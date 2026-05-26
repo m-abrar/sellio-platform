@@ -25,9 +25,10 @@ export default function CreateProduct() {
   const isEditMode = Boolean(slug);
 
   // Design Constants (Mirroring Create Property)
-  const containerClass = "bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12";
+  const containerClass = "bg-white border border-slate-100 rounded-[2rem] shadow-[0_18px_44px_rgba(0,0,0,0.035)] p-6 md:p-10";
   const labelClass = "text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2";
   const inputClass = "w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300";
+  const fieldHintClass = "mt-2 ml-2 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-300";
 
   const [categories, setCategories] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
@@ -201,7 +202,7 @@ export default function CreateProduct() {
   };
 
   return (
-    <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+    <div className="space-y-10 md:space-y-14 pb-64 lg:pb-48 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       <PageHeader
         badge="Asset Protocol"
         title={isEditMode ? "Modify" : "Register"}
@@ -232,14 +233,14 @@ export default function CreateProduct() {
           </div>
         </div>
       ) : (
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        <div className="lg:col-span-8 space-y-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10">
+        <div className="lg:col-span-8 space-y-8 md:space-y-10">
           <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-10 flex items-center gap-3">
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
               <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Primary Identity.
             </h3>
-            <div className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-7">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div className="md:col-span-2">
                   <label className={labelClass}>Product Title</label>
                   <input
@@ -249,8 +250,9 @@ export default function CreateProduct() {
                     className={`${inputClass} text-2xl italic tracking-tighter`}
                     placeholder="e.g. Titanium Executive Watch"
                   />
+                  <p className={fieldHintClass}>Required</p>
                 </div>
-                <div className="md:col-span-2">
+                <div>
                   <label className={labelClass}>Asset Classification (Category)</label>
                   <div className="relative">
                     <select
@@ -265,36 +267,11 @@ export default function CreateProduct() {
                     </select>
                     <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
                   </div>
-                </div>
-                <div>
-                  <label className={labelClass}>Universal SKU</label>
-                  <div className="relative">
-                    <HiOutlineHashtag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                    <input
-                      type="text"
-                      value={form.sku}
-                      onChange={(e) => updateForm('sku', e.target.value)}
-                      className={`${inputClass} pl-14 uppercase tracking-widest`}
-                      placeholder="SKU-0000"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className={labelClass}>Brand Identifier</label>
-                  <select
-                    value={form.brand_id}
-                    onChange={(e) => updateForm('brand_id', e.target.value)}
-                    className={`${inputClass} appearance-none cursor-pointer`}
-                  >
-                    <option value="">Select Brand...</option>
-                    {brands.map((brand: any) => (
-                      <option key={brand.id} value={brand.id}>{brand.title}</option>
-                    ))}
-                  </select>
+                  <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
                   <label className={labelClass}>Product Type</label>
@@ -308,17 +285,46 @@ export default function CreateProduct() {
                       <option key={type.id} value={type.id}>{type.title}</option>
                     ))}
                   </select>
+                  <p className={fieldHintClass}>Optional</p>
+                </div>
+                <div>
+                  <label className={labelClass}>Universal SKU</label>
+                  <div className="relative">
+                    <HiOutlineHashtag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    <input
+                      type="text"
+                      value={form.sku}
+                      onChange={(e) => updateForm('sku', e.target.value)}
+                      className={`${inputClass} pl-14 uppercase tracking-widest`}
+                      placeholder="SKU-0000"
+                    />
+                  </div>
+                  <p className={fieldHintClass}>Optional</p>
+                </div>
+                <div>
+                  <label className={labelClass}>Brand Identifier</label>
+                  <select
+                    value={form.brand_id}
+                    onChange={(e) => updateForm('brand_id', e.target.value)}
+                    className={`${inputClass} appearance-none cursor-pointer`}
+                  >
+                    <option value="">Select Brand...</option>
+                    {brands.map((brand: any) => (
+                      <option key={brand.id} value={brand.id}>{brand.title}</option>
+                    ))}
+                  </select>
+                  <p className={fieldHintClass}>Optional</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-10 flex items-center gap-3">
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
               <span className="w-2 h-8 bg-green-500 rounded-full" /> Commercial & Stock.
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="space-y-6">
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div>
                   <label className={labelClass}>Base Valuation (USD)</label>
                   <div className="relative">
@@ -331,6 +337,7 @@ export default function CreateProduct() {
                       placeholder="0.00"
                     />
                   </div>
+                  <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
                   <label className={labelClass}>Sale/Offer Price (USD)</label>
@@ -344,9 +351,8 @@ export default function CreateProduct() {
                       placeholder="Optional"
                     />
                   </div>
+                  <p className={fieldHintClass}>Optional</p>
                 </div>
-              </div>
-              <div className="space-y-6 bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100">
                 <div>
                   <label className={labelClass}>Stock Quantity</label>
                   <div className="relative">
@@ -359,6 +365,7 @@ export default function CreateProduct() {
                       placeholder="0"
                     />
                   </div>
+                  <p className={fieldHintClass}>Required when tracking</p>
                 </div>
                 <div>
                   <label className={labelClass}>Low Stock Alert</label>
@@ -372,8 +379,11 @@ export default function CreateProduct() {
                       placeholder="Optional"
                     />
                   </div>
+                  <p className={fieldHintClass}>Optional</p>
                 </div>
-                <label className="flex items-center justify-between p-4 bg-white rounded-xl cursor-pointer hover:shadow-sm transition-all group">
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <label className="flex items-center justify-between min-h-[72px] p-5 bg-slate-50 rounded-2xl border border-slate-100 cursor-pointer hover:bg-white hover:shadow-sm transition-all group">
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-[#6610f2]">Track Inventory</span>
                   <input
                     type="checkbox"
@@ -382,7 +392,7 @@ export default function CreateProduct() {
                     className="w-5 h-5 rounded accent-[#6610f2]"
                   />
                 </label>
-                <label className="flex items-center justify-between p-4 bg-white rounded-xl cursor-pointer hover:shadow-sm transition-all group">
+                <label className="flex items-center justify-between min-h-[72px] p-5 bg-slate-50 rounded-2xl border border-slate-100 cursor-pointer hover:bg-white hover:shadow-sm transition-all group">
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-[#6610f2]">Digital Product</span>
                   <input
                     type="checkbox"
@@ -396,7 +406,7 @@ export default function CreateProduct() {
           </div>
 
           <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
               <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Media Studio.
             </h3>
             <div className="mt-4">
@@ -405,10 +415,10 @@ export default function CreateProduct() {
           </div>
 
           <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
               <HiOutlineCube className="w-6 h-6 text-slate-300" /> Physical Specs.
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {[
                 { key: 'weight', label: 'Weight (kg)' },
                 { key: 'length', label: 'Length (cm)' },
@@ -418,10 +428,10 @@ export default function CreateProduct() {
                 <div key={dim.key}>
                   <label className={labelClass}>{dim.label}</label>
                   <input
-                    type="text"
+                    type="number"
                     value={form[dim.key]}
                     onChange={(e) => updateForm(dim.key, e.target.value)}
-                    className={`${inputClass} py-4 px-5 text-center`}
+                    className={`${inputClass} py-4 px-4 text-left md:text-center`}
                     placeholder="0.0"
                   />
                 </div>
@@ -430,7 +440,7 @@ export default function CreateProduct() {
           </div>
 
           <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8">Asset Narrative.</h3>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Asset Narrative.</h3>
             <textarea
               value={form.description}
               onChange={(e) => updateForm('description', e.target.value)}
@@ -438,12 +448,13 @@ export default function CreateProduct() {
               className={`${inputClass} resize-none`}
               placeholder="Describe the unique value proposition..."
             />
+            <p className={fieldHintClass}>Required</p>
           </div>
 
           <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8">Discovery Details.</h3>
-            <div className="space-y-6">
-              <div>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Discovery Details.</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              <div className="md:col-span-2">
                 <label className={labelClass}>Demo Video URL</label>
                 <input
                   type="url"
@@ -452,6 +463,7 @@ export default function CreateProduct() {
                   className={inputClass}
                   placeholder="https://..."
                 />
+                <p className={fieldHintClass}>Optional</p>
               </div>
               <div>
                 <label className={labelClass}>Meta Title</label>
@@ -462,6 +474,7 @@ export default function CreateProduct() {
                   className={inputClass}
                   placeholder="Search result title"
                 />
+                <p className={fieldHintClass}>Optional</p>
               </div>
               <div>
                 <label className={labelClass}>Meta Description</label>
@@ -472,13 +485,15 @@ export default function CreateProduct() {
                   className={`${inputClass} resize-none`}
                   placeholder="Short search result description"
                 />
+                <p className={fieldHintClass}>Optional</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="lg:col-span-4 space-y-10">
-          <div className="bg-slate-900 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden">
+        <div className="lg:col-span-4">
+          <div className="lg:sticky lg:top-10 space-y-8">
+          <div className="bg-slate-900 rounded-[2rem] p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="relative z-10">
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Readiness Score</p>
               <span className="text-7xl font-black italic tracking-tighter">{progress}%</span>
@@ -511,10 +526,30 @@ export default function CreateProduct() {
             </div>
           </div>
 
-          <div className="p-8 border-2 border-dashed border-slate-100 rounded-[2.5rem]">
-            <p className="text-[9px] font-bold text-slate-400 uppercase leading-relaxed tracking-widest">
-              * Ensure all high-resolution assets are uploaded to the Media Studio for optimal storefront display.
+          <div className="p-6 border-2 border-dashed border-slate-100 rounded-[2rem] bg-white/60">
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">
+              Listing Checklist
             </p>
+            <div className="space-y-3">
+              {[
+                { label: 'Title', done: form.title.length > 5 },
+                { label: 'Primary media', done: files.some(f => f.isMain) },
+                { label: 'Price', done: Number(form.base_price) > 0 },
+                { label: 'Category', done: form.category_id !== '' },
+                { label: 'SKU', done: form.sku !== '' },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center justify-between gap-4 text-[10px] font-black uppercase tracking-widest">
+                  <span className="text-slate-500">{item.label}</span>
+                  <span className={item.done ? 'text-green-500' : 'text-slate-300'}>
+                    {item.done ? 'Ready' : 'Missing'}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 text-[9px] font-bold text-slate-400 uppercase leading-relaxed tracking-widest">
+              Upload high-resolution assets and complete the required fields before publishing.
+            </p>
+          </div>
           </div>
         </div>
       </div>
