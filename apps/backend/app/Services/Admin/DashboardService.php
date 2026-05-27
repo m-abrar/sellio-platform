@@ -402,7 +402,7 @@ class DashboardService
                 ]));
         }
 
-        $events = $events->merge(Campaign::active()
+        $events = $events->merge(Campaign::where('status', 'active')
             ->where(fn($q) => $q->whereBetween('start_date', [$last180Days, $next180Days])->orWhereBetween('end_date', [$last180Days, $next180Days]))
             ->get(['id', 'title', 'start_date', 'end_date', 'color'])->map(fn($c) => [
                 'title' => $c->title . ' (Campaign)', 'start' => $c->start_date->toIso8601String(), 'end' => $c->end_date->toIso8601String(), 'color' => $c->color,
@@ -439,8 +439,35 @@ class DashboardService
 
     private function getHeatmapData(): array
     {
-        return Property::where('is_published', true)->whereNotNull('latitude')->whereNotNull('longitude')
-            ->select('latitude', 'longitude')->get()->map(fn($p) => [$p->latitude, $p->longitude, 0.6])->toArray();
+        $points = [];
+        $modules = [
+            'properties'   => Property::class,
+            'autos'        => Auto::class,
+            'events'       => Event::class,
+            'jobs'         => JobListing::class,
+            'services'     => Service::class,
+            'classifieds'  => Classified::class,
+        ];
+
+        foreach ($modules as $mod => $modelClass) {
+            if (module_enabled($mod)) {
+                try {
+                    $records = $modelClass::where('is_published', true)
+                        ->whereNotNull('latitude')
+                        ->whereNotNull('longitude')
+                        ->select('latitude', 'longitude')
+                        ->get();
+
+                    foreach ($records as $r) {
+                        $points[] = [(float) $r->latitude, (float) $r->longitude, 0.6];
+                    }
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::warning("Failed to fetch heatmap data for module {$mod}: " . $e->getMessage());
+                }
+            }
+        }
+
+        return $points;
     }
 
     public function getEcommerceMetrics(): array

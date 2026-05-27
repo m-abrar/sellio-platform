@@ -25,10 +25,25 @@ class ContactService
             'email' => $data['email'],
         ]);
 
-        // 2. TODO: Implement actual mailing logic
-        // In a production environment, this would trigger a Mailable or an Event.
-        // Mail::to(setting('admin_email', 'admin@sellio.com'))->send(new \App\Mail\ContactInquiry($data));
-        
+        // 2. Implement actual mailing logic with safety try-catch block
+        try {
+            $adminEmail = setting('admin_email', 'admin@sellio.com');
+            Mail::raw(
+                "You have received a new contact form inquiry on Sellio:\n\n" .
+                "Name: " . ($data['name'] ?? 'N/A') . "\n" .
+                "Email: " . ($data['email'] ?? 'N/A') . "\n" .
+                "Subject: " . ($data['subject'] ?? 'General Inquiry') . "\n\n" .
+                "Message:\n" . ($data['message'] ?? 'No message body provided.'),
+                function ($message) use ($data, $adminEmail) {
+                    $message->to($adminEmail)
+                        ->subject("Contact Form Submission: " . ($data['subject'] ?? 'General Inquiry'))
+                        ->replyTo($data['email'] ?? $adminEmail, $data['name'] ?? 'Inquirer');
+                }
+            );
+        } catch (\Exception $e) {
+            Log::error("Failed to send contact form mailable: " . $e->getMessage());
+        }
+
         // 3. Optional: Store in database if a 'contacts' table exists
         // \App\Models\Contact::create($data);
     }

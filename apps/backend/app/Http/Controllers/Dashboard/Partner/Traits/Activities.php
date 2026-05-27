@@ -8,6 +8,53 @@ trait Activities
 {
     protected function getPartnerActivityData($partner): array
     {
+        $awaitingCount = 0;
+        $expiredCount = 0;
+        $reviewsCount = 0;
+
+        $modulesConfig = [
+            'properties'  => 'properties',
+            'events'      => 'events',
+            'autos'       => 'autos',
+            'services'    => 'services',
+            'classifieds' => 'classifieds',
+            'jobs'        => 'jobs',
+            'products'    => 'products',
+        ];
+
+        foreach ($modulesConfig as $mod => $relation) {
+            if (module_enabled($mod) && method_exists($partner, $relation)) {
+                try {
+                    // Awaiting Approval Count (not published)
+                    $awaitingCount += $partner->$relation()->where('is_published', false)->count();
+
+                    // Expired Count (status is expired or expires_at is in the past)
+                    $expiredCount += $partner->$relation()
+                        ->where(function ($q) {
+                            $q->where('status', 'expired')
+                              ->orWhere(function ($sub) {
+                                  $sub->whereNotNull('expires_at')
+                                      ->where('expires_at', '<', now());
+                              });
+                        })->count();
+
+                    // Reviews Count matching partner listing IDs
+                    $itemIds = $partner->$relation()->pluck('id')->toArray();
+                    if (!empty($itemIds)) {
+                        $modelName = 'App\\Models\\' . \Illuminate\Support\Str::studly(\Illuminate\Support\Str::singular($mod));
+                        if ($mod === 'jobs') $modelName = 'App\\Models\\JobListing';
+                        if ($mod === 'classifieds') $modelName = 'App\\Models\\Classified';
+
+                        $reviewsCount += \App\Models\Review::where('reviewable_type', $modelName)
+                            ->whereIn('reviewable_id', $itemIds)
+                            ->count();
+                    }
+                } catch (\Exception $e) {
+                    // Fail silently
+                }
+            }
+        }
+
         $aggregatedActivities = collect([
             [
                 'count' => isset($partner->properties_bookings_new_count) ? $partner->properties_bookings_new_count : 0,
@@ -91,8 +138,7 @@ trait Activities
                 'isMessage' => true,
             ],
             [
-                // Mock count retained for New Reviews, assuming no dynamic property available
-                'count' => 4, 
+                'count' => $reviewsCount, 
                 'title' => 'New Reviews',
                 'subtitle' => 'Check out your latest customer feedback.',
                 'icon' => 'bi-star-fill',
@@ -102,8 +148,7 @@ trait Activities
                 'btnText' => 'View Reviews',
             ],
             [
-                // Mock count retained for Awaiting Approval, assuming no dynamic property available
-                'count' => 3, 
+                'count' => $awaitingCount, 
                 'title' => 'Awaiting Approval',
                 'subtitle' => 'Listings submitted and pending admin review.',
                 'icon' => 'bi-clock-history',
@@ -113,8 +158,7 @@ trait Activities
                 'btnText' => 'Check Status',
             ],
             [
-                // Mock count retained for Expired Listings, assuming no dynamic property available
-                'count' => 1, 
+                'count' => $expiredCount, 
                 'title' => 'Expired Listings',
                 'subtitle' => 'Requires immediate renewal to be visible.',
                 'icon' => 'bi-hourglass-split',

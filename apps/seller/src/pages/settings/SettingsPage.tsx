@@ -147,10 +147,6 @@ export default function SettingsPage() {
                 <p className="text-sm text-slate-400 font-medium leading-relaxed">{section.description}</p>
               </div>
             </div>
-
-            <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#6610f2] bg-white px-6 py-3 rounded-full shadow-xl border border-purple-100">Coming Soon</span>
-            </div>
           </div>
         ))}
       </div>
