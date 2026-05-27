@@ -22,10 +22,18 @@ class DashboardController extends Controller
 
         // Using the Recovered Model Attributes for the Overview
         $stats = [
-            'totalBookings'   => $user->pending_bookings_count, 
-            'totalMessages'   => $user->new_messages,
-            'activeInquiries' => $user->pending_inquiries_count,
-            'walletBalance'   => $user->wallet_balance,
+            'totalBookings'     => $user->pending_bookings_count, 
+            'totalMessages'     => $user->new_messages,
+            'activeInquiries'   => $user->pending_inquiries_count,
+            'walletBalance'     => $user->wallet_balance,
+            'favoritesCount'    => $user->userFavorites()->count(),
+            'bookingsCount'     => $user->propertyBookings()->count() + $user->eventBookings()->count(),
+            'messagesCount'     => $user->new_messages,
+            'appsCount'         => $user->jobApplications()->count(),
+            'appointmentsCount' => $user->serviceAppointments()->count(),
+            'quotesCount'       => $user->serviceQuotes()->count(),
+            'inquiriesCount'    => $user->classifiedInquiries()->count() + \App\Models\AutoInquiry::where('user_id', $user->id)->count(),
+            'reviewsCount'      => \App\Models\Review::where('user_id', $user->id)->count(),
         ];
 
         // Placeholder for theme logic

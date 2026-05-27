@@ -30,8 +30,11 @@ export default function FavoritesView() {
   };
 
   const handleRemove = async (itemId: string) => {
+    const favItem = favorites.find(f => f.id === itemId);
+    const favoriteRecordId = favItem?.favoriteId || itemId;
+
     try {
-      await toggleFavorite(itemId);
+      await toggleFavorite(String(favoriteRecordId));
       setFavorites(favorites.filter(f => f.id !== itemId));
       refreshStats();
     } catch (error) {

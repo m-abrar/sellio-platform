@@ -8,7 +8,7 @@ Complete `apps/buyer` as an authenticated buyer dashboard. The panel should focu
 
 Marketplace discovery belongs to the storefront. Buyers should be redirected to the storefront when they want to browse full listing catalogs or inspect storefront-facing listing pages. The buyer panel must not include listing CRUD.
 
-Current dev URL: `http://localhost:3001` when running with `PORT=3001 npm run dev`.
+Current dev URL: `http://localhost:3003` when running with `npm run dev` or `npm run dev:buyer` from root.
 
 ## Current App Snapshot
 

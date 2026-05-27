@@ -36,7 +36,7 @@ export const fetchConversations = async () => {
       id: conversation.id,
       name: participant.name || `Conversation #${conversation.id}`,
       avatar: participant.avatar_url || participant.avatar,
-      lastMessage: conversation.last_message?.body || conversation.lastMessage?.content || '',
+      lastMessage: conversation.last_message?.body || conversation.lastMessage?.body || conversation.last_message?.content || conversation.lastMessage?.content || '',
       time: conversation.updated_at,
       unread: conversation.unread_count || 0,
     };

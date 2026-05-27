@@ -23,7 +23,9 @@ class ClassifiedInquiryResource extends JsonResource
             'viewed_at' => $this->viewed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'classifiedad' => $this->whenLoaded("classifiedad"),
+            'classifiedad' => $this->whenLoaded("classifiedAd"),
+            'classifiedAd' => $this->whenLoaded("classifiedAd"),
+            'classified_ad' => $this->whenLoaded("classifiedAd"),
         ];
     }
 }

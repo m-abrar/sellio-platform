@@ -259,9 +259,12 @@ export function toActivity(resource: any, index = 0, fallbackModule = 'products'
     status: normalizedStatus,
     booking_date:
       resource?.booking_date ||
+      resource?.check_in_date ||
       resource?.scheduled_at ||
       resource?.preferred_date ||
       resource?.requested_date ||
+      resource?.occurrence?.start_date_time ||
+      resource?.occurrence?.start_date ||
       resource?.date ||
       resource?.created_at,
     created_at: resource?.created_at || resource?.updated_at || new Date().toISOString(),

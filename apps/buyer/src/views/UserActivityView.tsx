@@ -8,9 +8,12 @@ import {
   AlertCircle, 
   ChevronRight, 
   Search,
+  Star,
+  X,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { fetchBookings, cancelBooking } from '../api/bookingApi';
+import { createReview } from '../api/reviewApi';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
 import { EmptyState } from '../components/EmptyState';
@@ -42,6 +45,14 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed'>('all');
   const [cancellingId, setCancellingId] = useState<number | null>(null);
 
+  // Review Modal States
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewActivity, setReviewActivity] = useState<ActivityItem | null>(null);
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState('');
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [reviewSuccessMessage, setReviewSuccessMessage] = useState<string | null>(null);
+
   useEffect(() => {
     fetchBookings(type, module)
       .then(setActivities)
@@ -61,6 +72,48 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
       alert(err?.message || 'Failed to cancel activity');
     } finally {
       setCancellingId(null);
+    }
+  };
+
+  const handleLeaveReviewClick = (activity: ActivityItem) => {
+    setReviewActivity(activity);
+    setReviewRating(5);
+    setReviewComment('');
+    setReviewSuccessMessage(null);
+    setShowReviewModal(true);
+  };
+
+  const handleReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewActivity) return;
+
+    setIsSubmittingReview(true);
+    try {
+      const savedReview = await createReview({
+        rating: reviewRating,
+        comment: reviewComment,
+        reviewable_id: reviewActivity.item_id,
+        reviewable_type: reviewActivity.module,
+      });
+
+      setReviewSuccessMessage('Review submitted successfully!');
+      
+      // Update local activity state so the Leave Review button disappears
+      setActivities(prev =>
+        prev.map(act =>
+          act.id === reviewActivity.id ? { ...act, review_id: savedReview.id } : act
+        )
+      );
+
+      // Close modal after a brief delay
+      setTimeout(() => {
+        setShowReviewModal(false);
+        setReviewActivity(null);
+      }, 1500);
+    } catch (err: any) {
+      alert(err?.message || 'Failed to submit review');
+    } finally {
+      setIsSubmittingReview(false);
     }
   };
 
@@ -175,7 +228,7 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
                   <Button 
                     size="sm" 
                     className="bg-amber-500 hover:bg-amber-600 text-white border-none"
-                    onClick={() => window.location.href = '/reviews'}
+                    onClick={() => handleLeaveReviewClick(activity)}
                   >
                     Leave Review
                   </Button>
@@ -201,6 +254,94 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
           />
         )}
       </div>
+
+      {/* Create Review Modal */}
+      <AnimatePresence>
+        {showReviewModal && reviewActivity && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl relative border border-zinc-100"
+            >
+              <button 
+                onClick={() => setShowReviewModal(false)}
+                className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-zinc-900 rounded-full hover:bg-zinc-100 transition-colors"
+              >
+                <X size={18} />
+              </button>
+
+              <h3 className="text-xl font-bold text-zinc-955 mb-1">Leave a Review</h3>
+              <p className="text-xs text-zinc-500 mb-6">Share your experience for: <strong>{reviewActivity.itemTitle}</strong></p>
+
+              {reviewSuccessMessage ? (
+                <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-6 text-center">
+                  <CheckCircle2 className="mx-auto w-12 h-12 text-emerald-500 mb-2" />
+                  <p className="text-sm font-bold text-emerald-800">{reviewSuccessMessage}</p>
+                </div>
+              ) : (
+                <form onSubmit={handleReviewSubmit} className="space-y-6">
+                  {/* Stars Rating Selector */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-zinc-400">Rating</label>
+                    <div className="flex items-center gap-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setReviewRating(star)}
+                          className="p-1 hover:scale-110 transition-transform"
+                        >
+                          <Star 
+                            size={28} 
+                            className={cn(
+                              star <= reviewRating 
+                                ? "text-amber-400 fill-amber-400" 
+                                : "text-zinc-200"
+                            )}
+                          />
+                        </button>
+                      ))}
+                      <span className="ml-3 text-sm font-extrabold text-zinc-900">{reviewRating}.0 / 5.0</span>
+                    </div>
+                  </div>
+
+                  {/* Comment Textarea */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-zinc-400">Comment / Feedback</label>
+                    <textarea
+                      required
+                      rows={4}
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
+                      placeholder="Write your experience here..."
+                      className="w-full bg-zinc-50 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-zinc-950 transition-all placeholder-zinc-400"
+                    />
+                  </div>
+
+                  <div className="pt-2 flex justify-end gap-3">
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={() => setShowReviewModal(false)}
+                      disabled={isSubmittingReview}
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      type="submit" 
+                      isLoading={isSubmittingReview}
+                    >
+                      Submit Review
+                    </Button>
+                  </div>
+                </form>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
