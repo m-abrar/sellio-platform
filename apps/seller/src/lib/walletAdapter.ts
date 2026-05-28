@@ -65,7 +65,9 @@ export const normalizeWalletTransaction = (record: Record<string, unknown>): Wal
 
   const rawStatus = typeof record.status === 'string' ? record.status : '';
   let statusText = 'Pending';
-  if (rawStatus === 'approved' || rawStatus === 'completed') {
+  if (rawStatus === 'approved') {
+    statusText = 'Approved';
+  } else if (rawStatus === 'completed') {
     statusText = 'Completed';
   } else if (rawStatus === 'rejected') {
     statusText = 'Rejected';
@@ -100,7 +102,9 @@ export const normalizePayoutRecord = (record: Record<string, unknown>): PayoutRe
 
   const rawStatus = typeof record.status === 'string' ? record.status : '';
   let statusText = 'Pending';
-  if (rawStatus === 'approved' || rawStatus === 'completed') {
+  if (rawStatus === 'approved') {
+    statusText = 'Approved';
+  } else if (rawStatus === 'completed') {
     statusText = 'Completed';
   } else if (rawStatus === 'rejected') {
     statusText = 'Rejected';

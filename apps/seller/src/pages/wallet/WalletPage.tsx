@@ -200,7 +200,7 @@ export default function WalletPage() {
                     <td className="px-10 py-8 text-xs font-bold text-slate-500 uppercase tracking-widest">{tx.date}</td>
                     <td className="px-10 py-8">
                       <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${
-                        tx.status === 'Completed' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
+                        tx.status === 'Completed' || tx.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
                         tx.status === 'Rejected' ? 'bg-rose-50 text-rose-600 border-rose-100' : 
                         'bg-amber-50 text-amber-600 border-amber-100'
                       }`}>
