@@ -105,6 +105,9 @@ class CustomerService
                     ->map(fn ($record) => $this->normalizeLeadRecord($record, 'classifieds', 'inquiries'))
             );
 
+        foreach ($records as $record) {
+            $key = $record['customer_key'];
+
             if (!$customers->has($key)) {
                 $customers->put($key, [
                     'id' => $nextId++,
