@@ -41,6 +41,8 @@ export interface NormalizedProduct {
     approved_at?: string | null;
   };
   is_featured?: boolean;
+  features?: Array<{ id: number; title: string; icon?: string }>;
+  tags?: string[];
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -92,6 +94,8 @@ export const normalizeProduct = (product: any): NormalizedProduct => {
     specs: product.specs ?? {},
     status: product.status ?? {},
     is_featured: product.status?.is_featured ?? product.is_featured ?? false,
+    features: product.specs?.features ?? [],
+    tags: product.taxonomy?.tags ?? product.tags ?? [],
     meta: product.meta ?? {},
   };
 };

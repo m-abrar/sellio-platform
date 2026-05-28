@@ -54,11 +54,23 @@ class SaveProductRequest extends FormRequest
             
             'main_image'        => [$productId ? 'nullable' : 'required', 'image', 'max:2048'],
             'gallery.*'         => ['nullable', 'image', 'max:2048'],
+            'tags'              => ['nullable', 'array'],
+            'tags.*'            => ['string', 'max:50'],
+            'features'          => ['nullable', 'array'],
+            'features.*'        => ['exists:features,id'],
         ];
     }
 
     protected function prepareForValidation()
     {
+        if (is_string($this->input('tags'))) {
+            $this->merge(['tags' => json_decode($this->input('tags'), true) ?? []]);
+        }
+
+        if (is_string($this->input('features'))) {
+            $this->merge(['features' => json_decode($this->input('features'), true) ?? []]);
+        }
+
         if ($this->has('title') && !$this->has('slug')) {
             $this->merge(['slug' => \Illuminate\Support\Str::slug($this->title)]);
         }

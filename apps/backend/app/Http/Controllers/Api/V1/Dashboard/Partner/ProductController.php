@@ -29,7 +29,7 @@ class ProductController extends Controller
 
         $products = Product::query()
             ->where('user_id', $user->id)
-            ->with(['media', 'brand', 'category', 'type'])
+            ->with(['media', 'brand', 'category', 'type', 'features', 'tags'])
             ->latest()
             ->paginate($request->integer('per_page', 120));
 
@@ -51,38 +51,77 @@ class ProductController extends Controller
     }
 
     public function store(SaveProductRequest $request) {
-        // Use safe()->except to remove media fields from the SQL insert
-        $data = $request->safe()->except(['main_image', 'gallery', 'approved_at', 'user_id']);
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($request) {
+            // Use safe()->except to remove media and polymorphic fields from the SQL insert
+            $data = $request->safe()->except(['main_image', 'gallery', 'approved_at', 'user_id', 'tags', 'features']);
 
-        $product = Product::create($data + [
-            'user_id' => auth()->id(),
-            // 'approved_at' is NULL by default, requiring admin moderation
-        ]);
-        
-        $this->handleMedia($product, $request);
+            $product = Product::create($data + [
+                'user_id' => auth()->id(),
+                // 'approved_at' is NULL by default, requiring admin moderation
+            ]);
+            
+            $this->handleMedia($product, $request);
 
-        return $this->successResponse(
-            new ProductResource($product),
-            __('Product created and submitted for moderation'),
-            201
-        );
+            // Sync features
+            if ($request->has('features')) {
+                $product->features()->sync($request->input('features') ?? []);
+            }
+
+            // Sync tags
+            if ($request->has('tags')) {
+                $tagIds = [];
+                foreach ($request->input('tags') ?? [] as $tagName) {
+                    $tag = \App\Models\Tag::firstOrCreate(
+                        ['title' => trim($tagName)],
+                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_product' => true, 'is_published' => true]
+                    );
+                    $tagIds[] = $tag->id;
+                }
+                $product->tags()->sync($tagIds);
+            }
+
+            return $this->successResponse(
+                new ProductResource($product->load(['media', 'brand', 'category', 'type', 'features', 'tags'])),
+                __('Product created and submitted for moderation'),
+                201
+            );
+        });
     }
 
     public function update(SaveProductRequest $request, $id) {
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($request, $id) {
+            $product = Product::where('user_id', auth()->id())->findOrFail($id);
 
-        $product = Product::where('user_id', auth()->id())->findOrFail($id);
+            // Prevent partners from changing ownership or approval status
+            $data = $request->safe()->except(['main_image', 'gallery', 'approved_at', 'user_id', 'tags', 'features']);
+            
+            $product->update($data);
+            
+            $this->handleMedia($product, $request);
 
-        // Prevent partners from changing ownership or approval status
-        $data = $request->safe()->except(['main_image', 'gallery', 'approved_at', 'user_id']);
-        
-        $product->update($data);
-        
-        $this->handleMedia($product, $request);
+            // Sync features
+            if ($request->has('features')) {
+                $product->features()->sync($request->input('features') ?? []);
+            }
 
-        return $this->successResponse(
-            new ProductResource($product->fresh()),
-            __('Product updated and resubmitted for moderation')
-        );
+            // Sync tags
+            if ($request->has('tags')) {
+                $tagIds = [];
+                foreach ($request->input('tags') ?? [] as $tagName) {
+                    $tag = \App\Models\Tag::firstOrCreate(
+                        ['title' => trim($tagName)],
+                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_product' => true, 'is_published' => true]
+                    );
+                    $tagIds[] = $tag->id;
+                }
+                $product->tags()->sync($tagIds);
+            }
+
+            return $this->successResponse(
+                new ProductResource($product->fresh(['media', 'brand', 'category', 'type', 'features', 'tags'])),
+                __('Product updated and resubmitted for moderation')
+            );
+        });
     }
 
     public function show(string $product): JsonResponse

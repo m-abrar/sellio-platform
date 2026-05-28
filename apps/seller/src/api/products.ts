@@ -7,17 +7,19 @@ export interface ProductFormMeta {
   categories: Array<{ id: number; title: string }>;
   brands: Array<{ id: number; title: string }>;
   types: Array<{ id: number; title: string }>;
+  features: Array<{ id: number; title: string; icon?: string }>;
 }
 
 let cachedFormMeta: ProductFormMeta | null = null;
 
 const extractFormMeta = (response: { data: LaravelResponse<unknown> }): ProductFormMeta => {
-  const sidebar = response.data.meta?.sidebar as ProductFormMeta | undefined;
+  const sidebar = response.data.meta?.sidebar as any;
 
   return {
     categories: sidebar?.categories ?? [],
     brands: sidebar?.brands ?? [],
     types: sidebar?.types ?? [],
+    features: sidebar?.features ?? [],
   };
 };
 

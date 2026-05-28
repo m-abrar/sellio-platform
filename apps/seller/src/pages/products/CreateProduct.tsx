@@ -11,7 +11,7 @@ import {
 
 // API Services
 import { getProductBySlug, createProduct, updateProduct } from '../../api/products';
-import { getCategories, getBrands, getProductTypes } from '../../api/categories';
+import { getCategories, getBrands, getProductTypes, getProductFeatures } from '../../api/categories';
 import { ApiError } from '../../lib/apiError';
 
 // Studio Components
@@ -33,6 +33,10 @@ export default function CreateProduct() {
   const [categories, setCategories] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
   const [types, setTypes] = useState<any[]>([]);
+  const [allFeatures, setAllFeatures] = useState<any[]>([]);
+  const [selectedFeatures, setSelectedFeatures] = useState<number[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [productId, setProductId] = useState<number | null>(null);
@@ -69,13 +73,15 @@ export default function CreateProduct() {
     const initializeData = async () => {
       setIsLoading(true);
       try {
-        // 1. Fetch Categories
+        // 1. Fetch Categories & Features
         const flatCategories = await getCategories();
         const flatBrands = await getBrands();
         const flatTypes = await getProductTypes();
+        const flatFeatures = await getProductFeatures();
         setCategories(flatCategories);
         setBrands(flatBrands);
         setTypes(flatTypes);
+        setAllFeatures(flatFeatures);
 
         if (isEditMode && slug) {
           const { data: p } = await getProductBySlug(slug);
@@ -112,6 +118,15 @@ export default function CreateProduct() {
             meta_title: p.meta?.title || '',
             meta_description: p.meta?.description || '',
           });
+
+          if (p.features && Array.isArray(p.features)) {
+            setSelectedFeatures(p.features.map((f: any) => f.id));
+          } else if (p.specs?.features && Array.isArray(p.specs.features)) {
+            setSelectedFeatures(p.specs.features.map((f: any) => f.id));
+          }
+          if (p.tags && Array.isArray(p.tags)) {
+            setTags(p.tags);
+          }
 
           // Handle Spatie Media Integration
           const initialMedia: any[] = [];
@@ -155,6 +170,27 @@ export default function CreateProduct() {
     setForm((prev: any) => ({ ...prev, [field]: value }));
   }, []);
 
+  const toggleFeature = useCallback((id: number) => {
+    setSelectedFeatures((prev) =>
+      prev.includes(id) ? prev.filter((fid) => fid !== id) : [...prev, id]
+    );
+  }, []);
+
+  const handleTagKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const val = tagInput.trim();
+      if (val && !tags.includes(val)) {
+        setTags((prev) => [...prev, val]);
+      }
+      setTagInput('');
+    }
+  }, [tagInput, tags]);
+
+  const removeTag = useCallback((idx: number) => {
+    setTags((prev) => prev.filter((_, i) => i !== idx));
+  }, []);
+
   const progress = useMemo(() => {
     let score = 0;
     if (form.title.length > 5) score += 20;
@@ -183,6 +219,9 @@ export default function CreateProduct() {
         formData.append('existing_media_ids[]', String(fileObj.id));
       }
     });
+
+    selectedFeatures.forEach((id) => formData.append('features[]', String(id)));
+    tags.forEach((tag) => formData.append('tags[]', tag));
 
     try {
       if (isEditMode && productId) {
@@ -459,6 +498,56 @@ export default function CreateProduct() {
           </div>
 
           <div className={containerClass}>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Specification Features.
+            </h3>
+            <p className="text-[10px] font-black text-slate-400 mb-8 leading-relaxed tracking-wider">
+              SELECT ALL RELEVANT SPECIFICATIONS AND FEATURES TO DECORATE THE E-COMMERCE LISTING PAGE (E.G. 'WARRANTY INCLUDED', 'ECO-FRIENDLY').
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {allFeatures.map((feat) => {
+                const isChecked = selectedFeatures.includes(feat.id);
+                return (
+                  <button
+                    key={feat.id}
+                    type="button"
+                    onClick={() => toggleFeature(feat.id)}
+                    className={`flex items-center justify-between p-5 rounded-2xl border text-left transition-all group ${
+                      isChecked
+                        ? 'bg-[#6610f2]/5 border-[#6610f2] shadow-[0_4px_20px_rgba(102,16,242,0.08)]'
+                        : 'bg-slate-50 border-slate-100 hover:bg-white hover:shadow-sm'
+                    }`}
+                  >
+                    <span
+                      className={`text-xs font-bold uppercase tracking-wider transition-colors ${
+                        isChecked ? 'text-[#6610f2]' : 'text-slate-500 group-hover:text-[#6610f2]'
+                      }`}
+                    >
+                      {feat.title}
+                    </span>
+                    <div
+                      className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${
+                        isChecked ? 'border-[#6610f2] bg-[#6610f2]' : 'border-slate-300'
+                      }`}
+                    >
+                      {isChecked && (
+                        <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+              {allFeatures.length === 0 && (
+                <div className="col-span-full py-6 text-center text-[10px] font-bold uppercase tracking-widest text-slate-300 italic">
+                  No features available in metadata...
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Asset Narrative.</h3>
             <textarea
               value={form.description}
@@ -468,6 +557,49 @@ export default function CreateProduct() {
               placeholder="Describe the unique value proposition..."
             />
             <p className={fieldHintClass}>Required</p>
+          </div>
+
+          <div className={containerClass}>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+              <span className="w-2 h-8 bg-teal-500 rounded-full" /> Discoverability Tags.
+            </h3>
+            <p className="text-[10px] font-black text-slate-400 mb-6 leading-relaxed tracking-wider">
+              ADD SEARCH KEYWORDS AND RELEVANT TAGS TO AMPLIFY DISCOVERABILITY ACROSS SEARCH SECTORS (E.G. 'NEW ARRIVAL', 'LIMITED EDITION'). PRESS ENTER OR COMMA TO CAST A TAG CHIP.
+            </p>
+            <div className="flex flex-wrap gap-2.5 mb-6">
+              {tags.map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center gap-2 bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest px-4.5 py-2.5 rounded-full shadow-sm select-none"
+                >
+                  {tag}
+                  <button
+                    type="button"
+                    onClick={() => removeTag(idx)}
+                    className="hover:text-red-400 transition-colors focus:outline-none"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </span>
+              ))}
+              {tags.length === 0 && (
+                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300 italic py-2">
+                  No tags added yet...
+                </span>
+              )}
+            </div>
+            <div className="relative">
+              <input
+                type="text"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={handleTagKeyDown}
+                className={inputClass}
+                placeholder="Type keyword and press Enter or Comma..."
+              />
+            </div>
           </div>
 
           <div className={containerClass}>
