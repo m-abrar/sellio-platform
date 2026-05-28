@@ -8,6 +8,7 @@ export interface AutoFormMeta {
   brands: Array<{ id: number; title: string }>;
   types: Array<{ id: number; title: string }>;
   locations: Array<{ id: number; title: string }>;
+  features: Array<{ id: number; title: string; icon?: string }>;
 }
 
 let cachedFormMeta: AutoFormMeta | null = null;
@@ -20,6 +21,7 @@ const extractFormMeta = (response: { data: LaravelResponse<unknown> }): AutoForm
     brands: form?.brands ?? [],
     types: form?.types ?? [],
     locations: form?.locations ?? [],
+    features: form?.features ?? [],
   };
 };
 

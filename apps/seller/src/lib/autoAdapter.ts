@@ -43,7 +43,8 @@ export interface NormalizedAuto {
   is_lease?: boolean;
   is_selling?: boolean;
   is_certified?: boolean;
-  features?: Array<{ title: string; icon?: string }>;
+  features?: Array<{ id: number; title: string; icon?: string }>;
+  tags?: string[];
   specs?: Record<string, unknown>;
   pricing?: Record<string, unknown>;
   status?: Record<string, unknown>;
@@ -118,6 +119,7 @@ export const normalizeAuto = (auto: any): NormalizedAuto => {
     is_selling: auto.pricing?.is_selling ?? auto.is_selling ?? true,
     is_certified: auto.specs?.is_certified ?? auto.is_certified ?? false,
     features: auto.taxonomy?.features ?? [],
+    tags: auto.taxonomy?.tags ?? [],
     specs: auto.specs ?? {},
     pricing: auto.pricing ?? {},
     status: auto.status ?? {},

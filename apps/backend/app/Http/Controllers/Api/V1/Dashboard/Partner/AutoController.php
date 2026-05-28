@@ -47,7 +47,7 @@ class AutoController extends Controller
         $this->handleMedia($auto, $request);
 
         return $this->successResponse(
-            new AutoResource($auto->load(['media', 'category', 'brand', 'type', 'location'])),
+            new AutoResource($auto->load(['media', 'category', 'brand', 'type', 'location', 'features', 'tags'])),
             __('Vehicle listing created successfully.'),
             201
         );
@@ -57,7 +57,7 @@ class AutoController extends Controller
     {
         $model = Auto::where('user_id', Auth::id())
             ->where(is_numeric($auto) ? 'id' : 'slug', $auto)
-            ->with(['media', 'category', 'brand', 'type', 'location', 'user', 'features'])
+            ->with(['media', 'category', 'brand', 'type', 'location', 'user', 'features', 'tags'])
             ->firstOrFail();
 
         return $this->successResponse(new AutoResource($model));
@@ -72,7 +72,7 @@ class AutoController extends Controller
         $this->handleMedia($auto, $request);
 
         return $this->successResponse(
-            new AutoResource($auto->fresh(['media', 'category', 'brand', 'type', 'location'])),
+            new AutoResource($auto->fresh(['media', 'category', 'brand', 'type', 'location', 'features', 'tags'])),
             __('Vehicle updated successfully.')
         );
     }

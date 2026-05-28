@@ -33,6 +33,7 @@ class AutoService
             'brands'     => \App\Models\Brand::where('is_auto', true)->get(),
             'types'      => \App\Models\Type::where('is_auto', true)->get(),
             'locations'  => \App\Models\Location::all(),
+            'features'   => \App\Models\Feature::where('is_auto', true)->active()->get(['id', 'title', 'icon']),
         ];
     }
 
@@ -46,20 +47,46 @@ class AutoService
      */
     public function saveAuto(User $user, array $data, ?Auto $auto = null): Auto
     {
-        $data['slug'] = $this->generateUniqueSlug($data['title'], $auto?->id);
-        
-        // Ensure boolean logic from checkboxes
-        $data['is_published'] = (bool) ($data['is_published'] ?? false);
-        $data['is_featured']  = (bool) ($data['is_featured'] ?? false);
-        $data['is_lease']     = (bool) ($data['is_lease'] ?? false);
-        $data['is_selling']   = (bool) ($data['is_selling'] ?? true);
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($user, $data, $auto) {
+            $coreData = collect($data)->except(['features', 'tags'])->toArray();
+            $coreData['slug'] = $this->generateUniqueSlug($coreData['title'], $auto?->id);
+            
+            // Ensure boolean logic from checkboxes
+            $coreData['is_published'] = (bool) ($coreData['is_published'] ?? false);
+            $coreData['is_featured']  = (bool) ($coreData['is_featured'] ?? false);
+            $coreData['is_lease']     = (bool) ($coreData['is_lease'] ?? false);
+            $coreData['is_selling']   = (bool) ($coreData['is_selling'] ?? true);
 
-        if ($auto) {
-            $auto->update($data);
+            if ($auto) {
+                $auto->update($coreData);
+            } else {
+                $auto = $user->autos()->create($coreData);
+            }
+
+            // 1. Sync polymorphic Features
+            if (isset($data['features'])) {
+                $auto->features()->sync($data['features']);
+            } else {
+                $auto->features()->sync([]);
+            }
+
+            // 2. Sync polymorphic Tags
+            if (isset($data['tags'])) {
+                $tagIds = [];
+                foreach ($data['tags'] as $tagName) {
+                    $tag = \App\Models\Tag::firstOrCreate(
+                        ['title' => trim($tagName)],
+                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_auto' => true, 'is_published' => true]
+                    );
+                    $tagIds[] = $tag->id;
+                }
+                $auto->tags()->sync($tagIds);
+            } else {
+                $auto->tags()->sync([]);
+            }
+
             return $auto;
-        }
-
-        return $user->autos()->create($data);
+        });
     }
 
     /**

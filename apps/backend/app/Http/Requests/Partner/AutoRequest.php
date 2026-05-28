@@ -88,6 +88,10 @@ class AutoRequest extends FormRequest
             'existing_media_ids'     => ['array'],
             'existing_media_ids.*'   => ['integer'],
             'sync_existing_media'    => ['boolean'],
+            'features'               => ['nullable', 'array'],
+            'features.*'             => ['exists:features,id'],
+            'tags'                   => ['nullable', 'array'],
+            'tags.*'                 => ['string', 'max:50'],
         ];
     }
 }

@@ -63,12 +63,14 @@ export default function CreateAuto() {
   const navigate = useNavigate();
   const isEditMode = Boolean(slug);
 
-  const [formMeta, setFormMeta] = useState<any>({ categories: [], brands: [], types: [], locations: [] });
+  const [formMeta, setFormMeta] = useState<any>({ categories: [], brands: [], types: [], locations: [], features: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [autoId, setAutoId] = useState<number | null>(null);
   const [files, setFiles] = useState<any[]>([]);
   const [form, setForm] = useState(defaultForm);
+  const [selectedFeatures, setSelectedFeatures] = useState<number[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
 
   const updateForm = useCallback((field: string, value: unknown) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -133,6 +135,9 @@ export default function CreateAuto() {
             is_certified: auto.is_certified ?? false,
           });
 
+          setSelectedFeatures((auto.features ?? []).map((f: any) => f.id));
+          setTags(auto.tags ?? []);
+
           const initialMedia: any[] = [];
           if (auto.featured_image) {
             initialMedia.push({
@@ -181,6 +186,8 @@ export default function CreateAuto() {
     });
 
     formData.append('sync_existing_media', '1');
+    selectedFeatures.forEach((id) => formData.append('features[]', String(id)));
+    tags.forEach((tag) => formData.append('tags[]', tag));
     files.forEach((fileObj) => {
       if (fileObj.file) {
         if (fileObj.isMain) formData.append('main_image', fileObj.file);
@@ -360,6 +367,52 @@ export default function CreateAuto() {
 
             <div className={containerClass}>
               <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+                <span className="w-2 h-8 bg-indigo-500 rounded-full" /> Specification Features.
+              </h3>
+              {formMeta.features && formMeta.features.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {formMeta.features.map((feature: any) => {
+                    const isChecked = selectedFeatures.includes(feature.id);
+                    return (
+                      <button
+                        key={feature.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedFeatures((prev) =>
+                            prev.includes(feature.id)
+                              ? prev.filter((id) => id !== feature.id)
+                              : [...prev, feature.id]
+                          );
+                        }}
+                        className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all text-left outline-none ${
+                          isChecked
+                            ? 'border-[#6610f2] bg-[#6610f2]/5 text-[#6610f2] shadow-[0_8px_20px_rgba(102,16,242,0.08)]'
+                            : 'border-slate-100 bg-white hover:bg-slate-50 text-slate-700'
+                        }`}
+                      >
+                        <span className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${
+                          isChecked ? 'border-[#6610f2] bg-[#6610f2]' : 'border-slate-300'
+                        }`}>
+                          {isChecked && (
+                            <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                        </span>
+                        <span className="text-xs font-black uppercase tracking-wider">{feature.title}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="p-8 border-2 border-dashed border-slate-100 rounded-2xl text-center">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">No active vehicle features found.</p>
+                </div>
+              )}
+            </div>
+
+            <div className={containerClass}>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
                 <HiOutlineMapPin className="w-6 h-6 text-slate-300" /> Location.
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -441,6 +494,43 @@ export default function CreateAuto() {
               <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} rows={6} className={`${inputClass} resize-none`} placeholder="Describe the condition, history, and features..." />
               <p className={fieldHintClass}>Required</p>
             </div>
+
+            <div className={containerClass}>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-6">Discoverability Tags.</h3>
+              <p className="text-slate-400 text-xs font-bold leading-relaxed mb-6">
+                Input custom keywords to categorize this vehicle in search filters. Press <kbd className="bg-slate-100 px-2 py-1 rounded text-slate-600 font-mono">Enter</kbd> or <kbd className="bg-slate-100 px-2 py-1 rounded text-slate-600 font-mono">Comma</kbd> to append a new tag.
+              </p>
+              <div className="bg-slate-50 border-2 border-transparent focus-within:border-[#6610f2] focus-within:bg-white rounded-[1.5rem] p-4 transition-all flex flex-wrap gap-2.5 items-center">
+                {tags.map((tag, idx) => (
+                  <span key={idx} className="bg-white border border-slate-100 text-slate-800 text-[10px] font-black uppercase tracking-widest pl-4 pr-3 py-2.5 rounded-full flex items-center gap-2 shadow-sm animate-in zoom-in-50 duration-200">
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => setTags(tags.filter((_, tIdx) => tIdx !== idx))}
+                      className="w-4 h-4 rounded-full hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors text-slate-400 font-black text-xs"
+                    >
+                      &times;
+                    </button>
+                  </span>
+                ))}
+                <input
+                  type="text"
+                  placeholder={tags.length === 0 ? "e.g. Electric, Luxury, CleanTitle" : ""}
+                  className="bg-transparent border-none outline-none font-bold text-slate-900 text-sm flex-1 min-w-[200px] placeholder:text-slate-300"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ',') {
+                      e.preventDefault();
+                      const val = e.currentTarget.value.trim().replace(/,/g, '');
+                      if (val && !tags.includes(val)) {
+                        setTags([...tags, val]);
+                        e.currentTarget.value = '';
+                      }
+                    }
+                  }}
+                />
+              </div>
+            </div>
+
           </div>
 
           <div className="lg:col-span-4">
