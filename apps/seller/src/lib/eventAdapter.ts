@@ -19,6 +19,21 @@ export interface NormalizedEvent {
   organizer?: string;
   is_published?: boolean;
   is_virtual?: boolean;
+  virtual_link?: string;
+  organizer_email?: string;
+  organizer_phone?: string;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
+  event_genre?: string | null;
+  venue_size?: number | string | null;
+  brand_id?: number;
+  type_id?: number;
+  location_id?: number;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  zip_code?: string;
   ticket_types?: Array<{ id: number | string; title: string; base_price: number }>;
   occurrences?: Array<{
     id: number | string;
@@ -109,8 +124,23 @@ export const normalizeEvent = (event: any): NormalizedEvent => {
     venue: firstOccurrence?.venue_details ?? '',
     capacity: firstOccurrence?.max_attendees ?? event.ticketing?.max_attendees ?? null,
     organizer: event.organizer_name ?? event.organizer?.name ?? '',
+    organizer_email: event.organizer_email ?? '',
+    organizer_phone: event.organizer_phone ?? '',
     is_published: event.status?.is_published ?? false,
     is_virtual: event.schedule?.is_virtual ?? false,
+    virtual_link: event.schedule?.virtual_link ?? '',
+    latitude: event.location?.latitude,
+    longitude: event.location?.longitude,
+    event_genre: event.specs?.event_genre ?? '',
+    venue_size: event.specs?.venue_size ?? '',
+    brand_id: event.specs?.brand_id,
+    type_id: event.specs?.type_id,
+    location_id: event.location_id,
+    address: event.location?.address ?? '',
+    city: event.location?.city ?? '',
+    state: event.location?.state ?? '',
+    country: event.location?.country ?? '',
+    zip_code: event.location?.zip_code ?? '',
     ticket_types: event.ticket_types ?? [],
     occurrences: event.occurrences ?? [],
     schedule: event.schedule ?? {},

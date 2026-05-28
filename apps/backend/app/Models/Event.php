@@ -61,6 +61,7 @@ class Event extends Model implements HasMedia
         'is_paid',
         'is_published',
         'is_virtual',
+        'virtual_link',
         'max_attendees',
         'base_price',
         'sale_price',
@@ -72,6 +73,10 @@ class Event extends Model implements HasMedia
         'latitude',
         'longitude',
         'organizer_name',
+        'organizer_email',
+        'organizer_phone',
+        'event_genre',
+        'venue_size',
         'expires_at',
     ];
 

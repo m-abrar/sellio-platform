@@ -25,13 +25,28 @@ const defaultForm = {
   date: '',
   time: '',
   venue: '',
-  location: '',
   capacity: '',
   organizer: '',
+  organizer_email: '',
+  organizer_phone: '',
   price: '',
   description: '',
   category_id: '',
+  brand_id: '',
+  type_id: '',
+  location_id: '',
   is_published: true,
+  is_virtual: false,
+  virtual_link: '',
+  address: '',
+  city: '',
+  state: '',
+  country: '',
+  zip_code: '',
+  latitude: '',
+  longitude: '',
+  event_genre: '',
+  venue_size: '',
 };
 
 export default function CreateEvent() {
@@ -90,13 +105,28 @@ export default function CreateEvent() {
             date: event.date || '',
             time: event.time || '',
             venue: event.venue || '',
-            location: event.location || '',
             capacity: event.capacity != null ? String(event.capacity) : '',
             organizer: event.organizer || '',
+            organizer_email: event.organizer_email || '',
+            organizer_phone: event.organizer_phone || '',
             price: event.base_price != null ? String(event.base_price) : '',
             description: event.description || '',
             category_id: event.category_id ? String(event.category_id) : '',
+            brand_id: event.brand_id ? String(event.brand_id) : '',
+            type_id: event.type_id ? String(event.type_id) : '',
+            location_id: event.location_id ? String(event.location_id) : '',
             is_published: event.is_published ?? true,
+            is_virtual: event.is_virtual ?? false,
+            virtual_link: event.virtual_link || '',
+            address: event.address || '',
+            city: event.city || '',
+            state: event.state || '',
+            country: event.country || '',
+            zip_code: event.zip_code || '',
+            latitude: event.latitude != null ? String(event.latitude) : '',
+            longitude: event.longitude != null ? String(event.longitude) : '',
+            event_genre: event.event_genre || '',
+            venue_size: event.venue_size != null ? String(event.venue_size) : '',
           });
 
           const initialMedia: any[] = [];
@@ -142,13 +172,29 @@ export default function CreateEvent() {
     formData.append('title', form.title);
     formData.append('description', form.description);
     formData.append('category_id', form.category_id);
+    if (form.brand_id) formData.append('brand_id', form.brand_id);
+    if (form.type_id) formData.append('type_id', form.type_id);
+    if (form.location_id) formData.append('location_id', form.location_id);
     formData.append('base_price', String(basePrice));
     formData.append('is_paid', basePrice > 0 ? '1' : '0');
     formData.append('is_published', form.is_published ? '1' : '0');
-    formData.append('is_virtual', '0');
+    formData.append('is_virtual', form.is_virtual ? '1' : '0');
+    formData.append('virtual_link', form.virtual_link || '');
 
-    if (form.location) formData.append('city', form.location);
-    if (form.organizer) formData.append('organizer_name', form.organizer);
+    formData.append('organizer_name', form.organizer || '');
+    formData.append('organizer_email', form.organizer_email || '');
+    formData.append('organizer_phone', form.organizer_phone || '');
+    
+    formData.append('event_genre', form.event_genre || '');
+    formData.append('venue_size', form.venue_size || '');
+
+    formData.append('address', form.address || '');
+    formData.append('city', form.city || '');
+    formData.append('state', form.state || '');
+    formData.append('country', form.country || '');
+    formData.append('zip_code', form.zip_code || '');
+    if (form.latitude) formData.append('latitude', form.latitude);
+    if (form.longitude) formData.append('longitude', form.longitude);
 
     formData.append('tickets[0][id]', ticketMeta.id);
     formData.append('tickets[0][title]', ticketMeta.title);
@@ -229,21 +275,21 @@ export default function CreateEvent() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-8 space-y-10">
           <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-10 flex items-center gap-3">
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
               <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Event Identity.
             </h3>
-            <div className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="md:col-span-2">
-                  <label className={labelClass}>Event Title</label>
-                  <input
-                    type="text"
-                    value={form.title}
-                    onChange={(e) => updateForm('title', e.target.value)}
-                    className={`${inputClass} text-2xl italic tracking-tighter`}
-                    placeholder="e.g. Summer Tech Summit 2026"
-                  />
-                </div>
+            <div className="space-y-6">
+              <div>
+                <label className={labelClass}>Event Title</label>
+                <input
+                  type="text"
+                  value={form.title}
+                  onChange={(e) => updateForm('title', e.target.value)}
+                  className={`${inputClass} text-2xl italic tracking-tighter`}
+                  placeholder="e.g. Summer Tech Summit 2026"
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className={labelClass}>Category</label>
                   <select
@@ -252,121 +298,297 @@ export default function CreateEvent() {
                     className={inputClass}
                   >
                     <option value="">Select category</option>
-                    {formMeta.categories.map((category: any) => (
+                    {formMeta.categories?.map((category: any) => (
                       <option key={category.id} value={category.id}>{category.title}</option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className={labelClass}>Organizer</label>
+                  <label className={labelClass}>Event Genre</label>
                   <input
                     type="text"
-                    value={form.organizer}
-                    onChange={(e) => updateForm('organizer', e.target.value)}
+                    value={form.event_genre}
+                    onChange={(e) => updateForm('event_genre', e.target.value)}
                     className={inputClass}
-                    placeholder="e.g. Sellio Studio"
+                    placeholder="e.g. Conference, Music Festival"
                   />
                 </div>
-                <div>
-                  <label className={labelClass}>Venue Name</label>
-                  <input
-                    type="text"
-                    value={form.venue}
-                    onChange={(e) => updateForm('venue', e.target.value)}
-                    className={inputClass}
-                    placeholder="e.g. Grand Plaza Hotel"
-                  />
-                </div>
+                {formMeta.types?.length > 0 && (
+                  <div>
+                    <label className={labelClass}>Type</label>
+                    <select
+                      value={form.type_id}
+                      onChange={(e) => updateForm('type_id', e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="">Select type</option>
+                      {formMeta.types.map((t: any) => (
+                        <option key={t.id} value={t.id}>{t.title}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                {formMeta.brands?.length > 0 && (
+                  <div>
+                    <label className={labelClass}>Brand / Sponsor</label>
+                    <select
+                      value={form.brand_id}
+                      onChange={(e) => updateForm('brand_id', e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="">Select brand</option>
+                      {formMeta.brands.map((b: any) => (
+                        <option key={b.id} value={b.id}>{b.title}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
           <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-10 flex items-center gap-3">
-              <span className="w-2 h-8 bg-purple-500 rounded-full" /> Schedule & Logistics.
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+              <span className="w-2 h-8 bg-blue-500 rounded-full" /> Organizer Info.
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className={labelClass}>Date</label>
-                <div className="relative">
-                  <HiOutlineCalendar className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                  <input
-                    type="date"
-                    value={form.date}
-                    onChange={(e) => updateForm('date', e.target.value)}
-                    className={`${inputClass} pl-14`}
-                  />
-                </div>
-              </div>
-              <div>
-                <label className={labelClass}>Start Time</label>
-                <div className="relative">
-                  <HiOutlineClock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                  <input
-                    type="time"
-                    value={form.time}
-                    onChange={(e) => updateForm('time', e.target.value)}
-                    className={`${inputClass} pl-14`}
-                  />
-                </div>
-              </div>
-              <div>
-                <label className={labelClass}>Capacity</label>
-                <div className="relative">
-                  <HiOutlineUserGroup className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                  <input
-                    type="number"
-                    value={form.capacity}
-                    onChange={(e) => updateForm('capacity', e.target.value)}
-                    className={`${inputClass} pl-14`}
-                    placeholder="e.g. 500"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className={labelClass}>Location (City, State)</label>
-                <div className="relative">
-                  <HiOutlineMapPin className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                  <input
-                    type="text"
-                    value={form.location}
-                    onChange={(e) => updateForm('location', e.target.value)}
-                    className={`${inputClass} pl-14`}
-                    placeholder="e.g. San Francisco, CA"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-10 flex items-center gap-3">
-              <span className="w-2 h-8 bg-green-500 rounded-full" /> Ticketing.
-            </h3>
-            <div>
-              <label className={labelClass}>Base Ticket Price (USD)</label>
-              <div className="relative">
-                <HiOutlineTicket className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <label className={labelClass}>Organizer Name</label>
                 <input
                   type="text"
-                  value={form.price}
-                  onChange={(e) => updateForm('price', e.target.value)}
-                  className={`${inputClass} pl-14 text-3xl`}
-                  placeholder="0.00"
+                  value={form.organizer}
+                  onChange={(e) => updateForm('organizer', e.target.value)}
+                  className={inputClass}
+                  placeholder="e.g. Sellio Studio"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Organizer Email</label>
+                <input
+                  type="email"
+                  value={form.organizer_email}
+                  onChange={(e) => updateForm('organizer_email', e.target.value)}
+                  className={inputClass}
+                  placeholder="organizer@example.com"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Organizer Phone</label>
+                <input
+                  type="tel"
+                  value={form.organizer_phone}
+                  onChange={(e) => updateForm('organizer_phone', e.target.value)}
+                  className={inputClass}
+                  placeholder="+1 (555) 000-0000"
                 />
               </div>
             </div>
           </div>
 
           <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+              <HiOutlineMapPin className="w-6 h-6 text-slate-300" /> Location.
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="md:col-span-2">
+                <label className={labelClass}>Address</label>
+                <input
+                  type="text"
+                  value={form.address}
+                  onChange={(e) => updateForm('address', e.target.value)}
+                  className={inputClass}
+                  placeholder="e.g. 100 Main Street"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>City</label>
+                <input
+                  type="text"
+                  value={form.city}
+                  onChange={(e) => updateForm('city', e.target.value)}
+                  className={inputClass}
+                  placeholder="City"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>State / Region</label>
+                <input
+                  type="text"
+                  value={form.state}
+                  onChange={(e) => updateForm('state', e.target.value)}
+                  className={inputClass}
+                  placeholder="State"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Country</label>
+                <input
+                  type="text"
+                  value={form.country}
+                  onChange={(e) => updateForm('country', e.target.value)}
+                  className={inputClass}
+                  placeholder="Country"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Zip Code</label>
+                <input
+                  type="text"
+                  value={form.zip_code}
+                  onChange={(e) => updateForm('zip_code', e.target.value)}
+                  className={inputClass}
+                  placeholder="Zip Code"
+                />
+              </div>
+              <div className="md:col-span-2 grid grid-cols-2 gap-6 pt-4 border-t border-slate-100/50">
+                <div>
+                  <label className={labelClass}>Latitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={form.latitude}
+                    onChange={(e) => updateForm('latitude', e.target.value)}
+                    className={inputClass}
+                    placeholder="e.g. 37.7749"
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Longitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={form.longitude}
+                    onChange={(e) => updateForm('longitude', e.target.value)}
+                    className={inputClass}
+                    placeholder="e.g. -122.4194"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={containerClass}>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+              <span className="w-2 h-8 bg-purple-500 rounded-full" /> Schedule & Logistics.
+            </h3>
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className={labelClass}>Date</label>
+                  <div className="relative">
+                    <HiOutlineCalendar className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    <input
+                      type="date"
+                      value={form.date}
+                      onChange={(e) => updateForm('date', e.target.value)}
+                      className={`${inputClass} pl-14`}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelClass}>Start Time</label>
+                  <div className="relative">
+                    <HiOutlineClock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    <input
+                      type="time"
+                      value={form.time}
+                      onChange={(e) => updateForm('time', e.target.value)}
+                      className={`${inputClass} pl-14`}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelClass}>Capacity (Attendees)</label>
+                  <div className="relative">
+                    <HiOutlineUserGroup className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    <input
+                      type="number"
+                      value={form.capacity}
+                      onChange={(e) => updateForm('capacity', e.target.value)}
+                      className={`${inputClass} pl-14`}
+                      placeholder="e.g. 500"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelClass}>Venue Size (sq ft)</label>
+                  <input
+                    type="number"
+                    value={form.venue_size}
+                    onChange={(e) => updateForm('venue_size', e.target.value)}
+                    className={inputClass}
+                    placeholder="e.g. 2500"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 pt-6 border-t border-slate-100">
+                <label className="flex items-center justify-between min-h-[72px] p-5 bg-slate-50 rounded-2xl border border-slate-100 cursor-pointer hover:bg-white hover:shadow-sm transition-all">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Virtual / Online Event</span>
+                  <input
+                    type="checkbox"
+                    checked={form.is_virtual}
+                    onChange={(e) => updateForm('is_virtual', e.target.checked)}
+                    className="w-5 h-5 accent-[#6610f2]"
+                  />
+                </label>
+                
+                {form.is_virtual && (
+                  <div className="animate-in fade-in slide-in-from-top-4 duration-500">
+                    <label className={labelClass}>Zoom / Meet / Live Stream Link</label>
+                    <input
+                      type="text"
+                      value={form.virtual_link}
+                      onChange={(e) => updateForm('virtual_link', e.target.value)}
+                      className={inputClass}
+                      placeholder="https://zoom.us/j/123456789"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className={containerClass}>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+              <span className="w-2 h-8 bg-green-500 rounded-full" /> Ticketing.
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className={labelClass}>Base Ticket Price (USD)</label>
+                <div className="relative">
+                  <HiOutlineTicket className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    value={form.price}
+                    onChange={(e) => updateForm('price', e.target.value)}
+                    className={`${inputClass} pl-14 text-2xl`}
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className={labelClass}>Venue Name (Display)</label>
+                <input
+                  type="text"
+                  value={form.venue}
+                  onChange={(e) => updateForm('venue', e.target.value)}
+                  className={inputClass}
+                  placeholder="e.g. Grand Plaza Hotel"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className={containerClass}>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
               <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Media Studio.
             </h3>
             <MediaStudio files={files} setFiles={setFiles} />
           </div>
 
           <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8">Event Narrative.</h3>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Event Narrative.</h3>
             <textarea
               value={form.description}
               onChange={(e) => updateForm('description', e.target.value)}

@@ -19,7 +19,9 @@ class EventResource extends JsonResource
             'slug'        => $this->slug,
             'description' => $this->description,
             'category_id' => $this->category_id,
-            'organizer_name' => $this->organizer_name,
+            'organizer_name'  => $this->organizer_name,
+            'organizer_email' => $this->organizer_email,
+            'organizer_phone' => $this->organizer_phone,
 
             // Schedule & Duration
             'schedule' => [
@@ -27,6 +29,7 @@ class EventResource extends JsonResource
                 'end_at'         => $this->end_date_time?->toIso8601String(),
                 'duration_hours' => $this->duration_hours,
                 'is_virtual'     => (bool) $this->is_virtual,
+                'virtual_link'   => $this->virtual_link,
             ],
 
             // Pricing & Ticketing
@@ -70,6 +73,7 @@ class EventResource extends JsonResource
                 'city'      => $this->city,
                 'state'     => $this->state,
                 'country'   => $this->country,
+                'zip_code'  => $this->zip_code,
                 'latitude'  => (float) $this->latitude,
                 'longitude' => (float) $this->longitude,
                 'map_title' => $this->whenLoaded('location', fn() => $this->location->title),

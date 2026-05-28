@@ -35,16 +35,35 @@ class EventRequest extends FormRequest
             'title'             => ['required', 'string', 'max:255'],
             'description'       => ['required', 'string'],
             'category_id'       => ['required', 'exists:categories,id'],
+            'type_id'           => ['nullable', 'exists:types,id'],
+            'brand_id'          => ['nullable', 'exists:brands,id'],
+            'location_id'       => ['nullable', 'exists:locations,id'],
             'base_price'        => ['required', 'numeric', 'min:0'],
             'sale_price'        => ['nullable', 'numeric', 'min:0', 'lt:base_price'],
             'is_paid'           => ['boolean'],
             'is_published'      => ['boolean'],
+            
+            // Scheduling & Virtual Options
             'is_virtual'        => ['boolean'],
+            'virtual_link'      => ['nullable', 'string', 'max:255'],
+
+            // Address & Coordinates
+            'address'           => ['nullable', 'string', 'max:255'],
             'city'              => ['nullable', 'string', 'max:100'],
             'state'             => ['nullable', 'string', 'max:100'],
             'country'           => ['nullable', 'string', 'max:100'],
-            'address'           => ['nullable', 'string', 'max:255'],
+            'zip_code'          => ['nullable', 'string', 'max:20'],
+            'latitude'          => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude'         => ['nullable', 'numeric', 'between:-180,180'],
+
+            // Specs
+            'event_genre'       => ['nullable', 'string', 'max:100'],
+            'venue_size'        => ['nullable', 'numeric', 'min:0'],
+
+            // Organizer Contacts
             'organizer_name'    => ['nullable', 'string', 'max:255'],
+            'organizer_email'   => ['nullable', 'email', 'max:255'],
+            'organizer_phone'   => ['nullable', 'string', 'max:50'],
 
             'tickets'           => ['required', 'array', 'min:1'],
             'tickets.*.id'      => ['required', 'string'],
