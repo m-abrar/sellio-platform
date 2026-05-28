@@ -144,7 +144,8 @@ class DashboardService
         }
 
         return [
-            'total' => $currentEarnings,
+            'total' => (float) $partner->wallet_balance,
+            'earnings_30_days' => $currentEarnings,
             'previous_earnings' => $previousEarnings,
             'percentage' => number_format(abs($change), 2),
             'change_type' => $changeType,
