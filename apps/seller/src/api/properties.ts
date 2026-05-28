@@ -8,6 +8,8 @@ export interface PropertyFormMeta {
   types: Array<{ id: number; title: string }>;
   locations: Array<{ id: number; title: string }>;
   amenities: Array<{ id: number; title: string }>;
+  brands: Array<{ id: number; title: string }>;
+  features: Array<{ id: number; title: string }>;
 }
 
 let cachedFormMeta: PropertyFormMeta | null = null;
@@ -20,6 +22,8 @@ const extractFormMeta = (response: { data: LaravelResponse<unknown> }): Property
     types: form?.types ?? [],
     locations: form?.locations ?? [],
     amenities: form?.amenities ?? [],
+    brands: (form as any)?.brands ?? [],
+    features: (form as any)?.features ?? [],
   };
 };
 

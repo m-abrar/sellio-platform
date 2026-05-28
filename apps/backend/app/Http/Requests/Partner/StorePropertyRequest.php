@@ -76,10 +76,42 @@ class StorePropertyRequest extends FormRequest
             'policies' => ['nullable', 'string'],
 
             // Taxonomy & Status
-            'amenities'    => ['nullable', 'array'],
-            'amenities.*'  => ['exists:amenities,id'],
-            'is_published' => ['boolean'],
-            'is_featured'  => ['boolean'], // Validated but controlled in Service/Controller
+            'brand_id'           => ['nullable', 'exists:brands,id'],
+            'amenities'          => ['nullable', 'array'],
+            'amenities.*'        => ['exists:amenities,id'],
+            'tags'               => ['nullable', 'array'],
+            'tags.*'             => ['string', 'max:50'],
+            'features'           => ['nullable', 'array'],
+            'features.*'         => ['exists:features,id'],
+            'is_published'       => ['boolean'],
+            'is_featured'        => ['boolean'],
+
+            // Neighborhood POIs
+            'neighborhoods'      => ['nullable', 'array'],
+            'neighborhoods.*.title' => ['required_with:neighborhoods', 'string', 'max:255'],
+            'neighborhoods.*.description' => ['nullable', 'string'],
+            'neighborhoods.*.distance_miles' => ['required_with:neighborhoods', 'numeric', 'min:0'],
+            
+            // Seasonal Rental Prices
+            'seasonal_prices'    => ['nullable', 'array'],
+            'seasonal_prices.*.season_name' => ['required_with:seasonal_prices', 'string', 'max:255'],
+            'seasonal_prices.*.start_date'  => ['required_with:seasonal_prices', 'date'],
+            'seasonal_prices.*.end_date'    => ['required_with:seasonal_prices', 'date', 'after_or_equal:seasonal_prices.*.start_date'],
+            'seasonal_prices.*.price'       => ['required_with:seasonal_prices', 'numeric', 'min:0'],
+            
+            // Property Addons
+            'addons'             => ['nullable', 'array'],
+            'addons.*.title'     => ['required_with:addons', 'string', 'max:255'],
+            'addons.*.description' => ['nullable', 'string'],
+            'addons.*.price'     => ['required_with:addons', 'numeric', 'min:0'],
+            
+            // Property Fees
+            'fees'               => ['nullable', 'array'],
+            'fees.*.title'       => ['required_with:fees', 'string', 'max:255'],
+            'fees.*.amount'      => ['required_with:fees', 'numeric', 'min:0'],
+            'fees.*.type'        => ['required_with:fees', 'string', 'in:fixed,percentage'],
+            'fees.*.rate'        => ['nullable', 'numeric', 'min:0'],
+            'fees.*.charge_type' => ['required_with:fees', 'string', 'in:per_stay,per_night,per_guest'],
         ];
     }
 

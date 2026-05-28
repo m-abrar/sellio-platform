@@ -24,6 +24,7 @@ const defaultForm = {
   category_id: '',
   type_id: '',
   location_id: '',
+  brand_id: '',
   address: '',
   city: '',
   state: '',
@@ -59,8 +60,16 @@ export default function CreateProperty() {
   const navigate = useNavigate();
   const isEditMode = Boolean(slug);
 
-  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [], amenities: [] });
+  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [], amenities: [], brands: [], features: [] });
   const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
+  const [selectedFeatures, setSelectedFeatures] = useState<number[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
+  const [neighborhoods, setNeighborhoods] = useState<any[]>([]);
+  const [seasonalPrices, setSeasonalPrices] = useState<any[]>([]);
+  const [addons, setAddons] = useState<any[]>([]);
+  const [fees, setFees] = useState<any[]>([]);
+  const [activePricingTab, setActivePricingTab] = useState<'seasonal' | 'addons' | 'fees'>('seasonal');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [propertyId, setPropertyId] = useState<number | null>(null);
@@ -87,6 +96,7 @@ export default function CreateProperty() {
             category_id: property.category_id ? String(property.category_id) : '',
             type_id: property.type_id ? String(property.type_id) : '',
             location_id: property.location_id ? String(property.location_id) : '',
+            brand_id: property.brand_id ? String(property.brand_id) : '',
             address: property.address || '',
             city: property.city || '',
             state: property.state || '',
@@ -117,6 +127,12 @@ export default function CreateProperty() {
             is_featured: property.status?.is_featured ?? false,
           });
           setSelectedAmenities((property.amenities ?? []).map((item: any) => item.id));
+          setSelectedFeatures((property.features ?? []).map((item: any) => item.id));
+          setTags(property.tags ?? []);
+          setNeighborhoods(property.neighborhoods ?? []);
+          setSeasonalPrices(property.seasonal_prices ?? []);
+          setAddons(property.addons ?? []);
+          setFees(property.fees ?? []);
 
           const initialMedia: any[] = [];
           if (property.featured_image) {
@@ -171,6 +187,41 @@ export default function CreateProperty() {
 
     selectedAmenities.forEach((amenityId) => {
       formData.append('amenities[]', String(amenityId));
+    });
+
+    selectedFeatures.forEach((featureId) => {
+      formData.append('features[]', String(featureId));
+    });
+
+    tags.forEach((tag) => {
+      formData.append('tags[]', tag);
+    });
+
+    neighborhoods.forEach((nb, index) => {
+      formData.append(`neighborhoods[${index}][title]`, nb.title);
+      formData.append(`neighborhoods[${index}][description]`, nb.description || '');
+      formData.append(`neighborhoods[${index}][distance_miles]`, String(nb.distance_miles ?? 0));
+    });
+
+    seasonalPrices.forEach((sp, index) => {
+      formData.append(`seasonal_prices[${index}][season_name]`, sp.season_name);
+      formData.append(`seasonal_prices[${index}][start_date]`, sp.start_date);
+      formData.append(`seasonal_prices[${index}][end_date]`, sp.end_date);
+      formData.append(`seasonal_prices[${index}][price]`, String(sp.price));
+    });
+
+    addons.forEach((addon, index) => {
+      formData.append(`addons[${index}][title]`, addon.title);
+      formData.append(`addons[${index}][description]`, addon.description || '');
+      formData.append(`addons[${index}][price]`, String(addon.price));
+    });
+
+    fees.forEach((fee, index) => {
+      formData.append(`fees[${index}][title]`, fee.title);
+      formData.append(`fees[${index}][amount]`, String(fee.amount ?? 0));
+      formData.append(`fees[${index}][type]`, fee.type || 'fixed');
+      formData.append(`fees[${index}][rate]`, fee.rate != null ? String(fee.rate) : '');
+      formData.append(`fees[${index}][charge_type]`, fee.charge_type || 'per_stay');
     });
 
     formData.append('sync_existing_media', '1');
@@ -229,11 +280,12 @@ export default function CreateProperty() {
                   <input type="text" value={form.title} onChange={(e) => updateForm('title', e.target.value)} className={`${inputClass} text-2xl italic tracking-tighter`} placeholder="e.g. Skyline Luxury Penthouse" />
                   <p className={fieldHintClass}>Required</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                   {[
                     { key: 'category_id', label: 'Category', options: formMeta.categories, hint: 'Required' },
                     { key: 'type_id', label: 'Type', options: formMeta.types, hint: 'Required' },
                     { key: 'location_id', label: 'Location Zone', options: formMeta.locations, hint: 'Required' },
+                    { key: 'brand_id', label: 'Developer Brand', options: formMeta.brands || [], hint: 'Optional' },
                   ].map((field) => (
                     <div key={field.key}>
                       <label className={labelClass}>{field.label}</label>
@@ -384,6 +436,20 @@ export default function CreateProperty() {
               </div>
             )}
 
+            {formMeta.features?.length > 0 && (
+              <div className={containerClass}>
+                <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Specification Features.</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {formMeta.features.map((feature: any) => (
+                    <label key={feature.id} className={`flex items-center gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${selectedFeatures.includes(feature.id) ? 'border-[#6610f2] bg-[#6610f2]/5' : 'border-slate-100 bg-slate-50'}`}>
+                      <input type="checkbox" checked={selectedFeatures.includes(feature.id)} onChange={() => setSelectedFeatures(prev => prev.includes(feature.id) ? prev.filter(id => id !== feature.id) : [...prev, feature.id])} className="accent-[#6610f2]" />
+                      <span className="text-sm font-bold text-slate-700">{feature.title}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className={containerClass}>
               <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
                 <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Media Studio.
@@ -413,6 +479,458 @@ export default function CreateProperty() {
               <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Property Narrative.</h3>
               <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} rows={6} className={`${inputClass} resize-none`} placeholder="Describe the architectural highlights and amenities..." />
               <p className={fieldHintClass}>Required</p>
+
+              <div className="mt-8 border-t border-slate-100 pt-8">
+                <label className={labelClass}>Discoverability Tags</label>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {tags.map((tag) => (
+                    <span key={tag} className="flex items-center gap-2 bg-[#6610f2]/5 text-[#6610f2] border border-[#6610f2]/10 px-4 py-2 rounded-full font-black text-[10px] uppercase tracking-wider">
+                      {tag}
+                      <button type="button" onClick={() => setTags(prev => prev.filter(t => t !== tag))} className="text-red-500 hover:text-red-700 font-bold ml-1">×</button>
+                    </span>
+                  ))}
+                  {tags.length === 0 && (
+                    <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest ml-2">No tags added yet.</span>
+                  )}
+                </div>
+                <div className="flex gap-4">
+                  <input
+                    type="text"
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (tagInput.trim() && !tags.includes(tagInput.trim())) {
+                          setTags(prev => [...prev, tagInput.trim()]);
+                          setTagInput('');
+                        }
+                      }
+                    }}
+                    className={`${inputClass} !py-3 !px-4 !rounded-full text-xs font-bold w-full max-w-xs`}
+                    placeholder="Type keyword and press Enter..."
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (tagInput.trim() && !tags.includes(tagInput.trim())) {
+                        setTags(prev => [...prev, tagInput.trim()]);
+                        setTagInput('');
+                      }
+                    }}
+                    className="bg-[#6610f2] text-white px-6 py-2.5 rounded-full font-black text-[10px] uppercase tracking-wider hover:bg-[#520dc2] transition-colors"
+                  >
+                    Add
+                  </button>
+                </div>
+                <p className={fieldHintClass}>Type keywords like "sea view" or "central" and press Enter to tag the property listing</p>
+              </div>
+            </div>
+
+            <div className={containerClass}>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+                <span className="w-2 h-8 bg-blue-500 rounded-full" /> Neighborhood POIs (Points of Interest).
+              </h3>
+              <div className="space-y-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-100">
+                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Landmark Title</th>
+                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Description</th>
+                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-32 pr-4">Distance (miles)</th>
+                        <th className="pb-3 w-16"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {neighborhoods.map((nb, index) => (
+                        <tr key={index} className="border-b border-slate-50 last:border-0">
+                          <td className="py-3 pr-4">
+                            <input
+                              type="text"
+                              value={nb.title}
+                              onChange={(e) => {
+                                const newNbs = [...neighborhoods];
+                                newNbs[index].title = e.target.value;
+                                setNeighborhoods(newNbs);
+                              }}
+                              className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                              placeholder="e.g. Metro Station"
+                            />
+                          </td>
+                          <td className="py-3 pr-4">
+                            <input
+                              type="text"
+                              value={nb.description || ''}
+                              onChange={(e) => {
+                                const newNbs = [...neighborhoods];
+                                newNbs[index].description = e.target.value;
+                                setNeighborhoods(newNbs);
+                              }}
+                              className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                              placeholder="e.g. Central line station"
+                            />
+                          </td>
+                          <td className="py-3 pr-4">
+                            <input
+                              type="number"
+                              step="0.1"
+                              value={nb.distance_miles}
+                              onChange={(e) => {
+                                const newNbs = [...neighborhoods];
+                                newNbs[index].distance_miles = Number(e.target.value);
+                                setNeighborhoods(newNbs);
+                              }}
+                              className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold text-center`}
+                              placeholder="0.0"
+                            />
+                          </td>
+                          <td className="py-3 text-center">
+                            <button
+                              type="button"
+                              onClick={() => setNeighborhoods(prev => prev.filter((_, i) => i !== index))}
+                              className="text-red-500 hover:text-red-700 font-bold text-lg"
+                            >
+                              ×
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                      {neighborhoods.length === 0 && (
+                        <tr>
+                          <td colSpan={4} className="py-8 text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                            No landmarks added yet. Click '+ Add Landmark' below to add nearby landmarks.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setNeighborhoods(prev => [...prev, { title: '', description: '', distance_miles: 0.5 }])}
+                  className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-wider hover:bg-slate-100 transition-colors"
+                >
+                  + Add Landmark
+                </button>
+              </div>
+            </div>
+
+            <div className={containerClass}>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+                <span className="w-2 h-8 bg-amber-500 rounded-full" /> Pricing Adjustments & Overrides.
+              </h3>
+              
+              <div className="flex flex-wrap gap-2 border-b border-slate-100 pb-4 mb-6">
+                {[
+                  { id: 'seasonal', label: 'Seasonal Rates' },
+                  { id: 'addons', label: 'Auxiliary Addons' },
+                  { id: 'fees', label: 'Additional Fees' }
+                ].map(tab => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActivePricingTab(tab.id as any)}
+                    className={`px-5 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${activePricingTab === tab.id ? 'bg-[#6610f2] text-white shadow-md' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {activePricingTab === 'seasonal' && (
+                <div className="space-y-6">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Override base price per night for short term rental seasons</p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-100">
+                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Season Name</th>
+                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Start Date</th>
+                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">End Date</th>
+                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-36 pr-4">Override Price ($)</th>
+                          <th className="pb-3 w-16"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {seasonalPrices.map((sp, index) => (
+                          <tr key={index} className="border-b border-slate-50 last:border-0">
+                            <td className="py-3 pr-4">
+                              <input
+                                type="text"
+                                value={sp.season_name}
+                                onChange={(e) => {
+                                  const newSps = [...seasonalPrices];
+                                  newSps[index].season_name = e.target.value;
+                                  setSeasonalPrices(newSps);
+                                }}
+                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                placeholder="e.g. Christmas Peak"
+                              />
+                            </td>
+                            <td className="py-3 pr-4">
+                              <input
+                                type="date"
+                                value={sp.start_date}
+                                onChange={(e) => {
+                                  const newSps = [...seasonalPrices];
+                                  newSps[index].start_date = e.target.value;
+                                  setSeasonalPrices(newSps);
+                                }}
+                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                              />
+                            </td>
+                            <td className="py-3 pr-4">
+                              <input
+                                type="date"
+                                value={sp.end_date}
+                                onChange={(e) => {
+                                  const newSps = [...seasonalPrices];
+                                  newSps[index].end_date = e.target.value;
+                                  setSeasonalPrices(newSps);
+                                }}
+                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                              />
+                            </td>
+                            <td className="py-3 pr-4">
+                              <input
+                                type="number"
+                                value={sp.price}
+                                onChange={(e) => {
+                                  const newSps = [...seasonalPrices];
+                                  newSps[index].price = Number(e.target.value);
+                                  setSeasonalPrices(newSps);
+                                }}
+                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold text-center`}
+                                placeholder="0.00"
+                              />
+                            </td>
+                            <td className="py-3 text-center">
+                              <button
+                                type="button"
+                                onClick={() => setSeasonalPrices(prev => prev.filter((_, i) => i !== index))}
+                                className="text-red-500 hover:text-red-700 font-bold text-lg"
+                              >
+                                ×
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                        {seasonalPrices.length === 0 && (
+                          <tr>
+                            <td colSpan={5} className="py-8 text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                              No seasonal overrides defined yet.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSeasonalPrices(prev => [...prev, { season_name: '', start_date: '', end_date: '', price: 0 }])}
+                    className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-wider hover:bg-slate-100 transition-colors"
+                  >
+                    + Add Season Price
+                  </button>
+                </div>
+              )}
+
+              {activePricingTab === 'addons' && (
+                <div className="space-y-6">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Add optional up-sell services (daily cleaning, car rental, tour guide)</p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-100">
+                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Addon Service</th>
+                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Description</th>
+                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-36 pr-4">Addon Cost ($)</th>
+                          <th className="pb-3 w-16"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {addons.map((ad, index) => (
+                          <tr key={index} className="border-b border-slate-50 last:border-0">
+                            <td className="py-3 pr-4">
+                              <input
+                                type="text"
+                                value={ad.title}
+                                onChange={(e) => {
+                                  const newAds = [...addons];
+                                  newAds[index].title = e.target.value;
+                                  setAddons(newAds);
+                                }}
+                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                placeholder="e.g. Airport Shuttle"
+                              />
+                            </td>
+                            <td className="py-3 pr-4">
+                              <input
+                                type="text"
+                                value={ad.description || ''}
+                                onChange={(e) => {
+                                  const newAds = [...addons];
+                                  newAds[index].description = e.target.value;
+                                  setAddons(newAds);
+                                }}
+                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                placeholder="e.g. Standard one-way pickup"
+                              />
+                            </td>
+                            <td className="py-3 pr-4">
+                              <input
+                                type="number"
+                                value={ad.price}
+                                onChange={(e) => {
+                                  const newAds = [...addons];
+                                  newAds[index].price = Number(e.target.value);
+                                  setAddons(newAds);
+                                }}
+                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold text-center`}
+                                placeholder="0.00"
+                              />
+                            </td>
+                            <td className="py-3 text-center">
+                              <button
+                                type="button"
+                                onClick={() => setAddons(prev => prev.filter((_, i) => i !== index))}
+                                className="text-red-500 hover:text-red-700 font-bold text-lg"
+                              >
+                                ×
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                        {addons.length === 0 && (
+                          <tr>
+                            <td colSpan={4} className="py-8 text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                              No auxiliary addons defined yet.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setAddons(prev => [...prev, { title: '', description: '', price: 0 }])}
+                    className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-wider hover:bg-slate-100 transition-colors"
+                  >
+                    + Add Addon Service
+                  </button>
+                </div>
+              )}
+
+              {activePricingTab === 'fees' && (
+                <div className="space-y-6">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Set additional fees (taxes, cleanings) with dynamic multipliers</p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-100">
+                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Fee Title</th>
+                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-36 pr-4">Calculation</th>
+                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-32 pr-4">Amount ($/%)</th>
+                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-36 pr-4">Charge Multiplier</th>
+                          <th className="pb-3 w-16"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {fees.map((fee, index) => (
+                          <tr key={index} className="border-b border-slate-50 last:border-0">
+                            <td className="py-3 pr-4">
+                              <input
+                                type="text"
+                                value={fee.title}
+                                onChange={(e) => {
+                                  const newFees = [...fees];
+                                  newFees[index].title = e.target.value;
+                                  setFees(newFees);
+                                }}
+                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                placeholder="e.g. Tourism Tax"
+                              />
+                            </td>
+                            <td className="py-3 pr-4">
+                              <select
+                                value={fee.type}
+                                onChange={(e) => {
+                                  const newFees = [...fees];
+                                  newFees[index].type = e.target.value as any;
+                                  setFees(newFees);
+                                }}
+                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                              >
+                                <option value="fixed">Fixed cost ($)</option>
+                                <option value="percentage">Percentage (%)</option>
+                              </select>
+                            </td>
+                            <td className="py-3 pr-4">
+                              <input
+                                type="number"
+                                value={fee.type === 'percentage' ? (fee.rate ?? 0) : fee.amount}
+                                onChange={(e) => {
+                                  const newFees = [...fees];
+                                  const val = Number(e.target.value);
+                                  if (fee.type === 'percentage') {
+                                    newFees[index].rate = val;
+                                    newFees[index].amount = 0;
+                                  } else {
+                                    newFees[index].amount = val;
+                                    newFees[index].rate = null;
+                                  }
+                                  setFees(newFees);
+                                }}
+                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold text-center`}
+                                placeholder="0.00"
+                              />
+                            </td>
+                            <td className="py-3 pr-4">
+                              <select
+                                value={fee.charge_type}
+                                onChange={(e) => {
+                                  const newFees = [...fees];
+                                  newFees[index].charge_type = e.target.value;
+                                  setFees(newFees);
+                                }}
+                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                              >
+                                <option value="per_stay">Per Stay</option>
+                                <option value="per_night">Per Night</option>
+                                <option value="per_guest">Per Guest</option>
+                              </select>
+                            </td>
+                            <td className="py-3 text-center">
+                              <button
+                                type="button"
+                                onClick={() => setFees(prev => prev.filter((_, i) => i !== index))}
+                                className="text-red-500 hover:text-red-700 font-bold text-lg"
+                              >
+                                ×
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                        {fees.length === 0 && (
+                          <tr>
+                            <td colSpan={5} className="py-8 text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                              No additional fees defined yet.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setFees(prev => [...prev, { title: '', amount: 0, type: 'fixed', rate: null, charge_type: 'per_stay' }])}
+                    className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-wider hover:bg-slate-100 transition-colors"
+                  >
+                    + Add Charge Fee
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className={containerClass}>

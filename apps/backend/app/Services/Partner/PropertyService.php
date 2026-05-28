@@ -53,14 +53,97 @@ class PropertyService
     public function saveProperty(User $user, array $data, ?Property $property = null): Property
     {
         return DB::transaction(function () use ($user, $data, $property) {
+            // Exclude relational array attributes from the core table save
+            $coreData = collect($data)->except([
+                'amenities', 'features', 'tags', 'neighborhoods', 'seasonal_prices', 'addons', 'fees'
+            ])->toArray();
+
             if ($property) {
-                $property->update($data);
+                $property->update($coreData);
             } else {
-                $property = $user->properties()->create($data);
+                $property = $user->properties()->create($coreData);
             }
 
+            // 1. Sync standard Amenities (Many-to-Many)
             if (isset($data['amenities'])) {
                 $property->amenities()->sync($data['amenities']);
+            }
+
+            // 2. Sync polymorphic Features (Morph-to-Many)
+            if (isset($data['features'])) {
+                $property->features()->sync($data['features']);
+            }
+
+            // 3. Sync polymorphic Tags (Morph-to-Many)
+            if (isset($data['tags'])) {
+                $tagIds = [];
+                foreach ($data['tags'] as $tagName) {
+                    $tag = \App\Models\Tag::firstOrCreate(
+                        ['title' => trim($tagName)],
+                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_property' => true, 'is_published' => true]
+                    );
+                    $tagIds[] = $tag->id;
+                }
+                $property->tags()->sync($tagIds);
+            }
+
+            // 4. Sync dynamic Neighborhoods (One-to-Many)
+            if (isset($data['neighborhoods'])) {
+                $property->neighborhoods()->delete();
+                foreach ($data['neighborhoods'] as $nb) {
+                    if (!empty($nb['title'])) {
+                        $property->neighborhoods()->create([
+                            'title'          => $nb['title'],
+                            'description'    => $nb['description'] ?? null,
+                            'distance_miles' => (float) ($nb['distance_miles'] ?? 0),
+                        ]);
+                    }
+                }
+            }
+
+            // 5. Sync Seasonal Prices (One-to-Many)
+            if (isset($data['seasonal_prices'])) {
+                $property->prices()->delete();
+                foreach ($data['seasonal_prices'] as $sp) {
+                    if (!empty($sp['season_name'])) {
+                        $property->prices()->create([
+                            'season_name' => $sp['season_name'],
+                            'start_date'  => $sp['start_date'],
+                            'end_date'    => $sp['end_date'],
+                            'price'       => (float) $sp['price'],
+                        ]);
+                    }
+                }
+            }
+
+            // 6. Sync Addons (One-to-Many)
+            if (isset($data['addons'])) {
+                $property->addons()->delete();
+                foreach ($data['addons'] as $addon) {
+                    if (!empty($addon['title'])) {
+                        $property->addons()->create([
+                            'title'       => $addon['title'],
+                            'description' => $addon['description'] ?? null,
+                            'price'       => (float) $addon['price'],
+                        ]);
+                    }
+                }
+            }
+
+            // 7. Sync Fees (One-to-Many)
+            if (isset($data['fees'])) {
+                $property->fees()->delete();
+                foreach ($data['fees'] as $fee) {
+                    if (!empty($fee['title'])) {
+                        $property->fees()->create([
+                            'title'       => $fee['title'],
+                            'amount'      => (float) ($fee['amount'] ?? 0),
+                            'type'        => $fee['type'] ?? 'fixed',
+                            'rate'        => isset($fee['rate']) ? (float) $fee['rate'] : null,
+                            'charge_type' => $fee['charge_type'] ?? 'per_stay',
+                        ]);
+                    }
+                }
             }
 
             return $property;

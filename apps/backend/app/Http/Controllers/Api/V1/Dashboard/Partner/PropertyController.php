@@ -11,6 +11,8 @@ use App\Models\Category;
 use App\Models\Location;
 use App\Models\Property;
 use App\Models\Type;
+use App\Models\Brand;
+use App\Models\Feature;
 use App\Services\Partner\PropertyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -196,6 +198,8 @@ class PropertyController extends Controller
             'types'      => Type::where('is_property', true)->active()->get(['id', 'title']),
             'locations'  => Location::where('is_property', true)->active()->get(['id', 'title']),
             'amenities'  => Amenity::where('is_property', true)->active()->get(['id', 'title']),
+            'brands'     => Brand::where('is_property', true)->active()->get(['id', 'title']),
+            'features'   => Feature::where('is_property', true)->active()->get(['id', 'title']),
         ];
     }
 }

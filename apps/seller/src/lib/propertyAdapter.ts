@@ -13,6 +13,14 @@ export interface NormalizedProperty {
   category_id?: number;
   type_id?: number;
   location_id?: number;
+  brand_id?: number | string | null;
+  brand?: { id: number; title: string } | null;
+  tags?: string[];
+  features?: Array<{ id: number; title: string }>;
+  neighborhoods?: Array<{ id?: number; title: string; description?: string | null; distance_miles: number }>;
+  seasonal_prices?: Array<{ id?: number; season_name: string; start_date: string; end_date: string; price: number }>;
+  addons?: Array<{ id?: number; title: string; description?: string | null; price: number }>;
+  fees?: Array<{ id?: number; title: string; amount: number; type: 'fixed' | 'percentage'; rate: number | null; charge_type: string }>;
   address?: string;
   city?: string;
   state?: string | null;
@@ -94,6 +102,14 @@ export const normalizeProperty = (property: any): NormalizedProperty => {
     category_id: property.category_id,
     type_id: property.type_id,
     location_id: property.location_id,
+    brand_id: property.brand_id ?? property.brand?.id ?? null,
+    brand: property.brand ?? null,
+    tags: property.tags ?? [],
+    features: property.features ?? [],
+    neighborhoods: property.neighborhoods ?? [],
+    seasonal_prices: property.seasonal_prices ?? [],
+    addons: property.addons ?? [],
+    fees: property.fees ?? [],
     address: property.location?.address,
     city: property.location?.city,
     state: property.location?.state,
