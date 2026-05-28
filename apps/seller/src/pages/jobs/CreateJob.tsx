@@ -24,13 +24,22 @@ const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-
 const defaultForm = {
   title: '',
   company: '',
+  brand_id: '',
   category_id: '',
   job_type: '',
   salary_range: '',
   location: '',
+  address: '',
+  city: '',
+  state: '',
+  country: '',
+  zip_code: '',
+  latitude: '',
+  longitude: '',
   experience_level: '',
   skills: '',
   description: '',
+  meta_description: '',
   is_published: true,
 };
 
@@ -39,7 +48,7 @@ export default function CreateJob() {
   const navigate = useNavigate();
   const isEditMode = Boolean(slug);
 
-  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [] });
+  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [], brands: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [jobId, setJobId] = useState<number | null>(null);
@@ -76,6 +85,7 @@ export default function CreateJob() {
           setForm({
             title: job.title || '',
             company: job.company || '',
+            brand_id: job.brand_id ? String(job.brand_id) : '',
             category_id: job.category_id ? String(job.category_id) : '',
             job_type: job.job_type || '',
             salary_range:
@@ -83,11 +93,19 @@ export default function CreateJob() {
                 ? `$${Number(job.salary_min).toLocaleString()} - $${Number(job.salary_max).toLocaleString()}`
                 : '',
             location: job.location || '',
+            address: job.address || '',
+            city: job.city || '',
+            state: job.state || '',
+            country: job.country || '',
+            zip_code: job.zip_code || '',
+            latitude: job.latitude != null ? String(job.latitude) : '',
+            longitude: job.longitude != null ? String(job.longitude) : '',
             experience_level: mapExperienceToFormValue(
               (job.employment?.experience_level ?? job.experience_level) as string | number | null | undefined
             ),
             skills: job.skills || '',
             description: job.description || '',
+            meta_description: job.meta_description || '',
             is_published: job.is_published ?? true,
           });
 
@@ -129,10 +147,10 @@ export default function CreateJob() {
     const formData = new FormData();
     const { min, max } = parseSalaryRange(form.salary_range);
     const typeFlags = mapJobTypeFlags(form.job_type);
-    const workplaceType = resolveWorkplaceType(form.location);
-    const locationParts = form.location.split(',').map((part: string) => part.trim());
-    const city = locationParts[0] || 'Remote';
-    const country = locationParts.length > 1 ? locationParts[locationParts.length - 1] : 'Global';
+    const workplaceType = resolveWorkplaceType(form.location || form.city);
+    const locationParts = (form.location || '').split(',').map((part: string) => part.trim());
+    const city = form.city || locationParts[0] || 'Remote';
+    const country = form.country || (locationParts.length > 1 ? locationParts[locationParts.length - 1] : 'Global');
 
     formData.append('title', form.title);
     formData.append('description', form.description);
@@ -144,6 +162,15 @@ export default function CreateJob() {
     formData.append('workplace_type', String(workplaceType));
     formData.append('city', city);
     formData.append('country', country);
+
+    if (form.brand_id) formData.append('brand_id', form.brand_id);
+    if (form.address) formData.append('address', form.address);
+    if (form.state) formData.append('state', form.state);
+    if (form.zip_code) formData.append('zip_code', form.zip_code);
+    if (form.latitude) formData.append('latitude', form.latitude);
+    if (form.longitude) formData.append('longitude', form.longitude);
+    if (form.meta_description) formData.append('meta_description', form.meta_description);
+
     formData.append('is_published', form.is_published ? '1' : '0');
     formData.append('is_full_time', typeFlags.is_full_time ? '1' : '0');
     formData.append('is_contract', typeFlags.is_contract ? '1' : '0');
@@ -247,6 +274,19 @@ export default function CreateJob() {
                   </div>
                 </div>
                 <div>
+                  <label className={labelClass}>Company Brand</label>
+                  <select
+                    value={form.brand_id}
+                    onChange={(e) => updateForm('brand_id', e.target.value)}
+                    className={inputClass}
+                  >
+                    <option value="">Select hiring brand...</option>
+                    {formMeta.brands?.map((brand: any) => (
+                      <option key={brand.id} value={brand.id}>{brand.title}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
                   <label className={labelClass}>Category</label>
                   <select
                     value={form.category_id}
@@ -329,6 +369,88 @@ export default function CreateJob() {
 
           <div className={containerClass}>
             <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-10 flex items-center gap-3">
+              <span className="w-2 h-8 bg-blue-500 rounded-full" /> Geographic Location.
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="md:col-span-2">
+                <label className={labelClass}>Street Address</label>
+                <input
+                  type="text"
+                  value={form.address}
+                  onChange={(e) => updateForm('address', e.target.value)}
+                  className={inputClass}
+                  placeholder="e.g. 100 Main Street"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>City</label>
+                <input
+                  type="text"
+                  value={form.city}
+                  onChange={(e) => updateForm('city', e.target.value)}
+                  className={inputClass}
+                  placeholder="City"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>State / Region</label>
+                <input
+                  type="text"
+                  value={form.state}
+                  onChange={(e) => updateForm('state', e.target.value)}
+                  className={inputClass}
+                  placeholder="State"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Country</label>
+                <input
+                  type="text"
+                  value={form.country}
+                  onChange={(e) => updateForm('country', e.target.value)}
+                  className={inputClass}
+                  placeholder="Country"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Zip Code</label>
+                <input
+                  type="text"
+                  value={form.zip_code}
+                  onChange={(e) => updateForm('zip_code', e.target.value)}
+                  className={inputClass}
+                  placeholder="Zip Code"
+                />
+              </div>
+              <div className="md:col-span-2 grid grid-cols-2 gap-6 pt-4 border-t border-slate-100/50">
+                <div>
+                  <label className={labelClass}>Latitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={form.latitude}
+                    onChange={(e) => updateForm('latitude', e.target.value)}
+                    className={inputClass}
+                    placeholder="e.g. 37.7749"
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Longitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={form.longitude}
+                    onChange={(e) => updateForm('longitude', e.target.value)}
+                    className={inputClass}
+                    placeholder="e.g. -122.4194"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={containerClass}>
+            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-10 flex items-center gap-3">
               <span className="w-2 h-8 bg-green-500 rounded-full" /> Compensation.
             </h3>
             <div>
@@ -363,6 +485,34 @@ export default function CreateJob() {
               className={`${inputClass} resize-none`}
               placeholder="Detail the responsibilities, requirements, and company culture..."
             />
+          </div>
+
+          <div className={containerClass}>
+            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+              <span className="w-2 h-8 bg-sky-500 rounded-full" /> Discovery Details (SEO).
+            </h3>
+            <div className="space-y-6">
+              <div>
+                <label className={labelClass}>Meta Title Override</label>
+                <input
+                  type="text"
+                  value={form.company}
+                  onChange={(e) => updateForm('company', e.target.value)}
+                  className={inputClass}
+                  placeholder="Override search title (default: Company Name)"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Meta Description</label>
+                <textarea
+                  value={form.meta_description}
+                  onChange={(e) => updateForm('meta_description', e.target.value)}
+                  rows={3}
+                  className={`${inputClass} resize-none`}
+                  placeholder="Short, attractive search snippet for search engines..."
+                />
+              </div>
+            </div>
           </div>
         </div>
 

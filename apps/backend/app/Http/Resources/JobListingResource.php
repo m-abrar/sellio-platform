@@ -43,11 +43,13 @@ class JobListingResource extends JsonResource
 
             // Company & Branding (Spatie Media)
             'company' => [
-                'name'      => $this->meta_title
+                'name'             => $this->meta_title
                     ?: $this->whenLoaded('brand', fn () => $this->brand->title, $this->employer->company ?? null),
-                'logo'      => $this->primary_image_url,
-                'logo_card' => $this->whenLoaded('media', fn() => $this->getMedia(JobListing::PRIMARY_MEDIA)->first()?->getUrl('listing_card_logo')),
-                'photos'    => $this->whenLoaded('media', fn() => $this->getMedia(JobListing::GALLERY_MEDIA)->map(fn($media) => [
+                'brand_id'         => $this->brand_id,
+                'meta_description' => $this->meta_description,
+                'logo'             => $this->primary_image_url,
+                'logo_card'        => $this->whenLoaded('media', fn() => $this->getMedia(JobListing::PRIMARY_MEDIA)->first()?->getUrl('listing_card_logo')),
+                'photos'           => $this->whenLoaded('media', fn() => $this->getMedia(JobListing::GALLERY_MEDIA)->map(fn($media) => [
                     'url'   => $media->getUrl(),
                     'thumb' => $media->getUrl('thumb'),
                 ])),
@@ -67,6 +69,7 @@ class JobListingResource extends JsonResource
                 'city'      => $this->city,
                 'state'     => $this->state,
                 'country'   => $this->country,
+                'zip_code'  => $this->zip_code,
                 'latitude'  => (float) $this->latitude,
                 'longitude' => (float) $this->longitude,
             ],

@@ -31,6 +31,7 @@ class JobListingService
             'categories' => Category::where('is_job', true)->get(['id', 'title']),
             'types'      => Type::where('is_job', true)->get(['id', 'title']),
             'locations'  => Location::where('is_job', true)->get(['id', 'title']),
+            'brands'     => \App\Models\Brand::where('is_job', true)->get(['id', 'title']),
         ];
     }
 

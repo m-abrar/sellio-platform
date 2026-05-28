@@ -23,6 +23,15 @@ export interface NormalizedJob {
   compensation?: Record<string, unknown>;
   employment?: Record<string, unknown>;
   status?: Record<string, unknown>;
+  brand_id?: number | string | null;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
+  meta_description?: string;
+  address?: string;
+  state?: string;
+  zip_code?: string;
+  country?: string;
+  city?: string;
 }
 
 const experienceLabels: Record<number, string> = {
@@ -105,6 +114,15 @@ export const normalizeJob = (job: any): NormalizedJob => {
     category_id: job.category_id,
     location_id: job.location_id,
     company: job.company?.name ?? '',
+    brand_id: job.company?.brand_id ?? job.brand_id ?? null,
+    latitude: job.location?.latitude ?? null,
+    longitude: job.location?.longitude ?? null,
+    meta_description: job.company?.meta_description ?? job.meta_description ?? '',
+    address: job.location?.address ?? '',
+    state: job.location?.state ?? '',
+    zip_code: job.location?.zip_code ?? '',
+    country: job.location?.country ?? '',
+    city: job.location?.city ?? '',
     job_type: resolveJobType(employment),
     experience_level: experienceLabels[Number(experienceLevel)] ?? experienceLevel,
     skills: employment.education ?? '',
