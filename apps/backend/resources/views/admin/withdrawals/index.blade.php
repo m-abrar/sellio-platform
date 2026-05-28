@@ -55,33 +55,43 @@
                     <ul class="nav nav-pills nav-pills-premium flex-nowrap bg-light p-1 rounded-pill border">
                         <li class="nav-item">
                             <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'all' ? 'active' : '' }}" 
-                               href="{{ route('admin.withdrawals.index') }}">
+                               href="{{ route('admin.withdrawals.index', array_merge(request()->only('user_id'), ['status' => 'all'])) }}">
                                {{ __('ALL') }}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'pending' ? 'active' : '' }}" 
-                               href="{{ route('admin.withdrawals.index', ['status' => 'pending']) }}">
+                               href="{{ route('admin.withdrawals.index', array_merge(request()->only('user_id'), ['status' => 'pending'])) }}">
                                {{ __('PENDING') }}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'approved' ? 'active' : '' }}" 
-                               href="{{ route('admin.withdrawals.index', ['status' => 'approved']) }}">
+                               href="{{ route('admin.withdrawals.index', array_merge(request()->only('user_id'), ['status' => 'approved'])) }}">
                                {{ __('APPROVED') }}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'rejected' ? 'active' : '' }}" 
-                               href="{{ route('admin.withdrawals.index', ['status' => 'rejected']) }}">
+                               href="{{ route('admin.withdrawals.index', array_merge(request()->only('user_id'), ['status' => 'rejected'])) }}">
                                {{ __('REJECTED') }}
                             </a>
                         </li>
                     </ul>
                 </div>
                 
-                <div class="d-flex align-items-center ml-md-auto">
-                    <div class="input-group input-group-premium col-search-reduced shadow-sm rounded-pill overflow-hidden border">
+                <div class="d-flex flex-column flex-sm-row align-items-center ml-md-auto gap-3">
+                    <div class="mb-2 mb-sm-0 mr-sm-3 w-100">
+                        <select id="user-filter" class="form-control rounded-pill border shadow-sm px-3 font-weight-bold smallest text-uppercase letter-spacing-1 text-muted" style="height: 38px; min-width: 220px;" onchange="window.location.href = this.value">
+                            <option value="{{ route('admin.withdrawals.index', array_merge(request()->except('user_id', 'page'), ['status' => $filter_status])) }}">{{ __('All Partners') }}</option>
+                            @foreach ($users as $u)
+                                <option value="{{ route('admin.withdrawals.index', array_merge(request()->except('page'), ['status' => $filter_status, 'user_id' => $u->id])) }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>
+                                    {{ $u->name }} ({{ $u->email }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="input-group input-group-premium col-search-reduced shadow-sm rounded-pill overflow-hidden border w-100">
                         <div class="input-group-prepend">
                             <span class="input-group-text bg-white border-0"><i class="fas fa-search text-xs text-muted"></i></span>
                         </div>
@@ -125,8 +135,14 @@
                             <tr>
                                 <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs icon-box-38 rounded-10 d-flex align-items-center justify-content-center">
-                                            <span class="smallest font-weight-bold">{{ strtoupper(substr($withdrawal->user->name ?? '?', 0, 1)) }}</span>
+                                        <div class="mr-3">
+                                            @if ($withdrawal->user && $withdrawal->user->avatar_url)
+                                                <img src="{{ $withdrawal->user->avatar_url }}" alt="{{ $withdrawal->user->name }}" class="rounded-circle shadow-xs border" style="width: 38px; height: 38px; object-fit: cover;">
+                                            @else
+                                                <div class="icon-box-soft bg-primary-soft text-primary shadow-xs icon-box-38 rounded-10 d-flex align-items-center justify-content-center">
+                                                    <span class="smallest font-weight-bold">{{ strtoupper(substr($withdrawal->user->name ?? '?', 0, 1)) }}</span>
+                                                </div>
+                                            @endif
                                         </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $withdrawal->user->name ?? __('N/A (Deleted)') }}</span>

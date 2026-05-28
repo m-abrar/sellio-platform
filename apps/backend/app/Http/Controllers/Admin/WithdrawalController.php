@@ -52,6 +52,7 @@ class WithdrawalController extends Controller
     public function index(Request $request): View
     {
         $status = $request->get('status');
+        $userId = $request->get('user_id');
         $query = $this->getWithdrawalsQuery();
         
         if ($status && in_array($status, ['pending', 'approved', 'rejected'])) {
@@ -60,36 +61,59 @@ class WithdrawalController extends Controller
         } else {
             $filter_status = 'all';
         }
+
+        if ($userId) {
+            $query->where('user_id', $userId);
+        }
         
         $withdrawals = $query->paginate(20);
+        $users = \App\Models\User::whereHas('withdrawals')->orderBy('name')->get(['id', 'name', 'email']);
         
-        return view('admin.withdrawals.index', compact('withdrawals', 'filter_status'));
+        return view('admin.withdrawals.index', compact('withdrawals', 'filter_status', 'users', 'userId'));
     }
 
     /**
      * Display a paginated list of all pending withdrawal requests.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function pending(): View
+    public function pending(Request $request): View
     {
-        $withdrawals = $this->getWithdrawalsQuery()->where('status', 'pending')->paginate(20);
-        $filter_status = 'pending';
+        $userId = $request->get('user_id');
+        $query = $this->getWithdrawalsQuery()->where('status', 'pending');
         
-        return view('admin.withdrawals.index', compact('withdrawals', 'filter_status'));
+        if ($userId) {
+            $query->where('user_id', $userId);
+        }
+        
+        $withdrawals = $query->paginate(20);
+        $filter_status = 'pending';
+        $users = \App\Models\User::whereHas('withdrawals')->orderBy('name')->get(['id', 'name', 'email']);
+        
+        return view('admin.withdrawals.index', compact('withdrawals', 'filter_status', 'users', 'userId'));
     }
 
     /**
      * Display a paginated list of all failed/rejected withdrawal requests.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function failed(): View
+    public function failed(Request $request): View
     {
-        $withdrawals = $this->getWithdrawalsQuery()->where('status', 'rejected')->paginate(20);
-        $filter_status = 'rejected';
+        $userId = $request->get('user_id');
+        $query = $this->getWithdrawalsQuery()->where('status', 'rejected');
         
-        return view('admin.withdrawals.index', compact('withdrawals', 'filter_status'));
+        if ($userId) {
+            $query->where('user_id', $userId);
+        }
+        
+        $withdrawals = $query->paginate(20);
+        $filter_status = 'rejected';
+        $users = \App\Models\User::whereHas('withdrawals')->orderBy('name')->get(['id', 'name', 'email']);
+        
+        return view('admin.withdrawals.index', compact('withdrawals', 'filter_status', 'users', 'userId'));
     }
 
     /**
