@@ -392,6 +392,13 @@ class PartnerActivitySeeder extends Seeder
         $wallet = $partner->wallet;
         
         // Let's seed a massive transaction history of deposits (in cents)
+        // 0. Historical Sales Revenue ($6,000.00 USD)
+        $partner->deposit(600000, [
+            'type' => 'historical_sales_revenue',
+            'description' => 'Onboarding historical marketplace sales revenue credit',
+            'partner_id' => $partner->id,
+        ]);
+
         // 1. Property Booking Earning ($2,500.00 USD)
         $partner->deposit(250000, [
             'type' => 'property_booking_payout',
@@ -414,45 +421,77 @@ class PartnerActivitySeeder extends Seeder
         ]);
 
         // --- 13. WITHDRAWAL PAYOUTS ---
-        $this->command->line('  💸 Seeding Payout Withdrawals for Julian...');
+        $this->command->line('  💸 Seeding Payout Withdrawals and Transactions for Julian...');
         
-        // Payout 1: Successful Withdrawal
-        Withdrawal::create([
+        // Payout 1: Approved / Completed Bank Transfer ($1,500.00)
+        $payoutDate1 = Carbon::now()->subDays(6);
+        $w1 = Withdrawal::create([
             'user_id' => $partner->id,
             'amount' => 150000, // $1,500.00 USD (in cents)
             'method' => 'Bank Transfer',
-            'details' => json_encode(['account' => $partner->phone ?: 'US-STERLING-84022', 'name' => 'Julian Sterling']),
+            'details' => json_encode(['account' => 'Chase Bank **** 4290', 'name' => 'Julian Sterling']),
             'status' => 'approved',
-            'admin_note' => 'Payout processed to verified account.',
-            'approved_at' => Carbon::now()->subDays(5),
-            'created_at' => Carbon::now()->subDays(6),
-            'updated_at' => Carbon::now()->subDays(5),
+            'admin_note' => 'Payout processed to verified Chase account.',
+            'approved_at' => $payoutDate1->copy()->addDay(),
+            'created_at' => $payoutDate1,
+            'updated_at' => $payoutDate1->copy()->addDay(),
         ]);
+        
+        $tx1 = $partner->withdraw(150000, [
+            'type' => 'withdrawal_request',
+            'description' => 'Chase Bank Transfer payout (Withdrawal #' . $w1->id . ')',
+            'withdrawal_id' => $w1->id,
+        ]);
+        $tx1->update(['created_at' => $payoutDate1, 'updated_at' => $payoutDate1]);
 
-        // Payout 2: Pending Withdrawal
-        Withdrawal::create([
+        // Payout 2: Pending Withdrawal ($850.00)
+        $payoutDate2 = Carbon::now()->subHours(18);
+        $w2 = Withdrawal::create([
             'user_id' => $partner->id,
             'amount' => 85000, // $850.00 USD (in cents)
             'method' => 'PayPal',
             'details' => json_encode(['account' => 'sterling.global@paypal.test', 'name' => 'Julian Sterling']),
             'status' => 'pending',
             'admin_note' => 'Awaiting corporate finance approval batch.',
-            'created_at' => Carbon::now()->subHours(18),
-            'updated_at' => Carbon::now()->subHours(18),
+            'created_at' => $payoutDate2,
+            'updated_at' => $payoutDate2,
         ]);
+        
+        $tx2 = $partner->withdraw(85000, [
+            'type' => 'withdrawal_request',
+            'description' => 'Pending PayPal Transfer request (Withdrawal #' . $w2->id . ')',
+            'withdrawal_id' => $w2->id,
+        ]);
+        $tx2->update(['created_at' => $payoutDate2, 'updated_at' => $payoutDate2]);
 
-        // Payout 3: Rejected Withdrawal
-        Withdrawal::create([
+        // Payout 3: Rejected / Failed Withdrawal ($3,000.00)
+        $payoutDate3 = Carbon::now()->subDays(12);
+        $w3 = Withdrawal::create([
             'user_id' => $partner->id,
             'amount' => 300000, // $3,000.00 USD (in cents)
             'method' => 'Wire Transfer',
             'details' => json_encode(['account' => 'SWIFT-STERL-822', 'name' => 'Julian Sterling']),
             'status' => 'rejected',
             'admin_note' => 'Invalid SWIFT routing code provided. Funds returned to balance.',
-            'rejected_at' => Carbon::now()->subDays(10),
-            'created_at' => Carbon::now()->subDays(12),
-            'updated_at' => Carbon::now()->subDays(10),
+            'rejected_at' => $payoutDate3->copy()->addDays(2),
+            'created_at' => $payoutDate3,
+            'updated_at' => $payoutDate3->copy()->addDays(2),
         ]);
+        
+        $tx3 = $partner->withdraw(300000, [
+            'type' => 'withdrawal_request',
+            'description' => 'Pending Wire Transfer request (Withdrawal #' . $w3->id . ')',
+            'withdrawal_id' => $w3->id,
+        ]);
+        $tx3->update(['created_at' => $payoutDate3, 'updated_at' => $payoutDate3]);
+
+        // Simulate the rejection refund (deposit)
+        $txRefund = $partner->deposit(300000, [
+            'type' => 'withdrawal_refund',
+            'description' => "Withdrawal Request #{$w3->id} Rejected/Refunded",
+            'reversal_of_id' => $tx3->id,
+        ]);
+        $txRefund->update(['created_at' => $payoutDate3->copy()->addDays(2), 'updated_at' => $payoutDate3->copy()->addDays(2)]);
 
         // --- 14. INBOX CONVERSATIONS & MESSAGES ---
         $this->command->line('  💬 Seeding Partner Message Threads...');
@@ -504,45 +543,52 @@ class PartnerActivitySeeder extends Seeder
      */
     private function cleanupOldRecords(int $userId): void
     {
-        $propertyIds = Property::where('user_id', $userId)->pluck('id')->toArray();
+        $propertyIds = Property::limit(4)->pluck('id')->toArray();
         if (!empty($propertyIds)) {
-            $bookingIds = PropertyBooking::whereIn('property_id', $propertyIds)->pluck('id')->toArray();
+            $bookingIds = DB::table('property_bookings')->whereIn('property_id', $propertyIds)->pluck('id')->toArray();
             if (!empty($bookingIds)) {
-                TransactionLine::whereIn('property_booking_id', $bookingIds)->delete();
-                PropertyBooking::whereIn('id', $bookingIds)->delete();
+                DB::table('transaction_lines')->whereIn('property_booking_id', $bookingIds)->delete();
+                DB::table('property_bookings')->whereIn('id', $bookingIds)->delete();
             }
-            PropertyVisit::whereIn('property_id', $propertyIds)->delete();
-            Review::whereIn('reviewable_id', $propertyIds)->where('reviewable_type', Property::class)->forceDelete();
+            DB::table('property_visits')->whereIn('property_id', $propertyIds)->delete();
+            DB::table('reviews')->whereIn('reviewable_id', $propertyIds)->where('reviewable_type', Property::class)->delete();
         }
 
-        $eventIds = Event::where('user_id', $userId)->pluck('id')->toArray();
+        $eventIds = Event::limit(4)->pluck('id')->toArray();
         if (!empty($eventIds)) {
-            EventBooking::whereIn('event_id', $eventIds)->delete();
+            DB::table('event_bookings')->whereIn('event_id', $eventIds)->delete();
         }
 
-        $serviceIds = Service::where('user_id', $userId)->pluck('id')->toArray();
+        $serviceIds = Service::limit(4)->pluck('id')->toArray();
         if (!empty($serviceIds)) {
-            ServiceAppointment::whereIn('service_id', $serviceIds)->delete();
-            ServiceQuote::whereIn('service_id', $serviceIds)->delete();
-            Review::whereIn('reviewable_id', $serviceIds)->where('reviewable_type', Service::class)->forceDelete();
+            DB::table('service_appointments')->whereIn('service_id', $serviceIds)->delete();
+            DB::table('service_quotes')->whereIn('service_id', $serviceIds)->delete();
+            DB::table('reviews')->whereIn('reviewable_id', $serviceIds)->where('reviewable_type', Service::class)->delete();
         }
 
-        $jobIds = JobListing::where('user_id', $userId)->pluck('id')->toArray();
+        $jobIds = JobListing::limit(4)->pluck('id')->toArray();
         if (!empty($jobIds)) {
-            JobApplication::whereIn('job_listing_id', $jobIds)->delete();
+            DB::table('job_applications')->whereIn('job_listing_id', $jobIds)->delete();
         }
 
-        $autoIds = Auto::where('user_id', $userId)->pluck('id')->toArray();
+        $autoIds = Auto::limit(4)->pluck('id')->toArray();
         if (!empty($autoIds)) {
-            AutoInquiry::whereIn('auto_id', $autoIds)->delete();
+            DB::table('auto_inquiries')->whereIn('auto_id', $autoIds)->delete();
         }
 
-        $classifiedIds = Classified::where('user_id', $userId)->pluck('id')->toArray();
+        $classifiedIds = Classified::limit(4)->pluck('id')->toArray();
         if (!empty($classifiedIds)) {
             DB::table('classified_inquiries')->whereIn('classified_id', $classifiedIds)->delete();
         }
 
-        Withdrawal::where('user_id', $userId)->delete();
-        Review::where('partner_id', $userId)->forceDelete();
+        DB::table('withdrawals')->where('user_id', $userId)->delete();
+        DB::table('reviews')->where('partner_id', $userId)->delete();
+
+        // Purge previous transactions and reset wallet balance
+        $partner = User::find($userId);
+        if ($partner && $partner->wallet) {
+            DB::table('transactions')->where('wallet_id', $partner->wallet->id)->delete();
+            $partner->wallet->update(['balance' => 0]);
+        }
     }
 }

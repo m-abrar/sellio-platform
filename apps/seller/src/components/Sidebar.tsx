@@ -63,7 +63,7 @@ export default function Sidebar({ user }: any) {
     { label: 'Messages', to: '/dashboard/messages', icon: HiOutlineChatBubbleLeftRight, count: counts.messages },
     { label: 'Notifications', to: '/dashboard/notifications', icon: HiOutlineBell, count: counts.notifications },
     { label: 'Wallet', to: '/dashboard/wallet', icon: HiOutlineWallet, count: counts.wallet },
-    { label: 'Payouts', to: '/dashboard/payouts', icon: HiOutlineBanknotes, count: counts.payouts },
+    { label: 'Transactions', to: '/dashboard/transactions', icon: HiOutlineCreditCard },
     { label: 'Memberships', to: '/dashboard/memberships', icon: HiOutlineShieldCheck, count: counts.memberships },
     { label: 'Analytics', to: '/dashboard/analytics', icon: HiOutlineChartBar, count: counts.analytics },
     { label: 'Settings', to: '/dashboard/settings', icon: HiOutlineCog6Tooth },

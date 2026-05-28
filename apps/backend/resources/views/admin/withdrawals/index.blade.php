@@ -44,63 +44,8 @@
 <div class="container-fluid pb-5">
     @include('admin.alert') 
 
-    {{-- Premium Status Filter --}}
-    <div class="card registry-card-premium registry-filter-card mb-4">
-        <div class="card-body">
-            <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
-                <div class="d-flex flex-row align-items-center mb-3 mb-md-0">
-                    <span class="form-label-premium mr-3 font-weight-bold text-uppercase smallest letter-spacing-1">
-                        <i class="fas fa-filter mr-1 text-primary opacity-75"></i> {{ __('Lifecycle:') }}
-                    </span>
-                    <ul class="nav nav-pills nav-pills-premium flex-nowrap bg-light p-1 rounded-pill border">
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'all' ? 'active' : '' }}" 
-                               href="{{ route('admin.withdrawals.index', array_merge(request()->only('user_id'), ['status' => 'all'])) }}">
-                               {{ __('ALL') }}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'pending' ? 'active' : '' }}" 
-                               href="{{ route('admin.withdrawals.index', array_merge(request()->only('user_id'), ['status' => 'pending'])) }}">
-                               {{ __('PENDING') }}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'approved' ? 'active' : '' }}" 
-                               href="{{ route('admin.withdrawals.index', array_merge(request()->only('user_id'), ['status' => 'approved'])) }}">
-                               {{ __('APPROVED') }}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'rejected' ? 'active' : '' }}" 
-                               href="{{ route('admin.withdrawals.index', array_merge(request()->only('user_id'), ['status' => 'rejected'])) }}">
-                               {{ __('REJECTED') }}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="d-flex flex-column flex-sm-row align-items-center ml-md-auto gap-3">
-                    <div class="mb-2 mb-sm-0 mr-sm-3 w-100">
-                        <select id="user-filter" class="form-control rounded-pill border shadow-sm px-3 font-weight-bold smallest text-uppercase letter-spacing-1 text-muted" style="height: 38px; min-width: 220px;" onchange="window.location.href = this.value">
-                            <option value="{{ route('admin.withdrawals.index', array_merge(request()->except('user_id', 'page'), ['status' => $filter_status])) }}">{{ __('All Partners') }}</option>
-                            @foreach ($users as $u)
-                                <option value="{{ route('admin.withdrawals.index', array_merge(request()->except('page'), ['status' => $filter_status, 'user_id' => $u->id])) }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>
-                                    {{ $u->name }} ({{ $u->email }})
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="input-group input-group-premium col-search-reduced shadow-sm rounded-pill overflow-hidden border w-100">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text bg-white border-0"><i class="fas fa-search text-xs text-muted"></i></span>
-                        </div>
-                        <input type="text" id="custom-search" class="form-control border-0 px-0" style="height: 38px;" placeholder="{{ __('Search...') }}">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{-- Payout Lifecycle + Partner Filter --}}
+    @include('admin.withdrawals._filter')
 
     <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">

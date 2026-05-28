@@ -65,9 +65,13 @@ class DashboardService
             ->where('status', \App\Models\Withdrawal::STATUS_APPROVED)
             ->sum('amount') / 100);
 
-        // Calculate total lifetime earnings (revenue) in dollars
+        // Calculate total lifetime earnings (revenue) in dollars - Exclude refunded withdrawals to prevent double-counting
         $lifetimeEarnings = (float) (($partner->transactions()
             ->where('type', 'deposit')
+            ->where(function ($query) {
+                $query->whereNull('meta')
+                      ->orWhereJsonDoesntContain('meta->type', 'withdrawal_refund');
+            })
             ->sum('amount') ?? 0) / 100);
 
         return array_merge([

@@ -5,6 +5,9 @@ export interface PartnerProfile {
   name: string;
   email: string;
   phone?: string | null;
+  company_name?: string | null;
+  website_url?: string | null;
+  bio?: string | null;
   username?: string | null;
   roles?: string[];
   avatar_url?: string | null;

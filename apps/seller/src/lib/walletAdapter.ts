@@ -48,7 +48,14 @@ export const normalizeWalletTransaction = (record: Record<string, unknown>): Wal
   const isDeposit = type === 'deposit';
 
   let uiType: WalletTransaction['type'] = 'refund';
-  if (isDeposit) {
+  const isRefund = isDeposit && (
+    meta.type === 'withdrawal_refund' ||
+    String(meta.description || '').toLowerCase().includes('refund')
+  );
+
+  if (isRefund) {
+    uiType = 'refund';
+  } else if (isDeposit) {
     uiType = 'earning';
   } else if (isWithdrawal) {
     uiType = 'payout';

@@ -24,9 +24,9 @@ export default function SettingsPage() {
           name: response.data.name ?? '',
           email: response.data.email ?? '',
           phone_number: response.data.phone ?? '',
-          company_name: '',
-          website_url: '',
-          bio: '',
+          company_name: response.data.company_name ?? '',
+          website_url: response.data.website_url ?? '',
+          bio: response.data.bio ?? '',
         });
       } catch (error) {
         console.error('Failed to fetch profile', error);
@@ -109,6 +109,16 @@ export default function SettingsPage() {
                 <input
                   value={profile.company_name}
                   onChange={(event) => setProfile((prev) => ({ ...prev, company_name: event.target.value }))}
+                  className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#6610f2]/20"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Website URL</label>
+                <input
+                  type="url"
+                  value={profile.website_url}
+                  onChange={(event) => setProfile((prev) => ({ ...prev, website_url: event.target.value }))}
+                  placeholder="https://example.com"
                   className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#6610f2]/20"
                 />
               </div>

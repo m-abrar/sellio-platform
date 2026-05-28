@@ -224,10 +224,10 @@ export default function WalletPage() {
         
         <div className="p-10 text-center border-t border-slate-50">
           <button 
-            onClick={() => navigate('/dashboard/payouts')}
+            onClick={() => navigate('/dashboard/transactions')}
             className="text-[11px] font-black text-[#6610f2] uppercase tracking-[0.3em] hover:underline"
           >
-            View All Payouts
+            View All Transactions
           </button>
         </div>
       </div>

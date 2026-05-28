@@ -21,9 +21,13 @@ class WalletController extends Controller
         
         $balance = $partner->wallet_balance;
         
-        // 1. Lifetime Earnings (deposits)
+        // 1. Lifetime Earnings (deposits) - Exclude refunded withdrawals to prevent double-counting
         $lifetimeEarnings = ($partner->transactions()
             ->where('type', 'deposit')
+            ->where(function ($query) {
+                $query->whereNull('meta')
+                      ->orWhereJsonDoesntContain('meta->type', 'withdrawal_refund');
+            })
             ->sum('amount') ?? 0) / 100;
             
         // 2. Approved Payouts (Completed)

@@ -35,7 +35,7 @@ import CustomerDetailPage from './pages/customers/CustomerDetailPage';
 import ReviewsPage from './pages/reviews/ReviewsPage';
 import MessagesPage from './pages/messages/MessagesPage';
 import WalletPage from './pages/wallet/WalletPage';
-import PayoutsPage from './pages/payouts/PayoutsPage';
+import TransactionsPage from './pages/transactions/TransactionsPage';
 import MembershipsPage from './pages/memberships/MembershipsPage';
 import ActivityPage from './pages/activity/ActivityPage';
 import ActivityDetailPage from './pages/activity/ActivityDetailPage';
@@ -137,7 +137,7 @@ function App() {
               <Route path="reviews" element={<ReviewsPage />} />
               <Route path="messages" element={<MessagesPage />} />
               <Route path="wallet" element={<WalletPage />} />
-              <Route path="payouts" element={<PayoutsPage />} />
+              <Route path="transactions" element={<TransactionsPage />} />
               <Route path="memberships" element={<MembershipsPage />} />
               <Route path="notifications" element={<NotificationsPage />} />
               <Route path=":module/:type" element={<ActivityPage />} />

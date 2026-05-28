@@ -12,7 +12,7 @@ export const getWallet = async () => {
   return {
     data: {
       ...overview,
-      pending_balance: overview.pendingWithdrawals,
+      pending_balance: overview.pendingPayouts,
       transactions,
     },
   };
