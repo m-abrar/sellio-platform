@@ -66,11 +66,17 @@ class ClassifiedRequest extends FormRequest
             'existing_media_ids' => ['array'],
             'existing_media_ids.*' => ['integer'],
             'sync_existing_media' => ['boolean'],
+            'tags'                 => ['nullable', 'array'],
+            'tags.*'               => ['string', 'max:50'],
         ];
     }
 
     protected function prepareForValidation(): void
     {
+        if (is_string($this->input('tags'))) {
+            $this->merge(['tags' => json_decode($this->input('tags'), true) ?? []]);
+        }
+
         $this->merge([
             'is_for_rent'  => filter_var($this->input('is_for_rent', false), FILTER_VALIDATE_BOOLEAN),
             'is_for_sale'  => filter_var($this->input('is_for_sale', true), FILTER_VALIDATE_BOOLEAN),

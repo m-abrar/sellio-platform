@@ -40,6 +40,7 @@ export interface NormalizedClassified {
   longitude?: number | string | null;
   meta_title?: string;
   meta_description?: string;
+  tags?: string[];
 }
 
 const conditionMap: Record<string, number> = {
@@ -127,6 +128,7 @@ export const normalizeClassified = (classified: any): NormalizedClassified => {
     pricing: classified.pricing ?? {},
     item_specs: classified.item_specs ?? {},
     status: classified.status ?? {},
+    tags: classified.taxonomy?.tags ?? classified.tags ?? [],
   };
 };
 

@@ -61,10 +61,27 @@ export default function CreateClassified() {
   const [classifiedId, setClassifiedId] = useState<number | null>(null);
   const [files, setFiles] = useState<any[]>([]);
   const [form, setForm] = useState(defaultForm);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
 
   const updateForm = useCallback((field: string, value: unknown) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   }, []);
+
+  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const val = tagInput.trim().replace(/,$/, '');
+      if (val && !tags.includes(val)) {
+        setTags((prev) => [...prev, val]);
+      }
+      setTagInput('');
+    }
+  };
+
+  const removeTag = (indexToRemove: number) => {
+    setTags((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
 
   const progress = useMemo(() => {
     let score = 0;
@@ -116,6 +133,10 @@ export default function CreateClassified() {
             is_for_sale: classified.is_for_sale ?? true,
             is_for_rent: classified.is_for_rent ?? false,
           });
+
+          if (classified.tags) {
+            setTags(classified.tags);
+          }
 
           const initialMedia: any[] = [];
           if (classified.featured_image) {
@@ -183,6 +204,8 @@ export default function CreateClassified() {
     formData.append('is_for_rent', form.is_for_rent ? '1' : '0');
     formData.append('is_published', form.is_published ? '1' : '0');
     formData.append('is_featured', form.is_featured ? '1' : '0');
+
+    tags.forEach((tag) => formData.append('tags[]', tag));
 
     formData.append('sync_existing_media', '1');
     files.forEach((fileObj) => {
@@ -485,6 +508,49 @@ export default function CreateClassified() {
               placeholder="Tell buyers more about the item..."
             />
             <p className={fieldHintClass}>Required</p>
+          </div>
+
+          <div className={containerClass}>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-6 flex items-center gap-3">
+              <span className="w-2 h-8 bg-teal-500 rounded-full" /> Discoverability Tags.
+            </h3>
+            <p className="text-[10px] font-black text-slate-400 mb-6 leading-relaxed tracking-wider">
+              ADD SEARCH KEYWORDS AND RELEVANT TAGS TO AMPLIFY DISCOVERABILITY ACROSS SEARCH SECTORS (E.G. 'VINTAGE', 'REFURBISHED', 'COLLECTIBLE'). PRESS ENTER OR COMMA TO CAST A TAG CHIP.
+            </p>
+            <div className="flex flex-wrap gap-2.5 mb-6">
+              {tags.map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center gap-2 bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest px-4.5 py-2.5 rounded-full shadow-sm select-none"
+                >
+                  {tag}
+                  <button
+                    type="button"
+                    onClick={() => removeTag(idx)}
+                    className="hover:text-red-400 transition-colors focus:outline-none"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </span>
+              ))}
+              {tags.length === 0 && (
+                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300 italic py-2">
+                  No tags added yet...
+                </span>
+              )}
+            </div>
+            <div className="relative">
+              <input
+                type="text"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={handleTagKeyDown}
+                className={inputClass}
+                placeholder="Type keyword and press Enter or Comma..."
+              />
+            </div>
           </div>
 
           <div className={containerClass}>

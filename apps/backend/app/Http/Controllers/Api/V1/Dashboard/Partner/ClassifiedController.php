@@ -52,7 +52,7 @@ class ClassifiedController extends Controller
         $this->handleMedia($classified, $request);
 
         return $this->successResponse(
-            new ClassifiedResource($classified->load(['media', 'category', 'brand', 'type', 'location'])),
+            new ClassifiedResource($classified->load(['media', 'category', 'brand', 'type', 'location', 'tags'])),
             __('Classified created successfully!'),
             201
         );
