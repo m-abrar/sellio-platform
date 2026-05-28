@@ -33,8 +33,8 @@ We will build the application in 5 sequential phases:
 ### Phase 1: Navigation & Routing Shell
 *   **Objective:** Install navigation dependencies and build the tab routing layout.
 *   **Tasks:**
-    - [ ] Install Expo Navigation: `npx expo install expo-router react-native-safe-area-context react-native-screens`
-    - [ ] Setup File-based routes under `apps/mobile/app/`:
+    - [x] Install Expo Navigation: `npx expo install expo-router react-native-safe-area-context react-native-screens`
+    - [x] Setup File-based routes under `apps/mobile/app/`:
         - `(tabs)/_layout.tsx`: Configures bottom tab navigator (Home, Favorites, Messages, Settings).
         - `(tabs)/index.tsx`: Homepage listing grid (Storefront vertical selectors).
         - `(tabs)/favorites.tsx`: Bookmarked items.
