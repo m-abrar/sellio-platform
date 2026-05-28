@@ -39,8 +39,11 @@ class WithdrawalSeeder extends Seeder
         
         if ($this->command) {
             $this->command->info('💸 Starting Withdrawal Seeder...');
-            DB::table('withdrawals')->delete();
-            $this->command->line('  🗑️ Cleared existing withdrawal records.');
+            // Delete all withdrawals except for the demo partner to preserve their high-fidelity transactions
+            \App\Models\Withdrawal::whereHas('user', function($q) {
+                $q->where('email', '!=', 'partner@sellio-platform.test');
+            })->delete();
+            $this->command->line('  🗑️ Cleared existing non-demo withdrawal records.');
         }
 
         // Define the minimum required balance in cents for a user to be considered for a withdrawal seed.
@@ -54,7 +57,8 @@ class WithdrawalSeeder extends Seeder
         // --- 1. Fetch Users with a positive balance using chunkById for performance ---
         User::whereHas('wallet', function($query) use ($minBalanceToWithdraw) {
             $query->where('balance', '>', $minBalanceToWithdraw);
-        })->orderBy('id')->chunkById(25, function ($users) use (&$count, $maxNumberOfWithdrawalsToCreate, $faker, $minBalanceToWithdraw) {
+        })->where('email', '!=', 'partner@sellio-platform.test') // Exclude the demo partner to preserve their balance and transactions
+        ->orderBy('id')->chunkById(25, function ($users) use (&$count, $maxNumberOfWithdrawalsToCreate, $faker, $minBalanceToWithdraw) {
             $batchWithdrawals = [];
             foreach ($users as $user) {
                 if ($count >= $maxNumberOfWithdrawalsToCreate) break;
