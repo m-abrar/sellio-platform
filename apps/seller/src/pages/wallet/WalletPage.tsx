@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { 
   HiOutlineWallet, 
@@ -15,6 +16,7 @@ import { getWallet, withdrawFunds } from '../../api/wallet';
 import { toast } from 'sonner';
 
 export default function WalletPage() {
+  const navigate = useNavigate();
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [transactions, setTransactions] = useState<any[]>([]);
@@ -221,7 +223,12 @@ export default function WalletPage() {
         </div>
         
         <div className="p-10 text-center border-t border-slate-50">
-          <button className="text-[11px] font-black text-[#6610f2] uppercase tracking-[0.3em] hover:underline">View All Transactions</button>
+          <button 
+            onClick={() => navigate('/dashboard/payouts')}
+            className="text-[11px] font-black text-[#6610f2] uppercase tracking-[0.3em] hover:underline"
+          >
+            View All Payouts
+          </button>
         </div>
       </div>
 
