@@ -40,17 +40,19 @@ class PropertyResource extends JsonResource
 
             // Property Specific Specs (Aligned with Migration)
             'specs' => [
-                'bedrooms'        => $this->number_of_bedrooms,
-                'bathrooms'       => $this->number_of_bathrooms,
-                'max_guests'      => $this->maximum_guests,
-                'total_units'     => $this->total_units,
-                'area_sq_ft'      => $this->area_sq_ft,
-                'area_sq_m'       => $this->area_sq_m,
-                'area_formatted'  => $this->area_formatted,
-                'year_built'      => $this->year_built,
-                'parking_spots'   => $this->number_of_parking_spots,
-                'property_type'   => $this->whenLoaded('type', fn() => $this->type->title), 
-                'category'        => $this->whenLoaded('category', fn() => $this->category->title),
+                'bedrooms'            => $this->number_of_bedrooms,
+                'bathrooms'           => $this->number_of_bathrooms,
+                'max_guests'          => $this->maximum_guests,
+                'total_units'         => $this->total_units,
+                'area_sq_ft'          => $this->area_sq_ft,
+                'area_sq_m'           => $this->area_sq_m,
+                'area_formatted'      => $this->area_formatted,
+                'year_built'          => $this->year_built,
+                'parking_spots'       => $this->number_of_parking_spots,
+                'minimum_rental_days' => $this->minimum_rental_days,
+                'maximum_rental_days' => $this->maximum_rental_days,
+                'property_type'       => $this->whenLoaded('type', fn() => $this->type->title), 
+                'category'            => $this->whenLoaded('category', fn() => $this->category->title),
             ],
 
             // Spatie Media (N+1 Hardened)

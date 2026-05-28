@@ -41,21 +41,39 @@ class StorePropertyRequest extends FormRequest
             'base_price'      => ['nullable', 'numeric', 'min:0'],
             'sale_price'      => ['nullable', 'numeric', 'min:0'],
             'price_per_night' => ['nullable', 'numeric', 'min:0'],
+            'hoa'             => ['nullable', 'numeric', 'min:0'],
             'is_rental'       => ['boolean'],
             'is_sale'         => ['boolean'],
 
             // Physical Specs
-            'number_of_bedrooms'  => ['nullable', 'integer', 'min:0'],
-            'number_of_bathrooms' => ['nullable', 'integer', 'min:0'],
-            'maximum_guests'      => ['nullable', 'integer', 'min:1'],
-            'area_sq_ft'          => ['nullable', 'numeric', 'min:0'],
-            'year_built'          => ['nullable', 'integer', 'min:1800', 'max:' . (date('Y') + 5)],
+            'total_units'             => ['nullable', 'integer', 'min:1'],
+            'number_of_bedrooms'      => ['nullable', 'integer', 'min:0'],
+            'number_of_bathrooms'     => ['nullable', 'integer', 'min:0'],
+            'maximum_guests'          => ['nullable', 'integer', 'min:1'],
+            'area_sq_ft'              => ['nullable', 'numeric', 'min:0'],
+            'number_of_parking_spots' => ['nullable', 'string', 'max:255'],
+            'year_built'              => ['nullable', 'integer', 'min:1800', 'max:' . (date('Y') + 5)],
+
+            // Rental Constraints
+            'minimum_rental_days'     => ['nullable', 'integer', 'min:1'],
+            'maximum_rental_days'     => ['nullable', 'integer', 'min:1'],
 
             // Location
-            'address'  => ['required', 'string', 'max:255'],
-            'city'     => ['required', 'string', 'max:100'],
-            'country'  => ['required', 'string', 'max:100'],
-            'zip_code' => ['nullable', 'string', 'max:20'],
+            'address'   => ['required', 'string', 'max:255'],
+            'city'      => ['required', 'string', 'max:100'],
+            'state'     => ['nullable', 'string', 'max:100'],
+            'country'   => ['required', 'string', 'max:100'],
+            'zip_code'  => ['nullable', 'string', 'max:20'],
+            'latitude'  => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
+
+            // Rich Media & Tours
+            'video'        => ['nullable', 'string'],
+            'virtual_tour' => ['nullable', 'string'],
+
+            // Rules & Policies
+            'rules'    => ['nullable', 'string'],
+            'policies' => ['nullable', 'string'],
 
             // Taxonomy & Status
             'amenities'    => ['nullable', 'array'],

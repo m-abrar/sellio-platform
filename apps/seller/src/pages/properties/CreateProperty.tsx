@@ -26,18 +26,30 @@ const defaultForm = {
   location_id: '',
   address: '',
   city: '',
+  state: '',
   country: '',
   zip_code: '',
+  latitude: '',
+  longitude: '',
   base_price: '',
   sale_price: '',
   price_per_night: '',
+  hoa: '',
   is_sale: true,
   is_rental: false,
+  total_units: '1',
   number_of_bedrooms: '',
   number_of_bathrooms: '',
   maximum_guests: '',
+  minimum_rental_days: '1',
+  maximum_rental_days: '',
+  number_of_parking_spots: '',
   area_sq_ft: '',
   year_built: '',
+  video: '',
+  virtual_tour: '',
+  rules: '',
+  policies: '',
   is_published: true,
   is_featured: false,
 };
@@ -77,18 +89,30 @@ export default function CreateProperty() {
             location_id: property.location_id ? String(property.location_id) : '',
             address: property.address || '',
             city: property.city || '',
+            state: property.state || '',
             country: property.country || '',
             zip_code: property.zip_code || '',
+            latitude: property.latitude != null ? String(property.latitude) : '',
+            longitude: property.longitude != null ? String(property.longitude) : '',
             base_price: property.base_price != null ? String(property.base_price) : '',
             sale_price: property.sale_price != null ? String(property.sale_price) : '',
             price_per_night: property.price_per_night != null ? String(property.price_per_night) : '',
+            hoa: property.hoa != null ? String(property.hoa) : '',
             is_sale: property.is_sale ?? true,
             is_rental: property.is_rental ?? false,
+            total_units: property.total_units != null ? String(property.total_units) : '1',
             number_of_bedrooms: property.number_of_bedrooms != null ? String(property.number_of_bedrooms) : '',
             number_of_bathrooms: property.number_of_bathrooms != null ? String(property.number_of_bathrooms) : '',
             maximum_guests: property.maximum_guests != null ? String(property.maximum_guests) : '',
+            minimum_rental_days: property.minimum_rental_days != null ? String(property.minimum_rental_days) : '1',
+            maximum_rental_days: property.maximum_rental_days != null ? String(property.maximum_rental_days) : '',
+            number_of_parking_spots: property.number_of_parking_spots || '',
             area_sq_ft: property.area_sq_ft != null ? String(property.area_sq_ft) : '',
             year_built: property.year_built != null ? String(property.year_built) : '',
+            video: property.video || '',
+            virtual_tour: property.virtual_tour || '',
+            rules: property.rules || '',
+            policies: property.policies || '',
             is_published: property.is_active ?? true,
             is_featured: property.status?.is_featured ?? false,
           });
@@ -242,21 +266,38 @@ export default function CreateProperty() {
                   <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
+                  <label className={labelClass}>State / Region</label>
+                  <input type="text" value={form.state} onChange={(e) => updateForm('state', e.target.value)} className={inputClass} placeholder="State / Province" />
+                  <p className={fieldHintClass}>Optional</p>
+                </div>
+                <div>
                   <label className={labelClass}>Country</label>
                   <input type="text" value={form.country} onChange={(e) => updateForm('country', e.target.value)} className={inputClass} placeholder="Country" />
                   <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
                   <label className={labelClass}>Zip Code</label>
-                  <input type="text" value={form.zip_code} onChange={(e) => updateForm('zip_code', e.target.value)} className={inputClass} placeholder="Zip" />
+                  <input type="text" value={form.zip_code} onChange={(e) => updateForm('zip_code', e.target.value)} className={inputClass} placeholder="Zip Code" />
                   <p className={fieldHintClass}>Optional</p>
+                </div>
+                <div className="md:col-span-2 grid grid-cols-2 gap-6 pt-4 border-t border-slate-100/50">
+                  <div>
+                    <label className={labelClass}>Latitude</label>
+                    <input type="number" step="any" value={form.latitude} onChange={(e) => updateForm('latitude', e.target.value)} className={inputClass} placeholder="e.g. 40.7128" />
+                    <p className={fieldHintClass}>Optional (Map Coordinate)</p>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Longitude</label>
+                    <input type="number" step="any" value={form.longitude} onChange={(e) => updateForm('longitude', e.target.value)} className={inputClass} placeholder="e.g. -74.0060" />
+                    <p className={fieldHintClass}>Optional (Map Coordinate)</p>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className={containerClass}>
               <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-                <HiOutlineCurrencyDollar className="w-6 h-6 text-slate-300" /> Pricing.
+                <HiOutlineCurrencyDollar className="w-6 h-6 text-slate-300" /> Pricing & Rental Terms.
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                 <label className="flex items-center justify-between min-h-[72px] p-5 bg-slate-50 rounded-2xl border border-slate-100 cursor-pointer hover:bg-white hover:shadow-sm transition-all">
@@ -268,7 +309,7 @@ export default function CreateProperty() {
                   <input type="checkbox" checked={form.is_rental} onChange={(e) => updateForm('is_rental', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
                 </label>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div>
                   <label className={labelClass}>Base Price</label>
                   <input type="number" value={form.base_price} onChange={(e) => updateForm('base_price', e.target.value)} className={inputClass} placeholder="0.00" />
@@ -284,7 +325,27 @@ export default function CreateProperty() {
                   <input type="number" value={form.price_per_night} onChange={(e) => updateForm('price_per_night', e.target.value)} className={inputClass} placeholder="Optional" />
                   <p className={fieldHintClass}>Optional</p>
                 </div>
+                <div>
+                  <label className={labelClass}>Monthly HOA Fee ($)</label>
+                  <input type="number" value={form.hoa} onChange={(e) => updateForm('hoa', e.target.value)} className={inputClass} placeholder="Optional" />
+                  <p className={fieldHintClass}>HOA Dues / Month</p>
+                </div>
               </div>
+
+              {form.is_rental && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 pt-8 border-t border-slate-100 animate-in fade-in slide-in-from-top-4 duration-500">
+                  <div>
+                    <label className={labelClass}>Minimum Rental Days</label>
+                    <input type="number" min="1" value={form.minimum_rental_days} onChange={(e) => updateForm('minimum_rental_days', e.target.value)} className={inputClass} placeholder="1" />
+                    <p className={fieldHintClass}>Required for rent listings</p>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Maximum Rental Days</label>
+                    <input type="number" min="1" value={form.maximum_rental_days} onChange={(e) => updateForm('maximum_rental_days', e.target.value)} className={inputClass} placeholder="No Limit" />
+                    <p className={fieldHintClass}>Optional Limit</p>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className={containerClass}>
@@ -293,15 +354,17 @@ export default function CreateProperty() {
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 {[
-                  { key: 'number_of_bedrooms', label: 'Bedrooms' },
-                  { key: 'number_of_bathrooms', label: 'Bathrooms' },
-                  { key: 'maximum_guests', label: 'Max Guests' },
-                  { key: 'area_sq_ft', label: 'Area (sq ft)' },
-                  { key: 'year_built', label: 'Year Built' },
+                  { key: 'number_of_bedrooms', label: 'Bedrooms', type: 'number' },
+                  { key: 'number_of_bathrooms', label: 'Bathrooms', type: 'number' },
+                  { key: 'maximum_guests', label: 'Max Guests', type: 'number' },
+                  { key: 'total_units', label: 'Total Units', type: 'number' },
+                  { key: 'number_of_parking_spots', label: 'Parking Spots', type: 'text', placeholder: 'e.g. 2 Spaces' },
+                  { key: 'area_sq_ft', label: 'Area (sq ft)', type: 'number' },
+                  { key: 'year_built', label: 'Year Built', type: 'number' },
                 ].map((field) => (
-                  <div key={field.key}>
+                  <div key={field.key} className={field.key === 'number_of_parking_spots' ? 'col-span-2 sm:col-span-1' : ''}>
                     <label className={labelClass}>{field.label}</label>
-                    <input type="number" value={(form as any)[field.key]} onChange={(e) => updateForm(field.key, e.target.value)} className={`${inputClass} px-4`} />
+                    <input type={field.type} placeholder={field.placeholder} value={(form as any)[field.key]} onChange={(e) => updateForm(field.key, e.target.value)} className={`${inputClass} px-4`} />
                   </div>
                 ))}
               </div>
@@ -329,53 +392,89 @@ export default function CreateProperty() {
             </div>
 
             <div className={containerClass}>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+                <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Tours & Media Embeds.
+              </h3>
+              <div className="space-y-6">
+                <div>
+                  <label className={labelClass}>Video Tour Link / Embed Code</label>
+                  <textarea value={form.video} onChange={(e) => updateForm('video', e.target.value)} rows={3} className={`${inputClass} resize-none`} placeholder="Paste YouTube/Vimeo URL or <iframe> embed code..." />
+                  <p className={fieldHintClass}>Enhance visibility with a high-fidelity video walk-through</p>
+                </div>
+                <div>
+                  <label className={labelClass}>360° Virtual Tour Link / Embed Code</label>
+                  <textarea value={form.virtual_tour} onChange={(e) => updateForm('virtual_tour', e.target.value)} rows={3} className={`${inputClass} resize-none`} placeholder="Paste Matterport, Metareal, or custom 3D iframe/URL..." />
+                  <p className={fieldHintClass}>Allow prospective buyers/renters to tour the space virtually</p>
+                </div>
+              </div>
+            </div>
+
+            <div className={containerClass}>
               <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Property Narrative.</h3>
               <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} rows={6} className={`${inputClass} resize-none`} placeholder="Describe the architectural highlights and amenities..." />
               <p className={fieldHintClass}>Required</p>
+            </div>
+
+            <div className={containerClass}>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+                <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Terms & Regulations.
+              </h3>
+              <div className="space-y-6">
+                <div>
+                  <label className={labelClass}>Property Rules</label>
+                  <textarea value={form.rules} onChange={(e) => updateForm('rules', e.target.value)} rows={4} className={`${inputClass} resize-none`} placeholder="e.g. No smoking inside, Quiet hours after 10 PM, Pets allowed under 25lbs..." />
+                  <p className={fieldHintClass}>Establish guidelines for guests, renters, or visitors</p>
+                </div>
+                <div>
+                  <label className={labelClass}>Cancellation & Booking Policies</label>
+                  <textarea value={form.policies} onChange={(e) => updateForm('policies', e.target.value)} rows={4} className={`${inputClass} resize-none`} placeholder="e.g. Free cancellation up to 48 hours prior to check-in, 50% refund afterwards..." />
+                  <p className={fieldHintClass}>Specify cancellation, security deposit, and refund structures</p>
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-10 space-y-8">
-            <div className="bg-slate-900 rounded-[2rem] p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
-              <div className="relative z-10">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Asset Status</p>
-                <span className="text-4xl font-black italic tracking-tighter">{form.is_published ? 'LIVE' : 'DRAFT'}</span>
-                <div className="space-y-4 mt-8">
-                  <label className="flex items-center justify-between p-4 bg-white/5 rounded-2xl cursor-pointer">
-                    <span className="text-sm font-bold">Published</span>
-                    <input type="checkbox" checked={form.is_published} onChange={(e) => updateForm('is_published', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
-                  </label>
-                  <label className="flex items-center justify-between p-4 bg-white/5 rounded-2xl cursor-pointer">
-                    <span className="text-sm font-bold">Featured</span>
-                    <input type="checkbox" checked={form.is_featured} onChange={(e) => updateForm('is_featured', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
-                  </label>
+              <div className="bg-slate-900 rounded-[2rem] p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
+                <div className="relative z-10">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Asset Status</p>
+                  <span className="text-4xl font-black italic tracking-tighter">{form.is_published ? 'LIVE' : 'DRAFT'}</span>
+                  <div className="space-y-4 mt-8">
+                    <label className="flex items-center justify-between p-4 bg-white/5 rounded-2xl cursor-pointer">
+                      <span className="text-sm font-bold">Published</span>
+                      <input type="checkbox" checked={form.is_published} onChange={(e) => updateForm('is_published', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
+                    </label>
+                    <label className="flex items-center justify-between p-4 bg-white/5 rounded-2xl cursor-pointer">
+                      <span className="text-sm font-bold">Featured</span>
+                      <input type="checkbox" checked={form.is_featured} onChange={(e) => updateForm('is_featured', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="p-6 border-2 border-dashed border-slate-100 rounded-[2rem] bg-white/60">
-              <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">
-                Listing Checklist
-              </p>
-              <div className="space-y-3">
-                {[
-                  { label: 'Title', done: form.title.length > 5 },
-                  { label: 'Location', done: Boolean(form.address && form.city && form.country) },
-                  { label: 'Taxonomy', done: Boolean(form.category_id && form.type_id && form.location_id) },
-                  { label: 'Primary media', done: files.some(f => f.isMain) },
-                  { label: 'Narrative', done: form.description.length > 20 },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-center justify-between gap-4 text-[10px] font-black uppercase tracking-widest">
-                    <span className="text-slate-500">{item.label}</span>
-                    <span className={item.done ? 'text-green-500' : 'text-slate-300'}>{item.done ? 'Ready' : 'Missing'}</span>
-                  </div>
-                ))}
+              <div className="p-6 border-2 border-dashed border-slate-100 rounded-[2rem] bg-white/60">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">
+                  Listing Checklist
+                </p>
+                <div className="space-y-3">
+                  {[
+                    { label: 'Title', done: form.title.length > 5 },
+                    { label: 'Location', done: Boolean(form.address && form.city && form.country) },
+                    { label: 'Taxonomy', done: Boolean(form.category_id && form.type_id && form.location_id) },
+                    { label: 'Primary media', done: files.some(f => f.isMain) },
+                    { label: 'Narrative', done: form.description.length > 20 },
+                  ].map((item) => (
+                    <div key={item.label} className="flex items-center justify-between gap-4 text-[10px] font-black uppercase tracking-widest">
+                      <span className="text-slate-500">{item.label}</span>
+                      <span className={item.done ? 'text-green-500' : 'text-slate-300'}>{item.done ? 'Ready' : 'Missing'}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-6 text-[9px] font-bold text-slate-400 uppercase leading-relaxed tracking-widest">
+                  Complete taxonomy, address, media, and narrative before publishing.
+                </p>
               </div>
-              <p className="mt-6 text-[9px] font-bold text-slate-400 uppercase leading-relaxed tracking-widest">
-                Complete taxonomy, address, media, and narrative before publishing.
-              </p>
-            </div>
             </div>
           </div>
         </div>
