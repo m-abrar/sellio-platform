@@ -34,6 +34,7 @@ const formatRelativeDate = (value: unknown): string => {
 export interface ReviewListItem {
   id: number;
   customer: string;
+  avatar_url?: string | null;
   rating: number;
   comment: string;
   asset: string;
@@ -48,6 +49,7 @@ export const normalizeReview = (record: Record<string, unknown>): ReviewListItem
   return {
     id: Number(record.id ?? 0),
     customer: typeof user?.name === 'string' ? user.name : 'Customer',
+    avatar_url: typeof user?.avatar_url === 'string' ? user.avatar_url : null,
     rating: Number(record.rating ?? 0),
     comment: typeof record.comment === 'string' ? record.comment : '',
     asset: typeof reviewable?.title === 'string' ? reviewable.title : 'Listing',

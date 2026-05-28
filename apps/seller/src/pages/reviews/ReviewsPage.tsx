@@ -64,9 +64,17 @@ export default function ReviewsPage() {
             <div key={review.id} className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-premium group hover:border-[#6610f2]/20 transition-all duration-300">
               <div className="flex justify-between items-start mb-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center font-black text-[#6610f2] border border-slate-100">
-                    {review.customer.charAt(0)}
-                  </div>
+                  {review.avatar_url ? (
+                    <img 
+                      src={review.avatar_url} 
+                      className="w-12 h-12 rounded-2xl object-cover border border-slate-100 shadow-xs shrink-0" 
+                      alt="avatar" 
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center font-black text-[#6610f2] border border-slate-100 shrink-0">
+                      {review.customer.charAt(0)}
+                    </div>
+                  )}
                   <div>
                     <h4 className="text-lg font-black text-slate-900 italic tracking-tight">{review.customer}</h4>
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">
