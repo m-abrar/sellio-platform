@@ -10,6 +10,7 @@ export interface CustomerListItem {
   total_spent: string;
   status: string;
   joined: string;
+  avatar_url?: string | null;
   last_interaction_at?: string | null;
   interactions?: Array<Record<string, unknown>>;
 }

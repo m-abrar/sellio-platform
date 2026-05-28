@@ -51,9 +51,17 @@ export default function CustomersPage() {
                 >
                   <td className="bg-white group-hover:bg-slate-50/50 border-y border-l border-slate-100 group-hover:border-[#6610f2]/20 rounded-l-[2rem] px-10 py-6 transition-all duration-300">
                     <div className="flex items-center gap-6">
-                      <div className="w-14 h-14 rounded-2xl bg-[#6610f2]/5 flex items-center justify-center text-[#6610f2] font-black text-xl group-hover:bg-[#6610f2] group-hover:text-white transition-all">
-                        {customer.name.charAt(0)}
-                      </div>
+                      {customer.avatar_url ? (
+                        <img 
+                          src={customer.avatar_url} 
+                          className="w-14 h-14 rounded-2xl object-cover border border-slate-100 shadow-xs shrink-0" 
+                          alt="avatar" 
+                        />
+                      ) : (
+                        <div className="w-14 h-14 rounded-2xl bg-[#6610f2]/5 flex items-center justify-center text-[#6610f2] font-black text-xl group-hover:bg-[#6610f2] group-hover:text-white transition-all shrink-0">
+                          {customer.name.charAt(0)}
+                        </div>
+                      )}
                       <div className="min-w-0">
                         <p className="text-lg font-black tracking-tighter text-slate-900 italic group-hover:text-[#6610f2] transition-colors">{customer.name}</p>
                         <div className="flex items-center gap-4 mt-1">

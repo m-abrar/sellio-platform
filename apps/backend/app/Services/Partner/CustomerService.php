@@ -105,9 +105,6 @@ class CustomerService
                     ->map(fn ($record) => $this->normalizeLeadRecord($record, 'classifieds', 'inquiries'))
             );
 
-        foreach ($records as $record) {
-            $key = $record['customer_key'];
-
             if (!$customers->has($key)) {
                 $customers->put($key, [
                     'id' => $nextId++,
@@ -115,6 +112,7 @@ class CustomerService
                     'name' => $record['name'],
                     'email' => $record['email'],
                     'phone' => $record['phone'],
+                    'avatar_url' => $record['avatar_url'] ?? null,
                     'total_orders' => 0,
                     'total_spent' => 0.0,
                     'status' => 'Active',
@@ -127,6 +125,10 @@ class CustomerService
             $customer = $customers->get($key);
             $customer['total_orders']++;
             $customer['total_spent'] += $record['amount'];
+            // Keep the avatar if the record has one and the customer doesn't yet have it
+            if (empty($customer['avatar_url']) && !empty($record['avatar_url'])) {
+                $customer['avatar_url'] = $record['avatar_url'];
+            }
             $customer['interactions'][] = [
                 'id' => $record['id'],
                 'module' => $record['module'],
@@ -187,6 +189,7 @@ class CustomerService
             'name' => $name,
             'email' => $email ?: '—',
             'phone' => $phone ?: '—',
+            'avatar_url' => $user?->avatar_url,
             'asset' => $asset,
             'status' => $record->status ?? 'pending',
             'amount' => $amount,

@@ -19,6 +19,7 @@ class CustomerResource extends JsonResource
             'total_spent' => $this->resource['total_spent'],
             'status' => $this->resource['status'],
             'joined' => $this->resource['joined'],
+            'avatar_url' => $this->resource['avatar_url'] ?? null,
             'last_interaction_at' => $this->resource['last_interaction_at'] ?? null,
             'interactions' => $this->when(
                 isset($this->resource['interactions']),
