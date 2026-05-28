@@ -39,7 +39,7 @@ class Classified extends Model implements HasMedia
         'item_condition', 'item_year_age', 'item_quantity', 'item_dimensions',
         'warranty_months', 'min_ad_duration', 'address', 'city', 'state',
         'country', 'zip_code', 'latitude', 'longitude', 'is_published', 'is_featured',
-        'is_for_rent', 'is_for_sale', 'expires_at',
+        'is_for_rent', 'is_for_sale', 'meta_title', 'meta_description', 'expires_at',
     ];
 
     protected $casts = [

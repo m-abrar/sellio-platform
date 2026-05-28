@@ -35,6 +35,11 @@ export interface NormalizedClassified {
   pricing?: Record<string, unknown>;
   item_specs?: Record<string, unknown>;
   status?: Record<string, unknown>;
+  brand_id?: number | string | null;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
+  meta_title?: string;
+  meta_description?: string;
 }
 
 const conditionMap: Record<string, number> = {
@@ -110,6 +115,11 @@ export const normalizeClassified = (classified: any): NormalizedClassified => {
     item_dimensions: classified.item_specs?.dimensions,
     warranty_months: classified.item_specs?.warranty_months,
     min_ad_duration: classified.item_specs?.min_ad_duration,
+    brand_id: classified.taxonomy?.brand?.id ?? classified.brand_id ?? null,
+    latitude: classified.location?.latitude ?? null,
+    longitude: classified.location?.longitude ?? null,
+    meta_title: classified.seo?.meta_title ?? classified.meta_title ?? '',
+    meta_description: classified.seo?.meta_description ?? classified.meta_description ?? '',
     is_published: classified.status?.is_published ?? classified.is_published ?? false,
     is_featured: classified.status?.is_featured ?? classified.is_featured ?? false,
     is_for_sale: classified.pricing?.transaction_type?.for_sale ?? classified.is_for_sale ?? true,

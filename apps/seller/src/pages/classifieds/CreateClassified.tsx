@@ -24,6 +24,7 @@ const defaultForm = {
   title: '',
   category_id: '',
   type_id: '',
+  brand_id: '',
   location_id: '',
   base_price: '',
   sale_price: '',
@@ -39,6 +40,10 @@ const defaultForm = {
   state: '',
   country: '',
   zip_code: '',
+  latitude: '',
+  longitude: '',
+  meta_title: '',
+  meta_description: '',
   is_published: true,
   is_featured: false,
   is_for_sale: true,
@@ -50,7 +55,7 @@ export default function CreateClassified() {
   const navigate = useNavigate();
   const isEditMode = Boolean(slug);
 
-  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [] });
+  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [], brands: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [classifiedId, setClassifiedId] = useState<number | null>(null);
@@ -86,6 +91,7 @@ export default function CreateClassified() {
             title: classified.title || '',
             category_id: classified.category_id ? String(classified.category_id) : '',
             type_id: classified.type_id ? String(classified.type_id) : '',
+            brand_id: classified.brand_id ? String(classified.brand_id) : '',
             location_id: classified.location_id ? String(classified.location_id) : '',
             base_price: classified.base_price != null ? String(classified.base_price) : '',
             sale_price: classified.sale_price != null ? String(classified.sale_price) : '',
@@ -101,6 +107,10 @@ export default function CreateClassified() {
             state: classified.state || '',
             country: classified.country || '',
             zip_code: classified.zip_code || '',
+            latitude: classified.latitude != null ? String(classified.latitude) : '',
+            longitude: classified.longitude != null ? String(classified.longitude) : '',
+            meta_title: classified.meta_title || '',
+            meta_description: classified.meta_description || '',
             is_published: classified.is_published ?? true,
             is_featured: classified.is_featured ?? false,
             is_for_sale: classified.is_for_sale ?? true,
@@ -163,6 +173,12 @@ export default function CreateClassified() {
     formData.append('state', form.state);
     formData.append('country', form.country || fallbackLocation.country);
     formData.append('zip_code', form.zip_code);
+
+    if (form.brand_id) formData.append('brand_id', form.brand_id);
+    if (form.latitude) formData.append('latitude', form.latitude);
+    if (form.longitude) formData.append('longitude', form.longitude);
+    if (form.meta_title) formData.append('meta_title', form.meta_title);
+    if (form.meta_description) formData.append('meta_description', form.meta_description);
     formData.append('is_for_sale', form.is_for_sale ? '1' : '0');
     formData.append('is_for_rent', form.is_for_rent ? '1' : '0');
     formData.append('is_published', form.is_published ? '1' : '0');
@@ -290,6 +306,20 @@ export default function CreateClassified() {
                   <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
+                  <label className={labelClass}>Company Brand</label>
+                  <select
+                    value={form.brand_id}
+                    onChange={(e) => updateForm('brand_id', e.target.value)}
+                    className={inputClass}
+                  >
+                    <option value="">Select brand...</option>
+                    {formMeta.brands?.map((brand: any) => (
+                      <option key={brand.id} value={brand.id}>{brand.title}</option>
+                    ))}
+                  </select>
+                  <p className={fieldHintClass}>Optional</p>
+                </div>
+                <div>
                   <label className={labelClass}>Base Price</label>
                   <div className="relative">
                     <HiOutlineCurrencyDollar className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
@@ -387,6 +417,30 @@ export default function CreateClassified() {
                 <input type="text" value={form.zip_code} onChange={(e) => updateForm('zip_code', e.target.value)} className={inputClass} />
                 <p className={fieldHintClass}>Optional</p>
               </div>
+              <div className="md:col-span-2 grid grid-cols-2 gap-6 pt-4 border-t border-slate-100/50">
+                <div>
+                  <label className={labelClass}>Latitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={form.latitude}
+                    onChange={(e) => updateForm('latitude', e.target.value)}
+                    className={inputClass}
+                    placeholder="e.g. 37.7749"
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Longitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={form.longitude}
+                    onChange={(e) => updateForm('longitude', e.target.value)}
+                    className={inputClass}
+                    placeholder="e.g. -122.4194"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -431,6 +485,36 @@ export default function CreateClassified() {
               placeholder="Tell buyers more about the item..."
             />
             <p className={fieldHintClass}>Required</p>
+          </div>
+
+          <div className={containerClass}>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+              <span className="w-2 h-8 bg-sky-500 rounded-full" /> Discovery Details (SEO).
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              <div className="md:col-span-2">
+                <label className={labelClass}>Meta Title</label>
+                <input
+                  type="text"
+                  value={form.meta_title}
+                  onChange={(e) => updateForm('meta_title', e.target.value)}
+                  className={inputClass}
+                  placeholder="Search engine result title"
+                />
+                <p className={fieldHintClass}>Optional</p>
+              </div>
+              <div className="md:col-span-2">
+                <label className={labelClass}>Meta Description</label>
+                <textarea
+                  value={form.meta_description}
+                  onChange={(e) => updateForm('meta_description', e.target.value)}
+                  rows={3}
+                  className={`${inputClass} resize-none`}
+                  placeholder="Short, attractive search snippet for search engines..."
+                />
+                <p className={fieldHintClass}>Optional</p>
+              </div>
+            </div>
           </div>
         </div>
 

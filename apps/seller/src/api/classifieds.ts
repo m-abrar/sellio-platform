@@ -7,6 +7,7 @@ export interface ClassifiedFormMeta {
   categories: Array<{ id: number; title: string }>;
   types: Array<{ id: number; title: string }>;
   locations: Array<{ id: number; title: string }>;
+  brands: Array<{ id: number; title: string }>;
 }
 
 let cachedFormMeta: ClassifiedFormMeta | null = null;
@@ -18,6 +19,7 @@ const extractFormMeta = (response: { data: LaravelResponse<unknown> }): Classifi
     categories: form?.categories ?? [],
     types: form?.types ?? [],
     locations: form?.locations ?? [],
+    brands: (form as any)?.brands ?? [],
   };
 };
 

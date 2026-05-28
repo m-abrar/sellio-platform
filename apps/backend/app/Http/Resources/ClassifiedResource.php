@@ -111,6 +111,11 @@ class ClassifiedResource extends JsonResource
                 'avatar' => $this->user->avatar_url,
             ]),
 
+            'seo' => [
+                'meta_title'       => $this->meta_title,
+                'meta_description' => $this->meta_description,
+            ],
+
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];

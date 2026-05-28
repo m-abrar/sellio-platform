@@ -30,6 +30,7 @@ class ClassifiedService
             'categories' => Category::where('is_classified', true)->get(['id', 'title']),
             'types'      => Type::where('is_classified', true)->get(['id', 'title']),
             'locations'  => Location::where('is_classified', true)->get(['id', 'title']),
+            'brands'     => \App\Models\Brand::where('is_classified', true)->get(['id', 'title']),
         ];
     }
 
