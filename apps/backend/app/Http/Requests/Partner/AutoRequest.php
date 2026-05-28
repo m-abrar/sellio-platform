@@ -73,12 +73,15 @@ class AutoRequest extends FormRequest
             'state'            => ['nullable', 'string', 'max:100'],
             'country'          => ['required', 'string', 'max:100'],
             'zip_code'         => ['nullable', 'string', 'max:20'],
+            'latitude'         => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude'        => ['nullable', 'numeric', 'between:-180,180'],
 
             // Status
             'is_published'     => ['boolean'],
             'is_featured'      => ['boolean'],
             'is_lease'         => ['boolean'],
             'is_selling'       => ['boolean'],
+            'is_certified'     => ['boolean'],
             'main_image'       => ['nullable', 'image', 'max:5120'],
             'gallery.*'        => ['nullable', 'image', 'max:5120'],
             'existing_main_media_id' => ['nullable', 'integer'],

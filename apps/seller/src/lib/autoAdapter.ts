@@ -36,10 +36,13 @@ export interface NormalizedAuto {
   state?: string;
   country?: string;
   zip_code?: string;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
   is_published?: boolean;
   is_featured?: boolean;
   is_lease?: boolean;
   is_selling?: boolean;
+  is_certified?: boolean;
   features?: Array<{ title: string; icon?: string }>;
   specs?: Record<string, unknown>;
   pricing?: Record<string, unknown>;
@@ -107,10 +110,13 @@ export const normalizeAuto = (auto: any): NormalizedAuto => {
     state: auto.location?.state,
     country: auto.location?.country,
     zip_code: auto.location?.zip_code,
+    latitude: auto.location?.latitude,
+    longitude: auto.location?.longitude,
     is_published: auto.status?.is_published ?? auto.is_published ?? false,
     is_featured: auto.status?.is_featured ?? auto.is_featured ?? false,
     is_lease: auto.pricing?.is_lease ?? auto.is_lease ?? false,
     is_selling: auto.pricing?.is_selling ?? auto.is_selling ?? true,
+    is_certified: auto.specs?.is_certified ?? auto.is_certified ?? false,
     features: auto.taxonomy?.features ?? [],
     specs: auto.specs ?? {},
     pricing: auto.pricing ?? {},

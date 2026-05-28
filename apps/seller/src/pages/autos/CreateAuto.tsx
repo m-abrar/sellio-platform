@@ -49,10 +49,13 @@ const defaultForm = {
   state: '',
   country: '',
   zip_code: '',
+  latitude: '',
+  longitude: '',
   is_published: true,
   is_featured: false,
   is_lease: false,
   is_selling: true,
+  is_certified: false,
 };
 
 export default function CreateAuto() {
@@ -121,10 +124,13 @@ export default function CreateAuto() {
             state: auto.state || '',
             country: auto.country || '',
             zip_code: auto.zip_code || '',
+            latitude: auto.latitude != null ? String(auto.latitude) : '',
+            longitude: auto.longitude != null ? String(auto.longitude) : '',
             is_published: auto.is_published ?? true,
             is_featured: auto.is_featured ?? false,
             is_lease: auto.is_lease ?? false,
             is_selling: auto.is_selling ?? true,
+            is_certified: auto.is_certified ?? false,
           });
 
           const initialMedia: any[] = [];
@@ -382,6 +388,18 @@ export default function CreateAuto() {
                   <input type="text" value={form.zip_code} onChange={(e) => updateForm('zip_code', e.target.value)} className={inputClass} />
                   <p className={fieldHintClass}>Optional</p>
                 </div>
+                <div className="md:col-span-2 grid grid-cols-2 gap-6 pt-4 border-t border-slate-100/50">
+                  <div>
+                    <label className={labelClass}>Latitude</label>
+                    <input type="number" step="any" value={form.latitude} onChange={(e) => updateForm('latitude', e.target.value)} className={inputClass} placeholder="e.g. 40.7128" />
+                    <p className={fieldHintClass}>Optional (Map Coordinate)</p>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Longitude</label>
+                    <input type="number" step="any" value={form.longitude} onChange={(e) => updateForm('longitude', e.target.value)} className={inputClass} placeholder="e.g. -74.0060" />
+                    <p className={fieldHintClass}>Optional (Map Coordinate)</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -456,6 +474,7 @@ export default function CreateAuto() {
                 {[
                   { key: 'is_selling', label: 'For Sale' },
                   { key: 'is_lease', label: 'For Lease' },
+                  { key: 'is_certified', label: 'Certified Pre-Owned' },
                 ].map((item) => (
                   <label key={item.key} className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl cursor-pointer hover:bg-slate-100 transition-colors group">
                     <span className="text-sm font-bold text-slate-700 group-hover:text-[#6610f2] transition-colors">{item.label}</span>

@@ -64,6 +64,7 @@ class AutoResource extends JsonResource
                 'exterior_color' => $this->exterior_color,
                 'warranty_months'=> $this->warranty_months !== null ? (int) $this->warranty_months : null,
                 'stock_quantity' => $this->stock_quantity !== null ? (int) $this->stock_quantity : null,
+                'is_certified'   => (bool) $this->is_certified,
             ],
 
             // Media (Spatie Media Library)
