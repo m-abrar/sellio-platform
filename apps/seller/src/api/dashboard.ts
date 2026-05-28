@@ -17,6 +17,13 @@ interface PartnerWelcomeResponse {
   };
   recentListings?: unknown[];
   partner?: {
+    properties_count?: number;
+    products_count?: number;
+    autos_count?: number;
+    events_count?: number;
+    jobs_count?: number;
+    services_count?: number;
+    classifieds_count?: number;
     properties?: unknown[];
     products?: unknown[];
     autos?: unknown[];
@@ -25,12 +32,12 @@ interface PartnerWelcomeResponse {
     jobs?: unknown[];
     classifieds?: unknown[];
   };
+  extraStats?: {
+    unread_notifications?: number;
+    unread_messages?: number;
+    total_payouts?: number;
+  };
 }
-
-const countCollection = (value: unknown): number => {
-  if (Array.isArray(value)) return value.length;
-  return 0;
-};
 
 export const getDashboardData = async () => {
   const response = await apiClient.get('/dashboard/partner/welcome');
@@ -38,26 +45,36 @@ export const getDashboardData = async () => {
 
   const recentListings = (payload.recentListings ?? []).map(mapRecentListing);
 
+  // Calculate total active inventory counts from backend counts
+  const activeInventory = 
+    (payload.partner?.properties_count ?? 0) +
+    (payload.partner?.autos_count ?? 0) +
+    (payload.partner?.products_count ?? 0) +
+    (payload.partner?.events_count ?? 0) +
+    (payload.partner?.services_count ?? 0) +
+    (payload.partner?.classifieds_count ?? 0) +
+    (payload.partner?.jobs_count ?? 0);
+
   return {
     data: {
       stats: {
-        activeInventory: recentListings.length,
+        activeInventory: activeInventory > 0 ? activeInventory : recentListings.length,
         urgentAlerts: Number(payload.performanceData?.total_leads ?? 0),
         marketViews: Number(payload.performanceData?.total_views ?? 0),
         totalRevenue: Number(payload.earningChangeData?.total ?? 0),
         moduleCounts: {
-          properties: countCollection(payload.partner?.properties),
-          autos: countCollection(payload.partner?.autos),
-          products: countCollection(payload.partner?.products),
-          jobs: countCollection(payload.partner?.jobs),
+          properties: payload.partner?.properties_count ?? 0,
+          autos: payload.partner?.autos_count ?? 0,
+          products: payload.partner?.products_count ?? 0,
+          jobs: payload.partner?.jobs_count ?? 0,
         },
         alerts: {
-          messages: 0,
-          notifications: 0,
+          messages: payload.extraStats?.unread_messages ?? 0,
+          notifications: payload.extraStats?.unread_notifications ?? 0,
         },
         revenue: {
           earnings: Number(payload.earningChangeData?.total ?? 0),
-          payouts: 0,
+          payouts: payload.extraStats?.total_payouts ?? 0,
         },
       },
       healthScore: payload.healthScoreData,

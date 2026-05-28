@@ -46,9 +46,12 @@ class JobApplicationController extends Controller
         $jobListingIds = $user->jobs()->pluck('id');
 
         $jobApplications = $this->application::whereIn('job_listing_id', $jobListingIds)
-            ->with(['job' => function ($query) {
-                $query->select('id', 'title', 'slug');
-            }])
+            ->with([
+                'job' => function ($query) {
+                    $query->select('id', 'title', 'slug');
+                },
+                'user'
+            ])
             ->latest()
             ->paginate(10);
 

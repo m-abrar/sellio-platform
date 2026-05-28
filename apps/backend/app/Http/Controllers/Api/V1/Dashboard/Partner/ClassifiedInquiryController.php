@@ -27,7 +27,7 @@ class ClassifiedInquiryController extends Controller
         $classifiedListingIds = $user->classifieds()->pluck('id');
 
         $classifiedInquiries = ClassifiedInquiry::whereIn('classified_id', $classifiedListingIds)
-            ->with('classifiedad')
+            ->with(['classifiedAd.brand', 'user'])
             ->latest()
             ->paginate(10);
 

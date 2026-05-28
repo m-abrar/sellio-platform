@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { 
   HiOutlineBell, 
@@ -9,7 +10,8 @@ import {
   HiOutlineChatBubbleLeftRight, 
   HiOutlineBanknotes, 
   HiOutlineShieldCheck, 
-  HiOutlineStar 
+  HiOutlineStar,
+  HiOutlineArrowLeft
 } from 'react-icons/hi2';
 import { toast } from 'sonner';
 import { getNotifications, markNotificationAsRead, markAllNotificationsAsRead, deleteNotification as deleteNotificationApi } from '../../api/notifications';
@@ -102,28 +104,39 @@ export default function NotificationsPage() {
         subtitle="Center"
       >
         <div className="flex gap-3">
-          <button 
-            onClick={markAllAsRead}
-            className="px-6 py-3 bg-white border border-slate-100 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all flex items-center gap-2"
+          <Link
+            to="/dashboard"
+            className="px-6 py-3 bg-white border border-slate-100 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all flex items-center gap-2 shadow-xs"
           >
-            <HiOutlineCheckCircle className="w-4 h-4" /> Mark All Read
-          </button>
+            <HiOutlineArrowLeft className="w-4 h-4" /> Back to Dashboard
+          </Link>
         </div>
       </PageHeader>
 
-      <div className="flex gap-4 border-b border-slate-100 pb-6">
-        <button 
-          onClick={() => setFilter('all')}
-          className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-900'}`}
-        >
-          All Notifications
-        </button>
-        <button 
-          onClick={() => setFilter('unread')}
-          className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${filter === 'unread' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-900'}`}
-        >
-          Unread ({notifications.filter(n => !n.read).length})
-        </button>
+      <div className="flex items-center justify-between border-b border-slate-100 pb-6">
+        <div className="flex gap-4">
+          <button 
+            onClick={() => setFilter('all')}
+            className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-900'}`}
+          >
+            All Notifications
+          </button>
+          <button 
+            onClick={() => setFilter('unread')}
+            className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${filter === 'unread' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-900'}`}
+          >
+            Unread ({notifications.filter(n => !n.read).length})
+          </button>
+        </div>
+        
+        {notifications.some(n => !n.read) && (
+          <button 
+            onClick={markAllAsRead}
+            className="px-6 py-3 bg-slate-900 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-[#6610f2] hover:shadow-lg hover:shadow-purple-100 transition-all flex items-center gap-2"
+          >
+            <HiOutlineCheckCircle className="w-4 h-4" /> Mark All Read
+          </button>
+        )}
       </div>
 
       {isLoading ? (
@@ -157,26 +170,26 @@ export default function NotificationsPage() {
                       </h4>
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{n.date}</span>
                     </div>
-                    <p className="text-xs text-slate-500 leading-relaxed max-w-2xl">{n.message}</p>
-                  </div>
-
-                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                    {!n.read && (
+                    <p className="text-xs text-slate-500 leading-relaxed max-w-2xl mb-4">{n.message}</p>
+                    
+                    <div className="flex gap-2.5">
+                      {!n.read && (
+                        <button 
+                          onClick={() => markAsRead(n.id)}
+                          className="px-4 py-2 bg-slate-50 hover:bg-purple-500 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 transition-all flex items-center gap-1.5"
+                          title="Mark as read"
+                        >
+                          <HiOutlineCheckCircle className="w-4 h-4" /> Mark as Read
+                        </button>
+                      )}
                       <button 
-                        onClick={() => markAsRead(n.id)}
-                        className="p-3 bg-slate-50 text-slate-400 rounded-xl hover:bg-purple-500 hover:text-white transition-all"
-                        title="Mark as read"
+                        onClick={() => deleteNotification(n.id)}
+                        className="px-4 py-2 bg-slate-50 hover:bg-red-500 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 transition-all flex items-center gap-1.5"
+                        title="Delete"
                       >
-                        <HiOutlineCheckCircle className="w-5 h-5" />
+                        <HiOutlineTrash className="w-4 h-4" /> Delete
                       </button>
-                    )}
-                    <button 
-                      onClick={() => deleteNotification(n.id)}
-                      className="p-3 bg-slate-50 text-slate-400 rounded-xl hover:bg-red-500 hover:text-white transition-all"
-                      title="Delete"
-                    >
-                      <HiOutlineTrash className="w-5 h-5" />
-                    </button>
+                    </div>
                   </div>
                 </div>
               );

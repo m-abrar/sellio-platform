@@ -45,9 +45,12 @@ class ServiceQuoteController extends Controller
         $serviceListingIds = $user->services()->pluck('id');
 
         $serviceQuotes = $this->quote::whereIn('service_id', $serviceListingIds)
-            ->with(['service' => function ($query) {
-                $query->select('id', 'title', 'slug');
-            }])
+            ->with([
+                'service' => function ($query) {
+                    $query->select('id', 'title', 'slug');
+                },
+                'user'
+            ])
             ->latest()
             ->paginate(10);
 
@@ -64,7 +67,7 @@ class ServiceQuoteController extends Controller
         $this->authorizeOwner($serviceQuote);
 
         return $this->successResponse([
-            'quote' => $serviceQuote->load('service')
+            'quote' => $serviceQuote->load(['service', 'user'])
         ]);
     }
 

@@ -14,6 +14,12 @@ class EventBookingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = $request->user();
+        $isOwner = $user && $user->id === $this->user_id;
+        $isPartner = $user && $this->relationLoaded('event') && $this->event && $user->id === $this->event->user_id;
+        $isAdmin = $user && $user->hasRole(['admin', 'super-admin']);
+        $canViewPii = $isOwner || $isPartner || $isAdmin;
+
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
@@ -27,9 +33,31 @@ class EventBookingResource extends JsonResource
             'viewed_at' => $this->viewed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'event' => $this->whenLoaded("event"),
-            'occurrence' => $this->whenLoaded("occurrence"),
-            'ticket_type' => $this->whenLoaded("ticketType"),
+            'event' => $this->event ? [
+                'id' => $this->event->id,
+                'title' => $this->event->title,
+                'slug' => $this->event->slug,
+                'primary_image_url' => $this->event->primary_image_url,
+            ] : null,
+            'user' => $this->user ? [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+                'avatar_url' => $this->user->avatar_url,
+            ] : null,
+            'occurrence' => $this->relationLoaded('occurrence') && $this->occurrence ? [
+                'id' => $this->occurrence->id,
+                'start_date_time' => $this->occurrence->start_date_time,
+                'end_date_time' => $this->occurrence->end_date_time,
+            ] : null,
+            'ticket_type' => $this->relationLoaded('ticketType') && $this->ticketType ? [
+                'id' => $this->ticketType->id,
+                'name' => $this->ticketType->name,
+                'price' => $this->ticketType->price,
+            ] : null,
+            // Fallback user contact details for consistent detail view UI
+            'full_name' => $this->when($canViewPii, $this->user ? $this->user->name : 'Attendee'),
+            'email' => $this->when($canViewPii, $this->user ? $this->user->email : null),
+            'phone' => $this->when($canViewPii, $this->user ? $this->user->phone : null),
         ];
     }
 }

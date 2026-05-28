@@ -25,8 +25,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class DashboardService
 {
-    private const MIN_TITLE_LENGTH = 10;
-    private const MIN_REQUIRED_PHOTOS = 3;
+    private const MIN_TITLE_LENGTH = 15;
+    private const MIN_REQUIRED_PHOTOS = 1;
 
     /**
      * Aggregate all dashboard data for a partner.
@@ -48,6 +48,23 @@ class DashboardService
         $baseSelect = ['id', 'title', 'created_at', 'is_published', 'slug'];
         $recentListings = $this->getUnifiedRecentListings($partner, $baseSelect);
 
+        // Load relationship counts dynamically for Julian Sterling
+        $partner->loadCount(['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products']);
+
+        // Fetch unread notifications count
+        $unreadNotifications = $partner->unreadNotifications()->count();
+
+        // Fetch unread messages count across all active conversations
+        $unreadMessages = \App\Models\Message::whereIn('conversation_id', $partner->allConversations()->pluck('id'))
+            ->where('sender_id', '!=', $partner->id)
+            ->whereNull('read_at')
+            ->count();
+
+        // Calculate total approved withdrawals / payouts in dollars
+        $totalPayouts = (float) ($partner->withdrawals()
+            ->where('status', \App\Models\Withdrawal::STATUS_APPROVED)
+            ->sum('amount') / 100);
+
         return array_merge([
             'partner'           => $partner,
             'earningChangeData' => $earningData,
@@ -55,6 +72,11 @@ class DashboardService
             'chartData'         => $chartData,
             'healthScoreData'   => $healthScoreData,
             'recentListings'    => $recentListings,
+            'extraStats'        => [
+                'unread_notifications' => $unreadNotifications,
+                'unread_messages'      => $unreadMessages,
+                'total_payouts'        => $totalPayouts,
+            ]
         ], $uiData);
     }
 
@@ -76,6 +98,7 @@ class DashboardService
             $partner->services()->latest()->take($limit)->select($columns),
             $partner->classifieds()->latest()->take($limit)->select($columns),
             $partner->jobs()->latest()->take($limit)->select($columns),
+            $partner->products()->latest()->take($limit)->select($columns),
         ];
 
         $results = collect();

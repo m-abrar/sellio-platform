@@ -58,6 +58,7 @@ Route::prefix('menus')->group(function () {
 // =======================
 Route::get('testimonials', [ApiTestimonialController::class, 'index']);
 Route::get('theme-content', [ApiThemeContentController::class, 'show']);
+Route::get('brand-settings', [\App\Http\Controllers\Api\V1\BrandSettingsController::class, 'show']);
 
 // =======================
 // Category Routes

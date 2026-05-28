@@ -12,8 +12,8 @@ use Illuminate\Support\Str;
 
 trait Listings
 {
-    protected const MIN_TITLE_LENGTH = 5;
-    protected const MIN_REQUIRED_PHOTOS = 3; 
+    protected const MIN_TITLE_LENGTH = 15;
+    protected const MIN_REQUIRED_PHOTOS = 1; 
 
     protected function enrichListingData($listing): array
     {

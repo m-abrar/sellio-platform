@@ -7,12 +7,13 @@ interface StatCardProps {
   icon: IconType;
   color: string;
   trend?: string;
-  details?: { label: string; value: number }[];
+  details?: { label: string; value: number | string }[];
+  detailColumns?: number;
 }
 
-export default function StatCard({ title, value, icon: Icon, color, trend, details }: StatCardProps) {
+export default function StatCard({ title, value, icon: Icon, color, trend, details, detailColumns = 1 }: StatCardProps) {
   return (
-    <div className="bg-white p-6 md:p-10 rounded-[2rem] xl:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] transition-all duration-500 hover:shadow-2xl hover:shadow-slate-200/50 hover:-translate-y-1.5 group flex flex-col justify-between h-full relative overflow-hidden">
+    <div className="bg-white p-6 md:p-8 rounded-[2rem] xl:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] transition-all duration-500 hover:shadow-2xl hover:shadow-slate-200/50 hover:-translate-y-1.5 group flex flex-col justify-between h-full relative overflow-hidden">
       {/* Decorative Glow */}
       <div className="absolute -top-12 -right-12 w-24 h-24 bg-slate-50 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
@@ -30,23 +31,29 @@ export default function StatCard({ title, value, icon: Icon, color, trend, detai
       </div>
       
       {/* Bottom Row: Text content */}
-      <div className="min-w-0 relative z-10">
+      <div className="min-w-0 relative z-10 w-full">
         <p className="text-[10px] md:text-[11px] font-black text-slate-400 uppercase mb-2 truncate">
           {title}
         </p>
-        <div className="flex items-baseline gap-1 mb-4">
-           <h3 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter italic leading-none">
+        <div className="flex items-baseline gap-1 mb-4 min-w-0">
+           <h3 
+             className="text-xl sm:text-2xl xl:text-3xl font-black text-slate-900 tracking-tighter italic leading-none shrink-0"
+             title={value}
+           >
              {value}
            </h3>
-           <span className="w-2 h-2 rounded-full bg-[#6610f2] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+           <span className="w-2 h-2 rounded-full bg-[#6610f2] opacity-0 group-hover:opacity-100 transition-opacity duration-500 shrink-0" />
         </div>
 
         {details && details.length > 0 && (
-          <div className="grid grid-cols-2 gap-x-4 gap-y-2 pt-4 border-t border-slate-50">
+          <div className={detailColumns === 2
+            ? "grid grid-cols-2 gap-x-4 gap-y-2 pt-4 border-t border-slate-50 w-full min-w-0"
+            : "flex flex-col gap-2.5 pt-4 border-t border-slate-50 w-full min-w-0"
+          }>
             {details.map((item, i) => (
-              <div key={i} className="flex justify-between items-center">
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{item.label}</span>
-                <span className="text-[10px] font-black text-slate-900">{item.value}</span>
+              <div key={i} className="flex justify-between items-center w-full min-w-0">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider shrink-0">{item.label}</span>
+                <span className="text-[10px] font-black text-slate-900 pl-2 text-right shrink-0" title={String(item.value)}>{item.value}</span>
               </div>
             ))}
           </div>

@@ -43,9 +43,12 @@ class AutoInquiryController extends Controller
         $autoListingIds = $user->autos()->pluck('id');
 
         $autoInquiries = $this->autoInquiry::whereIn('auto_id', $autoListingIds)
-            ->with(['auto' => function ($query) {
-                $query->select('id', 'title', 'slug', 'brand_id');
-            }])
+            ->with([
+                'auto' => function ($query) {
+                    $query->select('id', 'title', 'slug', 'brand_id');
+                },
+                'user'
+            ])
             ->latest()
             ->paginate(10);
 
@@ -62,7 +65,7 @@ class AutoInquiryController extends Controller
         $this->authorizeOwner($autoInquiry);
 
         return $this->successResponse([
-            'inquiry' => $autoInquiry->load('auto')
+            'inquiry' => $autoInquiry->load(['auto', 'user'])
         ]);
     }
 

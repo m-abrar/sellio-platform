@@ -48,13 +48,19 @@ export const getActivities = async (module?: string, type?: string) => {
 };
 
 export const getActivityById = async (module: string | undefined, type: string | undefined, id: string) => {
-  if (module === 'properties' && type === 'bookings') {
-    const response = await apiClient.get(`/dashboard/partner/leads/properties/bookings/${id}`);
-    const payload = unwrapData<{ booking?: Record<string, unknown> } | Record<string, unknown>>(response);
-    const booking = (payload as { booking?: Record<string, unknown> }).booking ?? payload;
-    const item = normalizeLeadRecord(booking as Record<string, unknown>, module, type);
-
-    return { data: item };
+  const baseEndpoint = resolveLeadEndpoint(module, type);
+  
+  if (baseEndpoint) {
+    try {
+      const response = await apiClient.get(`${baseEndpoint}/${id}`);
+      const payload = unwrapData<any>(response);
+      // Extract relation wrapper if exists, e.g. booking, inquiry, visit, quote, etc.
+      const rawRecord = payload.booking || payload.inquiry || payload.visit || payload.application || payload.quote || payload.appointment || payload;
+      const item = normalizeLeadRecord(rawRecord, module, type);
+      return { data: item };
+    } catch (error) {
+      console.warn("Failed to fetch direct detail, falling back to list", error);
+    }
   }
 
   const listResponse = await getActivities(module, type);
