@@ -54,6 +54,8 @@ export default function CreateJob() {
   const [jobId, setJobId] = useState<number | null>(null);
   const [files, setFiles] = useState<any[]>([]);
   const [form, setForm] = useState(defaultForm);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
 
   const updateForm = useCallback((field: string, value: unknown) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -109,6 +111,10 @@ export default function CreateJob() {
             is_published: job.is_published ?? true,
           });
 
+          if (job.tags) {
+            setTags(job.tags);
+          }
+
           const initialMedia: any[] = [];
           if (job.featured_image) {
             initialMedia.push({
@@ -142,6 +148,17 @@ export default function CreateJob() {
 
     initialize();
   }, [isEditMode, slug]);
+
+  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const val = tagInput.trim();
+      if (val && !tags.includes(val)) {
+        setTags((prev) => [...prev, val]);
+      }
+      setTagInput('');
+    }
+  };
 
   const buildFormData = () => {
     const formData = new FormData();
@@ -186,6 +203,8 @@ export default function CreateJob() {
         formData.append('existing_media_ids[]', String(fileObj.id));
       }
     });
+
+    tags.forEach((tag) => formData.append('tags[]', tag));
 
     return formData;
   };
@@ -485,6 +504,36 @@ export default function CreateJob() {
               className={`${inputClass} resize-none`}
               placeholder="Detail the responsibilities, requirements, and company culture..."
             />
+
+            {/* Discoverability Tags manager */}
+            <div className="space-y-4 pt-8 border-t border-slate-100 mt-8">
+              <label className={labelClass}>Discoverability Keywords / Tags</label>
+              <div className="flex flex-wrap gap-2.5 p-5 bg-slate-50 border-2 border-slate-100/50 rounded-[2rem] min-h-[72px] items-center">
+                {tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-2 bg-[#6610f2]/5 text-[#6610f2] text-xs font-bold pl-4 pr-3 py-2 rounded-xl border border-[#6610f2]/10"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => setTags((prev) => prev.filter((_, idx) => idx !== i))}
+                      className="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black hover:bg-[#6610f2] hover:text-white transition-colors text-[#6610f2]/60"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+                <input
+                  type="text"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleTagKeyDown}
+                  placeholder={tags.length === 0 ? "Type a tag (e.g. React, Remote) and press Enter..." : "Add tag..."}
+                  className="flex-1 bg-transparent border-none outline-none text-xs font-bold px-2 py-1 placeholder:text-slate-300 text-slate-800"
+                />
+              </div>
+            </div>
           </div>
 
           <div className={containerClass}>

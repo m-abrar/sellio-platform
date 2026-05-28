@@ -20,6 +20,7 @@ export interface NormalizedJob {
   salary_max?: number | null;
   applicants_count?: number | null;
   is_published?: boolean;
+  tags?: string[];
   compensation?: Record<string, unknown>;
   employment?: Record<string, unknown>;
   status?: Record<string, unknown>;
@@ -130,6 +131,7 @@ export const normalizeJob = (job: any): NormalizedJob => {
     salary_max: job.compensation?.max ?? null,
     applicants_count: job.status?.application_count ?? null,
     is_published: job.status?.is_published ?? false,
+    tags: job.taxonomy?.tags ?? [],
     compensation: job.compensation ?? {},
     employment: job.employment ?? {},
     status: job.status ?? {},

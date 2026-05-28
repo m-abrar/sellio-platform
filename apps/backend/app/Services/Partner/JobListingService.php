@@ -37,27 +37,43 @@ class JobListingService
 
     public function saveJob(User $user, array $data, ?JobListing $jobListing = null): JobListing
     {
-        unset($data['main_image'], $data['gallery'], $data['existing_media_ids'], $data['employment_type']);
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($user, $data, $jobListing) {
+            $tags = $data['tags'] ?? null;
+            unset($data['main_image'], $data['gallery'], $data['existing_media_ids'], $data['employment_type'], $data['tags']);
 
-        $data['slug'] = $this->generateUniqueSlug($data['title'], $jobListing?->id);
-        $data['is_published'] = (bool) ($data['is_published'] ?? false);
-        $data['is_featured'] = (bool) ($data['is_featured'] ?? false);
-        $data['is_contract'] = (bool) ($data['is_contract'] ?? false);
-        $data['is_full_time'] = (bool) ($data['is_full_time'] ?? false);
-        $data['experience_level'] = (int) ($data['experience_level'] ?? 1);
-        $data['workplace_type'] = (int) ($data['workplace_type'] ?? 1);
-        $data['city'] = $data['city'] ?? 'Remote';
-        $data['country'] = $data['country'] ?? 'Global';
-        $data['salary_frequency'] = $data['salary_frequency'] ?? 'yearly';
+            $data['slug'] = $this->generateUniqueSlug($data['title'], $jobListing?->id);
+            $data['is_published'] = (bool) ($data['is_published'] ?? false);
+            $data['is_featured'] = (bool) ($data['is_featured'] ?? false);
+            $data['is_contract'] = (bool) ($data['is_contract'] ?? false);
+            $data['is_full_time'] = (bool) ($data['is_full_time'] ?? false);
+            $data['experience_level'] = (int) ($data['experience_level'] ?? 1);
+            $data['workplace_type'] = (int) ($data['workplace_type'] ?? 1);
+            $data['city'] = $data['city'] ?? 'Remote';
+            $data['country'] = $data['country'] ?? 'Global';
+            $data['salary_frequency'] = $data['salary_frequency'] ?? 'yearly';
 
-        $payload = Arr::only($data, (new JobListing())->getFillable());
+            $payload = Arr::only($data, (new JobListing())->getFillable());
 
-        if ($jobListing) {
-            $jobListing->update($payload);
+            if ($jobListing) {
+                $jobListing->update($payload);
+            } else {
+                $jobListing = $user->jobs()->create($payload);
+            }
+
+            if ($tags !== null) {
+                $tagIds = [];
+                foreach ($tags as $tagName) {
+                    $tag = \App\Models\Tag::firstOrCreate(
+                        ['title' => trim($tagName)],
+                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_job' => true, 'is_published' => true]
+                    );
+                    $tagIds[] = $tag->id;
+                }
+                $jobListing->tags()->sync($tagIds);
+            }
+
             return $jobListing;
-        }
-
-        return $user->jobs()->create($payload);
+        });
     }
 
     public function deleteJob(JobListing $jobListing): void

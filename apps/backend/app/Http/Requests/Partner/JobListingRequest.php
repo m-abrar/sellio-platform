@@ -59,6 +59,8 @@ class JobListingRequest extends FormRequest
             'is_featured'          => ['boolean'],
             'is_contract'          => ['boolean'],
             'is_full_time'         => ['boolean'],
+            'tags'                 => ['nullable', 'array'],
+            'tags.*'               => ['string', 'max:50'],
             'main_image'           => ['nullable', 'image', 'max:5120'],
             'gallery.*'            => ['nullable', 'image', 'max:5120'],
             'existing_media_ids'   => ['nullable', 'array'],
@@ -68,6 +70,10 @@ class JobListingRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        if (is_string($this->input('tags'))) {
+            $this->merge(['tags' => json_decode($this->input('tags'), true) ?? []]);
+        }
+
         if ($this->filled('name') && !$this->filled('title')) {
             $this->merge(['title' => $this->input('name')]);
         }

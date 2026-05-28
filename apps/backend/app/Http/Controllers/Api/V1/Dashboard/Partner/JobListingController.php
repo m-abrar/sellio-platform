@@ -52,7 +52,7 @@ class JobListingController extends Controller
         $this->handleMedia($job, $request);
 
         return $this->successResponse(
-            new JobListingResource($job->load(['media', 'category', 'location', 'brand', 'employer'])),
+            new JobListingResource($job->load(['media', 'category', 'location', 'brand', 'tags', 'employer'])),
             __('Job created successfully!'),
             201
         );
@@ -85,7 +85,7 @@ class JobListingController extends Controller
         $this->handleMedia($joblisting, $request);
 
         return $this->successResponse(
-            new JobListingResource($joblisting->fresh(['media', 'category', 'location', 'brand', 'employer'])),
+            new JobListingResource($joblisting->fresh(['media', 'category', 'location', 'brand', 'tags', 'employer'])),
             __('Job updated successfully!')
         );
     }
