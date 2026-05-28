@@ -30,6 +30,7 @@ class ServiceService
             'categories' => Category::where('is_service', true)->get(['id', 'title']),
             'types'      => Type::where('is_service', true)->get(['id', 'title']),
             'locations'  => Location::where('is_service', true)->get(['id', 'title']),
+            'brands'     => \App\Models\Brand::where('is_service', true)->get(['id', 'title']),
         ];
     }
 

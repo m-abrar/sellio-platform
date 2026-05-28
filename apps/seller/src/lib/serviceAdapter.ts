@@ -40,6 +40,11 @@ export interface NormalizedService {
   operations?: Record<string, unknown>;
   professional?: Record<string, unknown>;
   status?: Record<string, unknown>;
+  brand_id?: number | string | null;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
+  meta_title?: string;
+  meta_description?: string;
 }
 
 const buildLocationLabel = (service: any): string => {
@@ -110,6 +115,11 @@ export const normalizeService = (service: any): NormalizedService => {
     rate_type: isProjectBased ? 'fixed' : 'hourly',
     category: service.professional?.category?.title ?? service.professional?.category ?? undefined,
     delivery_time: service.operations?.hours_label ?? service.pricing?.min_contract ?? undefined,
+    brand_id: service.professional?.brand?.id ?? service.brand_id ?? null,
+    latitude: service.location?.latitude ?? null,
+    longitude: service.location?.longitude ?? null,
+    meta_title: service.seo?.meta_title ?? service.meta_title ?? '',
+    meta_description: service.seo?.meta_description ?? service.meta_description ?? '',
     pricing: service.pricing ?? {},
     operations: service.operations ?? {},
     professional: service.professional ?? {},

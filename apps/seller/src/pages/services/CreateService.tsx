@@ -26,6 +26,7 @@ const defaultForm = {
   title: '',
   category_id: '',
   type_id: '',
+  brand_id: '',
   location_id: '',
   rate_type: 'fixed',
   base_price: '',
@@ -43,7 +44,11 @@ const defaultForm = {
   state: '',
   country: '',
   zip_code: '',
+  latitude: '',
+  longitude: '',
   description: '',
+  meta_title: '',
+  meta_description: '',
   is_published: true,
   is_featured: false,
   is_subscription: false,
@@ -55,7 +60,7 @@ export default function CreateService() {
   const navigate = useNavigate();
   const isEditMode = Boolean(slug);
 
-  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [] });
+  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [], brands: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [serviceId, setServiceId] = useState<number | null>(null);
@@ -92,6 +97,7 @@ export default function CreateService() {
             title: service.title || '',
             category_id: service.category_id ? String(service.category_id) : '',
             type_id: service.type_id ? String(service.type_id) : '',
+            brand_id: service.brand_id ? String(service.brand_id) : '',
             location_id: service.location_id ? String(service.location_id) : '',
             rate_type: service.rate_type || 'fixed',
             base_price: service.base_price != null ? String(service.base_price) : '',
@@ -109,7 +115,11 @@ export default function CreateService() {
             state: service.state || '',
             country: service.country || '',
             zip_code: service.zip_code || '',
+            latitude: service.latitude != null ? String(service.latitude) : '',
+            longitude: service.longitude != null ? String(service.longitude) : '',
             description: service.description || '',
+            meta_title: service.meta_title || '',
+            meta_description: service.meta_description || '',
             is_published: service.is_published ?? true,
             is_featured: service.is_featured ?? false,
             is_subscription: service.is_subscription ?? false,
@@ -178,6 +188,12 @@ export default function CreateService() {
     formData.append('state', form.state);
     formData.append('country', form.country || 'Global');
     formData.append('zip_code', form.zip_code);
+
+    if (form.brand_id) formData.append('brand_id', form.brand_id);
+    if (form.latitude) formData.append('latitude', form.latitude);
+    if (form.longitude) formData.append('longitude', form.longitude);
+    if (form.meta_title) formData.append('meta_title', form.meta_title);
+    if (form.meta_description) formData.append('meta_description', form.meta_description);
 
     formData.append('sync_existing_media', '1');
     files.forEach((fileObj) => {
@@ -317,6 +333,20 @@ export default function CreateService() {
                   </select>
                   <p className={fieldHintClass}>Optional</p>
                 </div>
+                <div>
+                  <label className={labelClass}>Company Brand</label>
+                  <select
+                    value={form.brand_id}
+                    onChange={(e) => updateForm('brand_id', e.target.value)}
+                    className={inputClass}
+                  >
+                    <option value="">Select hiring brand...</option>
+                    {formMeta.brands?.map((brand: any) => (
+                      <option key={brand.id} value={brand.id}>{brand.title}</option>
+                    ))}
+                  </select>
+                  <p className={fieldHintClass}>Optional</p>
+                </div>
               </div>
             </div>
           </div>
@@ -449,6 +479,30 @@ export default function CreateService() {
                 <label className={labelClass}>Zip Code</label>
                 <input type="text" value={form.zip_code} onChange={(e) => updateForm('zip_code', e.target.value)} className={inputClass} />
               </div>
+              <div className="md:col-span-2 grid grid-cols-2 gap-6 pt-4 border-t border-slate-100/50">
+                <div>
+                  <label className={labelClass}>Latitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={form.latitude}
+                    onChange={(e) => updateForm('latitude', e.target.value)}
+                    className={inputClass}
+                    placeholder="e.g. 37.7749"
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Longitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={form.longitude}
+                    onChange={(e) => updateForm('longitude', e.target.value)}
+                    className={inputClass}
+                    placeholder="e.g. -122.4194"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -469,6 +523,36 @@ export default function CreateService() {
               placeholder="Describe what's included in the service, your expertise, and the value you provide..."
             />
             <p className={fieldHintClass}>Required</p>
+          </div>
+
+          <div className={containerClass}>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+              <span className="w-2 h-8 bg-sky-500 rounded-full" /> Discovery Details (SEO).
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              <div className="md:col-span-2">
+                <label className={labelClass}>Meta Title</label>
+                <input
+                  type="text"
+                  value={form.meta_title}
+                  onChange={(e) => updateForm('meta_title', e.target.value)}
+                  className={inputClass}
+                  placeholder="Search engine result title"
+                />
+                <p className={fieldHintClass}>Optional</p>
+              </div>
+              <div className="md:col-span-2">
+                <label className={labelClass}>Meta Description</label>
+                <textarea
+                  value={form.meta_description}
+                  onChange={(e) => updateForm('meta_description', e.target.value)}
+                  rows={3}
+                  className={`${inputClass} resize-none`}
+                  placeholder="Short, attractive search snippet for search engines..."
+                />
+                <p className={fieldHintClass}>Optional</p>
+              </div>
+            </div>
           </div>
         </div>
 
