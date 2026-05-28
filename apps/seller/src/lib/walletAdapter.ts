@@ -1,7 +1,9 @@
 export interface WalletOverview {
   balance: number;
   lifetimeEarnings: number;
-  pendingWithdrawals: number;
+  approvedPayouts: number;
+  pendingPayouts: number;
+  rejectedPayouts: number;
 }
 
 export interface WalletTransaction {
@@ -33,7 +35,9 @@ const formatDate = (value: unknown): string => {
 export const normalizeWalletOverview = (payload: Record<string, unknown>): WalletOverview => ({
   balance: Number(payload.balance ?? 0),
   lifetimeEarnings: Number(payload.lifetimeEarnings ?? 0),
-  pendingWithdrawals: Number(payload.pendingWithdrawals ?? 0),
+  approvedPayouts: Number(payload.approvedPayouts ?? 0),
+  pendingPayouts: Number(payload.pendingPayouts ?? 0),
+  rejectedPayouts: Number(payload.rejectedPayouts ?? 0),
 });
 
 export const normalizeWalletTransaction = (record: Record<string, unknown>): WalletTransaction => {
@@ -59,13 +63,25 @@ export const normalizeWalletTransaction = (record: Record<string, unknown>): Wal
     (typeof meta.title === 'string' && meta.title) ||
     (isWithdrawal ? 'Withdrawal Request' : isDeposit ? 'Wallet Deposit' : 'Wallet Transaction');
 
+  const rawStatus = typeof record.status === 'string' ? record.status : '';
+  let statusText = 'Pending';
+  if (rawStatus === 'approved' || rawStatus === 'completed') {
+    statusText = 'Completed';
+  } else if (rawStatus === 'rejected') {
+    statusText = 'Rejected';
+  } else if (rawStatus === 'pending') {
+    statusText = 'Pending';
+  } else {
+    statusText = record.confirmed ? 'Completed' : 'Pending';
+  }
+
   return {
     id: Number(record.id ?? 0),
     type: uiType,
     title,
     amount: signedAmount,
     date: formatDate(record.created_at),
-    status: record.confirmed ? 'Completed' : 'Pending',
+    status: statusText,
   };
 };
 
@@ -82,10 +98,22 @@ export const normalizePayoutRecord = (record: Record<string, unknown>): PayoutRe
   const meta = record.meta as Record<string, unknown> | undefined;
   const method = typeof meta?.method === 'string' ? meta.method : 'Wallet Withdrawal';
 
+  const rawStatus = typeof record.status === 'string' ? record.status : '';
+  let statusText = 'Pending';
+  if (rawStatus === 'approved' || rawStatus === 'completed') {
+    statusText = 'Completed';
+  } else if (rawStatus === 'rejected') {
+    statusText = 'Rejected';
+  } else if (rawStatus === 'pending') {
+    statusText = 'Pending';
+  } else {
+    statusText = record.confirmed ? 'Completed' : 'Pending';
+  }
+
   return {
     id: Number(record.id ?? 0),
     amount: `$${Math.abs(amountValue).toFixed(2)}`,
-    status: record.confirmed ? 'Completed' : 'Pending',
+    status: statusText,
     date: formatDate(record.created_at),
     method,
   };

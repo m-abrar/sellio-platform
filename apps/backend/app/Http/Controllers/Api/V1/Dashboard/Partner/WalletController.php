@@ -21,14 +21,24 @@ class WalletController extends Controller
         
         $balance = $partner->wallet_balance;
         
+        // 1. Lifetime Earnings (deposits)
         $lifetimeEarnings = ($partner->transactions()
             ->where('type', 'deposit')
             ->sum('amount') ?? 0) / 100;
             
-        $pendingWithdrawals = abs($partner->transactions()
-            ->where('type', 'withdraw')
-            ->where('confirmed', true)
-            ->whereJsonContains('meta', ['type' => 'withdrawal_request'])
+        // 2. Approved Payouts (Completed)
+        $approvedPayouts = ($partner->withdrawals()
+            ->where('status', 'approved')
+            ->sum('amount') ?? 0) / 100;
+            
+        // 3. Pending Payouts (Awaiting Review)
+        $pendingPayouts = ($partner->withdrawals()
+            ->where('status', 'pending')
+            ->sum('amount') ?? 0) / 100;
+            
+        // 4. Rejected Payouts (Failed / Returned)
+        $rejectedPayouts = ($partner->withdrawals()
+            ->where('status', 'rejected')
             ->sum('amount') ?? 0) / 100;
 
         $transactions = $partner->transactions()
@@ -39,7 +49,9 @@ class WalletController extends Controller
         return $this->successResponse([
             'balance' => $balance,
             'lifetimeEarnings' => $lifetimeEarnings,
-            'pendingWithdrawals' => $pendingWithdrawals,
+            'approvedPayouts' => $approvedPayouts,
+            'pendingPayouts' => $pendingPayouts,
+            'rejectedPayouts' => $rejectedPayouts,
             'transactions' => TransactionResource::collection($transactions)->resolve(),
         ]);
     }

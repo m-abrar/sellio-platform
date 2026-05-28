@@ -14,6 +14,22 @@ class TransactionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $meta = $this->meta ?? [];
+        $status = 'completed'; // default status for non-withdrawal transactions
+        
+        if ($this->type === 'withdraw') {
+            if (isset($meta['withdrawal_id'])) {
+                $withdrawal = \App\Models\Withdrawal::find($meta['withdrawal_id']);
+                if ($withdrawal) {
+                    $status = $withdrawal->status; // 'pending', 'approved', 'rejected'
+                } else {
+                    $status = $this->confirmed ? 'approved' : 'pending';
+                }
+            } else {
+                $status = $this->confirmed ? 'approved' : 'pending';
+            }
+        }
+
         return [
             'id' => $this->id,
             'payable_type' => $this->payable_type,
@@ -23,6 +39,7 @@ class TransactionResource extends JsonResource
             'amount' => ($this->amount ?? 0) / 100, // Typically decimal divided by 100
             'confirmed' => $this->confirmed,
             'meta' => $this->meta,
+            'status' => $status,
             'uuid' => $this->uuid,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

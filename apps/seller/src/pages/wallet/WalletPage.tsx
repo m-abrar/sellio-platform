@@ -76,7 +76,9 @@ export default function WalletPage() {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-500 mb-4">Total Balance</p>
-                <h2 className="text-7xl font-black italic tracking-tighter">${wallet?.balance?.toLocaleString() || '0'}<span className="text-3xl text-slate-500">.00</span></h2>
+                <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black italic tracking-tighter shrink-0">
+                  ${wallet?.balance?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}
+                </h2>
               </div>
               <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-xl flex items-center justify-center border border-white/10">
                 <HiOutlineWallet className="w-8 h-8 text-white" />
@@ -120,13 +122,29 @@ export default function WalletPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-            <div className="bg-emerald-50 p-8 rounded-[2rem] border border-emerald-100">
-              <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">Lifetime</p>
-              <h4 className="text-2xl font-black text-emerald-900 tracking-tight">+${wallet?.lifetimeEarnings?.toLocaleString() || '0'}</h4>
+            <div className="bg-emerald-50 p-6 sm:p-8 rounded-[2rem] border border-emerald-100 flex flex-col justify-between">
+              <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">Lifetime Revenue</p>
+              <h4 className="text-lg sm:text-2xl font-black text-emerald-900 tracking-tight">
+                +${wallet?.lifetimeEarnings?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}
+              </h4>
             </div>
-            <div className="bg-slate-50 p-8 rounded-[2rem] border border-slate-100">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Pending</p>
-              <h4 className="text-2xl font-black text-slate-900 tracking-tight">${wallet?.pending_balance?.toLocaleString() || '0'}.00</h4>
+            <div className="bg-indigo-50 p-6 sm:p-8 rounded-[2rem] border border-indigo-100 flex flex-col justify-between">
+              <p className="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-2">Completed Payouts</p>
+              <h4 className="text-lg sm:text-2xl font-black text-indigo-900 tracking-tight">
+                -${wallet?.approvedPayouts?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}
+              </h4>
+            </div>
+            <div className="bg-amber-50 p-6 sm:p-8 rounded-[2rem] border border-amber-100 flex flex-col justify-between">
+              <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2">Pending Withdrawals</p>
+              <h4 className="text-lg sm:text-2xl font-black text-amber-900 tracking-tight">
+                ${wallet?.pendingPayouts?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}
+              </h4>
+            </div>
+            <div className="bg-rose-50 p-6 sm:p-8 rounded-[2rem] border border-rose-100 flex flex-col justify-between">
+              <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-2">Rejected Attempts</p>
+              <h4 className="text-lg sm:text-2xl font-black text-rose-900 tracking-tight">
+                ${wallet?.rejectedPayouts?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}
+              </h4>
             </div>
           </div>
         </div>
@@ -181,13 +199,16 @@ export default function WalletPage() {
                     </td>
                     <td className="px-10 py-8 text-xs font-bold text-slate-500 uppercase tracking-widest">{tx.date}</td>
                     <td className="px-10 py-8">
-                      <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${
-                        tx.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
+                      <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${
+                        tx.status === 'Completed' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
+                        tx.status === 'Rejected' ? 'bg-rose-50 text-rose-600 border-rose-100' : 
+                        'bg-amber-50 text-amber-600 border-amber-100'
                       }`}>
                         {tx.status}
                       </span>
                     </td>
                     <td className={`px-10 py-8 text-right font-black tracking-tight ${
+                      tx.status === 'Rejected' ? 'text-slate-400 line-through' :
                       tx.amount.startsWith('+') ? 'text-emerald-600' : 'text-slate-900'
                     }`}>
                       {tx.amount}
@@ -241,7 +262,9 @@ export default function WalletPage() {
                     required
                   />
                 </div>
-                <p className="mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Available: ${wallet?.balance?.toLocaleString() || '0'}.00</p>
+                <p className="mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                  Available: ${wallet?.balance?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}
+                </p>
               </div>
 
               <button 
