@@ -12,6 +12,7 @@ export interface NormalizedProduct {
   pricing: {
     base_price?: number;
     sale_price?: number | null;
+    cost_price?: number | null;
     on_sale?: boolean;
     formatted?: string;
   };
@@ -72,7 +73,12 @@ export const normalizeProduct = (product: any): NormalizedProduct => {
         }))
       : [],
     video_url: product.media?.video_url ?? product.video_url ?? null,
-    pricing: product.pricing ?? {},
+    pricing: product.pricing
+      ? {
+          ...product.pricing,
+          cost_price: product.pricing.cost_price !== undefined ? toNumber(product.pricing.cost_price) : null,
+        }
+      : {},
     inventory: {
       stock_quantity: toNumber(product.inventory?.stock_quantity),
       low_stock_threshold: toNumber(product.inventory?.low_stock_threshold),

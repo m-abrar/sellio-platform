@@ -48,6 +48,7 @@ export default function CreateProduct() {
     short_description: '',
     base_price: '',
     sale_price: '',
+    cost_price: '',
     on_sale: false,
     stock_quantity: 0,
     low_stock_threshold: '',
@@ -95,6 +96,7 @@ export default function CreateProduct() {
             short_description: p.short_description || '',
             base_price: p.pricing?.base_price || '',
             sale_price: p.pricing?.sale_price || '',
+            cost_price: p.pricing?.cost_price || '',
             on_sale: p.pricing?.on_sale ?? Boolean(p.pricing?.sale_price),
             stock_quantity: p.inventory?.stock_quantity || 0,
             low_stock_threshold: p.inventory?.low_stock_threshold ?? '',
@@ -324,7 +326,7 @@ export default function CreateProduct() {
               <span className="w-2 h-8 bg-green-500 rounded-full" /> Commercial & Stock.
             </h3>
             <div className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                 <div>
                   <label className={labelClass}>Base Valuation (USD)</label>
                   <div className="relative">
@@ -353,6 +355,23 @@ export default function CreateProduct() {
                   </div>
                   <p className={fieldHintClass}>Optional</p>
                 </div>
+                <div>
+                  <label className={labelClass}>Cost Price (USD)</label>
+                  <div className="relative">
+                    <HiOutlineCurrencyDollar className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    <input
+                      type="number"
+                      value={form.cost_price}
+                      onChange={(e) => updateForm('cost_price', e.target.value)}
+                      className={`${inputClass} pl-14`}
+                      placeholder="Optional"
+                    />
+                  </div>
+                  <p className={fieldHintClass}>Optional (Internal Cost)</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div>
                   <label className={labelClass}>Stock Quantity</label>
                   <div className="relative">

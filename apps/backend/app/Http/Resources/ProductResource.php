@@ -25,6 +25,7 @@ class ProductResource extends JsonResource
             'pricing' => [
                 'base_price'      => (float) $this->base_price,
                 'sale_price'      => (float) $this->sale_price,
+                'cost_price'      => $this->cost_price !== null ? (float) $this->cost_price : null,
                 'current_price'   => (float) $this->price, // From custom accessor
                 'formatted'       => $this->price_formatted,
                 'on_sale'         => (bool) $this->on_sale,

@@ -34,6 +34,7 @@ class SaveProductRequest extends FormRequest
             
             'base_price'        => ['required', 'numeric', 'min:0'],
             'sale_price'        => ['nullable', 'numeric', 'min:0'],
+            'cost_price'        => ['nullable', 'numeric', 'min:0'],
             'on_sale'           => ['boolean'],
             
             'stock_quantity'    => ['required_if:manage_stock,true', 'integer'],
