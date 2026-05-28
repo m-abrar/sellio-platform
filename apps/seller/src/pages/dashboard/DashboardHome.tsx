@@ -237,7 +237,7 @@ export default function DashboardHome() {
                 <p className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-500 mb-2">Available Payout</p>
                 <div className="flex items-baseline gap-1 text-white mb-10 min-w-0">
                     <h4 
-                      className="text-3xl sm:text-4xl xl:text-5xl font-black italic tracking-tighter truncate max-w-full"
+                      className="text-3xl sm:text-4xl xl:text-5xl font-black italic tracking-tighter shrink-0"
                       title={`${earningChange?.currency_symbol ?? '$'}${Number(earningChange?.total ?? 0).toLocaleString()}`}
                     >
                       {earningChange?.currency_symbol ?? '$'}{Number(earningChange?.total ?? 0).toLocaleString()}
