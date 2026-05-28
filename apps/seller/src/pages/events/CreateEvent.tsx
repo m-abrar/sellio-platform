@@ -22,14 +22,9 @@ const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-
 
 const defaultForm = {
   title: '',
-  date: '',
-  time: '',
-  venue: '',
-  capacity: '',
   organizer: '',
   organizer_email: '',
   organizer_phone: '',
-  price: '',
   description: '',
   category_id: '',
   brand_id: '',
@@ -49,6 +44,22 @@ const defaultForm = {
   venue_size: '',
 };
 
+interface TicketItem {
+  id: string;
+  title: string;
+  base_price: string;
+}
+
+interface OccurrenceItem {
+  id: string;
+  date: string;
+  time: string;
+  duration_hours: string;
+  max_attendees: string;
+  venue_details: string;
+  inventory: Record<string, { available_quantity: string; override_price: string }>;
+}
+
 export default function CreateEvent() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -60,24 +71,139 @@ export default function CreateEvent() {
   const [eventId, setEventId] = useState<number | null>(null);
   const [files, setFiles] = useState<any[]>([]);
   const [form, setForm] = useState(defaultForm);
-  const [ticketMeta, setTicketMeta] = useState({ id: 'NEW_1', title: 'General Admission', durationHours: 3 });
-  const [occurrenceMeta, setOccurrenceMeta] = useState({ id: 'NEW_1' });
+
+  // Advanced sub-wizard states
+  const [ticketsList, setTicketsList] = useState<TicketItem[]>([
+    { id: 'NEW_1', title: 'General Admission', base_price: '' }
+  ]);
+
+  const [occurrencesList, setOccurrencesList] = useState<OccurrenceItem[]>([
+    {
+      id: 'NEW_1',
+      date: '',
+      time: '',
+      duration_hours: '3',
+      max_attendees: '',
+      venue_details: '',
+      inventory: {
+        NEW_1: { available_quantity: '', override_price: '0' }
+      }
+    }
+  ]);
+
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
 
   const updateForm = useCallback((field: string, value: unknown) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   }, []);
 
+  const updateTicketField = (id: string, field: 'title' | 'base_price', value: string) => {
+    setTicketsList((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, [field]: value } : t))
+    );
+  };
+
+  const addTicketType = () => {
+    const newId = `NEW_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    setTicketsList((prev) => [...prev, { id: newId, title: '', base_price: '' }]);
+    setOccurrencesList((prev) =>
+      prev.map((occ) => ({
+        ...occ,
+        inventory: {
+          ...occ.inventory,
+          [newId]: { available_quantity: '', override_price: '0' }
+        }
+      }))
+    );
+  };
+
+  const removeTicketType = (id: string) => {
+    setTicketsList((prev) => prev.filter((t) => t.id !== id));
+    setOccurrencesList((prev) =>
+      prev.map((occ) => {
+        const nextInv = { ...occ.inventory };
+        delete nextInv[id];
+        return { ...occ, inventory: nextInv };
+      })
+    );
+  };
+
+  const addOccurrenceSlot = () => {
+    const newId = `NEW_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const defaultInventory: Record<string, { available_quantity: string; override_price: string }> = {};
+    ticketsList.forEach((t) => {
+      defaultInventory[t.id] = { available_quantity: '', override_price: '0' };
+    });
+    setOccurrencesList((prev) => [
+      ...prev,
+      {
+        id: newId,
+        date: '',
+        time: '',
+        duration_hours: '3',
+        max_attendees: '',
+        venue_details: '',
+        inventory: defaultInventory
+      }
+    ]);
+  };
+
+  const removeOccurrenceSlot = (id: string) => {
+    setOccurrencesList((prev) => prev.filter((occ) => occ.id !== id));
+  };
+
+  const updateOccurrenceField = (id: string, field: string, value: string) => {
+    setOccurrencesList((prev) =>
+      prev.map((occ) => (occ.id === id ? { ...occ, [field]: value } : occ))
+    );
+  };
+
+  const updateInventoryField = (
+    occId: string,
+    ticketId: string,
+    field: 'available_quantity' | 'override_price',
+    value: string
+  ) => {
+    setOccurrencesList((prev) =>
+      prev.map((occ) => {
+        if (occ.id !== occId) return occ;
+        return {
+          ...occ,
+          inventory: {
+            ...occ.inventory,
+            [ticketId]: {
+              ...(occ.inventory[ticketId] || { available_quantity: '', override_price: '0' }),
+              [field]: value
+            }
+          }
+        };
+      })
+    );
+  };
+
+  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const val = tagInput.trim();
+      if (val && !tags.includes(val)) {
+        setTags((prev) => [...prev, val]);
+      }
+      setTagInput('');
+    }
+  };
+
   const progress = useMemo(() => {
     let score = 0;
     if (form.title.length > 5) score += 15;
     if (files.some((f) => f.isMain)) score += 15;
-    if (form.date !== '') score += 15;
-    if (form.venue !== '') score += 15;
-    if (form.price !== '') score += 15;
+    if (occurrencesList.some((occ) => occ.date !== '')) score += 15;
+    if (occurrencesList.some((occ) => occ.venue_details !== '')) score += 15;
+    if (ticketsList.some((t) => t.base_price !== '')) score += 15;
     if (form.category_id !== '') score += 15;
     if (form.description.length > 20) score += 10;
     return score;
-  }, [form, files]);
+  }, [form, files, occurrencesList, ticketsList]);
 
   useEffect(() => {
     const initialize = async () => {
@@ -88,28 +214,78 @@ export default function CreateEvent() {
 
         if (isEditMode && slug) {
           const { data: event } = await getEventBySlug(slug);
-          const ticket = event.ticket_types?.[0];
-          const occurrence = event.occurrences?.[0];
 
           setEventId(event.id);
-          setTicketMeta({
-            id: ticket ? String(ticket.id) : 'NEW_1',
-            title: ticket?.title || 'General Admission',
-            durationHours: occurrence?.duration_hours || 3,
-          });
-          setOccurrenceMeta({
-            id: occurrence ? String(occurrence.id) : 'NEW_1',
-          });
+
+          // Populate Ticket Types List
+          if (event.ticket_types && event.ticket_types.length > 0) {
+            setTicketsList(event.ticket_types.map((ticket: any) => ({
+              id: String(ticket.id),
+              title: ticket.title || '',
+              base_price: ticket.base_price != null ? String(ticket.base_price) : '',
+            })));
+          } else {
+            setTicketsList([{ id: 'NEW_1', title: 'General Admission', base_price: event.base_price != null ? String(event.base_price) : '' }]);
+          }
+
+          // Populate Occurrences List
+          if (event.occurrences && event.occurrences.length > 0) {
+            setOccurrencesList(event.occurrences.map((occ: any) => {
+              const startAt = occ.start_date_time;
+              let occDate = '';
+              let occTime = '';
+              if (startAt) {
+                const parsed = new Date(startAt);
+                if (!Number.isNaN(parsed.getTime())) {
+                  occDate = parsed.getFullYear() + '-' + String(parsed.getMonth() + 1).padStart(2, '0') + '-' + String(parsed.getDate()).padStart(2, '0');
+                  occTime = String(parsed.getHours()).padStart(2, '0') + ':' + String(parsed.getMinutes()).padStart(2, '0');
+                }
+              }
+
+              const occInventory: Record<string, { available_quantity: string; override_price: string }> = {};
+              if (occ.inventory) {
+                Object.entries(occ.inventory).forEach(([tId, inv]: [string, any]) => {
+                  occInventory[tId] = {
+                    available_quantity: inv.available_quantity != null ? String(inv.available_quantity) : '',
+                    override_price: inv.override_price != null ? String(inv.override_price) : '0',
+                  };
+                });
+              }
+
+              return {
+                id: String(occ.id),
+                date: occDate,
+                time: occTime,
+                duration_hours: occ.duration_hours != null ? String(occ.duration_hours) : '3',
+                max_attendees: occ.max_attendees != null ? String(occ.max_attendees) : '',
+                venue_details: occ.venue_details || '',
+                inventory: occInventory,
+              };
+            }));
+          } else {
+            setOccurrencesList([{
+              id: 'NEW_1',
+              date: event.date || '',
+              time: event.time || '',
+              duration_hours: '3',
+              max_attendees: event.capacity != null ? String(event.capacity) : '',
+              venue_details: event.venue || '',
+              inventory: {
+                NEW_1: { available_quantity: event.capacity != null ? String(event.capacity) : '', override_price: '0' }
+              }
+            }]);
+          }
+
+          // Populate Tags
+          if (event.tags) {
+            setTags(event.tags);
+          }
+
           setForm({
             title: event.title || '',
-            date: event.date || '',
-            time: event.time || '',
-            venue: event.venue || '',
-            capacity: event.capacity != null ? String(event.capacity) : '',
             organizer: event.organizer || '',
             organizer_email: event.organizer_email || '',
             organizer_phone: event.organizer_phone || '',
-            price: event.base_price != null ? String(event.base_price) : '',
             description: event.description || '',
             category_id: event.category_id ? String(event.category_id) : '',
             brand_id: event.brand_id ? String(event.brand_id) : '',
@@ -132,24 +308,26 @@ export default function CreateEvent() {
           const initialMedia: any[] = [];
           if (event.featured_image) {
             initialMedia.push({
-              id: event.gallery[0]?.id,
+              id: event.gallery?.[0]?.id,
               url: event.featured_image,
               preview: event.featured_image,
               isMain: true,
               existing: true,
             });
           }
-          event.gallery.forEach((item: any) => {
-            if (item.url !== event.featured_image) {
-              initialMedia.push({
-                id: item.id,
-                url: item.url,
-                preview: item.thumbnail || item.url,
-                isMain: false,
-                existing: true,
-              });
-            }
-          });
+          if (event.gallery) {
+            event.gallery.forEach((item: any) => {
+              if (item.url !== event.featured_image) {
+                initialMedia.push({
+                  id: item.id,
+                  url: item.url,
+                  preview: item.thumbnail || item.url,
+                  isMain: false,
+                  existing: true,
+                });
+              }
+            });
+          }
           setFiles(initialMedia);
         }
       } catch (error) {
@@ -165,16 +343,18 @@ export default function CreateEvent() {
 
   const buildFormData = () => {
     const formData = new FormData();
-    const basePrice = parseFloat(form.price) || 0;
-    const capacity = parseInt(form.capacity, 10) || 0;
-    const startDateTime = `${form.date} ${form.time}:00`;
 
+    // Core attributes
     formData.append('title', form.title);
     formData.append('description', form.description);
     formData.append('category_id', form.category_id);
     if (form.brand_id) formData.append('brand_id', form.brand_id);
     if (form.type_id) formData.append('type_id', form.type_id);
     if (form.location_id) formData.append('location_id', form.location_id);
+
+    const firstTicket = ticketsList[0];
+    const basePrice = parseFloat(firstTicket?.base_price || '') || 0;
+
     formData.append('base_price', String(basePrice));
     formData.append('is_paid', basePrice > 0 ? '1' : '0');
     formData.append('is_published', form.is_published ? '1' : '0');
@@ -196,18 +376,32 @@ export default function CreateEvent() {
     if (form.latitude) formData.append('latitude', form.latitude);
     if (form.longitude) formData.append('longitude', form.longitude);
 
-    formData.append('tickets[0][id]', ticketMeta.id);
-    formData.append('tickets[0][title]', ticketMeta.title);
-    formData.append('tickets[0][base_price]', String(basePrice));
+    // Dynamic Ticket Pricing definitions
+    ticketsList.forEach((ticket, idx) => {
+      formData.append(`tickets[${idx}][id]`, String(ticket.id));
+      formData.append(`tickets[${idx}][title]`, ticket.title);
+      formData.append(`tickets[${idx}][base_price]`, String(parseFloat(ticket.base_price) || 0));
+    });
 
-    formData.append('occurrences[0][id]', occurrenceMeta.id);
-    formData.append('occurrences[0][start_date_time]', startDateTime);
-    formData.append('occurrences[0][duration_hours]', String(ticketMeta.durationHours));
-    formData.append('occurrences[0][max_attendees]', String(capacity));
-    formData.append('occurrences[0][venue_details]', form.venue);
-    formData.append(`occurrences[0][inventory][${ticketMeta.id}][available_quantity]`, String(capacity));
-    formData.append(`occurrences[0][inventory][${ticketMeta.id}][override_price]`, '0');
+    // Scheduled Occurrences and Inventory Allocation Matrix
+    occurrencesList.forEach((occ, idx) => {
+      formData.append(`occurrences[${idx}][id]`, String(occ.id));
+      const startDateTime = occ.date && occ.time ? `${occ.date} ${occ.time}:00` : '';
+      formData.append(`occurrences[${idx}][start_date_time]`, startDateTime);
+      formData.append(`occurrences[${idx}][duration_hours]`, String(parseFloat(occ.duration_hours) || 3));
+      formData.append(`occurrences[${idx}][max_attendees]`, String(parseInt(occ.max_attendees, 10) || 0));
+      formData.append(`occurrences[${idx}][venue_details]`, occ.venue_details || '');
 
+      Object.entries(occ.inventory || {}).forEach(([ticketId, inv]: [string, any]) => {
+        formData.append(`occurrences[${idx}][inventory][${ticketId}][available_quantity]`, String(parseInt(inv.available_quantity, 10) || 0));
+        formData.append(`occurrences[${idx}][inventory][${ticketId}][override_price]`, String(parseFloat(inv.override_price) || 0));
+      });
+    });
+
+    // Polymorphic tags
+    tags.forEach((tag) => formData.append('tags[]', tag));
+
+    // Media studio upload files
     files.forEach((fileObj) => {
       if (fileObj.file) {
         if (fileObj.isMain) formData.append('main_image', fileObj.file);
@@ -221,8 +415,14 @@ export default function CreateEvent() {
   };
 
   const handleSave = async () => {
-    if (!form.title || !form.description || !form.category_id || !form.date || !form.time) {
+    if (!form.title || !form.description || !form.category_id) {
       toast.error('Please complete the required event fields.');
+      return;
+    }
+
+    const hasIncompleteOccurrences = occurrencesList.some(occ => !occ.date || !occ.time);
+    if (hasIncompleteOccurrences) {
+      toast.error('Please select a date and start time for all scheduled occurrence slots.');
       return;
     }
 
@@ -467,116 +667,182 @@ export default function CreateEvent() {
             </div>
           </div>
 
+          {/* Ticket Pricing Tiers setup */}
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-purple-500 rounded-full" /> Schedule & Logistics.
+              <span className="w-2 h-8 bg-green-500 rounded-full" /> Ticket Pricing Tiers.
             </h3>
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className={labelClass}>Date</label>
-                  <div className="relative">
-                    <HiOutlineCalendar className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                    <input
-                      type="date"
-                      value={form.date}
-                      onChange={(e) => updateForm('date', e.target.value)}
-                      className={`${inputClass} pl-14`}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className={labelClass}>Start Time</label>
-                  <div className="relative">
-                    <HiOutlineClock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                    <input
-                      type="time"
-                      value={form.time}
-                      onChange={(e) => updateForm('time', e.target.value)}
-                      className={`${inputClass} pl-14`}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className={labelClass}>Capacity (Attendees)</label>
-                  <div className="relative">
-                    <HiOutlineUserGroup className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                    <input
-                      type="number"
-                      value={form.capacity}
-                      onChange={(e) => updateForm('capacity', e.target.value)}
-                      className={`${inputClass} pl-14`}
-                      placeholder="e.g. 500"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className={labelClass}>Venue Size (sq ft)</label>
-                  <input
-                    type="number"
-                    value={form.venue_size}
-                    onChange={(e) => updateForm('venue_size', e.target.value)}
-                    className={inputClass}
-                    placeholder="e.g. 2500"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-6 pt-6 border-t border-slate-100">
-                <label className="flex items-center justify-between min-h-[72px] p-5 bg-slate-50 rounded-2xl border border-slate-100 cursor-pointer hover:bg-white hover:shadow-sm transition-all">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Virtual / Online Event</span>
-                  <input
-                    type="checkbox"
-                    checked={form.is_virtual}
-                    onChange={(e) => updateForm('is_virtual', e.target.checked)}
-                    className="w-5 h-5 accent-[#6610f2]"
-                  />
-                </label>
-                
-                {form.is_virtual && (
-                  <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-                    <label className={labelClass}>Zoom / Meet / Live Stream Link</label>
+              {ticketsList.map((ticket, index) => (
+                <div key={ticket.id} className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end p-6 bg-slate-50 rounded-3xl border border-slate-100/50 relative">
+                  <div className="md:col-span-6">
+                    <label className={labelClass}>Ticket Name / Tier</label>
                     <input
                       type="text"
-                      value={form.virtual_link}
-                      onChange={(e) => updateForm('virtual_link', e.target.value)}
-                      className={inputClass}
-                      placeholder="https://zoom.us/j/123456789"
+                      value={ticket.title}
+                      onChange={(e) => updateTicketField(ticket.id, 'title', e.target.value)}
+                      className="w-full bg-white border-2 border-transparent focus:border-[#6610f2] rounded-2xl px-6 py-4 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300 text-sm"
+                      placeholder="e.g. VIP Access, General Admission"
                     />
                   </div>
-                )}
-              </div>
+                  <div className="md:col-span-4">
+                    <label className={labelClass}>Base Price (USD)</label>
+                    <div className="relative">
+                      <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">$</span>
+                      <input
+                        type="number"
+                        value={ticket.base_price}
+                        onChange={(e) => updateTicketField(ticket.id, 'base_price', e.target.value)}
+                        className="w-full bg-white border-2 border-transparent focus:border-[#6610f2] rounded-2xl pl-10 pr-6 py-4 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300 text-sm"
+                        placeholder="0.00"
+                      />
+                    </div>
+                  </div>
+                  <div className="md:col-span-2 flex justify-end md:pb-1">
+                    <button
+                      type="button"
+                      disabled={ticketsList.length === 1}
+                      onClick={() => removeTicketType(ticket.id)}
+                      className="bg-red-50 text-red-500 hover:bg-red-100 disabled:opacity-30 px-5 py-4 rounded-2xl font-bold text-xs uppercase tracking-wider transition-all w-full text-center"
+                      title="Remove ticket tier"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={addTicketType}
+                className="bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest px-8 py-4.5 rounded-2xl hover:bg-slate-800 transition-colors"
+              >
+                + Add Pricing Tier
+              </button>
             </div>
           </div>
 
+          {/* Scheduled Occurrences & Inventory allocation block */}
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-green-500 rounded-full" /> Ticketing.
+              <span className="w-2 h-8 bg-purple-500 rounded-full" /> Scheduled Occurrences.
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className={labelClass}>Base Ticket Price (USD)</label>
-                <div className="relative">
-                  <HiOutlineTicket className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                  <input
-                    type="text"
-                    value={form.price}
-                    onChange={(e) => updateForm('price', e.target.value)}
-                    className={`${inputClass} pl-14 text-2xl`}
-                    placeholder="0.00"
-                  />
+            <div className="space-y-8">
+              {occurrencesList.map((occ, occIdx) => (
+                <div key={occ.id} className="p-8 bg-slate-50/50 border border-slate-100 rounded-[2.5rem] space-y-6 relative">
+                  <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+                    <h4 className="text-xs font-black text-[#6610f2] uppercase tracking-widest italic">
+                      // Occurrence Slot #{occIdx + 1}
+                    </h4>
+                    <button
+                      type="button"
+                      disabled={occurrencesList.length === 1}
+                      onClick={() => removeOccurrenceSlot(occ.id)}
+                      className="text-red-500 hover:text-red-700 text-[10px] font-black uppercase tracking-widest disabled:opacity-30"
+                    >
+                      Remove Slot
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className={labelClass}>Date</label>
+                      <input
+                        type="date"
+                        value={occ.date}
+                        onChange={(e) => updateOccurrenceField(occ.id, 'date', e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Start Time</label>
+                      <input
+                        type="time"
+                        value={occ.time}
+                        onChange={(e) => updateOccurrenceField(occ.id, 'time', e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Duration (Hours)</label>
+                      <input
+                        type="number"
+                        step="0.5"
+                        value={occ.duration_hours}
+                        onChange={(e) => updateOccurrenceField(occ.id, 'duration_hours', e.target.value)}
+                        className={inputClass}
+                        placeholder="3"
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Slot Total Capacity</label>
+                      <input
+                        type="number"
+                        value={occ.max_attendees}
+                        onChange={(e) => updateOccurrenceField(occ.id, 'max_attendees', e.target.value)}
+                        className={inputClass}
+                        placeholder="e.g. 500"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className={labelClass}>Room / Stage venue details</label>
+                      <input
+                        type="text"
+                        value={occ.venue_details}
+                        onChange={(e) => updateOccurrenceField(occ.id, 'venue_details', e.target.value)}
+                        className={inputClass}
+                        placeholder="e.g. Hall A, Main Auditorium"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Nested Inventory Mapping */}
+                  <div className="bg-white p-6 rounded-[2rem] border border-slate-100/80 space-y-4">
+                    <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block ml-2">
+                      Ticket Inventory & Availability Allocations
+                    </h5>
+                    <div className="space-y-4">
+                      {ticketsList.map((ticket) => {
+                        const inv = occ.inventory[ticket.id] || { available_quantity: '', override_price: '0' };
+                        return (
+                          <div key={ticket.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center p-5 bg-slate-50 rounded-2xl border border-slate-100/50">
+                            <div className="md:col-span-4">
+                              <span className="text-xs font-black text-slate-800 italic block">{ticket.title || 'Untitled Ticket Tier'}</span>
+                              <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mt-0.5">Base: ${parseFloat(ticket.base_price) || 0}</span>
+                            </div>
+                            <div className="md:col-span-4">
+                              <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest block mb-1">Available Qty</label>
+                              <input
+                                type="number"
+                                value={inv.available_quantity}
+                                onChange={(e) => updateInventoryField(occ.id, ticket.id, 'available_quantity', e.target.value)}
+                                className="w-full bg-white border-2 border-transparent focus:border-[#6610f2] rounded-xl px-4 py-2.5 text-xs font-bold outline-none"
+                                placeholder="Quantity"
+                              />
+                            </div>
+                            <div className="md:col-span-4">
+                              <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest block mb-1">Override Price ($)</label>
+                              <input
+                                type="number"
+                                value={inv.override_price}
+                                onChange={(e) => updateInventoryField(occ.id, ticket.id, 'override_price', e.target.value)}
+                                className="w-full bg-white border-2 border-transparent focus:border-[#6610f2] rounded-xl px-4 py-2.5 text-xs font-bold outline-none"
+                                placeholder="0 for default"
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <label className={labelClass}>Venue Name (Display)</label>
-                <input
-                  type="text"
-                  value={form.venue}
-                  onChange={(e) => updateForm('venue', e.target.value)}
-                  className={inputClass}
-                  placeholder="e.g. Grand Plaza Hotel"
-                />
-              </div>
+              ))}
+              <button
+                type="button"
+                onClick={addOccurrenceSlot}
+                className="bg-[#6610f2] text-white font-black text-[10px] uppercase tracking-widest px-8 py-4.5 rounded-2xl hover:bg-[#520dc2] transition-colors"
+              >
+                + Add Scheduled Slot
+              </button>
             </div>
           </div>
 
@@ -593,9 +859,39 @@ export default function CreateEvent() {
               value={form.description}
               onChange={(e) => updateForm('description', e.target.value)}
               rows={6}
-              className={`${inputClass} resize-none`}
+              className={`${inputClass} resize-none mb-8`}
               placeholder="What makes this experience unique? Describe the agenda, speakers, or highlights..."
             />
+
+            {/* Discoverability Tags manager */}
+            <div className="space-y-4 pt-8 border-t border-slate-100">
+              <label className={labelClass}>Discoverability Keywords / Tags</label>
+              <div className="flex flex-wrap gap-2.5 p-5 bg-slate-50 border-2 border-slate-100/50 rounded-[2rem] min-h-[72px] items-center">
+                {tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-2 bg-[#6610f2]/5 text-[#6610f2] text-xs font-bold pl-4 pr-3 py-2 rounded-xl border border-[#6610f2]/10"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => setTags((prev) => prev.filter((_, idx) => idx !== i))}
+                      className="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black hover:bg-[#6610f2] hover:text-white transition-colors text-[#6610f2]/60"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+                <input
+                  type="text"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleTagKeyDown}
+                  placeholder={tags.length === 0 ? "Type a tag (e.g. Tech, Music) and press Enter..." : "Add tag..."}
+                  className="flex-1 bg-transparent border-none outline-none text-xs font-bold px-2 py-1 placeholder:text-slate-300 text-slate-800"
+                />
+              </div>
+            </div>
           </div>
         </div>
 

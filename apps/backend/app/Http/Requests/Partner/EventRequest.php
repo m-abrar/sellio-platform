@@ -80,6 +80,9 @@ class EventRequest extends FormRequest
             'occurrences.*.inventory.*.available_quantity' => ['required', 'integer', 'min:0'],
             'occurrences.*.inventory.*.override_price'     => ['nullable', 'numeric', 'min:0'],
 
+            'tags'              => ['nullable', 'array'],
+            'tags.*'            => ['string', 'max:50'],
+
             'main_image'        => ['nullable', 'image', 'max:5120'],
             'gallery.*'         => ['nullable', 'image', 'max:5120'],
             'existing_media_ids' => ['nullable', 'array'],
@@ -95,6 +98,10 @@ class EventRequest extends FormRequest
 
         if (is_string($this->input('occurrences'))) {
             $this->merge(['occurrences' => json_decode($this->input('occurrences'), true) ?? []]);
+        }
+
+        if (is_string($this->input('tags'))) {
+            $this->merge(['tags' => json_decode($this->input('tags'), true) ?? []]);
         }
 
         $this->merge([

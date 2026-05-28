@@ -28,7 +28,7 @@ class EventController extends Controller
     public function index(Request $request): JsonResponse
     {
         $events = Event::where('user_id', Auth::id())
-            ->with(['media', 'category', 'ticketTypes', 'occurrences'])
+            ->with(['media', 'category', 'ticketTypes', 'occurrences', 'tags'])
             ->orderBy('start_date_time', 'desc')
             ->paginate($request->integer('per_page', 120));
 
@@ -51,7 +51,7 @@ class EventController extends Controller
         $this->handleMedia($event, $request);
 
         return $this->successResponse(
-            new EventResource($event->load(['media', 'category', 'ticketTypes', 'occurrences.inventory'])),
+            new EventResource($event->load(['media', 'category', 'ticketTypes', 'occurrences.inventory', 'tags'])),
             __('Event created successfully.'),
             201
         );
@@ -61,7 +61,7 @@ class EventController extends Controller
     {
         $model = Event::where('user_id', Auth::id())
             ->where(is_numeric($event) ? 'id' : 'slug', $event)
-            ->with(['media', 'category', 'ticketTypes', 'occurrences.inventory'])
+            ->with(['media', 'category', 'ticketTypes', 'occurrences.inventory', 'tags'])
             ->firstOrFail();
 
         return $this->successResponse(new EventResource($model));
@@ -72,7 +72,7 @@ class EventController extends Controller
         $this->authorizeOwner($event);
 
         return $this->successResponse(
-            new EventResource($event->load(['media', 'category', 'ticketTypes', 'occurrences.inventory']))
+            new EventResource($event->load(['media', 'category', 'ticketTypes', 'occurrences.inventory', 'tags']))
         );
     }
 
@@ -83,7 +83,7 @@ class EventController extends Controller
         $this->handleMedia($event, $request);
 
         return $this->successResponse(
-            new EventResource($event->fresh(['media', 'category', 'ticketTypes', 'occurrences.inventory'])),
+            new EventResource($event->fresh(['media', 'category', 'ticketTypes', 'occurrences.inventory', 'tags'])),
             __('Event updated successfully.')
         );
     }

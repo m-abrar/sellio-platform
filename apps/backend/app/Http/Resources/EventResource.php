@@ -52,7 +52,7 @@ class EventResource extends JsonResource
                 'brand'       => $this->whenLoaded('brand', fn() => $this->brand->title),
                 'event_genre' => $this->event_genre,
                 'venue_size'  => $this->venue_size,
-                'tags'        => $this->whenLoaded('tags', fn() => $this->tags->pluck('title')),
+                'tags'        => $this->relationLoaded('tags') ? $this->tags->pluck('title') : $this->tags()->pluck('title'),
             ],
 
             // Spatie Media Implementation

@@ -53,7 +53,22 @@ class EventService
             $ticketIdMap = $this->syncTicketTypes($event, $tickets);
             $this->syncOccurrences($event, $occurrences, $ticketIdMap);
 
-            return $event->fresh(['ticketTypes', 'occurrences.inventory']);
+            // Sync polymorphic Tags
+            if (isset($data['tags'])) {
+                $tagIds = [];
+                foreach ($data['tags'] as $tagName) {
+                    $tag = \App\Models\Tag::firstOrCreate(
+                        ['title' => trim($tagName)],
+                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_event' => true, 'is_published' => true]
+                    );
+                    $tagIds[] = $tag->id;
+                }
+                $event->tags()->sync($tagIds);
+            } else {
+                $event->tags()->sync([]);
+            }
+
+            return $event->fresh(['ticketTypes', 'occurrences.inventory', 'tags']);
         });
     }
 
@@ -62,7 +77,7 @@ class EventService
      */
     protected function prepareBaseData(array $data, array $occurrences, ?int $currentId = null): array
     {
-        unset($data['tickets'], $data['occurrences'], $data['main_image'], $data['gallery'], $data['existing_media_ids']);
+        unset($data['tickets'], $data['occurrences'], $data['tags'], $data['main_image'], $data['gallery'], $data['existing_media_ids']);
 
         if (!empty($occurrences[0])) {
             $first = $occurrences[0];

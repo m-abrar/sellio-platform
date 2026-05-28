@@ -34,6 +34,7 @@ export interface NormalizedEvent {
   state?: string;
   country?: string;
   zip_code?: string;
+  tags?: string[];
   ticket_types?: Array<{ id: number | string; title: string; base_price: number }>;
   occurrences?: Array<{
     id: number | string;
@@ -141,6 +142,7 @@ export const normalizeEvent = (event: any): NormalizedEvent => {
     state: event.location?.state ?? '',
     country: event.location?.country ?? '',
     zip_code: event.location?.zip_code ?? '',
+    tags: event.specs?.tags ?? [],
     ticket_types: event.ticket_types ?? [],
     occurrences: event.occurrences ?? [],
     schedule: event.schedule ?? {},
