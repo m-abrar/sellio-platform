@@ -40,6 +40,8 @@ export interface NormalizedService {
   operations?: Record<string, unknown>;
   professional?: Record<string, unknown>;
   status?: Record<string, unknown>;
+  features?: Array<{ id: number; title: string; icon?: string; value?: string }>;
+  tags?: string[];
   brand_id?: number | string | null;
   latitude?: number | string | null;
   longitude?: number | string | null;
@@ -124,5 +126,7 @@ export const normalizeService = (service: any): NormalizedService => {
     operations: service.operations ?? {},
     professional: service.professional ?? {},
     status: service.status ?? {},
+    features: service.features ?? [],
+    tags: service.tags ?? [],
   };
 };

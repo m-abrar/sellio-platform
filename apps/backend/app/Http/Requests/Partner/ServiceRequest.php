@@ -68,11 +68,23 @@ class ServiceRequest extends FormRequest
             'existing_media_ids'   => ['array'],
             'existing_media_ids.*' => ['integer'],
             'sync_existing_media'  => ['boolean'],
+            'features'             => ['nullable', 'array'],
+            'features.*'           => ['exists:features,id'],
+            'tags'                 => ['nullable', 'array'],
+            'tags.*'               => ['string', 'max:50'],
         ];
     }
 
     protected function prepareForValidation(): void
     {
+        if (is_string($this->input('tags'))) {
+            $this->merge(['tags' => json_decode($this->input('tags'), true) ?? []]);
+        }
+
+        if (is_string($this->input('features'))) {
+            $this->merge(['features' => json_decode($this->input('features'), true) ?? []]);
+        }
+
         if ($this->filled('name') && !$this->filled('title')) {
             $this->merge(['title' => $this->input('name')]);
         }

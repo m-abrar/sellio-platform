@@ -52,7 +52,7 @@ class ServiceController extends Controller
         $this->handleMedia($service, $request);
 
         return $this->successResponse(
-            new ServiceResource($service->load(['media', 'category', 'brand', 'type', 'location'])),
+            new ServiceResource($service->load(['media', 'category', 'brand', 'type', 'location', 'features', 'tags'])),
             __('Service created successfully.'),
             201
         );
@@ -62,7 +62,7 @@ class ServiceController extends Controller
     {
         $model = Service::where('user_id', Auth::id())
             ->where(is_numeric($service) ? 'id' : 'slug', $service)
-            ->with(['media', 'category', 'brand', 'type', 'location', 'features'])
+            ->with(['media', 'category', 'brand', 'type', 'location', 'features', 'tags'])
             ->firstOrFail();
 
         return $this->successResponse(new ServiceResource($model));
@@ -73,7 +73,7 @@ class ServiceController extends Controller
         $this->authorizeOwner($service);
 
         return $this->successResponse(
-            new ServiceResource($service->load(['media', 'category', 'brand', 'type', 'location', 'features']))
+            new ServiceResource($service->load(['media', 'category', 'brand', 'type', 'location', 'features', 'tags']))
         );
     }
 
@@ -86,7 +86,7 @@ class ServiceController extends Controller
         $this->handleMedia($service, $request);
 
         return $this->successResponse(
-            new ServiceResource($service->fresh(['media', 'category', 'brand', 'type', 'location', 'features'])),
+            new ServiceResource($service->fresh(['media', 'category', 'brand', 'type', 'location', 'features', 'tags'])),
             __('Service updated successfully.')
         );
     }

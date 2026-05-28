@@ -60,16 +60,40 @@ export default function CreateService() {
   const navigate = useNavigate();
   const isEditMode = Boolean(slug);
 
-  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [], brands: [] });
+  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [], brands: [], features: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [serviceId, setServiceId] = useState<number | null>(null);
   const [files, setFiles] = useState<any[]>([]);
   const [form, setForm] = useState(defaultForm);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
+  const [selectedFeatures, setSelectedFeatures] = useState<number[]>([]);
 
   const updateForm = useCallback((field: string, value: unknown) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   }, []);
+
+  const toggleFeature = (id: number) => {
+    setSelectedFeatures((prev) =>
+      prev.includes(id) ? prev.filter((fid) => fid !== id) : [...prev, id]
+    );
+  };
+
+  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const val = tagInput.trim().replace(/,$/, '');
+      if (val && !tags.includes(val)) {
+        setTags((prev) => [...prev, val]);
+      }
+      setTagInput('');
+    }
+  };
+
+  const removeTag = (indexToRemove: number) => {
+    setTags((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
 
   const progress = useMemo(() => {
     let score = 0;
@@ -125,6 +149,13 @@ export default function CreateService() {
             is_subscription: service.is_subscription ?? false,
             is_project_based: service.is_project_based ?? true,
           });
+
+          if (service.tags) {
+            setTags(service.tags);
+          }
+          if (service.features) {
+            setSelectedFeatures(service.features.map((f: any) => f.id));
+          }
 
           const initialMedia: any[] = [];
           if (service.featured_image) {
@@ -194,6 +225,9 @@ export default function CreateService() {
     if (form.longitude) formData.append('longitude', form.longitude);
     if (form.meta_title) formData.append('meta_title', form.meta_title);
     if (form.meta_description) formData.append('meta_description', form.meta_description);
+
+    tags.forEach((tag) => formData.append('tags[]', tag));
+    selectedFeatures.forEach((featId) => formData.append('features[]', String(featId)));
 
     formData.append('sync_existing_media', '1');
     files.forEach((fileObj) => {
@@ -453,6 +487,46 @@ export default function CreateService() {
             </div>
           </div>
 
+          {formMeta.features && formMeta.features.length > 0 && (
+            <div className={containerClass}>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+                <span className="w-2 h-8 bg-indigo-500 rounded-full" /> Specification Features.
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {formMeta.features.map((feature: any) => {
+                  const isSelected = selectedFeatures.includes(feature.id);
+                  return (
+                    <button
+                      key={feature.id}
+                      type="button"
+                      onClick={() => toggleFeature(feature.id)}
+                      className={`flex items-center gap-4 p-5 rounded-2xl text-left border-2 transition-all ${
+                        isSelected
+                          ? 'bg-[#6610f2]/5 border-[#6610f2] text-slate-950 font-black'
+                          : 'bg-slate-50/50 border-slate-100 text-slate-500 hover:border-slate-200'
+                      }`}
+                    >
+                      <div
+                        className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${
+                          isSelected
+                            ? 'border-[#6610f2] bg-[#6610f2] text-white'
+                            : 'border-slate-300 bg-white'
+                        }`}
+                      >
+                        {isSelected && (
+                          <svg className="w-4 h-4 stroke-current stroke-[3]" fill="none" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="text-sm font-bold tracking-tight">{feature.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
               <HiOutlineMapPin className="w-6 h-6 text-slate-300" /> Location.
@@ -523,6 +597,49 @@ export default function CreateService() {
               placeholder="Describe what's included in the service, your expertise, and the value you provide..."
             />
             <p className={fieldHintClass}>Required</p>
+          </div>
+
+          <div className={containerClass}>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-6 flex items-center gap-3">
+              <span className="w-2 h-8 bg-teal-500 rounded-full" /> Discoverability Tags.
+            </h3>
+            <p className="text-[10px] font-black text-slate-400 mb-6 leading-relaxed tracking-wider">
+              ADD SEARCH KEYWORDS AND RELEVANT TAGS TO AMPLIFY DISCOVERABILITY ACROSS SEARCH SECTORS (E.G. 'PLUMBING', 'EMERGENCY', 'REPAIR'). PRESS ENTER OR COMMA TO CAST A TAG CHIP.
+            </p>
+            <div className="flex flex-wrap gap-2.5 mb-6">
+              {tags.map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center gap-2 bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest px-4.5 py-2.5 rounded-full shadow-sm select-none"
+                >
+                  {tag}
+                  <button
+                    type="button"
+                    onClick={() => removeTag(idx)}
+                    className="hover:text-red-400 transition-colors focus:outline-none"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </span>
+              ))}
+              {tags.length === 0 && (
+                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300 italic py-2">
+                  No tags added yet...
+                </span>
+              )}
+            </div>
+            <div className="relative">
+              <input
+                type="text"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={handleTagKeyDown}
+                className={inputClass}
+                placeholder="Type keyword and press Enter or Comma..."
+              />
+            </div>
           </div>
 
           <div className={containerClass}>
