@@ -65,6 +65,11 @@ class DashboardService
             ->where('status', \App\Models\Withdrawal::STATUS_APPROVED)
             ->sum('amount') / 100);
 
+        // Calculate total lifetime earnings (revenue) in dollars
+        $lifetimeEarnings = (float) (($partner->transactions()
+            ->where('type', 'deposit')
+            ->sum('amount') ?? 0) / 100);
+
         return array_merge([
             'partner'           => $partner,
             'earningChangeData' => $earningData,
@@ -76,6 +81,8 @@ class DashboardService
                 'unread_notifications' => $unreadNotifications,
                 'unread_messages'      => $unreadMessages,
                 'total_payouts'        => $totalPayouts,
+                'lifetime_earnings'    => $lifetimeEarnings,
+                'wallet_balance'       => (float) $partner->wallet_balance,
             ]
         ], $uiData);
     }
@@ -144,8 +151,7 @@ class DashboardService
         }
 
         return [
-            'total' => (float) $partner->wallet_balance,
-            'earnings_30_days' => $currentEarnings,
+            'total' => $currentEarnings,
             'previous_earnings' => $previousEarnings,
             'percentage' => number_format(abs($change), 2),
             'change_type' => $changeType,

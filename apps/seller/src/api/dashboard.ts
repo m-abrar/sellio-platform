@@ -36,6 +36,8 @@ interface PartnerWelcomeResponse {
     unread_notifications?: number;
     unread_messages?: number;
     total_payouts?: number;
+    lifetime_earnings?: number;
+    wallet_balance?: number;
   };
 }
 
@@ -61,7 +63,7 @@ export const getDashboardData = async () => {
         activeInventory: activeInventory > 0 ? activeInventory : recentListings.length,
         urgentAlerts: Number(payload.performanceData?.total_leads ?? 0),
         marketViews: Number(payload.performanceData?.total_views ?? 0),
-        totalRevenue: Number(payload.earningChangeData?.total ?? 0),
+        totalRevenue: Number(payload.extraStats?.lifetime_earnings ?? 0),
         moduleCounts: {
           properties: payload.partner?.properties_count ?? 0,
           autos: payload.partner?.autos_count ?? 0,
@@ -73,12 +75,15 @@ export const getDashboardData = async () => {
           notifications: payload.extraStats?.unread_notifications ?? 0,
         },
         revenue: {
-          earnings: Number(payload.earningChangeData?.total ?? 0),
+          earnings: Number(payload.extraStats?.lifetime_earnings ?? 0),
           payouts: payload.extraStats?.total_payouts ?? 0,
         },
       },
       healthScore: payload.healthScoreData,
-      earningChange: payload.earningChangeData,
+      earningChange: {
+        ...payload.earningChangeData,
+        total: Number(payload.extraStats?.wallet_balance ?? 0),
+      },
       performance: payload.performanceData,
       recentListings,
     },
