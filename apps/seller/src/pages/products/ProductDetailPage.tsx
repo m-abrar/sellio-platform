@@ -11,6 +11,7 @@ import {
 } from 'react-icons/hi2';
 import PageHeader from '../../components/layout/PageHeader';
 import { getProductBySlug } from '../../api/products';
+import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
 import { toast } from 'sonner';
 
 export default function ProductDetailPage() {
@@ -156,6 +157,8 @@ export default function ProductDetailPage() {
               <p><HiOutlineShieldCheck className="inline w-4 h-4 mr-2 text-slate-400" />Status: {product.status?.is_published ? 'Published' : 'Draft'}</p>
             </div>
           </div>
+
+          <ListingAnalyticsWidget listingId={product.id} listingType="Product" />
         </div>
       </div>
     </div>

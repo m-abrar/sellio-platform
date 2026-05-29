@@ -30,6 +30,7 @@ export interface ConversationListItem {
   preview: string;
   date: string;
   unread: boolean;
+  avatarUrl?: string | null;
   inquiriable?: {
     id: number;
     title: string;
@@ -132,6 +133,7 @@ export const normalizeConversation = (
     preview: typeof message?.body === 'string' ? message.body : 'No messages yet',
     date: formatDate(message?.created_at ?? record.updated_at),
     unread: Boolean(record.unread_count ?? record.unread ?? false),
+    avatarUrl: typeof user?.avatar_url === 'string' ? user.avatar_url : null,
     inquiriable: inquiriableData,
   };
 };

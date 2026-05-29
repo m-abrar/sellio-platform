@@ -11,6 +11,7 @@ import {
 } from 'react-icons/hi2';
 import PageHeader from '../../components/layout/PageHeader';
 import { getJobBySlug } from '../../api/jobs';
+import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
 import { toast } from 'sonner';
 
 export default function JobDetailPage() {
@@ -176,6 +177,8 @@ export default function JobDetailPage() {
               </div>
             </div>
           )}
+
+          <ListingAnalyticsWidget listingId={job.id} listingType="JobListing" />
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@ import {
 } from 'react-icons/hi2';
 import PageHeader from '../../components/layout/PageHeader';
 import { getPropertyBySlug } from '../../api/properties';
+import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
 import { toast } from 'sonner';
 
 export default function PropertyDetailPage() {
@@ -169,6 +170,8 @@ export default function PropertyDetailPage() {
               </div>
             </div>
           </div>
+
+          <ListingAnalyticsWidget listingId={property.id} listingType="Property" />
         </div>
       </div>
     </div>

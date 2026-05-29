@@ -10,6 +10,7 @@ import {
 } from 'react-icons/hi2';
 import PageHeader from '../../components/layout/PageHeader';
 import { getClassifiedBySlug } from '../../api/classifieds';
+import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
 import { toast } from 'sonner';
 
 export default function ClassifiedDetailPage() {
@@ -154,6 +155,8 @@ export default function ClassifiedDetailPage() {
               </div>
             </div>
           </div>
+
+          <ListingAnalyticsWidget listingId={classified.id} listingType="Classified" />
         </div>
       </div>
     </div>

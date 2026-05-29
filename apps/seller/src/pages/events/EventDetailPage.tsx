@@ -11,6 +11,7 @@ import {
 } from 'react-icons/hi2';
 import PageHeader from '../../components/layout/PageHeader';
 import { getEventBySlug } from '../../api/events';
+import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
 import { toast } from 'sonner';
 
 export default function EventDetailPage() {
@@ -184,6 +185,8 @@ export default function EventDetailPage() {
               </div>
             </div>
           )}
+
+          <ListingAnalyticsWidget listingId={event.id} listingType="Event" />
         </div>
       </div>
     </div>

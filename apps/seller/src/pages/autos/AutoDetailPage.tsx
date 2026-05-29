@@ -10,6 +10,7 @@ import {
 } from 'react-icons/hi2';
 import PageHeader from '../../components/layout/PageHeader';
 import { getAutoBySlug } from '../../api/autos';
+import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
 import { toast } from 'sonner';
 
 export default function AutoDetailPage() {
@@ -162,6 +163,8 @@ export default function AutoDetailPage() {
               </div>
             </div>
           </div>
+
+          <ListingAnalyticsWidget listingId={auto.id} listingType="Auto" />
         </div>
       </div>
     </div>

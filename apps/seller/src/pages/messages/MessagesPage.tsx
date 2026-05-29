@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import {
   HiOutlineEnvelope,
@@ -30,6 +31,7 @@ const getCategoryStyles = (type: string) => {
 };
 
 export default function MessagesPage() {
+  const { user: currentUser } = useOutletContext<any>() || {};
   const [messages, setMessages] = useState<any[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [threadMessages, setThreadMessages] = useState<any[]>([]);
@@ -119,9 +121,17 @@ export default function MessagesPage() {
                   onClick={() => setSelectedId(msg.id)}
                   className={`p-6 flex items-center gap-4 hover:bg-slate-50 transition-all cursor-pointer border-b border-slate-50 last:border-0 group ${selectedId === msg.id ? 'bg-slate-50 border-l-4 border-l-[#6610f2]' : ''} ${msg.unread ? 'bg-slate-50/30' : ''}`}
                 >
-                  <div className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${msg.unread ? 'bg-[#6610f2] border-[#6610f2] text-white' : 'bg-white border-slate-100 text-slate-300'}`}>
-                    {msg.unread ? <HiOutlineEnvelope className="w-5 h-5" /> : <HiOutlineEnvelopeOpen className="w-5 h-5" />}
-                  </div>
+                  {msg.avatarUrl ? (
+                    <img 
+                      src={msg.avatarUrl} 
+                      className="shrink-0 w-10 h-10 rounded-xl object-cover border border-slate-100 shadow-sm" 
+                      alt={msg.sender} 
+                    />
+                  ) : (
+                    <div className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${msg.unread ? 'bg-[#6610f2] border-[#6610f2] text-white' : 'bg-white border-slate-100 text-slate-300'}`}>
+                      {msg.unread ? <HiOutlineEnvelope className="w-5 h-5" /> : <HiOutlineEnvelopeOpen className="w-5 h-5" />}
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-center mb-0.5">
                       <h4 className={`text-sm tracking-tight truncate ${msg.unread ? 'font-black text-slate-900' : 'font-bold text-slate-600'}`}>{msg.sender}</h4>
@@ -144,9 +154,17 @@ export default function MessagesPage() {
                       <button onClick={() => setSelectedId(null)} className="lg:hidden p-2 text-slate-400">
                         <HiOutlineArrowLeft className="w-5 h-5" />
                       </button>
-                      <div className="w-10 h-10 rounded-xl bg-[#6610f2]/5 flex items-center justify-center text-[#6610f2] font-black">
-                        {selectedMessage.sender.charAt(0)}
-                      </div>
+                      {selectedMessage.avatarUrl ? (
+                        <img 
+                          src={selectedMessage.avatarUrl} 
+                          className="w-10 h-10 rounded-xl object-cover border border-slate-100 shadow-sm" 
+                          alt={selectedMessage.sender} 
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-xl bg-[#6610f2]/5 flex items-center justify-center text-[#6610f2] font-black">
+                          {selectedMessage.sender.charAt(0)}
+                        </div>
+                      )}
                       <div>
                         <h4 className="text-sm font-black text-slate-900 tracking-tight">{selectedMessage.sender}</h4>
                         <p className="text-[10px] font-black text-[#6610f2] uppercase tracking-widest">{selectedMessage.subject}</p>
@@ -165,7 +183,31 @@ export default function MessagesPage() {
                     ) : (
                       threadMessages.map((message) => (
                         <div key={message.id} className={`flex gap-4 ${message.isMine ? 'flex-row-reverse' : ''}`}>
-                          <div className={`w-10 h-10 rounded-xl shrink-0 ${message.isMine ? 'bg-[#6610f2]' : 'bg-slate-100'}`} />
+                          {message.isMine ? (
+                            currentUser?.avatar_url ? (
+                              <img 
+                                src={currentUser.avatar_url} 
+                                className="w-10 h-10 rounded-xl object-cover border border-slate-100 shadow-sm shrink-0" 
+                                alt="avatar" 
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-xl bg-[#6610f2]/5 flex items-center justify-center text-[#6610f2] font-black shrink-0">
+                                {currentUser?.name?.charAt(0) || 'Me'}
+                              </div>
+                            )
+                          ) : (
+                            selectedMessage.avatarUrl ? (
+                              <img 
+                                src={selectedMessage.avatarUrl} 
+                                className="w-10 h-10 rounded-xl object-cover border border-slate-100 shadow-sm shrink-0" 
+                                alt="avatar" 
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 font-bold shrink-0">
+                                {selectedMessage.sender.charAt(0)}
+                              </div>
+                            )
+                          )}
                           <div
                             className={`p-6 rounded-2xl max-w-[80%] shadow-sm ${
                               message.isMine

@@ -9,6 +9,7 @@ import {
 } from 'react-icons/hi2';
 import PageHeader from '../../components/layout/PageHeader';
 import { getServiceBySlug } from '../../api/services';
+import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
 import { toast } from 'sonner';
 
 export default function ServiceDetailPage() {
@@ -160,6 +161,8 @@ export default function ServiceDetailPage() {
               </div>
             </div>
           </div>
+
+          <ListingAnalyticsWidget listingId={service.id} listingType="Service" />
         </div>
       </div>
     </div>
