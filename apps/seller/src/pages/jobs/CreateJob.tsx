@@ -14,6 +14,7 @@ import MediaStudio from '../../components/studio/MediaStudio';
 import PageHeader from '../../components/layout/PageHeader';
 import ActionPill from '../../utils/ActionPill';
 import { createJob, getJobBySlug, getJobFormMeta, updateJob } from '../../api/jobs';
+import { getWelcomeData } from '../../api/dashboard';
 import { ApiError } from '../../lib/apiError';
 import { mapExperienceToFormValue, mapJobTypeFlags, parseSalaryRange, resolveWorkplaceType } from '../../lib/jobAdapter';
 
@@ -56,6 +57,7 @@ export default function CreateJob() {
   const [form, setForm] = useState(defaultForm);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
+  const [limits, setLimits] = useState<any>(null);
 
   const updateForm = useCallback((field: string, value: unknown) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -78,8 +80,14 @@ export default function CreateJob() {
     const initialize = async () => {
       setIsLoading(true);
       try {
-        const meta = await getJobFormMeta();
+        const [meta, dashboardResponse] = await Promise.all([
+          getJobFormMeta(),
+          !isEditMode ? getWelcomeData().catch(() => null) : Promise.resolve(null)
+        ]);
         setFormMeta(meta);
+        if (dashboardResponse) {
+          setLimits(dashboardResponse.data.subscriptionLimits);
+        }
 
         if (isEditMode && slug) {
           const { data: job } = await getJobBySlug(slug);
@@ -242,6 +250,37 @@ export default function CreateJob() {
     return (
       <div className="h-screen flex items-center justify-center">
         <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading Job Studio...</span>
+      </div>
+    );
+  }
+
+  if (!isLoading && !isEditMode && limits?.is_limit_exceeded) {
+    return (
+      <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+        <PageHeader badge="Limit Guard" title="Post" subtitle="Job" />
+        <div className="bg-slate-900 rounded-[3rem] p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
+          <div className="relative z-10 max-w-md space-y-8">
+            <div className="w-20 h-20 rounded-3xl bg-[#6610f2]/20 border border-[#6610f2]/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
+              <span className="text-4xl">🛡️</span>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-3xl font-black italic tracking-tight">Active Limit Reached!</h3>
+              <p className="text-sm font-medium text-slate-300 leading-relaxed">
+                You have reached your subscription active listing limit ({limits.current_listings_count} / {limits.max_listings} listings). 
+                Please upgrade your plan to post more job listings.
+              </p>
+            </div>
+            <button 
+              type="button"
+              onClick={() => navigate('/dashboard/memberships')}
+              className="bg-[#6610f2] hover:bg-[#7b2dfd] px-10 py-5 rounded-[1.8rem] font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-xl shadow-purple-900/40 inline-flex items-center gap-2 cursor-pointer"
+            >
+              Upgrade Subscription Plan
+            </button>
+          </div>
+          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#6610f2]/20 rounded-full blur-[120px]" />
+          <div className="absolute -left-20 -top-20 w-80 h-80 bg-[#6610f2]/10 rounded-full blur-[120px]" />
+        </div>
       </div>
     );
   }

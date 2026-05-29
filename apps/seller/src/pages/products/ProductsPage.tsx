@@ -5,17 +5,27 @@ import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icon
 import { toast } from 'sonner';
 import { getProducts, deleteProduct } from '../../api/products';
 import { triggerDeletion } from '../../utils/animations';
+import { getWelcomeData } from '../../api/dashboard';
+import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
 
 export default function ProductsPage() {
   const navigate = useNavigate();
   const [products, setProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [limits, setLimits] = useState<any>(null);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
 
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const response = await getProducts();
+      const [response, dashboardResponse] = await Promise.all([
+        getProducts(),
+        getWelcomeData().catch(() => null)
+      ]);
       setProducts(response.data);
+      if (dashboardResponse) {
+        setLimits(dashboardResponse.data.subscriptionLimits);
+      }
     } catch (err) {
       console.error("Failed to fetch products", err);
       toast.error("Failed to synchronize inventory.");
@@ -25,6 +35,14 @@ export default function ProductsPage() {
   };
 
   useEffect(() => { fetchProducts(); }, []);
+
+  const handleCreateClick = () => {
+    if (limits?.is_limit_exceeded) {
+      setIsUpgradeModalOpen(true);
+    } else {
+      navigate('/dashboard/products/create');
+    }
+  };
 
   const handleDelete = async (id: number, title: string) => {
     toast(`Decommission "${title}"?`, {
@@ -55,7 +73,7 @@ export default function ProductsPage() {
         subtitle="Inventory"
       >
         <button 
-          onClick={() => navigate('/dashboard/products/create')}
+          onClick={handleCreateClick}
           className="bg-[#6610f2] text-white px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-[#7b2dfd] transition-all active:scale-95 flex items-center gap-2"
         >
           <HiOutlinePlus className="w-4 h-4" /> Add Product
@@ -186,6 +204,13 @@ export default function ProductsPage() {
             </table>
           </div>
         </>
+      )}
+      {limits && (
+        <UpgradePlanModal 
+          isOpen={isUpgradeModalOpen} 
+          onClose={() => setIsUpgradeModalOpen(false)} 
+          limits={limits} 
+        />
       )}
     </div>
   );

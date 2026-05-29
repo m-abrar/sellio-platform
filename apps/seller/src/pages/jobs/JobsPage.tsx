@@ -5,17 +5,27 @@ import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icon
 import { toast } from 'sonner';
 import { deleteJob, getJobs } from '../../api/jobs';
 import { triggerDeletion } from '../../utils/animations';
+import { getWelcomeData } from '../../api/dashboard';
+import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
 
 export default function JobsPage() {
   const navigate = useNavigate();
   const [jobs, setJobs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [limits, setLimits] = useState<any>(null);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
 
   const fetchJobs = async () => {
     setIsLoading(true);
     try {
-      const response = await getJobs();
+      const [response, dashboardResponse] = await Promise.all([
+        getJobs(),
+        getWelcomeData().catch(() => null)
+      ]);
       setJobs(response.data);
+      if (dashboardResponse) {
+        setLimits(dashboardResponse.data.subscriptionLimits);
+      }
     } catch (error) {
       console.error('Failed to fetch jobs', error);
       toast.error('Failed to synchronize opportunities.');
@@ -27,6 +37,14 @@ export default function JobsPage() {
   useEffect(() => {
     fetchJobs();
   }, []);
+
+  const handleCreateClick = () => {
+    if (limits?.is_limit_exceeded) {
+      setIsUpgradeModalOpen(true);
+    } else {
+      navigate('/dashboard/joblistings/create');
+    }
+  };
 
   const handleDelete = (id: number, title: string) => {
     toast(`Decommission "${title}"?`, {
@@ -55,7 +73,7 @@ export default function JobsPage() {
         subtitle="Listings"
       >
         <button 
-          onClick={() => navigate('/dashboard/joblistings/create')}
+          onClick={handleCreateClick}
           className="bg-[#6610f2] text-white px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-[#7b2dfd] transition-all active:scale-95 flex items-center gap-2"
         >
           <HiOutlinePlus className="w-4 h-4" /> Post Job
@@ -169,6 +187,13 @@ export default function JobsPage() {
             </table>
           </div>
         </>
+      )}
+      {limits && (
+        <UpgradePlanModal 
+          isOpen={isUpgradeModalOpen} 
+          onClose={() => setIsUpgradeModalOpen(false)} 
+          limits={limits} 
+        />
       )}
     </div>
   );

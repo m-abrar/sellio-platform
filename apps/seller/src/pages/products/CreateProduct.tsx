@@ -12,6 +12,7 @@ import {
 // API Services
 import { getProductBySlug, createProduct, updateProduct } from '../../api/products';
 import { getCategories, getBrands, getProductTypes, getProductFeatures } from '../../api/categories';
+import { getWelcomeData } from '../../api/dashboard';
 import { ApiError } from '../../lib/apiError';
 
 // Studio Components
@@ -41,6 +42,7 @@ export default function CreateProduct() {
   const [isSaving, setIsSaving] = useState(false);
   const [productId, setProductId] = useState<number | null>(null);
   const [files, setFiles] = useState<any[]>([]);
+  const [limits, setLimits] = useState<any>(null);
 
   const [form, setForm] = useState<any>({
     title: '',
@@ -74,14 +76,20 @@ export default function CreateProduct() {
       setIsLoading(true);
       try {
         // 1. Fetch Categories & Features
-        const flatCategories = await getCategories();
-        const flatBrands = await getBrands();
-        const flatTypes = await getProductTypes();
-        const flatFeatures = await getProductFeatures();
+        const [flatCategories, flatBrands, flatTypes, flatFeatures, dashboardResponse] = await Promise.all([
+          getCategories(),
+          getBrands(),
+          getProductTypes(),
+          getProductFeatures(),
+          !isEditMode ? getWelcomeData().catch(() => null) : Promise.resolve(null)
+        ]);
         setCategories(flatCategories);
         setBrands(flatBrands);
         setTypes(flatTypes);
         setAllFeatures(flatFeatures);
+        if (dashboardResponse) {
+          setLimits(dashboardResponse.data.subscriptionLimits);
+        }
 
         if (isEditMode && slug) {
           const { data: p } = await getProductBySlug(slug);
@@ -241,6 +249,37 @@ export default function CreateProduct() {
       throw err;
     }
   };
+
+  if (!isLoading && !isEditMode && limits?.is_limit_exceeded) {
+    return (
+      <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+        <PageHeader badge="Limit Guard" title="Register" subtitle="Product" />
+        <div className="bg-slate-900 rounded-[3rem] p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
+          <div className="relative z-10 max-w-md space-y-8">
+            <div className="w-20 h-20 rounded-3xl bg-[#6610f2]/20 border border-[#6610f2]/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
+              <span className="text-4xl">🛡️</span>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-3xl font-black italic tracking-tight">Active Limit Reached!</h3>
+              <p className="text-sm font-medium text-slate-300 leading-relaxed">
+                You have reached your subscription active listing limit ({limits.current_listings_count} / {limits.max_listings} listings). 
+                Please upgrade your plan to register more products.
+              </p>
+            </div>
+            <button 
+              type="button"
+              onClick={() => navigate('/dashboard/memberships')}
+              className="bg-[#6610f2] hover:bg-[#7b2dfd] px-10 py-5 rounded-[1.8rem] font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-xl shadow-purple-900/40 inline-flex items-center gap-2 cursor-pointer"
+            >
+              Upgrade Subscription Plan
+            </button>
+          </div>
+          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#6610f2]/20 rounded-full blur-[120px]" />
+          <div className="absolute -left-20 -top-20 w-80 h-80 bg-[#6610f2]/10 rounded-full blur-[120px]" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10 md:space-y-14 pb-64 lg:pb-48 animate-in fade-in slide-in-from-bottom-6 duration-1000">

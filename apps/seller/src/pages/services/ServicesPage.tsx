@@ -5,17 +5,27 @@ import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icon
 import { toast } from 'sonner';
 import { deleteService, getServices } from '../../api/services';
 import { triggerDeletion } from '../../utils/animations';
+import { getWelcomeData } from '../../api/dashboard';
+import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
 
 export default function ServicesPage() {
   const navigate = useNavigate();
   const [services, setServices] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [limits, setLimits] = useState<any>(null);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
 
   const fetchServices = async () => {
     setIsLoading(true);
     try {
-      const response = await getServices();
+      const [response, dashboardResponse] = await Promise.all([
+        getServices(),
+        getWelcomeData().catch(() => null)
+      ]);
       setServices(response.data);
+      if (dashboardResponse) {
+        setLimits(dashboardResponse.data.subscriptionLimits);
+      }
     } catch (error) {
       console.error('Failed to fetch services', error);
       toast.error('Failed to synchronize services.');
@@ -27,6 +37,14 @@ export default function ServicesPage() {
   useEffect(() => {
     fetchServices();
   }, []);
+
+  const handleCreateClick = () => {
+    if (limits?.is_limit_exceeded) {
+      setIsUpgradeModalOpen(true);
+    } else {
+      navigate('/dashboard/services/create');
+    }
+  };
 
   const handleDelete = (id: number, title: string) => {
     toast(`Decommission "${title}"?`, {
@@ -55,7 +73,7 @@ export default function ServicesPage() {
         subtitle="Catalog"
       >
         <button 
-          onClick={() => navigate('/dashboard/services/create')}
+          onClick={handleCreateClick}
           className="bg-[#6610f2] text-white px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-[#7b2dfd] transition-all active:scale-95 flex items-center gap-2"
         >
           <HiOutlinePlus className="w-4 h-4" /> Add Service
@@ -169,6 +187,13 @@ export default function ServicesPage() {
             </table>
           </div>
         </>
+      )}
+      {limits && (
+        <UpgradePlanModal 
+          isOpen={isUpgradeModalOpen} 
+          onClose={() => setIsUpgradeModalOpen(false)} 
+          limits={limits} 
+        />
       )}
     </div>
   );
