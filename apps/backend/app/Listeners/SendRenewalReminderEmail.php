@@ -52,7 +52,7 @@ class SendRenewalReminderEmail implements ShouldQueue
                 'plan_name' => $subscription->plan->title, 
                 // Format the ends_at date for display in the email body
                 'expiry_date' => $subscription->ends_at->toFormattedDateString(),
-                'renewal_url' => route('dashboard.partner.subscriptions.index'),
+                'renewal_url' => route('api.dashboard.partner.subscriptions.index'),
             ];
 
             // 3. Send the email using the DynamicEmail Mailable via the queue

@@ -45,7 +45,7 @@ class SendPlanUpgradedEmail implements ShouldQueue
                 'user_name' => $user->name,
                 'old_plan_name' => $oldPlan->title, 
                 'new_plan_name' => $newPlan->title,
-                'billing_url' => route('dashboard.partner.subscriptions.index'), 
+                'billing_url' => route('api.dashboard.partner.subscriptions.index'), 
             ];
 
             // 3. Send the email using the DynamicEmail Mailable via the queue

@@ -44,7 +44,7 @@ class SendPlanSubscribedEmail implements ShouldQueue
             $data = [
                 'user_name' => $user->name,
                 'plan_name' => $plan->title, 
-                'billing_url' => route('dashboard.partner.subscriptions.index'), 
+                'billing_url' => route('api.dashboard.partner.subscriptions.index'), 
             ];
 
             // 3. Send the email using the DynamicEmail Mailable via the queue

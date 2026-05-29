@@ -29,10 +29,11 @@ class SubscriptionService
         DB::transaction(function () use ($user, $plan, $currentSubscription) {
             if ($currentSubscription) {
                 // Expire current one
-                $currentSubscription->update([
+                $currentSubscription->forceFill([
                     'title' => 'expired_' . $currentSubscription->id . '_' . now()->format('YmdHis'),
                     'ends_at' => now(),
-                ]);
+                    'status' => Subscription::STATUS_EXPIRED,
+                ])->save();
             }
 
             $newStartsAt = now();

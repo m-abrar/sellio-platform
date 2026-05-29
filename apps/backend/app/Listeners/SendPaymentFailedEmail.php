@@ -51,7 +51,7 @@ class SendPaymentFailedEmail implements ShouldQueue
                 'plan_name' => $plan->title, 
                 'error_message' => $event->errorMessage ?? __('An unknown error occurred during payment processing.'),
                 // Link directly to where the user can update their card details
-                'billing_url' => route('dashboard.partner.subscriptions.index'), 
+                'billing_url' => route('api.dashboard.partner.subscriptions.index'), 
             ];
 
             // 3. Send the email using the DynamicEmail Mailable via the queue

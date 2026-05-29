@@ -56,7 +56,7 @@ class SendPlanExpiredEmail implements ShouldQueue
             $data = [
                 'user_name' => $user->name,
                 'plan_name' => $plan->title, 
-                'reactivate_url' => route('dashboard.partner.plans.index'), 
+                'reactivate_url' => route('api.dashboard.partner.plans.index'), 
             ];
 
             // 3. Send the email using the DynamicEmail Mailable via the queue
