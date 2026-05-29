@@ -46,6 +46,23 @@ export default function ActivityDetailPage() {
     setActivity((prev: any) => ({ ...prev, status: newStatus }));
   };
 
+  const getAssetUrl = () => {
+    if (!activity?.raw) return `/dashboard/${module}`;
+    const raw = activity.raw;
+    let slug = null;
+    if (module === 'properties') slug = raw.property?.slug;
+    else if (module === 'autos') slug = raw.auto?.slug;
+    else if (module === 'events') slug = raw.event?.slug;
+    else if (module === 'services') slug = raw.service?.slug;
+    else if (module === 'joblistings') slug = raw.job?.slug || raw.job_listing?.slug;
+    else if (module === 'classifieds') slug = raw.classified?.slug || raw.classifiedad?.slug;
+    else if (module === 'products') slug = raw.product?.slug;
+
+    return slug ? `/dashboard/${module}/view/${slug}` : `/dashboard/${module}`;
+  };
+
+  const assetUrl = getAssetUrl();
+
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -750,11 +767,14 @@ export default function ActivityDetailPage() {
 
         {/* SIDEBAR INFO */}
         <div className="lg:col-span-4 space-y-10">
-          <div className="bg-slate-900 p-10 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden">
+          <div 
+            onClick={() => navigate(assetUrl)}
+            className="bg-slate-900 p-10 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden cursor-pointer border border-transparent hover:border-[#6610f2]/50 hover:shadow-[0_20px_50px_rgba(102,16,242,0.15)] group transition-all duration-300"
+          >
             <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-500 mb-8">Asset Details</h4>
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-12 rounded-xl bg-white/10 border border-white/10 overflow-hidden shrink-0">
+                <div className="w-16 h-12 rounded-xl bg-white/10 border border-white/10 overflow-hidden shrink-0 group-hover:scale-105 transition-transform duration-300">
                   <img 
                     src={(module === 'properties' ? activity.raw.property?.primary_image_url 
                           : module === 'events' ? activity.raw.event?.primary_image_url 
@@ -768,7 +788,7 @@ export default function ActivityDetailPage() {
                   />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-black italic truncate">{activity.asset}</p>
+                  <p className="text-sm font-black italic truncate group-hover:text-[#9b51e0] transition-colors">{activity.asset}</p>
                   <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">
                     Ref: #ASSET-{(module === 'properties' ? activity.raw.property?.id 
                                   : module === 'events' ? activity.raw.event?.id 
@@ -781,8 +801,11 @@ export default function ActivityDetailPage() {
                 </div>
               </div>
               <button 
-                onClick={() => navigate(`/dashboard/${module}`)}
-                className="w-full py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(assetUrl);
+                }}
+                className="w-full py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10 group-hover:border-[#6610f2]/40"
               >
                 View Asset Listing
               </button>
