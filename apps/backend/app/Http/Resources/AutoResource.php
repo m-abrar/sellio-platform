@@ -98,10 +98,10 @@ class AutoResource extends JsonResource
                     'id'    => $f->id,
                     'title' => $f->title,
                     'icon'  => $f->icon,
-                ]) : $this->features()->get(['features.id', 'features.title', 'features.icon'])->map(fn($f) => [
+                ]) : $this->features()->get(['features.id', 'features.title'])->map(fn($f) => [
                     'id'    => $f->id,
                     'title' => $f->title,
-                    'icon'  => $f->icon,
+                    'icon'  => null,
                 ]),
                 'tags'      => $this->relationLoaded('tags') ? $this->tags->pluck('title') : $this->tags()->pluck('title'),
             ],
