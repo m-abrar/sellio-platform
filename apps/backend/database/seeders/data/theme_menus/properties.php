@@ -1,11 +1,11 @@
 <?php
 
 $heritageSpotlightLinks = tm_links([
-    'Registry',
-    'Archives',
-    'Protocols',
-    'Auth',
-]);
+    ['Registry', '/explore'],
+    ['Archives', '/explore'],
+    ['Protocols', '/cart'],
+    ['Auth', '/cart'],
+], 'properties');
 
 return [
     'properties_classic' => [
@@ -22,22 +22,26 @@ return [
             ['INQUIRE', '/cart'],
         ])),
         tm_menu('footer_column_1', 'Collections', tm_links([
-            'Manorial Estates',
-            'Historic Chateaus',
-            'Urban Heritage',
-            'Legacy Registry',
-        ])),
+            ['Manorial Estates', '/explore'],
+            ['Historic Chateaus', '/explore'],
+            ['Urban Heritage', '/explore'],
+            ['Legacy Registry', '/explore'],
+        ], 'properties')),
         tm_menu('footer_column_2', 'Heritage Spotlight', $heritageSpotlightLinks),
         tm_menu('footer_column_3', 'Registry Updates', tm_links([
-            'Join Protocol',
-            'Global Feed',
-            'Archive Sync',
-        ])),
+            ['Global Feed', '/explore'],
+            ['Archive Sync', '/explore'],
+        ], 'properties')),
         tm_menu('footer_bottom_bar', 'Legal', tm_links([
-            'PRIVACY',
-            'TERMS',
-            'PROVENANCE',
-        ])),
+            ['PRIVACY', '/explore'],
+            ['TERMS', '/explore'],
+            ['PROVENANCE', '/explore'],
+        ], 'properties')),
+        tm_menu('social_footer', 'Social', tm_links([
+            ['Instagram', 'https://instagram.com'],
+            ['LinkedIn', 'https://linkedin.com'],
+            ['X', 'https://x.com'],
+        ], 'properties')),
     ],
 
     'properties_commercial' => [
