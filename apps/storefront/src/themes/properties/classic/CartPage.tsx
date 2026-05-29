@@ -1,6 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
+import { FALLBACK_ESTATE_IDS } from './fallback-data';
+import { useClassicListingLink, useClassicThemeLink } from './hooks/useClassicThemeLink';
+import { useDemoFallbackAllowed } from './hooks/useDemoFallbackAllowed';
 
 interface InquiredEstate {
   id: number;
@@ -21,6 +24,9 @@ interface InquiredEstate {
 }
 
 export default function CartPage() {
+  const allowDemoCatalog = useDemoFallbackAllowed();
+  const themeLink = useClassicThemeLink();
+  const listingLink = useClassicListingLink();
   const [inquiries, setInquiries] = useState<InquiredEstate[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,17 +36,6 @@ export default function CartPage() {
   const [phone, setPhone] = useState('');
   const [specialRegistryText, setSpecialRegistryText] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        const themeKey = window.location.pathname.split('/')[2];
-        return `/preview/${themeKey}${path}`;
-      }
-    }
-    return path;
-  };
 
   // Load from local storage
   useEffect(() => {
@@ -69,7 +64,7 @@ export default function CartPage() {
         let result: { total_nights: number; estimated_lodging_total: string };
         
         // If it's a fallback ID (custom mock IDs are usually small or have distinct ranges, but checking standard fallbacks)
-        const isFallback = item.id <= 6; // our fallbacks are 1 to 6
+        const isFallback = allowDemoCatalog && FALLBACK_ESTATE_IDS.has(item.id);
         if (isFallback) {
           const inDate = new Date(item.checkIn);
           const outDate = new Date(item.checkOut);
@@ -137,19 +132,18 @@ export default function CartPage() {
   }
 
   return (
-    <div style={{ background: 'var(--pc-bone)', minHeight: '100vh', paddingTop: '8rem' }}>
+    <div className="pc-page-shell" style={{ background: 'var(--pc-bone)', minHeight: '100vh' }}>
       
-      <section className="pc-section" style={{ paddingTop: '4rem', paddingBottom: '12rem' }}>
+      <section className="pc-section pc-section--listing">
         
-        {/* Ledger Header */}
-        <div style={{ borderBottom: '1px solid var(--pc-border)', paddingBottom: '4rem', marginBottom: '6rem', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2rem' }}>
+        <div className="pc-page-header" style={{ alignItems: 'flex-end' }}>
           <div>
-            <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '1.25rem', opacity: 0.4 }}>Heritage Registry Inquiry</div>
-            <h1 className="pc-serif" style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)', margin: 0 }}>
+            <div className="pc-caps pc-section-eyebrow" style={{ color: 'var(--pc-teal)', opacity: 0.4 }}>Heritage Registry Inquiry</div>
+            <h1 className="pc-serif" style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}>
               Your <span className="pc-italic" style={{ fontWeight: 400 }}>Ledger.</span>
             </h1>
           </div>
-          <p style={{ color: 'var(--pc-text-muted)', fontSize: '0.95rem', maxWidth: '400px', lineHeight: 1.8, margin: 0 }}>
+          <p style={{ color: 'var(--pc-text-muted)', fontSize: '0.95rem', maxWidth: '400px', lineHeight: 1.8 }}>
             Review your collected properties of interest. You can submit a single unified inquiry request to the Heritage coordination desk.
           </p>
         </div>
@@ -161,7 +155,7 @@ export default function CartPage() {
             <p style={{ color: 'var(--pc-text-muted)', fontSize: '1.1rem', lineHeight: 1.8, maxWidth: '550px', margin: '0 auto 3rem' }}>
               Thank you, {fullName}. A dedicated Heritage Coordination Specialist has received your collection dossier. We will perform the deeds verification and contact you within one business day at <strong>{email}</strong>.
             </p>
-            <a href={getThemeLink('/')} className="pc-btn-primary" style={{ textDecoration: 'none' }}>
+            <a href={themeLink('/')} className="pc-btn-primary" style={{ textDecoration: 'none' }}>
               Return to global catalog
             </a>
           </div>
@@ -185,10 +179,11 @@ export default function CartPage() {
                 </button>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+              <div className="pc-ledger-list">
                 {inquiries.map((item) => (
                   <div 
                     key={item.id} 
+                    className="pc-ledger-card"
                     style={{ 
                       background: 'var(--pc-white)', 
                       border: '1px solid var(--pc-border)', 
@@ -198,7 +193,6 @@ export default function CartPage() {
                       gap: '2.5rem', 
                       position: 'relative' 
                     }}
-                    className="pc-ledger-card"
                   >
                     <style dangerouslySetInnerHTML={{ __html: `
                       @media (min-width: 600px) {
@@ -219,7 +213,7 @@ export default function CartPage() {
                       <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
                           <h3 className="pc-serif" style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--pc-teal)', margin: 0 }}>
-                            <a href={getThemeLink(`/product/${item.slug}`)} style={{ color: 'inherit', textDecoration: 'none' }}>
+                            <a href={listingLink(item.slug)} style={{ color: 'inherit', textDecoration: 'none' }}>
                               {item.title}
                             </a>
                           </h3>
@@ -287,7 +281,7 @@ export default function CartPage() {
             </div>
 
             {/* Right Form Column - Unified Dispatch Form */}
-            <aside style={{ position: 'sticky', top: '140px' }}>
+            <aside className="pc-inquiry-aside" style={{ position: 'sticky', top: '140px' }}>
               <div style={{ background: 'var(--pc-white)', border: '1px solid var(--pc-border)', padding: '3.5rem', boxShadow: 'var(--pc-shadow-premium)' }}>
                 <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
                   <div className="pc-caps" style={{ opacity: 0.4, marginBottom: '1rem' }}>Ledger Submission</div>
@@ -360,13 +354,13 @@ export default function CartPage() {
             </aside>
           </div>
         ) : (
-          <div style={{ textAlign: 'center', padding: '10rem 2rem', border: '1px dashed var(--pc-border)', background: 'var(--pc-white)', maxWidth: '800px', margin: '0 auto' }}>
+          <div className="pc-empty-state" style={{ border: '1px dashed var(--pc-border)', background: 'var(--pc-white)', maxWidth: '800px', margin: '0 auto' }}>
             <span style={{ fontSize: '2.5rem', color: 'var(--pc-teal)', opacity: 0.3 }}>❦</span>
             <h3 className="pc-serif" style={{ fontSize: '2.25rem', color: 'var(--pc-teal)', marginTop: '2rem', marginBottom: '1rem' }}>Ledger is Empty</h3>
             <p style={{ color: 'var(--pc-text-muted)', fontSize: '1rem', marginBottom: '4rem', maxWidth: '400px', margin: '0 auto 3rem', lineHeight: 1.6 }}>
               No historic estates have been selected for active inquiry. Explore the dynamic registry catalog to build your heritage registry collection.
             </p>
-            <a href={getThemeLink('/explore')} className="pc-btn-primary" style={{ textDecoration: 'none' }}>
+            <a href={themeLink('/explore')} className="pc-btn-primary" style={{ textDecoration: 'none' }}>
               Explore the Registry
             </a>
           </div>

@@ -1,114 +1,126 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useClassicThemeLink } from '../hooks/useClassicThemeLink';
+
+function FooterColumnLabel({ children }: { children: string }) {
+    return <p className="pc-footer-label">{children}</p>;
+}
 
 export const Footer = () => {
+    const themeLink = useClassicThemeLink();
     const brandLabel = useThemeContent('header.brand_label', 'ESTATE & HERITAGE');
+    const footerEyebrow = useThemeContent('footer.eyebrow', 'Global Registry // Footer');
     const footerDescription = useThemeContent(
         'footer.description',
         "A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and legacy value.",
     );
-    const subscribeText = useThemeContent('footer.subscribe_text', 'Subscribe to our global heritage distribution protocol.');
+    const subscribeText = useThemeContent(
+        'footer.subscribe_text',
+        'Subscribe to our global heritage distribution protocol.',
+    );
+    const copyright = useThemeContent(
+        'footer.copyright',
+        '© 2026 ESTATE & HERITAGE // GLOBAL REGISTRY',
+    );
+    const [email, setEmail] = useState('');
     const [brandPrimary, brandSecondary] = brandLabel.split('&').map((part) => part.trim());
 
+    const handleNewsletterSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        window.location.href = themeLink('/cart');
+    };
+
+    const columnTitle = (title: string) => <FooterColumnLabel>{title}</FooterColumnLabel>;
+
     return (
-    <footer className="pc-footer">
-        <div className="pc-footer-grid">
-            <div style={{ paddingRight: '1rem' }}>
-                <h2 className="pc-serif pc-footer-title">
-                    {brandSecondary ? (
-                        <>
-                            {brandPrimary} <br/>
-                            <span className="pc-italic" style={{ fontWeight: 400 }}>&</span> {brandSecondary}
-                        </>
-                    ) : brandLabel}
-                </h2>
-                <p style={{ color: 'var(--pc-beige)', opacity: 0.8, lineHeight: 2, fontSize: '0.95rem', marginBottom: '3rem', maxWidth: '400px' }}>
-                    {footerDescription}
-                </p>
-                <div style={{ display: 'flex', gap: '2rem', opacity: 0.6, fontWeight: 900, fontSize: '0.7rem', letterSpacing: '3px' }}>
-                   {['FB', 'TW', 'IG', 'LI'].map(s => <span key={s} style={{ cursor: 'pointer' }}>{s}</span>)}
-                </div>
-            </div>
+        <footer className="pc-footer">
+            <div className="pc-footer-inner">
+                <div className="pc-footer-main">
+                    <section className="pc-footer-brand" aria-label="Brand">
+                        <div className="pc-footer-brand-header">
+                            <FooterColumnLabel>{footerEyebrow}</FooterColumnLabel>
+                            <p className="pc-footer-brand-name">
+                                {brandSecondary ? (
+                                    <>
+                                        {brandPrimary} <span className="pc-italic">&</span> {brandSecondary}
+                                    </>
+                                ) : (
+                                    brandLabel
+                                )}
+                            </p>
+                        </div>
+                        <p className="pc-footer-text">{footerDescription}</p>
+                        <MenuNav
+                            location="social_footer"
+                            flat
+                            className="pc-footer-social"
+                            linkClassName="pc-footer-social-link"
+                        />
+                    </section>
 
-            <FooterMenuColumn
-                location="footer_column_1"
-                renderTitle={(title) => (
-                    <h4 className="pc-caps" style={{ color: 'var(--pc-beige)', marginBottom: '2.5rem', opacity: 0.8 }}>{title}</h4>
-                )}
-                listClassName=""
-                linkClassName="pc-footer-link"
-            />
-
-            <FooterMenuColumn
-                location="footer_column_2"
-                renderTitle={(title) => (
-                    <h4 className="pc-caps" style={{ color: 'var(--pc-beige)', marginBottom: '2.5rem', opacity: 0.8 }}>{title}</h4>
-                )}
-                listClassName=""
-                linkClassName="pc-footer-link"
-            />
-
-            <div>
-                <FooterMenuColumn
-                    location="footer_column_3"
-                    renderTitle={(title) => (
-                        <h4 className="pc-caps" style={{ color: 'var(--pc-beige)', marginBottom: '2.5rem', opacity: 0.85 }}>{title}</h4>
-                    )}
-                    listClassName=""
-                    linkClassName="pc-footer-link"
-                />
-                <p style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '2rem', lineHeight: 1.6 }}>{subscribeText}</p>
-                <div style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)' }} className="pc-footer-subscribe">
-                    <input 
-                        type="email" 
-                        placeholder="Email Address" 
-                        style={{ 
-                            padding: '1.25rem', 
-                            background: 'transparent', 
-                            border: 'none', 
-                            color: 'var(--pc-bone)',
-                            width: '100%',
-                            outline: 'none',
-                            fontFamily: 'var(--pc-font-body)',
-                            fontSize: '0.85rem'
-                        }} 
+                    <FooterMenuColumn
+                        location="footer_column_1"
+                        className="pc-footer-col"
+                        renderTitle={columnTitle}
+                        listClassName="pc-footer-nav"
+                        linkClassName="pc-footer-item"
                     />
-                    <button style={{ padding: '1.25rem 2rem', background: 'var(--pc-beige)', color: 'var(--pc-teal)', border: 'none', fontWeight: 900, fontSize: '0.7rem', letterSpacing: '2px', cursor: 'pointer' }}>JOIN</button>
-                </div>
-            </div>
-        </div>
 
-        <div style={{ marginTop: '6rem', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', gap: '2.5rem', justifyContent: 'center', alignItems: 'center', textAlign: 'center', fontSize: '0.65rem', opacity: 0.6, fontWeight: 800, letterSpacing: '3px' }}>
-            <style dangerouslySetInnerHTML={{ __html: `
-                @media (min-width: 992px) {
-                    .pc-footer-bottom { flex-direction: row !important; justify-content: space-between !important; text-align: left !important; }
-                }
-            ` }} />
-            <div className="pc-footer-bottom" style={{ display: 'flex', width: '100%', flexDirection: 'column', gap: '2.5rem', alignItems: 'center' }}>
-                <span>© 2026 ESTATE & HERITAGE // GLOBAL REGISTRY</span>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', alignItems: 'center' }}>
-                    <style dangerouslySetInnerHTML={{ __html: `
-                        @media (min-width: 600px) {
-                            .pc-footer-links { flex-direction: row !important; gap: 4rem !important; }
-                        }
-                    ` }} />
+                    <FooterMenuColumn
+                        location="footer_column_2"
+                        className="pc-footer-col"
+                        renderTitle={columnTitle}
+                        listClassName="pc-footer-nav"
+                        linkClassName="pc-footer-item"
+                    />
+
+                    <section className="pc-footer-col pc-footer-col-register">
+                        <FooterMenuColumn
+                            location="footer_column_3"
+                            renderTitle={columnTitle}
+                            listClassName="pc-footer-nav"
+                            linkClassName="pc-footer-item"
+                        />
+                        <div className="pc-footer-register">
+                            <p className="pc-footer-text pc-footer-text--compact">{subscribeText}</p>
+                            <form className="pc-footer-form" onSubmit={handleNewsletterSubmit} aria-label="Newsletter">
+                                <div className="pc-footer-form-field">
+                                    <label className="pc-footer-form-label" htmlFor="pc-footer-email">
+                                        Email address
+                                    </label>
+                                    <input
+                                        id="pc-footer-email"
+                                        type="email"
+                                        name="email"
+                                        value={email}
+                                        onChange={(event) => setEmail(event.target.value)}
+                                        autoComplete="email"
+                                        placeholder="Email address"
+                                        className="pc-footer-form-input"
+                                    />
+                                </div>
+                                <button type="submit" className="pc-btn-primary pc-footer-form-btn">
+                                    JOIN
+                                </button>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+
+                <div className="pc-footer-bar">
+                    <p className="pc-footer-meta">{copyright}</p>
                     <MenuNav
                         location="footer_bottom_bar"
                         flat
-                        className="pc-footer-links"
-                        renderItem={(item, { href, className, onNavigate }) => (
-                            <span style={{ cursor: 'pointer' }}>
-                                <a href={href} className={className} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
-                            </span>
-                        )}
+                        className="pc-footer-legal"
+                        linkClassName="pc-footer-legal-link"
                     />
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
     );
 };

@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="properties-classic-theme">
       <Header />
-      <main>
+      <main className="pc-main">
         {children}
       </main>
       <Footer />

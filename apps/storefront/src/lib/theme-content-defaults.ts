@@ -22,7 +22,9 @@ const PROPERTIES_CLASSIC_HOME: ThemeContentResponse = {
     'testimonials.eyebrow': 'Patron Feedback',
     'testimonials.title': 'Voices of Trust.',
     'footer.description': "A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and legacy value.",
+    'footer.eyebrow': 'Global Registry // Footer',
     'footer.subscribe_text': 'Subscribe to our global heritage distribution protocol.',
+    'footer.copyright': '© 2026 ESTATE & HERITAGE // GLOBAL REGISTRY',
   },
   media: {
     'hero.image': '/themes/properties/classic/7.webp',

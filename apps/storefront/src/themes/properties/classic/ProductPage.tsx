@@ -3,49 +3,34 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { EstateCard } from './components';
+import { FALLBACK_ESTATES } from './fallback-data';
+import { useClassicThemeLink } from './hooks/useClassicThemeLink';
+import { useDemoFallbackAllowed } from './hooks/useDemoFallbackAllowed';
 
 interface ProductPageProps {
   slug: string;
 }
 
-const FALLBACK_ESTATES: Property[] = [
-  { id: 1, user_id: 1, category_id: 1, type_id: 1, location_id: 1, title: "The Pemberley Manor", slug: "pemberley-manor", description: "A majestic historic manor situated in the heart of Hertfordshire, featuring sweeping countryside views and rich architectural history. Built during the Regency period, Pemberley Manor offers exceptionally grand proportions, beautiful sash windows, and intricate original moldings.\n\nThe extensive grounds include pristine manicured lawns, a private serpentine lake, and mature oak forests. A truly unparalleled heritage opportunity.", base_price: 14200000, number_of_bedrooms: 6, number_of_bathrooms: 5, maximum_guests: 10, minimum_rental_days: 7, maximum_rental_days: 30, area_sq_ft: 12000, area_sq_m: 1114, number_of_parking_spots: 4, hoa: 200, year_built: 1815, address: "Pemberley Park", city: "Hertfordshire", state: "Herts", country: "UK", zip_code: "AL1 1AB", status: "active", is_published: true, is_featured: true, is_rental: false, is_sale: true, created_at: "", updated_at: "", pricing: { base_price: 14200000, price_formatted: "$14,200,000", currency_symbol: "$" }, location: { id: 1, title: "Hertfordshire", country: "UK", slug: "hertfordshire" }, specs: { bedrooms: 6, bathrooms: 5, area_formatted: "12,000 Sq Ft", year_built: 1815, category: "Country Manors", property_type: "Sale" }, featured_image: "/themes/properties/classic/1.webp", short_description: "A majestic historic manor situated in the heart of Hertfordshire, featuring sweeping countryside views and rich architectural history." },
-  { id: 2, user_id: 1, category_id: 2, type_id: 1, location_id: 2, title: "Florentine Palazzo", slug: "florentine-palazzo", description: "An authentic Renaissance palace in central Florence, with original frescoes, grand vaulted halls, and private courtyard gardens.", base_price: 22500000, number_of_bedrooms: 8, number_of_bathrooms: 7, maximum_guests: 16, minimum_rental_days: 3, maximum_rental_days: 14, area_sq_ft: 18500, area_sq_m: 1718, number_of_parking_spots: 2, hoa: 500, year_built: 1540, address: "Via dei Bardi", city: "Florence", state: "Tuscany", country: "Italy", zip_code: "50125", status: "active", is_published: true, is_featured: false, is_rental: false, is_sale: true, created_at: "", updated_at: "", pricing: { base_price: 22500000, price_formatted: "$22,500,000", currency_symbol: "$" }, location: { id: 2, title: "Florence", country: "Italy", slug: "florence" }, specs: { bedrooms: 8, bathrooms: 7, area_formatted: "18,500 Sq Ft", year_built: 1540, category: "Historic Chateaus", property_type: "Sale" }, featured_image: "/themes/properties/classic/2.webp", short_description: "An authentic Renaissance palace in central Florence, with original frescoes, grand vaulted halls, and private courtyard gardens." },
-  { id: 3, user_id: 1, category_id: 3, type_id: 1, location_id: 3, title: "Colonial River Estate", slug: "colonial-river-estate", description: "A meticulously preserved classic colonial estate on the banks of the James River, boasting rich heritage and timeless charm.", base_price: 8900000, number_of_bedrooms: 5, number_of_bathrooms: 4, maximum_guests: 8, minimum_rental_days: 1, maximum_rental_days: 365, area_sq_ft: 8200, area_sq_m: 761, number_of_parking_spots: 3, hoa: 100, year_built: 1742, address: "River Road", city: "Virginia", state: "VA", country: "USA", zip_code: "23220", status: "active", is_published: true, is_featured: false, is_rental: false, is_sale: true, created_at: "", updated_at: "", pricing: { base_price: 8900000, price_formatted: "$8,900,000", currency_symbol: "$" }, location: { id: 3, title: "Virginia", country: "USA", slug: "virginia" }, specs: { bedrooms: 5, bathrooms: 4, area_formatted: "8,200 Sq Ft", year_built: 1742, category: "Colonial Estates", property_type: "Sale" }, featured_image: "/themes/properties/classic/3.webp", short_description: "A meticulously preserved classic colonial estate on the banks of the James River, boasting rich heritage and timeless charm." },
-  { id: 4, user_id: 1, category_id: 2, type_id: 1, location_id: 3, title: "Loire Valley Chateau", slug: "loire-valley-chateau", description: "A breathtaking French chateau with spectacular turrets, exquisite manicured formal gardens, and extensive woodland acreage.", base_price: 35000000, number_of_bedrooms: 12, number_of_bathrooms: 10, maximum_guests: 20, minimum_rental_days: 5, maximum_rental_days: 30, area_sq_ft: 24000, area_sq_m: 2229, number_of_parking_spots: 10, hoa: 800, year_built: 1620, address: "Chateau Road", city: "Loire", state: "Centre-Val de Loire", country: "France", zip_code: "37000", status: "active", is_published: true, is_featured: true, is_rental: false, is_sale: true, created_at: "", updated_at: "", pricing: { base_price: 35000000, price_formatted: "$35,000,000", currency_symbol: "$" }, location: { id: 3, title: "Loire Valley", country: "France", slug: "loire" }, specs: { bedrooms: 12, bathrooms: 10, area_formatted: "24,000 Sq Ft", year_built: 1620, category: "Historic Chateaus", property_type: "Sale" }, featured_image: "/themes/properties/classic/4.webp", short_description: "A breathtaking French chateau with spectacular turrets, exquisite manicured formal gardens, and extensive woodland acreage." },
-  { id: 5, user_id: 1, category_id: 4, type_id: 1, location_id: 1, title: "Scottish Highland Castle", slug: "scottish-highland-castle", description: "A historic stone fortress overlooking the Scottish Highlands, complete with authentic battlements, grand hall, and private loch.", base_price: 12400000, number_of_bedrooms: 10, number_of_bathrooms: 8, maximum_guests: 18, minimum_rental_days: 2, maximum_rental_days: 14, area_sq_ft: 15000, area_sq_m: 1393, number_of_parking_spots: 6, hoa: 400, year_built: 1480, address: "Highland Way", city: "Inverness", state: "Highlands", country: "Scotland", zip_code: "IV1 1AA", status: "active", is_published: true, is_featured: false, is_rental: false, is_sale: true, created_at: "", updated_at: "", pricing: { base_price: 12400000, price_formatted: "$12,400,000", currency_symbol: "$" }, location: { id: 1, title: "Inverness", country: "Scotland", slug: "inverness" }, specs: { bedrooms: 10, bathrooms: 8, area_formatted: "15,000 Sq Ft", year_built: 1480, category: "Royal Castles", property_type: "Sale" }, featured_image: "/themes/properties/classic/5.webp", short_description: "A historic stone fortress overlooking the Scottish Highlands, complete with authentic battlements, grand hall, and private loch." },
-  { id: 6, user_id: 1, category_id: 1, type_id: 1, location_id: 1, title: "Bavarian Hunting Lodge", slug: "bavarian-hunting-lodge", description: "An alpine timber lodge surrounded by deep Bavarian forests, offering ultimate privacy, heated floors, and a gorgeous stone hearth.", base_price: 6500000, number_of_bedrooms: 4, number_of_bathrooms: 3, maximum_guests: 6, minimum_rental_days: 3, maximum_rental_days: 30, area_sq_ft: 5800, area_sq_m: 538, number_of_parking_spots: 2, hoa: 150, year_built: 1895, address: "Alpine Lodge Weg", city: "Bavaria", state: "Bavaria", country: "Germany", zip_code: "80331", status: "active", is_published: true, is_featured: false, is_rental: false, is_sale: true, created_at: "", updated_at: "", pricing: { base_price: 6500000, price_formatted: "$6,500,000", currency_symbol: "$" }, location: { id: 1, title: "Bavaria", country: "Germany", slug: "bavaria" }, specs: { bedrooms: 4, bathrooms: 3, area_formatted: "5,800 Sq Ft", year_built: 1895, category: "Country Manors", property_type: "Sale" }, featured_image: "/themes/properties/classic/6.webp", short_description: "An alpine timber lodge surrounded by deep Bavarian forests, offering ultimate privacy, heated floors, and a gorgeous stone hearth." }
-];
-
 export default function ProductPage({ slug }: ProductPageProps) {
+  const themeLink = useClassicThemeLink();
+  const allowDemoCatalog = useDemoFallbackAllowed();
   const [property, setProperty] = useState<Property | null>(null);
   const [related, setRelated] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
 
-  // Inquiry form states
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState('1');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  
-  // Estimator results
+
   const [estimatingPrice, setEstimatingPrice] = useState(false);
   const [estimation, setEstimation] = useState<{ total_nights: number; estimated_lodging_total: string } | null>(null);
   const [inquiryAdded, setInquiryAdded] = useState(false);
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        const themeKey = window.location.pathname.split('/')[2];
-        return `/preview/${themeKey}${path}`;
-      }
-    }
-    return path;
-  };
+  const [collectNotice, setCollectNotice] = useState(false);
+  const [inquirySubmitted, setInquirySubmitted] = useState(false);
 
   useEffect(() => {
     const loadDetails = async () => {
@@ -57,11 +42,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
           setRelated(response.related_properties || []);
           setUseFallback(false);
         } else {
-          console.warn("Classic Property ProductPage: API returned unsuccessful details payload. Falling back to static data.");
           loadFallback();
         }
-      } catch (err) {
-        console.error("Classic Property ProductPage: Failed to fetch dynamic property details from API:", err);
+      } catch {
         loadFallback();
       } finally {
         setLoading(false);
@@ -69,22 +52,29 @@ export default function ProductPage({ slug }: ProductPageProps) {
     };
 
     const loadFallback = () => {
-      const matched = FALLBACK_ESTATES.find(e => e.slug === slug);
+      if (!allowDemoCatalog) {
+        setProperty(null);
+        setRelated([]);
+        setUseFallback(false);
+        return;
+      }
+
+      const matched = FALLBACK_ESTATES.find((estate) => estate.slug === slug);
       if (matched) {
         setProperty(matched);
-        setRelated(FALLBACK_ESTATES.filter(e => e.slug !== slug).slice(0, 3));
-      } else {
-        // Fallback to first if unmatched
-        setProperty(FALLBACK_ESTATES[0]);
-        setRelated(FALLBACK_ESTATES.slice(1, 4));
+        setRelated(FALLBACK_ESTATES.filter((estate) => estate.slug !== slug).slice(0, 3));
+        setUseFallback(true);
+        return;
       }
-      setUseFallback(true);
+
+      setProperty(null);
+      setRelated([]);
+      setUseFallback(false);
     };
 
     loadDetails();
-  }, [slug]);
+  }, [slug, allowDemoCatalog]);
 
-  // Estimator trigger for check-in / check-out changes
   useEffect(() => {
     const calculatePrice = async () => {
       if (!property || !checkIn || !checkOut) return;
@@ -98,14 +88,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
           const pricePerNight = Number(property.price_per_night || 2500);
           setEstimation({
             total_nights: diffDays,
-            estimated_lodging_total: (pricePerNight * diffDays).toFixed(2)
+            estimated_lodging_total: (pricePerNight * diffDays).toFixed(2),
           });
         } else {
           const result = await api.calculateLodgingPrice(property.id, checkIn, checkOut);
           setEstimation(result);
         }
-      } catch (err) {
-        console.warn("Calculation of seasonal lodging failed.", err);
+      } catch {
+        setEstimation(null);
       } finally {
         setEstimatingPrice(false);
       }
@@ -113,50 +103,48 @@ export default function ProductPage({ slug }: ProductPageProps) {
     calculatePrice();
   }, [checkIn, checkOut, property, useFallback]);
 
-  // Check if already in Inquiry registry
   useEffect(() => {
     if (!property) return;
     const currentList = JSON.parse(localStorage.getItem('sellio_classic_inquiries') || '[]');
-    const exists = currentList.some((item: any) => item.id === property.id);
+    const exists = currentList.some((item: { id: number }) => item.id === property.id);
     setInquiryAdded(exists);
   }, [property]);
 
   const handleAddToRegistry = () => {
     if (!property) return;
     const currentList = JSON.parse(localStorage.getItem('sellio_classic_inquiries') || '[]');
-    
-    // Check duplication
-    if (!currentList.some((item: any) => item.id === property.id)) {
-      const updatedList = [...currentList, {
-        id: property.id,
-        title: property.title,
-        slug: property.slug,
-        featured_image: property.featured_image || property.thumbnail_image,
-        location: property.location?.title || property.city,
-        price: property.pricing?.price_formatted || property.base_price,
-        year: property.specs?.year_built || property.year_built,
-        beds: property.specs?.bedrooms ?? property.number_of_bedrooms,
-        baths: property.specs?.bathrooms ?? property.number_of_bathrooms,
-        area: property.specs?.area_formatted || `${property.area_sq_ft} SQFT`,
-        is_rental: property.is_rental,
-        checkIn: checkIn,
-        checkOut: checkOut,
-        guests: guests
-      }];
+
+    if (!currentList.some((item: { id: number }) => item.id === property.id)) {
+      const updatedList = [
+        ...currentList,
+        {
+          id: property.id,
+          title: property.title,
+          slug: property.slug,
+          featured_image: property.featured_image || property.thumbnail_image,
+          location: property.location?.title || property.city,
+          price: property.pricing?.price_formatted || property.base_price,
+          year: property.specs?.year_built || property.year_built,
+          beds: property.specs?.bedrooms ?? property.number_of_bedrooms,
+          baths: property.specs?.bathrooms ?? property.number_of_bathrooms,
+          area: property.specs?.area_formatted || `${property.area_sq_ft} SQFT`,
+          is_rental: property.is_rental,
+          checkIn,
+          checkOut,
+          guests,
+        },
+      ];
       localStorage.setItem('sellio_classic_inquiries', JSON.stringify(updatedList));
       setInquiryAdded(true);
-      alert('Sovereign Heritage Inquiry Panel: Estate added successfully to your Registry collection.');
+      setCollectNotice(true);
     }
   };
 
   const handleInquirySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !email) {
-      alert("Please complete the required details before sending.");
-      return;
-    }
-    alert(`Thank you, ${fullName}. An Estate Heritage Coordinator has been notified. We will verify architectural provenance and contact you at ${email} shortly.`);
-    // Reset Form
+    if (!fullName || !email) return;
+
+    setInquirySubmitted(true);
     setFullName('');
     setEmail('');
     setMessage('');
@@ -166,163 +154,184 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   if (loading) {
     return (
-      <div style={{ background: 'var(--pc-bone)', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', fontFamily: 'var(--pc-font-serif)' }}>
-        <h2 style={{ fontSize: '2.5rem', color: 'var(--pc-teal)' }} className="pc-italic">Retrieving Provenance...</h2>
-        <div style={{ width: '80px', height: '1px', background: 'var(--pc-teal)', marginTop: '2rem', opacity: 0.3 }} />
+      <div className="pc-listing-page">
+        <div className="pc-listing-loading">
+          <h2 className="pc-listing-loading__title pc-italic">Retrieving Provenance...</h2>
+          <div className="pc-listing-loading__rule" aria-hidden="true" />
+        </div>
       </div>
     );
   }
 
   if (!property) {
     return (
-      <div style={{ background: 'var(--pc-bone)', minHeight: '100vh', padding: '12rem 2rem', textAlign: 'center' }}>
-        <h2 className="pc-serif" style={{ fontSize: '2.5rem', color: 'var(--pc-teal)', marginBottom: '2rem' }}>Estate Not Found</h2>
-        <p style={{ color: 'var(--pc-text-muted)', marginBottom: '4rem' }}>The requested listing could not be found in the Global Heritage Registry.</p>
-        <a href={getThemeLink('/')} className="pc-btn-primary" style={{ textDecoration: 'none' }}>Return to Registry Homepage</a>
+      <div className="pc-listing-page pc-page-shell">
+        <div className="pc-listing-not-found pc-empty-state">
+          <h2 className="pc-serif">Estate Not Found</h2>
+          <p>The requested listing could not be found in the Global Heritage Registry.</p>
+          <a href={themeLink('/')} className="pc-btn-primary">
+            Return to Registry Homepage
+          </a>
+        </div>
       </div>
     );
   }
 
   const isRental = property.is_rental || property.status?.is_rental;
-
   const displayTitle = property.title;
-  const displayPrice = property.pricing?.price_formatted || (property.base_price ? `$${Number(property.base_price).toLocaleString()}` : '$1,000,000');
-  const displayLocation = property.location?.title 
+  const displayPrice =
+    property.pricing?.price_formatted ||
+    (property.base_price ? `$${Number(property.base_price).toLocaleString()}` : '$1,000,000');
+  const displayLocation = property.location?.title
     ? `${property.location.title}, ${property.location.country || ''}`
-    : (property.city && property.country ? `${property.city}, ${property.country}` : 'Global Registry');
+    : property.city && property.country
+      ? `${property.city}, ${property.country}`
+      : 'Global Registry';
   const displayYear = property.specs?.year_built || property.year_built || '1800';
   const displayImage = property.featured_image || property.thumbnail_image || '/themes/properties/classic/1.webp';
-  
+
   const beds = property.specs?.bedrooms ?? property.number_of_bedrooms ?? 4;
   const baths = property.specs?.bathrooms ?? property.number_of_bathrooms ?? 3;
-  const area = property.specs?.area_formatted || (property.area_sq_ft ? `${property.area_sq_ft.toLocaleString()} SQFT` : '4,200 SQFT');
+  const area =
+    property.specs?.area_formatted ||
+    (property.area_sq_ft ? `${property.area_sq_ft.toLocaleString()} SQFT` : '4,200 SQFT');
   const guestsCount = property.specs?.max_guests ?? property.maximum_guests ?? 4;
   const parking = property.specs?.parking_spots ?? property.number_of_parking_spots ?? 2;
   const categoryName = property.specs?.category || property.category?.title || 'Heritage Listing';
+  const listingType = isRental ? 'Seasonal Rental' : property.is_sale ? 'Estate Sale' : 'Heritage Listing';
+
+  const specs = [
+    { label: 'Bedrooms', value: `${beds} Rooms` },
+    { label: 'Bathrooms', value: `${baths} Baths` },
+    { label: 'Total Area', value: area },
+    { label: 'Guests Max', value: `${guestsCount} Guests` },
+    { label: 'Parking', value: `${parking} Spots` },
+    { label: 'HOA Fees', value: property.hoa ? `$${property.hoa}/mo` : 'Included' },
+  ];
 
   return (
-    <div style={{ background: 'var(--pc-bone)', minHeight: '100vh' }}>
-      
-      {/* Dynamic Parallax Hero */}
-      <section className="pc-product-hero-container" style={{ height: '70vh', position: 'relative', overflow: 'hidden', background: 'var(--pc-teal)' }}>
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.6 }}>
-          <img src={displayImage} alt={displayTitle} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+    <div className="pc-listing-page">
+      <section className="pc-product-hero-container" aria-label={`${displayTitle} hero`}>
+        <div className="pc-product-hero-media">
+          <img src={displayImage} alt={displayTitle} />
         </div>
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6))' }} />
-        
-        <div className="pc-product-hero-overlay" style={{ position: 'absolute', bottom: '6rem', left: '6%', right: '6%', zIndex: 10, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2rem' }}>
+        <div className="pc-product-hero-scrim" aria-hidden="true" />
+
+        <div className="pc-product-hero-overlay">
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-              <span className="pc-caps" style={{ color: 'var(--pc-beige)', fontSize: '0.75rem', opacity: 0.8 }}>{categoryName}</span>
-              <div style={{ width: '30px', height: '1px', background: 'var(--pc-beige)', opacity: 0.5 }} />
-              <span className="pc-caps" style={{ color: 'var(--pc-beige)', fontSize: '0.75rem', opacity: 0.8 }}>EST. {displayYear}</span>
+            <nav className="pc-listing-crumb" aria-label="Breadcrumb">
+              <a href={themeLink('/')}>Registry</a>
+              <span className="pc-listing-crumb__sep" aria-hidden="true">
+                /
+              </span>
+              <a href={themeLink('/explore')}>Catalogue</a>
+              <span className="pc-listing-crumb__sep" aria-hidden="true">
+                /
+              </span>
+              <span className="pc-listing-crumb__current">{displayTitle}</span>
+            </nav>
+
+            <div className="pc-listing-hero-meta">
+              <span className="pc-caps pc-listing-hero-meta__tag">{categoryName}</span>
+              <span className="pc-listing-hero-meta__rule" aria-hidden="true" />
+              <span className="pc-caps pc-listing-hero-meta__tag">Est. {displayYear}</span>
             </div>
-            <h1 className="pc-serif" style={{ fontSize: 'clamp(2.5rem, 5vw, 5rem)', fontWeight: 900, color: 'var(--pc-white)', letterSpacing: '-2px', textShadow: '0 4px 10px rgba(0,0,0,0.3)', margin: 0 }}>
-              {displayTitle}
-            </h1>
+
+            <h1 className="pc-listing-hero-title">{displayTitle}</h1>
           </div>
-          <div style={{ background: 'rgba(252,251,248, 0.1)', backdropFilter: 'blur(20px)', border: '1px solid rgba(252,251,248, 0.2)', padding: '2rem 3rem', color: 'var(--pc-white)', textAlign: 'right' }}>
-            <div className="pc-caps" style={{ fontSize: '0.65rem', marginBottom: '0.5rem', opacity: 0.8, color: 'var(--pc-beige)' }}>Valuation</div>
-            <div style={{ fontSize: '2rem', fontWeight: 900, letterSpacing: '1px', color: 'var(--pc-beige)' }}>{displayPrice}</div>
+
+          <div className="pc-listing-hero-price">
+            <div className="pc-caps pc-listing-hero-price__label">Valuation</div>
+            <div className="pc-listing-hero-price__value">{displayPrice}</div>
           </div>
         </div>
       </section>
 
-      {/* Main Content Layout */}
-      <section className="pc-section" style={{ paddingTop: '8rem', paddingBottom: '10rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '6rem', alignItems: 'start' }} className="pc-details-grid">
-          <style dangerouslySetInnerHTML={{ __html: `
-            @media (min-width: 1024px) {
-              .pc-details-grid { grid-template-columns: 1fr 400px !important; }
-            }
-          ` }} />
+      <div className="pc-listing-meta-shell">
+        <div className="pc-listing-meta-bar" role="list">
+        <div className="pc-listing-meta-bar__item" role="listitem">
+          <span className="pc-caps pc-listing-meta-bar__label">Location</span>
+          <span className="pc-listing-meta-bar__value">{displayLocation}</span>
+        </div>
+        <div className="pc-listing-meta-bar__item" role="listitem">
+          <span className="pc-caps pc-listing-meta-bar__label">Listing Type</span>
+          <span className="pc-listing-meta-bar__value">{listingType}</span>
+        </div>
+        <div className="pc-listing-meta-bar__item" role="listitem">
+          <span className="pc-caps pc-listing-meta-bar__label">Accommodation</span>
+          <span className="pc-listing-meta-bar__value">
+            {beds} Bed · {baths} Bath
+          </span>
+        </div>
+        <div className="pc-listing-meta-bar__item" role="listitem">
+          <span className="pc-caps pc-listing-meta-bar__label">Total Area</span>
+          <span className="pc-listing-meta-bar__value">{area}</span>
+        </div>
+        </div>
+      </div>
 
-          {/* Left Column: Provenance Description & Specs */}
-          <div>
-            <div style={{ borderBottom: '1px solid var(--pc-border)', paddingBottom: '4rem', marginBottom: '4rem' }}>
-              <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '1.5rem', opacity: 0.4 }}>Historic Account</div>
-              <h2 className="pc-serif" style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--pc-teal)', marginBottom: '2.5rem', letterSpacing: '-1px' }}>
-                Provenance <span className="pc-italic" style={{ fontWeight: 400 }}>Overview.</span>
+      <section className="pc-section pc-product-detail-section">
+        <div className="pc-details-grid">
+          <div className="pc-listing-content">
+            <article className="pc-prose-block">
+              <div className="pc-caps pc-section-eyebrow">Historic Account</div>
+              <h2 className="pc-listing-prose-title">
+                Provenance <span className="pc-italic">Overview.</span>
               </h2>
-              <div 
-                style={{ fontSize: '1.15rem', color: 'var(--pc-text-muted)', lineHeight: 2, whiteSpace: 'pre-line' }}
-              >
-                {property.description}
-              </div>
-            </div>
+              <p className="pc-listing-prose-body">{property.description}</p>
+            </article>
 
-            {/* Spec badging grid */}
-            <div style={{ borderBottom: '1px solid var(--pc-border)', paddingBottom: '4rem', marginBottom: '4rem' }}>
-              <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '2.5rem', opacity: 0.4 }}>Architectural Registry</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem' }} className="pc-specs-subgrid">
-                <style dangerouslySetInnerHTML={{ __html: `
-                  @media (min-width: 600px) {
-                    .pc-specs-subgrid { grid-template-columns: repeat(3, 1fr) !important; }
-                  }
-                ` }} />
-                {[
-                  { label: "BEDROOMS", value: `${beds} Rooms` },
-                  { label: "BATHROOMS", value: `${baths} Baths` },
-                  { label: "TOTAL AREA", value: area },
-                  { label: "GUESTS MAX", value: `${guestsCount} Guests` },
-                  { label: "PARKING", value: `${parking} Spots` },
-                  { label: "HOA FEES", value: property.hoa ? `$${property.hoa}/mo` : "Included" }
-                ].map((s, i) => (
-                  <div key={i} style={{ border: '1px solid var(--pc-border)', background: 'var(--pc-white)', padding: '2rem', textAlign: 'center' }}>
-                    <div className="pc-caps" style={{ fontSize: '0.65rem', color: 'var(--pc-teal)', opacity: 0.4, marginBottom: '0.8rem' }}>{s.label}</div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--pc-teal)' }}>{s.value}</div>
+            <div className="pc-prose-block">
+              <div className="pc-caps pc-section-eyebrow">Architectural Registry</div>
+              <div className="pc-specs-subgrid">
+                {specs.map((spec) => (
+                  <div key={spec.label} className="pc-spec-card">
+                    <div className="pc-caps pc-spec-card__label">{spec.label}</div>
+                    <div className="pc-spec-card__value">{spec.value}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Amenities Grid */}
             {property.amenities && property.amenities.length > 0 && (
-              <div style={{ borderBottom: '1px solid var(--pc-border)', paddingBottom: '4rem', marginBottom: '4rem' }}>
-                <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '2.5rem', opacity: 0.4 }}>Luxury Amenities</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-                  {property.amenities.map(a => (
-                    <div key={a.id} style={{ border: '1px solid var(--pc-teal)', padding: '1rem 2rem', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--pc-teal)', background: 'transparent' }}>
-                      ❦ {a.title}
-                    </div>
+              <div className="pc-prose-block">
+                <div className="pc-caps pc-section-eyebrow">Luxury Amenities</div>
+                <div className="pc-amenity-list">
+                  {property.amenities.map((amenity) => (
+                    <span key={amenity.id} className="pc-amenity-tag">
+                      {amenity.title}
+                    </span>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Features list */}
             {property.features && property.features.length > 0 && (
-              <div style={{ borderBottom: '1px solid var(--pc-border)', paddingBottom: '4rem', marginBottom: '4rem' }}>
-                <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '2.5rem', opacity: 0.4 }}>Unique Fealty Features</div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1rem' }} className="pc-feats-grid">
-                  <style dangerouslySetInnerHTML={{ __html: `
-                    @media (min-width: 600px) {
-                      .pc-feats-grid { grid-template-columns: repeat(2, 1fr) !important; }
-                    }
-                  ` }} />
-                  {property.features.map(f => (
-                    <div key={f.id} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', fontSize: '0.95rem', color: 'var(--pc-text-muted)' }}>
-                      <span style={{ color: 'var(--pc-accent)', fontSize: '1.5rem' }}>❖</span>
-                      <span>{f.title} {f.pivot?.value ? `: ${f.pivot.value}` : ''}</span>
+              <div className="pc-prose-block">
+                <div className="pc-caps pc-section-eyebrow">Unique Fealty Features</div>
+                <div className="pc-feats-grid">
+                  {property.features.map((feature) => (
+                    <div key={feature.id} className="pc-feature-item">
+                      <span className="pc-feature-item__mark" aria-hidden="true">
+                        ◆
+                      </span>
+                      <span>
+                        {feature.title}
+                        {feature.pivot?.value ? `: ${feature.pivot.value}` : ''}
+                      </span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Image Gallery */}
             {property.gallery && property.gallery.length > 0 && (
-              <div>
-                <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '2.5rem', opacity: 0.4 }}>Provenance Gallery</div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }} className="pc-gallery-grid">
-                  <style dangerouslySetInnerHTML={{ __html: `
-                    @media (min-width: 600px) {
-                      .pc-gallery-grid { grid-template-columns: repeat(2, 1fr) !important; }
-                    }
-                  ` }} />
+              <div className="pc-prose-block">
+                <div className="pc-caps pc-section-eyebrow">Provenance Gallery</div>
+                <div className="pc-gallery-grid">
                   {property.gallery.map((img: string, idx: number) => (
-                    <div key={idx} style={{ height: '300px', border: '1px solid var(--pc-border)', overflow: 'hidden' }}>
-                      <img src={img} alt={`Gallery ${idx}`} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'var(--pc-transition)' }} />
+                    <div key={idx} className="pc-gallery-item">
+                      <img src={img} alt={`${displayTitle} gallery ${idx + 1}`} loading="lazy" />
                     </div>
                   ))}
                 </div>
@@ -330,170 +339,160 @@ export default function ProductPage({ slug }: ProductPageProps) {
             )}
           </div>
 
-          {/* Right Column: Inquiry Reserve Form */}
-          <aside style={{ position: 'sticky', top: '140px', zIndex: 10 }}>
-            <div style={{ background: 'var(--pc-white)', border: '1px solid var(--pc-border)', padding: '3rem', boxShadow: 'var(--pc-shadow-premium)' }}>
-              
-              <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <div className="pc-caps" style={{ opacity: 0.4, marginBottom: '1rem' }}>Inquiry Desk</div>
-                <h3 className="pc-serif" style={{ fontSize: '1.8rem', color: 'var(--pc-teal)', fontWeight: 900 }}>
-                  Manorial <span className="pc-italic" style={{ fontWeight: 400 }}>Inquiry.</span>
+          <aside className="pc-inquiry-panel" aria-label="Inquiry desk">
+            <div className="pc-inquiry-card">
+              <header className="pc-inquiry-card__header">
+                <div className="pc-caps pc-section-eyebrow">Inquiry Desk</div>
+                <h3 className="pc-inquiry-card__title">
+                  Manorial <span className="pc-italic">Inquiry.</span>
                 </h3>
-                <div style={{ fontSize: '0.8rem', color: 'var(--pc-text-muted)', marginTop: '0.5rem' }}>Location: {displayLocation}</div>
-              </div>
+                <p className="pc-inquiry-card__location">{displayLocation}</p>
+              </header>
 
-              {/* Inquiry Action Registry collection */}
-              <button 
-                onClick={handleAddToRegistry} 
-                className="pc-btn-primary" 
-                style={{ 
-                  width: '100%', 
-                  padding: '1.5rem', 
-                  marginBottom: '2rem', 
-                  background: inquiryAdded ? 'transparent' : 'var(--pc-accent)',
-                  border: inquiryAdded ? '1px solid var(--pc-accent)' : 'none',
-                  color: inquiryAdded ? 'var(--pc-accent)' : 'var(--pc-white)'
-                }}
+              {collectNotice && (
+                <p className="pc-inquiry-notice" role="status">
+                  Estate added to your Heritage Collection.{' '}
+                  <a href={themeLink('/cart')}>View inquiry ledger →</a>
+                </p>
+              )}
+
+              <button
+                type="button"
+                onClick={handleAddToRegistry}
+                className={`pc-btn-primary pc-inquiry-collect-btn${inquiryAdded ? ' is-collected' : ''}`}
+                disabled={inquiryAdded}
               >
-                {inquiryAdded ? '✓ ADDED TO HERITAGE COLLECTION' : '❦ COLLECT FOR INQUIRY'}
+                {inquiryAdded ? '✓ Added to Heritage Collection' : 'Collect for Inquiry'}
               </button>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
-                <div style={{ flex: 1, height: '1px', background: 'var(--pc-border)' }} />
-                <span style={{ fontSize: '0.65rem', fontWeight: 900, color: 'var(--pc-teal)', opacity: 0.3 }}>OR SUBMIT INQUIRY</span>
-                <div style={{ flex: 1, height: '1px', background: 'var(--pc-border)' }} />
+              <div className="pc-inquiry-divider">
+                <span className="pc-inquiry-divider__line" aria-hidden="true" />
+                <span className="pc-inquiry-divider__label">Or submit inquiry</span>
+                <span className="pc-inquiry-divider__line" aria-hidden="true" />
               </div>
 
-              <form onSubmit={handleInquirySubmit}>
-                {/* Date Estimator if it is a rental listing */}
+              {inquirySubmitted && (
+                <p className="pc-inquiry-notice pc-inquiry-notice--success" role="status">
+                  Thank you. A Heritage Coordinator will contact you shortly.
+                </p>
+              )}
+
+              <form className="pc-inquiry-form" onSubmit={handleInquirySubmit}>
                 {isRental && (
-                  <div style={{ background: 'var(--pc-bone)', padding: '2rem 1.5rem', border: '1px solid var(--pc-border)', marginBottom: '2.5rem' }}>
-                    <div className="pc-caps" style={{ fontSize: '0.65rem', marginBottom: '1.5rem', color: 'var(--pc-teal)', opacity: 0.5 }}>Estimated Lodging Rental</div>
-                    
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                      <div>
-                        <label style={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--pc-teal)', display: 'block', marginBottom: '0.5rem' }} className="pc-caps">CHECK IN DATE</label>
-                        <input 
-                          type="date" 
-                          required 
+                  <div className="pc-inquiry-rental-box">
+                    <div className="pc-caps pc-inquiry-rental-box__title">Estimated Lodging Rental</div>
+                    <div className="pc-inquiry-fields">
+                      <div className="pc-filter-group">
+                        <label className="pc-filter-label pc-caps">Check In Date</label>
+                        <input
+                          type="date"
+                          required
                           value={checkIn}
                           onChange={(e) => setCheckIn(e.target.value)}
-                          style={{ width: '100%', padding: '0.8rem', border: '1px solid var(--pc-border)', background: 'white', fontFamily: 'var(--pc-font-body)', outline: 'none' }}
                         />
                       </div>
-                      <div>
-                        <label style={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--pc-teal)', display: 'block', marginBottom: '0.5rem' }} className="pc-caps">CHECK OUT DATE</label>
-                        <input 
-                          type="date" 
-                          required 
+                      <div className="pc-filter-group">
+                        <label className="pc-filter-label pc-caps">Check Out Date</label>
+                        <input
+                          type="date"
+                          required
                           value={checkOut}
                           onChange={(e) => setCheckOut(e.target.value)}
-                          style={{ width: '100%', padding: '0.8rem', border: '1px solid var(--pc-border)', background: 'white', fontFamily: 'var(--pc-font-body)', outline: 'none' }}
                         />
                       </div>
-                      <div>
-                        <label style={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--pc-teal)', display: 'block', marginBottom: '0.5rem' }} className="pc-caps">PATRON GUESTS</label>
-                        <select 
-                          value={guests} 
-                          onChange={(e) => setGuests(e.target.value)}
-                          style={{ width: '100%', padding: '0.8rem', border: '1px solid var(--pc-border)', background: 'white', outline: 'none' }}
-                        >
+                      <div className="pc-filter-group">
+                        <label className="pc-filter-label pc-caps">Patron Guests</label>
+                        <select value={guests} onChange={(e) => setGuests(e.target.value)}>
                           {[...Array(guestsCount)].map((_, i) => (
-                            <option key={i+1} value={i+1}>{i+1} Patron{i > 0 ? 's' : ''}</option>
+                            <option key={i + 1} value={i + 1}>
+                              {i + 1} Patron{i > 0 ? 's' : ''}
+                            </option>
                           ))}
                         </select>
                       </div>
                     </div>
 
                     {checkIn && checkOut && (
-                      <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--pc-border)' }}>
+                      <div className="pc-inquiry-estimate">
                         {estimatingPrice ? (
-                          <div style={{ fontSize: '0.85rem', color: 'var(--pc-text-muted)', fontStyle: 'italic' }}>Calculating Lodging rates...</div>
+                          <span className="pc-inquiry-estimate__nights">Calculating rates…</span>
                         ) : estimation ? (
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--pc-teal)' }}>{estimation.total_nights} Nights Rental</span>
-                            <span style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--pc-teal)' }}>${Number(estimation.estimated_lodging_total).toLocaleString()}</span>
-                          </div>
+                          <>
+                            <span className="pc-inquiry-estimate__nights">
+                              {estimation.total_nights} Nights Rental
+                            </span>
+                            <span className="pc-inquiry-estimate__total">
+                              ${Number(estimation.estimated_lodging_total).toLocaleString()}
+                            </span>
+                          </>
                         ) : null}
                       </div>
                     )}
                   </div>
                 )}
 
-                <div className="pc-filter-group" style={{ marginBottom: '1.5rem' }}>
-                  <label className="pc-filter-label pc-caps" style={{ fontSize: '0.7rem' }}>Full Name</label>
-                  <input 
-                    type="text" 
-                    required 
+                <div className="pc-filter-group">
+                  <label className="pc-filter-label pc-caps">Full Name</label>
+                  <input
+                    type="text"
+                    required
                     placeholder="Grace Bennett"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="pc-filter-input" 
-                    style={{ background: 'white' }}
+                    className="pc-filter-input"
                   />
                 </div>
 
-                <div className="pc-filter-group" style={{ marginBottom: '1.5rem' }}>
-                  <label className="pc-filter-label pc-caps" style={{ fontSize: '0.7rem' }}>Email Address</label>
-                  <input 
-                    type="email" 
-                    required 
+                <div className="pc-filter-group">
+                  <label className="pc-filter-label pc-caps">Email Address</label>
+                  <input
+                    type="email"
+                    required
                     placeholder="grace@pemberley.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pc-filter-input" 
-                    style={{ background: 'white' }}
+                    className="pc-filter-input"
                   />
                 </div>
 
-                <div className="pc-filter-group" style={{ marginBottom: '3rem' }}>
-                  <label className="pc-filter-label pc-caps" style={{ fontSize: '0.7rem' }}>Message</label>
-                  <textarea 
+                <div className="pc-filter-group">
+                  <label className="pc-filter-label pc-caps">Message</label>
+                  <textarea
                     rows={4}
-                    placeholder="Inquire on the architectural provenance and deed allocation details..."
+                    placeholder="Inquire on architectural provenance and deed allocation details..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    className="pc-filter-input" 
-                    style={{ background: 'white', resize: 'none' }}
+                    className="pc-filter-input pc-filter-textarea"
                   />
                 </div>
 
-                <button type="submit" className="pc-btn-primary" style={{ width: '100%', padding: '1.5rem' }}>
-                  DISPATCH DIRECT INQUIRY
+                <button type="submit" className="pc-btn-primary pc-inquiry-submit">
+                  Dispatch Direct Inquiry
                 </button>
               </form>
-              
-              <div style={{ marginTop: '2.5rem', textAlign: 'center', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.3 }}>
-                  HERITAGE COORDINATION DESK
-              </div>
+
+              <footer className="pc-inquiry-card__footer">Heritage Coordination Desk</footer>
             </div>
           </aside>
         </div>
       </section>
 
-      {/* Related Provenance properties */}
-      {related && related.length > 0 && (
-        <section style={{ background: 'var(--pc-beige)', padding: '10rem 6%' }}>
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: '8rem' }}>
-              <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '1.5rem', opacity: 0.4 }}>Heritage Affiliations</div>
-              <h3 className="pc-serif" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}>
-                Related <span className="pc-italic" style={{ fontWeight: 400 }}>Provenance.</span>
-              </h3>
-            </div>
-            
-            <div className="pc-estate-grid">
-              {related.map(property => (
-                <EstateCard 
-                  key={property.id} 
-                  property={property} 
-                />
-              ))}
-            </div>
+      {related.length > 0 && (
+        <section className="pc-related-section" aria-label="Related listings">
+          <div className="pc-testimonials-heading">
+            <div className="pc-caps pc-section-eyebrow">Heritage Affiliations</div>
+            <h2 className="pc-section-title">
+              Related <span className="pc-italic">Provenance.</span>
+            </h2>
+          </div>
+
+          <div className="pc-estate-grid">
+            {related.map((relatedProperty) => (
+              <EstateCard key={relatedProperty.id} property={relatedProperty} />
+            ))}
           </div>
         </section>
       )}
-
     </div>
   );
 }

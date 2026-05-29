@@ -30,8 +30,8 @@ export const FilterSidebar = ({
   onRefine
 }: FilterSidebarProps) => (
     <aside className="pc-sidebar">
-        <div style={{ marginBottom: '4rem' }}>
-            <div className="pc-caps" style={{ opacity: 0.4, marginBottom: '1rem' }}>Search Registry</div>
+        <div className="pc-sidebar-header">
+            <div className="pc-caps" style={{ opacity: 0.4 }}>Search Registry</div>
             <h3 className="pc-serif" style={{ fontSize: '1.75rem', color: 'var(--pc-teal)', fontWeight: 900 }}>
                 Refine <span className="pc-italic" style={{ fontWeight: 400 }}>Registry.</span>
             </h3>
@@ -45,52 +45,32 @@ export const FilterSidebar = ({
               onChange={(e) => onLocationChange?.(e.target.value)}
             >
                 <option value="">All Global Regions</option>
-                {locations && locations.length > 0 ? (
-                  locations.map(l => (
-                    <option key={l.id} value={l.slug}>{l.title}, {l.country || ''}</option>
-                  ))
-                ) : (
-                  <>
-                    <option value="hertfordshire">Hertfordshire, UK</option>
-                    <option value="florence">Florence, Italy</option>
-                    <option value="loire">Loire Valley, France</option>
-                  </>
-                )}
+                {locations?.map((l) => (
+                  <option key={l.id} value={l.slug}>
+                    {l.title}, {l.country || ''}
+                  </option>
+                ))}
             </select>
         </div>
 
         <div className="pc-filter-group">
             <label className="pc-filter-label pc-caps">Estate Category</label>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', fontSize: '0.8rem' }}>
+            <div className="pc-category-list" style={{ fontSize: '0.8rem' }}>
                 {categories && categories.length > 0 ? (
-                  categories.map(c => (
-                    <label key={c.id} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', cursor: 'pointer', color: 'var(--pc-text-muted)' }}>
-                        <input 
-                          type="checkbox" 
-                          checked={String(selectedCategory) === String(c.id)}
-                          onChange={() => onCategoryChange?.(String(selectedCategory) === String(c.id) ? '' : c.id)}
-                          style={{ accentColor: 'var(--pc-teal)', width: '16px', height: '16px' }} 
-                        /> 
-                        <span style={{ fontWeight: 600, letterSpacing: '1px' }}>{c.title.toUpperCase()}</span>
+                  categories.map((c) => (
+                    <label key={c.id} className="pc-category-option">
+                      <input
+                        type="checkbox"
+                        checked={String(selectedCategory) === String(c.id)}
+                        onChange={() =>
+                          onCategoryChange?.(String(selectedCategory) === String(c.id) ? '' : c.id)
+                        }
+                      />
+                      <span>{c.title.toUpperCase()}</span>
                     </label>
                   ))
                 ) : (
-                  [
-                    { id: 1, title: 'Country Manors' },
-                    { id: 2, title: 'Historic Chateaus' },
-                    { id: 3, title: 'Colonial Estates' },
-                    { id: 4, title: 'Royal Castles' }
-                  ].map(c => (
-                    <label key={c.id} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', cursor: 'pointer', color: 'var(--pc-text-muted)' }}>
-                        <input 
-                          type="checkbox" 
-                          checked={String(selectedCategory) === String(c.id)}
-                          onChange={() => onCategoryChange?.(String(selectedCategory) === String(c.id) ? '' : c.id)}
-                          style={{ accentColor: 'var(--pc-teal)', width: '16px', height: '16px' }} 
-                        /> 
-                        <span style={{ fontWeight: 600, letterSpacing: '1px' }}>{c.title.toUpperCase()}</span>
-                    </label>
-                  ))
+                  <p className="pc-sidebar-empty-hint">No categories loaded from the registry yet.</p>
                 )}
             </div>
         </div>
@@ -107,7 +87,7 @@ export const FilterSidebar = ({
             />
         </div>
 
-        <div className="pc-filter-group" style={{ marginBottom: '4rem' }}>
+        <div className="pc-filter-group">
             <label className="pc-filter-label pc-caps">Valuation Range</label>
             <select 
               className="pc-filter-input"
@@ -121,15 +101,24 @@ export const FilterSidebar = ({
             </select>
         </div>
 
-        <button 
-          className="pc-btn-primary" 
-          style={{ width: '100%', padding: '1.5rem' }}
-          onClick={() => onRefine?.()}
-        >
-            REFINE SEARCH
-        </button>
+        <div className="pc-filter-actions">
+          <button
+            type="button"
+            className="pc-btn-primary"
+            style={{
+              width: '100%',
+              padding: '1.5rem',
+              backgroundColor: 'var(--pc-accent, #8b6b4d)',
+              color: '#ffffff',
+              border: '1px solid var(--pc-accent, #8b6b4d)',
+            }}
+            onClick={() => onRefine?.()}
+          >
+              REFINE SEARCH
+          </button>
+        </div>
         
-        <div style={{ marginTop: '2.5rem', textAlign: 'center', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.3 }}>
+        <div className="pc-sidebar-footnote pc-caps" style={{ fontSize: '0.6rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.3 }}>
             SECURE ENCRYPTED REGISTRY
         </div>
     </aside>

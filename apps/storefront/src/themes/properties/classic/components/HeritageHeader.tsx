@@ -65,7 +65,25 @@ export const Header = () => {
                         linkClassName="pc-btn-primary"
                         onNavigate={() => setIsOpen(false)}
                         renderItem={(item, { href, className, onNavigate }) => (
-                            <a href={href} className={className} style={{ padding: '0.8rem 2.5rem', fontSize: '0.85rem', textDecoration: 'none', display: 'inline-block', marginTop: '1.5rem' }} onClick={onNavigate}>{item.title}</a>
+                            <a
+                                href={href}
+                                className={className}
+                                style={{
+                                    padding: '0.8rem 2.5rem',
+                                    fontSize: '0.85rem',
+                                    textDecoration: 'none',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginTop: '1.5rem',
+                                    backgroundColor: 'var(--pc-accent, #8b6b4d)',
+                                    color: '#ffffff',
+                                    border: '1px solid var(--pc-accent, #8b6b4d)',
+                                }}
+                                onClick={onNavigate}
+                            >
+                                {item.title}
+                            </a>
                         )}
                     />
                 </div>
@@ -79,7 +97,24 @@ export const Header = () => {
                 <MenuActionButtons
                     linkClassName="pc-btn-primary"
                     renderItem={(item, { href, className, onNavigate }) => (
-                        <a href={href} className={className} style={{ padding: '0.8rem 2.5rem', fontSize: '0.85rem', textDecoration: 'none' }} onClick={onNavigate}>{item.title}</a>
+                        <a
+                            href={href}
+                            className={className}
+                            style={{
+                                padding: '0.8rem 2.5rem',
+                                fontSize: '0.85rem',
+                                textDecoration: 'none',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                backgroundColor: 'var(--pc-accent, #8b6b4d)',
+                                color: '#ffffff',
+                                border: '1px solid var(--pc-accent, #8b6b4d)',
+                            }}
+                            onClick={onNavigate}
+                        >
+                            {item.title}
+                        </a>
                     )}
                 />
             </div>
