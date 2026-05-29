@@ -11,6 +11,7 @@ import {
 import PageHeader from '../../components/layout/PageHeader';
 import { getAutoBySlug } from '../../api/autos';
 import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
+import ListingActivityWidget from '../../components/studio/ListingActivityWidget';
 import { toast } from 'sonner';
 
 export default function AutoDetailPage() {
@@ -165,6 +166,7 @@ export default function AutoDetailPage() {
           </div>
 
           <ListingAnalyticsWidget listingId={auto.id} listingType="Auto" />
+          <ListingActivityWidget listingId={auto.id} listingType="Auto" />
         </div>
       </div>
     </div>

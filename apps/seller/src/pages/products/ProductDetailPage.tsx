@@ -12,6 +12,7 @@ import {
 import PageHeader from '../../components/layout/PageHeader';
 import { getProductBySlug } from '../../api/products';
 import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
+import ListingActivityWidget from '../../components/studio/ListingActivityWidget';
 import { toast } from 'sonner';
 
 export default function ProductDetailPage() {
@@ -159,6 +160,7 @@ export default function ProductDetailPage() {
           </div>
 
           <ListingAnalyticsWidget listingId={product.id} listingType="Product" />
+          <ListingActivityWidget listingId={product.id} listingType="Product" />
         </div>
       </div>
     </div>

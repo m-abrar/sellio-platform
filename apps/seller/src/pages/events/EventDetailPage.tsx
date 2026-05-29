@@ -12,6 +12,7 @@ import {
 import PageHeader from '../../components/layout/PageHeader';
 import { getEventBySlug } from '../../api/events';
 import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
+import ListingActivityWidget from '../../components/studio/ListingActivityWidget';
 import { toast } from 'sonner';
 
 export default function EventDetailPage() {
@@ -187,6 +188,7 @@ export default function EventDetailPage() {
           )}
 
           <ListingAnalyticsWidget listingId={event.id} listingType="Event" />
+          <ListingActivityWidget listingId={event.id} listingType="Event" />
         </div>
       </div>
     </div>

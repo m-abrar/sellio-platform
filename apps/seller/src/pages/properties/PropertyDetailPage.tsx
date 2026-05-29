@@ -12,6 +12,7 @@ import {
 import PageHeader from '../../components/layout/PageHeader';
 import { getPropertyBySlug } from '../../api/properties';
 import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
+import ListingActivityWidget from '../../components/studio/ListingActivityWidget';
 import { toast } from 'sonner';
 
 export default function PropertyDetailPage() {
@@ -172,6 +173,7 @@ export default function PropertyDetailPage() {
           </div>
 
           <ListingAnalyticsWidget listingId={property.id} listingType="Property" />
+          <ListingActivityWidget listingId={property.id} listingType="Property" />
         </div>
       </div>
     </div>
