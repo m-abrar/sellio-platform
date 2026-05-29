@@ -52,4 +52,23 @@ class AnalyticsController extends Controller
             'days' => $days
         ]));
     }
+
+    /**
+     * Displays analytics specifically for a single selected listing.
+     */
+    public function listingAnalytics(Request $request, string $type, int $id)
+    {
+        $days = (int) $request->get('period', 30);
+        
+        try {
+            $data = $this->analyticsService->getListingAnalytics($request->user(), $type, $id, $days);
+            return $this->successResponse($data);
+        } catch (\InvalidArgumentException $e) {
+            return $this->errorResponse($e->getMessage(), 400);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return $this->errorResponse(__('Listing not found or access denied.'), 404);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
 }

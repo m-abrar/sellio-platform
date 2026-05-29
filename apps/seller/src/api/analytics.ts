@@ -61,3 +61,26 @@ export const getAnalytics = async (period = 30) => {
     },
   };
 };
+
+export interface ListingAnalyticsPayload {
+  listing: {
+    id: number;
+    title: string;
+    slug: string;
+    type: string;
+  };
+  performanceData: {
+    total_views: number;
+    total_leads: number;
+    conversion_rate: string;
+    total_revenue: number;
+  };
+  chartPoints: Array<{ name: string; views: number; leads: number }>;
+}
+
+export const getListingAnalytics = async (type: string, id: number | string, period = 30) => {
+  const response = await apiClient.get(`/dashboard/partner/analytics/listing/${type}/${id}`, {
+    params: { period },
+  });
+  return unwrapData<ListingAnalyticsPayload>(response);
+};

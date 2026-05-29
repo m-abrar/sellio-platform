@@ -237,7 +237,7 @@ export default function CreateJob() {
 
       toast.success(`${form.title || 'Job'} saved successfully.`, { id: toastId });
       await triggerCelebration();
-      setTimeout(() => navigate('/dashboard/joblistings'), 1500);
+      navigate('/dashboard/joblistings');
     } catch (error) {
       const message = error instanceof ApiError ? error.message : 'Failed to post job.';
       toast.error(message, { id: toastId });

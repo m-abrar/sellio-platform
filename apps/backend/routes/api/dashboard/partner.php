@@ -44,6 +44,7 @@ use App\Http\Controllers\Api\V1\Dashboard\Partner\{
  */
 Route::get('welcome', [DashboardController::class, 'index']);
 Route::get('analytics', [AnalyticsController::class, 'index']);
+Route::get('analytics/listing/{type}/{id}', [AnalyticsController::class, 'listingAnalytics']);
 Route::get('activities', [ActivityController::class, 'index']);
 
 Route::prefix('notifications')->group(function () {

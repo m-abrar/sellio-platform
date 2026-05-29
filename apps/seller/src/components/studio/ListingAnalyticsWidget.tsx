@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAnalytics, type DetailedListingPerformance } from '../../api/analytics';
 import { 
   HiOutlinePresentationChartLine,
@@ -15,6 +16,7 @@ interface ListingAnalyticsWidgetProps {
 }
 
 export default function ListingAnalyticsWidget({ listingId, listingType }: ListingAnalyticsWidgetProps) {
+  const navigate = useNavigate();
   const [performance, setPerformance] = useState<DetailedListingPerformance | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -110,6 +112,15 @@ export default function ListingAnalyticsWidget({ listingId, listingType }: Listi
             </p>
           </div>
         </div>
+      </div>
+
+      <div className="mt-8 pt-6 border-t border-[#6610f2]/10 flex justify-center relative z-10">
+        <button 
+          onClick={() => navigate(`/dashboard/analytics/${listingType}/${listingId}`)}
+          className="text-[10px] font-black text-[#6610f2] uppercase tracking-[0.2em] hover:underline flex items-center gap-2 cursor-pointer transition-all duration-300 hover:scale-102"
+        >
+          View Daily Charts & Trends
+        </button>
       </div>
 
       <div className="absolute -right-20 -bottom-20 w-48 h-48 bg-[#6610f2]/10 rounded-full blur-[80px] group-hover:bg-[#6610f2]/20 transition-all duration-700 pointer-events-none" />

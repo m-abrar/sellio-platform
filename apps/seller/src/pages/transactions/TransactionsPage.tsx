@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { 
   HiOutlineArrowDownLeft, 
@@ -12,6 +13,7 @@ import {
 import { getTransactions } from '../../api/transactions';
 
 export default function TransactionsPage() {
+  const navigate = useNavigate();
   const [transactions, setTransactions] = useState<any[]>([]);
   const [filteredTransactions, setFilteredTransactions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -116,7 +118,13 @@ export default function TransactionsPage() {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {filteredTransactions.map((tx) => (
-                  <tr key={tx.id} className="group hover:bg-slate-50/50 transition-all cursor-pointer">
+                  <tr 
+                    key={tx.id} 
+                    onClick={() => tx.url && navigate(tx.url)}
+                    className={`group transition-all ${
+                      tx.url ? 'cursor-pointer hover:bg-slate-50/50' : 'cursor-default'
+                    }`}
+                  >
                     <td className="px-10 py-8">
                       <div className="flex items-center gap-4">
                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${

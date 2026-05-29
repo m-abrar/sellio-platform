@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import {
   AreaChart,
@@ -37,9 +38,24 @@ const VERTICALS: Record<string, VerticalMetadata> = {
 };
 
 export default function AnalyticsPage() {
+  const navigate = useNavigate();
   const [selectedVertical, setSelectedVertical] = useState<string>('All');
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const getListingPath = (type: string, id: number) => {
+    const mapping: Record<string, string> = {
+      Property: 'properties',
+      Auto: 'autos',
+      Product: 'products',
+      Event: 'events',
+      Service: 'services',
+      JobListing: 'joblistings',
+      Classified: 'classifieds',
+    };
+    const module = mapping[type] || 'properties';
+    return `/dashboard/${module}/view/${id}`;
+  };
   
   const [payload, setPayload] = useState<any>(null);
   const [detailedListings, setDetailedListings] = useState<DetailedListingPerformance[]>([]);
@@ -346,7 +362,11 @@ export default function AnalyticsPage() {
               </thead>
               <tbody>
                 {filteredListings.map((item) => (
-                  <tr key={`${item.type}-${item.id}`} className="group">
+                  <tr 
+                    key={`${item.type}-${item.id}`} 
+                    onClick={() => navigate(`/dashboard/analytics/${item.type}/${item.id}`)}
+                    className="group cursor-pointer hover:scale-[1.002] transition-all"
+                  >
                     {/* Title */}
                     <td className="bg-slate-50/45 group-hover:bg-slate-50/20 border-y border-l border-slate-100 rounded-l-2xl px-6 py-6 transition-all duration-300">
                       <p className="text-sm font-black text-slate-900 line-clamp-1 leading-snug group-hover:text-[#6610f2] transition-colors">{item.title}</p>

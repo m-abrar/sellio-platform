@@ -451,7 +451,10 @@ export default function WalletPage() {
               {transactions.map((tx, index) => (
                 <tr 
                   key={tx.id} 
-                  className="group hover:bg-slate-50/50 transition-all duration-300 cursor-pointer animate-in fade-in slide-in-from-bottom-2 duration-500"
+                  onClick={() => tx.url && navigate(tx.url)}
+                  className={`group transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-500 ${
+                    tx.url ? 'cursor-pointer hover:bg-slate-50/50' : 'cursor-default'
+                  }`}
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <td className="px-10 py-8">

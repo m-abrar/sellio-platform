@@ -37,6 +37,134 @@ class AnalyticsService
         });
     }
 
+    /**
+     * Get analytics specifically for a single listing.
+     */
+    public function getListingAnalytics(User $partner, string $type, int $id, int $days = 30): array
+    {
+        $startDate = Carbon::now()->subDays($days)->startOfDay();
+
+        // 1. Resolve model and relation configuration
+        $listingTypes = [
+            'Property'   => ['model' => Property::class,   'relation' => 'properties',   'lead_col' => 'property_id'],
+            'Event'      => ['model' => Event::class,      'relation' => 'events',       'lead_col' => 'event_id'],
+            'JobListing' => ['model' => JobListing::class, 'relation' => 'jobs',         'lead_col' => 'job_listing_id'],
+            'Auto'       => ['model' => Auto::class,       'relation' => 'autos',        'lead_col' => 'auto_id'],
+            'Service'    => ['model' => Service::class,    'relation' => 'services',     'lead_col' => 'service_id'],
+            'Classified' => ['model' => Classified::class, 'relation' => 'classifieds',  'lead_col' => 'classified_id'],
+            'Product'    => ['model' => Product::class,    'relation' => 'products',     'lead_col' => 'product_id'],
+        ];
+
+        if (!isset($listingTypes[$type])) {
+            throw new \InvalidArgumentException("Invalid listing type: {$type}");
+        }
+
+        $config = $listingTypes[$type];
+
+        // 2. Fetch listing details and verify ownership
+        $listing = $partner->{$config['relation']}()
+            ->where('id', $id)
+            ->firstOrFail(['id', 'title', 'slug']);
+
+        // 3. Generate daily date keys
+        $dates = collect();
+        $currentDate = $startDate->copy();
+        while ($currentDate->lessThanOrEqualTo(Carbon::now())) {
+            $dates->put($currentDate->toDateString(), ['views' => 0, 'leads' => 0]);
+            $currentDate->addDay();
+        }
+
+        // 4. Fetch daily views
+        $viewsData = ActivityLog::selectRaw('DATE(created_at) as date, count(*) as count')
+            ->where('description', 'viewed_listing')
+            ->where('subject_type', $config['model'])
+            ->where('subject_id', $id)
+            ->where('created_at', '>=', $startDate)
+            ->groupBy('date')
+            ->get();
+
+        // 5. Fetch daily leads
+        $leadsData = collect();
+        $leadCol = $config['lead_col'] ?? null;
+        if ($leadCol) {
+            $leadModel = $this->getLeadModelMap()[$leadCol] ?? null;
+            if ($leadModel) {
+                $leadsRaw = $leadModel::selectRaw('DATE(created_at) as date, count(*) as count')
+                    ->where($leadCol, $id)
+                    ->where('created_at', '>=', $startDate)
+                    ->groupBy('date')
+                    ->get();
+                
+                foreach ($leadsRaw as $lr) {
+                    $leadsData->push($lr);
+                }
+            }
+        }
+
+        // Special case: Service Quotes
+        if ($type === 'Service') {
+            $quoteCounts = ServiceQuote::selectRaw('DATE(created_at) as date, count(*) as count')
+                ->where('service_id', $id)
+                ->where('created_at', '>=', $startDate)
+                ->groupBy('date')
+                ->get();
+            
+            foreach ($quoteCounts as $qc) {
+                $leadsData->push($qc);
+            }
+        }
+
+        // 6. Map views and leads into the daily dates structure
+        $vDates = $dates->toArray();
+
+        foreach ($viewsData as $v) {
+            if (isset($vDates[$v->date])) {
+                $vDates[$v->date]['views'] += $v->count;
+            }
+        }
+
+        foreach ($leadsData as $l) {
+            if (isset($vDates[$l->date])) {
+                $vDates[$l->date]['leads'] += $l->count;
+            }
+        }
+
+        // 7. Calculate summary metrics
+        $totalViews = array_sum(array_column($vDates, 'views'));
+        $totalLeads = array_sum(array_column($vDates, 'leads'));
+        $conversionRate = $totalViews > 0 ? ($totalLeads / $totalViews) * 100 : 0;
+
+        // Fetch total revenue in period
+        $revenueMap = $this->getBulkRevenueForListings($config['model'], [$id], $startDate);
+        $totalRevenue = (float) ($revenueMap[$id] ?? 0.0);
+
+        // 8. Generate chartpoints array
+        $chartPoints = [];
+        foreach ($vDates as $date => $metrics) {
+            $chartPoints[] = [
+                'name' => Carbon::parse($date)->format('M d'),
+                'views' => $metrics['views'],
+                'leads' => $metrics['leads']
+            ];
+        }
+
+        return [
+            'listing' => [
+                'id' => $listing->id,
+                'title' => $listing->title,
+                'slug' => $listing->slug,
+                'type' => $type,
+            ],
+            'performanceData' => [
+                'total_views' => $totalViews,
+                'total_leads' => $totalLeads,
+                'conversion_rate' => number_format($conversionRate, 2),
+                'total_revenue' => $totalRevenue,
+            ],
+            'chartPoints' => $chartPoints,
+        ];
+    }
+
     private function calculatePerformanceMetrics(User $partner, Carbon $startDate): array
     {
         $listings = $this->getPartnerListingIds($partner);

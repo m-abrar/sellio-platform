@@ -13,6 +13,10 @@ export interface WalletTransaction {
   amount: string;
   date: string;
   status: string;
+  payable_type?: string;
+  payable_id?: number;
+  meta?: Record<string, unknown>;
+  url?: string;
 }
 
 const formatDate = (value: unknown): string => {
@@ -84,6 +88,36 @@ export const normalizeWalletTransaction = (record: Record<string, unknown>): Wal
     statusText = record.confirmed ? 'Completed' : 'Pending';
   }
 
+  const payableType = record.payable_type ? String(record.payable_type) : '';
+  const payableId = record.payable_id ? Number(record.payable_id) : 0;
+  
+  let resolvedType = payableType.replace(/^App\\Models\\/, '');
+  let resolvedId = payableId;
+  
+  if (!resolvedType && meta.description && typeof meta.description === 'string') {
+    const match = meta.description.match(/Payment completed for (\w+) #(\d+)/i);
+    if (match) {
+      resolvedType = match[1];
+      resolvedId = Number(match[2]);
+    }
+  }
+
+  let url: string | undefined = undefined;
+
+  if (resolvedType && resolvedId) {
+    if (resolvedType === 'PropertyBooking') {
+      url = `/dashboard/properties/bookings/${resolvedId}`;
+    } else if (resolvedType === 'EventBooking') {
+      url = `/dashboard/events/bookings/${resolvedId}`;
+    } else if (resolvedType === 'Order') {
+      url = `/dashboard/products/orders/${resolvedId}`;
+    } else if (resolvedType === 'Subscription') {
+      url = `/dashboard/memberships`;
+    }
+  } else if (type === 'withdraw' || uiType === 'payout') {
+    url = `/dashboard/wallet`;
+  }
+
   return {
     id: Number(record.id ?? 0),
     type: uiType,
@@ -91,6 +125,10 @@ export const normalizeWalletTransaction = (record: Record<string, unknown>): Wal
     amount: signedAmount,
     date: formatDate(record.created_at),
     status: statusText,
+    payable_type: record.payable_type ? String(record.payable_type) : undefined,
+    payable_id: record.payable_id ? Number(record.payable_id) : undefined,
+    meta: meta,
+    url,
   };
 };
 

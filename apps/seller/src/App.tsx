@@ -29,6 +29,7 @@ import ClassifiedsPage from './pages/classifieds/ClassifiedsPage';
 import CreateClassified from './pages/classifieds/CreateClassified';
 import ClassifiedDetailPage from './pages/classifieds/ClassifiedDetailPage';
 import AnalyticsPage from './pages/analytics/AnalyticsPage';
+import ListingAnalyticsPage from './pages/analytics/ListingAnalyticsPage';
 import SettingsPage from './pages/settings/SettingsPage';
 import CustomersPage from './pages/customers/CustomersPage';
 import CustomerDetailPage from './pages/customers/CustomerDetailPage';
@@ -133,6 +134,7 @@ function App() {
               <Route path="classifieds/view/:slug" element={<ClassifiedDetailPage />} />
 
               <Route path="analytics" element={<AnalyticsPage />} />
+              <Route path="analytics/:type/:id" element={<ListingAnalyticsPage />} />
               <Route path="settings" element={<SettingsPage />} />
               <Route path="customers" element={<CustomersPage />} />
               <Route path="customers/:id" element={<CustomerDetailPage />} />

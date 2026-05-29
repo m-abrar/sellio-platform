@@ -7,7 +7,9 @@ import {
   HiOutlineChevronRight,
   HiOutlineClipboardDocumentList,
   HiOutlineCurrencyDollar,
-  HiOutlineChatBubbleLeftRight
+  HiOutlineChatBubbleLeftRight,
+  HiOutlineMapPin,
+  HiOutlineClock
 } from 'react-icons/hi2';
 
 interface ListingActivityWidgetProps {
@@ -123,7 +125,7 @@ export default function ListingActivityWidget({ listingId, listingType }: Listin
 
   return (
     <div className={`${containerClass} relative overflow-hidden group animate-in fade-in zoom-in-95 duration-500`}>
-      <h4 className="text-[10px] font-black text-[#6610f2] uppercase tracking-[0.25em] mb-8 flex items-center justify-between">
+      <h4 className="text-[10px] font-black text-[#6610f2] uppercase tracking-[0.25em] mb-8 flex items-center justify-between gap-3 flex-wrap">
         <span className="flex items-center gap-2">
           <HiOutlineClipboardDocumentList className="w-4 h-4 stroke-[2.5px]" /> Related Bookings & Inquiries
         </span>
@@ -137,50 +139,72 @@ export default function ListingActivityWidget({ listingId, listingType }: Listin
           const isConfirmed = activity.status === 'Confirmed' || activity.status === 'Accepted' || activity.status === 'Resolved' || activity.status === 'Hired';
           const isPending = activity.status === 'Pending' || activity.status === 'Quoted' || activity.status === 'Interviewing' || activity.status === 'Shortlisted';
           
+          const activityMeta = (() => {
+            switch(activity.activityType) {
+              case 'bookings':
+                return { icon: HiOutlineCalendarDays, color: 'text-indigo-500 bg-indigo-50/50 border-indigo-100/50', label: 'Booking' };
+              case 'visits':
+                return { icon: HiOutlineMapPin, color: 'text-sky-500 bg-sky-50/50 border-sky-100/50', label: 'Visit Request' };
+              case 'inquiries':
+                return { icon: HiOutlineChatBubbleLeftRight, color: 'text-purple-500 bg-purple-50/50 border-purple-100/50', label: 'Inquiry' };
+              case 'quotes':
+                return { icon: HiOutlineCurrencyDollar, color: 'text-emerald-500 bg-emerald-50/50 border-emerald-100/50', label: 'Quote Request' };
+              case 'appointments':
+                return { icon: HiOutlineClock, color: 'text-amber-500 bg-amber-50/50 border-amber-100/50', label: 'Appointment' };
+              case 'applications':
+                return { icon: HiOutlineUser, color: 'text-rose-500 bg-rose-50/50 border-rose-100/50', label: 'Application' };
+              default:
+                return { icon: HiOutlineUser, color: 'text-slate-500 bg-slate-50/50 border-slate-100/50', label: activity.activityType };
+            }
+          })();
+
+          const IconComponent = activityMeta.icon;
+          
           return (
             <div 
               key={activity.id}
               onClick={() => navigate(`/dashboard/${config.module}/${activity.activityType}/${activity.id}`)}
-              className="bg-slate-50 hover:bg-slate-100/75 p-5 rounded-2xl border border-slate-100/50 hover:border-[#6610f2]/20 flex items-center justify-between gap-4 cursor-pointer transition-all duration-300 hover:shadow-xs group/item"
+              className="group/item flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-white hover:bg-slate-50/50 border border-slate-100 hover:border-[#6610f2]/20 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_12px_30px_rgba(102,16,242,0.03)]"
             >
-              <div className="flex items-center gap-4 min-w-0">
-                <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 shrink-0 shadow-2xs group-hover/item:border-[#6610f2]/10 group-hover/item:text-[#6610f2] transition-colors">
-                  <HiOutlineUser className="w-5 h-5 stroke-[2px]" />
+              <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 group-hover/item:scale-105 ${activityMeta.color}`}>
+                  <IconComponent className="w-5 h-5 stroke-[2.2px]" />
                 </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-black text-slate-800 truncate mb-1">{activity.customer}</p>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[8px] font-black uppercase tracking-wider text-slate-400 shrink-0">
-                      {activity.activityType === 'bookings' ? 'Booking' 
-                       : activity.activityType === 'visits' ? 'Visit Request' 
-                       : activity.activityType === 'inquiries' ? 'Inquiry' 
-                       : activity.activityType === 'quotes' ? 'Quote Request' 
-                       : activity.activityType === 'appointments' ? 'Appointment' 
-                       : activity.activityType === 'applications' ? 'Application' 
-                       : activity.activityType}
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-black text-slate-800 truncate leading-snug mb-1 group-hover/item:text-[#6610f2] transition-colors">{activity.customer}</p>
+                  <div className="flex items-center gap-x-2 gap-y-1 flex-wrap leading-none">
+                    <span className="text-[8px] font-black uppercase tracking-wider text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded-md border border-slate-100/50 leading-none">
+                      {activityMeta.label}
                     </span>
-                    <span className="text-slate-300">•</span>
-                    <span className="text-[8px] font-bold text-slate-400 shrink-0 flex items-center gap-1">
-                      <HiOutlineCalendarDays className="w-3 h-3 shrink-0" /> {activity.date}
+                    <span className="text-[8px] font-bold text-slate-400 shrink-0 flex items-center gap-1 leading-none">
+                      <HiOutlineCalendarDays className="w-3 h-3 text-slate-300 shrink-0" /> {activity.date}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 shrink-0">
-                <div className="text-right">
+              <div className="flex items-center justify-between sm:justify-end gap-3.5 shrink-0 w-full sm:w-auto border-t border-slate-50 sm:border-none pt-3.5 sm:pt-0">
+                <div className="flex flex-col items-start sm:items-end gap-1.5 leading-none">
                   {activity.amount && activity.amount !== '—' && (
-                    <p className="text-xs font-black text-[#6610f2] italic mb-1">{activity.amount}</p>
+                    <p className="text-xs font-black text-[#6610f2] italic leading-none tracking-tight">{activity.amount}</p>
                   )}
-                  <span className={`inline-block px-2.5 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest ${
-                    isConfirmed ? 'bg-green-50 text-green-500 border border-green-100' :
-                    isPending ? 'bg-amber-50 text-amber-500 border border-amber-100' :
-                    'bg-slate-100 text-slate-400 border border-slate-200'
+                  <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[7px] font-black uppercase tracking-widest border transition-all duration-300 ${
+                    isConfirmed ? 'bg-green-50 text-green-500 border-green-100/60 group-hover/item:bg-green-100/40' :
+                    isPending ? 'bg-amber-50 text-amber-500 border-amber-100/60 group-hover/item:bg-amber-100/40' :
+                    'bg-slate-50 text-slate-400 border border-slate-200/50'
                   }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${
+                      isConfirmed ? 'bg-green-400 animate-pulse' :
+                      isPending ? 'bg-amber-400 animate-pulse' :
+                      'bg-slate-300'
+                    }`} />
                     {activity.status}
                   </span>
                 </div>
-                <HiOutlineChevronRight className="w-4 h-4 text-slate-300 group-hover/item:text-[#6610f2] group-hover/item:translate-x-0.5 transition-all" />
+                
+                <div className="w-8 h-8 bg-slate-50 border border-slate-100/80 rounded-lg flex items-center justify-center text-slate-300 group-hover/item:text-[#6610f2] group-hover/item:bg-purple-50 group-hover/item:border-purple-100/50 transition-all duration-300">
+                  <HiOutlineChevronRight className="w-3.5 h-3.5 stroke-[2.8px] group-hover/item:translate-x-0.5 transition-transform" />
+                </div>
               </div>
             </div>
           );
