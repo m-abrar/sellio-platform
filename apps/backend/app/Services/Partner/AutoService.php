@@ -33,7 +33,7 @@ class AutoService
             'brands'     => \App\Models\Brand::where('is_auto', true)->get(),
             'types'      => \App\Models\Type::where('is_auto', true)->get(),
             'locations'  => \App\Models\Location::all(),
-            'features'   => \App\Models\Feature::where('is_auto', true)->active()->get(['id', 'title', 'icon']),
+            'features'   => \App\Models\Feature::where('is_auto', true)->active()->get(['id', 'title']),
         ];
     }
 
