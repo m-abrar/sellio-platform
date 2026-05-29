@@ -130,6 +130,7 @@ Route::prefix('wallet')->group(function () {
 Route::prefix('reviews')->group(function () {
     Route::get('/', [ReviewController::class, 'index']);
     Route::post('{review}/reply', [ReviewController::class, 'reply']);
+    Route::post('{review}/toggle-featured', [ReviewController::class, 'toggleFeatured']);
 });
 
 Route::prefix('messages')->group(function () {

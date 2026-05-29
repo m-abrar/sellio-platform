@@ -40,6 +40,9 @@ export interface ReviewListItem {
   asset: string;
   date: string;
   partnerReply?: string | null;
+  isFeatured: boolean;
+  type: string;
+  asset_image?: string | null;
 }
 
 export const normalizeReview = (record: Record<string, unknown>): ReviewListItem => {
@@ -55,5 +58,8 @@ export const normalizeReview = (record: Record<string, unknown>): ReviewListItem
     asset: typeof reviewable?.title === 'string' ? reviewable.title : 'Listing',
     date: formatRelativeDate(record.created_at),
     partnerReply: typeof record.partner_reply === 'string' ? record.partner_reply : null,
+    isFeatured: Boolean(record.is_featured ?? false),
+    type: typeof record.reviewable_type === 'string' ? record.reviewable_type.split('\\').pop() ?? 'Listing' : 'Listing',
+    asset_image: typeof record.asset_image === 'string' ? record.asset_image : null,
   };
 };

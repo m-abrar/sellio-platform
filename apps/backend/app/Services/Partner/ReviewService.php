@@ -24,7 +24,7 @@ class ReviewService
         return Review::whereHasMorph('reviewable', '*', function ($query) use ($partner) {
             $query->where('user_id', $partner->id);
         })
-        ->with(['user', 'reviewable'])
+        ->with(['user', 'reviewable', 'reviewable.media'])
         ->latest()
         ->paginate(10);
     }

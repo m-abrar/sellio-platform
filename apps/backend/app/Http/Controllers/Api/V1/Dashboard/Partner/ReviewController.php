@@ -82,6 +82,23 @@ class ReviewController extends Controller
     }
 
     /**
+     * Toggle the featured/testimonial status of a review.
+     */
+    public function toggleFeatured(Review $review)
+    {
+        $this->authorizeOwner($review);
+
+        $review->update([
+            'is_premium' => !$review->is_premium,
+        ]);
+
+        return $this->successResponse(
+            new ReviewResource($review->fresh(['user', 'reviewable'])),
+            $review->is_premium ? __('Review featured as testimonial.') : __('Review removed from featured testimonials.')
+        );
+    }
+
+    /**
      * Ensure the partner is the owner of the listing being reviewed.
      *
      * @param Review $review

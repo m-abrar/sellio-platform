@@ -14,6 +14,15 @@ class ReviewResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $image = null;
+        if ($this->relationLoaded('reviewable') && $this->reviewable) {
+            if (isset($this->reviewable->featured_image)) {
+                $image = $this->reviewable->featured_image;
+            } elseif ($this->reviewable->relationLoaded('media') && $this->reviewable->media->isNotEmpty()) {
+                $image = $this->reviewable->media->first()->original_url ?? $this->reviewable->media->first()->url ?? null;
+            }
+        }
+
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
@@ -25,6 +34,8 @@ class ReviewResource extends JsonResource
             'partner_replied_at' => $this->partner_replied_at,
             'partner_id' => $this->partner_id,
             'status' => $this->status,
+            'is_featured' => (bool) $this->is_premium,
+            'asset_image' => $image,
             'viewed_at' => $this->viewed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
