@@ -11,7 +11,7 @@ use Spatie\Activitylog\Models\Activity as ActivityLog;
 use Illuminate\Support\Str;
 
 // Models
-use App\Models\{Property, Event, JobListing, Service, Classified, Auto};
+use App\Models\{Property, Event, JobListing, Service, Classified, Auto, Product};
 use App\Models\{PropertyBooking, EventBooking, JobApplication, ServiceAppointment, ServiceQuote, ClassifiedInquiry, AutoInquiry};
 
 class AnalyticsService
@@ -32,6 +32,7 @@ class AnalyticsService
                 'chartData'           => $this->generateChartData($partner, $startDate, $days),
                 'detailedPerformance' => $this->getDetailedListingPerformance($partner, $startDate),
                 'allListings'         => $this->getAllListings($partner),
+                'verticalsData'       => $this->calculateVerticalsData($partner, $startDate, $days),
             ];
         });
     }
@@ -253,6 +254,7 @@ class AnalyticsService
             Auto::class       => $partner->autos()->pluck('id')->toArray(),
             Service::class    => $partner->services()->pluck('id')->toArray(),
             Classified::class => $partner->classifieds()->pluck('id')->toArray(),
+            Product::class    => $partner->products()->pluck('id')->toArray(),
         ];
     }
 
@@ -360,5 +362,129 @@ class AnalyticsService
 
             default => collect(),
         };
+    }
+
+    /**
+     * Calculate daily views, leads, and conversion metrics grouped by vertical module.
+     */
+    private function calculateVerticalsData(User $partner, Carbon $startDate, int $days): array
+    {
+        $dates = collect();
+        $currentDate = $startDate->copy();
+        while ($currentDate->lessThanOrEqualTo(Carbon::now())) {
+            $dates->put($currentDate->toDateString(), ['views' => 0, 'leads' => 0]);
+            $currentDate->addDay();
+        }
+
+        $listings = $this->getPartnerListingIds($partner);
+
+        // Fetch daily views by vertical type
+        $viewsData = ActivityLog::selectRaw('subject_type, DATE(created_at) as date, count(*) as count')
+            ->where('description', 'viewed_listing')
+            ->where('created_at', '>=', $startDate)
+            ->where(function ($query) use ($listings) {
+                foreach ($listings as $type => $ids) {
+                    if (!empty($ids)) {
+                        $query->orWhere(fn($q) => $q->where('subject_type', $type)->whereIn('subject_id', $ids));
+                    }
+                }
+            })
+            ->groupBy('subject_type', 'date')
+            ->get();
+
+        // Fetch daily leads by vertical type
+        $leadsData = collect();
+        foreach ($this->getLeadModelMap() as $listingCol => $leadModel) {
+            $listingClass = $this->getListingModelFromColumn($listingCol);
+            $ids = $listings[$listingClass] ?? [];
+            if (!empty($ids)) {
+                $counts = $leadModel::selectRaw('DATE(created_at) as date, count(*) as count')
+                    ->whereIn($listingCol, $ids)
+                    ->where('created_at', '>=', $startDate)
+                    ->groupBy('date')
+                    ->get();
+                
+                foreach ($counts as $count) {
+                    $leadsData->push([
+                        'class' => $listingClass,
+                        'date' => $count->date,
+                        'count' => $count->count
+                    ]);
+                }
+            }
+        }
+
+        // Special case: Service Quote leads
+        $serviceIds = $listings[Service::class] ?? [];
+        if (!empty($serviceIds)) {
+            $quoteCounts = ServiceQuote::selectRaw('DATE(created_at) as date, count(*) as count')
+                ->whereIn('service_id', $serviceIds)
+                ->where('created_at', '>=', $startDate)
+                ->groupBy('date')
+                ->get();
+            
+            foreach ($quoteCounts as $count) {
+                $leadsData->push([
+                    'class' => Service::class,
+                    'date' => $count->date,
+                    'count' => $count->count
+                ]);
+            }
+        }
+
+        $verticalKeys = ['Property', 'Auto', 'Service', 'Event', 'JobListing', 'Classified', 'Product'];
+        $verticals = [];
+
+        foreach ($verticalKeys as $rawType) {
+            $shortName = match($rawType) {
+                'JobListing' => 'Job',
+                default => $rawType
+            };
+
+            // Initialize structured data
+            $vDates = $dates->mapWithKeys(fn($val, $date) => [$date => ['views' => 0, 'leads' => 0]])->toArray();
+
+            $fullClass = "App\\Models\\{$rawType}";
+            
+            // Map views
+            $vViews = $viewsData->where('subject_type', $fullClass);
+            foreach ($vViews as $v) {
+                if (isset($vDates[$v->date])) {
+                    $vDates[$v->date]['views'] += $v->count;
+                }
+            }
+
+            // Map leads
+            $vLeads = $leadsData->where('class', $fullClass);
+            foreach ($vLeads as $l) {
+                if (isset($vDates[$l['date']])) {
+                    $vDates[$l['date']]['leads'] += $l['count'];
+                }
+            }
+
+            // Totals
+            $totalViews = array_sum(array_column($vDates, 'views'));
+            $totalLeads = array_sum(array_column($vDates, 'leads'));
+            $conversionRate = $totalViews > 0 ? ($totalLeads / $totalViews) * 100 : 0;
+
+            // Map to chartpoints
+            $chartPoints = [];
+            foreach ($vDates as $date => $metrics) {
+                $chartPoints[] = [
+                    'name' => Carbon::parse($date)->format('M d'),
+                    'views' => $metrics['views'],
+                    'leads' => $metrics['leads']
+                ];
+            }
+
+            $verticals[$shortName] = [
+                'views' => $totalViews,
+                'leads' => $totalLeads,
+                'conversion_rate' => number_format($conversionRate, 2),
+                'chartPoints' => $chartPoints
+            ];
+        }
+
+        return $verticals;
     }
 }

@@ -51,7 +51,7 @@ export default function RecentListingsTable({ listings }: { listings: Listing[] 
       {/* MOBILE VIEW */}
       <div className="lg:hidden space-y-6 px-6 pb-12">
         {listings.map((item) => (
-          <div key={item.id} className="bg-slate-50/50 border border-slate-100 rounded-[2.5rem] p-8 shadow-sm">
+          <div key={`${item.module_type}-${item.id}`} className="bg-slate-50/50 border border-slate-100 rounded-[2.5rem] p-8 shadow-sm">
             <div className="flex gap-6 items-start">
               <img 
                 src={item.media?.[0]?.original_url} 
@@ -92,7 +92,7 @@ export default function RecentListingsTable({ listings }: { listings: Listing[] 
           </thead>
           <tbody>
             {listings.map((item) => (
-              <tr key={item.id} className="group">
+              <tr key={`${item.module_type}-${item.id}`} className="group">
                 {/* ASSET IDENTITY */}
                 <td className="bg-slate-50/40 group-hover:bg-white border-y border-l border-slate-100 group-hover:border-[#6610f2]/20 rounded-l-[2rem] px-10 py-8 transition-all duration-300">
                   <div className="flex items-center gap-6">

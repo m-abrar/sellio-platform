@@ -6,6 +6,16 @@ export interface AnalyticsChartPoint {
   leads: number;
 }
 
+export interface DetailedListingPerformance {
+  title: string;
+  type: string;
+  id: number;
+  views: number;
+  leads: number;
+  revenue: number;
+  conversion_rate: string;
+}
+
 export interface AnalyticsPayload {
   performanceData: {
     total_views: number;
@@ -19,6 +29,13 @@ export interface AnalyticsPayload {
     datasets: Array<{ label: string; data: number[] }>;
   };
   days: number;
+  verticalsData?: Record<string, {
+    views: number;
+    leads: number;
+    conversion_rate: string;
+    chartPoints: Array<{ name: string; views: number; leads: number }>;
+  }>;
+  detailedPerformance?: DetailedListingPerformance[];
 }
 
 export const getAnalytics = async (period = 30) => {

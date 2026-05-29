@@ -394,6 +394,9 @@ class BuyerActivitySeeder extends Seeder
         // --- 11. INBOX MESSAGES & CONVERSATIONS ---
         $this->command->line('  💬 Seeding Message Threads...');
 
+        $buyerProperty = Property::first();
+        $buyerService = Service::first();
+
         // Conversation 1: Property Inquiry
         $conv1 = Conversation::create([
             'user_id' => $buyer->id,
@@ -401,6 +404,8 @@ class BuyerActivitySeeder extends Seeder
             'subject' => 'Inquiry about Sterling Villa Listing details',
             'status' => 'active',
             'admin_note' => 'Eleanor Vance inbox thread.',
+            'inquiriable_type' => $buyerProperty ? Property::class : null,
+            'inquiriable_id' => $buyerProperty ? $buyerProperty->id : null,
             'created_at' => Carbon::now()->subHours(12),
             'updated_at' => Carbon::now()->subHours(4),
         ]);
@@ -433,6 +438,8 @@ class BuyerActivitySeeder extends Seeder
             'subject' => 'Service Package Customization Options',
             'status' => 'active',
             'admin_note' => 'Eleanor Vance inbox thread 2.',
+            'inquiriable_type' => $buyerService ? Service::class : null,
+            'inquiriable_id' => $buyerService ? $buyerService->id : null,
             'created_at' => Carbon::now()->subDays(2),
             'updated_at' => Carbon::now()->subDays(1),
         ]);

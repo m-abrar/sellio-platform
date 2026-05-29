@@ -57,6 +57,10 @@ class MessageSeeder extends Seeder
         $partner2 = $partners->count() > 1 ? $partners[1] : $partner1; 
         $client3 = $buyers->count() > 2 ? $buyers[2] : $client1; 
 
+        $service = \App\Models\Service::first();
+        $property = \App\Models\Property::first();
+        $auto = \App\Models\Auto::first();
+
         $this->command->line("\n--- 📝 Defining Conversations ---");
         $this->command->line("  - Pairs: {$client1->title} <-> {$partner1->title}, {$client2->title} <-> {$partner2->title}, {$client3->title} <-> {$partner1->title}");
 
@@ -71,6 +75,8 @@ class MessageSeeder extends Seeder
                 'subject' => 'Booking Confirmation: Deep Tissue Massage',
                 'start_time' => Carbon::now()->subHours(5),
                 'last_update' => Carbon::now()->subMinutes(1),
+                'inquiriable_type' => $service ? \App\Models\Service::class : null,
+                'inquiriable_id' => $service ? $service->id : null,
                 'messages' => [
                     // Messages include sender_id and a time delay (delay_mins) for sequencing
                     ['sender_id' => $partner1->id, 'body' => 'Hello ' . $client1->title . '! We received your request. Is 4:00 PM today suitable for the Deep Tissue Massage?', 'delay_mins' => 1],
@@ -86,6 +92,8 @@ class MessageSeeder extends Seeder
                 'subject' => 'Inquiry: Warehouse Space Rental (5,000 sq ft)',
                 'start_time' => Carbon::now()->subDay(),
                 'last_update' => Carbon::now()->subMinutes(30),
+                'inquiriable_type' => $property ? \App\Models\Property::class : null,
+                'inquiriable_id' => $property ? $property->id : null,
                 'messages' => [
                     ['sender_id' => $client2->id, 'body' => 'Hi, I saw your listing for the warehouse space. Is it suitable for storing paper products?', 'delay_mins' => 5],
                     ['sender_id' => $partner2->id, 'body' => 'Good morning, ' . $client2->title . '. Yes, the unit is climate-controlled. What volume are you looking to store?', 'delay_mins' => 60],
@@ -100,6 +108,8 @@ class MessageSeeder extends Seeder
                 'subject' => 'Urgent Consultation Request - Tomorrow at 6 PM',
                 'start_time' => Carbon::now()->subDays(3),
                 'last_update' => Carbon::now()->subHours(2),
+                'inquiriable_type' => $auto ? \App\Models\Auto::class : null,
+                'inquiriable_id' => $auto ? $auto->id : null,
                 'messages' => [
                     ['sender_id' => $client3->id, 'body' => 'I require an urgent consultation. Are you available this week?', 'delay_mins' => 1],
                     ['sender_id' => $partner1->id, 'body' => 'We have a slot opening at 6 PM tomorrow. Is that suitable?', 'delay_mins' => 10],
@@ -139,6 +149,8 @@ class MessageSeeder extends Seeder
                 'subject' => $data['subject'], 
                 'status' => 'active',
                 'admin_note' => 'System generated demo conversation.',
+                'inquiriable_type' => $data['inquiriable_type'] ?? null,
+                'inquiriable_id' => $data['inquiriable_id'] ?? null,
                 'created_at' => $data['start_time'],
                 'updated_at' => $data['last_update'],
             ]);

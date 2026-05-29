@@ -42,8 +42,12 @@ interface PartnerWelcomeResponse {
 }
 
 export const getDashboardData = async () => {
-  const response = await apiClient.get('/dashboard/partner/welcome');
-  const payload = unwrapData<PartnerWelcomeResponse>(response);
+  const [welcomeRes, analyticsRes] = await Promise.all([
+    apiClient.get('/dashboard/partner/welcome'),
+    apiClient.get('/dashboard/partner/analytics', { params: { period: 30 } }),
+  ]);
+  const payload = unwrapData<PartnerWelcomeResponse>(welcomeRes);
+  const analyticsPayload = unwrapData<any>(analyticsRes);
 
   const recentListings = (payload.recentListings ?? []).map(mapRecentListing);
 
@@ -69,6 +73,9 @@ export const getDashboardData = async () => {
           autos: payload.partner?.autos_count ?? 0,
           products: payload.partner?.products_count ?? 0,
           jobs: payload.partner?.jobs_count ?? 0,
+          events: payload.partner?.events_count ?? 0,
+          services: payload.partner?.services_count ?? 0,
+          classifieds: payload.partner?.classifieds_count ?? 0,
         },
         alerts: {
           messages: payload.extraStats?.unread_messages ?? 0,
@@ -86,6 +93,7 @@ export const getDashboardData = async () => {
       },
       performance: payload.performanceData,
       recentListings,
+      verticalsData: analyticsPayload.verticalsData ?? null,
     },
   };
 };

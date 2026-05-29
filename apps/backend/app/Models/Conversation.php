@@ -34,6 +34,8 @@ class Conversation extends Model
     protected $fillable = [
         'user_id',
         'partner_id',
+        'inquiriable_type',
+        'inquiriable_id',
     ];
 
     /**
@@ -47,6 +49,14 @@ class Conversation extends Model
     ];
 
     // --- Relationships ---
+
+    /**
+     * Get the target entity being discussed (Property, Auto, Event, Service, Job, Classified, Product).
+     */
+    public function inquiriable(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    {
+        return $this->morphTo();
+    }
 
     /**
      * Get the user who initiated the conversation.

@@ -27,7 +27,7 @@ class MessageController extends Controller
         $partner = $user = Auth::user();
         
         $conversations = Conversation::forUser($partner->id) 
-            ->with(['user', 'partner', 'lastMessage']) 
+            ->with(['user', 'partner', 'lastMessage', 'inquiriable']) 
             ->orderByDesc('updated_at')
             ->get();
 
@@ -49,7 +49,7 @@ class MessageController extends Controller
         
         $activeConversation = Conversation::forUser($partner->id)
             ->where('id', $conversationId)
-            ->with(['user', 'partner']) 
+            ->with(['user', 'partner', 'inquiriable']) 
             ->firstOrFail();
 
         $messages = $activeConversation->messages()

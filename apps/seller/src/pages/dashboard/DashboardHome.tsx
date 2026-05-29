@@ -4,6 +4,7 @@ import StatCard from './StatCard';
 import { HiOutlinePlus } from 'react-icons/hi2';
 import PageHeader from '../../components/layout/PageHeader';
 import RecentListingsTable from './RecentListingsTable';
+import AnalyticsChartWidget from './AnalyticsChartWidget';
 import { 
   HiOutlineHome, 
   HiOutlineBell, 
@@ -57,7 +58,7 @@ export default function DashboardHome() {
     );
   }
 
-  const { stats, recentListings, healthScore, earningChange } = data || { stats: {}, recentListings: [] };
+  const { stats, recentListings, healthScore, earningChange, verticalsData } = data || { stats: {}, recentListings: [], verticalsData: null };
 
   return (
     <div className="space-y-10 md:space-y-16 pb-20">
@@ -122,6 +123,9 @@ export default function DashboardHome() {
             { label: 'Props', value: stats.moduleCounts?.properties || 0 },
             { label: 'Autos', value: stats.moduleCounts?.autos || 0 },
             { label: 'Prods', value: stats.moduleCounts?.products || 0 },
+            { label: 'Events', value: stats.moduleCounts?.events || 0 },
+            { label: 'Servs', value: stats.moduleCounts?.services || 0 },
+            { label: 'Class', value: stats.moduleCounts?.classifieds || 0 },
             { label: 'Jobs', value: stats.moduleCounts?.jobs || 0 }
           ]}
         />
@@ -157,6 +161,9 @@ export default function DashboardHome() {
           ]}
         />
       </div>
+
+      {/* PERFORMANCE METRICS CHART */}
+      <AnalyticsChartWidget verticalsData={verticalsData} />
 
       {/* 2. ACTIVITY & HUD GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
