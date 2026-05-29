@@ -20,11 +20,7 @@ class PropertyService
      */
     public function canCreateProperty(User $user): bool
     {
-        $plan = $user->getPlan();
-        $currentCount = $user->properties()->where('is_published', true)->count();
-        $maxLimit = (int) ($plan->max_listings ?? 1);
-
-        return $currentCount < $maxLimit;
+        return !$user->hasReachedListingLimit();
     }
 
     /**

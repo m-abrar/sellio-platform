@@ -81,5 +81,41 @@ trait Subscribable
         });
     }
 
-    
+    /**
+     * Get details of listings usage across all verticals.
+     */
+    public function getListingUsageDetails(): array
+    {
+        return [
+            'properties' => (int) $this->properties()->count(),
+            'autos' => (int) $this->autos()->count(),
+            'events' => (int) $this->events()->count(),
+            'jobs' => (int) $this->jobs()->count(),
+            'services' => (int) $this->services()->count(),
+            'classifieds' => (int) $this->classifieds()->count(),
+            'products' => (int) $this->products()->count(),
+        ];
+    }
+
+    /**
+     * Check if the user has reached or exceeded their active subscription listing limits.
+     */
+    public function hasReachedListingLimit(): bool
+    {
+        $plan = $this->getPlan();
+        if (!$plan) {
+            return true; // No active plan = cannot create listings
+        }
+
+        $maxLimit = (int) ($plan->max_listings ?? 0);
+        if ($maxLimit === 999) {
+            return false; // Unlimited listing limit
+        }
+
+        $usage = $this->getListingUsageDetails();
+        $totalListings = array_sum($usage);
+
+        return $totalListings >= $maxLimit;
+    }
 }
+

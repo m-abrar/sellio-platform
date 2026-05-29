@@ -126,9 +126,9 @@ export default function EventDetailPage() {
             <div className="relative z-10">
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-4">Standard Admission</p>
               <h4 className="text-5xl font-black italic tracking-tighter mb-8">{event.price || 'Free'}</h4>
-              <div className="flex items-center gap-3 text-pink-400 font-bold text-sm">
-                <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse" />
-                {event.is_active ? 'LIVE LISTING' : 'DRAFT'}
+              <div className={`flex items-center gap-3 font-bold text-sm ${event.is_active ? 'text-green-400' : event.is_published ? 'text-amber-400' : 'text-slate-400'}`}>
+                <div className={`w-2 h-2 rounded-full ${event.is_active ? 'bg-green-400 animate-pulse' : event.is_published ? 'bg-amber-400 animate-pulse' : 'bg-slate-500'}`} />
+                {event.is_active ? 'LIVE LISTING' : event.is_published ? 'PENDING MODERATION' : 'DRAFT'}
               </div>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-10">

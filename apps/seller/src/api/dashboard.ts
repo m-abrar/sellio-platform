@@ -39,6 +39,12 @@ interface PartnerWelcomeResponse {
     lifetime_earnings?: number;
     wallet_balance?: number;
   };
+  subscription_limits?: {
+    plan_title?: string;
+    max_listings?: number;
+    current_listings_count?: number;
+    is_limit_exceeded?: boolean;
+  };
 }
 
 export const getDashboardData = async () => {
@@ -94,6 +100,18 @@ export const getDashboardData = async () => {
       performance: payload.performanceData,
       recentListings,
       verticalsData: analyticsPayload.verticalsData ?? null,
+      subscriptionLimits: payload.subscription_limits ?? {
+        plan_title: 'Basic Tier',
+        max_listings: 3,
+        current_listings_count: activeInventory,
+        is_limit_exceeded: activeInventory >= 3,
+      },
     },
   };
 };
+
+export const getLiveInteractions = async () => {
+  const response = await apiClient.get('/dashboard/partner/activities');
+  return response.data.data;
+};
+

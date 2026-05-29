@@ -4,18 +4,28 @@ import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
 import { toast } from 'sonner';
 import { deleteProperty, getProperties } from '../../api/properties';
+import { getDashboardData } from '../../api/dashboard';
+import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
 import { triggerDeletion } from '../../utils/animations';
 
 export default function PropertiesPage() {
   const navigate = useNavigate();
   const [properties, setProperties] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [limits, setLimits] = useState<any>(null);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
 
   const fetchProperties = async () => {
     setIsLoading(true);
     try {
-      const response = await getProperties();
-      setProperties(response.data);
+      const [propResponse, dashboardResponse] = await Promise.all([
+        getProperties(),
+        getDashboardData().catch(() => null)
+      ]);
+      setProperties(propResponse.data);
+      if (dashboardResponse) {
+        setLimits(dashboardResponse.data.subscriptionLimits);
+      }
     } catch (error) {
       console.error('Failed to fetch properties', error);
       toast.error('Failed to synchronize portfolio.');
@@ -27,6 +37,14 @@ export default function PropertiesPage() {
   useEffect(() => {
     fetchProperties();
   }, []);
+
+  const handleCreateClick = () => {
+    if (limits?.is_limit_exceeded) {
+      setIsUpgradeModalOpen(true);
+    } else {
+      navigate('/dashboard/properties/create');
+    }
+  };
 
   const handleDelete = (id: number, title: string) => {
     toast(`Decommission "${title}"?`, {
@@ -51,7 +69,7 @@ export default function PropertiesPage() {
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader badge="Real Estate" title="Property" subtitle="Portfolio">
         <button
-          onClick={() => navigate('/dashboard/properties/create')}
+          onClick={handleCreateClick}
           className="bg-[#6610f2] text-white px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-[#7b2dfd] transition-all active:scale-95 flex items-center gap-2"
         >
           <HiOutlinePlus className="w-4 h-4" /> Add Property
@@ -74,8 +92,8 @@ export default function PropertiesPage() {
                 <div className="relative h-48 overflow-hidden cursor-pointer" onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}>
                   <img src={property.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={property.title} />
                   <div className="absolute top-4 right-4">
-                    <span className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest ${property.is_active ? 'bg-green-500 text-white' : 'bg-amber-400 text-white'}`}>
-                      {property.is_active ? 'Live' : 'Draft'}
+                    <span className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest ${property.is_active ? 'bg-green-500 text-white' : property.is_published ? 'bg-amber-400 text-white animate-pulse' : 'bg-slate-500 text-white'}`}>
+                      {property.is_active ? 'Live' : property.is_published ? 'Pending' : 'Draft'}
                     </span>
                   </div>
                 </div>
@@ -141,8 +159,10 @@ export default function PropertiesPage() {
                       <div className="relative h-16 flex items-center justify-end">
                         <div className="flex flex-col items-end transition-all duration-500 group-hover:opacity-0 group-hover:translate-y-4">
                           <div className="flex items-center gap-2">
-                            <span className={`text-[11px] font-black uppercase tracking-widest ${property.is_active ? 'text-green-500' : 'text-amber-500'}`}>{property.is_active ? 'Live' : 'Draft'}</span>
-                            <span className={`w-2 h-2 rounded-full ${property.is_active ? 'bg-green-500 animate-pulse' : 'bg-amber-400'}`} />
+                            <span className={`text-[11px] font-black uppercase tracking-widest ${property.is_active ? 'text-green-500' : property.is_published ? 'text-amber-500 animate-pulse' : 'text-slate-400'}`}>
+                              {property.is_active ? 'Live' : property.is_published ? 'Pending' : 'Draft'}
+                            </span>
+                            <span className={`w-2 h-2 rounded-full ${property.is_active ? 'bg-green-500 animate-pulse' : property.is_published ? 'bg-amber-400' : 'bg-slate-400'}`} />
                           </div>
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center gap-3 opacity-0 translate-y-[-20px] group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
@@ -157,6 +177,13 @@ export default function PropertiesPage() {
             </table>
           </div>
         </>
+      )}
+      {limits && (
+        <UpgradePlanModal 
+          isOpen={isUpgradeModalOpen} 
+          onClose={() => setIsUpgradeModalOpen(false)} 
+          limits={limits} 
+        />
       )}
     </div>
   );

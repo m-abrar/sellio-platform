@@ -47,8 +47,13 @@ class ClassifiedController extends Controller
 
     public function store(ClassifiedRequest $request): JsonResponse
     {
+        $user = Auth::user();
+        if ($user->hasReachedListingLimit()) {
+            return $this->successResponse(null, __('You have reached your listing limit. Please upgrade your plan.'), 403);
+        }
+
         $data = $request->validated();
-        $classified = $this->classifiedService->saveClassified(Auth::user(), $data);
+        $classified = $this->classifiedService->saveClassified($user, $data);
         $this->handleMedia($classified, $request);
 
         return $this->successResponse(

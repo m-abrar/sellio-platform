@@ -41,6 +41,7 @@ class PendingListingsSeeder extends Seeder
 
         // 1. Properties
         if (class_exists(Property::class)) {
+            // 2 Pending Properties
             Property::factory()->count(2)->create([
                 'user_id' => $partner->id,
                 'location_id' => $locationId,
@@ -51,7 +52,19 @@ class PendingListingsSeeder extends Seeder
                 'status' => 'pending',
                 'title' => 'PENDING: ' . Property::factory()->make()->title,
             ]);
-            $this->command->line('   - Created 2 Pending Properties');
+            
+            // 2 Draft Properties
+            Property::factory()->count(2)->create([
+                'user_id' => $partner->id,
+                'location_id' => $locationId,
+                'category_id' => Category::where('is_property', true)->first()?->id ?? Category::factory()->create(['is_property' => true])->id,
+                'type_id' => Type::where('is_property', true)->first()?->id ?? Type::factory()->create(['is_property' => true])->id,
+                'is_published' => false,
+                'approved_at' => null,
+                'status' => 'draft',
+                'title' => 'DRAFT: ' . Property::factory()->make()->title,
+            ]);
+            $this->command->line('   - Created 2 Pending & 2 Draft Properties');
         }
 
         // 2. Autos
@@ -72,6 +85,7 @@ class PendingListingsSeeder extends Seeder
 
         // 3. Events
         if (class_exists(Event::class)) {
+            // 2 Pending Events
             Event::factory()->count(2)->create([
                 'user_id' => $partner->id,
                 'location_id' => $locationId,
@@ -81,7 +95,18 @@ class PendingListingsSeeder extends Seeder
                 'approved_at' => null,
                 'title' => 'PENDING: ' . Event::factory()->make()->title,
             ]);
-            $this->command->line('   - Created 2 Pending Events');
+
+            // 2 Draft Events
+            Event::factory()->count(2)->create([
+                'user_id' => $partner->id,
+                'location_id' => $locationId,
+                'category_id' => Category::where('is_event', true)->first()?->id ?? Category::factory()->create(['is_event' => true])->id,
+                'type_id' => Type::where('is_event', true)->first()?->id ?? Type::factory()->create(['is_event' => true])->id,
+                'is_published' => false,
+                'approved_at' => null,
+                'title' => 'DRAFT: ' . Event::factory()->make()->title,
+            ]);
+            $this->command->line('   - Created 2 Pending & 2 Draft Events');
         }
 
         // 4. Job Listings

@@ -91,6 +91,7 @@ class EventResource extends JsonResource
                 'is_published' => (bool) $this->is_published,
                 'is_featured'  => (bool) $this->is_featured,
                 'approved_at'  => $this->approved_at?->toIso8601String(),
+                'is_approved'  => !is_null($this->approved_at),
                 'rating'       => (float) ($this->reviews_avg_rating ?? 0),
             ],
 

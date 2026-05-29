@@ -13,22 +13,31 @@ import {
   HiOutlineArrowUpRight,
   HiOutlineChevronRight 
 } from 'react-icons/hi2';
-import { getDashboardData } from '../../api/dashboard';
+import { getDashboardData, getLiveInteractions } from '../../api/dashboard';
 import { ApiError } from '../../lib/apiError';
+import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
 
 export default function DashboardHome() {
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
+  const [activities, setActivities] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isInventoryDropdownOpen, setIsInventoryDropdownOpen] = useState(false);
   const [isCreateDropdownOpen, setIsCreateDropdownOpen] = useState(false);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getDashboardData();
-        setData(response.data);
+        const [dashboardRes, activitiesRes] = await Promise.all([
+          getDashboardData(),
+          getLiveInteractions()
+        ]);
+        setData(dashboardRes.data);
+        if (activitiesRes && activitiesRes.recentActivity) {
+          setActivities(activitiesRes.recentActivity);
+        }
         setLoadError(null);
       } catch (error) {
         console.error('Failed to fetch dashboard data', error);
@@ -58,20 +67,93 @@ export default function DashboardHome() {
     );
   }
 
-  const { stats, recentListings, healthScore, earningChange, verticalsData } = data || { stats: {}, recentListings: [], verticalsData: null };
+  const { stats, recentListings, healthScore, earningChange, verticalsData, subscriptionLimits } = data || { stats: {}, recentListings: [], verticalsData: null, subscriptionLimits: null };
+
+  const displayActivities = activities.length > 0 
+    ? activities.slice(0, 6).map((item) => ({
+        name: item.user || 'Anon',
+        actionText: item.type || 'Activity',
+        listingName: item.description || item.title || 'Interaction',
+        avatar: item.avatar || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80',
+        listingImage: item.image || 'https://images.unsplash.com/photo-1521791136368-1a46828d0fa9?auto=format&fit=crop&w=200&h=150&q=80',
+        time: item.time || 'just now',
+        route: item.route || '/dashboard'
+      }))
+    : [
+        { 
+          name: 'Julian Vance', 
+          actionText: 'Viewing',
+          listingName: 'Azure Bay Villa', 
+          avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80',
+          listingImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=120&h=80&q=80',
+          time: '2m ago',
+          route: '/dashboard'
+        },
+        { 
+          name: 'Sarah Connor', 
+          actionText: 'Inquired',
+          listingName: 'Tesla Model S Plaid', 
+          avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80',
+          listingImage: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=120&h=80&q=80',
+          time: '15m ago',
+          route: '/dashboard'
+        },
+        { 
+          name: 'Michael Ross', 
+          actionText: 'Saved',
+          listingName: 'Modern Glass Office Space', 
+          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80',
+          listingImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=120&h=80&q=80',
+          time: '1h ago',
+          route: '/dashboard'
+        },
+        { 
+          name: 'Emily Watson', 
+          actionText: 'Requested Quote',
+          listingName: 'Enterprise SEO Campaign', 
+          avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&h=100&q=80',
+          listingImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=120&h=80&q=80',
+          time: '2h ago',
+          route: '/dashboard'
+        },
+        { 
+          name: 'David Beckham', 
+          actionText: 'Booked Visit',
+          listingName: 'Luxury Downtown Penthouse', 
+          avatar: 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?auto=format&fit=crop&w=100&h=100&q=80',
+          listingImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=120&h=80&q=80',
+          time: '4h ago',
+          route: '/dashboard'
+        },
+        { 
+          name: 'Jessica Alba', 
+          actionText: 'Submitted Application',
+          listingName: 'Lead Frontend Architect', 
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80',
+          listingImage: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=120&h=80&q=80',
+          time: '1d ago',
+          route: '/dashboard'
+        }
+      ];
 
   return (
     <div className="space-y-10 md:space-y-16 pb-20">
         {/* // highlight={user?.name?.split(' ')[0] || 'Partner'} */}
 
       <PageHeader 
-        badge="Partner Ecosystem" 
+        badge={subscriptionLimits?.is_limit_exceeded ? "Limit Exceeded ⚠️" : "Partner Ecosystem"} 
         title="Welcome," 
         subtitle="Partner"
       >
         <div className="relative flex-1 md:flex-none">
           <button 
-            onClick={() => setIsCreateDropdownOpen(!isCreateDropdownOpen)}
+            onClick={() => {
+              if (subscriptionLimits?.is_limit_exceeded) {
+                setIsUpgradeModalOpen(true);
+              } else {
+                setIsCreateDropdownOpen(!isCreateDropdownOpen);
+              }
+            }}
             className="w-full md:w-auto bg-[#6610f2] text-white px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-[#7b2dfd] transition-all flex items-center justify-center group"
           >
             <HiOutlinePlus className={`w-4 h-4 mr-3 stroke-[3px] transition-transform duration-300 ${isCreateDropdownOpen ? 'rotate-45' : ''}`} /> Create Listing
@@ -117,7 +199,8 @@ export default function DashboardHome() {
           title="Active Inventory" 
           value={stats.activeInventory?.toString() || "0"} 
           icon={HiOutlineHome} 
-          color="text-[#6610f2] bg-[#6610f2]/5" 
+          color={subscriptionLimits?.is_limit_exceeded ? "text-red-500 bg-red-50" : "text-[#6610f2] bg-[#6610f2]/5"} 
+          trend={subscriptionLimits?.is_limit_exceeded ? "Limit Reached" : undefined}
           detailColumns={2}
           details={[
             { label: 'Props', value: stats.moduleCounts?.properties || 0 },
@@ -175,37 +258,21 @@ export default function DashboardHome() {
                 <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight italic">Live Interactions.</h3>
                 <p className="text-[10px] md:text-xs text-slate-400 font-bold mt-2 uppercase tracking-[0.3em]">Real-time buyer activity</p>
             </div>
-            <button className="text-[10px] font-black text-slate-300 uppercase hover:text-[#6610f2] transition-colors">Clear All</button>
+            <button 
+              onClick={() => navigate('/dashboard/live-interactions')}
+              className="text-[10px] font-black text-[#6610f2] uppercase hover:underline hover:scale-105 active:scale-95 transition-all tracking-widest"
+            >
+              View All
+            </button>
           </div>
           
           <div className="space-y-4">
-            {[
-              { 
-                name: 'Julian Vance', 
-                actionText: 'Viewing',
-                listingName: 'Azure Bay Villa', 
-                avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80',
-                listingImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=120&h=80&q=80',
-                time: '2m ago'
-              },
-              { 
-                name: 'Sarah Connor', 
-                actionText: 'Inquired',
-                listingName: 'Tesla Model S Plaid', 
-                avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80',
-                listingImage: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=120&h=80&q=80',
-                time: '15m ago'
-              },
-              { 
-                name: 'Michael Ross', 
-                actionText: 'Saved',
-                listingName: 'Modern Glass Office Space', 
-                avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80',
-                listingImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=120&h=80&q=80',
-                time: '1h ago'
-              }
-            ].map((interaction, i) => (
-              <div key={i} className="group flex items-center p-5 rounded-[1.8rem] bg-slate-50/50 border border-transparent hover:bg-white hover:border-slate-100 hover:shadow-xl hover:shadow-slate-200/40 transition-all cursor-pointer">
+            {displayActivities.map((interaction, i) => (
+              <div 
+                key={i} 
+                onClick={() => navigate(interaction.route)}
+                className="group flex items-center p-5 rounded-[1.8rem] bg-slate-50/50 border border-transparent hover:bg-white hover:border-slate-100 hover:shadow-xl hover:shadow-slate-200/40 transition-all cursor-pointer"
+              >
                 {/* 1. User Avatar */}
                 <img 
                   src={interaction.avatar} 
@@ -216,10 +283,10 @@ export default function DashboardHome() {
                 {/* 2. Interaction Details */}
                 <div className="ms-5 flex-1 min-w-0">
                   <div className="flex items-baseline gap-2">
-                    <p className="text-sm font-black text-slate-900 leading-none">{interaction.name}</p>
+                    <p className="text-sm font-black text-slate-900 leading-none group-hover:text-[#6610f2] transition-colors">{interaction.name}</p>
                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{interaction.time}</span>
                   </div>
-                  <p className="text-[10px] font-bold text-[#6610f2] uppercase tracking-widest mt-1.5 opacity-80 leading-none">
+                  <p className="text-[10px] font-bold text-[#6610f2] uppercase tracking-widest mt-1.5 opacity-80 leading-none truncate max-w-lg">
                     {interaction.actionText}: <span className="text-slate-500 font-medium normal-case font-sans text-xs ml-1">{interaction.listingName}</span>
                   </p>
                 </div>
@@ -267,6 +334,50 @@ export default function DashboardHome() {
                 Listing Health: <span className="text-slate-900 font-bold underline decoration-[#ffc107] decoration-4 underline-offset-4">{healthScore?.statusText ?? 'N/A'}</span> ({healthScore?.score ?? 0}%).
             </p>
           </div>
+
+          {/* COMPACT SUBSCRIPTION QUOTA PREVIEW */}
+          {subscriptionLimits && (
+            <div 
+              className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm relative overflow-hidden flex flex-col justify-between group cursor-pointer hover:border-[#6610f2]/20 transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-500" 
+              onClick={() => navigate('/dashboard/memberships')}
+            >
+              <div className="absolute top-0 left-0 w-2 h-full bg-[#6610f2]" />
+              
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-1.5">Active Quota Preview</h4>
+                  <p className="text-xs font-bold text-slate-500">{subscriptionLimits.plan_title}</p>
+                </div>
+                <span className={`px-2.5 py-1 rounded-full text-[8px] font-black uppercase tracking-wider ${subscriptionLimits.is_limit_exceeded ? 'bg-red-50 text-red-500' : 'bg-purple-50 text-[#6610f2]'}`}>
+                  {subscriptionLimits.is_limit_exceeded ? 'Limit Hit ⚠️' : 'Active'}
+                </span>
+              </div>
+
+              {/* Progress and numbers */}
+              <div className="space-y-2 mt-2">
+                <div className="flex justify-between items-baseline text-[10px] font-bold">
+                  <span className="text-slate-400">Quota Consumed</span>
+                  <span className="text-slate-900 font-black">
+                    {subscriptionLimits.current_listings_count} <span className="text-slate-400 font-medium">/ {subscriptionLimits.max_listings === 999 ? 'Unlimited' : subscriptionLimits.max_listings}</span>
+                  </span>
+                </div>
+
+                {/* Progress Bar */}
+                {subscriptionLimits.max_listings > 0 && subscriptionLimits.max_listings !== 999 ? (
+                  <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div 
+                      style={{ width: `${Math.min(100, (subscriptionLimits.current_listings_count / subscriptionLimits.max_listings) * 100)}%` }}
+                      className={`h-full rounded-full bg-gradient-to-r ${subscriptionLimits.is_limit_exceeded ? 'from-red-500 to-[#6610f2]' : 'from-[#6610f2] to-purple-500'}`}
+                    />
+                  </div>
+                ) : (
+                  <div className="w-full h-2 bg-purple-50 rounded-full flex items-center">
+                    <div className="w-full h-1 bg-[#6610f2] rounded-full" />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -321,6 +432,13 @@ export default function DashboardHome() {
         
         <RecentListingsTable listings={recentListings} />
       </div>
+      {subscriptionLimits && (
+        <UpgradePlanModal 
+          isOpen={isUpgradeModalOpen} 
+          onClose={() => setIsUpgradeModalOpen(false)} 
+          limits={subscriptionLimits} 
+        />
+      )}
     </div>
   );
 }

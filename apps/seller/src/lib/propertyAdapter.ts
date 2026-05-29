@@ -6,6 +6,8 @@ export interface NormalizedProperty {
   price?: string;
   location?: string;
   is_active: boolean;
+  is_approved: boolean;
+  is_published: boolean;
   featured_image?: string | null;
   featured_image_id?: number | null;
   gallery: Array<{ id: number; url: string; thumbnail?: string }>;
@@ -94,7 +96,9 @@ export const normalizeProperty = (property: any): NormalizedProperty => {
     description: property.description,
     price: property.pricing?.price_formatted ?? property.pricing?.price_formatted_k ?? undefined,
     location: buildLocationLabel(property),
-    is_active: property.status?.is_published ?? property.is_published ?? false,
+    is_active: (property.status?.is_published && property.status?.is_approved) ?? (property.is_published && property.approved_at) ?? false,
+    is_approved: property.status?.is_approved ?? !!property.approved_at,
+    is_published: property.status?.is_published ?? !!property.is_published,
     featured_image: featuredImage,
     featured_image_id: property.featured_image_id ?? null,
     gallery,

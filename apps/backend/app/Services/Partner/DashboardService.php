@@ -74,6 +74,19 @@ class DashboardService
             })
             ->sum('amount') ?? 0) / 100);
 
+        $plan = $partner->getPlan();
+        $maxListings = (int) ($plan?->max_listings ?? 0);
+        $usage = $partner->getListingUsageDetails();
+        $currentListingsCount = array_sum($usage);
+        $isLimitExceeded = ($maxListings > 0 && $maxListings !== 999) ? ($currentListingsCount >= $maxListings) : false;
+
+        $subscriptionLimits = [
+            'plan_title' => $plan?->title ?? 'Basic Tier',
+            'max_listings' => $maxListings,
+            'current_listings_count' => $currentListingsCount,
+            'is_limit_exceeded' => $isLimitExceeded,
+        ];
+
         return array_merge([
             'partner'           => $partner,
             'earningChangeData' => $earningData,
@@ -87,8 +100,10 @@ class DashboardService
                 'total_payouts'        => $totalPayouts,
                 'lifetime_earnings'    => $lifetimeEarnings,
                 'wallet_balance'       => (float) $partner->wallet_balance,
-            ]
+            ],
+            'subscription_limits' => $subscriptionLimits,
         ], $uiData);
+
     }
 
     /**

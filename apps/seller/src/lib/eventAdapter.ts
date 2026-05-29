@@ -7,6 +7,8 @@ export interface NormalizedEvent {
   sku?: string;
   location?: string;
   is_active: boolean;
+  is_approved: boolean;
+  is_published: boolean;
   featured_image?: string | null;
   gallery: Array<{ id: number; url: string; thumbnail?: string }>;
   media: Array<{ original_url: string }>;
@@ -17,7 +19,6 @@ export interface NormalizedEvent {
   venue?: string;
   capacity?: number | string | null;
   organizer?: string;
-  is_published?: boolean;
   is_virtual?: boolean;
   virtual_link?: string;
   organizer_email?: string;
@@ -114,7 +115,9 @@ export const normalizeEvent = (event: any): NormalizedEvent => {
       (event.ticketing?.base_price != null ? `$${Number(event.ticketing.base_price).toFixed(2)}` : undefined),
     sku: `EVT-${event.id}`,
     location: buildLocationLabel(event),
-    is_active: event.status?.is_published ?? false,
+    is_active: (event.status?.is_published && event.status?.is_approved) ?? false,
+    is_approved: event.status?.is_approved ?? false,
+    is_published: event.status?.is_published ?? false,
     featured_image: featuredImage,
     gallery,
     media: media.length ? media : [{ original_url: 'https://via.placeholder.com/400x300?text=Event' }],
@@ -127,7 +130,6 @@ export const normalizeEvent = (event: any): NormalizedEvent => {
     organizer: event.organizer_name ?? event.organizer?.name ?? '',
     organizer_email: event.organizer_email ?? '',
     organizer_phone: event.organizer_phone ?? '',
-    is_published: event.status?.is_published ?? false,
     is_virtual: event.schedule?.is_virtual ?? false,
     virtual_link: event.schedule?.virtual_link ?? '',
     latitude: event.location?.latitude,

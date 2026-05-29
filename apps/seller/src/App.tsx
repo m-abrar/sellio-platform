@@ -40,6 +40,7 @@ import MembershipsPage from './pages/memberships/MembershipsPage';
 import ActivityPage from './pages/activity/ActivityPage';
 import ActivityDetailPage from './pages/activity/ActivityDetailPage';
 import DashboardHome from './pages/dashboard/DashboardHome';
+import LiveInteractionsPage from './pages/dashboard/LiveInteractionsPage';
 import NotificationsPage from './pages/notifications/NotificationsPage';
 import Login from './pages/Login';
 import Error404 from './pages/Error404';
@@ -97,6 +98,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<DashboardHome />} />
+              <Route path="live-interactions" element={<LiveInteractionsPage />} />
               <Route path="properties" element={<PropertiesPage />} />
               <Route path="properties/create" element={<CreateProperty />} />
               <Route path="properties/edit/:slug" element={<CreateProperty />} />

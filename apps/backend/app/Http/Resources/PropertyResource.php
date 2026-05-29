@@ -142,6 +142,7 @@ class PropertyResource extends JsonResource
                 'is_rental'    => (bool) $this->is_rental,
                 'is_sale'      => (bool) $this->is_sale,
                 'is_new'       => (bool) $this->is_new,
+                'is_approved'  => !is_null($this->approved_at),
             ],
             
             'rules'        => $this->rules,

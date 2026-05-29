@@ -476,7 +476,7 @@ export default function ActivityDetailPage() {
                   </div>
                 </div>
               </div>
-            ) : module === 'services' && type === 'inquiries' ? (
+            ) : module === 'services' && (type === 'inquiries' || type === 'quotes' || type === 'appointments') ? (
               <div className="space-y-10 animate-in fade-in duration-500">
                 {/* 1. Service Details Timeline Grid */}
                 <div>
@@ -485,8 +485,8 @@ export default function ActivityDetailPage() {
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
                       <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Desired Start</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
-                        {activity.raw.requested_date 
-                          ? new Date(activity.raw.requested_date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) 
+                        {activity.raw.requested_date || activity.raw.scheduled_at 
+                          ? new Date((activity.raw.requested_date || activity.raw.scheduled_at) as string).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) 
                           : 'Flexible / Asap'}
                       </p>
                     </div>
@@ -499,7 +499,7 @@ export default function ActivityDetailPage() {
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
                       <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Inquiry Date</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
-                        {activity.raw.created_at ? new Date(activity.raw.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '—'}
+                        {activity.raw.created_at ? new Date(activity.raw.created_at as string).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '—'}
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
@@ -543,7 +543,7 @@ export default function ActivityDetailPage() {
                   <div className="space-y-3.5">
                     <div className="flex justify-between items-center text-xs font-bold text-slate-500">
                       <span>Quoted Service Rate</span>
-                      <span className="text-slate-900">${Number(activity.raw.quoted_price || activity.raw.total_price || 150).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                      <span className="text-slate-900">${Number(activity.raw.quoted_price || activity.raw.total_price || activity.raw.price || 150).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
                     <div className="flex justify-between items-center text-xs font-bold text-slate-500">
                       <span>Scope / Size multiplier</span>
@@ -555,7 +555,7 @@ export default function ActivityDetailPage() {
                     </div>
                     <div className="border-t border-slate-200/60 my-2 pt-4 flex justify-between items-baseline">
                       <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Estimated Project Total</span>
-                      <span className="text-2xl font-black text-[#6610f2] italic tracking-tight">${Number(activity.raw.quoted_price || activity.raw.total_price || 150).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                      <span className="text-2xl font-black text-[#6610f2] italic tracking-tight">${Number(activity.raw.quoted_price || activity.raw.total_price || activity.raw.price || 150).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
                   </div>
                 </div>

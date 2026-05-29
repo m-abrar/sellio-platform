@@ -47,6 +47,11 @@ class EventController extends Controller
 
     public function store(EventRequest $request): JsonResponse
     {
+        $user = Auth::user();
+        if ($user->hasReachedListingLimit()) {
+            return $this->successResponse(null, __('You have reached your listing limit. Please upgrade your plan.'), 403);
+        }
+
         $event = $this->eventService->saveEvent($request->validated());
         $this->handleMedia($event, $request);
 

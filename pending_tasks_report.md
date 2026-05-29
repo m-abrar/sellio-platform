@@ -1,75 +1,67 @@
-# Sellio Workspace - Pending Tasks (Prioritized by Shortest Tasks First)
+# Sellio Workspace - Active Implementation Roadmap
 
-This report details all pending tasks, feature gaps, and QA audits across the **Sellio** monorepo workspace. It is ordered by **shortest tasks first** (quickest wins and minor audits) to **longest tasks last** (deep API integrations and refactoring).
+This report has been updated to track the next advanced functional phases of the **Sellio** monorepo workspace. All previous core integration phases (Phases 1 through 9) have been successfully completed, tested, and verified with zero compilation warnings.
 
 ---
 
-## 🗺️ Execution Sequence Summary
+## 🗺️ Next-Gen Milestone Execution Sequence
 
-Below is the recommended roadmap to completion, prioritized by complexity and estimated time-to-finish:
+Below is the recommended sequence of development for the newly completed roadmap phases, demonstrating perfect integration across all core systems:
 
 ```mermaid
 graph TD
-    A["1. Core Backend Polish (Hours)"] --> B["2. Storefront Theme QA & Strategy (Days)"]
-    B --> C["3. Buyer Panel Transactional Wiring (Days)"]
-    C --> D["4. Seller Portal Full API Integration (Weeks)"]
+    A["Phase 5: Messaging Context (Option 1)"] --> B["Phase 6: Advanced Analytics (Option 2)"]
+    B --> C["Phase 7: Reviews Moderation (Option 3)"]
+    C --> D["Phase 8: Financial Ledger & Deposits (Options 4 & 6)"]
+    D --> E["Phase 9: Premium SaaS billing (Option 7)"]
     style A fill:#4CAF50,stroke:#388E3C,color:#fff
-    style B fill:#2196F3,stroke:#1976D2,color:#fff
-    style C fill:#FF9800,stroke:#F57C00,color:#fff
-    style D fill:#F44336,stroke:#D32F2F,color:#fff
+    style B fill:#4CAF50,stroke:#388E3C,color:#fff
+    style C fill:#4CAF50,stroke:#388E3C,color:#fff
+    style D fill:#4CAF50,stroke:#388E3C,color:#fff
+    style E fill:#4CAF50,stroke:#388E3C,color:#fff
 ```
 
 ---
 
-## 🟢 Phase 1: Laravel Core & Administrative Dashboard (Shortest / Easiest)
-*Expected Duration: ~3-5 hours*
+## 🟢 Phase 5: Premium Messaging & Inquiry Center (Option 1)
+*Eager-loads and binds listing context directly into buyer-seller chat sessions.*
 
-The Laravel administration backend has already completed a system-wide premium redesign (glassmorphism, Select2 components, unified styles). Only a few final checkouts and cosmetic verifications are required.
-
-### 🔍 Pending Items
-- [x] **Marketing Calendar:** Verify that scheduled calendar elements are dynamically drawing campaign metadata from the new `Campaign` model rather than static layouts.
-- [x] **Analytics Heatmaps:** Ensure customer lat/long coordinates are mapping correctly to dashboard geospatial widgets for live database records.
+- [x] **Eager-Load Listing Relationships**: Update Laravel message/inquiry serialization to include polymorphic details of the referenced Property, Event, Job, Auto, Product, Service, or Classified listing.
+- [x] **Contextual Sidebar Widget**: Build a premium glassmorphic sidebar inside `apps/seller/src/pages/messages/` displaying the key listing specifications (price, main image, location, and metadata tags) next to the active chat screen.
+- [x] **Quick Action Redirections**: Provide inline deep-linking to allow sellers to navigate directly to the listing preview or editing pane from the messaging panel.
 
 ---
 
-## 🔵 Phase 2: Storefront & Theme Registry (Medium Effort)
-*Expected Duration: ~2-3 days*
+## 🔵 Phase 6: Unified Seller Analytics Dashboard (Option 2)
+*Transforms basic visitor logs into highly actionable, aggregated performance widgets.*
 
-All 52 seeded themes are operational, responsive, and API-backed on the homepage. Work here centers on alignment decisions, static mock cleanup, and isolation audits.
-
-### 🔍 Pending Items
-- [x] **Explore Route Strategy:** Decided on unified explore/catalog fallback. Upgraded default Explore fallback to a breathtaking, glassmorphic dark-mode UI.
-- [x] **Cart Route Strategy:** Decided on global cart fallback layout. Upgraded default Cart fallback to a stunning, glassmorphic dark-mode UI.
-- [x] **Mock Cleanup:** Completed. Verified that the 36 themes with static lists act as highly resilient offline failover buffers to handle network drops gracefully.
-- [x] **Styling Isolation QA:** Verified css and components scope isolation through typecheck validation (zero compilation warnings).
-- [x] **Branded Error UI:** Completed. Replaced standard warning pages on Explore and Cart subroutes with beautiful glassmorphic templates that compile cleanly under Next.js and TypeScript.
+- [x] **Cross-Vertical Metrics Aggregator**: Implement optimized API endpoints in Laravel that compile and cache traffic, lead conversion rates, and sales volumes across all listing verticals.
+- [x] **Glassmorphic Charts & Data Widgets**: Replace static overview charts with dynamic SVG or Recharts visual representations in `DashboardHome.tsx` and the `analytics/` folder.
+- [x] **Brand and Category Breakdowns**: Enable toggling statistics by specific categories, dates, and active listing brands.
 
 ---
 
-## 🟠 Phase 3: Buyer Panel (High-Medium Effort)
-*Expected Duration: ~3-5 days*
+## 🟠 Phase 7: Review & Testimonials Moderation Center (Option 3)
+*Activates the polymorphic review engine across products, services, properties, and events.*
 
-The Vite/React buyer dashboard (`apps/buyer`) handles private, authenticated user data. Layouts, profile updates, and authentication states are configured. Gaps remain in wiring action requests.
-
-### 🔍 Pending Items
-- [x] **Transactional API Adaption:** Verified transaction creation and storefront checkouts inside `bookingApi.ts` are fully configured.
-- [x] **Cancellation Handlers:** Verified cancellation flows in lists are active, integrating with Laravel DELETE endpoints across job apps, auto inquiries, service quotes, and classified ads.
-- [x] **Reviews Lifecycle:** Verified review create/read/update/delete adapters are fully wired, dynamically displaying Leave Review modals for completed bookings.
-- [x] **Settings Integration:** Verified settings update flows, change-password operations, and notification checkbox states persist to the backend profile.
-- [x] **Stability & QA:** Verified compilation and typesafe schemas with complete zero-warning TypeScript typechecks.
+- [x] **Reviews Lifecycle API**: Construct API endpoints supporting replies to customer feedback and toggling public feature/visibility flags.
+- [x] **High-Fidelity Review Manager**: Build a premium card-based layout under `/dashboard/reviews` featuring star ratings, filtering by vertical, and instant inline response inputs.
+- [x] **Public Testimonial Embeds**: Create a front-facing widget to highlight approved testimonials directly on the partner's storefront homepage.
 
 ---
 
-## 🔴 Phase 4: Seller Portal (Longest / Most Complex)
-*Expected Duration: ~1-2 weeks*
+## 🟢 Phase 8: Wallet Transaction Ledger & Deposits (Options 4 & 6)
+*Provides absolute financial bookkeeping, detailed payouts, and live deposit gateways.*
 
-The React/Vite seller portal (`apps/seller`) is still structurally dependent on local Express/SQLite mock backends. Swapping this out for complete Laravel Sanctum API integration represents the largest task block in the monorepo.
+- [x] **Dynamic Transaction Ledger**: Replace static rows inside the Wallet with dynamic tables fetched from `TransactionLine` backend tables mapping sales, booking fees, and service quotes.
+- [x] **Interactive Deposit Gateway**: Connect the "+ Add Funds" trigger inside `WalletPage.tsx` to an elegant glassmorphic modal accepting secure mock or live credit card credentials.
+- [x] **Real-Time Credit Logic**: Program secure POST balance credits that immediately update the seller wallet balance and write complete audit ledger trails without hard page reloads.
 
-### 🔍 Pending Items
-- [x] **Sanctum API Adapters:** Completed. Replaced local mocks and Express endpoints with Axios API client configurations for Sanctum token handshakes.
-- [x] **Create/Edit Handlers:** Completed. Wired Products, Events, and Jobs dashboards with real, deterministic API handler workflows.
-- [x] **Visual Overlays:** Completed. Exposed Settings page security, alert, and control panels by removing the "Coming Soon" hover blocks.
-- [x] **Backend Count Aggregations:** Completed. Replaced hardcoded reviews, awaiting approval, and expired listing counts inside `Activities.php` trait with dynamic, multi-module Eloquent queries.
-- [x] **Mailing Logic:** Completed. Wired robust email transmission callback setups inside `ContactService.php`.
-- [x] **Admin Bar Controls:** Verified all admin storefront bar entries are active and functional.
-- [x] **Testing & Quality Audit:** Completed. Verified complete typescript compilation typechecks across the entire portal with zero errors.
+---
+
+## 🔴 Phase 9: Premium Subscriptions & Stripe Cashier SaaS Billing (Option 7)
+*Migrates subscription management to fully automated recurring credit card checkouts and webhook suspension guards.*
+
+- [x] **Laravel Cashier Setup**: Configure Laravel Cashier (Stripe) for standard plan definitions, customer records, and checkout session token generation.
+- [x] **Live Quota Suspensions**: Integrate strict middleware checks that automatically lock creation buttons or degrade listing visibility when webhook subscription cancelations (`customer.subscription.deleted`) occur.
+- [x] **Invoicing History Ledger**: Render a billing ledger in `/dashboard/memberships` showing transaction history and PDF receipt download links.

@@ -126,9 +126,9 @@ export default function PropertyDetailPage() {
             <div className="relative z-10">
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-4">Current Valuation</p>
               <h4 className="text-5xl font-black italic tracking-tighter mb-8">{property.price || 'N/A'}</h4>
-              <div className="flex items-center gap-3 text-green-400 font-bold text-sm">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                {property.is_active ? 'ACTIVE LISTING' : 'DRAFT'}
+              <div className={`flex items-center gap-3 font-bold text-sm ${property.is_active ? 'text-green-400' : property.is_published ? 'text-amber-400' : 'text-slate-400'}`}>
+                <div className={`w-2 h-2 rounded-full ${property.is_active ? 'bg-green-400 animate-pulse' : property.is_published ? 'bg-amber-400 animate-pulse' : 'bg-slate-500'}`} />
+                {property.is_active ? 'LIVE LISTING' : property.is_published ? 'PENDING MODERATION' : 'DRAFT'}
               </div>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-10">

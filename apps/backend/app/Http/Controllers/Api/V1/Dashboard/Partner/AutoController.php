@@ -42,8 +42,13 @@ class AutoController extends Controller
 
     public function store(AutoRequest $request): JsonResponse
     {
+        $user = Auth::user();
+        if ($user->hasReachedListingLimit()) {
+            return $this->successResponse(null, __('You have reached your listing limit. Please upgrade your plan.'), 403);
+        }
+
         $data = $request->safe()->except(['main_image', 'gallery', 'existing_main_media_id', 'existing_media_ids', 'sync_existing_media']);
-        $auto = $this->autoService->saveAuto(Auth::user(), $data);
+        $auto = $this->autoService->saveAuto($user, $data);
         $this->handleMedia($auto, $request);
 
         return $this->successResponse(

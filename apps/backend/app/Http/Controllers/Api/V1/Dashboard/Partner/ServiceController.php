@@ -47,8 +47,13 @@ class ServiceController extends Controller
 
     public function store(ServiceRequest $request): JsonResponse
     {
+        $user = Auth::user();
+        if ($user->hasReachedListingLimit()) {
+            return $this->successResponse(null, __('You have reached your listing limit. Please upgrade your plan.'), 403);
+        }
+
         $data = $request->safe()->except(['main_image', 'gallery', 'existing_main_media_id', 'existing_media_ids', 'sync_existing_media']);
-        $service = $this->serviceService->saveService(Auth::user(), $data);
+        $service = $this->serviceService->saveService($user, $data);
         $this->handleMedia($service, $request);
 
         return $this->successResponse(

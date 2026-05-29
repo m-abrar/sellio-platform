@@ -51,12 +51,17 @@ class ProductController extends Controller
     }
 
     public function store(SaveProductRequest $request) {
-        return \Illuminate\Support\Facades\DB::transaction(function () use ($request) {
+        $user = auth()->user();
+        if ($user->hasReachedListingLimit()) {
+            return $this->successResponse(null, __('You have reached your listing limit. Please upgrade your plan.'), 403);
+        }
+
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($request, $user) {
             // Use safe()->except to remove media and polymorphic fields from the SQL insert
             $data = $request->safe()->except(['main_image', 'gallery', 'approved_at', 'user_id', 'tags', 'features']);
 
             $product = Product::create($data + [
-                'user_id' => auth()->id(),
+                'user_id' => $user->id,
                 // 'approved_at' is NULL by default, requiring admin moderation
             ]);
             

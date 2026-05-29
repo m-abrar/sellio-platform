@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlineCheck, HiOutlineSparkles } from 'react-icons/hi2';
 import { getMembershipPlans, subscribeToPlan } from '../../api/plans';
+import { getDashboardData } from '../../api/dashboard';
 import { toast } from 'sonner';
 
 export default function MembershipsPage() {
   const [memberships, setMemberships] = useState<any[]>([]);
+  const [limits, setLimits] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [upgradingPlanId, setUpgradingPlanId] = useState<number | null>(null);
 
   const fetchPlans = async () => {
     setIsLoading(true);
     try {
-      const response = await getMembershipPlans();
-      setMemberships(response.data.data);
+      const [plansRes, dashboardRes] = await Promise.all([
+        getMembershipPlans(),
+        getDashboardData()
+      ]);
+      setMemberships(plansRes.data.data);
+      setLimits(dashboardRes.data.subscriptionLimits);
     } catch (error) {
       console.error('Failed to fetch memberships', error);
     } finally {
@@ -42,6 +48,60 @@ export default function MembershipsPage() {
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader badge="Subscription" title="Partner" subtitle="Memberships" />
+
+      {/* Dynamic Active Quota Alert Card */}
+      {!isLoading && limits && (
+        <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-10 shadow-sm relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
+          
+          {/* Left Side: Plan Info and Progress */}
+          <div className="w-full md:flex-1 space-y-6">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-500 mb-2">Active Subscription Status</p>
+              <h3 className="text-2xl md:text-3xl font-black italic tracking-tight text-slate-900 flex items-center gap-3">
+                {limits.plan_title}
+                <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${limits.is_limit_exceeded ? 'bg-red-50 text-red-500 border border-red-100' : 'bg-green-50 text-green-600 border border-green-100'}`}>
+                  {limits.is_limit_exceeded ? 'Limit Reached ⚠️' : 'Active ✅'}
+                </span>
+              </h3>
+            </div>
+
+            {/* Quota Progress */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-baseline text-xs">
+                <span className="font-bold text-slate-400">Total Listings Usage</span>
+                <span className="font-black text-slate-900">
+                  {limits.current_listings_count} <span className="text-slate-400 font-medium">/ {limits.max_listings === 999 ? 'Unlimited' : `${limits.max_listings} listings`}</span>
+                </span>
+              </div>
+
+              {/* Progress Bar */}
+              {limits.max_listings > 0 && limits.max_listings !== 999 ? (
+                <div className="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div 
+                    style={{ width: `${Math.min(100, (limits.current_listings_count / limits.max_listings) * 100)}%` }}
+                    className={`h-full rounded-full transition-all duration-1000 bg-gradient-to-r ${limits.is_limit_exceeded ? 'from-red-500 to-[#6610f2]' : 'from-[#6610f2] to-purple-500'}`}
+                  />
+                </div>
+              ) : (
+                <div className="w-full h-3.5 bg-purple-50 rounded-full flex items-center px-1">
+                  <div className="w-full h-1.5 bg-[#6610f2] rounded-full" />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right Side: Visual Metrics Indicator */}
+          <div className="w-full md:w-auto shrink-0 bg-slate-50/50 border border-slate-100 rounded-3xl p-6 text-center md:text-left min-w-[200px]">
+            <div className="text-3xl font-black italic tracking-tighter text-slate-900 mb-1">
+              {limits.max_listings === 999 ? '0%' : `${Math.round(Math.min(100, (limits.current_listings_count / limits.max_listings) * 100))}%`}
+            </div>
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Quota Consumed</p>
+          </div>
+
+          {/* Background subtle glow */}
+          <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-[#6610f2]/5 rounded-full blur-[80px] pointer-events-none" />
+        </div>
+      )}
 
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">

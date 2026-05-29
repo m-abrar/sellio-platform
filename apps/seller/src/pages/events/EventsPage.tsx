@@ -4,18 +4,28 @@ import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
 import { toast } from 'sonner';
 import { deleteEvent, getEvents } from '../../api/events';
+import { getDashboardData } from '../../api/dashboard';
+import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
 import { triggerDeletion } from '../../utils/animations';
 
 export default function EventsPage() {
   const navigate = useNavigate();
   const [events, setEvents] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [limits, setLimits] = useState<any>(null);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
 
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
-      const response = await getEvents();
-      setEvents(response.data);
+      const [eventsResponse, dashboardResponse] = await Promise.all([
+        getEvents(),
+        getDashboardData().catch(() => null)
+      ]);
+      setEvents(eventsResponse.data);
+      if (dashboardResponse) {
+        setLimits(dashboardResponse.data.subscriptionLimits);
+      }
     } catch (error) {
       console.error('Failed to fetch events', error);
       toast.error('Failed to synchronize calendar.');
@@ -27,6 +37,14 @@ export default function EventsPage() {
   useEffect(() => {
     fetchEvents();
   }, []);
+
+  const handleCreateClick = () => {
+    if (limits?.is_limit_exceeded) {
+      setIsUpgradeModalOpen(true);
+    } else {
+      navigate('/dashboard/events/create');
+    }
+  };
 
   const handleDelete = (id: number, title: string) => {
     toast(`Decommission "${title}"?`, {
@@ -55,7 +73,7 @@ export default function EventsPage() {
         subtitle="Calendar"
       >
         <button 
-          onClick={() => navigate('/dashboard/events/create')}
+          onClick={handleCreateClick}
           className="bg-[#6610f2] text-white px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-[#7b2dfd] transition-all active:scale-95 flex items-center gap-2"
         >
           <HiOutlinePlus className="w-4 h-4" /> Create Event
@@ -75,11 +93,16 @@ export default function EventsPage() {
           <div className="lg:hidden space-y-6">
             {events.map((event) => (
               <div key={event.id} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-premium relative overflow-hidden group">
+                <div className="absolute top-8 right-8">
+                  <span className={`px-3 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest ${event.is_active ? 'bg-green-500 text-white' : event.is_published ? 'bg-amber-400 text-white animate-pulse' : 'bg-slate-500 text-white'}`}>
+                    {event.is_active ? 'Live' : event.is_published ? 'Pending' : 'Draft'}
+                  </span>
+                </div>
                 <div className="flex gap-6">
                   <div className="w-24 h-24 rounded-[2rem] overflow-hidden bg-slate-50 shrink-0 border-4 border-white shadow-md cursor-pointer" onClick={() => navigate(`/dashboard/events/view/${event.slug}`)}>
                     <img src={event.media[0]?.original_url} className="w-full h-full object-cover" alt={event.title} />
                   </div>
-                  <div className="min-w-0 flex-1 pt-1">
+                  <div className="min-w-0 flex-1 pt-1 pr-16">
                     <span className="text-[9px] font-black text-[#6610f2] bg-[#6610f2]/5 px-3 py-1 rounded-full uppercase tracking-widest">{event.sku}</span>
                     <h3 
                       className="text-lg font-black text-slate-900 truncate mt-2 italic tracking-tight cursor-pointer hover:text-[#6610f2] transition-colors"
@@ -148,8 +171,8 @@ export default function EventsPage() {
                       <div className="relative h-16 flex items-center justify-end">
                         <div className="flex flex-col items-end transition-all duration-500 group-hover:opacity-0 group-hover:translate-y-4">
                           <div className="flex items-center gap-2">
-                            <span className={`text-[11px] font-black uppercase tracking-widest ${event.is_active ? 'text-green-500' : 'text-amber-500'}`}>{event.is_active ? 'Live' : 'Draft'}</span>
-                            <span className={`w-2 h-2 rounded-full ${event.is_active ? 'bg-green-500 animate-pulse' : 'bg-amber-400'}`} />
+                            <span className={`text-[11px] font-black uppercase tracking-widest ${event.is_active ? 'text-green-500' : event.is_published ? 'text-amber-500 animate-pulse' : 'text-slate-400'}`}>{event.is_active ? 'Live' : event.is_published ? 'Pending' : 'Draft'}</span>
+                            <span className={`w-2 h-2 rounded-full ${event.is_active ? 'bg-green-500 animate-pulse' : event.is_published ? 'bg-amber-400' : 'bg-slate-400'}`} />
                           </div>
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center gap-3 opacity-0 translate-y-[-20px] group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
@@ -169,6 +192,13 @@ export default function EventsPage() {
             </table>
           </div>
         </>
+      )}
+      {limits && (
+        <UpgradePlanModal 
+          isOpen={isUpgradeModalOpen} 
+          onClose={() => setIsUpgradeModalOpen(false)} 
+          limits={limits} 
+        />
       )}
     </div>
   );

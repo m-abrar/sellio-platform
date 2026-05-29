@@ -47,8 +47,13 @@ class JobListingController extends Controller
 
     public function store(JobListingRequest $request): JsonResponse
     {
+        $user = Auth::user();
+        if ($user->hasReachedListingLimit()) {
+            return $this->successResponse(null, __('You have reached your listing limit. Please upgrade your plan.'), 403);
+        }
+
         $data = $request->validated();
-        $job = $this->jobService->saveJob(Auth::user(), $data);
+        $job = $this->jobService->saveJob($user, $data);
         $this->handleMedia($job, $request);
 
         return $this->successResponse(
