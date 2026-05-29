@@ -115,3 +115,28 @@ export const getLiveInteractions = async () => {
   return response.data.data;
 };
 
+export const getWelcomeData = async () => {
+  const response = await apiClient.get('/dashboard/partner/welcome');
+  const payload = unwrapData<PartnerWelcomeResponse>(response);
+
+  const activeInventory = 
+    (payload.partner?.properties_count ?? 0) +
+    (payload.partner?.autos_count ?? 0) +
+    (payload.partner?.products_count ?? 0) +
+    (payload.partner?.events_count ?? 0) +
+    (payload.partner?.services_count ?? 0) +
+    (payload.partner?.classifieds_count ?? 0) +
+    (payload.partner?.jobs_count ?? 0);
+
+  return {
+    data: {
+      subscriptionLimits: payload.subscription_limits ?? {
+        plan_title: 'Basic Tier',
+        max_listings: 3,
+        current_listings_count: activeInventory,
+        is_limit_exceeded: activeInventory >= 3,
+      },
+    },
+  };
+};
+

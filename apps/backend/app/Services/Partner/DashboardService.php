@@ -78,7 +78,7 @@ class DashboardService
         $maxListings = (int) ($plan?->max_listings ?? 0);
         $usage = $partner->getListingUsageDetails();
         $currentListingsCount = array_sum($usage);
-        $isLimitExceeded = ($maxListings > 0 && $maxListings !== 999) ? ($currentListingsCount >= $maxListings) : false;
+        $isLimitExceeded = $partner->hasReachedListingLimit();
 
         $subscriptionLimits = [
             'plan_title' => $plan?->title ?? 'Basic Tier',

@@ -11,7 +11,7 @@ import {
   getPropertyFormMeta,
   updateProperty,
 } from '../../api/properties';
-import { getDashboardData } from '../../api/dashboard';
+import { getWelcomeData } from '../../api/dashboard';
 import { ApiError } from '../../lib/apiError';
 
 const containerClass = 'bg-white border border-slate-100 rounded-[2rem] shadow-[0_18px_44px_rgba(0,0,0,0.035)] p-6 md:p-10';
@@ -88,7 +88,7 @@ export default function CreateProperty() {
       try {
         const [meta, dashboardResponse] = await Promise.all([
           getPropertyFormMeta(),
-          !isEditMode ? getDashboardData().catch(() => null) : Promise.resolve(null)
+          !isEditMode ? getWelcomeData().catch(() => null) : Promise.resolve(null)
         ]);
         setFormMeta(meta);
         if (dashboardResponse) {

@@ -14,7 +14,7 @@ import MediaStudio from '../../components/studio/MediaStudio';
 import PageHeader from '../../components/layout/PageHeader';
 import ActionPill from '../../utils/ActionPill';
 import { createEvent, getEventBySlug, getEventFormMeta, updateEvent } from '../../api/events';
-import { getDashboardData } from '../../api/dashboard';
+import { getWelcomeData } from '../../api/dashboard';
 import { ApiError } from '../../lib/apiError';
 
 const containerClass = 'bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12';
@@ -213,7 +213,7 @@ export default function CreateEvent() {
       try {
         const [meta, dashboardResponse] = await Promise.all([
           getEventFormMeta(),
-          !isEditMode ? getDashboardData().catch(() => null) : Promise.resolve(null)
+          !isEditMode ? getWelcomeData().catch(() => null) : Promise.resolve(null)
         ]);
         setFormMeta(meta);
         if (dashboardResponse) {
