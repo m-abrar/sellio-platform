@@ -39,6 +39,11 @@ class ProcessWithdrawalRequest extends FormRequest
                 'min:10.00',
                 'max:' . $maxBalanceDollars, 
             ],
+            'payout_method_id' => [
+                'required',
+                'integer',
+                'exists:payout_methods,id',
+            ],
         ];
     }
 }

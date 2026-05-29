@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\V1\Dashboard\Partner\{
     SubscriptionController,
     PaymentController,
     WalletController,
+    PayoutMethodController,
     NotificationController,
     CustomerController
 };
@@ -122,6 +123,14 @@ Route::prefix('wallet')->group(function () {
     Route::get('history', [WalletController::class, 'history']);
     Route::get('withdrawals', [WalletController::class, 'withdrawals']);
     Route::post('withdraw', [WalletController::class, 'processWithdrawal']);
+    Route::post('deposit', [WalletController::class, 'deposit']);
+});
+
+Route::prefix('payout-methods')->group(function () {
+    Route::get('/', [PayoutMethodController::class, 'index']);
+    Route::post('/', [PayoutMethodController::class, 'store']);
+    Route::delete('{payoutMethod}', [PayoutMethodController::class, 'destroy']);
+    Route::patch('{payoutMethod}/primary', [PayoutMethodController::class, 'setPrimary']);
 });
 
 /**

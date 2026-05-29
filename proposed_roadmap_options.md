@@ -43,3 +43,43 @@ This document details the prioritized functional upgrades, business layers, and 
     2.  Refactor the seller wallet UI to present dynamic ledger tables, withdrawal request modals, and premium glassmorphic revenue-split breakdowns.
 
 ---
+
+## 💳 Option 5: Manage Linked Accounts & Payout Methods
+
+*   **Focus:** Managing dynamic payout methods (Bank Account, PayPal email, Stripe Connect) inside `WalletPage.tsx` and the Laravel backend.
+*   **Why:** Currently, the seller dashboard uses a static placeholder ("Chase Bank **** 4290") inside `WalletPage.tsx`. To launch a production-ready marketplace platform, partners must be able to securely link, view, delete, and switch active payout methods.
+*   **Proposed Work:**
+    1.  **Backend Schema:** Create a new `payout_methods` table (fields: `id`, `partner_id`, `type` [bank, paypal, stripe], `details` [json], `is_primary`, `created_at`, `updated_at`).
+    2.  **API Endpoints:** Build index, store, destroy, and "set primary" routes inside `WalletController.php` or a dedicated `PayoutMethodController.php`.
+    3.  **Frontend State & Wiring:** Replace the hardcoded Chase Bank display inside `WalletPage.tsx` with dynamic arrays fetched from `/api/v1/dashboard/partner/payout-methods`.
+    4.  **Interactive Forms:** Wire the "+ Add New Account" button to trigger a high-fidelity glassmorphic modal with form fields for Bank details (Routing, Account number), PayPal email, or Stripe account sync.
+    5.  **Modal Integration:** Integrate the payout method selector inside the dynamic "Withdrawal Modal" to let partners choose which linked account to withdraw funds to.
+
+---
+
+## 💰 Option 6: Add Funds to Wallet Balance
+
+*   **Focus:** Integrating interactive deposits to let sellers top up their wallet balances inside `WalletPage.tsx` and the Laravel backend.
+*   **Why:** Currently, the "Add Funds" button in `WalletPage.tsx` is an inactive placeholder. Enabling deposits allows partners to add funds directly to purchase featured listing slots, premium badges, or pay for subscription plan renewals.
+*   **Proposed Work:**
+    1.  **Backend Gateway API:** Add a `POST /api/v1/dashboard/partner/wallet/deposit` route in `WalletController.php` that handles secure mock or live card payment transactions (using Stripe or PayPal APIs).
+    2.  **Balance Credit Logic:** On a successful gateway charge, credit the partner's `wallet.balance` and write a new transaction ledger record (`type` = `earning`, `status` = `Completed`, `title` = `Wallet Deposit`).
+    3.  **Frontend Deposit Modal:** Map the "Add Funds" button to launch an elegant, glassmorphic modal featuring deposit amount quick-selectors (e.g., $10, $50, $100) and card credentials input fields.
+    4.  **Real-Time Balance Update:** Fetch and refresh the active wallet state immediately upon deposit success to update the dashboard statistics without a hard page reload.
+
+---
+
+## 🛡️ Option 7: Premium Subscriptions & Stripe Cashier Billing
+
+*   **Focus:** Migrating the membership subscription engine from manual switches to recurring gateway checkouts, automated billing, and live quota guards.
+*   **Why:** To transition Sellio into a fully automated SaaS platform, plan renewals and tier transitions must handle recurring credit card billing and checkouts automatically, alongside proactive listing limit enforcement.
+*   **Proposed Work:**
+    1.  **Laravel Cashier Integration:** Setup Laravel Cashier (Stripe) or custom subscription gateways inside the backend to manage plans, customer metadata, and checkout session redirects.
+    2.  **Frontend Quota Guards:** Build React router guards and button checks in the seller panel to alert and redirect partners to `/dashboard/memberships` if they try to post listings exceeding their active tier limits (e.g., 3 listings on Starter).
+    3.  **Webhook Event Handlers:** Create API webhook handlers for Stripe events (`customer.subscription.deleted`, `invoice.payment_failed`) to automatically degrade quotas or suspend dashboard access.
+    4.  **Billing History & Invoices:** Append a billing ledger under `MembershipsPage.tsx` displaying invoice timestamps, charge totals, and PDF receipt download links.
+
+---
+
+
+

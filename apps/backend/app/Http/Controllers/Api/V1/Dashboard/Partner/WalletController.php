@@ -89,10 +89,46 @@ class WalletController extends Controller
     public function processWithdrawal(ProcessWithdrawalRequest $request, WalletService $service)
     {
         try {
-            $service->processWithdrawal($request->user(), $request->validated());
+            $payoutMethod = $request->user()->payoutMethods()->findOrFail($request->input('payout_method_id'));
+            
+            $service->processWithdrawal($request->user(), [
+                'amount' => $request->validated()['amount'],
+                'method' => $payoutMethod->type === 'bank_transfer' ? 'Bank Transfer' : ($payoutMethod->type === 'paypal' ? 'PayPal' : 'Stripe'),
+                'details' => $payoutMethod->details,
+            ]);
             
             return $this->successResponse(null, 'Withdrawal request for $' . number_format($request->validated()['amount'], 2) . ' submitted successfully. It is now pending approval.');
         } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 422);
+        }
+    }
+
+    public function deposit(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $validated = $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'card_details' => 'nullable|array',
+        ]);
+
+        $partner = $request->user();
+        $amountCents = (int)($validated['amount'] * 100);
+
+        try {
+            DB::transaction(function () use ($partner, $amountCents) {
+                // Deposit the funds using laravel-wallet package capabilities
+                $partner->deposit($amountCents, [
+                    'title' => 'Wallet Deposit',
+                    'type' => 'earning',
+                    'description' => 'Online deposit via payout ledger system',
+                ]);
+            });
+
+            return $this->successResponse(
+                null,
+                __('Funds deposited successfully! Your wallet balance has been updated.')
+            );
+        } catch (\Exception $e) {
+            Log::error('Wallet deposit error: ' . $e->getMessage());
             return $this->errorResponse($e->getMessage(), 422);
         }
     }

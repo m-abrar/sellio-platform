@@ -226,6 +226,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
     public function classifieds(): HasMany  { return $this->hasMany(Classified::class); }
     public function autos(): HasMany        { return $this->hasMany(Auto::class); }
     public function withdrawals(): HasMany  { return $this->hasMany(Withdrawal::class); }
+    public function payoutMethods(): HasMany  { return $this->hasMany(PayoutMethod::class); }
     public function reviews(): MorphMany    { return $this->morphMany(Review::class, 'reviewable'); }
     public function subscriptions(): HasMany { return $this->hasMany(Subscription::class); }
     public function subscription(): HasOne  { return $this->hasOne(Subscription::class)->where('title', 'default'); }
