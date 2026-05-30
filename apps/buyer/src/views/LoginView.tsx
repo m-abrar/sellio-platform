@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Lock, Mail, Rocket } from 'lucide-react';
 import { Button } from '../components/Button';
 import { useUser } from '../context/UserContext';
+import { getBrandSettings, BrandSettings } from '../api/brandApi';
 
 export default function LoginView() {
   const { login } = useUser();
@@ -9,6 +10,19 @@ export default function LoginView() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [brand, setBrand] = useState<BrandSettings | null>(null);
+
+  useEffect(() => {
+    const loadBrand = async () => {
+      try {
+        const data = await getBrandSettings();
+        setBrand(data);
+      } catch (error) {
+        console.error('Failed to load brand settings in login:', error);
+      }
+    };
+    loadBrand();
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -28,12 +42,18 @@ export default function LoginView() {
     <div className="min-h-screen bg-[#f7f8f5] flex items-center justify-center p-6">
       <form onSubmit={handleSubmit} className="w-full max-w-md glass-surface p-8 space-y-6">
         <div className="flex items-center gap-3">
-          <div className="h-12 w-12 rounded-2xl bg-[var(--primary-color)] text-white flex items-center justify-center">
-            <Rocket size={24} />
-          </div>
+          {brand?.site_logo ? (
+            <img src={brand.site_logo} alt={brand.site_name} className="w-12 h-12 object-contain rounded-2xl bg-zinc-50 border border-zinc-100 p-1 shrink-0" />
+          ) : (
+            <div className="h-12 w-12 rounded-2xl bg-[var(--primary-color)] text-white flex items-center justify-center shrink-0">
+              <Rocket size={24} />
+            </div>
+          )}
           <div>
-            <h1 className="text-2xl font-extrabold text-zinc-950">Buyer Login</h1>
-            <p className="text-sm text-zinc-500">Use your Sellio Laravel account.</p>
+            <h1 className="text-2xl font-extrabold text-zinc-950">
+              {brand?.site_name || 'Sellio'}
+            </h1>
+            <p className="text-sm text-zinc-500">Buyer Portal Access</p>
           </div>
         </div>
 

@@ -46,6 +46,7 @@ import NotificationsView from './views/NotificationsView';
 import { fetchNotifications } from './api/notificationApi';
 import { StatsProvider, useStats } from './context/StatsContext';
 import { UserProvider, useUser } from './context/UserContext';
+import { getBrandSettings, BrandSettings } from './api/brandApi';
 
 const MAIN_NAV = [
   { name: 'Dashboard', path: '/', icon: LayoutDashboard, badge: 'totalItemsCount' },
@@ -77,7 +78,7 @@ const API_ORIGIN = (() => {
 
 const FALLBACK_AVATAR = `${API_ORIGIN}/images/fallbacks/default-avatar.png`;
 
-function Sidebar({ isOpen, setIsOpen, stats }: { isOpen: boolean; setIsOpen: (v: boolean) => void; stats: any }) {
+function Sidebar({ isOpen, setIsOpen, stats, brand }: { isOpen: boolean; setIsOpen: (v: boolean) => void; stats: any; brand: BrandSettings | null }) {
   const location = useLocation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showTopIndicator, setShowTopIndicator] = useState(false);
@@ -188,8 +189,14 @@ function Sidebar({ isOpen, setIsOpen, stats }: { isOpen: boolean; setIsOpen: (v:
         <div className="flex flex-col h-full p-4 relative">
           <div className="h-16 flex items-center px-4 mb-4">
             <Link to="/" className="flex items-center gap-2 text-zinc-900">
-              <Rocket size={24} className="fill-[var(--primary-light)] text-[var(--primary-color)]" />
-              <span className="font-extrabold text-xl tracking-tight text-zinc-900">Sellio</span>
+              {brand?.site_logo ? (
+                <img src={brand.site_logo} alt={brand.site_name} className="w-8 h-8 object-contain rounded-lg" />
+              ) : (
+                <Rocket size={24} className="fill-[var(--primary-light)] text-[var(--primary-color)]" />
+              )}
+              <span className="font-extrabold text-xl tracking-tight text-zinc-900">
+                {brand?.site_name || 'Sellio'}
+              </span>
             </Link>
             <button onClick={() => setIsOpen(false)} className="ml-auto p-2 lg:hidden text-zinc-400 hover:text-zinc-900 hover:bg-zinc-50 rounded-xl">
               <X size={20} />
@@ -296,7 +303,7 @@ function Sidebar({ isOpen, setIsOpen, stats }: { isOpen: boolean; setIsOpen: (v:
   );
 }
 
-function Header({ setIsSidebarOpen, stats }: { setIsSidebarOpen: (v: boolean) => void; stats: any }) {
+function Header({ setIsSidebarOpen, stats, brand }: { setIsSidebarOpen: (v: boolean) => void; stats: any; brand: BrandSettings | null }) {
   const { user, logout } = useUser();
   const [localUnreadCount, setLocalUnreadCount] = useState<number | null>(null);
 
@@ -324,8 +331,14 @@ function Header({ setIsSidebarOpen, stats }: { setIsSidebarOpen: (v: boolean) =>
           <Menu size={20} />
         </button>
         <Link to="/" className="lg:hidden flex items-center gap-2 text-[var(--primary-color)]">
-          <Rocket size={20} className="fill-current" />
-          <span className="font-extrabold text-lg tracking-tight">Sellio</span>
+          {brand?.site_logo ? (
+            <img src={brand.site_logo} alt={brand.site_name} className="w-7 h-7 object-contain rounded-lg" />
+          ) : (
+            <Rocket size={20} className="fill-current" />
+          )}
+          <span className="font-extrabold text-lg tracking-tight">
+            {brand?.site_name || 'Sellio'}
+          </span>
         </Link>
       </div>
 
@@ -412,6 +425,43 @@ function AppContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { isAuthenticated, isLoading } = useUser();
   const { stats } = useStats();
+  const [brand, setBrand] = useState<BrandSettings | null>(null);
+
+  useEffect(() => {
+    const updateHeadLink = (rel: string, href: string, type?: string) => {
+      let link = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement;
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = rel;
+        if (type) link.type = type;
+        document.head.appendChild(link);
+      }
+      link.href = href;
+    };
+
+    const loadBrandSettings = async () => {
+      try {
+        const data = await getBrandSettings();
+        if (data) {
+          setBrand(data);
+          if (data.site_name) {
+            document.title = `${data.site_name} - Buyer Dashboard`;
+          }
+          if (data.site_favicon) {
+            updateHeadLink('icon', data.site_favicon, 'image/svg+xml');
+            updateHeadLink('alternate icon', data.site_favicon, 'image/x-icon');
+          }
+          if (data.site_logo) {
+            updateHeadLink('apple-touch-icon', data.site_logo);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load dynamic brand settings:', error);
+      }
+    };
+
+    loadBrandSettings();
+  }, []);
 
   React.useEffect(() => {
     // Handle window resize for sidebar
@@ -439,10 +489,10 @@ function AppContent() {
   return (
     <Router>
       <div className="min-h-screen font-sans selection:bg-[var(--primary-color)] selection:text-white">
-        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} stats={stats} />
+        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} stats={stats} brand={brand} />
         
         <div className="lg:pl-[280px] flex flex-col min-h-screen">
-          <Header setIsSidebarOpen={setIsSidebarOpen} stats={stats} />
+          <Header setIsSidebarOpen={setIsSidebarOpen} stats={stats} brand={brand} />
           
           <main className="flex-1 p-4 lg:p-8 max-w-7xl mx-auto w-full">
             <ErrorBoundary>

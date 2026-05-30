@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
@@ -9,6 +9,7 @@ import {
   HiOutlineArrowRight,
 } from 'react-icons/hi2';
 import { getAuthErrorMessage, useAuth } from '../context/AuthContext';
+import { getBrandSettings } from '../api/brand';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -17,6 +18,19 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login, isAuthenticated, hasSellerAccess, isLoading: authLoading } = useAuth();
+  const [brand, setBrand] = useState<any>(null);
+
+  useEffect(() => {
+    const loadBrand = async () => {
+      try {
+        const data = await getBrandSettings();
+        setBrand(data);
+      } catch (error) {
+        console.error('Failed to load brand settings in login:', error);
+      }
+    };
+    loadBrand();
+  }, []);
 
   if (!authLoading && isAuthenticated && hasSellerAccess) {
     return <Navigate to="/dashboard" replace />;
@@ -74,10 +88,16 @@ export default function Login() {
       <div className="w-full max-w-[420px] animate-in fade-in slide-in-from-bottom-6 duration-700">
 
         <div className="text-center mb-8 sm:mb-10">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#6610f2] rounded-2xl sm:rounded-3xl flex items-center justify-center text-white font-black text-2xl sm:text-3xl mx-auto mb-5 shadow-2xl shadow-purple-200 rotate-3 hover:rotate-0 transition-transform duration-300">
-            S
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tighter">Partner Portal</h1>
+          {brand?.site_logo ? (
+            <img src={brand.site_logo} alt={brand.site_name} className="w-14 h-14 sm:w-16 sm:h-16 object-contain rounded-2xl sm:rounded-3xl mx-auto mb-5 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-300 bg-white border border-slate-100 p-1.5" />
+          ) : (
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#6610f2] rounded-2xl sm:rounded-3xl flex items-center justify-center text-white font-black text-2xl sm:text-3xl mx-auto mb-5 shadow-2xl shadow-purple-200 rotate-3 hover:rotate-0 transition-transform duration-300">
+              S
+            </div>
+          )}
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tighter">
+            {brand?.site_name || 'Partner'} Portal
+          </h1>
           <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mt-2">Sellio Studio Access</p>
         </div>
 

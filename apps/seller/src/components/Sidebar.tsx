@@ -15,6 +15,7 @@ import {
 
 import { getSidebarCounts } from '../api/sidebar';
 import { useAuth } from '../context/AuthContext';
+import { getBrandSettings } from '../api/brand';
 
 export default function Sidebar({ user }: any) {
   const { logout } = useAuth();
@@ -24,6 +25,19 @@ export default function Sidebar({ user }: any) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [counts, setCounts] = useState<any>({});
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [brand, setBrand] = useState<any>(null);
+
+  useEffect(() => {
+    const loadBrand = async () => {
+      try {
+        const data = await getBrandSettings();
+        setBrand(data);
+      } catch (error) {
+        console.error('Failed to load brand settings in sidebar:', error);
+      }
+    };
+    loadBrand();
+  }, []);
   const [showTopIndicator, setShowTopIndicator] = useState(false);
   const [showBottomIndicator, setShowBottomIndicator] = useState(false);
   const [activeTab, setActiveTab] = useState<'operations' | 'management'>('operations');
@@ -230,9 +244,13 @@ export default function Sidebar({ user }: any) {
         <div className="flex flex-col h-full">
           <header className="flex items-center justify-between px-8 pt-12 pb-6 flex-shrink-0">
             <div className="flex items-center">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#6610f2] to-[#8b5cf6] rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-purple-200">S</div>
+              {brand?.site_logo ? (
+                <img src={brand.site_logo} alt={brand.site_name} className="w-10 h-10 object-contain rounded-xl" />
+              ) : (
+                <div className="w-10 h-10 bg-gradient-to-br from-[#6610f2] to-[#8b5cf6] rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-purple-200">S</div>
+              )}
               <div className="flex flex-col ms-3 min-w-0">
-                <span className="text-lg font-black text-slate-900 tracking-tighter leading-none">Sellio.</span>
+                <span className="text-lg font-black text-slate-900 tracking-tighter leading-none">{brand?.site_name || 'Sellio.'}</span>
                 <span className="text-[8px] font-black text-purple-500 uppercase tracking-[0.2em] mt-1">Studio Partner</span>
               </div>
             </div>
@@ -306,9 +324,13 @@ export default function Sidebar({ user }: any) {
 
         <div className="px-10 pt-12 pb-6 flex-shrink-0">
           <NavLink aria-current="page" className="flex items-center no-underline group active" to="/dashboard">
-            <div className="w-12 h-12 bg-gradient-to-br from-[#6610f2] to-[#8b5cf6] rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-purple-200 group-hover:rotate-6 transition-transform">S</div>
+            {brand?.site_logo ? (
+              <img src={brand.site_logo} alt={brand.site_name} className="w-12 h-12 object-contain rounded-2xl group-hover:rotate-6 transition-transform" />
+            ) : (
+              <div className="w-12 h-12 bg-gradient-to-br from-[#6610f2] to-[#8b5cf6] rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-purple-200 group-hover:rotate-6 transition-transform">S</div>
+            )}
             <div className="flex flex-col ms-4 min-w-0">
-              <span className="text-xl font-black text-slate-900 tracking-tighter leading-none">Sellio.</span>
+              <span className="text-xl font-black text-slate-900 tracking-tighter leading-none">{brand?.site_name || 'Sellio.'}</span>
               <span className="text-[10px] font-black text-purple-500 uppercase tracking-[0.25em] mt-1.5">Partner Studio</span>
             </div>
           </NavLink>
