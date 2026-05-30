@@ -3,7 +3,9 @@
 namespace App\Services\Admin;
 
 use App\Models\Event;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
@@ -43,6 +45,12 @@ class EventManagementService
     public function saveEvent(array $data, ?Event $event = null): Event
     {
         return DB::transaction(function () use ($data, $event) {
+            if (empty($data['slug']) && ! empty($data['title'])) {
+                $data['slug'] = Str::slug($data['title']);
+            }
+
+            $data = $this->prepareScheduleData($data);
+
             $data['is_published'] = isset($data['is_published']) ? (bool)$data['is_published'] : false;
             $data['is_featured']  = isset($data['is_featured']) ? (bool)$data['is_featured'] : false;
             $data['is_paid']      = isset($data['is_paid']) ? (bool)$data['is_paid'] : false;
@@ -77,5 +85,24 @@ class EventManagementService
 
             return $clone;
         });
+    }
+
+    /**
+     * Map form schedule fields to columns persisted on the events table.
+     *
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    protected function prepareScheduleData(array $data): array
+    {
+        if (! empty($data['start_date_time']) && ! empty($data['end_date_time'])) {
+            $start = Carbon::parse($data['start_date_time']);
+            $end = Carbon::parse($data['end_date_time']);
+            $data['duration_hours'] = max(round($start->diffInMinutes($end) / 60, 1), 0.1);
+        }
+
+        unset($data['end_date_time']);
+
+        return $data;
     }
 }

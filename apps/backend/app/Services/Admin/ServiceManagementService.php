@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\Service;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * Class ServiceManagementService
@@ -23,6 +24,15 @@ class ServiceManagementService
     public function saveService(array $data, ?Service $service = null): Service
     {
         return DB::transaction(function () use ($data, $service) {
+            if (empty($data['slug']) && ! empty($data['title'])) {
+                $data['slug'] = Str::slug($data['title']);
+            }
+
+            $data['city'] = $data['city'] ?? 'N/A';
+            $data['country'] = $data['country'] ?? 'USA';
+            $data['expertise_level'] = $data['expertise_level'] ?? 1;
+            $data['availability_schedule'] = $data['availability_schedule'] ?? 1;
+
             $data['is_published']     = isset($data['is_published']) ? (bool)$data['is_published'] : false;
             $data['is_featured']      = isset($data['is_featured']) ? (bool)$data['is_featured'] : false;
             $data['is_subscription']  = isset($data['is_subscription']) ? (bool)$data['is_subscription'] : false;

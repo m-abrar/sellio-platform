@@ -151,6 +151,7 @@
                                             <button type="button" class="btn text-danger" 
                                                     data-toggle="tooltip" title="{{ __('Purge Segment') }}" 
                                                     data-action="delete-trigger"
+                                                    data-form-id="delete-category-{{ $category->id }}"
                                                     data-confirm-title="{{ __('Purge Taxonomy?') }}"
                                                     data-confirm-text="{{ __('This segment and its associations will be removed.') }}">
                                                 <i class="fas fa-trash-alt"></i>

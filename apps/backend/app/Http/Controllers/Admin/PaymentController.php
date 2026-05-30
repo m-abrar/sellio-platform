@@ -65,6 +65,18 @@ class PaymentController extends Controller
     }
 
     /**
+     * Review payments flagged as potential duplicates.
+     */
+    public function duplicate(Request $request): View
+    {
+        $filters = $request->only(['search', 'status', 'method']);
+        $payments = $this->paymentService->getPayments($filters);
+        $pageTitle = __('Duplicate Payments Review');
+
+        return view('admin.payments.index', compact('payments', 'pageTitle'));
+    }
+
+    /**
      * Show the form for creating a new manual payment entry.
      *
      * @return \Illuminate\View\View

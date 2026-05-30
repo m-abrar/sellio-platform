@@ -32,10 +32,13 @@ class Withdrawal extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'amount',      // Stored in minor units (cents/paisa)
-        'method',      // e.g., 'paypal', 'bank_transfer', 'stripe'
-        'details',     // JSON or String containing account info
+        'amount',
+        'method',
+        'details',
         'admin_note',
+        'status',
+        'approved_at',
+        'rejected_at',
     ];
 
     /**

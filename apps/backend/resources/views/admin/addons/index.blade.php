@@ -73,7 +73,7 @@
                                         <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-40 rounded-10">
                                             <i class="fas fa-puzzle-piece text-primary"></i>
                                         </div>
-                                        <span class="font-weight-bold text-dark">{{ $addon->title }}</span>
+                                        <span class="font-weight-bold text-dark">{{ $addon->name }}</span>
                                     </div>
                                 </td>
                                 <td class="align-middle text-muted small">

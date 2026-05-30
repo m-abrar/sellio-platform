@@ -34,6 +34,11 @@ class ReportController extends Controller
         $this->analyticsService = $analyticsService;
     }
 
+    public function index(): View
+    {
+        return view('admin.reports.index');
+    }
+
     /**
      * Display the Revenue & Payments analytical dashboard.
      *

@@ -20,12 +20,11 @@ class SaveLineItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => ['required', 'string', 'max:255'],
+            'title'       => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'amount'      => ['required', 'numeric'],
-            'is_required' => ['boolean'],
-            'applies_on'  => ['required', 'string'],
-            'type'        => ['nullable', 'string', 'max:100'],
+            'applies_on'  => ['required', 'string', 'in:booking,service,item'],
+            'type'        => ['nullable', 'string', 'in:fixed,percentage'],
             'order'       => ['nullable', 'integer'],
             'status'      => ['nullable', 'in:active,inactive'],
         ];

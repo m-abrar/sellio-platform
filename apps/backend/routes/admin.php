@@ -217,7 +217,7 @@ Route::prefix('admin')
         Route::resource('auto-inquiries', AutoInquiryController::class)->middleware(['module:autos', 'can:manage-auto']);
         Route::resource('event-bookings', EventBookingController::class)->middleware(['module:events', 'can:manage-event']);
         Route::resource('job-applications', JobApplicationController::class)->middleware(['module:jobs', 'can:manage-job']);
-        Route::resource('service-quotes', ServiceQuoteController::class)->middleware(['module:services', 'can:manage-service']);
+        Route::resource('service-quotes', ServiceQuoteController::class)->except(['create', 'store'])->middleware(['module:services', 'can:manage-service']);
         Route::resource('service-appointments', ServiceAppointmentController::class)->middleware(['module:services', 'can:manage-service']);
         Route::resource('classified-inquiries', ClassifiedInquiryController::class)->middleware(['module:classifieds', 'can:manage-classified']);
 
@@ -408,6 +408,8 @@ Route::prefix('admin')
         /**
      * 8. GLOBAL ATTRIBUTES
      */
+        Route::resource('booking-line-items', BookingLineItemController::class)->except(['create', 'store']);
+
         Route::resources([
             'types' => TypeController::class ,
             'categories' => CategoryController::class ,
@@ -416,7 +418,6 @@ Route::prefix('admin')
             'amenities' => AmenityController::class ,
             'features' => FeatureController::class ,
             'tags' => TagController::class ,
-            'booking-line-items' => BookingLineItemController::class ,
             'line-items' => LineItemController::class ,
             'addons' => AddonController::class ,
         ]);

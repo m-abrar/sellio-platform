@@ -38,8 +38,19 @@ class AdvertisementRequest extends FormRequest
             'zipcodes.*'     => ['string'],
             'regions'        => ['nullable', 'array'],
             'regions.*'      => ['string'],
-            'status'         => ['nullable', 'boolean'],
+            'status'         => ['nullable', 'string', 'in:active,inactive,scheduled,expired'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('status') && ! is_string($this->input('status'))) {
+            $this->merge([
+                'status' => $this->boolean('status')
+                    ? \App\Models\Advertisement::STATUS_ACTIVE
+                    : \App\Models\Advertisement::STATUS_INACTIVE,
+            ]);
+        }
     }
 
     /**
@@ -47,10 +58,8 @@ class AdvertisementRequest extends FormRequest
      */
     protected function passedValidation(): void
     {
-        $this->merge([
-            'status' => $this->boolean('status') 
-                ? \App\Models\Advertisement::STATUS_ACTIVE 
-                : \App\Models\Advertisement::STATUS_INACTIVE,
-        ]);
+        if (! $this->filled('status')) {
+            $this->merge(['status' => \App\Models\Advertisement::STATUS_INACTIVE]);
+        }
     }
 }

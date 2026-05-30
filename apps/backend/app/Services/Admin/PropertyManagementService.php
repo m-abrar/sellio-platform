@@ -151,13 +151,34 @@ class PropertyManagementService
     protected function extractModelData(array $data): array
     {
         $filtered = collect($data)->except([
-            'amenities', 'features', 'tags', 'types', 'neighborhoods', 'seasonal_prices'
+            'amenities', 'features', 'tags', 'types', 'neighborhoods', 'seasonal_prices', 'status'
         ])->toArray();
 
-        $filtered['status']      = isset($data['status']) ? (bool)$data['status'] : false;
+        if (empty($filtered['slug']) && ! empty($filtered['title'])) {
+            $filtered['slug'] = Str::slug($filtered['title']);
+        }
+
+        if (! isset($filtered['user_id'])) {
+            $filtered['user_id'] = auth()->id();
+        }
+
+        $filtered['is_published'] = isset($data['status'])
+            ? (bool) $data['status']
+            : (isset($data['is_published']) ? (bool) $data['is_published'] : false);
         $filtered['is_featured'] = isset($data['is_featured']) ? (bool)$data['is_featured'] : false;
         $filtered['is_rental']   = isset($data['is_rental']) ? (bool)$data['is_rental'] : false;
-        $filtered['is_sale']     = isset($data['is_sale']) ? (bool)$data['is_sale'] : false;
+        $filtered['is_sale']     = isset($data['is_sale']) ? (bool)$data['is_sale'] : true;
+
+        foreach ([
+            'number_of_bedrooms' => 0,
+            'number_of_bathrooms' => 0,
+            'number_of_parking_spots' => 0,
+            'maximum_guests' => 1,
+        ] as $field => $default) {
+            if (! array_key_exists($field, $filtered) || $filtered[$field] === null || $filtered[$field] === '') {
+                $filtered[$field] = $default;
+            }
+        }
 
         if (isset($data['images']) && is_array($data['images'])) {
             $filtered['images'] = json_encode($data['images'], JSON_UNESCAPED_SLASHES);
@@ -177,7 +198,11 @@ class PropertyManagementService
     {
         $property->amenities()->sync($data['amenities'] ?? []);
         $property->tags()->sync($data['tags'] ?? []);
-        $property->types()->sync($data['types'] ?? []);
+
+        if (array_key_exists('types', $data)) {
+            $typeIds = array_values(array_filter($data['types'] ?? []));
+            $property->update(['type_id' => $typeIds !== [] ? (int) $typeIds[0] : null]);
+        }
     }
 
     /**
@@ -245,7 +270,12 @@ class PropertyManagementService
 
         $property->prices()->delete();
         foreach ($prices as $p) {
-            $property->prices()->create($p);
+            $property->prices()->create([
+                'title' => $p['name'] ?? $p['title'] ?? 'Season',
+                'start_date' => $p['start_date'],
+                'end_date' => $p['end_date'],
+                'price' => $p['price'],
+            ]);
         }
     }
 }

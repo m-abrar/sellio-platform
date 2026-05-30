@@ -27,7 +27,7 @@ class FinancialService
      */
     public function createTemplate(array $data): LineItem
     {
-        return LineItem::create($data);
+        return LineItem::create($this->normalizeTemplateData($data));
     }
 
     /**
@@ -39,7 +39,20 @@ class FinancialService
      */
     public function updateTemplate(LineItem $lineItem, array $data): bool
     {
-        return $lineItem->update($data);
+        return $lineItem->update($this->normalizeTemplateData($data));
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    private function normalizeTemplateData(array $data): array
+    {
+        $data['status'] = ($data['status'] ?? null) === 'active' ? 'active' : 'inactive';
+        $data['type'] = $data['type'] ?? 'fixed';
+        $data['order'] = $data['order'] ?? 0;
+
+        return $data;
     }
 
     /**

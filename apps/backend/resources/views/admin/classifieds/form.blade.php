@@ -95,10 +95,9 @@
                                 <div class="form-group mb-4">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Condition Scale</label>
                                     <select name="item_condition" class="form-control form-control-premium">
-                                        <option value="10" {{ old('item_condition', $classified->item_condition ?? '') == '10' ? 'selected' : '' }}>10/10 (Brand New)</option>
-                                        <option value="8" {{ old('item_condition', $classified->item_condition ?? '') == '8' ? 'selected' : '' }}>8/10 (Excellent)</option>
-                                        <option value="5" {{ old('item_condition', $classified->item_condition ?? '') == '5' ? 'selected' : '' }}>5/10 (Fair)</option>
-                                        <option value="3" {{ old('item_condition', $classified->item_condition ?? '') == '3' ? 'selected' : '' }}>3/10 (Defects)</option>
+                                        <option value="new" {{ old('item_condition', $classified->item_condition ?? '') == 'new' || old('item_condition', $classified->item_condition ?? '') == 10 ? 'selected' : '' }}>Brand New</option>
+                                        <option value="used" {{ old('item_condition', $classified->item_condition ?? '') == 'used' || old('item_condition', $classified->item_condition ?? '') == 5 ? 'selected' : '' }}>Used</option>
+                                        <option value="refurbished" {{ old('item_condition', $classified->item_condition ?? '') == 'refurbished' || old('item_condition', $classified->item_condition ?? '') == 7 ? 'selected' : '' }}>Refurbished</option>
                                     </select>
                                 </div>
                             </div>

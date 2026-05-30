@@ -73,10 +73,22 @@
                         <tr>
                             <td>{{ $transaction->reference_number ?? '—' }}</td>
                             <td>{{ setting('currency_symbol') }}{{ number_format($transaction->amount, 2) }}</td>
-                            <td>{{ $transaction->booking->property->title }}</td>
-                            <td>{{ $transaction->booking->first_name }} {{ $transaction->booking->last_name }}</td>
-                            <td>{{ \Carbon\Carbon::parse($transaction->booking->start_date)->format('d M, Y') }} - {{ \Carbon\Carbon::parse($transaction->booking->end_date)->format('d M, Y') }}</td>
-                            <td>{{ setting('currency_symbol') }}{{ number_format($transaction->booking->total_price, 2) }}</td>
+                            <td>{{ $transaction->booking?->property?->title ?? __('N/A') }}</td>
+                            <td>{{ $transaction->booking?->full_name ?? __('N/A') }}</td>
+                            <td>
+                                @if($transaction->booking)
+                                    {{ $transaction->booking->check_in_date?->format('d M, Y') }} - {{ $transaction->booking->check_out_date?->format('d M, Y') }}
+                                @else
+                                    —
+                                @endif
+                            </td>
+                            <td>
+                                @if($transaction->booking)
+                                    {{ setting('currency_symbol') }}{{ number_format($transaction->booking->total_price, 2) }}
+                                @else
+                                    —
+                                @endif
+                            </td>
                             <td class="text-center align-middle">
                                 @if($transaction->status == 'completed')
                                     <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Completed') }}</span>

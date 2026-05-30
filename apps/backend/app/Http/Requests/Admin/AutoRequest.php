@@ -53,9 +53,9 @@ class AutoRequest extends FormRequest
 
             // Address
             'address'          => ['nullable', 'string', 'max:255'],
-            'city'             => ['required', 'string', 'max:100'],
+            'city'             => ['nullable', 'string', 'max:100'],
             'state'            => ['nullable', 'string', 'max:100'],
-            'country'          => ['required', 'string', 'max:100'],
+            'country'          => ['nullable', 'string', 'max:100'],
             'zip_code'         => ['nullable', 'string', 'max:20'],
 
             // Status

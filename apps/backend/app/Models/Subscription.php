@@ -35,8 +35,11 @@ class Subscription extends Model
      */
     protected $fillable = [
         'plan_id',
+        'user_id',
         'title',
+        'status',
         'starts_at',
+        'ends_at',
     ];
 
     /**
@@ -63,6 +66,11 @@ class Subscription extends Model
     public function plan(): BelongsTo
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    public function quota(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(SubscriptionQuota::class);
     }
 
     /**

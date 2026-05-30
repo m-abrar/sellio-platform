@@ -26,7 +26,7 @@ class SubscriptionRequest extends FormRequest
         return [
             'user_id'   => 'required|exists:users,id',
             'plan_id'   => 'required|exists:plans,id',
-            'name'      => 'required|string|max:255',
+            'title'     => 'required|string|max:255',
             'status'    => ['required', Rule::in([
                 Subscription::STATUS_ACTIVE, 
                 Subscription::STATUS_ON_TRIAL, 

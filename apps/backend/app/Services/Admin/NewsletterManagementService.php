@@ -30,7 +30,7 @@ class NewsletterManagementService
                 return $q->where('source', $source);
             })
             ->when(isset($filters['confirmed']) && $filters['confirmed'] !== '', function ($q) use ($filters) {
-                return $q->where('is_confirmed', $filters['confirmed']);
+                return $q->where('is_confirmed', filter_var($filters['confirmed'], FILTER_VALIDATE_BOOLEAN));
             })
             ->paginate($perPage)
             ->withQueryString();

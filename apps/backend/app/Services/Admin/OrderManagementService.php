@@ -24,6 +24,9 @@ class OrderManagementService
             $order->shipping_address = $data['shipping_address'];
             $order->shipping_city    = $data['shipping_city'];
             $order->shipping_zip     = $data['shipping_zip'];
+            $order->shipping_country = $data['shipping_country'] ?? 'USA';
+            $order->tax_amount       = $data['tax_amount'] ?? 0;
+            $order->discount_amount  = $data['discount_amount'] ?? 0;
             $order->notes            = $data['notes'] ?? null;
             $order->user_id          = $data['user_id'];
             $order->status           = $data['status'];

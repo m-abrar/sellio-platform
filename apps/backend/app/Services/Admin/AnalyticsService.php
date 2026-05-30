@@ -194,7 +194,7 @@ class AnalyticsService
         $trendStart = Carbon::now()->subMonths(self::MONTHS_FOR_TREND)->startOfMonth();
 
         $revenueTrend = Payment::select(
-                DB::raw('DATE_FORMAT(paid_at, "%Y-%m") as month_year'),
+                DB::raw($this->monthYearExpression('paid_at') . ' as month_year'),
                 DB::raw('SUM(amount) as total_amount')
             )
             ->where('status', 'completed')
@@ -227,7 +227,7 @@ class AnalyticsService
         $trendStart = Carbon::now()->subMonths(self::MONTHS_FOR_TREND)->startOfMonth();
 
         $bookingTrend = PropertyBooking::select(
-            DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month_year'),
+            DB::raw($this->monthYearExpression('created_at') . ' as month_year'),
             DB::raw('COUNT(id) as total_count')
         )
             ->where('created_at', '>=', $trendStart)
@@ -247,5 +247,14 @@ class AnalyticsService
         }
 
         return ['labels' => $labels, 'data' => $data];
+    }
+
+    private function monthYearExpression(string $column): string
+    {
+        return match (DB::connection()->getDriverName()) {
+            'sqlite' => "strftime('%Y-%m', {$column})",
+            'pgsql' => "to_char({$column}, 'YYYY-MM')",
+            default => "DATE_FORMAT({$column}, '%Y-%m')",
+        };
     }
 }

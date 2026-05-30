@@ -63,8 +63,14 @@ class ListingQueryService
             $query = ($query === null) ? $subQuery : $query->unionAll($subQuery);
         }
 
-        // Apply global ordering and pagination
-        return $query->orderByDesc('created_at')->paginate($perPage);
+        if ($query === null) {
+            return new LengthAwarePaginator(collect(), 0, $perPage);
+        }
+
+        return DB::query()
+            ->fromSub($query, 'listings')
+            ->orderByDesc('created_at')
+            ->paginate($perPage);
     }
 
     /**

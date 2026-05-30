@@ -69,6 +69,7 @@ class Advertisement extends Model implements HasMedia
         'cities',
         'zipcodes',
         'regions',
+        'status',
     ];
 
     /**

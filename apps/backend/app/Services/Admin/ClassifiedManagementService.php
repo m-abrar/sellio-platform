@@ -3,7 +3,9 @@
 namespace App\Services\Admin;
 
 use App\Models\Classified;
+use App\Models\Type;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * Class ClassifiedManagementService
@@ -23,6 +25,8 @@ class ClassifiedManagementService
     public function saveClassified(array $data, ?Classified $classified = null): Classified
     {
         return DB::transaction(function () use ($data, $classified) {
+            $data = $this->normalizeClassifiedData($data);
+
             $data['is_published'] = isset($data['is_published']) ? (bool)$data['is_published'] : false;
             $data['is_featured']  = isset($data['is_featured']) ? (bool)$data['is_featured'] : false;
             $data['is_for_rent']  = isset($data['is_for_rent']) ? (bool)$data['is_for_rent'] : false;
@@ -46,6 +50,33 @@ class ClassifiedManagementService
 
             return $classified;
         });
+    }
+
+    /**
+     * Normalize admin form values to database-ready attributes.
+     */
+    protected function normalizeClassifiedData(array $data): array
+    {
+        if (empty($data['slug']) && ! empty($data['title'])) {
+            $data['slug'] = Str::slug($data['title']);
+        }
+
+        $data['city'] = $data['city'] ?? 'N/A';
+        $data['country'] = $data['country'] ?? 'USA';
+
+        if (empty($data['type_id'])) {
+            $data['type_id'] = Type::active()->where('is_classified', true)->value('id')
+                ?? Type::active()->value('id');
+        }
+
+        $conditionMap = ['new' => 10, 'used' => 5, 'refurbished' => 7];
+        if (! isset($data['item_condition'])) {
+            $data['item_condition'] = 5;
+        } elseif (is_string($data['item_condition']) && isset($conditionMap[$data['item_condition']])) {
+            $data['item_condition'] = $conditionMap[$data['item_condition']];
+        }
+
+        return $data;
     }
 
     /**

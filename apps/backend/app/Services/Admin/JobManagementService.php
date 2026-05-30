@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\JobListing;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * Class JobManagementService
@@ -23,6 +24,13 @@ class JobManagementService
     public function saveJob(array $data, ?JobListing $job = null): JobListing
     {
         return DB::transaction(function () use ($data, $job) {
+            if (empty($data['slug']) && ! empty($data['title'])) {
+                $data['slug'] = Str::slug($data['title']);
+            }
+
+            $data['city'] = $data['city'] ?? 'Remote';
+            $data['country'] = $data['country'] ?? 'USA';
+
             $data['is_published'] = isset($data['is_published']) ? (bool)$data['is_published'] : false;
             $data['is_featured']  = isset($data['is_featured']) ? (bool)$data['is_featured'] : false;
             $data['is_contract']  = isset($data['is_contract']) ? (bool)$data['is_contract'] : false;

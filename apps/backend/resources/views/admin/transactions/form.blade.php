@@ -81,7 +81,9 @@
         <!-- Right Column -->
         <div class="col-md-4">
         
+            @if($transaction->exists && $transaction->booking)
             @include('admin.transactions.partials.booking')
+            @endif
 
             <!-- Transaction Screenshot -->
             @include('admin._partials._image-uploader', [

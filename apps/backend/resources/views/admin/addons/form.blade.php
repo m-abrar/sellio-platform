@@ -61,7 +61,7 @@
                             <input type="text" name="name" id="name" 
                                    class="form-control form-control-hero @error('name') is-invalid @enderror" 
                                    placeholder="e.g. Premium Insurance"
-                                   value="{{ old('name', $addon->title ?? '') }}" required>
+                                   value="{{ old('name', $addon->name ?? '') }}" required>
                             @error('name') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
 

@@ -50,8 +50,10 @@ class Plan extends Model implements HasMedia
      */
     protected $fillable = [
         'title',
+        'slug',
         'description',
         'label_text',
+        'price',
         'billing_period',
         'max_listings',
         'max_addons',
@@ -78,7 +80,7 @@ class Plan extends Model implements HasMedia
         'listing_duration'      => 'integer',
         'priority_support'      => 'boolean',
         'custom_branding'       => 'boolean',
-        'analytics_access'      => 'boolean',
+        'analytics_access'      => 'string',
         'is_active'             => 'boolean',
         'is_featured'           => 'boolean',
         'is_popular'            => 'boolean',

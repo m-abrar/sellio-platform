@@ -33,7 +33,7 @@ class AddonController extends Controller
      */
     public function create(): View
     {
-        return view('admin.addons.form');
+        return view('admin.addons.form', ['addon' => new Addon()]);
     }
 
     /**

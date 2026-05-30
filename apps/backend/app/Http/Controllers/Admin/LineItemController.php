@@ -41,7 +41,7 @@ class LineItemController extends Controller
      */
     public function create(): View
     {
-        return view('admin.line-items.form');
+        return view('admin.line-items.form', ['LineItem' => new LineItem()]);
     }
 
     /**
@@ -66,7 +66,7 @@ class LineItemController extends Controller
      */
     public function edit(LineItem $lineItem): View
     {
-        return view('admin.line-items.form', compact('lineItem'));
+        return view('admin.line-items.form', ['LineItem' => $lineItem]);
     }
 
     /**

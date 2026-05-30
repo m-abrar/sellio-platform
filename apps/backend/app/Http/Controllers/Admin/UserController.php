@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Role;
 use App\Http\Requests\Admin\UserStoreRequest;
 use App\Services\Admin\UserManagementService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -41,9 +42,19 @@ class UserController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $users = User::with('roles')->latest()->paginate(15);
+        $users = User::with('roles')
+            ->when($request->search, function ($query, $search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%');
+                });
+            })
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
         return view('admin.users.index', compact('users'));
     }
 

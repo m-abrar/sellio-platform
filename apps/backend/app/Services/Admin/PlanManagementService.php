@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\Plan;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
 
 /**
  * Class PlanManagementService
@@ -106,6 +107,10 @@ class PlanManagementService
             if (isset($data[$field]) && ($data[$field] === '' || $data[$field] === null)) {
                 $data[$field] = null;
             }
+        }
+
+        if (empty($data['slug']) && ! empty($data['title'])) {
+            $data['slug'] = Str::slug($data['title']);
         }
 
         return $data;

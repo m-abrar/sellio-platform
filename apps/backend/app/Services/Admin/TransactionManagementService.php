@@ -22,9 +22,12 @@ class TransactionManagementService
      */
     public function getTransactions(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        return Transaction::with(['user', 'payable'])
+        return Transaction::with(['user', 'booking.property'])
+            ->when($filters['reference_number'] ?? null, fn ($q, $ref) => $q->where('reference_number', 'like', '%' . $ref . '%'))
+            ->when($filters['status'] ?? null, fn ($q, $status) => $q->where('status', $status))
             ->latest()
-            ->paginate($perPage);
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     /**
@@ -36,10 +39,13 @@ class TransactionManagementService
     public function createTransaction(array $data): Transaction
     {
         return DB::transaction(function () use ($data) {
+            $media = $data['media'] ?? null;
+            unset($data['media']);
+
             $transaction = Transaction::create($data);
 
-            if (isset($data['media'])) {
-                foreach ($data['media'] as $file) {
+            if ($media) {
+                foreach ($media as $file) {
                     $transaction->addMedia($file)->toMediaCollection('transaction_screenshots');
                 }
             }
@@ -58,11 +64,14 @@ class TransactionManagementService
     public function updateTransaction(Transaction $transaction, array $data): bool
     {
         return DB::transaction(function () use ($transaction, $data) {
+            $media = $data['media'] ?? null;
+            unset($data['media']);
+
             $transaction->update($data);
 
-            if (isset($data['media'])) {
+            if ($media) {
                 $transaction->clearMediaCollection('transaction_screenshots');
-                foreach ($data['media'] as $file) {
+                foreach ($media as $file) {
                     $transaction->addMedia($file)->toMediaCollection('transaction_screenshots');
                 }
             }

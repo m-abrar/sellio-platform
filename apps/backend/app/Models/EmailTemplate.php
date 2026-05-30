@@ -36,6 +36,7 @@ class EmailTemplate extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'key',
         'title',
         'subject',
         'body',

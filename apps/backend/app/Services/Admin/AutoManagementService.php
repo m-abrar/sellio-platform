@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Models\Auto;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 /**
  * Class AutoManagementService
@@ -73,6 +74,8 @@ class AutoManagementService
     public function saveAuto(array $data, ?Auto $auto = null): Auto
     {
         return DB::transaction(function () use ($data, $auto) {
+            $data = $this->normalizeAutoData($data);
+
             $data['is_published'] = isset($data['is_published']) ? (bool)$data['is_published'] : false;
             $data['is_featured']  = isset($data['is_featured']) ? (bool)$data['is_featured'] : false;
 
@@ -87,6 +90,50 @@ class AutoManagementService
 
             return Auto::create($data);
         });
+    }
+
+    /**
+     * Normalize admin form values to database-ready attributes.
+     */
+    protected function normalizeAutoData(array $data): array
+    {
+        if (empty($data['slug']) && ! empty($data['title'])) {
+            $data['slug'] = Str::slug($data['title']);
+        }
+
+        $data['city'] = $data['city'] ?? 'N/A';
+        $data['country'] = $data['country'] ?? 'USA';
+
+        $engineMap = [
+            'petrol' => 'Gasoline',
+            'diesel' => 'Diesel',
+            'electric' => 'Electric',
+            'hybrid' => 'Hybrid',
+            'lpg' => 'LPG',
+        ];
+        if (isset($data['fuel_economy']) && isset($engineMap[$data['fuel_economy']])) {
+            $data['engine_type'] = $engineMap[$data['fuel_economy']];
+            unset($data['fuel_economy']);
+        }
+
+        $transmissionMap = [
+            'automatic' => 'Automatic',
+            'manual' => 'Manual',
+            'semi-automatic' => 'Semi-Automatic',
+            'cvt' => 'CVT',
+        ];
+        if (isset($data['transmission'])) {
+            $key = strtolower($data['transmission']);
+            $data['transmission'] = $transmissionMap[$key] ?? $data['transmission'];
+        }
+
+        $drivetrainMap = ['fwd' => 'FWD', 'rwd' => 'RWD', 'awd' => 'AWD', '4wd' => '4WD'];
+        if (isset($data['drivetrain'])) {
+            $key = strtolower($data['drivetrain']);
+            $data['drivetrain'] = $drivetrainMap[$key] ?? strtoupper($data['drivetrain']);
+        }
+
+        return $data;
     }
 
     /**

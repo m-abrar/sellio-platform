@@ -24,9 +24,11 @@ class ClassifiedRequest extends FormRequest
      */
     public function rules(): array
     {
+        $classifiedId = $this->route('classified')?->id;
+
         return [
             'title'            => ['required', 'string', 'max:255'],
-            'slug'             => ['nullable', 'string', 'max:255', 'unique:classifieds,slug,' . (optional($this->route('classified'))->id)],
+            'slug'             => ['nullable', 'string', 'max:255', 'unique:classified_ads,slug,' . $classifiedId],
             'description'      => ['required', 'string'],
             'category_id'      => ['required', 'exists:categories,id'],
             'location_id'      => ['nullable', 'exists:locations,id'],

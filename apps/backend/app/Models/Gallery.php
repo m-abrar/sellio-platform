@@ -28,6 +28,7 @@ class Gallery extends Model implements HasMedia
      */
     protected $fillable = [
         'title',
+        'slug',
         'description',
     ];
 

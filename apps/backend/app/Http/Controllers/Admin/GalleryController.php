@@ -69,6 +69,7 @@ class GalleryController extends Controller
         // Standalone assets require a parent model; we create a Gallery record as the host
         $gallery = Gallery::create([
             'title' => $request->input('title') ?: 'Upload ' . now()->format('Y-m-d H:i'),
+            'slug' => Str::slug($request->input('title') ?: 'upload-' . now()->timestamp),
         ]);
 
         if ($request->hasFile('image')) {

@@ -26,7 +26,7 @@ class JobListingRequest extends FormRequest
     {
         return [
             'title'                => ['required', 'string', 'max:255'],
-            'slug'                 => ['nullable', 'string', 'max:255', 'unique:job_listings,slug,' . (optional($this->route('job_listing'))->id)],
+            'slug'                 => ['nullable', 'string', 'max:255', 'unique:joblistings,slug,' . (optional($this->route('job'))->id)],
             'description'          => ['required', 'string'],
             'category_id'          => ['required', 'exists:categories,id'],
             'location_id'          => ['nullable', 'exists:locations,id'],

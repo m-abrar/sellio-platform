@@ -69,6 +69,11 @@ class PropertyBookingManagementService
      */
     public function createBooking(array $data): PropertyBooking
     {
+        $data['user_id'] = $data['user_id'] ?? auth()->id();
+        $data['phone'] = $data['phone'] ?? '';
+        $data['total_price'] = $data['total_price'] ?? 0;
+        $data['status'] = $data['status'] ?? PropertyBooking::STATUS_PENDING;
+
         return PropertyBooking::create($data);
     }
 

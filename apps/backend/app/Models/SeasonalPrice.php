@@ -23,7 +23,7 @@ class SeasonalPrice extends Model
      */
     protected $fillable = [
         'property_id',
-        'season_name', // e.g., "Christmas Peak", "Summer Solstice"
+        'title',
         'start_date',
         'end_date',
         'price',       // The override price for this period

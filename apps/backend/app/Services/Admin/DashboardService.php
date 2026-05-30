@@ -193,10 +193,12 @@ class DashboardService
 
     private function getMonthlyRevenueChart(int $year): array
     {
-        $monthlyGross = WalletTransaction::select(DB::raw('MONTH(created_at) as month'), DB::raw('SUM(amount) / 100 as total'))
+        $monthExpression = $this->monthExpression('created_at');
+        $monthlyGross = WalletTransaction::select(DB::raw("{$monthExpression} as month"), DB::raw('SUM(amount) / 100 as total'))
             ->where('type', 'deposit')->whereYear('created_at', $year)->groupBy('month')->pluck('total', 'month')->toArray();
 
-        $monthlyPayouts = Withdrawal::select(DB::raw('MONTH(approved_at) as month'), DB::raw('SUM(amount) / 100 as total'))
+        $approvedMonthExpression = $this->monthExpression('approved_at');
+        $monthlyPayouts = Withdrawal::select(DB::raw("{$approvedMonthExpression} as month"), DB::raw('SUM(amount) / 100 as total'))
             ->where('status', 'approved')->whereYear('approved_at', $year)->groupBy('month')->pluck('total', 'month')->toArray();
 
         $gross = []; $payouts = [];
@@ -572,5 +574,14 @@ class DashboardService
         }
 
         return $pendingListingsQuery ? $pendingListingsQuery->orderByDesc('created_at')->with('user')->paginate(20) : collect();
+    }
+
+    private function monthExpression(string $column): string
+    {
+        return match (DB::connection()->getDriverName()) {
+            'sqlite' => "cast(strftime('%m', {$column}) as integer)",
+            'pgsql' => "cast(extract(month from {$column}) as integer)",
+            default => "MONTH({$column})",
+        };
     }
 }

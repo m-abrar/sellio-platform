@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TransactionRequest;
 use App\Models\Transaction;
-use App\Models\Booking;
+use App\Models\PropertyBooking;
 use App\Services\Admin\TransactionManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,7 +40,7 @@ class TransactionController extends Controller
      */
     public function index(): View
     {
-        $transactions = $this->transactionService->getTransactions();
+        $transactions = $this->transactionService->getTransactions(request()->only(['reference_number', 'status']));
 
         return view('admin.transactions.index', compact('transactions'));
     }
@@ -53,7 +53,7 @@ class TransactionController extends Controller
     public function create(): View
     {
         // RECOMMENDATION: For large datasets, replace with AJAX search endpoint
-        $bookings    = Booking::latest()->limit(100)->get();
+        $bookings    = PropertyBooking::latest()->limit(100)->get();
         $transaction = new Transaction();
         
         return view('admin.transactions.form', compact('transaction', 'bookings'));
@@ -82,8 +82,8 @@ class TransactionController extends Controller
     public function edit(Transaction $transaction): View
     {
         // RECOMMENDATION: For large datasets, replace with AJAX search endpoint
-        $bookings = Booking::latest()->limit(100)->get();
-        $transaction->load(['user', 'payable']);
+        $bookings = PropertyBooking::latest()->limit(100)->get();
+        $transaction->load(['user', 'booking']);
         
         return view('admin.transactions.form', compact('transaction', 'bookings'));
     }

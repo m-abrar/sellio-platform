@@ -66,7 +66,10 @@ class BookingManagementService
                 return new LengthAwarePaginator([], 0, $perPage);
             }
 
-            $results = $query->orderByDesc('created_at')->paginate($perPage);
+            $results = DB::query()
+                ->fromSub($query, 'bookings')
+                ->orderByDesc('created_at')
+                ->paginate($perPage);
 
             return $this->hydrateBookings($results);
         });

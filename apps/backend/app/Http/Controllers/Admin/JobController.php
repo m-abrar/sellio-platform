@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Traits\ManagesApproval;
 use App\Services\Admin\JobManagementService;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class JobController
