@@ -42,6 +42,7 @@ import ReviewsView from './views/ReviewsView';
 import LoginView from './views/LoginView';
 import StorefrontRedirectView from './views/StorefrontRedirectView';
 import NotFoundView from './views/NotFoundView';
+import NotificationsView from './views/NotificationsView';
 import { StatsProvider, useStats } from './context/StatsContext';
 import { UserProvider, useUser } from './context/UserContext';
 
@@ -296,6 +297,25 @@ function Sidebar({ isOpen, setIsOpen, stats }: { isOpen: boolean; setIsOpen: (v:
 
 function Header({ setIsSidebarOpen, stats }: { setIsSidebarOpen: (v: boolean) => void; stats: any }) {
   const { user, logout } = useUser();
+  const [localUnreadCount, setLocalUnreadCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const updateCount = () => {
+      const stored = localStorage.getItem('sellio_buyer_notifications');
+      if (stored) {
+        try {
+          const list = JSON.parse(stored);
+          const count = list.filter((n: any) => !n.read).length;
+          setLocalUnreadCount(count);
+        } catch {}
+      }
+    };
+    updateCount();
+    window.addEventListener('sellio_notifications_updated', updateCount);
+    return () => window.removeEventListener('sellio_notifications_updated', updateCount);
+  }, []);
+
+  const displayNotifCount = localUnreadCount !== null ? localUnreadCount : stats.notificationCount;
 
   return (
     <header className="h-16 bg-white/90 backdrop-blur-md border-b border-zinc-200/50 sticky top-0 z-30 px-4 lg:px-8 flex items-center justify-between">
@@ -322,14 +342,14 @@ function Header({ setIsSidebarOpen, stats }: { setIsSidebarOpen: (v: boolean) =>
         </Link>
 
         <div className="flex items-center gap-1">
-          <button className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-xl relative cursor-pointer" title="Notifications">
+          <Link to="/notifications" className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-xl relative cursor-pointer" title="Notifications">
             <Bell size={20} />
-            {stats.notificationCount > 0 && (
+            {displayNotifCount > 0 && (
               <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[8px] font-extrabold flex items-center justify-center rounded-full border border-white shadow-2xs">
-                {stats.notificationCount > 9 ? '9+' : stats.notificationCount}
+                {displayNotifCount > 9 ? '9+' : displayNotifCount}
               </span>
             )}
-          </button>
+          </Link>
           <Link to="/messages" className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-xl relative cursor-pointer" title="Inbox">
             <MessageSquare size={20} />
             {stats.messagesCount > 0 && (
@@ -431,6 +451,7 @@ function AppContent() {
                 <Route path="/messages" element={<MessagesView />} />
                 <Route path="/messages/:id" element={<MessagesView />} />
                 <Route path="/settings" element={<SettingsView />} />
+                <Route path="/notifications" element={<NotificationsView />} />
                 
                 {/* Discovery belongs in the storefront; buyer routes stay activity-focused. */}
                 <Route path="/properties" element={<StorefrontRedirectView module="properties" />} />
