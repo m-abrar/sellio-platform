@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   HiOutlineSquares2X2, HiOutlineChartBar, HiOutlineBell,
   HiOutlineFolder, HiChevronDown, HiOutlineHome, HiOutlineCalendar,
@@ -22,6 +23,47 @@ export default function Sidebar({ user }: any) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [counts, setCounts] = useState<any>({});
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showTopIndicator, setShowTopIndicator] = useState(false);
+  const [showBottomIndicator, setShowBottomIndicator] = useState(false);
+  const [activeTab, setActiveTab] = useState<'operations' | 'management'>('operations');
+  const [isActivityExpanded, setIsActivityExpanded] = useState(false);
+  const [isInventoryExpanded, setIsInventoryExpanded] = useState(false);
+  const [isRelationsExpanded, setIsRelationsExpanded] = useState(false);
+  const [isFinanceExpanded, setIsFinanceExpanded] = useState(false);
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const isScrollable = el.scrollHeight > el.clientHeight;
+    setShowTopIndicator(isScrollable && el.scrollTop > 10);
+
+    const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 10;
+    setShowBottomIndicator(isScrollable && !isAtBottom);
+  };
+
+  const scrollDown = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({
+      top: 150,
+      behavior: 'smooth',
+    });
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) {
+      handleScroll();
+      const observer = new ResizeObserver(handleScroll);
+      observer.observe(el);
+      if (el.firstElementChild) {
+        observer.observe(el.firstElementChild as HTMLElement);
+      }
+      return () => observer.disconnect();
+    }
+  }, [counts]);
 
   const prevCounts = useRef<Record<string, number>>({});
   const isFirstMount = useRef(true);
@@ -70,6 +112,43 @@ export default function Sidebar({ user }: any) {
   ];
 
   useEffect(() => {
+    const path = location.pathname;
+    
+    // Check if the current route belongs to Management tab
+    const isManagementRoute = 
+      // 1. Inventory paths: exact match or subpaths
+      modules.some(mod => path === `/dashboard/${mod.slug}` || path.startsWith(`/dashboard/${mod.slug}/`)) ||
+      // 2. Finance & Admin paths
+      ['wallet', 'transactions', 'memberships', 'analytics', 'settings'].some(key => path.startsWith(`/dashboard/${key}`));
+
+    if (isManagementRoute) {
+      setActiveTab('management');
+      // Auto-expand Inventory group if active path matches an inventory child or its subpaths
+      const isActiveInventory = modules.some(mod => path === `/dashboard/${mod.slug}` || path.startsWith(`/dashboard/${mod.slug}/`));
+      if (isActiveInventory) {
+        setIsInventoryExpanded(true);
+      }
+      // Auto-expand Finance group if active path matches a finance/setup child
+      const isActiveFinance = ['wallet', 'transactions', 'memberships', 'analytics', 'settings'].some(key => path.startsWith(`/dashboard/${key}`));
+      if (isActiveFinance) {
+        setIsFinanceExpanded(true);
+      }
+    } else {
+      setActiveTab('operations');
+      // Auto-expand Activity group if active path matches an activity child
+      const isActiveActivity = modules.some(mod => path === `/dashboard/${mod.slug}/${mod.type.toLowerCase()}`);
+      if (isActiveActivity) {
+        setIsActivityExpanded(true);
+      }
+      // Auto-expand Relations group if active path matches a relations child
+      const isActiveRelations = ['customers', 'reviews', 'messages', 'notifications'].some(key => path.startsWith(`/dashboard/${key}`));
+      if (isActiveRelations) {
+        setIsRelationsExpanded(true);
+      }
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
     if (isFirstMount.current) {
       modules.forEach(mod => { prevCounts.current[`${mod.slug}-${mod.type}`] = mod.count; });
       isFirstMount.current = false;
@@ -102,6 +181,45 @@ export default function Sidebar({ user }: any) {
     <h6 className="px-5 mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 mt-8 first:mt-0">
       {children}
     </h6>
+  );
+
+  const CollapsibleHeader = ({ 
+    label, 
+    isExpanded, 
+    onToggle 
+  }: { 
+    label: string; 
+    isExpanded: boolean; 
+    onToggle: () => void; 
+  }) => (
+    <button
+      type="button"
+      onClick={onToggle}
+      className="w-full flex items-center justify-between px-5 mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-slate-600 transition-colors mt-8 first:mt-0 outline-none focus:outline-none group"
+    >
+      <span>{label}</span>
+      <motion.div
+        animate={isExpanded ? {
+          rotate: 180,
+          y: 0,
+          scale: 1
+        } : {
+          rotate: 0,
+          y: [0, -5, 0],
+          scale: [1, 1.15, 1]
+        }}
+        transition={isExpanded ? {
+          rotate: { duration: 0.2 }
+        } : {
+          rotate: { duration: 0.2 },
+          y: { repeat: Infinity, duration: 1.4, ease: 'easeInOut' },
+          scale: { repeat: Infinity, duration: 1.4, ease: 'easeInOut' }
+        }}
+        className="text-slate-400 group-hover:text-slate-600"
+      >
+        <HiChevronDown className="w-4 h-4" />
+      </motion.div>
+    </button>
   );
 
   return (
@@ -139,10 +257,12 @@ export default function Sidebar({ user }: any) {
             <div className="grid grid-cols-1 gap-2 mb-6">
               {Array.from(new Set(modules.map(m => m.slug))).map((slug) => {
                 const count = counts[slug === 'joblistings' ? 'jobs' : slug] || 0;
+                const moduleItem = modules.find(m => m.slug === slug);
+                const displayName = moduleItem ? moduleItem.name : (slug === 'joblistings' ? 'Jobs' : slug);
                 return (
                   <NavLink key={slug} to={`/dashboard/${slug}`} className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-100 text-slate-600 font-bold text-sm active:bg-slate-50">
                     <div className="flex items-center">
-                      <HiOutlineFolder className="w-5 h-5 mr-4 text-slate-300" /> Manage {slug === 'joblistings' ? 'Jobs' : slug}
+                      <HiOutlineFolder className="w-5 h-5 mr-4 text-slate-300" /> Manage {displayName}
                     </div>
                     {count > 0 && (
                       <span className="bg-slate-100 text-slate-600 text-[9px] font-black px-2 py-0.5 rounded-full">
@@ -182,9 +302,9 @@ export default function Sidebar({ user }: any) {
       </div>
 
       {/* 2. DESKTOP SIDEBAR (UPDATED FONTS) */}
-      <aside className="hidden lg:flex flex-col sticky top-6 ml-6 h-[94dvh] w-[320px] bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] overflow-hidden">
+      <aside className="hidden lg:flex flex-col sticky top-6 ml-6 h-[94dvh] w-[320px] bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] overflow-hidden relative">
 
-        <div className="px-10 pt-12 pb-10">
+        <div className="px-10 pt-12 pb-6 flex-shrink-0">
           <NavLink aria-current="page" className="flex items-center no-underline group active" to="/dashboard">
             <div className="w-12 h-12 bg-gradient-to-br from-[#6610f2] to-[#8b5cf6] rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-purple-200 group-hover:rotate-6 transition-transform">S</div>
             <div className="flex flex-col ms-4 min-w-0">
@@ -194,85 +314,412 @@ export default function Sidebar({ user }: any) {
           </NavLink>
         </div>
 
-        <nav className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-10">
-          {/* Main Link - Increased to 15px */}
-          <NavLink to="/dashboard" end className={({ isActive }) => `flex items-center py-4 px-6 mb-8 rounded-2xl text-[15px] font-black transition-all ${isActive ? 'bg-[#6610f2] text-white shadow-xl shadow-purple-100' : 'text-slate-600 hover:bg-slate-50'}`}>
+        {/* Main Link - Studio Overview */}
+        <div className="px-6 pb-4 flex-shrink-0">
+          <NavLink to="/dashboard" end className={({ isActive }) => `flex items-center py-4 px-6 rounded-2xl text-[15px] font-black transition-all ${isActive ? 'bg-[#6610f2] text-white shadow-xl shadow-purple-100' : 'text-slate-600 hover:bg-slate-50'}`}>
             <HiOutlineSquares2X2 className="w-6 h-6 mr-3" /> Studio Overview
           </NavLink>
+        </div>
 
-          <NavGroupHeader>Activity & Bookings</NavGroupHeader>
-          <div className="space-y-1.5 mb-8">
-            {modules.map((mod, i) => (
-              <NavLink key={i} to={`/dashboard/${mod.slug}/${mod.type.toLowerCase()}`} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:text-slate-900'}`}>
-                {({ isActive }) => (
-                  <>
-                    <div className="flex items-center"><mod.icon className="w-5 h-5 mr-3 opacity-70" /> {mod.label}</div>
-                    {mod.count > 0 && <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-black ${isActive ? 'bg-white/20 text-white' : 'bg-red-500 text-white'}`}>{mod.count}</span>}
-                  </>
-                )}
+        {/* Pinned Quick-Links Dock */}
+        <div className="px-6 pb-5 flex-shrink-0 flex items-center justify-between gap-2 border-b border-slate-50">
+          {[
+            { to: '/dashboard/properties', icon: HiOutlineHome, label: 'Properties' },
+            { to: '/dashboard/messages', icon: HiOutlineChatBubbleLeftRight, label: 'Messages' },
+            { to: '/dashboard/analytics', icon: HiOutlineChartBar, label: 'Analytics' },
+            { to: '/dashboard/settings', icon: HiOutlineCog6Tooth, label: 'Settings' },
+            { to: '/dashboard/events', icon: HiOutlineCalendar, label: 'Events' }
+          ].map((item, idx) => {
+            const isActive = location.pathname.startsWith(item.to);
+            return (
+              <NavLink 
+                key={idx}
+                to={item.to}
+                title={item.label}
+                className={`w-[46px] h-[46px] rounded-2xl flex items-center justify-center border transition-all duration-300 relative group cursor-pointer ${
+                  isActive 
+                    ? 'bg-[#6610f2] border-[#6610f2] text-white shadow-lg shadow-purple-100' 
+                    : 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:text-[#6610f2] hover:border-slate-200 hover:shadow-xs'
+                }`}
+              >
+                <item.icon className="w-5 h-5 transition-transform group-hover:scale-110" />
+                {/* CSS Tooltip */}
+                <span className="absolute bottom-full mb-2 scale-0 group-hover:scale-100 transition-all duration-200 origin-bottom bg-slate-900 text-white text-[9px] font-black uppercase tracking-wider py-1.5 px-3 rounded-xl whitespace-nowrap shadow-md pointer-events-none z-50">
+                  {item.label}
+                </span>
+                <span className="absolute bottom-full mb-1 scale-0 group-hover:scale-100 transition-all duration-200 origin-bottom border-4 border-transparent border-t-slate-900 pointer-events-none z-50" />
               </NavLink>
-            ))}
-          </div>
+            );
+          })}
+        </div>
 
-          <NavGroupHeader>Inventory & Spatie Media</NavGroupHeader>
-          <div className="space-y-1.5 mb-8">
-            {Array.from(new Set(modules.map(m => m.slug))).map((slug) => {
-              const count = counts[slug === 'joblistings' ? 'jobs' : slug] || 0;
-              return (
-                <NavLink key={slug} to={`/dashboard/${slug}`} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'text-slate-900 bg-slate-50' : 'text-slate-500 hover:text-slate-900'}`}>
-                  <div className="flex items-center">
-                    <HiOutlineFolder className="w-5 h-5 mr-3 opacity-70" /> Manage {slug === 'joblistings' ? 'Jobs' : slug}
-                  </div>
-                  {count > 0 && (
-                    <span className="bg-slate-100 text-slate-600 text-[9px] font-black px-2 py-0.5 rounded-full">
-                      {count}
-                    </span>
-                  )}
-                </NavLink>
-              );
-            })}
+        {/* Premium Segmented Glowing Switcher */}
+        <div className="px-6 pb-6 flex-shrink-0">
+          <div className="bg-slate-50 p-1.5 rounded-[1.25rem] flex border border-slate-100 relative shadow-inner">
+            <button
+              type="button"
+              onClick={() => setActiveTab('operations')}
+              className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all duration-300 relative z-10 flex items-center justify-center ${
+                activeTab === 'operations' ? 'text-white' : 'text-slate-500 hover:text-slate-850'
+              }`}
+            >
+              {activeTab === 'operations' && (
+                <motion.div
+                  layoutId="active-segment-bg"
+                  className="absolute inset-0 bg-gradient-to-r from-[#6610f2] to-[#8b5cf6] rounded-xl shadow-md shadow-purple-200/40 border border-[#7c3aed]/20"
+                  style={{ zIndex: -1 }}
+                  transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+                />
+              )}
+              <motion.div
+                animate={activeTab !== 'operations' ? {
+                  rotate: [0, -12, 12, -6, 6, 0],
+                  scale: [1, 1.15, 1]
+                } : {
+                  rotate: 0,
+                  scale: 1
+                }}
+                transition={activeTab !== 'operations' ? {
+                  repeat: Infinity,
+                  repeatDelay: 2.3, // Animate periodically every 2.3 seconds
+                  duration: 0.5,
+                  ease: 'easeInOut'
+                } : {
+                  duration: 0.2
+                }}
+                className="mr-1.5 flex items-center justify-center flex-shrink-0"
+              >
+                <HiOutlineChartBar className="w-4 h-4" />
+              </motion.div>
+              Operations
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('management')}
+              className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all duration-300 relative z-10 flex items-center justify-center ${
+                activeTab === 'management' ? 'text-white' : 'text-slate-500 hover:text-slate-850'
+              }`}
+            >
+              {activeTab === 'management' && (
+                <motion.div
+                  layoutId="active-segment-bg"
+                  className="absolute inset-0 bg-gradient-to-r from-[#6610f2] to-[#8b5cf6] rounded-xl shadow-md shadow-purple-200/40 border border-[#7c3aed]/20"
+                  style={{ zIndex: -1 }}
+                  transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+                />
+              )}
+              <motion.div
+                animate={activeTab !== 'management' ? {
+                  rotate: [0, -12, 12, -6, 6, 0],
+                  scale: [1, 1.15, 1]
+                } : {
+                  rotate: 0,
+                  scale: 1
+                }}
+                transition={activeTab !== 'management' ? {
+                  repeat: Infinity,
+                  repeatDelay: 2.3, // Animate periodically every 2.3 seconds
+                  duration: 0.5,
+                  ease: 'easeInOut'
+                } : {
+                  duration: 0.2
+                }}
+                className="mr-1.5 flex items-center justify-center flex-shrink-0"
+              >
+                <HiOutlineCog6Tooth className="w-4 h-4" />
+              </motion.div>
+              Management
+            </button>
           </div>
+        </div>
 
-          <NavGroupHeader>Relations & Growth</NavGroupHeader>
-          <div className="space-y-1.5 mb-8">
-            {backOfficeLinks.slice(0, 4).map((link, i) => (
-              <NavLink key={i} to={link.to} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'text-slate-900 bg-slate-50' : 'text-slate-500 hover:text-slate-900'}`}>
-                <div className="flex items-center">
-                  <link.icon className="w-5 h-5 mr-3 opacity-70" /> {link.label}
-                </div>
-                {link.count > 0 && (
-                  <span className="bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full">
-                    {link.count}
-                  </span>
+        {/* Top scroll gradient overlay */}
+        <AnimatePresence>
+          {showTopIndicator && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute top-[264px] left-6 right-6 h-8 bg-gradient-to-b from-white to-transparent pointer-events-none z-10"
+            />
+          )}
+        </AnimatePresence>
+
+        <nav
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="flex-1 px-6 overflow-y-auto scrollbar-hide pb-10"
+        >
+
+          {activeTab === 'operations' ? (
+            <>
+              <CollapsibleHeader
+                label="Activity & Bookings"
+                isExpanded={isActivityExpanded}
+                onToggle={() => setIsActivityExpanded(!isActivityExpanded)}
+              />
+              <AnimatePresence initial={false}>
+                {isActivityExpanded && (
+                  <motion.div
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
+                    variants={{
+                      open: {
+                        height: 'auto',
+                        opacity: 1,
+                        transition: {
+                          height: { duration: 0.25, ease: 'easeInOut' },
+                          opacity: { duration: 0.2 },
+                          staggerChildren: 0.04,
+                          delayChildren: 0.05
+                        }
+                      },
+                      closed: {
+                        height: 0,
+                        opacity: 0,
+                        transition: {
+                          height: { duration: 0.2, ease: 'easeInOut' },
+                          opacity: { duration: 0.15 }
+                        }
+                      }
+                    }}
+                    className="overflow-hidden space-y-1.5 mb-6 px-1"
+                  >
+                    {modules.map((mod, i) => (
+                      <motion.div
+                        key={i}
+                        variants={{
+                          open: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
+                          closed: { opacity: 0, x: -10 }
+                        }}
+                      >
+                        <NavLink to={`/dashboard/${mod.slug}/${mod.type.toLowerCase()}`} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:text-slate-900'}`}>
+                          {({ isActive }) => (
+                            <>
+                              <div className="flex items-center"><mod.icon className="w-5 h-5 mr-3 opacity-70" /> {mod.label}</div>
+                              {mod.count > 0 && <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-black ${isActive ? 'bg-white/20 text-white' : 'bg-red-500 text-white'}`}>{mod.count}</span>}
+                            </>
+                          )}
+                        </NavLink>
+                      </motion.div>
+                    ))}
+                  </motion.div>
                 )}
-              </NavLink>
-            ))}
-          </div>
+              </AnimatePresence>
 
-          <NavGroupHeader>Finance & Setup</NavGroupHeader>
-          <div className="space-y-1.5">
-            {backOfficeLinks.slice(4).map((link, i) => (
-              <NavLink key={i} to={link.to} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'text-slate-900 bg-slate-50' : 'text-slate-500 hover:text-slate-900'}`}>
-                <div className="flex items-center">
-                  <link.icon className="w-5 h-5 mr-3 opacity-70" /> {link.label}
-                </div>
-                {link.count > 0 && (
-                  <span className="bg-slate-100 text-slate-600 text-[9px] font-black px-2 py-0.5 rounded-full">
-                    {link.count}
-                  </span>
+              <CollapsibleHeader
+                label="Relations & Growth"
+                isExpanded={isRelationsExpanded}
+                onToggle={() => setIsRelationsExpanded(!isRelationsExpanded)}
+              />
+              <AnimatePresence initial={false}>
+                {isRelationsExpanded && (
+                  <motion.div
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
+                    variants={{
+                      open: {
+                        height: 'auto',
+                        opacity: 1,
+                        transition: {
+                          height: { duration: 0.25, ease: 'easeInOut' },
+                          opacity: { duration: 0.2 },
+                          staggerChildren: 0.04,
+                          delayChildren: 0.05
+                        }
+                      },
+                      closed: {
+                        height: 0,
+                        opacity: 0,
+                        transition: {
+                          height: { duration: 0.2, ease: 'easeInOut' },
+                          opacity: { duration: 0.15 }
+                        }
+                      }
+                    }}
+                    className="overflow-hidden space-y-1.5 mb-6 px-1"
+                  >
+                    {backOfficeLinks.slice(0, 4).map((link, i) => (
+                      <motion.div
+                        key={i}
+                        variants={{
+                          open: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
+                          closed: { opacity: 0, x: -10 }
+                        }}
+                      >
+                        <NavLink to={link.to} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'text-slate-900 bg-slate-50' : 'text-slate-500 hover:text-slate-900'}`}>
+                          <div className="flex items-center">
+                            <link.icon className="w-5 h-5 mr-3 opacity-70" /> {link.label}
+                          </div>
+                          {link.count > 0 && (
+                            <span className="bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full">
+                              {link.count}
+                            </span>
+                          )}
+                        </NavLink>
+                      </motion.div>
+                    ))}
+                  </motion.div>
                 )}
-              </NavLink>
-            ))}
-          </div>
+              </AnimatePresence>
+            </>
+          ) : (
+            <>
+              <CollapsibleHeader
+                label="Inventory & Media"
+                isExpanded={isInventoryExpanded}
+                onToggle={() => setIsInventoryExpanded(!isInventoryExpanded)}
+              />
+              <AnimatePresence initial={false}>
+                {isInventoryExpanded && (
+                  <motion.div
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
+                    variants={{
+                      open: {
+                        height: 'auto',
+                        opacity: 1,
+                        transition: {
+                          height: { duration: 0.25, ease: 'easeInOut' },
+                          opacity: { duration: 0.2 },
+                          staggerChildren: 0.04,
+                          delayChildren: 0.05
+                        }
+                      },
+                      closed: {
+                        height: 0,
+                        opacity: 0,
+                        transition: {
+                          height: { duration: 0.2, ease: 'easeInOut' },
+                          opacity: { duration: 0.15 }
+                        }
+                      }
+                    }}
+                    className="overflow-hidden space-y-1.5 mb-6 px-1"
+                  >
+                    {Array.from(new Set(modules.map(m => m.slug))).map((slug) => {
+                      const count = counts[slug === 'joblistings' ? 'jobs' : slug] || 0;
+                      const moduleItem = modules.find(m => m.slug === slug);
+                      const displayName = moduleItem ? moduleItem.name : (slug === 'joblistings' ? 'Jobs' : slug);
+                      return (
+                        <motion.div
+                          key={slug}
+                          variants={{
+                            open: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
+                            closed: { opacity: 0, x: -10 }
+                          }}
+                        >
+                          <NavLink to={`/dashboard/${slug}`} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'text-slate-900 bg-slate-50' : 'text-slate-500 hover:text-slate-900'}`}>
+                            <div className="flex items-center">
+                              <HiOutlineFolder className="w-5 h-5 mr-3 opacity-70" /> Manage {displayName}
+                            </div>
+                            {count > 0 && (
+                              <span className="bg-slate-100 text-slate-600 text-[9px] font-black px-2 py-0.5 rounded-full">
+                                {count}
+                              </span>
+                            )}
+                          </NavLink>
+                        </motion.div>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <CollapsibleHeader
+                label="Finance & Setup"
+                isExpanded={isFinanceExpanded}
+                onToggle={() => setIsFinanceExpanded(!isFinanceExpanded)}
+              />
+              <AnimatePresence initial={false}>
+                {isFinanceExpanded && (
+                  <motion.div
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
+                    variants={{
+                      open: {
+                        height: 'auto',
+                        opacity: 1,
+                        transition: {
+                          height: { duration: 0.25, ease: 'easeInOut' },
+                          opacity: { duration: 0.2 },
+                          staggerChildren: 0.04,
+                          delayChildren: 0.05
+                        }
+                      },
+                      closed: {
+                        height: 0,
+                        opacity: 0,
+                        transition: {
+                          height: { duration: 0.2, ease: 'easeInOut' },
+                          opacity: { duration: 0.15 }
+                        }
+                      }
+                    }}
+                    className="overflow-hidden space-y-1.5 mb-6 px-1"
+                  >
+                    {backOfficeLinks.slice(4).map((link, i) => (
+                      <motion.div
+                        key={i}
+                        variants={{
+                          open: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
+                          closed: { opacity: 0, x: -10 }
+                        }}
+                      >
+                        <NavLink to={link.to} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'text-slate-900 bg-slate-50' : 'text-slate-500 hover:text-slate-900'}`}>
+                          <div className="flex items-center">
+                            <link.icon className="w-5 h-5 mr-3 opacity-70" /> {link.label}
+                          </div>
+                          {link.count > 0 && (
+                            <span className="bg-slate-100 text-slate-600 text-[9px] font-black px-2 py-0.5 rounded-full">
+                              {link.count}
+                            </span>
+                          )}
+                        </NavLink>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </>
+          )}
         </nav>
+
+        {/* Bottom scroll bounce indicator */}
+        <AnimatePresence>
+          {showBottomIndicator && (
+            <motion.div
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 5 }}
+              className="absolute bottom-[108px] left-6 right-6 h-16 bg-gradient-to-t from-white via-white/95 to-transparent pointer-events-none z-10 flex items-end justify-center pb-1"
+            >
+              <button
+                onClick={scrollDown}
+                className="flex flex-col items-center gap-0.5 text-slate-400 pointer-events-auto hover:text-[#6610f2] transition-colors cursor-pointer border-none bg-transparent p-0 focus:outline-none"
+              >
+                <HiChevronDown size={14} className="animate-bounce" />
+                <span className="text-[8px] font-extrabold uppercase tracking-widest leading-none">More Options</span>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="p-5 bg-white border-t border-slate-50 flex-shrink-0">
           <div className="flex items-center justify-between bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
             <div className="flex items-center gap-3">
               <img src={user?.avatar_url || `https://ui-avatars.com/api/?name=${user?.name}&background=6610f2&color=fff`} className="w-10 h-10 rounded-xl border border-white shadow-sm object-cover" alt="avatar" />
               <div className="min-w-0">
-                <p className="text-[12px] font-black text-slate-900 truncate uppercase tracking-tighter leading-none mb-1">{user?.name?.split(' ')[0]}</p>
-                <p className="text-[9px] font-bold text-green-500 uppercase tracking-wider">{user?.name || 'Seller User'}</p>
+                <p className="text-[12px] font-black text-slate-900 truncate uppercase tracking-tighter leading-none mb-1">
+                  {user?.name ? user.name.split(' ')[0] : user?.email?.split('@')[0] || 'Seller'}
+                </p>
+                <p className="text-[9px] font-bold text-green-500 uppercase tracking-wider">
+                  {user?.name || 'Studio Partner'}
+                </p>
               </div>
             </div>
             <button onClick={handleLogout} className="p-2 text-slate-300 hover:text-red-500 transition-colors">

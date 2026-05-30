@@ -140,6 +140,7 @@ function App() {
               <Route path="customers/:id" element={<CustomerDetailPage />} />
               <Route path="reviews" element={<ReviewsPage />} />
               <Route path="messages" element={<MessagesPage />} />
+              <Route path="messages/:id" element={<MessagesPage />} />
               <Route path="wallet" element={<WalletPage />} />
               <Route path="transactions" element={<TransactionsPage />} />
               <Route path="memberships" element={<MembershipsPage />} />

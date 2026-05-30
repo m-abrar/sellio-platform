@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useParams, useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import {
   HiOutlineEnvelope,
@@ -32,8 +32,10 @@ const getCategoryStyles = (type: string) => {
 
 export default function MessagesPage() {
   const { user: currentUser } = useOutletContext<any>() || {};
+  const { id } = useParams<{ id?: string }>();
+  const navigate = useNavigate();
+  const selectedId = id ? parseInt(id, 10) : null;
   const [messages, setMessages] = useState<any[]>([]);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [threadMessages, setThreadMessages] = useState<any[]>([]);
   const [partnerId, setPartnerId] = useState<number>(0);
   const [draft, setDraft] = useState('');
@@ -54,6 +56,12 @@ export default function MessagesPage() {
     };
     fetchMessages();
   }, []);
+
+  useEffect(() => {
+    if (messages.length > 0 && !id) {
+      navigate(`/dashboard/messages/${messages[0].id}`, { replace: true });
+    }
+  }, [messages, id]);
 
   useEffect(() => {
     const fetchThread = async () => {
@@ -118,7 +126,7 @@ export default function MessagesPage() {
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  onClick={() => setSelectedId(msg.id)}
+                  onClick={() => navigate(`/dashboard/messages/${msg.id}`)}
                   className={`p-6 flex items-center gap-4 hover:bg-slate-50 transition-all cursor-pointer border-b border-slate-50 last:border-0 group ${selectedId === msg.id ? 'bg-slate-50 border-l-4 border-l-[#6610f2]' : ''} ${msg.unread ? 'bg-slate-50/30' : ''}`}
                 >
                   {msg.avatarUrl ? (
@@ -151,7 +159,7 @@ export default function MessagesPage() {
                 <div className="flex-1 flex flex-col min-w-0 h-full bg-slate-50/5">
                   <div className="p-6 bg-white border-b border-slate-50 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <button onClick={() => setSelectedId(null)} className="lg:hidden p-2 text-slate-400">
+                      <button onClick={() => navigate('/dashboard/messages')} className="lg:hidden p-2 text-slate-400">
                         <HiOutlineArrowLeft className="w-5 h-5" />
                       </button>
                       {selectedMessage.avatarUrl ? (

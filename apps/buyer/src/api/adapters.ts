@@ -244,7 +244,12 @@ export function toActivity(resource: any, index = 0, fallbackModule = 'products'
     resource?.classified ||
     resource?.listing ||
     {};
-  const module = text(resource?.module || item?.module || inferModuleFromType(text(resource?.type)), fallbackModule);
+  const module = text(
+    resource?.module ||
+    item?.module ||
+    (resource?.type ? inferModuleFromType(text(resource.type)) : ''),
+    fallbackModule
+  );
 
   const status = text(resource?.status, 'pending').toLowerCase();
   const normalizedStatus = ['pending', 'confirmed', 'completed', 'cancelled'].includes(status)

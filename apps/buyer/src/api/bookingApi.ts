@@ -12,6 +12,14 @@ function activityEndpoint(type = 'booking', module?: string) {
 }
 
 function activityItems(payload: any, module?: string) {
+  if (payload && typeof payload === 'object') {
+    if ('upcomingBookings' in payload || 'pastBookings' in payload) {
+      return [
+        ...collectionData(payload.upcomingBookings),
+        ...collectionData(payload.pastBookings),
+      ];
+    }
+  }
   if (module === 'classifieds') return collectionData(payload?.inquiries || payload);
   return collectionData(payload?.bookings || payload);
 }

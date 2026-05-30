@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -22,6 +22,7 @@ import {
   X,
   Rocket,
   ChevronRight,
+  ChevronDown,
   LogOut,
   User as UserIcon
 } from 'lucide-react';
@@ -76,6 +77,49 @@ const FALLBACK_AVATAR = `${API_ORIGIN}/images/fallbacks/default-avatar.png`;
 
 function Sidebar({ isOpen, setIsOpen, stats }: { isOpen: boolean; setIsOpen: (v: boolean) => void; stats: any }) {
   const location = useLocation();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showTopIndicator, setShowTopIndicator] = useState(false);
+  const [showBottomIndicator, setShowBottomIndicator] = useState(false);
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const isScrollable = el.scrollHeight > el.clientHeight;
+    
+    // Show top indicator if we've scrolled down slightly
+    setShowTopIndicator(isScrollable && el.scrollTop > 10);
+
+    // Show bottom indicator if we haven't reached the bottom
+    const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 10;
+    setShowBottomIndicator(isScrollable && !isAtBottom);
+  };
+
+  const scrollDown = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({
+      top: 150,
+      behavior: 'smooth',
+    });
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) {
+      handleScroll();
+      
+      const observer = new ResizeObserver(handleScroll);
+      observer.observe(el);
+      
+      // Observe children to capture dynamic content shifts (e.g. stats loading)
+      if (el.firstElementChild) {
+        observer.observe(el.firstElementChild as HTMLElement);
+      }
+      
+      return () => observer.disconnect();
+    }
+  }, [stats]);
 
   const NavItem = ({ item }: { item: any }) => {
     const isActive = location.pathname === item.path;
@@ -89,22 +133,23 @@ function Sidebar({ isOpen, setIsOpen, stats }: { isOpen: boolean; setIsOpen: (v:
           "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative",
           isActive 
             ? "bg-[var(--primary-light)] text-[var(--primary-color)] font-bold" 
-            : "text-[var(--text-dark)] hover:bg-white/50"
+            : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50"
         )}
       >
         {isActive && (
           <motion.div 
             layoutId="sidebar-active-indicator"
-            className="absolute left-0 top-2 bottom-2 w-1 bg-[var(--primary-color)] rounded-r-full"
+            className="absolute left-0 top-3 bottom-3 w-1 bg-[var(--primary-color)] rounded-r-full"
           />
         )}
-        <item.icon size={20} className={cn(isActive ? "text-[var(--primary-color)]" : "text-zinc-400 group-hover:text-[var(--primary-color)]")} />
+        <item.icon size={20} className={cn(isActive ? "text-[var(--primary-color)]" : "text-zinc-400 group-hover:text-zinc-750")} />
         <span className="text-sm">{item.name}</span>
         {badgeValue > 0 && (
           <span className={cn(
             "ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full",
+            isActive ? "bg-[var(--primary-color)] text-white" :
             item.name === 'My Favorites' ? "bg-red-500 text-white" : 
-            item.name === 'Messages' ? "bg-amber-400 text-zinc-900" : "bg-[var(--primary-color)] text-white"
+            item.name === 'Messages' ? "bg-amber-400 text-zinc-900" : "bg-zinc-100 text-zinc-500"
           )}>
             {badgeValue}
           </span>
@@ -134,28 +179,80 @@ function Sidebar({ isOpen, setIsOpen, stats }: { isOpen: boolean; setIsOpen: (v:
         }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         className={cn(
-          "fixed top-0 left-0 bottom-0 w-[280px] bg-white/70 backdrop-blur-xl border-r border-white/50 z-50 lg:translate-x-0",
+          "fixed top-0 left-0 bottom-0 w-[280px] bg-white border-r border-zinc-200/80 z-50 lg:translate-x-0",
           !isOpen && "hidden lg:block"
         )}
       >
-        <div className="flex flex-col h-full p-4">
+        <div className="flex flex-col h-full p-4 relative">
           <div className="h-16 flex items-center px-4 mb-4">
-            <Link to="/" className="flex items-center gap-2 text-[var(--primary-color)]">
-              <Rocket size={24} className="fill-current" />
-              <span className="font-extrabold text-xl tracking-tight">Sellio</span>
+            <Link to="/" className="flex items-center gap-2 text-zinc-900">
+              <Rocket size={24} className="fill-[var(--primary-light)] text-[var(--primary-color)]" />
+              <span className="font-extrabold text-xl tracking-tight text-zinc-900">Sellio</span>
             </Link>
-            <button onClick={() => setIsOpen(false)} className="ml-auto p-2 lg:hidden text-zinc-500">
+            <button onClick={() => setIsOpen(false)} className="ml-auto p-2 lg:hidden text-zinc-400 hover:text-zinc-900 hover:bg-zinc-50 rounded-xl">
               <X size={20} />
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto space-y-6">
+          {/* Pinned Quick-Links Dock */}
+          <div className="px-4 pb-5 flex-shrink-0 flex items-center justify-between gap-2 border-b border-zinc-100">
+            {[
+              { to: '/', icon: LayoutDashboard, label: 'Dashboard', exact: true },
+              { to: '/messages', icon: MessageSquare, label: 'Messages' },
+              { to: '/favorites', icon: Heart, label: 'Favorites' },
+              { to: '/bookings', icon: CalendarCheck, label: 'Bookings' },
+              { to: '/settings', icon: SettingsIcon, label: 'Settings' }
+            ].map((item, idx) => {
+              const isActive = item.exact 
+                ? location.pathname === item.to 
+                : location.pathname.startsWith(item.to);
+              return (
+                <Link 
+                  key={idx}
+                  to={item.to}
+                  onClick={() => setIsOpen(false)}
+                  title={item.label}
+                  className={cn(
+                    "w-[42px] h-[42px] rounded-xl flex items-center justify-center border transition-all duration-300 relative group cursor-pointer",
+                    isActive 
+                      ? "bg-[var(--primary-color)] border-[var(--primary-color)] text-white shadow-md shadow-[var(--primary-color)]/20" 
+                      : "bg-zinc-50 border-zinc-100 text-zinc-500 hover:bg-zinc-100 hover:text-[var(--primary-color)] hover:border-zinc-200 hover:shadow-xs"
+                  )}
+                >
+                  <item.icon size={18} className="transition-transform group-hover:scale-110" />
+                  {/* CSS Tooltip */}
+                  <span className="absolute bottom-full mb-2 scale-0 group-hover:scale-100 transition-all duration-200 origin-bottom bg-zinc-900 text-white text-[9px] font-bold uppercase tracking-wider py-1.5 px-3 rounded-lg whitespace-nowrap shadow-md pointer-events-none z-50">
+                    {item.label}
+                  </span>
+                  <span className="absolute bottom-full mb-1 scale-0 group-hover:scale-100 transition-all duration-200 origin-bottom border-4 border-transparent border-t-zinc-900 pointer-events-none z-50" />
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Top scroll gradient overlay */}
+          <AnimatePresence>
+            {showTopIndicator && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute top-20 left-4 right-4 h-8 bg-gradient-to-b from-white to-transparent pointer-events-none z-10"
+              />
+            )}
+          </AnimatePresence>
+
+          <div 
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex-1 overflow-y-auto no-scrollbar space-y-6"
+          >
             <nav className="space-y-1">
               {MAIN_NAV.map((item) => <NavItem key={item.name} item={item} />)}
             </nav>
 
             <div className="px-4">
-              <hr className="border-zinc-100" />
+              <hr className="border-zinc-200/60" />
             </div>
 
             <div className="space-y-1">
@@ -164,13 +261,33 @@ function Sidebar({ isOpen, setIsOpen, stats }: { isOpen: boolean; setIsOpen: (v:
             </div>
 
             <div className="px-4">
-              <hr className="border-zinc-100" />
+              <hr className="border-zinc-200/60" />
             </div>
 
             <nav className="space-y-1">
               {FOOTER_NAV.map((item) => <NavItem key={item.name} item={item} />)}
             </nav>
           </div>
+
+          {/* Bottom scroll bounce indicator */}
+          <AnimatePresence>
+            {showBottomIndicator && (
+              <motion.div
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 5 }}
+                className="absolute bottom-4 left-4 right-4 h-16 bg-gradient-to-t from-white via-white/95 to-transparent pointer-events-none z-10 flex items-end justify-center pb-1"
+              >
+                <button
+                  onClick={scrollDown}
+                  className="flex flex-col items-center gap-0.5 text-zinc-400 pointer-events-auto hover:text-[var(--primary-color)] transition-colors cursor-pointer border-none bg-transparent p-0 focus:outline-none"
+                >
+                  <ChevronDown size={14} className="animate-bounce" />
+                  <span className="text-[8px] font-extrabold uppercase tracking-widest leading-none">More Options</span>
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.aside>
     </>
@@ -181,7 +298,7 @@ function Header({ setIsSidebarOpen, stats }: { setIsSidebarOpen: (v: boolean) =>
   const { user, logout } = useUser();
 
   return (
-    <header className="h-16 bg-white/70 backdrop-blur-md border-b border-white/50 sticky top-0 z-30 px-4 lg:px-8 flex items-center justify-between">
+    <header className="h-16 bg-white/90 backdrop-blur-md border-b border-zinc-200/50 sticky top-0 z-30 px-4 lg:px-8 flex items-center justify-between">
       <div className="flex items-center gap-4">
         <button 
           onClick={() => setIsSidebarOpen(true)}
@@ -205,19 +322,21 @@ function Header({ setIsSidebarOpen, stats }: { setIsSidebarOpen: (v: boolean) =>
         </Link>
 
         <div className="flex items-center gap-1">
-          <button className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-xl relative">
+          <button className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-xl relative cursor-pointer" title="Notifications">
             <Bell size={20} />
             {stats.notificationCount > 0 && (
-              <span className="absolute top-2 right-2 min-w-4 h-4 px-1 bg-red-500 text-white text-[8px] font-bold flex items-center justify-center rounded-full border-2 border-white">
+              <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[8px] font-extrabold flex items-center justify-center rounded-full border border-white shadow-2xs">
                 {stats.notificationCount > 9 ? '9+' : stats.notificationCount}
               </span>
             )}
           </button>
-          <Link to="/messages" className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-xl relative">
+          <Link to="/messages" className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-xl relative cursor-pointer" title="Inbox">
             <MessageSquare size={20} />
-            <span className="absolute top-2 right-2 w-4 h-4 bg-amber-400 text-zinc-900 text-[8px] font-bold flex items-center justify-center rounded-full border-2 border-white">
-              {stats.messagesCount}
-            </span>
+            {stats.messagesCount > 0 && (
+              <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 bg-amber-400 text-zinc-900 text-[8px] font-extrabold flex items-center justify-center rounded-full border border-white shadow-2xs">
+                {stats.messagesCount > 9 ? '9+' : stats.messagesCount}
+              </span>
+            )}
           </Link>
         </div>
 
@@ -310,6 +429,7 @@ function AppContent() {
                 <Route path="/" element={<DashboardOverview />} />
                 <Route path="/favorites" element={<FavoritesView />} />
                 <Route path="/messages" element={<MessagesView />} />
+                <Route path="/messages/:id" element={<MessagesView />} />
                 <Route path="/settings" element={<SettingsView />} />
                 
                 {/* Discovery belongs in the storefront; buyer routes stay activity-focused. */}

@@ -54,6 +54,9 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
   const [reviewSuccessMessage, setReviewSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    setLoading(true);
+    setError(null);
+    setActivities([]);
     fetchBookings(type, module)
       .then(setActivities)
       .catch(() => setError('Activity could not be loaded.'))

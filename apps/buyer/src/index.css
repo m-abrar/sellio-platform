@@ -8,26 +8,26 @@
 
 :root {
     /* Primary Color Palette (Purple/Indigo Focus) */
-    --primary-hue: 240; 
+    --primary-hue: 250; 
     --primary-color: hsl(var(--primary-hue), 75%, 60%);
     --primary-dark: hsl(var(--primary-hue), 70%, 50%);
     --primary-light: hsl(var(--primary-hue), 85%, 95%);
 
-    /* Backgrounds & Surfaces (Glassmorphism) */
-    --bg-body: linear-gradient(135deg, #e0e6f0 0%, #f7f9fc 100%);
-    --bg-glass: rgba(255, 255, 255, 0.7);
+    /* Backgrounds & Surfaces (Minimalist Nordic Light) */
+    --bg-body: #f8fafc; /* Beautiful clean zinc slate background canvas */
+    --bg-glass: #ffffff; /* Solid pristine white cards */
     --bg-surface: #ffffff; 
-    --bg-glass-heavy: rgba(255, 255, 255, 0.9);
+    --bg-glass-heavy: #ffffff;
     
     /* Text & Borders */
-    --text-dark: #1f2937;
-    --text-muted: #6b7280;
-    --border-color: rgba(255, 255, 255, 0.5);
+    --text-dark: #09090b; /* Deep high-contrast charcoal black */
+    --text-muted: #71717a; /* Sleek neutral gray */
+    --border-color: rgba(228, 228, 231, 0.6); /* Zinc-200 micro-thin borders */
     
-    /* Dimensions & Shadow */
-    --card-radius: 20px; 
-    --shadow-subtle: 0 10px 30px rgba(0, 0, 0, 0.1); 
-    --shadow-deep: 0 15px 40px rgba(0, 0, 0, 0.15); 
+    /* Dimensions & Shadow (Subtle Diffused SaaS Shadows) */
+    --card-radius: 24px; 
+    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.01), 0 10px 40px rgba(0, 0, 0, 0.02); 
+    --shadow-deep: 0 1px 10px rgba(0, 0, 0, 0.02), 0 25px 50px rgba(0, 0, 0, 0.04); 
 }
 
 @layer base {
@@ -96,4 +96,13 @@
 
 ::-webkit-scrollbar-thumb {
   @apply bg-zinc-300 rounded-full hover:bg-zinc-400 transition-colors;
+}
+
+/* Hide scrollbar utility class */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
