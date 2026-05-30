@@ -68,6 +68,8 @@ class ListingController extends Controller
             'is_published' => true,
         ]);
 
+        event(new \App\Events\ListingApproved($listing));
+
         return back()->with('success', __('Asset #:id approved and published.', ['id' => $listing_id]));
     }
 
@@ -90,6 +92,8 @@ class ListingController extends Controller
             'approved_at' => null,
             'is_published' => false,
         ]);
+
+        event(new \App\Events\ListingRejected($listing, 'Admin disapproval'));
 
         return back()->with('success', __('Asset #:id moved to pending.', ['id' => $listing_id]));
     }

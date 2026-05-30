@@ -53,6 +53,10 @@ class EventBookingService
         $booking->paid_amount    = $amount;
         $booking->paid_at        = Carbon::now();
         
-        return $booking->save();
+        $saved = $booking->save();
+        if ($saved) {
+            event(new \App\Events\EventTicketPurchased($booking->user, $booking));
+        }
+        return $saved;
     }
 }

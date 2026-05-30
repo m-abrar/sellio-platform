@@ -82,7 +82,16 @@ class PropertyBookingController extends Controller
             return $this->errorResponse(__('Invalid booking status requested.'), 422);
         }
 
+        $oldStatus = $propertyBooking->status;
         $propertyBooking->update(['status' => $status]);
+
+        if ($status !== $oldStatus) {
+            if ($status === 'confirmed') {
+                event(new \App\Events\PropertyBookingConfirmed($propertyBooking->user, $propertyBooking));
+            } elseif ($status === 'cancelled') {
+                event(new \App\Events\BookingCancelled($propertyBooking));
+            }
+        }
 
         return $this->successResponse(null, __('Booking status updated successfully.'));
     }

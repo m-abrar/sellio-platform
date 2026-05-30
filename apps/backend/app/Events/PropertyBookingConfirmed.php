@@ -6,7 +6,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
-use App\Models\Booking; // Assumed model for transactional data
+use App\Models\PropertyBooking;
 
 class PropertyBookingConfirmed
 {
@@ -19,9 +19,9 @@ class PropertyBookingConfirmed
      * Create a new event instance.
      *
      * @param  \App\Models\User $guest The user who made the booking.
-     * @param  \App\Models\Booking $booking The confirmed booking record.
+     * @param  \App\Models\PropertyBooking $booking The confirmed booking record.
      */
-    public function __construct(User $guest, Booking $booking)
+    public function __construct(User $guest, PropertyBooking $booking)
     {
         $this->guest = $guest;
         $this->booking = $booking;

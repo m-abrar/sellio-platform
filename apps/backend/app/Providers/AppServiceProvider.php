@@ -69,6 +69,29 @@ class AppServiceProvider extends ServiceProvider
             NewMessageSent::class,
         ], SendPartnerDatabaseNotification::class);
 
+        // 2.1 Register CartItem Observer
+        \App\Models\CartItem::observe(\App\Observers\CartItemObserver::class);
+
+        // 2.2 Wire Core Platform Event-to-Email Listener Mappings
+        Event::listen(\App\Events\UserRegistered::class, \App\Listeners\SendWelcomeEmail::class);
+        Event::listen(\App\Events\PropertyBookingConfirmed::class, \App\Listeners\SendBookingConfirmedEmail::class);
+        Event::listen(\App\Events\BookingCancelled::class, \App\Listeners\SendBookingCancelledEmail::class);
+        Event::listen(\App\Events\EventTicketPurchased::class, \App\Listeners\SendEventTicketEmail::class);
+        Event::listen(\App\Events\JobApplicationReceived::class, \App\Listeners\SendJobApplicationReceivedEmail::class);
+        Event::listen(\App\Events\ReviewReceived::class, \App\Listeners\SendReviewReceivedEmail::class);
+        Event::listen(\App\Events\ReviewRequested::class, \App\Listeners\SendReviewRequestEmail::class);
+        Event::listen(\App\Events\ListingApproved::class, \App\Listeners\SendListingApprovedEmail::class);
+        Event::listen(\App\Events\ListingRejected::class, \App\Listeners\SendListingRejectedEmail::class);
+        Event::listen(\App\Events\NewListingLead::class, \App\Listeners\SendNewListingLeadEmail::class);
+        Event::listen(\App\Events\PaymentFailed::class, \App\Listeners\SendPaymentFailedEmail::class);
+        Event::listen(\App\Events\PlanAboutToExpire::class, \App\Listeners\SendRenewalReminderEmail::class);
+        Event::listen(\App\Events\PlanDowngraded::class, \App\Listeners\SendPlanDowngradedEmail::class);
+        Event::listen(\App\Events\PlanExpired::class, \App\Listeners\SendPlanExpiredEmail::class);
+        Event::listen(\App\Events\PlanSubscribed::class, \App\Listeners\SendPlanSubscribedEmail::class);
+        Event::listen(\App\Events\PlanUpgraded::class, \App\Listeners\SendPlanUpgradedEmail::class);
+        Event::listen(\App\Events\NewsletterOptinAttempted::class, \App\Listeners\SendOptinConfirmationEmail::class);
+        Event::listen(\App\Events\NewsletterSubscriptionConfirmed::class, \App\Listeners\SendNewsletterWelcomeEmail::class);
+
         // 3. Global View Composer (Common Branding)
         View::composer(['frontend._layouts._app', 'frontend._layouts._guest'], function ($view) use ($cartService) {
             $faviconPath = setting('site_favicon');

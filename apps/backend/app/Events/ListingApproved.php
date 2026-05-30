@@ -5,7 +5,7 @@ namespace App\Events;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Listing; 
+use Illuminate\Database\Eloquent\Model; 
 
 class ListingApproved
 {
@@ -16,7 +16,7 @@ class ListingApproved
     /**
      * Create a new event instance.
      */
-    public function __construct(Listing $listing)
+    public function __construct(Model $listing)
     {
         $this->listing = $listing;
     }
