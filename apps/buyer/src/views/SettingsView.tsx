@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   User, 
   Lock, 
@@ -15,7 +15,8 @@ import {
   Server,
   Database,
   ExternalLink,
-  Loader2
+  Loader2,
+  X
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Badge } from '../components/Badge';
@@ -112,6 +113,167 @@ export default function SettingsView() {
       setPasswordError(err?.message || 'Failed to update password');
     } finally {
       setIsUpdatingPassword(false);
+    }
+  };
+
+  // Auto-Save Notification settings state
+  const [savingSettings, setSavingSettings] = useState<Record<string, 'saving' | 'saved' | null>>({});
+
+  // 2FA states
+  const [show2FAModal, setShow2FAModal] = useState(false);
+  const [twoFactorPin, setTwoFactorPin] = useState('');
+  const [is2FASaving, setIs2FASaving] = useState(false);
+  const [twoFactorError, setTwoFactorError] = useState<string | null>(null);
+
+  // Credit Card states
+  const [showCardModal, setShowCardModal] = useState(false);
+  const [cardNo, setCardNo] = useState('');
+  const [cardHolder, setCardHolder] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const [cardBrand, setCardBrand] = useState('Visa');
+  const [isCardSaving, setIsCardSaving] = useState(false);
+  const [cardError, setCardError] = useState<string | null>(null);
+
+  const handleAutoSaveSettings = async (newSettings: any, settingId: string) => {
+    setSavingSettings(prev => ({ ...prev, [settingId]: 'saving' }));
+    try {
+      const updated = await updateUserProfile({
+        name: profile?.name || '',
+        email: profile?.email || '',
+        phone: profile?.phone,
+        location: profile?.location,
+        settings: newSettings
+      });
+      setProfile(updated);
+      setSavingSettings(prev => ({ ...prev, [settingId]: 'saved' }));
+      setTimeout(() => {
+        setSavingSettings(prev => ({ ...prev, [settingId]: null }));
+      }, 1500);
+    } catch {
+      setSavingSettings(prev => ({ ...prev, [settingId]: null }));
+    }
+  };
+
+  const handleToggle2FA = async () => {
+    if (!profile) return;
+    const isCurrentlyEnabled = !!profile.settings?.two_factor_enabled;
+
+    if (isCurrentlyEnabled) {
+      setIsSaving(true);
+      try {
+        const newSettings = { ...profile.settings, two_factor_enabled: false };
+        const updated = await updateUserProfile({
+          name: profile.name,
+          email: profile.email,
+          phone: profile.phone,
+          location: profile.location,
+          settings: newSettings
+        });
+        setProfile(updated);
+      } catch (err) {
+        alert('Failed to disable Two-Factor Authentication');
+      } finally {
+        setIsSaving(false);
+      }
+    } else {
+      setTwoFactorPin('');
+      setTwoFactorError(null);
+      setShow2FAModal(true);
+    }
+  };
+
+  const handleVerify2FA = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profile) return;
+    setTwoFactorError(null);
+
+    const cleanPin = twoFactorPin.replace(/\s+/g, '');
+    if (cleanPin !== '123456' && cleanPin.length !== 6) {
+      setTwoFactorError('Invalid verification code. Please enter 6 digits (e.g. 123456).');
+      return;
+    }
+
+    setIs2FASaving(true);
+    try {
+      const newSettings = { ...profile.settings, two_factor_enabled: true };
+      const updated = await updateUserProfile({
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        location: profile.location,
+        settings: newSettings
+      });
+      setProfile(updated);
+      setShow2FAModal(false);
+    } catch (err) {
+      setTwoFactorError('Failed to enable Two-Factor Authentication');
+    } finally {
+      setIs2FASaving(false);
+    }
+  };
+
+  const handleAddCard = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profile) return;
+    setCardError(null);
+
+    const cleanCardNo = cardNo.replace(/\s+/g, '');
+    if (cleanCardNo.length < 15 || cleanCardNo.length > 16) {
+      setCardError('Card number must be 15 or 16 digits.');
+      return;
+    }
+
+    if (!/^(0[1-9]|1[0-2])\/?([0-9]{2})$/.test(cardExpiry)) {
+      setCardError('Expiry must be in MM/YY format.');
+      return;
+    }
+
+    setIsCardSaving(true);
+    try {
+      const newSettings = {
+        ...profile.settings,
+        card_brand: cardBrand.toUpperCase(),
+        card_last4: cleanCardNo.slice(-4),
+        card_expiry: cardExpiry
+      };
+      const updated = await updateUserProfile({
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        location: profile.location,
+        settings: newSettings
+      });
+      setProfile(updated);
+      setShowCardModal(false);
+    } catch {
+      setCardError('Failed to add payment method.');
+    } finally {
+      setIsCardSaving(false);
+    }
+  };
+
+  const handleRemoveCard = async () => {
+    if (!profile || !window.confirm('Are you sure you want to remove this payment method?')) return;
+
+    setIsSaving(true);
+    try {
+      const newSettings = { ...profile.settings };
+      delete newSettings.card_brand;
+      delete newSettings.card_last4;
+      delete newSettings.card_expiry;
+
+      const updated = await updateUserProfile({
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        location: profile.location,
+        settings: newSettings
+      });
+      setProfile(updated);
+    } catch {
+      alert('Failed to remove payment method.');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -257,16 +419,44 @@ export default function SettingsView() {
                 </form>
               )}
 
-            {activeTab === 'security' && (
+            {activeTab === 'security' && profile && (
               <form onSubmit={handlePasswordUpdate} className="space-y-8">
-                <div className="flex items-center gap-4 p-4 bg-amber-50 rounded-2xl border border-amber-100">
-                  <Shield className="text-amber-500" size={24} />
+                <div className={cn(
+                  "flex items-center gap-4 p-4 rounded-2xl border transition-all",
+                  profile.settings?.two_factor_enabled 
+                    ? "bg-emerald-50 border-emerald-100" 
+                    : "bg-amber-50 border-amber-100"
+                )}>
+                  <Shield className={cn(
+                    profile.settings?.two_factor_enabled ? "text-emerald-500" : "text-amber-500"
+                  )} size={24} />
                   <div>
-                    <p className="text-sm font-bold text-amber-900">Two-Factor Authentication is Off</p>
-                    <p className="text-xs text-amber-700">Add an extra layer of security to your account.</p>
+                    <p className={cn(
+                      "text-sm font-bold",
+                      profile.settings?.two_factor_enabled ? "text-emerald-900" : "text-amber-900"
+                    )}>
+                      Two-Factor Authentication is {profile.settings?.two_factor_enabled ? 'On' : 'Off'}
+                    </p>
+                    <p className={cn(
+                      "text-xs",
+                      profile.settings?.two_factor_enabled ? "text-emerald-700" : "text-amber-700"
+                    )}>
+                      Add an extra layer of security to your account by requiring an authenticator code.
+                    </p>
                   </div>
-                  <Button type="button" variant="outline" size="sm" className="ml-auto bg-amber-500 text-white border-none hover:bg-amber-600">
-                    Enable
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleToggle2FA}
+                    className={cn(
+                      "ml-auto text-white border-none cursor-pointer",
+                      profile.settings?.two_factor_enabled 
+                        ? "bg-red-500 hover:bg-red-650" 
+                        : "bg-amber-500 hover:bg-amber-600"
+                    )}
+                  >
+                    {profile.settings?.two_factor_enabled ? 'Disable' : 'Enable'}
                   </Button>
                 </div>
 
@@ -340,25 +530,50 @@ export default function SettingsView() {
                         <p className="text-sm font-bold text-zinc-900">{item.title}</p>
                         <p className="text-xs text-zinc-500">{item.desc}</p>
                       </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input 
-                          type="checkbox" 
-                          className="sr-only peer" 
-                          checked={!!profile.settings?.[item.id]} 
-                          onChange={(e) => {
-                            const newSettings = { ...profile.settings, [item.id]: e.target.checked };
-                            setProfile({ ...profile, settings: newSettings });
-                          }}
-                        />
-                        <div className="w-11 h-6 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--primary-color)]"></div>
-                      </label>
+                      <div className="flex items-center gap-4">
+                        <AnimatePresence>
+                          {savingSettings[item.id] === 'saving' && (
+                            <motion.span
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0 }}
+                              className="text-[10px] font-bold text-zinc-400"
+                            >
+                              Saving...
+                            </motion.span>
+                          )}
+                          {savingSettings[item.id] === 'saved' && (
+                            <motion.span
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0 }}
+                              className="text-[10px] font-extrabold text-[var(--primary-color)] bg-[var(--primary-light)] px-2.5 py-0.5 rounded-full"
+                            >
+                              ✓ Saved!
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input 
+                            type="checkbox" 
+                            className="sr-only peer" 
+                            checked={!!profile.settings?.[item.id]} 
+                            onChange={(e) => {
+                              const newSettings = { ...profile.settings, [item.id]: e.target.checked };
+                              setProfile({ ...profile, settings: newSettings });
+                              handleAutoSaveSettings(newSettings, item.id);
+                            }}
+                          />
+                          <div className="w-11 h-6 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--primary-color)]"></div>
+                        </label>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {activeTab === 'billing' && (
+            {activeTab === 'billing' && profile && (
               <div className="space-y-8">
                 <div className="p-6 bg-zinc-900 rounded-3xl text-white relative overflow-hidden">
                   <div className="relative z-10">
@@ -381,17 +596,40 @@ export default function SettingsView() {
 
                 <div className="space-y-4">
                   <h4 className="text-sm font-bold text-zinc-900 uppercase tracking-wider">Payment Methods</h4>
-                  <div className="p-4 border border-zinc-200 rounded-2xl flex items-center gap-4">
-                    <div className="w-12 h-8 bg-zinc-100 rounded flex items-center justify-center font-bold text-[10px] text-zinc-400">VISA</div>
-                    <div className="flex-1">
-                      <p className="text-sm font-bold text-zinc-900">Visa ending in 4242</p>
-                      <p className="text-xs text-zinc-500">Expires 12/26</p>
+                  {profile.settings?.card_brand ? (
+                    <div className="p-4 border border-zinc-200 rounded-2xl flex items-center gap-4 group hover:bg-zinc-50 transition-colors">
+                      <div className="w-12 h-8 bg-zinc-900 text-white rounded flex items-center justify-center font-black text-[9px] uppercase tracking-wider shadow-xs">
+                        {profile.settings.card_brand}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-zinc-900">
+                          {profile.settings.card_brand} ending in {profile.settings.card_last4}
+                        </p>
+                        <p className="text-xs text-zinc-500">Expires {profile.settings.card_expiry}</p>
+                      </div>
+                      <button 
+                        onClick={handleRemoveCard}
+                        className="text-xs font-bold text-red-505 hover:text-red-600 transition-colors cursor-pointer border-none bg-transparent"
+                      >
+                        Remove
+                      </button>
                     </div>
-                    <button className="text-xs font-bold text-[var(--primary-color)] hover:underline">Edit</button>
-                  </div>
-                  <button className="w-full py-3 border-2 border-dashed border-zinc-200 rounded-2xl text-sm font-bold text-zinc-400 hover:border-zinc-900 hover:text-zinc-900 transition-all">
-                    + Add New Payment Method
-                  </button>
+                  ) : (
+                    <div className="p-8 border-2 border-dashed border-zinc-200 rounded-3xl text-center bg-zinc-50/20">
+                      <CreditCard className="mx-auto text-zinc-350 mb-2" size={32} />
+                      <p className="text-sm font-bold text-zinc-800">No Payment Methods Added</p>
+                      <p className="text-xs text-zinc-400 mt-0.5">Attach a payment card to purchase marketplace services seamlessly.</p>
+                    </div>
+                  )}
+
+                  {!profile.settings?.card_brand && (
+                    <button 
+                      onClick={() => setShowCardModal(true)}
+                      className="w-full py-3 border-2 border-dashed border-zinc-200 hover:border-zinc-900 rounded-2xl text-sm font-bold text-zinc-450 hover:text-zinc-900 transition-all cursor-pointer"
+                    >
+                      + Add New Payment Method
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -500,6 +738,222 @@ export default function SettingsView() {
           </motion.div>
         )}
       </div>
+
+      {/* 2FA Verification Modal */}
+      <AnimatePresence>
+        {show2FAModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative border border-zinc-100 text-left"
+            >
+              <button 
+                type="button"
+                onClick={() => setShow2FAModal(false)}
+                className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-zinc-900 rounded-full hover:bg-zinc-100 transition-colors cursor-pointer border-none bg-transparent"
+              >
+                <X size={18} />
+              </button>
+
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center">
+                  <Shield size={20} />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-zinc-900 leading-tight">Enable 2FA</h3>
+                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Secure Authentication</p>
+                </div>
+              </div>
+
+              <div className="space-y-4 text-center pb-2">
+                <p className="text-xs text-zinc-500 leading-relaxed">
+                  Scan this QR code with your Google Authenticator or custom 2FA app, then enter the 6-digit verification code below.
+                </p>
+                {/* Mock QR Code */}
+                <div className="w-40 h-40 mx-auto border-2 border-zinc-150 rounded-2xl bg-zinc-100 flex flex-col items-center justify-center p-2 relative group overflow-hidden shadow-2xs">
+                  <div className="w-full h-full bg-zinc-950 flex flex-wrap p-1 gap-1.5 opacity-90 transition-opacity group-hover:opacity-100">
+                    {[...Array(64)].map((_, i) => (
+                      <div 
+                        key={i} 
+                        className={cn(
+                          "w-3 h-3 rounded-[2px]", 
+                          (i % 3 === 0 || i % 7 === 0) ? "bg-white" : "bg-black"
+                        )} 
+                      />
+                    ))}
+                  </div>
+                  <div className="absolute inset-0 bg-white/95 flex flex-col items-center justify-center p-4 text-center transition-transform duration-300 translate-y-full group-hover:translate-y-0">
+                    <span className="text-[10px] font-black uppercase text-zinc-900 tracking-wider">Secret Key</span>
+                    <code className="bg-zinc-100 px-2 py-1 rounded font-mono text-[9px] mt-1 text-zinc-650">SELLIO-BUYER-KEY</code>
+                  </div>
+                </div>
+              </div>
+
+              {twoFactorError && (
+                <div className="rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-xs font-bold text-red-650 mb-4">
+                  {twoFactorError}
+                </div>
+              )}
+
+              <form onSubmit={handleVerify2FA} className="space-y-4">
+                <div className="space-y-2 text-left">
+                  <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-1">Verification Code</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Enter 123456"
+                    value={twoFactorPin}
+                    onChange={(e) => setTwoFactorPin(e.target.value)}
+                    maxLength={6}
+                    className="w-full text-center tracking-[0.4em] font-mono font-bold px-4 py-3 bg-zinc-50 border-none rounded-2xl text-base focus:ring-2 focus:ring-zinc-900 transition-all placeholder-zinc-300 placeholder:tracking-normal placeholder:font-sans placeholder:text-xs"
+                  />
+                </div>
+
+                <div className="pt-2 flex justify-end gap-3">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => setShow2FAModal(false)}
+                    disabled={is2FASaving}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    isLoading={is2FASaving}
+                  >
+                    Verify & Enable
+                  </Button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Credit Card Creator Modal */}
+      <AnimatePresence>
+        {showCardModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative border border-zinc-100 text-left"
+            >
+              <button 
+                type="button"
+                onClick={() => setShowCardModal(false)}
+                className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-zinc-900 rounded-full hover:bg-zinc-100 transition-colors cursor-pointer border-none bg-transparent"
+              >
+                <X size={18} />
+              </button>
+
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-indigo-50 text-indigo-500 rounded-xl flex items-center justify-center animate-bounce">
+                  <CreditCard size={20} />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-zinc-900 leading-tight">Add Payment Method</h3>
+                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Secure Credit Card Simulator</p>
+                </div>
+              </div>
+
+              {cardError && (
+                <div className="rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-xs font-bold text-red-650 mb-4">
+                  {cardError}
+                </div>
+              )}
+
+              <form onSubmit={handleAddCard} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5 col-span-2 text-left">
+                    <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">Card Brand</label>
+                    <select
+                      value={cardBrand}
+                      onChange={(e) => setCardBrand(e.target.value)}
+                      className="w-full px-4 py-2.5 bg-zinc-50 border-none rounded-xl text-xs sm:text-sm font-bold text-zinc-700 focus:ring-2 focus:ring-zinc-900"
+                    >
+                      <option value="Visa">Visa</option>
+                      <option value="Mastercard">Mastercard</option>
+                      <option value="Amex">American Express</option>
+                      <option value="Discover">Discover</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1.5 col-span-2 text-left">
+                    <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">Cardholder Name</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. John Doe"
+                      value={cardHolder}
+                      onChange={(e) => setCardHolder(e.target.value)}
+                      className="w-full px-4 py-2.5 bg-zinc-50 border-none rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-zinc-900"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5 col-span-2 text-left">
+                    <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">Card Number</label>
+                    <input
+                      type="text"
+                      required
+                      maxLength={16}
+                      placeholder="16 digits (e.g. 4242424242424242)"
+                      value={cardNo}
+                      onChange={(e) => setCardNo(e.target.value.replace(/\D/g, ''))}
+                      className="w-full px-4 py-2.5 bg-zinc-50 border-none rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-zinc-900 font-mono"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5 text-left">
+                    <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">Expiry Date</label>
+                    <input
+                      type="text"
+                      required
+                      maxLength={5}
+                      placeholder="MM/YY"
+                      value={cardExpiry}
+                      onChange={(e) => setCardExpiry(e.target.value)}
+                      className="w-full px-4 py-2.5 bg-zinc-50 border-none rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-zinc-900 font-mono"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5 text-left">
+                    <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">CVV / CVC</label>
+                    <input
+                      type="password"
+                      required
+                      maxLength={4}
+                      placeholder="•••"
+                      className="w-full px-4 py-2.5 bg-zinc-50 border-none rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-zinc-900 text-center font-mono"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-2 flex justify-end gap-3">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => setShowCardModal(false)}
+                    disabled={isCardSaving}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    isLoading={isCardSaving}
+                  >
+                    Add Card
+                  </Button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
       </div>
     </div>
   );

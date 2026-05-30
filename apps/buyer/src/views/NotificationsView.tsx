@@ -91,50 +91,69 @@ const INITIAL_NOTIFICATIONS: Notification[] = [
   }
 ];
 
+import { 
+  fetchNotifications, 
+  markNotificationAsRead, 
+  markAllNotificationsAsRead, 
+  deleteNotification as deleteNotificationApi, 
+  NotificationItem 
+} from '../api/notificationApi';
+
 export default function NotificationsView() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Load from localStorage or set defaults
-    const stored = localStorage.getItem('sellio_buyer_notifications');
-    if (stored) {
-      try {
-        setNotifications(JSON.parse(stored));
-      } catch {
-        setNotifications(INITIAL_NOTIFICATIONS);
-      }
-    } else {
-      setNotifications(INITIAL_NOTIFICATIONS);
-      localStorage.setItem('sellio_buyer_notifications', JSON.stringify(INITIAL_NOTIFICATIONS));
+  const loadNotifications = async () => {
+    try {
+      setLoading(true);
+      const data = await fetchNotifications();
+      setNotifications(data);
+    } catch (error) {
+      console.error('Failed to load notifications from database:', error);
+    } finally {
+      setLoading(false);
     }
-    
-    const timer = setTimeout(() => setLoading(false), 400);
-    return () => clearTimeout(timer);
+  };
+
+  useEffect(() => {
+    loadNotifications();
   }, []);
 
-  const saveToStorage = (newNotifs: Notification[]) => {
-    setNotifications(newNotifs);
-    localStorage.setItem('sellio_buyer_notifications', JSON.stringify(newNotifs));
-    
-    // Dispatch custom event to notify App header to update notification badges
-    window.dispatchEvent(new Event('sellio_notifications_updated'));
+  const markAsRead = async (id: string) => {
+    try {
+      await markNotificationAsRead(id);
+      setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+      
+      // Dispatch custom event to notify App header to update notification badges
+      window.dispatchEvent(new Event('sellio_notifications_updated'));
+    } catch (error) {
+      console.error('Failed to mark notification as read:', error);
+    }
   };
 
-  const markAsRead = (id: string) => {
-    const updated = notifications.map(n => n.id === id ? { ...n, read: true } : n);
-    saveToStorage(updated);
+  const markAllAsRead = async () => {
+    try {
+      await markAllNotificationsAsRead();
+      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+      
+      // Dispatch custom event to notify App header to update notification badges
+      window.dispatchEvent(new Event('sellio_notifications_updated'));
+    } catch (error) {
+      console.error('Failed to mark all notifications as read:', error);
+    }
   };
 
-  const markAllAsRead = () => {
-    const updated = notifications.map(n => ({ ...n, read: true }));
-    saveToStorage(updated);
-  };
-
-  const deleteNotification = (id: string) => {
-    const updated = notifications.filter(n => n.id !== id);
-    saveToStorage(updated);
+  const deleteNotification = async (id: string) => {
+    try {
+      await deleteNotificationApi(id);
+      setNotifications(prev => prev.filter(n => n.id !== id));
+      
+      // Dispatch custom event to notify App header to update notification badges
+      window.dispatchEvent(new Event('sellio_notifications_updated'));
+    } catch (error) {
+      console.error('Failed to delete notification:', error);
+    }
   };
 
   const filteredNotifications = filter === 'all' 

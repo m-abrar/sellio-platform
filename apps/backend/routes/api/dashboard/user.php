@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\Dashboard\User\{
     ReviewController,
     MessageController,
     BookingController,
+    NotificationController,
 
     // 2. Lead & Inquiry Management
     AutoInquiryController,
@@ -56,6 +57,14 @@ Route::group([], function () {
 
     // Reviews
     Route::resource('reviews', ReviewController::class)->only(['index', 'show', 'store', 'edit', 'update', 'destroy']);
+
+    // Notifications
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', [NotificationController::class, 'index']);
+        Route::post('read-all', [NotificationController::class, 'markAllAsRead']);
+        Route::patch('{notification}/read', [NotificationController::class, 'markAsRead']);
+        Route::delete('{notification}', [NotificationController::class, 'destroy']);
+    });
 
     /**
      * 3. LEAD & INQUIRY TRACKING
