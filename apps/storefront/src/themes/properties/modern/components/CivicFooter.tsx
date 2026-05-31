@@ -9,7 +9,7 @@ export const CivicFooter = () => (
             <div>
                 <div className="urban-logo civic-footer-logo">URBAN.</div>
                 <p className="civic-footer-copy">
-                    The world's most advanced high-fidelity urban distribution node. Precision architectural engineering for the modern global skyline.
+                    Discover premium homes, apartments, and commercial spaces in cities worldwide. Browse listings, compare amenities, and contact agents or hosts directly.
                 </p>
             </div>
             <FooterMenuColumn
@@ -32,8 +32,7 @@ export const CivicFooter = () => (
             />
         </div>
         <div className="civic-footer-bottom">
-            <span>© 2026 URBAN_NODE_SYSTEMS. STRUCTURAL_AUTHORITY.</span>
-            <span>v.8.0_SKYLINE</span>
+            <span>© 2026 Urban Properties. All rights reserved.</span>
         </div>
     </footer>
 );

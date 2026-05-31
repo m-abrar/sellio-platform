@@ -133,6 +133,14 @@ class PropertyResource extends JsonResource
                 'charge_type' => $f->charge_type,
             ]),
 
+            'scores' => ($this->relationLoaded('scores') ? $this->scores : $this->scores()->get())->map(fn($s) => [
+                'id'          => $s->id,
+                'title'       => $s->title,
+                'description' => $s->description,
+                'score'       => (float) $s->score,
+                'units'       => $s->units,
+            ]),
+
             // Status & Meta
             'status' => [
                 'label'        => $this->status_label,

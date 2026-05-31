@@ -1,10 +1,7 @@
-
-'use client';
-
 'use client';
 
 import React from 'react';
-import { getThemeLink } from '../utils';
+import { useModernThemeLink } from '../hooks/useModernThemeLink';
 
 interface StructureItemProps {
     title: string;
@@ -17,7 +14,17 @@ interface StructureItemProps {
     location?: string;
 }
 
-const StructureItem = ({ title, units, area, icon, slug, image, price, location }: StructureItemProps) => {
+const StructureItem = ({
+    title,
+    units,
+    area,
+    icon,
+    slug,
+    image,
+    price,
+    location,
+    themeLink,
+}: StructureItemProps & { themeLink: (path: string) => string }) => {
     const content = (
         <div className="structure-card-premium">
             <div className="structure-card-image">
@@ -33,11 +40,11 @@ const StructureItem = ({ title, units, area, icon, slug, image, price, location 
                 {price && <div className="structure-card-price">{price}</div>}
                 <div className="structure-card-meta">
                     <div>
-                        <div className="structure-card-meta-label">AVAILABLE_UNITS</div>
+                        <div className="structure-card-meta-label">Units</div>
                         <div className="structure-card-meta-value">{units}</div>
                     </div>
                     <div>
-                        <div className="structure-card-meta-label">TOTAL_AREA</div>
+                        <div className="structure-card-meta-label">Floor area</div>
                         <div className="structure-card-meta-value structure-card-meta-area">{area}</div>
                     </div>
                 </div>
@@ -47,7 +54,7 @@ const StructureItem = ({ title, units, area, icon, slug, image, price, location 
 
     if (slug) {
         return (
-            <a className="prop-structure-link" href={getThemeLink(`/product/${slug}`)}>
+            <a className="prop-structure-link" href={themeLink(`/product/${slug}`)}>
                 {content}
             </a>
         );
@@ -60,13 +67,29 @@ interface StructureGridProps {
     items?: StructureItemProps[];
     loading?: boolean;
     error?: string | null;
+    showExploreLink?: boolean;
 }
 
-export const StructureGrid = ({ items = [], loading = false, error = null }: StructureGridProps) => (
+export const StructureGrid = ({
+    items = [],
+    loading = false,
+    error = null,
+    showExploreLink = true,
+}: StructureGridProps) => {
+    const themeLink = useModernThemeLink();
+
+    return (
     <section className="structure-grid-section" id="urban-structure-grid">
         <div className="structure-grid-header">
-            <span className="structure-grid-kicker">STRUCTURAL_SCHEMA_V4</span>
-            <h2>Urban Assets.</h2>
+            <span className="structure-grid-kicker">Featured listings</span>
+            <div className="structure-grid-header-row">
+              <h2>Properties</h2>
+              {showExploreLink && (
+                <a href={themeLink('/explore')} className="urban-btn-secondary structure-grid-explore-link">
+                  View all properties
+                </a>
+              )}
+            </div>
         </div>
         <div className="structure-grid">
             {loading ? (
@@ -82,19 +105,22 @@ export const StructureGrid = ({ items = [], loading = false, error = null }: Str
                 ))
             ) : error ? (
                 <div className="prop-listing-state">
-                    <div className="prop-listing-kicker">Property Sync Offline</div>
-                    <h3>Urban assets could not be loaded.</h3>
+                    <div className="prop-listing-kicker">Unable to load</div>
+                    <h3>Properties could not be loaded.</h3>
                     <p>{error}</p>
                 </div>
             ) : items.length === 0 ? (
                 <div className="prop-listing-state">
-                    <div className="prop-listing-kicker">Empty Property Registry</div>
-                    <h3>No live properties are published yet.</h3>
-                    <p>Add property records in the backend and this structural grid will hydrate automatically.</p>
+                    <div className="prop-listing-kicker">No listings yet</div>
+                    <h3>No properties are published yet.</h3>
+                    <p>Add and publish properties in the admin panel to show them here.</p>
                 </div>
             ) : (
-                items.map((item) => <StructureItem key={item.slug || item.title} {...item} />)
+                items.map((item) => (
+                    <StructureItem key={item.slug || item.title} {...item} themeLink={themeLink} />
+                ))
             )}
         </div>
     </section>
-);
+    );
+};

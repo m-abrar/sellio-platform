@@ -129,29 +129,29 @@ return [
 
     'properties_modern' => [
         tm_menu('main_header', 'Main Header Menu', tm_links([
-            ['RESIDENTIAL', '#urban-structure-grid'],
-            ['COMMERCIAL', '#urban-precision-section'],
-            ['DISTRICTS', '#urban-structure-grid'],
-            ['SKYLINE', '#urban-hero-section'],
+            ['Residential', '#urban-structure-grid'],
+            ['Commercial', '#urban-precision-section'],
+            ['Neighborhoods', '#urban-structure-grid'],
+            ['Featured', '#urban-hero-section'],
         ], 'properties')),
         tm_menu('action_buttons', 'Header Actions', tm_links([
-            ['EXPLORE_UNITS', '#urban-structure-grid'],
+            ['Browse listings', '#urban-structure-grid'],
         ])),
-        tm_menu('footer_column_1', 'DISTRICTS', tm_links([
-            'Downtown Node',
-            'Skyline Grid',
-            'Structural Hub',
-            'Civic Logic',
+        tm_menu('footer_column_1', 'Explore', tm_links([
+            'Homes for sale',
+            'Apartments for rent',
+            'Commercial space',
+            'New listings',
         ])),
-        tm_menu('footer_column_2', 'SYSTEMS', tm_links([
-            'Unit Registry',
-            'Distribution',
-            'Global Sync',
+        tm_menu('footer_column_2', 'Company', tm_links([
+            'About us',
+            'How it works',
+            'List your property',
         ])),
-        tm_menu('footer_column_3', 'NETWORK', tm_links([
-            'Verification',
-            'Governance',
-            'Contact Hub',
+        tm_menu('footer_column_3', 'Support', tm_links([
+            'Help center',
+            'Contact us',
+            'Privacy policy',
         ])),
     ],
 

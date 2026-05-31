@@ -17,7 +17,7 @@ export const UrbanHeader = () => {
 
     return (
         <header className="urban-header">
-            <div className="urban-logo">URBAN<span>_</span>NODE</div>
+            <div className="urban-logo">URBAN<span>.</span></div>
 
             {isOpen && (
                 <button
