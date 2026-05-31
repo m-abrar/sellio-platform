@@ -81,12 +81,13 @@
                     "lengthChange": false,
                     "searching": false,
                     "ordering": true,
+                    "order": [],
                     "info": false,
                     "autoWidth": false,
                     "responsive": true,
                     "dom": 't',
                     "columnDefs": [
-                        { "orderable": false, "targets": 0 }
+                        { "orderable": false, "targets": [0, 5] }
                     ]
                 });
             }

@@ -175,8 +175,9 @@
                 @if($classified->exists)
                 {{-- Recent Inquiries --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
-                    <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-main">Recent Inquiries</h3>
+                    <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
+                        <h3 class="card-title-main mb-0">Recent Inquiries</h3>
+                        <a href="{{ route('admin.classified-inquiries.index', ['classifiedad' => $classified->id]) }}" class="btn btn-premium-soft-primary btn-sm px-3 uppercase small letter-spacing-1 font-weight-bold">{{ __('View All') }}</a>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -186,6 +187,7 @@
                                         <th class="px-4 py-3 small uppercase letter-spacing-1">User</th>
                                         <th class="px-4 py-3 small uppercase letter-spacing-1">Message</th>
                                         <th class="px-4 py-3 small uppercase letter-spacing-1">Date</th>
+                                        <th class="px-4 py-3 text-right small uppercase letter-spacing-1">{{ __('Action') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -194,10 +196,13 @@
                                             <td class="px-4 py-3 align-middle font-weight-bold text-dark">{{ $inq->user->name ?? 'Guest' }}</td>
                                             <td class="px-4 py-3 align-middle text-muted small">{{ Str::limit($inq->message, 40) }}</td>
                                             <td class="px-4 py-3 align-middle text-muted small">{{ $inq->created_at->format('M d') }}</td>
+                                            <td class="px-4 py-3 text-right align-middle">
+                                                <a href="{{ route('admin.classified-inquiries.show', $inq->id) }}" class="btn btn-light btn-xs text-primary rounded-circle shadow-sm"><i class="fas fa-eye"></i></a>
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center py-5 text-muted small uppercase letter-spacing-1">No inquiries yet</td>
+                                            <td colspan="4" class="text-center py-5 text-muted small uppercase letter-spacing-1">No inquiries yet</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

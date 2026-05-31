@@ -248,7 +248,7 @@
                                                 <span class="badge badge-premium-{{ $bk->status === 'confirmed' ? 'success' : 'warning' }} px-3 py-2">{{ ucfirst(__($bk->status)) }}</span>
                                             </td>
                                             <td class="px-4 py-3 text-right align-middle">
-                                                <a href="{{ url('/admin/bookings/show/PropertyBooking/' . $bk->id) }}" class="btn btn-light btn-xs text-primary rounded-circle shadow-sm"><i class="fas fa-eye"></i></a>
+                                                <a href="{{ route('admin.property-bookings.show', $bk->id) }}" class="btn btn-light btn-xs text-primary rounded-circle shadow-sm"><i class="fas fa-eye"></i></a>
                                             </td>
                                         </tr>
                                     @empty

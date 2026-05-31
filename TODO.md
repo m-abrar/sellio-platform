@@ -26,15 +26,16 @@
 - [x] Add a dedicated route for property bookings filtered by a specific property.
 - [x] Update the property bookings link on `/admin/properties/[id]/edit`.
 - [x] On `/admin/property-bookings/77`, allow clicking back to the single property page.
-- [ ] On single property or event edit pages, evaluate adding a Google Maps modal for selecting an exact pinned location with drag-and-drop pin support, using Google API if required.
+- [x] On single property or event edit pages, evaluate adding a Google Maps modal for selecting an exact pinned location with drag-and-drop pin support, using Google API if required.
+  - Evaluation: yes, but implement it as a follow-up feature behind `GOOGLE_MAPS_API_KEY`; the models already have `latitude`/`longitude`, while the admin forms/requests still need coordinate fields, validation, and a shared map-picker partial before enabling drag-and-drop pins.
 
 ### Module Edit Pages
 - [x] In each module edit mode, fix the "Visual Identity" card warning:
   - `System Lock: Initialization Required`
   - `Establish record persistence before attaching assets.`
 - [x] On each module edit page, show the proprietor.
-- [ ] Related bookings or inquiries cards should have a "View all" link.
-- [ ] Single booking entries in related bookings/inquiries should be clickable.
+- [x] Related bookings or inquiries cards should have a "View all" link.
+- [x] Single booking entries in related bookings/inquiries should be clickable.
 
 ### Taxonomy, Locations, And Attributes
 - [x] On `/admin/locations`, color the badges in the "applicability" column.
@@ -71,5 +72,5 @@
 - [x] On `/admin/roles`, fix DataTables search input and pagination positioning CSS.
 
 ### Tickets
-- [ ] On `/admin/tickets`, check whether avatars are shown and add them if needed.
-- [ ] On `/admin/tickets`, remove sorting from the first column.
+- [x] On `/admin/tickets`, check whether avatars are shown and add them if needed.
+- [x] On `/admin/tickets`, remove sorting from the first column.

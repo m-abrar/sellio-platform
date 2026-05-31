@@ -94,7 +94,7 @@
                     <table id="tickets-table" class="table table-hover table-premium mb-0">
                         <thead class="bg-light text-uppercase smallest font-weight-bold">
                             <tr>
-                            <th class="py-3 border-0 px-4 w-60-p">
+                            <th class="py-3 border-0 px-4 w-60-p no-sort">
                                 <div class="custom-control custom-checkbox custom-control-premium">
                                     <input type="checkbox" class="custom-control-input" id="check-all">
                                     <label class="custom-control-label" for="check-all"></label>
@@ -104,7 +104,7 @@
                             <th class="py-3 border-0 w-20-p">{{ __('User Profile') }}</th>
                             <th class="py-3 border-0 w-15-p">{{ __('Status & Priority') }}</th>
                             <th class="py-3 border-0 w-15-p">{{ __('Ticket Age') }}</th>
-                            <th class="py-3 border-0 text-right px-4 w-140-p">{{ __('Actions') }}</th>
+                            <th class="py-3 border-0 text-right px-4 w-140-p no-sort">{{ __('Actions') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -127,8 +127,10 @@
                                 </td>
                                 <td class="align-middle py-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-circle bg-light border text-muted mr-3 shadow-xs icon-box-38 rounded-12 d-flex align-items-center justify-content-center">
-                                            <i class="fas fa-user-circle"></i>
+                                        <div class="rounded-circle overflow-hidden border bg-white mr-3 shadow-xs icon-box-42">
+                                            <img src="{{ $ticket->user?->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode(__('Guest User')) . '&background=6366f1&color=fff&size=120&font-size=0.35' }}"
+                                                 alt="{{ $ticket->user->name ?? __('Guest User') }}"
+                                                 class="w-100 h-100 object-fit-cover">
                                         </div>
                                         <div class="overflow-hidden">
                                             <span class="d-block font-weight-bold text-dark smallest text-truncate w-max-150">{{ $ticket->user->name ?? __('Guest User') }}</span>
