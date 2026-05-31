@@ -38,6 +38,50 @@
 
 @push('css')
     @include('admin._partials._toggle-card-css')
+    <style>
+        #withdrawals-table {
+            table-layout: fixed;
+            width: 100% !important;
+        }
+
+        #withdrawals-table th,
+        #withdrawals-table td {
+            overflow-wrap: anywhere;
+            white-space: normal;
+            word-break: normal;
+        }
+
+        #withdrawals-table .withdrawal-partner,
+        #withdrawals-table .withdrawal-destination,
+        #withdrawals-table .withdrawal-wallet-card {
+            min-width: 0;
+        }
+
+        #withdrawals-table .withdrawal-wallet-card .d-flex {
+            gap: 0.5rem;
+        }
+
+        #withdrawals-table .withdrawal-wallet-card span:last-child {
+            flex-shrink: 0;
+        }
+
+        #withdrawals-table .withdrawal-method,
+        #withdrawals-table .withdrawal-date,
+        #withdrawals-table .withdrawal-status,
+        #withdrawals-table .withdrawal-actions {
+            white-space: nowrap;
+        }
+
+        #withdrawals-table .withdrawal-actions .btn-group {
+            flex-wrap: nowrap;
+        }
+
+        @media (max-width: 1199.98px) {
+            #withdrawals-table {
+                min-width: 980px;
+            }
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -63,12 +107,21 @@
             <div class="table-responsive">
                 <table id="withdrawals-table" class="table table-hover table-premium mb-0 datatable-init"
                        data-datatable-config='{"paging": true, "searching": true, "ordering": true, "info": true, "order": [[5, "desc"]], "dom": "tr"}'>
+                    <colgroup>
+                        <col style="width: 22%;">
+                        <col style="width: 18%;">
+                        <col style="width: 10%;">
+                        <col style="width: 16%;">
+                        <col style="width: 10%;">
+                        <col style="width: 9%;">
+                        <col style="width: 7%;">
+                    </colgroup>
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4 w-25-p">{{ __('Partner Intelligence') }}</th>
+                            <th class="pl-4">{{ __('Partner Intelligence') }}</th>
                             <th class="text-right">{{ __('Settlement Value') }}</th>
                             <th>{{ __('Protocol') }}</th>
-                            <th class="w-35-p">{{ __('Destination Data') }}</th>
+                            <th>{{ __('Details') }}</th>
                             <th class="text-center">{{ __('Lifecycle') }}</th>
                             <th>{{ __('Temporal Data') }}</th>
                             <th class="text-right pr-4">{{ __('Operations') }}</th>
@@ -96,8 +149,8 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        <div>
-                                            <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $withdrawal->user->name ?? __('N/A (Deleted)') }}</span>
+                                        <div class="withdrawal-partner">
+                                            <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1 text-truncate">{{ $withdrawal->user->name ?? __('N/A (Deleted)') }}</span>
                                             <small class="text-muted text-monospace smallest smallest-0-7">{{ __('ACCOUNT') }} #{{ $withdrawal->user_id }}</small>
                                         </div>
                                     </div>
@@ -107,7 +160,7 @@
                                     <div class="text-dark font-weight-bold">
                                         <span class="smallest font-weight-normal opacity-50 mr-1">$</span>{{ number_format($withdrawal->amount_dollars, 2) }}
                                     </div>
-                                    <div class="mt-2 p-2 rounded-lg bg-light border text-left">
+                                    <div class="mt-2 p-2 rounded-lg bg-light border text-left withdrawal-wallet-card">
                                         <div class="d-flex justify-content-between smallest font-weight-bold text-muted uppercase letter-spacing-1">
                                             <span>{{ __('Wallet') }}</span>
                                             <span class="text-dark">${{ number_format($walletBalance, 2) }}</span>
@@ -124,32 +177,31 @@
                                 </td>
                                 
                                 <td class="align-middle">
-                                    <span class="smallest font-weight-bold uppercase letter-spacing-1 text-muted">
+                                    <span class="smallest font-weight-bold uppercase letter-spacing-1 text-muted withdrawal-method">
                                         <i class="fas fa-university mr-1 opacity-50"></i> {{ $withdrawal->method ?? __('OTHER') }}
                                     </span>
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1 leading-1-5">
-                                        {{ $withdrawal->details ?: '—' }}
+                                    <a href="{{ route('admin.withdrawals.show', $withdrawal) }}" class="btn btn-light btn-sm rounded-pill font-weight-bold smallest uppercase letter-spacing-1 text-primary border">
+                                        <i class="fas fa-file-invoice-dollar mr-1"></i> {{ __('View Details') }}
+                                    </a>
+                                    <div class="smallest text-muted mt-2">
+                                        {{ Str::limit($withdrawal->method ?? __('Payout'), 18) }}
+                                        @if ($withdrawal->admin_note)
+                                            <span class="badge badge-danger-light text-danger ml-1">{{ __('Note') }}</span>
+                                        @endif
                                     </div>
-                                    @if ($withdrawal->admin_note)
-                                        <div class="mt-2">
-                                            <div class="badge badge-danger-light text-danger smallest p-2 border-left-premium-danger note-badge-premium">
-                                                <i class="fas fa-info-circle mr-1"></i> <strong>{{ __('NOTE:') }}</strong> {{ $withdrawal->admin_note }}
-                                            </div>
-                                        </div>
-                                    @endif
                                 </td>
 
-                                <td class="text-center align-middle">
+                                <td class="text-center align-middle withdrawal-status">
                                     @php $status = $withdrawal->getStatusMeta(); @endphp
                                     <span class="badge badge-{{ $status['color'] }}-light text-{{ $status['color'] }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-90">
                                         {{ $status['label'] }}
                                     </span>
                                 </td>
 
-                                <td class="align-middle">
+                                <td class="align-middle withdrawal-date">
                                     <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1 mb-1">
                                         {{ $withdrawal->created_at->format('M d, Y') }}
                                     </div>
@@ -158,7 +210,7 @@
                                     </div>
                                 </td>
 
-                                <td class="text-right align-middle pr-4">
+                                <td class="text-right align-middle pr-4 withdrawal-actions">
                                     @if ($withdrawal->status === 'pending')
                                         <div class="btn-group btn-group-premium">
                                              <form id="approve-form-{{ $withdrawal->id }}" action="{{ route('admin.withdrawals.approve', $withdrawal) }}" method="POST" class="m-0">

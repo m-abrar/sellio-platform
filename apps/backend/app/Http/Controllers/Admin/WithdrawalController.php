@@ -117,6 +117,30 @@ class WithdrawalController extends Controller
     }
 
     /**
+     * Display the full payout request context, destination data, and approval controls.
+     *
+     * @param  \App\Models\Withdrawal  $withdrawal
+     * @return \Illuminate\View\View
+     */
+    public function show(Withdrawal $withdrawal): View
+    {
+        $withdrawal->load(['user', 'user.wallet']);
+
+        $walletBalance = $withdrawal->user?->wallet_balance ?? 0;
+        $pendingForPartner = $withdrawal->user
+            ? $withdrawal->user->withdrawals()->where('status', Withdrawal::STATUS_PENDING)->sum('amount') / 100
+            : 0;
+        $remainingAfterQueue = $walletBalance - $pendingForPartner;
+
+        return view('admin.withdrawals.show', compact(
+            'withdrawal',
+            'walletBalance',
+            'pendingForPartner',
+            'remainingAfterQueue'
+        ));
+    }
+
+    /**
      * Approve a withdrawal request and finalize the balance reservation for payout.
      *
      * @param  \App\Models\Withdrawal  $withdrawal

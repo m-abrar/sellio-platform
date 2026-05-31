@@ -230,6 +230,7 @@ Route::prefix('admin')
                     Route::get('/', 'index')->name('index');
                     Route::get('/pending', 'pending')->name('pending');
                     Route::get('/failed', 'failed')->name('failed');
+                    Route::get('/{withdrawal}', 'show')->name('show');
                     Route::post('/{withdrawal}/approve', 'approve')->name('approve');
                     Route::post('/{withdrawal}/reject', 'reject')->name('reject');
                 }
