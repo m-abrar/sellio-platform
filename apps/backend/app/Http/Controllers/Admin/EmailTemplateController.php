@@ -47,6 +47,7 @@ class EmailTemplateController extends Controller
     public function update(\App\Http\Requests\Admin\UpdateEmailTemplateRequest $request, EmailTemplate $emailTemplate): RedirectResponse
     {
         $emailTemplate->update($request->validated());
+        $emailTemplate->forgetCache();
 
         return redirect()->route('admin.email-templates.index')
                          ->with('success', __('Email template updated successfully.'));

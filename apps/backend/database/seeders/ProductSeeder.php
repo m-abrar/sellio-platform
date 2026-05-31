@@ -71,6 +71,7 @@ class ProductSeeder extends Seeder
         foreach (range(1, $totalProductsToCreate) as $index) {
             $baseName = $productNames[$index - 1] ?? $faker->words(3, true);
             $name = $baseName . ' ' . $faker->randomElement(['Edition', 'Pro', 'Series 2', 'Plus', 'Elite']);
+            $isLowStockDemoItem = $index <= 6;
 
             // --- Pricing Logic ---
             $basePrice = $faker->randomFloat(2, 45, 1200);
@@ -96,8 +97,8 @@ class ProductSeeder extends Seeder
                 'base_price'  => $basePrice,
                 'sale_price'  => $salePrice,
                 'cost_price'  => $costPrice,
-                'stock_quantity'      => $faker->numberBetween(5, 100),
-                'low_stock_threshold' => 5,
+                'stock_quantity'      => $isLowStockDemoItem ? $faker->numberBetween(1, 5) : $faker->numberBetween(12, 100),
+                'low_stock_threshold' => $isLowStockDemoItem ? 6 : 8,
                 'manage_stock'        => true,
                 'in_stock'            => true,
                 'weight'      => $faker->randomFloat(2, 0.5, 5),

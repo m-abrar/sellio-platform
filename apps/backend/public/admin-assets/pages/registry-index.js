@@ -73,7 +73,15 @@
                         }
                     };
                     
-                    $(this).DataTable($.extend(true, defaultConfig, customConfig));
+                    const table = $(this).DataTable($.extend(true, defaultConfig, customConfig));
+                    const wrapper = $(table.table().container());
+
+                    wrapper.addClass('datatable-premium-layout');
+                    wrapper.find('.dataTables_filter input')
+                        .addClass('form-control form-control-premium shadow-none')
+                        .attr('aria-label', 'Search records');
+                    wrapper.find('.dataTables_length select')
+                        .addClass('form-control form-control-premium shadow-none');
                 }
             });
         }

@@ -62,14 +62,19 @@
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                     <i class="fas fa-map-marked-alt mr-2 text-primary opacity-50"></i> {{ __('Geospatial Demand Heatmap') }}
                 </h3>
-                <span class="badge badge-primary-light ml-auto px-3 py-2 rounded-pill font-weight-bold smallest uppercase animate-pulse">{{ __('Live Transmission') }}</span>
+                @php
+                    $heatmapPointCount = $metrics['js_data']['heatmap_meta']['point_count'] ?? count($metrics['js_data']['heatmap_data'] ?? []);
+                @endphp
+                <span class="badge {{ $heatmapPointCount > 0 ? 'badge-primary-light animate-pulse' : 'badge-secondary-light' }} ml-auto px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
+                    {{ $heatmapPointCount > 0 ? __('Real Coordinates') : __('Awaiting Coordinates') }}
+                </span>
             </div>
             <div class="card-body p-0">
                 <div id="heatmap" style="height: 400px; filter: grayscale(0.2) contrast(1.1);"></div> 
             </div>
             <div class="card-footer bg-white py-3 px-4 d-flex justify-content-between align-items-center border-0">
                 <p class="mb-0 smallest text-muted font-weight-bold uppercase letter-spacing-1">
-                    <i class="fas fa-crosshairs mr-1"></i> {{ __('Resolution focus: :size Cluster', ['size' => '25km']) }}
+                    <i class="fas fa-crosshairs mr-1"></i> {{ __(':count live coordinate points', ['count' => $heatmapPointCount]) }}
                 </p>
                 <a href="{{ route('admin.locations.index')}}" class="smallest font-weight-bold text-primary uppercase letter-spacing-1">
                     {{ __('Manage Territory Architecture') }} <i class="fas fa-arrow-right ml-1"></i>

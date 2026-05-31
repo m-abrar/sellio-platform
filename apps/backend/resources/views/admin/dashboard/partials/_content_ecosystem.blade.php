@@ -29,7 +29,7 @@
                                 {{ $item['tag'] }}
                             </span>
                         </div>
-                        <a href="{{ route('admin.listings.edit.type', ['listing_type' => $item['tag'], 'listing_id' => $item['id']]) }}" class="btn btn-sm btn-white rounded-circle shadow-xs border d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="{{ __('Review Submission') }}">
+                        <a href="{{ route('admin.listings.edit.type', ['listing_type' => $item['listing_type'] ?? $item['tag'], 'listing_id' => $item['id']]) }}" class="btn btn-sm btn-white rounded-circle shadow-xs border d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="{{ __('Review Submission') }}">
                             <i class="fas fa-eye text-primary smallest"></i>
                         </a>
                     </div>

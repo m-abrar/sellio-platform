@@ -35,7 +35,7 @@
                                 </td>
                                 <td class="py-3">
                                     <span class="font-weight-bold text-dark d-block small">{{ $item['title'] }}</span>
-                                    <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">SKU Identity: {{ strtoupper(Str::random(6)) }}</span>
+                                    <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">SKU Identity: {{ $item['sku'] ?? 'N/A' }}</span>
                                 </td>
                                 <td class="text-center pr-4">
                                     <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest">

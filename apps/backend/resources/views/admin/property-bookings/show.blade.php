@@ -30,6 +30,11 @@
                     <a href="{{ route('admin.property-bookings.edit', $booking->id) }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
                         <i class="fas fa-edit mr-2"></i> {{ __('Modify Record') }}
                     </a>
+                    @if($booking->property)
+                        <a href="{{ route('admin.properties.edit', $booking->property->id) }}" class="btn btn-light rounded-pill px-4 py-2 font-weight-bold shadow-xs smallest uppercase letter-spacing-1 text-primary border">
+                            <i class="fas fa-home mr-2"></i> {{ __('Property Page') }}
+                        </a>
+                    @endif
                     <a href="{{ route('admin.property-bookings.index') }}" class="btn-back shadow-sm">
                         <i class="fas fa-receipt mr-2"></i> {{ __('Back to Ledger') }}
                     </a>

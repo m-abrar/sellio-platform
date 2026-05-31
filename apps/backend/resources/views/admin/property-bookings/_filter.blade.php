@@ -19,10 +19,10 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-home text-xs"></i></span>
                         </div>
-                        <select name="property" class="form-control select2">
+                        <select name="property" class="form-control select2" {{ isset($selectedProperty) && $selectedProperty ? 'disabled' : '' }}>
                             <option value="">All Inventory</option>
                             @foreach ($properties as $p)
-                                <option value="{{ $p->id }}" {{ request('property') == $p->id ? 'selected' : '' }}>
+                                <option value="{{ $p->id }}" {{ (request('property') == $p->id || (isset($selectedProperty) && $selectedProperty && $selectedProperty->id === $p->id)) ? 'selected' : '' }}>
                                     {{ $p->title }}
                                 </option>
                             @endforeach

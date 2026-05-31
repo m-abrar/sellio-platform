@@ -79,13 +79,7 @@
                                 <td class="align-middle px-4">
                                     <div class="d-flex align-items-center">
                                         <div class="table-img-preview shadow-xs rounded-circle overflow-hidden border-0 mr-3" style="width: 48px; height: 48px;">
-                                            @if($testimonial->avatar_url)
-                                                <img src="{{ $testimonial->avatar_url }}" alt="{{ $testimonial->author_name }}" class="w-100 h-100 object-fit-cover">
-                                            @else
-                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-light text-primary font-weight-bold">
-                                                    {{ Str::upper(Str::substr($testimonial->author_name, 0, 1)) }}
-                                                </div>
-                                            @endif
+                                            <img src="{{ $testimonial->avatar_url }}" alt="{{ $testimonial->author_name }}" class="w-100 h-100 object-fit-cover">
                                         </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ $testimonial->author_name }}</span>

@@ -38,7 +38,7 @@
                                 </td>
                                 <td class="py-3">
                                     <span class="font-weight-bold text-dark d-block" style="font-size: 0.9rem;">{{ $item['title'] }}</span>
-                                    <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">LOGISTICS ID: #{{ rand(1000, 9999) }}</span>
+                                    <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">LOGISTICS ID: {{ $item['logistics_id'] ?? 'Pending Assignment' }}</span>
                                 </td>
                                 <td class="text-center pr-4">
                                     <span class="badge {{ str_replace('bg-', 'badge-', $item['tag_class']) }}-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase">

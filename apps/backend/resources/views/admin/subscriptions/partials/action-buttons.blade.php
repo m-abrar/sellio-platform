@@ -78,9 +78,11 @@
 <div class="card card-premium shadow-sm border-0">
     <div class="card-body p-3">
         <div class="d-flex align-items-center">
-            <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-50">
-                <span class="font-weight-bold text-primary">{{ strtoupper(substr($subscription->user->name ?? 'N', 0, 1)) }}</span>
-            </div>
+            <img src="{{ $subscription->user->avatar_url }}"
+                 alt="{{ $subscription->user->name }}"
+                 class="rounded-circle shadow-xs mr-3 object-fit-cover"
+                 width="52"
+                 height="52">
             <div>
                 <h6 class="mb-0 font-weight-bold text-dark">{{ $subscription->user->name }}</h6>
                 <p class="mb-0 smallest text-muted text-uppercase font-weight-bold letter-spacing-1">{{ __('Verified Customer') }}</p>

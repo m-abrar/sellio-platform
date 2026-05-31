@@ -80,6 +80,23 @@ class AdminExtendedResourcesTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_open_email_template_editor(): void
+    {
+        $template = EmailTemplate::create([
+            'key' => 'editable_template',
+            'title' => 'Editable Template',
+            'subject' => 'Editable Subject',
+            'body' => '<p>Editable body</p>',
+            'is_active' => true,
+        ]);
+
+        $this->actingAsSuperAdmin()
+            ->get(route('admin.email-templates.edit', $template))
+            ->assertOk()
+            ->assertSee('Editable Subject', false)
+            ->assertSee('Email Architect', false);
+    }
+
     public function test_admin_can_create_update_and_delete_property_booking(): void
     {
         $property = Property::firstOrFail();

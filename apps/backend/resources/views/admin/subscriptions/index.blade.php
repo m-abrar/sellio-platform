@@ -86,9 +86,11 @@
                             <tr>
                                 <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center icon-box-40 rounded-10">
-                                            <span class="smallest font-weight-bold text-primary">{{ strtoupper(substr($subscription->user->name ?? 'N', 0, 1)) }}</span>
-                                        </div>
+                                        <img src="{{ $subscription->user?->avatar_url ?? asset('images/fallbacks/avatar.jpg') }}"
+                                             alt="{{ $subscription->user->name ?? __('Subscriber') }}"
+                                             class="rounded-circle shadow-xs mr-3 object-fit-cover"
+                                             width="42"
+                                             height="42">
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0 font-0-95">{{ $subscription->user->name ?? __('Unknown User') }}</span>
                                             <small class="text-muted text-monospace smallest">{{ $subscription->user->email ?? __('N/A') }}</small>

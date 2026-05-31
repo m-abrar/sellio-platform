@@ -13,6 +13,21 @@
 @php
     $isEdit = $model->exists;
     $label = $title ?? __('RECORD');
+    $analyticsTypeMap = [
+        \App\Models\Property::class => 'property',
+        \App\Models\Auto::class => 'auto',
+        \App\Models\Event::class => 'event',
+        \App\Models\JobListing::class => 'joblisting',
+        \App\Models\Service::class => 'service',
+        \App\Models\Classified::class => 'classified',
+        \App\Models\Product::class => 'product',
+    ];
+    $analyticsType = $analyticsTypeMap[get_class($model)] ?? null;
+    $owner = null;
+
+    if ($isEdit && method_exists($model, 'user')) {
+        $owner = $model->relationLoaded('user') ? $model->user : $model->user()->first();
+    }
 @endphp
 
 <div class="card card-sidebar-premium">
@@ -29,6 +44,21 @@
                 <span class="badge badge-{{ $statusMeta['color'] }}-light px-4 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs w-100">
                     <i class="fas fa-{{ $statusMeta['icon'] }} mr-1"></i> {{ $statusMeta['label'] }}
                 </span>
+            </div>
+        @endif
+
+        @if($owner)
+            <div class="mb-4 pb-3 border-bottom">
+                <div class="d-flex align-items-center">
+                    <div class="rounded-circle overflow-hidden shadow-xs border bg-white mr-3" style="width: 48px; height: 48px;">
+                        <img src="{{ $owner->avatar_url }}" alt="{{ $owner->name }}" class="w-100 h-100" style="object-fit: cover;">
+                    </div>
+                    <div class="min-width-0">
+                        <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Proprietor') }}</div>
+                        <div class="font-weight-bold text-dark text-truncate">{{ $owner->name }}</div>
+                        <div class="smallest text-muted text-monospace">{{ __('UID:') }} #{{ $owner->id }}</div>
+                    </div>
+                </div>
             </div>
         @endif
 
@@ -74,6 +104,12 @@
                     </button>
                 @endif
             </div>
+
+            @if($isEdit && $analyticsType)
+                <a href="{{ route('admin.listings.analytics', ['listing_type' => $analyticsType, 'listing_id' => $model->id]) }}" class="btn btn-light btn-block rounded-pill font-weight-bold small py-2 text-primary border uppercase letter-spacing-1 mt-3">
+                    <i class="fas fa-chart-line mr-1"></i> {{ __('Analytics & Reports') }}
+                </a>
+            @endif
         </div>
     </div>
 

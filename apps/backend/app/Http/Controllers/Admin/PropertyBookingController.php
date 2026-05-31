@@ -47,13 +47,45 @@ class PropertyBookingController extends Controller
         $status = $request->route('status') ?: ($request->query('status') ?: 'all');
         $filters = array_merge($request->only(['property', 'start_date', 'end_date']), ['status' => $status]);
 
+        return $this->renderIndex($filters, $status);
+    }
+
+    /**
+     * Display property bookings scoped to one specific property.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Property  $property
+     * @param  string  $status
+     * @return \Illuminate\View\View
+     */
+    public function forProperty(Request $request, Property $property, string $status = 'all'): View
+    {
+        $status = $request->route('status') ?: ($request->query('status') ?: 'all');
+        $filters = array_merge($request->only(['start_date', 'end_date']), [
+            'property' => $property->id,
+            'status' => $status,
+        ]);
+
+        return $this->renderIndex($filters, $status, $property);
+    }
+
+    /**
+     * Render the shared property bookings index view.
+     *
+     * @param array $filters
+     * @param string $status
+     * @param \App\Models\Property|null $selectedProperty
+     * @return \Illuminate\View\View
+     */
+    private function renderIndex(array $filters, string $status, ?Property $selectedProperty = null): View
+    {
         $bookings = $this->bookingService->getBookings($filters);
 
         // Performance: Cap selection to prevent memory exhaustion in high-volume environments.
         // RECOMMENDATION: Replace with AJAX search for true scalability
         $properties = Property::select('id', 'title')->limit(100)->get();
 
-        return view('admin.property-bookings.index', compact('bookings', 'properties', 'status'));
+        return view('admin.property-bookings.index', compact('bookings', 'properties', 'status', 'selectedProperty'));
     }
 
     /**

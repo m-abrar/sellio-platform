@@ -36,6 +36,30 @@
 <div class="container-fluid pb-5">
     @include('admin.alert')
 
+    @php
+        $propertyModeTabs = [
+            'all' => ['label' => __('All'), 'icon' => 'fa-layer-group'],
+            'rental' => ['label' => __('Rental'), 'icon' => 'fa-key'],
+            'sale' => ['label' => __('Sale'), 'icon' => 'fa-tag'],
+        ];
+    @endphp
+    <div class="card registry-card-premium registry-filter-card mb-4">
+        <div class="card-body py-3">
+            <ul class="nav nav-pills nav-pills-premium flex-wrap">
+                @foreach($propertyModeTabs as $mode => $tab)
+                    <li class="nav-item">
+                        <a class="nav-link {{ ($activePropertyMode ?? 'all') === $mode ? 'active' : '' }}"
+                           href="{{ route('admin.properties.index', array_merge(request()->except(['page', 'property_mode']), $mode === 'all' ? [] : ['property_mode' => $mode])) }}">
+                            <i class="fas {{ $tab['icon'] }} mr-1 mr-md-2"></i>
+                            {{ $tab['label'] }}
+                            <span class="badge badge-light text-muted ml-2">{{ $propertyModeCounts[$mode] ?? 0 }}</span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+
     @include('admin.properties._filter')
 
     {{-- Main Table --}}

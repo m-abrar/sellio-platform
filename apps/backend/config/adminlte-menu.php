@@ -69,7 +69,7 @@ return [
         'icon' => 'fas fa-building',
         'submenu' => [
             [
-                'text' => 'All Unified',
+                'text' => 'All Listings',
                 'url' => 'admin/listings',
                 'icon' => 'fas fa-layer-group',
             ],

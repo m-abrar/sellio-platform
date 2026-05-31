@@ -102,7 +102,7 @@ class SubscriptionController extends Controller
         // RECOMMENDATION: For large datasets, replace these with AJAX search endpoints
         $users = User::select('id', 'name', 'email')->latest()->limit(100)->get();
         $plans = Plan::select('id', 'title', 'price')->get();
-        $subscription->load('payments');
+        $subscription->load(['payments', 'plan', 'user']);
         
         return view('admin.subscriptions.form', compact('subscription', 'users', 'plans'));
     }

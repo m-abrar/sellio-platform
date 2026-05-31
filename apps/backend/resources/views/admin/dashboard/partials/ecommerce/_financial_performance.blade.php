@@ -13,7 +13,7 @@
             <div class="card-header bg-white border-0 py-3 d-flex align-items-center justify-content-between">
                 <div>
                     <h6 class="m-0 font-weight-bold text-secondary text-uppercase small" style="letter-spacing: 1px;">Revenue Analytics</h6>
-                    <p class="text-muted small mb-0">Monthly Gross vs Fulfillment Costs</p>
+                    <p class="text-muted small mb-0">Paid order revenue vs product cost basis</p>
                 </div>
                 <div class="dropdown no-arrow ml-auto">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

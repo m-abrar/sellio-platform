@@ -37,6 +37,16 @@
                     {{ __('Rentals & Stays') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage property reservations, guest arrivals, and short-term stay schedules.</p>
+                @if($selectedProperty ?? null)
+                    <div class="mt-3">
+                        <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                            <i class="fas fa-home mr-1"></i> {{ __('Filtered:') }} {{ $selectedProperty->title }}
+                        </span>
+                        <a href="{{ route('admin.properties.edit', $selectedProperty->id) }}" class="smallest font-weight-bold text-primary uppercase letter-spacing-1 ml-2">
+                            {{ __('Open Property') }} <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                @endif
             </div>
             <div class="col-sm-5 text-right">
                 <div class="d-flex justify-content-end align-items-center gap-12">

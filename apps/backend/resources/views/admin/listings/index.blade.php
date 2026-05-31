@@ -204,8 +204,8 @@
                                     <td class="align-middle">
                                         @if ($listing->user)
                                             <div class="d-flex align-items-center">
-                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-md">
-                                                    <i class="fas fa-user-tie text-primary smallest"></i>
+                                                <div class="mr-3 shadow-xs rounded-circle overflow-hidden border bg-white" style="width: 42px; height: 42px;">
+                                                    <img src="{{ $listing->user->avatar_url }}" alt="{{ $listing->user->name }}" class="w-100 h-100" style="object-fit: cover;">
                                                 </div>
                                                 <div>
                                                     <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $listing->user->name }}</span>

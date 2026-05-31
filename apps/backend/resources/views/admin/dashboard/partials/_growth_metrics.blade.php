@@ -10,9 +10,9 @@
 <div class="row">
     @php
         $growthItems = [
-            ['val' => $metrics['user_metrics']['total_users'] ?? 0, 'label' => __('Global User Base'), 'pct' => $metrics['user_metrics']['users_growth_percent'] ?? 0, 'desc' => __('Total registered ecosystem accounts'), 'color' => 'success', 'icon' => 'fa-users'],
-            ['val' => $metrics['user_metrics']['newsletter_subscribers'] ?? 0, 'label' => __('Network Reach'), 'pct' => $metrics['user_metrics']['newsletter_conversion'] ?? 0, 'desc' => __('Newsletter & communication reach'), 'color' => 'primary', 'icon' => 'fa-paper-plane'],
-            ['val' => $metrics['user_metrics']['active_subscriptions'] ?? 0, 'label' => __('Elite Membership'), 'pct' => $metrics['user_metrics']['subscriptions_percent'] ?? 0, 'desc' => __('Active recurring premium accounts'), 'color' => 'info', 'icon' => 'fa-crown'],
+            ['val' => $metrics['user_metrics']['total_users'] ?? 0, 'label' => __('Global User Base'), 'pct' => $metrics['user_metrics']['users_growth_percent'] ?? 0, 'bar' => $metrics['user_metrics']['user_base_progress'] ?? 0, 'desc' => __('Total registered ecosystem accounts'), 'color' => 'success', 'icon' => 'fa-users'],
+            ['val' => $metrics['user_metrics']['newsletter_subscribers'] ?? 0, 'label' => __('Network Reach'), 'pct' => $metrics['user_metrics']['newsletter_conversion'] ?? 0, 'bar' => $metrics['user_metrics']['newsletter_conversion'] ?? 0, 'desc' => __('Newsletter & communication reach'), 'color' => 'primary', 'icon' => 'fa-paper-plane'],
+            ['val' => $metrics['user_metrics']['active_subscriptions'] ?? 0, 'label' => __('Elite Membership'), 'pct' => $metrics['user_metrics']['subscriptions_percent'] ?? 0, 'bar' => $metrics['user_metrics']['subscriptions_percent'] ?? 0, 'desc' => __('Active recurring premium accounts'), 'color' => 'info', 'icon' => 'fa-crown'],
         ];
     @endphp
     
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="progress mb-3" style="height: 6px; background: rgba(0,0,0,0.03); border-radius: 6px; overflow: hidden;">
-                    <div class="progress-bar bg-{{ $g['color'] }}" style="width: {{ min($g['pct'], 100) }}%; border-radius: 6px;"></div>
+                    <div class="progress-bar bg-{{ $g['color'] }}" style="width: {{ min($g['bar'], 100) }}%; border-radius: 6px;"></div>
                 </div>
 
                 <p class="smallest text-muted mb-0 font-weight-bold uppercase letter-spacing-1 opacity-50">{{ $g['desc'] }}</p>

@@ -9,13 +9,13 @@
 --}}
 @php
     $modules = [
-        'is_property'   => ['title' => 'Property',   'icon' => 'fas fa-home',          'color' => 'badge-indigo-light'],
-        'is_event'      => ['title' => 'Event',      'icon' => 'fas fa-calendar-alt',  'color' => 'badge-olive-light'],
-        'is_job'        => ['title' => 'Job',        'icon' => 'fas fa-briefcase',     'color' => 'badge-navy-light'],
-        'is_auto'       => ['title' => 'Auto',       'icon' => 'fas fa-car',           'color' => 'badge-lightblue-light'],
-        'is_service'    => ['title' => 'Service',    'icon' => 'fas fa-tools',         'color' => 'badge-maroon-light'],
-        'is_classified' => ['title' => 'Classified', 'icon' => 'fas fa-tag',           'color' => 'badge-orange-light'],
-        'is_product'    => ['title' => 'Product',    'icon' => 'fas fa-shopping-bag',  'color' => 'badge-primary-light'],
+        'is_property'   => ['title' => 'Property',   'icon' => 'fas fa-home',          'color' => 'badge-primary text-white'],
+        'is_event'      => ['title' => 'Event',      'icon' => 'fas fa-calendar-alt',  'color' => 'badge-success text-white'],
+        'is_job'        => ['title' => 'Job',        'icon' => 'fas fa-briefcase',     'color' => 'badge-dark text-white'],
+        'is_auto'       => ['title' => 'Auto',       'icon' => 'fas fa-car',           'color' => 'badge-info text-white'],
+        'is_service'    => ['title' => 'Service',    'icon' => 'fas fa-tools',         'color' => 'badge-danger text-white'],
+        'is_classified' => ['title' => 'Classified', 'icon' => 'fas fa-tag',           'color' => 'badge-warning text-dark'],
+        'is_product'    => ['title' => 'Product',    'icon' => 'fas fa-shopping-bag',  'color' => 'badge-secondary text-white'],
     ];
     $hasModule = false;
 @endphp
@@ -24,7 +24,7 @@
     @foreach($modules as $column => $data)
         @if($model->$column)
             @php $hasModule = true; @endphp
-            <span class="badge {{ $data['color'] }} px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0" 
+            <span class="badge {{ $data['color'] }} px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 shadow-xs" 
                   data-toggle="tooltip" title="{{ $data['title'] }} Module">
                 <i class="{{ $data['icon'] }} mr-1"></i> {{ $data['title'] }}
             </span>

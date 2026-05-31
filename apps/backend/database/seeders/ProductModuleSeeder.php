@@ -32,6 +32,17 @@ class ProductModuleSeeder extends Seeder
         'Priority Express'  => ['pricing_type' => 'one_time',  'icon' => 'bi-lightning-charge', 'is_popular' => false, 'max_qty' => 1],
     ];
 
+    private array $commerceCountries = [
+        'United States',
+        'Canada',
+        'United Kingdom',
+        'Germany',
+        'France',
+        'United Arab Emirates',
+        'Pakistan',
+        'Australia',
+    ];
+
     public function run(): void
     {
         $this->faker = Faker::create();
@@ -96,8 +107,12 @@ class ProductModuleSeeder extends Seeder
                 // Create Order (Header)
                 $order = Order::factory()->create([
                     'user_id'      => $buyerId,
+                    'status'       => $this->faker->randomElement(['pending', 'processing', 'shipped', 'delivered']),
+                    'payment_status' => $this->faker->randomElement(['paid', 'paid', 'paid', 'unpaid']),
                     'subtotal'     => $unitPrice * $qty,
                     'total_amount' => ($unitPrice * $qty) + 10, // Simulating fixed shipping/tax
+                    'shipping_country' => $this->faker->randomElement($this->commerceCountries),
+                    'tracking_number' => strtoupper($this->faker->bothify('TRK#########')),
                 ]);
 
                 // Create Order Item (Detail Snapshot)

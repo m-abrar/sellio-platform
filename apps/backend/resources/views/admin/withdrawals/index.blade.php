@@ -77,6 +77,13 @@
 
                     <tbody>
                         @forelse ($withdrawals as $withdrawal)
+                            @php
+                                $walletBalance = $withdrawal->user?->wallet_balance ?? 0;
+                                $pendingForPartner = $withdrawal->user
+                                    ? $withdrawal->user->withdrawals()->where('status', \App\Models\Withdrawal::STATUS_PENDING)->sum('amount') / 100
+                                    : 0;
+                                $remainingAfterQueue = $walletBalance - $pendingForPartner;
+                            @endphp
                             <tr>
                                 <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
@@ -99,6 +106,20 @@
                                 <td class="align-middle text-right">
                                     <div class="text-dark font-weight-bold">
                                         <span class="smallest font-weight-normal opacity-50 mr-1">$</span>{{ number_format($withdrawal->amount_dollars, 2) }}
+                                    </div>
+                                    <div class="mt-2 p-2 rounded-lg bg-light border text-left">
+                                        <div class="d-flex justify-content-between smallest font-weight-bold text-muted uppercase letter-spacing-1">
+                                            <span>{{ __('Wallet') }}</span>
+                                            <span class="text-dark">${{ number_format($walletBalance, 2) }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between smallest font-weight-bold text-muted uppercase letter-spacing-1 mt-1">
+                                            <span>{{ __('Pending Queue') }}</span>
+                                            <span class="{{ $pendingForPartner > $walletBalance ? 'text-danger' : 'text-primary' }}">${{ number_format($pendingForPartner, 2) }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between smallest font-weight-bold text-muted uppercase letter-spacing-1 mt-1">
+                                            <span>{{ __('After Queue') }}</span>
+                                            <span class="{{ $remainingAfterQueue < 0 ? 'text-danger' : 'text-success' }}">${{ number_format($remainingAfterQueue, 2) }}</span>
+                                        </div>
                                     </div>
                                 </td>
                                 
@@ -146,7 +167,7 @@
                                                          title="{{ __('Approve Payout') }}" 
                                                          data-action="confirm-trigger"
                                                          data-confirm-title="{{ __('Approve Payout?') }}"
-                                                         data-confirm-text="{{ __('Confirming this will process the settlement of $:amount to the partner.', ['amount' => number_format($withdrawal->amount_dollars, 2)]) }}"
+                                                         data-confirm-text="{{ __('Confirming this will process $:amount. Current wallet balance: $:balance. Pending payout queue for this partner: $:pending.', ['amount' => number_format($withdrawal->amount_dollars, 2), 'balance' => number_format($walletBalance, 2), 'pending' => number_format($pendingForPartner, 2)]) }}"
                                                          data-confirm-button="{{ __('Approve Now') }}">
                                                      <i class="fas fa-check"></i>
                                                  </button>

@@ -39,6 +39,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             RolesAndPermissionsSeeder::class,
+            UserRoleAssignmentSeeder::class,
+            PendingPartnerApplicationSeeder::class,
             SettingSeeder::class,
             PageSeeder::class,
             ThemeSeeder::class,
@@ -105,6 +107,8 @@ class DatabaseSeeder extends Seeder
         }
         
         if ($this->isModuleEnabled('classifieds')) $this->call(ClassifiedAdSeeder::class);
+
+        $this->call(PendingListingsSeeder::class);
         
         // --- SECTION 4: DETAILED DATA ---
         $this->command->newLine();
@@ -144,7 +148,6 @@ class DatabaseSeeder extends Seeder
             MenuItemSeeder::class,
             ActivityLogSeeder::class,
             MediaFullSeeder::class,
-            UserRoleAssignmentSeeder::class,
             BuyerActivitySeeder::class,
             PartnerActivitySeeder::class,
         ]);

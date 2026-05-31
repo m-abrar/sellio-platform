@@ -123,6 +123,60 @@ class ListingController extends Controller
     }
 
     /**
+     * Display a dedicated analytics and reports landing page for a listing.
+     *
+     * @param  string  $listing_type
+     * @param  int  $listing_id
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function analytics(string $listing_type, int $listing_id)
+    {
+        $listing = $this->listingService->resolveListing($listing_type, $listing_id);
+
+        if (!$listing) {
+            return back()->with('error', __('Listing not found.'));
+        }
+
+        $listing->loadMissing('user');
+
+        $reportLinks = [
+            [
+                'label' => __('Reports Hub'),
+                'description' => __('Open the complete administrative analytics center.'),
+                'icon' => 'fa-chart-pie',
+                'color' => 'primary',
+                'url' => route('admin.reports.index'),
+            ],
+            [
+                'label' => __('Bookings Report'),
+                'description' => __('Review booking and inquiry velocity for marketplace operations.'),
+                'icon' => 'fa-calendar-check',
+                'color' => 'success',
+                'url' => route('admin.reports.bookings', ['listing_type' => $listing_type, 'listing_id' => $listing_id]),
+            ],
+            [
+                'label' => __('Payments Report'),
+                'description' => __('Inspect revenue, settlement, and payment performance.'),
+                'icon' => 'fa-credit-card',
+                'color' => 'info',
+                'url' => route('admin.reports.payments', ['listing_type' => $listing_type, 'listing_id' => $listing_id]),
+            ],
+        ];
+
+        if (strtolower($listing_type) === 'property') {
+            $reportLinks[] = [
+                'label' => __('Property Occupancy Report'),
+                'description' => __('Analyze property utilization, availability, and occupancy signals.'),
+                'icon' => 'fa-building',
+                'color' => 'warning',
+                'url' => route('admin.reports.properties', ['property_id' => $listing_id]),
+            ];
+        }
+
+        return view('admin.listings.analytics', compact('listing', 'listing_type', 'listing_id', 'reportLinks'));
+    }
+
+    /**
      * Purge a marketplace listing by vertical type and ID.
      *
      * @param  string  $listing_type

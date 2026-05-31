@@ -224,7 +224,7 @@
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
                         <h3 class="card-title-main mb-0">{{ __('Recent Bookings') }}</h3>
-                        <a href="{{ route('admin.bookings.properties') }}?item_id={{ $property->id }}" class="btn btn-premium-soft-primary btn-sm px-3 uppercase small letter-spacing-1 font-weight-bold">{{ __('View All') }}</a>
+                        <a href="{{ route('admin.bookings.properties.property', $property->id) }}" class="btn btn-premium-soft-primary btn-sm px-3 uppercase small letter-spacing-1 font-weight-bold">{{ __('View All') }}</a>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">

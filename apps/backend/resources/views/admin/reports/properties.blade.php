@@ -16,6 +16,11 @@
 
 @section('title', __($reportTitle))
 
+@section('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@include('admin.reports._date_range_picker_css')
+@endsection
+
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
@@ -188,5 +193,7 @@
 @stop
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
+<script src="{{ asset('admin-assets/pages/reports-filters.js') }}"></script>
 @endsection

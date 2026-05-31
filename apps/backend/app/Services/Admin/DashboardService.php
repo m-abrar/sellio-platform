@@ -55,17 +55,18 @@ class DashboardService
             $revenueChart = $this->getMonthlyRevenueChart($currentYear);
             $typeChart = $this->getModuleDistributionChart();
 
-            // 4. Activity & Lists
+            // 4. Aggregate Metrics
+            $moduleStats = $this->getEnabledModuleStats($last24Hours);
+
+            // 5. Activity & Lists
             $recentListings = $this->getRecentListings($limit);
             $recentBookings = $this->getRecentBookings($limit);
-            $notifications = $this->getRecentNotifications($limit);
+            $notifications = $this->getRecentNotifications($limit, $moduleStats);
             $topPartners = $this->getTopPartnersData($last30Days);
 
-            // 5. Calendar
+            // 6. Calendar
             $calendarEvents = $this->getCalendarEvents($last180Days, $next180Days);
-
-            // 6. Aggregate Metrics
-            $moduleStats = $this->getEnabledModuleStats($last24Hours);
+            $heatmapData = $this->getHeatmapData();
 
             return [
                 'system_kpis' => [
@@ -73,9 +74,7 @@ class DashboardService
                     'yoy_change' => $yoyChange,
                 ],
                 'urgent_actions' => [
-                    'partner_applications' => User::where('is_partner', true)
-                        ->whereDoesntHave('roles', fn ($query) => $query->where('name', 'partner'))
-                        ->count(),
+                    'partner_applications' => $this->getPendingPartnerApplicationsCount(),
                     'listing_approvals' => $moduleStats['listing_approvals'],
                     'pending_payouts' => '$' . number_format(Withdrawal::where('status', 'pending')->sum('amount') / 100, 2),
                     'unresolved_tickets' => Ticket::unresolved()->count(),
@@ -95,7 +94,11 @@ class DashboardService
                     'revenue_chart' => $revenueChart,
                     'type_chart' => $typeChart,
                     'calendar_events' => $calendarEvents,
-                    'heatmap_data' => $this->getHeatmapData()
+                    'heatmap_data' => $heatmapData,
+                    'heatmap_meta' => [
+                        'point_count' => count($heatmapData),
+                        'source' => count($heatmapData) > 0 ? 'live_listing_coordinates' : 'no_coordinates_available',
+                    ],
                 ],
                 'system_health' => [
                     'php_version' => PHP_VERSION,
@@ -181,6 +184,7 @@ class DashboardService
         return [
             'total_users' => number_format($totalUsers),
             'users_growth_percent' => abs($growth),
+            'user_base_progress' => $totalUsers > 0 ? min(100, max(12, round(($totalUsers / 100) * 100))) : 0,
             'users_growth_desc' => ($growth >= 0 ? '+' : '-') . abs($growth) . '% Growth (L30D)',
             'newsletter_subscribers' => '+' . number_format($subscribers),
             'newsletter_conversion' => $convRate,
@@ -250,33 +254,54 @@ class DashboardService
     private function getRecentListings(int $limit): array
     {
         $config = [
-            'properties'   => [Property::class, 'fa-home', 'primary'],
-            'events'       => [Event::class, 'fa-calendar-alt', 'success'],
-            'jobs'         => [JobListing::class, 'fa-briefcase', 'warning'],
-            'autos'        => [Auto::class, 'fa-car', 'info'],
-            'services'     => [Service::class, 'fa-tools', 'secondary'],
-            'classifieds'  => [Classified::class, 'fa-tag', 'dark'],
-            'products'     => [Product::class, 'fa-shopping-bag', 'danger'],
+            'property'   => ['module' => 'properties', 'model' => Property::class, 'icon' => 'fa-home', 'color' => 'primary'],
+            'event'      => ['module' => 'events', 'model' => Event::class, 'icon' => 'fa-calendar-alt', 'color' => 'success'],
+            'joblisting' => ['module' => 'jobs', 'model' => JobListing::class, 'icon' => 'fa-briefcase', 'color' => 'warning'],
+            'auto'       => ['module' => 'autos', 'model' => Auto::class, 'icon' => 'fa-car', 'color' => 'info'],
+            'service'    => ['module' => 'services', 'model' => Service::class, 'icon' => 'fa-tools', 'color' => 'secondary'],
+            'classified' => ['module' => 'classifieds', 'model' => Classified::class, 'icon' => 'fa-tag', 'color' => 'dark'],
+            'product'    => ['module' => 'products', 'model' => Product::class, 'icon' => 'fa-shopping-bag', 'color' => 'danger'],
         ];
 
-        $query = null;
-        foreach ($config as $mod => $cfg) {
-            if (module_enabled($mod)) {
-                $q = $cfg[0]::select('id', 'title', 'created_at')
-                    ->selectRaw("'{$cfg[1]}' as icon_class")
-                    ->selectRaw("'{$cfg[2]}' as tag_class")
-                    ->selectRaw("'" . Str::afterLast($cfg[0], '\\') . "' as tag");
-                $query = ($query === null) ? $q : $query->unionAll($q);
+        $items = collect();
+
+        foreach ($config as $type => $cfg) {
+            if (! module_enabled($cfg['module'])) {
+                continue;
             }
+
+            $modelClass = $cfg['model'];
+            $moduleItems = $modelClass::query()
+                ->where('is_published', true)
+                ->whereNull('approved_at')
+                ->latest()
+                ->limit(2)
+                ->get(['id', 'title', 'created_at']);
+
+            if ($moduleItems->isEmpty()) {
+                $moduleItems = $modelClass::query()
+                    ->latest()
+                    ->limit(1)
+                    ->get(['id', 'title', 'created_at']);
+            }
+
+            $items = $items->merge($moduleItems->map(fn ($item) => [
+                'id' => $item->id,
+                'title' => Str::limit($item->title, 40) . ' (' . $item->created_at->diffForHumans() . ')',
+                'tag' => Str::headline($type),
+                'listing_type' => $type,
+                'icon_class' => $cfg['icon'] . ' text-' . $cfg['color'],
+                'tag_class' => 'bg-' . $cfg['color'],
+                'created_at' => $item->created_at,
+            ]));
         }
 
-        return $query ? $query->orderByDesc('created_at')->limit($limit)->get()->map(fn($i) => [
-            'id' => $i->id,
-            'title' => Str::limit($i->title, 40) . ' (' . $i->created_at->diffForHumans() . ')',
-            'tag' => $i->tag,
-            'icon_class' => 'fa ' . $i->icon_class . ' text-' . $i->tag_class,
-            'tag_class' => 'bg-' . $i->tag_class,
-        ])->toArray() : [];
+        return $items
+            ->sortByDesc('created_at')
+            ->take($limit)
+            ->map(fn ($item) => collect($item)->except('created_at')->all())
+            ->values()
+            ->toArray();
     }
 
     private function getRecentBookings(int $limit): array
@@ -314,30 +339,79 @@ class DashboardService
         ])->toArray() : [];
     }
 
-    private function getRecentNotifications(int $limit): array
+    private function getRecentNotifications(int $limit, array $moduleStats = []): array
     {
-        if (!Auth::check() || !Auth::user()->hasRole('admin')) return [];
+        $items = [];
 
-        return Auth::user()->unreadNotifications()->take($limit)->get()->map(function ($n) {
-            $data = $n->data;
-            $type = $data['type'] ?? 'default';
-            $meta = [
-                'urgent' => ['Urgent', 'fa-exclamation-circle text-danger', 'bg-danger'],
-                'flag'   => ['Flagged', 'fa-flag text-warning', 'bg-warning'],
-                'review' => ['Review', 'fa-user-check text-success', 'bg-success'],
-                'report' => ['Report', 'fa-user-slash text-warning', 'bg-warning'],
-                'new'    => ['Support', 'fa-headset text-info', 'bg-info'],
-                'default'=> ['New', 'fa-bell text-primary', 'bg-primary'],
-            ];
-            $cfg = $meta[$type] ?? $meta['default'];
+        if (Auth::check() && Auth::user()->hasAnyRole(['admin', 'super-admin', 'moderator'])) {
+            $items = Auth::user()->unreadNotifications()->take($limit)->get()->map(function ($n) {
+                $data = $n->data;
+                $type = $data['type'] ?? 'default';
+                $meta = [
+                    'urgent' => ['Urgent', 'fa-exclamation-circle text-danger', 'bg-danger'],
+                    'alert'  => ['Urgent', 'fa-exclamation-circle text-danger', 'bg-danger'],
+                    'flag'   => ['Flagged', 'fa-flag text-warning', 'bg-warning'],
+                    'review' => ['Review', 'fa-user-check text-success', 'bg-success'],
+                    'report' => ['Report', 'fa-user-slash text-warning', 'bg-warning'],
+                    'new'    => ['Support', 'fa-headset text-info', 'bg-info'],
+                    'default'=> ['New', 'fa-bell text-primary', 'bg-primary'],
+                ];
+                $cfg = $meta[$type] ?? $meta['default'];
 
-            return [
-                'title' => Str::limit($data['message'] ?? 'New Admin Alert', 35) . ' (' . $n->created_at->diffForHumans() . ')',
-                'tag' => $cfg[0],
-                'icon_class' => 'fa ' . $cfg[1],
-                'tag_class' => $cfg[2],
-            ];
-        })->toArray();
+                return [
+                    'title' => Str::limit($data['message'] ?? 'New Admin Alert', 35) . ' (' . $n->created_at->diffForHumans() . ')',
+                    'tag' => $cfg[0],
+                    'icon_class' => 'fa ' . $cfg[1],
+                    'tag_class' => $cfg[2],
+                ];
+            })->toArray();
+        }
+
+        if (! empty($items)) {
+            return $items;
+        }
+
+        return collect([
+            [
+                'count' => $this->getPendingPartnerApplicationsCount(),
+                'title' => __(':count partner applications awaiting review', ['count' => $this->getPendingPartnerApplicationsCount()]),
+                'tag' => __('Review'),
+                'icon_class' => 'fa fa-user-shield text-danger',
+                'tag_class' => 'bg-danger',
+            ],
+            [
+                'count' => $moduleStats['listing_approvals'] ?? 0,
+                'title' => __(':count marketplace submissions require moderation', ['count' => $moduleStats['listing_approvals'] ?? 0]),
+                'tag' => __('Moderation'),
+                'icon_class' => 'fa fa-file-signature text-warning',
+                'tag_class' => 'bg-warning',
+            ],
+            [
+                'count' => Ticket::unresolved()->count(),
+                'title' => __(':count support tickets remain unresolved', ['count' => Ticket::unresolved()->count()]),
+                'tag' => __('Support'),
+                'icon_class' => 'fa fa-headset text-info',
+                'tag_class' => 'bg-info',
+            ],
+            [
+                'count' => Withdrawal::where('status', 'pending')->count(),
+                'title' => __(':count payout requests pending finance review', ['count' => Withdrawal::where('status', 'pending')->count()]),
+                'tag' => __('Finance'),
+                'icon_class' => 'fa fa-wallet text-success',
+                'tag_class' => 'bg-success',
+            ],
+        ])
+            ->filter(fn ($item) => $item['count'] > 0)
+            ->take($limit)
+            ->map(fn ($item) => collect($item)->except('count')->all())
+            ->values()
+            ->whenEmpty(fn ($collection) => $collection->push([
+                'title' => __('All operational queues are currently clear'),
+                'tag' => __('Healthy'),
+                'icon_class' => 'fa fa-check-circle text-success',
+                'tag_class' => 'bg-success',
+            ]))
+            ->toArray();
     }
 
     private function getTopPartnersData($last30Days): array
@@ -429,7 +503,10 @@ class DashboardService
 
         foreach ($config as $mod => $models) {
             if (module_enabled($mod)) {
-                $approvals += $models[0]::where('is_published', false)->count();
+                $approvals += $models[0]::where(function ($query) {
+                    $query->where('is_published', false)
+                        ->orWhere(fn ($pending) => $pending->where('is_published', true)->whereNull('approved_at'));
+                })->count();
                 $live += $models[0]::where('is_published', true)->count();
                 $leads += $models[1]::where('created_at', '>=', $last24Hours)->count();
                 if ($mod === 'services') $leads += ServiceAppointment::where('created_at', '>=', $last24Hours)->count();
@@ -472,6 +549,13 @@ class DashboardService
         return $points;
     }
 
+    private function getPendingPartnerApplicationsCount(): int
+    {
+        return User::where('is_partner', true)
+            ->whereDoesntHave('roles', fn ($query) => $query->where('name', 'partner'))
+            ->count();
+    }
+
     public function getEcommerceMetrics(): array
     {
         $today = now();
@@ -501,13 +585,24 @@ class DashboardService
             $cls = $map[$o->payment_status] ?? 'info';
             return [
                 'title' => "Order #{$o->order_number} (" . ucfirst($o->payment_status) . ")",
+                'logistics_id' => $o->tracking_number ?: $o->order_number,
                 'tag' => 'Order', 'icon_class' => "fa fa-shopping-cart text-{$cls}", 'tag_class' => "bg-{$cls}",
             ];
         });
 
-        $topSellersData = OrderItem::select('product_id', 'product_name', DB::raw('SUM(quantity) as total'))
-            ->groupBy('product_id', 'product_name')->orderByDesc('total')->limit(5)->get()
-            ->map(fn($i, $idx) => ['rank' => '#' . ($idx + 1), 'title' => $i->product_name, 'bookings' => $i->total . ' Sales']);
+        $topSellersData = OrderItem::query()
+            ->leftJoin('products', 'order_items.product_id', '=', 'products.id')
+            ->select('order_items.product_id', 'order_items.product_name', 'products.sku', DB::raw('SUM(order_items.quantity) as total'))
+            ->groupBy('order_items.product_id', 'order_items.product_name', 'products.sku')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get()
+            ->map(fn($i, $idx) => [
+                'rank' => '#' . ($idx + 1),
+                'title' => $i->product_name,
+                'sku' => $i->sku ?: 'SKU-' . $i->product_id,
+                'bookings' => $i->total . ' Sales',
+            ]);
 
         $subscribers = NewsletterSubscriber::where('created_at', '>=', $lastMonth)->count();
         $activeSubs = Subscription::where('status', 'active')->count();
@@ -538,12 +633,106 @@ class DashboardService
                 'subscriptions_desc' => $subPercent . '% of Total Users are Active Subscribers',
             ],
             'js_data' => [
-                'revenue_chart' => $this->getMonthlyRevenueChart($currentYear),
-                'type_chart' => $this->getModuleDistributionChart(),
+                'revenue_chart' => $this->getMonthlyEcommerceRevenueChart($currentYear),
+                'type_chart' => $this->getEcommerceCategoryDistributionChart(),
                 'calendar_events' => $this->getCalendarEvents($last180Days, $next180Days),
-                'heatmap_data' => $this->getHeatmapData()
+                'heatmap_data' => $this->getEcommerceHeatmapData(),
             ]
         ];
+    }
+
+    private function getMonthlyEcommerceRevenueChart(int $year): array
+    {
+        $monthExpression = $this->monthExpression('orders.created_at');
+
+        $monthlyGross = Order::select(DB::raw("{$monthExpression} as month"), DB::raw('SUM(total_amount) as total'))
+            ->where('payment_status', 'paid')
+            ->whereYear('orders.created_at', $year)
+            ->groupBy('month')
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $monthlyCosts = OrderItem::query()
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->select(DB::raw("{$monthExpression} as month"), DB::raw('SUM(COALESCE(products.cost_price, 0) * order_items.quantity) as total'))
+            ->where('orders.payment_status', 'paid')
+            ->whereYear('orders.created_at', $year)
+            ->groupBy('month')
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $gross = [];
+        $costs = [];
+        foreach (range(1, 12) as $month) {
+            $gross[] = round($monthlyGross[$month] ?? 0);
+            $costs[] = round($monthlyCosts[$month] ?? 0);
+        }
+
+        return [
+            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'gross_earnings' => $gross,
+            'total_payouts' => $costs,
+        ];
+    }
+
+    private function getEcommerceCategoryDistributionChart(): array
+    {
+        $sales = OrderItem::query()
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->where('orders.payment_status', 'paid')
+            ->selectRaw("COALESCE(categories.title, 'Uncategorized') as category_name")
+            ->selectRaw('SUM(order_items.total_price) as total')
+            ->groupBy('category_name')
+            ->orderByDesc('total')
+            ->limit(6)
+            ->get();
+
+        if ($sales->isEmpty()) {
+            $sales = Product::query()
+                ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+                ->selectRaw("COALESCE(categories.title, 'Uncategorized') as category_name")
+                ->selectRaw('COUNT(products.id) as total')
+                ->groupBy('category_name')
+                ->orderByDesc('total')
+                ->limit(6)
+                ->get();
+        }
+
+        return [
+            'labels' => $sales->pluck('category_name')->toArray(),
+            'data' => $sales->pluck('total')->map(fn ($value) => round((float) $value))->toArray(),
+        ];
+    }
+
+    private function getEcommerceHeatmapData(): array
+    {
+        $countryCoordinates = [
+            'United States' => [39.8283, -98.5795],
+            'Canada' => [56.1304, -106.3468],
+            'United Kingdom' => [55.3781, -3.4360],
+            'Germany' => [51.1657, 10.4515],
+            'France' => [46.2276, 2.2137],
+            'United Arab Emirates' => [23.4241, 53.8478],
+            'Pakistan' => [30.3753, 69.3451],
+            'Australia' => [-25.2744, 133.7751],
+        ];
+
+        return Order::query()
+            ->select('shipping_country', DB::raw('COUNT(*) as total'))
+            ->whereNotNull('shipping_country')
+            ->groupBy('shipping_country')
+            ->get()
+            ->map(function ($country) use ($countryCoordinates) {
+                $coords = $countryCoordinates[$country->shipping_country] ?? null;
+
+                return $coords ? [$coords[0], $coords[1], min(1, 0.35 + ($country->total / 20))] : null;
+            })
+            ->filter()
+            ->values()
+            ->toArray();
     }
 
     public function getPendingListings()

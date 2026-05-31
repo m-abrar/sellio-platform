@@ -13,25 +13,32 @@
 <div class="card registry-card-premium registry-filter-card mb-5">
     <div class="card-body">
         <form action="{{ url()->current() }}" method="GET" class="row align-items-end">
-            <div class="col-md-5 mb-3 mb-md-0">
-                <label class="form-label-premium">{{ __('Analysis Period (Start)') }}</label>
-                <div class="input-group input-group-premium">
+            <div class="col-lg-7 mb-3 mb-lg-0">
+                <label class="form-label-premium">{{ __('Analysis Period') }}</label>
+                <input type="hidden" id="bookings_start_date" name="start_date" value="{{ $startDateFormatted ?? '' }}">
+                <input type="hidden" id="bookings_end_date" name="end_date" value="{{ $endDateFormatted ?? '' }}">
+                <div class="input-group input-group-premium report-date-range-shell">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-calendar-alt text-xs"></i></span>
                     </div>
-                    <input type="date" name="start_date" class="form-control" value="{{ $startDateFormatted ?? '' }}">
+                    <input type="text"
+                           class="form-control report-date-range-picker"
+                           value="{{ trim(($startDateFormatted ?? '') . (($startDateFormatted ?? false) && ($endDateFormatted ?? false) ? ' to ' : '') . ($endDateFormatted ?? '')) }}"
+                           placeholder="{{ __('Select booking analysis range') }}"
+                           readonly
+                           data-start-input="#bookings_start_date"
+                           data-end-input="#bookings_end_date">
                 </div>
             </div>
-            <div class="col-md-5 mb-3 mb-md-0">
-                <label class="form-label-premium">{{ __('Analysis Period (End)') }}</label>
-                <div class="input-group input-group-premium">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-calendar-check text-xs"></i></span>
-                    </div>
-                    <input type="date" name="end_date" class="form-control" value="{{ $endDateFormatted ?? '' }}">
+            <div class="col-lg-3 mb-3 mb-lg-0">
+                <label class="form-label-premium">{{ __('Quick Range') }}</label>
+                <div class="report-range-presets">
+                    <button type="button" class="report-range-chip" data-report-range="7">{{ __('7D') }}</button>
+                    <button type="button" class="report-range-chip" data-report-range="30">{{ __('30D') }}</button>
+                    <button type="button" class="report-range-chip" data-report-range="month">{{ __('MTD') }}</button>
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-lg-2">
                 <div class="d-flex align-items-center justify-content-end gap-12">
                     <button type="submit" class="btn-filter-premium flex-grow-1">
                         <i class="fas fa-sync-alt mr-2"></i> {{ __('UPDATE') }}

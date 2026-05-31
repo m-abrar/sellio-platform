@@ -12,6 +12,9 @@
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form action="{{ route('admin.properties.index') }}" method="GET">
+            @if(request('property_mode'))
+                <input type="hidden" name="property_mode" value="{{ request('property_mode') }}">
+            @endif
             <div class="row align-items-end">
                 <div class="col-md-3">
                     <label class="form-label-premium">{{ __('Property Focus') }}</label>

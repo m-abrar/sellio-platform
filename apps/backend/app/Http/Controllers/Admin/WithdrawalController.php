@@ -25,7 +25,7 @@ class WithdrawalController extends Controller
      */
     private function getWithdrawalsQuery(): Builder
     {
-        return Withdrawal::with('user')->latest();
+        return Withdrawal::with(['user', 'user.wallet'])->latest();
     }
     
     /**

@@ -33,7 +33,7 @@ class BlogRequest extends FormRequest
             'is_published'    => ['nullable', 'boolean'],
             'is_featured'     => ['nullable', 'boolean'],
             'allow_comments'  => ['nullable', 'boolean'],
-            'featured_image'  => ['nullable', 'image', 'max:2048'],
+            'featured_image'  => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:5120'],
             'tags'            => ['nullable', 'array'],
             'tags.*'          => ['exists:tags,id'],
             'meta_title'      => ['nullable', 'string', 'max:255'],

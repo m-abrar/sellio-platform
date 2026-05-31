@@ -116,6 +116,7 @@ Route::prefix('admin')
         Route::prefix('listings')->name('listings.')->group(function () {
             Route::get('/{status?}', [ListingController::class, 'index'])->name('index');
             Route::get('/{listing_type}/{listing_id}', [ListingController::class, 'edit'])->name('edit');
+            Route::get('/{listing_type}/{listing_id}/analytics', [ListingController::class, 'analytics'])->name('analytics');
             Route::get('/{listing_type}/{listing_id}/edit', [ListingController::class, 'edit'])->name('edit.type');
             Route::delete('/{listing_type}/{listing_id}', [ListingController::class, 'destroy'])->name('destroy');
             Route::post('/{listing_type}/{listing_id}/approve', [ListingController::class, 'approve'])->name('approve');
@@ -199,6 +200,7 @@ Route::prefix('admin')
      */
         Route::controller(BookingController::class)->prefix('bookings')->name('bookings.')->group(function () {
             // Dedicated Category Views (Pills Grouping equivalent)
+            Route::get('/properties/property/{property}/{status?}', [PropertyBookingController::class, 'forProperty'])->name('properties.property')->middleware(['module:properties', 'can:manage-property']);
             Route::get('/properties/{status?}', [PropertyBookingController::class, 'index'])->name('properties')->middleware(['module:properties', 'can:manage-property']);
             Route::get('/autos/{status?}', [AutoInquiryController::class, 'index'])->name('autos')->middleware(['module:autos', 'can:manage-auto']);
             Route::get('/events/{status?}', [EventBookingController::class, 'index'])->name('events')->middleware(['module:events', 'can:manage-event']);

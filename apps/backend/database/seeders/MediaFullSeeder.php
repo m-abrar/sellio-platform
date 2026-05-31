@@ -68,6 +68,7 @@ class MediaFullSeeder extends Seeder
         // --- Gallery On/Off Switch ---
         // Reads from config/app.php or a custom config file. Defaults to true.
         $seedGalleryMedia = false; // config('app.seed_gallery_media', true);
+        $forceGalleryModels = ['Advertisement'];
         if (!$seedGalleryMedia) {
             $this->command->warn('⚠️ Gallery media seeding is disabled by configuration.');
         }
@@ -85,14 +86,14 @@ class MediaFullSeeder extends Seeder
             'Blog' => Blog::class,
             // Supporting Models
             'User' => User::class,
-            // 'Category' => Category::class,
-            // 'Type' => Type::class,
-            // 'Brand' => Brand::class,
-            // 'Location' => Location::class,
-            // 'Feature' => Feature::class,
-            // 'Tag' => Tag::class,
-            // 'Advertisement' => Advertisement::class,
-            // 'Amenity' => Amenity::class,
+            'Category' => Category::class,
+            'Type' => Type::class,
+            'Brand' => Brand::class,
+            'Location' => Location::class,
+            'Feature' => Feature::class,
+            'Tag' => Tag::class,
+            'Amenity' => Amenity::class,
+            'Advertisement' => Advertisement::class,
             // 'Plan' => Plan::class,
             // 'PropertyAddon' => PropertyAddon::class,
         ];
@@ -152,7 +153,7 @@ class MediaFullSeeder extends Seeder
             // ----------------------------------------------------------------------
             // FIX: Process records in chunks (e.g., 50 at a time) to prevent memory exhaustion
             // ----------------------------------------------------------------------
-            $modelClass::chunk(50, function ($records) use ($faker, $modelName, $primaryFolderPath, $primaryCollection, $primaryFiles, $galleryCollection, $galleryCount, $galleryFiles, &$totalAttachments, $seedGalleryMedia) {
+            $modelClass::chunk(50, function ($records) use ($faker, $modelName, $primaryFolderPath, $primaryCollection, $primaryFiles, $galleryCollection, $galleryCount, $galleryFiles, &$totalAttachments, $seedGalleryMedia, $forceGalleryModels) {
             
                 // Iterate through each chunk of database records.
                 foreach ($records as $record) {
@@ -214,7 +215,7 @@ class MediaFullSeeder extends Seeder
                     // ----------------------------------------------------------
                     // 4. ATTACH GALLERY MEDIA (If applicable and files exist)
                     // ----------------------------------------------------------
-                    if ($seedGalleryMedia && $galleryCollection && $galleryCount > 0) {
+                    if (($seedGalleryMedia || in_array($modelName, $forceGalleryModels, true)) && $galleryCollection && $galleryCount > 0) {
                         
                         // Attach 1 to 3 random images (MAXIMUM LIMIT IS 3)
                         $numGalleryItems = $faker->numberBetween(1, min(3, $galleryCount));

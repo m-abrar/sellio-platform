@@ -38,6 +38,11 @@
 
             // 2. Establish Record Persistence (Avoid ::find if record is passed)
             $isEdit = isset($record) && $record->exists;
+
+            if (!$isEdit && !empty($id) && is_string($modelClass) && class_exists($modelClass)) {
+                $record = $modelClass::find($id);
+                $isEdit = $record && $record->exists;
+            }
             
             if ($isEdit) {
                 if ($multiple) {

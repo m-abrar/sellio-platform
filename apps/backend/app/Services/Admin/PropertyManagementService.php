@@ -35,13 +35,22 @@ class PropertyManagementService
             ->when($request->query('name'), fn($q) => $q->where('title', 'like', '%' . $request->query('name') . '%'))
             ->when($request->query('location_id'), fn($q) => $q->where('location_id', $request->query('location_id')))
             ->when($request->query('category_id'), fn($q) => $q->where('category_id', $request->query('category_id')))
+            ->when($request->query('property_mode') === 'rental', fn($q) => $q->where('is_rental', true))
+            ->when($request->query('property_mode') === 'sale', fn($q) => $q->where('is_sale', true))
             ->when($request->query('only_active'), fn($q) => $q->where('is_published', 1))
             ->with(['location', 'category', 'user', 'media', 'type'])
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
-        return compact('properties', 'locations', 'categories');
+        $activePropertyMode = $request->query('property_mode', 'all');
+        $propertyModeCounts = [
+            'all' => Property::count(),
+            'rental' => Property::where('is_rental', true)->count(),
+            'sale' => Property::where('is_sale', true)->count(),
+        ];
+
+        return compact('properties', 'locations', 'categories', 'activePropertyMode', 'propertyModeCounts');
     }
 
     /**

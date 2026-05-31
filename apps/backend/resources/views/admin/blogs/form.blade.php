@@ -100,6 +100,25 @@
                     </div>
                 </div>
 
+                {{-- Article Gallery --}}
+                <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-side">
+                            <i class="fas fa-images mr-2 text-primary opacity-50"></i> {{ __('Article Gallery') }}
+                        </h3>
+                    </div>
+                    <div class="card-body p-0">
+                        @include('admin._partials._image-uploader', [
+                            'name' => \App\Models\Blog::GALLERY_MEDIA,
+                            'label' => __('Attach Article Images'),
+                            'multiple' => true,
+                            'model' => 'blog',
+                            'id' => $blog->id ?? null,
+                            'noCard' => true,
+                        ])
+                    </div>
+                </div>
+
                 {{-- Additional Meta --}}
                 <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden">
                     <div class="card-header border-0 bg-white py-4 px-4">

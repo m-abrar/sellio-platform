@@ -58,7 +58,7 @@ class MediaController extends Controller
     public function upload(Request $request): JsonResponse
     {
         $request->validate([
-            'image'    => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'image'    => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'model'    => 'required|string',
             'id'       => 'required|integer', // Made required to prevent auto-creation
             'name'     => 'nullable|string',
