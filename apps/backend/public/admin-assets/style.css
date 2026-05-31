@@ -2274,6 +2274,7 @@ tr:hover .icon-square-premium {
 .image-preview-remove { top: -10px !important; right: -10px !important; border-radius: 50% !important; width: 28px !important; height: 28px !important; padding: 0 !important; border: 2px solid #fff !important; z-index: 2 !important; }
 .image-preview-remove-sm { top: -8px !important; right: -8px !important; border-radius: 50% !important; width: 26px !important; height: 26px !important; padding: 0 !important; border: 2px solid #fff !important; }
 .image-preview-overlay { top:0 !important; left:0 !important; right:0 !important; bottom:0 !important; background: rgba(0,0,0,0.2) !important; z-index: 1 !important; }
+.image-upload-state { top: 3px !important; left: 3px !important; right: 3px !important; bottom: 3px !important; background: rgba(255, 255, 255, 0.78) !important; backdrop-filter: blur(2px) !important; z-index: 2 !important; pointer-events: none !important; }
 
 /* Floating Action Bar Styling */
 .bulk-floating-bar {
@@ -2522,7 +2523,6 @@ tr:hover .icon-square-premium {
 /* Support Ticket Specifics */
 .ticket-chat-thread::-webkit-scrollbar { width: 6px !important; }
 .ticket-chat-thread::-webkit-scrollbar-thumb { background-color: #ccc !important; border-radius: 3px !important; }
-
 
 
 

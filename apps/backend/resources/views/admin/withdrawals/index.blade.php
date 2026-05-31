@@ -106,25 +106,23 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="withdrawals-table" class="table table-hover table-premium mb-0 datatable-init"
-                       data-datatable-config='{"paging": true, "searching": true, "ordering": true, "info": true, "order": [[5, "desc"]], "dom": "tr"}'>
+                       data-datatable-config='{"paging": true, "searching": true, "ordering": true, "info": true, "order": [[3, "desc"]], "dom": "tr"}'>
                     <colgroup>
                         <col style="width: 22%;">
-                        <col style="width: 18%;">
+                        <col style="width: 22%;">
                         <col style="width: 10%;">
-                        <col style="width: 16%;">
+                        <col style="width: 12%;">
+                        <col style="width: 14%;">
                         <col style="width: 10%;">
-                        <col style="width: 9%;">
-                        <col style="width: 7%;">
                     </colgroup>
                     <thead class="thead-light">
                         <tr>
                             <th class="pl-4">{{ __('Partner Intelligence') }}</th>
                             <th class="text-right">{{ __('Settlement Value') }}</th>
-                            <th>{{ __('Protocol') }}</th>
-                            <th>{{ __('Details') }}</th>
                             <th class="text-center">{{ __('Lifecycle') }}</th>
-                            <th>{{ __('Temporal Data') }}</th>
+                            <th>{{ __('Date') }}</th>
                             <th class="text-right pr-4">{{ __('Operations') }}</th>
+                            <th>{{ __('Details') }}</th>
                         </tr>
                     </thead>
 
@@ -160,6 +158,11 @@
                                     <div class="text-dark font-weight-bold">
                                         <span class="smallest font-weight-normal opacity-50 mr-1">$</span>{{ number_format($withdrawal->amount_dollars, 2) }}
                                     </div>
+                                    <div class="smallest text-muted mt-1 withdrawal-method">
+                                        <i class="fas fa-university mr-1 opacity-50"></i>
+                                        <span class="font-weight-bold uppercase letter-spacing-1">{{ __('Protocol') }}:</span>
+                                        {{ Str::limit($withdrawal->method ?? __('Other'), 28) }}
+                                    </div>
                                     <div class="mt-2 p-2 rounded-lg bg-light border text-left withdrawal-wallet-card">
                                         <div class="d-flex justify-content-between smallest font-weight-bold text-muted uppercase letter-spacing-1">
                                             <span>{{ __('Wallet') }}</span>
@@ -176,24 +179,6 @@
                                     </div>
                                 </td>
                                 
-                                <td class="align-middle">
-                                    <span class="smallest font-weight-bold uppercase letter-spacing-1 text-muted withdrawal-method">
-                                        <i class="fas fa-university mr-1 opacity-50"></i> {{ $withdrawal->method ?? __('OTHER') }}
-                                    </span>
-                                </td>
-
-                                <td class="align-middle">
-                                    <a href="{{ route('admin.withdrawals.show', $withdrawal) }}" class="btn btn-light btn-sm rounded-pill font-weight-bold smallest uppercase letter-spacing-1 text-primary border">
-                                        <i class="fas fa-file-invoice-dollar mr-1"></i> {{ __('View Details') }}
-                                    </a>
-                                    <div class="smallest text-muted mt-2">
-                                        {{ Str::limit($withdrawal->method ?? __('Payout'), 18) }}
-                                        @if ($withdrawal->admin_note)
-                                            <span class="badge badge-danger-light text-danger ml-1">{{ __('Note') }}</span>
-                                        @endif
-                                    </div>
-                                </td>
-
                                 <td class="text-center align-middle withdrawal-status">
                                     @php $status = $withdrawal->getStatusMeta(); @endphp
                                     <span class="badge badge-{{ $status['color'] }}-light text-{{ $status['color'] }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-90">
@@ -238,10 +223,17 @@
                                         </span>
                                     @endif
                                 </td>
+
+                                <td class="align-middle">
+                                    <a href="{{ route('admin.withdrawals.show', $withdrawal) }}" class="btn btn-light btn-sm rounded-pill font-weight-bold smallest uppercase letter-spacing-1 text-primary border">
+                                        <i class="fas fa-file-invoice-dollar mr-1"></i> {{ __('View Details') }}
+                                    </a>
+                                </td>
+
                             </tr>
                         @empty
                             @include('admin._partials._empty-state', [
-                                'colspan' => 7,
+                                'colspan' => 6,
                                 'icon' => 'fas fa-file-invoice-dollar',
                                 'title' => __('Zero Requests Found'),
                                 'description' => __('New payouts in the ":status" queue will appear here once requested by marketplace partners.', ['status' => __($filter_status)]),

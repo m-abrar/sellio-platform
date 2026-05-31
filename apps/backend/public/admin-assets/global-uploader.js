@@ -66,6 +66,17 @@
             formData.append("name", $dropzone.data('name'));
             formData.append("multiple", $dropzone.data('multiple') ? '1' : '0');
 
+            const isMultiple = Boolean($dropzone.data('multiple'));
+            const previousMarkup = previewContainer.innerHTML;
+            const objectUrl = URL.createObjectURL(file);
+
+            if (!isMultiple) {
+                previewContainer.innerHTML = "";
+            }
+
+            const previewElement = createPreviewElement(objectUrl, 'syncing');
+            previewContainer.appendChild(previewElement);
+
             fetch($dropzone.data('upload-url'), {
                 method: "POST",
                 body: formData
@@ -73,31 +84,73 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    if (!$dropzone.data('multiple')) {
-                        previewContainer.innerHTML = "";
-                    }
-
-                    const imageHtml = `
-                        <div class="image-container position-relative group">
-                            <img src="${data.url}" class="img-thumbnail border-0 shadow-premium rounded-xl image-preview-img">
-                            <button type="button" class="btn btn-danger btn-xs remove-image position-absolute d-flex align-items-center justify-content-center shadow-lg" 
-                                    data-image="${data.url}">
-                                <i class="fas fa-times smallest"></i>
-                            </button>
-                        </div>`;
-
-                    previewContainer.insertAdjacentHTML('beforeend', imageHtml);
+                    completePreviewUpload(previewElement, data.url);
                     attachRemoveEvents(previewContainer, $dropzone);
                     
                     if (window.PremiumToast) PremiumToast.fire({ icon: 'success', title: 'Asset synchronized.' });
                 } else {
+                    previewElement.remove();
+                    if (!isMultiple) {
+                        previewContainer.innerHTML = previousMarkup;
+                        attachRemoveEvents(previewContainer, $dropzone);
+                    }
                     if (window.PremiumToast) PremiumToast.fire({ icon: 'error', title: data.message || 'Upload failed.' });
                 }
             })
             .catch(error => {
                 console.error("Upload error:", error);
+                previewElement.remove();
+                if (!isMultiple) {
+                    previewContainer.innerHTML = previousMarkup;
+                    attachRemoveEvents(previewContainer, $dropzone);
+                }
                 if (window.PremiumToast) PremiumToast.fire({ icon: 'error', title: 'System communication error.' });
+            })
+            .finally(() => {
+                URL.revokeObjectURL(objectUrl);
             });
+        }
+
+        function createPreviewElement(src, state) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'image-container position-relative group';
+            wrapper.dataset.uploadState = state;
+
+            const image = document.createElement('img');
+            image.src = src;
+            image.className = 'img-thumbnail border-0 shadow-premium rounded-xl image-preview-img';
+            image.alt = '';
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'btn btn-danger btn-xs remove-image position-absolute d-flex align-items-center justify-content-center shadow-lg image-preview-remove';
+            button.disabled = state === 'syncing';
+            button.innerHTML = '<i class="fas fa-times smallest"></i>';
+
+            const overlay = document.createElement('div');
+            overlay.className = 'image-upload-state position-absolute rounded-xl d-flex align-items-center justify-content-center';
+            overlay.innerHTML = '<span class="badge badge-primary-light text-primary shadow-xs"><i class="fas fa-spinner fa-spin mr-1"></i> Syncing</span>';
+
+            wrapper.appendChild(image);
+            wrapper.appendChild(button);
+            wrapper.appendChild(overlay);
+
+            return wrapper;
+        }
+
+        function completePreviewUpload(previewElement, url) {
+            const image = previewElement.querySelector('img');
+            const button = previewElement.querySelector('.remove-image');
+            const overlay = previewElement.querySelector('.image-upload-state');
+
+            if (image) image.src = url;
+            if (button) {
+                button.disabled = false;
+                button.dataset.image = url;
+            }
+            if (overlay) overlay.remove();
+
+            previewElement.dataset.uploadState = 'synced';
         }
 
         function attachRemoveEvents(container, $dropzone) {
