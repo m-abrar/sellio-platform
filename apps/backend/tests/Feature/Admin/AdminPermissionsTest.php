@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\User;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\Concerns\InteractsWithAdmin;
 use Tests\TestCase;
@@ -65,5 +66,34 @@ class AdminPermissionsTest extends TestCase
         $this->actingAsSuperAdmin()
             ->get(route('admin.menu.index'))
             ->assertOk();
+    }
+
+    public function test_limited_admin_with_single_permission_can_access_allowed_module_only(): void
+    {
+        Role::where('name', 'admin')->firstOrFail()->syncPermissions(['manage-product']);
+
+        $limitedAdmin = User::factory()->create([
+            'email' => 'limited-product-admin@test.test',
+            'is_admin' => true,
+        ]);
+        $limitedAdmin->assignRole('admin');
+
+        $this->actingAs($limitedAdmin)
+            ->get(route('admin.products.index'))
+            ->assertOk();
+
+        $this->actingAs($limitedAdmin)
+            ->get(route('admin.users.index'))
+            ->assertForbidden();
+    }
+
+    public function test_standard_user_cannot_access_admin_dashboard(): void
+    {
+        $buyer = User::factory()->create(['email' => 'buyer-user@test.test']);
+        $buyer->assignRole(Role::where('name', 'user')->firstOrFail());
+
+        $this->actingAs($buyer)
+            ->get(route('admin.welcome'))
+            ->assertForbidden();
     }
 }

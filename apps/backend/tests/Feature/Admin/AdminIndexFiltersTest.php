@@ -3,10 +3,17 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Auto;
+use App\Models\AutoInquiry;
+use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Classified;
 use App\Models\Event;
+use App\Models\EventBooking;
+use App\Models\EventOccurrence;
+use App\Models\EventOccurrenceTicket;
+use App\Models\EventTicketType;
 use App\Models\Gallery;
+use App\Models\JobApplication;
 use App\Models\JobListing;
 use App\Models\NewsletterSubscriber;
 use App\Models\Order;
@@ -16,6 +23,7 @@ use App\Models\Product;
 use App\Models\Property;
 use App\Models\PropertyBooking;
 use App\Models\Service;
+use App\Models\ServiceQuote;
 use App\Models\Subscription;
 use App\Models\Testimonial;
 use App\Models\Ticket;
@@ -24,6 +32,7 @@ use App\Models\Type;
 use App\Models\User;
 use App\Models\Withdrawal;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Tests\Concerns\InteractsWithAdmin;
 use Tests\TestCase;
@@ -597,5 +606,229 @@ class AdminIndexFiltersTest extends TestCase
         $pageTwo->assertOk();
         $pageTwo->assertSee('paginate-newsletter-16@test.test', false);
         $pageTwo->assertDontSee('paginate-newsletter-01@test.test', false);
+    }
+
+    public function test_unified_bookings_index_filters_by_status(): void
+    {
+        cache()->flush();
+
+        $property = Property::firstOrFail();
+        $pendingUser = User::factory()->create(['name' => 'Pending Booking User Alpha']);
+        $confirmedUser = User::factory()->create(['name' => 'Confirmed Booking User Beta']);
+
+        PropertyBooking::create([
+            'user_id' => $pendingUser->id,
+            'property_id' => $property->id,
+            'check_in_date' => now()->addDays(5),
+            'check_out_date' => now()->addDays(7),
+            'guests' => 2,
+            'total_price' => 500,
+            'full_name' => 'Pending Booking Guest',
+            'email' => 'pending-booking@test.test',
+            'phone' => '+15550101',
+            'status' => PropertyBooking::STATUS_PENDING,
+        ]);
+        PropertyBooking::create([
+            'user_id' => $confirmedUser->id,
+            'property_id' => $property->id,
+            'check_in_date' => now()->addDays(10),
+            'check_out_date' => now()->addDays(12),
+            'guests' => 2,
+            'total_price' => 750,
+            'full_name' => 'Confirmed Booking Guest',
+            'email' => 'confirmed-booking@test.test',
+            'phone' => '+15550102',
+            'status' => PropertyBooking::STATUS_CONFIRMED,
+        ]);
+
+        $response = $this->actingAsSuperAdmin()->get(route('admin.bookings.index', [
+            'status' => PropertyBooking::STATUS_PENDING,
+        ]));
+
+        $response->assertOk();
+        $response->assertSee('Pending Booking User Alpha', false);
+        $response->assertDontSee('Confirmed Booking User Beta', false);
+    }
+
+    public function test_job_application_index_filters_by_status(): void
+    {
+        $job = JobListing::firstOrFail();
+        $pendingUser = User::factory()->create(['name' => 'Pending Applicant Alpha']);
+        $hiredUser = User::factory()->create(['name' => 'Hired Applicant Beta']);
+
+        JobApplication::create([
+            'job_listing_id' => $job->id,
+            'user_id' => $pendingUser->id,
+            'cover_letter' => 'Pending application.',
+            'status' => JobApplication::STATUS_PENDING,
+        ]);
+        JobApplication::create([
+            'job_listing_id' => $job->id,
+            'user_id' => $hiredUser->id,
+            'cover_letter' => 'Hired application.',
+            'status' => JobApplication::STATUS_HIRED,
+        ]);
+
+        $response = $this->actingAsSuperAdmin()->get(route('admin.job-applications.index', [
+            'status' => JobApplication::STATUS_PENDING,
+        ]));
+
+        $response->assertOk();
+        $response->assertSee('Pending Applicant Alpha', false);
+        $response->assertDontSee('Hired Applicant Beta', false);
+    }
+
+    public function test_auto_inquiry_index_filters_by_status(): void
+    {
+        $auto = Auto::firstOrFail();
+        $pendingUser = User::factory()->create(['name' => 'Pending Auto Inquiry User']);
+        $resolvedUser = User::factory()->create(['name' => 'Resolved Auto Inquiry User']);
+
+        AutoInquiry::create([
+            'auto_id' => $auto->id,
+            'user_id' => $pendingUser->id,
+            'full_name' => 'Pending Auto Lead',
+            'email' => 'pending-auto@test.test',
+            'phone' => '+15550103',
+            'message' => 'Pending inquiry message.',
+        ]);
+        $resolved = AutoInquiry::create([
+            'auto_id' => $auto->id,
+            'user_id' => $resolvedUser->id,
+            'full_name' => 'Resolved Auto Lead',
+            'email' => 'resolved-auto@test.test',
+            'phone' => '+15550104',
+            'message' => 'Resolved inquiry message.',
+        ]);
+        $resolved->forceFill(['status' => AutoInquiry::STATUS_RESOLVED])->save();
+
+        $response = $this->actingAsSuperAdmin()->get(route('admin.auto-inquiries.index', [
+            'status' => AutoInquiry::STATUS_PENDING,
+        ]));
+
+        $response->assertOk();
+        $response->assertSee('Pending Auto Inquiry User', false);
+        $response->assertDontSee('Resolved Auto Inquiry User', false);
+    }
+
+    public function test_event_booking_index_filters_by_status(): void
+    {
+        $event = Event::firstOrFail();
+        $pendingUser = User::factory()->create(['name' => 'Pending Event Attendee']);
+        $confirmedUser = User::factory()->create(['name' => 'Confirmed Event Attendee']);
+        $occurrence = EventOccurrence::factory()->create(['event_id' => $event->id]);
+        $ticketType = EventTicketType::factory()->create(['event_id' => $event->id, 'title' => 'Filter Test Ticket']);
+        $inventory = EventOccurrenceTicket::create([
+            'event_occurrence_id' => $occurrence->id,
+            'event_ticket_type_id' => $ticketType->id,
+            'available_quantity' => 100,
+        ]);
+
+        EventBooking::forceCreate([
+            'user_id' => $pendingUser->id,
+            'event_id' => $event->id,
+            'event_occurrence_id' => $occurrence->id,
+            'occurrence_ticket_id' => $inventory->id,
+            'event_ticket_type_id' => $ticketType->id,
+            'quantity' => 1,
+            'total_price' => 99.00,
+            'status' => EventBooking::STATUS_PENDING,
+        ]);
+        EventBooking::forceCreate([
+            'user_id' => $confirmedUser->id,
+            'event_id' => $event->id,
+            'event_occurrence_id' => $occurrence->id,
+            'occurrence_ticket_id' => $inventory->id,
+            'event_ticket_type_id' => $ticketType->id,
+            'quantity' => 2,
+            'total_price' => 149.00,
+            'status' => EventBooking::STATUS_CONFIRMED,
+        ]);
+
+        $response = $this->actingAsSuperAdmin()->get(route('admin.event-bookings.index', [
+            'status' => EventBooking::STATUS_PENDING,
+        ]));
+
+        $response->assertOk();
+        $response->assertSee('Pending Event Attendee', false);
+        $response->assertDontSee('Confirmed Event Attendee', false);
+    }
+
+    public function test_service_quote_index_filters_by_status(): void
+    {
+        $service = Service::firstOrFail();
+        $pendingUser = User::factory()->create(['name' => 'Pending Service Quote User']);
+        $acceptedUser = User::factory()->create(['name' => 'Accepted Service Quote User']);
+
+        ServiceQuote::forceCreate([
+            'service_id' => $service->id,
+            'user_id' => $pendingUser->id,
+            'details' => 'Need a pending quote.',
+            'status' => ServiceQuote::STATUS_PENDING,
+        ]);
+        ServiceQuote::forceCreate([
+            'service_id' => $service->id,
+            'user_id' => $acceptedUser->id,
+            'details' => 'Need an accepted quote.',
+            'status' => ServiceQuote::STATUS_ACCEPTED,
+            'quoted_price' => 250,
+        ]);
+        $response = $this->actingAsSuperAdmin()->get(route('admin.service-quotes.index', [
+            'status' => ServiceQuote::STATUS_PENDING,
+        ]));
+
+        $response->assertOk();
+        $response->assertSee('Pending Service Quote User', false);
+        $response->assertDontSee('Accepted Service Quote User', false);
+    }
+
+    public function test_listings_index_shows_active_property_listings(): void
+    {
+        Property::factory()->create(['title' => 'Listings Filter Property', 'is_published' => true]);
+
+        $response = $this->actingAsSuperAdmin()->get(route('admin.listings.index', [
+            'status' => 'active',
+        ]));
+
+        $response->assertOk();
+        $response->assertSee('Listings Filter Property', false);
+    }
+
+    public function test_job_application_pagination_preserves_status_filter(): void
+    {
+        $job = JobListing::firstOrFail();
+
+        for ($i = 1; $i <= 16; $i++) {
+            JobApplication::create([
+                'job_listing_id' => $job->id,
+                'user_id' => User::factory()->create([
+                    'name' => 'Paginate Pending Applicant ' . str_pad((string) $i, 2, '0', STR_PAD_LEFT),
+                ])->id,
+                'cover_letter' => 'Paginate pending application.',
+                'status' => JobApplication::STATUS_PENDING,
+            ]);
+        }
+
+        JobApplication::create([
+            'job_listing_id' => $job->id,
+            'user_id' => User::factory()->create(['name' => 'Hired Outlier Applicant'])->id,
+            'cover_letter' => 'Hired outlier application.',
+            'status' => JobApplication::STATUS_HIRED,
+        ]);
+
+        $pageOne = $this->actingAsSuperAdmin()->get(route('admin.job-applications.index', [
+            'status' => JobApplication::STATUS_PENDING,
+        ]));
+        $pageOne->assertOk();
+        $pageOne->assertSee('Paginate Pending Applicant 16', false);
+        $pageOne->assertDontSee('Hired Outlier Applicant', false);
+
+        $pageTwo = $this->actingAsSuperAdmin()->get(route('admin.job-applications.index', [
+            'status' => JobApplication::STATUS_PENDING,
+            'page' => 2,
+        ]));
+        $pageTwo->assertOk();
+        $pageTwo->assertSee('Paginate Pending Applicant 01', false);
+        $pageTwo->assertDontSee('Paginate Pending Applicant 16', false);
     }
 }

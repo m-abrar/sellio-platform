@@ -64,6 +64,26 @@ php artisan serve
 npm run dev
 ```
 
+### 4. Admin E2E tests
+
+**PHPUnit (in-memory SQLite, isolated per test):**
+
+```bash
+cd apps/backend
+php artisan test tests/Feature/Admin/
+```
+
+**Playwright (uses `.env.testing` + MySQL database `sellio_testing`):**
+
+```bash
+cd apps/backend
+php scripts/create-testing-db.php   # first-time: creates sellio_testing schema
+npm run test:browser:setup
+npm run test:browser
+```
+
+Dev/demo data uses `php artisan migrate:fresh --seed` (`DatabaseSeeder`). Browser tests use `AdminTestSeeder` on the separate `sellio_testing` schema so `Browser *` rows do not pollute your dev database.
+
 ---
 
 ## 📄 Documentation & Support

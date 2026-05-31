@@ -8,11 +8,15 @@ use App\Models\Event;
 use App\Models\JobListing;
 use App\Models\Product;
 use App\Models\Property;
+use App\Models\PropertyBooking;
 use App\Models\Service;
 use App\Models\Subscription;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\Withdrawal;
 use App\Services\Admin\DashboardService;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Tests\Concerns\ClearsAdminDashboardCache;
 use Tests\Concerns\InteractsWithAdmin;
 use Tests\TestCase;
@@ -105,6 +109,58 @@ class AdminDashboardMetricsTest extends TestCase
         $this->assertSame(
             $before['urgent_actions']['unresolved_tickets'] + 1,
             $fresh['urgent_actions']['unresolved_tickets']
+        );
+    }
+
+    public function test_dashboard_metrics_reflect_minimal_ticket_backlog(): void
+    {
+        Ticket::query()->delete();
+        $this->clearAdminDashboardCache();
+
+        $metrics = app(DashboardService::class)->getGlobalMetrics();
+
+        $this->assertSame(0, $metrics['urgent_actions']['unresolved_tickets']);
+    }
+
+    public function test_dashboard_pending_payouts_reflect_mixed_withdrawal_statuses(): void
+    {
+        Withdrawal::query()->delete();
+
+        Withdrawal::factory()->pending()->create([
+            'user_id' => $this->admin->id,
+            'amount' => 15000,
+        ]);
+        Withdrawal::factory()->create([
+            'user_id' => $this->admin->id,
+            'amount' => 5000,
+            'status' => Withdrawal::STATUS_APPROVED,
+        ]);
+
+        $this->clearAdminDashboardCache();
+
+        $metrics = app(DashboardService::class)->getGlobalMetrics();
+
+        $this->assertSame('$150.00', $metrics['urgent_actions']['pending_payouts']);
+    }
+
+    public function test_dashboard_module_stats_exclude_disabled_vertical(): void
+    {
+        Product::factory()->create(['title' => 'Disabled Module Product', 'is_published' => false]);
+        $this->clearAdminDashboardCache();
+        $beforeDisable = app(DashboardService::class)->getGlobalMetrics();
+
+        DB::table('settings')->updateOrInsert(
+            ['key' => 'is_section.products'],
+            ['group' => 'modules', 'value' => '0', 'created_at' => now(), 'updated_at' => now()]
+        );
+        Cache::forget('settings_all');
+        $this->clearAdminDashboardCache();
+
+        $afterDisable = app(DashboardService::class)->getGlobalMetrics();
+
+        $this->assertSame(
+            $beforeDisable['urgent_actions']['listing_approvals'] - 1,
+            $afterDisable['urgent_actions']['listing_approvals']
         );
     }
 

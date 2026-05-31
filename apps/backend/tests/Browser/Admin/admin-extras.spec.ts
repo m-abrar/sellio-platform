@@ -101,7 +101,7 @@ test.describe('Admin extras (browser)', () => {
         await expect(page.locator('body')).toContainText(label);
     });
 
-    test('can reorder menu items and synchronize structure', async ({ page }) => {
+    test('can reorder menu items via nestable drag-and-drop', async ({ page }) => {
         const firstLabel = `Reorder First ${Date.now()}`;
         const secondLabel = `Reorder Second ${Date.now()}`;
 
@@ -122,16 +122,19 @@ test.describe('Admin extras (browser)', () => {
         await page.reload();
         await assertNoServerErrors(page);
 
+        const firstItem = page.locator('#menu-items-list .dd-list > .dd-item', { hasText: firstLabel });
+        const secondItem = page.locator('#menu-items-list .dd-list > .dd-item', { hasText: secondLabel });
         await page.evaluate(({ firstLabel, secondLabel }) => {
-            const items = Array.from(document.querySelectorAll('#menu-items-list .dd-list > .dd-item'));
-            const findItem = (label: string) =>
-                items.find((item) => item.querySelector('.item-title')?.textContent?.includes(label));
-            const first = findItem(firstLabel);
-            const second = findItem(secondLabel);
+            const items = Array.from(document.querySelectorAll('#menu-items-list .dd-list:first-child > .dd-item'));
+            const first = items.find((el) => el.textContent?.includes(firstLabel));
+            const second = items.find((el) => el.textContent?.includes(secondLabel));
             if (first && second && second.parentElement) {
                 second.parentElement.insertBefore(second, first);
+                window.jQuery('#menu-items-list').trigger('change');
             }
         }, { firstLabel, secondLabel });
+        await expect(firstItem).toBeVisible();
+        await expect(secondItem).toBeVisible();
 
         await page.getByRole('button', { name: /synchronize structure/i }).click();
         await assertNoServerErrors(page);
@@ -144,6 +147,57 @@ test.describe('Admin extras (browser)', () => {
         expect(secondIndex).toBeGreaterThan(-1);
         expect(firstIndex).toBeGreaterThan(-1);
         expect(secondIndex).toBeLessThan(firstIndex);
+    });
+
+    test('can nest menu items via nestable drag-and-drop', async ({ page }) => {
+        const parentLabel = `Nest Parent ${Date.now()}`;
+        const childLabel = `Nest Child ${Date.now()}`;
+
+        await page.goto('/admin/menu/unifieds_default');
+        await page.locator('a[href*="/admin/menu/"][href*="/edit"]').first().click();
+        await assertNoServerErrors(page);
+
+        await page.locator('#new_title').fill(parentLabel);
+        await page.locator('#new_url').fill('/nest-parent');
+        await page.locator('#add-new-item').click();
+
+        await page.locator('#new_title').fill(childLabel);
+        await page.locator('#new_url').fill('/nest-child');
+        await page.locator('#add-new-item').click();
+
+        await page.getByRole('button', { name: /synchronize structure/i }).click();
+        await assertNoServerErrors(page);
+        await page.reload();
+        await assertNoServerErrors(page);
+
+        const parentItem = page.locator('#menu-items-list .dd-list > .dd-item', { hasText: parentLabel });
+        const childItem = page.locator('#menu-items-list .dd-list > .dd-item', { hasText: childLabel });
+        await page.evaluate(({ parentLabel, childLabel }) => {
+            const items = Array.from(document.querySelectorAll('#menu-items-list .dd-list:first-child > .dd-item'));
+            const parent = items.find((el) => el.textContent?.includes(parentLabel));
+            const child = items.find((el) => el.textContent?.includes(childLabel));
+            if (!parent || !child) {
+                return;
+            }
+
+            let nestedList = parent.querySelector(':scope > .dd-list');
+            if (!nestedList) {
+                nestedList = document.createElement('ol');
+                nestedList.className = 'dd-list';
+                parent.appendChild(nestedList);
+            }
+
+            nestedList.appendChild(child);
+            window.jQuery('#menu-items-list').trigger('change');
+        }, { parentLabel, childLabel });
+
+        await page.getByRole('button', { name: /synchronize structure/i }).click();
+        await assertNoServerErrors(page);
+        await page.reload();
+        await assertNoServerErrors(page);
+
+        const nestedChild = parentItem.locator('> .dd-list > .dd-item', { hasText: childLabel });
+        await expect(nestedChild).toBeVisible();
     });
 
     test('can replace a gallery asset via modal', async ({ page }) => {

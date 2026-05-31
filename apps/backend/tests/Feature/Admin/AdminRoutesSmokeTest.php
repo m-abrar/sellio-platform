@@ -18,6 +18,7 @@ class AdminRoutesSmokeTest extends TestCase
 
     public function test_all_resolvable_admin_get_routes_return_successful_responses(): void
     {
+        $initialBufferLevel = ob_get_level();
         $helper = new AdminRouteSmokeHelper();
         $failures = [];
 
@@ -42,6 +43,10 @@ class AdminRoutesSmokeTest extends TestCase
                     }
                 }
             }
+        }
+
+        while (ob_get_level() > $initialBufferLevel) {
+            ob_end_clean();
         }
 
         $this->assertSame(

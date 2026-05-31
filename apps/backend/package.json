@@ -6,6 +6,7 @@
         "build": "vite build",
         "dev": "vite",
         "test:browser": "playwright test",
+        "test:browser:setup": "php artisan migrate:fresh --seeder=Database\\Seeders\\AdminTestSeeder --env=testing --force",
         "test:browser:ui": "playwright test --ui"
     },
     "devDependencies": {

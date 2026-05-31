@@ -70,6 +70,7 @@ test.describe('Admin verticals (browser)', () => {
         await page.waitForURL(/\/admin\/events\/\d+\/edit/);
         await assertNoServerErrors(page);
         await expect(page.locator('input[name="title"]')).toHaveValue(title);
+        await expect(page.locator('input[name="start_date_time"]')).toHaveValue(start);
     });
 
     test('jobs index loads', async ({ page }) => {
@@ -82,6 +83,24 @@ test.describe('Admin verticals (browser)', () => {
         await page.goto('/admin/services');
         await assertNoServerErrors(page);
         await expect(page.locator('body')).toContainText(/service/i);
+    });
+
+    test('can create a service from the admin form', async ({ page }) => {
+        const title = `Browser Service ${Date.now()}`;
+
+        await page.goto('/admin/services/create');
+        await assertNoServerErrors(page);
+
+        const form = page.locator('form[action*="/admin/services"]');
+        await form.locator('input[name="title"]').fill(title);
+        await form.locator('textarea[name="description"]').fill('Created by Playwright service CRUD test.');
+        await form.locator('input[name="base_price"]').fill('99.00');
+        await form.locator('select[name="category_id"]').selectOption({ index: 1 });
+        await form.locator('.btn-submit-premium').click();
+
+        await page.waitForURL(/\/admin\/services\/\d+\/edit/);
+        await assertNoServerErrors(page);
+        await expect(page.locator('input[name="title"]')).toHaveValue(title);
     });
 
     test('autos index loads', async ({ page }) => {

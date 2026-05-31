@@ -21,10 +21,11 @@ export default defineConfig({
             use: { ...devices['Desktop Chrome'] },
         },
     ],
+    globalSetup: './tests/Browser/global-setup.ts',
     webServer: process.env.PW_SKIP_WEBSERVER
         ? undefined
         : {
-              command: 'php artisan serve --host=127.0.0.1 --port=8000',
+              command: 'php artisan serve --env=testing --host=127.0.0.1 --port=8000',
               url: baseURL,
               reuseExistingServer: !process.env.CI,
               timeout: 120_000,

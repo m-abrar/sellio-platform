@@ -1,0 +1,95 @@
+name: Admin Tests
+
+on:
+  push:
+    paths:
+      - 'apps/backend/**'
+      - '.github/workflows/admin-tests.yml'
+  pull_request:
+    paths:
+      - 'apps/backend/**'
+      - '.github/workflows/admin-tests.yml'
+
+jobs:
+  phpunit-admin:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_sqlite, sqlite3
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run Admin PHPUnit suite
+        run: php artisan test tests/Feature/Admin/
+
+  playwright-admin:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/backend
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: sellio_testing
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    env:
+      CI: true
+      APP_KEY: base64:2fl+Ktvkfl+FuzQBgz5Z2jDQL59+NeFc04f+2Wyc/Rg=
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: sellio_testing
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_mysql
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/backend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist
+          npm ci
+
+      - name: Prepare browser test environment
+        run: |
+          cp .env.testing .env
+          echo "DB_PASSWORD=root" >> .env
+          php artisan key:generate --force
+          php artisan migrate:fresh --seeder=Database\\Seeders\\AdminTestSeeder --force
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Run Playwright admin suite
+        run: npm run test:browser

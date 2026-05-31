@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use App\Models\Tag;
 
@@ -19,7 +20,7 @@ class TagSeeder extends Seeder
     {
         $this->command->info('Preparing to clear Tags and Taggables tables...');
 
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Schema::disableForeignKeyConstraints();
         DB::table('taggables')->delete();
         DB::table('tags')->delete();
         
@@ -85,7 +86,7 @@ class TagSeeder extends Seeder
             $count++;
         }
 
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        Schema::enableForeignKeyConstraints();
 
         $this->command->info("✅ Tag seeding complete! {$count} tags created/updated.");
     }

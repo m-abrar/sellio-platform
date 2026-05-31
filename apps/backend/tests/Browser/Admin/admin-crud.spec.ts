@@ -17,9 +17,9 @@ test.describe('Admin CRUD (browser)', () => {
         await form.locator('textarea[name="description"]').fill('Created by Playwright admin CRUD test.');
         await form.locator('button[type="submit"]').click();
 
-        await page.waitForURL(/\/admin\/categories/);
+        await page.waitForURL(/\/admin\/categories\/\d+\/edit/);
         await assertNoServerErrors(page);
-        await expect(page.locator('body')).toContainText(title);
+        await expect(page.locator('#categoryMainForm input[name="title"]')).toHaveValue(title);
     });
 
     test('product index loads and shows seeded inventory', async ({ page }) => {
@@ -69,7 +69,7 @@ test.describe('Admin CRUD (browser)', () => {
         await page.locator('#categoryMainForm input[name="title"]').fill(title);
         await page.locator('#categoryMainForm textarea[name="description"]').fill('Temporary category for delete confirmation test.');
         await page.locator('#categoryMainForm button[type="submit"]').click();
-        await page.waitForURL(/\/admin\/categories/);
+        await page.waitForURL(/\/admin\/categories\/\d+\/edit/);
 
         await page.goto('/admin/categories');
         const row = page.locator('tr', { hasText: title });
@@ -100,5 +100,29 @@ test.describe('Admin CRUD (browser)', () => {
         await page.goto('/admin');
         await assertNoServerErrors(page);
         await expect(page.locator('body')).toBeVisible();
+    });
+
+    test('can update an existing category from the admin form', async ({ page }) => {
+        const title = `Edit Me Category ${Date.now()}`;
+        const updatedTitle = `${title} Updated`;
+
+        await page.goto('/admin/categories/create');
+        await page.locator('#categoryMainForm input[name="title"]').fill(title);
+        await page.locator('#categoryMainForm textarea[name="description"]').fill('Temporary category for edit test.');
+        await page.locator('#categoryMainForm button[type="submit"]').click();
+        await page.waitForURL(/\/admin\/categories\/\d+\/edit/);
+        await assertNoServerErrors(page);
+
+        const categoryId = page.url().match(/\/categories\/(\d+)\/edit/)?.[1];
+        expect(categoryId).toBeTruthy();
+
+        await page.locator('#categoryMainForm input[name="title"]').fill(updatedTitle);
+        await page.locator('#categoryMainForm button[type="submit"]').click();
+        await page.waitForURL((url) => new URL(url).pathname === '/admin/categories');
+        await assertNoServerErrors(page);
+
+        await page.goto(`/admin/categories/${categoryId}/edit`);
+        await assertNoServerErrors(page);
+        await expect(page.locator('#categoryMainForm input[name="title"]')).toHaveValue(updatedTitle);
     });
 });

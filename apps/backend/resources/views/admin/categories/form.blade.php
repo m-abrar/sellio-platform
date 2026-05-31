@@ -146,7 +146,6 @@
                 @include('admin._partials._form-actions', [
                     'model' => $category,
                     'title' => 'CATEGORY',
-                    'duplicate' => 'admin.categories.duplicate'
                 ])
 
                 {{-- Featured Image Partial --}}

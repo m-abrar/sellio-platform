@@ -21,6 +21,11 @@ test.describe('Admin smoke', () => {
             '/admin/services',
             '/admin/tickets',
             '/admin/users',
+            '/admin/bookings',
+            '/admin/payments',
+            '/admin/reports',
+            '/admin/menu/unifieds_default',
+            '/admin/settings',
         ];
 
         for (const path of paths) {
