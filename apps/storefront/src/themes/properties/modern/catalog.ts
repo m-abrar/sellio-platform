@@ -1,5 +1,7 @@
 import { api } from '@sellio/api-client';
 import type { Property, Category, Location } from '@sellio/types';
+import { matchesExplorePriceRange } from './explore-utils';
+import { matchesListingFilter, type ListingFilter } from './listing-mode';
 import {
   FALLBACK_CATEGORIES,
   FALLBACK_ESTATES,
@@ -38,6 +40,7 @@ export interface PropertyCatalogFilters {
   selectedLocation?: string | number;
   selectedBedrooms?: string;
   selectedPriceRange?: string;
+  listingFilter?: ListingFilter;
 }
 
 export function buildPropertiesApiParams(
@@ -54,16 +57,31 @@ export function buildPropertiesApiParams(
   if (filters.selectedCategory) params.category_id = filters.selectedCategory;
   if (filters.selectedLocation) params.location = filters.selectedLocation;
 
-  if (filters.selectedPriceRange) {
+  if (filters.listingFilter === 'rental') {
+    params.property_type = 'rent';
+  } else if (filters.listingFilter === 'sale') {
     params.property_type = 'sale';
-    if (filters.selectedPriceRange === '1m-5m') {
+  }
+
+  if (filters.selectedPriceRange) {
+    const range = filters.selectedPriceRange;
+    if (range === 'under-500k') {
+      params.max_price = 499999;
+    } else if (range === '500k-1m') {
+      params.min_price = 500000;
+      params.max_price = 1000000;
+    } else if (range === '1m-2m') {
       params.min_price = 1000000;
-      params.max_price = 5000000;
-    } else if (filters.selectedPriceRange === '5m-10m') {
-      params.min_price = 5000000;
-      params.max_price = 10000000;
-    } else if (filters.selectedPriceRange === '10m-plus') {
-      params.min_price = 10000000;
+      params.max_price = 2000000;
+    } else if (range === '2m-plus') {
+      params.min_price = 2000000;
+    } else if (range === 'under-200') {
+      params.max_price = 199;
+    } else if (range === '200-400') {
+      params.min_price = 200;
+      params.max_price = 400;
+    } else if (range === '400-plus') {
+      params.min_price = 400;
     }
   }
 
@@ -75,11 +93,18 @@ export function filterFallbackEstates(filters: PropertyCatalogFilters): Property
 
   if (filters.searchQuery) {
     const q = filters.searchQuery.toLowerCase();
-    filtered = filtered.filter(
-      (estate) =>
+    filtered = filtered.filter((estate) => {
+      const locationLabel =
+        estate.location?.title ||
+        [estate.city, estate.state].filter(Boolean).join(', ') ||
+        '';
+      return (
         estate.title.toLowerCase().includes(q) ||
-        estate.description.toLowerCase().includes(q),
-    );
+        estate.description.toLowerCase().includes(q) ||
+        locationLabel.toLowerCase().includes(q) ||
+        (estate.city?.toLowerCase().includes(q) ?? false)
+      );
+    });
   }
 
   if (filters.selectedCategory) {
@@ -104,20 +129,20 @@ export function filterFallbackEstates(filters: PropertyCatalogFilters): Property
     );
   }
 
+  if (filters.listingFilter && filters.listingFilter !== 'all') {
+    filtered = filtered.filter((estate) =>
+      matchesListingFilter(estate, filters.listingFilter!),
+    );
+  }
+
   if (filters.selectedPriceRange) {
-    filtered = filtered.filter((estate) => {
-      const value = Number(estate.pricing?.base_price || estate.base_price);
-      if (filters.selectedPriceRange === '1m-5m') {
-        return value >= 1000000 && value <= 5000000;
-      }
-      if (filters.selectedPriceRange === '5m-10m') {
-        return value >= 5000000 && value <= 10000000;
-      }
-      if (filters.selectedPriceRange === '10m-plus') {
-        return value >= 10000000;
-      }
-      return true;
-    });
+    filtered = filtered.filter((estate) =>
+      matchesExplorePriceRange(
+        estate,
+        filters.selectedPriceRange!,
+        filters.listingFilter ?? 'all',
+      ),
+    );
   }
 
   return filtered;
@@ -172,14 +197,14 @@ export async function fetchPropertyCatalogPage(
       buildPropertiesApiParams(page, filters, perPage),
     );
 
-    if (response?.data?.length) {
+    if (Array.isArray(response?.data)) {
       return {
         ok: true,
         data: response.data,
         categories: response.sidebar?.categories ?? [],
         locations: response.sidebar?.locations ?? [],
         currentPage: response.meta?.current_page ?? page,
-        lastPage: response.meta?.last_page ?? page,
+        lastPage: response.meta?.last_page ?? 1,
       };
     }
 

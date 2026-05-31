@@ -25,4 +25,9 @@ return [
     ['section' => 'cta', 'content_key' => 'title', 'input_type' => 'textarea', 'value' => "Ready to \nexplore?"],
     ['section' => 'cta', 'content_key' => 'description', 'input_type' => 'textarea', 'value' => 'Search thousands of properties for sale and rent. Save your favorites and send inquiries to agents or hosts in a few clicks.'],
     ['section' => 'cta', 'content_key' => 'button_label', 'input_type' => 'text', 'value' => 'Search properties'],
+    ['section' => 'explore', 'content_key' => 'kicker', 'input_type' => 'text', 'value' => 'Property search'],
+    ['section' => 'explore', 'content_key' => 'title', 'input_type' => 'textarea', 'value' => "Find your next \nhome."],
+    ['section' => 'explore', 'content_key' => 'highlight', 'input_type' => 'text', 'value' => 'home'],
+    ['section' => 'explore', 'content_key' => 'description', 'input_type' => 'textarea', 'value' => 'Browse homes and apartments for rent or sale. Filter by location, price, bedrooms, and property type.'],
+    ['section' => 'explore', 'content_key' => 'search_placeholder', 'input_type' => 'text', 'value' => 'Search by city, neighborhood, or keyword...'],
 ];

@@ -1343,6 +1343,12 @@ const PROPERTIES_MODERN_HOME: ThemeContentResponse = {
     'cta.description':
       'Search thousands of properties for sale and rent. Save your favorites and send inquiries to agents or hosts in a few clicks.',
     'cta.button_label': 'Search properties',
+    'explore.kicker': 'Property search',
+    'explore.title': 'Find your next \nhome.',
+    'explore.highlight': 'home',
+    'explore.description':
+      'Browse homes and apartments for rent or sale. Filter by location, price, bedrooms, and property type.',
+    'explore.search_placeholder': 'Search by city, neighborhood, or keyword...',
   },
   media: {
     'hero.image': '/themes/properties/modern/1.webp',

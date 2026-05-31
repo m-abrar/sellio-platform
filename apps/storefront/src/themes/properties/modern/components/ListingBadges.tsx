@@ -15,8 +15,7 @@ export function ListingBadges({ property }: ListingBadgesProps) {
   const badges: string[] = [];
   if (status?.is_featured || property.is_featured) badges.push('Featured');
   if (status?.is_new) badges.push('New listing');
-  if (status?.is_rental || property.is_rental) badges.push('Rental');
-  if (status?.is_sale || property.is_sale) badges.push('For sale');
+  // Listing type (For rent / For sale) is shown on the hero type pill.
   if (property.rating && property.rating > 0) {
     badges.push(`${property.rating.toFixed(1)} ★`);
   }

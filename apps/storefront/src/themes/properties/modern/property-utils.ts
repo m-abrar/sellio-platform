@@ -1,10 +1,36 @@
 import type { Property } from '@sellio/types';
+import {
+  getListingModeLabel,
+  getPropertyListingMode,
+  type ListingMode,
+} from './listing-mode';
 
 const DEMO_FALLBACK_IMAGE = '/demo-assets/properties/item-01.svg';
 
 const STRUCTURE_ICONS = ['🏙️', '🏢', '🏗️', '🏬', '🏛️', '🏘️'];
 
+export type ExplorePropertyCard = {
+  title: string;
+  slug: string;
+  image: string;
+  location: string;
+  price: string;
+  listingMode: ListingMode;
+  listingLabel: string;
+  beds: string;
+  baths: string;
+  area: string;
+};
+
 export function getPropertyPrice(property: Property) {
+  const mode = getPropertyListingMode(property);
+  if (mode === 'rental') {
+    const nightly = property.pricing?.price_per_night;
+    if (nightly) {
+      return `$${Number(nightly).toLocaleString()} / night`;
+    }
+  }
+
   return (
     property.pricing?.price_formatted ||
     (property.base_price
@@ -88,7 +114,34 @@ export function collectPropertyImages(property: Property, index = 0): string[] {
   return images;
 }
 
-export function mapPropertyToStructure(property: Property, index: number) {
+export function mapPropertyToExploreCard(
+  property: Property,
+  index: number,
+): ExplorePropertyCard {
+  const listingMode = getPropertyListingMode(property);
+  const beds = property.specs?.bedrooms ?? property.number_of_bedrooms;
+  const baths = property.specs?.bathrooms ?? property.number_of_bathrooms;
+  const area =
+    property.specs?.area_formatted ||
+    (property.area_sq_ft
+      ? `${Number(property.area_sq_ft).toLocaleString()} sq ft`
+      : '—');
+
+  return {
+    title: property.title,
+    slug: property.slug,
+    image: collectPropertyImages(property, index)[0],
+    location: getPropertyLocation(property),
+    price: getPropertyPrice(property),
+    listingMode,
+    listingLabel: getListingModeLabel(listingMode),
+    beds: beds ? String(beds) : '—',
+    baths: baths ? String(baths) : '—',
+    area,
+  };
+}
+
+export function mapPropertyToStructure(property: Property, index = 0) {
   const area =
     property.specs?.area_formatted ||
     (property.area_sq_ft
