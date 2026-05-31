@@ -178,4 +178,22 @@ class AdminCmsOperationsTest extends TestCase
             'admin_note' => 'Rejected by admin CRUD test.',
         ]);
     }
+
+    public function test_admin_can_view_withdrawal_details(): void
+    {
+        $partner = User::where('email', 'partner@test.test')->firstOrFail();
+
+        $withdrawal = Withdrawal::factory()->pending()->create([
+            'user_id' => $partner->id,
+            'amount' => 5000,
+            'method' => 'bank_transfer',
+            'details' => 'Bank: Demo National Bank, IBAN: DEMO-123456789',
+        ]);
+
+        $this->actingAsSuperAdmin()
+            ->get(route('admin.withdrawals.show', $withdrawal))
+            ->assertOk()
+            ->assertSee('Bank: Demo National Bank', false)
+            ->assertSee('Payout Request', false);
+    }
 }
