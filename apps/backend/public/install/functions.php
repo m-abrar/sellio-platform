@@ -91,6 +91,51 @@ function redirect(string $step): void
 }
 
 /**
+ * Path to the flag file set when the user opts to overwrite a non-empty database.
+ */
+function installer_db_overwrite_flag_path(): string
+{
+    global $basePath;
+
+    return $basePath . '/storage/framework/installer_overwrite_db.flag';
+}
+
+/**
+ * Mark that the migration step should run migrate:fresh instead of migrate.
+ */
+function set_installer_db_overwrite_flag(): bool
+{
+    $path = installer_db_overwrite_flag_path();
+    $dir = dirname($path);
+
+    if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
+        return false;
+    }
+
+    return file_put_contents($path, date('c')) !== false;
+}
+
+/**
+ * Whether migrate:fresh was requested for this install run.
+ */
+function should_installer_migrate_fresh(): bool
+{
+    return file_exists(installer_db_overwrite_flag_path());
+}
+
+/**
+ * Remove the migrate:fresh flag after a successful migration.
+ */
+function clear_installer_db_overwrite_flag(): void
+{
+    $path = installer_db_overwrite_flag_path();
+
+    if (file_exists($path)) {
+        unlink($path);
+    }
+}
+
+/**
  * Display a styled Bootstrap alert message.
  */
 function display_message(?string $message, bool $isError = false): void

@@ -48,7 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     chdir($basePath);
 
     $phpBinary = get_php_binary();
-    $command = "{$phpBinary} artisan migrate --force 2>&1";
+    $useFresh = should_installer_migrate_fresh();
+    $migrateCommand = $useFresh ? 'migrate:fresh' : 'migrate';
+    $command = "{$phpBinary} artisan {$migrateCommand} --force 2>&1";
+
+    if ($useFresh) {
+        echo "ℹ️ [Notice] Overwrite requested — running migrate:fresh to drop and rebuild all tables.\n\n";
+    }
 
     if (function_exists('passthru')) {
         passthru($command, $status);
@@ -58,6 +64,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $error = ($status !== 0);
+
+    if (!$error && $useFresh) {
+        clear_installer_db_overwrite_flag();
+    }
     
     if (!$error) {
         try {

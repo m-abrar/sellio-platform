@@ -84,6 +84,16 @@ npm run test:browser
 
 Dev/demo data uses `php artisan migrate:fresh --seed` (`DatabaseSeeder`). Browser tests use `AdminTestSeeder` on the separate `sellio_testing` schema so `Browser *` rows do not pollute your dev database.
 
+**Installer smoke test (uses isolated MySQL database `sellio_install_test`; restores `.env` and `installed.lock` afterward):**
+
+```bash
+cd apps/backend
+npm run test:browser:installer:setup   # drop/recreate sellio_install_test, remove installed.lock
+npm run test:browser:installer         # Playwright walkthrough of /install/
+```
+
+Backups are written to `.env.bak` and `installed.lock.bak` on first run. The test skips the Composer POST step when `vendor/` already exists (web SAPI autoload regen is slow locally).
+
 ---
 
 ## 📄 Documentation & Support

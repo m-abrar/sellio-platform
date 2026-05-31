@@ -7,6 +7,8 @@
         "dev": "vite",
         "test:browser": "playwright test",
         "test:browser:setup": "php artisan migrate:fresh --seeder=Database\\Seeders\\AdminTestSeeder --env=testing --force",
+        "test:browser:installer": "playwright test --config=playwright.installer.config.ts",
+        "test:browser:installer:setup": "php scripts/reset-installer-state.php",
         "test:browser:ui": "playwright test --ui"
     },
     "devDependencies": {

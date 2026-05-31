@@ -49,6 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mailEnc    = $_POST['mail_enc'] ?? $existingEnv['MAIL_ENCRYPTION'] ?? 'tls';
     $mailFrom   = $_POST['mail_from'] ?? $existingEnv['MAIL_FROM_ADDRESS'] ?? "no-reply@sellio.com";
 
+    $tables = [];
+    $overwrite_db = isset($_POST['overwrite_db']) && $_POST['overwrite_db'] === '1';
+
     // Test DB connection
     try {
         $dsn = "mysql:host={$dbHost};port={$dbPort};dbname={$dbName};charset=utf8mb4";
@@ -61,15 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!$errorMessage) {
-        // Check if database is empty
         $stmt = $pdo->query("SHOW TABLES");
         $tables = $stmt->fetchAll(PDO::FETCH_COLUMN);
-        
-        if (!empty($tables)) {
-            $overwrite_db = isset($_POST['overwrite_db']) && $_POST['overwrite_db'] === '1';
-            if (!$overwrite_db) {
-                $errorMessage = "⚠️ The database '{$dbName}' is not empty. Proceeding may overwrite existing data. Please check the 'Overwrite existing tables' box to continue.";
-            }
+
+        if (!empty($tables) && !$overwrite_db) {
+            $errorMessage = "⚠️ The database '{$dbName}' is not empty. Proceeding may overwrite existing data. Please check the 'Overwrite existing tables' box to continue.";
         }
     }
 
@@ -108,6 +107,14 @@ ENV;
             if (file_put_contents($envPath, $content) === false) {
                 $errorMessage = "❌ Failed to write .env file. Please check folder permissions.";
             }
+        }
+
+        if (!$errorMessage && !empty($tables) && $overwrite_db) {
+            if (!set_installer_db_overwrite_flag()) {
+                $errorMessage = "❌ Failed to prepare database overwrite. Please check storage/framework permissions.";
+            }
+        } elseif (!$errorMessage) {
+            clear_installer_db_overwrite_flag();
         }
         
         if (!$errorMessage) {
@@ -259,7 +266,7 @@ include __DIR__ . '/../layout/header.php';
         <div class="form-check custom-check">
             <input class="form-check-input" type="checkbox" name="overwrite_db" value="1" id="overwrite_db_check">
             <label class="form-check-label text-muted small fw-bold" for="overwrite_db_check">
-                OVERWRITE TABLES
+                OVERWRITE TABLES (drops all tables on migration)
             </label>
         </div>
     </div>
