@@ -20,16 +20,7 @@
         {{-- Search Container --}}
         <div class="search-container-wrapper mx-auto hero-search-max" data-aos="zoom-in" data-aos-delay="200">
             <ul class="nav nav-pills justify-content-center" id="searchTab" role="tablist">
-                @php
-                    $tabs = [
-                        ['id' => 'properties', 'icon' => 'bi-building', 'label' => __('Properties')],
-                        ['id' => 'autos', 'icon' => 'bi-car-front-fill', 'label' => __('Autos')],
-                        ['id' => 'jobs', 'icon' => 'bi-briefcase', 'label' => __('Jobs')],
-                        ['id' => 'classifieds', 'icon' => 'bi-tag', 'label' => __('Classifieds')],
-                    ];
-                @endphp
-
-                @foreach($tabs as $tab)
+                @foreach(($publicModules ?? collect())->take(8) as $tab)
                 <li class="nav-item" role="presentation">
                     <div class="pill-group">
                         <button class="nav-link @if($loop->first) active @endif" 

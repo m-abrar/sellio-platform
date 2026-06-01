@@ -8,6 +8,8 @@ use App\Models\Event;
 use App\Models\Service;
 use App\Models\JobListing;
 use App\Models\Classified;
+use App\Models\Product;
+use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Location;
 use Carbon\Carbon;
@@ -34,35 +36,133 @@ class HomeDataService
     public function getHomeData(): array
     {
         $lastMonth = Carbon::now()->subDays(30);
+        $publicModules = collect($this->moduleDefinitions())
+            ->filter(fn (array $module) => $module['module'] === null || module_enabled($module['module']))
+            ->values();
 
         return [
+            'publicModules'       => $publicModules,
+
             // Featured Sections (Cached individually)
-            'propertiesFeatured'  => $this->cached('h_feat_prop', fn() => $this->getFeatured(new Property())),
-            'autosFeatured'       => $this->cached('h_feat_auto', fn() => $this->getFeatured(new Auto())),
-            'eventsFeatured'      => $this->cached('h_feat_event', fn() => $this->getFeatured(new Event())),
-            'jobsFeatured'        => $this->cached('h_feat_job', fn() => $this->getFeatured(new JobListing())),
-            'servicesFeatured'    => $this->cached('h_feat_serv', fn() => $this->getFeatured(new Service())),
-            'classifiedsFeatured' => $this->cached('h_feat_class', fn() => $this->getFeatured(new Classified())),
+            'propertiesFeatured'  => $this->forModule('properties', fn() => $this->cached('h_feat_prop', fn() => $this->getFeatured(new Property()))),
+            'autosFeatured'       => $this->forModule('autos', fn() => $this->cached('h_feat_auto', fn() => $this->getFeatured(new Auto()))),
+            'eventsFeatured'      => $this->forModule('events', fn() => $this->cached('h_feat_event', fn() => $this->getFeatured(new Event()))),
+            'jobsFeatured'        => $this->forModule('jobs', fn() => $this->cached('h_feat_job', fn() => $this->getFeatured(new JobListing()))),
+            'servicesFeatured'    => $this->forModule('services', fn() => $this->cached('h_feat_serv', fn() => $this->getFeatured(new Service()))),
+            'classifiedsFeatured' => $this->forModule('classifieds', fn() => $this->cached('h_feat_class', fn() => $this->getFeatured(new Classified()))),
 
             // Trending Sections (Based on 30-day activity)
-            'propertiesTrending'  => $this->cached('h_trend_prop', fn() => $this->getTrending(new Property(), 'bookings', $lastMonth)),
-            'autosTrending'       => $this->cached('h_trend_auto', fn() => $this->getTrending(new Auto(), 'inquiries', $lastMonth)),
-            'eventsTrending'      => $this->cached('h_trend_event', fn() => $this->getTrending(new Event(), 'bookings', $lastMonth)),
-            'jobsTrending'        => $this->cached('h_trend_job', fn() => $this->getTrending(new JobListing(), 'applications', $lastMonth)),
-            'servicesTrending'    => $this->cached('h_trend_serv', fn() => $this->getTrendingServices($lastMonth)),
-            'classifiedsTrending' => $this->cached('h_trend_class', fn() => $this->getTrending(new Classified(), 'inquiries', $lastMonth)),
+            'propertiesTrending'  => $this->forModule('properties', fn() => $this->cached('h_trend_prop', fn() => $this->getTrending(new Property(), 'bookings', $lastMonth))),
+            'autosTrending'       => $this->forModule('autos', fn() => $this->cached('h_trend_auto', fn() => $this->getTrending(new Auto(), 'inquiries', $lastMonth))),
+            'eventsTrending'      => $this->forModule('events', fn() => $this->cached('h_trend_event', fn() => $this->getTrending(new Event(), 'bookings', $lastMonth))),
+            'jobsTrending'        => $this->forModule('jobs', fn() => $this->cached('h_trend_job', fn() => $this->getTrending(new JobListing(), 'applications', $lastMonth))),
+            'servicesTrending'    => $this->forModule('services', fn() => $this->cached('h_trend_serv', fn() => $this->getTrendingServices($lastMonth))),
+            'classifiedsTrending' => $this->forModule('classifieds', fn() => $this->cached('h_trend_class', fn() => $this->getTrending(new Classified(), 'inquiries', $lastMonth))),
 
             // Specific Sub-sections
-            'propertiesRental'    => $this->cached('h_rent_prop', fn() => $this->transformCollection(Property::active()->with(['location', 'category', 'user'])->without(['media'])->where('is_rental', true)->latest()->take(6)->get())),
-            'propertiesSale'      => $this->cached('h_sale_prop', fn() => $this->transformCollection(Property::active()->with(['location', 'category', 'user'])->without(['media'])->where('is_sale', true)->latest()->take(6)->get())),
-            'autosLatest'         => $this->cached('h_late_auto', fn() => $this->transformCollection(Auto::active()->with(['location', 'category', 'user'])->without(['media'])->latest()->take(6)->get())),
+            'propertiesRental'    => $this->forModule('properties', fn() => $this->cached('h_rent_prop', fn() => $this->transformCollection(Property::active()->with(['location', 'category', 'user'])->without(['media'])->where('is_rental', true)->latest()->take(6)->get()))),
+            'propertiesSale'      => $this->forModule('properties', fn() => $this->cached('h_sale_prop', fn() => $this->transformCollection(Property::active()->with(['location', 'category', 'user'])->without(['media'])->where('is_sale', true)->latest()->take(6)->get()))),
+            'autosLatest'         => $this->forModule('autos', fn() => $this->cached('h_late_auto', fn() => $this->transformCollection(Auto::active()->with(['location', 'category', 'user'])->without(['media'])->latest()->take(6)->get()))),
+            'productsLatest'      => $this->forModule('products', fn() => $this->cached('h_late_prod', fn() => Product::active()->with(['category', 'brand'])->withCount(['attributes', 'addons'])->latest()->take(4)->get())),
+            'blogsFeatured'       => $this->cached('h_feat_blog', fn() => Blog::active()->with(['category'])->orderByDesc('is_featured')->latest('published_at')->take(3)->get()),
 
             // Taxonomy
             'categories'          => $this->cached('h_tax_cat', fn() => Category::active()->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c))),
             'locations'           => $this->cached('h_tax_loc', fn() => Location::active()->without(['media'])->get()->map(fn($l) => $this->transformTaxonomy($l))),
             'locationsFeatured'   => $this->cached('h_feat_loc', fn() => Location::active()->without(['media'])->orderByDesc('is_featured')->take(6)->get()->map(fn($l) => $this->transformTaxonomy($l))),
-            'serviceCategories'   => $this->cached('h_serv_cat', fn() => Category::active()->where('is_service', true)->without(['media'])->take(4)->get()->map(fn($c) => $this->transformTaxonomy($c))),
-            'autoCategories'      => $this->cached('h_auto_cat', fn() => Category::active()->where('is_auto', true)->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c))),
+            'serviceCategories'   => $this->forModule('services', fn() => $this->cached('h_serv_cat', fn() => Category::active()->where('is_service', true)->without(['media'])->take(4)->get()->map(fn($c) => $this->transformTaxonomy($c)))),
+            'autoCategories'      => $this->forModule('autos', fn() => $this->cached('h_auto_cat', fn() => Category::active()->where('is_auto', true)->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c)))),
+        ];
+    }
+
+    protected function forModule(string $module, callable $callback): Collection
+    {
+        return module_enabled($module) ? $callback() : collect();
+    }
+
+    protected function moduleDefinitions(): array
+    {
+        return [
+            [
+                'id' => 'properties',
+                'module' => 'properties',
+                'icon' => 'bi-building',
+                'label' => __('Properties'),
+                'route' => 'properties.index',
+                'search_route' => 'properties.search',
+                'section_title' => __('Featured Properties'),
+                'section_description' => __('Handpicked premium properties just for you.'),
+            ],
+            [
+                'id' => 'autos',
+                'module' => 'autos',
+                'icon' => 'bi-car-front-fill',
+                'label' => __('Autos'),
+                'route' => 'autos.index',
+                'search_route' => 'autos.search',
+                'section_title' => __('Latest Vehicles'),
+                'section_description' => __('Verified vehicles and premium inventory.'),
+            ],
+            [
+                'id' => 'products',
+                'module' => 'products',
+                'icon' => 'bi-bag-check-fill',
+                'label' => __('Products'),
+                'route' => 'products.index',
+                'search_route' => 'products.search',
+                'section_title' => __('Latest Products'),
+                'section_description' => __('Shop fresh arrivals from trusted sellers.'),
+            ],
+            [
+                'id' => 'services',
+                'module' => 'services',
+                'icon' => 'bi-tools',
+                'label' => __('Services'),
+                'route' => 'services.index',
+                'search_route' => 'services.search',
+                'section_title' => __('Popular Services'),
+                'section_description' => __('Find trusted professionals for any project.'),
+            ],
+            [
+                'id' => 'jobs',
+                'module' => 'jobs',
+                'icon' => 'bi-briefcase',
+                'label' => __('Jobs'),
+                'route' => 'jobs.index',
+                'search_route' => 'jobs.search',
+                'section_title' => __('Featured Careers'),
+                'section_description' => __('Discover active opportunities from marketplace employers.'),
+            ],
+            [
+                'id' => 'events',
+                'module' => 'events',
+                'icon' => 'bi-calendar-event',
+                'label' => __('Events'),
+                'route' => 'events.index',
+                'search_route' => 'events.search',
+                'section_title' => __('Upcoming Events'),
+                'section_description' => __('Join the community in person or online.'),
+            ],
+            [
+                'id' => 'classifieds',
+                'module' => 'classifieds',
+                'icon' => 'bi-tag',
+                'label' => __('Classifieds'),
+                'route' => 'classifieds.index',
+                'search_route' => 'classifieds.search',
+                'section_title' => __('Top Deals'),
+                'section_description' => __('Find great deals in your local community.'),
+            ],
+            [
+                'id' => 'blogs',
+                'module' => null,
+                'icon' => 'bi-journal-text',
+                'label' => __('Blogs'),
+                'route' => 'blogs.index',
+                'search_route' => 'blogs.search',
+                'section_title' => __('Latest Stories'),
+                'section_description' => __('Read guides, updates, and marketplace insights.'),
+            ],
         ];
     }
 

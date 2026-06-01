@@ -1,4 +1,5 @@
 {{-- MODULE: Real Estate --}}
+@if(module_enabled('properties'))
 <section class="py-5">
     <div class="container-xl">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-3">
@@ -28,8 +29,10 @@
         </div>
     </div>
 </section>
+@endif
 
 {{-- MODULE: Autos --}}
+@if(module_enabled('autos'))
 <section class="py-5 position-relative overflow-hidden">
     <div class="container-xl position-relative z-index-1">
         <div class="text-center mb-5" data-aos="fade-down">
@@ -50,12 +53,44 @@
         </div>
     </div>
 </section>
+@endif
+
+{{-- MODULE: Products --}}
+@if(module_enabled('products'))
+<section class="py-5">
+    <div class="container-xl">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-3">
+            <div data-aos="fade-right">
+                <h2 class="fw-800 text-dark display-6 mb-0">{{ __('Latest') }} <span class="text-primary">{{ __('Products') }}</span></h2>
+                <p class="lead text-muted mb-0 sub-heading">{{ __('Shop fresh arrivals from trusted sellers.') }}</p>
+            </div>
+            <div data-aos="fade-left">
+                <a href="{{ route('products.index') }}" class="btn btn-link text-primary fw-800 text-decoration-none p-0 hvr-icon-forward">
+                    {{ __('SHOP ALL') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+            @isset($productsLatest)
+                @forelse($productsLatest as $product)
+                    @include('frontend.products._partials._card', ['product' => $product])
+                @empty
+                    <div class="col-12 text-center py-5"><p class="text-muted">{{ __('Products are being stocked.') }}</p></div>
+                @endforelse
+            @endisset
+        </div>
+    </div>
+</section>
+@endif
 
 {{-- MODULE: Careers & Classifieds Split --}}
+@if(module_enabled('jobs') || module_enabled('classifieds'))
 <section class="py-5">
     <div class="container-xl">
         <div class="row g-4 g-xl-5">
             {{-- Careers --}}
+            @if(module_enabled('jobs'))
             <div class="col-lg-6" data-aos="fade-right">
                 <div class="card glass-surface rounded-5 p-4 p-md-5 shadow-lg border-0 h-100 overflow-hidden">
                     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -71,8 +106,10 @@
                     </div>
                 </div>
             </div>
+            @endif
 
             {{-- Top Deals --}}
+            @if(module_enabled('classifieds'))
             <div class="col-lg-6" data-aos="fade-left">
                 <div class="card glass-surface rounded-5 p-4 p-md-5 shadow-lg border-0 h-100 overflow-hidden">
                     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -90,11 +127,14 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 </section>
+@endif
 
 {{-- MODULE: Services --}}
+@if(module_enabled('services'))
 <section class="py-5">
     <div class="container-xl">
         <div class="text-center mb-5" data-aos="fade-up">
@@ -124,8 +164,10 @@
         </div>
     </div>
 </section>
+@endif
 
 {{-- MODULE: Events --}}
+@if(module_enabled('events'))
 <section class="py-5">
     <div class="container-xl">
         <div class="text-center mb-5" data-aos="fade-down">
@@ -141,6 +183,34 @@
                     </div>
                 @empty
                     <div class="col-12 text-center py-5 text-muted">{{ __('Stay tuned for upcoming community events!') }}</div>
+                @endforelse
+            @endisset
+        </div>
+    </div>
+</section>
+@endif
+
+{{-- MODULE: Blogs --}}
+<section class="py-5">
+    <div class="container-xl">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-3">
+            <div data-aos="fade-right">
+                <h2 class="fw-800 text-dark display-6 mb-0">{{ __('Latest') }} <span class="text-primary">{{ __('Stories') }}</span></h2>
+                <p class="lead text-muted mb-0 sub-heading">{{ __('Read guides, updates, and marketplace insights.') }}</p>
+            </div>
+            <div data-aos="fade-left">
+                <a href="{{ route('blogs.index') }}" class="btn btn-link text-primary fw-800 text-decoration-none p-0 hvr-icon-forward">
+                    {{ __('READ ALL') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @isset($blogsFeatured)
+                @forelse($blogsFeatured as $blog)
+                    @include('frontend.blogs._partials._card', ['blog' => $blog])
+                @empty
+                    <div class="col-12 text-center py-5"><p class="text-muted">{{ __('Stories and guides will appear here soon.') }}</p></div>
                 @endforelse
             @endisset
         </div>
