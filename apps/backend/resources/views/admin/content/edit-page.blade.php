@@ -2,16 +2,16 @@
     Administrative Content: High-Fidelity Page Orchestration
     
     This view serves as the primary engine for configuring dynamic 
-    page content across the active platform architecture. It 
+    page content across the active platform architecture. It
     facilitates section-based content grouping, asset deployment 
     (images, color palettes, textual strings), and global content 
-    synchronization. It ensures that content updates adhere to the 
-    defined theme tokens and layout protocols.
+    synchronization. It keeps content updates inside approved editable
+    fields while layout remains protected in code.
     
     @extends adminlte::page
     @context Content Management Module
     @variables Collection $settings Grouped collection of PageContent models.
-    @variables String $theme_key The active architectural theme identifier.
+    @variables String $theme_key The active content scope identifier.
     @variables String $page The specific page context being managed.
 --}}
 @extends('adminlte::page')
@@ -27,7 +27,7 @@
                     <i class="fas fa-edit mr-2 text-primary opacity-50"></i> Content Engine: {{ ucfirst($page) }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    <i class="fas fa-palette mr-1 text-primary"></i> Theme Architecture | {{ Str::of($theme_key)->replace('_', ' ')->title() }}
+                    <i class="fas fa-edit mr-1 text-primary"></i> Content Scope | {{ Str::of($theme_key)->replace('_', ' ')->title() }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
@@ -109,9 +109,9 @@
                         </div>
                         <div class="card-body bg-white py-4 px-4">
                              <div class="mb-4 pb-2 border-bottom">
-                                <label class="d-block smallest font-weight-bold text-muted mb-2 text-uppercase letter-spacing-1">Active Architecture</label>
+                                <label class="d-block smallest font-weight-bold text-muted mb-2 text-uppercase letter-spacing-1">Active Content Scope</label>
                                 <span class="badge badge-primary-light text-primary px-3 py-2 font-weight-bold rounded-pill" style="font-size: 0.7rem;">
-                                    <i class="fas fa-palette mr-1"></i> {{ strtoupper(str_replace('_', ' ', $theme_key)) }}
+                                    <i class="fas fa-edit mr-1"></i> {{ strtoupper(str_replace('_', ' ', $theme_key)) }}
                                 </span>
                              </div>
 

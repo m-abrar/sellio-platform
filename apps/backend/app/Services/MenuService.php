@@ -37,10 +37,12 @@ class MenuService
     ];
 
     protected ?string $activeTheme;
+    protected string $bladeMenuScope;
     protected string $currentPath;
 
     public function __construct(Request $request)
     {
+        $this->bladeMenuScope = Config::get('content.blade_scope', 'laravel_blade');
         $this->activeTheme = $this->resolveThemeKey(
             $request->header('X-Theme-Key')
                 ?? $request->get('theme_key')
@@ -80,7 +82,7 @@ class MenuService
      */
     public function get(string $locationKey): Collection
     {
-        $structure = $this->getStructure($locationKey, $this->activeTheme, true);
+        $structure = $this->getStructure($locationKey, $this->bladeMenuScope, true);
         $items = $this->hydrateItemsFromStructure($structure['items']);
         $this->setActiveStateRecursively($items);
 
@@ -89,7 +91,7 @@ class MenuService
 
     public function getMenuName(string $locationKey, ?string $defaultName = null): string
     {
-        $structure = $this->getStructure($locationKey, $this->activeTheme, false);
+        $structure = $this->getStructure($locationKey, $this->bladeMenuScope, false);
 
         return $structure['title']
             ?? $defaultName
@@ -98,10 +100,10 @@ class MenuService
 
     public function getMenusList(): Collection
     {
-        $cacheKey = "menu.list.{$this->activeTheme}";
+        $cacheKey = "menu.list.{$this->bladeMenuScope}";
 
         return Cache::rememberForever($cacheKey, function () {
-            return Menu::where('theme_key', $this->activeTheme)
+            return Menu::where('theme_key', $this->bladeMenuScope)
                 ->where('status', 'active')
                 ->orderBy('title')
                 ->get();
@@ -116,15 +118,16 @@ class MenuService
 
         Cache::forget("menu.list.{$menu->theme_key}");
         Cache::forget("menu.list.{$this->activeTheme}");
+        Cache::forget("menu.list.{$this->bladeMenuScope}");
     }
 
     public function forgetCacheByLocation(string $locationKey): void
     {
-        foreach ($this->resolveThemeKeys($this->activeTheme) as $themeKey) {
+        foreach ($this->resolveThemeKeys($this->bladeMenuScope) as $themeKey) {
             Cache::forget($this->generateStructureCacheKey($themeKey, $locationKey));
         }
 
-        Cache::forget("menu.list.{$this->activeTheme}");
+        Cache::forget("menu.list.{$this->bladeMenuScope}");
     }
 
     public function updateStructure(Menu $menu, array $data): void
@@ -375,6 +378,14 @@ class MenuService
     protected function resolveThemeKeys(string $themeKey): array
     {
         $keys = [$themeKey];
+
+        if ($themeKey === $this->bladeMenuScope) {
+            if ($themeKey !== self::GLOBAL_FALLBACK_THEME) {
+                $keys[] = self::GLOBAL_FALLBACK_THEME;
+            }
+
+            return array_values(array_unique($keys));
+        }
 
         if (str_contains($themeKey, '_')) {
             [$prefix] = explode('_', $themeKey, 2);

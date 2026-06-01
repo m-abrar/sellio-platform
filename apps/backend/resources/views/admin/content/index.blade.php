@@ -17,7 +17,13 @@
 @section('title', 'Content Management')
 
 @php
+    $bladeScope = config('content.blade_scope', 'laravel_blade');
+
     $resolveVertical = function ($themeKey) use ($themes) {
+        if ($themeKey === config('content.blade_scope', 'laravel_blade')) {
+            return ['key' => 'blade', 'label' => 'Laravel Blade Website', 'icon' => 'fa-code text-primary', 'order' => 1];
+        }
+
         $theme = $themes[$themeKey] ?? null;
         $vertical = $theme?->vertical;
         $text = Str::lower($vertical ?: str_replace(['_', '-'], ' ', $themeKey));
@@ -72,7 +78,7 @@
                     <i class="fas fa-edit mr-2 text-primary opacity-50"></i> Content Studio
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    {{ __('Choose a vertical, then edit the safe storefront slots for each theme.') }}
+                    {{ __('Choose a content scope, then edit the safe storefront slots.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
@@ -92,7 +98,7 @@
             <strong>{{ $contentByVertical->count() }}</strong>
         </div>
         <div class="overview-tile">
-            <span>{{ __('Themes') }}</span>
+            <span>{{ __('Scopes') }}</span>
             <strong>{{ $themeKeys->count() }}</strong>
         </div>
         <div class="overview-tile">
@@ -109,7 +115,7 @@
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <div>
                 <h5 class="card-title font-weight-bold text-dark mb-1 smallest text-uppercase letter-spacing-1 float-none">
-                    <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> {{ __('Theme Content Library') }}
+                    <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> {{ __('Content Library') }}
                 </h5>
                 <p class="text-muted small mb-0">{{ __('Structured fields keep the storefront flexible without letting layout break.') }}</p>
             </div>
@@ -162,7 +168,7 @@
                                     <div>
                                         <h4 class="font-weight-bold mb-1 text-dark">{{ $verticalMeta['label'] }}</h4>
                                         <p class="text-muted small mb-0">
-                                            {{ $themesInVertical->count() }} {{ Str::plural('theme', $themesInVertical->count()) }},
+                                            {{ $themesInVertical->count() }} {{ Str::plural('scope', $themesInVertical->count()) }},
                                             {{ $entries->count() }} {{ Str::plural('page', $entries->count()) }},
                                             {{ $entries->sum('slots_count') }} {{ Str::plural('slot', $entries->sum('slots_count')) }}
                                         </p>
@@ -174,7 +180,8 @@
                                     @foreach($themesInVertical as $themeKey => $themeEntries)
                                         @php
                                             $theme = $themes[$themeKey] ?? null;
-                                            $themeTitle = $theme?->title ?: Str::of($themeKey)->replace('_', ' ')->title();
+                                            $isBladeScope = $themeKey === $bladeScope;
+                                            $themeTitle = $isBladeScope ? __('Laravel Blade Website') : ($theme?->title ?: Str::of($themeKey)->replace('_', ' ')->title());
                                         @endphp
 
                                         <section class="content-theme-panel"
@@ -185,7 +192,7 @@
                                                     <span class="theme-kicker">{{ $themeKey }}</span>
                                                     <h5>{{ $themeTitle }}</h5>
                                                 </div>
-                                                <a href="{{ config('app.storefront_url') }}/preview/{{ $themeKey }}" target="_blank" class="btn btn-light btn-sm rounded-pill font-weight-bold">
+                                                <a href="{{ $isBladeScope ? url('/') : config('app.storefront_url') . '/preview/' . $themeKey }}" target="_blank" class="btn btn-light btn-sm rounded-pill font-weight-bold">
                                                     <i class="fas fa-eye mr-1"></i> {{ __('Preview') }}
                                                 </a>
                                             </div>

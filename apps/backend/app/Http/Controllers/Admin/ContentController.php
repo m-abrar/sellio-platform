@@ -49,8 +49,14 @@ class ContentController extends Controller
      */
     public function index(Request $request): View
     {
-        foreach (['properties_classic', 'events_music', 'ecommerce_fashion', 'services_marketplace', 'autos_luxury', 'jobs_startup', 'classifieds_general', 'events_classic', 'autos_classic', 'autos_modern', 'autos_used', 'events_creative', 'events_festival', 'autos_electric', 'events_corporate', 'jobs_tech', 'jobs_corporate', 'ecommerce_default', 'ecommerce_electronics', 'ecommerce_luxury'] as $themeKey) {
-            $this->ensureStructuredSlots($themeKey, 'home');
+        $bladeScope = config('content.blade_scope', 'laravel_blade');
+        $contentScopes = array_unique(array_merge(
+            [$bladeScope],
+            ['properties_classic', 'events_music', 'ecommerce_fashion', 'services_marketplace', 'autos_luxury', 'jobs_startup', 'classifieds_general', 'events_classic', 'autos_classic', 'autos_modern', 'autos_used', 'events_creative', 'events_festival', 'autos_electric', 'events_corporate', 'jobs_tech', 'jobs_corporate', 'ecommerce_default', 'ecommerce_electronics', 'ecommerce_luxury']
+        ));
+
+        foreach ($contentScopes as $contentScope) {
+            $this->ensureStructuredSlots($contentScope, 'home');
         }
 
         $selectedThemeKey = $request->query('theme_key');
@@ -89,7 +95,7 @@ class ContentController extends Controller
      */
     public function editPage(Request $request, string $page, ?string $theme_key = null): View
     {
-        $activeTheme = $theme_key ?? $request->query('themeKey');
+        $activeTheme = $theme_key ?? $request->query('themeKey') ?? config('content.blade_scope', 'laravel_blade');
 
         $this->ensureStructuredSlots($activeTheme, $page);
         
@@ -142,7 +148,9 @@ class ContentController extends Controller
             return;
         }
 
-        if (! Theme::where('theme_key', $themeKey)->exists()) {
+        $bladeScope = config('content.blade_scope', 'laravel_blade');
+
+        if ($themeKey !== $bladeScope && ! Theme::where('theme_key', $themeKey)->exists()) {
             return;
         }
 

@@ -10,11 +10,11 @@ use Illuminate\Http\Request;
 class ContentService
 {
     protected const FILE_COLLECTION = 'page_content';
-    protected ?string $activeTheme;
+    protected string $contentScope;
 
     public function __construct(Request $request)
     {
-        $this->activeTheme = $request->get('themeKey') ?? Config::get('app.default_theme', 'default');
+        $this->contentScope = Config::get('content.blade_scope', 'laravel_blade');
     }
 
     protected array $localCache = [];
@@ -46,7 +46,7 @@ class ContentService
         } else {
             // Fallback for missing keys (still creates if missing)
             $setting = PageContent::firstOrCreate([
-                'theme_key'   => $this->activeTheme,
+                'theme_key'   => $this->contentScope,
                 'page'        => $page,
                 'section'     => $section,
                 'content_key' => $key,
@@ -65,7 +65,7 @@ class ContentService
 
     protected function primeLocalCache(string $page): void
     {
-        $contents = PageContent::where('theme_key', $this->activeTheme)
+        $contents = PageContent::where('theme_key', $this->contentScope)
             ->where('page', $page)
             ->get();
 
@@ -88,7 +88,7 @@ class ContentService
     protected function fetchFromDb($page, $section, $key, $default)
     {
         $setting = PageContent::where([
-            'theme_key'     => $this->activeTheme,
+            'theme_key'    => $this->contentScope,
             'page'        => $page,
             'section'     => $section,
             'content_key' => $key,
@@ -99,11 +99,13 @@ class ContentService
 
     public function forgetCache(PageContent $setting): void
     {
-        Cache::forget($this->generateCacheKey($setting->page, $setting->section, $setting->content_key));
+        Cache::forget($this->generateCacheKey($setting->page, $setting->section, $setting->content_key, $setting->theme_key));
     }
 
-    protected function generateCacheKey($page, $section, $key): string
+    protected function generateCacheKey($page, $section, $key, ?string $scope = null): string
     {
-        return "page_content.{$this->activeTheme}.{$page}.{$section}.{$key}";
+        $scope ??= $this->contentScope;
+
+        return "page_content.{$scope}.{$page}.{$section}.{$key}";
     }
 }

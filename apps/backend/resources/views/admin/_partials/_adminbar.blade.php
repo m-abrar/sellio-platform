@@ -2,8 +2,8 @@
     Administrative Quick Access Bar (Admin Bar)
     
     This partial renders a floating utility bar at the top of the viewport 
-    for authenticated administrators. It provides rapid access to the 
-    dashboard, theme settings, content management, and menu configuration.
+    for authenticated administrators. It provides rapid access to the
+    dashboard, Blade content management, and menu configuration.
     
     @layout resources/views/admin/layout.blade.php
     @context Authenticated Admin
@@ -38,14 +38,12 @@
 
       <span class="separator">|</span>
 
-      {{-- 3. Theme Context --}}
+      {{-- 3. Blade Content Scope --}}
       <div class="me-3">
-        @if(isset($activeTheme))
-          <a href="{{ route('admin.themes.edit', $activeTheme->id) }}" class="text-decoration-none">
-            <i class="fas fa-palette me-1"></i>
-            <span class="badge bg-primary">{{ $activeTheme->theme_key }}</span>
-          </a>
-        @endif
+        <a href="{{ route('admin.content.index', ['theme_key' => $bladeContentScope ?? config('content.blade_scope', 'laravel_blade')]) }}" class="text-decoration-none">
+          <i class="fas fa-edit me-1"></i>
+          <span class="badge bg-primary">{{ $bladeContentScope ?? config('content.blade_scope', 'laravel_blade') }}</span>
+        </a>
       </div>
 
       <span class="separator">|</span>
@@ -56,15 +54,14 @@
           <i class="fas fa-edit me-1"></i>{{ __('Edit Content') }}
         </a>
         <ul class="dropdown-menu dropdown-menu-dark">
-          {{-- Ensure $themePages is shared via View::share in Middleware or ServiceProvider --}}
-          @forelse ($themePages ?? [] as $page)
+          @forelse ($bladePages ?? [] as $page)
             <li>
-              <a class="dropdown-item text-capitalize" href="{{ route('admin.content.edit', ['page' => $page->page, 'theme_key' => $activeTheme->theme_key ?? '']) }}">
+              <a class="dropdown-item text-capitalize" href="{{ route('admin.content.edit', ['page' => $page->page, 'theme_key' => $bladeContentScope ?? config('content.blade_scope', 'laravel_blade')]) }}">
                 <i class="fas fa-file me-2"></i>{{ $page->page }}
               </a>
             </li>
           @empty
-            <li><a class="dropdown-item disabled"><i class="fas fa-exclamation-triangle me-2"></i>{{ __('No theme pages') }}</a></li>
+            <li><a class="dropdown-item disabled"><i class="fas fa-exclamation-triangle me-2"></i>{{ __('No Blade pages') }}</a></li>
           @endforelse
           <li><hr class="dropdown-divider border-light"></li>
           <li><a class="dropdown-item" href="{{ route('admin.pages.index') }}"><i class="fas fa-list me-2"></i>{{ __('Manage Pages') }}</a></li>
@@ -95,7 +92,7 @@
             <li><hr class="dropdown-divider border-light"></li>
             
             <li>
-                <a class="dropdown-item" href="{{ route('admin.menu.index', ['theme_key' => $activeTheme->theme_key ?? '']) }}">
+                <a class="dropdown-item" href="{{ route('admin.menu.index', ['theme_key' => $bladeContentScope ?? config('content.blade_scope', 'laravel_blade')]) }}">
                     <i class="fas fa-list-alt me-2"></i>{{ __('Manage All Menus') }}
                 </a>
             </li>
