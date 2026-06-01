@@ -1658,9 +1658,7 @@ footer{
 .max-w-500{
     max-width:500px
 }
-[data-aos]{
-    pointer-events:none
-}
+[data-aos],
 [data-aos].aos-animate{
     pointer-events:auto
 }

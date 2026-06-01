@@ -26,4 +26,8 @@ noscript [data-aos] {
     transition: none !important;
 }
 
+[data-aos] {
+    pointer-events: auto;
+}
+
 /* Any other custom CSS goes here */

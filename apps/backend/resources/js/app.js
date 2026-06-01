@@ -25,6 +25,7 @@ const AppJS = {
      */
     initDocumentState() {
         document.documentElement.classList.replace('no-js', 'js');
+        document.body?.classList.replace('no-js', 'js');
     },
 
     /**
