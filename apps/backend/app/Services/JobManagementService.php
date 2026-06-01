@@ -55,12 +55,14 @@ class JobManagementService
     {
         // Define common vertical relations to count for the dashboard/sidebar
         $verticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products'];
+        $locationVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
+        $tagVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
 
         return [
             'categories' => Category::where('is_job', true)->withCount($verticals)->get(),
-            'locations'  => Location::where('is_job', true)->withCount($verticals)->get(),
+            'locations'  => Location::where('is_job', true)->withCount($locationVerticals)->get(),
             'types'      => Type::where('is_job', true)->withCount($verticals)->get(),
-            'tags'       => Tag::where('is_job', true)->withCount($verticals)->get(),
+            'tags'       => Tag::where('is_job', true)->withCount($tagVerticals)->get(),
         ];
     }
 

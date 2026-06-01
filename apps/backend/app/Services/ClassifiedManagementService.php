@@ -27,12 +27,14 @@ class ClassifiedManagementService
     {
         // Define common vertical relations to count for the dashboard/sidebar
         $verticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products'];
+        $locationVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
+        $tagVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
 
         return [
             'categories' => Category::where('is_classified', true)->withCount($verticals)->get(),
-            'locations'  => Location::where('is_classified', true)->withCount($verticals)->get(),
+            'locations'  => Location::where('is_classified', true)->withCount($locationVerticals)->get(),
             'types'      => Type::where('is_classified', true)->withCount($verticals)->get(),
-            'tags'       => Tag::where('is_classified', true)->withCount($verticals)->get(),
+            'tags'       => Tag::where('is_classified', true)->withCount($tagVerticals)->get(),
         ];
     }
 

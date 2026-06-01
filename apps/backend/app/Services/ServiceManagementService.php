@@ -74,13 +74,15 @@ class ServiceManagementService
     {
         // Define common vertical relations to count for the dashboard/sidebar
         $verticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products'];
+        $locationVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
+        $tagVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
 
         // Centralized taxonomy retrieval with active scope and eager-loaded counts
         $categories = \App\Models\Category::active()->where('is_service', true)->withCount($verticals)->get();
-        $locations  = \App\Models\Location::active()->where('is_service', true)->withCount($verticals)->get();
+        $locations  = \App\Models\Location::active()->where('is_service', true)->withCount($locationVerticals)->get();
         $types      = \App\Models\Type::active()->where('is_service', true)->withCount($verticals)->get();
         $features   = \App\Models\Feature::active()->where('is_service', true)->get();
-        $tags       = \App\Models\Tag::active()->where('is_service', true)->withCount($verticals)->get();
+        $tags       = \App\Models\Tag::active()->where('is_service', true)->withCount($tagVerticals)->get();
 
         $services = $this->searchServices($filters, $user);
 

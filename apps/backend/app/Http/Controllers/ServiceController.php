@@ -9,6 +9,7 @@ use App\Models\Feature;
 use App\Models\Type;
 use App\Models\Tag;
 use App\Services\ServiceManagementService;
+use App\Http\Requests\SearchServiceRequest;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\StoreConsultationRequest;
 use App\Http\Requests\StoreQuoteRequest;
@@ -42,10 +43,10 @@ class ServiceController extends Controller
     /**
      * Display the service listing.
      *
-     * @param Request $request
+     * @param SearchServiceRequest $request
      * @return View
      */
-    public function index(Request $request): View
+    public function index(SearchServiceRequest $request): View
     {
         return $this->search($request);
     }
@@ -53,10 +54,10 @@ class ServiceController extends Controller
     /**
      * Perform service search with advanced filters.
      *
-     * @param \App\Http\Requests\SearchServiceRequest $request
+     * @param SearchServiceRequest $request
      * @return View
      */
-    public function search(\App\Http\Requests\SearchServiceRequest $request): View
+    public function search(SearchServiceRequest $request): View
     {
         $data = $this->serviceManagement->getSearchPageData($request->validated(), auth()->user());
 
