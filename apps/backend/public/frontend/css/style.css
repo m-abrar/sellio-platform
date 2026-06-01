@@ -233,6 +233,33 @@ footer{
     background:rgba(255,255,255,.5);
     -webkit-backdrop-filter:blur(20px)
 }
+.search-container-wrapper{
+    width:min(100%, 920px);
+    position:relative
+}
+.hero-search-max{
+    max-width:920px
+}
+.hero-text-max{
+    max-width:760px
+}
+.hero-section .pill-group{
+    display:flex;
+    width:78px;
+    align-items:center;
+    flex-direction:column;
+    gap:.5rem
+}
+.hero-section .label-text{
+    max-width:78px;
+    color:var(--text-muted);
+    font-size:.72rem;
+    font-weight:800;
+    line-height:1.15;
+    text-align:center;
+    text-transform:uppercase;
+    overflow-wrap:anywhere
+}
 .filter-sidebar{
     background-color:rgba(255, 255, 255, 0.8);
     box-shadow:var(--shadow-subtle);
@@ -729,9 +756,11 @@ footer{
     position:relative;
     bottom:-55px;
     z-index:10;
-    gap:2rem;
+    gap:1rem;
     border:none;
-    justify-content:center
+    justify-content:center;
+    flex-wrap:wrap;
+    padding:0 1rem
 }
 .hero-section .nav-pills .nav-link{
     border-radius:50%!important;
@@ -752,6 +781,9 @@ footer{
     padding:0 30px;
     font-size:1rem;
     background-color:#fff
+}
+.glass-hero-panel .row{
+    justify-content:center
 }
 .btn-search-pill{
     height:60px;
@@ -1662,6 +1694,44 @@ footer{
 [data-aos].aos-animate{
     pointer-events:auto
 }
+@media (max-width:991.98px){
+    .hero-section{
+        min-height:auto;
+        padding-top:84px!important;
+        padding-bottom:72px
+    }
+    .hero-section .nav-pills{
+        width:100%;
+        justify-content:flex-start;
+        flex-wrap:nowrap;
+        overflow-x:auto;
+        overflow-y:hidden;
+        scrollbar-width:none;
+        padding:0 .25rem 10px;
+        gap:.75rem
+    }
+    .hero-section .nav-pills::-webkit-scrollbar{
+        display:none
+    }
+    .hero-section .pill-group{
+        width:64px;
+        flex:0 0 64px
+    }
+    .hero-section .nav-pills .nav-link{
+        width:58px;
+        height:58px;
+        font-size:1.35rem
+    }
+    .hero-section .label-text{
+        max-width:64px;
+        font-size:.64rem
+    }
+    .glass-hero-panel{
+        margin-bottom:2.5rem;
+        padding:74px 20px 28px;
+        border-radius:22px
+    }
+}
 .user-profile-header{
     min-height:400px
 }
@@ -1758,6 +1828,27 @@ footer{
         border-bottom:1px solid #dee2e6;
         padding-bottom:1rem;
         margin-bottom:1rem
+    }
+}
+@media (max-width:767.98px){
+    .hero-section .display-3{
+        font-size:2.35rem
+    }
+    .hero-section .fs-5{
+        font-size:1rem!important
+    }
+    .custom-pill-input,
+    .btn-search-pill{
+        height:52px;
+        border-radius:16px!important;
+        padding:0 18px;
+        font-size:.95rem
+    }
+    .btn-search-pill{
+        width:100%
+    }
+    .glass-hero-panel{
+        padding:70px 16px 22px
     }
 }
 .unified-input{

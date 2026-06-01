@@ -74,7 +74,9 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
             @isset($productsLatest)
                 @forelse($productsLatest as $product)
-                    @include('frontend.products._partials._card', ['product' => $product])
+                    <div class="col">
+                        @include('frontend.products._partials._card', ['product' => $product])
+                    </div>
                 @empty
                     <div class="col-12 text-center py-5"><p class="text-muted">{{ __('Products are being stocked.') }}</p></div>
                 @endforelse
@@ -208,7 +210,9 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             @isset($blogsFeatured)
                 @forelse($blogsFeatured as $blog)
-                    @include('frontend.blogs._partials._card', ['blog' => $blog])
+                    <div class="col">
+                        @include('frontend.blogs._partials._card', ['blog' => $blog])
+                    </div>
                 @empty
                     <div class="col-12 text-center py-5"><p class="text-muted">{{ __('Stories and guides will appear here soon.') }}</p></div>
                 @endforelse

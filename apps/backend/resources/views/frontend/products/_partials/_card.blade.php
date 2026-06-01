@@ -1,5 +1,4 @@
-<div class="col">
-    <div class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4 position-relative">
+<div class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4 position-relative">
         
         {{-- Link wrapper for the main content --}}
         <a href="{{ route('products.show', $product->slug) }}" class="text-decoration-none text-dark flex-grow-1 d-flex flex-column">
@@ -69,6 +68,7 @@
                         <span class="small text-danger"><i class="bi bi-x-circle-fill me-1"></i>{{ __('Out of Stock') }}</span>
                     @endif
                 </div>
+            </div>
             </a> {{-- End of main link --}}
             
 
@@ -96,6 +96,4 @@
                         </form>
                     @endif
                 </div>
-        </div>
-    </div>
 </div>
