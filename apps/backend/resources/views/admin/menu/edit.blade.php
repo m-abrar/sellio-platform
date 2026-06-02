@@ -53,16 +53,27 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-3">
                             <div class="form-group mb-0">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2">Display Label</label>
                                 <input type="text" id="new_title" class="form-control" placeholder="e.g. Contact Support" style="border-radius: 12px; height: 45px;">
                             </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <div class="form-group mb-0">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2">Target URL / Route</label>
                                 <input type="text" id="new_url" class="form-control" placeholder="e.g. /support or https://..." style="border-radius: 12px; height: 45px;">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2">Related Module</label>
+                                <select id="new_module" class="form-control" style="border-radius: 12px; height: 45px;">
+                                    <option value="">{{ __('Always visible') }}</option>
+                                    @foreach($moduleOptions as $moduleKey => $moduleLabel)
+                                        <option value="{{ $moduleKey }}">{{ __($moduleLabel) }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
@@ -164,6 +175,16 @@
                         <label class="small font-weight-bold text-secondary text-uppercase mb-2">Destination URL</label>
                         <input type="text" id="edit_url" name="url" class="form-control" required style="border-radius: 12px;">
                     </div>
+                    <div class="form-group mb-0 mt-3">
+                        <label class="small font-weight-bold text-secondary text-uppercase mb-2">Related Module</label>
+                        <select id="edit_module" name="module" class="form-control" style="border-radius: 12px;">
+                            <option value="">{{ __('Always visible') }}</option>
+                            @foreach($moduleOptions as $moduleKey => $moduleLabel)
+                                <option value="{{ $moduleKey }}">{{ __($moduleLabel) }}</option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted">{{ __('When selected, this link is hidden while the module is disabled.') }}</small>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer border-0">
@@ -222,6 +243,7 @@
             const addItemButton = document.getElementById('add-new-item');
             const newTitleInput = document.getElementById('new_title');
             const newUrlInput = document.getElementById('new_url');
+            const newModuleInput = document.getElementById('new_module');
             const menuItemsList = document.getElementById('menu-items-list');
             const newItemsContainer = document.getElementById('new-items-container');
             const updateForm = document.getElementById('menu-update-form');
@@ -235,14 +257,16 @@
             addItemButton.addEventListener('click', function() {
                 const title = newTitleInput.value.trim();
                 const url = newUrlInput.value.trim();
+                const module = newModuleInput.value.trim();
                 if (title && url) {
                     const tempId = `new-${newItemIndex}`;
                     const listItem = `
-                        <li class="dd-item" data-id="${tempId}" data-title="${title}" data-url="${url}">
+                        <li class="dd-item" data-id="${tempId}" data-title="${title}" data-url="${url}" data-module="${module}">
                             <div class="dd-handle">
                                 <i class="fas fa-grip-lines mr-3 text-muted opacity-50"></i>
                                 <span class="item-title font-weight-bold">${title}</span> 
                                 <span class="item-url ml-2 text-muted small opacity-50">(${url})</span>
+                                <span class="item-module ml-2 badge ${module ? 'badge-primary-light text-primary' : 'badge-light text-muted'} smallest text-uppercase">${module || 'Always visible'}</span>
                                 <span class="ml-3 badge badge-success-light text-success smallest">NEW</span>
                             </div>
                             <div class="dd-actions">
@@ -256,9 +280,9 @@
                         </li>
                     `;
                     nestableRoot.find('.dd-list:first').append(listItem);
-                    const hiddenInputs = `<div id="new-input-${tempId}"><input type="hidden" name="new_items[${newItemIndex}][title]" value="${title}"><input type="hidden" name="new_items[${newItemIndex}][url]" value="${url}"></div>`;
+                    const hiddenInputs = `<div id="new-input-${tempId}"><input type="hidden" name="new_items[${newItemIndex}][title]" value="${title}"><input type="hidden" name="new_items[${newItemIndex}][url]" value="${url}"><input type="hidden" name="new_items[${newItemIndex}][module]" value="${module}"></div>`;
                     newItemsContainer.insertAdjacentHTML('beforeend', hiddenInputs);
-                    newTitleInput.value = ''; newUrlInput.value = ''; newItemIndex++;
+                    newTitleInput.value = ''; newUrlInput.value = ''; newModuleInput.value = ''; newItemIndex++;
                 } else {
                     showAlert('Please define both label and URL for the component.', 'warning');
                 }
@@ -285,6 +309,7 @@
                 document.getElementById('edit_item_id').value = listItem.data('id');
                 document.getElementById('edit_title').value = listItem.data('title');
                 document.getElementById('edit_url').value = listItem.data('url');
+                document.getElementById('edit_module').value = listItem.data('module') || '';
                 editItemModal.modal('show');
             });
             
@@ -293,6 +318,7 @@
                 const itemId = document.getElementById('edit_item_id').value;
                 const title = document.getElementById('edit_title').value;
                 const url = document.getElementById('edit_url').value;
+                const module = document.getElementById('edit_module').value;
                 const token = document.querySelector('#menu-update-form input[name="_token"]').value; 
                 const listItem = $(menuItemsList).find(`li[data-id="${itemId}"]`);
 
@@ -300,27 +326,38 @@
                     if (listItem.length) {
                         listItem.data('title', title).attr('data-title', title);
                         listItem.data('url', url).attr('data-url', url);
+                        listItem.data('module', module).attr('data-module', module);
                         listItem.find('.item-title').text(title);
                         listItem.find('.item-url').text(`(${url})`);
+                        listItem.find('.item-module')
+                            .text(module || 'Always visible')
+                            .toggleClass('badge-primary-light text-primary', Boolean(module))
+                            .toggleClass('badge-light text-muted', !module);
                         const hiddenDiv = document.getElementById(`new-input-${itemId}`);
                         if (hiddenDiv) {
                             hiddenDiv.querySelector('input[name$="[title]"]').value = title;
                             hiddenDiv.querySelector('input[name$="[url]"]').value = url;
+                            hiddenDiv.querySelector('input[name$="[module]"]').value = module;
                         }
                         editItemModal.modal('hide');
                         showAlert('Component updated locally.', 'info');
                     }
                 } else {
                     const formData = new URLSearchParams();
-                    formData.append('title', title); formData.append('url', url); formData.append('_method', 'PUT'); formData.append('_token', token);
+                    formData.append('title', title); formData.append('url', url); formData.append('module', module); formData.append('_method', 'PUT'); formData.append('_token', token);
                     fetch(`/admin/menu/items/${itemId}`, { method: 'POST', headers: { 'Accept': 'application/json' }, body: formData })
                     .then(response => response.json())
                     .then(data => {
                         if (listItem.length) {
                             listItem.data('title', title).attr('data-title', title);
                             listItem.data('url', url).attr('data-url', url);
+                            listItem.data('module', module).attr('data-module', module);
                             listItem.find('.item-title').text(title);
                             listItem.find('.item-url').text(`(${url})`);
+                            listItem.find('.item-module')
+                                .text(module || 'Always visible')
+                                .toggleClass('badge-primary-light text-primary', Boolean(module))
+                                .toggleClass('badge-light text-muted', !module);
                         }
                         editItemModal.modal('hide');
                         showAlert('Menu item updated successfully!', 'success');

@@ -15,13 +15,19 @@
     <li class="dd-item" 
         data-id="{{ $item->id }}" 
         data-title="{{ $item->title }}" 
-        data-url="{{ $item->url }}">
+        data-url="{{ $item->url }}"
+        data-module="{{ $item->module }}">
         
         {{-- Handle for dragging --}}
         <div class="dd-handle">
             <i class="fas fa-arrows-alt mr-2 text-muted"></i>
             <span class="item-title font-weight-bold">{{ $item->title }}</span> 
             <span class="item-url ml-2 text-muted small">({{ $item->url }})</span>
+            @if($item->module)
+                <span class="item-module ml-2 badge badge-primary-light text-primary smallest text-uppercase">{{ $item->module }}</span>
+            @else
+                <span class="item-module ml-2 badge badge-light text-muted smallest text-uppercase">{{ __('Always visible') }}</span>
+            @endif
         </div>
         
         {{-- Actions must be placed outside the dd-handle --}}

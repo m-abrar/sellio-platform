@@ -63,8 +63,9 @@ class MenuController extends Controller
             ->get();
             
         return view('admin.menu.edit', [
-            'menu'  => $menu,
-            'items' => $items,
+            'menu'          => $menu,
+            'items'         => $items,
+            'moduleOptions' => MenuService::moduleOptions(),
         ]);
     }
 

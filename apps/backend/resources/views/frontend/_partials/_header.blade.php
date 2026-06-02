@@ -32,12 +32,34 @@ Features: Responsive menu, auth-aware actions, and cart integration.
             {{-- Dynamic Navigation Links --}}
             <ul class="navbar-nav me-auto">
                 @foreach(menu_items('main_header') as $menuitem)
-                    <li class="nav-item" data-aos="fade-down" data-aos-delay="{{ $loop->iteration * 100 }}">
-                        <a @class(['nav-link fw-semibold text-uppercase', 'active' => $menuitem->is_active])
-                            href="{{ $menuitem->url }}">
-                            {{ __($menuitem->title) }}
-                        </a>
-                    </li>
+                    @if($menuitem->children->isNotEmpty())
+                        <li class="nav-item dropdown" data-aos="fade-down" data-aos-delay="{{ $loop->iteration * 100 }}">
+                            <a @class(['nav-link dropdown-toggle fw-semibold text-uppercase', 'active' => $menuitem->is_active])
+                                href="{{ $menuitem->url }}"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                {{ __($menuitem->title) }}
+                            </a>
+                            <ul class="dropdown-menu border-0 shadow-sm rounded-3 p-2">
+                                @foreach($menuitem->children as $child)
+                                    <li>
+                                        <a @class(['dropdown-item rounded-2', 'active' => $child->is_active])
+                                            href="{{ $child->url }}">
+                                            {{ __($child->title) }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @else
+                        <li class="nav-item" data-aos="fade-down" data-aos-delay="{{ $loop->iteration * 100 }}">
+                            <a @class(['nav-link fw-semibold text-uppercase', 'active' => $menuitem->is_active])
+                                href="{{ $menuitem->url }}">
+                                {{ __($menuitem->title) }}
+                            </a>
+                        </li>
+                    @endif
                 @endforeach
             </ul>
 
@@ -116,4 +138,4 @@ Features: Responsive menu, auth-aware actions, and cart integration.
         </div>
     </div>
 </nav>
-
+

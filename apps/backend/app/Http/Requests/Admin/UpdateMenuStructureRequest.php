@@ -24,6 +24,7 @@ class UpdateMenuStructureRequest extends FormRequest
             'new_items'           => ['nullable', 'array'],
             'new_items.*.title'   => ['required_with:new_items.*.url', 'string', 'max:255'],
             'new_items.*.url'     => ['required_with:new_items.*.title', 'string', 'max:255'],
+            'new_items.*.module'  => ['nullable', 'string', 'in:properties,autos,products,services,jobs,events,classifieds,blogs'],
         ];
     }
 }

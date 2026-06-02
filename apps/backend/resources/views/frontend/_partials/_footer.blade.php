@@ -38,10 +38,10 @@
         {{-- Dynamic Link Columns --}}
         @php
             $footerMenus = [
-                'company_footer'   => 'Company',
-                'support_footer'   => 'Support',
-                'resources_footer' => 'Resources',
-                'settings_footer'  => 'Settings'
+                'footer_column_1' => 'Explore',
+                'footer_column_2' => 'More',
+                'footer_column_3' => 'Company',
+                'footer_column_4' => 'Support'
             ];
         @endphp
 

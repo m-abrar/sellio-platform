@@ -13,6 +13,17 @@ class MenuService
 {
     public const GLOBAL_FALLBACK_THEME = 'unifieds_default';
 
+    public const MODULE_OPTIONS = [
+        'properties'  => 'Properties',
+        'autos'       => 'Autos',
+        'products'    => 'Products',
+        'services'    => 'Services',
+        'jobs'        => 'Jobs',
+        'events'      => 'Events',
+        'classifieds' => 'Classifieds',
+        'blogs'       => 'Blogs',
+    ];
+
     public const MENU_LOCATIONS = [
         'utility_topbar',
         'main_header',
@@ -110,6 +121,11 @@ class MenuService
         });
     }
 
+    public static function moduleOptions(): array
+    {
+        return self::MODULE_OPTIONS;
+    }
+
     public function forgetCache(Menu $menu): void
     {
         foreach ($this->resolveThemeKeys($menu->theme_key) as $themeKey) {
@@ -140,6 +156,7 @@ class MenuService
                             'menu_id' => $menu->id,
                             'title'   => $newItem['title'],
                             'url'     => $newItem['url'],
+                            'module'  => $newItem['module'] ?? null,
                             'order'   => 9999,
                             'status'  => 'active',
                         ]);
@@ -170,6 +187,8 @@ class MenuService
         $structure = Cache::rememberForever($cacheKey, function () use ($locationKey, $themeKey) {
             return $this->buildStructure($locationKey, $themeKey);
         });
+
+        $structure['items'] = $this->filterItemsByEnabledModules($structure['items'] ?? []);
 
         if ($resolveLaravelRoutes) {
             $structure = $this->resolveUrlsInStructure($structure);
@@ -229,10 +248,6 @@ class MenuService
 
     protected function toItemDto(MenuItem $item): ?array
     {
-        if ($item->module && ! module_enabled($item->module)) {
-            return null;
-        }
-
         $children = $item->relationLoaded('childrenRecursive')
             ? collect($item->childrenRecursive)
                 ->map(fn (MenuItem $child) => $this->toItemDto($child))
@@ -245,9 +260,23 @@ class MenuService
             'id'       => $item->id,
             'title'    => $item->title,
             'url'      => $this->normalizeUrl($item->url),
+            'module'   => $item->module,
             'target'   => Str::startsWith($item->url, ['http://', 'https://', '//']) ? '_blank' : '_self',
             'children' => $children,
         ];
+    }
+
+    protected function filterItemsByEnabledModules(array $items): array
+    {
+        return collect($items)
+            ->filter(fn (array $item) => empty($item['module']) || module_enabled($item['module']))
+            ->map(function (array $item) {
+                $item['children'] = $this->filterItemsByEnabledModules($item['children'] ?? []);
+
+                return $item;
+            })
+            ->values()
+            ->all();
     }
 
     protected function normalizeUrl(?string $url): string
@@ -302,9 +331,10 @@ class MenuService
     {
         $models = array_map(function (array $item) {
             $model = new MenuItem([
-                'id'    => $item['id'] ?? null,
-                'title' => $item['title'],
-                'url'   => $item['url'],
+                'id'     => $item['id'] ?? null,
+                'title'  => $item['title'],
+                'url'    => $item['url'],
+                'module' => $item['module'] ?? null,
             ]);
 
             if (! empty($item['children'])) {
@@ -422,18 +452,39 @@ class MenuService
             return $this->fallbackFooterItems($locationKey);
         }
 
+        if ($themeKey === $this->bladeMenuScope) {
+            return $this->moduleAwareFallbackHeaderItems();
+        }
+
         $vertical = $this->resolveVertical($themeKey);
 
         return match ($vertical) {
-            'properties'   => $this->dtoLinks(['Explore' => '/explore', 'Cart' => '/cart']),
-            'autos'        => $this->dtoLinks(['Inventory' => '/explore', 'Explore' => '/explore']),
-            'events'       => $this->dtoLinks(['Events' => '/explore']),
-            'jobs'         => $this->dtoLinks(['Jobs' => '/explore']),
-            'services'     => $this->dtoLinks(['Services' => '/explore']),
-            'classifieds'  => $this->dtoLinks(['Listings' => '/explore']),
-            'ecommerce'    => $this->dtoLinks(['Shop' => '/explore', 'Explore' => '/explore']),
-            default        => $this->dtoLinks(['Home' => '/', 'Explore' => '/explore', 'Shop' => '/explore']),
+            'properties'   => $this->dtoLinks(['Properties' => '/properties']),
+            'autos'        => $this->dtoLinks(['Autos' => '/autos']),
+            'events'       => $this->dtoLinks(['Events' => '/events']),
+            'jobs'         => $this->dtoLinks(['Jobs' => '/jobs']),
+            'services'     => $this->dtoLinks(['Services' => '/services']),
+            'classifieds'  => $this->dtoLinks(['Classifieds' => '/classifieds']),
+            'ecommerce'    => $this->dtoLinks(['Shop' => '/products']),
+            default        => $this->moduleAwareFallbackHeaderItems(),
         };
+    }
+
+    protected function moduleAwareFallbackHeaderItems(): array
+    {
+        return array_merge(
+            $this->dtoLinks(['Home' => '/']),
+            $this->dtoModuleLinks([
+                'Properties'  => ['/properties', 'properties'],
+                'Autos'       => ['/autos', 'autos'],
+                'Products'    => ['/products', 'products'],
+                'Services'    => ['/services', 'services'],
+                'Jobs'        => ['/jobs', 'jobs'],
+                'Events'      => ['/events', 'events'],
+                'Classifieds' => ['/classifieds', 'classifieds'],
+                'Blog'        => ['/blogs', 'blogs'],
+            ])
+        );
     }
 
     protected function fallbackFooterItems(string $locationKey): array
@@ -441,8 +492,18 @@ class MenuService
         return match ($locationKey) {
             'social_footer'      => $this->dtoLinks(['Instagram' => '#', 'LinkedIn' => '#', 'X' => '#']),
             'footer_bottom_bar'  => $this->dtoLinks(['Privacy' => '#', 'Terms' => '#']),
-            'footer_column_1',
-            'footer_column_2',
+            'footer_column_1'    => $this->dtoModuleLinks([
+                'Properties'  => ['/properties', 'properties'],
+                'Autos'       => ['/autos', 'autos'],
+                'Products'    => ['/products', 'products'],
+                'Services'    => ['/services', 'services'],
+            ]),
+            'footer_column_2'    => $this->dtoModuleLinks([
+                'Jobs'        => ['/jobs', 'jobs'],
+                'Events'      => ['/events', 'events'],
+                'Classifieds' => ['/classifieds', 'classifieds'],
+                'Blog'        => ['/blogs', 'blogs'],
+            ]),
             'footer_column_3',
             'footer_column_4'    => $this->dtoLinks(['About' => '#', 'Contact' => '#']),
             'company_footer'     => $this->dtoLinks(['About' => '#', 'Careers' => '#', 'Press' => '#']),
@@ -466,10 +527,32 @@ class MenuService
                 'id'       => null,
                 'title'    => $title,
                 'url'      => $url,
+                'module'   => null,
                 'target'   => Str::startsWith($url, ['http://', 'https://']) ? '_blank' : '_self',
                 'children' => [],
             ];
             $order++;
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param  array<string, array{0: string, 1: string}>  $links
+     */
+    protected function dtoModuleLinks(array $links): array
+    {
+        $items = [];
+
+        foreach ($links as $title => [$url, $module]) {
+            $items[] = [
+                'id'       => null,
+                'title'    => $title,
+                'url'      => $url,
+                'module'   => $module,
+                'target'   => Str::startsWith($url, ['http://', 'https://']) ? '_blank' : '_self',
+                'children' => [],
+            ];
         }
 
         return $items;
@@ -490,6 +573,6 @@ class MenuService
 
     protected function generateStructureCacheKey(string $themeKey, string $locationKey): string
     {
-        return "menu.structure.{$themeKey}.{$locationKey}";
+        return "menu.structure.v2.{$themeKey}.{$locationKey}";
     }
 }

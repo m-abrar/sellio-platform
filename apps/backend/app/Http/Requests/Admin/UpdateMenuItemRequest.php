@@ -20,8 +20,9 @@ class UpdateMenuItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'url'   => ['required', 'string', 'max:255'],
+            'title'  => ['required', 'string', 'max:255'],
+            'url'    => ['required', 'string', 'max:255'],
+            'module' => ['nullable', 'string', 'in:properties,autos,products,services,jobs,events,classifieds,blogs'],
         ];
     }
 }
