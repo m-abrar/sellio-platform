@@ -2,7 +2,7 @@
 
 {{-- Use product data for title and category name --}}
 @section('title', $product->title . ' - ' . ($product->category->title ?? __('Product'))) 
-@section('body_class', 'has-body-glow bg-light')
+@section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 @section('content')
 <x-frontend.detail-shell variant="product">

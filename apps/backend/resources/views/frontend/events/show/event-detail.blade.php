@@ -1,7 +1,7 @@
 @extends('frontend._layouts._app')
 
 @section('title', $event->title) 
-@section('body_class', 'has-body-glow')
+@section('body_class', 'has-body-glow bg-light frontend-page--detail')
 @php $tickets_left = $event->tickets_left @endphp
 @section('content')
 <x-frontend.detail-shell variant="event">

@@ -1,11 +1,10 @@
 @extends('frontend._layouts._app')
 
 @section('title', page_content('blogs.search.meta_title', __('Expert Insights & Community Stories')))
-@section('body_class', 'has-body-glow bg-light')
+@section('body_class', 'has-body-glow bg-light frontend-page--listing')
 
 @section('content')
-<div class="page-content-wrapper py-4 py-lg-5" x-data="{ isFilterOpen: false }">
-    
+<x-frontend.listing-shell variant="blogs" x-data="{ isFilterOpen: false }">
     @include('frontend._partials._page-heading', [
         'titleKey' => 'blogs.search.heading',
         'titleDefault' => __('Our Journal'),
@@ -22,7 +21,6 @@
             @include('frontend.blogs._partials._sidebar')
         @endcomponent
 
-        {{-- Articles Column --}}
         <div class="col-12 col-lg-9">
             <div class="row g-2 g-md-3 g-lg-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
                 @forelse ($blogs as $blog)
@@ -30,26 +28,21 @@
                         @include('frontend.blogs._partials._card', ['blog' => $blog])
                     </div>
                 @empty
-                    <div class="col-12 text-center py-5">
-                        <div class="glass-surface rounded-4 shadow-sm p-5 border bg-white">
-                            <i class="bi bi-journal-x display-1 text-muted opacity-25 mb-3"></i>
-                            <h4 class="fw-bold">{{ __('No Articles Found') }}</h4>
-                            <p class="text-muted">{{ __('We couldn\'t find any posts matching your current filters.') }}</p>
-                            <a href="{{ route(Route::currentRouteName()) }}" class="btn btn-primary rounded-pill px-4">
-                                <i class="bi bi-arrow-clockwise me-2"></i>{{ __('Refresh Feed') }}
-                            </a>
-                        </div>
-                    </div>
+                    @include('frontend._partials._listing-empty-state', [
+                        'icon' => 'bi-journal-x',
+                        'title' => __('No Articles Found'),
+                        'description' => __('We couldn\'t find any posts matching your current filters.'),
+                        'route' => route(Route::currentRouteName()),
+                        'label' => __('Refresh Feed'),
+                    ])
                 @endforelse
             </div>
 
-            {{-- Pagination --}}
             @if($blogs->hasPages())
                 <div class="mt-5 d-flex justify-content-center">
                     {{ $blogs->links('frontend.blogs._partials._pagination') }}
                 </div>
             @endif
-
         </div>
     </div>
 
@@ -58,5 +51,5 @@
         'icon' => 'bi-funnel',
         'active' => request()->anyFilled(['search', 'category', 'sort', 'tags']),
     ])
-</div>
+</x-frontend.listing-shell>
 @endsection

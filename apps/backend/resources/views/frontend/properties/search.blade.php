@@ -1,9 +1,10 @@
 @extends('frontend._layouts._app')
+
 @section('title', page_content('properties.search.meta_title', __('Premium Real Estate Listings')))
-@section('body_class', 'has-body-glow')
+@section('body_class', 'has-body-glow bg-light frontend-page--listing')
+
 @section('content')
-<div class="page-content-wrapper py-4 py-lg-5" x-data="{ isFilterOpen: false }">
-    
+<x-frontend.listing-shell variant="properties" x-data="{ isFilterOpen: false }">
     @include('frontend._partials._page-heading', [
         'titleKey' => 'properties.search.heading',
         'titleDefault' => __('Properties'),
@@ -19,7 +20,6 @@
             @include('frontend.properties._partials._sidebar_filter')
         @endcomponent
 
-        {{-- Listings Column --}}
         <div class="col-12 col-lg-9">
             <div class="row g-3 row-cols-2 row-cols-md-2 row-cols-xl-3">
                 @forelse($properties as $property)
@@ -27,18 +27,14 @@
                         @include('frontend.properties._partials._card', ['property' => $property])
                     </div>
                 @empty
-                    <div class="col-12 text-center py-5">
-                        <div class="bg-white rounded-4 shadow-sm p-5 border">
-                            <i class="bi bi-house-exclamation display-1 text-muted opacity-25 mb-3"></i>
-                            <h4 class="fw-bold">{{ __('No Results Found') }}</h4>
-                            <p class="text-muted">{{ __('Try adjusting your filters to find what you are looking for.') }}</p>
-                            <a href="{{ route('properties.index') }}" class="btn btn-primary rounded-pill px-4">{{ __('Reset All Filters') }}</a>
-                        </div>
-                    </div>
+                    @include('frontend._partials._listing-empty-state', [
+                        'icon' => 'bi-house-exclamation',
+                        'title' => __('No Results Found'),
+                        'route' => route('properties.index'),
+                    ])
                 @endforelse
             </div>
 
-            {{-- Pagination --}}
             @if($properties->hasPages())
                 {{ $properties->appends(request()->query())->links('frontend._partials._pagination') }}
             @endif
@@ -48,7 +44,7 @@
     @include('frontend._partials._mobile-filter-button', [
         'active' => request()->anyFilled(['category', 'max_price', 'location', 'bedrooms', 'bathrooms', 'amenities', 'features']),
     ])
-</div>
+</x-frontend.listing-shell>
 @endsection
 
 @push('scripts')

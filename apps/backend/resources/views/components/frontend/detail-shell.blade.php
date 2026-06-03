@@ -4,7 +4,7 @@
 ])
 
 <div {{ $attributes->merge(['class' => 'detail-page detail-page--' . $variant]) }}>
-    <div class="detail-page__inner">
+    <div class="frontend-shell__inner detail-page__inner">
         @isset($breadcrumbs)
             <div class="detail-page__breadcrumbs">
                 {{ $breadcrumbs }}

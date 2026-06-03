@@ -27,7 +27,7 @@
     @stack('styles')
 </head>
 
-<body class="no-js antialiased has-body-glow @yield('body_class')">
+<body class="no-js antialiased frontend-site @yield('body_class', 'has-body-glow bg-light')">
 
     @auth
         @can('manage-pages')
@@ -40,11 +40,9 @@
         @includeIf('frontend._partials._header')
     </header>
     
-    <main id="main-content" class="min-vh-100" role="main">
+    <main id="main-content" class="frontend-main min-vh-100" role="main">
         @yield('hero')
-        <div class="container-xl">
-            @yield('content')
-        </div>
+        @yield('content')
     </main>
     
     <footer class="main-footer bg-dark footer-section" role="contentinfo">

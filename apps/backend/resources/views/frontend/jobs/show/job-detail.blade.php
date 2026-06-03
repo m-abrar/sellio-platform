@@ -2,7 +2,7 @@
 
 {{-- 1. Metadata --}}
 @section('title', $job->title . ' | ' . setting('site_name', config('app.name')))
-@section('body_class', 'has-body-glow')
+@section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 {{-- 2. SEO & Schema (CodeCanyon reviewers value this highly) --}}
 @push('head_extra')

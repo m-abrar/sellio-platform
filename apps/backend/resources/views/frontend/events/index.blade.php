@@ -1,11 +1,10 @@
 @extends('frontend._layouts._app')
 
 @section('title', page_content('events.search.meta_title', __('Upcoming Community & Tech Events')))
-@section('body_class', 'has-body-glow bg-light')
+@section('body_class', 'has-body-glow bg-light frontend-page--listing')
 
 @section('content')
-<div class="page-content-wrapper py-4 py-lg-5" x-data="{ isFilterOpen: false }">
-    
+<x-frontend.listing-shell variant="events" x-data="{ isFilterOpen: false }">
     @include('frontend._partials._page-heading', [
         'titleKey' => 'events.search.heading',
         'titleDefault' => __('Events & Workshops'),
@@ -21,7 +20,6 @@
             @include('frontend.events._partials._sidebar-filter-events')
         @endcomponent
 
-        {{-- Listings Column --}}
         <div class="col-12 col-lg-9">
             <div class="row g-3 row-cols-2 row-cols-md-2 row-cols-xl-3">
                 @forelse($events as $event)
@@ -29,20 +27,16 @@
                         @include('frontend.events._partials._card-event', ['event' => $event])
                     </div>
                 @empty
-                    <div class="col-12 text-center py-5">
-                        <div class="glass-surface rounded-4 shadow-sm p-5 border bg-white">
-                            <i class="bi bi-calendar-x display-1 text-muted opacity-25 mb-3"></i>
-                            <h4 class="fw-bold">{{ __('No Events Found') }}</h4>
-                            <p class="text-muted">{{ __('Try adjusting your filters or dates to find upcoming events.') }}</p>
-                            <a href="{{ route('events.index') }}" class="btn btn-primary rounded-pill px-4">
-                                <i class="bi bi-arrow-clockwise me-2"></i>{{ __('View All Events') }}
-                            </a>
-                        </div>
-                    </div>
+                    @include('frontend._partials._listing-empty-state', [
+                        'icon' => 'bi-calendar-x',
+                        'title' => __('No Events Found'),
+                        'description' => __('Try adjusting your filters or dates to find upcoming events.'),
+                        'route' => route('events.index'),
+                        'label' => __('View All Events'),
+                    ])
                 @endforelse
             </div>
 
-            {{-- Pagination --}}
             @if($events->hasPages())
                 <div class="mt-5 d-flex justify-content-center">
                     {{ $events->links('frontend._partials._pagination') }}
@@ -54,7 +48,7 @@
     @include('frontend._partials._mobile-filter-button', [
         'active' => request()->anyFilled(['category', 'date_start', 'location']),
     ])
-</div>
+</x-frontend.listing-shell>
 @endsection
 
 @push('scripts')

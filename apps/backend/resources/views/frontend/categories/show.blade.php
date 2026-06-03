@@ -20,10 +20,10 @@
 </div>
 @endsection
 
-@section('content')
-<div class="container mt-n5 position-relative z-index-2 mb-5">
-    @include('frontend._partials._alerts')
+@section('body_class', 'has-body-glow bg-light frontend-page--listing')
 
+@section('content')
+<x-frontend.listing-shell variant="category" class="mt-n5 position-relative z-index-2">
     <div class="row g-4">
         {{-- Left Column: Dynamic Content --}}
         <div class="col-lg-8">
@@ -127,5 +127,5 @@
             </div>
         </div>
     </div>
-</div>
+</x-frontend.listing-shell>
 @endsection

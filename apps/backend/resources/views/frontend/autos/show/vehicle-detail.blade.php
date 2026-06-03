@@ -2,7 +2,7 @@
 
 @section('title', $auto->meta_title ?: ($auto->year . ' ' . $auto->make . ' ' . $auto->model . ' ' . __('for Sale in') . ' ' . $auto->city)) 
 
-@section('body_class', 'has-body-glow bg-light')
+@section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 @section('content')
 <x-frontend.detail-shell variant="auto">

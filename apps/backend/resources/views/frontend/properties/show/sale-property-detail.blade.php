@@ -6,7 +6,7 @@
 <meta name="description" content="{{ $property->meta_description ?: $property->description }}">
 @endsection
 
-@section('body_class', 'has-body-glow bg-light')
+@section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 @section('content')
 <x-frontend.detail-shell variant="property-sale">

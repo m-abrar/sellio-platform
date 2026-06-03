@@ -17,7 +17,8 @@ Build the standalone Laravel public website as a full-featured storefront with f
 | Global layout (header/footer) | **Complete** (footer newsletter added 2026-06-03) |
 | Blade/theme decoupling | **Complete** |
 | Automated tests | **Started** (`tests/Feature/LaravelPublicStorefrontTest.php`) |
-| Phase 1.5 — Detail shell | **In progress** (see below) |
+| Unified layout shells (`listing-shell` / `detail-shell`) | **Complete** (2026-06-03) |
+| Phase 1.5 — Detail shell | **Mostly complete** (booking/checkout still uneven) |
 | Phase 2 — Checkout/auth/booking parity | **Not started** |
 
 ## Key Changes
@@ -39,7 +40,8 @@ Build the standalone Laravel public website as a full-featured storefront with f
 - **Module index pages** — Shared `_page-heading`, `_filter-shell`, `_mobile-filter-button` on properties, autos, products, services, jobs, events, classifieds, blogs.
 - **Global layout** — `main_header` menus (module-filtered), Post Listing CTA, footer columns, social links, newsletter block when `newsletter_enabled` is truthy (default on).
 - **Blade decoupling** — `config/content.php`, `ContentService`, `MenuService`, admin bar scoped to `laravel_blade`; no Theme model usage in `resources/views/frontend`.
-- **CSS** — `public/frontend/css/style.css` with hero mobile scroll, marketplace cards, `detail-page` layout rules.
+- **CSS** — `public/frontend/css/style.css` with shared `--frontend-shell-*` tokens, `listing-page` + `detail-page` shells, hero mobile scroll, marketplace cards.
+- **Layout shells** — `x-frontend.listing-shell` for explore/index pages; `x-frontend.detail-shell` for show pages; app layout no longer double-wraps `container-xl`.
 
 ### Phase 1.5 (beyond original plan — in progress)
 

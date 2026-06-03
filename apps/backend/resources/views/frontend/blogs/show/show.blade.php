@@ -2,7 +2,7 @@
 
 {{-- Use blog data for title and category name --}}
 @section('title', $blog->title . ' - ' . ($blog->category->title ?? __('Blog'))) 
-@section('body_class', 'has-body-glow bg-light')
+@section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 @section('content')
 <x-frontend.detail-shell variant="blog">

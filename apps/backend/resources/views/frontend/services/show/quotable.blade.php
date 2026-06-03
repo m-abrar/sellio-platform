@@ -1,7 +1,7 @@
 @extends('frontend._layouts._app')
 
 @section('title', $service->title . ' - ' . __('Get a Quote')) 
-@section('body_class', 'has-body-glow bg-light')
+@section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 @section('content')
 <x-frontend.detail-shell variant="service-quotable">
