@@ -45,7 +45,7 @@ Route::middleware(['built_in_website'])->group(function () {
 
 
     /** BLOGS **/
-    Route::prefix('blogs')->name('blogs.')->group(function () {
+    Route::prefix('blogs')->name('blogs.')->middleware('module:blogs')->group(function () {
         Route::get('/', [BlogController::class, 'index'])->name('index');
         Route::get('/search', [BlogController::class, 'search'])->name('search');
         Route::get('/{blog:slug}', [BlogController::class, 'show'])->name('show');
@@ -250,7 +250,6 @@ Route::prefix('auth')->group(function () {
     Route::get('{provider}/callback', [SocialLoginController::class, 'callback'])
         ->name('login.social.callback');
 });
-
 
 
 

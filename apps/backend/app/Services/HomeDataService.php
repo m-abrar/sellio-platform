@@ -38,6 +38,7 @@ class HomeDataService
         $lastMonth = Carbon::now()->subDays(30);
         $publicModules = collect($this->moduleDefinitions())
             ->filter(fn (array $module) => $module['module'] === null || module_enabled($module['module']))
+            ->map(fn (array $module) => $this->withModuleStats($module))
             ->values();
 
         return [
@@ -70,6 +71,7 @@ class HomeDataService
             'categories'          => $this->cached('h_tax_cat', fn() => Category::active()->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c))),
             'locations'           => $this->cached('h_tax_loc', fn() => Location::active()->without(['media'])->get()->map(fn($l) => $this->transformTaxonomy($l))),
             'locationsFeatured'   => $this->cached('h_feat_loc', fn() => Location::active()->without(['media'])->orderByDesc('is_featured')->take(6)->get()->map(fn($l) => $this->transformTaxonomy($l))),
+            'categoriesFeatured'  => $this->cached('h_feat_cat', fn() => Category::active()->without(['media'])->orderByDesc('is_featured')->latest()->take(8)->get()->map(fn($c) => $this->transformTaxonomy($c))),
             'serviceCategories'   => $this->forModule('services', fn() => $this->cached('h_serv_cat', fn() => Category::active()->where('is_service', true)->without(['media'])->take(4)->get()->map(fn($c) => $this->transformTaxonomy($c)))),
             'autoCategories'      => $this->forModule('autos', fn() => $this->cached('h_auto_cat', fn() => Category::active()->where('is_auto', true)->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c)))),
         ];
@@ -155,7 +157,7 @@ class HomeDataService
             ],
             [
                 'id' => 'blogs',
-                'module' => null,
+                'module' => 'blogs',
                 'icon' => 'bi-journal-text',
                 'label' => __('Blogs'),
                 'route' => 'blogs.index',
@@ -164,6 +166,31 @@ class HomeDataService
                 'section_description' => __('Read guides, updates, and marketplace insights.'),
             ],
         ];
+    }
+
+    protected function withModuleStats(array $module): array
+    {
+        $module['count'] = $this->cached(
+            "h_count_{$module['id']}",
+            fn() => $this->countForModule($module['id'])
+        );
+
+        return $module;
+    }
+
+    protected function countForModule(string $module): int
+    {
+        return match ($module) {
+            'properties' => Property::active()->count(),
+            'autos' => Auto::active()->count(),
+            'products' => Product::active()->count(),
+            'services' => Service::active()->count(),
+            'jobs' => JobListing::active()->count(),
+            'events' => Event::active()->count(),
+            'classifieds' => Classified::active()->count(),
+            'blogs' => Blog::active()->count(),
+            default => 0,
+        };
     }
 
     /**

@@ -260,6 +260,57 @@ footer{
     text-transform:uppercase;
     overflow-wrap:anywhere
 }
+.market-module-card,.taxonomy-chip{
+    border-radius:12px;
+    min-height:100%;
+    box-shadow:0 8px 22px rgba(15,23,42,.06)
+}
+.market-module-card:hover,.taxonomy-chip:hover{
+    transform:translateY(-3px);
+    border-color:rgba(var(--primary-color-rgb),.28)
+}
+.market-module-icon{
+    width:48px;
+    height:48px;
+    border-radius:12px;
+    background:rgba(var(--primary-color-rgb),.1);
+    color:var(--primary-color);
+    font-size:1.35rem
+}
+.taxonomy-icon{
+    width:34px;
+    height:34px;
+    flex:0 0 34px;
+    border-radius:10px;
+    background:#eef6f3;
+    color:#0f766e
+}
+.location-pill{
+    background:#fff;
+    border:1px solid rgba(15,23,42,.08);
+    color:var(--text-dark);
+    box-shadow:0 6px 16px rgba(15,23,42,.05)
+}
+.location-pill:hover{
+    background:#111827;
+    border-color:#111827;
+    color:#fff
+}
+.home-empty-state{
+    border-radius:12px;
+    background:rgba(255,255,255,.82)!important
+}
+.home-empty-state p{
+    max-width:560px
+}
+.home-empty-icon{
+    width:54px;
+    height:54px;
+    border-radius:14px;
+    background:#fff4df;
+    color:#b45309;
+    font-size:1.45rem
+}
 .filter-sidebar{
     background-color:rgba(255, 255, 255, 0.8);
     box-shadow:var(--shadow-subtle);

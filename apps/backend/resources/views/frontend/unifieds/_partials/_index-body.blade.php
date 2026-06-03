@@ -1,3 +1,40 @@
+{{-- PUBLIC DISCOVERY: Module cards --}}
+@if(($publicModules ?? collect())->isNotEmpty())
+<section class="py-5">
+    <div class="container-xl">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3">
+            <div>
+                <h2 class="fw-800 text-dark h1 mb-1">
+                    {!! page_content('home.discovery.heading', __('Explore the Marketplace')) !!}
+                </h2>
+                <p class="lead text-muted mb-0 sub-heading">
+                    {{ page_content('home.discovery.description', __('Start with any category, then filter into the exact listing you need.')) }}
+                </p>
+            </div>
+            <a href="{{ setting('url_partner', '#') }}" class="btn btn-outline-primary rounded-pill fw-bold px-4">
+                <i class="bi bi-plus-lg me-1"></i> {{ __('Post Listing') }}
+            </a>
+        </div>
+
+        <div class="row row-cols-2 row-cols-md-4 g-3 g-lg-4">
+            @foreach($publicModules as $module)
+                <div class="col">
+                    <a href="{{ route($module['route']) }}" class="market-module-card glass-surface d-flex flex-column h-100 text-decoration-none p-3 p-lg-4">
+                        <span class="market-module-icon d-inline-flex align-items-center justify-content-center mb-3">
+                            <i class="bi {{ $module['icon'] }}"></i>
+                        </span>
+                        <span class="fw-800 text-dark">{{ $module['label'] }}</span>
+                        <span class="small text-muted mt-1">
+                            {{ trans_choice(':count active listing|:count active listings', $module['count'], ['count' => number_format($module['count'])]) }}
+                        </span>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 {{-- MODULE: Real Estate --}}
 @if(module_enabled('properties'))
 <section class="py-5">
@@ -21,9 +58,13 @@
                         @include('frontend.unifieds._partials._property-card', ['property' => $property])
                     </div>
                 @empty
-                    <div class="col-12 text-center py-5 glass-surface rounded-5 border-dashed">
-                        <p class="text-muted mb-0">{{ __('No featured properties available at the moment.') }}</p>
-                    </div>
+                    @include('frontend.unifieds._partials._section-empty-state', [
+                        'icon' => 'bi-building',
+                        'title' => __('Properties are being curated'),
+                        'description' => __('Featured homes, rentals, and investment listings will appear here soon.'),
+                        'route' => route('properties.index'),
+                        'label' => __('Browse Properties')
+                    ])
                 @endforelse
             @endisset
         </div>
@@ -47,7 +88,13 @@
                         @include('frontend.unifieds._partials._auto-card', ['auto' => $auto])
                     </div>
                 @empty
-                    <div class="col-12 text-center py-5"><p class="text-muted">{{ __('Inventory is being updated.') }}</p></div>
+                    @include('frontend.unifieds._partials._section-empty-state', [
+                        'icon' => 'bi-car-front-fill',
+                        'title' => __('Vehicle inventory is being updated'),
+                        'description' => __('Check back for verified cars, trucks, SUVs, and specialty autos.'),
+                        'route' => route('autos.index'),
+                        'label' => __('Browse Vehicles')
+                    ])
                 @endforelse
             @endisset
         </div>
@@ -78,7 +125,13 @@
                         @include('frontend.products._partials._card', ['product' => $product])
                     </div>
                 @empty
-                    <div class="col-12 text-center py-5"><p class="text-muted">{{ __('Products are being stocked.') }}</p></div>
+                    @include('frontend.unifieds._partials._section-empty-state', [
+                        'icon' => 'bi-bag-check-fill',
+                        'title' => __('Products are being stocked'),
+                        'description' => __('Fresh arrivals from marketplace sellers will show up here.'),
+                        'route' => route('products.index'),
+                        'label' => __('Shop Products')
+                    ])
                 @endforelse
             @endisset
         </div>
@@ -146,7 +199,7 @@
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
             @isset($serviceCategories)
-                @foreach($serviceCategories as $category)
+                @forelse($serviceCategories as $category)
                     <div class="col" data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 }}">
                         <a href="{{ route('services.index', ['category' => $category->slug]) }}" class="text-decoration-none">
                             <div class="card glass-surface text-center h-100 border-0 rounded-5 p-3 hover-lift transition-all">
@@ -161,7 +214,15 @@
                             </div>
                         </a>
                     </div>
-                @endforeach
+                @empty
+                    @include('frontend.unifieds._partials._section-empty-state', [
+                        'icon' => 'bi-tools',
+                        'title' => __('Service categories are coming soon'),
+                        'description' => __('Professionals and project-ready categories will appear as soon as they are available.'),
+                        'route' => route('services.index'),
+                        'label' => __('Browse Services')
+                    ])
+                @endforelse
             @endisset
         </div>
     </div>
@@ -184,7 +245,13 @@
                         @include('frontend.unifieds._partials._event-card', ['event' => $event])
                     </div>
                 @empty
-                    <div class="col-12 text-center py-5 text-muted">{{ __('Stay tuned for upcoming community events!') }}</div>
+                    @include('frontend.unifieds._partials._section-empty-state', [
+                        'icon' => 'bi-calendar-event',
+                        'title' => __('Events are warming up'),
+                        'description' => __('Community meetups, workshops, and ticketed events will appear here.'),
+                        'route' => route('events.index'),
+                        'label' => __('Browse Events')
+                    ])
                 @endforelse
             @endisset
         </div>
@@ -214,12 +281,68 @@
                         @include('frontend.blogs._partials._card', ['blog' => $blog])
                     </div>
                 @empty
-                    <div class="col-12 text-center py-5"><p class="text-muted">{{ __('Stories and guides will appear here soon.') }}</p></div>
+                    @include('frontend.unifieds._partials._section-empty-state', [
+                        'icon' => 'bi-journal-text',
+                        'title' => __('Stories and guides will appear soon'),
+                        'description' => __('Marketplace news, buying guides, and seller insights will live here.'),
+                        'route' => route('blogs.index'),
+                        'label' => __('Read Stories')
+                    ])
                 @endforelse
             @endisset
         </div>
     </div>
 </section>
+
+{{-- PUBLIC DISCOVERY: Taxonomy and locations --}}
+@if(($categoriesFeatured ?? collect())->isNotEmpty() || ($locationsFeatured ?? collect())->isNotEmpty())
+<section class="py-5">
+    <div class="container-xl">
+        <div class="row g-4 g-xl-5">
+            @if(($categoriesFeatured ?? collect())->isNotEmpty())
+                <div class="col-lg-7">
+                    <div class="d-flex justify-content-between align-items-end mb-4 gap-3">
+                        <div>
+                            <h2 class="fw-800 text-dark h3 mb-1">{{ __('Popular Categories') }}</h2>
+                            <p class="text-muted mb-0">{{ __('Jump into curated marketplace lanes.') }}</p>
+                        </div>
+                    </div>
+                    <div class="row row-cols-2 row-cols-md-4 g-3">
+                        @foreach($categoriesFeatured as $category)
+                            <div class="col">
+                                <a href="{{ route('categories.show', $category->slug) }}" class="taxonomy-chip glass-surface d-flex align-items-center gap-2 p-3 text-decoration-none h-100">
+                                    <span class="taxonomy-icon d-inline-flex align-items-center justify-content-center">
+                                        <i class="{{ $category->icon ?? 'bi bi-grid-1x2-fill' }}"></i>
+                                    </span>
+                                    <span class="small fw-bold text-dark">{{ $category->title }}</span>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            @if(($locationsFeatured ?? collect())->isNotEmpty())
+                <div class="col-lg-5">
+                    <div class="d-flex justify-content-between align-items-end mb-4 gap-3">
+                        <div>
+                            <h2 class="fw-800 text-dark h3 mb-1">{{ __('Featured Locations') }}</h2>
+                            <p class="text-muted mb-0">{{ __('Explore where the marketplace is active.') }}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach($locationsFeatured as $location)
+                            <a href="{{ route('index', ['location' => $location->slug]) }}" class="location-pill rounded-pill px-3 py-2 text-decoration-none">
+                                <i class="bi bi-geo-alt me-1"></i>{{ $location->title }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+</section>
+@endif
 
 {{-- MODULE: CTA --}}
 @include('frontend.unifieds._partials._index-cta')
