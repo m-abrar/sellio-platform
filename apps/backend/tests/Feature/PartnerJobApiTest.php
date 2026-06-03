@@ -11,20 +11,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
+use Tests\Concerns\InteractsWithPartnerApi;
 use Tests\TestCase;
 
 class PartnerJobApiTest extends TestCase
 {
     use RefreshDatabase;
+    use InteractsWithPartnerApi;
 
     public function test_partner_can_create_update_and_delete_job_listing(): void
     {
         Storage::fake('public');
 
         // Create partner user and role
-        $partner = User::factory()->partner()->create();
-        Role::create(['name' => 'partner']);
-        $partner->assignRole('partner');
+        $partner = $this->createPartner();
 
         // Create metadata for jobs
         $category = Category::factory()->create(['is_job' => true]);
@@ -59,10 +59,10 @@ class PartnerJobApiTest extends TestCase
 
         $createResponse->assertCreated()
             ->assertJsonPath('data.title', 'Senior React Developer')
-            ->assertJsonPath('data.specs.salary_min', 90000)
-            ->assertJsonPath('data.specs.salary_max', 120000)
-            ->assertJsonPath('data.specs.experience_level', 3) // mapped Senior to 3
-            ->assertJsonPath('data.specs.workplace_type', 1)
+            ->assertJsonPath('data.compensation.min', 90000)
+            ->assertJsonPath('data.compensation.max', 120000)
+            ->assertJsonPath('data.employment.experience_level', 3) // mapped Senior to 3
+            ->assertJsonPath('data.employment.workplace_id', 1)
             ->assertJsonPath('data.location.address', '100 Tech Lane')
             ->assertJsonPath('data.location.city', 'San Francisco');
 
@@ -112,9 +112,9 @@ class PartnerJobApiTest extends TestCase
 
         $updateResponse->assertOk()
             ->assertJsonPath('data.title', 'Lead Frontend Engineer')
-            ->assertJsonPath('data.specs.salary_min', 110000)
-            ->assertJsonPath('data.specs.salary_max', 140000)
-            ->assertJsonPath('data.specs.experience_level', 4); // mapped Lead to 4
+            ->assertJsonPath('data.compensation.min', 110000)
+            ->assertJsonPath('data.compensation.max', 140000)
+            ->assertJsonPath('data.employment.experience_level', 4); // mapped Lead to 4
 
         $this->assertDatabaseHas('joblistings', [
             'id' => $jobListing->id,

@@ -22,7 +22,7 @@ class ApiRegistrationTest extends TestCase
 
     public function test_user_can_register()
     {
-        $response = $this->postJson('/api/register', [
+        $response = $this->postJson('/api/v1/auth/register', [
             'name' => 'Test User',
             'email' => 'testuser@example.com',
             'password' => 'password123',
@@ -33,9 +33,11 @@ class ApiRegistrationTest extends TestCase
         $response->assertStatus(201)
                  ->assertJsonStructure([
                      'message',
-                     'access_token',
-                     'token_type',
-                     'user' => ['id', 'name', 'email', 'roles']
+                     'data' => [
+                         'access_token',
+                         'token_type',
+                         'user' => ['id', 'name', 'username', 'avatar_url', 'is_buyer']
+                     ],
                  ]);
 
         $this->assertDatabaseHas('users', ['email' => 'testuser@example.com']);
@@ -46,7 +48,7 @@ class ApiRegistrationTest extends TestCase
 
     public function test_partner_can_register()
     {
-        $response = $this->postJson('/api/register', [
+        $response = $this->postJson('/api/v1/auth/register', [
             'name' => 'Test Partner',
             'email' => 'testpartner@example.com',
             'password' => 'password123',
@@ -62,7 +64,7 @@ class ApiRegistrationTest extends TestCase
 
     public function test_registration_validation_fails()
     {
-        $response = $this->postJson('/api/register', []); // Empty
+        $response = $this->postJson('/api/v1/auth/register', []); // Empty
 
         $response->assertStatus(422)
                  ->assertJsonValidationErrors(['name', 'email', 'password', 'role']);

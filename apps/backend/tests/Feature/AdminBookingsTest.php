@@ -3,39 +3,32 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use Spatie\Permission\Models\Role;
+use Tests\Concerns\InteractsWithAdmin;
 
 class AdminBookingsTest extends TestCase
 {
+    use InteractsWithAdmin;
+
     protected function setUp(): void
     {
         parent::setUp();
-        
-        // Ensure role exists for actingAs
-        if (!Role::where('name', 'super-admin')->exists()) {
-            Role::create(['name' => 'super-admin']);
-        }
+
+        $this->seedAdminContext();
     }
 
     public function test_admin_bookings_properties_route()
     {
-        $user = User::factory()->create();
-        $user->assignRole('super-admin');
-
-        echo "\n--- Hitting /dashboard/admin/bookings/properties ---\n";
-        
-        $response = $this->actingAs($user)
-                         ->get('/dashboard/admin/bookings/properties');
+        $response = $this->actingAsSuperAdmin()
+                         ->get(route('admin.bookings.properties'));
 
         $response->assertStatus(200);
         
         $status = $response->viewData('status');
-        $type = $response->viewData('type');
         $bookings = $response->viewData('bookings');
+        $properties = $response->viewData('properties');
 
-        echo "View Status Variable: " . $status . "\n";
-        echo "View Type Variable: " . $type . "\n";
-        echo "View Bookings Total: " . ($bookings ? $bookings->total() : 'NULL') . "\n";
+        $this->assertSame('all', $status);
+        $this->assertNotNull($bookings);
+        $this->assertNotNull($properties);
     }
 }

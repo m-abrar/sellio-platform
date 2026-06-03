@@ -11,20 +11,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
+use Tests\Concerns\InteractsWithPartnerApi;
 use Tests\TestCase;
 
 class PartnerEventApiTest extends TestCase
 {
     use RefreshDatabase;
+    use InteractsWithPartnerApi;
 
     public function test_partner_can_create_update_and_delete_event_listing(): void
     {
         Storage::fake('public');
 
         // Create partner user and role
-        $partner = User::factory()->partner()->create();
-        Role::create(['name' => 'partner']);
-        $partner->assignRole('partner');
+        $partner = $this->createPartner();
 
         // Create metadata for events
         $category = Category::factory()->create(['is_event' => true]);
@@ -85,9 +85,9 @@ class PartnerEventApiTest extends TestCase
 
         $createResponse->assertCreated()
             ->assertJsonPath('data.title', 'Stellar Tech Conference 2026')
-            ->assertJsonPath('data.pricing.is_paid', true)
-            ->assertJsonPath('data.organizer.name', 'Stellar Events Co.')
-            ->assertJsonPath('data.organizer.email', 'contact@stellar.test');
+            ->assertJsonPath('data.ticketing.is_paid', true)
+            ->assertJsonPath('data.organizer_name', 'Stellar Events Co.')
+            ->assertJsonPath('data.organizer_email', 'contact@stellar.test');
 
         $event = Event::with(['media', 'ticketTypes', 'occurrences.inventory', 'tags'])->findOrFail($createResponse->json('data.id'));
         $this->assertNotNull($event->getFirstMedia(Event::PRIMARY_MEDIA));
@@ -157,7 +157,7 @@ class PartnerEventApiTest extends TestCase
 
         $updateResponse->assertOk()
             ->assertJsonPath('data.title', 'Stellar Tech Conference 2026 Updated')
-            ->assertJsonPath('data.organizer.name', 'Stellar Events Co. New');
+            ->assertJsonPath('data.organizer_name', 'Stellar Events Co. New');
 
         $this->assertDatabaseHas('events', [
             'id' => $event->id,

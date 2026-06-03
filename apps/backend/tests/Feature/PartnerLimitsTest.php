@@ -47,6 +47,7 @@ class PartnerLimitsTest extends TestCase
         // Create plan tiers
         $this->starterPlan = Plan::create([
             'title' => 'Starter Plan',
+            'slug' => 'starter-plan',
             'price' => 29.99,
             'billing_period' => 'monthly',
             'max_listings' => 3,
@@ -55,6 +56,7 @@ class PartnerLimitsTest extends TestCase
 
         $this->unlimitedPlan = Plan::create([
             'title' => 'Pro Plan',
+            'slug' => 'pro-plan',
             'price' => 79.99,
             'billing_period' => 'monthly',
             'max_listings' => 999,

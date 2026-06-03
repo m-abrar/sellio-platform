@@ -33,6 +33,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property bool $is_classified
  * @property bool $is_product
  * @property bool $is_blog
+ * @property bool $is_featured
  * @property bool $is_published
  * @property array|null $types
  * @property-read int $listings_count
@@ -65,6 +66,7 @@ class Category extends Model implements HasMedia
         'is_classified',
         'is_product',
         'is_blog',
+        'is_featured',
         'is_published',
     ];
 
@@ -82,6 +84,7 @@ class Category extends Model implements HasMedia
         'is_classified' => 'boolean',
         'is_product'    => 'boolean',
         'is_blog'       => 'boolean',
+        'is_featured'   => 'boolean',
         'is_published'  => 'boolean',
         'types'         => 'array',
     ];

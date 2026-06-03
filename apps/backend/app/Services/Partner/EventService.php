@@ -131,7 +131,14 @@ class EventService
             $updatedIds[] = $ticket->id;
         }
 
-        $event->ticketTypes()->whereNotIn('id', $updatedIds)->delete();
+        $staleTicketIds = $event->ticketTypes()
+            ->whereNotIn('id', $updatedIds)
+            ->pluck('id');
+
+        if ($staleTicketIds->isNotEmpty()) {
+            EventOccurrenceTicket::whereIn('event_ticket_type_id', $staleTicketIds)->delete();
+            $event->ticketTypes()->whereIn('id', $staleTicketIds)->delete();
+        }
 
         return $idMap;
     }

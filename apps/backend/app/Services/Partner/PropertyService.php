@@ -5,6 +5,7 @@ namespace App\Services\Partner;
 use App\Models\User;
 use App\Models\Property;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * Class PropertyService
@@ -55,8 +56,10 @@ class PropertyService
             ])->toArray();
 
             if ($property) {
+                $coreData['slug'] = $coreData['slug'] ?? $this->generateUniqueSlug($coreData['title'], $property->id);
                 $property->update($coreData);
             } else {
+                $coreData['slug'] = $coreData['slug'] ?? $this->generateUniqueSlug($coreData['title']);
                 $property = $user->properties()->create($coreData);
             }
 
@@ -144,5 +147,22 @@ class PropertyService
 
             return $property;
         });
+    }
+
+    protected function generateUniqueSlug(string $title, ?int $currentId = null): string
+    {
+        $slug = Str::slug($title);
+        $original = $slug;
+        $count = 1;
+
+        while (
+            Property::where('slug', $slug)
+                ->when($currentId, fn ($query) => $query->where('id', '!=', $currentId))
+                ->exists()
+        ) {
+            $slug = $original . '-' . $count++;
+        }
+
+        return $slug;
     }
 }

@@ -12,20 +12,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
+use Tests\Concerns\InteractsWithPartnerApi;
 use Tests\TestCase;
 
 class PartnerPropertyApiTest extends TestCase
 {
     use RefreshDatabase;
+    use InteractsWithPartnerApi;
 
     public function test_partner_can_create_update_and_delete_property_listing(): void
     {
         Storage::fake('public');
 
         // Create partner user and role
-        $partner = User::factory()->partner()->create();
-        Role::create(['name' => 'partner']);
-        $partner->assignRole('partner');
+        $partner = $this->createPartner();
 
         // Create metadata for properties
         $category = Category::factory()->create(['is_property' => true]);
@@ -65,10 +65,10 @@ class PartnerPropertyApiTest extends TestCase
 
         $createResponse->assertCreated()
             ->assertJsonPath('data.title', 'Luxury Beachfront Villa')
-            ->assertJsonPath('data.pricing.is_sale', true)
-            ->assertJsonPath('data.specs.number_of_bedrooms', 4)
-            ->assertJsonPath('data.specs.number_of_bathrooms', 3)
-            ->assertJsonPath('data.specs.area_sq_ft', 3200)
+            ->assertJsonPath('data.status.is_sale', true)
+            ->assertJsonPath('data.specs.bedrooms', '4')
+            ->assertJsonPath('data.specs.bathrooms', '3')
+            ->assertJsonPath('data.specs.area_sq_ft', '3200')
             ->assertJsonPath('data.location.address', '123 Ocean Drive')
             ->assertJsonPath('data.location.city', 'Miami');
 
@@ -114,8 +114,8 @@ class PartnerPropertyApiTest extends TestCase
 
         $updateResponse->assertOk()
             ->assertJsonPath('data.title', 'Luxury Beachfront Villa Updated')
-            ->assertJsonPath('data.specs.number_of_bedrooms', 5)
-            ->assertJsonPath('data.specs.number_of_bathrooms', 4)
+            ->assertJsonPath('data.specs.bedrooms', 5)
+            ->assertJsonPath('data.specs.bathrooms', 4)
             ->assertJsonPath('data.location.address', '123 Ocean Drive Updated');
 
         $this->assertDatabaseHas('properties', [
@@ -154,7 +154,7 @@ class PartnerPropertyApiTest extends TestCase
         $response = $this->actingAs($partnerTwo, 'sanctum')
             ->delete("/api/dashboard/partner/properties/{$property->id}", [], ['Accept' => 'application/json']);
 
-        $response->assertStatus(403);
+        $response->assertStatus(404);
         $this->assertDatabaseHas('properties', [
             'id' => $property->id,
             'deleted_at' => null,

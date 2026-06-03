@@ -11,19 +11,19 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
+use Tests\Concerns\InteractsWithPartnerApi;
 use Tests\TestCase;
 
 class PartnerClassifiedApiTest extends TestCase
 {
     use RefreshDatabase;
+    use InteractsWithPartnerApi;
 
     public function test_partner_can_create_update_clear_fields_and_promote_existing_media(): void
     {
         Storage::fake('public');
 
-        $partner = User::factory()->partner()->create();
-        Role::create(['name' => 'partner']);
-        $partner->assignRole('partner');
+        $partner = $this->createPartner();
 
         $category = Category::factory()->create(['is_classified' => true]);
         $type = Type::factory()->create(['is_classified' => true]);

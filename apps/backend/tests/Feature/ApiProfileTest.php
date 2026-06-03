@@ -31,18 +31,18 @@ class ApiProfileTest extends TestCase
     public function test_can_get_profile()
     {
         $response = $this->actingAs($this->user, 'sanctum')
-                         ->getJson('/api/profile');
+                         ->getJson('/api/v1/auth/me');
 
         $response->assertStatus(200)
                  ->assertJsonStructure([
-                     'user' => ['id', 'name', 'email', 'roles']
+                     'data' => ['id', 'name', 'email', 'roles']
                  ]);
     }
 
     public function test_can_update_profile()
     {
         $response = $this->actingAs($this->user, 'sanctum')
-                         ->putJson('/api/profile', [
+                         ->putJson('/api/v1/auth/profile', [
                              'name' => 'Updated Name',
                              'phone' => '1234567890',
                              'username' => 'testusername'
@@ -62,7 +62,7 @@ class ApiProfileTest extends TestCase
     public function test_can_update_password()
     {
         $response = $this->actingAs($this->user, 'sanctum')
-                         ->putJson('/api/profile/password', [
+                         ->putJson('/api/v1/auth/profile/password', [
                              'current_password' => 'password123',
                              'password' => 'newpassword123',
                              'password_confirmation' => 'newpassword123',
@@ -77,7 +77,7 @@ class ApiProfileTest extends TestCase
     public function test_update_password_fails_if_incorrect_current()
     {
         $response = $this->actingAs($this->user, 'sanctum')
-                         ->putJson('/api/profile/password', [
+                         ->putJson('/api/v1/auth/profile/password', [
                              'current_password' => 'wrongpassword',
                              'password' => 'newpassword123',
                              'password_confirmation' => 'newpassword123',

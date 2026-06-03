@@ -38,6 +38,7 @@ class EventOccurrenceTicket extends Model
         'event_occurrence_id',
         'event_ticket_type_id',
         'available_quantity',
+        'override_price',
     ];
 
     /**
@@ -49,6 +50,7 @@ class EventOccurrenceTicket extends Model
         'available_quantity' => 'integer',
         'base_price'         => 'decimal:2',
         'sale_price'         => 'decimal:2',
+        'override_price'     => 'decimal:2',
     ];
 
     // --- Relationships ---

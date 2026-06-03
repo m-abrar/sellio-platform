@@ -12,20 +12,19 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
+use Tests\Concerns\InteractsWithPartnerApi;
 use Tests\TestCase;
 
 class PartnerProductApiTest extends TestCase
 {
     use RefreshDatabase;
+    use InteractsWithPartnerApi;
 
     public function test_partner_can_create_update_and_delete_product_listing(): void
     {
         Storage::fake('public');
 
-        // Create partner user and role
-        $partner = User::factory()->partner()->create();
-        Role::create(['name' => 'partner']);
-        $partner->assignRole('partner');
+        $partner = $this->createPartner();
 
         // Create metadata for products
         $category = Category::factory()->create(['is_product' => true]);
@@ -69,10 +68,10 @@ class PartnerProductApiTest extends TestCase
 
         $createResponse->assertCreated()
             ->assertJsonPath('data.title', 'Ultimate Running Shoes')
-            ->assertJsonPath('data.pricing.base_price', '120.00')
-            ->assertJsonPath('data.specs.sku', 'RUN-SHOE-001')
-            ->assertJsonPath('data.specs.stock_quantity', 50)
-            ->assertJsonPath('data.specs.weight', '1.2');
+            ->assertJsonPath('data.pricing.base_price', 120)
+            ->assertJsonPath('data.sku', 'RUN-SHOE-001')
+            ->assertJsonPath('data.inventory.stock_quantity', 50)
+            ->assertJsonPath('data.specs.weight_value', 1.2);
 
         $product = Product::with(['media', 'category', 'brand', 'type', 'features', 'tags'])->findOrFail($createResponse->json('data.id'));
         $this->assertNotNull($product->getFirstMedia(Product::PRIMARY_MEDIA));
@@ -123,10 +122,10 @@ class PartnerProductApiTest extends TestCase
 
         $updateResponse->assertOk()
             ->assertJsonPath('data.title', 'Ultimate Running Shoes Pro')
-            ->assertJsonPath('data.pricing.base_price', '140.00')
-            ->assertJsonPath('data.pricing.sale_price', '125.00')
-            ->assertJsonPath('data.specs.sku', 'RUN-SHOE-001-PRO')
-            ->assertJsonPath('data.specs.stock_quantity', 100);
+            ->assertJsonPath('data.pricing.base_price', 140)
+            ->assertJsonPath('data.pricing.sale_price', 125)
+            ->assertJsonPath('data.sku', 'RUN-SHOE-001-PRO')
+            ->assertJsonPath('data.inventory.stock_quantity', 100);
 
         $this->assertDatabaseHas('products', [
             'id' => $product->id,
@@ -165,7 +164,7 @@ class PartnerProductApiTest extends TestCase
         $response = $this->actingAs($partnerTwo, 'sanctum')
             ->delete("/api/dashboard/partner/products/{$product->id}", [], ['Accept' => 'application/json']);
 
-        $response->assertStatus(403);
+        $response->assertStatus(404);
         $this->assertDatabaseHas('products', [
             'id' => $product->id,
             'deleted_at' => null,

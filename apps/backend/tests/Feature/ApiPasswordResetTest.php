@@ -27,7 +27,7 @@ class ApiPasswordResetTest extends TestCase
 
     public function test_can_send_reset_link_email()
     {
-        $response = $this->postJson('/api/password/email', [
+        $response = $this->postJson('/api/v1/auth/password/email', [
             'email' => 'test@example.com'
         ]);
 
@@ -39,7 +39,7 @@ class ApiPasswordResetTest extends TestCase
         // Generate plain token
         $token = Password::broker()->createToken($this->user);
 
-        $response = $this->postJson('/api/password/reset', [
+        $response = $this->postJson('/api/v1/auth/password/reset', [
             'token' => $token,
             'email' => 'test@example.com',
             'password' => 'newpassword123',
@@ -53,7 +53,7 @@ class ApiPasswordResetTest extends TestCase
 
     public function test_reset_password_fails_with_invalid_token()
     {
-        $response = $this->postJson('/api/password/reset', [
+        $response = $this->postJson('/api/v1/auth/password/reset', [
             'token' => 'invalid-token',
             'email' => 'test@example.com',
             'password' => 'newpassword123',
