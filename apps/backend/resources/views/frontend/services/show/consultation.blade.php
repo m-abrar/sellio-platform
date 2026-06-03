@@ -4,18 +4,16 @@
 @section('body_class', 'has-body-glow bg-light')
 
 @section('content')
-<div class="page-content-wrapper py-3 py-lg-4">
-    
-    {{-- 1. NAVIGATION HEADER (Breadcrumbs Only) --}}
-    @include('frontend.services.show.partials._breadcrumbs', [
-        'pageTitle' => $service->title,
-        'categoryName' => $service->category->title ?? 'Services',
-        'categorySlug' => $service->category->slug ?? null,
-    ])
+<x-frontend.detail-shell variant="service-consultation">
+    <x-slot:breadcrumbs>
+        @include('frontend.services.show.partials._breadcrumbs', [
+            'pageTitle' => $service->title,
+            'categoryName' => $service->category->title ?? 'Services',
+            'categorySlug' => $service->category->slug ?? null,
+        ])
+    </x-slot:breadcrumbs>
 
-    <div class="row g-4 mt-1">
-        {{-- MAIN COLUMN (8/12) --}}
-        <div class="col-lg-8">
+    <x-slot:main>
             <div class="card glass-surface border-0 overflow-hidden mb-5">
                 
                 {{-- 2. HEADER IMAGE / GALLERY --}}
@@ -87,11 +85,9 @@
                 <h3 class="fw-bold mt-5 mb-4"><i class="bi bi-bookmark-heart-fill me-2 text-primary-color"></i>{{ __('You Might Also Like') }}</h3>
                  @include('frontend.services.show.partials._related_services')
             </div>
-        </div>
+    </x-slot:main>
 
-        {{-- SIDEBAR COLUMN (4/12) --}}
-        <div class="col-lg-4">
-            <aside class="sticky-sidebar">
+    <x-slot:sidebar>
                 {{-- Main Booking/Consultation Card --}}
                 @include('frontend.services.show.partials.sidebar._consultation_sidebar')
                 
@@ -105,8 +101,6 @@
                         <p class="text-muted tiny mb-0">{{ __('Background checked & certified') }}</p>
                     </div>
                 </div>
-            </aside>
-        </div>
-    </div>
-</div>
+    </x-slot:sidebar>
+</x-frontend.detail-shell>
 @endsection

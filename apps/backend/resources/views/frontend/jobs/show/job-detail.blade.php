@@ -11,30 +11,21 @@
 @endpush
 
 @section('content')
-<div class="page-content-wrapper py-3 py-lg-4">
-    
-    {{-- Job Header (Title, Company, Cover) --}}
-    @include('frontend.jobs.show.partials._header')
+<x-frontend.detail-shell variant="job">
+    <x-slot:breadcrumbs>
+        @include('frontend.jobs.show.partials._header')
+    </x-slot:breadcrumbs>
 
-    <div class="row g-4 mt-1">
-        {{-- Flash Messages / Form Feedback --}}
-        @include('frontend._partials._alerts')
+    <x-slot:main>
+        <article class="job-details-article">
+            @include('frontend.jobs.show.partials._description')
+        </article>
+    </x-slot:main>
 
-        {{-- MAIN COLUMN: Job Description & Requirements --}}
-        <div class="col-lg-8">
-            <article class="job-details-article">
-                @include('frontend.jobs.show.partials._description')
-            </article>
-        </div>
-
-        {{-- SIDEBAR: Application Form & Company Info --}}
-        <div class="col-lg-4">
-            <aside class="sticky-sidebar">
-                @include('frontend.jobs.show.partials._application_sidebar')
-            </aside>
-        </div>
-    </div>
-</div>
+    <x-slot:sidebar>
+        @include('frontend.jobs.show.partials._application_sidebar')
+    </x-slot:sidebar>
+</x-frontend.detail-shell>
 @endsection
 
 {{-- 3. Scripts --}}

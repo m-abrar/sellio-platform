@@ -4,24 +4,21 @@
 @section('body_class', 'has-body-glow')
 @php $tickets_left = $event->tickets_left @endphp
 @section('content')
-<div class="page-content-wrapper py-3 py-lg-4">
-    {{-- 1. Breadcrumbs --}}
-    @include('frontend.events.show.partials._breadcrumbs')
-    <div class="row g-4 mt-1">
-        @include('frontend._partials._alerts')
-        {{-- MAIN COLUMN --}}
-        <div class="col-lg-8">
-            @include('frontend.events.show.partials._details_main')
-        </div>
+<x-frontend.detail-shell variant="event">
+    <x-slot:breadcrumbs>
+        @include('frontend.events.show.partials._breadcrumbs')
+    </x-slot:breadcrumbs>
 
-        {{-- SIDEBAR --}}
-        <div class="col-lg-4">
-            <aside class="sticky-sidebar ticket-sidebar" style="z-index: 10;">
-                @include('frontend.events.show.partials._sidebar_tickets')
-            </aside>
+    <x-slot:main>
+        @include('frontend.events.show.partials._details_main')
+    </x-slot:main>
+
+    <x-slot:sidebar>
+        <div class="ticket-sidebar">
+            @include('frontend.events.show.partials._sidebar_tickets')
         </div>
-    </div>
-</div>
+    </x-slot:sidebar>
+</x-frontend.detail-shell>
 {{-- Mobile Sticky CTA --}}
 @include('frontend.events.show.partials._mobile_cta_footer')
 

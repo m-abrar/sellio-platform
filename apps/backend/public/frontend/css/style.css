@@ -683,6 +683,84 @@ footer{
     border-top-left-radius:var(--bs-card-border-radius);
     border-top-right-radius:var(--bs-card-border-radius)
 }
+.detail-page{
+    width:100%;
+    padding:1rem 0 2.5rem
+}
+.detail-page__inner{
+    width:min(100%, 1320px);
+    margin:0 auto;
+    padding:0 1rem
+}
+.detail-page__breadcrumbs{
+    margin-bottom:.75rem
+}
+.detail-page__grid{
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) minmax(300px, 380px);
+    gap:1.5rem;
+    align-items:start
+}
+.detail-page__main,
+.detail-page__sidebar{
+    min-width:0
+}
+.detail-page__sidebar-stack{
+    position:sticky;
+    top:76px;
+    display:flex;
+    flex-direction:column;
+    gap:1rem
+}
+.detail-page .sticky-sidebar{
+    position:static;
+    top:auto
+}
+.detail-page .card.glass-surface,
+.detail-page article.glass-surface{
+    border-radius:12px!important;
+    box-shadow:0 12px 32px rgba(15,23,42,.08)!important
+}
+.detail-page .gallery-section{
+    min-height:280px;
+    background:#f8fafc
+}
+.detail-page .gallery-section img,
+.detail-page .listing-header-img,
+.detail-page .main-product-image,
+.detail-page .main-listing-img{
+    object-fit:cover
+}
+.detail-page .p-lg-5{
+    padding:2rem!important
+}
+.detail-page .section-title{
+    font-size:1.15rem;
+    line-height:1.25;
+    margin-bottom:1rem!important
+}
+.detail-page .section-title::after{
+    width:34px;
+    height:3px;
+    margin-top:.55rem
+}
+.detail-page section{
+    scroll-margin-top:96px
+}
+.detail-page__related{
+    margin-top:.5rem
+}
+.detail-page__related .related-wrapper{
+    padding-bottom:2.5rem!important
+}
+.detail-page__sidebar .card,
+.detail-page__sidebar .glass-surface,
+.detail-page__sidebar .rounded-4{
+    border-radius:12px!important
+}
+.detail-page__sidebar .btn{
+    border-radius:10px!important
+}
 .btn-primary,.btn-primary-theme{
     background-color:var(--primary-color)!important
 }
@@ -1552,6 +1630,19 @@ footer{
     }
 }
 @media (max-width:991px){
+    .detail-page{
+        padding-top:.75rem
+    }
+    .detail-page__grid{
+        grid-template-columns:1fr;
+        gap:1rem
+    }
+    .detail-page__sidebar-stack{
+        position:static
+    }
+    .detail-page .gallery-section{
+        min-height:220px
+    }
     .price-container{
         min-width:100%;
         margin-top:1rem

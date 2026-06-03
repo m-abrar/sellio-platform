@@ -85,7 +85,7 @@
                 <div class="p-3 bg-light rounded-4 border border-white h-100">
                     <i class="bi bi-award text-warning fs-2 mb-2 d-block"></i>
                     <span class="fw-bold small d-block">Dealer Rating</span>
-                    <span class="text-muted smaller">{{ $auto->user->rating('auto') ?? '4.8' }}/5.0 stars</span>
+                    <span class="text-muted smaller">{{ number_format(($auto->user?->reviews ?? collect())->avg('rating') ?: 0, 1) }}/5.0 stars</span>
                 </div>
             </div>
         </div>

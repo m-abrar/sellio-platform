@@ -4,20 +4,16 @@
 @section('body_class', 'has-body-glow bg-light')
 
 @section('content')
-<div class="page-content-wrapper py-3 py-lg-4">
-    
-    {{-- 1. NAVIGATION HEADER (Breadcrumbs) --}}
-    @include('frontend.services.show.partials._breadcrumbs', [
-        'pageTitle'    => $service->title,
-        'categoryName' => $service->category?->title,
-        'categorySlug' => $service->category?->slug,
-    ])
+<x-frontend.detail-shell variant="service-bookable">
+    <x-slot:breadcrumbs>
+        @include('frontend.services.show.partials._breadcrumbs', [
+            'pageTitle'    => $service->title,
+            'categoryName' => $service->category?->title,
+            'categorySlug' => $service->category?->slug,
+        ])
+    </x-slot:breadcrumbs>
 
-    <div class="row g-4 mt-1">
-        @include('frontend._partials._alerts')
-
-        {{-- MAIN COLUMN (8/12) --}}
-        <div class="col-lg-8">
+    <x-slot:main>
             <div class="card glass-surface border-0 overflow-hidden mb-5">
                 
                 {{-- 2. HEADER IMAGE / GALLERY --}}
@@ -93,11 +89,9 @@
                 </h3>
                 @include('frontend.services.show.partials._related_services', ['relatedServices' => $relatedServices ?? collect()])
             </div>
-        </div>
+    </x-slot:main>
 
-        {{-- SIDEBAR COLUMN (4/12) --}}
-        <div class="col-lg-4">
-            <aside class="sticky-sidebar">
+    <x-slot:sidebar>
                 {{-- Booking specific sidebar (Calculators/Date Pickers) --}}
                 @include('frontend.services.show.partials.sidebar._booking_sidebar', ['service' => $service])
                 
@@ -118,8 +112,6 @@
                     <p class="small opacity-75 mb-3">{{ __('Have questions about this service before booking?') }}</p>
                     <button class="btn btn-outline-light btn-sm w-100 rounded-pill">{{ __('Message Provider') }}</button>
                 </div>
-            </aside>
-        </div>
-    </div>
-</div>
+    </x-slot:sidebar>
+</x-frontend.detail-shell>
 @endsection

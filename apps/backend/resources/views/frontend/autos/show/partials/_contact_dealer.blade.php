@@ -6,7 +6,9 @@
     $dealerPhone = $dealer->phone ?? '(555) 987-6543';
     // Removed $dealerEmail as it is no longer used for the CTA
     $dealerLogo = $dealer->logo_url ?? "https://ui-avatars.com/api/?name=" . urlencode($dealerName) . "&background=6366f1&color=fff&size=80&font-size=0.45&bold=true";
-    $dealerRating = $dealer->rating('auto') ?? 0;
+    $dealerReviews = $dealer?->reviews ?? collect();
+    $dealerRating = $dealerReviews->avg('rating') ?: 0;
+    $dealerReviewCount = $dealerReviews->count();
 @endphp
 
 <div class="card glass-surface p-4 mt-4">
@@ -29,7 +31,7 @@
 
         {{-- 💡 UX Improvement: Display Rating --}}
         <span class="text-warning fw-bold small">
-            <i class="bi bi-star-fill"></i> {{ number_format($dealerRating, 1) }} ({{ $dealer->reviews->count() ?? 0 }} reviews)
+            <i class="bi bi-star-fill"></i> {{ number_format($dealerRating, 1) }} ({{ $dealerReviewCount }} reviews)
         </span>
     </div>
 
