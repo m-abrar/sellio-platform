@@ -19,7 +19,7 @@
 @endphp
 
 @section('content')
-<div class="page-content-wrapper py-4 py-lg-5">
+<x-frontend.page-shell variant="property-booking" narrow>
     {{-- 1. Header Section --}}
     <div class="page-title-section mb-4 mb-lg-5 text-center">
         <span class="metric-label mx-auto">{{ __('Finalize Reservation') }}</span>
@@ -227,5 +227,5 @@
             </aside>
         </div>
     </div>
-</div>
+</x-frontend.page-shell>
 @endsection

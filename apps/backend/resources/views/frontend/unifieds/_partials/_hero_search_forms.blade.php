@@ -13,7 +13,12 @@
 
 @foreach(($publicModules ?? collect())->take(8) as $module)
     @php($config = $searchConfig[$module['id']] ?? $searchConfig['classifieds'])
-    <div class="tab-pane fade @if($loop->first) show active @endif" id="{{ $module['id'] }}" role="tabpanel" aria-labelledby="{{ $module['id'] }}-tab">
+    <div class="tab-pane fade @if($loop->first) show active @endif"
+         id="hero-search-{{ $module['id'] }}"
+         data-hero-pane
+         role="tabpanel"
+         aria-labelledby="{{ $module['id'] }}-tab"
+         @unless($loop->first) hidden @endunless>
         <form class="row g-3 align-items-center" method="GET" action="{{ route($module['search_route']) }}">
             <div class="col-lg-{{ $module['id'] === 'jobs' ? '5' : '9' }}">
                 <input type="text" name="{{ $config['name'] }}" class="form-control custom-pill-input"

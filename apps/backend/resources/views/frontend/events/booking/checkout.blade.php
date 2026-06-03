@@ -6,7 +6,7 @@
 @section('body_class', 'has-body-glow')
 
 @section('content')
-<div class="">
+<x-frontend.page-shell variant="event-booking" narrow>
 
         <header class="row mb-3 mb-lg-5"> 
             <div class="col-12">
@@ -124,7 +124,7 @@
             </div>
         </div>
     </div>
-</div>
+</x-frontend.page-shell>
 @endsection
 
 @section('head_extra')

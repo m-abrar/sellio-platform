@@ -4,47 +4,33 @@
 @section('body_class', 'has-body-glow bg-light frontend-page--listing')
 
 @section('content')
-<x-frontend.listing-shell variant="properties" x-data="{ isFilterOpen: false }">
-    @include('frontend._partials._page-heading', [
-        'titleKey' => 'properties.search.heading',
-        'titleDefault' => __('Properties'),
-        'subtitleKey' => 'properties.search.sub_heading',
-        'subtitleDefault' => __('Explore premium real estate listings.'),
-        'total' => $properties->total(),
-        'icon' => 'bi-houses-fill',
-        'desktopLabel' => __('Listings Available'),
-    ])
-
-    <div class="row g-4">
-        @component('frontend._partials._filter-shell', ['title' => __('Filters')])
+    <x-frontend.listing-index
+        variant="properties"
+        :paginator="$properties"
+        :total="$properties->total()"
+        titleKey="properties.search.heading"
+        :titleDefault="__('Properties')"
+        subtitleKey="properties.search.sub_heading"
+        :subtitleDefault="__('Explore premium real estate listings.')"
+        icon="bi-houses-fill"
+        :desktopLabel="__('Listings Available')"
+        :filterActive="request()->anyFilled(['category', 'max_price', 'location', 'bedrooms', 'bathrooms', 'amenities', 'features'])"
+    >
+        <x-slot:filters>
             @include('frontend.properties._partials._sidebar_filter')
-        @endcomponent
+        </x-slot:filters>
 
-        <div class="col-12 col-lg-9">
-            <div class="row g-3 row-cols-2 row-cols-md-2 row-cols-xl-3">
-                @forelse($properties as $property)
-                    <div class="col">
-                        @include('frontend.properties._partials._card', ['property' => $property])
-                    </div>
-                @empty
-                    @include('frontend._partials._listing-empty-state', [
-                        'icon' => 'bi-house-exclamation',
-                        'title' => __('No Results Found'),
-                        'route' => route('properties.index'),
-                    ])
-                @endforelse
+        @forelse($properties as $property)
+            <div class="col">
+                @include('frontend.properties._partials._card', ['property' => $property])
             </div>
-
-            @if($properties->hasPages())
-                {{ $properties->appends(request()->query())->links('frontend._partials._pagination') }}
-            @endif
-        </div>
-    </div>
-
-    @include('frontend._partials._mobile-filter-button', [
-        'active' => request()->anyFilled(['category', 'max_price', 'location', 'bedrooms', 'bathrooms', 'amenities', 'features']),
-    ])
-</x-frontend.listing-shell>
+        @empty
+            @include('frontend._partials._listing-empty-state', [
+                'icon' => 'bi-house-exclamation',
+                'route' => route('properties.index'),
+            ])
+        @endforelse
+    </x-frontend.listing-index>
 @endsection
 
 @push('scripts')

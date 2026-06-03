@@ -1,3 +1,5 @@
+@extends('frontend._layouts._app')
+
 @section('hero')
 {{-- Premium Category Header --}}
 <div class="user-profile-header py-5 mb-5 position-relative overflow-hidden" 

@@ -4,7 +4,7 @@
 @section('body_class', 'has-body-glow')
 
 @section('content')
-<div class="page-content-wrapper py-4 py-lg-5" 
+<x-frontend.page-shell variant="property-booking" narrow
     x-data="bookingForm({
         nights: {{ $bookingData['nights'] }},
         initialTotal: {{ $initialTotal }},
@@ -226,7 +226,7 @@
             </div>
         </div>
     </form>
-</div>
+</x-frontend.page-shell>
 @endsection
 
 @push('scripts')

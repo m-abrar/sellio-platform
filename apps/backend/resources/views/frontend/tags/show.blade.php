@@ -1,3 +1,5 @@
+@extends('frontend._layouts._app')
+
 @section('hero')
 {{-- Premium Tag Hero Header --}}
 <div class="user-profile-header py-5 mb-5 position-relative overflow-hidden" 
@@ -25,9 +27,10 @@
 </div>
 @endsection
 
+@section('body_class', 'has-body-glow bg-light frontend-page--listing')
+
 @section('content')
-<div class="container mt-n5 position-relative z-index-2 mb-5">
-    @include('frontend._partials._alerts')
+<x-frontend.listing-shell variant="tag" class="mt-n5 position-relative z-index-2">
     
     <div class="row g-4">
         {{-- Left Column: Content --}}
@@ -156,6 +159,5 @@
             </div>
         </div>
     </div>
-</div>
-
+</x-frontend.listing-shell>
 @endsection

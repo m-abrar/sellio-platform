@@ -13,12 +13,13 @@ Build the standalone Laravel public website as a full-featured storefront with f
 | Phase 1 — Home & explore/index | **Mostly complete** |
 | `laravel_blade` content scope | **Complete** |
 | Module-aware discovery | **Complete** (blogs gating fixed 2026-06-03) |
-| Module index standardization | **Complete** (products index include fixed 2026-06-03) |
+| Module index standardization | **Complete** (`listing-index` component, 2026-06-03) |
 | Global layout (header/footer) | **Complete** (footer newsletter added 2026-06-03) |
 | Blade/theme decoupling | **Complete** |
 | Automated tests | **Started** (`tests/Feature/LaravelPublicStorefrontTest.php`) |
 | Unified layout shells (`listing-shell` / `detail-shell`) | **Complete** (2026-06-03) |
-| Phase 1.5 — Detail shell | **Mostly complete** (booking/checkout still uneven) |
+| Phase 1.5 — Detail shell | **Mostly complete** |
+| `page-shell` (cart, booking, confirmations) | **Started** (property booking, cart, job/event flows) |
 | Phase 2 — Checkout/auth/booking parity | **Not started** |
 
 ## Key Changes
@@ -37,7 +38,7 @@ Build the standalone Laravel public website as a full-featured storefront with f
 
 - **`HomeDataService`** — Public discovery provider with enabled-module filtering, counts, featured/trending, products/blogs, taxonomy.
 - **Unified home** — Hero (`page_content`), dynamic module tabs/search, curated sections, empty states, category/location blocks.
-- **Module index pages** — Shared `_page-heading`, `_filter-shell`, `_mobile-filter-button` on properties, autos, products, services, jobs, events, classifieds, blogs.
+- **Module index pages** — Unified `x-frontend.listing-index` component (heading, filters, grid, pagination, mobile filter) across properties, autos, products, services, jobs, events, classifieds, blogs.
 - **Global layout** — `main_header` menus (module-filtered), Post Listing CTA, footer columns, social links, newsletter block when `newsletter_enabled` is truthy (default on).
 - **Blade decoupling** — `config/content.php`, `ContentService`, `MenuService`, admin bar scoped to `laravel_blade`; no Theme model usage in `resources/views/frontend`.
 - **CSS** — `public/frontend/css/style.css` with shared `--frontend-shell-*` tokens, `listing-page` + `detail-page` shells, hero mobile scroll, marketplace cards.
@@ -46,7 +47,9 @@ Build the standalone Laravel public website as a full-featured storefront with f
 ### Phase 1.5 (beyond original plan — in progress)
 
 - **`x-frontend.detail-shell`** component and migration of module show views (autos, properties, products, services, jobs, events, classifieds, blogs).
-- Detail/checkout/booking flows still vary by vertical and are not fully unified.
+- **`x-frontend.page-shell`** — Cart, property vacation booking (checkout/payment/confirmation), event booking checkout, job application confirmation.
+- Taxonomy browse pages (`categories`, `brands`, `tags`, `types`, `partners`) use `listing-shell`; missing `@extends` fixed on direct show views.
+- Product multi-gateway checkout view (`checkout`) still separate from `page-shell`.
 
 ### Pending / follow-up
 
@@ -85,3 +88,6 @@ Build the standalone Laravel public website as a full-featured storefront with f
 | `products/index.blade.php` included classifieds search | Fixed — now includes `frontend.products.search` |
 | Blogs home section ignored `module_enabled('blogs')` | Fixed — view + `HomeDataService` |
 | Footer lacked newsletter entry | Fixed — gated by `newsletter_enabled` (default `1`) |
+| Home hero tabs did not switch forms | Fixed — vanilla `data-hero-*` switcher |
+| Taxonomy show views missing `@extends` | Fixed — categories, brands, tags, types, partners |
+| Broken `unifieds/*/show` wrappers | Fixed — include-only pattern |

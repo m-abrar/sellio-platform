@@ -17,33 +17,109 @@
             </div>
         </div>
 
-        {{-- Search Container --}}
-        <div class="search-container-wrapper mx-auto hero-search-max" data-aos="zoom-in" data-aos-delay="200">
-            <ul class="nav nav-pills justify-content-center" id="searchTab" role="tablist">
-                @foreach(($publicModules ?? collect())->take(8) as $tab)
-                <li class="nav-item" role="presentation">
-                    <div class="pill-group">
-                        <button class="nav-link @if($loop->first) active @endif" 
-                                id="{{ $tab['id'] }}-tab" 
-                                data-bs-toggle="pill" 
-                                data-bs-target="#{{ $tab['id'] }}" 
-                                type="button" role="tab" 
-                                aria-controls="{{ $tab['id'] }}"
-                                aria-selected="{{ $loop->first ? 'true' : 'false' }}">
-                            <i class="bi {{ $tab['icon'] }}"></i>
-                        </button>
-                        <div class="label-text">{{ $tab['label'] }}</div>
-                    </div>
-                </li>
-                @endforeach
-            </ul>
+        {{-- Search: tabs sit in their own layer above the panel (no overlap blocking clicks) --}}
+        <div class="search-container-wrapper mx-auto hero-search-max" data-hero-search>
+            <div class="hero-search-stack">
+                <div class="hero-search-tabs-wrap">
+                    <ul class="nav nav-pills hero-search-tabs justify-content-center" id="searchTab" role="tablist">
+                        @foreach(($publicModules ?? collect())->take(8) as $tab)
+                            <li class="nav-item" role="presentation">
+                                <div class="pill-group">
+                                    <button type="button"
+                                            class="nav-link @if($loop->first) active @endif"
+                                            id="{{ $tab['id'] }}-tab"
+                                            role="tab"
+                                            data-hero-tab
+                                            data-hero-target="hero-search-{{ $tab['id'] }}"
+                                            aria-controls="hero-search-{{ $tab['id'] }}"
+                                            aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                                        <i class="bi {{ $tab['icon'] }}" aria-hidden="true"></i>
+                                        <span class="visually-hidden">{{ $tab['label'] }}</span>
+                                    </button>
+                                    <div class="label-text" aria-hidden="true">{{ $tab['label'] }}</div>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
 
-            <div class="glass-hero-panel">
-                <div class="tab-content" id="searchTabContent">
-                    {{-- Form logic remains same but ensure __() is used for all placeholders --}}
-                    @include('frontend.unifieds._partials._hero_search_forms')
+                <div class="glass-hero-panel">
+                    <div class="tab-content" id="searchTabContent">
+                        @include('frontend.unifieds._partials._hero_search_forms')
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+@once
+    @push('scripts')
+        <script>
+            (function () {
+                function activateHeroTab(root, targetId, trigger) {
+                    root.querySelectorAll('[data-hero-tab]').forEach(function (btn) {
+                        var isActive = btn === trigger;
+                        btn.classList.toggle('active', isActive);
+                        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                    });
+
+                    root.querySelectorAll('[data-hero-pane]').forEach(function (pane) {
+                        var isActive = pane.id === targetId;
+                        pane.classList.toggle('active', isActive);
+                        pane.classList.toggle('show', isActive);
+                        pane.hidden = !isActive;
+                    });
+                }
+
+                function initHeroSearchTabs() {
+                    var root = document.querySelector('[data-hero-search]');
+                    if (!root) {
+                        return;
+                    }
+
+                    var tabList = root.querySelector('#searchTab');
+                    if (!tabList) {
+                        return;
+                    }
+
+                    tabList.addEventListener('click', function (event) {
+                        var trigger = event.target.closest('[data-hero-tab]');
+                        if (!trigger || !tabList.contains(trigger)) {
+                            return;
+                        }
+
+                        event.preventDefault();
+
+                        var targetId = trigger.getAttribute('data-hero-target');
+                        if (!targetId) {
+                            return;
+                        }
+
+                        activateHeroTab(root, targetId, trigger);
+                    });
+
+                    tabList.addEventListener('keydown', function (event) {
+                        if (event.key !== 'Enter' && event.key !== ' ') {
+                            return;
+                        }
+
+                        var trigger = event.target.closest('[data-hero-tab]');
+                        if (!trigger) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        trigger.click();
+                    });
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initHeroSearchTabs);
+                } else {
+                    initHeroSearchTabs();
+                }
+            })();
+        </script>
+    @endpush
+@endonce

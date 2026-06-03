@@ -6,6 +6,7 @@ import jQuery from 'jquery';
 import Alpine from 'alpinejs';
 import AOS from 'aos';
 import 'bootstrap';
+import { Tab } from 'bootstrap';
 import flatpickr from "flatpickr";
 
 
@@ -46,14 +47,27 @@ const AppJS = {
     /**
      * Global Event Listeners
      */
+    initHeroSearchTabs() {
+        const tabList = document.getElementById('searchTab');
+        if (!tabList) {
+            return;
+        }
+
+        tabList.querySelectorAll('[data-bs-toggle="tab"][data-bs-target]').forEach((trigger) => {
+            Tab.getOrCreateInstance(trigger);
+        });
+    },
+
     bindEvents() {
         // Handle Livewire navigation if present
         document.addEventListener('livewire:navigated', () => {
             this.initAnimations();
+            this.initHeroSearchTabs();
         });
 
         $(() => {
             this.initAnimations();
+            this.initHeroSearchTabs();
             // Add high-level jQuery UI interactions here
         });
     }

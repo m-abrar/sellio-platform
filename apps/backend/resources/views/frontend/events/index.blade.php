@@ -4,51 +4,36 @@
 @section('body_class', 'has-body-glow bg-light frontend-page--listing')
 
 @section('content')
-<x-frontend.listing-shell variant="events" x-data="{ isFilterOpen: false }">
-    @include('frontend._partials._page-heading', [
-        'titleKey' => 'events.search.heading',
-        'titleDefault' => __('Events & Workshops'),
-        'subtitleKey' => 'events.search.sub_heading',
-        'subtitleDefault' => __('Don\'t miss the next big conference or local meetup.'),
-        'total' => $events->total(),
-        'icon' => 'bi-calendar-check-fill',
-        'desktopLabel' => __('Events Found'),
-    ])
-
-    <div class="row g-4">
-        @component('frontend._partials._filter-shell', ['title' => __('Filters')])
+    <x-frontend.listing-index
+        variant="events"
+        :paginator="$events"
+        :total="$events->total()"
+        titleKey="events.search.heading"
+        :titleDefault="__('Events & Workshops')"
+        subtitleKey="events.search.sub_heading"
+        :subtitleDefault="__('Don\'t miss the next big conference or local meetup.')"
+        icon="bi-calendar-check-fill"
+        :desktopLabel="__('Events Found')"
+        :filterActive="request()->anyFilled(['category', 'date_start', 'location', 'keyword'])"
+    >
+        <x-slot:filters>
             @include('frontend.events._partials._sidebar-filter-events')
-        @endcomponent
+        </x-slot:filters>
 
-        <div class="col-12 col-lg-9">
-            <div class="row g-3 row-cols-2 row-cols-md-2 row-cols-xl-3">
-                @forelse($events as $event)
-                    <div class="col">
-                        @include('frontend.events._partials._card-event', ['event' => $event])
-                    </div>
-                @empty
-                    @include('frontend._partials._listing-empty-state', [
-                        'icon' => 'bi-calendar-x',
-                        'title' => __('No Events Found'),
-                        'description' => __('Try adjusting your filters or dates to find upcoming events.'),
-                        'route' => route('events.index'),
-                        'label' => __('View All Events'),
-                    ])
-                @endforelse
+        @forelse($events as $event)
+            <div class="col">
+                @include('frontend.events._partials._card-event', ['event' => $event])
             </div>
-
-            @if($events->hasPages())
-                <div class="mt-5 d-flex justify-content-center">
-                    {{ $events->links('frontend._partials._pagination') }}
-                </div>
-            @endif
-        </div>
-    </div>
-
-    @include('frontend._partials._mobile-filter-button', [
-        'active' => request()->anyFilled(['category', 'date_start', 'location']),
-    ])
-</x-frontend.listing-shell>
+        @empty
+            @include('frontend._partials._listing-empty-state', [
+                'icon' => 'bi-calendar-x',
+                'title' => __('No Events Found'),
+                'description' => __('Try adjusting your filters or dates to find upcoming events.'),
+                'route' => route('events.index'),
+                'label' => __('View All Events'),
+            ])
+        @endforelse
+    </x-frontend.listing-index>
 @endsection
 
 @push('scripts')

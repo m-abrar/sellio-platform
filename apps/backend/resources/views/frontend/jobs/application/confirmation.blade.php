@@ -4,9 +4,9 @@
 @section('body_class', 'has-body-glow')
 
 @section('content')
-<div class="container py-5">
+<x-frontend.page-shell variant="job-application" narrow>
     <div class="row justify-content-center">
-        <div class="col-lg-8 col-xl-7">
+        <div class="col-lg-10 col-xl-9">
             
             {{-- Success Animation & Header --}}
             <div class="text-center mb-5">
@@ -99,5 +99,5 @@
             </div>
         </div>
     </div>
-</div>
+</x-frontend.page-shell>
 @endsection

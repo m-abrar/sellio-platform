@@ -28,6 +28,17 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertSee(__('Explore the Marketplace'), false);
     }
 
+    public function test_homepage_hero_tabs_include_vanilla_switcher_markup(): void
+    {
+        $this->get(route('index'))
+            ->assertOk()
+            ->assertSee('data-hero-search', false)
+            ->assertSee('data-hero-tab', false)
+            ->assertSee('data-hero-pane', false)
+            ->assertSee('id="hero-search-properties"', false)
+            ->assertSee('data-hero-target="hero-search-properties"', false);
+    }
+
     public function test_products_index_renders_product_catalog_not_classifieds(): void
     {
         Setting::set('is_section.products', '1');
@@ -36,8 +47,37 @@ class LaravelPublicStorefrontTest extends TestCase
         $this->get(route('products.index'))
             ->assertOk()
             ->assertSee(__('Product Catalog'), false)
-            ->assertSee(__('Filter Products'), false)
+            ->assertSee('listing-page--products', false)
+            ->assertSee('listing-grid', false)
             ->assertDontSee(__('Ads Available'), false);
+    }
+
+    public function test_cart_page_uses_page_shell_markup(): void
+    {
+        Setting::set('is_section.products', '1');
+        Cache::forget('settings_all');
+
+        $this->get(route('cart.index'))
+            ->assertOk()
+            ->assertSee('page-shell--cart', false)
+            ->assertSee(__('Your Shopping Cart'), false);
+    }
+
+    public function test_listing_index_pages_share_unified_layout_markup(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Setting::set('is_section.jobs', '1');
+        Cache::forget('settings_all');
+
+        $this->get(route('properties.index'))
+            ->assertOk()
+            ->assertSee('listing-page--properties', false)
+            ->assertSee(__('Filters'), false);
+
+        $this->get(route('jobs.index'))
+            ->assertOk()
+            ->assertSee('listing-page--jobs', false)
+            ->assertSee('listing-grid', false);
     }
 
     public function test_disabled_module_route_returns_not_found(): void
