@@ -260,6 +260,7 @@
 @endif
 
 {{-- MODULE: Blogs --}}
+@if(module_enabled('blogs'))
 <section class="py-5">
     <div class="container-xl">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-3">
@@ -293,6 +294,7 @@
         </div>
     </div>
 </section>
+@endif
 
 {{-- PUBLIC DISCOVERY: Taxonomy and locations --}}
 @if(($categoriesFeatured ?? collect())->isNotEmpty() || ($locationsFeatured ?? collect())->isNotEmpty())

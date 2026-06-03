@@ -65,7 +65,7 @@ class HomeDataService
             'propertiesSale'      => $this->forModule('properties', fn() => $this->cached('h_sale_prop', fn() => $this->transformCollection(Property::active()->with(['location', 'category', 'user'])->without(['media'])->where('is_sale', true)->latest()->take(6)->get()))),
             'autosLatest'         => $this->forModule('autos', fn() => $this->cached('h_late_auto', fn() => $this->transformCollection(Auto::active()->with(['location', 'category', 'user'])->without(['media'])->latest()->take(6)->get()))),
             'productsLatest'      => $this->forModule('products', fn() => $this->cached('h_late_prod', fn() => Product::active()->with(['category', 'brand'])->withCount(['attributes', 'addons'])->latest()->take(4)->get())),
-            'blogsFeatured'       => $this->cached('h_feat_blog', fn() => Blog::active()->with(['category'])->orderByDesc('is_featured')->latest('published_at')->take(3)->get()),
+            'blogsFeatured'       => $this->forModule('blogs', fn() => $this->cached('h_feat_blog', fn() => Blog::active()->with(['category'])->orderByDesc('is_featured')->latest('published_at')->take(3)->get())),
 
             // Taxonomy
             'categories'          => $this->cached('h_tax_cat', fn() => Category::active()->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c))),

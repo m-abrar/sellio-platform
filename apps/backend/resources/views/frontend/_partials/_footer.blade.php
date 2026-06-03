@@ -69,6 +69,43 @@
 
     </div>
 
+    @if(filter_var(setting('newsletter_enabled', '1'), FILTER_VALIDATE_BOOLEAN))
+        <div class="row mt-2">
+            <div class="col-12 col-lg-8 mx-auto">
+                <div class="footer-newsletter rounded-4 p-4 p-md-5 border border-light border-opacity-10">
+                    <div class="row align-items-center g-4">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-white mb-2">
+                                {{ page_content('global.footer.newsletter_title', __('Newsletter')) }}
+                            </h6>
+                            <p class="small text-light opacity-75 mb-0">
+                                {{ page_content('global.footer.newsletter_description', __('Get marketplace updates, guides, and featured listings in your inbox.')) }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <form action="{{ route('newsletter.subscribe') }}" method="POST" class="d-flex flex-column flex-sm-row gap-2">
+                                @csrf
+                                <input type="hidden" name="source" value="site_footer">
+                                <label for="footer-newsletter-email" class="visually-hidden">{{ __('Email Address') }}</label>
+                                <input
+                                    id="footer-newsletter-email"
+                                    type="email"
+                                    name="email"
+                                    class="form-control rounded-pill border-0"
+                                    placeholder="{{ page_content('global.footer.newsletter_placeholder', __('Your email address')) }}"
+                                    required
+                                >
+                                <button type="submit" class="btn btn-primary rounded-pill px-4 text-nowrap fw-bold">
+                                    {{ page_content('global.footer.newsletter_button', __('Subscribe')) }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <hr class="my-4" style="border-color: rgba(255, 255, 255, 0.1);">
 
     <div class="row align-items-center">

@@ -1,1 +1,1 @@
-@include('frontend.classifieds.search')
+@include('frontend.products.search')

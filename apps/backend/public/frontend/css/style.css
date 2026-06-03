@@ -1767,6 +1767,9 @@ footer{
 .footer-section .nav-link{
     transition:opacity .2s
 }
+.footer-newsletter{
+    background:rgba(255,255,255,.04)
+}
 .footer-section .nav-link:hover{
     text-decoration:underline!important;
     opacity:1!important
