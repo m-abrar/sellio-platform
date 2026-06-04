@@ -54,7 +54,7 @@ Build the standalone Laravel public website as a full-featured storefront with f
 ### Pending / follow-up
 
 - [ ] Manual responsive QA at desktop, tablet, mobile (hero tabs, filters, sticky CTAs).
-- [ ] Expand `LaravelPublicStorefrontTest` for menu filtering and admin `@editable` visibility.
+- [x] Expand `LaravelPublicStorefrontTest` for menu filtering and admin `@editable` visibility.
 - [ ] Audit follow-ups from `apps/backend/.audit/03_ui_ux/005_frontend_blade_audit_report.md` (currency helper, logic out of Blade).
 - [ ] Optional: seed `global.footer.newsletter_*` slots under `laravel_blade` in admin content defaults.
 - [ ] Run `npm run build` in `apps/backend` after CSS changes when dependencies are installed.
@@ -67,8 +67,8 @@ Build the standalone Laravel public website as a full-featured storefront with f
 - [x] `ContentService` reads `laravel_blade` scope.
 - [x] `HomeDataService` omits blogs when `is_section.blogs` is off.
 - [x] Footer newsletter respects `newsletter_enabled` setting.
-- [ ] Module toggles reflected in hero tabs and `main_header` menus (manual or additional tests).
-- [ ] `@editable` only for authorized admins with `frontend_edit` enabled.
+- [x] Module toggles reflected in hero tabs and `main_header` menus (manual or additional tests).
+- [x] `@editable` only for authorized admins with `frontend_edit` enabled.
 - [ ] Theme changes do not alter Blade public views.
 - [ ] Run full suite: `php artisan test` from `apps/backend`.
 

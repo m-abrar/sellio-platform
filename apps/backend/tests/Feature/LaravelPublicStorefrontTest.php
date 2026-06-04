@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\PageContent;
 use App\Models\Setting;
+use App\Models\Menu;
+use App\Models\MenuItem;
 use App\Models\User;
 use App\Services\ContentService;
 use App\Services\HomeDataService;
@@ -199,5 +201,94 @@ class LaravelPublicStorefrontTest extends TestCase
         $this->get(route('index'))
             ->assertOk()
             ->assertDontSee('name="source" value="site_footer"', false);
+    }
+
+    public function test_main_header_menu_filters_disabled_module_items(): void
+    {
+        Setting::set('is_section.products', '1');
+        Setting::set('is_section.autos', '0');
+        Cache::flush();
+
+        $menu = Menu::updateOrCreate(
+            [
+                'theme_key' => config('content.blade_scope', 'laravel_blade'),
+                'location_key' => 'main_header',
+            ],
+            [
+                'title' => 'Main Header',
+                'status' => 'active',
+            ]
+        );
+        $menu->items()->delete();
+
+        MenuItem::create([
+            'menu_id' => $menu->id,
+            'title' => 'Visible Products Menu',
+            'url' => '/products',
+            'module' => 'products',
+            'order' => 1,
+            'status' => 'active',
+        ]);
+
+        MenuItem::create([
+            'menu_id' => $menu->id,
+            'title' => 'Hidden Autos Menu',
+            'url' => '/autos',
+            'module' => 'autos',
+            'order' => 2,
+            'status' => 'active',
+        ]);
+
+        $this->get(route('index'))
+            ->assertOk()
+            ->assertSee('Visible Products Menu', false)
+            ->assertDontSee('Hidden Autos Menu', false);
+    }
+
+    public function test_editable_controls_are_hidden_for_guests_and_admins_without_frontend_edit(): void
+    {
+        Setting::set('frontend_edit', '0');
+        Cache::flush();
+
+        $this->get(route('index'))
+            ->assertOk()
+            ->assertDontSee('editable-group', false)
+            ->assertDontSee('edit-link', false);
+
+        Role::firstOrCreate(['name' => 'admin']);
+        $admin = User::factory()->create();
+        $admin->assignRole('admin');
+
+        $this->actingAs($admin)
+            ->get(route('index'))
+            ->assertOk()
+            ->assertDontSee('editable-group', false)
+            ->assertDontSee('edit-link', false);
+    }
+
+    public function test_editable_controls_are_visible_for_admins_when_frontend_edit_is_enabled(): void
+    {
+        Setting::set('frontend_edit', '1');
+        Cache::flush();
+
+        Role::firstOrCreate(['name' => 'admin']);
+        $admin = User::factory()->create();
+        $admin->assignRole('admin');
+
+        $content = PageContent::create([
+            'theme_key' => config('content.blade_scope', 'laravel_blade'),
+            'page' => 'global',
+            'section' => 'header',
+            'content_key' => 'brand_text',
+            'value' => 'Editable Brand Copy',
+            'input_type' => 'text',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('index'))
+            ->assertOk()
+            ->assertSee('Editable Brand Copy', false)
+            ->assertSee('editable-group', false)
+            ->assertSee(route('admin.content.edit.item', ['id' => $content->id]), false);
     }
 }
