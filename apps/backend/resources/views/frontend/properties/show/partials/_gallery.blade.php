@@ -1,6 +1,6 @@
 @php
     use App\Models\Property;
-    const CAROUSEL_CONVERSION = 'detail';
+    $carouselConversion = 'detail';
     
     $featuredImage = $property->getFirstMedia(Property::PRIMARY_MEDIA);
     $galleryPhotos = $property->gallery();
@@ -23,7 +23,7 @@
         @forelse ($allPhotos as $index => $media)
             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                 <img 
-                    src="{{ $media->getUrl(CAROUSEL_CONVERSION) }}" 
+                    src="{{ $media->getUrl($carouselConversion) }}"
                     class="d-block w-100 listing-header-img" 
                     alt="{{ $media->name }}"
                 >
@@ -31,7 +31,7 @@
         @empty
             <div class="carousel-item active">
                 <img 
-                    src="{{ $property->getImageUrl(conversion: CAROUSEL_CONVERSION) }}" 
+                    src="{{ $property->getImageUrl(conversion: $carouselConversion) }}"
                     class="d-block w-100 listing-header-img" 
                     alt="No photo available"
                 >

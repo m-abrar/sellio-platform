@@ -19,5 +19,5 @@
         </iframe>
     </div>
 @else
-    <p class="text-muted small">Location details are not available at this time.</p>
+    <p class="text-muted small">{{ __('Location details are not available at this time.') }}</p>
 @endif

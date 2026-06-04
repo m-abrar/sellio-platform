@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\Property;
+use App\Models\PropertyBooking;
 use App\Models\User;
 use App\Services\ContentService;
 use App\Services\HomeDataService;
@@ -111,12 +112,12 @@ class LaravelPublicStorefrontTest extends TestCase
 
     public function test_currency_helpers_and_listing_price_accessors_use_settings(): void
     {
-        Setting::set('currency_symbol', '€');
+        Setting::set('currency_symbol', 'USD ');
         Setting::set('currency_position', 'right');
         Cache::forget('settings_all');
 
-        $this->assertSame('1,234.50€', format_currency(1234.5));
-        $this->assertSame('1.2K€', format_currency_compact(1234.5));
+        $this->assertSame('1,234.50USD ', format_currency(1234.5));
+        $this->assertSame('1.2KUSD ', format_currency_compact(1234.5));
 
         $auto = new Auto([
             'base_price' => 24000,
@@ -125,8 +126,8 @@ class LaravelPublicStorefrontTest extends TestCase
         ]);
 
         $this->assertTrue($auto->on_sale);
-        $this->assertSame('21,000€', $auto->sale_price_formatted);
-        $this->assertSame('24,000€', $auto->base_price_formatted);
+        $this->assertSame('21,000USD ', $auto->sale_price_formatted);
+        $this->assertSame('24,000USD ', $auto->base_price_formatted);
         $this->assertSame('EV', $auto->fuel_badge_label);
 
         $property = new Property([
@@ -134,13 +135,112 @@ class LaravelPublicStorefrontTest extends TestCase
             'base_price' => 420000,
         ]);
 
-        $this->assertSame('420.0K€', $property->price_formatted_k);
+        $this->assertSame('420.0KUSD ', $property->price_formatted_k);
 
         $event = new Event([
             'base_price' => 75,
         ]);
 
-        $this->assertSame('75.00€', $event->price_formatted);
+        $this->assertSame('75.00USD ', $event->price_formatted);
+    }
+
+    public function test_property_sale_detail_page_renders_complete_shell(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $property = Property::factory()->create([
+            'title' => 'Completed Sale Property',
+            'is_sale' => true,
+            'is_rental' => false,
+            'base_price' => 350000,
+            'sale_price' => null,
+        ]);
+
+        $this->get(route('properties.show', $property->slug))
+            ->assertOk()
+            ->assertSee('detail-page--property-sale', false)
+            ->assertSee('Completed Sale Property', false)
+            ->assertSee(__('Schedule a Visit'), false)
+            ->assertSee(__('Your Dedicated Agent'), false);
+    }
+
+    public function test_property_rental_detail_page_renders_booking_widget_and_availability(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $property = Property::factory()->create([
+            'title' => 'Completed Rental Property',
+            'is_sale' => false,
+            'is_rental' => true,
+            'price_per_night' => 180,
+            'maximum_guests' => 4,
+            'minimum_rental_days' => 2,
+        ]);
+
+        PropertyBooking::factory()->create([
+            'property_id' => $property->id,
+            'user_id' => User::factory(),
+            'full_name' => 'Rental Guest',
+            'email' => 'guest@example.test',
+            'phone' => '5551234567',
+            'check_in_date' => now()->addDays(7)->toDateString(),
+            'check_out_date' => now()->addDays(10)->toDateString(),
+            'status' => 'confirmed',
+        ]);
+
+        $this->get(route('properties.show', $property->slug))
+            ->assertOk()
+            ->assertSee('detail-page--property-rental', false)
+            ->assertSee('Completed Rental Property', false)
+            ->assertSee(__('Secure Your Stay'), false)
+            ->assertSee(__('Availability'), false)
+            ->assertSee('name="guests"', false)
+            ->assertSee(__('Meet Your Host'), false);
+    }
+
+    public function test_property_default_detail_page_exists_for_unspecified_listing_type(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $property = Property::factory()->create([
+            'title' => 'Completed Default Property',
+            'is_sale' => false,
+            'is_rental' => false,
+        ]);
+
+        $this->get(route('properties.show', $property->slug))
+            ->assertOk()
+            ->assertSee('detail-page--property', false)
+            ->assertSee('Completed Default Property', false)
+            ->assertSee(__('Property Details'), false);
+    }
+
+    public function test_property_lodging_price_endpoint_returns_formatted_total(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Setting::set('currency_symbol', '$');
+        Setting::set('currency_position', 'left');
+        Cache::forget('settings_all');
+
+        $property = Property::factory()->create([
+            'is_sale' => false,
+            'is_rental' => true,
+            'price_per_night' => 125,
+        ]);
+
+        $this->getJson(route('properties.calculate-lodging-price', [
+            'property' => $property->id,
+            'check_in' => now()->addDays(2)->toDateString(),
+            'check_out' => now()->addDays(5)->toDateString(),
+            'guests' => 1,
+        ]))
+            ->assertOk()
+            ->assertJsonPath('total_nights', 3)
+            ->assertJsonPath('estimated_lodging_total', '375.00')
+            ->assertJsonPath('estimated_lodging_total_formatted', '$375.00');
     }
 
     public function test_pagination_translation_does_not_return_array_for_page_navigation_label(): void

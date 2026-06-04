@@ -171,7 +171,11 @@ class PropertyService
         return Property::where('slug', $slug)
             ->visibleTo($user)
             ->with([
-                'user' => fn($q) => $q->withCount(['properties' => fn($pq) => $pq->active()->where('is_sale', true)]),
+                'user' => fn($q) => $q
+                    ->withCount([
+                        'properties as active_properties_count' => fn($pq) => $pq->active(),
+                        'properties as sale_properties_count' => fn($pq) => $pq->active()->where('is_sale', true),
+                    ]),
                 'category', 'location', 'amenities', 'features',
                 'fees', 'addons', 'neighborhoods', 'scores', 'reviews.user', 'media'
             ])
@@ -224,9 +228,12 @@ class PropertyService
     {
         $checkIn = Carbon::parse($in);
         $checkOut = Carbon::parse($out);
+        $lodgingAmount = $this->calculateLodgingAmount($property, $checkIn, $checkOut);
+
         return [
             'total_nights' => $checkIn->diffInDays($checkOut, true),
-            'estimated_lodging_total' => number_format($this->calculateLodgingAmount($property, $checkIn, $checkOut), 2, '.', ''),
+            'estimated_lodging_total' => number_format($lodgingAmount, 2, '.', ''),
+            'estimated_lodging_total_formatted' => format_currency($lodgingAmount),
         ];
     }
 

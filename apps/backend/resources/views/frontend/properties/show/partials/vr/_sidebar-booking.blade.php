@@ -1,145 +1,111 @@
-{{-- This file is included on the main property detail page: properties.show --}}
-
 @php
-    // --- PHP FALLBACK & INITIALIZATION ---
     $nightlyRate = $property->price_per_night ?? 0;
-    $maxGuests = $property->maximum_guests ?? 1; // TODO
+    $maxGuests = max(1, (int) ($property->maximum_guests ?? 1));
     $isSessionData = isset($bookingData['check_in']);
-    
-    // If no session data, check_out is set to be the same as check_in (today).
-    $checkIn = $bookingData['check_in'] ?? now()->format('Y-m-d'); // TODO add 2 days
-    $checkOut = $bookingData['check_out'] ?? now()->format('Y-m-d'); // TODO add 5 days
-    $numGuests = $bookingData['guests'] ?? 2; // TODO
-    
+
+    $checkIn = $bookingData['check_in'] ?? now()->addDays(2)->format('Y-m-d');
+    $checkOut = $bookingData['check_out'] ?? now()->addDays(5)->format('Y-m-d');
+    $numGuests = min(max(1, (int) ($bookingData['guests'] ?? 1)), $maxGuests);
+
     try {
         $start = \Carbon\Carbon::parse($checkIn);
         $end = \Carbon\Carbon::parse($checkOut);
-        
-        // FIX #1: Use abs() to ensure $totalNights is never negative on initial load.
-        $totalNights = abs($end->diffInDays($start));
-        
-        // Ensure total nights is 0 if check-in and check-out are the same (initial load state)
-        if ($start->equalTo($end)) {
+
+        if ($start->gte($end)) {
             $totalNights = 0;
-        } elseif ($totalNights < 1) {
-            $totalNights = 1; 
+            $estimatedLodgingTotal = 0;
+        } else {
+            $totalNights = $start->diffInDays($end);
+            $estimatedLodgingTotal = app(\App\Services\PropertyService::class)->calculateLodgingAmount($property, $start, $end);
         }
-        
     } catch (\Exception $e) {
-        $totalNights = 0; // Set to 0 on any date parsing error
+        $totalNights = 0;
+        $estimatedLodgingTotal = 0;
     }
-    
-    // Total rental is 0 on initial load now, otherwise based on preloaded session dates.
-    $baseRental = $nightlyRate * $totalNights; 
-    $estimatedLodgingTotal = $baseRental;
 @endphp
 
-{{-- ----------------------------------------------------------------- --}}
-{{-- VR Booking Widget (STEP 0: CRITICAL CONVERSION POINT) --}}
-{{-- ----------------------------------------------------------------- --}}
 <div class="card glass-surface mb-4" id="booking-widget">
-
     <div class="card-header bg-primary text-white p-4 border-0">
-        <h4 class="fw-800 mb-0"><i class="bi-calendar-check-fill me-2"></i>Secure Your Stay</h4>
+        <h4 class="fw-800 mb-0"><i class="bi-calendar-check-fill me-2"></i>{{ __('Secure Your Stay') }}</h4>
     </div>
+
     <div class="card-body p-4">
-    
-    {{-- Nightly Rate Display --}}
-    <p class="h4 fw-bold mb-3">
-        {{ setting('currency_symbol', '$') }}{{ number_format($nightlyRate, 0) }}
-        <span class="small fw-normal text-muted"> / {{ __('average night') }}</span>
-    </p>
-    <div class="fw-bold text-center border w-100 p-2 rounded-3">{{ __('Select Check-in & Check-out Dates') }}</div>
+        <p class="h4 fw-bold mb-3">
+            {{ format_currency($nightlyRate, 0) }}
+            <span class="small fw-normal text-muted"> / {{ __('average night') }}</span>
+        </p>
 
-    <form action="{{ route('property.booking.start', $property->slug) }}" method="POST">
-        @csrf
-        
-        {{-- Dates Field (The Flatpickr Target) --}}
-        <div class="mb-4 text-center date-selection-container"> {{-- Added text-center and custom class --}}
-            
-            {{-- NEW: Container for the always-visible inline calendar --}}
-            <div id="inline_calendar_container" class="flatpickr-calendar-inline mb-3"></div>
+        <div class="fw-bold text-center border w-100 p-2 rounded-3">{{ __('Select Check-in & Check-out Dates') }}</div>
 
-            {{-- Hidden input for initial value and displaying selected range --}}
-            <input 
-                type="hidden" 
-                id="date_range_picker" 
-                class="form-control" 
-                placeholder="Check In - Check Out"
-                value="{{ 
-                    $isSessionData 
-                        ? $checkIn . ' to ' . $checkOut
-                        : ''
-                }}"
-                required
-            >
-            
-            {{-- HIDDEN INPUTS: These will be updated by the Flatpickr onChange event and submitted with the form --}}
-            <input type="hidden" name="check_in" value="{{ $checkIn }}" id="widget_check_in_val">
-            <input type="hidden" name="check_out" value="{{ $checkOut }}" id="widget_check_out_val">
-            
-            {{-- HIDDEN GUESTS INPUT: Keeping this hidden for form submission if needed by the backend. --}}
-            {{-- The value will always be $numGuests (the default/session value) as there's no UI to change it. --}}
-            <input type="hidden" name="guests" value="{{ $numGuests }}" id="guests">
-        </div>
+        <form action="{{ route('property.booking.start', $property->slug) }}" method="POST">
+            @csrf
 
-        {{-- Removed Guest Selection Field --}}
-        
-        {{-- Price Summary --}}
-        <ul class="list-group list-group-flush small mb-4">
-            
-            {{-- Total Nights line --}}
-            <li class="list-group-item d-flex justify-content-between bg-transparent px-0 pt-0 pb-2 border-0">
-                <span class="fw-semibold">{{ __('Your Stay Duration:') }}</span>
-                <span class="fw-bold text-end">
-                    <span id="total_nights_span">{{ $totalNights }}</span>
-                    <span id="nights_word_span"> {{ __('Night') }}{{ $totalNights !== 1 ? 's' : '' }}</span>
-                </span>
-            </li>
-            
-            {{-- Lodging Total (Bottom line) --}}
-            <li class="list-group-item d-flex justify-content-between bg-transparent px-0 pt-3 border-top">
-                <span class="fw-bold h5 mb-0 text-primary-color">{{ __('Lodging Total:') }} <small class="text-muted"> {{ __('estimated') }} </small></span>
-                <span class="fw-bold h5 text-primary-color mb-0" id="estimated_lodging_total">{{ setting('currency_symbol', '$') }}{{ number_format($estimatedLodgingTotal, 2) }}</span>
-            </li>
-        </ul>
+            <div class="mb-4 text-center date-selection-container">
+                <div id="inline_calendar_container" class="flatpickr-calendar-inline mb-3"></div>
 
-        {{-- Book Button --}}
-        <div class="d-grid">
-            <button type="submit" class="btn btn-lg fw-bold text-white btn-primary-theme">
-                {{ __('Continue Booking') }} <i class="bi bi-arrow-right-short ms-2"></i>
-            </button>
-        </div>
-        <p class="text-center small text-muted mt-2">Taxes and final fees are calculated on the next page.</p>
-    </form>
+                <input
+                    type="hidden"
+                    id="date_range_picker"
+                    class="form-control"
+                    placeholder="{{ __('Check In - Check Out') }}"
+                    value="{{ $isSessionData ? $checkIn . ' to ' . $checkOut : '' }}"
+                    required
+                >
+
+                <input type="hidden" name="check_in" value="{{ $checkIn }}" id="widget_check_in_val">
+                <input type="hidden" name="check_out" value="{{ $checkOut }}" id="widget_check_out_val">
+            </div>
+
+            <div class="mb-4">
+                <label for="guests" class="form-label small fw-semibold">{{ __('Guests') }}</label>
+                <select id="guests" name="guests" class="form-select">
+                    @for($guest = 1; $guest <= $maxGuests; $guest++)
+                        <option value="{{ $guest }}" @selected($guest === $numGuests)>
+                            {{ trans_choice(':count guest|:count guests', $guest, ['count' => $guest]) }}
+                        </option>
+                    @endfor
+                </select>
+            </div>
+
+            <ul class="list-group list-group-flush small mb-4">
+                <li class="list-group-item d-flex justify-content-between bg-transparent px-0 pt-0 pb-2 border-0">
+                    <span class="fw-semibold">{{ __('Your Stay Duration:') }}</span>
+                    <span class="fw-bold text-end">
+                        <span id="total_nights_span">{{ $totalNights }}</span>
+                        <span id="nights_word_span"> {{ trans_choice('Night|Nights', $totalNights) }}</span>
+                    </span>
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between bg-transparent px-0 pt-3 border-top">
+                    <span class="fw-bold h5 mb-0 text-primary-color">{{ __('Lodging Total:') }} <small class="text-muted"> {{ __('estimated') }} </small></span>
+                    <span class="fw-bold h5 text-primary-color mb-0" id="estimated_lodging_total">{{ format_currency($estimatedLodgingTotal) }}</span>
+                </li>
+            </ul>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-lg fw-bold text-white btn-primary-theme">
+                    {{ __('Continue Booking') }} <i class="bi bi-arrow-right-short ms-2"></i>
+                </button>
+            </div>
+
+            <p class="text-center small text-muted mt-2">{{ __('Taxes and final fees are calculated on the next page.') }}</p>
+        </form>
+    </div>
 </div>
-</div>
-
-
-{{-- ----------------------------------------------------------------- --}}
-{{-- ASSETS AND JAVASCRIPT --}}
-{{-- ----------------------------------------------------------------- --}}
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <style>
-        /* ----------------------------------------------------------------- */
-        /* FLATICKR CUSTOM THEME STYLES - LOCAL VARIABLE OVERRIDE for #00A896 */
-        /* ----------------------------------------------------------------- */
         :root {
-            /* OVERRIDING GLOBAL THEME VARIABLES TO MATCH #00A896 (Teal) */
             --primary-color: #00A896;
-            --primary-dark: #00998a; 
+            --primary-dark: #00998a;
             --primary-light: #ccf2ef;
-
-            /* Using your original theme variables for other required styles */
             --text-dark: #1f2937;
             --bg-glass-heavy: rgba(255, 255, 255, 0.9);
             --border-color: rgba(255, 255, 255, 0.5);
             --card-radius: 20px;
         }
-        
     </style>
 @endpush
 
@@ -147,82 +113,64 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
     $(document).ready(function() {
-        // --- Element Variables ---
         const $inlineCalendarContainer = $('#inline_calendar_container');
         const $checkInHidden = $('#widget_check_in_val');
         const $checkOutHidden = $('#widget_check_out_val');
-        // Removed reference to $guestsDropdown as it's no longer in the HTML
+        const $guestsDropdown = $('#guests');
 
-        // --- AJAX Function for Real-Time Price Update (GET Request) ---
         function updatePrice() {
             const checkIn = $checkInHidden.val();
             const checkOut = $checkOutHidden.val();
 
-            // Only update if a range has been selected
             if (!checkIn || !checkOut || checkIn === checkOut) {
-                return; 
+                return;
             }
-            
+
             $('#estimated_lodging_total').text('...');
 
             $.ajax({
                 url: "{{ route('properties.calculate-lodging-price', $property) }}",
-                method: 'GET', 
+                method: 'GET',
                 data: {
                     check_in: checkIn,
                     check_out: checkOut,
-                    // Pass current default/session guest count to backend
-                    guests: $('#guests').val(), 
+                    guests: $guestsDropdown.val(),
                 },
                 success: function(response) {
                     $('#total_nights_span').text(response.total_nights);
-                    $('#estimated_lodging_total').text('$' + response.estimated_lodging_total);
-                    
-                    let nightsWord = response.total_nights === 1 ? ' Night' : ' Nights'; 
-                    $('#nights_word_span').text(nightsWord);
-
+                    $('#estimated_lodging_total').text(response.estimated_lodging_total_formatted || response.estimated_lodging_total);
+                    $('#nights_word_span').text(response.total_nights === 1 ? ' {{ __('Night') }}' : ' {{ __('Nights') }}');
                 },
                 error: function(xhr) {
-                    console.error("Price calculation failed:", xhr.responseText);
-                    $('#estimated_lodging_total').text('Error');
+                    console.error('Price calculation failed:', xhr.responseText);
+                    $('#estimated_lodging_total').text('{{ __('Unavailable') }}');
                 }
             });
         }
 
-        // -----------------------------------------------------------------
-        // --- Flatpickr Initialization ---
-        // -----------------------------------------------------------------
-        
         flatpickr($inlineCalendarContainer, {
             mode: 'range',
             dateFormat: 'Y-m-d',
             inline: true,
             minDate: 'today',
             defaultDate: $('#date_range_picker').val(),
-            
+
             onChange: function(selectedDates, dateStr, instance) {
                 if (selectedDates.length === 2) {
                     selectedDates.sort((a, b) => a - b);
-                    
-                    const checkInDate = instance.formatDate(selectedDates[0], 'Y-m-d');
-                    const checkOutDate = instance.formatDate(selectedDates[1], 'Y-m-d');
-                    
-                    $checkInHidden.val(checkInDate);
-                    $checkOutHidden.val(checkOutDate);
-                    
-                    updatePrice(); 
+
+                    $checkInHidden.val(instance.formatDate(selectedDates[0], 'Y-m-d'));
+                    $checkOutHidden.val(instance.formatDate(selectedDates[1], 'Y-m-d'));
+
+                    updatePrice();
                 } else if (selectedDates.length === 1) {
                     $checkOutHidden.val('');
                 }
             }
         });
 
-        // Removed Guest Change Handler
-        // $guestsDropdown.on('change', function() { /* ... */ });
+        $guestsDropdown.on('change', updatePrice);
 
-        // -----------------------------------------------------------------
-        // --- Initial Price Load ---
-        // -----------------------------------------------------------------
         if ($checkInHidden.val() && $checkOutHidden.val() && $checkInHidden.val() !== $checkOutHidden.val()) {
             updatePrice();
         }

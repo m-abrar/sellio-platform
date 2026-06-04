@@ -31,11 +31,7 @@
             <div class="position-absolute bottom-0 start-0 m-3">
                 <div class="price-overlay bg-dark bg-opacity-75 backdrop-blur text-white rounded-pill border border-white border-opacity-25 px-3 py-1 shadow-sm">
                     <span class="price-text-sm fw-800">
-                        @if($property->is_sale)
-                            {{ setting_string('currency_symbol', '$') }}{{ number_format($property->sale_price ?? $property->base_price) }}
-                        @else
-                            {{ setting_string('currency_symbol', '$') }}{{ number_format($property->price_per_night) }}<small class="opacity-75">/{{ __('night') }}</small>
-                        @endif
+                        {{ $property->price_formatted_k ?? __('Price on request') }}
                     </span>
                 </div>
             </div>
