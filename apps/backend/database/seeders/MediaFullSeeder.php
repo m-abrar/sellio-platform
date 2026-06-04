@@ -158,6 +158,10 @@ class MediaFullSeeder extends Seeder
                 // Iterate through each chunk of database records.
                 foreach ($records as $record) {
                     
+                    if ($record->hasMedia($primaryCollection)) {
+                        continue;
+                    }
+
                     // --- Find Specific Primary Image Path (Priority 1 & 2) ---
                     $specificImagePath = null;
                     $foundFile = null;
