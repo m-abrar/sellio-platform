@@ -37,18 +37,16 @@
             <span class="small fw-normal text-muted"> / {{ __('average night') }}</span>
         </p>
 
-        <div class="fw-bold text-center border w-100 p-2 rounded-3">{{ __('Select Check-in & Check-out Dates') }}</div>
-
         <form action="{{ route('property.booking.start', $property->slug) }}" method="POST">
             @csrf
 
-            <div class="mb-4 text-center date-selection-container">
-                <div id="inline_calendar_container" class="flatpickr-calendar-inline mb-3"></div>
+            <div class="mb-4 date-selection-container">
+                <label for="date_range_picker" class="form-label small fw-semibold">{{ __('Check-in & Check-out Dates') }}</label>
 
                 <input
                     type="text"
                     id="date_range_picker"
-                    class="visually-hidden"
+                    class="form-control text-center fw-bold bg-white mb-3"
                     placeholder="{{ __('Check In - Check Out') }}"
                     value="{{ $checkIn . ' to ' . $checkOut }}"
                     aria-label="{{ __('Check In - Check Out') }}"
@@ -58,6 +56,7 @@
 
                 <input type="hidden" name="check_in" value="{{ $checkIn }}" id="widget_check_in_val">
                 <input type="hidden" name="check_out" value="{{ $checkOut }}" id="widget_check_out_val">
+                <div id="inline_calendar_container" class="flatpickr-calendar-inline"></div>
             </div>
 
             <div class="mb-4">
