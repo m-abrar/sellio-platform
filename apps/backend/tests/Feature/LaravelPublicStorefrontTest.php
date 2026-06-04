@@ -161,6 +161,8 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertOk()
             ->assertSee('detail-page--property-sale', false)
             ->assertSee('Completed Sale Property', false)
+            ->assertSee('images/fallbacks/default-detail.jpg', false)
+            ->assertSee('1 Photo', false)
             ->assertSee(__('Schedule a Visit'), false)
             ->assertSee(__('Your Dedicated Agent'), false);
     }
@@ -197,6 +199,9 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertSee(__('Secure Your Stay'), false)
             ->assertSee(__('Availability'), false)
             ->assertSee('name="guests"', false)
+            ->assertSee('disable: bookedDateRanges', false)
+            ->assertSee('"from":"' . now()->addDays(7)->toDateString() . '"', false)
+            ->assertSee('"to":"' . now()->addDays(9)->toDateString() . '"', false)
             ->assertSee(__('Meet Your Host'), false);
     }
 

@@ -22,6 +22,8 @@
         $totalNights = 0;
         $estimatedLodgingTotal = 0;
     }
+
+    $bookedDateRangesForPicker = ($bookedDateRanges ?? collect())->values();
 @endphp
 
 <div class="card glass-surface mb-4" id="booking-widget">
@@ -44,11 +46,13 @@
                 <div id="inline_calendar_container" class="flatpickr-calendar-inline mb-3"></div>
 
                 <input
-                    type="hidden"
+                    type="text"
                     id="date_range_picker"
-                    class="form-control"
+                    class="visually-hidden"
                     placeholder="{{ __('Check In - Check Out') }}"
-                    value="{{ $isSessionData ? $checkIn . ' to ' . $checkOut : '' }}"
+                    value="{{ $checkIn . ' to ' . $checkOut }}"
+                    aria-label="{{ __('Check In - Check Out') }}"
+                    readonly
                     required
                 >
 
@@ -113,10 +117,12 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
     $(document).ready(function() {
-        const $inlineCalendarContainer = $('#inline_calendar_container');
+        const inlineCalendarContainer = document.getElementById('inline_calendar_container');
+        const dateRangeInput = document.getElementById('date_range_picker');
         const $checkInHidden = $('#widget_check_in_val');
         const $checkOutHidden = $('#widget_check_out_val');
         const $guestsDropdown = $('#guests');
+        const bookedDateRanges = @json($bookedDateRangesForPicker);
 
         function updatePrice() {
             const checkIn = $checkInHidden.val();
@@ -148,12 +154,14 @@
             });
         }
 
-        flatpickr($inlineCalendarContainer, {
+        flatpickr(dateRangeInput, {
             mode: 'range',
             dateFormat: 'Y-m-d',
             inline: true,
+            appendTo: inlineCalendarContainer,
             minDate: 'today',
-            defaultDate: $('#date_range_picker').val(),
+            defaultDate: [$checkInHidden.val(), $checkOutHidden.val()],
+            disable: bookedDateRanges,
 
             onChange: function(selectedDates, dateStr, instance) {
                 if (selectedDates.length === 2) {

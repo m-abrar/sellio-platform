@@ -15,25 +15,33 @@
     $allPhotos = $allPhotos->merge($filteredGallery);
 
     $totalPhotos = $allPhotos->count();
+    $displayPhotoCount = max(1, $totalPhotos);
 
 @endphp
 
 <div id="propertyGallery" class="carousel slide listing-header-carousel" data-bs-ride="carousel">
     <div class="carousel-inner">
         @forelse ($allPhotos as $index => $media)
+            @php
+                $imageUrl = method_exists($media, 'hasGeneratedConversion') && $media->hasGeneratedConversion($carouselConversion)
+                    ? $media->getUrl($carouselConversion)
+                    : $media->getUrl();
+            @endphp
             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                <img 
-                    src="{{ $media->getUrl($carouselConversion) }}"
-                    class="d-block w-100 listing-header-img" 
-                    alt="{{ $media->name }}"
+                <img
+                    src="{{ $imageUrl }}"
+                    class="d-block w-100 listing-header-img"
+                    alt="{{ $media->name ?: $property->title }}"
+                    loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
                 >
             </div>
         @empty
             <div class="carousel-item active">
-                <img 
+                <img
                     src="{{ $property->getImageUrl(conversion: $carouselConversion) }}"
-                    class="d-block w-100 listing-header-img" 
-                    alt="No photo available"
+                    class="d-block w-100 listing-header-img"
+                    alt="{{ __('No photo available for :title', ['title' => $property->title]) }}"
+                    loading="eager"
                 >
             </div>
         @endforelse
@@ -51,6 +59,6 @@
     @endif
     
     <span class="badge position-absolute top-0 end-0 m-3 text-white fw-bold bg-dark-glass z-10">
-        <i class="bi bi-images me-1"></i> {{ $totalPhotos }} {{ __('Photos') }}
+        <i class="bi bi-images me-1"></i> {{ trans_choice(':count Photo|:count Photos', $displayPhotoCount, ['count' => $displayPhotoCount]) }}
     </span>
 </div>

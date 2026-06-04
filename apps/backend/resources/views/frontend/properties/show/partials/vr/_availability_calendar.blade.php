@@ -2,7 +2,7 @@
     <div>
         <h4 class="fw-bold mb-1"><i class="bi bi-calendar-range me-2"></i>{{ __('Availability') }}</h4>
         <p class="small text-muted mb-0">
-            {{ __('Select available dates in the booking panel. Existing confirmed or pending stays are blocked below.') }}
+            {{ __('Select available dates in the booking panel. Confirmed and pending stays are blocked in the date picker.') }}
         </p>
     </div>
 

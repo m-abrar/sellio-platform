@@ -191,6 +191,8 @@ class PropertyService
     public function getPropertyDetailsData(Property $property): array
     {
         $bookings = collect();
+        $bookedDateRanges = collect();
+
         if ($property->is_rental) {
             $statusColors = ['confirmed' => '#ef4444', 'pending' => '#fde68a'];
             
@@ -207,11 +209,19 @@ class PropertyService
                     'end'   => Carbon::parse($b->check_out_date)->subDay()->toDateString(),
                     'color' => $statusColors[$b->status] ?? '#e5e7eb',
                 ]);
+
+            $bookedDateRanges = $bookings
+                ->map(fn(array $booking) => [
+                    'from' => $booking['start'],
+                    'to' => $booking['end'],
+                ])
+                ->values();
         }
 
         return [
             'property'          => $property,
             'bookings'          => $bookings,
+            'bookedDateRanges'  => $bookedDateRanges,
             'relatedProperties' => $this->getRelatedProperties($property),
         ];
     }
