@@ -10,6 +10,8 @@
         'addons' => $property->addons,
         'oldAddons' => old('add_ons', []),
         'guestCount' => old('guests', $bookingData['guests'] ?? 1),
+        'currencySymbol' => setting_string('currency_symbol', '$'),
+        'currencyPosition' => setting_string('currency_position', 'left'),
     ];
 @endphp
 
@@ -19,33 +21,15 @@
     <form action="{{ route('property.booking.store', $property->slug) }}" method="POST" class="needs-validation" novalidate>
         @csrf 
         <input type="hidden" name="property_id" value="{{ $property->id }}">
-        
-        {{-- 1. Header Section --}}
-        <div class="page-title-section mb-4 mb-lg-5 text-center">
-            <span class="metric-label mx-auto">{{ __('Secure Reservation') }}</span>
-            <h1 class="fw-800 mb-2 tracking-tight text-dark display-6">
-                {{ __('Vacation Booking') }}: <span class="text-primary-color">{{ __('Step 1 of 3') }}</span>
-            </h1>
-            <p class="text-muted mb-0 fs-6 mx-auto" style="max-width: 600px;">
-                {{ __('Confirm your stay details and customize your experience with premium add-ons.') }}
-            </p>
-        </div>
 
-        {{-- 2. Stepper --}}
-        <div class="stepper mx-auto mb-5" style="max-width: 750px;">
-            <div class="step active">
-                <div class="step-icon shadow-sm">1</div>
-                <div class="step-label fw-800 text-primary-color uppercase tracking-wider small">{{ __('Details') }}</div>
-            </div>
-            <div class="step">
-                <div class="step-icon">2</div>
-                <div class="step-label fw-bold text-muted uppercase tracking-wider small">{{ __('Payment') }}</div>
-            </div>
-            <div class="step">
-                <div class="step-icon">3</div>
-                <div class="step-label fw-bold text-muted uppercase tracking-wider small">{{ __('Confirm') }}</div>
-            </div>
-        </div>
+        @include('frontend.properties.booking._partials._booking-header', [
+            'eyebrow' => __('Secure Reservation'),
+            'title' => __('Vacation Booking'),
+            'step' => 1,
+            'subtitle' => __('Confirm your stay details and customize your experience with premium add-ons.'),
+        ])
+
+        @include('frontend.properties.booking._partials._booking-stepper', ['step' => 1])
         
         <div class="row g-4">
             {{-- Left Column: Forms --}}
@@ -120,7 +104,7 @@
                                             </div>
                                             <p class="small text-muted mb-0 text-truncate" style="max-width: 250px;">{{ $addon['description'] }}</p>
                                             <div class="fw-800 text-primary-color small">
-                                                ${{ number_format($addon['price'], 2) }} 
+                                                {{ format_currency($addon['price']) }}
                                                 <span class="text-muted fw-normal">/ {{ $addon['type'] == 'per_night' ? __('night') : __('stay') }}</span>
                                             </div>
                                         </div>
@@ -198,7 +182,7 @@
                             @foreach($bookingData['lines'] as $line)
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted small fw-600">{{ $line['title'] }}</span>
-                                    <span class="fw-800 text-dark small">${{ number_format($line['amount'], 2) }}</span>
+                                    <span class="fw-800 text-dark small">{{ format_currency($line['amount']) }}</span>
                                 </div>
                             @endforeach
 
@@ -286,7 +270,10 @@
             },
 
             formatCurrency(val) {
-                return '$' + val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const formatted = val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return bookingFormConfig.currencyPosition === 'right'
+                    ? `${formatted}${bookingFormConfig.currencySymbol}`
+                    : `${bookingFormConfig.currencySymbol}${formatted}`;
             }
         }));
         };

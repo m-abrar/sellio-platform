@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -164,7 +165,15 @@ class PropertyBookingController extends Controller
     public function payment(Property $property, PropertyBooking $booking): View
     {
         $this->authorizeBooking($property, $booking);
-        return view('frontend.properties.booking.payment', compact('property', 'booking'));
+
+        return view('frontend.properties.booking.payment', [
+            'property' => $property,
+            'booking' => $booking,
+            'nights' => $booking->duration_nights,
+            'addonLines' => $booking->transactionLines()
+                ->where('description', 'LIKE', 'Add-on:%')
+                ->get(),
+        ]);
     }
 
     /**
@@ -177,7 +186,25 @@ class PropertyBookingController extends Controller
     public function show(Property $property, PropertyBooking $booking): View
     {
         $this->authorizeBooking($property, $booking);
-        return view('frontend.properties.booking.confirmation', compact('property', 'booking'));
+
+        $isPaid = in_array($booking->status, [
+            PropertyBooking::STATUS_CONFIRMED,
+            PropertyBooking::STATUS_COMPLETED,
+            'paid',
+        ], true);
+
+        return view('frontend.properties.booking.confirmation', [
+            'property' => $property,
+            'booking' => $booking,
+            'nights' => $booking->duration_nights,
+            'isPaid' => $isPaid,
+            'statusText' => $isPaid ? __('Booking Confirmed!') : __('Action Required: Payment Pending'),
+            'statusColorClass' => $isPaid ? 'text-success' : 'text-warning',
+            'statusIcon' => $isPaid ? 'bi-check-circle-fill' : 'bi-exclamation-circle-fill',
+            'buyerBookingsUrl' => Route::has('dashboard.user.bookings.index')
+                ? route('dashboard.user.bookings.index')
+                : url('/buyer/bookings'),
+        ]);
     }
 
     /**

@@ -433,4 +433,131 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertSee('editable-group', false)
             ->assertSee(route('admin.content.edit.item', ['id' => $content->id]), false);
     }
+
+    public function test_property_booking_checkout_renders_step_one_of_three(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $property = Property::factory()->create([
+            'title' => 'Step One Rental',
+            'is_sale' => false,
+            'is_rental' => true,
+            'price_per_night' => 150,
+            'maximum_guests' => 4,
+        ]);
+
+        $checkIn = now()->addDays(3)->toDateString();
+        $checkOut = now()->addDays(6)->toDateString();
+
+        $this->get(route('property.booking.checkout', [
+            'property' => $property->slug,
+            'start_date' => $checkIn,
+            'end_date' => $checkOut,
+            'guests' => 2,
+        ]))
+            ->assertOk()
+            ->assertSee('page-shell--property-booking', false)
+            ->assertSee(__('Step :step of 3', ['step' => 1]), false)
+            ->assertSee(__('Stay Overview'), false)
+            ->assertSee(__('Continue to Payment'), false)
+            ->assertSee('Step One Rental', false);
+    }
+
+    public function test_property_booking_payment_renders_step_two_for_booking_owner(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $user = User::factory()->create();
+        $property = Property::factory()->create([
+            'is_sale' => false,
+            'is_rental' => true,
+            'price_per_night' => 200,
+        ]);
+
+        $booking = PropertyBooking::factory()
+            ->forDateRange(now()->addDays(5), now()->addDays(8), 200)
+            ->pending()
+            ->create([
+                'property_id' => $property->id,
+                'user_id' => $user->id,
+                'guests' => 2,
+            ]);
+
+        $this->actingAs($user)
+            ->get(route('property.booking.payment', [
+                'property' => $property->slug,
+                'booking' => $booking->id,
+            ]))
+            ->assertOk()
+            ->assertSee(__('Step :step of 3', ['step' => 2]), false)
+            ->assertSee(__('Secure Payment'), false)
+            ->assertSee(__('Review Booking'), false)
+            ->assertSee(__('Complete Payment'), false);
+    }
+
+    public function test_property_booking_confirmation_renders_step_three_for_booking_owner(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $user = User::factory()->create();
+        $property = Property::factory()->create([
+            'title' => 'Confirmed Stay Property',
+            'is_sale' => false,
+            'is_rental' => true,
+            'price_per_night' => 175,
+        ]);
+
+        $booking = PropertyBooking::factory()
+            ->forDateRange(now()->addDays(10), now()->addDays(13), 175)
+            ->confirmed()
+            ->create([
+                'property_id' => $property->id,
+                'user_id' => $user->id,
+                'guests' => 3,
+                'full_name' => 'Confirmed Guest',
+            ]);
+
+        $this->actingAs($user)
+            ->get(route('property.booking.confirmation', [
+                'property' => $property->slug,
+                'booking' => $booking->id,
+            ]))
+            ->assertOk()
+            ->assertSee(__('Step :step of 3', ['step' => 3]), false)
+            ->assertSee(__('Booking Confirmation'), false)
+            ->assertSee(__('Booking Confirmed!'), false)
+            ->assertSee('Confirmed Stay Property', false)
+            ->assertSee('Confirmed Guest', false);
+    }
+
+    public function test_property_booking_payment_is_forbidden_for_other_users(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $owner = User::factory()->create();
+        $stranger = User::factory()->create();
+        $property = Property::factory()->create([
+            'is_sale' => false,
+            'is_rental' => true,
+        ]);
+
+        $booking = PropertyBooking::factory()
+            ->forDateRange(now()->addDays(4), now()->addDays(7))
+            ->pending()
+            ->create([
+                'property_id' => $property->id,
+                'user_id' => $owner->id,
+            ]);
+
+        $this->actingAs($stranger)
+            ->get(route('property.booking.payment', [
+                'property' => $property->slug,
+                'booking' => $booking->id,
+            ]))
+            ->assertForbidden();
+    }
 }
