@@ -43,20 +43,11 @@
             <div class="mb-4 date-selection-container">
                 <label for="date_range_picker" class="form-label small fw-semibold">{{ __('Check-in & Check-out Dates') }}</label>
 
-                <input
-                    type="text"
-                    id="date_range_picker"
-                    class="visually-hidden"
-                    placeholder="{{ __('Check In - Check Out') }}"
-                    value="{{ $checkIn . ' to ' . $checkOut }}"
-                    aria-label="{{ __('Check In - Check Out') }}"
-                    readonly
-                    required
-                >
+                <input type="text" id="date_range_picker" class="visually-hidden" value="{{ $checkIn . ' to ' . $checkOut }}" aria-label="{{ __('Check In - Check Out') }}" readonly required>
 
                 <input type="hidden" name="check_in" value="{{ $checkIn }}" id="widget_check_in_val">
                 <input type="hidden" name="check_out" value="{{ $checkOut }}" id="widget_check_out_val">
-                <div id="inline_calendar_container" class="flatpickr-calendar-inline"></div>
+                <div id="inline_calendar_container" class="booking-inline-calendar"></div>
                 <div class="selected-date-range small fw-semibold text-center text-muted border rounded-3 py-2 px-3 mt-3">
                     <i class="bi bi-calendar-range me-1"></i>
                     <span id="selected_date_range_text">{{ $checkIn }} - {{ $checkOut }}</span>
@@ -101,25 +92,36 @@
 </div>
 
 @push('styles')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
     <style>
-        :root {
-            --primary-color: #00A896;
-            --primary-dark: #00998a;
-            --primary-light: #ccf2ef;
-            --text-dark: #1f2937;
-            --bg-glass-heavy: rgba(255, 255, 255, 0.9);
-            --border-color: rgba(255, 255, 255, 0.5);
-            --card-radius: 20px;
+        #booking-widget {
+            overflow: hidden;
+            border: 0;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+        }
+
+        #booking-widget .card-header {
+            background: linear-gradient(135deg, var(--bs-primary, #0d6efd), #5f55d9) !important;
+        }
+
+        #booking-widget .date-selection-container {
+            background: linear-gradient(180deg, rgba(248, 250, 252, 0.95), rgba(255, 255, 255, 0.98));
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 18px;
+            padding: 14px;
+        }
+
+        #booking-widget .booking-inline-calendar {
+            display: block !important;
+            overflow: hidden;
         }
 
         #booking-widget .flatpickr-calendar.inline {
             width: 100%;
             max-width: 100%;
             box-shadow: none;
-            border: 1px solid rgba(15, 23, 42, 0.08);
+            border: 0;
             border-radius: 16px;
+            background: transparent;
         }
 
         #booking-widget .flatpickr-calendar .dayContainer,
@@ -129,30 +131,149 @@
             max-width: 100%;
         }
 
+        #booking-widget .flatpickr-months {
+            align-items: center;
+            padding: 0 4px 8px;
+        }
+
+        #booking-widget .flatpickr-month,
+        #booking-widget .flatpickr-current-month {
+            height: 42px;
+        }
+
+        #booking-widget .flatpickr-current-month {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0;
+            left: 12.5%;
+            width: 75%;
+            font-size: 1rem;
+        }
+
+        #booking-widget .flatpickr-current-month .flatpickr-monthDropdown-months,
+        #booking-widget .flatpickr-current-month input.cur-year {
+            font-weight: 800;
+            color: #334155;
+        }
+
+        #booking-widget .flatpickr-current-month .flatpickr-monthDropdown-months {
+            border-radius: 999px;
+            padding: 4px 24px 4px 10px;
+        }
+
+        #booking-widget .flatpickr-weekdays {
+            margin-bottom: 4px;
+        }
+
+        #booking-widget span.flatpickr-weekday {
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+
         #booking-widget .flatpickr-day {
+            height: 34px;
+            line-height: 34px;
             max-width: none;
-            border-radius: 10px;
+            border-radius: 12px;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        #booking-widget .flatpickr-day.selected,
+        #booking-widget .flatpickr-day.startRange,
+        #booking-widget .flatpickr-day.endRange {
+            background: linear-gradient(135deg, var(--bs-primary, #0d6efd), #5f55d9);
+            border-color: transparent;
+            box-shadow: 0 10px 22px rgba(13, 110, 253, 0.28);
+            color: #fff;
+        }
+
+        #booking-widget .flatpickr-day.inRange {
+            background: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.11);
+            border-color: transparent;
+            box-shadow: none;
+            color: #1d4ed8;
+        }
+
+        #booking-widget .flatpickr-day:hover:not(.selected):not(.startRange):not(.endRange):not(.flatpickr-disabled) {
+            background: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.09);
+            border-color: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.18);
+        }
+
+        #booking-widget .flatpickr-day.today:not(.selected):not(.startRange):not(.endRange) {
+            border-color: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.45);
+            color: var(--bs-primary, #0d6efd);
+        }
+
+        #booking-widget .flatpickr-day.flatpickr-disabled,
+        #booking-widget .flatpickr-day.prevMonthDay,
+        #booking-widget .flatpickr-day.nextMonthDay {
+            color: #cbd5e1;
+        }
+
+        #booking-widget .flatpickr-day.flatpickr-disabled {
+            background: repeating-linear-gradient(
+                135deg,
+                rgba(148, 163, 184, 0.08),
+                rgba(148, 163, 184, 0.08) 4px,
+                rgba(148, 163, 184, 0.15) 4px,
+                rgba(148, 163, 184, 0.15) 8px
+            );
+            text-decoration: line-through;
+        }
+
+        #booking-widget .selected-date-range {
+            background: #fff;
+            border-color: rgba(15, 23, 42, 0.08) !important;
+            color: #334155 !important;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+        }
+
+        #booking-widget .form-select {
+            border-radius: 14px;
+            border-color: rgba(15, 23, 42, 0.1);
+            min-height: 50px;
+        }
+
+        #booking-widget .btn-primary-theme {
+            border: 0;
+            border-radius: 14px;
+            box-shadow: 0 14px 30px rgba(13, 110, 253, 0.28);
+        }
+
+        #booking-widget .list-group-item {
+            color: #1f2937;
         }
     </style>
 @endpush
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-    $(document).ready(function() {
+    document.addEventListener('DOMContentLoaded', function() {
         const inlineCalendarContainer = document.getElementById('inline_calendar_container');
         const dateRangeInput = document.getElementById('date_range_picker');
-        const $checkInHidden = $('#widget_check_in_val');
-        const $checkOutHidden = $('#widget_check_out_val');
-        const $guestsDropdown = $('#guests');
+        const checkInHidden = document.getElementById('widget_check_in_val');
+        const checkOutHidden = document.getElementById('widget_check_out_val');
+        const guestsDropdown = document.getElementById('guests');
+        const selectedRangeText = document.getElementById('selected_date_range_text');
+        const totalNightsSpan = document.getElementById('total_nights_span');
+        const nightsWordSpan = document.getElementById('nights_word_span');
+        const estimatedTotal = document.getElementById('estimated_lodging_total');
         const bookedDateRanges = @json($bookedDateRangesForPicker);
 
+        if (!inlineCalendarContainer || !dateRangeInput || !checkInHidden || !checkOutHidden || !guestsDropdown) {
+            return;
+        }
+
         function syncSelectedRangeLabel(instance = null) {
-            const checkIn = $checkInHidden.val();
-            const checkOut = $checkOutHidden.val();
+            const checkIn = checkInHidden.value;
+            const checkOut = checkOutHidden.value;
 
             if (!checkIn || !checkOut) {
-                $('#selected_date_range_text').text('{{ __('Select your dates') }}');
+                selectedRangeText.textContent = '{{ __('Select your dates') }}';
                 return;
             }
 
@@ -161,78 +282,101 @@
                 const end = instance.parseDate(checkOut, 'Y-m-d');
 
                 if (start && end) {
-                    $('#selected_date_range_text').text(
-                        instance.formatDate(start, 'M j, Y') + ' - ' + instance.formatDate(end, 'M j, Y')
-                    );
+                    selectedRangeText.textContent = instance.formatDate(start, 'M j, Y') + ' - ' + instance.formatDate(end, 'M j, Y');
                     return;
                 }
             }
 
-            $('#selected_date_range_text').text(checkIn + ' - ' + checkOut);
+            selectedRangeText.textContent = checkIn + ' - ' + checkOut;
         }
 
         function updatePrice() {
-            const checkIn = $checkInHidden.val();
-            const checkOut = $checkOutHidden.val();
+            const checkIn = checkInHidden.value;
+            const checkOut = checkOutHidden.value;
 
             if (!checkIn || !checkOut || checkIn === checkOut) {
                 return;
             }
 
-            $('#estimated_lodging_total').text('...');
+            estimatedTotal.textContent = '...';
 
-            $.ajax({
-                url: "{{ route('properties.calculate-lodging-price', $property) }}",
-                method: 'GET',
-                data: {
-                    check_in: checkIn,
-                    check_out: checkOut,
-                    guests: $guestsDropdown.val(),
+            const params = new URLSearchParams({
+                check_in: checkIn,
+                check_out: checkOut,
+                guests: guestsDropdown.value,
+            });
+
+            fetch("{{ route('properties.calculate-lodging-price', $property) }}?" + params.toString())
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Price calculation failed');
+                    }
+
+                    return response.json();
+                })
+                .then((response) => {
+                    totalNightsSpan.textContent = response.total_nights;
+                    estimatedTotal.textContent = response.estimated_lodging_total_formatted || response.estimated_lodging_total;
+                    nightsWordSpan.textContent = response.total_nights === 1 ? ' {{ __('Night') }}' : ' {{ __('Nights') }}';
+                })
+                .catch((error) => {
+                    console.error(error);
+                    estimatedTotal.textContent = '{{ __('Unavailable') }}';
+                });
+        }
+
+        function showUnavailableMessage() {
+            const message = document.createElement('p');
+            message.className = 'text-muted small mb-0';
+            message.textContent = '{{ __('Date picker is unavailable. Please refresh the page.') }}';
+            inlineCalendarContainer.replaceChildren(message);
+        }
+
+        function initCalendar(attempt = 0) {
+            if (typeof window.flatpickr !== 'function') {
+                if (attempt < 20) {
+                    window.setTimeout(() => initCalendar(attempt + 1), 50);
+                    return;
+                }
+
+                showUnavailableMessage();
+                return;
+            }
+
+            window.flatpickr(dateRangeInput, {
+                mode: 'range',
+                dateFormat: 'Y-m-d',
+                inline: true,
+                appendTo: inlineCalendarContainer,
+                minDate: 'today',
+                defaultDate: [checkInHidden.value, checkOutHidden.value],
+                disable: bookedDateRanges,
+
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length === 2) {
+                        selectedDates.sort((a, b) => a - b);
+
+                        checkInHidden.value = instance.formatDate(selectedDates[0], 'Y-m-d');
+                        checkOutHidden.value = instance.formatDate(selectedDates[1], 'Y-m-d');
+
+                        syncSelectedRangeLabel(instance);
+                        updatePrice();
+                    } else if (selectedDates.length === 1) {
+                        checkOutHidden.value = '';
+                        syncSelectedRangeLabel(instance);
+                    }
                 },
-                success: function(response) {
-                    $('#total_nights_span').text(response.total_nights);
-                    $('#estimated_lodging_total').text(response.estimated_lodging_total_formatted || response.estimated_lodging_total);
-                    $('#nights_word_span').text(response.total_nights === 1 ? ' {{ __('Night') }}' : ' {{ __('Nights') }}');
-                },
-                error: function(xhr) {
-                    console.error('Price calculation failed:', xhr.responseText);
-                    $('#estimated_lodging_total').text('{{ __('Unavailable') }}');
+
+                onReady: function(selectedDates, dateStr, instance) {
+                    syncSelectedRangeLabel(instance);
                 }
             });
         }
 
-        flatpickr(dateRangeInput, {
-            mode: 'range',
-            dateFormat: 'Y-m-d',
-            inline: true,
-            appendTo: inlineCalendarContainer,
-            minDate: 'today',
-            defaultDate: [$checkInHidden.val(), $checkOutHidden.val()],
-            disable: bookedDateRanges,
+        guestsDropdown.addEventListener('change', updatePrice);
+        initCalendar();
 
-            onChange: function(selectedDates, dateStr, instance) {
-                if (selectedDates.length === 2) {
-                    selectedDates.sort((a, b) => a - b);
-
-                    $checkInHidden.val(instance.formatDate(selectedDates[0], 'Y-m-d'));
-                    $checkOutHidden.val(instance.formatDate(selectedDates[1], 'Y-m-d'));
-
-                    syncSelectedRangeLabel(instance);
-                    updatePrice();
-                } else if (selectedDates.length === 1) {
-                    $checkOutHidden.val('');
-                    syncSelectedRangeLabel(instance);
-                }
-            },
-
-            onReady: function(selectedDates, dateStr, instance) {
-                syncSelectedRangeLabel(instance);
-            }
-        });
-
-        $guestsDropdown.on('change', updatePrice);
-
-        if ($checkInHidden.val() && $checkOutHidden.val() && $checkInHidden.val() !== $checkOutHidden.val()) {
+        if (checkInHidden.value && checkOutHidden.value && checkInHidden.value !== checkOutHidden.value) {
             updatePrice();
         }
     });

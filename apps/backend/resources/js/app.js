@@ -1,5 +1,4 @@
 import './bootstrap';
-import './echo';
 
 // 1. Frameworks & Libraries
 import jQuery from 'jquery';
@@ -15,6 +14,10 @@ window.$ = window.jQuery = jQuery;
 window.Alpine = Alpine;
 window.AOS = AOS;
 window.flatpickr = flatpickr;
+
+import('./echo').catch((error) => {
+    console.warn('Realtime client was not initialized.', error);
+});
 
 /**
  * Optimized Global UI Logic

@@ -207,6 +207,7 @@ class PropertyService
                 ->map(fn($b) => [
                     'start' => Carbon::parse($b->check_in_date)->toDateString(),
                     'end'   => Carbon::parse($b->check_out_date)->subDay()->toDateString(),
+                    'status' => $b->status,
                     'color' => $statusColors[$b->status] ?? '#e5e7eb',
                 ]);
 

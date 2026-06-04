@@ -2,6 +2,9 @@
     /** * Stagger the AOS animations using the loop iteration
      */
     $delay = ($iteration ?? 1) * 100;
+    $isOnSale = $auto->on_sale ?? false;
+    $isFeatured = $auto->is_featured ?? false;
+    $fuelBadgeLabel = $auto->fuel_badge_label ?? null;
 @endphp
 
 <div class="col" data-aos="fade-up" data-aos-delay="{{ $delay }}">
@@ -19,19 +22,19 @@
             
             {{-- Badges --}}
             <div class="position-absolute top-0 end-0 m-2 m-md-3 d-flex flex-column gap-2">
-                @if($auto->on_sale)
+                @if($isOnSale)
                     <span class="badge bg-danger text-white rounded-pill px-2 px-md-3 py-1 py-md-2 shadow-sm fw-800 border border-white border-opacity-25">
                         {{ __('SALE') }}
                     </span>
-                @elseif($auto->is_featured)
+                @elseif($isFeatured)
                     <span class="badge bg-warning text-dark rounded-pill px-2 px-md-3 py-1 py-md-2 shadow-sm fw-800 border border-dark border-opacity-10">
                         {{ __('FEATURED') }}
                     </span>
                 @endif
 
-                @if($auto->fuel_badge_label)
+                @if($fuelBadgeLabel)
                     <span class="badge bg-info text-white rounded-pill px-2 px-md-3 py-1 py-md-2 shadow-sm fw-800">
-                        <i class="bi bi-lightning-fill me-1"></i>{{ __($auto->fuel_badge_label) }}
+                        <i class="bi bi-lightning-fill me-1"></i>{{ __($fuelBadgeLabel) }}
                     </span>
                 @endif
             </div>
@@ -40,11 +43,11 @@
             <div class="position-absolute bottom-0 start-0 m-2 m-md-3">
                 <div class="price-overlay bg-dark bg-opacity-75 backdrop-blur text-white rounded-pill border border-white border-opacity-25 px-2 px-md-3 py-1 py-md-2 shadow-sm">
                     <span class="fw-800 price-font">
-                        @if($auto->on_sale)
-                            <span class="text-warning">{{ $auto->sale_price_formatted }}</span>
-                            <small class="text-white text-decoration-line-through opacity-50 ms-1" style="font-size: 0.7rem;">{{ $auto->base_price_formatted }}</small>
+                        @if($isOnSale)
+                            <span class="text-warning">{{ $auto->sale_price_formatted ?? $auto->price_formatted ?? __('Price on request') }}</span>
+                            <small class="text-white text-decoration-line-through opacity-50 ms-1" style="font-size: 0.7rem;">{{ $auto->base_price_formatted ?? null }}</small>
                         @else
-                            {{ $auto->base_price_formatted ?? __('Price on request') }}
+                            {{ $auto->base_price_formatted ?? $auto->price_formatted ?? __('Price on request') }}
                         @endif
                     </span>
                 </div>

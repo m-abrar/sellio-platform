@@ -275,6 +275,8 @@ class HomeDataService
             $obj->price_formatted_k = $item->price_formatted_k ?? null;
             $obj->base_price        = $item->base_price ?? null;
             $obj->sale_price        = $item->sale_price ?? null;
+            $obj->base_price_formatted = $item->base_price_formatted ?? null;
+            $obj->sale_price_formatted = $item->sale_price_formatted ?? null;
             $obj->price_per_night   = $item->price_per_night ?? null;
 
             // Image attributes
@@ -307,6 +309,7 @@ class HomeDataService
             $obj->is_featured       = (bool) $item->is_featured;
             $obj->is_rental         = (bool) ($item->is_rental ?? false);
             $obj->is_sale           = (bool) ($item->is_sale ?? false);
+            $obj->on_sale           = (bool) ($item->on_sale ?? false);
             
             // Property specific
             $obj->number_of_bedrooms  = $item->number_of_bedrooms ?? 0;
@@ -324,6 +327,7 @@ class HomeDataService
             $obj->transmission        = $item->transmission ?? null;
             $obj->fuel_economy        = $item->fuel_economy ?? null;
             $obj->engine_type         = $item->engine_type ?? null;
+            $obj->fuel_badge_label    = $item->fuel_badge_label ?? null;
             
             // Event specific
             $obj->start_date_time     = $item->start_date_time; 
