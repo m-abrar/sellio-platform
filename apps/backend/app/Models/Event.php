@@ -254,7 +254,7 @@ class Event extends Model implements HasMedia
         return Attribute::make(
             get: function () {
                 $price = ($this->sale_price > 0) ? $this->sale_price : $this->base_price;
-                return ($price > 0) ? '$' . number_format($price, 2) : null;
+                return ($price > 0) ? format_currency($price) : null;
             }
         );
     }
@@ -270,15 +270,7 @@ class Event extends Model implements HasMedia
 
                 if ($price <= 0) return null;
 
-                if (abs($price) >= 1000000) {
-                    return '$' . number_format($price / 1000000, 1) . 'M';
-                }
-
-                if (abs($price) >= 1000) {
-                    return '$' . number_format($price / 1000, 1) . 'K';
-                }
-
-                return '$' . number_format($price, 2);
+                return format_currency_compact($price);
             }
         );
     }
@@ -301,4 +293,3 @@ class Event extends Model implements HasMedia
         );
     }
 }
-

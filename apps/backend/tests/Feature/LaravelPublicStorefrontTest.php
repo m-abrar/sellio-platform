@@ -4,8 +4,11 @@ namespace Tests\Feature;
 
 use App\Models\PageContent;
 use App\Models\Setting;
+use App\Models\Auto;
+use App\Models\Event;
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\Property;
 use App\Models\User;
 use App\Services\ContentService;
 use App\Services\HomeDataService;
@@ -104,6 +107,40 @@ class LaravelPublicStorefrontTest extends TestCase
         $this->assertSame('first', content_display(['first', 'second'], ''));
         $this->assertSame('Fallback', content_display(null, 'Fallback'));
         $this->assertSame('$', setting_string('currency_symbol', '$'));
+    }
+
+    public function test_currency_helpers_and_listing_price_accessors_use_settings(): void
+    {
+        Setting::set('currency_symbol', '€');
+        Setting::set('currency_position', 'right');
+        Cache::forget('settings_all');
+
+        $this->assertSame('1,234.50€', format_currency(1234.5));
+        $this->assertSame('1.2K€', format_currency_compact(1234.5));
+
+        $auto = new Auto([
+            'base_price' => 24000,
+            'sale_price' => 21000,
+            'engine_type' => 'electric',
+        ]);
+
+        $this->assertTrue($auto->on_sale);
+        $this->assertSame('21,000€', $auto->sale_price_formatted);
+        $this->assertSame('24,000€', $auto->base_price_formatted);
+        $this->assertSame('EV', $auto->fuel_badge_label);
+
+        $property = new Property([
+            'is_sale' => true,
+            'base_price' => 420000,
+        ]);
+
+        $this->assertSame('420.0K€', $property->price_formatted_k);
+
+        $event = new Event([
+            'base_price' => 75,
+        ]);
+
+        $this->assertSame('75.00€', $event->price_formatted);
     }
 
     public function test_pagination_translation_does_not_return_array_for_page_navigation_label(): void

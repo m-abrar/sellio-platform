@@ -11,7 +11,7 @@
             
             {{-- Badges - Restored Desktop Sizes, Smaller on Mobile --}}
             <div class="position-absolute top-0 end-0 m-2 m-md-3 d-flex flex-column gap-1">
-                @if(is_numeric($auto->sale_price) && $auto->sale_price > 0 && $auto->sale_price < $auto->base_price)
+                @if($auto->on_sale)
                     <span class="badge bg-danger text-white rounded-pill px-2 px-md-3 py-1 py-md-2 shadow-sm fw-800 border border-white border-opacity-25 auto-badge">
                         {{ __('SALE') }}
                     </span>
@@ -21,9 +21,9 @@
                     </span>
                 @endif
 
-                @if(isset($auto->engine_type) && strtolower($auto->engine_type) === 'electric')
+                @if($auto->fuel_badge_label)
                     <span class="badge bg-info text-white rounded-pill px-2 px-md-3 py-1 py-md-2 shadow-sm fw-800 auto-badge">
-                        <i class="bi bi-lightning-fill me-1"></i>EV
+                        <i class="bi bi-lightning-fill me-1"></i>{{ __($auto->fuel_badge_label) }}
                     </span>
                 @endif
             </div>
@@ -32,10 +32,10 @@
             <div class="position-absolute bottom-0 start-0 m-2 m-md-3">
                 <div class="price-overlay bg-dark bg-opacity-75 backdrop-blur text-white rounded-pill border border-white border-opacity-25 px-2 px-md-3 py-1 py-md-2 shadow-sm">
                     <span class="fw-800 price-font">
-                        @if($auto->sale_price > 0 && $auto->sale_price < $auto->base_price)
-                            <span class="text-warning">${{ number_format($auto->sale_price) }}</span>
+                        @if($auto->on_sale)
+                            <span class="text-warning">{{ $auto->sale_price_formatted }}</span>
                         @else
-                            ${{ number_format($auto->base_price) }}
+                            {{ $auto->base_price_formatted ?? __('Price on request') }}
                         @endif
                     </span>
                 </div>

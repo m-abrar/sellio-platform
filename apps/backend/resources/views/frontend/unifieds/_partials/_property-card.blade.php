@@ -15,27 +15,14 @@
                      loading="lazy">
             </div>
             
-            @php
-                $status = $property->is_rental ? 'RENTAL' : ($property->is_sale ? 'SALE' : 'NEW');
-                $statusColor = match($status) {
-                    'SALE'   => 'bg-danger text-white',
-                    'RENTAL' => 'bg-warning text-dark',
-                    default  => 'bg-primary text-white'
-                };
-            @endphp
-            
-            <span class="badge property-status-badge position-absolute top-0 end-0 m-3 rounded-pill shadow-sm fw-800 {{ $statusColor }}">
-                {{ __($status) }}
+            <span class="badge property-status-badge position-absolute top-0 end-0 m-3 rounded-pill shadow-sm fw-800 {{ $property->status_color }}">
+                {{ __($property->status_label) }}
             </span>
 
             <div class="position-absolute bottom-0 start-0 m-3">
                 <div class="price-overlay bg-dark bg-opacity-75 backdrop-blur text-white rounded-pill border border-white border-opacity-25 px-3 py-1 shadow-sm">
                     <span class="price-text-sm fw-800">
-                        @if($property->is_sale)
-                            ${{ number_format($property->sale_price ?? $property->base_price) }}
-                        @else
-                            ${{ number_format($property->price_per_night) }}<small class="opacity-75">/{{ __('night') }}</small>
-                        @endif
+                        {{ $property->price_formatted_k ?? __('Price on request') }}
                     </span>
                 </div>
             </div>

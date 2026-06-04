@@ -269,24 +269,28 @@ class Auto extends Model implements HasMedia
     {
         return Attribute::make(
             get: function () {
-                // 1. Determine active price (Sale takes priority over Base)
-                $price = ($this->sale_price > 0) ? $this->sale_price : $this->base_price;
+                $price = $this->on_sale ? $this->sale_price : $this->base_price;
                 
                 if (!$price || $price <= 0) {
                     return null;
                 }
 
-                // 2. Retrieve global settings
-                $symbol = setting('currency_symbol', '$');
-                $position = setting('currency_position', 'left'); // Options: 'left', 'right'
-                
-                $formattedValue = number_format($price, 2);
-
-                // 3. Return based on placement preference
-                return $position === 'left' 
-                    ? "{$symbol}{$formattedValue}" 
-                    : "{$formattedValue}{$symbol}";
+                return format_currency($price);
             }
+        )->shouldCache();
+    }
+
+    protected function basePriceFormatted(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->base_price > 0 ? format_currency($this->base_price, 0) : null
+        )->shouldCache();
+    }
+
+    protected function salePriceFormatted(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->sale_price > 0 ? format_currency($this->sale_price, 0) : null
         )->shouldCache();
     }
 
@@ -297,29 +301,26 @@ class Auto extends Model implements HasMedia
     {
         return Attribute::make(
             get: function () {
-                // 1. Determine the active price
-                $price = ($this->sale_price > 0) ? $this->sale_price : $this->base_price;
+                $price = $this->on_sale ? $this->sale_price : $this->base_price;
 
                 if ($price <= 0) return null;
 
-                // 2. Fetch global settings
-                $symbol = setting('currency_symbol', '$');
-                $position = setting('currency_position', 'left');
-
-                // 3. Calculate shorthand value
-                if (abs($price) >= 1000000) {
-                    $value = number_format($price / 1000000, 1) . 'M';
-                } elseif (abs($price) >= 1000) {
-                    $value = number_format($price / 1000, 1) . 'K';
-                } else {
-                    $value = number_format($price, 2);
-                }
-
-                // 4. Return with correct symbol positioning
-                return $position === 'left' 
-                    ? "{$symbol}{$value}" 
-                    : "{$value}{$symbol}";
+                return format_currency_compact($price);
             }
+        )->shouldCache();
+    }
+
+    protected function onSale(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->sale_price > 0 && $this->base_price > 0 && $this->sale_price < $this->base_price
+        )->shouldCache();
+    }
+
+    protected function fuelBadgeLabel(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => strtolower((string) $this->engine_type) === 'electric' ? 'EV' : null
         )->shouldCache();
     }
 

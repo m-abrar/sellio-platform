@@ -279,7 +279,7 @@ class Property extends Model implements HasMedia
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
                 if (!isset($attributes['hoa']) || is_null($attributes['hoa'])) return null;
-                return setting('currency_symbol', '$') . number_format($attributes['hoa'], 2) . ' / month';
+                return format_currency($attributes['hoa']) . ' / month';
             }
         )->shouldCache();
     }
@@ -307,18 +307,16 @@ class Property extends Model implements HasMedia
         return Attribute::make(
             get: function () {
 
-                $currency = setting('currency_symbol', '$');
-
                 // Rental price (per night)
                 if ($this->is_rental && ! is_null($this->price_per_night)) {
-                    return $currency . number_format($this->price_per_night, 2) . ' / night';
+                    return format_currency($this->price_per_night) . ' / night';
                 }
 
                 // Sale price or base price
                 $price = $this->sale_price ?? $this->base_price;
 
                 return $price
-                    ? $currency . number_format($price, 2)
+                    ? format_currency($price)
                     : null;
             }
         );
@@ -335,18 +333,17 @@ class Property extends Model implements HasMedia
                     return null;
                 }
 
-                $currency = setting('currency_symbol', '$');
                 $unit = $this->is_rental ? ' / night' : '';
 
                 if (abs($price) >= 1_000_000) {
-                    return $currency . number_format($price / 1_000_000, 1) . 'M' . $unit;
+                    return format_currency_compact($price) . $unit;
                 }
 
                 if (abs($price) >= 1_000) {
-                    return $currency . number_format($price / 1_000, 1) . 'K' . $unit;
+                    return format_currency_compact($price) . $unit;
                 }
 
-                return $currency . number_format($price, 2) . $unit;
+                return format_currency($price) . $unit;
             }
         );
     }

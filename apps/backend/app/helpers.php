@@ -110,6 +110,53 @@ if (!function_exists('humanAmount')) {
 }
 
 
+if (!function_exists('format_currency')) {
+    function format_currency(mixed $amount, int $decimals = 2): string
+    {
+        if ($amount === null || $amount === '') {
+            return '';
+        }
+
+        $symbol = setting_string('currency_symbol', '$');
+        $position = setting_string('currency_position', 'left');
+        $formatted = number_format((float) $amount, $decimals);
+
+        return $position === 'right'
+            ? "{$formatted}{$symbol}"
+            : "{$symbol}{$formatted}";
+    }
+}
+
+if (!function_exists('format_currency_compact')) {
+    function format_currency_compact(mixed $amount, int $decimals = 1): string
+    {
+        if ($amount === null || $amount === '') {
+            return '';
+        }
+
+        $value = (float) $amount;
+        $suffix = '';
+
+        if (abs($value) >= 1_000_000) {
+            $value /= 1_000_000;
+            $suffix = 'M';
+        } elseif (abs($value) >= 1_000) {
+            $value /= 1_000;
+            $suffix = 'K';
+        } else {
+            $decimals = 2;
+        }
+
+        $symbol = setting_string('currency_symbol', '$');
+        $position = setting_string('currency_position', 'left');
+        $formatted = number_format($value, $decimals) . $suffix;
+
+        return $position === 'right'
+            ? "{$formatted}{$symbol}"
+            : "{$symbol}{$formatted}";
+    }
+}
+
 
 
 if (!function_exists('content_display')) {
