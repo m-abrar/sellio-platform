@@ -479,20 +479,58 @@
         }
 
         @media (max-width: 575.98px) {
+            .availability-heading {
+                margin-bottom: 14px !important;
+            }
+
+            .availability-heading h4 {
+                font-size: 1.12rem;
+            }
+
+            .availability-toolbar {
+                gap: 8px;
+            }
+
+            .availability-count {
+                min-height: 34px;
+                padding: 0 12px;
+                font-size: 0.76rem;
+            }
+
             .availability-calendar-panel {
                 padding-top: 14px;
                 border-radius: 16px;
             }
 
             .availability-summary {
-                grid-template-columns: 1fr;
-                gap: 10px;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0;
                 padding: 0 14px 14px;
             }
 
             .availability-summary > div {
+                border-right: 1px solid rgba(15, 23, 42, 0.08);
+                padding: 0 8px;
+            }
+
+            .availability-summary > div:first-child {
+                padding-left: 0;
+            }
+
+            .availability-summary > div:last-child {
                 border-right: 0;
-                padding: 0;
+                padding-right: 0;
+            }
+
+            .availability-summary__label {
+                font-size: 0.56rem;
+                line-height: 1.2;
+            }
+
+            .availability-summary strong {
+                display: block;
+                font-size: 0.8rem;
+                line-height: 1.25;
             }
 
             .availability-month {
@@ -508,6 +546,18 @@
             .availability-day {
                 min-height: 32px;
                 font-size: 0.8rem;
+            }
+
+            .availability-ranges {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .availability-range {
+                width: 100%;
+                justify-content: flex-start;
+                border-radius: 14px;
+                padding: 10px 12px;
             }
         }
     </style>

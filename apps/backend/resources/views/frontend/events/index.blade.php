@@ -39,7 +39,11 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            flatpickr(".event-date-picker", {
+            if (typeof window.flatpickr !== 'function') {
+                return;
+            }
+
+            window.flatpickr(".event-date-picker", {
                 altInput: true,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",

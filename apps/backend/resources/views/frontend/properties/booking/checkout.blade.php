@@ -3,14 +3,19 @@
 @section('title', __('Vacation Booking') . ' | ' . __('Step 1 of 3')) 
 @section('body_class', 'has-body-glow')
 
+@php
+    $bookingFormConfig = [
+        'nights' => $bookingData['nights'],
+        'initialTotal' => $initialTotal,
+        'addons' => $property->addons,
+        'oldAddons' => old('add_ons', []),
+        'guestCount' => old('guests', $bookingData['guests'] ?? 1),
+    ];
+@endphp
+
 @section('content')
-<x-frontend.page-shell variant="property-booking" narrow
-    x-data="bookingForm({
-        nights: {{ $bookingData['nights'] }},
-        initialTotal: {{ $initialTotal }},
-        addons: {{ $property->addons->toJson() }}
-    })">
-    
+<x-frontend.page-shell variant="property-booking" narrow>
+    <div x-data="bookingForm()">
     <form action="{{ route('property.booking.store', $property->slug) }}" method="POST" class="needs-validation" novalidate>
         @csrf 
         <input type="hidden" name="property_id" value="{{ $property->id }}">
@@ -226,22 +231,25 @@
             </div>
         </div>
     </form>
+    </div>
 </x-frontend.page-shell>
 @endsection
 
 @push('scripts')
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('bookingForm', (config) => ({
-            nights: config.nights,
-            guestCount: {{ old('guests', $bookingData['guests'] ?? 1) }},
-            baseTotal: config.initialTotal,
-            availableAddons: config.addons,
+    (() => {
+        const bookingFormConfig = @js($bookingFormConfig);
+
+        const registerBookingForm = () => {
+        Alpine.data('bookingForm', () => ({
+            nights: bookingFormConfig.nights,
+            guestCount: bookingFormConfig.guestCount,
+            baseTotal: bookingFormConfig.initialTotal,
+            availableAddons: bookingFormConfig.addons,
             selectedAddons: {},
 
             init() {
-                const oldValues = {{ old('add_ons') ? json_encode(old('add_ons')) : '{}' }};
+                const oldValues = bookingFormConfig.oldAddons || {};
                 this.availableAddons.forEach(addon => {
                     this.selectedAddons[addon.id] = oldValues[addon.id] ? parseInt(oldValues[addon.id].qty) : 0;
                 });
@@ -281,6 +289,13 @@
                 return '$' + val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             }
         }));
-    });
+        };
+
+        if (window.Alpine) {
+            registerBookingForm();
+        } else {
+            document.addEventListener('alpine:init', registerBookingForm, { once: true });
+        }
+    })();
 </script>
 @endpush

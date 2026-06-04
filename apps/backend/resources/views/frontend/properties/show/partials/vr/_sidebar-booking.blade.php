@@ -247,6 +247,48 @@
         #booking-widget .list-group-item {
             color: #1f2937;
         }
+
+        @media (max-width: 575.98px) {
+            #booking-widget {
+                border-radius: 16px;
+                box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+            }
+
+            #booking-widget .card-header {
+                padding: 18px !important;
+            }
+
+            #booking-widget .card-header h4 {
+                font-size: 1.05rem;
+            }
+
+            #booking-widget .card-body {
+                padding: 18px !important;
+            }
+
+            #booking-widget .date-selection-container {
+                border-radius: 16px;
+                padding: 10px;
+            }
+
+            #booking-widget .flatpickr-current-month {
+                font-size: 0.92rem;
+            }
+
+            #booking-widget .flatpickr-day {
+                height: 32px;
+                line-height: 32px;
+                font-size: 0.78rem;
+            }
+
+            #booking-widget .selected-date-range {
+                font-size: 0.78rem;
+            }
+
+            #booking-widget .btn-primary-theme {
+                min-height: 48px;
+            }
+        }
     </style>
 @endpush
 

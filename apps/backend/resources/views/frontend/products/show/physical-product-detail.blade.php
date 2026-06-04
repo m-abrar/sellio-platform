@@ -62,8 +62,8 @@
         <div class="card glass-surface border-0 rounded-4 shadow-sm overflow-hidden"
              x-data="productPriceCalculator({
                 basePrice: {{ $product->on_sale ? $product->sale_price : $product->base_price }},
-                productId: {{ $product->id }}
-             })">
+                priceUrl: '{{ route('products.calculate-dynamic-price', $product) }}'
+              })">
             <div class="p-4">
                 <h6 class="fw-800 text-uppercase mb-3 small" style="letter-spacing: 1px;">{{ __('Configure & Buy') }}</h6>
 

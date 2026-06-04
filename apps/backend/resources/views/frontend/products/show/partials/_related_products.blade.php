@@ -6,7 +6,7 @@
                 <div class="card glass-surface related-listing-card h-100 border-0 shadow-sm transition-all shadow-hover">
                     {{-- Product Image with Aspect Ratio --}}
                     <div class="aspect-ratio-1-1 overflow-hidden rounded-top">
-                        <img src="{{ $item->main_image_url ?? asset('images/placeholder-product.png') }}" 
+                        <img src="{{ $item->main_image_url ?? asset('images/map-placeholder.webp') }}" 
                              class="card-img-top related-img w-100 h-100 object-fit-cover" 
                              alt="{{ $item->title }}">
                     </div>

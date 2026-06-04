@@ -12,6 +12,9 @@
     $statusText = $isPaid ? __('Booking Confirmed!') : __('Action Required: Payment Pending');
     $statusColorClass = $isPaid ? 'text-success' : 'text-warning';
     $statusIcon = $isPaid ? 'bi-check-circle-fill' : 'bi-exclamation-circle-fill';
+    $buyerBookingsUrl = Route::has('dashboard.user.bookings.index')
+        ? route('dashboard.user.bookings.index')
+        : url('/buyer/bookings');
 @endphp
 
 @section('content')
@@ -75,16 +78,16 @@
 
                         <div class="d-grid gap-3 px-lg-4 mt-2">
                             @if ($isPaid)
-                                <a href="{{ route('dashboard.user.bookings.index') }}" class="btn btn-lg btn-primary-theme py-3 fw-800 rounded-pill shadow-deep">
+                                <a href="{{ $buyerBookingsUrl }}" class="btn btn-lg btn-primary-theme py-3 fw-800 rounded-pill shadow-deep">
                                     {{ __('View My Itinerary') }} <i class="bi bi-calendar3 ms-2"></i>
                                 </a>
                             @else
-                                <a href="{{ route('property.booking.checkout', ['property' => $property->slug, 'booking' => $booking->id]) }}" class="btn btn-lg btn-warning py-3 fw-800 rounded-pill shadow-deep">
+                                <a href="{{ route('property.booking.payment', ['property' => $property->slug, 'booking' => $booking->id]) }}" class="btn btn-lg btn-warning py-3 fw-800 rounded-pill shadow-deep">
                                     {{ __('Complete Payment') }} — ${{ $totalPrice }} <i class="bi bi-credit-card ms-2"></i>
                                 </a>
                             @endif
                             
-                            <a href="{{ route('dashboard.user.bookings.index') }}" class="btn btn-link text-decoration-none text-muted small fw-800 uppercase tracking-wider">
+                            <a href="{{ $buyerBookingsUrl }}" class="btn btn-link text-decoration-none text-muted small fw-800 uppercase tracking-wider">
                                 <i class="bi bi-arrow-left me-2"></i>{{ __('Back to Dashboard') }}
                             </a>
                         </div>

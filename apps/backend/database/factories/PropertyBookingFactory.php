@@ -5,6 +5,7 @@
 namespace Database\Factories;
 
 use App\Models\PropertyBooking;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -40,10 +41,49 @@ class PropertyBookingFactory extends Factory
 
         return [
             // user_id and property_id will be set by the PropertySeeder
+            'guests' => $this->faker->numberBetween(1, 4),
+            'full_name' => $this->faker->name(),
+            'email' => $this->faker->safeEmail(),
+            'phone' => $this->faker->phoneNumber(),
+            'message' => $this->faker->optional()->sentence(),
             'check_in_date' => $checkInDate,
             'check_out_date' => $checkOutDate,
             'total_price' => $totalPrice, 
             'status' => $this->faker->randomElement(['confirmed', 'pending', 'cancelled', 'completed']),
         ];
+    }
+
+    public function forDateRange(string|Carbon $checkIn, string|Carbon $checkOut, float $nightlyRate = 180.00): static
+    {
+        $checkInDate = Carbon::parse($checkIn)->startOfDay();
+        $checkOutDate = Carbon::parse($checkOut)->startOfDay();
+        $nights = max(1, $checkInDate->diffInDays($checkOutDate));
+
+        return $this->state(fn () => [
+            'check_in_date' => $checkInDate->toDateString(),
+            'check_out_date' => $checkOutDate->toDateString(),
+            'total_price' => $nights * $nightlyRate,
+        ]);
+    }
+
+    public function pending(): static
+    {
+        return $this->state(fn () => [
+            'status' => PropertyBooking::STATUS_PENDING,
+        ]);
+    }
+
+    public function confirmed(): static
+    {
+        return $this->state(fn () => [
+            'status' => PropertyBooking::STATUS_CONFIRMED,
+        ]);
+    }
+
+    public function completed(): static
+    {
+        return $this->state(fn () => [
+            'status' => PropertyBooking::STATUS_COMPLETED,
+        ]);
     }
 }

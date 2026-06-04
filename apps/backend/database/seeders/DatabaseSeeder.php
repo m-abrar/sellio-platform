@@ -82,6 +82,7 @@ class DatabaseSeeder extends Seeder
             $this->call([
                 PropertySeeder::class,
                 PropertyModuleSeeder::class,
+                RentalAvailabilityCalendarSeeder::class,
                 SeasonalPriceSeeder::class,
                 TransactionLineSeeder::class,
             ]);

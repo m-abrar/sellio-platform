@@ -80,8 +80,21 @@ const AppJS = {
 AppJS.initDocumentState();
 AppJS.bindEvents();
 
-// Start Alpine last to ensure DOM and listeners are ready
-Alpine.start();
+// Start Alpine after Blade-pushed scripts have had a chance to register page components.
+const startAlpine = () => {
+    if (window.__sellioAlpineStarted) {
+        return;
+    }
+
+    window.__sellioAlpineStarted = true;
+    Alpine.start();
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startAlpine);
+} else {
+    window.setTimeout(startAlpine, 0);
+}
 
 /**
  * Global Helpers

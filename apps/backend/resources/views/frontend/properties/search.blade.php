@@ -36,7 +36,11 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            flatpickr("#check_in, #check_out", {
+            if (typeof window.flatpickr !== 'function') {
+                return;
+            }
+
+            window.flatpickr("#check_in, #check_out", {
                 altInput: true,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
