@@ -4,7 +4,7 @@
 @section('body_class', 'has-body-glow')
 
 @section('content')
-<x-frontend.page-shell variant="property-booking" narrow>
+<x-frontend.page-shell variant="property-booking">
     @include('frontend.properties.booking._partials._booking-header', [
         'eyebrow' => __('Finalize Reservation'),
         'title' => __('Secure Payment'),
@@ -14,8 +14,8 @@
 
     @include('frontend.properties.booking._partials._booking-stepper', ['step' => 2])
 
-    <div class="row g-4">
-        <div class="col-lg-7">
+    <div class="row g-4 booking-layout">
+        <div class="col-lg-7 booking-layout__main">
             {{-- Review Details Card --}}
             <div class="glass-surface p-4 p-md-5 mb-4 border-0">
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -58,88 +58,11 @@
             </div>
 
             {{-- Payment Form Card --}}
-            <div class="glass-surface p-4 p-md-5 border-0 shadow-deep">
-                <div class="alert bg-primary-light border-0 mb-5 d-flex align-items-center">
-                    <div class="spinner-grow spinner-grow-sm text-primary-color me-3" role="status"></div>
-                    <span class="small fw-800 text-primary-color uppercase tracking-wider">
-                        {{ __('Secure Checkout: Finalize your reservation') }}
-                    </span>
-                </div>
-
-                <h4 class="fw-800 tracking-tight text-dark mb-4">
-                    <i class="bi bi-shield-lock-fill text-primary-color me-2"></i>{{ __('Payment Details') }}
-                </h4>
-
-                <form action="{{ route('property.booking.processPayment', $booking) }}" method="POST">
-                    @csrf
-                    <div class="row g-4">
-                        <div class="col-12 text-start">
-                            <label for="card_number" class="filter-label mb-2">{{ __('Credit Card Number') }}</label>
-                            <div class="input-group unified-input">
-                                <span class="input-group-text">
-                                    <i class="bi bi-credit-card-2-front"></i>
-                                </span>
-                                <input type="text" id="card_number" name="card_number" class="form-control" placeholder="0000 0000 0000 0000" required>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 text-start">
-                            <label for="name_on_card" class="filter-label mb-2">{{ __('Cardholder Name') }}</label>
-                            <div class="input-group unified-input">
-                                <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                <input type="text" id="name_on_card" name="name_on_card" class="form-control" placeholder="JOHN DOE" required style="text-transform: uppercase;">
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-md-3 text-start">
-                            <label for="mm_yy" class="filter-label mb-2">{{ __('Expiry') }}</label>
-                            <div class="input-group unified-input">
-                                <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
-                                <input type="text" id="mm_yy" name="mm_yy" class="form-control text-center" placeholder="MM/YY" required>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-md-3 text-start">
-                            <label for="cvc" class="filter-label mb-2">{{ __('CVC') }}</label>
-                            <div class="input-group unified-input">
-                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                <input type="text" id="cvc" name="cvc" class="form-control text-center" placeholder="123" required>
-                            </div>
-                        </div>
-
-                        <div class="col-12 mt-4 text-start">
-                            <div class="form-check p-3 bg-light-primary border border-primary-light rounded-4 d-flex align-items-start">
-                                <input class="form-check-input ms-0 me-3 mt-1" type="checkbox" name="termsCheck" value="1" id="termsCheck" required>
-                                <label class="form-check-label small text-dark fw-600" for="termsCheck">
-                                    {{ __('I authorize the charge of') }} <span class="text-primary-color">{{ format_currency($booking->total_price) }}</span> {{ __('and agree to the') }}
-                                    <a href="#" class="text-primary-color text-decoration-underline">{{ __('House Rules') }}</a>.
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 d-grid mt-4">
-                            <button type="submit" class="btn btn-lg btn-primary-theme py-3 fw-800 rounded-pill shadow-deep">
-                                {{ __('Complete Payment') }} — {{ format_currency($booking->total_price) }}
-                            </button>
-
-                            <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
-                                <span class="small text-muted fw-600 border-end pe-3 border-color-light">
-                                    <i class="bi bi-lock-fill text-success me-1"></i>256-bit Encryption
-                                </span>
-                                <div class="payment-logos d-flex gap-2 opacity-50" style="filter: grayscale(1);">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" height="10" alt="Visa">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" height="12" alt="Mastercard">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" height="12" alt="Paypal">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
+            @include('frontend.properties.booking._partials._payment_details', ['booking' => $booking])
         </div>
 
         {{-- Right Column: Summary --}}
-        <div class="col-lg-5">
+        <div class="col-lg-5 booking-layout__aside">
             <aside class="sticky-sidebar">
                 <div class="glass-surface p-4 p-md-5 border-0 shadow-deep position-relative overflow-hidden">
                     <div class="price-glow-effect"></div>

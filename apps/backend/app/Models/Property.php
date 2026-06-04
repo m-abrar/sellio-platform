@@ -168,7 +168,10 @@ class Property extends Model implements HasMedia
     
     public function prices(): HasMany { return $this->hasMany(SeasonalPrice::class); }
     public function seasonalPrices(): HasMany { return $this->hasMany(SeasonalPrice::class); }
-    public function addons(): HasMany { return $this->hasMany(PropertyAddon::class); }
+    public function addons(): HasMany
+    {
+        return $this->hasMany(PropertyAddon::class)->orderBy('sort_order')->orderBy('id');
+    }
     public function transactionLines(): HasMany { return $this->hasMany(TransactionLine::class); }
     public function fees(): HasMany { return $this->hasMany(PropertyFee::class); }
 

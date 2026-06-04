@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\SeedsPropertyAddons;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Faker\Factory as Faker;
 use App\Models\Property;
 use App\Models\PropertyFee;
-use App\Models\PropertyAddon;
 use App\Models\PropertyNeighborhood;
 use App\Models\PropertyScore; 
 use App\Models\Review;
@@ -25,6 +25,8 @@ use Carbon\Carbon;
  */
 class PropertyModuleSeeder extends Seeder
 {
+    use SeedsPropertyAddons;
+
     private $faker;
     private array $userIds;
     private int $maxUsers;
@@ -63,20 +65,6 @@ class PropertyModuleSeeder extends Seeder
         ],
     ];
 
-    // --- ADDON DEFINITIONS ---
-    private array $addonDefinitions = [
-        'Daily Breakfast'  => ['type' => 'per_night', 'icon' => 'bi-cup-hot', 'is_popular' => true, 'max_qty' => 10],
-        'Airport Shuttle'  => ['type' => 'per_stay',  'icon' => 'bi-car-front', 'is_popular' => false, 'max_qty' => 2],
-        'Pet Fee'          => ['type' => 'per_stay',  'icon' => 'bi-dog', 'is_popular' => false, 'max_qty' => 1],
-        'Late Checkout'    => ['type' => 'per_stay',  'icon' => 'bi-clock-history', 'is_popular' => true, 'max_qty' => 1],
-        'High-Speed Wi-Fi' => ['type' => 'per_night', 'icon' => 'bi-wifi', 'is_popular' => false, 'max_qty' => 1],
-        'Extra Towels'     => ['type' => 'per_stay',  'icon' => 'bi-moisture', 'is_popular' => false, 'max_qty' => 5],
-        'Private Parking'  => ['type' => 'per_night', 'icon' => 'bi-p-circle', 'is_popular' => false, 'max_qty' => 1],
-        'Spa Access'       => ['type' => 'per_night', 'icon' => 'bi-water', 'is_popular' => true, 'max_qty' => 10],
-        'Early Checkin'    => ['type' => 'per_stay',  'icon' => 'bi-door-open', 'is_popular' => false, 'max_qty' => 1],
-    ];
-
-
     /**
      * Run the database seeds for the entire Property module.
      */
@@ -109,9 +97,35 @@ class PropertyModuleSeeder extends Seeder
 
         // 3. Create Complex Relations (Reviews, Visits, Bookings) for existing properties
         $this->seedRelations($properties);
+
+        $this->backfillMissingRentalAddons();
         
         // New Success Footer
         $this->command->info('✅ Property module data seeded successfully!');
+    }
+
+    /**
+     * Ensure every rental property has bookable add-ons for the vacation checkout flow.
+     */
+    public function backfillMissingRentalAddons(): void
+    {
+        $created = 0;
+
+        Property::query()
+            ->where('is_rental', true)
+            ->whereDoesntHave('addons')
+            ->orderBy('id')
+            ->each(function (Property $property) use (&$created) {
+                $count = $this->seedPropertyAddonsIfMissing($property);
+                if ($count > 0) {
+                    $created += $count;
+                    $this->command?->line("    🎁 Backfilled {$count} addons for rental property #{$property->id}.");
+                }
+            });
+
+        if ($created > 0) {
+            $this->command?->info("✅ Backfilled {$created} rental add-ons.");
+        }
     }
 
     // =================================================================
@@ -137,12 +151,13 @@ class PropertyModuleSeeder extends Seeder
                 $totalFees += $count;
             }
             
-            // Addons
-            if($property->addons()->count() === 0) {
-                $this->seedAddons($property);
-                $count = $property->addons()->count();
-                $this->command->info("    🎁 Created {$count} addons.");
-                $totalAddons += $count;
+            // Add-ons (rental / vacation stays only)
+            if ($property->is_rental && $property->addons()->count() === 0) {
+                $count = $this->seedPropertyAddonsIfMissing($property);
+                if ($count > 0) {
+                    $this->command->info("    🎁 Created {$count} addons.");
+                    $totalAddons += $count;
+                }
             }
 
             // Neighborhoods
@@ -193,26 +208,6 @@ class PropertyModuleSeeder extends Seeder
         }
     }
         
-    private function seedAddons(Property $property): void
-    {
-        // Pick 2 to 4 random keys from the definitions
-        $randomAddonTitles = collect($this->addonDefinitions)->keys()->shuffle()->take(mt_rand(2, 4));
-
-        $randomAddonTitles->each(function ($title) use ($property) {
-            $meta = $this->addonDefinitions[$title];
-
-            PropertyAddon::factory()->create([
-                'property_id' => $property->id,
-                'title'       => $title,
-                'type'        => $meta['type'],
-                'icon'        => $meta['icon'],
-                'is_popular'  => $meta['is_popular'],
-                'max_qty'     => $meta['max_qty'],
-                // Description and Price are still handled by the Factory's random logic
-            ]);
-        });
-    }
-
     private function seedNeighborhoods(Property $property): void
     {
         // Use fully qualified class name to avoid resolution issues on restricted servers.

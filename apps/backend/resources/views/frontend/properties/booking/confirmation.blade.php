@@ -4,7 +4,7 @@
 @section('body_class', 'has-body-glow')
 
 @section('content')
-<x-frontend.page-shell variant="property-booking" narrow>
+<x-frontend.page-shell variant="property-booking">
     @php
         $confirmationSubtitle = null;
 
@@ -31,8 +31,8 @@
         'confirmLabelClass' => $statusColorClass,
     ])
 
-    <div class="row justify-content-center pb-5">
-        <div class="col-lg-10">
+    <div class="row justify-content-center pb-5 booking-layout">
+        <div class="col-xl-11 col-lg-12">
             <div class="glass-surface p-0 overflow-hidden border-0 shadow-deep">
                 <div class="row g-0">
 

@@ -110,6 +110,10 @@ class DatabaseSeeder extends Seeder
         if ($this->isModuleEnabled('classifieds')) $this->call(ClassifiedAdSeeder::class);
 
         $this->call(PendingListingsSeeder::class);
+
+        if ($this->isModuleEnabled('properties')) {
+            $this->call(PropertyModuleSeeder::class);
+        }
         
         // --- SECTION 4: DETAILED DATA ---
         $this->command->newLine();

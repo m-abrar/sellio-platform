@@ -47,7 +47,12 @@ class PropertyAddon extends Model implements HasMedia
         'property_id',
         'title',
         'description',
+        'icon',
         'price',
+        'type',
+        'max_qty',
+        'is_popular',
+        'sort_order',
     ];
 
     /**
@@ -57,6 +62,9 @@ class PropertyAddon extends Model implements HasMedia
      */
     protected $casts = [
         'price' => 'decimal:2',
+        'is_popular' => 'boolean',
+        'max_qty' => 'integer',
+        'sort_order' => 'integer',
     ];
 
     // --- Media Management ---

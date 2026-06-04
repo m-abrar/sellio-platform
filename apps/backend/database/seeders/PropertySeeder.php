@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\SeedsPropertyAddons;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -18,6 +19,8 @@ use App\Models\Property;
  */
 class PropertySeeder extends Seeder
 {
+    use SeedsPropertyAddons;
+
     /**
      * Run the database seeds to create Property records and their pivots.
      *
@@ -32,6 +35,7 @@ class PropertySeeder extends Seeder
         $totalPropertiesCreated = 0;
         $totalAmenitiesAttached = 0;
         $totalFeaturesAttached = 0;
+        $totalAddonsCreated = 0;
 
         // 🎯 Header Line with Emoji (Yellow Text)
         $this->command->line("🏠 Seeding Property listings and pivot data (**$totalPropertiesToCreate** total)...");
@@ -185,6 +189,10 @@ class PropertySeeder extends Seeder
 
             $property->features()->attach($featuresToAttach);
             $totalFeaturesAttached += count($featuresToAttach);
+
+            if ($isRental) {
+                $totalAddonsCreated += $this->seedPropertyAddonsIfMissing($property);
+            }
         }
         
         // 5. Seeding Summary
@@ -195,6 +203,7 @@ class PropertySeeder extends Seeder
         $this->command->info("   > **$totalPropertiesCreated** Property records created.");
         $this->command->info("   > **$totalAmenitiesAttached** Amenities attached via pivot table.");
         $this->command->info("   > **$totalFeaturesAttached** Features attached via pivot table.");
+        $this->command->info("   > **$totalAddonsCreated** Rental add-ons created.");
 
         // 🎉 Success Footer (Yellow Text with Emoji)
         $this->command->line('✅ Property Seeder finished.');

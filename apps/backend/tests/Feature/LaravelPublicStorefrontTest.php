@@ -10,6 +10,7 @@ use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\Property;
 use App\Models\PropertyBooking;
+use App\Models\PropertyAddon;
 use App\Models\User;
 use App\Services\ContentService;
 use App\Services\HomeDataService;
@@ -460,8 +461,45 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertSee('page-shell--property-booking', false)
             ->assertSee(__('Step :step of 3', ['step' => 1]), false)
             ->assertSee(__('Stay Overview'), false)
+            ->assertSee(__('Tailor Your Stay'), false)
             ->assertSee(__('Continue to Payment'), false)
             ->assertSee('Step One Rental', false);
+    }
+
+    public function test_property_booking_checkout_shows_seeded_addons_for_rental(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $property = Property::factory()->create([
+            'is_sale' => false,
+            'is_rental' => true,
+            'price_per_night' => 120,
+            'maximum_guests' => 4,
+        ]);
+
+        \App\Models\PropertyAddon::factory()->create([
+            'property_id' => $property->id,
+            'title' => 'Daily Breakfast',
+            'type' => 'per_night',
+            'icon' => 'bi-cup-hot',
+            'is_popular' => true,
+            'max_qty' => 4,
+            'price' => 25,
+        ]);
+
+        $checkIn = now()->addDays(4)->toDateString();
+        $checkOut = now()->addDays(7)->toDateString();
+
+        $this->get(route('property.booking.checkout', [
+            'property' => $property->slug,
+            'start_date' => $checkIn,
+            'end_date' => $checkOut,
+            'guests' => 2,
+        ]))
+            ->assertOk()
+            ->assertSee('Daily Breakfast', false)
+            ->assertDontSee(__('No add-ons available.'), false);
     }
 
     public function test_property_booking_payment_renders_step_two_for_booking_owner(): void
