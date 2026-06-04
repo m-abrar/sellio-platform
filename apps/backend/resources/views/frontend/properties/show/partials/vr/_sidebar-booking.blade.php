@@ -46,7 +46,7 @@
                 <input
                     type="text"
                     id="date_range_picker"
-                    class="form-control text-center fw-bold bg-white mb-3"
+                    class="visually-hidden"
                     placeholder="{{ __('Check In - Check Out') }}"
                     value="{{ $checkIn . ' to ' . $checkOut }}"
                     aria-label="{{ __('Check In - Check Out') }}"
@@ -57,6 +57,10 @@
                 <input type="hidden" name="check_in" value="{{ $checkIn }}" id="widget_check_in_val">
                 <input type="hidden" name="check_out" value="{{ $checkOut }}" id="widget_check_out_val">
                 <div id="inline_calendar_container" class="flatpickr-calendar-inline"></div>
+                <div class="selected-date-range small fw-semibold text-center text-muted border rounded-3 py-2 px-3 mt-3">
+                    <i class="bi bi-calendar-range me-1"></i>
+                    <span id="selected_date_range_text">{{ $checkIn }} - {{ $checkOut }}</span>
+                </div>
             </div>
 
             <div class="mb-4">
@@ -109,6 +113,26 @@
             --border-color: rgba(255, 255, 255, 0.5);
             --card-radius: 20px;
         }
+
+        #booking-widget .flatpickr-calendar.inline {
+            width: 100%;
+            max-width: 100%;
+            box-shadow: none;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 16px;
+        }
+
+        #booking-widget .flatpickr-calendar .dayContainer,
+        #booking-widget .flatpickr-calendar .flatpickr-days {
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+        }
+
+        #booking-widget .flatpickr-day {
+            max-width: none;
+            border-radius: 10px;
+        }
     </style>
 @endpush
 
@@ -122,6 +146,30 @@
         const $checkOutHidden = $('#widget_check_out_val');
         const $guestsDropdown = $('#guests');
         const bookedDateRanges = @json($bookedDateRangesForPicker);
+
+        function syncSelectedRangeLabel(instance = null) {
+            const checkIn = $checkInHidden.val();
+            const checkOut = $checkOutHidden.val();
+
+            if (!checkIn || !checkOut) {
+                $('#selected_date_range_text').text('{{ __('Select your dates') }}');
+                return;
+            }
+
+            if (instance) {
+                const start = instance.parseDate(checkIn, 'Y-m-d');
+                const end = instance.parseDate(checkOut, 'Y-m-d');
+
+                if (start && end) {
+                    $('#selected_date_range_text').text(
+                        instance.formatDate(start, 'M j, Y') + ' - ' + instance.formatDate(end, 'M j, Y')
+                    );
+                    return;
+                }
+            }
+
+            $('#selected_date_range_text').text(checkIn + ' - ' + checkOut);
+        }
 
         function updatePrice() {
             const checkIn = $checkInHidden.val();
@@ -169,10 +217,16 @@
                     $checkInHidden.val(instance.formatDate(selectedDates[0], 'Y-m-d'));
                     $checkOutHidden.val(instance.formatDate(selectedDates[1], 'Y-m-d'));
 
+                    syncSelectedRangeLabel(instance);
                     updatePrice();
                 } else if (selectedDates.length === 1) {
                     $checkOutHidden.val('');
+                    syncSelectedRangeLabel(instance);
                 }
+            },
+
+            onReady: function(selectedDates, dateStr, instance) {
+                syncSelectedRangeLabel(instance);
             }
         });
 
