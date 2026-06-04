@@ -32,7 +32,11 @@ class ContentService
         // Visitor/Guest Path (Uses Global Cache)
         if (!$isAdmin || !$frontendEditEnabled) {
             $cacheKey = $this->generateCacheKey($page, $section, $key);
-            return Cache::rememberForever($cacheKey, fn() => $this->fetchFromDb($page, $section, $key, $default));
+
+            return content_display(
+                Cache::rememberForever($cacheKey, fn() => $this->fetchFromDb($page, $section, $key, $default)),
+                $default
+            );
         }
 
         // Admin Path (Optimized with Local Priming to avoid N+1)
@@ -94,7 +98,11 @@ class ContentService
             'content_key' => $key,
         ])->first();
 
-        return $setting ? $this->formatValue($setting, $default) : $default;
+        if (!$setting) {
+            return content_display($default, $default);
+        }
+
+        return content_display($this->formatValue($setting, $default), $default);
     }
 
     public function forgetCache(PageContent $setting): void

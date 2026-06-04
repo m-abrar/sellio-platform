@@ -1,6 +1,6 @@
 @if ($paginator->hasPages())
 <div class="d-flex justify-content-center mt-5 mb-4 px-2" role="navigation">
-    <nav aria-label="{{ __('Page navigation') }}">
+    <nav aria-label="{{ content_display(__('Page navigation'), 'Page navigation') }}">
         {{-- 
             Aligned with Section 3 of frontend.css: glass-surface.
             Rounded-pill added for the specific container aesthetic.

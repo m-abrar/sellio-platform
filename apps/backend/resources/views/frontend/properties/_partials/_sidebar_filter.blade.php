@@ -45,7 +45,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <label class="form-label small fw-bold mb-0 text-muted">{{ __('Max Price') }}</label>
                     <span class="badge bg-primary rounded-pill">
-                        {{setting('currency_symbol')}}<span x-text="Number(maxPrice).toLocaleString()"></span>
+                        {{ setting_string('currency_symbol', '$') }}<span x-text="Number(maxPrice).toLocaleString()"></span>
                     </span>
                 </div>
                 <input type="range" name="max_price" class="form-range custom-range" 

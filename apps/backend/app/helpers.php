@@ -1,5 +1,6 @@
 <?php
 
+use App\DTOs\ContentResult;
 use App\Models\Setting;
 use App\Models\PageContent;
 use Illuminate\Support\Collection;
@@ -67,7 +68,13 @@ if (!function_exists('setting')) {
 
         if (is_string($value)) {
             $decoded = json_decode($value, true);
-            return (json_last_error() === JSON_ERROR_NONE) ? $decoded : $value;
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $value = $decoded;
+            }
+        }
+
+        if (is_array($value)) {
+            return content_display($value, $default);
         }
 
         return $value;
@@ -105,20 +112,81 @@ if (!function_exists('humanAmount')) {
 
 
 
-// app/helpers.php
+if (!function_exists('content_display')) {
+    /**
+     * Coerce CMS/settings values to a safe string for Blade e() / attributes.
+     */
+    function content_display(mixed $value, mixed $default = ''): string
+    {
+        if ($value instanceof ContentResult) {
+            $value = $value->value;
+        }
+
+        if ($value === null) {
+            return is_scalar($default) || $default === null
+                ? (string) ($default ?? '')
+                : content_display($default, '');
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_int($value) || is_float($value)) {
+            return (string) $value;
+        }
+
+        if (is_string($value)) {
+            return $value;
+        }
+
+        if (is_array($value)) {
+            foreach ($value as $item) {
+                if (is_scalar($item) && $item !== '') {
+                    return (string) $item;
+                }
+            }
+
+            $encoded = json_encode($value);
+
+            return $encoded !== false ? $encoded : content_display($default, '');
+        }
+
+        if (is_object($value) && method_exists($value, '__toString')) {
+            return (string) $value;
+        }
+
+        return is_scalar($default) ? (string) ($default ?? '') : content_display($default, '');
+    }
+}
+
 if (!function_exists('page_content')) {
     /**
-     * @param bool $raw If true, returns string even if user is admin (for meta tags/attributes)
+     * @param bool $raw If true, returns a display-safe string (meta tags/attributes)
      */
     function page_content(string $keyString, $default = null, bool $raw = false): mixed
     {
         $content = app(\App\Services\ContentService::class)->get($keyString, $default);
-        
-        if ($raw && is_object($content)) {
-            return $content->value;
+
+        if ($raw) {
+            return content_display($content, $default);
         }
-        
+
         return $content;
+    }
+}
+
+if (!function_exists('page_content_string')) {
+    function page_content_string(string $keyString, $default = null): string
+    {
+        return content_display(page_content($keyString, $default), $default);
+    }
+}
+
+if (!function_exists('setting_string')) {
+    function setting_string(string $key, mixed $default = ''): string
+    {
+        return content_display(setting($key, $default), $default);
     }
 }
 

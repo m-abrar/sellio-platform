@@ -4,7 +4,7 @@
 
         {{-- Brand and Socials --}}
         <div class="col-12 col-md-4">
-            <a href="{{ page_content('global.footer.brand_link', config('app.url')) }}" 
+            <a href="{{ page_content_string('global.footer.brand_link', config('app.url')) }}"
                 class="footer-logo mb-3 d-flex align-items-center fw-bold fs-5 text-decoration-none" 
                 style="color: var(--primary-color, #0d6efd);">
                 @php
@@ -12,12 +12,12 @@
                     $footerLogoDefault = '<img src="' . $footerLogoUrl . '" alt="' . setting('site_name', config('app.name')) . '" style="max-height: 35px;" class="me-2">';
                 @endphp
                 {!! page_content('global.footer.brand_logo', $footerLogoDefault) !!}
-                <span>{{ page_content('global.footer.brand_text', setting('site_name', config('app.name'))) }}</span>
+                <span>{{ page_content_string('global.footer.brand_text', setting_string('site_name', config('app.name'))) }}</span>
             </a>
             
             <div class="footer-description pe-lg-4 mb-4">
                 <p class="small text-light opacity-75">
-                    {{ page_content('global.footer.paragraph', __('Elevating your experience with innovative solutions.')) }}
+                    {{ page_content_string('global.footer.paragraph', __('Elevating your experience with innovative solutions.')) }}
                 </p>
             </div>
 
@@ -76,10 +76,10 @@
                     <div class="row align-items-center g-4">
                         <div class="col-md-6">
                             <h6 class="fw-bold text-white mb-2">
-                                {{ page_content('global.footer.newsletter_title', __('Newsletter')) }}
+                                {{ page_content_string('global.footer.newsletter_title', __('Newsletter')) }}
                             </h6>
                             <p class="small text-light opacity-75 mb-0">
-                                {{ page_content('global.footer.newsletter_description', __('Get marketplace updates, guides, and featured listings in your inbox.')) }}
+                                {{ page_content_string('global.footer.newsletter_description', __('Get marketplace updates, guides, and featured listings in your inbox.')) }}
                             </p>
                         </div>
                         <div class="col-md-6">
@@ -92,11 +92,11 @@
                                     type="email"
                                     name="email"
                                     class="form-control rounded-pill border-0"
-                                    placeholder="{{ page_content('global.footer.newsletter_placeholder', __('Your email address')) }}"
+                                    placeholder="{{ page_content_string('global.footer.newsletter_placeholder', __('Your email address')) }}"
                                     required
                                 >
                                 <button type="submit" class="btn btn-primary rounded-pill px-4 text-nowrap fw-bold">
-                                    {{ page_content('global.footer.newsletter_button', __('Subscribe')) }}
+                                    {{ page_content_string('global.footer.newsletter_button', __('Subscribe')) }}
                                 </button>
                             </form>
                         </div>
@@ -111,7 +111,7 @@
     <div class="row align-items-center">
         <div class="col-md-12 text-center">
             <p class="small text-light opacity-50 mb-0">
-                &copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}. {{ __('All rights reserved.') }}
+                &copy; {{ date('Y') }} {{ setting_string('site_name', config('app.name')) }}. {{ __('All rights reserved.') }}
             </p>
         </div>
     </div>

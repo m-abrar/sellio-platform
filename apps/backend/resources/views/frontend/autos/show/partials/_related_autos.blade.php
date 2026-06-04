@@ -12,7 +12,9 @@
             
             @foreach ($relatedAutos->take(3) as $relatedAuto)
                 {{-- 💡 Reusing the Auto Card partial for consistency --}}
-                @include('frontend.autos._auto_card', ['auto' => $relatedAuto])
+                <div class="col">
+                    @include('frontend.autos._auto_card', ['auto' => $relatedAuto])
+                </div>
             @endforeach
 
         </div>

@@ -89,5 +89,6 @@ Build the standalone Laravel public website as a full-featured storefront with f
 | Blogs home section ignored `module_enabled('blogs')` | Fixed — view + `HomeDataService` |
 | Footer lacked newsletter entry | Fixed — gated by `newsletter_enabled` (default `1`) |
 | Home hero tabs did not switch forms | Fixed — vanilla `data-hero-*` switcher |
+| `/properties` TypeError (array passed to `e()`) | Fixed — `content_display()` helpers; `__('Pagination')` → `__('Page navigation')`; pagination links use `{!! !!}` |
 | Taxonomy show views missing `@extends` | Fixed — categories, brands, tags, types, partners |
 | Broken `unifieds/*/show` wrappers | Fixed — include-only pattern |

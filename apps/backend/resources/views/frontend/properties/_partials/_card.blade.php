@@ -32,9 +32,9 @@
                 <div class="price-overlay bg-dark bg-opacity-75 backdrop-blur text-white rounded-pill border border-white border-opacity-25 px-3 py-1 shadow-sm">
                     <span class="price-text-sm fw-800">
                         @if($property->is_sale)
-                            {{ setting('currency_symbol', '$') }}{{ number_format($property->sale_price ?? $property->base_price) }}
+                            {{ setting_string('currency_symbol', '$') }}{{ number_format($property->sale_price ?? $property->base_price) }}
                         @else
-                            {{ setting('currency_symbol', '$') }}{{ number_format($property->price_per_night) }}<small class="opacity-75">/{{ __('night') }}</small>
+                            {{ setting_string('currency_symbol', '$') }}{{ number_format($property->price_per_night) }}<small class="opacity-75">/{{ __('night') }}</small>
                         @endif
                     </span>
                 </div>

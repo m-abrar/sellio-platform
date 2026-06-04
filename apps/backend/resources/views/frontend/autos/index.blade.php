@@ -1,15 +1,23 @@
 @extends('frontend._layouts._app')
 
-@section('title', @$category->title ? $category->title . ' Vehicles for Sale' : __('Browse All Vehicle Listings'))
+@section('title', @$category->title ? $category->title . ' Vehicles for Sale' : page_content_string('autos.search.meta_title', __('Browse All Vehicle Listings')))
 @section('body_class', 'has-body-glow bg-light frontend-page--listing')
 
 @section('content')
+    @php
+        $categoryTitle = $category->title ?? null;
+    @endphp
+
     <x-frontend.listing-index
         variant="autos"
         :paginator="$autos"
         :total="$autos->total()"
-        :titleHtml="($category->title ?? null) ?: page_content('autos.search.heading', __('Certified Pre-Owned Vehicles'))"
-        :subtitleHtml="($category->title ?? null) ? __('Browse our inventory of quality ') . strtolower($category->title) : page_content('autos.search.sub_heading', __('Explore premium cars, trucks, and SUVs with verified history.'))"
+        titleKey="autos.search.heading"
+        :titleDefault="__('Vehicles')"
+        subtitleKey="autos.search.sub_heading"
+        :subtitleDefault="__('Explore premium cars, trucks, and SUVs with verified history.')"
+        :titleHtml="$categoryTitle"
+        :subtitleHtml="$categoryTitle ? __('Browse our inventory of quality :category vehicles.', ['category' => strtolower($categoryTitle)]) : null"
         icon="bi-car-front-fill"
         :desktopLabel="__('Vehicles Available')"
         :filterActive="request()->anyFilled(['brand', 'model', 'price_min', 'price_max', 'year', 'keyword', 'category', 'location'])"

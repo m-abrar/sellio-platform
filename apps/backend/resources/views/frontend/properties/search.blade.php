@@ -1,6 +1,6 @@
 @extends('frontend._layouts._app')
 
-@section('title', page_content('properties.search.meta_title', __('Premium Real Estate Listings')))
+@section('title', page_content_string('properties.search.meta_title', __('Premium Real Estate Listings')))
 @section('body_class', 'has-body-glow bg-light frontend-page--listing')
 
 @section('content')

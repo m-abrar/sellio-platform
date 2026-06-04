@@ -4,10 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\PageContent;
 use App\Models\Setting;
+use App\Models\User;
 use App\Services\ContentService;
 use App\Services\HomeDataService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class LaravelPublicStorefrontTest extends TestCase
@@ -78,6 +80,62 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertOk()
             ->assertSee('listing-page--jobs', false)
             ->assertSee('listing-grid', false);
+    }
+
+    public function test_properties_index_survives_array_like_cached_page_content(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $scope = config('content.blade_scope', 'laravel_blade');
+        Cache::forever("page_content.{$scope}.properties.search.heading", ['unexpected' => 'array']);
+
+        $this->get(route('properties.index'))
+            ->assertOk()
+            ->assertSee('listing-page--properties', false);
+
+        $this->assertSame('array', content_display(['unexpected' => 'array'], 'Fallback'));
+    }
+
+    public function test_content_display_coerces_arrays_for_blade_escaping(): void
+    {
+        $this->assertSame('first', content_display(['first', 'second'], ''));
+        $this->assertSame('Fallback', content_display(null, 'Fallback'));
+        $this->assertSame('$', setting_string('currency_symbol', '$'));
+    }
+
+    public function test_pagination_translation_does_not_return_array_for_page_navigation_label(): void
+    {
+        $this->assertIsString(__('Page navigation'));
+        $this->assertIsArray(__('pagination'));
+    }
+
+    public function test_properties_index_handles_json_array_currency_symbol_setting(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Setting::set('currency_symbol', '["$"]');
+        Cache::forget('settings_all');
+
+        $this->assertSame('$', setting('currency_symbol', '$'));
+
+        $this->get(route('properties.index'))
+            ->assertOk()
+            ->assertSee('listing-page--properties', false);
+    }
+
+    public function test_properties_index_renders_for_authenticated_admin(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        Role::firstOrCreate(['name' => 'admin']);
+        $admin = User::factory()->create();
+        $admin->assignRole('admin');
+
+        $this->actingAs($admin)
+            ->get(route('properties.index'))
+            ->assertOk()
+            ->assertSee('listing-page--properties', false);
     }
 
     public function test_disabled_module_route_returns_not_found(): void

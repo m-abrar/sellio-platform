@@ -12,8 +12,8 @@ Features: Responsive menu, auth-aware actions, and cart integration.
     <div class="container-xl">
         {{-- Brand Identity --}}
         <a class="navbar-brand fw-bolder d-flex align-items-center" href="{{ url('/') }}">
-            <img src="{{ page_content('global.header.brand_logo', setting('site_logo') ? Storage::url(setting('site_logo')) : asset('images/app-logo.webp')) }}"
-                 alt="{{ setting('site_name') }}" style="max-height: 40px;" />
+            <img src="{{ page_content_string('global.header.brand_logo', setting('site_logo') ? Storage::url(setting('site_logo')) : asset('images/app-logo.webp')) }}"
+                 alt="{{ setting_string('site_name', config('app.name')) }}" style="max-height: 40px;" />
 
             @if(!setting('hide_site_name'))
                 <span class="fw-bold ms-2 d-none d-sm-inline-block text-uppercase">

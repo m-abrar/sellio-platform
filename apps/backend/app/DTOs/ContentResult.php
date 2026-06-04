@@ -16,6 +16,6 @@ class ContentResult implements Stringable
      */
     public function __toString(): string
     {
-        return (string) ($this->value ?? '');
+        return content_display($this->value, '');
     }
 }

@@ -1,5 +1,4 @@
-<div class="col">
-    <a href="{{ route('autos.show', $auto->slug) }}" class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4">
+<a href="{{ route('autos.show', $auto->slug) }}" class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4">
         
         {{-- Media Container --}}
         <div class="img-container position-relative overflow-hidden rounded-top-4">
@@ -71,5 +70,4 @@
                 </div>
             </div>
         </div>
-    </a>
-</div>
+</a>

@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
 
         // 1. Dynamic Config for Admin Branding
         if (!$this->app->runningInConsole()) {
-            $siteName = setting('site_name', config('app.name'));
+            $siteName = setting_string('site_name', config('app.name'));
             $faviconPath = setting('site_favicon');
             $logoPath = setting('site_logo');
 
@@ -99,7 +99,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'cartCount'         => $cartService->getCount(),
                 'notificationCount' => $this->getNotificationCount(),
-                'siteName'          => Cache::rememberForever('site_name', fn() => setting('site_name', config('app.name'))),
+                'siteName'          => Cache::rememberForever('site_name', fn() => setting_string('site_name', config('app.name'))),
                 'siteFavicon'       => $faviconPath ? Storage::url($faviconPath) : ($logoPath ? Storage::url($logoPath) : asset('images/app-logo.webp')),
                 'bladeContentScope' => config('content.blade_scope', 'laravel_blade'),
                 'bladePages'        => \App\Models\PageContent::where('theme_key', config('content.blade_scope', 'laravel_blade'))
@@ -116,15 +116,14 @@ class AppServiceProvider extends ServiceProvider
                 
                 if (\$data instanceof \App\DTOs\ContentResult) {
                     \$editUrl = route('admin.content.edit.item', ['id' => \$data->id]);
-                    // Added d-inline-flex and align-items-center to help with vertical alignment
                     echo '<span class=\"editable-group d-inline-flex align-items-center\">';
-                        echo '<span class=\"editable-text\">' . e(\$data->value) . '</span>';
+                        echo '<span class=\"editable-text\">' . e(content_display(\$data->value, '')) . '</span>';
                         echo '<a href=\"' . \$editUrl . '\" class=\"edit-link\" target=\"_blank\">';
                             echo '<i class=\"fa-solid fa-pencil edit-icon\"></i>';
                         echo '</a>';
                     echo '</span>';
                 } else {
-                    echo e(\$data);
+                    echo e(content_display(\$data, ''));
                 }
             ?>";
         });
