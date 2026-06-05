@@ -1,76 +1,67 @@
 <?php
 
-// database/seeders/TransactionLineSeeder.php
-
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\TransactionLine;
-use Illuminate\Support\Facades\DB;
 use App\Models\Property;
-use App\Models\PropertyBooking; // ASSUMED: PropertyBooking Model exists and is already seeded
+use App\Models\PropertyBooking;
+use App\Models\TransactionLine;
+use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 /**
- * Seeds the 'transaction_lines' table.
+ * Seeds property-level financial ledger rows.
  *
- * It creates multiple transaction line items for every property, simulating sales
- * and linking approximately 70% of those lines to existing property bookings.
+ * The seeder is intentionally backfill-friendly: it only creates rows for
+ * properties that do not already have transaction lines, so it can repair an
+ * existing demo database without wiping booking history.
  */
 class TransactionLineSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run(): void
     {
-        if ($this->command) {
-            $this->command->info('💵 Starting Transaction Line Seeder...');
-            // Clear existing data before seeding
-            DB::table('transaction_lines')->delete();
-            $this->command->line('  🗑️ Cleared existing transaction lines.');
-        }
+        $this->command?->info('Starting Transaction Line Seeder...');
 
-        // Performance: Use chunkById to prevent memory exhaustion on large datasets
-        Property::orderBy('id')->chunkById(25, function ($properties) {
-            $batchLines = [];
-            foreach ($properties as $property) {
-                // Performance: Query only for bookings belonging to this property
-                $propertyBookings = PropertyBooking::where('property_id', $property->id)->get();
-            
-                // Create a random number of transaction line items (between 5 and 15) for each property.
-                for ($i = 0; $i < mt_rand(5, 15); $i++) {
-                    $bookingId = null;
-                    
-                    // Logic to simulate linking:
-                    if ($propertyBookings->isNotEmpty() && mt_rand(1, 10) <= 7) {
-                        $bookingId = $propertyBookings->random()->id;
+        $createdCount = 0;
+
+        Property::doesntHave('transactionLines')
+            ->orderBy('id')
+            ->chunkById(25, function ($properties) use (&$createdCount) {
+                $batchLines = [];
+
+                foreach ($properties as $property) {
+                    $propertyBookings = PropertyBooking::where('property_id', $property->id)->get();
+
+                    foreach (range(1, mt_rand(5, 15)) as $unused) {
+                        $bookingId = null;
+
+                        if ($propertyBookings->isNotEmpty() && mt_rand(1, 10) <= 7) {
+                            $bookingId = $propertyBookings->random()->id;
+                        }
+
+                        $lineData = TransactionLine::factory()->make([
+                            'property_id' => $property->id,
+                            'property_booking_id' => $bookingId,
+                        ])->toArray();
+
+                        $lineData['transaction_date'] = Carbon::parse($lineData['transaction_date'])->format('Y-m-d');
+                        $lineData['created_at'] = now()->toDateTimeString();
+                        $lineData['updated_at'] = now()->toDateTimeString();
+
+                        $batchLines[] = $lineData;
+                        $createdCount++;
                     }
-                    
-                    $lineData = TransactionLine::factory()->make([
-                        'property_id' => $property->id,
-                        'property_booking_id' => $bookingId,
-                    ])->toArray();
-                    
-                    // Force SQL-compatible date formats (override ISO 8601 from toArray)
-                    $lineData['transaction_date'] = \Carbon\Carbon::parse($lineData['transaction_date'])->format('Y-m-d');
-                    $lineData['created_at'] = now()->toDateTimeString();
-                    $lineData['updated_at'] = now()->toDateTimeString();
-                    
-                    $batchLines[] = $lineData;
                 }
-            }
-            // Batch insert for this chunk
-            if (!empty($batchLines)) {
-                TransactionLine::insert($batchLines);
-            }
-        });
 
-        if ($this->command) {
-            $count = TransactionLine::count();
-            $this->command->info("  Created {$count} transaction line items across " . Property::count() . " properties.");
-            $this->command->info('--- 🏁 Transaction Line Seeding Complete ---');
-        }
+                if ($batchLines !== []) {
+                    TransactionLine::insert($batchLines);
+                }
+            });
+
+        $totalCount = TransactionLine::count();
+        $coveredProperties = TransactionLine::distinct('property_id')->count('property_id');
+
+        $this->command?->info("  Created {$createdCount} new transaction line items.");
+        $this->command?->info("  {$totalCount} total transaction line items now cover {$coveredProperties} of " . Property::count() . ' properties.');
+        $this->command?->info('--- Transaction Line Seeding Complete ---');
     }
 }

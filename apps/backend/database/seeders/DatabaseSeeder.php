@@ -84,7 +84,6 @@ class DatabaseSeeder extends Seeder
                 PropertyModuleSeeder::class,
                 RentalAvailabilityCalendarSeeder::class,
                 SeasonalPriceSeeder::class,
-                TransactionLineSeeder::class,
             ]);
         }
         
@@ -112,7 +111,12 @@ class DatabaseSeeder extends Seeder
         $this->call(PendingListingsSeeder::class);
 
         if ($this->isModuleEnabled('properties')) {
-            $this->call(PropertyModuleSeeder::class);
+            $this->call([
+                PropertyModuleSeeder::class,
+                PropertyFeeSeeder::class,
+                BookingLineItemSeeder::class,
+                TransactionLineSeeder::class,
+            ]);
         }
         
         // --- SECTION 4: DETAILED DATA ---
@@ -127,6 +131,7 @@ class DatabaseSeeder extends Seeder
             PlanSeeder::class,
             SubscriptionSeeder::class,
             TicketSeeder::class,
+            LineItemSeeder::class,
         ]);
         
         // --- SECTION 5: RELATIONS & SYSTEM ---

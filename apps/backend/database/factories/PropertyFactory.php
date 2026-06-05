@@ -49,7 +49,7 @@ class PropertyFactory extends Factory
             'latitude'  => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
 
-            'status'       => 'active',
+            'status'       => 'approved',
             'is_published' => true,
             'is_featured'  => $this->faker->boolean(10),
             'approved_at'  => now(),

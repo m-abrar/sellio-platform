@@ -193,7 +193,10 @@ class Property extends Model implements HasMedia
     /** Scope to filter listings that are approved and published */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('is_published', true)->whereNotNull('approved_at');
+        return $query
+            ->where('is_published', true)
+            ->where('status', 'approved')
+            ->whereNotNull('approved_at');
     }
 
     /**
@@ -223,7 +226,9 @@ class Property extends Model implements HasMedia
     protected function isActive(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->is_published && !is_null($this->approved_at),
+            get: fn () => $this->is_published
+                && $this->status === 'approved'
+                && !is_null($this->approved_at),
         );
     }
     

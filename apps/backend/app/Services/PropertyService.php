@@ -284,7 +284,7 @@ class PropertyService
                             $selectedAddons[] = [
                                 'title' => $addon->title,
                                 'qty'   => $qty,
-                                'cost'  => $addonCost
+                                'cost'  => $addonCost,
                             ];
                         }
                     }
@@ -328,6 +328,14 @@ class PropertyService
 
             // Clear old transaction lines for idempotent updates
             $booking->transactionLines()->delete();
+            $booking->lineItems()->delete();
+
+            $bookingLineItems = collect($breakdown['lines'])
+                ->map(fn(array $line) => [
+                    'title' => $line['title'],
+                    'quantity' => 1,
+                    'price' => round((float) $line['amount'], 2),
+                ]);
 
             // Persist revenue lines for ledger tracking
             foreach ($breakdown['lines'] as $line) {
@@ -343,6 +351,12 @@ class PropertyService
 
             // Save Add-on Lines
             foreach ($selectedAddons as $item) {
+                $bookingLineItems->push([
+                    'title' => "Add-on: {$item['title']} (x{$item['qty']})",
+                    'quantity' => 1,
+                    'price' => round((float) $item['cost'], 2),
+                ]);
+
                 $transactionLine = $booking->transactionLines()->make([
                     'property_id'      => $property->id,
                     'description'      => "Add-on: {$item['title']} (x{$item['qty']})",
@@ -352,6 +366,8 @@ class PropertyService
                 $transactionLine->type = 'revenue';
                 $transactionLine->save();
             }
+
+            $booking->lineItems()->createMany($bookingLineItems->all());
 
             return [
                 'booking' => $booking, 

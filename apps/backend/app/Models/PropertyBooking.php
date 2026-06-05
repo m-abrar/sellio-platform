@@ -178,6 +178,11 @@ class PropertyBooking extends Model
         return $this->hasMany(TransactionLine::class, 'property_booking_id');
     }
 
+    public function lineItems(): HasMany
+    {
+        return $this->hasMany(BookingLineItem::class, 'property_booking_id');
+    }
+
     public function payments(): MorphMany
     {
         return $this->morphMany(Payment::class, 'payable');
@@ -205,4 +210,3 @@ class PropertyBooking extends Model
             ->dontSubmitEmptyLogs();
     }
 }
-
