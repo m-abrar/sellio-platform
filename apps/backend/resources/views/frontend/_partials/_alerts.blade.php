@@ -1,64 +1,83 @@
-{{-- Success Message --}}
-@if(session('success'))
-    <div class="alert alert-success d-flex align-items-center" role="alert">
-        <i class="fas fa-check-circle fa-2x pr-3 me-2"></i>
-        <p class="mb-0">{{ session('success') }}</p>
-    </div>
-@endif
+@php
+    $frontendAlerts = collect();
 
-{{-- Error Message --}}
-@if(session('error'))
-    <div class="alert alert-danger d-flex align-items-center" role="alert">
-        <i class="fas fa-times-circle fa-2x pr-3 me-2"></i>
-        <p class="mb-0">{{ session('error') }}</p>
-    </div>
-@endif
+    if (session('success')) {
+        $frontendAlerts->push([
+            'type' => 'success',
+            'icon' => 'bi-check-circle-fill',
+            'title' => __('Success'),
+            'message' => session('success'),
+        ]);
+    }
 
-{{-- Warning Message --}}
-@if(session('warning'))
-    <div class="alert alert-warning d-flex align-items-center" role="alert">
-        <i class="fas fa-exclamation-triangle fa-2x pr-3 me-2"></i>
-        <p class="mb-0">{{ session('warning') }}</p>
-    </div>
-@endif
+    if (session('warning')) {
+        $frontendAlerts->push([
+            'type' => 'warning',
+            'icon' => 'bi-exclamation-triangle-fill',
+            'title' => __('Heads up'),
+            'message' => session('warning'),
+        ]);
+    }
 
-{{-- Multiple Errors --}}
-@if($errors->any())
-    <div class="alert alert-danger d-flex align-items-center" role="alert">
-        <i class="fas fa-exclamation-circle fa-2x pr-3 me-2"></i>
-        @if($errors->count() > 1)
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        @else
-            <p class="mb-0">{{ $errors->first() }}</p>
-        @endif
-    </div>
-@endif
+    if (session('error')) {
+        $frontendAlerts->push([
+            'type' => 'danger',
+            'icon' => 'bi-x-circle-fill',
+            'title' => __('Something went wrong'),
+            'message' => session('error'),
+        ]);
+    }
 
+    if (session('status')) {
+        $statusMessage = match (session('status')) {
+            'profile-updated' => __('Your profile has been successfully updated!'),
+            'password-updated' => __('Your password has been successfully changed!'),
+            'avatar-updated' => __('Your avatar has been successfully updated!'),
+            'verification-link-sent' => __('A new verification link has been sent to your email address.'),
+            'account-deleted' => __('Your account has been deleted.'),
+            default => session('status'),
+        };
 
-{{-- Profile Success Messages --}}
-@if (session('status'))
-    <div class="alert alert-success d-flex align-items-center" role="alert">
-        <i class="fas fa-check-circle fa-2x pr-3 me-2"></i>
-        @switch(session('status'))
-            @case('profile-updated')
-                {{ __('Your profile has been successfully updated!') }}
-                @break
-            @case('password-updated')
-                {{ __('Your password has been successfully changed!') }}
-                @break
-            @case('avatar-updated')
-                {{ __('Your avatar has been successfully updated!') }}
-                @break
-            @case('verification-link-sent')
-                {{ __('A new verification link has been sent to your email address.') }}
-                @break
-            @case('account-deleted')
-                {{ __('Your account has been deleted.') }}
-                @break
-        @endswitch
+        $frontendAlerts->push([
+            'type' => 'success',
+            'icon' => 'bi-check-circle-fill',
+            'title' => __('Success'),
+            'message' => $statusMessage,
+        ]);
+    }
+
+    if ($errors->any()) {
+        $frontendAlerts->push([
+            'type' => 'danger',
+            'icon' => 'bi-exclamation-circle-fill',
+            'title' => trans_choice(':count issue needs attention|:count issues need attention', $errors->count(), ['count' => $errors->count()]),
+            'errors' => $errors->all(),
+        ]);
+    }
+@endphp
+
+@foreach($frontendAlerts as $alert)
+    <div class="frontend-alert frontend-alert--{{ $alert['type'] }} glass-surface" role="alert">
+        <span class="frontend-alert__icon" aria-hidden="true">
+            <i class="bi {{ $alert['icon'] }}"></i>
+        </span>
+
+        <div class="frontend-alert__body">
+            <p class="frontend-alert__title mb-1">{{ $alert['title'] }}</p>
+
+            @if(! empty($alert['errors']))
+                @if(count($alert['errors']) > 1)
+                    <ul class="frontend-alert__list mb-0">
+                        @foreach($alert['errors'] as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p class="frontend-alert__message mb-0">{{ $alert['errors'][0] }}</p>
+                @endif
+            @else
+                <p class="frontend-alert__message mb-0">{{ $alert['message'] }}</p>
+            @endif
+        </div>
     </div>
-@endif
+@endforeach

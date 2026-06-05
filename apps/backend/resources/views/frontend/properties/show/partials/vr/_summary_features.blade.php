@@ -1,7 +1,7 @@
 <div class="row g-3">
     @php
         $features = [
-            ['icon' => 'bi-people', 'label' => 'Sleeps', 'value' => ($property->maximum_guests ?? 0) . ' Guests'],
+            ['icon' => 'bi-people', 'label' => 'Sleeps', 'value' => ($property->booking_guest_capacity ?? $property->maximum_guests ?? 1) . ' Guests'],
             ['icon' => 'bi-door-open', 'label' => 'Bedrooms', 'value' => $property->number_of_bedrooms ?? 0],
             ['icon' => 'bi-droplet', 'label' => 'Bathrooms', 'value' => $property->number_of_bathrooms ?? 0],
             ['icon' => 'bi-moon-stars', 'label' => 'Min Stay', 'value' => ($property->minimum_rental_days ?? 1) . ' Nights'],

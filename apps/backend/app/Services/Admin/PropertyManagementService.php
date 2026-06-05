@@ -182,11 +182,14 @@ class PropertyManagementService
             'number_of_bedrooms' => 0,
             'number_of_bathrooms' => 0,
             'number_of_parking_spots' => 0,
-            'maximum_guests' => 1,
         ] as $field => $default) {
             if (! array_key_exists($field, $filtered) || $filtered[$field] === null || $filtered[$field] === '') {
                 $filtered[$field] = $default;
             }
+        }
+
+        if (! array_key_exists('maximum_guests', $filtered) || $filtered['maximum_guests'] === null || $filtered['maximum_guests'] === '') {
+            $filtered['maximum_guests'] = $this->defaultGuestCapacity($filtered);
         }
 
         if (isset($data['images']) && is_array($data['images'])) {
@@ -194,6 +197,17 @@ class PropertyManagementService
         }
 
         return $filtered;
+    }
+
+    protected function defaultGuestCapacity(array $data): int
+    {
+        if (empty($data['is_rental'])) {
+            return 1;
+        }
+
+        $bedrooms = (int) ($data['number_of_bedrooms'] ?? 0);
+
+        return $bedrooms > 0 ? max(2, $bedrooms * 2) : 1;
     }
 
     /**

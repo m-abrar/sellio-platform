@@ -51,7 +51,7 @@ class PropertyBookingController extends Controller
         $request->validate([
             'check_in'  => ['required', 'date', 'after_or_equal:today'],
             'check_out' => ['required', 'date', 'after:check_in'],
-            'guests'    => ['required', 'integer', 'min:1', 'max:' . ($property->maximum_guests ?? 1)],
+            'guests'    => ['required', 'integer', 'min:1', 'max:' . $property->booking_guest_capacity],
         ]);
 
         return redirect()->route('property.booking.checkout', [
@@ -74,7 +74,10 @@ class PropertyBookingController extends Controller
     public function checkout(Request $request, string $slug, string $start_date, string $end_date): View|RedirectResponse
     {
         $property = Property::with(['addons', 'prices', 'fees'])->where('slug', $slug)->firstOrFail();
-        $guestCount = (int) $request->query('guests', $property->minimum_guests ?? 1);
+        $guestCount = min(
+            max(1, (int) $request->query('guests', $property->minimum_guests ?? 1)),
+            $property->booking_guest_capacity
+        );
 
         try {
             $bookingData = $this->propertyService->calculateBookingBreakdown(

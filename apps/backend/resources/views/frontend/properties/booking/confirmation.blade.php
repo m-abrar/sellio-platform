@@ -8,10 +8,7 @@
     @php
         $confirmationSubtitle = null;
 
-        if (session('success') || session('warning') || session('error')) {
-            $alertClass = session('error') ? 'alert-danger' : (session('warning') ? 'alert-warning' : 'bg-primary-light text-primary-color border-primary-light');
-            $confirmationSubtitle = '<div class="d-flex justify-content-center"><div class="alert ' . e($alertClass) . ' px-4 py-2 rounded-pill small fw-800">' . e(session('success') ?? session('warning') ?? session('error')) . '</div></div>';
-        } elseif (! $isPaid) {
+        if (! $isPaid) {
             $confirmationSubtitle = '<p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">' . e(__('Your reservation is saved. Complete payment to secure these dates.')) . '</p>';
         } else {
             $confirmationSubtitle = '<p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">' . e(__('Pack your bags! Your trip is officially on the calendar.')) . '</p>';
@@ -23,7 +20,12 @@
         'title' => __('Booking Confirmation'),
         'step' => 3,
         'subtitleHtml' => $confirmationSubtitle,
+        'property' => $property,
+        'backUrl' => $isPaid ? route('properties.show', $property->slug) : route('property.booking.payment', ['property' => $property->slug, 'booking' => $booking->id]),
+        'backLabel' => $isPaid ? __('Back to property') : __('Back to payment'),
     ])
+
+    @include('frontend._partials._alerts')
 
     @include('frontend.properties.booking._partials._booking-stepper', [
         'step' => 3,

@@ -115,6 +115,7 @@ class Property extends Model implements HasMedia
         'is_rental'       => 'boolean',
         'is_sale'         => 'boolean',
         'year_built'      => 'integer',
+        'maximum_guests'  => 'integer',
         'base_price'      => 'decimal:2',
         'sale_price'      => 'decimal:2',
         'price_per_night' => 'decimal:2',
@@ -349,6 +350,34 @@ class Property extends Model implements HasMedia
                 return format_currency($price) . $unit;
             }
         );
+    }
+
+    /**
+     * Effective guest capacity used by rental booking UI and validation.
+     *
+     * Older listings can carry the database default of 1 even when bedrooms are
+     * present. For rentals, derive a conservative capacity of two guests per
+     * bedroom when the stored value is still that default.
+     */
+    protected function bookingGuestCapacity(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $storedMaximum = (int) ($this->maximum_guests ?? 0);
+
+                if (! $this->is_rental || $storedMaximum > 1) {
+                    return max(1, $storedMaximum);
+                }
+
+                $bedrooms = (int) ($this->number_of_bedrooms ?? 0);
+
+                if ($bedrooms > 0) {
+                    return max(2, $bedrooms * 2);
+                }
+
+                return 1;
+            }
+        )->shouldCache();
     }
 
 

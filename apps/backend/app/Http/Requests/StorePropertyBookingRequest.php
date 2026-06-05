@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Property;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 /**
  * Class StorePropertyBookingRequest
@@ -41,5 +43,25 @@ class StorePropertyBookingRequest extends FormRequest
             'add_ons'     => ['nullable', 'array'],
             'add_ons.*.qty' => ['required', 'integer', 'min:0', 'max:20'],
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            $propertyId = $this->input('property_id');
+            $guests = (int) $this->input('guests', 0);
+
+            if (! $propertyId || $guests < 1) {
+                return;
+            }
+
+            $property = Property::find($propertyId);
+
+            if ($property && $guests > $property->booking_guest_capacity) {
+                $validator->errors()->add('guests', __('This property allows up to :count guests.', [
+                    'count' => $property->booking_guest_capacity,
+                ]));
+            }
+        });
     }
 }

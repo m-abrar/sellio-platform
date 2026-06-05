@@ -1,6 +1,6 @@
 @php
     $nightlyRate = $property->price_per_night ?? 0;
-    $maxGuests = max(1, (int) ($property->maximum_guests ?? 1));
+    $maxGuests = max(1, (int) ($property->booking_guest_capacity ?? $property->maximum_guests ?? 1));
     $isSessionData = isset($bookingData['check_in']);
 
     $checkIn = $bookingData['check_in'] ?? now()->addDays(2)->format('Y-m-d');

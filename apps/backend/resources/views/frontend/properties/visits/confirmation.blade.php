@@ -16,17 +16,11 @@
         <div class="col-12 text-center">
             <h1 class="fw-bold display-6 mb-2">{{ __('Property Visit') }}</h1>
 
-            <div class="d-flex justify-content-center mb-4">
-                @if (session('success') || session('warning') || session('error'))
-                    <div class="alert {{ session('error') ? 'alert-danger' : (session('warning') ? 'alert-warning' : 'bg-primary-light text-primary-color border-primary-light') }} px-4 py-2 rounded-pill small fw-bold">
-                        {{ session('success') ?? session('warning') ?? session('error') }}
-                    </div>
-                @else
-                    <p class="lead text-muted">
-                        {{ $isConfirmed ? __('Your appointment is set!') : __('We have sent your request to the agent for review.') }}
-                    </p>
-                @endif
-            </div>
+            <p class="lead text-muted mb-4">
+                {{ $isConfirmed ? __('Your appointment is set!') : __('We have sent your request to the agent for review.') }}
+            </p>
+
+            @include('frontend._partials._alerts')
         </div>
     </div>
 

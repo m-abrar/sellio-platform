@@ -55,6 +55,10 @@ class PropertyService
                 'amenities', 'features', 'tags', 'neighborhoods', 'seasonal_prices', 'addons', 'fees'
             ])->toArray();
 
+            if (! array_key_exists('maximum_guests', $coreData) || $coreData['maximum_guests'] === null || $coreData['maximum_guests'] === '') {
+                $coreData['maximum_guests'] = $this->defaultGuestCapacity($coreData);
+            }
+
             if ($property) {
                 $coreData['slug'] = $coreData['slug'] ?? $this->generateUniqueSlug($coreData['title'], $property->id);
                 $property->update($coreData);
@@ -147,6 +151,17 @@ class PropertyService
 
             return $property;
         });
+    }
+
+    protected function defaultGuestCapacity(array $data): int
+    {
+        if (empty($data['is_rental'])) {
+            return 1;
+        }
+
+        $bedrooms = (int) ($data['number_of_bedrooms'] ?? 0);
+
+        return $bedrooms > 0 ? max(2, $bedrooms * 2) : 1;
     }
 
     protected function generateUniqueSlug(string $title, ?int $currentId = null): string

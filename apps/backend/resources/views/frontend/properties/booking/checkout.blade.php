@@ -4,12 +4,14 @@
 @section('body_class', 'has-body-glow')
 
 @php
+    $maxGuests = max(1, (int) ($property->booking_guest_capacity ?? $property->maximum_guests ?? 1));
+
     $bookingFormConfig = [
         'nights' => $bookingData['nights'],
         'initialTotal' => $initialTotal,
         'addons' => $property->addons,
         'oldAddons' => old('add_ons', []),
-        'guestCount' => old('guests', $bookingData['guests'] ?? 1),
+        'guestCount' => min(max(1, (int) old('guests', $bookingData['guests'] ?? 1)), $maxGuests),
         'currencySymbol' => setting_string('currency_symbol', '$'),
         'currencyPosition' => setting_string('currency_position', 'left'),
     ];
@@ -27,6 +29,9 @@
             'title' => __('Vacation Booking'),
             'step' => 1,
             'subtitle' => __('Review your stay, add optional extras, and tell the host how to reach you.'),
+            'property' => $property,
+            'backUrl' => route('properties.show', $property->slug),
+            'backLabel' => __('Back to property'),
         ])
 
         @include('frontend.properties.booking._partials._booking-stepper', ['step' => 1])
@@ -58,7 +63,7 @@
                         <div class="col-md-4 border-start-md ps-md-4 border-color-light">
                             <label for="guests" class="metric-label">{{ __('Guests') }}</label>
                             <select name="guests" id="guests" x-model="guestCount" class="form-select border-0 bg-light-primary text-primary-color fw-800 rounded-3 @error('guests') is-invalid @enderror" required>
-                                @for ($i = 1; $i <= $property->maximum_guests; $i++) 
+                                @for ($i = 1; $i <= $maxGuests; $i++)
                                     <option value="{{ $i }}">{{ $i }}</option>
                                 @endfor
                             </select>

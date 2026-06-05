@@ -10,6 +10,9 @@
         'title' => __('Secure Payment'),
         'step' => 2,
         'subtitle' => __('Please review your booking summary and provide your payment details below.'),
+        'property' => $property,
+        'backUrl' => route('property.booking.checkout', [$property->slug, 'start_date' => $booking->check_in_date->toDateString(), 'end_date' => $booking->check_out_date->toDateString(), 'guests' => $booking->guests]),
+        'backLabel' => __('Back to details'),
     ])
 
     @include('frontend.properties.booking._partials._booking-stepper', ['step' => 2])
