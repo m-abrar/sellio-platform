@@ -10,7 +10,7 @@
     ];
 @endphp
 
-<div class="stepper mx-auto mb-5">
+<ol class="stepper mx-auto mb-5" aria-label="{{ __('Booking progress') }}">
     @foreach($steps as $number => $label)
         @php
             $isDone = $step > $number;
@@ -21,7 +21,7 @@
                 : ($isActive && $number === 3 ? 'fw-800 ' . $confirmLabelClass : ($isActive ? 'fw-800 text-primary-color' : 'fw-bold text-muted'));
         @endphp
 
-        <div class="step {{ $stateClass }}">
+        <li class="step {{ $stateClass }}" @if($isActive) aria-current="step" @endif>
             <div @class(['step-icon', 'shadow-sm' => $isActive && ! $isDone])>
                 @if($isDone)
                     <i class="bi bi-check-lg text-white"></i>
@@ -32,6 +32,6 @@
                 @endif
             </div>
             <div class="step-label {{ $labelClass }} uppercase tracking-wider small">{{ $label }}</div>
-        </div>
+        </li>
     @endforeach
-</div>
+</ol>

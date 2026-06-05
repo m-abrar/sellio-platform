@@ -11,8 +11,7 @@
 
     <div class="text-center mb-3 border-bottom pb-3">
         <img src="{{ $hostAvatar }}"
-             class="rounded-circle mb-2 shadow-sm"
-             style="width: 80px; height: 80px; object-fit: cover;"
+             class="host-profile-avatar rounded-circle mb-2 shadow-sm"
              alt="{{ __('Host: :name', ['name' => $hostName]) }}">
 
         <h5 class="mb-0 fw-bold">{{ $hostName }}</h5>

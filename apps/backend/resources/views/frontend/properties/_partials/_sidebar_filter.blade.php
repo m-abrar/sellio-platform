@@ -28,7 +28,7 @@
             {{-- 1. LISTING TYPE TABS --}}
             <div class="mb-4">
                 <label class="filter-label mb-2">{{ __('Listing Type') }}</label>
-                <div class="btn-group w-100 bg-light p-1 rounded-3" role="group">
+                <div class="property-filter-tabs btn-group w-100 bg-light p-1 rounded-3" role="group" aria-label="{{ __('Listing type') }}">
                     <input type="radio" class="btn-check" name="property_type" value="" id="t_any" x-model="propertyType">
                     <label class="btn btn-filter-tab" :class="propertyType === '' ? 'btn-primary text-white' : 'text-muted'" for="t_any">{{ __('Any') }}</label>
 
@@ -36,8 +36,14 @@
                     <label class="btn btn-filter-tab" :class="propertyType === 'sale' ? 'btn-primary text-white' : 'text-muted'" for="t_sale">{{ __('Sale') }}</label>
 
                     <input type="radio" class="btn-check" name="property_type" value="rental" id="t_rental" x-model="propertyType">
-                    <label class="btn btn-filter-tab" :class="propertyType === 'rental' ? 'btn-primary text-white' : 'text-muted'" for="t_rental">{{ __('Rent') }}</label>
+                    <label class="btn btn-filter-tab" :class="propertyType === 'rental' ? 'btn-primary text-white' : 'text-muted'" for="t_rental">{{ __('Rental') }}</label>
                 </div>
+                <p class="filter-helper mt-2 mb-0" x-show="propertyType === 'sale'" x-cloak>
+                    {{ __('Sale listings use purchase price, beds, baths, and location filters.') }}
+                </p>
+                <p class="filter-helper mt-2 mb-0" x-show="propertyType === 'rental'" x-cloak>
+                    {{ __('Rental listings add stay dates so unavailable homes can be skipped.') }}
+                </p>
             </div>
 
             {{-- 2. PRICE SLIDER --}}
@@ -50,6 +56,7 @@
                 </div>
                 <input type="range" name="max_price" class="form-range custom-range" 
                        min="100000" max="{{ $maxAllowedPrice ?? 5000000 }}" step="50000" x-model="maxPrice">
+                <p class="filter-helper mb-0">{{ __('Use this for sale listings. Rentals are priced during date selection.') }}</p>
             </div>
 
             {{-- 3. DATES (Using Unified Input) --}}
@@ -66,6 +73,7 @@
                                class="form-control filter-input" placeholder="mm/dd/yyyy">
                     </div>
                 </div>
+                <p class="filter-helper mt-2 mb-0">{{ __('Choose both dates for the most accurate rental availability.') }}</p>
             </div>
 
             {{-- 4. CORE FILTERS (Using Unified Selects) --}}
@@ -155,9 +163,14 @@
             </div>
             @endisset
 
-            <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 shadow-sm fw-bold mt-4 border-0">
-                <i class="bi bi-search me-2"></i>{{ __('Update Search') }}
-            </button>
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 shadow-sm fw-bold border-0">
+                    <i class="bi bi-search me-2"></i>{{ __('Update Search') }}
+                </button>
+                <a href="{{ route('properties.index') }}" class="btn btn-link w-100 text-muted text-decoration-none fw-bold mt-1">
+                    {{ __('Clear filters') }}
+                </a>
+            </div>
 
         </form>
     </div>

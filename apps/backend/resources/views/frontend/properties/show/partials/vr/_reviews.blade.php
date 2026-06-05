@@ -1,8 +1,6 @@
 @php
-    // 💡 Alignment: Calculate dynamic metrics
     $totalReviews = $property->reviews->count();
     $averageRating = $totalReviews > 0 ? number_format($property->reviews->avg('rating'), 1) : 0;
-    $limitedReviews = $property->reviews->take(2); // Show only the top 2 or 3 reviews
 @endphp
 
 <div class="card glass-surface p-4 p-lg-5 mt-4 border-0 shadow-sm">
@@ -25,7 +23,7 @@
             <div class="col-md-6">
                 <div class="p-4 rounded-4 bg-glass-light h-100 border border-color-light">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="avatar-sm me-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px;">
+                        <div class="review-avatar avatar-sm me-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold">
                             {{ substr($review->user->name ?? 'G', 0, 1) }}
                         </div>
                         <div>

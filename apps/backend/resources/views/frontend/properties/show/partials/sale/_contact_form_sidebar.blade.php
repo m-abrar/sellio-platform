@@ -6,13 +6,14 @@
 
 <div class="card glass-surface mb-4">
     <div class="card-header bg-primary text-white p-4 border-0">
-        <h4 class="fw-800 mb-0"><i class="bi-calendar-check-fill me-2"></i>{{ __('Schedule a Visit') }}</h4>
+        <h4 class="fw-800 mb-1"><i class="bi-calendar-check-fill me-2"></i>{{ __('Request a Property Visit') }}</h4>
+        <p class="small text-white-50 mb-0">{{ __('Share your preferred time and the agent will confirm availability.') }}</p>
     </div>
 
     <div class="card-body p-4">
-        <h6 class="fw-bold mb-4">
+        <h6 class="fw-bold mb-3">
             <i class="bi bi-envelope-paper me-2 text-primary-color"></i>
-            {{ __('Fill in the required details') }}
+            {{ __('Visit details') }}
         </h6>
 
         <form id="visitForm" action="{{ route('property.visit.store', $property->slug) }}" method="POST">
@@ -20,6 +21,9 @@
 
             <input type="hidden" name="property_id" value="{{ $property->id }}">
             <input type="hidden" name="scheduled_at" id="scheduled_at">
+            <p id="visit-form-date-error" class="text-danger small fw-semibold d-none mb-3" role="alert">
+                {{ __('Please select both a preferred date and time for your visit.') }}
+            </p>
 
             <div class="mb-3">
                 <label for="visit-date" class="form-label small fw-semibold">{{ __('Preferred Date') }}</label>
@@ -54,11 +58,13 @@
             <hr>
 
             <div class="mb-3">
+                <label for="visit-full-name" class="form-label small fw-semibold">{{ __('Full Name') }}</label>
                 <input
+                    id="visit-full-name"
                     type="text"
                     name="full_name"
                     class="form-control @error('full_name') is-invalid @enderror"
-                    placeholder="{{ __('Enter Your Full Name') }}"
+                    placeholder="{{ __('Your full name') }}"
                     value="{{ old('full_name', $user->name ?? '') }}"
                     required
                 >
@@ -68,11 +74,13 @@
             </div>
 
             <div class="mb-3">
+                <label for="visit-email" class="form-label small fw-semibold">{{ __('Email Address') }}</label>
                 <input
+                    id="visit-email"
                     type="email"
                     name="email"
                     class="form-control @error('email') is-invalid @enderror"
-                    placeholder="{{ __('Enter Your Email Address') }}"
+                    placeholder="you@example.com"
                     value="{{ old('email', $user->email ?? '') }}"
                     required
                 >
@@ -82,11 +90,13 @@
             </div>
 
             <div class="mb-4">
+                <label for="visit-phone" class="form-label small fw-semibold">{{ __('Phone Number') }} <span class="text-muted fw-normal">({{ __('optional') }})</span></label>
                 <input
+                    id="visit-phone"
                     type="tel"
                     name="phone"
                     class="form-control @error('phone') is-invalid @enderror"
-                    placeholder="{{ __('Enter Your Phone Number') }}"
+                    placeholder="+1 (555) 000-0000"
                     value="{{ old('phone') }}"
                 >
                 @error('phone')
@@ -95,10 +105,12 @@
             </div>
 
             <div class="mb-4">
+                <label for="visit-notes" class="form-label small fw-semibold">{{ __('Notes') }} <span class="text-muted fw-normal">({{ __('optional') }})</span></label>
                 <textarea
+                    id="visit-notes"
                     name="notes"
                     class="form-control @error('notes') is-invalid @enderror"
-                    placeholder="{{ __('Any special requests or notes?') }}"
+                    placeholder="{{ __('Questions, access needs, or preferred contact method') }}"
                 >{{ old('notes') }}</textarea>
                 @error('notes')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -107,7 +119,7 @@
 
             <div class="d-grid">
                 <button type="submit" class="btn btn-lg fw-bold text-white btn-primary-theme shadow-primary-md">
-                    <i class="bi bi-send-fill me-2"></i>{{ __('Send Request') }}
+                    <i class="bi bi-send-fill me-2"></i>{{ __('Request Visit') }}
                 </button>
             </div>
 
@@ -118,17 +130,29 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('visitForm').addEventListener('submit', function(event) {
-        const dateInput = document.getElementById('visit-date');
-        const timeInput = document.getElementById('visit-time');
-        const scheduledAtInput = document.getElementById('scheduled_at');
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const visitForm = document.getElementById('visitForm');
+            const dateInput = document.getElementById('visit-date');
+            const timeInput = document.getElementById('visit-time');
+            const scheduledAtInput = document.getElementById('scheduled_at');
+            const dateError = document.getElementById('visit-form-date-error');
 
-        if (dateInput.value && timeInput.value) {
-            scheduledAtInput.value = dateInput.value + ' ' + timeInput.value;
-        } else {
-            event.preventDefault();
-            alert('{{ __('Please select both a preferred date and time for your visit.') }}');
-        }
-    });
-</script>
+            if (!visitForm || !dateInput || !timeInput || !scheduledAtInput) {
+                return;
+            }
+
+            visitForm.addEventListener('submit', function(event) {
+                if (dateInput.value && timeInput.value) {
+                    scheduledAtInput.value = dateInput.value + ' ' + timeInput.value;
+                    dateError?.classList.add('d-none');
+                    return;
+                }
+
+                event.preventDefault();
+                dateError?.classList.remove('d-none');
+            });
+        });
+    </script>
+@endpush

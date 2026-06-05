@@ -6,7 +6,7 @@
         <div class="col-md-4">
             <div class="card glass-surface border-0 h-100 shadow-sm hover-up rounded-4 overflow-hidden">
                 <div class="position-relative">
-                    <img src="{{ $related->thumbnail_url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ $related->title }}">
+                    <img src="{{ $related->thumbnail_url }}" class="related-property-img card-img-top" alt="{{ $related->title }}">
                     <div class="position-absolute bottom-0 start-0 m-2">
                         <span class="badge bg-white text-dark shadow-sm">{{ $related->city }}</span>
                     </div>

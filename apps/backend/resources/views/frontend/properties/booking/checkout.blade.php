@@ -26,7 +26,7 @@
             'eyebrow' => __('Secure Reservation'),
             'title' => __('Vacation Booking'),
             'step' => 1,
-            'subtitle' => __('Confirm your stay details and customize your experience with premium add-ons.'),
+            'subtitle' => __('Review your stay, add optional extras, and tell the host how to reach you.'),
         ])
 
         @include('frontend.properties.booking._partials._booking-stepper', ['step' => 1])
@@ -34,10 +34,10 @@
         <div class="row g-4 booking-layout">
             {{-- Left Column: Forms --}}
             <div class="col-lg-7 booking-layout__main">
-                {{-- Stay Overview --}}
+                {{-- Stay Details --}}
                 <div class="glass-surface p-4 p-md-5 mb-4 position-relative">
                     <h4 class="fw-800 tracking-tight mb-4 text-dark">
-                        <i class="bi bi-calendar-range text-primary-color me-2"></i>{{ __('Stay Overview') }}
+                        <i class="bi bi-calendar-range text-primary-color me-2"></i>{{ __('Stay Details') }}
                     </h4>
                     
                     <div class="row g-4 text-center text-md-start">
@@ -57,11 +57,14 @@
                         </div>
                         <div class="col-md-4 border-start-md ps-md-4 border-color-light">
                             <label for="guests" class="metric-label">{{ __('Guests') }}</label>
-                            <select name="guests" id="guests" x-model="guestCount" class="form-select border-0 bg-light-primary text-primary-color fw-800 rounded-3">
+                            <select name="guests" id="guests" x-model="guestCount" class="form-select border-0 bg-light-primary text-primary-color fw-800 rounded-3 @error('guests') is-invalid @enderror" required>
                                 @for ($i = 1; $i <= $property->maximum_guests; $i++) 
                                     <option value="{{ $i }}">{{ $i }}</option>
                                 @endfor
                             </select>
+                            @error('guests')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -70,7 +73,7 @@
                 <div class="glass-surface p-4 p-md-5 mb-4 booking-addons-panel">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h4 class="fw-800 tracking-tight text-dark mb-0">
-                            <i class="bi bi-stars text-primary-color me-2"></i>{{ __('Tailor Your Stay') }}
+                            <i class="bi bi-stars text-primary-color me-2"></i>{{ __('Enhance Your Stay') }}
                         </h4>
                         <span class="badge bg-light-primary text-primary-color rounded-pill px-3">{{ __('Optional') }}</span>
                     </div>
@@ -89,7 +92,7 @@
                                     </template>
 
                                     <div class="d-flex align-items-center p-3">
-                                        <div class="addon-icon-box shadow-sm rounded-3 d-flex align-items-center justify-content-center bg-white" style="width: 55px; height: 55px;">
+                                        <div class="addon-icon-box booking-addon-icon shadow-sm rounded-3 d-flex align-items-center justify-content-center bg-white">
                                             <i class="bi {{ $addon->icon ?? 'bi-box' }} fs-4 text-primary-color"></i>
                                         </div>
 
@@ -97,7 +100,7 @@
                                             <div class="d-flex align-items-center gap-2 flex-wrap">
                                                 <h6 class="fw-800 mb-0 text-dark">{{ $addon->title }}</h6>
                                                 @if($addon->is_popular)
-                                                    <span class="badge bg-light-primary text-primary-color" style="font-size: 0.6rem;">
+                                                    <span class="badge booking-addon-popular bg-light-primary text-primary-color">
                                                         <i class="bi bi-fire me-1"></i>{{ __('POPULAR') }}
                                                     </span>
                                                 @endif
@@ -113,7 +116,7 @@
                                             <button type="button" class="btn btn-icon-sm rounded-circle bg-white shadow-sm border-0" @click="decrement({{ $addon->id }})">
                                                 <i class="bi bi-dash"></i>
                                             </button>
-                                            <span class="px-2 fw-800 text-primary-color" style="min-width: 30px; text-align: center;" x-text="selectedAddons[{{ $addon->id }}]"></span>
+                                            <span class="booking-addon-qty-value px-2 fw-800 text-primary-color" x-text="selectedAddons[{{ $addon->id }}]"></span>
                                             <button type="button" class="btn btn-icon-sm rounded-circle bg-white shadow-sm border-0" @click="increment({{ $addon->id }}, {{ $addon->max_qty }})">
                                                 <i class="bi bi-plus"></i>
                                             </button>
@@ -128,10 +131,10 @@
                     </div>
                 </div>
 
-                {{-- Contact Info Section (Unified Input System) --}}
+                {{-- Contact Info Section --}}
                 <div class="glass-surface p-4 p-md-5 mb-4">
                     <h4 class="fw-800 tracking-tight mb-4 text-dark">
-                        <i class="bi bi-person-circle text-primary-color me-2"></i>{{ __('Primary Contact') }}
+                        <i class="bi bi-person-circle text-primary-color me-2"></i>{{ __('Guest Details') }}
                     </h4>
                     
                     <div class="row g-3">
@@ -139,25 +142,34 @@
                             <label for="full_name" class="filter-label mb-2">{{ __('Full Name') }}</label>
                             <div class="input-group unified-input">
                                 <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                <input type="text" name="full_name" id="full_name" class="form-control" 
+                                <input type="text" name="full_name" id="full_name" class="form-control @error('full_name') is-invalid @enderror"
                                     value="{{ old('full_name', auth()->user()->name ?? '') }}" placeholder="{{ __('Enter your full name') }}" required>
                             </div>
+                            @error('full_name')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-7">
                             <label for="email" class="filter-label mb-2">{{ __('Email Address') }}</label>
                             <div class="input-group unified-input">
                                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                <input type="email" name="email" id="email" class="form-control" 
+                                <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror"
                                     value="{{ old('email', auth()->user()->email ?? '') }}" placeholder="your@email.com" required>
                             </div>
+                            @error('email')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-5">
-                            <label for="phone" class="filter-label mb-2">{{ __('Phone Number') }}</label>
+                            <label for="phone" class="filter-label mb-2">{{ __('Phone Number') }} <span class="text-muted fw-normal">({{ __('optional') }})</span></label>
                             <div class="input-group unified-input">
                                 <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                <input type="tel" name="phone" id="phone" class="form-control" 
+                                <input type="tel" name="phone" id="phone" class="form-control @error('phone') is-invalid @enderror"
                                     value="{{ old('phone', auth()->user()->phone ?? '') }}" placeholder="+1 (555) 000-0000">
                             </div>
+                            @error('phone')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -170,7 +182,7 @@
                         <div class="price-glow-effect"></div>
 
                         <div class="d-flex align-items-center mb-4 border-bottom border-color-light pb-4">
-                            <img src="{{ $property->primary_image_url }}" class="rounded-4 me-3 shadow-sm" style="width: 70px; height: 70px; object-fit: cover;">
+                            <img src="{{ $property->primary_image_url }}" class="booking-summary-thumb rounded-4 me-3 shadow-sm" alt="{{ $property->title }}">
                             <div class="overflow-hidden">
                                 <span class="metric-label">{{ __('Reserved Property') }}</span>
                                 <h6 class="fw-800 mb-0 text-truncate text-dark">{{ $property->title }}</h6>
@@ -189,7 +201,7 @@
                             <template x-for="addon in activeAddons" :key="addon.id">
                                 <div class="d-flex justify-content-between mb-2 animate__animated animate__fadeIn">
                                     <span class="text-muted small fw-600 d-flex align-items-center">
-                                        <i class="bi bi-plus-circle-fill me-2 text-primary-color" style="font-size: 0.7rem;"></i>
+                                        <i class="bi bi-plus-circle-fill me-2 text-primary-color booking-addon-line-icon"></i>
                                         <span x-text="addon.title"></span> (x<span x-text="addon.qty"></span>)
                                     </span>
                                     <span class="fw-800 text-primary-color small" x-text="formatCurrency(addon.totalPrice)"></span>
@@ -200,10 +212,10 @@
                         <hr class="my-4 border-color-light">
 
                         <div class="bg-white bg-opacity-50 p-4 rounded-4 text-center border border-primary-light backdrop-blur mb-4">
-                            <p class="filter-label mb-1">{{ __('Total Amount Due') }}</p>
+                            <p class="filter-label mb-1">{{ __('Review Total') }}</p>
                             <h2 class="price-text-large mb-0 line-height-1 text-primary-color" x-text="formatCurrency(finalTotal)"></h2>
                             <span class="badge bg-light-primary text-primary-color mt-3 rounded-pill px-3 py-2">
-                                <i class="bi bi-shield-check me-1"></i> {{ __('Inclusive of all taxes') }}
+                                <i class="bi bi-shield-check me-1"></i> {{ __('No charge until payment step') }}
                             </span>
                         </div>
                         
@@ -213,6 +225,16 @@
                     </div>
                 </aside>
             </div>
+        </div>
+
+        <div class="booking-mobile-summary d-lg-none">
+            <div>
+                <span class="booking-mobile-summary__label">{{ __('Review Total') }}</span>
+                <strong x-text="formatCurrency(finalTotal)"></strong>
+            </div>
+            <button type="submit" class="btn btn-primary-theme text-white fw-800 rounded-pill px-4">
+                {{ __('Payment') }} <i class="bi bi-arrow-right-short ms-1"></i>
+            </button>
         </div>
     </form>
     </div>

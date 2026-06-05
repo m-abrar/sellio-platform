@@ -55,10 +55,10 @@
                 
                 {{-- Quick Share/Save Actions --}}
                 <div class="mt-3 d-flex gap-2 justify-content-lg-end">
-                    <button class="btn btn-white btn-sm border shadow-sm px-3 rounded-pill">
+                    <button type="button" class="btn btn-white btn-sm border shadow-sm px-3 rounded-pill">
                         <i class="bi bi-share me-1"></i> {{ __('Share') }}
                     </button>
-                    <button class="btn btn-white btn-sm border shadow-sm px-3 rounded-pill">
+                    <button type="button" class="btn btn-white btn-sm border shadow-sm px-3 rounded-pill">
                         <i class="bi bi-heart me-1"></i> {{ __('Save') }}
                     </button>
                 </div>

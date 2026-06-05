@@ -13,6 +13,6 @@
     @if($subtitleHtml)
         {!! $subtitleHtml !!}
     @elseif($subtitle)
-        <p class="text-muted mb-0 fs-6 mx-auto" style="max-width: 600px;">{{ $subtitle }}</p>
+        <p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">{{ $subtitle }}</p>
     @endif
 </div>

@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="col-6">
-        <div class="rule-card" style="border-color: #ffc107;">
+        <div class="rule-card rule-card--warning">
             <span class="tiny text-uppercase fw-bold text-muted d-block">{{ __('Check-out') }}</span>
             <span class="fw-bold text-dark">{{ __('10:00 AM Sharp') }}</span>
         </div>

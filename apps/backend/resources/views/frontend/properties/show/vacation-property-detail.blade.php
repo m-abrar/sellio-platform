@@ -64,4 +64,6 @@
         @include('frontend.properties.show.partials.vr._sidebar-host')
     </x-slot:sidebar>
 </x-frontend.detail-shell>
+
+@include('frontend.properties.show.partials.vr._sticky_footer_cta')
 @endsection

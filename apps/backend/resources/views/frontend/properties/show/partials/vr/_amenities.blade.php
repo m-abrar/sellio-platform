@@ -8,7 +8,7 @@
             @foreach($property->amenities as $amenity)
                 <div class="col-md-6">
                     <div class="d-flex align-items-center py-2 border-bottom border-color-light">
-                        <div class="icon-circle-theme me-3" style="width: 35px; height: 35px; min-width: 35px;">
+                        <div class="amenity-icon-sm icon-circle-theme me-3">
                             <i class="{{ $amenity->icon ?? 'bi bi-check2-circle' }}"></i>
                         </div>
                         <span class="text-dark fw-medium">{{ $amenity->title }}</span>

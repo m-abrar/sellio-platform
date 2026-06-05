@@ -28,14 +28,16 @@
 
 <div class="card glass-surface mb-4" id="booking-widget">
     <div class="card-header bg-primary text-white p-4 border-0">
-        <h4 class="fw-800 mb-0"><i class="bi-calendar-check-fill me-2"></i>{{ __('Secure Your Stay') }}</h4>
+        <h4 class="fw-800 mb-1"><i class="bi-calendar-check-fill me-2"></i>{{ __('Reserve Your Stay') }}</h4>
+        <p class="small text-white-50 mb-0">{{ __('Pick dates, review the quote, then continue to checkout.') }}</p>
     </div>
 
     <div class="card-body p-4">
-        <p class="h4 fw-bold mb-3">
+        <p class="h4 fw-bold mb-1">
             {{ format_currency($nightlyRate, 0) }}
             <span class="small fw-normal text-muted"> / {{ __('average night') }}</span>
         </p>
+        <p class="small text-muted mb-3">{{ __('Final taxes and service fees appear before payment.') }}</p>
 
         <form action="{{ route('property.booking.start', $property->slug) }}" method="POST">
             @csrf
@@ -65,7 +67,7 @@
                 </select>
             </div>
 
-            <ul class="list-group list-group-flush small mb-4">
+            <ul class="booking-quote-list list-group list-group-flush small mb-4" aria-label="{{ __('Estimated booking quote') }}">
                 <li class="list-group-item d-flex justify-content-between bg-transparent px-0 pt-0 pb-2 border-0">
                     <span class="fw-semibold">{{ __('Your Stay Duration:') }}</span>
                     <span class="fw-bold text-end">
@@ -76,17 +78,22 @@
 
                 <li class="list-group-item d-flex justify-content-between bg-transparent px-0 pt-3 border-top">
                     <span class="fw-bold h5 mb-0 text-primary-color">{{ __('Lodging Total:') }} <small class="text-muted"> {{ __('estimated') }} </small></span>
-                    <span class="fw-bold h5 text-primary-color mb-0" id="estimated_lodging_total">{{ format_currency($estimatedLodgingTotal) }}</span>
+                    <span class="fw-bold h5 text-primary-color mb-0" id="estimated_lodging_total" aria-live="polite">{{ format_currency($estimatedLodgingTotal) }}</span>
                 </li>
             </ul>
 
+            <div class="booking-widget-trust mb-4">
+                <span><i class="bi bi-shield-check text-success"></i>{{ __('Secure checkout') }}</span>
+                <span><i class="bi bi-receipt text-primary-color"></i>{{ __('Fees shown before payment') }}</span>
+            </div>
+
             <div class="d-grid">
                 <button type="submit" class="btn btn-lg fw-bold text-white btn-primary-theme">
-                    {{ __('Continue Booking') }} <i class="bi bi-arrow-right-short ms-2"></i>
+                    {{ __('Review Booking') }} <i class="bi bi-arrow-right-short ms-2"></i>
                 </button>
             </div>
 
-            <p class="text-center small text-muted mt-2">{{ __('Taxes and final fees are calculated on the next page.') }}</p>
+            <p class="text-center small text-muted mt-2">{{ __('You will not be charged on this step.') }}</p>
         </form>
     </div>
 </div>

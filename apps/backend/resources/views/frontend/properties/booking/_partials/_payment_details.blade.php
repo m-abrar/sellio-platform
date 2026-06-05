@@ -46,7 +46,7 @@
 
         <div class="booking-payment-form__demo">
             <i class="bi bi-info-circle me-2"></i>
-            {{ __('Demo mode: use card') }} <code>4242 4242 4242 4242</code>, {{ __('any future expiry, and any 3-digit CVC.') }}
+            {{ __('Demo payment mode: use card') }} <code>4242 4242 4242 4242</code>, {{ __('any future expiry, and any 3-digit CVC.') }}
         </div>
 
         <div class="row g-3 g-md-4">
@@ -170,7 +170,7 @@
 
             <div class="col-12">
                 <button type="submit" class="btn btn-lg btn-primary-theme w-100 py-3 fw-800 rounded-pill shadow-deep booking-payment-form__submit">
-                    <span>{{ __('Complete Payment') }}</span>
+                    <span data-payment-submit-label>{{ __('Complete Payment') }}</span>
                     <span class="booking-payment-form__submit-amount">{{ $totalFormatted }}</span>
                     <i class="bi bi-arrow-right-circle-fill ms-2"></i>
                 </button>
@@ -190,6 +190,8 @@
 (() => {
     const form = document.querySelector('[data-property-payment-form]');
     if (!form) return;
+    const submitButton = form.querySelector('.booking-payment-form__submit');
+    const submitLabel = form.querySelector('[data-payment-submit-label]');
 
     const preview = {
         number: document.querySelector('[data-payment-preview="number"]'),
@@ -254,6 +256,17 @@
             syncPreview();
         });
     }
+
+    form.addEventListener('submit', () => {
+        if (!submitButton) return;
+
+        submitButton.disabled = true;
+        submitButton.classList.add('is-loading');
+
+        if (submitLabel) {
+            submitLabel.textContent = @json(__('Processing payment...'));
+        }
+    });
 
     syncPreview();
 })();

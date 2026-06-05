@@ -12,8 +12,7 @@
 
     <div class="text-center mb-4 border-bottom pb-4">
         <img src="{{ $agentAvatar }}"
-             class="rounded-circle mb-2 border border-3 border-primary-theme shadow-sm"
-             style="width: 90px; height: 90px; object-fit: cover;"
+             class="agent-profile-avatar rounded-circle mb-2 border border-3 border-primary-theme shadow-sm"
              alt="{{ __('Agent: :name', ['name' => $agentName]) }}">
 
         <h5 class="mb-0 fw-bold mt-2">{{ $agentName }}</h5>
@@ -65,7 +64,7 @@
     </div>
 
     <div class="text-center mt-3">
-        <button class="btn btn-link text-danger fw-semibold" data-property-id="{{ $property->id }}">
+        <button type="button" class="btn btn-link text-danger fw-semibold" data-property-id="{{ $property->id }}">
             <i class="bi bi-heart me-1"></i>{{ __('Save to Favorites') }}
         </button>
     </div>

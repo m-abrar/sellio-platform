@@ -1,21 +1,19 @@
 @if ($property->latitude && $property->longitude)
-    
-    {{-- Generate a clean Google Maps embed URL using the coordinates --}}
     @php
         $lat = $property->latitude;
         $lng = $property->longitude;
-        $map_url = "https://maps.google.com/maps?q={$lat},{$lng}&z=15&output=embed";
+        $mapUrl = "https://maps.google.com/maps?q={$lat},{$lng}&z=15&output=embed";
     @endphp
 
-    <div class="ratio ratio-16x9 mb-3" style="max-height: 400px; border-radius: var(--bs-card-border-radius);">
-        {{-- 💡 Alignment: Dynamic Google Maps iframe --}}
-        <iframe src="{{ $map_url }}" 
-                frameborder="0" 
-                style="border:0; border-radius: var(--bs-card-border-radius);" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade"
-                title="Location map for {{ $property->title }}">
+    <div class="property-map-frame ratio ratio-16x9 mb-3">
+        <iframe
+            src="{{ $mapUrl }}"
+            class="property-map-frame__embed"
+            frameborder="0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="{{ __('Location map for :title', ['title' => $property->title]) }}">
         </iframe>
     </div>
 @else

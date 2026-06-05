@@ -12,9 +12,9 @@
             $alertClass = session('error') ? 'alert-danger' : (session('warning') ? 'alert-warning' : 'bg-primary-light text-primary-color border-primary-light');
             $confirmationSubtitle = '<div class="d-flex justify-content-center"><div class="alert ' . e($alertClass) . ' px-4 py-2 rounded-pill small fw-800">' . e(session('success') ?? session('warning') ?? session('error')) . '</div></div>';
         } elseif (! $isPaid) {
-            $confirmationSubtitle = '<p class="text-muted mb-0 fs-6 mx-auto" style="max-width: 600px;">' . e(__('Your reservation is registered, but not yet secured.')) . '</p>';
+            $confirmationSubtitle = '<p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">' . e(__('Your reservation is saved. Complete payment to secure these dates.')) . '</p>';
         } else {
-            $confirmationSubtitle = '<p class="text-muted mb-0 fs-6 mx-auto" style="max-width: 600px;">' . e(__('Pack your bags! Your trip is officially on the calendar.')) . '</p>';
+            $confirmationSubtitle = '<p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">' . e(__('Pack your bags! Your trip is officially on the calendar.')) . '</p>';
         }
     @endphp
 
@@ -39,7 +39,7 @@
                     {{-- Left Column: Status & Primary Actions --}}
                     <div class="col-md-6 d-flex flex-column justify-content-center text-center p-4 p-lg-5 border-end border-color-light bg-white bg-opacity-50">
                         <div class="mb-4">
-                            <i class="bi {{ $statusIcon }} {{ $statusColorClass }}" style="font-size: 5rem; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.05));"></i>
+                            <i class="booking-confirmation-status-icon bi {{ $statusIcon }} {{ $statusColorClass }}"></i>
                         </div>
 
                         <h2 class="fw-800 {{ $statusColorClass }} mb-3 tracking-tight">{{ $statusText }}</h2>
@@ -58,7 +58,7 @@
                                 </a>
                             @else
                                 <a href="{{ route('property.booking.payment', ['property' => $property->slug, 'booking' => $booking->id]) }}" class="btn btn-lg btn-warning py-3 fw-800 rounded-pill shadow-deep">
-                                    {{ __('Complete Payment') }} — {{ format_currency($booking->total_price) }} <i class="bi bi-credit-card ms-2"></i>
+                                    {{ __('Complete Payment') }} &mdash; {{ format_currency($booking->total_price) }} <i class="bi bi-credit-card ms-2"></i>
                                 </a>
                             @endif
 
@@ -96,7 +96,7 @@
 
                             <div class="receipt-total pt-4 border-top border-2 border-color-light">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-800 text-muted uppercase small tracking-wider">{{ __('Total Paid') }}</span>
+                                    <span class="fw-800 text-muted uppercase small tracking-wider">{{ $isPaid ? __('Total Paid') : __('Total Due') }}</span>
                                     <h2 class="fw-800 {{ $statusColorClass }} mb-0">{{ format_currency($booking->total_price) }}</h2>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                         {{-- Host Assistance --}}
                         <div class="mt-5 p-4 rounded-4 bg-primary-light border border-primary-light">
                             <div class="d-flex align-items-center gap-3">
-                                <div class="host-avatar bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px; border: 2px solid white;">
+                                <div class="booking-help-avatar host-avatar bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm">
                                     <i class="bi bi-person-fill text-primary-color fs-4"></i>
                                 </div>
                                 <div class="text-start">
