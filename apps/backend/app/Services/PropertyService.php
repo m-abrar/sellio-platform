@@ -177,7 +177,8 @@ class PropertyService
                         'properties as sale_properties_count' => fn($pq) => $pq->active()->where('is_sale', true),
                     ]),
                 'category', 'location', 'amenities', 'features',
-                'fees', 'addons', 'neighborhoods', 'scores', 'reviews.user', 'media'
+                'fees', 'addons', 'neighborhoods', 'scores', 'reviews.user', 'media',
+                'prices' => fn($q) => $q->orderBy('start_date'),
             ])
             ->firstOrFail();
     }

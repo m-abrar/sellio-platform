@@ -11,6 +11,7 @@ use App\Models\MenuItem;
 use App\Models\Property;
 use App\Models\PropertyBooking;
 use App\Models\PropertyAddon;
+use App\Models\SeasonalPrice;
 use App\Models\User;
 use App\Services\ContentService;
 use App\Services\HomeDataService;
@@ -193,11 +194,22 @@ class LaravelPublicStorefrontTest extends TestCase
             'status' => 'confirmed',
         ]);
 
+        SeasonalPrice::factory()->create([
+            'property_id' => $property->id,
+            'title' => 'Summer Peak',
+            'start_date' => now()->addMonth()->startOfMonth()->toDateString(),
+            'end_date' => now()->addMonth()->endOfMonth()->toDateString(),
+            'price' => 240,
+        ]);
+
         $this->get(route('properties.show', $property->slug))
             ->assertOk()
             ->assertSee('detail-page--property-rental', false)
             ->assertSee('Completed Rental Property', false)
-            ->assertSee(__('Secure Your Stay'), false)
+            ->assertSee(__('Reserve Your Stay'), false)
+            ->assertSee(__('Seasonal rates'), false)
+            ->assertSee('Summer Peak', false)
+            ->assertSee(format_currency(240, 0), false)
             ->assertSee(__('Availability'), false)
             ->assertSee('name="guests"', false)
             ->assertSee('disable: bookedDateRanges', false)

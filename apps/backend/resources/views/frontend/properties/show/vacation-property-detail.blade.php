@@ -34,6 +34,10 @@
 
                 @include('frontend.properties.show.partials.vr._amenities')
 
+                <section id="seasonal-rates" class="mt-5 pt-5 border-top border-color-light">
+                    @include('frontend.properties.show.partials.vr._seasonal_prices')
+                </section>
+
                 <section id="calendar" class="mt-5 pt-5 border-top border-color-light">
                     @include('frontend.properties.show.partials.vr._availability_calendar')
                 </section>
