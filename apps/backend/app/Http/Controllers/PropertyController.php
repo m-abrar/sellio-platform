@@ -56,7 +56,7 @@ class PropertyController extends Controller
     {
         // Now $request->validated() will work perfectly
         $filters = $request->validated();
-        $data = $this->propertyService->getSearchPageData($filters, auth()->user());
+        $data = $this->propertyService->getSearchPageData($filters, null);
 
         return view("frontend.properties.search", $data);
     }

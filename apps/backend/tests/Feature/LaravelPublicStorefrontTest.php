@@ -277,10 +277,24 @@ class LaravelPublicStorefrontTest extends TestCase
         $admin = User::factory()->create();
         $admin->assignRole('admin');
 
-        $this->actingAs($admin)
+        Property::factory()->create([
+            'status' => 'approved',
+            'is_published' => true,
+            'approved_at' => now(),
+        ]);
+
+        Property::factory()->create([
+            'status' => 'active',
+            'is_published' => true,
+            'approved_at' => now(),
+        ]);
+
+        $response = $this->actingAs($admin)
             ->get(route('properties.index'))
             ->assertOk()
             ->assertSee('listing-page--properties', false);
+
+        $this->assertMatchesRegularExpression('/1\s+Listings Available/', strip_tags($response->getContent()));
     }
 
     public function test_disabled_module_route_returns_not_found(): void
