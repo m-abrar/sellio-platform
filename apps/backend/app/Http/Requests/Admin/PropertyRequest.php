@@ -77,6 +77,12 @@ class PropertyRequest extends FormRequest
             'neighborhoods.*.distance' => 'required|numeric|min:0',
             'neighborhoods.*.latitude' => 'nullable|numeric',
             'neighborhoods.*.longitude' => 'nullable|numeric',
+
+            'scores' => 'nullable|array',
+            'scores.*.title' => 'required_with:scores|string|max:100',
+            'scores.*.score' => 'required_with:scores|numeric|min:0',
+            'scores.*.units' => 'nullable|string|max:20',
+            'scores.*.description' => 'nullable|string|max:255',
         ];
     }
 }

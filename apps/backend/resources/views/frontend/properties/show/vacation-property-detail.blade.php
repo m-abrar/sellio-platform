@@ -46,6 +46,11 @@
                     @include('frontend.properties.show.partials.vr._local_guide')
                 </section>
 
+                <section id="livability" class="mt-5 pt-5 border-top border-color-light property-scores-panel property-scores-panel--expanded">
+                    <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Livability & Accessibility') }}</h4>
+                    @include('frontend.properties.show.partials.sale._scores', ['hideHeading' => true])
+                </section>
+
                 <section id="rules" class="mt-5 pt-5 border-top border-color-light">
                     <div class="row g-4">
                         <div class="col-md-7">@include('frontend.properties.show.partials.vr._rules')</div>

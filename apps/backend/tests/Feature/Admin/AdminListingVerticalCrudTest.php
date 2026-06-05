@@ -44,12 +44,41 @@ class AdminListingVerticalCrudTest extends TestCase
             'city' => 'Austin',
             'country' => 'USA',
             'status' => true,
+            'scores' => [
+                ['title' => 'Walk Score', 'score' => 88, 'units' => '/100', 'description' => 'Very Walkable'],
+                ['title' => 'School Rating', 'score' => 8.5, 'units' => '/10', 'description' => 'Excellent'],
+            ],
+            'seasonal_prices' => [
+                [
+                    'name' => 'Summer Peak',
+                    'start_date' => now()->addMonths(2)->toDateString(),
+                    'end_date' => now()->addMonths(3)->toDateString(),
+                    'price' => 275,
+                ],
+            ],
         ])->assertRedirect();
 
         $this->assertDatabaseHas('properties', [
             'id' => $property->id,
             'title' => 'Updated CRUD Property',
             'is_published' => true,
+        ]);
+
+        $this->assertDatabaseHas('property_scores', [
+            'property_id' => $property->id,
+            'title' => 'Walk Score',
+            'score' => 88,
+        ]);
+        $this->assertDatabaseHas('property_scores', [
+            'property_id' => $property->id,
+            'title' => 'School Rating',
+            'score' => 8.5,
+        ]);
+
+        $this->assertDatabaseHas('seasonal_prices', [
+            'property_id' => $property->id,
+            'title' => 'Summer Peak',
+            'price' => 275,
         ]);
 
         $this->actingAsSuperAdmin()->delete(route('admin.properties.destroy', $property))

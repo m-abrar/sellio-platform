@@ -8,9 +8,11 @@
     $isTotalHigh = $totalScoreValue >= 75;
 @endphp
 
+@unless($hideHeading ?? false)
 <h6 class="fw-bold mb-4 text-primary-color">
     <i class="bi bi-bicycle me-2"></i>{{ __('Lifestyle & Accessibility') }}
 </h6>
+@endunless
 
 @if ($scoresCount > 0)
     {{-- Featured Total Score Card --}}
@@ -44,7 +46,7 @@
                 $isHigh = ($scale == 100) ? ($score->score >= 70) : ($score->score >= 7);
                 $glowColor = $isHigh ? 'rgba(25, 135, 84, 0.15)' : 'rgba(111, 66, 193, 0.1)';
             @endphp
-            <div class="col-6 col-md-4">
+            <div class="col-6 col-md-4 col-lg-3">
                 <div class="score-card text-center h-100 d-flex flex-column justify-content-center p-3">
                     
                     <div class="score-card__ring mx-auto mb-2 d-flex align-items-center justify-content-center" style="--score-glow: {{ $glowColor }};">

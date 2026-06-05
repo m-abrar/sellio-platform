@@ -1202,6 +1202,35 @@ footer{
 .score-card__badge{
     font-size:.55rem
 }
+.property-scores-panel--expanded .livability-score-ring{
+    width:110px;
+    height:110px
+}
+.property-scores-panel--expanded .livability-score-value{
+    font-size:2.25rem
+}
+.property-scores-panel--expanded .livability-score-scale{
+    font-size:.75rem
+}
+.property-scores-panel--expanded .score-card__ring{
+    width:72px;
+    height:72px
+}
+.property-scores-panel--expanded .score-card__value{
+    font-size:1.35rem
+}
+.property-scores-panel--expanded .score-card__scale{
+    font-size:.7rem
+}
+.property-scores-panel--expanded .score-card__title{
+    font-size:.72rem
+}
+.property-scores-panel--expanded .score-card__badge{
+    font-size:.65rem
+}
+.property-scores-panel--expanded .score-card{
+    padding:1rem!important
+}
 .property-document-icon{
     background:#e7f3ff;
     color:#007bff

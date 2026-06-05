@@ -101,7 +101,7 @@ class PropertyController extends Controller
     {
         $model = Property::where('user_id', Auth::id())
             ->where(is_numeric($property) ? 'id' : 'slug', $property)
-            ->with(['amenities', 'media', 'category', 'type', 'location', 'user'])
+            ->with(['amenities', 'media', 'category', 'type', 'location', 'user', 'scores', 'neighborhoods', 'addons', 'fees', 'prices'])
             ->firstOrFail();
 
         return $this->successResponse(new PropertyResource($model));

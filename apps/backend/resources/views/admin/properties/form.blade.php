@@ -182,6 +182,8 @@
                     </div>
                 </div>
 
+                @include('admin.properties.partials._seasonal_prices_editor')
+
                 {{-- Location Address --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
@@ -200,6 +202,8 @@
                         </div>
                     </div>
                 </div>
+
+                @include('admin.properties.partials._scores_editor')
 
                 {{-- Gallery Collection --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
@@ -413,6 +417,7 @@
 
 @push('js')
 <script src="{{ asset('admin-assets/pages/taxonomy-form.js') }}"></script>
+<script src="{{ asset('admin-assets/pages/property-form.js') }}"></script>
 @endpush
 
 @if($property->exists)

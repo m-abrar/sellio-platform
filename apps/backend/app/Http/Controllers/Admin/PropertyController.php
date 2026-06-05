@@ -115,7 +115,7 @@ class PropertyController extends Controller
     public function edit(Property $property): View
     {
         $property->images = json_decode($property->images, true) ?? [];
-        $property->load(['features', 'neighborhoods', 'prices']);
+        $property->load(['features', 'neighborhoods', 'prices', 'scores']);
 
         $formData = $this->propertyService->getFormData();
 

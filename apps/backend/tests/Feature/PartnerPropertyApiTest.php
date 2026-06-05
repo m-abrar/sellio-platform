@@ -57,6 +57,17 @@ class PartnerPropertyApiTest extends TestCase
                 'country' => 'USA',
                 'is_published' => '1',
                 'amenities' => [$amenity->id],
+                'scores' => [
+                    ['title' => 'Walk Score', 'score' => '82', 'units' => '/100', 'description' => 'Very Walkable'],
+                ],
+                'seasonal_prices' => [
+                    [
+                        'season_name' => 'Holiday Season',
+                        'start_date' => now()->addMonths(4)->toDateString(),
+                        'end_date' => now()->addMonths(5)->toDateString(),
+                        'price' => '320',
+                    ],
+                ],
                 'main_image' => UploadedFile::fake()->image('villa-main.jpg', 1200, 800),
                 'gallery' => [
                     UploadedFile::fake()->image('villa-pool.jpg', 1200, 800),
@@ -86,6 +97,18 @@ class PartnerPropertyApiTest extends TestCase
             'number_of_bathrooms' => 3,
             'address' => '123 Ocean Drive',
             'city' => 'Miami',
+        ]);
+
+        $this->assertDatabaseHas('property_scores', [
+            'property_id' => $property->id,
+            'title' => 'Walk Score',
+            'score' => 82,
+        ]);
+
+        $this->assertDatabaseHas('seasonal_prices', [
+            'property_id' => $property->id,
+            'title' => 'Holiday Season',
+            'price' => 320,
         ]);
 
         // 2. Update the Property Listing

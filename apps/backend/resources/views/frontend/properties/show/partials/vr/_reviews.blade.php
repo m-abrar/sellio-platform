@@ -31,7 +31,7 @@
                             <span class="tiny text-muted">{{ $review->created_at->format('M Y') }}</span>
                         </div>
                     </div>
-                    <p class="text-muted small mb-0 lh-base italic">"{{ Str::limit($review->body, 150) }}"</p>
+                    <p class="text-muted small mb-0 lh-base italic">"{{ Str::limit($review->comment, 150) }}"</p>
                 </div>
             </div>
         @endforeach

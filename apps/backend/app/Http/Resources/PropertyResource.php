@@ -111,7 +111,7 @@ class PropertyResource extends JsonResource
 
             'seasonal_prices' => ($this->relationLoaded('prices') ? $this->prices : $this->prices()->get())->map(fn($sp) => [
                 'id'          => $sp->id,
-                'season_name' => $sp->season_name,
+                'season_name' => $sp->title,
                 'start_date'  => $sp->start_date?->toDateString(),
                 'end_date'    => $sp->end_date?->toDateString(),
                 'price'       => (float) $sp->price,

@@ -2524,6 +2524,40 @@ tr:hover .icon-square-premium {
 .ticket-chat-thread::-webkit-scrollbar { width: 6px !important; }
 .ticket-chat-thread::-webkit-scrollbar-thumb { background-color: #ccc !important; border-radius: 3px !important; }
 
+/* Property editor: repeatable tables (scores, seasonal rates, etc.) */
+.property-editor-card-header {
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+}
+
+.property-editor-card-header > div {
+    flex: 1 1 280px;
+    min-width: 0;
+}
+
+.admin-repeatable-table {
+    min-width: 720px;
+}
+
+.admin-repeatable-table .form-control-premium,
+.admin-repeatable-table .custom-select {
+    height: 46px !important;
+    min-height: 46px !important;
+    font-size: 0.875rem !important;
+    padding: 0.65rem 1rem !important;
+}
+
+.admin-repeatable-table thead th {
+    white-space: nowrap;
+}
+
+.admin-repeatable-table .col-metric { min-width: 180px; }
+.admin-repeatable-table .col-score { min-width: 110px; width: 120px; }
+.admin-repeatable-table .col-units { min-width: 90px; width: 100px; }
+.admin-repeatable-table .col-date { min-width: 150px; }
+.admin-repeatable-table .col-price { min-width: 130px; width: 140px; }
+.admin-repeatable-table .col-action { width: 72px; min-width: 72px; }
+
 
 
 

@@ -52,7 +52,7 @@ class PropertyService
         return DB::transaction(function () use ($user, $data, $property) {
             // Exclude relational array attributes from the core table save
             $coreData = collect($data)->except([
-                'amenities', 'features', 'tags', 'neighborhoods', 'seasonal_prices', 'addons', 'fees'
+                'amenities', 'features', 'tags', 'neighborhoods', 'seasonal_prices', 'addons', 'fees', 'scores'
             ])->toArray();
 
             if (! array_key_exists('maximum_guests', $coreData) || $coreData['maximum_guests'] === null || $coreData['maximum_guests'] === '') {
@@ -108,12 +108,13 @@ class PropertyService
             if (isset($data['seasonal_prices'])) {
                 $property->prices()->delete();
                 foreach ($data['seasonal_prices'] as $sp) {
-                    if (!empty($sp['season_name'])) {
+                    $seasonName = $sp['season_name'] ?? $sp['name'] ?? $sp['title'] ?? null;
+                    if (! empty($seasonName)) {
                         $property->prices()->create([
-                            'season_name' => $sp['season_name'],
-                            'start_date'  => $sp['start_date'],
-                            'end_date'    => $sp['end_date'],
-                            'price'       => (float) $sp['price'],
+                            'title'      => $seasonName,
+                            'start_date' => $sp['start_date'],
+                            'end_date'   => $sp['end_date'],
+                            'price'      => (float) $sp['price'],
                         ]);
                     }
                 }
@@ -144,6 +145,21 @@ class PropertyService
                             'type'        => $fee['type'] ?? 'fixed',
                             'rate'        => isset($fee['rate']) ? (float) $fee['rate'] : null,
                             'charge_type' => $fee['charge_type'] ?? 'per_stay',
+                        ]);
+                    }
+                }
+            }
+
+            // 8. Sync Livability Scores (One-to-Many)
+            if (isset($data['scores'])) {
+                $property->scores()->delete();
+                foreach ($data['scores'] as $score) {
+                    if (! empty($score['title']) && isset($score['score']) && $score['score'] !== '') {
+                        $property->scores()->create([
+                            'title'       => $score['title'],
+                            'score'       => (float) $score['score'],
+                            'units'       => $score['units'] ?? null,
+                            'description' => $score['description'] ?? null,
                         ]);
                     }
                 }

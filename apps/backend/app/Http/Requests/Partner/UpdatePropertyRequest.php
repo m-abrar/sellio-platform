@@ -123,6 +123,13 @@ class UpdatePropertyRequest extends FormRequest
             'fees.*.type'        => ['required_with:fees', 'string', 'in:fixed,percentage'],
             'fees.*.rate'        => ['nullable', 'numeric', 'min:0'],
             'fees.*.charge_type' => ['required_with:fees', 'string', 'in:per_stay,per_night,per_guest'],
+
+            // Livability Scores
+            'scores'             => ['nullable', 'array'],
+            'scores.*.title'     => ['required_with:scores', 'string', 'max:100'],
+            'scores.*.score'     => ['required_with:scores', 'numeric', 'min:0'],
+            'scores.*.units'     => ['nullable', 'string', 'max:20'],
+            'scores.*.description' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

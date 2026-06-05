@@ -36,9 +36,14 @@
                         @include('frontend.properties.show.partials.sale._amenities')
                     </section>
 
-                    <section id="location" class="pt-4 border-top border-color-light">
+                    <section id="location" class="pt-4 border-top border-color-light mb-5">
                         <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Location Overview') }}</h4>
                         @include('frontend.properties.show.partials._map')
+                    </section>
+
+                    <section id="livability" class="pt-4 border-top border-color-light property-scores-panel property-scores-panel--expanded">
+                        <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Livability & Accessibility') }}</h4>
+                        @include('frontend.properties.show.partials.sale._scores', ['hideHeading' => true])
                     </section>
                 </div>
             </div>

@@ -23,6 +23,7 @@ export interface NormalizedProperty {
   seasonal_prices?: Array<{ id?: number; season_name: string; start_date: string; end_date: string; price: number }>;
   addons?: Array<{ id?: number; title: string; description?: string | null; price: number }>;
   fees?: Array<{ id?: number; title: string; amount: number; type: 'fixed' | 'percentage'; rate: number | null; charge_type: string }>;
+  scores?: Array<{ id?: number; title: string; score: number; units?: string | null; description?: string | null }>;
   address?: string;
   city?: string;
   state?: string | null;
@@ -114,6 +115,7 @@ export const normalizeProperty = (property: any): NormalizedProperty => {
     seasonal_prices: property.seasonal_prices ?? [],
     addons: property.addons ?? [],
     fees: property.fees ?? [],
+    scores: property.scores ?? [],
     address: property.location?.address,
     city: property.location?.city,
     state: property.location?.state,

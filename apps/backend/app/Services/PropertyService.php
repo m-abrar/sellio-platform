@@ -43,8 +43,8 @@ class PropertyService
             return $this->roundUpPrice($rawMax) ?? 1000000;
         });
 
-        $checkIn = isset($filters['check_in']) ? Carbon::createFromFormat('m-d-Y', $filters['check_in']) : null;
-        $checkOut = isset($filters['check_out']) ? Carbon::createFromFormat('m-d-Y', $filters['check_out']) : null;
+        $checkIn = isset($filters['check_in']) ? Carbon::createFromFormat('Y-m-d', $filters['check_in']) : null;
+        $checkOut = isset($filters['check_out']) ? Carbon::createFromFormat('Y-m-d', $filters['check_out']) : null;
 
         // Execute filtered search
         $properties = $this->applyFilters(Property::query(), $filters, $checkIn, $checkOut, $user)->paginate(12);

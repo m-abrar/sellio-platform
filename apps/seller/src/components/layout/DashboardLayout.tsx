@@ -15,7 +15,7 @@ export default function DashboardLayout() {
 
         {/* MAIN CONTENT AREA */}
         <main className="flex-1 min-w-0 px-4 py-8 md:p-10 lg:p-14 pb-32">
-          <div className="animate-in fade-in zoom-in-95 duration-700">
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <Outlet context={{ user }} />
           </div>
         </main>

@@ -17,7 +17,16 @@ import { ApiError } from '../../lib/apiError';
 const containerClass = 'bg-white border border-slate-100 rounded-[2rem] shadow-[0_18px_44px_rgba(0,0,0,0.035)] p-6 md:p-10';
 const labelClass = 'text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2';
 const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
+const tableInputClass = 'w-full min-w-[120px] bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-xl px-4 py-3.5 text-slate-900 font-semibold text-sm transition-all outline-none placeholder:text-slate-300 min-h-[48px]';
 const fieldHintClass = 'mt-2 ml-2 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-300';
+
+const SCORE_PRESETS = [
+  { title: 'Walk Score', units: '/100' },
+  { title: 'Transit Score', units: '/100' },
+  { title: 'Bike Score', units: '/100' },
+  { title: 'School Rating', units: '/10' },
+  { title: 'Safety Index', units: '/10' },
+];
 
 const defaultForm = {
   title: '',
@@ -70,6 +79,7 @@ export default function CreateProperty() {
   const [seasonalPrices, setSeasonalPrices] = useState<any[]>([]);
   const [addons, setAddons] = useState<any[]>([]);
   const [fees, setFees] = useState<any[]>([]);
+  const [scores, setScores] = useState<any[]>([]);
   const [activePricingTab, setActivePricingTab] = useState<'seasonal' | 'addons' | 'fees'>('seasonal');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -141,6 +151,7 @@ export default function CreateProperty() {
           setSeasonalPrices(property.seasonal_prices ?? []);
           setAddons(property.addons ?? []);
           setFees(property.fees ?? []);
+          setScores(property.scores ?? []);
 
           const initialMedia: any[] = [];
           if (property.featured_image) {
@@ -230,6 +241,13 @@ export default function CreateProperty() {
       formData.append(`fees[${index}][type]`, fee.type || 'fixed');
       formData.append(`fees[${index}][rate]`, fee.rate != null ? String(fee.rate) : '');
       formData.append(`fees[${index}][charge_type]`, fee.charge_type || 'per_stay');
+    });
+
+    scores.forEach((score, index) => {
+      formData.append(`scores[${index}][title]`, score.title);
+      formData.append(`scores[${index}][score]`, String(score.score ?? 0));
+      formData.append(`scores[${index}][units]`, score.units || '');
+      formData.append(`scores[${index}][description]`, score.description || '');
     });
 
     formData.append('sync_existing_media', '1');
@@ -593,7 +611,7 @@ export default function CreateProperty() {
                                 newNbs[index].title = e.target.value;
                                 setNeighborhoods(newNbs);
                               }}
-                              className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                              className={tableInputClass}
                               placeholder="e.g. Metro Station"
                             />
                           </td>
@@ -606,7 +624,7 @@ export default function CreateProperty() {
                                 newNbs[index].description = e.target.value;
                                 setNeighborhoods(newNbs);
                               }}
-                              className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                              className={tableInputClass}
                               placeholder="e.g. Central line station"
                             />
                           </td>
@@ -620,7 +638,7 @@ export default function CreateProperty() {
                                 newNbs[index].distance_miles = Number(e.target.value);
                                 setNeighborhoods(newNbs);
                               }}
-                              className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold text-center`}
+                              className={`${tableInputClass} text-center`}
                               placeholder="0.0"
                             />
                           </td>
@@ -651,6 +669,125 @@ export default function CreateProperty() {
                   className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-wider hover:bg-slate-100 transition-colors"
                 >
                   + Add Landmark
+                </button>
+              </div>
+            </div>
+
+            <div className={containerClass}>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+                <span className="w-2 h-8 bg-emerald-500 rounded-full" /> Livability & Accessibility Scores.
+              </h3>
+              <div className="space-y-6">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                  Walk Score, transit ratings, school ratings, and other lifestyle metrics shown on the property detail page.
+                </p>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {SCORE_PRESETS.map((preset) => (
+                    <button
+                      key={preset.title}
+                      type="button"
+                      onClick={() => setScores((prev) => [...prev, { title: preset.title, score: '', units: preset.units, description: '' }])}
+                      className="bg-emerald-50 border border-emerald-100 text-emerald-700 px-4 py-2 rounded-xl font-black text-[10px] uppercase tracking-wider hover:bg-emerald-100 transition-colors"
+                    >
+                      + {preset.title}
+                    </button>
+                  ))}
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-100">
+                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Metric</th>
+                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-28 pr-4">Score</th>
+                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-24 pr-4">Units</th>
+                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Label</th>
+                        <th className="pb-3 w-16"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {scores.map((score, index) => (
+                        <tr key={index} className="border-b border-slate-50 last:border-0">
+                          <td className="py-3 pr-4">
+                            <input
+                              type="text"
+                              value={score.title}
+                              onChange={(e) => {
+                                const next = [...scores];
+                                next[index].title = e.target.value;
+                                setScores(next);
+                              }}
+                              className={tableInputClass}
+                              placeholder="e.g. Walk Score"
+                            />
+                          </td>
+                          <td className="py-3 pr-4">
+                            <input
+                              type="number"
+                              step="0.01"
+                              min="0"
+                              value={score.score}
+                              onChange={(e) => {
+                                const next = [...scores];
+                                next[index].score = e.target.value;
+                                setScores(next);
+                              }}
+                              className={`${tableInputClass} text-center`}
+                              placeholder="85"
+                            />
+                          </td>
+                          <td className="py-3 pr-4">
+                            <input
+                              type="text"
+                              value={score.units || ''}
+                              onChange={(e) => {
+                                const next = [...scores];
+                                next[index].units = e.target.value;
+                                setScores(next);
+                              }}
+                              className={`${tableInputClass} text-center`}
+                              placeholder="/100"
+                            />
+                          </td>
+                          <td className="py-3 pr-4">
+                            <input
+                              type="text"
+                              value={score.description || ''}
+                              onChange={(e) => {
+                                const next = [...scores];
+                                next[index].description = e.target.value;
+                                setScores(next);
+                              }}
+                              className={tableInputClass}
+                              placeholder="e.g. Excellent"
+                            />
+                          </td>
+                          <td className="py-3 text-center">
+                            <button
+                              type="button"
+                              onClick={() => setScores((prev) => prev.filter((_, i) => i !== index))}
+                              className="text-red-500 hover:text-red-700 font-bold text-lg"
+                            >
+                              ×
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                      {scores.length === 0 && (
+                        <tr>
+                          <td colSpan={5} className="py-8 text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                            No scores added yet. Use a preset above or add a custom metric.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setScores((prev) => [...prev, { title: '', score: '', units: '/100', description: '' }])}
+                  className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-wider hover:bg-slate-100 transition-colors"
+                >
+                  + Add Custom Score
                 </button>
               </div>
             </div>
@@ -703,7 +840,7 @@ export default function CreateProperty() {
                                   newSps[index].season_name = e.target.value;
                                   setSeasonalPrices(newSps);
                                 }}
-                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                className={tableInputClass}
                                 placeholder="e.g. Christmas Peak"
                               />
                             </td>
@@ -716,7 +853,7 @@ export default function CreateProperty() {
                                   newSps[index].start_date = e.target.value;
                                   setSeasonalPrices(newSps);
                                 }}
-                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                className={tableInputClass}
                               />
                             </td>
                             <td className="py-3 pr-4">
@@ -728,7 +865,7 @@ export default function CreateProperty() {
                                   newSps[index].end_date = e.target.value;
                                   setSeasonalPrices(newSps);
                                 }}
-                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                className={tableInputClass}
                               />
                             </td>
                             <td className="py-3 pr-4">
@@ -740,7 +877,7 @@ export default function CreateProperty() {
                                   newSps[index].price = Number(e.target.value);
                                   setSeasonalPrices(newSps);
                                 }}
-                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold text-center`}
+                                className={`${tableInputClass} text-center`}
                                 placeholder="0.00"
                               />
                             </td>
@@ -800,7 +937,7 @@ export default function CreateProperty() {
                                   newAds[index].title = e.target.value;
                                   setAddons(newAds);
                                 }}
-                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                className={tableInputClass}
                                 placeholder="e.g. Airport Shuttle"
                               />
                             </td>
@@ -813,7 +950,7 @@ export default function CreateProperty() {
                                   newAds[index].description = e.target.value;
                                   setAddons(newAds);
                                 }}
-                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                className={tableInputClass}
                                 placeholder="e.g. Standard one-way pickup"
                               />
                             </td>
@@ -826,7 +963,7 @@ export default function CreateProperty() {
                                   newAds[index].price = Number(e.target.value);
                                   setAddons(newAds);
                                 }}
-                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold text-center`}
+                                className={`${tableInputClass} text-center`}
                                 placeholder="0.00"
                               />
                             </td>
@@ -887,7 +1024,7 @@ export default function CreateProperty() {
                                   newFees[index].title = e.target.value;
                                   setFees(newFees);
                                 }}
-                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                className={tableInputClass}
                                 placeholder="e.g. Tourism Tax"
                               />
                             </td>
@@ -899,7 +1036,7 @@ export default function CreateProperty() {
                                   newFees[index].type = e.target.value as any;
                                   setFees(newFees);
                                 }}
-                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                className={tableInputClass}
                               >
                                 <option value="fixed">Fixed cost ($)</option>
                                 <option value="percentage">Percentage (%)</option>
@@ -921,7 +1058,7 @@ export default function CreateProperty() {
                                   }
                                   setFees(newFees);
                                 }}
-                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold text-center`}
+                                className={`${tableInputClass} text-center`}
                                 placeholder="0.00"
                               />
                             </td>
@@ -933,7 +1070,7 @@ export default function CreateProperty() {
                                   newFees[index].charge_type = e.target.value;
                                   setFees(newFees);
                                 }}
-                                className={`${inputClass} !py-2.5 !px-4 !rounded-xl text-xs font-bold`}
+                                className={tableInputClass}
                               >
                                 <option value="per_stay">Per Stay</option>
                                 <option value="per_night">Per Night</option>

@@ -74,3 +74,53 @@
 ### Tickets
 - [x] On `/admin/tickets`, check whether avatars are shown and add them if needed.
 - [x] On `/admin/tickets`, remove sorting from the first column.
+
+
+
+
+NEW TODO ITEMS
+
+
+http://127.0.0.1:8000/properties (search form sumbitted)
+
+- [x] The check in field must match the format m-d-Y. (Fixed: aligned validation with flatpickr `Y-m-d` output.)
+- [x] The check out field must match the format m-d-Y. (Fixed: aligned validation with flatpickr `Y-m-d` output.)
+
+
+
+----------------------
+
+
+Property Detail Page:
+
+- [x] Can we add score here as well? if already available in the database. (Added to vacation and default detail pages; sale page already had scores.)
+
+-------------------------
+
+Everything that i showed on property detail page, should be cross check if admin and partner form has been designed to manage the cruds and pivot table data?
+- [x] Property scores (Walk Score, School Rating, etc.) — admin property form + partner seller dashboard now support CRUD.
+- [x] Seasonal rental rates — admin property form added; partner seller dashboard already had UI; fixed partner save mapping (`season_name` → DB `title`).
+
+-------------------------
+
+on the property detail page, there is a rating section on the last, it shows two "" empty 
+- [x] Fixed: template used `$review->body` but the Review model field is `comment`.
+
+----------------
+
+when seeding fresh database, does our seller/partner subscibe to a plan?
+
+--------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+

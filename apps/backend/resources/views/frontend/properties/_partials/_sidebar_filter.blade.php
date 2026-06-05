@@ -65,12 +65,12 @@
                     <div class="col-6">
                         <label class="filter-label" for="check_in">{{ __('Check-In') }}</label>
                         <input type="text" id="check_in" name="check_in" value="{{ request('check_in') }}" 
-                               class="form-control filter-input" placeholder="mm/dd/yyyy">
+                               class="form-control filter-input" placeholder="{{ __('Select date') }}">
                     </div>
                     <div class="col-6">
                         <label class="filter-label" for="check_out">{{ __('Check-Out') }}</label>
                         <input type="text" id="check_out" name="check_out" value="{{ request('check_out') }}" 
-                               class="form-control filter-input" placeholder="mm/dd/yyyy">
+                               class="form-control filter-input" placeholder="{{ __('Select date') }}">
                     </div>
                 </div>
                 <p class="filter-helper mt-2 mb-0">{{ __('Choose both dates for the most accurate rental availability.') }}</p>

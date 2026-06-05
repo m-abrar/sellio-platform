@@ -97,6 +97,7 @@ class PropertyManagementService
             $this->syncFeatures($property, $data['features'] ?? []);
             $this->syncNeighborhoods($property, $data['neighborhoods'] ?? []);
             $this->syncSeasonalPrices($property, $data['seasonal_prices'] ?? []);
+            $this->syncScores($property, $data['scores'] ?? []);
 
             return $property;
         });
@@ -130,10 +131,10 @@ class PropertyManagementService
             // Replicate seasonal pricing
             foreach ($property->prices as $p) {
                 $clone->prices()->create([
-                    'name' => $p->title, 
-                    'start_date' => $p->start_date, 
-                    'end_date' => $p->end_date, 
-                    'price' => $p->price
+                    'title' => $p->title,
+                    'start_date' => $p->start_date,
+                    'end_date' => $p->end_date,
+                    'price' => $p->price,
                 ]);
             }
 
@@ -144,6 +145,15 @@ class PropertyManagementService
                     'distance' => $n->distance, 
                     'latitude' => $n->latitude, 
                     'longitude' => $n->longitude
+                ]);
+            }
+
+            foreach ($property->scores as $score) {
+                $clone->scores()->create([
+                    'title' => $score->title,
+                    'score' => $score->score,
+                    'units' => $score->units,
+                    'description' => $score->description,
                 ]);
             }
 
@@ -160,7 +170,7 @@ class PropertyManagementService
     protected function extractModelData(array $data): array
     {
         $filtered = collect($data)->except([
-            'amenities', 'features', 'tags', 'types', 'neighborhoods', 'seasonal_prices', 'status'
+            'amenities', 'features', 'tags', 'types', 'neighborhoods', 'seasonal_prices', 'scores', 'status'
         ])->toArray();
 
         if (empty($filtered['slug']) && ! empty($filtered['title'])) {
@@ -271,6 +281,22 @@ class PropertyManagementService
      * @return void
      * @throws \Exception
      */
+    protected function syncScores(Property $property, array $scores): void
+    {
+        $property->scores()->delete();
+
+        foreach ($scores as $entry) {
+            if (! empty($entry['title']) && isset($entry['score']) && $entry['score'] !== '') {
+                $property->scores()->create([
+                    'title'       => $entry['title'],
+                    'score'       => $entry['score'],
+                    'units'       => $entry['units'] ?? null,
+                    'description' => $entry['description'] ?? null,
+                ]);
+            }
+        }
+    }
+
     protected function syncSeasonalPrices(Property $property, array $prices): void
     {
         // Filter out empty entries
@@ -294,7 +320,7 @@ class PropertyManagementService
         $property->prices()->delete();
         foreach ($prices as $p) {
             $property->prices()->create([
-                'title' => $p['name'] ?? $p['title'] ?? 'Season',
+                'title' => $p['name'] ?? $p['title'] ?? $p['season_name'] ?? 'Season',
                 'start_date' => $p['start_date'],
                 'end_date' => $p['end_date'],
                 'price' => $p['price'],
