@@ -8,7 +8,6 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Plan;
 use App\Models\Subscription;
-use Illuminate\Support\Carbon; // Import Carbon for date manipulation
 
 /**
  * Class SubscriptionSeeder
@@ -34,10 +33,21 @@ class SubscriptionSeeder extends Seeder
 
         // Fetch all existing Users and Plans to link the subscriptions correctly.
         $plans = Plan::all();
+
+        if ($plans->isEmpty()) {
+            $this->command?->warn('No plans found. Skipping subscription seeding.');
+            return;
+        }
+
+        $stableDemoEmails = [
+            'admin@sellio-platform.test',
+            'partner@sellio-platform.test',
+            'buyer@sellio-platform.test',
+        ];
         
         // Performance: Use chunkById to prevent memory exhaustion when seeding large user bases
-        User::orderBy('id')->chunkById(100, function ($users) use ($plans) {
-            $users->each(function ($user) use ($plans) {
+        User::orderBy('id')->chunkById(100, function ($users) use ($plans, $stableDemoEmails) {
+            $users->each(function ($user) use ($plans, $stableDemoEmails) {
             
             // ------------------------------------------------
             // 1. ADD 1-2 PREVIOUSLY EXPIRED SUBSCRIPTIONS (HISTORY)
@@ -73,7 +83,7 @@ class SubscriptionSeeder extends Seeder
             // 2. ADD ONE ACTIVE SUBSCRIPTION (CURRENT)
             // ------------------------------------------------
             // Give 80% of users an active subscription (or an active one set to expire soon).
-            if (mt_rand(1, 10) <= 8) {
+            if (!in_array($user->email, $stableDemoEmails, true) && mt_rand(1, 10) <= 8) {
                 $plan = $plans->random();
                 
                 // Determine the original start date (between 1 and 6 months ago)
@@ -128,7 +138,43 @@ class SubscriptionSeeder extends Seeder
             }
         });
     });
+
+        $this->seedDemoPartnerSubscription($plans);
         
         $this->command->info('✅ Subscription seeding complete! ' . Subscription::count() . ' subscriptions processed.');
+    }
+
+    private function seedDemoPartnerSubscription($plans): void
+    {
+        $partner = User::where('email', 'partner@sellio-platform.test')->first();
+
+        if (!$partner) {
+            $this->command?->warn('Demo partner user not found. Skipping deterministic partner subscription.');
+            return;
+        }
+
+        $plan = $plans->firstWhere('title', 'Enterprise Plan')
+            ?? $plans->where('is_active', true)->sortByDesc('max_listings')->first()
+            ?? $plans->sortByDesc('max_listings')->first();
+
+        if (!$plan) {
+            $this->command?->warn('No usable demo partner plan found. Skipping deterministic partner subscription.');
+            return;
+        }
+
+        Subscription::updateOrCreate(
+            [
+                'user_id' => $partner->id,
+                'title' => 'default',
+            ],
+            [
+                'plan_id' => $plan->id,
+                'status' => Subscription::STATUS_ACTIVE,
+                'starts_at' => now()->subMonth(),
+                'ends_at' => null,
+            ]
+        );
+
+        $this->command?->info("  - Demo partner assigned active {$plan->title} subscription.");
     }
 }
