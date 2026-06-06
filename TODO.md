@@ -210,3 +210,27 @@ in the partner dashboard
 - [x] Events single page UI/UX refreshed: metric cards, ticket sidebar styling, sticky purchase panel, mobile CTA, and shared detail tokens aligned with property/product pages.
 
 -----------------------
+
+- [x] Product `/checkout` and event booking checkout now match property payment UX: shared `booking-payment-panel` with card preview, secure header, trust list, review cards, sticky price breakdown sidebar, and mobile pay bar.
+
+--------------------------
+
+on the login/register/forget (all auth pages), you have to redesign the UIUX
+
+---------------------------
+
+products single page has UIUX bugs, design issues
+
+------------------
+
+classifieds single page has UIUX bugs, fix them
+
+------------------------
+
+related products does not show correct images
+
+--------------------------
+
+on the products single page, you have extra addons on the sidebar, can you get inspiration from the properties booking step 1 of 3, for UIUX polishing?
+
+--------------------------

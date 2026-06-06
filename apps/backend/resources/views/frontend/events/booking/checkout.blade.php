@@ -1,15 +1,20 @@
 @extends('frontend._layouts._app')
 
+@php
+    $taxRate = 0.05;
+    $finalTotal = round($booking->total_price * (1 + $taxRate), 2);
+@endphp
+
 @section('title', __('Secure Checkout') . ' | ' . __('Step 2 of 3'))
 @section('body_class', 'has-body-glow')
 
 @section('content')
 <x-frontend.page-shell variant="event-booking">
     @include('frontend.events.booking._partials._booking-header', [
-        'eyebrow' => __('Secure Checkout'),
-        'title' => __('Event Booking'),
+        'eyebrow' => __('Finalize Reservation'),
+        'title' => __('Secure Payment'),
         'step' => 2,
-        'subtitle' => __('Review attendee details, confirm your tickets, and complete payment below.'),
+        'subtitle' => __('Review your tickets, confirm attendee details, and complete payment below.'),
         'event' => $event,
         'backUrl' => route('events.show', $event->slug),
         'backLabel' => __('Back to event'),
@@ -22,31 +27,46 @@
             <div class="glass-surface p-4 p-md-5 mb-4 border-0">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="fw-800 tracking-tight text-dark mb-0">
-                        <i class="bi bi-person-vcard text-primary-color me-2"></i>{{ __('Attendee Details') }}
+                        <i class="bi bi-file-earmark-text text-primary-color me-2"></i>{{ __('Review Booking') }}
                     </h4>
                     <span class="badge bg-light-primary text-primary-color rounded-pill px-3 py-2 fw-600">
                         {{ $booking->quantity }} {{ __('ticket') }}{{ $booking->quantity > 1 ? 's' : '' }}
                     </span>
                 </div>
 
+                <div class="row g-4 text-start">
+                    <div class="col-md-6">
+                        <span class="metric-label">{{ __('Event Date') }}</span>
+                        <p class="fw-800 mb-0 text-dark fs-5">
+                            {{ $booking->occurrence->start_date_time->format('M j, Y') }}
+                        </p>
+                        <p class="small text-muted mb-0">{{ $booking->occurrence->start_date_time->format('h:i A') }}</p>
+                    </div>
+                    <div class="col-md-6 border-start-md ps-md-4 border-color-light">
+                        <span class="metric-label">{{ __('Ticket Type') }}</span>
+                        <p class="fw-800 mb-0 text-dark">{{ $booking->ticketType->title }}</p>
+                        <p class="small text-muted mb-0">{{ __('Quantity') }}: {{ $booking->quantity }}</p>
+                    </div>
+                    <div class="col-12 pt-3 border-top border-color-light">
+                        <span class="metric-label">{{ __('Primary Contact') }}</span>
+                        <p class="fw-800 mb-0 text-dark">{{ $booking->user_name }}</p>
+                        <p class="small text-muted mb-0">{{ $booking->user_email }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-surface p-4 p-md-5 mb-4 border-0">
+                <h4 class="fw-800 tracking-tight mb-4 text-dark">
+                    <i class="bi bi-person-vcard text-primary-color me-2"></i>{{ __('Attendee Details') }}
+                </h4>
+
                 @include('frontend.events.booking._partials._attendee_form', ['booking' => $booking])
             </div>
 
-            <div class="glass-surface p-4 p-md-5 border-0">
-                <h4 class="fw-800 tracking-tight mb-4 text-dark">
-                    <i class="bi bi-credit-card-2-front text-primary-color me-2"></i>{{ __('Payment Method') }}
-                </h4>
-
-                @include('frontend.events.booking._partials._payment_options', [
-                    'booking' => $booking,
-                    'stripePublishableKey' => $stripePublishableKey ?? null,
-                ])
-            </div>
-
-            <div class="mt-4 d-flex align-items-center text-muted small px-2">
-                <i class="bi bi-shield-fill-check text-success fs-4 me-2"></i>
-                <span>{{ __('Your transaction is protected by 256-bit SSL encryption. We never store your full card details.') }}</span>
-            </div>
+            @include('frontend.events.booking._partials._payment_options', [
+                'booking' => $booking,
+                'stripePublishableKey' => $stripePublishableKey ?? null,
+            ])
         </div>
 
         <div class="col-lg-5 booking-layout__aside">
@@ -54,35 +74,28 @@
                 <div class="glass-surface p-4 p-md-5 border-0 shadow-deep position-relative overflow-hidden">
                     <div class="price-glow-effect"></div>
 
-                    <h4 class="fw-800 tracking-tight mb-4 text-dark">{{ __('Order Summary') }}</h4>
+                    <h4 class="fw-800 tracking-tight mb-4 text-dark">{{ __('Price Breakdown') }}</h4>
 
-                    <div class="d-flex gap-3 mb-4 pb-4 border-bottom border-color-light">
-                        <img src="{{ $event->primary_image_url }}"
-                             class="rounded-3 shadow-sm"
-                             width="72"
-                             height="72"
-                             style="object-fit:cover"
-                             alt="{{ $event->title }}">
-                        <div class="min-w-0">
-                            <h6 class="fw-bold mb-1 text-dark text-truncate">{{ $event->title }}</h6>
-                            <span class="small text-muted d-block">
-                                <i class="bi bi-calendar-event me-1"></i>
+                    <div class="d-flex align-items-center mb-4 border-bottom border-color-light pb-4">
+                        <img src="{{ $event->primary_image_url }}" class="booking-summary-thumb rounded-4 me-3 shadow-sm" alt="{{ $event->title }}">
+                        <div class="overflow-hidden">
+                            <span class="metric-label">{{ __('Reserved Event') }}</span>
+                            <h6 class="fw-800 mb-0 text-truncate text-dark">{{ $event->title }}</h6>
+                            <p class="small text-muted mb-0">
+                                <i class="bi bi-calendar-event text-primary-color me-1"></i>
                                 {{ $booking->occurrence->start_date_time->format('M j, Y · h:i A') }}
-                            </span>
+                            </p>
                         </div>
                     </div>
 
                     @include('frontend.events.booking._partials._order_summary', ['booking' => $booking])
 
-                    <div class="mt-4 border-top pt-3">
-                        <div class="form-check small">
-                            <input class="form-check-input" type="checkbox" id="termsCheck" form="payment-form" required>
-                            <label class="form-check-label text-muted" for="termsCheck">
-                                {{ __('I agree to the') }}
-                                <a href="#" class="text-primary-color fw-bold">{{ __('Terms & Conditions') }}</a>
-                                {{ __('and') }}
-                                <a href="#" class="text-primary-color fw-bold">{{ __('Refund Policy') }}</a>.
-                            </label>
+                    <div class="mt-4">
+                        <div class="p-3 bg-light-primary rounded-4 border border-primary-light text-center">
+                            <p class="small text-muted mb-0">
+                                <i class="bi bi-info-circle me-1 text-primary-color"></i>
+                                {{ __('Your digital tickets will be emailed immediately after payment.') }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -92,6 +105,6 @@
 </x-frontend.page-shell>
 @endsection
 
-@section('head_extra')
+@push('scripts')
 @stack('payment_scripts')
-@endsection
+@endpush
