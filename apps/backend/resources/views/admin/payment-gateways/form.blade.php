@@ -153,3 +153,29 @@
     .nav-pills .nav-link:not(.active) { color: var(--dark-muted); }
 </style>
 @endpush
+
+@push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form[action*="payment-gateways"]');
+        const modeSelect = document.getElementById('mode');
+
+        if (!form || !modeSelect) {
+            return;
+        }
+
+        const syncInactiveEnvironmentInputs = () => {
+            const activeEnvironment = modeSelect.value === 'live' ? 'live' : 'sandbox';
+
+            form.querySelectorAll('[data-gateway-config-input]').forEach((input) => {
+                const isActive = input.dataset.gatewayEnvironment === activeEnvironment;
+                input.disabled = !isActive;
+            });
+        };
+
+        modeSelect.addEventListener('change', syncInactiveEnvironmentInputs);
+        form.addEventListener('submit', syncInactiveEnvironmentInputs);
+        syncInactiveEnvironmentInputs();
+    });
+</script>
+@endpush

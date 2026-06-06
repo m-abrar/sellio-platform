@@ -33,15 +33,18 @@
                     <input type="password" name="{{ $name }}" id="{{ $name }}"
                            class="form-control @if($isInvalid) is-invalid @endif"
                            placeholder="Enter {{ $blueprint->label }}"
-                           {{ $blueprint->is_required ? 'required' : '' }}
-                           autocomplete="new-password">
+                           autocomplete="new-password"
+                           data-gateway-config-input
+                           data-gateway-environment="{{ $environment }}">
                     <small class="form-text text-muted">
                         {{ $blueprint->is_sensitive ? 'Sensitive: Leave blank to keep existing value.' : '' }}
                     </small>
                 @elseif ($blueprint->input_type === 'textarea')
                     <textarea name="{{ $name }}" id="{{ $name }}"
                               class="form-control @if($isInvalid) is-invalid @endif"
-                              rows="3" {{ $blueprint->is_required ? 'required' : '' }}>{{ old($name, $value) }}</textarea>
+                              rows="3"
+                              data-gateway-config-input
+                              data-gateway-environment="{{ $environment }}">{{ old($name, $value) }}</textarea>
                 @elseif ($blueprint->input_type === 'checkbox')
                     <div class="custom-control custom-checkbox pt-2">
                         <input type="hidden" name="{{ $name }}" value="0">
@@ -53,7 +56,8 @@
                     <input type="text" name="{{ $name }}" id="{{ $name }}"
                            class="form-control @if($isInvalid) is-invalid @endif"
                            value="{{ old($name, $value) }}"
-                           {{ $blueprint->is_required ? 'required' : '' }}>
+                           data-gateway-config-input
+                           data-gateway-environment="{{ $environment }}">
                 @endif
                 
                 @error($name) <span class="invalid-feedback d-block">{{ $message }}</span> @enderror

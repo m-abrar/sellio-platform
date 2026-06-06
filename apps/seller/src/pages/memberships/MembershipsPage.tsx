@@ -4,6 +4,7 @@ import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlineCheck, HiOutlineSparkles } from 'react-icons/hi2';
 import { getMembershipPlans, subscribeToPlan } from '../../api/plans';
 import { getDashboardData } from '../../api/dashboard';
+import { ApiError } from '../../lib/apiError';
 import { toast } from 'sonner';
 
 export default function MembershipsPage() {
@@ -66,7 +67,10 @@ export default function MembershipsPage() {
       await fetchPlans();
     } catch (error) {
       console.error('Failed to subscribe', error);
-      toast.error('Unable to update subscription.');
+      const message = error instanceof ApiError
+        ? error.message
+        : 'Unable to update subscription.';
+      toast.error(message);
     } finally {
       setUpgradingPlanId(null);
     }

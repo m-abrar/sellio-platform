@@ -60,7 +60,8 @@ class PaymentGatewayController extends Controller
      */
     public function update(Request $request, PaymentGateway $gateway): RedirectResponse
     {
-        $validationRules = $this->buildValidationRules($gateway);
+        $mode = $request->input('mode', 'sandbox');
+        $validationRules = $this->buildValidationRules($gateway, $mode);
         $request->validate($validationRules);
 
         $credentials = $gateway->credentials ?? new GatewayCredential(['payment_gateway_id' => $gateway->id]);
@@ -100,7 +101,7 @@ class PaymentGatewayController extends Controller
      * @param  \App\Models\PaymentGateway  $gateway
      * @return array
      */
-    protected function buildValidationRules(PaymentGateway $gateway): array
+    protected function buildValidationRules(PaymentGateway $gateway, string $mode): array
     {
         $rules = [
             'is_active' => ['nullable', 'boolean'],
@@ -112,25 +113,25 @@ class PaymentGatewayController extends Controller
             ->pluck('key')
             ->toArray();
 
-        foreach ($requiredKeys as $key) {
-            // Live Config Validation
-            $rules["live_config.{$key}"] = [
-                'nullable', 
-                function ($attribute, $value, $fail) use ($key, $gateway) {
-                    if (empty($value) && empty($gateway->credentials->live_config[$key] ?? null)) {
-                        $fail(__('The live configuration field for :key is required.', ['key' => $key]));
-                    }
-                }
-            ];
+        $configPrefix = $mode === PaymentGateway::MODE_LIVE ? 'live_config' : 'sandbox_config';
+        $existingConfig = $mode === PaymentGateway::MODE_LIVE
+            ? ($gateway->credentials->live_config ?? [])
+            : ($gateway->credentials->sandbox_config ?? []);
 
-            // Sandbox Config Validation
-            $rules["sandbox_config.{$key}"] = [
-                'nullable', 
-                function ($attribute, $value, $fail) use ($key, $gateway) {
-                    if (empty($value) && empty($gateway->credentials->sandbox_config[$key] ?? null)) {
-                        $fail(__('The sandbox configuration field for :key is required.', ['key' => $key]));
+        foreach ($requiredKeys as $key) {
+            $rules["{$configPrefix}.{$key}"] = [
+                'nullable',
+                function ($attribute, $value, $fail) use ($key, $existingConfig, $mode) {
+                    if (!empty($value) || !empty($existingConfig[$key] ?? null)) {
+                        return;
                     }
-                }
+
+                    $environment = $mode === PaymentGateway::MODE_LIVE ? 'live' : 'sandbox';
+                    $fail(__('The :environment configuration field for :key is required.', [
+                        'environment' => $environment,
+                        'key' => $key,
+                    ]));
+                },
             ];
         }
 

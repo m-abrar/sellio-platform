@@ -44,6 +44,24 @@ class AdminSystemResourcesTest extends TestCase
         $this->assertNull(Permission::find($permission->id));
     }
 
+    public function test_admin_can_update_sandbox_gateway_without_live_credentials(): void
+    {
+        $gateway = PaymentGateway::where('slug', 'stripe')->firstOrFail();
+
+        $this->actingAsSuperAdmin()->put(route('admin.payment-gateways.update', $gateway), [
+            'mode' => 'sandbox',
+            'is_active' => '1',
+            'sandbox_config' => [
+                'secret_key' => 'sk_test_sandbox_only',
+                'publishable_key' => 'pk_test_sandbox_only',
+                'currency' => 'USD',
+            ],
+        ])->assertRedirect(route('admin.payment-gateways.index'));
+
+        $credentials = $gateway->credentials()->firstOrFail()->refresh();
+        $this->assertSame('pk_test_sandbox_only', $credentials->sandbox_config['publishable_key']);
+    }
+
     public function test_admin_can_update_payment_gateway_configuration(): void
     {
         $gateway = PaymentGateway::where('slug', 'stripe')->firstOrFail();
