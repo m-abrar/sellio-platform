@@ -181,6 +181,22 @@ class ProductCheckoutPaymentTest extends TestCase
         ]);
     }
 
+    public function test_product_stripe_auth_return_is_forbidden_for_another_user(): void
+    {
+        $owner = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $order = Order::factory()->create([
+            'user_id' => $owner->id,
+            'status' => Order::STATUS_PENDING,
+            'payment_status' => 'unpaid',
+            'payment_method' => 'stripe',
+        ]);
+
+        $this->actingAs($otherUser)
+            ->get(route('checkout.confirm', ['gateway' => 'stripe', 'order' => $order->id]) . '?payment_intent=pi_product_order_auth')
+            ->assertForbidden();
+    }
+
     public function test_stripe_webhook_payment_intent_succeeded_fulfills_product_order_and_records_payment(): void
     {
         $user = User::factory()->create();

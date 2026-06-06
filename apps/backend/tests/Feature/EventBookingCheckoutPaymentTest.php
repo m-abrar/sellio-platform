@@ -45,6 +45,17 @@ class EventBookingCheckoutPaymentTest extends TestCase
             ->assertSee('data-stripe-payment-token', false);
     }
 
+    public function test_event_ticket_booking_guest_is_redirected_to_login(): void
+    {
+        [, $event] = $this->createPendingEventBooking();
+
+        $this->post(route('events.tickets.booking.store', [$event->slug, $event->ticketTypes()->first()->id]), [
+            'event_occurrence_id' => $event->occurrences()->first()->id,
+            'quantity' => 1,
+        ])
+            ->assertRedirect(route('login'));
+    }
+
     public function test_event_stripe_payment_confirms_booking_and_records_payment(): void
     {
         [$user, $event, $booking] = $this->createPendingEventBooking(totalPrice: 100);

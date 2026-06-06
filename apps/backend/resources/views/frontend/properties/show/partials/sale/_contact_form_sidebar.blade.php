@@ -6,7 +6,7 @@
 
 <div class="card glass-surface mb-4">
     <div class="card-header bg-primary text-white p-4 border-0">
-        <h4 class="fw-800 mb-1"><i class="bi-calendar-check-fill me-2"></i>{{ __('Request a Property Visit') }}</h4>
+        <h4 class="fw-800 mb-1"><i class="bi-calendar-check-fill me-2"></i>{{ __('Schedule a Visit') }}</h4>
         <p class="small text-white-50 mb-0">{{ __('Share your preferred time and the agent will confirm availability.') }}</p>
     </div>
 

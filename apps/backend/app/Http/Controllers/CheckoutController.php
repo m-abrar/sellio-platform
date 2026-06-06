@@ -183,6 +183,10 @@ class CheckoutController extends Controller
      */
     public function confirmPayment(Request $request, GatewayManager $manager, CheckoutService $checkoutService, string $gatewaySlug, \App\Models\Order $order): RedirectResponse
     {
+        if (!Auth::check() || Auth::id() !== $order->user_id) {
+            abort(403, __('Unauthorized access.'));
+        }
+
         $paymentIntentId = $request->get('payment_intent') ?? $request->get('token');
 
         if (!$paymentIntentId) {

@@ -84,7 +84,7 @@ class PaypalGatewayService implements PaymentGatewayService
                 ],
                 'application_context' => [
                     'return_url' => $returnUrl, 
-                    'cancel_url' => route('checkout.showCheckout', ['error' => 'paypal_cancelled']), 
+                    'cancel_url' => route('checkout.index', ['error' => 'paypal_cancelled']), 
                 ],
             ];
             
