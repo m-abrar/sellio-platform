@@ -21,6 +21,7 @@ class AdminBarContextTest extends TestCase
             ->assertJson([
                 'pages' => [],
                 'menus' => [],
+                'enabled_modules' => [],
             ]);
     }
 
@@ -59,6 +60,7 @@ class AdminBarContextTest extends TestCase
         $response->assertOk()
             ->assertJsonPath('pages', ['home'])
             ->assertJsonCount(1, 'menus')
-            ->assertJsonPath('menus.0.title', 'Main Header');
+            ->assertJsonPath('menus.0.title', 'Main Header')
+            ->assertJson(fn ($json) => $json->has('enabled_modules')->etc());
     }
 }

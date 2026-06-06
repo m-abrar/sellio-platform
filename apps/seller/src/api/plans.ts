@@ -20,12 +20,15 @@ export const getSubscriptions = async () => {
 };
 
 export const subscribeToPlan = async (planId: number) => {
-  const response = await apiClient.post('/dashboard/partner/subscriptions', {
-    plan_id: planId,
+  const response = await apiClient.get('/dashboard/partner/subscriptions/checkout', {
+    params: { plan_id: planId },
   });
+
+  const payload = unwrapData<Record<string, unknown>>(response);
 
   return {
     message: response.data.message,
+    checkoutUrl: typeof payload?.checkout_url === 'string' ? payload.checkout_url : null,
   };
 };
 

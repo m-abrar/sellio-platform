@@ -117,6 +117,7 @@ Route::apiResources([
  */
 Route::get('payments', [PaymentController::class, 'index']);
 Route::apiResource('plans', PlanController::class)->only(['index', 'show']);
+Route::get('subscriptions/checkout', [SubscriptionController::class, 'checkout']);
 Route::apiResource('subscriptions', SubscriptionController::class)->only(['index', 'store', 'destroy']);
 
 Route::prefix('wallet')->group(function () {

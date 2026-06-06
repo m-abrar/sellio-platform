@@ -121,18 +121,85 @@ h1, h2, h3, h4, h5, h6, .brand-text {
     background-color: var(--glass-bg) !important;
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     margin: 0 !important;
+    margin-left: 0 !important;
     border-radius: 0 !important;
     border-bottom: 1px solid rgba(0,0,0,0.05) !important;
-    padding: 0.75rem 1.5rem !important;
+    padding: 0 !important;
     position: absolute !important;
     top: 0;
     left: 0 !important;
-    right: 0 !important;
+    right: auto !important;
     z-index: 1030;
-    width: auto !important;
-    transition: left .3s ease-in-out !important;
+    width: 100% !important;
+    transition: left .3s ease-in-out, width .3s ease-in-out !important;
     display: flex !important;
     align-items: center;
+    overflow: visible !important;
+}
+
+/* AdminLTE also applies margin-left to the header; with our absolute left offset that doubles the gap and clips the right side. */
+body .main-header,
+body.sidebar-mini .main-header,
+body.sidebar-mini.sidebar-collapse .main-header,
+body.layout-fixed .wrapper .main-header {
+    margin-left: 0 !important;
+}
+
+/* Keep header content aligned with the dashboard content frame */
+.main-header > .container,
+.main-header > .container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0.75rem 1rem !important;
+    overflow: visible !important;
+}
+
+.main-header .navbar {
+    width: 100% !important;
+    padding: 0 !important;
+    flex-wrap: nowrap !important;
+}
+
+.main-header .navbar-nav {
+    flex-wrap: nowrap !important;
+}
+
+.main-header .navbar-nav.ml-auto,
+.main-header .navbar-nav.navbar-no-expand {
+    margin-left: auto !important;
+}
+
+@media (min-width: 992px) {
+    .main-header > .container,
+    .main-header > .container-fluid {
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
+
+.main-header .navbar-nav {
+    align-items: center;
+}
+
+.main-header .navbar-nav .nav-item {
+    position: relative;
+}
+
+.main-header .navbar-nav .dropdown-menu {
+    left: auto !important;
+    right: 0 !important;
+    margin-top: 0.5rem !important;
+    min-width: 16rem;
+    border-radius: var(--radius-lg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--shadow-float) !important;
+}
+
+.main-header .navbar-nav.ml-auto .dropdown-menu,
+.main-header .navbar-nav[class*="-right"] .dropdown-menu {
+    left: auto !important;
+    right: 0 !important;
 }
 
 /* Adjust Sidebar and Content for Sidebar-First Layout */
@@ -147,18 +214,38 @@ h1, h2, h3, h4, h5, h6, .brand-text {
 
 /* Desktop Sidebar Logic for Wide Header */
 @media (min-width: 992px) {
-    .sidebar-mini:not(.sidebar-collapse) .main-header {
+    body.sidebar-mini:not(.sidebar-collapse) .main-header {
         left: 250px !important;
         width: calc(100% - 250px) !important;
     }
 
-    .sidebar-collapse .main-header {
-        left: 73px !important;
-        width: calc(100% - 73px) !important;
-    }
-    
-    .sidebar-mini.sidebar-collapse .main-header {
+    body.sidebar-mini.sidebar-collapse .main-header {
         left: 4.6rem !important;
+        width: calc(100% - 4.6rem) !important;
+    }
+
+    body.sidebar-mini.sidebar-collapse .main-sidebar {
+        width: 4.6rem !important;
+    }
+
+    body.sidebar-mini.sidebar-collapse .brand-link {
+        width: 4.6rem !important;
+        justify-content: center !important;
+        padding: 1.35rem 0 !important;
+        overflow: hidden;
+    }
+
+    body.sidebar-mini.sidebar-collapse .brand-link .brand-image {
+        float: none !important;
+        margin: 0 auto !important;
+        max-width: 2.1rem;
+        max-height: 2.1rem;
+        object-fit: contain;
+    }
+
+    body.sidebar-mini.sidebar-collapse .brand-link .brand-text,
+    body.sidebar-mini.sidebar-collapse .brand-text {
+        display: none !important;
     }
 }
 
@@ -166,6 +253,19 @@ h1, h2, h3, h4, h5, h6, .brand-text {
 @media (max-width: 991.98px) {
     .main-header {
         left: 0 !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    .main-header .navbar-nav .dropdown-menu {
+        left: auto !important;
+        right: 0 !important;
+        transform: none !important;
+    }
+
+    .sidebar-open .main-header {
+        left: 0 !important;
+        width: 100% !important;
     }
 }
 
@@ -196,19 +296,35 @@ h1, h2, h3, h4, h5, h6, .brand-text {
 }
 
 /* User Profile in Navbar */
+.navbar-nav .user-menu > .nav-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    max-width: none !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+    padding-right: 0.25rem !important;
+}
+
 .navbar-nav .user-menu .user-image {
     width: 34px;
     height: 34px;
     border-radius: var(--radius-md);
     object-fit: cover;
     border: 2px solid var(--border-color);
+    flex-shrink: 0;
 }
 
 .navbar-nav .user-menu .user-name {
+    display: inline-block !important;
     font-weight: var(--weight-bold);
     color: var(--dark);
     font-size: var(--text-base);
-    margin-left: 8px;
+    margin-left: 0;
+    max-width: 11rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Premium Sidebar */
@@ -241,7 +357,6 @@ h1, h2, h3, h4, h5, h6, .brand-text {
 
 .brand-image {
     opacity: 1 !important;
-    filter: drop-shadow(0 4px 10px rgba(var(--primary-rgb), 0.3)) hue-rotate(180deg) brightness(1.2);
 }
 
 /* Sidebar Menu Typography */
@@ -338,14 +453,14 @@ h1, h2, h3, h4, h5, h6, .brand-text {
 }
 
 @media (min-width: 992px) {
-    .sidebar-mini:not(.sidebar-collapse) .content-wrapper {
+    body.sidebar-mini:not(.sidebar-collapse) .content-wrapper {
         margin-left: 250px !important;
         padding-left: 1.5rem !important;
         padding-right: 1.5rem !important;
         padding-bottom: 1.5rem !important;
     }
     
-    .sidebar-mini.sidebar-collapse .content-wrapper {
+    body.sidebar-mini.sidebar-collapse .content-wrapper {
         margin-left: 4.6rem !important;
         padding-left: 1.5rem !important;
         padding-right: 1.5rem !important;

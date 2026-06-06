@@ -241,7 +241,7 @@ export default function CreateProduct() {
       toast.success(`${form.title || 'Product'} saved successfully.`, { id: toastId });
       setIsSaving(false);
       await triggerCelebration();
-      setTimeout(() => navigate('/dashboard/products'), 3500);
+      navigate('/dashboard/products');
     } catch (err: unknown) {
       setIsSaving(false);
       const errorMessage = err instanceof ApiError ? err.message : 'Validation failed.';

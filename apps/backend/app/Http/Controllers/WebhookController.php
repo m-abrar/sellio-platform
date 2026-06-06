@@ -40,6 +40,16 @@ class WebhookController extends Controller
             // Delegate entire processing and signature verification to the specialized service
             $result = $service->handleWebhook($request); 
             
+            if (!empty($result['subscription_user_id']) && !empty($result['subscription_plan_id'])) {
+                $user = \App\Models\User::find($result['subscription_user_id']);
+                $plan = \App\Models\Plan::find($result['subscription_plan_id']);
+
+                if ($user && $plan) {
+                    app(\App\Services\SubscriptionService::class)->subscribe($user, $plan);
+                    Log::info("Webhook activated partner subscription for user {$user->id} on plan {$plan->id} via {$gatewaySlug}");
+                }
+            }
+
             // AUTOMATED FULFILLMENT: Update the corresponding Order if identified
             if (!empty($result['order_id']) && isset($result['payment_status']) && $result['payment_status'] === 'paid') {
                 $order = \App\Models\Order::find($result['order_id']);

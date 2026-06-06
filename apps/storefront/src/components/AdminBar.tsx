@@ -32,12 +32,15 @@ export async function AdminBar({ theme }: AdminBarProps) {
     locationKey: menu.location_key,
   }));
 
+  const enabledModules = context?.enabledModules ?? [];
+
   return (
     <AdminBarClient
       initialAuthenticated={Boolean(user)}
       theme={theme}
       themePages={themePages}
       adminMenus={adminMenus}
+      enabledModules={enabledModules}
       requestHostname={hostname}
     />
   );

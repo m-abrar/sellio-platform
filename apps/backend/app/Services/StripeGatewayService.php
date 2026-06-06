@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Contracts\PaymentGatewayService;
 use App\Exceptions\WebhookSignatureException; // Assuming you have this exception
+use App\Models\Plan;
+use App\Models\User;
 use Stripe\StripeClient;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\SignatureVerificationException; // Specific Stripe exception for webhooks
@@ -303,6 +305,58 @@ class StripeGatewayService implements PaymentGatewayService
     }
 
     /**
+     * Create a hosted Stripe Checkout session for partner plan subscriptions.
+     */
+    public function createSubscriptionCheckoutSession(
+        User $user,
+        Plan $plan,
+        string $successUrl,
+        string $cancelUrl,
+    ): string {
+        $currency = strtolower($this->config['currency'] ?? 'usd');
+        $interval = $plan->billing_period === 'annually' ? 'year' : 'month';
+
+        $session = $this->client->checkout->sessions->create([
+            'mode' => 'subscription',
+            'customer_email' => $user->email,
+            'success_url' => $successUrl,
+            'cancel_url' => $cancelUrl,
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => $currency,
+                    'product_data' => [
+                        'name' => $plan->title,
+                        'description' => $plan->description,
+                    ],
+                    'unit_amount' => (int) round($plan->price * 100),
+                    'recurring' => [
+                        'interval' => $interval,
+                    ],
+                ],
+                'quantity' => 1,
+            ]],
+            'metadata' => [
+                'purpose' => 'partner_subscription',
+                'user_id' => (string) $user->id,
+                'plan_id' => (string) $plan->id,
+            ],
+            'subscription_data' => [
+                'metadata' => [
+                    'purpose' => 'partner_subscription',
+                    'user_id' => (string) $user->id,
+                    'plan_id' => (string) $plan->id,
+                ],
+            ],
+        ]);
+
+        if (empty($session->url)) {
+            throw new \RuntimeException('Stripe did not return a checkout URL.');
+        }
+
+        return $session->url;
+    }
+
+    /**
      * Handles and processes incoming webhook payloads from Stripe.
      * @param \Illuminate\Http\Request $request
      * @return array
@@ -359,12 +413,20 @@ class StripeGatewayService implements PaymentGatewayService
 
         if ($eventType === 'checkout.session.completed') {
             Log::info("Handled 'checkout.session.completed'. Session ID: {$eventData['id']}");
+
+            $metadata = $eventData['metadata'] ?? [];
+            $isPartnerSubscription = ($metadata['purpose'] ?? null) === 'partner_subscription';
+
             return [
-                'status'         => 'processed',
-                'order_id'       => $eventData['metadata']['order_id'] ?? null,
-                'payment_status' => 'paid',
-                'reference'      => $eventData['id'],
-                'message'        => 'Checkout session completed event handled.',
+                'status'                 => 'processed',
+                'order_id'               => $metadata['order_id'] ?? null,
+                'payment_status'         => 'paid',
+                'reference'              => $eventData['id'],
+                'subscription_user_id'   => $isPartnerSubscription ? ($metadata['user_id'] ?? null) : null,
+                'subscription_plan_id'   => $isPartnerSubscription ? ($metadata['plan_id'] ?? null) : null,
+                'message'                => $isPartnerSubscription
+                    ? 'Partner subscription checkout completed.'
+                    : 'Checkout session completed event handled.',
             ];
         }
         

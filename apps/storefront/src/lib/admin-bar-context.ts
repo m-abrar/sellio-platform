@@ -9,6 +9,7 @@ export interface AdminBarContextMenu {
 export interface AdminBarContext {
   pages: string[];
   menus: AdminBarContextMenu[];
+  enabledModules: string[];
 }
 
 export async function fetchAdminBarContext(
@@ -37,6 +38,7 @@ export async function fetchAdminBarContext(
     return {
       pages: Array.isArray(payload?.pages) ? payload.pages : [],
       menus: Array.isArray(payload?.menus) ? payload.menus : [],
+      enabledModules: Array.isArray(payload?.enabled_modules) ? payload.enabled_modules : [],
     };
   } catch {
     return null;

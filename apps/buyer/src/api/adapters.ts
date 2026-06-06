@@ -256,9 +256,20 @@ export function toActivity(resource: any, index = 0, fallbackModule = 'products'
     ? (status as 'pending' | 'confirmed' | 'completed' | 'cancelled')
     : 'pending';
 
+  const reviewableId = firstDefined(
+    item?.id,
+    resource?.property_id,
+    resource?.event_id,
+    resource?.service_id,
+    resource?.auto_id,
+    resource?.classified_id,
+    resource?.reviewable_id,
+  );
+
   return {
     id: resource?.id || index,
     item_id: text(item?.slug || item?.id || resource?.item_id || resource?.listing_id || resource?.id),
+    reviewable_id: reviewableId ?? null,
     itemTitle: text(resource?.itemTitle || resource?.item_title || item?.title || resource?.title, 'Activity'),
     module,
     status: normalizedStatus,

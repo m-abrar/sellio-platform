@@ -7,6 +7,8 @@ import { deleteJob, getJobs } from '../../api/jobs';
 import { triggerDeletion } from '../../utils/animations';
 import { getWelcomeData } from '../../api/dashboard';
 import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
+import ListingCountCards from '../../components/listings/ListingCountCards';
+import { getListingCounts } from '../../utils/listingCounts';
 
 export default function JobsPage() {
   const navigate = useNavigate();
@@ -65,6 +67,8 @@ export default function JobsPage() {
     });
   };
 
+  const jobCounts = getListingCounts(jobs);
+
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader 
@@ -79,6 +83,8 @@ export default function JobsPage() {
           <HiOutlinePlus className="w-4 h-4" /> Post Job
         </button>
       </PageHeader>
+
+      <ListingCountCards entityLabel="Jobs" counts={jobCounts} isLoading={isLoading} />
       
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">

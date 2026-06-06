@@ -16,6 +16,7 @@ use App\Events\PlanUpgraded;
 use App\Events\PlanDowngraded; 
 use Illuminate\Support\Facades\Log;
 use App\Services\SubscriptionService;
+use App\Services\SubscriptionCheckoutService;
 
 class SubscriptionController extends Controller
 {
@@ -24,6 +25,33 @@ class SubscriptionController extends Controller
         $subscriptions = Auth::user()->subscriptions()->with('plan')->get();
 
         return $this->successResponse(SubscriptionResource::collection($subscriptions));
+    }
+
+    public function checkout(
+        StoreSubscriptionRequest $request,
+        SubscriptionCheckoutService $checkoutService,
+        SubscriptionService $service,
+    ) {
+        try {
+            $plan = Plan::findOrFail($request->plan_id);
+
+            if ($plan->price > 0 && $checkoutService->isStripeCheckoutAvailable()) {
+                $checkoutUrl = $checkoutService->createCheckoutSession(Auth::user(), $plan);
+
+                return $this->successResponse([
+                    'checkout_url' => $checkoutUrl,
+                ], __('Redirecting to secure checkout.'));
+            }
+
+            $result = $service->subscribe(Auth::user(), $plan);
+
+            return $this->successResponse([
+                'checkout_url' => null,
+            ], $result['message']);
+        } catch (\Exception $e) {
+            Log::error('Subscription checkout error: ' . $e->getMessage());
+            return $this->errorResponse($e->getMessage(), 422);
+        }
     }
 
     public function store(StoreSubscriptionRequest $request, SubscriptionService $service)

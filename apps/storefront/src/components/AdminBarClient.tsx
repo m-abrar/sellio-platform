@@ -17,12 +17,110 @@ export interface AdminMenuLink {
   locationKey: string;
 }
 
+interface ListingCreateLink {
+  module: string;
+  label: string;
+  href: string;
+  icon: React.ReactNode;
+}
+
 interface AdminBarClientProps {
   initialAuthenticated: boolean;
   theme: Theme;
   themePages: ThemePageLink[];
   adminMenus: AdminMenuLink[];
+  enabledModules?: string[];
   requestHostname?: string;
+}
+
+function isModuleEnabled(enabledModules: string[], module: string): boolean {
+  return enabledModules.length === 0 || enabledModules.includes(module);
+}
+
+function buildListingCreateLinks(urls: AdminUrls): ListingCreateLink[] {
+  return [
+    {
+      module: 'properties',
+      label: 'Property Listing',
+      href: urls.create.property,
+      icon: (
+        <>
+          <path d="M3 21h18" />
+          <path d="M5 21V7l8-4v18" />
+        </>
+      ),
+    },
+    {
+      module: 'autos',
+      label: 'Automotive Asset',
+      href: urls.create.auto,
+      icon: (
+        <>
+          <path d="M7 17h10" />
+          <path d="M5 17l-2-5h18l-2 5" />
+          <circle cx="7.5" cy="17" r="1.5" />
+          <circle cx="16.5" cy="17" r="1.5" />
+        </>
+      ),
+    },
+    {
+      module: 'events',
+      label: 'Event / Ticket',
+      href: urls.create.event,
+      icon: (
+        <>
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </>
+      ),
+    },
+    {
+      module: 'jobs',
+      label: 'Job Opportunity',
+      href: urls.create.job,
+      icon: (
+        <>
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+        </>
+      ),
+    },
+    {
+      module: 'services',
+      label: 'Professional Service',
+      href: urls.create.service,
+      icon: (
+        <>
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </>
+      ),
+    },
+    {
+      module: 'classifieds',
+      label: 'General Classified',
+      href: urls.create.classified,
+      icon: (
+        <>
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+          <line x1="7" y1="7" x2="7.01" y2="7" />
+        </>
+      ),
+    },
+    {
+      module: 'products',
+      label: 'Retail Product',
+      href: urls.create.product,
+      icon: (
+        <>
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 0 1-8 0" />
+        </>
+      ),
+    },
+  ];
 }
 
 type DropdownKey = 'addNew' | 'editContent' | 'menus' | null;
@@ -125,6 +223,7 @@ export function AdminBarClient({
   theme,
   themePages,
   adminMenus,
+  enabledModules = [],
   requestHostname,
 }: AdminBarClientProps) {
   const [visible, setVisible] = useState(initialAuthenticated);
@@ -134,6 +233,9 @@ export function AdminBarClient({
     requestHostname ||
     (typeof window !== 'undefined' ? window.location.hostname : '127.0.0.1');
   const urls: AdminUrls = buildAdminUrls(theme, hostname);
+  const listingCreateLinks = buildListingCreateLinks(urls).filter((link) =>
+    isModuleEnabled(enabledModules, link.module),
+  );
 
   const verifyAuth = useCallback(async () => {
     if (initialAuthenticated) {
@@ -234,14 +336,24 @@ export function AdminBarClient({
               </Icon>
             }
           >
-            <span className="admin-bar-dropdown-item is-disabled">
-              <Icon>
-                <path d="M3 21h18" />
-                <path d="M5 21V7l8-4v18" />
-              </Icon>
-              New Listing
-            </span>
-            <span className="admin-bar-dropdown-item is-disabled">
+            <div className="admin-bar-dropdown-header">New Listing</div>
+            {listingCreateLinks.length > 0 ? (
+              listingCreateLinks.map((link) => (
+                <a
+                  key={link.module}
+                  className="admin-bar-dropdown-item"
+                  href={link.href}
+                  {...ADMIN_LINK_PROPS}
+                >
+                  <Icon>{link.icon}</Icon>
+                  {link.label}
+                </a>
+              ))
+            ) : (
+              <span className="admin-bar-dropdown-item is-disabled">No listing modules enabled</span>
+            )}
+            <div className="admin-bar-dropdown-divider" />
+            <a className="admin-bar-dropdown-item" href={urls.create.user} {...ADMIN_LINK_PROPS}>
               <Icon>
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                 <circle cx="9" cy="7" r="4" />
@@ -249,22 +361,22 @@ export function AdminBarClient({
                 <line x1="22" y1="11" x2="16" y2="11" />
               </Icon>
               New User
-            </span>
+            </a>
             <div className="admin-bar-dropdown-divider" />
-            <span className="admin-bar-dropdown-item is-disabled">
+            <a className="admin-bar-dropdown-item" href={urls.create.page} {...ADMIN_LINK_PROPS}>
               <Icon>
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                 <polyline points="14 2 14 8 20 8" />
               </Icon>
               New Page
-            </span>
-            <span className="admin-bar-dropdown-item is-disabled">
+            </a>
+            <a className="admin-bar-dropdown-item" href={urls.create.blog} {...ADMIN_LINK_PROPS}>
               <Icon>
                 <path d="M12 20h9" />
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
               </Icon>
               New Blog
-            </span>
+            </a>
           </Dropdown>
 
           <span className="separator">|</span>

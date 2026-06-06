@@ -163,3 +163,21 @@ in the partner dashboard
 - [x] http://127.0.0.1:8000/properties showed `205 Listings Available` / too many entries. (Problem: repeated demo seeding kept adding 30 properties. `PropertySeeder` now skips once 30 exist, and the unfiltered public properties page uses a curated 30-listing demo cap while filtered searches still use matching results.)
 
 -------------------
+- [x] In the admin dashboard, the sidebar logo color is changed with some CSS styling? (Removed the `hue-rotate` / `brightness` filter from `.brand-image` in `public/admin-assets/style.css`.)
+
+--------------
+
+- [x] http://127.0.0.1:8000/admin/welcome — navbar hamburger dropdown items misaligned. (Fixed double-offset on `.main-header` by zeroing AdminLTE `margin-left`, using full-width fluid container padding aligned with dashboard content, and correcting `.navbar-nav` dropdown positioning on mobile/desktop.)
+
+---------------------
+
+- [x] http://localhost:5173/dashboard/properties — show total/live/pending/draft counts on other seller vertical listing pages too. (Added shared `ListingCountCards` + `getListingCounts` across products, autos, events, services, jobs, and classifieds.)
+
+----------------------
+- [x] Seller dashboard index counters flashed zero while loading. (`ListingCountCards` now renders pulse skeletons until fetch completes.)
+- [x] Admin topbar/sidebar misaligned when collapsed. (Unified collapsed offset to `4.6rem` for header width, sidebar, brand link, and content wrapper.)
+- [x] Admin collapsed layout regressions: topbar gap, off-center sidebar logo, clipped username. (Removed stacked AdminLTE `margin-left` on `.main-header` when using absolute `left`, centered collapsed brand mark, and fixed navbar/user-menu overflow.)
+
+---------------------
+
+

@@ -8,17 +8,22 @@ Default development API base: `http://127.0.0.1:8000/api`, overrideable via sell
 
 ## Current Workspace Status
 
-Last refreshed: 2026-05-26 by static workspace scan.
+Last refreshed: 2026-06-06 by static workspace scan.
 
-This plan is still active. The current codebase still shows seller/API completion signals:
+This plan remains active for backend polish and verification. Several items from the May 2026 scan are now resolved:
 
-- `apps/seller/src/pages/settings/SettingsPage.tsx` still renders a visible `Coming Soon` overlay.
-- `apps/seller/src/pages/products/CreateProduct.tsx`, `apps/seller/src/pages/events/CreateEvent.tsx`, and `apps/seller/src/pages/jobs/CreateJob.tsx` still use delayed navigation after save flows.
+- Settings page no longer shows a `Coming Soon` overlay.
+- Product, event, and job create flows navigate immediately after save (no `setTimeout` delay).
+- Listing count cards and loading skeletons are wired on all vertical list pages.
+- Storefront and Blade admin bars expose real Add New create routes (module-gated for listings).
+- Stripe subscription checkout foundation exists (`SubscriptionCheckoutService`, partner checkout route, webhook fulfillment).
+
+Still open from the original plan:
+
 - `apps/backend/app/Http/Controllers/Dashboard/Partner/Traits/Activities.php` still retains mock counts for reviews, awaiting approval, and expired listings.
 - `apps/backend/app/Services/ContactService.php` still has a TODO for actual mailing logic.
-- The storefront admin bar has disabled Add New entries in `apps/storefront/src/components/AdminBarClient.tsx`; the backend Blade admin bar still has placeholder `#` Add New links in `apps/backend/resources/views/admin/_partials/_adminbar.blade.php`.
 
-This scan did not run the seller build, Laravel tests, or browser acceptance tests.
+This scan did not re-run seller build, Laravel tests, or browser acceptance tests in this refresh.
 
 ## Key Changes
 
@@ -69,13 +74,11 @@ This scan did not run the seller build, Laravel tests, or browser acceptance tes
 
 ## Updated Pending Items
 
-- Finish or remove the Settings page `Coming Soon` overlay.
-- Replace delayed post-save navigation with deterministic API success/error handling in product, event, and job create flows.
 - Replace retained mock activity counts with real backend queries or clearly labeled development fixtures.
 - Implement contact mailing or explicitly document the mail transport dependency.
-- Wire admin bar Add New actions to real create routes, or remove the disabled items from both backend and storefront admin bars.
 - Run seller `npm run lint` and `npm run build` after API/UI cleanup.
 - Run focused Laravel tests for partner dashboard/API routes after backend cleanup.
+- Live-test Stripe subscription checkout with configured keys.
 
 ## Test Plan
 

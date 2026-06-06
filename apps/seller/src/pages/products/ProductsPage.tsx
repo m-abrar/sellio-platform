@@ -7,6 +7,8 @@ import { getProducts, deleteProduct } from '../../api/products';
 import { triggerDeletion } from '../../utils/animations';
 import { getWelcomeData } from '../../api/dashboard';
 import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
+import ListingCountCards from '../../components/listings/ListingCountCards';
+import { getListingCounts } from '../../utils/listingCounts';
 
 export default function ProductsPage() {
   const navigate = useNavigate();
@@ -63,6 +65,8 @@ export default function ProductsPage() {
     });
   };
 
+  const productCounts = getListingCounts(products);
+
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       
@@ -79,6 +83,8 @@ export default function ProductsPage() {
           <HiOutlinePlus className="w-4 h-4" /> Add Product
         </button>
       </PageHeader>
+
+      <ListingCountCards entityLabel="Products" counts={productCounts} isLoading={isLoading} />
 
       {/* 2. LOADING SKELETON STATE */}
       {isLoading ? (

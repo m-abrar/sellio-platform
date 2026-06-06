@@ -7,6 +7,8 @@ import { deleteAuto, getAutos } from '../../api/autos';
 import { triggerDeletion } from '../../utils/animations';
 import { getWelcomeData } from '../../api/dashboard';
 import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
+import ListingCountCards from '../../components/listings/ListingCountCards';
+import { getListingCounts } from '../../utils/listingCounts';
 
 export default function AutosPage() {
   const navigate = useNavigate();
@@ -65,6 +67,8 @@ export default function AutosPage() {
     });
   };
 
+  const autoCounts = getListingCounts(autos);
+
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader badge="Automotive" title="Vehicle" subtitle="Inventory">
@@ -75,6 +79,8 @@ export default function AutosPage() {
           <HiOutlinePlus className="w-4 h-4" /> Add Vehicle
         </button>
       </PageHeader>
+
+      <ListingCountCards entityLabel="Vehicles" counts={autoCounts} isLoading={isLoading} />
 
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">

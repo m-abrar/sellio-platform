@@ -68,6 +68,11 @@ class DashboardController extends Controller
 
         $validated = $request->validated();
 
+        if (array_key_exists('settings', $validated)) {
+            $validated['preferences'] = $validated['settings'];
+            unset($validated['settings']);
+        }
+
         $user->update($validated);
 
         return $this->successResponse(

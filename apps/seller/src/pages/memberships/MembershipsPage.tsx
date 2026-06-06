@@ -35,6 +35,12 @@ export default function MembershipsPage() {
     setUpgradingPlanId(planId);
     try {
       const response = await subscribeToPlan(planId);
+
+      if (response.checkoutUrl) {
+        window.location.assign(response.checkoutUrl);
+        return;
+      }
+
       toast.success(response.message || 'Subscription updated successfully.');
       await fetchPlans();
     } catch (error) {

@@ -22,6 +22,8 @@ class UserResource extends JsonResource
             // Sensitive fields included only for owner or admin
             'email'      => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->email),
             'phone'      => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->phone),
+            'location'   => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->location),
+            'settings'   => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->preferences ?? []),
             'roles'      => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->getRoleNames()),
             'is_buyer'   => $this->is_buyer,
             'created_at' => $this->created_at,

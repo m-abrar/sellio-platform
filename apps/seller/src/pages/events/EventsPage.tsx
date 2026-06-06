@@ -6,7 +6,9 @@ import { toast } from 'sonner';
 import { deleteEvent, getEvents } from '../../api/events';
 import { getDashboardData } from '../../api/dashboard';
 import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
+import ListingCountCards from '../../components/listings/ListingCountCards';
 import { triggerDeletion } from '../../utils/animations';
+import { getListingCounts } from '../../utils/listingCounts';
 
 export default function EventsPage() {
   const navigate = useNavigate();
@@ -65,6 +67,8 @@ export default function EventsPage() {
     });
   };
 
+  const eventCounts = getListingCounts(events);
+
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader 
@@ -79,6 +83,8 @@ export default function EventsPage() {
           <HiOutlinePlus className="w-4 h-4" /> Create Event
         </button>
       </PageHeader>
+
+      <ListingCountCards entityLabel="Events" counts={eventCounts} isLoading={isLoading} />
       
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">

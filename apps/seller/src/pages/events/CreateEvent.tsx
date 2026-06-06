@@ -449,7 +449,7 @@ export default function CreateEvent() {
 
       toast.success(`${form.title || 'Event'} saved successfully.`, { id: toastId });
       await triggerCelebration();
-      setTimeout(() => navigate('/dashboard/events'), 1500);
+      navigate('/dashboard/events');
     } catch (error) {
       const message = error instanceof ApiError ? error.message : 'Failed to publish event.';
       toast.error(message, { id: toastId });

@@ -25,6 +25,8 @@ export async function updateUserProfile(data: Partial<UserProfile>): Promise<Use
       name: data.name,
       email: data.email,
       phone: data.phone,
+      location: data.location,
+      settings: data.settings,
     }),
   });
   return toUserProfile(payload?.user || payload);

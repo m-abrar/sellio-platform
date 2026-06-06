@@ -14,20 +14,20 @@ class AdminBarContextController extends Controller
     {
         $user = Auth::user();
 
+        $emptyContext = [
+            'pages' => [],
+            'menus' => [],
+            'enabled_modules' => [],
+        ];
+
         if (! $user || ! $user->hasAnyRole(['super-admin', 'admin'])) {
-            return response()->json([
-                'pages' => [],
-                'menus' => [],
-            ]);
+            return response()->json($emptyContext);
         }
 
         $themeKey = $request->query('theme_key');
 
         if (! is_string($themeKey) || $themeKey === '') {
-            return response()->json([
-                'pages' => [],
-                'menus' => [],
-            ]);
+            return response()->json($emptyContext);
         }
 
         $pages = PageContent::query()
@@ -50,9 +50,25 @@ class AdminBarContextController extends Controller
             ])
             ->values();
 
+        $listingModules = [
+            'properties',
+            'autos',
+            'events',
+            'jobs',
+            'services',
+            'classifieds',
+            'products',
+        ];
+
+        $enabledModules = array_values(array_filter(
+            $listingModules,
+            fn (string $module): bool => module_enabled($module),
+        ));
+
         return response()->json([
             'pages' => $pages,
             'menus' => $menus,
+            'enabled_modules' => $enabledModules,
         ]);
     }
 }

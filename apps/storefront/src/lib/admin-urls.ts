@@ -32,6 +32,31 @@ export function getAdminBaseUrl(hostname?: string): string {
   return `http://${host}:8000`;
 }
 
+export const ADMIN_LISTING_MODULES = [
+  'properties',
+  'autos',
+  'events',
+  'jobs',
+  'services',
+  'classifieds',
+  'products',
+] as const;
+
+export type AdminListingModule = (typeof ADMIN_LISTING_MODULES)[number];
+
+export interface AdminCreateUrls {
+  property: string;
+  auto: string;
+  event: string;
+  job: string;
+  service: string;
+  classified: string;
+  product: string;
+  user: string;
+  page: string;
+  blog: string;
+}
+
 export interface AdminUrls {
   dashboard: string;
   themeEdit: string;
@@ -39,6 +64,7 @@ export interface AdminUrls {
   pagesIndex: string;
   menuIndex: string;
   menuEdit: (menuId: number) => string;
+  create: AdminCreateUrls;
   settings: string;
   logout: string;
 }
@@ -55,6 +81,18 @@ export function buildAdminUrls(theme: Theme, hostname?: string): AdminUrls {
     pagesIndex: `${base}/admin/content?theme_key=${themeKey}`,
     menuIndex: `${base}/admin/menu/${themeKey}`,
     menuEdit: (menuId: number) => `${base}/admin/menu/${menuId}/edit`,
+    create: {
+      property: `${base}/admin/properties/create`,
+      auto: `${base}/admin/autos/create`,
+      event: `${base}/admin/events/create`,
+      job: `${base}/admin/jobs/create`,
+      service: `${base}/admin/services/create`,
+      classified: `${base}/admin/classifieds/create`,
+      product: `${base}/admin/products/create`,
+      user: `${base}/admin/users/create`,
+      page: `${base}/admin/pages/create`,
+      blog: `${base}/admin/blogs/create`,
+    },
     settings: `${base}/admin/settings`,
     logout: `${base}/logout`,
   };

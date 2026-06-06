@@ -24,6 +24,7 @@ import { storefrontListingUrl } from '../config/api';
 interface ActivityItem {
   id: number;
   item_id: string;
+  reviewable_id: number | string | null;
   itemTitle: string;
   module: string;
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
@@ -92,10 +93,12 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
 
     setIsSubmittingReview(true);
     try {
+      const reviewableId = reviewActivity.reviewable_id ?? reviewActivity.item_id;
+
       const savedReview = await createReview({
         rating: reviewRating,
         comment: reviewComment,
-        reviewable_id: reviewActivity.item_id,
+        reviewable_id: reviewableId,
         reviewable_type: reviewActivity.module,
       });
 

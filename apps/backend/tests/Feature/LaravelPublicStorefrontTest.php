@@ -567,9 +567,9 @@ class LaravelPublicStorefrontTest extends TestCase
         ]))
             ->assertOk()
             ->assertSee('page-shell--property-booking', false)
-            ->assertSee(__('Step :step of 3', ['step' => 1]), false)
-            ->assertSee(__('Stay Overview'), false)
-            ->assertSee(__('Tailor Your Stay'), false)
+            ->assertSee(__('Step 1 of 3'), false)
+            ->assertSee(__('Stay Details'), false)
+            ->assertSee(__('Enhance Your Stay'), false)
             ->assertSee(__('Continue to Payment'), false)
             ->assertSee('Step One Rental', false);
     }
@@ -705,5 +705,44 @@ class LaravelPublicStorefrontTest extends TestCase
                 'booking' => $booking->id,
             ]))
             ->assertForbidden();
+    }
+
+    public function test_property_booking_store_creates_pending_booking_and_redirects_to_payment(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $user = User::factory()->create();
+        $property = Property::factory()->create([
+            'is_sale' => false,
+            'is_rental' => true,
+            'price_per_night' => 160,
+            'maximum_guests' => 4,
+        ]);
+
+        $checkIn = now()->addDays(8)->toDateString();
+        $checkOut = now()->addDays(11)->toDateString();
+
+        $this->actingAs($user)
+            ->post(route('property.booking.store', ['property' => $property->slug]), [
+                'property_id' => $property->id,
+                'check_in' => $checkIn,
+                'check_out' => $checkOut,
+                'guests' => 2,
+                'full_name' => 'Storefront Guest',
+                'email' => $user->email,
+                'phone' => '555-0101',
+            ])
+            ->assertRedirect();
+
+        $booking = PropertyBooking::query()
+            ->where('user_id', $user->id)
+            ->where('property_id', $property->id)
+            ->latest('id')
+            ->first();
+
+        $this->assertNotNull($booking);
+        $this->assertSame('pending', $booking->status);
+        $this->assertSame('Storefront Guest', $booking->full_name);
     }
 }

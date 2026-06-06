@@ -27,12 +27,81 @@
           <i class="fas fa-plus-circle me-1"></i>{{ __('Add New') }}
         </a>
         <ul class="dropdown-menu dropdown-menu-dark">
-          {{-- Note: Replace '#' with your actual route names --}}
-          <li><a class="dropdown-item" href="#"><i class="fas fa-building me-2"></i>{{ __('New Listing') }}</a></li>
-          <li><a class="dropdown-item" href="#"><i class="fas fa-user-plus me-2"></i>{{ __('New User') }}</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#"><i class="fas fa-file-alt me-2"></i>{{ __('New Page') }}</a></li>
-          <li><a class="dropdown-item" href="#"><i class="fas fa-blog me-2"></i>{{ __('New Blog') }}</a></li>
+          <li><h6 class="dropdown-header">{{ __('New Listing') }}</h6></li>
+
+          @if(module_enabled('properties'))
+            <li>
+              <a class="dropdown-item" href="{{ route('admin.properties.create') }}">
+                <i class="fas fa-home me-2"></i>{{ __('Property Listing') }}
+              </a>
+            </li>
+          @endif
+
+          @if(module_enabled('autos'))
+            <li>
+              <a class="dropdown-item" href="{{ route('admin.autos.create') }}">
+                <i class="fas fa-car me-2"></i>{{ __('Automotive Asset') }}
+              </a>
+            </li>
+          @endif
+
+          @if(module_enabled('events'))
+            <li>
+              <a class="dropdown-item" href="{{ route('admin.events.create') }}">
+                <i class="fas fa-calendar-alt me-2"></i>{{ __('Event / Ticket') }}
+              </a>
+            </li>
+          @endif
+
+          @if(module_enabled('jobs'))
+            <li>
+              <a class="dropdown-item" href="{{ route('admin.jobs.create') }}">
+                <i class="fas fa-briefcase me-2"></i>{{ __('Job Opportunity') }}
+              </a>
+            </li>
+          @endif
+
+          @if(module_enabled('services'))
+            <li>
+              <a class="dropdown-item" href="{{ route('admin.services.create') }}">
+                <i class="fas fa-tools me-2"></i>{{ __('Professional Service') }}
+              </a>
+            </li>
+          @endif
+
+          @if(module_enabled('classifieds'))
+            <li>
+              <a class="dropdown-item" href="{{ route('admin.classifieds.create') }}">
+                <i class="fas fa-tags me-2"></i>{{ __('General Classified') }}
+              </a>
+            </li>
+          @endif
+
+          @if(module_enabled('products'))
+            <li>
+              <a class="dropdown-item" href="{{ route('admin.products.create') }}">
+                <i class="fas fa-shopping-bag me-2"></i>{{ __('Retail Product') }}
+              </a>
+            </li>
+          @endif
+
+          <li><hr class="dropdown-divider border-light"></li>
+          <li>
+            <a class="dropdown-item" href="{{ route('admin.users.create') }}">
+              <i class="fas fa-user-plus me-2"></i>{{ __('New User') }}
+            </a>
+          </li>
+          <li><hr class="dropdown-divider border-light"></li>
+          <li>
+            <a class="dropdown-item" href="{{ route('admin.pages.create') }}">
+              <i class="fas fa-file-alt me-2"></i>{{ __('New Page') }}
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{{ route('admin.blogs.create') }}">
+              <i class="fas fa-blog me-2"></i>{{ __('New Blog') }}
+            </a>
+          </li>
         </ul>
       </div>
 

@@ -7,6 +7,8 @@ import { deleteService, getServices } from '../../api/services';
 import { triggerDeletion } from '../../utils/animations';
 import { getWelcomeData } from '../../api/dashboard';
 import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
+import ListingCountCards from '../../components/listings/ListingCountCards';
+import { getListingCounts } from '../../utils/listingCounts';
 
 export default function ServicesPage() {
   const navigate = useNavigate();
@@ -65,6 +67,8 @@ export default function ServicesPage() {
     });
   };
 
+  const serviceCounts = getListingCounts(services);
+
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader 
@@ -79,6 +83,8 @@ export default function ServicesPage() {
           <HiOutlinePlus className="w-4 h-4" /> Add Service
         </button>
       </PageHeader>
+
+      <ListingCountCards entityLabel="Services" counts={serviceCounts} isLoading={isLoading} />
       
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">

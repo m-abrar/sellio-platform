@@ -76,6 +76,8 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
         'name',
         'email',
         'phone',
+        'location',
+        'preferences',
         'username',
         'company',
         'bio',
@@ -114,6 +116,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
             'is_partner'        => 'boolean',
             'is_verified'       => 'boolean',
             'social_links'      => 'array',
+            'preferences'       => 'array',
         ];
     }
 
