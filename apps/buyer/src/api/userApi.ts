@@ -43,3 +43,23 @@ export async function updatePassword(data: {
     body: JSON.stringify(data),
   });
 }
+
+export async function uploadUserAvatar(userId: number, file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append('image', file);
+  formData.append('model', 'user');
+  formData.append('id', String(userId));
+  formData.append('name', 'avatar');
+
+  const payload = await apiRequest<{ url?: string }>(buyerUrl('/upload-image'), {
+    method: 'POST',
+    authenticated: true,
+    body: formData,
+  });
+
+  if (!payload?.url) {
+    throw new Error('Avatar upload did not return a URL');
+  }
+
+  return payload.url;
+}

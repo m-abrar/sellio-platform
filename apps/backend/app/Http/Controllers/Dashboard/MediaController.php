@@ -100,8 +100,8 @@ class MediaController extends Controller
             $collection = ($request->name === 'image') ? 'featured_image' : $request->name;
         }
 
-        if ($collection === 'featured_image') {
-            $model->clearMediaCollection('featured_image');
+        if (in_array($collection, ['featured_image', 'avatar'], true)) {
+            $model->clearMediaCollection($collection);
         }
 
         $media = $model->addMediaFromRequest('image')->toMediaCollection($collection);

@@ -18,6 +18,7 @@ Last refreshed: 2026-06-06
 - Messages list conversations, load messages by active conversation, use the logged-in user id for alignment, and can send messages.
 - Laravel exposes `GET /api/dashboard/user/profile` and `PUT /api/dashboard/user/profile`.
 - Settings profile read/update is wired for name, email, phone, location, and notification preferences (`preferences` JSON on users table).
+- Profile avatar upload is wired via `POST /api/dashboard/user/upload-image` and the Settings camera control.
 - A not-found route exists for unknown buyer panel paths.
 - A buyer route error boundary exists for unexpected view failures.
 - Activity cancellation is wired where Laravel exposes safe cancel routes.
@@ -26,7 +27,7 @@ Last refreshed: 2026-06-06
 
 ## Pending
 
-- Settings security (password change), billing, and avatar upload are still mostly visual/prototype.
+- Settings security (password change) and billing are still mostly visual/prototype.
 - No focused frontend tests yet.
 
 ## Verification

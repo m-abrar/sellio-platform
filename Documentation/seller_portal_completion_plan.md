@@ -20,8 +20,8 @@ This plan remains active for backend polish and verification. Several items from
 
 Still open from the original plan:
 
-- `apps/backend/app/Http/Controllers/Dashboard/Partner/Traits/Activities.php` still retains mock counts for reviews, awaiting approval, and expired listings.
-- `apps/backend/app/Services/ContactService.php` still has a TODO for actual mailing logic.
+- Partner activity counts in `Activities.php` now query live listing/review data; verify counts against seeded data in acceptance testing.
+- Contact form mailing is implemented in `ContactService` (`Mail::raw` to `admin_email`); add/configure mail transport for production.
 
 This scan did not re-run seller build, Laravel tests, or browser acceptance tests in this refresh.
 

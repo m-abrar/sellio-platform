@@ -8,6 +8,8 @@ use App\Models\PropertyBooking;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class BuyerDashboardApiTest extends TestCase
@@ -101,6 +103,27 @@ class BuyerDashboardApiTest extends TestCase
             'reviewable_type' => Property::class,
             'comment' => 'Great stay and smooth booking.',
         ]);
+    }
+
+    public function test_buyer_can_upload_profile_avatar(): void
+    {
+        Storage::fake('public');
+        $buyer = $this->createBuyer();
+
+        $response = $this->actingAs($buyer, 'sanctum')
+            ->post('/api/dashboard/user/upload-image', [
+                'image' => UploadedFile::fake()->image('avatar.jpg'),
+                'model' => 'user',
+                'id' => $buyer->id,
+                'name' => 'avatar',
+            ]);
+
+        $response->assertOk()
+            ->assertJsonPath('success', true)
+            ->assertJsonStructure(['url']);
+
+        $buyer->refresh();
+        $this->assertNotEmpty($buyer->getFirstMediaUrl('avatar'));
     }
 
     public function test_buyer_bookings_index_returns_upcoming_property_booking(): void

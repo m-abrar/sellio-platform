@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   User, 
@@ -24,7 +24,7 @@ import { Button } from '../components/Button';
 import { PageHeader } from '../components/PageHeader';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { API_BASE_URL, IS_EXTERNAL_BACKEND, STOREFRONT_BASE_URL } from '../config/api';
-import { fetchUserProfile, updateUserProfile, updatePassword, UserProfile } from '../api/userApi';
+import { fetchUserProfile, updateUserProfile, updatePassword, uploadUserAvatar, UserProfile } from '../api/userApi';
 
 const API_ORIGIN = (() => {
   try {
@@ -39,9 +39,11 @@ const FALLBACK_AVATAR = `${API_ORIGIN}/images/fallbacks/default-avatar.png`;
 export default function SettingsView() {
   const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'notifications' | 'billing' | 'developer'>('profile');
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
 
   // Password Change States
   const [currentPassword, setCurrentPassword] = useState('');
@@ -64,6 +66,27 @@ export default function SettingsView() {
       setError('Failed to load profile');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleAvatarChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+
+    if (!file || !profile) {
+      return;
+    }
+
+    setIsUploadingAvatar(true);
+    setError(null);
+
+    try {
+      const avatarUrl = await uploadUserAvatar(profile.id, file);
+      setProfile({ ...profile, avatar: avatarUrl });
+    } catch (err) {
+      setError('Failed to upload avatar');
+    } finally {
+      setIsUploadingAvatar(false);
     }
   };
 
@@ -339,11 +362,27 @@ export default function SettingsView() {
                       <img 
                         src={profile.avatar || FALLBACK_AVATAR} 
                         alt="Avatar" 
-                        className="w-32 h-32 rounded-full border-4 border-white shadow-xl object-cover"
+                        className={cn(
+                          "w-32 h-32 rounded-full border-4 border-white shadow-xl object-cover",
+                          isUploadingAvatar && "opacity-60"
+                        )}
                         referrerPolicy="no-referrer"
                       />
-                      <button type="button" className="absolute bottom-0 right-0 p-2 bg-zinc-900 text-white rounded-full shadow-lg hover:scale-110 transition-transform">
-                        <Camera size={18} />
+                      <input
+                        ref={avatarInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/jpg,image/gif,image/webp"
+                        className="hidden"
+                        onChange={handleAvatarChange}
+                      />
+                      <button
+                        type="button"
+                        disabled={isUploadingAvatar}
+                        onClick={() => avatarInputRef.current?.click()}
+                        className="absolute bottom-0 right-0 p-2 bg-zinc-900 text-white rounded-full shadow-lg hover:scale-110 transition-transform disabled:opacity-60 disabled:hover:scale-100"
+                        aria-label="Upload avatar"
+                      >
+                        {isUploadingAvatar ? <Loader2 size={18} className="animate-spin" /> : <Camera size={18} />}
                       </button>
                     </div>
                     <div className="text-center sm:text-left">
