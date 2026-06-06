@@ -108,19 +108,20 @@ on the property detail page, there is a rating section on the last, it shows two
 
 ----------------
 
-when seeding fresh database, does our seller/partner subscibe to a plan?
+- [x] when seeding fresh database, does our seller/partner subscibe to a plan? (Yes: `partner@sellio-platform.test` is now assigned an active `Enterprise Plan` subscription by `SubscriptionSeeder`, with regression coverage in `SeededPartnerSubscriptionTest`.)
 
 --------------------------
 
+- [x] Add latitude/longitude fields to admin property/event forms. (Added shared coordinate/map picker to admin property and event forms.)
 
+-----------------
 
+- [x] Add validation in the admin requests. (Admin `PropertyRequest` and `EventRequest` now validate latitude/longitude ranges.)
 
+----------------
 
+- [x] Add a shared map-picker partial that enables drag-and-drop Google Maps pin selection when either `GOOGLE_MAPS_API_KEY` or the Admin Settings Google Maps key exists.
 
+-----------------
 
-
-
-
-
-
-
+- [x] Keep manual coordinate inputs as fallback. (Manual latitude/longitude inputs always render; the map renders when an env or Admin Settings Google Maps key is configured.)

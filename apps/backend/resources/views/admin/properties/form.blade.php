@@ -31,7 +31,7 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.listings.index', ['type' => 'property']) }}" class="btn btn-back shadow-sm">
+                <a href="{{ route('admin.properties.index') }}" class="btn btn-back shadow-sm">
                     <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Listings') }}
                 </a>
             </div>
@@ -199,6 +199,13 @@
                             <div class="col-md-3"><input type="text" name="state" placeholder="{{ __('State/Prov') }}" class="form-control form-control-premium mb-2" value="{{ old('state', $property->state ?? '') }}"></div>
                             <div class="col-md-3"><input type="text" name="country" placeholder="{{ __('Country') }}" class="form-control form-control-premium mb-2" value="{{ old('country', $property->country ?? '') }}"></div>
                             <div class="col-md-3"><input type="text" name="zip_code" placeholder="{{ __('Zip Code') }}" class="form-control form-control-premium mb-2" value="{{ old('zip_code', $property->zip_code ?? '') }}"></div>
+                        </div>
+                        <div class="mt-4">
+                            @include('admin._partials._map-picker', [
+                                'model' => $property,
+                                'name' => 'property_location',
+                                'title' => __('Pinned Property Location'),
+                            ])
                         </div>
                     </div>
                 </div>

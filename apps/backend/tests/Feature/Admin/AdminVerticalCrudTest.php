@@ -36,6 +36,8 @@ class AdminVerticalCrudTest extends TestCase
             'start_date_time' => $start->toDateTimeString(),
             'end_date_time' => $end->toDateTimeString(),
             'base_price' => 49.99,
+            'latitude' => 40.7128,
+            'longitude' => -74.0060,
             'is_published' => true,
         ])->assertRedirect();
 
@@ -48,10 +50,17 @@ class AdminVerticalCrudTest extends TestCase
             'start_date_time' => $start->toDateTimeString(),
             'end_date_time' => $end->toDateTimeString(),
             'base_price' => 59.99,
+            'latitude' => 40.7580,
+            'longitude' => -73.9855,
             'is_published' => true,
         ])->assertRedirect();
 
-        $this->assertDatabaseHas('events', ['id' => $event->id, 'title' => 'Updated CRUD Event']);
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
+            'title' => 'Updated CRUD Event',
+            'latitude' => 40.7580,
+            'longitude' => -73.9855,
+        ]);
 
         $this->actingAsSuperAdmin()->delete(route('admin.events.destroy', $event))
             ->assertRedirect();

@@ -119,6 +119,8 @@ class Property extends Model implements HasMedia
         'base_price'      => 'decimal:2',
         'sale_price'      => 'decimal:2',
         'price_per_night' => 'decimal:2',
+        'latitude'        => 'float',
+        'longitude'       => 'float',
         'expires_at'      => 'datetime',
         'approved_at'     => 'datetime',
     ];

@@ -39,6 +39,8 @@ class EventRequest extends FormRequest
             'is_paid'           => ['boolean'],
             'max_attendees'     => ['nullable', 'integer', 'min:0'],
             'address'           => ['nullable', 'string', 'max:255'],
+            'latitude'          => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude'         => ['nullable', 'numeric', 'between:-180,180'],
             
             // Pricing
             'base_price'        => ['required', 'numeric', 'min:0'],

@@ -95,6 +95,8 @@ class Event extends Model implements HasMedia
         'max_attendees'   => 'integer',
         'base_price'      => 'decimal:2',
         'sale_price'      => 'decimal:2',
+        'latitude'        => 'float',
+        'longitude'       => 'float',
         'approved_at'     => 'datetime',
         'expires_at'      => 'datetime',
     ];

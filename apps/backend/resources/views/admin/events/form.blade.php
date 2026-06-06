@@ -119,6 +119,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="mt-4">
+                            @include('admin._partials._map-picker', [
+                                'model' => $event,
+                                'name' => 'event_location',
+                                'title' => __('Pinned Event Location'),
+                            ])
+                        </div>
                     </div>
                 </div>
 

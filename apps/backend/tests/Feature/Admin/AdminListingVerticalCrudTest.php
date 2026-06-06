@@ -31,6 +31,8 @@ class AdminListingVerticalCrudTest extends TestCase
             'category_id' => $category->id,
             'city' => 'Austin',
             'country' => 'USA',
+            'latitude' => 30.2672,
+            'longitude' => -97.7431,
             'status' => true,
         ])->assertRedirect();
 
@@ -43,6 +45,8 @@ class AdminListingVerticalCrudTest extends TestCase
             'category_id' => $category->id,
             'city' => 'Austin',
             'country' => 'USA',
+            'latitude' => 30.2700,
+            'longitude' => -97.7500,
             'status' => true,
             'scores' => [
                 ['title' => 'Walk Score', 'score' => 88, 'units' => '/100', 'description' => 'Very Walkable'],
@@ -62,6 +66,8 @@ class AdminListingVerticalCrudTest extends TestCase
             'id' => $property->id,
             'title' => 'Updated CRUD Property',
             'is_published' => true,
+            'latitude' => 30.2700,
+            'longitude' => -97.7500,
         ]);
 
         $this->assertDatabaseHas('property_scores', [

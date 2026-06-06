@@ -65,6 +65,8 @@ class PropertyRequest extends FormRequest
             'state' => 'nullable|string|max:100',
             'country' => 'required|string|max:100',
             'zip_code' => 'nullable|string|max:20',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
 
             'seasonal_prices' => 'nullable|array',
             'seasonal_prices.*.name' => 'required|string|max:255',
