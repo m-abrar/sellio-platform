@@ -122,6 +122,16 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertSee(__('Login'), false);
     }
 
+    public function test_login_page_survives_missing_cart_tables(): void
+    {
+        Schema::dropIfExists('cart_items');
+        Schema::dropIfExists('carts');
+
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertSee(__('Login'), false);
+    }
+
     public function test_currency_helpers_and_listing_price_accessors_use_settings(): void
     {
         Setting::set('currency_symbol', 'USD ');

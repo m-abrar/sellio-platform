@@ -7,7 +7,7 @@ use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductAddon;
-use Illuminate\Support\Facades\{Auth, Session, DB};
+use Illuminate\Support\Facades\{Auth, Session, DB, Schema};
 
 class CartService
 {
@@ -93,6 +93,10 @@ class CartService
 
     public function getCount(): int
     {
+        if (! Schema::hasTable('carts') || ! Schema::hasTable('cart_items')) {
+            return 0;
+        }
+
         $cart = $this->getOrCreateCart();
         return (int) $cart->items()->sum('quantity');
     }
