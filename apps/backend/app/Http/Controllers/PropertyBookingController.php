@@ -232,14 +232,33 @@ class PropertyBookingController extends Controller
      * @param  \App\Models\PropertyBooking  $booking
      * @return \Illuminate\View\View
      */
-    public function payment(Property $property, PropertyBooking $booking): View
+    public function payment(Property $property, PropertyBooking $booking, GatewayManager $manager): View
     {
         $this->authorizeBooking($property, $booking);
+
+        $stripePublishableKey = null;
+        $stripeGateway = PaymentGateway::query()
+            ->where('slug', 'stripe')
+            ->where('is_active', true)
+            ->with('credentials')
+            ->first();
+
+        if ($stripeGateway) {
+            try {
+                $stripePublishableKey = $manager->resolve($stripeGateway)->getFrontendConfig()['publishable_key'] ?? null;
+            } catch (Exception $e) {
+                Log::warning('Unable to load Stripe frontend config for property booking payment.', [
+                    'booking_id' => $booking->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
 
         return view('frontend.properties.booking.payment', [
             'property' => $property,
             'booking' => $booking,
             'nights' => $booking->duration_nights,
+            'stripePublishableKey' => $stripePublishableKey,
             'addonLines' => $booking->transactionLines()
                 ->where('description', 'LIKE', 'Add-on:%')
                 ->get(),

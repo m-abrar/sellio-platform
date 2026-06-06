@@ -1,5 +1,7 @@
 @php
     $totalFormatted = format_currency($booking->total_price);
+    $stripePublishableKey = $stripePublishableKey ?? null;
+    $usesStripeElements = filled($stripePublishableKey);
 @endphp
 
 <section class="booking-payment-panel glass-surface border-0 shadow-deep">
@@ -44,13 +46,50 @@
     >
         @csrf
         <input type="hidden" name="payment_method" value="stripe">
+        <input type="hidden" name="payment_token" value="" data-stripe-payment-token>
 
         <div class="booking-payment-form__demo">
             <i class="bi bi-info-circle me-2"></i>
-            {{ __('Stripe sandbox mode: use card') }} <code>4242 4242 4242 4242</code>, {{ __('any future expiry, and any 3-digit CVC.') }}
+            @if($usesStripeElements)
+                {{ __('Stripe secure card entry is enabled for this booking checkout.') }}
+            @else
+                {{ __('Stripe sandbox mode: use card') }} <code>4242 4242 4242 4242</code>, {{ __('any future expiry, and any 3-digit CVC.') }}
+            @endif
         </div>
 
         <div class="row g-3 g-md-4">
+            @if($usesStripeElements)
+                <div class="col-12">
+                    <label for="name_on_card" class="filter-label mb-2">{{ __('Cardholder Name') }}</label>
+                    <div class="input-group unified-input @error('name_on_card') is-invalid @enderror">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input
+                            type="text"
+                            id="name_on_card"
+                            name="name_on_card"
+                            class="form-control text-uppercase @error('name_on_card') is-invalid @enderror"
+                            value="{{ old('name_on_card', $booking->full_name) }}"
+                            placeholder="{{ __('JOHN DOE') }}"
+                            autocomplete="cc-name"
+                            data-payment-input="name"
+                            required
+                        >
+                    </div>
+                    @error('name_on_card')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-12">
+                    <label for="stripe-card-element" class="filter-label mb-2">{{ __('Card Details') }}</label>
+                    <div
+                        id="stripe-card-element"
+                        class="form-control unified-input py-3"
+                        data-stripe-card-element
+                    ></div>
+                    <div class="invalid-feedback d-block d-none" data-stripe-card-errors></div>
+                </div>
+            @else
             <div class="col-12">
                 <label for="card_number" class="filter-label mb-2">{{ __('Credit Card Number') }}</label>
                 <div class="input-group unified-input @error('card_number') is-invalid @enderror">
@@ -145,6 +184,7 @@
                     <div class="invalid-feedback d-block">{{ $message }}</div>
                 @enderror
             </div>
+            @endif
 
             <div class="col-12">
                 <div class="booking-payment-form__terms @error('termsCheck') is-invalid @enderror">
@@ -187,12 +227,21 @@
 </section>
 
 @push('scripts')
+@if($usesStripeElements)
+<script src="https://js.stripe.com/v3/"></script>
+@endif
 <script>
 (() => {
     const form = document.querySelector('[data-property-payment-form]');
     if (!form) return;
     const submitButton = form.querySelector('.booking-payment-form__submit');
     const submitLabel = form.querySelector('[data-payment-submit-label]');
+    const stripePublishableKey = @json($stripePublishableKey);
+    const tokenInput = form.querySelector('[data-stripe-payment-token]');
+    const cardElementContainer = form.querySelector('[data-stripe-card-element]');
+    const cardErrors = form.querySelector('[data-stripe-card-errors]');
+    let stripe = null;
+    let cardElement = null;
 
     const preview = {
         number: document.querySelector('[data-payment-preview="number"]'),
@@ -205,6 +254,35 @@
         name: form.querySelector('[data-payment-input="name"]'),
         expiry: form.querySelector('[data-payment-input="expiry"]'),
     };
+
+    if (stripePublishableKey && window.Stripe && cardElementContainer) {
+        stripe = window.Stripe(stripePublishableKey);
+        const elements = stripe.elements();
+        cardElement = elements.create('card', {
+            hidePostalCode: true,
+            style: {
+                base: {
+                    color: '#111827',
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    fontSize: '16px',
+                    '::placeholder': {
+                        color: '#9ca3af',
+                    },
+                },
+                invalid: {
+                    color: '#dc3545',
+                },
+            },
+        });
+
+        cardElement.mount(cardElementContainer);
+        cardElement.on('change', (event) => {
+            if (!cardErrors) return;
+
+            cardErrors.textContent = event.error ? event.error.message : '';
+            cardErrors.classList.toggle('d-none', !event.error);
+        });
+    }
 
     const formatCardNumber = (value) => {
         const digits = value.replace(/\D/g, '').slice(0, 16);
@@ -258,15 +336,56 @@
         });
     }
 
-    form.addEventListener('submit', () => {
+    const setSubmitting = (isSubmitting) => {
         if (!submitButton) return;
 
-        submitButton.disabled = true;
-        submitButton.classList.add('is-loading');
+        submitButton.disabled = isSubmitting;
+        submitButton.classList.toggle('is-loading', isSubmitting);
 
         if (submitLabel) {
-            submitLabel.textContent = @json(__('Processing payment...'));
+            submitLabel.textContent = isSubmitting
+                ? @json(__('Processing payment...'))
+                : @json(__('Complete Payment'));
         }
+    };
+
+    form.addEventListener('submit', async (event) => {
+        if (!stripe || !cardElement || !tokenInput) {
+            setSubmitting(true);
+            return;
+        }
+
+        event.preventDefault();
+        setSubmitting(true);
+
+        if (cardErrors) {
+            cardErrors.textContent = '';
+            cardErrors.classList.add('d-none');
+        }
+
+        const cardholderName = inputs.name ? inputs.name.value.trim() : '';
+        const result = await stripe.createPaymentMethod({
+            type: 'card',
+            card: cardElement,
+            billing_details: {
+                name: cardholderName || @json($booking->full_name),
+                email: @json($booking->email),
+                phone: @json($booking->phone),
+            },
+        });
+
+        if (result.error) {
+            if (cardErrors) {
+                cardErrors.textContent = result.error.message;
+                cardErrors.classList.remove('d-none');
+            }
+
+            setSubmitting(false);
+            return;
+        }
+
+        tokenInput.value = result.paymentMethod.id;
+        form.submit();
     });
 
     syncPreview();

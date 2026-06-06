@@ -648,6 +648,54 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertSee(__('Complete Payment'), false);
     }
 
+    public function test_property_booking_payment_uses_stripe_elements_when_gateway_is_configured(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $user = User::factory()->create();
+        $property = Property::factory()->create([
+            'is_sale' => false,
+            'is_rental' => true,
+            'price_per_night' => 200,
+        ]);
+
+        $booking = PropertyBooking::factory()
+            ->forDateRange(now()->addDays(5), now()->addDays(8), 200)
+            ->pending()
+            ->create([
+                'property_id' => $property->id,
+                'user_id' => $user->id,
+                'guests' => 2,
+            ]);
+
+        PaymentGateway::create([
+            'title' => 'Stripe',
+            'slug' => 'stripe',
+            'class_name' => \App\Services\StripeGatewayService::class,
+            'is_active' => true,
+            'mode' => PaymentGateway::MODE_SANDBOX,
+        ])->credentials()->create([
+            'sandbox_config' => [
+                'secret_key' => 'sk_test_example',
+                'publishable_key' => 'pk_test_property_booking',
+                'currency' => 'USD',
+            ],
+            'live_config' => [],
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('property.booking.payment', [
+                'property' => $property->slug,
+                'booking' => $booking->id,
+            ]))
+            ->assertOk()
+            ->assertSee('https://js.stripe.com/v3/', false)
+            ->assertSee('pk_test_property_booking', false)
+            ->assertSee('data-stripe-card-element', false)
+            ->assertSee('data-stripe-payment-token', false);
+    }
+
     public function test_property_booking_stripe_payment_confirms_booking_and_records_payment(): void
     {
         Setting::set('is_section.properties', '1');
