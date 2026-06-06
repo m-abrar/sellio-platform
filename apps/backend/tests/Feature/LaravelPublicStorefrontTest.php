@@ -17,6 +17,7 @@ use App\Services\ContentService;
 use App\Services\HomeDataService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -110,6 +111,15 @@ class LaravelPublicStorefrontTest extends TestCase
         $this->assertSame('first', content_display(['first', 'second'], ''));
         $this->assertSame('Fallback', content_display(null, 'Fallback'));
         $this->assertSame('$', setting_string('currency_symbol', '$'));
+    }
+
+    public function test_login_page_survives_missing_page_contents_table(): void
+    {
+        Schema::dropIfExists('page_contents');
+
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertSee(__('Login'), false);
     }
 
     public function test_currency_helpers_and_listing_price_accessors_use_settings(): void

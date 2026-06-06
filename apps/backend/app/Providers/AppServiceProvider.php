@@ -10,7 +10,7 @@ use App\Events\Partner\PartnerLeadCreated;
 use App\Events\ReviewReceived;
 use App\Listeners\Partner\SendPartnerDatabaseNotification;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\{View, Auth, Gate, Event, Session, Storage, Cache, Blade};
+use Illuminate\Support\Facades\{View, Auth, Gate, Event, Session, Storage, Cache, Blade, Schema};
 use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Pagination\Paginator;
 
@@ -102,10 +102,12 @@ class AppServiceProvider extends ServiceProvider
                 'siteName'          => Cache::rememberForever('site_name', fn() => setting_string('site_name', config('app.name'))),
                 'siteFavicon'       => $faviconPath ? Storage::url($faviconPath) : ($logoPath ? Storage::url($logoPath) : asset('images/app-logo.webp')),
                 'bladeContentScope' => config('content.blade_scope', 'laravel_blade'),
-                'bladePages'        => \App\Models\PageContent::where('theme_key', config('content.blade_scope', 'laravel_blade'))
+                'bladePages'        => Schema::hasTable('page_contents')
+                    ? \App\Models\PageContent::where('theme_key', config('content.blade_scope', 'laravel_blade'))
                     ->select('page', 'theme_key')
                     ->groupBy('page', 'theme_key')
-                    ->get(),
+                    ->get()
+                    : collect(),
             ]);
         });
 

@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\PageContent;
 use App\DTOs\ContentResult;
-use Illuminate\Support\Facades\{Cache, Auth, Config, Storage};
+use Illuminate\Support\Facades\{Cache, Auth, Config, Schema, Storage};
 use Illuminate\Http\Request;
 
 class ContentService
@@ -25,6 +25,10 @@ class ContentService
         $parts = explode('.', $keyString);
         if (count($parts) < 3) return $default;
         [$page, $section, $key] = $parts; 
+
+        if (! Schema::hasTable('page_contents')) {
+            return content_display($default, $default);
+        }
 
         $isAdmin = Auth::check() && Auth::user()->hasRole(['admin', 'super-admin']);
         $frontendEditEnabled = (bool) setting('frontend_edit', false);

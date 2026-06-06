@@ -49,6 +49,10 @@ if (! function_exists('get_menus_list')) {
 if (!function_exists('themepages')) {
     function themepages(string $themeKey)
     {
+        if (! \Illuminate\Support\Facades\Schema::hasTable('page_contents')) {
+            return collect();
+        }
+
         return PageContent::where('theme_key', $themeKey)
             ->select('page', 'theme_key') 
             ->groupBy('page', 'theme_key') 
