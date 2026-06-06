@@ -59,6 +59,18 @@ class Cart extends Model
         return round((float) $this->items->sum(fn (CartItem $item) => (float) $item->total_price), 2);
     }
 
+    /**
+     * Persist the calculated subtotal for header badges and cached reads.
+     */
+    public function syncTempTotal(): void
+    {
+        $total = $this->calculateTotal();
+
+        if ((float) $this->temp_total !== $total) {
+            $this->forceFill(['temp_total' => $total])->saveQuietly();
+        }
+    }
+
     // --- Accessors ---
 
     /**

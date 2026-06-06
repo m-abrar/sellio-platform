@@ -14,9 +14,7 @@
     </x-slot:main>
 
     <x-slot:sidebar>
-        <div class="ticket-sidebar">
-            @include('frontend.events.show.partials._sidebar_tickets')
-        </div>
+        @include('frontend.events.show.partials._sidebar_tickets')
     </x-slot:sidebar>
 </x-frontend.detail-shell>
 {{-- Mobile Sticky CTA --}}

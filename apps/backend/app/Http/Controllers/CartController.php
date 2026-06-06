@@ -43,6 +43,7 @@ class CartController extends Controller
     {
         $cart = $this->cartService->getOrCreateCart();
         $cart->load(['items.product', 'items.product.media']);
+        $cart->syncTempTotal();
 
         return view('frontend.products.cart', compact('cart'));
     }

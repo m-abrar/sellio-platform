@@ -51,13 +51,14 @@ class CartService
                 return $item;
             }
 
-            $item = $cart->items()->make([
+            $item = new CartItem([
+                'cart_id'       => $cart->id,
                 'product_id'    => $productId,
                 'quantity'      => $quantity,
                 'attribute_ids' => $attributes,
                 'addon_ids'     => $addons,
             ]);
-            $item->unit_price = $unitPrice; // Set explicitly
+            $item->unit_price = $unitPrice;
             $item->save();
 
             return $item;

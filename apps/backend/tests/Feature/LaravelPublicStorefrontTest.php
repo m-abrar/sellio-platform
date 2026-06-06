@@ -2,7 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\PageContent;
+use App\Models\Product;
 use App\Models\Setting;
 use App\Models\Auto;
 use App\Models\Event;
@@ -77,6 +80,39 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertOk()
             ->assertSee('page-shell--cart', false)
             ->assertSee(__('Your Shopping Cart'), false);
+    }
+
+    public function test_cart_page_shows_calculated_subtotal_for_cart_items(): void
+    {
+        Setting::set('is_section.products', '1');
+        Setting::set('built_in_website_status', 'active');
+        Cache::forget('settings_all');
+
+        $user = User::factory()->create();
+        $product = Product::factory()->create([
+            'base_price' => 42.50,
+            'sale_price' => null,
+            'on_sale' => false,
+            'manage_stock' => true,
+            'stock_quantity' => 5,
+        ]);
+
+        $cart = Cart::create(['user_id' => $user->id, 'temp_total' => 0]);
+        $item = new CartItem([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'quantity' => 2,
+            'attribute_ids' => [],
+            'addon_ids' => [],
+        ]);
+        $item->unit_price = 42.50;
+        $item->save();
+
+        $this->actingAs($user)
+            ->get(route('cart.index'))
+            ->assertOk()
+            ->assertSee('$85.00', false)
+            ->assertDontSee('$0.00', false);
     }
 
     public function test_listing_index_pages_share_unified_layout_markup(): void

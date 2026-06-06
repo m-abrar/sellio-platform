@@ -17,6 +17,8 @@
         </div>
     </div>
 
+    @php $cartSubtotal = $cart->calculateTotal(); @endphp
+
     @if($cart->items->isNotEmpty())
         @include('frontend.products._partials._checkout-stepper', ['step' => 1])
     @endif
@@ -61,7 +63,7 @@
 
                         <div class="bg-white bg-opacity-50 p-4 rounded-4 text-center border border-primary-light backdrop-blur mb-4">
                             <p class="filter-label mb-1">{{ __('Subtotal') }}</p>
-                            <h2 class="price-text-large mb-0 line-height-1 text-primary-color">{{ format_currency($cart->temp_total) }}</h2>
+                            <h2 class="price-text-large mb-0 line-height-1 text-primary-color">{{ format_currency($cartSubtotal) }}</h2>
                         </div>
 
                         <a href="{{ route('checkout.index') }}" class="btn btn-primary-theme w-100 rounded-pill py-3 fw-800 shadow-deep">

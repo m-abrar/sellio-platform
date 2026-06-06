@@ -200,14 +200,13 @@ in the partner dashboard
 
 -----------------------
 
-Product detail page needs polishing the UIUX
+- [x] Product detail page UI/UX polished: unified header/meta, purchase quote card, `btn-primary-theme`, gallery tokens, and property-style section rhythm.
 
 ------------------
-http://127.0.0.1:8000/cart
-Summary
-Subtotal
-
-$0.00 (this is by mistake, it must be some value)
+- [x] Cart summary subtotal showed `$0.00` — cart page now uses `calculateTotal()`, `Cart::syncTempTotal()` runs on index, and cart item creation persists `cart_id` reliably. Coverage: `LaravelPublicStorefrontTest::test_cart_page_shows_calculated_subtotal_for_cart_items`.
 
 -------------------------
 
+- [x] Events single page UI/UX refreshed: metric cards, ticket sidebar styling, sticky purchase panel, mobile CTA, and shared detail tokens aligned with property/product pages.
+
+-----------------------

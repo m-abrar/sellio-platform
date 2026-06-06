@@ -3,17 +3,19 @@
         <div>
             <span class="h5 fw-bold text-white mb-0 d-block">
                 @if($event->is_paid)
-                    ${{ number_format($event->sale_price ?? $event->base_price, 0) }} 
-                    <span class="small fw-normal text-muted"> starting price</span>
+                    {{ format_currency($event->sale_price ?? $event->base_price) }}
+                    <span class="small fw-normal text-muted">{{ __('starting price') }}</span>
                 @else
-                    FREE <span class="small fw-normal text-muted"> entry</span>
+                    {{ __('FREE') }} <span class="small fw-normal text-muted">{{ __('entry') }}</span>
                 @endif
             </span>
-            <span class="small text-warning fw-semibold"><i class="bi bi-ticket-fill me-1"></i>
-                {{ $tickets_left > 0 ? $tickets_left . ' Tickets Left' : 'Tickets Available' }}
+            <span class="small text-warning fw-semibold">
+                <i class="bi bi-ticket-fill me-1"></i>
+                {{ $tickets_left > 0 ? $tickets_left . ' ' . __('Tickets Left') : __('Tickets Available') }}
             </span>
         </div>
-        {{-- Button links to the anchor of the main ticket sidebar --}}
-        <a href="#ticket-sidebar" class="btn btn-primary-theme fw-bold text-white"><i class="bi bi-cart-fill me-2"></i>Buy Now</a>
+        <a href="#ticket-sidebar" class="btn btn-primary-theme fw-bold rounded-pill px-4">
+            <i class="bi bi-cart-fill me-2"></i>{{ __('Buy Now') }}
+        </a>
     </div>
 </div>
