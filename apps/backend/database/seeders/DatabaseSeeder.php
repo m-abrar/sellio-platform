@@ -160,6 +160,7 @@ class DatabaseSeeder extends Seeder
             MediaFullSeeder::class,
             BuyerActivitySeeder::class,
             PartnerActivitySeeder::class,
+            UserRoleAssignmentSeeder::class,
         ]);
         
         // Final Footer

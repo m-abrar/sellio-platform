@@ -23,3 +23,6 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 *.zip
+
+# Development workspace scratch files
+/_development/temp/

@@ -16,13 +16,19 @@
 
 ## 📁 Repository Ecosystem
 
-Sellio is built as a unified monorepo for maximum developer efficiency:
+**Submission package** (root):
 
--   **`apps/backend`**: Laravel 12.x Core - The brain of the platform. Handles API, SSR Storefront, and Admin Ops.
--   **`apps/storefront`**: React/Next.js Storefront (Coming Soon)
--   **`apps/seller`**: Dedicated Seller Dashboard
--   **`packages/api-client`**: Unified Axios wrapper for cross-app synchronization.
--   **`packages/types`**: Shared TypeScript definitions.
+| Path | Purpose |
+| :--- | :--- |
+| **`apps/backend`** | Laravel 12.x core — API, Blade storefront, admin panel |
+| **`apps/seller`** | Partner / seller React dashboard |
+| **`apps/buyer`** | Buyer React dashboard |
+| **`packages/`** | Shared `api-client` and TypeScript `types` |
+| **`documentation/`** | Buyer-facing HTML documentation (`index.html`) |
+| **`introduction/`** | CodeCanyon item preview pages |
+| **`listing-description/`** | Marketplace listing HTML |
+
+Internal development files (audits, TODOs, theme references, WIP Next.js storefront) live in **`_development/`** and are excluded from the distribution bundle.
 
 ---
 

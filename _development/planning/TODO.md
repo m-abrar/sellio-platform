@@ -244,8 +244,6 @@ in the partner dashboard
 ------------------------
 
 
-------------------------------
-
 - [x] Step 2 payment pages no longer duplicate listing thumbnails: header context card hidden on product/event checkout step 2; sidebar summary keeps the single thumb.
 
 --------------------------------

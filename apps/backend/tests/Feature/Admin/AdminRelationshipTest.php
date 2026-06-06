@@ -144,6 +144,15 @@ class AdminRelationshipTest extends TestCase
         ]);
     }
 
+    public function test_factory_created_user_receives_default_role(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'factory-role-test@test.test',
+        ]);
+
+        $this->assertTrue($user->hasRole('user'));
+    }
+
     public function test_user_creation_assigns_roles(): void
     {
         $moderatorRole = Role::where('name', 'moderator')->firstOrFail();

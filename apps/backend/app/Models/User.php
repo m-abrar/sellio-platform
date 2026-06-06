@@ -70,6 +70,42 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
                 $user->uuid = (string) \Illuminate\Support\Str::uuid();
             }
         });
+
+        static::created(function (User $user) {
+            if ($user->roles()->exists()) {
+                return;
+            }
+
+            $roleName = match (true) {
+                $user->is_admin => 'admin',
+                $user->is_partner => 'partner',
+                default => 'user',
+            };
+
+            if (\Spatie\Permission\Models\Role::where('name', $roleName)->exists()) {
+                $user->assignRole($roleName);
+            }
+        });
+    }
+
+    /**
+     * Role names for admin display, falling back to identity flags when Spatie roles are missing.
+     *
+     * @return \Illuminate\Support\Collection<int, string>
+     */
+    public function displayRoleNames(): \Illuminate\Support\Collection
+    {
+        $names = $this->getRoleNames();
+
+        if ($names->isNotEmpty()) {
+            return $names;
+        }
+
+        return collect(array_filter([
+            $this->is_admin ? 'admin' : null,
+            $this->is_partner ? 'partner' : null,
+            $this->is_buyer ? 'user' : null,
+        ]))->unique()->values();
     }
 
     protected $fillable = [
