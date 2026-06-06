@@ -132,6 +132,45 @@
                     </div>
                 </div>
 
+                {{-- Location --}}
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Listing Location</h3>
+                    </div>
+                    <div class="card-body p-4 pt-0">
+                        <div class="form-group mb-4">
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Address</label>
+                            <input type="text" name="address" class="form-control form-control-premium" value="{{ old('address', $classified->address ?? '') }}" placeholder="Street address or pickup area">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">City</label>
+                                    <input type="text" name="city" class="form-control form-control-premium" value="{{ old('city', $classified->city ?? '') }}" placeholder="e.g. Austin">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">State</label>
+                                    <input type="text" name="state" class="form-control form-control-premium" value="{{ old('state', $classified->state ?? '') }}" placeholder="e.g. Texas">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Country</label>
+                                    <input type="text" name="country" class="form-control form-control-premium" value="{{ old('country', $classified->country ?? '') }}" placeholder="e.g. USA">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Zip Code</label>
+                                    <input type="text" name="zip_code" class="form-control form-control-premium" value="{{ old('zip_code', $classified->zip_code ?? '') }}" placeholder="e.g. 78701">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Pricing --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">

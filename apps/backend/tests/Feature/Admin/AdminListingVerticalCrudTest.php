@@ -154,6 +154,11 @@ class AdminListingVerticalCrudTest extends TestCase
             'type_id' => $type->id,
             'base_price' => 150,
             'item_condition' => 'used',
+            'address' => '100 Market Street',
+            'city' => 'Austin',
+            'state' => 'Texas',
+            'country' => 'USA',
+            'zip_code' => '78701',
             'is_published' => true,
         ];
 
@@ -165,12 +170,20 @@ class AdminListingVerticalCrudTest extends TestCase
         $this->actingAsSuperAdmin()->put(route('admin.classifieds.update', $classified), array_merge($payload, [
             'title' => 'Updated CRUD Classified',
             'base_price' => 175,
+            'address' => '200 Market Street',
+            'city' => 'Dallas',
+            'zip_code' => '75201',
         ]))->assertRedirect();
 
         $this->assertDatabaseHas('classified_ads', [
             'id' => $classified->id,
             'title' => 'Updated CRUD Classified',
             'item_condition' => 5,
+            'address' => '200 Market Street',
+            'city' => 'Dallas',
+            'state' => 'Texas',
+            'country' => 'USA',
+            'zip_code' => '75201',
         ]);
 
         $this->actingAsSuperAdmin()->delete(route('admin.classifieds.destroy', $classified))

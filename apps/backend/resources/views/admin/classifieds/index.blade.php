@@ -115,7 +115,11 @@
                                         <a href="{{ route('admin.classifieds.duplicate', $ad->id) }}" class="btn text-success" data-toggle="tooltip" title="{{ __('Clone Entry') }}"><i class="fas fa-copy"></i></a>
                                         <form action="{{ route('admin.classifieds.destroy', $ad->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="{{ __('Purge Ad') }}" data-action="delete-trigger">
+                                            <button type="button" class="btn text-danger"
+                                                    data-toggle="tooltip" title="{{ __('Purge Ad') }}"
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="{{ __('Purge Ad?') }}"
+                                                    data-confirm-text="{{ __('Permanently delete this classified listing?') }}">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>

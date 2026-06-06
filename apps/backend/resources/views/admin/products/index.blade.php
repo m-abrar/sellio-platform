@@ -152,7 +152,10 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="button" class="btn text-danger" 
-                                                    data-toggle="tooltip" title="{{ __('Purge Product') }}" data-action="delete-trigger">
+                                                    data-toggle="tooltip" title="{{ __('Purge Product') }}"
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="{{ __('Purge Product?') }}"
+                                                    data-confirm-text="{{ __('Permanently delete this product listing?') }}">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>

@@ -77,6 +77,11 @@ class AdminVerticalCrudTest extends TestCase
             'description' => 'Service created by admin CRUD test.',
             'category_id' => $category->id,
             'base_price' => 99.00,
+            'address' => '100 Service Way',
+            'city' => 'Austin',
+            'state' => 'Texas',
+            'country' => 'USA',
+            'zip_code' => '78701',
             'is_published' => true,
         ])->assertRedirect();
 
@@ -87,10 +92,23 @@ class AdminVerticalCrudTest extends TestCase
             'description' => 'Updated service description.',
             'category_id' => $category->id,
             'base_price' => 129.00,
+            'address' => '200 Service Way',
+            'city' => 'Dallas',
+            'state' => 'Texas',
+            'country' => 'USA',
+            'zip_code' => '75201',
             'is_published' => true,
         ])->assertRedirect();
 
-        $this->assertDatabaseHas('services', ['id' => $service->id, 'title' => 'Updated CRUD Service']);
+        $this->assertDatabaseHas('services', [
+            'id' => $service->id,
+            'title' => 'Updated CRUD Service',
+            'address' => '200 Service Way',
+            'city' => 'Dallas',
+            'state' => 'Texas',
+            'country' => 'USA',
+            'zip_code' => '75201',
+        ]);
 
         $this->actingAsSuperAdmin()->delete(route('admin.services.destroy', $service))
             ->assertRedirect();

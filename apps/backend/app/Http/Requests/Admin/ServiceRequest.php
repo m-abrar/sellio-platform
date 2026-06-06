@@ -41,6 +41,12 @@ class ServiceRequest extends FormRequest
             'min_contract_months' => ['nullable', 'integer', 'min:0'],
             'max_client_slots'    => ['nullable', 'integer', 'min:0'],
             'address'             => ['nullable', 'string', 'max:255'],
+            'city'                => ['nullable', 'string', 'max:100'],
+            'state'               => ['nullable', 'string', 'max:100'],
+            'country'             => ['nullable', 'string', 'max:100'],
+            'zip_code'            => ['nullable', 'string', 'max:20'],
+            'latitude'            => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude'           => ['nullable', 'numeric', 'between:-180,180'],
 
             // Pricing
             'base_price'          => ['required', 'numeric', 'min:0'],
