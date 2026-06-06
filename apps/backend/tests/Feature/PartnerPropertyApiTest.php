@@ -11,6 +11,7 @@ use App\Models\Type;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Tests\Concerns\InteractsWithPartnerApi;
@@ -31,6 +32,18 @@ class PartnerPropertyApiTest extends TestCase
 
         $response->assertOk()
             ->assertJsonPath('data.google_maps_api_key', 'test-browser-map-key');
+    }
+
+    public function test_partner_property_form_metadata_survives_missing_settings_table(): void
+    {
+        $partner = $this->createPartner();
+        Schema::dropIfExists('settings');
+
+        $response = $this->actingAs($partner, 'sanctum')
+            ->getJson('/api/dashboard/partner/properties/form-data');
+
+        $response->assertOk()
+            ->assertJsonPath('data.google_maps_api_key', null);
     }
 
     public function test_partner_can_create_update_and_delete_property_listing(): void

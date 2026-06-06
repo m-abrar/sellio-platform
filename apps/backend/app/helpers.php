@@ -60,6 +60,10 @@ if (!function_exists('themepages')) {
 if (!function_exists('setting')) {
     function setting($key, $default = null)
     {
+        if (! \Illuminate\Support\Facades\Schema::hasTable('settings')) {
+            return $default;
+        }
+
         $settings = \Illuminate\Support\Facades\Cache::rememberForever('settings_all', function () {
             return \App\Models\Setting::pluck('value', 'key')->toArray();
         });
