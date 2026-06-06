@@ -24,6 +24,10 @@ class UserResource extends JsonResource
             'phone'      => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->phone),
             'location'   => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->location),
             'settings'   => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->preferences ?? []),
+            'wallet_balance' => $this->when(
+                $request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']),
+                $this->wallet_balance ?? 0,
+            ),
             'roles'      => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->getRoleNames()),
             'is_buyer'   => $this->is_buyer,
             'created_at' => $this->created_at,

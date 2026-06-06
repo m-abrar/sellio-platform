@@ -10,6 +10,7 @@ export interface UserProfile {
   location?: string;
   member_since?: string;
   settings?: any;
+  wallet_balance?: number;
 }
 
 export async function fetchUserProfile(): Promise<UserProfile> {

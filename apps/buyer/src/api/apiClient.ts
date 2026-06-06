@@ -82,7 +82,10 @@ export async function apiRequest<T>(
   const payload = text ? JSON.parse(text) : null;
 
   if (!response.ok) {
-    const message = payload?.message || 'Request failed';
+    const validationMessage = payload?.errors
+      ? Object.values(payload.errors as Record<string, string[]>).flat()[0]
+      : null;
+    const message = validationMessage || payload?.message || 'Request failed';
     throw new Error(message);
   }
 

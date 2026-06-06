@@ -27,7 +27,7 @@ class ContactService
 
         // 2. Implement actual mailing logic with safety try-catch block
         try {
-            $adminEmail = setting('admin_email', 'admin@sellio.com');
+            $adminEmail = setting('email_contact', config('mail.from.address', 'admin@sellio.com'));
             Mail::raw(
                 "You have received a new contact form inquiry on Sellio:\n\n" .
                 "Name: " . ($data['name'] ?? 'N/A') . "\n" .

@@ -148,15 +148,6 @@ export default function SettingsView() {
   const [is2FASaving, setIs2FASaving] = useState(false);
   const [twoFactorError, setTwoFactorError] = useState<string | null>(null);
 
-  // Credit Card states
-  const [showCardModal, setShowCardModal] = useState(false);
-  const [cardNo, setCardNo] = useState('');
-  const [cardHolder, setCardHolder] = useState('');
-  const [cardExpiry, setCardExpiry] = useState('');
-  const [cardBrand, setCardBrand] = useState('Visa');
-  const [isCardSaving, setIsCardSaving] = useState(false);
-  const [cardError, setCardError] = useState<string | null>(null);
-
   const handleAutoSaveSettings = async (newSettings: any, settingId: string) => {
     setSavingSettings(prev => ({ ...prev, [settingId]: 'saving' }));
     try {
@@ -232,71 +223,6 @@ export default function SettingsView() {
       setTwoFactorError('Failed to enable Two-Factor Authentication');
     } finally {
       setIs2FASaving(false);
-    }
-  };
-
-  const handleAddCard = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!profile) return;
-    setCardError(null);
-
-    const cleanCardNo = cardNo.replace(/\s+/g, '');
-    if (cleanCardNo.length < 15 || cleanCardNo.length > 16) {
-      setCardError('Card number must be 15 or 16 digits.');
-      return;
-    }
-
-    if (!/^(0[1-9]|1[0-2])\/?([0-9]{2})$/.test(cardExpiry)) {
-      setCardError('Expiry must be in MM/YY format.');
-      return;
-    }
-
-    setIsCardSaving(true);
-    try {
-      const newSettings = {
-        ...profile.settings,
-        card_brand: cardBrand.toUpperCase(),
-        card_last4: cleanCardNo.slice(-4),
-        card_expiry: cardExpiry
-      };
-      const updated = await updateUserProfile({
-        name: profile.name,
-        email: profile.email,
-        phone: profile.phone,
-        location: profile.location,
-        settings: newSettings
-      });
-      setProfile(updated);
-      setShowCardModal(false);
-    } catch {
-      setCardError('Failed to add payment method.');
-    } finally {
-      setIsCardSaving(false);
-    }
-  };
-
-  const handleRemoveCard = async () => {
-    if (!profile || !window.confirm('Are you sure you want to remove this payment method?')) return;
-
-    setIsSaving(true);
-    try {
-      const newSettings = { ...profile.settings };
-      delete newSettings.card_brand;
-      delete newSettings.card_last4;
-      delete newSettings.card_expiry;
-
-      const updated = await updateUserProfile({
-        name: profile.name,
-        email: profile.email,
-        phone: profile.phone,
-        location: profile.location,
-        settings: newSettings
-      });
-      setProfile(updated);
-    } catch {
-      alert('Failed to remove payment method.');
-    } finally {
-      setIsSaving(false);
     }
   };
 
@@ -616,59 +542,29 @@ export default function SettingsView() {
               <div className="space-y-8">
                 <div className="p-6 bg-zinc-900 rounded-3xl text-white relative overflow-hidden">
                   <div className="relative z-10">
-                    <p className="text-xs font-bold text-white/50 uppercase tracking-widest mb-8">Current Plan</p>
-                    <div className="flex items-end justify-between">
-                      <div>
-                        <h4 className="text-3xl font-extrabold mb-1">Premium Pro</h4>
-                        <p className="text-sm text-white/70">Next billing date: Oct 12, 2024</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-2xl font-bold">$29.00</p>
-                        <p className="text-xs text-white/50">per month</p>
-                      </div>
-                    </div>
+                    <p className="text-xs font-bold text-white/50 uppercase tracking-widest mb-2">Wallet Balance</p>
+                    <p className="text-3xl font-extrabold mb-1">
+                      ${Number(profile.wallet_balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </p>
+                    <p className="text-sm text-white/70">Credits and refunds from marketplace activity.</p>
                   </div>
-                  {/* Decorative circles */}
                   <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
-                  <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-[var(--primary-color)]/20 rounded-full blur-3xl" />
                 </div>
 
-                <div className="space-y-4">
-                  <h4 className="text-sm font-bold text-zinc-900 uppercase tracking-wider">Payment Methods</h4>
-                  {profile.settings?.card_brand ? (
-                    <div className="p-4 border border-zinc-200 rounded-2xl flex items-center gap-4 group hover:bg-zinc-50 transition-colors">
-                      <div className="w-12 h-8 bg-zinc-900 text-white rounded flex items-center justify-center font-black text-[9px] uppercase tracking-wider shadow-xs">
-                        {profile.settings.card_brand}
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-bold text-zinc-900">
-                          {profile.settings.card_brand} ending in {profile.settings.card_last4}
-                        </p>
-                        <p className="text-xs text-zinc-500">Expires {profile.settings.card_expiry}</p>
-                      </div>
-                      <button 
-                        onClick={handleRemoveCard}
-                        className="text-xs font-bold text-red-505 hover:text-red-600 transition-colors cursor-pointer border-none bg-transparent"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="p-8 border-2 border-dashed border-zinc-200 rounded-3xl text-center bg-zinc-50/20">
-                      <CreditCard className="mx-auto text-zinc-350 mb-2" size={32} />
-                      <p className="text-sm font-bold text-zinc-800">No Payment Methods Added</p>
-                      <p className="text-xs text-zinc-400 mt-0.5">Attach a payment card to purchase marketplace services seamlessly.</p>
-                    </div>
-                  )}
-
-                  {!profile.settings?.card_brand && (
-                    <button 
-                      onClick={() => setShowCardModal(true)}
-                      className="w-full py-3 border-2 border-dashed border-zinc-200 hover:border-zinc-900 rounded-2xl text-sm font-bold text-zinc-450 hover:text-zinc-900 transition-all cursor-pointer"
-                    >
-                      + Add New Payment Method
-                    </button>
-                  )}
+                <div className="p-6 border border-zinc-200 rounded-2xl bg-zinc-50 space-y-3">
+                  <h4 className="text-sm font-bold text-zinc-900 uppercase tracking-wider">Booking payments</h4>
+                  <p className="text-sm text-zinc-600 leading-relaxed">
+                    Property and event bookings are paid during storefront checkout. The buyer panel does not store payment cards yet.
+                  </p>
+                  <a
+                    href={STOREFRONT_BASE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-bold text-zinc-900 hover:text-[var(--primary-color)] transition-colors"
+                  >
+                    Browse storefront
+                    <ExternalLink size={14} />
+                  </a>
                 </div>
               </div>
             )}
@@ -864,128 +760,6 @@ export default function SettingsView() {
                     isLoading={is2FASaving}
                   >
                     Verify & Enable
-                  </Button>
-                </div>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* Credit Card Creator Modal */}
-      <AnimatePresence>
-        {showCardModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative border border-zinc-100 text-left"
-            >
-              <button 
-                type="button"
-                onClick={() => setShowCardModal(false)}
-                className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-zinc-900 rounded-full hover:bg-zinc-100 transition-colors cursor-pointer border-none bg-transparent"
-              >
-                <X size={18} />
-              </button>
-
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-indigo-50 text-indigo-500 rounded-xl flex items-center justify-center animate-bounce">
-                  <CreditCard size={20} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-zinc-900 leading-tight">Add Payment Method</h3>
-                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Secure Credit Card Simulator</p>
-                </div>
-              </div>
-
-              {cardError && (
-                <div className="rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-xs font-bold text-red-650 mb-4">
-                  {cardError}
-                </div>
-              )}
-
-              <form onSubmit={handleAddCard} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5 col-span-2 text-left">
-                    <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">Card Brand</label>
-                    <select
-                      value={cardBrand}
-                      onChange={(e) => setCardBrand(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-zinc-50 border-none rounded-xl text-xs sm:text-sm font-bold text-zinc-700 focus:ring-2 focus:ring-zinc-900"
-                    >
-                      <option value="Visa">Visa</option>
-                      <option value="Mastercard">Mastercard</option>
-                      <option value="Amex">American Express</option>
-                      <option value="Discover">Discover</option>
-                    </select>
-                  </div>
-
-                  <div className="space-y-1.5 col-span-2 text-left">
-                    <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">Cardholder Name</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. John Doe"
-                      value={cardHolder}
-                      onChange={(e) => setCardHolder(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-zinc-50 border-none rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-zinc-900"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5 col-span-2 text-left">
-                    <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">Card Number</label>
-                    <input
-                      type="text"
-                      required
-                      maxLength={16}
-                      placeholder="16 digits (e.g. 4242424242424242)"
-                      value={cardNo}
-                      onChange={(e) => setCardNo(e.target.value.replace(/\D/g, ''))}
-                      className="w-full px-4 py-2.5 bg-zinc-50 border-none rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-zinc-900 font-mono"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5 text-left">
-                    <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">Expiry Date</label>
-                    <input
-                      type="text"
-                      required
-                      maxLength={5}
-                      placeholder="MM/YY"
-                      value={cardExpiry}
-                      onChange={(e) => setCardExpiry(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-zinc-50 border-none rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-zinc-900 font-mono"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5 text-left">
-                    <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">CVV / CVC</label>
-                    <input
-                      type="password"
-                      required
-                      maxLength={4}
-                      placeholder="•••"
-                      className="w-full px-4 py-2.5 bg-zinc-50 border-none rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-zinc-900 text-center font-mono"
-                    />
-                  </div>
-                </div>
-
-                <div className="pt-2 flex justify-end gap-3">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={() => setShowCardModal(false)}
-                    disabled={isCardSaving}
-                  >
-                    Cancel
-                  </Button>
-                  <Button 
-                    type="submit" 
-                    isLoading={isCardSaving}
-                  >
-                    Add Card
                   </Button>
                 </div>
               </form>

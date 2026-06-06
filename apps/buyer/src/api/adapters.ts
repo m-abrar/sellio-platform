@@ -208,6 +208,7 @@ export function toUserProfile(resource: any) {
     location: resource?.location || '',
     member_since: resource?.created_at ? new Date(resource.created_at).toLocaleDateString() : '',
     settings: resource?.settings || {},
+    wallet_balance: number(resource?.wallet_balance, 0),
     roles: resource?.roles || [],
   };
 }

@@ -52,7 +52,11 @@ class ProfileController extends Controller
         $user = $request->user();
 
         if (!Hash::check($request->current_password, $user->password)) {
-            return $this->successResponse(null, 'The provided current password does not match our records.', 422);
+            return $this->errorResponse(
+                'The provided current password does not match our records.',
+                422,
+                ['current_password' => ['The provided current password does not match our records.']],
+            );
         }
 
         $user->update([

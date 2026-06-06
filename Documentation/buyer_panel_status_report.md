@@ -19,6 +19,8 @@ Last refreshed: 2026-06-06
 - Laravel exposes `GET /api/dashboard/user/profile` and `PUT /api/dashboard/user/profile`.
 - Settings profile read/update is wired for name, email, phone, location, and notification preferences (`preferences` JSON on users table).
 - Profile avatar upload is wired via `POST /api/dashboard/user/upload-image` and the Settings camera control.
+- Password change is wired to `PUT /api/v1/auth/profile/password` with validation error surfacing.
+- Billing tab shows live wallet balance from `UserResource`; booking payments remain at storefront checkout.
 - A not-found route exists for unknown buyer panel paths.
 - A buyer route error boundary exists for unexpected view failures.
 - Activity cancellation is wired where Laravel exposes safe cancel routes.
@@ -27,7 +29,8 @@ Last refreshed: 2026-06-06
 
 ## Pending
 
-- Settings security (password change) and billing are still mostly visual/prototype.
+- Password change is wired to `PUT /api/v1/auth/profile/password` with validation error surfacing.
+- Billing tab shows live wallet balance; booking payments remain at storefront checkout (no saved cards).
 - No focused frontend tests yet.
 
 ## Verification
