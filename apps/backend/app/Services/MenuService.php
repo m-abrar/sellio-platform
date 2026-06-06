@@ -6,7 +6,7 @@ use App\Models\Menu;
 use App\Models\MenuItem;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Cache, Config, Route};
+use Illuminate\Support\Facades\{Cache, Config, Route, Schema};
 use Illuminate\Support\Str;
 
 class MenuService
@@ -111,6 +111,10 @@ class MenuService
 
     public function getMenusList(): Collection
     {
+        if (! $this->hasMenuTables()) {
+            return new Collection();
+        }
+
         $cacheKey = "menu.list.{$this->bladeMenuScope}";
 
         return Cache::rememberForever($cacheKey, function () {
@@ -199,6 +203,15 @@ class MenuService
 
     protected function buildStructure(string $locationKey, string $themeKey): array
     {
+        if (! $this->hasMenuTables()) {
+            return [
+                'location_key' => $locationKey,
+                'title'        => Str::of($locationKey)->replace('_', ' ')->title() . ' Menu',
+                'source'       => 'fallback',
+                'items'        => $this->fallbackItems($locationKey, $themeKey),
+            ];
+        }
+
         foreach ($this->resolveThemeKeys($themeKey) as $index => $candidateTheme) {
             $menu = Menu::query()
                 ->where('theme_key', $candidateTheme)
@@ -388,6 +401,10 @@ class MenuService
 
     protected function resolveThemeKey(?string $requestedTheme): string
     {
+        if (! Schema::hasTable('themes')) {
+            return Config::get('app.default_theme', self::GLOBAL_FALLBACK_THEME);
+        }
+
         if ($requestedTheme) {
             $themeExists = Cache::remember("theme_exists.{$requestedTheme}", 3600, function () use ($requestedTheme) {
                 return \App\Models\Theme::where('theme_key', $requestedTheme)->exists();
@@ -400,6 +417,11 @@ class MenuService
 
         return \App\Models\Theme::where('is_active', 1)->value('theme_key')
             ?? Config::get('app.default_theme', self::GLOBAL_FALLBACK_THEME);
+    }
+
+    protected function hasMenuTables(): bool
+    {
+        return Schema::hasTable('menus') && Schema::hasTable('menu_items');
     }
 
     /**
