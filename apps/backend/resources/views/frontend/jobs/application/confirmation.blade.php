@@ -8,14 +8,15 @@
     <div class="row justify-content-center">
         <div class="col-lg-10 col-xl-9">
             
-            {{-- Success Animation & Header --}}
-            <div class="text-center mb-5">
-                <div class="success-icon-wrapper mb-4">
-                    <i class="bi bi-check-all"></i>
-                </div>
-                <h1 class="fw-800 text-dark">Application Sent!</h1>
-                <p class="lead text-muted">You've taken a great step toward your next career move.</p>
-            </div>
+            @include('frontend._partials._checkout_success_hero', [
+                'eyebrow' => __('Application received'),
+                'title' => __('Application Sent!'),
+                'message' => __('You have taken a great step toward your next career move at :company.', ['company' => $job->title]),
+                'icon' => 'bi-send-check-fill',
+                'tone' => 'success',
+                'reference' => $application->id,
+                'referenceLabel' => __('Application ID'),
+            ])
 
             <div class="card glass-surface border-0 shadow-lg overflow-hidden">
                 {{-- Job Summary Strip --}}

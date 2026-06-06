@@ -23,7 +23,7 @@
         @forelse ($allPhotos as $index => $media)
             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                 <div class="ratio ratio-16x9">
-                    <img src="{{ $media->getUrl('detail') }}" 
+                    <img src="{{ $service->resolveMediaUrl($media, 'detail') }}" 
                          class="object-fit-cover" 
                          alt="{{ $service->title }}" 
                          loading="{{ $index === 0 ? 'eager' : 'lazy' }}">

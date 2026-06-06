@@ -23,7 +23,7 @@
         @forelse ($allPhotos as $index => $media)
             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                 <img 
-                    src="{{ $media->getUrl(CAROUSEL_CONVERSION) }}" 
+                    src="{{ $event->resolveMediaUrl($media, CAROUSEL_CONVERSION) }}" 
                     class="d-block w-100 listing-header-img" 
                     alt="{{ $media->name }}"
                 >

@@ -87,16 +87,9 @@ h1, h2, h3, h4, .brand-text {
     letter-spacing: -0.01em;
 }
 
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
-    border: none !important;
-    box-shadow: var(--shadow-glow) !important;
-    color: var(--surface-white) !important;
-}
-
-.btn-primary:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 20px 40px -8px rgba(var(--primary-rgb), 0.45) !important;
+.auth-page .btn-primary-theme,
+.auth-page .btn-outline-primary-theme {
+    border-radius: var(--radius-pill) !important;
 }
 
 .btn-light {
@@ -130,15 +123,34 @@ h1, h2, h3, h4, .brand-text {
 
 /* Auth Card System */
 .auth-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-premium);
-    padding: 4.5rem !important;
+    padding: clamp(2rem, 5vw, 3.5rem) !important;
     width: 100%;
-    max-width: 540px;
+    max-width: 520px;
     animation: cardEntrance 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.auth-page .filter-label {
+    letter-spacing: 0.04em;
+}
+
+.auth-marketing-icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1.25rem;
+}
+
+.auth-mobile-logo {
+    max-height: 42px;
+    width: auto;
+}
+
+.auth-divider-badge {
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
 }
 
 @keyframes cardEntrance {

@@ -31,8 +31,12 @@
                 isUpdatingPrice: false,
 
                 init() {
-                    this.selectedAddons = Array.from(this.$root.querySelectorAll('input[name="addon_ids[]"]:checked'))
+                    const requiredAddonIds = Array.from(this.$root.querySelectorAll('[data-required-addon]'))
                         .map((input) => input.value);
+                    const optionalAddonIds = Array.from(this.$root.querySelectorAll('input[type="checkbox"][name="addon_ids[]"]:checked'))
+                        .map((input) => input.value);
+
+                    this.selectedAddons = [...new Set([...requiredAddonIds, ...optionalAddonIds])];
 
                     this.$watch('quantity', () => this.updatePrice());
                     this.updatePrice();

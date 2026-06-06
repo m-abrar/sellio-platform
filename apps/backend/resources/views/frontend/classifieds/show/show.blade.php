@@ -30,8 +30,6 @@
                     'classified' => $classified
                 ])
 
-                <hr class="opacity-10 my-4">
-
                 <div class="property-details-content">
                     <section id="listing-description" class="mb-5">
                         <h2 class="fw-800 text-dark mb-4 section-title">{{ __('Description') }}</h2>
@@ -58,8 +56,8 @@
 
         @include('frontend.classifieds.show.partials.sidebar._pickup_location_card')
 
-        <div class="p-4 rounded-4 border border-warning bg-warning bg-opacity-10">
-            <h6 class="fw-bold text-dark"><i class="bi bi-shield-lock me-2"></i>{{ __('Safety Tips') }}</h6>
+        <div class="glass-surface border-0 rounded-4 p-4 bg-warning bg-opacity-10">
+            <h6 class="fw-800 text-dark"><i class="bi bi-shield-lock text-primary-color me-2"></i>{{ __('Safety Tips') }}</h6>
             <ul class="small text-muted mb-0 ps-3">
                 <li>{{ __('Meet in a public place') }}</li>
                 <li>{{ __('Check the item before paying') }}</li>
@@ -80,27 +78,4 @@
         </div>
     </x-slot:related>
 </x-frontend.detail-shell>
-@endsection
-
-@section('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const mainImage = document.getElementById('mainImage');
-        const thumbnails = document.querySelectorAll('.thumbnail-img');
-
-        thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', function() {
-                // 1. Get the new image source
-                const newSrc = this.getAttribute('data-full-src');
-                
-                // 2. Change the main image source
-                mainImage.src = newSrc;
-                
-                // 3. Update active state on thumbnails
-                thumbnails.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    });
-</script>
 @endsection

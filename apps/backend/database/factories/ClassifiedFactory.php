@@ -6,6 +6,7 @@ use App\Models\Classified;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Location;
+use App\Models\Type;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -21,6 +22,7 @@ class ClassifiedFactory extends Factory
         return [
             'user_id'     => User::inRandomOrder()->first()?->id ?? User::factory(),
             'category_id' => Category::where('is_classified', true)->inRandomOrder()->first()?->id ?? Category::factory(),
+            'type_id'     => Type::where('is_classified', true)->inRandomOrder()->first()?->id ?? Type::factory(),
             'location_id' => Location::inRandomOrder()->first()?->id ?? Location::factory(),
 
             'title'       => ucfirst($title),

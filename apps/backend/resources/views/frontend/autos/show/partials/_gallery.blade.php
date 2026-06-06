@@ -23,7 +23,7 @@
         @forelse ($allPhotos as $index => $media)
             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                 <img 
-                    src="{{ $media->getUrl(CAROUSEL_CONVERSION) }}" 
+                    src="{{ $auto->resolveMediaUrl($media, CAROUSEL_CONVERSION) }}" 
                     class="d-block w-100 listing-header-img" 
                     alt="{{ $auto->title ?? 'Vehicle' }} - {{ $media->name ?? 'Photo ' . ($index + 1) }}"
                 >
@@ -31,7 +31,7 @@
         @empty
             <div class="carousel-item active">
                 <img 
-                    src="{{ $auto->getFirstMediaUrl(Auto::PRIMARY_MEDIA, conversion: CAROUSEL_CONVERSION) }}    {{ $auto->getImageUrl(conversion: CAROUSEL_CONVERSION) }}" 
+                    src="{{ $auto->getImageUrl(conversion: CAROUSEL_CONVERSION) }}" 
                     class="d-block w-100 listing-header-img" 
                     alt="No photo available for {{ $auto->title ?? 'Vehicle' }}"
                 >

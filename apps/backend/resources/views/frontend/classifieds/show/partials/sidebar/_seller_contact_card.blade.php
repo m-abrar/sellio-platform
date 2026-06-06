@@ -1,27 +1,26 @@
-<div class="card glass-surface p-4 mb-4">
-    <h5 class="fw-bold mb-3"><i class="bi bi-person-circle me-2"></i>Seller Details</h5>
+<div class="glass-surface border-0 rounded-4 shadow-sm p-4 mb-4">
+    <span class="metric-label d-block mb-2">{{ __('Seller') }}</span>
+    <h5 class="fw-800 text-dark mb-3">
+        <i class="bi bi-person-circle text-primary-color me-2"></i>{{ __('Contact Seller') }}
+    </h5>
 
-    {{-- Seller Avatar --}}
     <div class="d-flex align-items-center mb-3">
-        <img src="{{ $seller->avatar_url ?? asset('images/default-avatar.png') }}" 
-             alt="{{ $seller->title ?? 'Seller' }} Avatar" 
-             class="rounded-circle me-3" 
-             style="width: 60px; height: 60px; object-fit: cover;">
+        <img src="{{ $seller->avatar_url ?? asset('images/fallbacks/default-avatar.png') }}"
+             alt="{{ $seller->name ?? __('Seller') }}"
+             class="rounded-circle me-3 object-fit-cover"
+             width="60"
+             height="60">
         <div>
-            <p class="fs-4 fw-bold mb-0">{{ $seller->title ?? 'Private Seller' }}</p>
-            <p class="text-muted small mb-0">Member Since {{ $seller->created_at->format('F Y') }}</p>
+            <p class="fw-800 mb-0 text-dark">{{ $seller->name ?? __('Private Seller') }}</p>
+            <p class="text-muted small mb-0">{{ __('Member since :date', ['date' => $seller->created_at->format('F Y')]) }}</p>
         </div>
     </div>
-    
-    <hr class="mt-0">
 
-    {{-- Seller Rating and Reviews --}}
     @php
-        // The controller should ensure the 'reviews' relationship is loaded on the User model
         $avgRating = $seller->reviews()->avg('rating');
         $reviewCount = $seller->reviews()->count();
     @endphp
-    
+
     @if ($reviewCount > 0)
         <div class="d-flex align-items-center mb-3">
             <span class="text-warning me-2">
@@ -29,21 +28,17 @@
                     <i class="bi bi-star{{ $i <= round($avgRating) ? '-fill' : '' }}"></i>
                 @endfor
             </span>
-            <span class="small text-muted">({{ $reviewCount }} Reviews)</span>
+            <span class="small text-muted">({{ trans_choice(':count review|:count reviews', $reviewCount, ['count' => $reviewCount]) }})</span>
         </div>
     @else
-        <p class="small text-info mb-3"><i class="bi bi-info-circle me-1"></i> No public reviews yet.</p>
+        <p class="small text-muted mb-3"><i class="bi bi-info-circle me-1"></i>{{ __('No public reviews yet.') }}</p>
     @endif
-    
-    {{-- Action Buttons --}}
-    
-    {{-- Use route('conversation.start') for the Send Message button --}}
-    <a href="{{ route('conversation.start', $seller) }}" class="btn btn-lg btn-primary mb-2">
-        <i class="bi bi-chat-dots me-2"></i>Send Message
+
+    <a href="{{ route('conversation.start', $seller) }}" class="btn btn-primary-theme w-100 rounded-pill fw-800 mb-2">
+        <i class="bi bi-chat-dots me-2"></i>{{ __('Send Message') }}
     </a>
 
-    {{-- View Profile Button --}}
-    <a href="{{ route('partner.profile', $seller) }}" class="btn btn-sm btn-outline-secondary">
-        View Profile
+    <a href="{{ route('partner.profile', $seller) }}" class="btn btn-outline-primary-theme w-100 rounded-pill fw-bold">
+        {{ __('View Profile') }}
     </a>
 </div>

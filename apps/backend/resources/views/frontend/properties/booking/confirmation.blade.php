@@ -1,25 +1,14 @@
 @extends('frontend._layouts._app')
 
-@section('title', __('Booking Confirmation') . ' | ' . __('Step 3 of 3'))
+@section('title', __('Booking Confirmation'))
 @section('body_class', 'has-body-glow')
 
 @section('content')
 <x-frontend.page-shell variant="property-booking">
-    @php
-        $confirmationSubtitle = null;
-
-        if (! $isPaid) {
-            $confirmationSubtitle = '<p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">' . e(__('Your reservation is saved. Complete payment to secure these dates.')) . '</p>';
-        } else {
-            $confirmationSubtitle = '<p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">' . e(__('Pack your bags! Your trip is officially on the calendar.')) . '</p>';
-        }
-    @endphp
-
     @include('frontend.properties.booking._partials._booking-header', [
         'eyebrow' => __('Vacation Booking'),
         'title' => __('Booking Confirmation'),
-        'step' => 3,
-        'subtitleHtml' => $confirmationSubtitle,
+        'step' => null,
         'property' => $property,
         'backUrl' => $isPaid ? route('properties.show', $property->slug) : route('property.booking.payment', ['property' => $property->slug, 'booking' => $booking->id]),
         'backLabel' => $isPaid ? __('Back to property') : __('Back to payment'),
@@ -27,33 +16,24 @@
 
     @include('frontend._partials._alerts')
 
-    @include('frontend.properties.booking._partials._booking-stepper', [
-        'step' => 3,
-        'confirmIcon' => $isPaid ? 'bi-star-fill' : 'bi-hourglass-split',
-        'confirmLabelClass' => $statusColorClass,
+    @include('frontend._partials._checkout_success_hero', [
+        'eyebrow' => $isPaid ? __('All Set') : __('Almost There'),
+        'title' => $statusText,
+        'message' => $isPaid
+            ? __('Pack your bags, :name! Your trip to :property is on the calendar.', ['name' => $booking->full_name, 'property' => $property->title])
+            : __('Your reservation is saved, :name. Complete payment to secure these dates.', ['name' => $booking->full_name]),
+        'icon' => $isPaid ? 'bi-balloon-heart-fill' : 'bi-hourglass-split',
+        'tone' => $isPaid ? 'success' : 'pending',
+        'reference' => $booking->id,
+        'referenceLabel' => __('Booking ID'),
     ])
 
     <div class="row justify-content-center pb-5 booking-layout">
         <div class="col-xl-11 col-lg-12">
             <div class="glass-surface p-0 overflow-hidden border-0 shadow-deep">
                 <div class="row g-0">
-
-                    {{-- Left Column: Status & Primary Actions --}}
                     <div class="col-md-6 d-flex flex-column justify-content-center text-center p-4 p-lg-5 border-end border-color-light bg-white bg-opacity-50">
-                        <div class="mb-4">
-                            <i class="booking-confirmation-status-icon bi {{ $statusIcon }} {{ $statusColorClass }}"></i>
-                        </div>
-
-                        <h2 class="fw-800 {{ $statusColorClass }} mb-3 tracking-tight">{{ $statusText }}</h2>
-
-                        <p class="text-dark px-lg-4 mb-2 fs-5">
-                            {{ $isPaid ? __('Congratulations,') : __('Almost there,') }} <strong>{{ $booking->full_name }}</strong>!
-                        </p>
-                        <p class="small text-muted mb-4 uppercase tracking-widest fw-700">
-                            {{ __('Booking ID') }}: <span class="text-dark">#{{ $booking->id }}</span>
-                        </p>
-
-                        <div class="d-grid gap-3 px-lg-4 mt-2">
+                        <div class="d-grid gap-3 px-lg-4">
                             @if ($isPaid)
                                 <a href="{{ $buyerBookingsUrl }}" class="btn btn-lg btn-primary-theme py-3 fw-800 rounded-pill shadow-deep">
                                     {{ __('View My Itinerary') }} <i class="bi bi-calendar3 ms-2"></i>
@@ -70,7 +50,6 @@
                         </div>
                     </div>
 
-                    {{-- Right Column: Reservation Summary --}}
                     <div class="col-md-6 p-4 p-lg-5">
                         <span class="metric-label mb-4">{{ __('Stay Summary') }}</span>
 
@@ -104,7 +83,6 @@
                             </div>
                         </div>
 
-                        {{-- Host Assistance --}}
                         <div class="mt-5 p-4 rounded-4 bg-primary-light border border-primary-light">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="booking-help-avatar host-avatar bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm">

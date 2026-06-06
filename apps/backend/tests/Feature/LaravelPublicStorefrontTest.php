@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\PageContent;
 use App\Models\Product;
+use App\Models\Classified;
 use App\Models\Setting;
 use App\Models\Auto;
 use App\Models\Event;
@@ -152,6 +153,16 @@ class LaravelPublicStorefrontTest extends TestCase
         $this->assertSame('first', content_display(['first', 'second'], ''));
         $this->assertSame('Fallback', content_display(null, 'Fallback'));
         $this->assertSame('$', setting_string('currency_symbol', '$'));
+    }
+
+    public function test_login_page_renders_redesigned_auth_shell(): void
+    {
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertSee('auth-page', false)
+            ->assertSee(__('Welcome Back'), false)
+            ->assertSee('btn-primary-theme', false)
+            ->assertSee(__('Or continue with'), false);
     }
 
     public function test_login_page_survives_missing_page_contents_table(): void
@@ -918,9 +929,10 @@ class LaravelPublicStorefrontTest extends TestCase
                 'booking' => $booking->id,
             ]))
             ->assertOk()
-            ->assertSee(__('Step :step of 3', ['step' => 3]), false)
+            ->assertSee('checkout-success-hero', false)
             ->assertSee(__('Booking Confirmation'), false)
             ->assertSee(__('Booking Confirmed!'), false)
+            ->assertDontSee(__('Step :step of 3', ['step' => 3]), false)
             ->assertSee('Confirmed Stay Property', false)
             ->assertSee('Confirmed Guest', false);
     }
@@ -990,5 +1002,47 @@ class LaravelPublicStorefrontTest extends TestCase
         $this->assertNotNull($booking);
         $this->assertSame('pending', $booking->status);
         $this->assertSame('Storefront Guest', $booking->full_name);
+    }
+
+    public function test_product_detail_page_uses_primary_image_url_for_related_products(): void
+    {
+        Setting::set('is_section.products', '1');
+        Cache::forget('settings_all');
+
+        $product = Product::factory()->create([
+            'title' => 'Primary Detail Product',
+            'is_published' => true,
+        ]);
+
+        $related = Product::factory()->create([
+            'title' => 'Related Shelf Product',
+            'is_published' => true,
+            'category_id' => $product->category_id,
+        ]);
+
+        $this->get(route('products.show', $product->slug))
+            ->assertOk()
+            ->assertSee('Primary Detail Product', false)
+            ->assertSee('Related Shelf Product', false)
+            ->assertSee($related->primary_image_url, false)
+            ->assertDontSee('map-placeholder.webp', false);
+    }
+
+    public function test_classified_detail_page_renders_token_aligned_header_and_seller_card(): void
+    {
+        Setting::set('is_section.classifieds', '1');
+        Cache::forget('settings_all');
+
+        $classified = Classified::factory()->create([
+            'title' => 'Token Aligned Classified',
+            'is_published' => true,
+        ]);
+
+        $this->get(route('classifieds.show', $classified->slug))
+            ->assertOk()
+            ->assertSee('Token Aligned Classified', false)
+            ->assertSee(__('Contact Seller'), false)
+            ->assertSee(__('Safety Tips'), false)
+            ->assertSee('classified-detail-header', false);
     }
 }

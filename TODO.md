@@ -215,22 +215,30 @@ in the partner dashboard
 
 --------------------------
 
-on the login/register/forget (all auth pages), you have to redesign the UIUX
+- [x] Auth pages (login, register, forgot/reset password) redesigned: shared marketing panel + form card partials, storefront `filter-label` / `btn-primary-theme` tokens, buyer-friendly copy, and social login divider.
 
 ---------------------------
 
-products single page has UIUX bugs, design issues
+- [x] Products single page UI/UX fixes: related products use `primary_image_url`, sidebar add-ons use property-style `addon-card` panel, required add-ons submit reliably, merchant block null-safe.
 
 ------------------
 
-classifieds single page has UIUX bugs, fix them
+- [x] Classifieds single page UI/UX polished: token-aligned header/meta, seller contact card, removed duplicate gallery script, safety tips card aligned with detail shell.
 
 ------------------------
 
-related products does not show correct images
+- [x] Related products show correct images (`primary_image_url` instead of missing `main_image_url` accessor; brand filter uses `brand` query param).
 
 --------------------------
 
-on the products single page, you have extra addons on the sidebar, can you get inspiration from the properties booking step 1 of 3, for UIUX polishing?
+- [x] Product sidebar add-ons redesigned with property booking step-1 inspiration (`addon-card`, icon box, check badge, optional badge).
 
 --------------------------
+
+- [x] Gallery thumbnail 404s fixed across verticals: shared `resolveMediaUrl()` falls back to original when Spatie conversions are missing; autos empty-gallery `src` bug fixed.
+
+-----------------------
+
+- [x] Step 3 confirmation flows redesigned across verticals: shared `checkout-success-hero` celebration card, steppers hidden on property/event/product/autos/visit/job confirmations, emotional copy + reference IDs retained.
+
+------------------------

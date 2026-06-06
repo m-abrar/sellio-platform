@@ -31,8 +31,8 @@
         @forelse ($allPhotos as $index => $media)
             <div class="product-gallery__thumb">
                 <img
-                    src="{{ $media->getUrl('thumb') }}"
-                    data-full-src="{{ $media->getUrl('detail') }}"
+                    src="{{ $product->resolveMediaUrl($media, 'thumb') }}"
+                    data-full-src="{{ $product->resolveMediaUrl($media, 'detail') }}"
                     class="product-gallery__thumb-img thumbnail-img w-100 h-100 object-fit-cover rounded-3 border pointer-cursor transition-all {{ $index === 0 ? 'active border-primary border-2' : 'opacity-75' }}"
                     alt="{{ $product->title }} - {{ $index + 1 }}"
                     role="button"

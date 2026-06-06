@@ -82,8 +82,24 @@ trait HasImageAccess
     public function getImageUrl(?string $collection = null, string $conversion = ''): string
     {
         $collection = $this->detectCollection($collection);
-        return $this->getFirstMediaUrl($collection, $conversion)
-            ?: $this->getFallbackImage($conversion);
+        $media = $this->getFirstMedia($collection);
+
+        if ($media) {
+            return $this->resolveMediaUrl($media, $conversion);
+        }
+
+        return $this->getFallbackImage($conversion ?: 'default');
+    }
+
+    public function resolveMediaUrl(Media $media, string $conversion = ''): string
+    {
+        if ($conversion !== ''
+            && method_exists($media, 'hasGeneratedConversion')
+            && $media->hasGeneratedConversion($conversion)) {
+            return $media->getUrl($conversion);
+        }
+
+        return $media->getUrl();
     }
 
     public function gallery(?string $collection = null): Collection

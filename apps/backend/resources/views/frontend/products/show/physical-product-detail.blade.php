@@ -65,7 +65,7 @@
                     @csrf
 
                     @include('frontend.products.show.partials.sidebar._variations')
-                    @include('frontend.products.show.partials.sidebar._addons')
+                    @include('frontend.products.show.partials.sidebar._addons', ['addons' => $addons])
 
                     <div class="mb-4 mt-3">
                         <label class="filter-label mb-2">{{ __('Quantity') }}</label>
@@ -101,9 +101,9 @@
         @if($product->brand || $product->user)
             <div class="glass-surface border-0 rounded-4 shadow-sm p-4 mt-4">
                 <div class="d-flex align-items-center">
-                    <img src="{{ $product->brand->logo_url ?? $product->user->avatar_url }}" class="rounded-circle object-fit-cover me-3" width="50" height="50" alt="">
+                    <img src="{{ $product->brand?->logo_url ?? $product->user?->avatar_url }}" class="rounded-circle object-fit-cover me-3" width="50" height="50" alt="">
                     <div>
-                        <h6 class="mb-0 fw-bold">{{ $product->brand->title ?? $product->user->name }}</h6>
+                        <h6 class="mb-0 fw-bold">{{ $product->brand?->title ?? $product->user?->name }}</h6>
                         <span class="small text-muted">{{ __('Official Merchant') }}</span>
                     </div>
                 </div>

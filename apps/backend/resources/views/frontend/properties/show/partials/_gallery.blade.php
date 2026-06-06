@@ -22,14 +22,9 @@
 <div id="propertyGallery" class="carousel slide listing-header-carousel" data-bs-ride="carousel">
     <div class="carousel-inner">
         @forelse ($allPhotos as $index => $media)
-            @php
-                $imageUrl = method_exists($media, 'hasGeneratedConversion') && $media->hasGeneratedConversion($carouselConversion)
-                    ? $media->getUrl($carouselConversion)
-                    : $media->getUrl();
-            @endphp
             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                 <img
-                    src="{{ $imageUrl }}"
+                    src="{{ $property->resolveMediaUrl($media, $carouselConversion) }}"
                     class="d-block w-100 listing-header-img"
                     alt="{{ $media->name ?: $property->title }}"
                     loading="{{ $index === 0 ? 'eager' : 'lazy' }}"

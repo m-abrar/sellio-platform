@@ -7,99 +7,61 @@
     $isConfirmed = $visit->status === 'confirmed';
     $statusText = $isConfirmed ? __('Visit Confirmed!') : __('Request Received');
     $statusColorClass = $isConfirmed ? 'text-success' : 'text-warning';
-    $statusIcon = $isConfirmed ? 'bi-check-circle-fill' : 'bi-clock-history';
 @endphp
 
 @section('content')
-<main class="container-xl page-wrapper">
-    <div class="row pt-4 g-4">
-        <div class="col-12 text-center">
-            <h1 class="fw-bold display-6 mb-2">{{ __('Property Visit') }}</h1>
+<x-frontend.page-shell variant="property-visit">
+    @include('frontend._partials._alerts')
 
-            <p class="lead text-muted mb-4">
-                {{ $isConfirmed ? __('Your appointment is set!') : __('We have sent your request to the agent for review.') }}
-            </p>
+    @include('frontend._partials._checkout_success_hero', [
+        'eyebrow' => $isConfirmed ? __('See you soon') : __('Request sent'),
+        'title' => $statusText,
+        'message' => $isConfirmed
+            ? __('Thank you, :name! Your visit to :property is confirmed. A calendar invite has been sent to your email.', ['name' => $visit->full_name, 'property' => $property->title])
+            : __('Thank you, :name! The agent will review your requested time for :property and reach out shortly.', ['name' => $visit->full_name, 'property' => $property->title]),
+        'icon' => $isConfirmed ? 'bi-calendar-check-fill' : 'bi-clock-history',
+        'tone' => $isConfirmed ? 'success' : 'pending',
+        'reference' => $visit->id,
+        'referenceLabel' => __('Request ID'),
+    ])
 
-            @include('frontend._partials._alerts')
-        </div>
-    </div>
-
-    <ol class="stepper stepper--compact mx-auto mb-5" aria-label="{{ __('Visit request progress') }}">
-        <li class="step done">
-            <div class="step-icon"><i class="bi bi-check-lg"></i></div>
-            <div class="step-label text-success">{{ __('Preferences') }}</div>
-        </li>
-        <li class="step {{ $isConfirmed ? 'done' : 'active' }}" @unless($isConfirmed) aria-current="step" @endunless>
-            <div class="step-icon">
-                <i class="bi {{ $isConfirmed ? 'bi-calendar-check-fill' : 'bi-hourglass-split' }}"></i>
-            </div>
-            <div class="step-label fw-semibold {{ $statusColorClass }}">{{ __('Confirmation') }}</div>
-        </li>
-    </ol>
-
-    <div class="row justify-content-center pb-5">
-        <div class="col-lg-10">
-            <div class="glass-surface p-0 overflow-hidden border-0 shadow-lg">
+    <div class="row justify-content-center pb-5 booking-layout">
+        <div class="col-xl-11 col-lg-12">
+            <div class="glass-surface p-0 overflow-hidden border-0 shadow-deep">
                 <div class="row g-0">
-                    <div class="col-md-6 d-flex flex-column justify-content-center text-center p-5 border-end bg-white bg-opacity-50">
-                        <div class="mb-4">
-                            <i class="visit-confirmation-status-icon bi {{ $statusIcon }} {{ $statusColorClass }}"></i>
-                        </div>
-
-                        <h2 class="fw-800 {{ $statusColorClass }} mb-3">{{ $statusText }}</h2>
-
-                        <div class="px-lg-4">
-                            <p class="text-dark mb-2">
-                                {{ __('Thank you,') }} <strong>{{ $visit->full_name }}</strong>!
-                            </p>
-                            <p class="text-muted small mb-4">
-                                @if($isConfirmed)
-                                    {{ __('Your visit is confirmed. A calendar invite has been sent to your email.') }}
-                                @else
-                                    {{ __('The agent will review your requested time and reach out shortly to finalize the schedule.') }}
-                                @endif
-                            </p>
-                        </div>
-
-                        <div class="d-grid gap-3 px-lg-4 mt-2">
-                            <a href="{{ route('dashboard.user.bookings.index') }}" class="btn btn-lg btn-primary-theme py-3 fw-bold">
+                    <div class="col-md-6 d-flex flex-column justify-content-center text-center p-4 p-lg-5 border-end border-color-light bg-white bg-opacity-50">
+                        <div class="d-grid gap-3 px-lg-4">
+                            <a href="{{ route('dashboard.user.bookings.index') }}" class="btn btn-lg btn-primary-theme py-3 fw-800 rounded-pill shadow-deep">
                                 {{ __('View Scheduled Visits') }} <i class="bi bi-calendar2-event ms-2"></i>
                             </a>
 
-                            <a href="{{ route('properties.show', $property->slug) }}" class="btn btn-link text-decoration-none text-muted small fw-semibold">
-                                <i class="bi bi-arrow-left"></i> {{ __('Return to Property') }}
+                            <a href="{{ route('properties.show', $property->slug) }}" class="btn btn-link text-decoration-none text-muted small fw-800">
+                                <i class="bi bi-arrow-left me-1"></i>{{ __('Return to Property') }}
                             </a>
                         </div>
                     </div>
 
-                    <div class="col-md-6 p-5">
-                        <h5 class="fw-bold mb-4 text-primary-color text-uppercase tracking-wider small">{{ __('Visit Schedule') }}</h5>
+                    <div class="col-md-6 p-4 p-lg-5">
+                        <span class="metric-label mb-4">{{ __('Visit Schedule') }}</span>
 
                         <div class="booking-receipt">
-                            <div class="receipt-row">
-                                <span class="label">{{ __('Property') }}</span>
-                                <span class="value text-end">{{ $property->title }}</span>
+                            <div class="receipt-row border-bottom border-color-light py-3">
+                                <span class="text-muted fw-600 small">{{ __('Property') }}</span>
+                                <span class="fw-800 text-dark text-end">{{ $property->title }}</span>
                             </div>
-                            <div class="receipt-row">
-                                <span class="label">{{ __('Requested Date') }}</span>
-                                <span class="value">{{ $visit->scheduled_at->format('D, M j, Y') }}</span>
+                            <div class="receipt-row border-bottom border-color-light py-3">
+                                <span class="text-muted fw-600 small">{{ __('Requested Date') }}</span>
+                                <span class="fw-800 text-dark">{{ $visit->scheduled_at->format('D, M j, Y') }}</span>
                             </div>
-                            <div class="receipt-row">
-                                <span class="label">{{ __('Time Slot') }}</span>
-                                <span class="value">{{ $visit->scheduled_at->format('h:i A') }}</span>
+                            <div class="receipt-row border-bottom border-color-light py-3">
+                                <span class="text-muted fw-600 small">{{ __('Time Slot') }}</span>
+                                <span class="fw-800 text-dark">{{ $visit->scheduled_at->format('h:i A') }}</span>
                             </div>
-                            <div class="receipt-row align-items-start">
-                                <span class="label">{{ __('Your Notes') }}</span>
-                                <span class="visit-notes-value value text-end small fw-normal text-muted">
+                            <div class="receipt-row py-3 align-items-start">
+                                <span class="text-muted fw-600 small">{{ __('Your Notes') }}</span>
+                                <span class="visit-notes-value fw-800 text-dark text-end small">
                                     {{ $visit->notes ?? __('No special requests') }}
                                 </span>
-                            </div>
-
-                            <div class="receipt-total pt-4 border-top mt-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-bold text-muted">{{ __('Request ID') }}</span>
-                                    <span class="fw-800 text-dark">#{{ $visit->id }}</span>
-                                </div>
                             </div>
                         </div>
 
@@ -110,11 +72,11 @@
                                         <i class="bi bi-headset text-primary-color fs-4"></i>
                                     </div>
                                     <div>
-                                        <h6 class="fw-bold mb-0">{{ __('Assigned Agent') }}</h6>
+                                        <h6 class="fw-800 mb-0 text-dark">{{ __('Assigned Agent') }}</h6>
                                         <p class="small text-muted mb-0">{{ $property->agent_name ?? $property->user->name }}</p>
                                     </div>
                                 </div>
-                                <a href="{{ route('conversation.start', ['user' => $property->user]) }}" class="btn btn-white btn-sm fw-bold shadow-sm w-100 mt-3 border">
+                                <a href="{{ route('conversation.start', ['user' => $property->user]) }}" class="btn btn-white btn-sm fw-800 shadow-sm w-100 mt-3 border rounded-pill py-2">
                                     {{ __('Message Agent') }}
                                 </a>
                             </div>
@@ -124,5 +86,5 @@
             </div>
         </div>
     </div>
-</main>
+</x-frontend.page-shell>
 @endsection

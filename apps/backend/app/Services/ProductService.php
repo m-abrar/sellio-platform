@@ -82,7 +82,12 @@ class ProductService
     public function getProductDetailsData(Product $product): array
     {
         return [
-            'product'          => $product->load(['brand', 'category', 'tags']),
+            'product'          => $product->load([
+                'brand',
+                'category',
+                'tags',
+                'addons' => fn ($query) => $query->where('is_published', true)->orderBy('sort_order'),
+            ]),
             'related_products' => $this->getRelatedProducts($product),
             'attributes'       => $product->attributes()
                                     ->where('is_visible', true)

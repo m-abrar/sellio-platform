@@ -489,6 +489,48 @@
     font-size:5rem;
     filter:drop-shadow(0 10px 15px rgba(0,0,0,.05))
 }
+.checkout-success-hero{
+    position:relative;
+    border-radius:1.5rem
+}
+.checkout-success-hero__glow{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.55
+}
+.checkout-success-hero__glow--success{
+    background:radial-gradient(circle at 50% 0%,hsla(var(--primary-hue),75%,60%,.18) 0%,transparent 58%)
+}
+.checkout-success-hero__glow--pending{
+    background:radial-gradient(circle at 50% 0%,rgba(245,158,11,.18) 0%,transparent 58%)
+}
+.checkout-success-hero__content{
+    position:relative;
+    z-index:1
+}
+.checkout-success-hero__message{
+    max-width:42rem
+}
+.checkout-success-hero__icon-wrap{
+    width:5.5rem;
+    height:5.5rem;
+    margin-inline:auto;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2.35rem;
+    box-shadow:0 18px 40px rgba(0,0,0,.08)
+}
+.checkout-success-hero__icon-wrap--success{
+    background:linear-gradient(135deg,hsla(var(--primary-hue),75%,60%,.15),#fff);
+    color:var(--primary-color)
+}
+.checkout-success-hero__icon-wrap--pending{
+    background:linear-gradient(135deg,rgba(245,158,11,.15),#fff);
+    color:#d97706
+}
 .booking-help-avatar{
     width:48px;
     height:48px;

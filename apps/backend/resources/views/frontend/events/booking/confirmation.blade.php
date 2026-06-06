@@ -1,24 +1,31 @@
 @extends('frontend._layouts._app')
 
-@section('title', __('Booking Confirmed') . ' | ' . __('Step 3 of 3'))
+@section('title', __('Booking Confirmed'))
 @section('body_class', 'has-body-glow')
 
 @section('content')
 <x-frontend.page-shell variant="event-booking">
     @include('frontend.events.booking._partials._booking-header', [
-        'eyebrow' => __('Booking Confirmation'),
-        'title' => __('Event Booking'),
-        'step' => 3,
-        'subtitle' => __('Your tickets are secured. A confirmation email has been sent to your inbox.'),
+        'eyebrow' => __('Event Booking'),
+        'title' => __('Booking Confirmation'),
+        'step' => null,
         'event' => $booking->event,
         'backUrl' => route('events.show', $booking->event->slug),
         'backLabel' => __('Back to event'),
     ])
 
-    @include('frontend.events.booking._partials._booking-stepper', [
-        'step' => 3,
-        'confirmIcon' => 'bi-star-fill',
-        'confirmLabelClass' => 'text-success',
+    @include('frontend._partials._checkout_success_hero', [
+        'eyebrow' => __('You are going!'),
+        'title' => __('Booking Confirmed!'),
+        'message' => __('Congratulations, :name! Your tickets for :event are secured. We sent your confirmation to :email.', [
+            'name' => $booking->user_name,
+            'event' => $booking->event->title,
+            'email' => $booking->user_email,
+        ]),
+        'icon' => 'bi-ticket-perforated-fill',
+        'tone' => 'success',
+        'reference' => $booking->id,
+        'referenceLabel' => __('Order ID'),
     ])
 
     <div class="row justify-content-center pb-5 booking-layout">
@@ -26,25 +33,11 @@
             <div class="glass-surface p-0 overflow-hidden border-0 shadow-deep">
                 <div class="row g-0">
                     <div class="col-md-6 d-flex flex-column justify-content-center text-center p-4 p-lg-5 border-end border-color-light bg-white bg-opacity-50">
-                        <div class="mb-4">
-                            <i class="booking-confirmation-status-icon bi bi-patch-check-fill text-success"></i>
-                        </div>
-
-                        <h2 class="fw-800 text-success mb-3 tracking-tight">{{ __('Booking Confirmed!') }}</h2>
-
-                        <p class="text-dark px-lg-4 mb-2 fs-5">
-                            {{ __('Congratulations,') }} <strong>{{ $booking->user_name }}</strong>!
-                            {{ __('Your spot at the event is secured.') }}
-                        </p>
-                        <p class="text-muted mb-4">
-                            {{ __('We sent your digital tickets to') }} <strong>{{ $booking->user_email }}</strong>.
-                        </p>
-
-                        <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <div class="d-flex flex-wrap justify-content-center gap-3 px-lg-3">
                             <button onclick="window.print()" class="btn btn-outline-primary-theme rounded-pill px-4 py-2 fw-bold">
                                 <i class="bi bi-printer me-2"></i>{{ __('Print Receipt') }}
                             </button>
-                            <a href="{{ route('dashboard') }}" class="btn btn-primary-theme rounded-pill px-4 py-2 fw-bold">
+                            <a href="{{ route('dashboard') }}" class="btn btn-primary-theme rounded-pill px-4 py-2 fw-800">
                                 <i class="bi bi-grid me-2"></i>{{ __('Go to Dashboard') }}
                             </a>
                         </div>
@@ -56,10 +49,6 @@
                         </h5>
 
                         <div class="pricing-list mb-4">
-                            <div class="d-flex justify-content-between mb-3">
-                                <span class="text-muted small fw-600">{{ __('Order ID') }}</span>
-                                <span class="fw-800 text-dark small">#{{ $booking->id }}</span>
-                            </div>
                             <div class="d-flex justify-content-between mb-3">
                                 <span class="text-muted small fw-600">{{ __('Event') }}</span>
                                 <span class="fw-800 text-dark small text-end">{{ $booking->event->title }}</span>

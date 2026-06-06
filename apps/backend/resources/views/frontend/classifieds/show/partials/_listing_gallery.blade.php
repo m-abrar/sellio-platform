@@ -10,8 +10,8 @@
     <div class="d-flex gap-2 thumbnail-container overflow-auto pb-2">
         @forelse ($allPhotos as $index => $media)
             <img 
-                src="{{ $media->getUrl('thumb') }}" 
-                data-full-src="{{ $media->getUrl('detail') }}"
+                src="{{ $classified->resolveMediaUrl($media, 'thumb') }}" 
+                data-full-src="{{ $classified->resolveMediaUrl($media, 'detail') }}"
                 class="thumbnail-img {{ $index === 0 ? 'active' : '' }}" 
                 alt="{{ $media->name ?? $classified->title }}"
                 role="button"
