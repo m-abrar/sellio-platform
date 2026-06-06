@@ -29,8 +29,6 @@ Last refreshed: 2026-06-06
 
 ## Pending
 
-- Password change is wired to `PUT /api/v1/auth/profile/password` with validation error surfacing.
-- Billing tab shows live wallet balance; booking payments remain at storefront checkout (no saved cards).
 - No focused frontend tests yet.
 
 ## Verification
