@@ -267,7 +267,10 @@ class Classified extends Model implements HasMedia
     public function getInitialMainImageUrl(string $conversion = 'detail'): string
     {
         $first = $this->all_photos->first();
-        return $first ? $first->getUrl($conversion) : $this->getImageUrl(conversion: $conversion);
+
+        return $first
+            ? $this->resolveMediaUrl($first, $conversion)
+            : $this->getImageUrl(conversion: $conversion);
     }
 }
 

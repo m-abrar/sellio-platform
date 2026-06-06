@@ -35,13 +35,16 @@ class ProductCheckoutPaymentTest extends TestCase
         [$user] = $this->createCartWithProduct();
         $this->createStripeGateway(publishableKey: 'pk_test_product_checkout');
 
-        $this->actingAs($user)
+        $response = $this->actingAs($user)
             ->get(route('checkout.index'))
             ->assertOk()
             ->assertSee('https://js.stripe.com/v3/', false)
             ->assertSee('pk_test_product_checkout', false)
             ->assertSee('data-stripe-card-element', false)
-            ->assertSee('data-stripe-payment-token', false);
+            ->assertSee('data-stripe-payment-token', false)
+            ->assertSee('booking-summary-thumb', false);
+
+        $this->assertEquals(0, substr_count($response->getContent(), 'booking-header__thumb'));
     }
 
     public function test_product_stripe_payment_creates_paid_order_and_payment_record(): void

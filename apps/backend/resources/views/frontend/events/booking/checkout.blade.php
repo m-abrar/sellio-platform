@@ -16,6 +16,7 @@
         'step' => 2,
         'subtitle' => __('Review your tickets, confirm attendee details, and complete payment below.'),
         'event' => $event,
+        'showContext' => false,
         'backUrl' => route('events.show', $event->slug),
         'backLabel' => __('Back to event'),
     ])

@@ -7,7 +7,7 @@
     <div class="auth-card glass-surface border-0 shadow-deep">
         <div class="text-center mb-4 mb-md-5">
             <div class="d-lg-none mb-4">
-                @if(setting('site_logo'))
+                @if(filled(setting('site_logo')))
                     <img src="{{ asset('storage/' . setting('site_logo')) }}" alt="{{ setting('site_name', config('app.name')) }}" class="auth-mobile-logo">
                 @else
                     <div class="d-inline-flex align-items-center gap-2 text-primary-color fw-bolder fs-2">

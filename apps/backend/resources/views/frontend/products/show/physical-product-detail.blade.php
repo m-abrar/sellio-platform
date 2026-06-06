@@ -41,7 +41,7 @@
                     </div>
                 </section>
 
-                @if($product->attributes->where('is_variation', false)->count() > 0)
+                @if(($attributes ?? collect())->flatten()->where('is_variation', false)->count() > 0)
                     <section id="item-specs" class="mb-0">
                         <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Specifications') }}</h4>
                         @include('frontend.products.show.partials._product_specs_table')

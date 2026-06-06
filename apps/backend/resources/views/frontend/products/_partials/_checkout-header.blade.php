@@ -1,12 +1,13 @@
 @php
     $firstItem = $cart->items->first();
     $product = $firstItem?->product;
+    $showContext = $showContext ?? true;
     $backUrl = $backUrl ?? route('cart.index');
     $backLabel = $backLabel ?? __('Back to cart');
 @endphp
 
 <div class="booking-header page-title-section mb-4 mb-lg-5">
-    @if($product)
+    @if($product && $showContext)
         <div class="booking-header__context glass-surface mb-4">
             <div class="booking-header__property">
                 <img src="{{ $product->primary_image_url }}"
@@ -23,6 +24,13 @@
             </div>
 
             <a href="{{ $backUrl }}" class="booking-header__back">
+                <i class="bi bi-arrow-left"></i>
+                <span>{{ $backLabel }}</span>
+            </a>
+        </div>
+    @elseif($backUrl)
+        <div class="mb-4">
+            <a href="{{ $backUrl }}" class="booking-header__back booking-header__back--inline">
                 <i class="bi bi-arrow-left"></i>
                 <span>{{ $backLabel }}</span>
             </a>

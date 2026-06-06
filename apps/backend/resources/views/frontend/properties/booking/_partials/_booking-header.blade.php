@@ -3,12 +3,14 @@
     $subtitle = $subtitle ?? null;
     $subtitleHtml = $subtitleHtml ?? null;
     $property = $property ?? null;
+    $showContext = $showContext ?? true;
+    $showTitle = $showTitle ?? true;
     $backUrl = $backUrl ?? ($property ? route('properties.show', $property->slug) : null);
     $backLabel = $backLabel ?? __('Back to property');
 @endphp
 
 <div class="booking-header page-title-section mb-4 mb-lg-5">
-    @if($property)
+    @if($property && $showContext)
         <div class="booking-header__context glass-surface mb-4">
             <div class="booking-header__property">
                 <img src="{{ $property->primary_image_url }}"
@@ -32,18 +34,27 @@
                 </a>
             @endif
         </div>
+    @elseif($backUrl)
+        <div class="mb-4">
+            <a href="{{ $backUrl }}" class="booking-header__back booking-header__back--inline">
+                <i class="bi bi-arrow-left"></i>
+                <span>{{ $backLabel }}</span>
+            </a>
+        </div>
     @endif
 
-    <div class="text-center">
-        <span class="metric-label mx-auto">{{ $eyebrow }}</span>
-        <h1 class="fw-800 mb-2 tracking-tight text-dark display-6">
-            {{ $title }}@if($step !== null)<span class="text-primary-color">: {{ __('Step :step of 3', ['step' => $step]) }}</span>@endif
-        </h1>
+    @if($showTitle)
+        <div class="text-center">
+            <span class="metric-label mx-auto">{{ $eyebrow }}</span>
+            <h1 class="fw-800 mb-2 tracking-tight text-dark display-6">
+                {{ $title }}@if($step !== null)<span class="text-primary-color">: {{ __('Step :step of 3', ['step' => $step]) }}</span>@endif
+            </h1>
 
-        @if($subtitleHtml)
-            {!! $subtitleHtml !!}
-        @elseif($subtitle)
-            <p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">{{ $subtitle }}</p>
-        @endif
-    </div>
+            @if($subtitleHtml)
+                {!! $subtitleHtml !!}
+            @elseif($subtitle)
+                <p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">{{ $subtitle }}</p>
+            @endif
+        </div>
+    @endif
 </div>

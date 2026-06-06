@@ -36,13 +36,50 @@ class EventBookingCheckoutPaymentTest extends TestCase
         [$user, $event, $booking] = $this->createPendingEventBooking();
         $this->createStripeGateway(publishableKey: 'pk_test_event_checkout');
 
-        $this->actingAs($user)
+        $response = $this->actingAs($user)
             ->get(route('events.tickets.booking.checkout', [$event->slug, $booking->id]))
             ->assertOk()
             ->assertSee('https://js.stripe.com/v3/', false)
             ->assertSee('pk_test_event_checkout', false)
             ->assertSee('data-stripe-card-element', false)
-            ->assertSee('data-stripe-payment-token', false);
+            ->assertSee('data-stripe-payment-token', false)
+            ->assertSee('booking-summary-thumb', false);
+
+        $this->assertEquals(0, substr_count($response->getContent(), 'booking-header__thumb'));
+    }
+
+    public function test_event_booking_confirmation_avoids_duplicate_headings(): void
+    {
+        [$user, $event, $booking] = $this->createPendingEventBooking();
+        $this->createStripeGateway();
+
+        $fakeGateway = Mockery::mock(PaymentGatewayService::class);
+        $fakeGateway->shouldReceive('charge')->once()->andReturn([
+            'status' => 'successful',
+            'reference' => 'pi_event_confirm_test',
+            'message' => 'Payment processed successfully via Stripe.',
+        ]);
+
+        $this->mock(GatewayManager::class, function ($mock) use ($fakeGateway) {
+            $mock->shouldReceive('resolve')->once()->andReturn($fakeGateway);
+        });
+
+        $this->actingAs($user)
+            ->post(route('events.tickets.booking.processPayment', [$event->slug, $booking->id]), [
+                'payment_method' => 'stripe',
+                'payment_token' => 'pm_card_visa',
+            ])
+            ->assertRedirect(route('events.tickets.booking.confirmation', [$event->slug, $booking->id]));
+
+        $response = $this->actingAs($user)
+            ->get(route('events.tickets.booking.confirmation', [$event->slug, $booking->id]))
+            ->assertOk()
+            ->assertSee('checkout-success-hero', false)
+            ->assertSee(__('Booking Confirmed!'), false)
+            ->assertDontSee(__('Booking Confirmation'), false)
+            ->assertDontSee(__('Booking Summary'), false);
+
+        $this->assertEquals(0, substr_count($response->getContent(), 'booking-header__thumb'));
     }
 
     public function test_event_ticket_booking_guest_is_redirected_to_login(): void

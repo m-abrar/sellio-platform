@@ -75,12 +75,7 @@ class ProductController extends Controller
         // Log the view for analytics
         $this->productService->logListingView($product);
 
-        $basePath = "frontend.products.show";
-        $viewName = $product->is_digital ? 'digital-product-detail' : 'physical-product-detail';
-
-        
-
-        return view("{$basePath}.{$viewName}", $viewData);
+        return view('frontend.products.show.physical-product-detail', $viewData);
     }
 
     /**

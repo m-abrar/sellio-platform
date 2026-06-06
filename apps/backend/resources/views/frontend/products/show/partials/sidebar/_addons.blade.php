@@ -1,5 +1,6 @@
 @php
     $publishedAddons = ($addons ?? $product->addons)->sortBy('sort_order');
+    $hasOptionalAddons = $publishedAddons->contains(fn ($addon) => ! $addon->is_required);
 @endphp
 
 @if($publishedAddons->count() > 0)
@@ -8,7 +9,9 @@
             <h6 class="fw-800 tracking-tight text-dark mb-0">
                 <i class="bi bi-stars text-primary-color me-2"></i>{{ __('Enhance Your Order') }}
             </h6>
-            <span class="badge bg-light-primary text-primary-color rounded-pill px-3 small">{{ __('Optional') }}</span>
+            @if($hasOptionalAddons)
+                <span class="badge bg-light-primary text-primary-color rounded-pill px-3 small">{{ __('Optional') }}</span>
+            @endif
         </div>
 
         <div class="row g-2">

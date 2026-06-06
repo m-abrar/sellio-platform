@@ -242,3 +242,15 @@ in the partner dashboard
 - [x] Step 3 confirmation flows redesigned across verticals: shared `checkout-success-hero` celebration card, steppers hidden on property/event/product/autos/visit/job confirmations, emotional copy + reference IDs retained.
 
 ------------------------
+
+
+------------------------------
+
+- [x] Step 2 payment pages no longer duplicate listing thumbnails: header context card hidden on product/event checkout step 2; sidebar summary keeps the single thumb.
+
+--------------------------------
+
+- [x] Event booking confirmation deduplicated: removed redundant header title/context and repeated booking summary labels; success hero + compact ticket receipt only.
+
+-----------------------------
+

@@ -28,7 +28,7 @@
                     <i class="bi bi-star{{ $i <= round($avgRating) ? '-fill' : '' }}"></i>
                 @endfor
             </span>
-            <span class="small text-muted">({{ trans_choice(':count review|:count reviews', $reviewCount, ['count' => $reviewCount]) }})</span>
+            <span class="small text-muted">({{ trans_choice('{1} :count review|[2,*] :count reviews', $reviewCount, ['count' => $reviewCount]) }})</span>
         </div>
     @else
         <p class="small text-muted mb-3"><i class="bi bi-info-circle me-1"></i>{{ __('No public reviews yet.') }}</p>

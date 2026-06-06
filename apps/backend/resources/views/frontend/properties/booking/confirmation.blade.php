@@ -6,10 +6,9 @@
 @section('content')
 <x-frontend.page-shell variant="property-booking">
     @include('frontend.properties.booking._partials._booking-header', [
-        'eyebrow' => __('Vacation Booking'),
-        'title' => __('Booking Confirmation'),
-        'step' => null,
         'property' => $property,
+        'showContext' => false,
+        'showTitle' => false,
         'backUrl' => $isPaid ? route('properties.show', $property->slug) : route('property.booking.payment', ['property' => $property->slug, 'booking' => $booking->id]),
         'backLabel' => $isPaid ? __('Back to property') : __('Back to payment'),
     ])

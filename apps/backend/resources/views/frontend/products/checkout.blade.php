@@ -12,7 +12,10 @@
 
 @section('content')
 <x-frontend.page-shell variant="checkout">
-    @include('frontend.products._partials._checkout-header', ['cart' => $cart])
+    @include('frontend.products._partials._checkout-header', [
+        'cart' => $cart,
+        'showContext' => false,
+    ])
     @include('frontend.products._partials._checkout-stepper', ['step' => 2])
 
     <form method="POST"

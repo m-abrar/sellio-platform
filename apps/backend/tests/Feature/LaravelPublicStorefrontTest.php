@@ -1028,6 +1028,23 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertDontSee('map-placeholder.webp', false);
     }
 
+    public function test_digital_product_detail_renders_physical_template(): void
+    {
+        Setting::set('is_section.products', '1');
+        Cache::forget('settings_all');
+
+        $product = Product::factory()->create([
+            'title' => 'Digital Download Product',
+            'is_published' => true,
+            'is_digital' => true,
+        ]);
+
+        $this->get(route('products.show', $product->slug))
+            ->assertOk()
+            ->assertSee('Digital Download Product', false)
+            ->assertSee('DIGITAL', false);
+    }
+
     public function test_classified_detail_page_renders_token_aligned_header_and_seller_card(): void
     {
         Setting::set('is_section.classifieds', '1');

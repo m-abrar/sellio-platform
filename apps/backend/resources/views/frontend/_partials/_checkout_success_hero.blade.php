@@ -23,7 +23,7 @@
             <p class="checkout-success-hero__message text-muted fs-5 mb-0 mx-auto">{{ $message }}</p>
         @endif
 
-        @if($reference)
+        @if(filled($reference) && $reference !== 'N/A')
             <p class="small text-muted mt-4 mb-0">
                 {{ $referenceLabel }}: <strong class="text-dark">#{{ $reference }}</strong>
             </p>

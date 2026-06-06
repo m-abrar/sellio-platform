@@ -1,5 +1,6 @@
 @php
-    $specAttributes = $product->attributes
+    $specAttributes = ($attributes ?? collect())
+        ->flatten()
         ->where('is_variation', false)
         ->sortBy('sort_order');
 @endphp

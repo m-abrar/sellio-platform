@@ -1,24 +1,5 @@
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const mainImage = document.getElementById('mainImage');
-        const thumbnails = document.querySelectorAll('.thumbnail-img');
-
-        if (!mainImage || !thumbnails.length) {
-            return;
-        }
-
-        thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', function() {
-                const newSrc = this.getAttribute('data-full-src');
-                mainImage.src = newSrc;
-
-                thumbnails.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    });
-
     (() => {
         const registerProductPriceCalculator = () => {
             Alpine.data('productPriceCalculator', (config) => ({
@@ -30,19 +11,39 @@
                 priceUrl: config.priceUrl,
                 isUpdatingPrice: false,
 
+                requiredAddonIds() {
+                    return Array.from(this.$root.querySelectorAll('[data-required-addon]'))
+                        .map((input) => input.value)
+                        .filter(Boolean);
+                },
+
+                mergeSelectedAddons(optionalAddonIds = []) {
+                    return [...new Set([...this.requiredAddonIds(), ...optionalAddonIds])];
+                },
+
                 init() {
-                    const requiredAddonIds = Array.from(this.$root.querySelectorAll('[data-required-addon]'))
-                        .map((input) => input.value);
                     const optionalAddonIds = Array.from(this.$root.querySelectorAll('input[type="checkbox"][name="addon_ids[]"]:checked'))
                         .map((input) => input.value);
 
-                    this.selectedAddons = [...new Set([...requiredAddonIds, ...optionalAddonIds])];
+                    this.selectedAddons = this.mergeSelectedAddons(optionalAddonIds);
+
+                    this.$watch('selectedAddons', (value) => {
+                        const merged = this.mergeSelectedAddons(value);
+                        const current = [...value].sort().join(',');
+                        const next = [...merged].sort().join(',');
+
+                        if (current !== next) {
+                            this.selectedAddons = merged;
+                        }
+                    });
 
                     this.$watch('quantity', () => this.updatePrice());
                     this.updatePrice();
                 },
 
                 updatePrice() {
+                    const addonIds = this.mergeSelectedAddons(this.selectedAddons);
+
                     if (!this.priceUrl) {
                         this.totalPrice = this.currentPrice * this.quantity;
                         return;
@@ -53,7 +54,7 @@
                         .filter(Boolean)
                         .forEach((id) => params.append('attribute_ids[]', id));
 
-                    this.selectedAddons
+                    addonIds
                         .filter(Boolean)
                         .forEach((id) => params.append('addon_ids[]', id));
 

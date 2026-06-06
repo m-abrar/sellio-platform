@@ -180,6 +180,9 @@
     background:rgba(var(--primary-color-rgb), .1);
     color:var(--primary-color)
 }
+.booking-header__back--inline{
+    align-self:flex-start
+}
 .page-shell--property-booking .booking-layout,
 .page-shell--event-booking .booking-layout,
 .page-shell--checkout .booking-layout,

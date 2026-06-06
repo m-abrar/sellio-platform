@@ -30,7 +30,7 @@
     {{-- View All Link --}}
     @if ($related_items->count() > 2)
     <div class="col-md-4 col-6">
-        <a href="{{ route('partner.profile', $seller->id) }}" class="card glass-surface related-listing-card h-100 text-center d-flex align-items-center justify-content-center text-decoration-none border-dashed">
+        <a href="{{ route('partner.profile', $seller) }}" class="card glass-surface related-listing-card h-100 text-center d-flex align-items-center justify-content-center text-decoration-none border-dashed">
             <span class="text-primary fw-semibold small p-3">
                 <i class="bi bi-grid-3x3-gap-fill d-block mb-1 fs-5"></i>
                 {{ __('View All Listings') }}<br/>

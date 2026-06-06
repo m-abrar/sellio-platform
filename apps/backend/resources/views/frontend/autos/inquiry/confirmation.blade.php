@@ -73,7 +73,7 @@
                                         <p class="small text-muted mb-0">{{ $auto->user->name }}</p>
                                     </div>
                                 </div>
-                                <a href="{{ route('conversation.start', $auto->user->username) }}" class="btn btn-white btn-sm fw-800 shadow-sm w-100 mt-3 border rounded-pill py-2">
+                                <a href="{{ route('conversation.start', $auto->user) }}" class="btn btn-white btn-sm fw-800 shadow-sm w-100 mt-3 border rounded-pill py-2">
                                     {{ __('Message Dealer') }}
                                 </a>
                             </div>
