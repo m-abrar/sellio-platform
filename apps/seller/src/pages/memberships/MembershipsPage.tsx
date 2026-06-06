@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlineCheck, HiOutlineSparkles } from 'react-icons/hi2';
 import { getMembershipPlans, subscribeToPlan } from '../../api/plans';
@@ -6,6 +7,7 @@ import { getDashboardData } from '../../api/dashboard';
 import { toast } from 'sonner';
 
 export default function MembershipsPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [memberships, setMemberships] = useState<any[]>([]);
   const [limits, setLimits] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,8 +30,27 @@ export default function MembershipsPage() {
   };
 
   useEffect(() => {
-    fetchPlans();
+    void fetchPlans();
   }, []);
+
+  useEffect(() => {
+    const subscriptionStatus = searchParams.get('subscription');
+
+    if (!subscriptionStatus) {
+      return;
+    }
+
+    if (subscriptionStatus === 'success') {
+      toast.success('Stripe checkout completed. Your membership will update after webhook confirmation.');
+      void fetchPlans();
+    } else if (subscriptionStatus === 'cancelled') {
+      toast.message('Checkout cancelled. No subscription changes were made.');
+    }
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('subscription');
+    setSearchParams(nextParams, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   const handleSubscribe = async (planId: number) => {
     setUpgradingPlanId(planId);

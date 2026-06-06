@@ -78,7 +78,16 @@ This scan did not re-run seller build, Laravel tests, or browser acceptance test
 - Implement contact mailing or explicitly document the mail transport dependency.
 - Run seller `npm run lint` and `npm run build` after API/UI cleanup.
 - Run focused Laravel tests for partner dashboard/API routes after backend cleanup.
-- Live-test Stripe subscription checkout with configured keys.
+- Live-test Stripe subscription checkout with configured keys (see checklist below).
+
+## Stripe Subscription Checkout (Test Mode)
+
+1. Admin → Payment Gateways → Stripe: set mode to **sandbox**, paste test keys (`sk_test_…`, `pk_test_…`), and add webhook signing secret.
+2. Stripe Dashboard → Webhooks: point `checkout.session.completed` to `POST {APP_URL}/webhooks/stripe`.
+3. Backend `.env`: set `SELLER_APP_URL=http://localhost:5173` so success/cancel redirects land on seller memberships.
+4. Seller portal → Memberships: choose a paid plan; app should redirect to Stripe Checkout when the gateway is active.
+5. Complete payment with test card `4242 4242 4242 4242`; webhook fulfillment activates the partner subscription.
+6. Automated coverage: `php artisan test --filter=PartnerSubscriptionCheckoutTest`.
 
 ## Test Plan
 

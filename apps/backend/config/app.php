@@ -60,6 +60,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
     'storefront_url' => env('STOREFRONT_URL', 'http://localhost:3000'),
+    'seller_app_url' => env('SELLER_APP_URL', 'http://localhost:5173'),
 
     /*
     |--------------------------------------------------------------------------
