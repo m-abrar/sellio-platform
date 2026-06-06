@@ -200,6 +200,7 @@ class PropertyController extends Controller
             'amenities'  => Amenity::where('is_property', true)->active()->get(['id', 'title']),
             'brands'     => Brand::where('is_property', true)->active()->get(['id', 'title']),
             'features'   => Feature::where('is_property', true)->active()->get(['id', 'title']),
+            'google_maps_api_key' => config('services.google_maps.api_key') ?: setting('google_map_api_key'),
         ];
     }
 }

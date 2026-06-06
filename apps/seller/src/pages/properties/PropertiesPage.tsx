@@ -65,6 +65,13 @@ export default function PropertiesPage() {
     });
   };
 
+  const propertyCounts = {
+    total: properties.length,
+    live: properties.filter((property) => property.is_active).length,
+    pending: properties.filter((property) => !property.is_active && property.is_published).length,
+    draft: properties.filter((property) => !property.is_active && !property.is_published).length,
+  };
+
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader badge="Real Estate" title="Property" subtitle="Portfolio">
@@ -75,6 +82,20 @@ export default function PropertiesPage() {
           <HiOutlinePlus className="w-4 h-4" /> Add Property
         </button>
       </PageHeader>
+
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
+        {[
+          { label: 'Total Properties', value: propertyCounts.total, tone: 'bg-slate-900 text-white border-slate-900' },
+          { label: 'Live', value: propertyCounts.live, tone: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
+          { label: 'Pending', value: propertyCounts.pending, tone: 'bg-amber-50 text-amber-700 border-amber-100' },
+          { label: 'Drafts', value: propertyCounts.draft, tone: 'bg-slate-50 text-slate-600 border-slate-100' },
+        ].map((item) => (
+          <div key={item.label} className={`rounded-[1.75rem] border px-6 py-5 shadow-[0_14px_30px_rgba(15,23,42,0.04)] ${item.tone}`}>
+            <p className="text-[9px] font-black uppercase tracking-[0.22em] opacity-60">{item.label}</p>
+            <p className="mt-3 text-3xl font-black tracking-tighter">{item.value}</p>
+          </div>
+        ))}
+      </div>
 
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">

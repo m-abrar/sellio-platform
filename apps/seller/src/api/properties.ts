@@ -10,6 +10,7 @@ export interface PropertyFormMeta {
   amenities: Array<{ id: number; title: string }>;
   brands: Array<{ id: number; title: string }>;
   features: Array<{ id: number; title: string }>;
+  google_maps_api_key?: string | null;
 }
 
 let cachedFormMeta: PropertyFormMeta | null = null;
@@ -24,6 +25,7 @@ const extractFormMeta = (response: { data: LaravelResponse<unknown> }): Property
     amenities: form?.amenities ?? [],
     brands: (form as any)?.brands ?? [],
     features: (form as any)?.features ?? [],
+    google_maps_api_key: (form as any)?.google_maps_api_key ?? null,
   };
 };
 

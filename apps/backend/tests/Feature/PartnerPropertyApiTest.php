@@ -6,6 +6,7 @@ use App\Models\Amenity;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\Property;
+use App\Models\Setting;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,6 +20,18 @@ class PartnerPropertyApiTest extends TestCase
 {
     use RefreshDatabase;
     use InteractsWithPartnerApi;
+
+    public function test_partner_property_form_metadata_includes_google_maps_key(): void
+    {
+        $partner = $this->createPartner();
+        Setting::set('google_map_api_key', 'test-browser-map-key');
+
+        $response = $this->actingAs($partner, 'sanctum')
+            ->getJson('/api/dashboard/partner/properties/form-data');
+
+        $response->assertOk()
+            ->assertJsonPath('data.google_maps_api_key', 'test-browser-map-key');
+    }
 
     public function test_partner_can_create_update_and_delete_property_listing(): void
     {

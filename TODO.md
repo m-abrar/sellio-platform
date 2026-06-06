@@ -125,3 +125,17 @@ on the property detail page, there is a rating section on the last, it shows two
 -----------------
 
 - [x] Keep manual coordinate inputs as fallback. (Manual latitude/longitude inputs always render; the map renders when an env or Admin Settings Google Maps key is configured.)
+
+-----------------
+in the partner dashboard
+- [x] http://localhost:5173/dashboard/properties can we show counting? (Added total, live, pending, and draft property counters.)
+
+-----------------
+
+- [x] http://localhost:5173/dashboard/properties/edit/[slug] can we give space to tightly shrinked form fields? which are collapsed horizontally. (Widened the main form column, relaxed field breakpoints, and made dynamic tables scroll-safe.)
+
+--------------------
+
+- [x] Do we have drag pin on real google map in seller panel like in the admin? (Now yes: seller property forms load the Google Maps key from partner form metadata and support drag/click pin updates for latitude/longitude.)
+
+------------------
