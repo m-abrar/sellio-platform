@@ -143,6 +143,16 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertSee(__('Explore the Marketplace'), false);
     }
 
+    public function test_homepage_survives_missing_properties_table(): void
+    {
+        Cache::flush();
+        Schema::dropIfExists('properties');
+
+        $this->get(route('index'))
+            ->assertOk()
+            ->assertSee(__('Explore the Marketplace'), false);
+    }
+
     public function test_currency_helpers_and_listing_price_accessors_use_settings(): void
     {
         Setting::set('currency_symbol', 'USD ');

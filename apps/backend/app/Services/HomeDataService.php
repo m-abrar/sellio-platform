@@ -14,6 +14,7 @@ use App\Models\Category;
 use App\Models\Location;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Class HomeDataService
@@ -61,19 +62,19 @@ class HomeDataService
             'classifiedsTrending' => $this->forModule('classifieds', fn() => $this->cached('h_trend_class', fn() => $this->getTrending(new Classified(), 'inquiries', $lastMonth))),
 
             // Specific Sub-sections
-            'propertiesRental'    => $this->forModule('properties', fn() => $this->cached('h_rent_prop', fn() => $this->transformCollection(Property::active()->with(['location', 'category', 'user'])->without(['media'])->where('is_rental', true)->latest()->take(6)->get()))),
-            'propertiesSale'      => $this->forModule('properties', fn() => $this->cached('h_sale_prop', fn() => $this->transformCollection(Property::active()->with(['location', 'category', 'user'])->without(['media'])->where('is_sale', true)->latest()->take(6)->get()))),
-            'autosLatest'         => $this->forModule('autos', fn() => $this->cached('h_late_auto', fn() => $this->transformCollection(Auto::active()->with(['location', 'category', 'user'])->without(['media'])->latest()->take(6)->get()))),
-            'productsLatest'      => $this->forModule('products', fn() => $this->cached('h_late_prod', fn() => Product::active()->with(['category', 'brand'])->withCount(['attributes', 'addons'])->latest()->take(4)->get())),
-            'blogsFeatured'       => $this->forModule('blogs', fn() => $this->cached('h_feat_blog', fn() => Blog::active()->with(['category'])->orderByDesc('is_featured')->latest('published_at')->take(3)->get())),
+            'propertiesRental'    => $this->forModule('properties', fn() => $this->safeModelCollection(Property::class, fn() => $this->cached('h_rent_prop', fn() => $this->transformCollection(Property::active()->with(['location', 'category', 'user'])->without(['media'])->where('is_rental', true)->latest()->take(6)->get())))),
+            'propertiesSale'      => $this->forModule('properties', fn() => $this->safeModelCollection(Property::class, fn() => $this->cached('h_sale_prop', fn() => $this->transformCollection(Property::active()->with(['location', 'category', 'user'])->without(['media'])->where('is_sale', true)->latest()->take(6)->get())))),
+            'autosLatest'         => $this->forModule('autos', fn() => $this->safeModelCollection(Auto::class, fn() => $this->cached('h_late_auto', fn() => $this->transformCollection(Auto::active()->with(['location', 'category', 'user'])->without(['media'])->latest()->take(6)->get())))),
+            'productsLatest'      => $this->forModule('products', fn() => $this->safeModelCollection(Product::class, fn() => $this->cached('h_late_prod', fn() => Product::active()->with(['category', 'brand'])->withCount(['attributes', 'addons'])->latest()->take(4)->get()))),
+            'blogsFeatured'       => $this->forModule('blogs', fn() => $this->safeModelCollection(Blog::class, fn() => $this->cached('h_feat_blog', fn() => Blog::active()->with(['category'])->orderByDesc('is_featured')->latest('published_at')->take(3)->get()))),
 
             // Taxonomy
-            'categories'          => $this->cached('h_tax_cat', fn() => Category::active()->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c))),
-            'locations'           => $this->cached('h_tax_loc', fn() => Location::active()->without(['media'])->get()->map(fn($l) => $this->transformTaxonomy($l))),
-            'locationsFeatured'   => $this->cached('h_feat_loc', fn() => Location::active()->without(['media'])->orderByDesc('is_featured')->take(6)->get()->map(fn($l) => $this->transformTaxonomy($l))),
-            'categoriesFeatured'  => $this->cached('h_feat_cat', fn() => Category::active()->without(['media'])->orderByDesc('is_featured')->latest()->take(8)->get()->map(fn($c) => $this->transformTaxonomy($c))),
-            'serviceCategories'   => $this->forModule('services', fn() => $this->cached('h_serv_cat', fn() => Category::active()->where('is_service', true)->without(['media'])->take(4)->get()->map(fn($c) => $this->transformTaxonomy($c)))),
-            'autoCategories'      => $this->forModule('autos', fn() => $this->cached('h_auto_cat', fn() => Category::active()->where('is_auto', true)->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c)))),
+            'categories'          => $this->safeModelCollection(Category::class, fn() => $this->cached('h_tax_cat', fn() => Category::active()->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c)))),
+            'locations'           => $this->safeModelCollection(Location::class, fn() => $this->cached('h_tax_loc', fn() => Location::active()->without(['media'])->get()->map(fn($l) => $this->transformTaxonomy($l)))),
+            'locationsFeatured'   => $this->safeModelCollection(Location::class, fn() => $this->cached('h_feat_loc', fn() => Location::active()->without(['media'])->orderByDesc('is_featured')->take(6)->get()->map(fn($l) => $this->transformTaxonomy($l)))),
+            'categoriesFeatured'  => $this->safeModelCollection(Category::class, fn() => $this->cached('h_feat_cat', fn() => Category::active()->without(['media'])->orderByDesc('is_featured')->latest()->take(8)->get()->map(fn($c) => $this->transformTaxonomy($c)))),
+            'serviceCategories'   => $this->forModule('services', fn() => $this->safeModelCollection(Category::class, fn() => $this->cached('h_serv_cat', fn() => Category::active()->where('is_service', true)->without(['media'])->take(4)->get()->map(fn($c) => $this->transformTaxonomy($c))))),
+            'autoCategories'      => $this->forModule('autos', fn() => $this->safeModelCollection(Category::class, fn() => $this->cached('h_auto_cat', fn() => Category::active()->where('is_auto', true)->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c))))),
         ];
     }
 
@@ -170,6 +171,12 @@ class HomeDataService
 
     protected function withModuleStats(array $module): array
     {
+        if (! $this->hasModuleTable($module['id'])) {
+            $module['count'] = 0;
+
+            return $module;
+        }
+
         $module['count'] = $this->cached(
             "h_count_{$module['id']}",
             fn() => $this->countForModule($module['id'])
@@ -193,6 +200,33 @@ class HomeDataService
         };
     }
 
+    protected function hasModuleTable(string $module): bool
+    {
+        return match ($module) {
+            'properties' => $this->hasModelTable(Property::class),
+            'autos' => $this->hasModelTable(Auto::class),
+            'products' => $this->hasModelTable(Product::class),
+            'services' => $this->hasModelTable(Service::class),
+            'jobs' => $this->hasModelTable(JobListing::class),
+            'events' => $this->hasModelTable(Event::class),
+            'classifieds' => $this->hasModelTable(Classified::class),
+            'blogs' => $this->hasModelTable(Blog::class),
+            default => true,
+        };
+    }
+
+    protected function hasModelTable(string|object $model): bool
+    {
+        $instance = is_string($model) ? new $model() : $model;
+
+        return Schema::hasTable($instance->getTable());
+    }
+
+    protected function safeModelCollection(string|object $model, callable $callback): Collection
+    {
+        return $this->hasModelTable($model) ? $callback() : collect();
+    }
+
     /**
      * Cache helper to keep getHomeData clean and modular.
      */
@@ -206,6 +240,10 @@ class HomeDataService
      */
     protected function getFeatured($model): Collection
     {
+        if (! $this->hasModelTable($model)) {
+            return collect();
+        }
+
         $collection = $model->active()
             ->with(['location', 'category', 'user'])
             ->without(['media', 'type']) 
@@ -222,6 +260,10 @@ class HomeDataService
      */
     protected function getTrending($model, string $relation, Carbon $date): Collection
     {
+        if (! $this->hasModelTable($model)) {
+            return collect();
+        }
+
         $collection = $model->active()
             ->with(['location', 'category', 'user'])
             ->without(['media', 'type'])
@@ -242,6 +284,10 @@ class HomeDataService
      */
     protected function getTrendingServices(Carbon $date): Collection
     {
+        if (! $this->hasModelTable(Service::class)) {
+            return collect();
+        }
+
         $collection = Service::active()
             ->with(['location', 'category', 'user'])
             ->without(['media', 'type'])
