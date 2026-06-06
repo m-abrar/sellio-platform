@@ -154,6 +154,7 @@ Route::middleware(['built_in_website'])->group(function () {
         Route::get('/booking/{start_date}/{end_date}/checkout', [PropertyBookingController::class, 'checkout'])->name('booking.checkout');
         Route::post('/booking', [PropertyBookingController::class, 'store'])->middleware('auth')->name('booking.store');
         Route::get('/booking/{booking}/payment', [PropertyBookingController::class, 'payment'])->middleware('auth')->name('booking.payment');
+        Route::get('/booking/{booking}/payment/confirm/{gateway}', [PropertyBookingController::class, 'confirmPayment'])->middleware('auth')->name('booking.payment.confirm');
         Route::get('/booking/{booking}', [PropertyBookingController::class, 'show'])->name('booking.confirmation');
         
         Route::prefix('visits')->name('visit.')->group(function () {
@@ -163,7 +164,7 @@ Route::middleware(['built_in_website'])->group(function () {
             Route::post('{visit}/cancel', [PropertyVisitController::class, 'cancel'])->middleware('auth')->name('cancel');
         });
     });
-    Route::post('/property/booking/{booking}/payment', [PropertyBookingController::class, 'processPayment'])->name('property.booking.processPayment');
+    Route::post('/property/booking/{booking}/payment', [PropertyBookingController::class, 'processPayment'])->middleware('auth')->name('property.booking.processPayment');
 
     // Ticket Booking Logic
     Route::prefix('events/{event:slug}/booking')->name('events.tickets.booking.')->middleware('module:events')->group(function () {
@@ -250,6 +251,5 @@ Route::prefix('auth')->group(function () {
     Route::get('{provider}/callback', [SocialLoginController::class, 'callback'])
         ->name('login.social.callback');
 });
-
 
 

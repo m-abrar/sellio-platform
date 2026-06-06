@@ -57,7 +57,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         // Add this to ensure CORS headers are attached even if auth fails
         $middleware->validateCsrfTokens(except: [
-            'api/*', 
+            'api/*',
+            'webhooks/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

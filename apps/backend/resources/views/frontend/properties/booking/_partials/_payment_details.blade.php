@@ -43,10 +43,11 @@
         novalidate
     >
         @csrf
+        <input type="hidden" name="payment_method" value="stripe">
 
         <div class="booking-payment-form__demo">
             <i class="bi bi-info-circle me-2"></i>
-            {{ __('Demo payment mode: use card') }} <code>4242 4242 4242 4242</code>, {{ __('any future expiry, and any 3-digit CVC.') }}
+            {{ __('Stripe sandbox mode: use card') }} <code>4242 4242 4242 4242</code>, {{ __('any future expiry, and any 3-digit CVC.') }}
         </div>
 
         <div class="row g-3 g-md-4">

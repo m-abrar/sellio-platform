@@ -180,4 +180,11 @@ in the partner dashboard
 
 ---------------------
 
+- [x] Stripe webhook local fulfillment — `stripe listen --forward-to http://127.0.0.1:8000/webhooks/stripe` receives events but Laravel returned **419** (CSRF). Fixed by excluding `webhooks/*` from CSRF verification; focused `PartnerSubscriptionCheckoutTest` passes and confirms `checkout.session.completed` activates partner subscriptions in the database. Return-url `session_id` confirm fallback already exists.
+
+----------------------
+
+- [x] Laravel public property booking checkout now uses the real Stripe gateway path instead of instant demo confirmation: payment submission resolves the active Stripe gateway, charges the booking total, records a polymorphic `payments` row, confirms only successful charges, stores failed attempts, supports Stripe auth return confirmation, and handles `payment_intent.succeeded` webhooks for property bookings.
+
+----------------------
 

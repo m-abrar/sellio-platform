@@ -8,16 +8,21 @@ use App\Models\Auto;
 use App\Models\Event;
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\Payment;
+use App\Models\PaymentGateway;
 use App\Models\Property;
 use App\Models\PropertyBooking;
 use App\Models\PropertyAddon;
 use App\Models\SeasonalPrice;
 use App\Models\User;
+use App\Contracts\PaymentGatewayService;
 use App\Services\ContentService;
+use App\Services\GatewayManager;
 use App\Services\HomeDataService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
+use Mockery;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -641,6 +646,163 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertSee(__('Secure Payment'), false)
             ->assertSee(__('Review Booking'), false)
             ->assertSee(__('Complete Payment'), false);
+    }
+
+    public function test_property_booking_stripe_payment_confirms_booking_and_records_payment(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $user = User::factory()->create();
+        $property = Property::factory()->create([
+            'is_sale' => false,
+            'is_rental' => true,
+            'price_per_night' => 200,
+        ]);
+
+        $booking = PropertyBooking::factory()
+            ->forDateRange(now()->addDays(5), now()->addDays(8), 200)
+            ->pending()
+            ->create([
+                'property_id' => $property->id,
+                'user_id' => $user->id,
+                'guests' => 2,
+                'total_price' => 600,
+            ]);
+
+        PaymentGateway::create([
+            'title' => 'Stripe',
+            'slug' => 'stripe',
+            'class_name' => \App\Services\StripeGatewayService::class,
+            'is_active' => true,
+            'mode' => PaymentGateway::MODE_SANDBOX,
+        ]);
+
+        $fakeGateway = Mockery::mock(PaymentGatewayService::class);
+        $fakeGateway->shouldReceive('charge')
+            ->once()
+            ->withArgs(function (float $amount, string $token, string $returnUrl, array $metadata) use ($booking) {
+                return $amount === 600.0
+                    && $token === 'tok_visa'
+                    && str_contains($returnUrl, '/booking/' . $booking->id . '/payment/confirm/stripe')
+                    && ($metadata['purpose'] ?? null) === 'property_booking'
+                    && ($metadata['property_booking_id'] ?? null) === (string) $booking->id;
+            })
+            ->andReturn([
+                'status' => 'successful',
+                'reference' => 'pi_property_booking_success',
+                'message' => 'Payment processed successfully via Stripe.',
+            ]);
+
+        $this->mock(GatewayManager::class, function ($mock) use ($fakeGateway) {
+            $mock->shouldReceive('resolve')->once()->andReturn($fakeGateway);
+        });
+
+        $this->actingAs($user)
+            ->post(route('property.booking.processPayment', $booking), [
+                'payment_method' => 'stripe',
+                'card_number' => '4242 4242 4242 4242',
+                'name_on_card' => 'Demo Guest',
+                'mm_yy' => '12/30',
+                'cvc' => '123',
+                'termsCheck' => '1',
+            ])
+            ->assertRedirect(route('property.booking.confirmation', [
+                'property' => $property->slug,
+                'booking' => $booking->id,
+            ]));
+
+        $this->assertDatabaseHas('property_bookings', [
+            'id' => $booking->id,
+            'status' => PropertyBooking::STATUS_CONFIRMED,
+        ]);
+
+        $this->assertDatabaseHas('payments', [
+            'user_id' => $user->id,
+            'amount' => 600,
+            'payment_method' => 'stripe',
+            'transaction_id' => 'pi_property_booking_success',
+            'status' => Payment::STATUS_COMPLETED,
+            'payable_type' => PropertyBooking::class,
+            'payable_id' => $booking->id,
+        ]);
+    }
+
+    public function test_property_booking_stripe_failure_keeps_booking_pending(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        $user = User::factory()->create();
+        $property = Property::factory()->create([
+            'is_sale' => false,
+            'is_rental' => true,
+            'price_per_night' => 150,
+        ]);
+
+        $booking = PropertyBooking::factory()
+            ->forDateRange(now()->addDays(6), now()->addDays(8), 150)
+            ->pending()
+            ->create([
+                'property_id' => $property->id,
+                'user_id' => $user->id,
+                'guests' => 2,
+                'total_price' => 300,
+            ]);
+
+        PaymentGateway::create([
+            'title' => 'Stripe',
+            'slug' => 'stripe',
+            'class_name' => \App\Services\StripeGatewayService::class,
+            'is_active' => true,
+            'mode' => PaymentGateway::MODE_SANDBOX,
+        ]);
+
+        $fakeGateway = Mockery::mock(PaymentGatewayService::class);
+        $fakeGateway->shouldReceive('charge')
+            ->once()
+            ->andReturn([
+                'status' => 'failed',
+                'reference' => 'pi_property_booking_failed',
+                'message' => 'Stripe reported a charge failure.',
+            ]);
+
+        $this->mock(GatewayManager::class, function ($mock) use ($fakeGateway) {
+            $mock->shouldReceive('resolve')->once()->andReturn($fakeGateway);
+        });
+
+        $this->actingAs($user)
+            ->from(route('property.booking.payment', [
+                'property' => $property->slug,
+                'booking' => $booking->id,
+            ]))
+            ->post(route('property.booking.processPayment', $booking), [
+                'payment_method' => 'stripe',
+                'card_number' => '4242 4242 4242 4242',
+                'name_on_card' => 'Demo Guest',
+                'mm_yy' => '12/30',
+                'cvc' => '123',
+                'termsCheck' => '1',
+            ])
+            ->assertRedirect(route('property.booking.payment', [
+                'property' => $property->slug,
+                'booking' => $booking->id,
+            ]));
+
+        $this->assertDatabaseHas('property_bookings', [
+            'id' => $booking->id,
+            'status' => PropertyBooking::STATUS_PENDING,
+        ]);
+
+        $this->assertDatabaseHas('payments', [
+            'user_id' => $user->id,
+            'amount' => 300,
+            'payment_method' => 'stripe',
+            'transaction_id' => 'pi_property_booking_failed',
+            'status' => Payment::STATUS_FAILED,
+            'payable_type' => PropertyBooking::class,
+            'payable_id' => $booking->id,
+        ]);
     }
 
     public function test_property_booking_confirmation_renders_step_three_for_booking_owner(): void

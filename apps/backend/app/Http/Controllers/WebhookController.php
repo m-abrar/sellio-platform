@@ -50,6 +50,26 @@ class WebhookController extends Controller
                 }
             }
 
+            if (!empty($result['property_booking_id']) && isset($result['payment_status']) && $result['payment_status'] === 'paid') {
+                $booking = \App\Models\PropertyBooking::find($result['property_booking_id']);
+
+                if ($booking) {
+                    app(\App\Services\PropertyService::class)->recordBookingPayment(
+                        $booking,
+                        $gatewaySlug,
+                        (float) $booking->total_price,
+                        \App\Models\Payment::STATUS_COMPLETED,
+                        $result['reference'] ?? null,
+                        $result['message'] ?? 'Property booking payment confirmed via webhook.'
+                    );
+
+                    if ($booking->status !== \App\Models\PropertyBooking::STATUS_CONFIRMED) {
+                        app(\App\Services\PropertyService::class)->confirmBookingPayment($booking);
+                        Log::info("Webhook confirmed property booking {$booking->id} via {$gatewaySlug}");
+                    }
+                }
+            }
+
             // AUTOMATED FULFILLMENT: Update the corresponding Order if identified
             if (!empty($result['order_id']) && isset($result['payment_status']) && $result['payment_status'] === 'paid') {
                 $order = \App\Models\Order::find($result['order_id']);

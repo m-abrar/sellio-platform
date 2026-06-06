@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePropertyBookingRequest;
 use App\Http\Requests\ProcessPaymentRequest;
+use App\Models\Payment;
+use App\Models\PaymentGateway;
 use App\Models\Property;
 use App\Models\PropertyBooking;
+use App\Services\GatewayManager;
 use App\Services\PropertyService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -134,7 +137,7 @@ class PropertyBookingController extends Controller
      * @param  \App\Models\PropertyBooking  $booking
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function processPayment(ProcessPaymentRequest $request, PropertyBooking $booking): RedirectResponse
+    public function processPayment(ProcessPaymentRequest $request, PropertyBooking $booking, GatewayManager $manager): RedirectResponse
     {
         $this->authorizeBooking($booking->property, $booking);
 
@@ -146,16 +149,80 @@ class PropertyBookingController extends Controller
         }
 
         try {
-            $this->propertyService->confirmBookingPayment($booking);
+            $gatewaySlug = $request->validated('payment_method');
+            $gateway = PaymentGateway::query()
+                ->where('slug', $gatewaySlug)
+                ->where('is_active', true)
+                ->firstOrFail();
 
-            return redirect()->route('property.booking.confirmation', [
+            $token = $request->input('payment_token')
+                ?? $request->input('stripeToken')
+                ?? $this->demoStripeTokenFromCard($request);
+
+            if (!$token) {
+                return back()->withInput()->with('error', __('Payment token could not be created. Please check your card details.'));
+            }
+
+            $returnUrl = route('property.booking.payment.confirm', [
                 'property' => $booking->property->slug,
-                'booking'  => $booking->id
-            ])->with('success', __('✅ Payment successful! Your vacation is confirmed.'));
+                'booking' => $booking->id,
+                'gateway' => $gatewaySlug,
+            ], true);
+
+            $result = $manager->resolve($gateway)->charge((float) $booking->total_price, $token, $returnUrl, [
+                'purpose' => 'property_booking',
+                'property_booking_id' => (string) $booking->id,
+                'property_id' => (string) $booking->property_id,
+                'user_id' => (string) $booking->user_id,
+                'description' => __('Payment for property booking #:id', ['id' => $booking->id]),
+            ]);
+
+            if (($result['status'] ?? null) === 'successful') {
+                $this->propertyService->recordBookingPayment(
+                    $booking,
+                    $gatewaySlug,
+                    (float) $booking->total_price,
+                    Payment::STATUS_COMPLETED,
+                    $result['reference'] ?? null,
+                    $result['message'] ?? null
+                );
+
+                $this->propertyService->confirmBookingPayment($booking);
+
+                return redirect()->route('property.booking.confirmation', [
+                    'property' => $booking->property->slug,
+                    'booking'  => $booking->id
+                ])->with('success', __('Payment successful! Your vacation is confirmed.'));
+            }
+
+            if (($result['status'] ?? null) === 'pending_auth' && !empty($result['redirect_url'])) {
+                $this->propertyService->recordBookingPayment(
+                    $booking,
+                    $gatewaySlug,
+                    (float) $booking->total_price,
+                    Payment::STATUS_PENDING,
+                    $result['reference'] ?? null,
+                    $result['message'] ?? null
+                );
+
+                return redirect($result['redirect_url']);
+            }
+
+            $this->propertyService->recordBookingPayment(
+                $booking,
+                $gatewaySlug,
+                (float) $booking->total_price,
+                Payment::STATUS_FAILED,
+                $result['reference'] ?? null,
+                $result['message'] ?? __('Gateway payment failed.')
+            );
+
+            return back()->withInput()->with('error', $result['message'] ?? __('Payment failed. Please check your details.'));
         } catch (Exception $e) {
             Log::error('Payment Failure: ' . $e->getMessage());
-            return back()->withInput()->with('error', __('❌ Payment failed. Please check your details.'));
+            return back()->withInput()->with('error', __('Payment failed. Please check your details.'));
         }
+
     }
 
     /**
@@ -177,6 +244,59 @@ class PropertyBookingController extends Controller
                 ->where('description', 'LIKE', 'Add-on:%')
                 ->get(),
         ]);
+    }
+
+    public function confirmPayment(Request $request, Property $property, PropertyBooking $booking, GatewayManager $manager, string $gateway): RedirectResponse
+    {
+        $this->authorizeBooking($property, $booking);
+
+        $paymentIntentId = $request->query('payment_intent') ?? $request->query('token');
+
+        if (!$paymentIntentId) {
+            return redirect()->route('property.booking.payment', [
+                'property' => $property->slug,
+                'booking' => $booking->id,
+            ])->with('error', __('Payment confirmation failed because the gateway reference was missing.'));
+        }
+
+        try {
+            $gatewayModel = PaymentGateway::query()
+                ->where('slug', $gateway)
+                ->where('is_active', true)
+                ->firstOrFail();
+
+            $result = $manager->resolve($gatewayModel)->retrieveIntentStatus($paymentIntentId);
+
+            if (($result['status'] ?? null) === 'successful') {
+                $this->propertyService->recordBookingPayment(
+                    $booking,
+                    $gateway,
+                    (float) $booking->total_price,
+                    Payment::STATUS_COMPLETED,
+                    $result['reference'] ?? $paymentIntentId,
+                    $result['message'] ?? null
+                );
+
+                $this->propertyService->confirmBookingPayment($booking);
+
+                return redirect()->route('property.booking.confirmation', [
+                    'property' => $property->slug,
+                    'booking' => $booking->id,
+                ])->with('success', __('Payment successful! Your vacation is confirmed.'));
+            }
+
+            return redirect()->route('property.booking.payment', [
+                'property' => $property->slug,
+                'booking' => $booking->id,
+            ])->with('error', $result['message'] ?? __('Payment confirmation failed.'));
+        } catch (Exception $e) {
+            Log::error('Payment confirmation failure: ' . $e->getMessage());
+
+            return redirect()->route('property.booking.payment', [
+                'property' => $property->slug,
+                'booking' => $booking->id,
+            ])->with('error', __('Payment confirmation failed. Please try again.'));
+        }
     }
 
     /**
@@ -234,5 +354,16 @@ class PropertyBookingController extends Controller
         if (!$isOwner && !$isPartner && !$isAdmin) {
             abort(403, 'Unauthorized access to this booking.');
         }
+    }
+
+    private function demoStripeTokenFromCard(Request $request): ?string
+    {
+        if ($request->input('payment_method', 'stripe') !== 'stripe') {
+            return null;
+        }
+
+        return $request->input('card_number') === '4242424242424242'
+            ? 'tok_visa'
+            : null;
     }
 }

@@ -27,7 +27,8 @@ class ProcessPaymentRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'card_number' => str_replace([' ', '-', '_'], '', $this->card_number),
+            'card_number' => str_replace([' ', '-', '_'], '', (string) $this->card_number),
+            'payment_method' => $this->payment_method ?: 'stripe',
         ]);
     }
 
@@ -39,11 +40,14 @@ class ProcessPaymentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'card_number'  => ['required', 'numeric', 'digits_between:14,19'],
-            'name_on_card' => ['required', 'string', 'max:255'],
-            'mm_yy'        => ['required', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
-            'cvc'          => ['required', 'numeric', 'digits_between:3,4'],
-            'termsCheck'   => ['accepted'],
+            'payment_method' => ['required', 'string', 'in:stripe'],
+            'payment_token'  => ['nullable', 'string', 'max:255'],
+            'stripeToken'    => ['nullable', 'string', 'max:255'],
+            'card_number'    => ['required_without_all:payment_token,stripeToken', 'numeric', 'digits_between:14,19'],
+            'name_on_card'   => ['required_without_all:payment_token,stripeToken', 'string', 'max:255'],
+            'mm_yy'          => ['required_without_all:payment_token,stripeToken', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
+            'cvc'            => ['required_without_all:payment_token,stripeToken', 'numeric', 'digits_between:3,4'],
+            'termsCheck'     => ['accepted'],
         ];
     }
 }

@@ -435,12 +435,18 @@ class StripeGatewayService implements PaymentGatewayService
 
         if ($eventType === 'payment_intent.succeeded') {
             Log::info("Handled 'payment_intent.succeeded'. Intent ID: {$eventData['id']}");
+            $metadata = $eventData['metadata'] ?? [];
+            $isPropertyBooking = ($metadata['purpose'] ?? null) === 'property_booking';
+
             return [
-                'status'         => 'processed',
-                'order_id'       => $eventData['metadata']['order_id'] ?? null,
-                'payment_status' => 'paid',
-                'reference'      => $eventData['id'],
-                'message'        => 'Payment intent succeeded event handled.',
+                'status'              => 'processed',
+                'order_id'            => $metadata['order_id'] ?? null,
+                'property_booking_id' => $isPropertyBooking ? ($metadata['property_booking_id'] ?? null) : null,
+                'payment_status'      => 'paid',
+                'reference'           => $eventData['id'],
+                'message'             => $isPropertyBooking
+                    ? 'Property booking payment completed.'
+                    : 'Payment intent succeeded event handled.',
             ];
         }
 

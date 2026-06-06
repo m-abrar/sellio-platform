@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Location;
 use App\Models\Property;
 use App\Models\PropertyBooking;
+use App\Models\Payment;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\TransactionLine;
@@ -414,6 +415,42 @@ class PropertyService
 
             $booking->status = 'confirmed';
             $booking->save();
+        });
+    }
+
+    public function recordBookingPayment(
+        PropertyBooking $booking,
+        string $gateway,
+        float $amount,
+        string $status,
+        ?string $reference = null,
+        ?string $message = null
+    ): Payment {
+        return DB::transaction(function () use ($booking, $gateway, $amount, $status, $reference, $message) {
+            $payment = Payment::query()
+                ->where('payable_type', PropertyBooking::class)
+                ->where('payable_id', $booking->id)
+                ->when($reference, fn ($query) => $query->where('transaction_id', $reference))
+                ->first();
+
+            if (!$payment) {
+                $payment = new Payment([
+                    'payable_type' => PropertyBooking::class,
+                    'payable_id' => $booking->id,
+                ]);
+            }
+
+            $payment->user_id = $booking->user_id;
+            $payment->amount = $amount;
+            $payment->currency = 'USD';
+            $payment->transaction_id = $reference;
+            $payment->payment_method = $gateway;
+            $payment->status = $status;
+            $payment->paid_at = $status === Payment::STATUS_COMPLETED ? now() : null;
+            $payment->admin_note = $message;
+            $payment->save();
+
+            return $payment;
         });
     }
 

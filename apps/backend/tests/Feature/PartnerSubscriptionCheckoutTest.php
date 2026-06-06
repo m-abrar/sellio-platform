@@ -5,7 +5,10 @@ namespace Tests\Feature;
 use App\Contracts\PaymentGatewayService;
 use App\Models\PaymentGateway;
 use App\Models\Plan;
+use App\Models\Property;
+use App\Models\PropertyBooking;
 use App\Models\Subscription;
+use App\Models\User;
 use App\Services\GatewayManager;
 use App\Services\SubscriptionCheckoutService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -197,6 +200,76 @@ class PartnerSubscriptionCheckoutTest extends TestCase
             'user_id' => $partner->id,
             'plan_id' => $plan->id,
             'status' => Subscription::STATUS_ACTIVE,
+        ]);
+    }
+
+    public function test_stripe_webhook_payment_intent_succeeded_confirms_property_booking(): void
+    {
+        $user = User::factory()->create();
+        $property = Property::factory()->create([
+            'is_sale' => false,
+            'is_rental' => true,
+            'price_per_night' => 200,
+        ]);
+
+        $booking = PropertyBooking::factory()
+            ->forDateRange(now()->addDays(5), now()->addDays(8), 200)
+            ->pending()
+            ->create([
+                'property_id' => $property->id,
+                'user_id' => $user->id,
+                'guests' => 2,
+                'total_price' => 600,
+            ]);
+
+        PaymentGateway::create([
+            'title' => 'Stripe',
+            'slug' => 'stripe',
+            'class_name' => \App\Services\StripeGatewayService::class,
+            'is_active' => true,
+            'mode' => PaymentGateway::MODE_SANDBOX,
+        ])->credentials()->create([
+            'sandbox_config' => [
+                'secret_key' => 'sk_test_example',
+                'publishable_key' => 'pk_test_example',
+                'webhook_secret' => 'whsec_test_example',
+                'currency' => 'USD',
+            ],
+            'live_config' => [],
+        ]);
+
+        $fakeService = Mockery::mock(PaymentGatewayService::class);
+        $fakeService->shouldReceive('handleWebhook')
+            ->once()
+            ->andReturn([
+                'status' => 'processed',
+                'property_booking_id' => (string) $booking->id,
+                'payment_status' => 'paid',
+                'reference' => 'pi_property_booking_webhook',
+                'message' => 'Property booking payment completed.',
+            ]);
+
+        $this->mock(GatewayManager::class, function ($mock) use ($fakeService) {
+            $mock->shouldReceive('resolve')->once()->andReturn($fakeService);
+        });
+
+        $this->postJson('/webhooks/stripe', ['type' => 'payment_intent.succeeded'])
+            ->assertOk()
+            ->assertJsonPath('status', 'success');
+
+        $this->assertDatabaseHas('property_bookings', [
+            'id' => $booking->id,
+            'status' => PropertyBooking::STATUS_CONFIRMED,
+        ]);
+
+        $this->assertDatabaseHas('payments', [
+            'user_id' => $user->id,
+            'amount' => 600,
+            'payment_method' => 'stripe',
+            'transaction_id' => 'pi_property_booking_webhook',
+            'status' => \App\Models\Payment::STATUS_COMPLETED,
+            'payable_type' => PropertyBooking::class,
+            'payable_id' => $booking->id,
         ]);
     }
 }
