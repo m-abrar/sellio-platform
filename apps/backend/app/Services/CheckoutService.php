@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Payment;
 use App\Models\ProductAttribute;
 use App\Models\ProductAddon;
 use Illuminate\Support\Facades\DB;
@@ -38,24 +39,32 @@ class CheckoutService
     {
         return DB::transaction(function () use ($cart, $shippingData, $paymentMethod) {
             
+            $shippingCost = (float) ($shippingData['shipping_cost'] ?? $shippingData['cost'] ?? 0.00);
+            $shippingName = $shippingData['shipping_name'] ?? $shippingData['name'];
+            $shippingAddress = $shippingData['shipping_address'] ?? $shippingData['address'];
+            $shippingCity = $shippingData['shipping_city'] ?? $shippingData['city'];
+            $shippingState = $shippingData['shipping_state'] ?? $shippingData['state'] ?? null;
+            $shippingZip = $shippingData['shipping_zip'] ?? $shippingData['zip'];
+            $shippingCountry = $shippingData['shipping_country'] ?? $shippingData['country'];
+
             // 1. Create the Order (The Parent)
             $order = new Order([
                 'order_number'     => 'ORD-' . strtoupper(Str::random(10)),
                 'payment_method'   => $paymentMethod,
-                'shipping_cost'    => $shippingData['cost'] ?? 0.00,
-                'shipping_name'    => $shippingData['name'],
-                'shipping_address' => $shippingData['address'],
-                'shipping_city'    => $shippingData['city'],
-                'shipping_state'   => $shippingData['state'] ?? null,
-                'shipping_zip'     => $shippingData['zip'],
-                'shipping_country' => $shippingData['country'],
+                'shipping_cost'    => $shippingCost,
+                'shipping_name'    => $shippingName,
+                'shipping_address' => $shippingAddress,
+                'shipping_city'    => $shippingCity,
+                'shipping_state'   => $shippingState,
+                'shipping_zip'     => $shippingZip,
+                'shipping_country' => $shippingCountry,
             ]);
 
             $order->user_id = $cart->user_id;
             $order->status = 'pending';
             $order->payment_status = 'unpaid';
             $order->subtotal = $cart->calculateTotal();
-            $order->total_amount = $cart->calculateTotal() + ($shippingData['cost'] ?? 0.00);
+            $order->total_amount = $cart->calculateTotal() + $shippingCost;
             $order->save();
 
             // 2. Loop through Cart Items to create Order Items (The Snapshots)
@@ -94,6 +103,42 @@ class CheckoutService
             $cart->delete();
 
             return $order;
+        });
+    }
+
+    public function recordOrderPayment(
+        Order $order,
+        string $gateway,
+        float $amount,
+        string $status,
+        ?string $reference = null,
+        ?string $message = null
+    ): Payment {
+        return DB::transaction(function () use ($order, $gateway, $amount, $status, $reference, $message) {
+            $payment = Payment::query()
+                ->where('payable_type', Order::class)
+                ->where('payable_id', $order->id)
+                ->when($reference, fn ($query) => $query->where('transaction_id', $reference))
+                ->first();
+
+            if (!$payment) {
+                $payment = new Payment([
+                    'payable_type' => Order::class,
+                    'payable_id' => $order->id,
+                ]);
+            }
+
+            $payment->user_id = $order->user_id;
+            $payment->amount = $amount;
+            $payment->currency = 'USD';
+            $payment->transaction_id = $reference;
+            $payment->payment_method = $gateway;
+            $payment->status = $status;
+            $payment->paid_at = $status === Payment::STATUS_COMPLETED ? now() : null;
+            $payment->admin_note = $message;
+            $payment->save();
+
+            return $payment;
         });
     }
 }

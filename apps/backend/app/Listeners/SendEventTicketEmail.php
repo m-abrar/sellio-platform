@@ -9,7 +9,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage; // Needed for file attachment
 
 /**
  * Class SendEventTicketEmail
@@ -34,12 +33,11 @@ class SendEventTicketEmail implements ShouldQueue
     public function handle(EventTicketPurchased $event): void
     {
         $user = $event->user;
-        $ticket = $event->ticket;
+        $booking = $event->booking->loadMissing(['event', 'ticketType', 'occurrence']);
+        $bookingEvent = $booking->event;
 
-        // Critical Check: Ensure all relationships required for the email exist
-        // Note: Assumes a 'event' relationship is defined on the Ticket model
-        if (!$user || !$ticket || !$ticket->event) {
-             Log::error("EventTicketPurchased event received with missing User, Ticket, or Event model.");
+        if (!$user || !$booking || !$bookingEvent) {
+             Log::error("EventTicketPurchased event received with missing User, EventBooking, or Event model.");
              return;
         }
 
@@ -50,11 +48,11 @@ class SendEventTicketEmail implements ShouldQueue
             // 2. Define the dynamic data for the template
             $data = [
                 'user_name' => $user->name,
-                'event_title' => $ticket->event->title,
-                'ticket_type' => $ticket->type_name, // e.g., 'VIP', 'General Admission'
-                'event_date' => $ticket->event->start_time->toFormattedDateString(),
-                'event_time' => $ticket->event->start_time->format('h:i A'),
-                'ticket_download_url' => route('tickets.download', $ticket->id), // Link for web download
+                'event_title' => $bookingEvent->title,
+                'ticket_type' => $booking->ticketType?->title ?? 'Event Ticket',
+                'event_date' => $booking->occurrence?->start_date_time?->toFormattedDateString() ?? 'TBA',
+                'event_time' => $booking->occurrence?->start_date_time?->format('h:i A') ?? 'TBA',
+                'ticket_download_url' => route('events.tickets.booking.confirmation', [$bookingEvent->slug, $booking->id]),
             ];
 
             // 3. Send the email using the DynamicEmail Mailable via the queue

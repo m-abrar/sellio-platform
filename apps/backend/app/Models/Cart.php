@@ -54,6 +54,11 @@ class Cart extends Model
         return $this->hasMany(CartItem::class);
     }
 
+    public function calculateTotal(): float
+    {
+        return round((float) $this->items->sum(fn (CartItem $item) => (float) $item->total_price), 2);
+    }
+
     // --- Accessors ---
 
     /**

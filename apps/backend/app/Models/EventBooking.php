@@ -54,6 +54,9 @@ class EventBooking extends Model
         'occurrence_ticket_id',
         'event_ticket_type_id',
         'quantity',
+        'user_name',
+        'user_email',
+        'user_phone',
         'booking_reference',
         'viewed_at',
     ];

@@ -5,26 +5,26 @@ namespace App\Events;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use App\Models\EventBooking;
 use App\Models\User;
-use App\Models\Ticket; // Assumed model for a purchased ticket
 
 class EventTicketPurchased
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     
     public $user;
-    public $ticket;
+    public $booking;
 
     /**
      * Create a new event instance.
      *
      * @param  \App\Models\User $user The user who purchased the ticket.
-     * @param  \App\Models\Ticket $ticket The purchased ticket record.
+     * @param  \App\Models\EventBooking $booking The purchased event booking.
      */
-    public function __construct(User $user, Ticket $ticket)
+    public function __construct(User $user, EventBooking $booking)
     {
         $this->user = $user;
-        $this->ticket = $ticket;
+        $this->booking = $booking;
     }
 
     /**

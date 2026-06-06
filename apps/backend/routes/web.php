@@ -171,6 +171,7 @@ Route::middleware(['built_in_website'])->group(function () {
         Route::post('/ticket/{ticket}/book', [EventBookingController::class, 'store'])->name('store');
         Route::get('/{booking}/checkout', [EventBookingController::class, 'checkout'])->name('checkout');
         Route::put('/{booking}/details', [EventBookingController::class, 'updateDetails'])->name('update_details');
+        Route::get('/{booking}/payment/confirm/{gateway}', [EventBookingController::class, 'confirmPayment'])->name('payment.confirm');
         Route::post('/{booking}/pay', [EventBookingController::class, 'processPayment'])->name('processPayment');
         Route::get('/{booking}/confirmation', [EventBookingController::class, 'confirmation'])->name('confirmation');
     });
@@ -251,5 +252,4 @@ Route::prefix('auth')->group(function () {
     Route::get('{provider}/callback', [SocialLoginController::class, 'callback'])
         ->name('login.social.callback');
 });
-
 

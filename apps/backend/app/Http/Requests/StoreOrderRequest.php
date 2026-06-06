@@ -23,9 +23,11 @@ class StoreOrderRequest extends FormRequest
             'shipping_name'    => ['required', 'string', 'max:255'],
             'shipping_address' => ['required', 'string', 'max:500'],
             'shipping_city'    => ['required', 'string', 'max:100'],
+            'shipping_state'   => ['nullable', 'string', 'max:100'],
             'shipping_zip'     => ['required', 'string', 'max:20'],
             'shipping_country' => ['required', 'string', 'max:100'],
             'payment_method'   => ['required', 'string', 'in:stripe,paypal,wallet,bank_transfer'],
+            'payment_token'    => ['nullable', 'string', 'max:255'],
         ];
     }
 }

@@ -7,6 +7,9 @@ use App\Models\EventBooking;
 use App\Models\EventOccurrence;
 use App\Models\EventOccurrenceTicket;
 use App\Models\EventTicketType;
+use App\Models\Payment;
+use App\Models\PaymentGateway;
+use App\Services\GatewayManager;
 use App\Services\EventBookingService;
 use App\Events\Partner\PartnerLeadCreated;
 use App\Http\Requests\StoreEventBookingRequest;
@@ -116,7 +119,7 @@ class EventBookingController extends Controller
      * @param EventBooking $booking
      * @return View|RedirectResponse
      */
-    public function checkout(Event $event, EventBooking $booking)
+    public function checkout(Event $event, EventBooking $booking, GatewayManager $manager)
     {
         $this->authorizeBooking($booking, $event);
 
@@ -125,11 +128,13 @@ class EventBookingController extends Controller
         }
 
         $booking->load(['event', 'occurrence', 'ticketType']);
+        $stripePublishableKey = $this->stripePublishableKey($booking, $manager);
 
         return view('frontend.events.booking.checkout', [
             'event'   => $event,
             'booking' => $booking,
             'user'    => Auth::user(),
+            'stripePublishableKey' => $stripePublishableKey,
         ]);
     }
 
@@ -163,28 +168,135 @@ class EventBookingController extends Controller
      * @param EventBooking $booking
      * @return RedirectResponse
      */
-    public function processPayment(Request $request, Event $event, EventBooking $booking): RedirectResponse
+    public function processPayment(Request $request, Event $event, EventBooking $booking, GatewayManager $manager): RedirectResponse
     {
         $this->authorizeBooking($booking, $event);
 
         $request->validate([
-            'payment_method' => 'required|string|in:stripe,paypal',
+            'payment_method' => 'required|string|in:stripe',
+            'payment_token' => 'nullable|string|max:255',
         ]);
 
         // SECURITY: Recalculate amount on the server based on the booking record.
         // Never trust the 'amount' field from the request in financial transactions.
-        $finalTotal = round($booking->total_price * 1.00, 2); 
+        $finalTotal = round($booking->total_price * 1.05, 2);
 
 
         try {
-            $transactionId = strtoupper($request->payment_method) . '_' . Str::random(10);
-            $this->bookingService->finalizePayment($booking, $request->payment_method, $transactionId, $finalTotal);
+            $gatewaySlug = $request->input('payment_method');
+            $gateway = PaymentGateway::query()
+                ->where('slug', $gatewaySlug)
+                ->where('is_active', true)
+                ->firstOrFail();
 
-            return redirect()->route('events.tickets.booking.confirmation', [$event->slug, $booking->id])
-                ->with('success', __('Payment successful!'));
+            $token = $request->input('payment_token');
+
+            if (!$token) {
+                return back()->with('error', __('Payment token could not be created. Please check your card details.'));
+            }
+
+            $returnUrl = route('events.tickets.booking.payment.confirm', [
+                'event' => $event->slug,
+                'booking' => $booking->id,
+                'gateway' => $gatewaySlug,
+            ], true);
+
+            $result = $manager->resolve($gateway)->charge($finalTotal, $token, $returnUrl, [
+                'purpose' => 'event_booking',
+                'event_booking_id' => (string) $booking->id,
+                'event_id' => (string) $event->id,
+                'user_id' => (string) $booking->user_id,
+                'description' => __('Payment for event booking #:id', ['id' => $booking->id]),
+            ]);
+
+            if (($result['status'] ?? null) === 'successful') {
+                $this->bookingService->recordBookingPayment(
+                    $booking,
+                    $gatewaySlug,
+                    $finalTotal,
+                    Payment::STATUS_COMPLETED,
+                    $result['reference'] ?? null,
+                    $result['message'] ?? null
+                );
+
+                $this->bookingService->finalizePayment($booking, $gatewaySlug, $result['reference'] ?? null, $finalTotal);
+
+                return redirect()->route('events.tickets.booking.confirmation', [$event->slug, $booking->id])
+                    ->with('success', __('Payment successful!'));
+            }
+
+            if (($result['status'] ?? null) === 'pending_auth' && !empty($result['redirect_url'])) {
+                $this->bookingService->recordBookingPayment(
+                    $booking,
+                    $gatewaySlug,
+                    $finalTotal,
+                    Payment::STATUS_PENDING,
+                    $result['reference'] ?? null,
+                    $result['message'] ?? null
+                );
+
+                return redirect($result['redirect_url']);
+            }
+
+            $this->bookingService->recordBookingPayment(
+                $booking,
+                $gatewaySlug,
+                $finalTotal,
+                Payment::STATUS_FAILED,
+                $result['reference'] ?? null,
+                $result['message'] ?? __('Gateway payment failed.')
+            );
+
+            return back()->with('error', $result['message'] ?? __('Payment failed. Please try again.'));
         } catch (\Exception $e) {
             Log::error("Payment Failed: " . $e->getMessage());
             return back()->with('error', __('Payment failed. Please try again.'));
+        }
+    }
+
+    public function confirmPayment(Request $request, Event $event, EventBooking $booking, GatewayManager $manager, string $gateway): RedirectResponse
+    {
+        $this->authorizeBooking($booking, $event);
+
+        $paymentIntentId = $request->query('payment_intent') ?? $request->query('token');
+
+        if (!$paymentIntentId) {
+            return redirect()->route('events.tickets.booking.checkout', [$event->slug, $booking->id])
+                ->with('error', __('Payment confirmation failed because the gateway reference was missing.'));
+        }
+
+        try {
+            $gatewayModel = PaymentGateway::query()
+                ->where('slug', $gateway)
+                ->where('is_active', true)
+                ->firstOrFail();
+
+            $result = $manager->resolve($gatewayModel)->retrieveIntentStatus($paymentIntentId);
+            $finalTotal = round((float) $booking->total_price * 1.05, 2);
+
+            if (($result['status'] ?? null) === 'successful') {
+                $this->bookingService->recordBookingPayment(
+                    $booking,
+                    $gateway,
+                    $finalTotal,
+                    Payment::STATUS_COMPLETED,
+                    $result['reference'] ?? $paymentIntentId,
+                    $result['message'] ?? null
+                );
+
+                $this->bookingService->finalizePayment($booking, $gateway, $result['reference'] ?? $paymentIntentId, $finalTotal);
+
+                return redirect()->route('events.tickets.booking.confirmation', [$event->slug, $booking->id])
+                    ->with('success', __('Payment successful!'));
+            }
+
+            return redirect()->route('events.tickets.booking.checkout', [$event->slug, $booking->id])
+                ->with('error', $result['message'] ?? __('Payment confirmation failed.'));
+        } catch (\Exception $e) {
+            Log::error("Event payment confirmation failed: " . $e->getMessage());
+
+            return redirect()->route('events.tickets.booking.checkout', [$event->slug, $booking->id])
+                ->with('error', __('Payment confirmation failed. Please try again.'));
         }
     }
 
@@ -245,5 +357,29 @@ class EventBookingController extends Controller
             }
         }
         throw $e;
+    }
+
+    private function stripePublishableKey(EventBooking $booking, GatewayManager $manager): ?string
+    {
+        $stripeGateway = PaymentGateway::query()
+            ->where('slug', 'stripe')
+            ->where('is_active', true)
+            ->with('credentials')
+            ->first();
+
+        if (!$stripeGateway) {
+            return null;
+        }
+
+        try {
+            return $manager->resolve($stripeGateway)->getFrontendConfig()['publishable_key'] ?? null;
+        } catch (\Exception $e) {
+            Log::warning('Unable to load Stripe frontend config for event booking checkout.', [
+                'booking_id' => $booking->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return null;
+        }
     }
 }

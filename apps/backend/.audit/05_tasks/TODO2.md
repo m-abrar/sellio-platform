@@ -87,3 +87,21 @@ vendor\laravel\framework\src\Illuminate\Routing\Exceptions\UrlGenerationExceptio
 Missing required parameter for [Route: admin.autos.approve] [URI: admin/autos/{auto}/approve] [Missing parameter: auto].
 
 --------------------
+
+Laravel public checkout rollout plan
+
+- [x] Properties: real Stripe backend charge, Stripe Elements, payments row, and `payment_intent.succeeded` webhook confirmation are implemented.
+- [x] Events: replace simulated ticket payment with Stripe Elements, active gateway charge, `payments` row linked to `EventBooking`, Stripe auth-return handling, and webhook confirmation.
+- [x] Products: audit/fix the generic checkout view path, then make product order checkout use Stripe Elements and record `Payment` rows linked to `Order`.
+- [ ] Shared payment helper: after properties/events/products work, extract small shared behavior for gateway frontend config, payment recording, and webhook fulfillment mapping.
+- [ ] Services: add a paid appointment/deposit checkout only if service bookings should require upfront payment.
+- [ ] Classifieds/autos/jobs: do not add checkout blindly; first decide whether each vertical needs purchase, deposit, paid posting, or remains inquiry/application only.
+
+Recommended next implementation order:
+1. Events checkout.
+2. Products checkout audit/fix.
+3. Shared helper cleanup.
+4. Optional services paid appointments.
+5. Classifieds/autos/jobs product decision.
+
+--------------------

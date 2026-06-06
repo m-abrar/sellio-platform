@@ -7,9 +7,9 @@ use App\Models\EventBooking;
 use App\Models\EventOccurrence;
 use App\Models\EventOccurrenceTicket;
 use App\Models\EventTicketType;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 /**
  * Class EventBookingService
@@ -45,18 +45,52 @@ class EventBookingService
      * @param float $amount
      * @return bool
      */
-    public function finalizePayment(EventBooking $booking, string $method, string $transactionId, float $amount): bool
+    public function finalizePayment(EventBooking $booking, string $method, ?string $transactionId, float $amount): bool
     {
         $booking->status         = 'confirmed';
+        $booking->payment_status = 'paid';
         $booking->transaction_id = $transactionId;
-        $booking->payment_method = $method;
-        $booking->paid_amount    = $amount;
-        $booking->paid_at        = Carbon::now();
         
         $saved = $booking->save();
         if ($saved) {
             event(new \App\Events\EventTicketPurchased($booking->user, $booking));
         }
         return $saved;
+    }
+
+    public function recordBookingPayment(
+        EventBooking $booking,
+        string $gateway,
+        float $amount,
+        string $status,
+        ?string $reference = null,
+        ?string $message = null
+    ): Payment {
+        return DB::transaction(function () use ($booking, $gateway, $amount, $status, $reference, $message) {
+            $payment = Payment::query()
+                ->where('payable_type', EventBooking::class)
+                ->where('payable_id', $booking->id)
+                ->when($reference, fn ($query) => $query->where('transaction_id', $reference))
+                ->first();
+
+            if (!$payment) {
+                $payment = new Payment([
+                    'payable_type' => EventBooking::class,
+                    'payable_id' => $booking->id,
+                ]);
+            }
+
+            $payment->user_id = $booking->user_id;
+            $payment->amount = $amount;
+            $payment->currency = 'USD';
+            $payment->transaction_id = $reference;
+            $payment->payment_method = $gateway;
+            $payment->status = $status;
+            $payment->paid_at = $status === Payment::STATUS_COMPLETED ? now() : null;
+            $payment->admin_note = $message;
+            $payment->save();
+
+            return $payment;
+        });
     }
 }

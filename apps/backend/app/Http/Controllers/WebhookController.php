@@ -70,16 +70,54 @@ class WebhookController extends Controller
                 }
             }
 
+            if (!empty($result['event_booking_id']) && isset($result['payment_status']) && $result['payment_status'] === 'paid') {
+                $booking = \App\Models\EventBooking::find($result['event_booking_id']);
+
+                if ($booking) {
+                    $amount = round((float) $booking->total_price * 1.05, 2);
+
+                    app(\App\Services\EventBookingService::class)->recordBookingPayment(
+                        $booking,
+                        $gatewaySlug,
+                        $amount,
+                        \App\Models\Payment::STATUS_COMPLETED,
+                        $result['reference'] ?? null,
+                        $result['message'] ?? 'Event booking payment confirmed via webhook.'
+                    );
+
+                    if ($booking->status !== \App\Models\EventBooking::STATUS_CONFIRMED) {
+                        app(\App\Services\EventBookingService::class)->finalizePayment(
+                            $booking,
+                            $gatewaySlug,
+                            $result['reference'] ?? null,
+                            $amount
+                        );
+                        Log::info("Webhook confirmed event booking {$booking->id} via {$gatewaySlug}");
+                    }
+                }
+            }
+
             // AUTOMATED FULFILLMENT: Update the corresponding Order if identified
             if (!empty($result['order_id']) && isset($result['payment_status']) && $result['payment_status'] === 'paid') {
                 $order = \App\Models\Order::find($result['order_id']);
-                if ($order && $order->payment_status !== 'paid') {
-                    $order->update([
-                        'payment_status' => 'paid',
-                        'status'         => 'processing',
-                        'notes'          => $order->notes . "\n[Webhook] " . ($result['message'] ?? 'Payment confirmed via webhook.')
-                    ]);
-                    Log::info("Webhook fulfilled Order: {$order->order_number} via {$gatewaySlug}");
+                if ($order) {
+                    app(\App\Services\CheckoutService::class)->recordOrderPayment(
+                        $order,
+                        $gatewaySlug,
+                        (float) $order->total_amount,
+                        \App\Models\Payment::STATUS_COMPLETED,
+                        $result['reference'] ?? null,
+                        $result['message'] ?? 'Product order payment confirmed via webhook.'
+                    );
+
+                    if ($order->payment_status !== 'paid') {
+                        $order->update([
+                            'payment_status' => 'paid',
+                            'status'         => 'processing',
+                            'notes'          => trim(($order->notes ? $order->notes . "\n" : '') . '[Webhook] ' . ($result['message'] ?? 'Payment confirmed via webhook.')),
+                        ]);
+                        Log::info("Webhook fulfilled Order: {$order->order_number} via {$gatewaySlug}");
+                    }
                 }
             }
 

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\PaymentGateway;
+use App\Models\Payment;
 use App\Services\GatewayManager;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -27,30 +27,32 @@ class CheckoutController extends Controller
      * @param  \App\Services\CartService  $cartService
      * @return \Illuminate\View\View
      */
-    public function showCheckout(GatewayManager $manager, CartService $cartService): View
+    public function showCheckout(GatewayManager $manager, CartService $cartService): View|RedirectResponse
     {
-        $activeGateways = PaymentGateway::where('is_active', true)
-            ->with(['credentials', 'blueprints'])
-            ->get();
-        
-        $frontendConfigs = [];
-
-        foreach ($activeGateways as $gateway) {
-            try {
-                $service = $manager->resolve($gateway);
-                $frontendConfigs[$gateway->slug] = $service->getFrontendConfig();
-            } catch (\Exception $e) {
-                Log::error("Failed to load gateway service for {$gateway->slug}: " . $e->getMessage());
-                continue; 
-            }
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', __('Please sign in to complete checkout.'));
         }
-        
+
         // Secure Price Retrieval: Fetch current active cart and calculate total on the server.
         $cart = $cartService->getOrCreateCart();
-        
+
         if ($cart->items->isEmpty()) {
-             // In a real scenario, we might redirect back to cart
-             // return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
+            return redirect()->route('cart.index')->with('error', __('Your cart is empty.'));
+        }
+
+        $stripePublishableKey = null;
+        $stripeGateway = PaymentGateway::query()
+            ->where('slug', 'stripe')
+            ->where('is_active', true)
+            ->with(['credentials', 'blueprints'])
+            ->first();
+
+        if ($stripeGateway) {
+            try {
+                $stripePublishableKey = $manager->resolve($stripeGateway)->getFrontendConfig()['publishable_key'] ?? null;
+            } catch (\Exception $e) {
+                Log::error("Failed to load Stripe checkout config: " . $e->getMessage());
+            }
         }
 
         $orderData = [
@@ -60,11 +62,10 @@ class CheckoutController extends Controller
             'description' => __('Marketplace Purchase - Order #:id', ['id' => $cart->id]),
         ];
 
-        return view('checkout', [
-            'activeGateways'  => $activeGateways,
-            'frontendConfigs' => $frontendConfigs,
-            'orderData'       => $orderData,
-            'cart'            => $cart, // Pass cart to view for summary
+        return view('frontend.products.checkout', [
+            'cart' => $cart,
+            'orderData' => $orderData,
+            'stripePublishableKey' => $stripePublishableKey,
         ]);
     }
 
@@ -80,7 +81,11 @@ class CheckoutController extends Controller
     public function processPayment(StoreOrderRequest $request, GatewayManager $manager, CheckoutService $checkoutService, string $gatewaySlug): RedirectResponse
     {
         try {
-            $gateway = PaymentGateway::where('slug', $gatewaySlug)->firstOrFail();
+            if (!Auth::check()) {
+                return redirect()->route('login')->with('error', __('Please sign in to complete checkout.'));
+            }
+
+            $gateway = PaymentGateway::where('slug', $gatewaySlug)->where('is_active', true)->firstOrFail();
             $service = $manager->resolve($gateway);
 
             // SECURITY: Recalculate amount from the source of truth (Cart)
@@ -90,22 +95,37 @@ class CheckoutController extends Controller
                 return redirect()->route('cart.index')->with('error', __('Your cart is empty.'));
             }
 
+            $token = $request->input('payment_token') ?? $request->input('stripeToken') ?? $request->input('paymentToken');
+
+            if (!$token) {
+                return redirect()->route('checkout.index')->with('error', __('Stripe payment details are required.'));
+            }
+
             // 1. Persist the Order before charging (Pendings state)
             $order = $checkoutService->process($cart, $request->validated(), $gatewaySlug);
             
             $returnUrl = route('checkout.confirm', ['gateway' => $gatewaySlug, 'order' => $order->id], true);
             
-            $token = $request->input('stripeToken') ?? $request->input('paymentToken');
-            
             // 2. Execute Charge
             $result = $service->charge($order->total_amount, $token, $returnUrl, [
+                'purpose'      => 'product_order',
                 'order_id'     => $order->id,
                 'order_number' => $order->order_number,
+                'user_id'      => (string) $order->user_id,
                 'description'  => __('Payment for Order #:num', ['num' => $order->order_number]),
             ]); 
 
             // 3. Handle Result
             if ($result['status'] === 'successful') {
+                $checkoutService->recordOrderPayment(
+                    $order,
+                    $gatewaySlug,
+                    (float) $order->total_amount,
+                    Payment::STATUS_COMPLETED,
+                    $result['reference'] ?? null,
+                    $result['message'] ?? 'Product order payment completed.'
+                );
+
                 $order->update(['payment_status' => 'paid', 'status' => 'processing']);
                 Log::info("Payment successful via {$gatewaySlug}. Order: {$order->order_number}");
                 
@@ -116,11 +136,29 @@ class CheckoutController extends Controller
             } 
             
             if ($result['status'] === 'pending_auth' && !empty($result['redirect_url'])) {
+                $checkoutService->recordOrderPayment(
+                    $order,
+                    $gatewaySlug,
+                    (float) $order->total_amount,
+                    Payment::STATUS_PENDING,
+                    $result['reference'] ?? null,
+                    $result['message'] ?? 'Product order payment requires authentication.'
+                );
+
                 return redirect($result['redirect_url']); 
             } 
 
             if ($result['status'] === 'failed' || $result['status'] === 'error') {
-                $order->update(['status' => 'cancelled', 'notes' => $result['message']]);
+                $checkoutService->recordOrderPayment(
+                    $order,
+                    $gatewaySlug,
+                    (float) $order->total_amount,
+                    Payment::STATUS_FAILED,
+                    $result['reference'] ?? null,
+                    $result['message'] ?? 'Product order payment failed.'
+                );
+
+                $order->update(['status' => 'cancelled', 'payment_status' => 'failed', 'notes' => $result['message']]);
                 Log::warning("Payment failed for order {$order->order_number}: " . $result['message']);
                 return redirect()->route('checkout.index')->with('error', $result['message']);
             }
@@ -143,13 +181,13 @@ class CheckoutController extends Controller
      * @param  string  $gatewaySlug
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function confirmPayment(Request $request, GatewayManager $manager, \App\Models\Order $order, string $gatewaySlug): RedirectResponse
+    public function confirmPayment(Request $request, GatewayManager $manager, CheckoutService $checkoutService, string $gatewaySlug, \App\Models\Order $order): RedirectResponse
     {
         $paymentIntentId = $request->get('payment_intent') ?? $request->get('token');
 
         if (!$paymentIntentId) {
             Log::error("Payment confirmation failed for order {$order->order_number}: Missing intent/token ID.");
-            return redirect()->route('checkout.showCheckout')->with('error', 'Payment confirmation failed: Missing transaction ID.');
+            return redirect()->route('checkout.index')->with('error', 'Payment confirmation failed: Missing transaction ID.');
         }
         
         try {
@@ -159,6 +197,15 @@ class CheckoutController extends Controller
             $result = $service->retrieveIntentStatus($paymentIntentId);
 
             if ($result['status'] === 'successful') {
+                $checkoutService->recordOrderPayment(
+                    $order,
+                    $gatewaySlug,
+                    (float) $order->total_amount,
+                    Payment::STATUS_COMPLETED,
+                    $result['reference'] ?? $paymentIntentId,
+                    $result['message'] ?? 'Product order payment confirmed.'
+                );
+
                 $order->update(['payment_status' => 'paid', 'status' => 'processing']);
                 Log::notice("3DS Confirmation Success for order {$order->order_number}, intent: {$paymentIntentId}");
 
@@ -168,13 +215,13 @@ class CheckoutController extends Controller
                 ]);
             }
             
-            $order->update(['status' => 'failed', 'notes' => $result['message'] ?? 'Payment failed during 3DS confirmation.']);
+            $order->update(['status' => 'cancelled', 'payment_status' => 'failed', 'notes' => $result['message'] ?? 'Payment failed during 3DS confirmation.']);
             Log::warning("3DS Confirmation Failed for order {$order->order_number}, intent: {$paymentIntentId}.");
-            return redirect()->route('checkout.showCheckout')->with('error', $result['message'] ?? 'Payment confirmation failed.');
+            return redirect()->route('checkout.index')->with('error', $result['message'] ?? 'Payment confirmation failed.');
 
         } catch (\Exception $e) {
             Log::critical("Payment confirmation error for order {$order->order_number}: " . $e->getMessage());
-            return redirect()->route('checkout.showCheckout')->with('error', 'A confirmation error occurred. Please try again.');
+            return redirect()->route('checkout.index')->with('error', 'A confirmation error occurred. Please try again.');
         }
     }
 
@@ -189,7 +236,7 @@ class CheckoutController extends Controller
         $reference = $request->session()->get('reference', 'N/A');
         $message = $request->session()->get('success', 'Your order was placed successfully.');
         
-        return view('success', [
+        return view('frontend.products.success', [
             'reference' => $reference,
             'message'   => $message,
         ]);
