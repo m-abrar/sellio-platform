@@ -139,3 +139,27 @@ in the partner dashboard
 - [x] Do we have drag pin on real google map in seller panel like in the admin? (Now yes: seller property forms load the Google Maps key from partner form metadata and support drag/click pin updates for latitude/longitude.)
 
 ------------------
+
+- [x] Laravel storefront ( Frontend views ) need to follow css style tokens. (Added shared semantic aliases in `frontend/css/style.css` for colors, fonts, radius, surface, text, border, and shadows.)
+
+------------------
+
+- [x] Login page needs to follow style tokens colors and fonts. (Aligned `frontend/css/auth.css` with the shared storefront token aliases instead of its separate accent palette.)
+
+------------------
+
+- [x] In the admin dashboard, the sidebar logo now prefers the uploaded `site_logo`, keeps the original file colors, and no longer forces the circular logo crop class.
+
+--------------
+
+- [x] In the admin dashboard, the sidebar logo color is changed with some CSS styling? fix it to show original. (Admin sidebar now prefers the uploaded original `site_logo` file and avoids the circular crop class.)
+
+-------------------------
+
+- [x] In the seller dashboard, add map pin drag on the events form. (Events now receive the Google Maps key in form metadata and use the same drag/click map picker as seller properties.)
+
+--------------------
+
+- [x] http://127.0.0.1:8000/properties showed `205 Listings Available` / too many entries. (Problem: repeated demo seeding kept adding 30 properties. `PropertySeeder` now skips once 30 exist, and the unfiltered public properties page uses a curated 30-listing demo cap while filtered searches still use matching results.)
+
+-------------------

@@ -12,6 +12,7 @@ import {
 } from 'react-icons/hi2';
 import MediaStudio from '../../components/studio/MediaStudio';
 import PageHeader from '../../components/layout/PageHeader';
+import GoogleMapPicker from '../../components/forms/GoogleMapPicker';
 import ActionPill from '../../utils/ActionPill';
 import { createEvent, getEventBySlug, getEventFormMeta, updateEvent } from '../../api/events';
 import { getWelcomeData } from '../../api/dashboard';
@@ -703,6 +704,16 @@ export default function CreateEvent() {
                   />
                 </div>
               </div>
+              <GoogleMapPicker
+                apiKey={formMeta.google_maps_api_key}
+                latitude={form.latitude}
+                longitude={form.longitude}
+                label="event"
+                onChange={(nextLatitude, nextLongitude) => {
+                  updateForm('latitude', nextLatitude);
+                  updateForm('longitude', nextLongitude);
+                }}
+              />
             </div>
           </div>
 

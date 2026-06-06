@@ -7,6 +7,7 @@ export interface EventFormMeta {
   categories: Array<{ id: number; title: string }>;
   types: Array<{ id: number; title: string }>;
   locations: Array<{ id: number; title: string }>;
+  google_maps_api_key?: string | null;
 }
 
 let cachedFormMeta: EventFormMeta | null = null;
@@ -18,6 +19,7 @@ const extractFormMeta = (response: { data: LaravelResponse<unknown> }): EventFor
     categories: form?.categories ?? [],
     types: form?.types ?? [],
     locations: form?.locations ?? [],
+    google_maps_api_key: (form as any)?.google_maps_api_key ?? null,
   };
 };
 

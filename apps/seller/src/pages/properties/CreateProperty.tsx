@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import PageHeader from '../../components/layout/PageHeader';
 import MediaStudio from '../../components/studio/MediaStudio';
 import ActionPill from '../../utils/ActionPill';
+import GoogleMapPicker from '../../components/forms/GoogleMapPicker';
 import { HiOutlineChevronLeft, HiOutlineMapPin, HiOutlineCurrencyDollar, HiOutlineHome } from 'react-icons/hi2';
 import {
   createProperty,
@@ -19,13 +20,6 @@ const labelClass = 'text-[10px] font-black text-slate-400 uppercase tracking-[0.
 const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
 const tableInputClass = 'w-full min-w-[120px] bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-xl px-4 py-3.5 text-slate-900 font-semibold text-sm transition-all outline-none placeholder:text-slate-300 min-h-[48px]';
 const fieldHintClass = 'mt-2 ml-2 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-300';
-const googleMapsScriptId = 'sellio-google-maps-js';
-
-declare global {
-  interface Window {
-    __sellioGoogleMapsPromise?: Promise<any>;
-  }
-}
 
 const SCORE_PRESETS = [
   { title: 'Walk Score', units: '/100' },
@@ -34,134 +28,6 @@ const SCORE_PRESETS = [
   { title: 'School Rating', units: '/10' },
   { title: 'Safety Index', units: '/10' },
 ];
-
-const loadGoogleMaps = (apiKey: string): Promise<any> => {
-  if ((window as any).google?.maps) {
-    return Promise.resolve((window as any).google.maps);
-  }
-
-  if (!window.__sellioGoogleMapsPromise) {
-    window.__sellioGoogleMapsPromise = new Promise((resolve, reject) => {
-      const existingScript = document.getElementById(googleMapsScriptId);
-
-      if (existingScript) {
-        existingScript.addEventListener('load', () => resolve((window as any).google.maps), { once: true });
-        existingScript.addEventListener('error', reject, { once: true });
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.id = googleMapsScriptId;
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}`;
-      script.async = true;
-      script.defer = true;
-      script.onload = () => resolve((window as any).google.maps);
-      script.onerror = reject;
-      document.head.appendChild(script);
-    });
-  }
-
-  return window.__sellioGoogleMapsPromise;
-};
-
-function PropertyMapPicker({
-  apiKey,
-  latitude,
-  longitude,
-  onChange,
-}: {
-  apiKey?: string | null;
-  latitude: string;
-  longitude: string;
-  onChange: (latitude: string, longitude: string) => void;
-}) {
-  const mapElementRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<any>(null);
-  const markerRef = useRef<any>(null);
-
-  const readPosition = useCallback(() => {
-    const lat = parseFloat(latitude);
-    const lng = parseFloat(longitude);
-
-    return {
-      lat: Number.isFinite(lat) ? lat : 0,
-      lng: Number.isFinite(lng) ? lng : 0,
-    };
-  }, [latitude, longitude]);
-
-  useEffect(() => {
-    if (!apiKey || !mapElementRef.current) return;
-
-    let isMounted = true;
-
-    loadGoogleMaps(apiKey)
-      .then((maps) => {
-        if (!isMounted || !mapElementRef.current) return;
-
-        const initialPosition = readPosition();
-        const hasCoordinates = latitude !== '' && longitude !== '';
-        const map = new maps.Map(mapElementRef.current, {
-          center: initialPosition,
-          zoom: hasCoordinates ? 15 : 2,
-          mapTypeControl: false,
-          streetViewControl: false,
-          fullscreenControl: false,
-        });
-
-        const marker = new maps.Marker({
-          position: initialPosition,
-          map,
-          draggable: true,
-          title: 'Drag to set property location',
-        });
-
-        const writePosition = (position: any) => {
-          onChange(position.lat().toFixed(7), position.lng().toFixed(7));
-        };
-
-        marker.addListener('dragend', (event: any) => writePosition(event.latLng));
-        map.addListener('click', (event: any) => {
-          marker.setPosition(event.latLng);
-          writePosition(event.latLng);
-        });
-
-        mapRef.current = map;
-        markerRef.current = marker;
-      })
-      .catch(() => {
-        toast.error('Google Maps could not be loaded.');
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [apiKey]);
-
-  useEffect(() => {
-    if (!mapRef.current || !markerRef.current) return;
-    if (latitude === '' || longitude === '') return;
-
-    const position = readPosition();
-    markerRef.current.setPosition(position);
-    mapRef.current.setCenter(position);
-    mapRef.current.setZoom(15);
-  }, [latitude, longitude, readPosition]);
-
-  if (!apiKey) {
-    return (
-      <div className="md:col-span-2 rounded-[1.5rem] border border-dashed border-slate-200 bg-slate-50 p-6">
-        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Map picker disabled</p>
-        <p className="mt-2 text-xs font-bold text-slate-400 leading-relaxed">Add a Google Maps key in admin settings to enable drag-and-drop pin selection.</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="md:col-span-2 overflow-hidden rounded-[1.75rem] border border-slate-100 bg-slate-100 shadow-inner">
-      <div ref={mapElementRef} className="h-[320px] w-full" />
-    </div>
-  );
-}
 
 const defaultForm = {
   title: '',
@@ -536,10 +402,11 @@ export default function CreateProperty() {
                     <p className={fieldHintClass}>Optional (Map Coordinate)</p>
                   </div>
                 </div>
-                <PropertyMapPicker
+                <GoogleMapPicker
                   apiKey={formMeta.google_maps_api_key}
                   latitude={form.latitude}
                   longitude={form.longitude}
+                  label="property"
                   onChange={(nextLatitude, nextLongitude) => {
                     updateForm('latitude', nextLatitude);
                     updateForm('longitude', nextLongitude);

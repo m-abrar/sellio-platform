@@ -41,14 +41,15 @@ class AppServiceProvider extends ServiceProvider
             $faviconPath = setting('site_favicon');
             $logoPath = setting('site_logo');
 
-            // Determine the URL for the brand mark (Favicon Preferred, then Logo, then Static Config)
-            $faviconUrl = $faviconPath ? Storage::url($faviconPath) : ($logoPath ? Storage::url($logoPath) : config('adminlte.logo_img'));
+            // Keep the sidebar brand mark faithful to the uploaded logo file.
+            $brandMarkUrl = $logoPath ? Storage::url($logoPath) : ($faviconPath ? Storage::url($faviconPath) : config('adminlte.logo_img'));
 
             config([
                 'adminlte.logo' => $siteName,
-                'adminlte.logo_img' => $faviconUrl, // Sidebar Icon
+                'adminlte.logo_img' => $brandMarkUrl,
+                'adminlte.logo_img_class' => 'brand-image elevation-2',
                 'adminlte.logo_img_alt' => $siteName,
-                'adminlte.preloader.img.path' => $faviconUrl,
+                'adminlte.preloader.img.path' => $brandMarkUrl,
                 'adminlte.use_full_favicon' => false,
                 'adminlte.use_ico_only' => true,
             ]);

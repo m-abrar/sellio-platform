@@ -19,6 +19,18 @@ class PartnerEventApiTest extends TestCase
     use RefreshDatabase;
     use InteractsWithPartnerApi;
 
+    public function test_event_form_metadata_includes_google_maps_key(): void
+    {
+        config(['services.google_maps.api_key' => 'seller-event-map-key']);
+
+        $partner = $this->createPartner();
+
+        $this->actingAs($partner, 'sanctum')
+            ->getJson('/api/dashboard/partner/events/form-data')
+            ->assertOk()
+            ->assertJsonPath('data.google_maps_api_key', 'seller-event-map-key');
+    }
+
     public function test_partner_can_create_update_and_delete_event_listing(): void
     {
         Storage::fake('public');

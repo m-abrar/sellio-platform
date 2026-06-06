@@ -29,6 +29,7 @@ class EventService
             'categories' => Category::where('is_event', true)->get(['id', 'title']),
             'types'      => Type::where('is_event', true)->get(['id', 'title']),
             'locations'  => Location::where('is_event', true)->get(['id', 'title']),
+            'google_maps_api_key' => config('services.google_maps.api_key') ?: setting('google_map_api_key'),
         ];
     }
 

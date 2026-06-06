@@ -30,6 +30,14 @@ class PropertySeeder extends Seeder
     {
         $faker = Faker::create();
         $totalPropertiesToCreate = 30;
+        $existingPropertyCount = Property::count();
+
+        if ($existingPropertyCount >= $totalPropertiesToCreate) {
+            $this->command->info("PropertySeeder skipped: {$existingPropertyCount} properties already exist.");
+            return;
+        }
+
+        $remainingPropertiesToCreate = $totalPropertiesToCreate - $existingPropertyCount;
 
         // Counters for tracking seeding results
         $totalPropertiesCreated = 0;
@@ -75,7 +83,7 @@ class PropertySeeder extends Seeder
             'Classic Brick Townhouse', 'Opulent Marble Palace', 'Modernist Prairie House'
         ];
 
-        foreach (range(1, $totalPropertiesToCreate) as $index) {
+        foreach (range(1, $remainingPropertiesToCreate) as $index) {
             $baseTitle = $propertyTitles[$index - 1] ?? $faker->company . ' Residence';
             $title = $baseTitle . ' ' . $faker->randomElement(['I', 'II', 'Alpha', 'Prime', 'Elite']);
 

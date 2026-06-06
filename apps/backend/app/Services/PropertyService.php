@@ -47,7 +47,17 @@ class PropertyService
         $checkOut = isset($filters['check_out']) ? Carbon::createFromFormat('Y-m-d', $filters['check_out']) : null;
 
         // Execute filtered search
-        $properties = $this->applyFilters(Property::query(), $filters, $checkIn, $checkOut, $user)->paginate(12);
+        $query = $this->applyFilters(Property::query(), $filters, $checkIn, $checkOut, $user);
+
+        if ($this->shouldUseCuratedDemoLimit($filters, $user)) {
+            $curatedIds = (clone $query)
+                ->limit(30)
+                ->pluck('properties.id');
+
+            $query = $this->applyFilters(Property::query()->whereKey($curatedIds), $filters, $checkIn, $checkOut, $user);
+        }
+
+        $properties = $query->paginate(12);
 
         $numberOfNights = ($checkIn && $checkOut && $checkIn->lt($checkOut)) 
             ? $checkIn->diffInDays($checkOut) 
@@ -121,6 +131,17 @@ class PropertyService
         }
 
         return $query->with(['prices', 'location', 'category', 'user', 'media']);
+    }
+
+    private function shouldUseCuratedDemoLimit(array $filters, ?User $user): bool
+    {
+        if ($user !== null) {
+            return false;
+        }
+
+        return collect($filters)
+            ->reject(fn ($value) => $value === null || $value === '' || $value === [])
+            ->isEmpty();
     }
 
     /**

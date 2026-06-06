@@ -371,6 +371,26 @@ class LaravelPublicStorefrontTest extends TestCase
         $this->assertMatchesRegularExpression('/1\s+Listings Available/', strip_tags($response->getContent()));
     }
 
+    public function test_public_properties_index_uses_curated_demo_limit_when_unfiltered(): void
+    {
+        Setting::set('is_section.properties', '1');
+        Cache::forget('settings_all');
+
+        Property::factory()
+            ->count(35)
+            ->create([
+                'status' => 'approved',
+                'is_published' => true,
+                'approved_at' => now(),
+            ]);
+
+        $response = $this->get(route('properties.index'))
+            ->assertOk()
+            ->assertSee('listing-page--properties', false);
+
+        $this->assertMatchesRegularExpression('/30\s+Listings Available/', strip_tags($response->getContent()));
+    }
+
     public function test_disabled_module_route_returns_not_found(): void
     {
         Setting::set('is_section.products', '0');
