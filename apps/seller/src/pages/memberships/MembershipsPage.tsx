@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlineCheck, HiOutlineSparkles } from 'react-icons/hi2';
-import { getMembershipPlans, subscribeToPlan } from '../../api/plans';
+import { confirmSubscriptionCheckout, getMembershipPlans, subscribeToPlan } from '../../api/plans';
 import { getDashboardData } from '../../api/dashboard';
 import { ApiError } from '../../lib/apiError';
 import { toast } from 'sonner';
@@ -36,21 +36,49 @@ export default function MembershipsPage() {
 
   useEffect(() => {
     const subscriptionStatus = searchParams.get('subscription');
+    const sessionId = searchParams.get('session_id');
 
     if (!subscriptionStatus) {
       return;
     }
 
-    if (subscriptionStatus === 'success') {
-      toast.success('Stripe checkout completed. Your membership will update after webhook confirmation.');
-      void fetchPlans();
-    } else if (subscriptionStatus === 'cancelled') {
-      toast.message('Checkout cancelled. No subscription changes were made.');
-    }
+    const clearReturnParams = () => {
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.delete('subscription');
+      nextParams.delete('session_id');
+      setSearchParams(nextParams, { replace: true });
+    };
 
-    const nextParams = new URLSearchParams(searchParams);
-    nextParams.delete('subscription');
-    setSearchParams(nextParams, { replace: true });
+    const handleReturn = async () => {
+      if (subscriptionStatus === 'success' && sessionId) {
+        try {
+          const response = await confirmSubscriptionCheckout(sessionId);
+          toast.success(response.message || 'Subscription updated successfully.');
+          await fetchPlans();
+        } catch (error) {
+          console.error('Failed to confirm subscription checkout', error);
+          const message = error instanceof ApiError
+            ? error.message
+            : 'Payment succeeded, but membership confirmation is still pending.';
+          toast.message(message);
+          await fetchPlans();
+        } finally {
+          clearReturnParams();
+        }
+        return;
+      }
+
+      if (subscriptionStatus === 'success') {
+        toast.success('Stripe checkout completed. Your membership will update after webhook confirmation.');
+        void fetchPlans();
+      } else if (subscriptionStatus === 'cancelled') {
+        toast.message('Checkout cancelled. No subscription changes were made.');
+      }
+
+      clearReturnParams();
+    };
+
+    void handleReturn();
   }, [searchParams, setSearchParams]);
 
   const handleSubscribe = async (planId: number) => {

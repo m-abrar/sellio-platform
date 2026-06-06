@@ -94,6 +94,58 @@ class PartnerSubscriptionCheckoutTest extends TestCase
         ]);
     }
 
+    public function test_partner_can_confirm_checkout_session_without_webhook(): void
+    {
+        $partner = $this->createPartner(maxListings: null);
+        $plan = Plan::create([
+            'title' => 'Confirm Plan',
+            'slug' => 'confirm-plan-checkout-test',
+            'price' => 19.99,
+            'billing_period' => 'monthly',
+            'max_listings' => 5,
+            'is_active' => true,
+        ]);
+
+        $fakeService = Mockery::mock(\App\Services\StripeGatewayService::class);
+        $fakeService->shouldReceive('confirmSubscriptionCheckoutSession')
+            ->once()
+            ->with('cs_test_confirm_123', Mockery::on(fn ($user) => $user->id === $partner->id))
+            ->andReturn([
+                'plan_id' => $plan->id,
+                'session_id' => 'cs_test_confirm_123',
+            ]);
+
+        $gateway = PaymentGateway::create([
+            'title' => 'Stripe',
+            'slug' => 'stripe',
+            'class_name' => \App\Services\StripeGatewayService::class,
+            'is_active' => true,
+            'mode' => PaymentGateway::MODE_SANDBOX,
+        ]);
+        $gateway->credentials()->create([
+            'sandbox_config' => [
+                'secret_key' => 'sk_test_example',
+                'publishable_key' => 'pk_test_example',
+                'currency' => 'USD',
+            ],
+            'live_config' => [],
+        ]);
+
+        $this->mock(GatewayManager::class, function ($mock) use ($fakeService) {
+            $mock->shouldReceive('resolve')->andReturn($fakeService);
+        });
+
+        $this->actingAs($partner, 'sanctum')
+            ->getJson('/api/dashboard/partner/subscriptions/confirm?session_id=cs_test_confirm_123')
+            ->assertOk();
+
+        $this->assertDatabaseHas('subscriptions', [
+            'user_id' => $partner->id,
+            'plan_id' => $plan->id,
+            'status' => Subscription::STATUS_ACTIVE,
+        ]);
+    }
+
     public function test_stripe_webhook_checkout_session_completed_activates_subscription(): void
     {
         $partner = $this->createPartner(maxListings: null);

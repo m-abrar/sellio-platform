@@ -41,9 +41,29 @@ class SubscriptionCheckoutService
         return $service->createSubscriptionCheckoutSession(
             $user,
             $plan,
-            "{$sellerAppUrl}/dashboard/memberships?subscription=success",
+            "{$sellerAppUrl}/dashboard/memberships?subscription=success&session_id={CHECKOUT_SESSION_ID}",
             "{$sellerAppUrl}/dashboard/memberships?subscription=cancelled",
         );
+    }
+
+    public function confirmCheckoutSession(User $user, string $sessionId): Plan
+    {
+        $gateway = $this->activeStripeGateway();
+
+        if (!$gateway) {
+            throw new \RuntimeException('Stripe is not configured for subscription checkout.');
+        }
+
+        $service = $this->gatewayManager->resolve($gateway);
+
+        if (!method_exists($service, 'confirmSubscriptionCheckoutSession')) {
+            throw new \RuntimeException('Stripe subscription confirmation is unavailable.');
+        }
+
+        $result = $service->confirmSubscriptionCheckoutSession($sessionId, $user);
+        $plan = Plan::query()->findOrFail($result['plan_id']);
+
+        return $plan;
     }
 
     protected function activeStripeGateway(): ?PaymentGateway

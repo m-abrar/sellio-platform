@@ -27,6 +27,33 @@ class SubscriptionController extends Controller
         return $this->successResponse(SubscriptionResource::collection($subscriptions));
     }
 
+    public function confirmCheckout(
+        Request $request,
+        SubscriptionCheckoutService $checkoutService,
+        SubscriptionService $service,
+    ) {
+        $request->validate([
+            'session_id' => ['required', 'string', 'max:255'],
+        ]);
+
+        try {
+            $plan = $checkoutService->confirmCheckoutSession(
+                Auth::user(),
+                $request->string('session_id')->toString(),
+            );
+
+            $result = $service->subscribe(Auth::user(), $plan);
+
+            return $this->successResponse([
+                'checkout_url' => null,
+            ], $result['message']);
+        } catch (\Exception $e) {
+            Log::error('Subscription checkout confirmation error: ' . $e->getMessage());
+
+            return $this->errorResponse($e->getMessage(), 422);
+        }
+    }
+
     public function checkout(
         StoreSubscriptionRequest $request,
         SubscriptionCheckoutService $checkoutService,

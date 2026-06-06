@@ -19,6 +19,19 @@ export const getSubscriptions = async () => {
   };
 };
 
+export const confirmSubscriptionCheckout = async (sessionId: string) => {
+  const response = await apiClient.get('/dashboard/partner/subscriptions/confirm', {
+    params: { session_id: sessionId },
+  });
+
+  const payload = unwrapData<Record<string, unknown>>(response);
+
+  return {
+    message: response.data.message,
+    checkoutUrl: typeof payload?.checkout_url === 'string' ? payload.checkout_url : null,
+  };
+};
+
 export const subscribeToPlan = async (planId: number) => {
   const response = await apiClient.get('/dashboard/partner/subscriptions/checkout', {
     params: { plan_id: planId },

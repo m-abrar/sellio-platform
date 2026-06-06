@@ -357,6 +357,39 @@ class StripeGatewayService implements PaymentGatewayService
     }
 
     /**
+     * Verify a completed partner subscription checkout session and return fulfillment metadata.
+     */
+    public function confirmSubscriptionCheckoutSession(string $sessionId, User $user): array
+    {
+        $session = $this->client->checkout->sessions->retrieve($sessionId);
+
+        if ($session->status !== 'complete' || $session->payment_status !== 'paid') {
+            throw new \RuntimeException('Checkout session is not completed yet.');
+        }
+
+        $metadata = $session->metadata?->toArray() ?? [];
+
+        if (($metadata['purpose'] ?? null) !== 'partner_subscription') {
+            throw new \RuntimeException('Unsupported checkout session.');
+        }
+
+        if ((int) ($metadata['user_id'] ?? 0) !== $user->id) {
+            throw new \RuntimeException('Checkout session does not belong to this account.');
+        }
+
+        $planId = (int) ($metadata['plan_id'] ?? 0);
+
+        if ($planId <= 0) {
+            throw new \RuntimeException('Checkout session is missing plan metadata.');
+        }
+
+        return [
+            'plan_id' => $planId,
+            'session_id' => $sessionId,
+        ];
+    }
+
+    /**
      * Handles and processes incoming webhook payloads from Stripe.
      * @param \Illuminate\Http\Request $request
      * @return array
