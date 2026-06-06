@@ -11,6 +11,7 @@ use App\Models\Payment;
 use App\Models\PaymentGateway;
 use App\Services\GatewayManager;
 use App\Services\EventBookingService;
+use App\Services\StripeCheckoutConfigService;
 use App\Events\Partner\PartnerLeadCreated;
 use App\Http\Requests\StoreEventBookingRequest;
 use App\Http\Requests\UpdateBookingDetailsRequest;
@@ -119,8 +120,12 @@ class EventBookingController extends Controller
      * @param EventBooking $booking
      * @return View|RedirectResponse
      */
-    public function checkout(Event $event, EventBooking $booking, GatewayManager $manager)
-    {
+    public function checkout(
+        Event $event,
+        EventBooking $booking,
+        GatewayManager $manager,
+        StripeCheckoutConfigService $stripeCheckoutConfig
+    ) {
         $this->authorizeBooking($booking, $event);
 
         if ($booking->status !== 'pending') {
@@ -128,7 +133,7 @@ class EventBookingController extends Controller
         }
 
         $booking->load(['event', 'occurrence', 'ticketType']);
-        $stripePublishableKey = $this->stripePublishableKey($booking, $manager);
+        $stripePublishableKey = $stripeCheckoutConfig->resolvePublishableKey($manager, 'event_booking_checkout');
 
         return view('frontend.events.booking.checkout', [
             'event'   => $event,
@@ -359,27 +364,4 @@ class EventBookingController extends Controller
         throw $e;
     }
 
-    private function stripePublishableKey(EventBooking $booking, GatewayManager $manager): ?string
-    {
-        $stripeGateway = PaymentGateway::query()
-            ->where('slug', 'stripe')
-            ->where('is_active', true)
-            ->with('credentials')
-            ->first();
-
-        if (!$stripeGateway) {
-            return null;
-        }
-
-        try {
-            return $manager->resolve($stripeGateway)->getFrontendConfig()['publishable_key'] ?? null;
-        } catch (\Exception $e) {
-            Log::warning('Unable to load Stripe frontend config for event booking checkout.', [
-                'booking_id' => $booking->id,
-                'error' => $e->getMessage(),
-            ]);
-
-            return null;
-        }
-    }
 }

@@ -10,6 +10,7 @@ use App\Models\Property;
 use App\Models\PropertyBooking;
 use App\Services\GatewayManager;
 use App\Services\PropertyService;
+use App\Services\StripeCheckoutConfigService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -236,23 +237,8 @@ class PropertyBookingController extends Controller
     {
         $this->authorizeBooking($property, $booking);
 
-        $stripePublishableKey = null;
-        $stripeGateway = PaymentGateway::query()
-            ->where('slug', 'stripe')
-            ->where('is_active', true)
-            ->with('credentials')
-            ->first();
-
-        if ($stripeGateway) {
-            try {
-                $stripePublishableKey = $manager->resolve($stripeGateway)->getFrontendConfig()['publishable_key'] ?? null;
-            } catch (Exception $e) {
-                Log::warning('Unable to load Stripe frontend config for property booking payment.', [
-                    'booking_id' => $booking->id,
-                    'error' => $e->getMessage(),
-                ]);
-            }
-        }
+        $stripePublishableKey = app(StripeCheckoutConfigService::class)
+            ->resolvePublishableKey($manager, 'property_booking_payment');
 
         return view('frontend.properties.booking.payment', [
             'property' => $property,

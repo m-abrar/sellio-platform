@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PaymentGateway;
 use App\Models\Payment;
 use App\Services\GatewayManager;
+use App\Services\StripeCheckoutConfigService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -27,7 +28,11 @@ class CheckoutController extends Controller
      * @param  \App\Services\CartService  $cartService
      * @return \Illuminate\View\View
      */
-    public function showCheckout(GatewayManager $manager, CartService $cartService): View|RedirectResponse
+    public function showCheckout(
+        GatewayManager $manager,
+        CartService $cartService,
+        StripeCheckoutConfigService $stripeCheckoutConfig
+    ): View|RedirectResponse
     {
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', __('Please sign in to complete checkout.'));
@@ -40,20 +45,7 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('error', __('Your cart is empty.'));
         }
 
-        $stripePublishableKey = null;
-        $stripeGateway = PaymentGateway::query()
-            ->where('slug', 'stripe')
-            ->where('is_active', true)
-            ->with(['credentials', 'blueprints'])
-            ->first();
-
-        if ($stripeGateway) {
-            try {
-                $stripePublishableKey = $manager->resolve($stripeGateway)->getFrontendConfig()['publishable_key'] ?? null;
-            } catch (\Exception $e) {
-                Log::error("Failed to load Stripe checkout config: " . $e->getMessage());
-            }
-        }
+        $stripePublishableKey = $stripeCheckoutConfig->resolvePublishableKey($manager, 'product_checkout');
 
         $orderData = [
             'amount'      => $cart->calculateTotal(),

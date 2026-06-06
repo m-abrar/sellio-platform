@@ -199,13 +199,28 @@ class UserController extends Controller
             return back()->with('error', __('You cannot impersonate yourself.'));
         }
 
-        // 2. Store the original user ID in the session
-        Session::put('impersonate_original_user_id', Auth::id());
+        $admin = Auth::user();
 
-        // 3. Log out current user and log in as target user
+        // 2. Store the original user ID in the session
+        Session::put('impersonate_original_user_id', $admin->id);
+
+        activity('auth')
+            ->causedBy($admin)
+            ->performedOn($user)
+            ->event('impersonate')
+            ->withProperties([
+                'admin_id' => $admin->id,
+                'target_user_id' => $user->id,
+                'target_email' => $user->email,
+            ])
+            ->log('Admin started impersonating user.');
+
+        // 3. Log in as target user and route them to the correct dashboard
         Auth::login($user);
 
-        return redirect()->route('admin.welcome')->with('success', __('You are now impersonating') . " {$user->name}");
+        return redirect()
+            ->route('dashboard')
+            ->with('success', __('You are now impersonating') . " {$user->name}");
     }
 
     /**

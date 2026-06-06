@@ -91,10 +91,18 @@
     margin-left:auto;
     margin-right:auto
 }
-.page-shell--property-booking .frontend-shell__inner{
+.page-shell--property-booking .frontend-shell__inner,
+.page-shell--event-booking .frontend-shell__inner,
+.page-shell--checkout .frontend-shell__inner,
+.page-shell--cart .frontend-shell__inner,
+.page-shell--checkout-success .frontend-shell__inner{
     width:min(100%, var(--frontend-shell-max))
 }
-.page-shell--property-booking .stepper{
+.page-shell--property-booking .stepper,
+.page-shell--event-booking .stepper,
+.page-shell--checkout .stepper,
+.page-shell--cart .stepper,
+.page-shell--checkout-success .stepper{
     max-width:min(100%, 920px);
     margin-left:auto;
     margin-right:auto;
@@ -172,11 +180,20 @@
     background:rgba(var(--primary-color-rgb), .1);
     color:var(--primary-color)
 }
-.page-shell--property-booking .booking-layout{
+.page-shell--property-booking .booking-layout,
+.page-shell--event-booking .booking-layout,
+.page-shell--checkout .booking-layout,
+.page-shell--cart .booking-layout{
     align-items:flex-start
 }
 .page-shell--property-booking .booking-layout__main,
-.page-shell--property-booking .booking-layout__aside{
+.page-shell--property-booking .booking-layout__aside,
+.page-shell--event-booking .booking-layout__main,
+.page-shell--event-booking .booking-layout__aside,
+.page-shell--checkout .booking-layout__main,
+.page-shell--checkout .booking-layout__aside,
+.page-shell--cart .booking-layout__main,
+.page-shell--cart .booking-layout__aside{
     min-width:0
 }
 .page-shell--property-booking .booking-addons-panel{

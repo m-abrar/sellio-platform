@@ -188,3 +188,26 @@ in the partner dashboard
 
 ----------------------
 
+- [x] Impersonate from super admin now routes through `dashboard` and lands partners/buyers on their configured React portal URLs (`url_partner` / `url_user`), with activity logging. Coverage: `AdminImpersonateTest`.
+
+-----------------------
+
+- [x] Event booking attendee columns (`user_name`, `user_email`, `user_phone`) — migration `2026_06_06_000002_add_attendee_fields_to_event_bookings_table` applied; fresh inserts work.
+
+------------------
+
+- [x] Event and product checkout UI/UX polished to match property rental flow: shared stepper/header/layout, sticky order summary, token-aligned forms, and confirmation pages. Shared `StripeCheckoutConfigService` extracted for gateway publishable-key resolution.
+
+-----------------------
+
+Product detail page needs polishing the UIUX
+
+------------------
+http://127.0.0.1:8000/cart
+Summary
+Subtotal
+
+$0.00 (this is by mistake, it must be some value)
+
+-------------------------
+
