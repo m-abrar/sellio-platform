@@ -126,6 +126,10 @@ ENV;
 }
 
 $title = 'Database Connection';
+$mailExpanded = !empty($existingEnv['MAIL_HOST'])
+    || !empty($_POST['mail_host'])
+    || !empty($_POST['mail_user'])
+    || !empty($_POST['mail_pass']);
 // --- PHP LOGIC END ---
 
 include __DIR__ . '/../layout/header.php';
@@ -208,12 +212,12 @@ if ($errorMessage) {
     </div>
 
     <div class="mb-3">
-        <button class="btn btn-outline-secondary btn-sm w-100" type="button" data-bs-toggle="collapse" data-bs-target="#mailSettings" aria-expanded="false" aria-controls="mailSettings">
+        <button class="btn btn-outline-secondary btn-sm w-100" type="button" data-bs-toggle="collapse" data-bs-target="#mailSettings" aria-expanded="<?= $mailExpanded ? 'true' : 'false' ?>" aria-controls="mailSettings">
             <i class="fas fa-envelope me-2"></i> Optional: mail server settings
         </button>
     </div>
 
-    <div class="collapse" id="mailSettings">
+    <div class="collapse <?= $mailExpanded ? 'show' : '' ?>" id="mailSettings">
     <div class="form-section info-panel-success mb-4">
         <h3 class="form-section-title text-success">
             <i class="fas fa-envelope me-2"></i> Mail server
@@ -263,8 +267,13 @@ if ($errorMessage) {
             </div>
             <div class="col-md-6">
                 <label for="mail_pass" class="form-label">Password</label>
-                <input type="password" id="mail_pass" name="mail_pass" class="form-control"
-                    value="<?= htmlspecialchars($_POST['mail_pass'] ?? $existingEnv['MAIL_PASSWORD'] ?? '') ?>">
+                <div class="password-field">
+                    <input type="password" id="mail_pass" name="mail_pass" class="form-control pe-5"
+                        value="<?= htmlspecialchars($_POST['mail_pass'] ?? $existingEnv['MAIL_PASSWORD'] ?? '') ?>">
+                    <button type="button" class="password-toggle-btn" data-password-toggle="mail_pass" aria-label="Show password">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -275,7 +284,8 @@ if ($errorMessage) {
         <div class="d-flex flex-column gap-2">
             <?php if (file_exists($envPath)): ?>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="overwrite_env" value="1" id="overwrite_env_check">
+                    <input class="form-check-input" type="checkbox" name="overwrite_env" value="1" id="overwrite_env_check"
+                        <?= (isset($_POST['overwrite_env']) && $_POST['overwrite_env'] === '1') ? 'checked' : '' ?>>
                     <label class="form-check-label" for="overwrite_env_check">
                         Overwrite existing <code>.env</code> file
                     </label>
@@ -283,7 +293,8 @@ if ($errorMessage) {
             <?php endif; ?>
 
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="overwrite_db" value="1" id="overwrite_db_check">
+                <input class="form-check-input" type="checkbox" name="overwrite_db" value="1" id="overwrite_db_check"
+                    <?= (isset($_POST['overwrite_db']) && $_POST['overwrite_db'] === '1') ? 'checked' : '' ?>>
                 <label class="form-check-label" for="overwrite_db_check">
                     Overwrite database tables (runs <code>migrate:fresh</code> — deletes all data)
                 </label>

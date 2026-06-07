@@ -68,8 +68,10 @@ $progress = installer_step_progress();
                         $class = 'completed';
                     }
 
+                    $displayIcon = $class === 'completed' ? 'fa-check' : $icon;
+
                     echo "<div class='step {$class}'>";
-                    echo "<div class='step-icon'><i class='fa-solid {$icon}'></i></div>";
+                    echo "<div class='step-icon'><i class='fa-solid {$displayIcon}'></i></div>";
                     echo "<div class='step-name'>" . htmlspecialchars($name) . "</div>";
                     echo "</div>";
                 }

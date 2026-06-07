@@ -112,9 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <?php
     display_message($message, $error);
-    if (!$error):
+
+    if (!$error) {
         ?>
-        <div class="text-center mt-5 pt-4 border-top animate__animated animate__fadeInUp">
+        <div class="text-center mt-5 pt-4 border-top seeding-success-panel">
             <h4 class="mb-3 text-success fw-bold"><i class="fas fa-check-double me-2"></i> Environment Ready!</h4>
             <p class="text-muted mb-4 small">Redirecting to administrator account provisioning in <span id="countdown" class="fw-bold text-dark">3</span> seconds...</p>
             <a href="?step=admin" class="btn btn-primary btn-lg px-5 py-3 shadow-lg">
@@ -134,8 +135,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }, 1000);
         </script>
-    <?php
-    endif;
+        <?php
+    } else {
+        echo '<form method="post" class="mt-4 pt-4 border-top">';
+        installer_step_nav('modules', '#', 'Retry data import', true);
+        echo '</form>';
+    }
+
     include __DIR__ . '/../layout/footer.php';
     exit();
 }

@@ -108,44 +108,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </pre>
     </div>
     <?php
-    if ($message)
+    if ($message) {
         display_message($message, $error);
-    if ($success):
-        ?>
-        <div class="text-center mt-5 pt-4 border-top">
-            <a href="?step=migration" class="btn btn-primary btn-lg px-5 shadow-lg">
-                Next: Data Structure Import <i class="fa-solid fa-chevron-right ms-2"></i>
-            </a>
-        </div>
-    <?php
-    endif;
+    }
+
+    installer_step_result_nav(
+        $success,
+        'environment',
+        'migration',
+        'Next: Data Structure Import',
+        'Retry package installation',
+    );
+
     include __DIR__ . '/../layout/footer.php';
     exit();
 }
 
+$vendorReady = installer_vendor_ready();
 $title = 'Composer Packages';
 include __DIR__ . '/../layout/header.php';
 ?>
 <?php installer_step_intro('Dependency registry', 'Sellio ships with a pre-built vendor folder in distribution packages. Run this step only if Composer packages are missing.'); ?>
 
+<?php if ($vendorReady): ?>
+    <div class="status-banner status-banner-success mb-4 align-items-start">
+        <i class="fas fa-circle-check text-success"></i>
+        <div>
+            <div class="fw-bold text-success">Composer packages already installed</div>
+            <div class="small text-muted">vendor/autoload.php was found — you can skip straight to database migration.</div>
+        </div>
+    </div>
+<?php endif; ?>
+
 <div class="info-panel mb-4">
     <h3 class="h6 fw-bold mb-3 text-brand smallest text-uppercase letter-spacing-1">
         <i class="fas fa-boxes me-2"></i> Required packages
     </h3>
-    <div class="row g-2" style="max-height:280px; overflow-y:auto;">
-        <?php foreach ($packages as $pkg): ?>
-            <div class="col-md-6">
-                <div class="package-chip">
-                    <i class="fa-solid fa-check-circle text-success smallest"></i>
-                    <code><?= htmlspecialchars($pkg) ?></code>
+    <?php if (empty($packages)): ?>
+        <p class="small text-muted mb-0">
+            <i class="fas fa-circle-info me-1 text-brand"></i>
+            Could not read <code>composer.json</code>. If <code>vendor/</code> is already present you can continue; otherwise upload the full application source.
+        </p>
+    <?php else: ?>
+        <div class="row g-2" style="max-height:280px; overflow-y:auto;">
+            <?php foreach ($packages as $pkg): ?>
+                <div class="col-md-6">
+                    <div class="package-chip">
+                        <i class="fa-solid fa-check-circle text-success smallest"></i>
+                        <code><?= htmlspecialchars($pkg) ?></code>
+                    </div>
                 </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 </div>
 
-<form method="post">
-    <?php installer_step_nav('environment', '#', 'Execute Package Installation', true); ?>
-    <p class="text-center text-muted smallest mt-n3">Keep your connection stable — do not close this tab during installation.</p>
-</form>
+<?php if ($vendorReady): ?>
+    <div class="step-nav">
+        <a href="?step=environment" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left me-2"></i>Back
+        </a>
+        <div class="text-end ms-auto d-flex flex-column flex-sm-row gap-2 align-items-sm-center justify-content-sm-end">
+            <form method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-secondary btn-sm">Reinstall packages</button>
+            </form>
+            <a href="?step=migration" class="btn btn-primary btn-lg shadow-sm">
+                Continue to migration <i class="fa-solid fa-chevron-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+<?php else: ?>
+    <form method="post">
+        <?php installer_step_nav('environment', '#', 'Execute Package Installation', true); ?>
+        <p class="text-center text-muted smallest mt-n3">Keep your connection stable — do not close this tab during installation.</p>
+    </form>
+<?php endif; ?>
 <?php include __DIR__ . '/../layout/footer.php'; ?>

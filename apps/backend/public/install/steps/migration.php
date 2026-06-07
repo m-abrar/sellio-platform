@@ -99,23 +99,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <?php
     display_message($message, $error);
-    if (!$error):
-        ?>
-        <div class="text-center mt-5 pt-4 border-top">
-            <a href="?step=modules" class="btn btn-primary btn-lg px-5 shadow-lg">
-                Next: Configure Modules <i class="fa-solid fa-chevron-right ms-2"></i>
-            </a>
-        </div>
-    <?php
-    endif;
+
+    installer_step_result_nav(
+        !$error,
+        'packages',
+        'modules',
+        'Next: Configure Modules',
+        'Retry migration',
+    );
+
     include __DIR__ . '/../layout/footer.php';
     exit();
 }
 
+$vendorReady = installer_vendor_ready();
 $title = 'Import Database Structure';
 include __DIR__ . '/../layout/header.php';
 ?>
 <?php installer_step_intro('Database structure', 'Deploy the core schema. Demo content is imported in the next steps.'); ?>
+
+<?php if (!$vendorReady): ?>
+    <div class="status-banner status-banner-warning mb-4 align-items-start">
+        <i class="fas fa-triangle-exclamation text-warning"></i>
+        <div>
+            <div class="fw-bold">Composer packages missing</div>
+            <div class="small text-muted">Install packages first — migrations require <code>vendor/autoload.php</code>.</div>
+        </div>
+    </div>
+<?php endif; ?>
 
 <div class="info-panel info-panel-primary mb-4 d-flex align-items-start gap-3">
     <div class="icon-square bg-white text-brand shadow-xs">
@@ -127,7 +138,11 @@ include __DIR__ . '/../layout/header.php';
     </div>
 </div>
 
-<form method="post">
-    <?php installer_step_nav('packages', '#', 'Deploy Schema Architecture', true); ?>
-</form>
+<?php if ($vendorReady): ?>
+    <form method="post">
+        <?php installer_step_nav('packages', '#', 'Deploy Schema Architecture', true); ?>
+    </form>
+<?php else: ?>
+    <?php installer_step_nav('packages', '?step=packages', 'Go to package installation'); ?>
+<?php endif; ?>
 <?php include __DIR__ . '/../layout/footer.php'; ?>

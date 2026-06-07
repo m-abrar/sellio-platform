@@ -22,7 +22,8 @@ include __DIR__ . '/../layout/header.php';
 
     <?php installer_step_intro(
         'System online & ready',
-        'Congratulations! Your Sellio environment is provisioned and ready to use.'
+        'Congratulations! Your Sellio environment is provisioned and ready to use.',
+        true,
     ); ?>
 
     <div class="finish-actions d-flex flex-column gap-3 mb-5">

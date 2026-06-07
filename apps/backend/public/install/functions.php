@@ -320,14 +320,74 @@ function installer_step_progress(): array
 }
 
 /**
+ * Whether Composer vendor/ is already present (distribution or prior install).
+ */
+function installer_vendor_ready(): bool
+{
+    global $basePath;
+
+    return is_file($basePath . '/vendor/autoload.php');
+}
+
+/**
+ * Actionable hint for a failed requirement or recommendation check.
+ */
+function installer_requirement_hint(string $label): ?string
+{
+    $hints = [
+        'PHP >= 8.2' => 'Upgrade to PHP 8.2+ via your hosting control panel or server administrator.',
+        'exec() Function' => 'Remove exec from disable_functions in php.ini — required to locate the PHP CLI binary.',
+        'passthru() Function' => 'Remove passthru from disable_functions — the installer streams Composer and Artisan output through it.',
+        'Writable storage/' => 'chmod 775 storage/ (or 755) and ensure the web-server user owns or can write to it.',
+        'Writable bootstrap/cache/' => 'chmod 775 bootstrap/cache/ so Laravel can compile config and routes.',
+        'Frontend assets (public/build/manifest.json)' => 'Use the Sellio distribution ZIP (includes public/build/), or run npm run build in the backend before installing. Login still works without it via a CSS fallback, but the admin UI needs built assets.',
+    ];
+
+    if (isset($hints[$label])) {
+        return $hints[$label];
+    }
+
+    if (str_ends_with($label, ' Extension')) {
+        return 'Enable this PHP extension in php.ini or your hosting “Select PHP Extensions” panel, then reload this page.';
+    }
+
+    return null;
+}
+
+/**
  * Standard step heading block.
  */
-function installer_step_intro(string $title, string $description): void
+function installer_step_intro(string $title, string $description, bool $centered = false): void
 {
-    echo '<div class="step-intro">';
+    $class = $centered ? 'step-intro step-intro-center' : 'step-intro';
+    echo '<div class="' . $class . '">';
     echo '<h2 class="step-title">' . htmlspecialchars($title) . '</h2>';
     echo '<p class="step-lead">' . htmlspecialchars($description) . '</p>';
     echo '</div>';
+}
+
+/**
+ * Navigation after async terminal steps (composer, migrate, seed).
+ */
+function installer_step_result_nav(
+    bool $success,
+    string $backStep,
+    string $nextStep,
+    string $nextLabel,
+    string $retryLabel = 'Try again',
+): void {
+    if ($success) {
+        echo '<div class="text-center mt-5 pt-4 border-top">';
+        echo '<a href="?step=' . htmlspecialchars($nextStep) . '" class="btn btn-primary btn-lg px-5 shadow-lg">';
+        echo htmlspecialchars($nextLabel) . ' <i class="fa-solid fa-chevron-right ms-2"></i></a>';
+        echo '</div>';
+
+        return;
+    }
+
+    echo '<form method="post" class="mt-4 pt-4 border-top">';
+    installer_step_nav($backStep, '#', $retryLabel, true);
+    echo '</form>';
 }
 
 /**

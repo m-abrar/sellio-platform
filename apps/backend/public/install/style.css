@@ -289,6 +289,15 @@ body {
     max-width: 680px;
 }
 
+.step-intro-center {
+    text-align: center;
+}
+
+.step-intro-center .step-lead {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Panels & cards */
 .info-panel,
 .welcome-panel,
@@ -541,6 +550,18 @@ body {
     border-color: rgba(239, 68, 68, 0.12);
 }
 
+.requirement-item.is-advisory {
+    background: rgba(245, 158, 11, 0.05);
+    border-color: rgba(245, 158, 11, 0.12);
+}
+
+.requirement-hint {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+    line-height: 1.4;
+}
+
 .badge-status {
     padding: 0.35rem 0.65rem;
     border-radius: 8px;
@@ -568,6 +589,11 @@ body {
 .summary-pill-danger {
     background: rgba(239, 68, 68, 0.08);
     color: #b91c1c;
+}
+
+.summary-pill-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: #b45309;
 }
 
 /* Module cards */
@@ -738,6 +764,22 @@ body {
 .finish-actions {
     max-width: 360px;
     margin: 0 auto;
+}
+
+.seeding-success-panel {
+    animation: installer-fade-up 0.45s ease-out both;
+}
+
+@keyframes installer-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Footer */
