@@ -79,16 +79,6 @@ const INCLUDE_ROOTS = [
   'LICENSE',
 ];
 
-const THEME_SOURCE = join(
-  repoRoot,
-  '_development',
-  'storefront',
-  'app',
-  'public',
-  'themes',
-);
-const THEME_DEST_REL = join('apps', 'backend', 'public', 'themes');
-
 /** Dev-uploaded media — never ship; demo seed recreates files after install. */
 const STORAGE_APP_PUBLIC_PREFIX = 'backend/storage/app/public';
 
@@ -292,18 +282,6 @@ async function copyBuildArtifacts() {
   }
 }
 
-async function copyThemes() {
-  if (!(await pathExists(THEME_SOURCE))) {
-    console.warn('Warning: theme bundle not found; storefront theme previews may be missing.');
-    return;
-  }
-
-  const dest = join(outputDir, THEME_DEST_REL);
-  await removeIfExists(dest);
-  await copyTree(THEME_SOURCE, dest);
-  console.log(`Copied theme bundle to ${THEME_DEST_REL}`);
-}
-
 async function writeDeployGuide() {
   const guide = `# Sellio distribution — server deploy guide
 
@@ -424,8 +402,7 @@ Change these before production.
 ## 9. Included extras
 
 - \`composer.phar\` in \`apps/backend/\` for hosts without global Composer
-- Theme WebP bundle in \`apps/backend/public/themes/\`
-- Seeder images in \`apps/backend/database/seeders/images/\` (if present in source)
+- Seeder images in \`apps/backend/database/seeders/images/\` (CMS + listing demo media; required for demo seed)
 - \`storage/app/public/\` is intentionally empty — run demo seed + \`php artisan storage:link\` after install
 `;
 
@@ -509,9 +486,6 @@ async function main() {
 
   console.log('\n==> Cleaning runtime artifacts in distribution copy...');
   await cleanBackendRuntimeArtifacts(join(outputDir, 'apps', 'backend'));
-
-  console.log('\n==> Copying theme WebP bundle...');
-  await copyThemes();
 
   console.log('\n==> Downloading composer.phar for shared hosting...');
   try {

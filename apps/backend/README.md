@@ -93,7 +93,7 @@ Before going live, complete this checklist:
 7. **Permissions** — Ensure `storage/` and `bootstrap/cache/` are writable by the web server.
 8. **CMS content** — Admin-editable page content (`page_content()`) allows limited inline HTML (e.g. hero highlights). Values are sanitized on save; only trusted admin accounts should edit storefront copy.
 9. **Page builder** — GrapesJS visual builder routes require the **super-admin** role; saved HTML/CSS is sanitized before persistence and on storefront render.
-10. **Demo assets** — Theme preview images use bundled `/themes/...` WebP paths (copy from storefront build into `public/themes/`). Listing seed photos live in `database/seeders/images/` — include only media you may redistribute. See `_development/audits/backend/00_strategic/DEMO_IMAGE_AUDIT_2026-06-07.md`.
+10. **Demo assets** — Demo photos and CMS/theme images are seeded from `database/seeders/images/` (`MediaFullSeeder`, `PageContentMediaSeeder`, brand logo/favicon). Include only media you may redistribute. See `_development/audits/backend/00_strategic/DEMO_IMAGE_AUDIT_2026-06-07.md`.
 
 ### 6. Admin E2E tests
 

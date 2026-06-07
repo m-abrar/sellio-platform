@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\RegenerateMediaJob;
+use App\Services\StorageLinkService;
 
 /**
  * Class MaintenanceService
@@ -59,7 +60,17 @@ class MaintenanceService
      */
     public function createStorageLink(): void
     {
-        Artisan::call('storage:link');
+        $failures = [];
+
+        foreach (app(StorageLinkService::class)->ensureLinks(force: true) as $result) {
+            if (! $result['success']) {
+                $failures[] = $result['message'];
+            }
+        }
+
+        if ($failures !== []) {
+            throw new \RuntimeException(implode(' ', $failures));
+        }
     }
 
     /**

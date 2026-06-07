@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\SeedsBrandAssets;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
@@ -16,6 +17,7 @@ use Illuminate\Support\Carbon;
  */
 class SettingSeeder extends Seeder
 {
+    use SeedsBrandAssets;
     /**
      * Run the database seeds.
      *
@@ -114,6 +116,8 @@ class SettingSeeder extends Seeder
 
         // Execute the database insertion.
         DB::table('settings')->insertOrIgnore($settings);
+
+        $this->seedBrandAssetsFromSeederImages();
         
         $this->command->info('✅ Setting seeding complete! Default configurations applied.');
     }

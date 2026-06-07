@@ -318,8 +318,14 @@ the install wizard has lost css styling, please fix.
 the footer links on install wizard are dead
 
 ----------------------
-
+https://demo.sellio.vebdez.com/login
+styling is crashed here
 
 -----------------------------------------------
 
 
+http://127.0.0.1:8000/install/
+
+css styling is lost here
+
+-----------------------

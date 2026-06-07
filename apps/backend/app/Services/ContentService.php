@@ -86,10 +86,25 @@ class ContentService
     protected function formatValue(PageContent $setting, $default): mixed
     {
         if (in_array($setting->input_type, ['logo', 'file', 'image'])) {
-            // Logic to handle media library or raw paths
+            $mediaUrl = $setting->getFirstMediaUrl(PageContent::PRIMARY_MEDIA);
+
+            if ($mediaUrl) {
+                return $mediaUrl;
+            }
+
             $value = $setting->value ?? $default;
-            return $value ? Storage::url($value) : $default;
+
+            if (! $value) {
+                return $default;
+            }
+
+            if (is_string($value) && str_starts_with($value, '/')) {
+                return $value;
+            }
+
+            return Storage::url($value);
         }
+
         return $setting->value ?? $default;
     }
 

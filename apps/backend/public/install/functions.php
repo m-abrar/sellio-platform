@@ -63,7 +63,8 @@ function installer_public_base(): string
     }
 
     $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '/install/index.php');
-    $publicPath = dirname(dirname($scriptName));
+    // dirname('/') is '\' on Windows — normalize so root installs resolve to an empty base.
+    $publicPath = str_replace('\\', '/', dirname(dirname($scriptName)));
 
     if ($publicPath === '/' || $publicPath === '.' || $publicPath === '') {
         $base = '';

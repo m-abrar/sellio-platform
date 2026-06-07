@@ -27,7 +27,7 @@ use App\Models\Plan;
 use App\Models\PropertyAddon;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
+use App\Services\StorageLinkService;
 
 /**
  * Class MediaFullSeeder
@@ -56,8 +56,14 @@ class MediaFullSeeder extends Seeder
         // Custom flag to skip resource-heavy conversions in HasImageAccess trait.
         config(['app.skip_media_conversions' => true]);
 
-        $this->command->warn('🔗 Ensuring storage link exists (php artisan storage:link)...');
-        Artisan::call('storage:link', [], $this->command->getOutput());
+        $this->command->warn('🔗 Ensuring storage link exists...');
+        foreach (app(StorageLinkService::class)->ensureLinks() as $result) {
+            if ($result['success']) {
+                $this->command->info($result['message']);
+            } else {
+                $this->command->warn('⚠️ ' . $result['message']);
+            }
+        }
         // ----------------------------------------------------
         
         $faker = Faker::create();
