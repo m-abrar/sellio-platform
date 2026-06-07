@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Page;
+use App\Services\Admin\PageBuilderService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,9 +21,9 @@ use Illuminate\View\View;
  */
 class PageBuilderController extends Controller
 {
-    protected \App\Services\Admin\PageBuilderService $pageBuilderService;
+    protected PageBuilderService $pageBuilderService;
 
-    public function __construct(\App\Services\Admin\PageBuilderService $pageBuilderService)
+    public function __construct(PageBuilderService $pageBuilderService)
     {
         $this->pageBuilderService = $pageBuilderService;
     }
@@ -77,7 +79,7 @@ class PageBuilderController extends Controller
                 'page'    => $page
             ]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("PageBuilder Sync Error: {$e->getMessage()}", ['page_id' => $page->id]);
             return response()->json([
                 'success' => false,

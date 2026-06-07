@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Setting;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -27,7 +28,7 @@ return new class extends Migration
         ];
 
         foreach ($modules as $module) {
-            \App\Models\Setting::updateOrCreate(
+            Setting::updateOrCreate(
                 ['key' => 'is_section.' . $module],
                 ['value' => '1']
             );
@@ -50,7 +51,7 @@ return new class extends Migration
         ];
 
         foreach ($modules as $module) {
-            \App\Models\Setting::where('key', 'is_section.' . $module)->delete();
+            Setting::where('key', 'is_section.' . $module)->delete();
         }
     }
 };

@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CalculatePriceRequest;
 use App\Http\Requests\SaveProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests\CalculatePriceRequest;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class ApiProductController
@@ -146,7 +147,7 @@ class ApiProductController extends Controller
 
             // CRITICAL: Re-apply order column based on the order of IDs sent from React
             // Spatie provides a utility for this:
-            \Spatie\MediaLibrary\MediaCollections\Models\Media::setNewOrder($keepIds);
+            Media::setNewOrder($keepIds);
         }
 
         // 3. Add New Gallery Images

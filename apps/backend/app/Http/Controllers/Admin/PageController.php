@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PageRequest;
 use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -47,7 +48,7 @@ class PageController extends Controller
      * @param  \App\Http\Requests\Admin\PageRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(\App\Http\Requests\Admin\PageRequest $request): RedirectResponse
+    public function store(PageRequest $request): RedirectResponse
     {
         $page = Page::create($request->validated());
 
@@ -76,7 +77,7 @@ class PageController extends Controller
      * @param  \App\Models\Page  $page
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(\App\Http\Requests\Admin\PageRequest $request, Page $page): RedirectResponse
+    public function update(PageRequest $request, Page $page): RedirectResponse
     {
         $page->update($request->validated());
 

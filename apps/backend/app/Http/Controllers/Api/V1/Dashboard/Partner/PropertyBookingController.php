@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
+use App\Events\BookingCancelled;
+use App\Events\PropertyBookingConfirmed;
 use App\Http\Controllers\Controller;
-use App\Models\PropertyBooking;
 use App\Http\Resources\PropertyBookingResource;
+use App\Models\PropertyBooking;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -72,7 +75,7 @@ class PropertyBookingController extends Controller
      * @param PropertyBooking $propertyBooking
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateStatus(string $status, PropertyBooking $propertyBooking): \Illuminate\Http\JsonResponse
+    public function updateStatus(string $status, PropertyBooking $propertyBooking): JsonResponse
     {
         $this->authorizeOwner($propertyBooking);
 
@@ -87,9 +90,9 @@ class PropertyBookingController extends Controller
 
         if ($status !== $oldStatus) {
             if ($status === 'confirmed') {
-                event(new \App\Events\PropertyBookingConfirmed($propertyBooking->user, $propertyBooking));
+                event(new PropertyBookingConfirmed($propertyBooking->user, $propertyBooking));
             } elseif ($status === 'cancelled') {
-                event(new \App\Events\BookingCancelled($propertyBooking));
+                event(new BookingCancelled($propertyBooking));
             }
         }
 

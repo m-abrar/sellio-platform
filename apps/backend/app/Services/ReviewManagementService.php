@@ -2,6 +2,14 @@
 
 namespace App\Services;
 
+use App\Models\Auto;
+use App\Models\Classified;
+use App\Models\Event;
+use App\Models\JobListing;
+use App\Models\Property;
+use App\Models\Review;
+use App\Models\Service;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -19,13 +27,13 @@ class ReviewManagementService
      * @var array
      */
     protected $reviewableMap = [
-        'properties'  => \App\Models\Property::class,
-        'autos'       => \App\Models\Auto::class,
-        'events'      => \App\Models\Event::class,
-        'jobs'        => \App\Models\JobListing::class,
-        'services'    => \App\Models\Service::class,
-        'classifieds' => \App\Models\Classified::class,
-        'users'       => \App\Models\User::class,
+        'properties'  => Property::class,
+        'autos'       => Auto::class,
+        'events'      => Event::class,
+        'jobs'        => JobListing::class,
+        'services'    => Service::class,
+        'classifieds' => Classified::class,
+        'users'       => User::class,
     ];
 
     /**
@@ -61,7 +69,7 @@ class ReviewManagementService
         ]);
 
         $review->user_id = Auth::id();
-        $review->status = \App\Models\Review::STATUS_PENDING;
+        $review->status = Review::STATUS_PENDING;
         $review->save();
 
         return $review;

@@ -2,27 +2,28 @@
 
 namespace Tests\Feature;
 
+use App\Contracts\PaymentGatewayService;
+use App\Models\Auto;
 use App\Models\Cart;
 use App\Models\CartItem;
-use App\Models\PageContent;
-use App\Models\Product;
 use App\Models\Classified;
-use App\Models\Setting;
-use App\Models\Auto;
 use App\Models\Event;
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\PageContent;
 use App\Models\Payment;
 use App\Models\PaymentGateway;
+use App\Models\Product;
 use App\Models\Property;
-use App\Models\PropertyBooking;
 use App\Models\PropertyAddon;
+use App\Models\PropertyBooking;
 use App\Models\SeasonalPrice;
+use App\Models\Setting;
 use App\Models\User;
-use App\Contracts\PaymentGatewayService;
 use App\Services\ContentService;
 use App\Services\GatewayManager;
 use App\Services\HomeDataService;
+use App\Services\StripeGatewayService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
@@ -638,7 +639,7 @@ class LaravelPublicStorefrontTest extends TestCase
             'maximum_guests' => 4,
         ]);
 
-        \App\Models\PropertyAddon::factory()->create([
+        PropertyAddon::factory()->create([
             'property_id' => $property->id,
             'title' => 'Daily Breakfast',
             'type' => 'per_night',
@@ -719,7 +720,7 @@ class LaravelPublicStorefrontTest extends TestCase
         PaymentGateway::create([
             'title' => 'Stripe',
             'slug' => 'stripe',
-            'class_name' => \App\Services\StripeGatewayService::class,
+            'class_name' => StripeGatewayService::class,
             'is_active' => true,
             'mode' => PaymentGateway::MODE_SANDBOX,
         ])->credentials()->create([
@@ -768,7 +769,7 @@ class LaravelPublicStorefrontTest extends TestCase
         PaymentGateway::create([
             'title' => 'Stripe',
             'slug' => 'stripe',
-            'class_name' => \App\Services\StripeGatewayService::class,
+            'class_name' => StripeGatewayService::class,
             'is_active' => true,
             'mode' => PaymentGateway::MODE_SANDBOX,
         ]);
@@ -848,7 +849,7 @@ class LaravelPublicStorefrontTest extends TestCase
         PaymentGateway::create([
             'title' => 'Stripe',
             'slug' => 'stripe',
-            'class_name' => \App\Services\StripeGatewayService::class,
+            'class_name' => StripeGatewayService::class,
             'is_active' => true,
             'mode' => PaymentGateway::MODE_SANDBOX,
         ]);

@@ -4,13 +4,14 @@ namespace App\Models;
 
 use App\Traits\HasImageAccess;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\PageContent
@@ -57,9 +58,9 @@ class PageContent extends Model implements HasMedia
     /**
      * Sanitize content before saving to prevent XSS.
      */
-    protected function value(): \Illuminate\Database\Eloquent\Casts\Attribute
+    protected function value(): Attribute
     {
-        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+        return Attribute::make(
             set: fn ($value) => is_string($value) 
                 ? strip_tags($value, '<div><section><main><article><aside><header><footer><nav><p><br><hr><a><b><i><u><strong><em><span><ul><li><ol><h1><h2><h3><h4><h5><h6><img><blockquote><video><audio><source><track><canvas><svg><path><circle><rect><line><polyline><polygon><ellipse>')
                 : $value

@@ -2,10 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
 class ApiProfileTest extends TestCase
 {
@@ -71,7 +72,7 @@ class ApiProfileTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson(['message' => 'Password updated successfully']);
 
-        $this->assertTrue(\Illuminate\Support\Facades\Hash::check('newpassword123', $this->user->fresh()->password));
+        $this->assertTrue(Hash::check('newpassword123', $this->user->fresh()->password));
     }
 
     public function test_update_password_fails_if_incorrect_current()

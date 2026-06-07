@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Partner;
 
+use App\Models\Service;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -16,9 +17,9 @@ class ServiceRequest extends FormRequest
 
         $service = $this->route('service');
         if ($service) {
-            $serviceId = $service instanceof \App\Models\Service ? $service->id : $service;
+            $serviceId = $service instanceof Service ? $service->id : $service;
 
-            return \App\Models\Service::where('id', $serviceId)
+            return Service::where('id', $serviceId)
                 ->where('user_id', Auth::id())
                 ->exists();
         }
@@ -29,7 +30,7 @@ class ServiceRequest extends FormRequest
     public function rules(): array
     {
         $service = $this->route('service');
-        $serviceId = $service instanceof \App\Models\Service ? $service->id : $service;
+        $serviceId = $service instanceof Service ? $service->id : $service;
 
         return [
             'category_id'          => ['required', 'exists:categories,id'],

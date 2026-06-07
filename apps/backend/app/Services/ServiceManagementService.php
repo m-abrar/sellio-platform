@@ -2,14 +2,19 @@
 
 namespace App\Services;
 
-use App\Models\Service;
-use App\Models\ServicePackage;
-use App\Models\ServiceAppointment;
-use App\Models\ServiceQuote;
 use App\Events\Partner\PartnerLeadCreated;
+use App\Models\Category;
+use App\Models\Feature;
+use App\Models\Location;
+use App\Models\Service;
+use App\Models\ServiceAppointment;
+use App\Models\ServicePackage;
+use App\Models\ServiceQuote;
+use App\Models\Tag;
+use App\Models\Type;
+use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
-use App\Models\User;
 
 /**
  * Class ServiceManagementService
@@ -78,11 +83,11 @@ class ServiceManagementService
         $tagVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
 
         // Centralized taxonomy retrieval with active scope and eager-loaded counts
-        $categories = \App\Models\Category::active()->where('is_service', true)->withCount($verticals)->get();
-        $locations  = \App\Models\Location::active()->where('is_service', true)->withCount($locationVerticals)->get();
-        $types      = \App\Models\Type::active()->where('is_service', true)->withCount($verticals)->get();
-        $features   = \App\Models\Feature::active()->where('is_service', true)->get();
-        $tags       = \App\Models\Tag::active()->where('is_service', true)->withCount($tagVerticals)->get();
+        $categories = Category::active()->where('is_service', true)->withCount($verticals)->get();
+        $locations  = Location::active()->where('is_service', true)->withCount($locationVerticals)->get();
+        $types      = Type::active()->where('is_service', true)->withCount($verticals)->get();
+        $features   = Feature::active()->where('is_service', true)->get();
+        $tags       = Tag::active()->where('is_service', true)->withCount($tagVerticals)->get();
 
         $services = $this->searchServices($filters, $user);
 

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Contracts\PaymentGatewayService;
+use App\Models\Payment;
 use App\Models\PaymentGateway;
 use App\Models\Plan;
 use App\Models\Property;
@@ -10,6 +11,7 @@ use App\Models\PropertyBooking;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Services\GatewayManager;
+use App\Services\StripeGatewayService;
 use App\Services\SubscriptionCheckoutService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
@@ -51,7 +53,7 @@ class PartnerSubscriptionCheckoutTest extends TestCase
         PaymentGateway::create([
             'title' => 'Stripe',
             'slug' => 'stripe',
-            'class_name' => \App\Services\StripeGatewayService::class,
+            'class_name' => StripeGatewayService::class,
             'is_active' => true,
             'mode' => PaymentGateway::MODE_SANDBOX,
         ])->credentials()->create([
@@ -63,7 +65,7 @@ class PartnerSubscriptionCheckoutTest extends TestCase
             'live_config' => [],
         ]);
 
-        $this->assertTrue(app(\App\Services\SubscriptionCheckoutService::class)->isStripeCheckoutAvailable());
+        $this->assertTrue(app(SubscriptionCheckoutService::class)->isStripeCheckoutAvailable());
     }
 
     public function test_partner_checkout_returns_stripe_url_when_gateway_is_active(): void
@@ -109,7 +111,7 @@ class PartnerSubscriptionCheckoutTest extends TestCase
             'is_active' => true,
         ]);
 
-        $fakeService = Mockery::mock(\App\Services\StripeGatewayService::class);
+        $fakeService = Mockery::mock(StripeGatewayService::class);
         $fakeService->shouldReceive('confirmSubscriptionCheckoutSession')
             ->once()
             ->with('cs_test_confirm_123', Mockery::on(fn ($user) => $user->id === $partner->id))
@@ -121,7 +123,7 @@ class PartnerSubscriptionCheckoutTest extends TestCase
         $gateway = PaymentGateway::create([
             'title' => 'Stripe',
             'slug' => 'stripe',
-            'class_name' => \App\Services\StripeGatewayService::class,
+            'class_name' => StripeGatewayService::class,
             'is_active' => true,
             'mode' => PaymentGateway::MODE_SANDBOX,
         ]);
@@ -164,7 +166,7 @@ class PartnerSubscriptionCheckoutTest extends TestCase
         PaymentGateway::create([
             'title' => 'Stripe',
             'slug' => 'stripe',
-            'class_name' => \App\Services\StripeGatewayService::class,
+            'class_name' => StripeGatewayService::class,
             'is_active' => true,
             'mode' => PaymentGateway::MODE_SANDBOX,
         ])->credentials()->create([
@@ -225,7 +227,7 @@ class PartnerSubscriptionCheckoutTest extends TestCase
         PaymentGateway::create([
             'title' => 'Stripe',
             'slug' => 'stripe',
-            'class_name' => \App\Services\StripeGatewayService::class,
+            'class_name' => StripeGatewayService::class,
             'is_active' => true,
             'mode' => PaymentGateway::MODE_SANDBOX,
         ])->credentials()->create([
@@ -267,7 +269,7 @@ class PartnerSubscriptionCheckoutTest extends TestCase
             'amount' => 600,
             'payment_method' => 'stripe',
             'transaction_id' => 'pi_property_booking_webhook',
-            'status' => \App\Models\Payment::STATUS_COMPLETED,
+            'status' => Payment::STATUS_COMPLETED,
             'payable_type' => PropertyBooking::class,
             'payable_id' => $booking->id,
         ]);

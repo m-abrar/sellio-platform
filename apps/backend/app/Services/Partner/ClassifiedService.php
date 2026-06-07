@@ -2,12 +2,15 @@
 
 namespace App\Services\Partner;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Classified;
 use App\Models\Location;
+use App\Models\Tag;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -30,13 +33,13 @@ class ClassifiedService
             'categories' => Category::where('is_classified', true)->get(['id', 'title']),
             'types'      => Type::where('is_classified', true)->get(['id', 'title']),
             'locations'  => Location::where('is_classified', true)->get(['id', 'title']),
-            'brands'     => \App\Models\Brand::where('is_classified', true)->get(['id', 'title']),
+            'brands'     => Brand::where('is_classified', true)->get(['id', 'title']),
         ];
     }
 
     public function saveClassified(User $user, array $data, ?Classified $classified = null): Classified
     {
-        return \Illuminate\Support\Facades\DB::transaction(function () use ($user, $data, $classified) {
+        return DB::transaction(function () use ($user, $data, $classified) {
             unset($data['main_image'], $data['gallery'], $data['existing_main_media_id'], $data['existing_media_ids'], $data['sync_existing_media']);
 
             $data['slug'] = $this->generateUniqueSlug($data['title'], $classified?->id);
@@ -65,9 +68,9 @@ class ClassifiedService
             if (isset($data['tags'])) {
                 $tagIds = [];
                 foreach ($data['tags'] as $tagName) {
-                    $tag = \App\Models\Tag::firstOrCreate(
+                    $tag = Tag::firstOrCreate(
                         ['title' => trim($tagName)],
-                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_classified' => true, 'is_published' => true]
+                        ['slug' => Str::slug($tagName), 'is_classified' => true, 'is_published' => true]
                     );
                     $tagIds[] = $tag->id;
                 }

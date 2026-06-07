@@ -6,8 +6,10 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
-use App\Models\ProductAttribute;
+use App\Models\Product;
 use App\Models\ProductAddon;
+use App\Models\ProductAttribute;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -89,11 +91,11 @@ class CheckoutService
 
                 // 3. Secure Stock Reduction (Prevents Race Conditions)
                 if ($cartItem->product->manage_stock) {
-                    $product = \App\Models\Product::where('id', $cartItem->product_id)->lockForUpdate()->first();
+                    $product = Product::where('id', $cartItem->product_id)->lockForUpdate()->first();
                     if ($product && $product->stock_quantity >= $cartItem->quantity) {
                         $product->decrement('stock_quantity', $cartItem->quantity);
                     } else {
-                        throw new \Exception(__('Insufficient stock for product: :title', ['title' => $product->title ?? 'Unknown']));
+                        throw new Exception(__('Insufficient stock for product: :title', ['title' => $product->title ?? 'Unknown']));
                     }
                 }
             }

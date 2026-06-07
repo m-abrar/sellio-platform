@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -44,16 +44,16 @@ class Theme extends Model implements HasMedia
      * Recursive XSS Sanitizer for theme variables and configuration.
      * Prevents script injection in style variables.
      */
-    protected function variables(): \Illuminate\Database\Eloquent\Casts\Attribute
+    protected function variables(): Attribute
     {
-        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+        return Attribute::make(
             set: fn ($value) => ['variables' => json_encode($this->sanitizeRecursive($value))]
         );
     }
 
-    protected function config(): \Illuminate\Database\Eloquent\Casts\Attribute
+    protected function config(): Attribute
     {
-        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+        return Attribute::make(
             set: fn ($value) => ['config' => json_encode($this->sanitizeRecursive($value))]
         );
     }

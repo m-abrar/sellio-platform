@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -87,7 +89,7 @@ class EmailTemplate extends Model
      */
     public static function fetchByKey(string $key): ?self
     {
-        return \Illuminate\Support\Facades\Cache::rememberForever("email_template.{$key}", function () use ($key) {
+        return Cache::rememberForever("email_template.{$key}", function () use ($key) {
             return self::where('key', $key)->first();
         });
     }
@@ -97,15 +99,15 @@ class EmailTemplate extends Model
      */
     public function forgetCache(): void
     {
-        \Illuminate\Support\Facades\Cache::forget("email_template.{$this->key}");
+        Cache::forget("email_template.{$this->key}");
     }
 
     /**
      * Sanitize body before saving to prevent XSS.
      */
-    protected function body(): \Illuminate\Database\Eloquent\Casts\Attribute
+    protected function body(): Attribute
     {
-        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+        return Attribute::make(
             set: fn ($value) => strip_tags($value, '<a><b><i><u><strong><em><p><br><ul><li><ol><h1><h2><h3><h4><h5><h6><img><blockquote><style>')
         );
     }

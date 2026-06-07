@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
-use App\Models\JobApplication;
 use App\Http\Resources\JobApplicationResource;
+use App\Models\JobApplication;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -91,7 +92,7 @@ class JobApplicationController extends Controller
      * @param string $status
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateStatus(JobApplication $jobApplication, string $status): \Illuminate\Http\JsonResponse
+    public function updateStatus(JobApplication $jobApplication, string $status): JsonResponse
     {
         $this->authorizeOwner($jobApplication);
 

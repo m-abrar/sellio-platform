@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\Contracts\PaymentGatewayService;
-use App\Exceptions\WebhookSignatureException; // Needed for handleWebhook contract
-use Illuminate\Support\Facades\Log;
-// NOTE: We will assume a conceptual, modern PayPal SDK for the client setup (e.g., srmklive/paypal or a custom wrapper)
+use App\Exceptions\WebhookSignatureException;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use Srmklive\PayPal\Services\PayPal as PayPalClient; // Conceptual SDK use
+use Illuminate\Support\Facades\Log;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class PaypalGatewayService implements PaymentGatewayService
 {
@@ -25,7 +26,7 @@ class PaypalGatewayService implements PaymentGatewayService
         
         if (empty($this->config['client_id']) || empty($this->config['client_secret'])) {
             Log::critical('PayPal client_id or client_secret is missing from configuration!');
-            throw new \Exception("PayPal API keys are missing from configuration.");
+            throw new Exception("PayPal API keys are missing from configuration.");
         }
         
         // --- REAL IMPLEMENTATION: Instantiate the PayPal Client ---
@@ -49,9 +50,9 @@ class PaypalGatewayService implements PaymentGatewayService
             
             Log::info('PayPal Client initialized successfully.', ['mode' => $this->config['mode'] ?? 'N/A']);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::critical('Failed to initialize PayPal client.', ['error' => $e->getMessage()]);
-            throw new \Exception("PayPal SDK initialization failed: " . $e->getMessage());
+            throw new Exception("PayPal SDK initialization failed: " . $e->getMessage());
         }
     }
 
@@ -116,7 +117,7 @@ class PaypalGatewayService implements PaymentGatewayService
                 'message' => 'PayPal Order created but unable to find approval link.'
             ];
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('PayPal API Error during Order creation.', ['error' => $e->getMessage()]);
             return [
                 'status' => 'error',
@@ -161,7 +162,7 @@ class PaypalGatewayService implements PaymentGatewayService
                 'details' => $capture,
             ];
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('PayPal API Error during CAPTURE.', ['order_id' => $paymentIntentId, 'error' => $e->getMessage()]);
             return [
                 'status' => 'error',
@@ -205,7 +206,7 @@ class PaypalGatewayService implements PaymentGatewayService
                 'message' => 'PayPal refund failed. Status: ' . $status
             ];
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('PayPal API Error during refund.', ['error' => $e->getMessage()]);
             return [
                 'status' => 'error', 
@@ -234,7 +235,7 @@ class PaypalGatewayService implements PaymentGatewayService
      * @param \Illuminate\Http\Request $request
      * @return array
      */
-    public function handleWebhook(\Illuminate\Http\Request $request): array
+    public function handleWebhook(Request $request): array
     {
         Log::info('PayPal webhook processing started.');
         
@@ -244,7 +245,7 @@ class PaypalGatewayService implements PaymentGatewayService
         $webhookId = $this->config['webhook_id'] ?? null;
         if (!$webhookId) {
             Log::critical("PayPal Webhook ID is missing from configuration!");
-            throw new \Exception("PayPal Webhook ID is missing. Cannot verify signature.");
+            throw new Exception("PayPal Webhook ID is missing. Cannot verify signature.");
         }
 
         try {
@@ -296,7 +297,7 @@ class PaypalGatewayService implements PaymentGatewayService
         } catch (WebhookSignatureException $e) {
             // Re-throw the signature exception for the controller to handle the 400 response
             throw $e;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("PayPal webhook processing failed due to internal error.", ['error' => $e->getMessage()]);
             return ['status' => 'error', 'message' => 'Internal server error during webhook processing.'];
         }

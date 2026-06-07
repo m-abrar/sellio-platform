@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class SaveProductRequest extends FormRequest
@@ -11,7 +13,7 @@ class SaveProductRequest extends FormRequest
     {
         $productId = $this->route('product') ?? $this->route('id');
         if ($productId) {
-            return \App\Models\Product::where('id', $productId)
+            return Product::where('id', $productId)
                 ->where('user_id', auth()->id())
                 ->exists();
         }
@@ -72,7 +74,7 @@ class SaveProductRequest extends FormRequest
         }
 
         if ($this->has('title') && !$this->has('slug')) {
-            $this->merge(['slug' => \Illuminate\Support\Str::slug($this->title)]);
+            $this->merge(['slug' => Str::slug($this->title)]);
         }
 
         $booleanFields = [

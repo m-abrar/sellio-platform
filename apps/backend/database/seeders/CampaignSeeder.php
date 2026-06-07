@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Campaign;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,7 +19,7 @@ class CampaignSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Campaign::create([
+        Campaign::create([
             'title' => 'Summer Sale Launch',
             'description' => 'Annual summer promotion with up to 50% off on selected items.',
             'start_date' => now()->startOfMonth()->addDays(4),
@@ -30,7 +31,7 @@ class CampaignSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        \App\Models\Campaign::create([
+        Campaign::create([
             'title' => 'Flash Sale: Tech Monday',
             'description' => '24-hour flash sale on electronics.',
             'start_date' => now()->startOfMonth()->addDays(15)->setHour(9)->setMinute(0),
@@ -42,7 +43,7 @@ class CampaignSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        \App\Models\Campaign::create([
+        Campaign::create([
             'title' => 'Inventory Audit',
             'description' => 'System-wide inventory check and synchronization.',
             'start_date' => now()->startOfMonth()->addDays(22)->setHour(8)->setMinute(0),
@@ -54,7 +55,7 @@ class CampaignSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        \App\Models\Campaign::create([
+        Campaign::create([
             'title' => 'Mid-Season Clearance',
             'description' => 'Stock clearance for incoming new arrivals.',
             'start_date' => now()->addMonth()->startOfMonth()->addDays(1),

@@ -2,9 +2,18 @@
 
 namespace App\Services\Admin;
 
-use Illuminate\Support\Facades\DB;
+use App\Models\AutoInquiry;
+use App\Models\ClassifiedInquiry;
+use App\Models\EventBooking;
+use App\Models\JobApplication;
+use App\Models\PropertyBooking;
+use App\Models\ServiceAppointment;
+use App\Models\ServiceQuote;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\Models\{PropertyBooking, AutoInquiry, EventBooking, JobApplication, ServiceQuote, ServiceAppointment, ClassifiedInquiry};
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class BookingManagementService
 {
@@ -106,13 +115,13 @@ class BookingManagementService
             $model->relation_name = $raw->relation_name;
 
             if ($raw->created_at) {
-                $model->created_at = \Illuminate\Support\Carbon::parse($raw->created_at);
+                $model->created_at = Carbon::parse($raw->created_at);
             }
 
             return $model;
         })->filter();
 
-        $items = new \Illuminate\Database\Eloquent\Collection($models);
+        $items = new Collection($models);
         
         // Eager load relationships
         $items->load('user');
@@ -129,8 +138,8 @@ class BookingManagementService
     public function resolveRedirectUrl(string $type, int $id): string
     {
         // Pluralize and kebab-case for standard Laravel route patterns
-        $pluralName = \Illuminate\Support\Str::plural($type); 
-        $routePrefix = \Illuminate\Support\Str::kebab($pluralName);
+        $pluralName = Str::plural($type); 
+        $routePrefix = Str::kebab($pluralName);
         
         return url('/admin/' . $routePrefix . '/' . $id);
     }

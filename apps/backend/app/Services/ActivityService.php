@@ -2,11 +2,27 @@
 
 namespace App\Services;
 
-use App\Models\{Message, Review, Property, Event, JobListing, Service, Classified, Auto};
-use App\Models\{PropertyBooking, JobApplication, ServiceQuote, EventBooking, ServiceAppointment, ClassifiedInquiry, AutoInquiry, User};
-use Illuminate\Support\Collection;
+use App\Models\Auto;
+use App\Models\AutoInquiry;
+use App\Models\Classified;
+use App\Models\ClassifiedInquiry;
+use App\Models\Event;
+use App\Models\EventBooking;
+use App\Models\JobApplication;
+use App\Models\JobListing;
+use App\Models\Message;
+use App\Models\Property;
+use App\Models\PropertyBooking;
+use App\Models\Review;
+use App\Models\Service;
+use App\Models\ServiceAppointment;
+use App\Models\ServiceQuote;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class ActivityService
 {
@@ -21,7 +37,7 @@ class ActivityService
         $partnerId = $partner->id;
         $cacheKey = "partner_dashboard_data_{$partnerId}";
 
-        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 300, function () use ($partner, $partnerId) {
+        return Cache::remember($cacheKey, 300, function () use ($partner, $partnerId) {
             
             // --- 1. Identify Partner Assets (Listing IDs) ---
             // Optimization: Get IDs directly from the database without hydrating full models
@@ -110,7 +126,7 @@ class ActivityService
                 $relation = strtolower($type);
                 $counts = $model::where('created_at', '>=', $startDate)
                     ->whereHas($relation, fn(Builder $q) => $q->where('user_id', $partnerId))
-                    ->select(\Illuminate\Support\Facades\DB::raw("DATE_FORMAT(created_at, '%Y-%v') as week"), \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
+                    ->select(DB::raw("DATE_FORMAT(created_at, '%Y-%v') as week"), DB::raw('COUNT(*) as total'))
                     ->groupBy('week')
                     ->pluck('total', 'week');
 
@@ -134,7 +150,7 @@ class ActivityService
                     $query->whereHas($relation, fn(Builder $q) => $q->where('user_id', $partnerId));
                 }
 
-                $counts = $query->select(\Illuminate\Support\Facades\DB::raw("DATE_FORMAT(created_at, '%Y-%v') as week"), \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
+                $counts = $query->select(DB::raw("DATE_FORMAT(created_at, '%Y-%v') as week"), DB::raw('COUNT(*) as total'))
                     ->groupBy('week')
                     ->pluck('total', 'week');
 

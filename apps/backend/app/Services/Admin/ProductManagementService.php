@@ -2,7 +2,11 @@
 
 namespace App\Services\Admin;
 
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Tag;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -20,10 +24,10 @@ class ProductManagementService
      * @param \Illuminate\Http\Request $request
      * @return array
      */
-    public function getListingData(\Illuminate\Http\Request $request): array
+    public function getListingData(Request $request): array
     {
-        $categories = \App\Models\Category::active()->where('is_product', 1)->get();
-        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+        $categories = Category::active()->where('is_product', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
 
         $products = Product::query()
             ->when($request->query('title'), fn($q) => $q->where('title', 'like', '%' . $request->query('title') . '%'))
@@ -45,13 +49,13 @@ class ProductManagementService
      */
     public function getFormData(): array
     {
-        $categories = \App\Models\Category::active()->where('is_product', 1)->get();
-        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+        $categories = Category::active()->where('is_product', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
 
-        $brands = \App\Models\Brand::active()->where('is_product', 1)->get();
-        if ($brands->isEmpty()) $brands = \App\Models\Brand::active()->get();
+        $brands = Brand::active()->where('is_product', 1)->get();
+        if ($brands->isEmpty()) $brands = Brand::active()->get();
 
-        $tags = \App\Models\Tag::all();
+        $tags = Tag::all();
         $titleSuggestions = Product::select('title')->distinct()->limit(20)->pluck('title');
 
         return compact('categories', 'brands', 'tags', 'titleSuggestions');

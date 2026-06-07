@@ -1,9 +1,14 @@
 <?php
 
 use App\DTOs\ContentResult;
-use App\Models\Setting;
 use App\Models\PageContent;
+use App\Models\Setting;
+use App\Services\ContentService;
+use App\Services\MenuService;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 
 
 if (! function_exists('menu_name')) {
@@ -17,7 +22,7 @@ if (! function_exists('menu_name')) {
     function menu_name(string $locationKey, ?string $defaultName = null): string
     {
         // Resolve the service from the container and pass the optional default name
-        return app(\App\Services\MenuService::class)->getMenuName($locationKey, $defaultName);
+        return app(MenuService::class)->getMenuName($locationKey, $defaultName);
     }
 }
 
@@ -31,7 +36,7 @@ if (! function_exists('menu_items')) {
     function menu_items(string $locationKey): Collection
     {
         // Resolve the service from the container and call the get method
-        return app(\App\Services\MenuService::class)->get($locationKey);
+        return app(MenuService::class)->get($locationKey);
     }
 }
 
@@ -42,14 +47,14 @@ if (! function_exists('get_menus_list')) {
      */
     function get_menus_list(): Collection
     {
-        return app(\App\Services\MenuService::class)->getMenusList();
+        return app(MenuService::class)->getMenusList();
     }
 }
 
 if (!function_exists('themepages')) {
     function themepages(string $themeKey)
     {
-        if (! \Illuminate\Support\Facades\Schema::hasTable('page_contents')) {
+        if (! Schema::hasTable('page_contents')) {
             return collect();
         }
 
@@ -64,15 +69,15 @@ if (!function_exists('themepages')) {
 if (!function_exists('setting')) {
     function setting($key, $default = null)
     {
-        if (! \Illuminate\Support\Facades\Schema::hasTable('settings')) {
+        if (! Schema::hasTable('settings')) {
             return $default;
         }
 
-        $settings = \Illuminate\Support\Facades\Cache::rememberForever('settings_all', function () {
-            return \App\Models\Setting::pluck('value', 'key')->toArray();
+        $settings = Cache::rememberForever('settings_all', function () {
+            return Setting::pluck('value', 'key')->toArray();
         });
 
-        $value = \Illuminate\Support\Arr::get($settings, $key, $default);
+        $value = Arr::get($settings, $key, $default);
 
         if (is_string($value)) {
             $decoded = json_decode($value, true);
@@ -221,7 +226,7 @@ if (!function_exists('page_content')) {
      */
     function page_content(string $keyString, $default = null, bool $raw = false): mixed
     {
-        $content = app(\App\Services\ContentService::class)->get($keyString, $default);
+        $content = app(ContentService::class)->get($keyString, $default);
 
         if ($raw) {
             return content_display($content, $default);

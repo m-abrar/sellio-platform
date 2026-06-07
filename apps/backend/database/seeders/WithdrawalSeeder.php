@@ -6,12 +6,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Withdrawal;
 use App\Models\User;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Withdrawal;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class WithdrawalSeeder
@@ -40,7 +40,7 @@ class WithdrawalSeeder extends Seeder
         if ($this->command) {
             $this->command->info('💸 Starting Withdrawal Seeder...');
             // Delete all withdrawals except for the demo partner to preserve their high-fidelity transactions
-            \App\Models\Withdrawal::whereHas('user', function($q) {
+            Withdrawal::whereHas('user', function($q) {
                 $q->where('email', '!=', 'partner@sellio-platform.test');
             })->delete();
             $this->command->line('  🗑️ Cleared existing non-demo withdrawal records.');

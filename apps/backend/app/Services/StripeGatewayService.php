@@ -3,15 +3,17 @@
 namespace App\Services;
 
 use App\Contracts\PaymentGatewayService;
-use App\Exceptions\WebhookSignatureException; // Assuming you have this exception
+use App\Exceptions\WebhookSignatureException;
 use App\Models\Plan;
 use App\Models\User;
-use Stripe\StripeClient;
-use Stripe\Exception\ApiErrorException;
-use Stripe\Exception\SignatureVerificationException; // Specific Stripe exception for webhooks
-use Stripe\Webhook;
-use Symfony\Component\HttpFoundation\Response; // Used for webhook response
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\SignatureVerificationException;
+use Stripe\StripeClient;
+use Stripe\Webhook;
+use Symfony\Component\HttpFoundation\Response;
 
 class StripeGatewayService implements PaymentGatewayService
 {
@@ -30,7 +32,7 @@ class StripeGatewayService implements PaymentGatewayService
         // --- REAL IMPLEMENTATION: Use the secret_key to initialize the client ---
         if (empty($this->config['secret_key'])) {
             Log::critical('Stripe Secret Key is missing from configuration!');
-            throw new \Exception("Stripe Secret Key is missing from configuration.");
+            throw new Exception("Stripe Secret Key is missing from configuration.");
         }
         
         // Initialize the Stripe Client instance
@@ -84,7 +86,7 @@ class StripeGatewayService implements PaymentGatewayService
                 $requestArray['payment_method_data'] = $paymentMethodParams;
             } else {
                 Log::error("Charge failed: Invalid or missing payment token/method ID.", ['token' => $token]);
-                throw new \Exception("Invalid or missing payment token/method ID.");
+                throw new Exception("Invalid or missing payment token/method ID.");
             }
             
             Log::debug('Stripe Payment Intent request array prepared.', ['amount' => $amountInCents, 'has_method' => (bool)($paymentMethodId || $paymentMethodParams)]);
@@ -141,7 +143,7 @@ class StripeGatewayService implements PaymentGatewayService
                 'message' => 'Stripe API Error: ' . $e->getMessage(),
                 'details' => $e->getJsonBody()
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::critical('Unexpected Service Error during charge.', [
                 'error_message' => $e->getMessage(),
                 'file' => $e->getFile(),
@@ -226,7 +228,7 @@ class StripeGatewayService implements PaymentGatewayService
                 'details' => $e->getJsonBody(),
             ];
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::critical('Unexpected error while retrieving payment intent status', [
                 'payment_intent_id' => $paymentIntentId,
                 'error_message' => $e->getMessage(),
@@ -394,7 +396,7 @@ class StripeGatewayService implements PaymentGatewayService
      * @param \Illuminate\Http\Request $request
      * @return array
      */
-    public function handleWebhook(\Illuminate\Http\Request $request): array
+    public function handleWebhook(Request $request): array
     {
         Log::info('Stripe webhook processing started.');
 
@@ -406,7 +408,7 @@ class StripeGatewayService implements PaymentGatewayService
         
         if (!$webhookSecret) {
             Log::critical("Stripe Webhook Secret is missing! Signature verification impossible.");
-            throw new \Exception("Stripe Webhook Secret is missing from configuration. Cannot verify signature.");
+            throw new Exception("Stripe Webhook Secret is missing from configuration. Cannot verify signature.");
         }
         
         if (!$signature) {

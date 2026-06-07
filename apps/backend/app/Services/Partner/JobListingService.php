@@ -2,12 +2,15 @@
 
 namespace App\Services\Partner;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\JobListing;
 use App\Models\Location;
+use App\Models\Tag;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -31,13 +34,13 @@ class JobListingService
             'categories' => Category::where('is_job', true)->get(['id', 'title']),
             'types'      => Type::where('is_job', true)->get(['id', 'title']),
             'locations'  => Location::where('is_job', true)->get(['id', 'title']),
-            'brands'     => \App\Models\Brand::where('is_job', true)->get(['id', 'title']),
+            'brands'     => Brand::where('is_job', true)->get(['id', 'title']),
         ];
     }
 
     public function saveJob(User $user, array $data, ?JobListing $jobListing = null): JobListing
     {
-        return \Illuminate\Support\Facades\DB::transaction(function () use ($user, $data, $jobListing) {
+        return DB::transaction(function () use ($user, $data, $jobListing) {
             $tags = $data['tags'] ?? null;
             unset($data['main_image'], $data['gallery'], $data['existing_media_ids'], $data['employment_type'], $data['tags']);
 
@@ -63,9 +66,9 @@ class JobListingService
             if ($tags !== null) {
                 $tagIds = [];
                 foreach ($tags as $tagName) {
-                    $tag = \App\Models\Tag::firstOrCreate(
+                    $tag = Tag::firstOrCreate(
                         ['title' => trim($tagName)],
-                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_job' => true, 'is_published' => true]
+                        ['slug' => Str::slug($tagName), 'is_job' => true, 'is_published' => true]
                     );
                     $tagIds[] = $tag->id;
                 }

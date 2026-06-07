@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Models\Type;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 /**
@@ -18,7 +19,7 @@ class TypeManagementService
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getListingData(\Illuminate\Http\Request $request)
+    public function getListingData(Request $request)
     {
         return Type::latest()
             ->when($request->query('search'), function($q) use ($request) {

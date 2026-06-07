@@ -2,12 +2,16 @@
 
 namespace App\Services\Partner;
 
+use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Feature;
 use App\Models\Location;
 use App\Models\Service;
+use App\Models\Tag;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -30,14 +34,14 @@ class ServiceService
             'categories' => Category::where('is_service', true)->get(['id', 'title']),
             'types'      => Type::where('is_service', true)->get(['id', 'title']),
             'locations'  => Location::where('is_service', true)->get(['id', 'title']),
-            'brands'     => \App\Models\Brand::where('is_service', true)->get(['id', 'title']),
-            'features'   => \App\Models\Feature::where('is_service', true)->active()->get(['id', 'title']),
+            'brands'     => Brand::where('is_service', true)->get(['id', 'title']),
+            'features'   => Feature::where('is_service', true)->active()->get(['id', 'title']),
         ];
     }
 
     public function saveService(User $user, array $data, ?Service $service = null): Service
     {
-        return \Illuminate\Support\Facades\DB::transaction(function () use ($user, $data, $service) {
+        return DB::transaction(function () use ($user, $data, $service) {
             unset($data['main_image'], $data['gallery'], $data['existing_main_media_id'], $data['existing_media_ids'], $data['sync_existing_media']);
 
             $data['slug'] = $this->generateUniqueSlug($data['title'], $service?->id);
@@ -69,9 +73,9 @@ class ServiceService
             if (isset($data['tags'])) {
                 $tagIds = [];
                 foreach ($data['tags'] as $tagName) {
-                    $tag = \App\Models\Tag::firstOrCreate(
+                    $tag = Tag::firstOrCreate(
                         ['title' => trim($tagName)],
-                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_service' => true, 'is_published' => true]
+                        ['slug' => Str::slug($tagName), 'is_service' => true, 'is_published' => true]
                     );
                     $tagIds[] = $tag->id;
                 }

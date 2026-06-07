@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Partner;
 
+use App\Models\Auto;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,8 +26,8 @@ class AutoRequest extends FormRequest
         // If updating, verify the user owns the vehicle
         $auto = $this->route('auto');
         if ($auto) {
-            $autoId = $auto instanceof \App\Models\Auto ? $auto->id : $auto;
-            return \App\Models\Auto::where('id', $autoId)
+            $autoId = $auto instanceof Auto ? $auto->id : $auto;
+            return Auto::where('id', $autoId)
                 ->where('user_id', Auth::id())
                 ->exists();
         }

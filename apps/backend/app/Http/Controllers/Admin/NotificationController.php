@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\NotificationResource;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -25,7 +26,7 @@ class NotificationController extends Controller
     {
         $notifications = Auth::user()->notifications()->paginate(15);
         
-        $styledNotifications = \App\Http\Resources\Admin\NotificationResource::collection($notifications)->resolve();
+        $styledNotifications = NotificationResource::collection($notifications)->resolve();
 
         return view('admin.notifications.index', compact('styledNotifications', 'notifications'));
     }

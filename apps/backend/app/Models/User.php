@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasImageAccess;
+use App\Traits\Models\HasMarketplaceMetrics;
 use App\Traits\Subscribable;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Wallet;
@@ -14,18 +15,20 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
-use Laravel\Sanctum\HasApiTokens; 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\Models\HasMarketplaceMetrics;
 
 /**
  * App\Models\User
@@ -67,7 +70,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
     {
         static::creating(function (User $user) {
             if (empty($user->uuid)) {
-                $user->uuid = (string) \Illuminate\Support\Str::uuid();
+                $user->uuid = (string) Str::uuid();
             }
         });
 
@@ -78,7 +81,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
 
             $roleName = $user->defaultRoleName();
 
-            if (\Spatie\Permission\Models\Role::where('name', $roleName)->exists()) {
+            if (Role::where('name', $roleName)->exists()) {
                 $user->assignRole($roleName);
             }
         });
@@ -114,7 +117,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
      *
      * @return \Illuminate\Support\Collection<int, string>
      */
-    public function displayRoleNames(): \Illuminate\Support\Collection
+    public function displayRoleNames(): Collection
     {
         $names = $this->getRoleNames();
 

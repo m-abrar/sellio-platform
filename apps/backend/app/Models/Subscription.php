@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -68,7 +69,7 @@ class Subscription extends Model
         return $this->belongsTo(Plan::class);
     }
 
-    public function quota(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function quota(): HasOne
     {
         return $this->hasOne(SubscriptionQuota::class);
     }

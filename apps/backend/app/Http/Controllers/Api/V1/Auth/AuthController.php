@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use App\Services\AuthService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -23,7 +25,7 @@ class AuthController extends Controller
      *
      * @param  \App\Services\AuthService  $authService
      */
-    public function __construct(\App\Services\AuthService $authService)
+    public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
     }
@@ -55,7 +57,7 @@ class AuthController extends Controller
     /**
      * Refresh the current Sanctum token.
      */
-    public function refresh(Request $request): \Illuminate\Http\JsonResponse
+    public function refresh(Request $request): JsonResponse
     {
         $token = $this->authService->refreshToken($request->user());
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Partner;
 
+use App\Models\Classified;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -16,9 +17,9 @@ class ClassifiedRequest extends FormRequest
 
         $classified = $this->route('classified');
         if ($classified) {
-            $classifiedId = $classified instanceof \App\Models\Classified ? $classified->id : $classified;
+            $classifiedId = $classified instanceof Classified ? $classified->id : $classified;
 
-            return \App\Models\Classified::where('id', $classifiedId)
+            return Classified::where('id', $classifiedId)
                 ->where('user_id', Auth::id())
                 ->exists();
         }
@@ -29,7 +30,7 @@ class ClassifiedRequest extends FormRequest
     public function rules(): array
     {
         $classified = $this->route('classified');
-        $classifiedId = $classified instanceof \App\Models\Classified ? $classified->id : $classified;
+        $classifiedId = $classified instanceof Classified ? $classified->id : $classified;
 
         return [
             'category_id'    => ['required', 'exists:categories,id'],

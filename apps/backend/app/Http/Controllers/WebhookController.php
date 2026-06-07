@@ -3,8 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\WebhookSignatureException;
+use Exception;
+use App\Models\EventBooking;
+use App\Models\Order;
+use App\Models\Payment;
 use App\Models\PaymentGateway;
+use App\Models\Plan;
+use App\Models\PropertyBooking;
+use App\Models\User;
+use App\Services\CheckoutService;
+use App\Services\EventBookingService;
 use App\Services\GatewayManager;
+use App\Services\PropertyService;
+use App\Services\SubscriptionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -41,52 +52,52 @@ class WebhookController extends Controller
             $result = $service->handleWebhook($request); 
             
             if (!empty($result['subscription_user_id']) && !empty($result['subscription_plan_id'])) {
-                $user = \App\Models\User::find($result['subscription_user_id']);
-                $plan = \App\Models\Plan::find($result['subscription_plan_id']);
+                $user = User::find($result['subscription_user_id']);
+                $plan = Plan::find($result['subscription_plan_id']);
 
                 if ($user && $plan) {
-                    app(\App\Services\SubscriptionService::class)->subscribe($user, $plan);
+                    app(SubscriptionService::class)->subscribe($user, $plan);
                     Log::info("Webhook activated partner subscription for user {$user->id} on plan {$plan->id} via {$gatewaySlug}");
                 }
             }
 
             if (!empty($result['property_booking_id']) && isset($result['payment_status']) && $result['payment_status'] === 'paid') {
-                $booking = \App\Models\PropertyBooking::find($result['property_booking_id']);
+                $booking = PropertyBooking::find($result['property_booking_id']);
 
                 if ($booking) {
-                    app(\App\Services\PropertyService::class)->recordBookingPayment(
+                    app(PropertyService::class)->recordBookingPayment(
                         $booking,
                         $gatewaySlug,
                         (float) $booking->total_price,
-                        \App\Models\Payment::STATUS_COMPLETED,
+                        Payment::STATUS_COMPLETED,
                         $result['reference'] ?? null,
                         $result['message'] ?? 'Property booking payment confirmed via webhook.'
                     );
 
-                    if ($booking->status !== \App\Models\PropertyBooking::STATUS_CONFIRMED) {
-                        app(\App\Services\PropertyService::class)->confirmBookingPayment($booking);
+                    if ($booking->status !== PropertyBooking::STATUS_CONFIRMED) {
+                        app(PropertyService::class)->confirmBookingPayment($booking);
                         Log::info("Webhook confirmed property booking {$booking->id} via {$gatewaySlug}");
                     }
                 }
             }
 
             if (!empty($result['event_booking_id']) && isset($result['payment_status']) && $result['payment_status'] === 'paid') {
-                $booking = \App\Models\EventBooking::find($result['event_booking_id']);
+                $booking = EventBooking::find($result['event_booking_id']);
 
                 if ($booking) {
                     $amount = round((float) $booking->total_price * 1.05, 2);
 
-                    app(\App\Services\EventBookingService::class)->recordBookingPayment(
+                    app(EventBookingService::class)->recordBookingPayment(
                         $booking,
                         $gatewaySlug,
                         $amount,
-                        \App\Models\Payment::STATUS_COMPLETED,
+                        Payment::STATUS_COMPLETED,
                         $result['reference'] ?? null,
                         $result['message'] ?? 'Event booking payment confirmed via webhook.'
                     );
 
-                    if ($booking->status !== \App\Models\EventBooking::STATUS_CONFIRMED) {
-                        app(\App\Services\EventBookingService::class)->finalizePayment(
+                    if ($booking->status !== EventBooking::STATUS_CONFIRMED) {
+                        app(EventBookingService::class)->finalizePayment(
                             $booking,
                             $gatewaySlug,
                             $result['reference'] ?? null,
@@ -99,13 +110,13 @@ class WebhookController extends Controller
 
             // AUTOMATED FULFILLMENT: Update the corresponding Order if identified
             if (!empty($result['order_id']) && isset($result['payment_status']) && $result['payment_status'] === 'paid') {
-                $order = \App\Models\Order::find($result['order_id']);
+                $order = Order::find($result['order_id']);
                 if ($order) {
-                    app(\App\Services\CheckoutService::class)->recordOrderPayment(
+                    app(CheckoutService::class)->recordOrderPayment(
                         $order,
                         $gatewaySlug,
                         (float) $order->total_amount,
-                        \App\Models\Payment::STATUS_COMPLETED,
+                        Payment::STATUS_COMPLETED,
                         $result['reference'] ?? null,
                         $result['message'] ?? 'Product order payment confirmed via webhook.'
                     );
@@ -132,7 +143,7 @@ class WebhookController extends Controller
             Log::error("Webhook signature verification failed for {$gatewaySlug}: " . $e->getMessage());
             return response()->json(['error' => 'Invalid signature'], Response::HTTP_BAD_REQUEST);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Webhook processing error for {$gatewaySlug}: " . $e->getMessage(), [
                 'exception' => get_class($e)
             ]);

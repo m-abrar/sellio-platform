@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -48,9 +49,9 @@ class MenuItem extends Model
     /**
      * Sanitize URL to prevent stored XSS via javascript: or data: protocols.
      */
-    protected function url(): \Illuminate\Database\Eloquent\Casts\Attribute
+    protected function url(): Attribute
     {
-        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+        return Attribute::make(
             set: function ($value) {
                 $sanitized = filter_var($value, FILTER_SANITIZE_URL);
                 // Block dangerous protocols

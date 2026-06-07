@@ -2,10 +2,17 @@
 
 namespace App\Services\Admin;
 
+use App\Models\Auto;
+use App\Models\Classified;
+use App\Models\Event;
+use App\Models\JobListing;
+use App\Models\Location;
+use App\Models\Property;
+use App\Models\Service;
+use App\Models\User;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\Models\{Property, Auto, Event, JobListing, Service, Classified};
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class ListingQueryService
 {
@@ -93,8 +100,8 @@ class ListingQueryService
         $userIds = $listings->pluck('user_id')->unique()->filter();
         $locIds  = $listings->pluck('location_id')->unique()->filter();
 
-        $users     = \App\Models\User::whereIn('id', $userIds)->get()->keyBy('id');
-        $locations = \App\Models\Location::whereIn('id', $locIds)->get()->keyBy('id');
+        $users     = User::whereIn('id', $userIds)->get()->keyBy('id');
+        $locations = Location::whereIn('id', $locIds)->get()->keyBy('id');
 
         $listings->getCollection()->transform(function ($listing) use ($users, $locations) {
             $typeKey = strtolower($listing->listing_type);

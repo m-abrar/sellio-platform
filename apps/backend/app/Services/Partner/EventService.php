@@ -8,6 +8,7 @@ use App\Models\EventOccurrence;
 use App\Models\EventOccurrenceTicket;
 use App\Models\EventTicketType;
 use App\Models\Location;
+use App\Models\Tag;
 use App\Models\Type;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
@@ -58,9 +59,9 @@ class EventService
             if (isset($data['tags'])) {
                 $tagIds = [];
                 foreach ($data['tags'] as $tagName) {
-                    $tag = \App\Models\Tag::firstOrCreate(
+                    $tag = Tag::firstOrCreate(
                         ['title' => trim($tagName)],
-                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_event' => true, 'is_published' => true]
+                        ['slug' => Str::slug($tagName), 'is_event' => true, 'is_published' => true]
                     );
                     $tagIds[] = $tag->id;
                 }

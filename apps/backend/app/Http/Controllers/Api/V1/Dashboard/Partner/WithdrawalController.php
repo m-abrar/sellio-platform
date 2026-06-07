@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
 use App\Services\WalletService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class WithdrawalController
@@ -51,9 +53,9 @@ class WithdrawalController extends Controller
                 null, 
                 __('Withdrawal request submitted successfully for approval.')
             );
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return $this->errorResponse($e->getMessage(), 422, $e->errors());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
     }

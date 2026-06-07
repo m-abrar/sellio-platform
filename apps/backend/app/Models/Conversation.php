@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * App\Models\Conversation
@@ -53,7 +54,7 @@ class Conversation extends Model
     /**
      * Get the target entity being discussed (Property, Auto, Event, Service, Job, Classified, Product).
      */
-    public function inquiriable(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    public function inquiriable(): MorphTo
     {
         return $this->morphTo();
     }

@@ -7,16 +7,17 @@ use App\Http\Requests\Partner\StorePropertyRequest;
 use App\Http\Requests\Partner\UpdatePropertyRequest;
 use App\Http\Resources\PropertyResource;
 use App\Models\Amenity;
+use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Feature;
 use App\Models\Location;
 use App\Models\Property;
 use App\Models\Type;
-use App\Models\Brand;
-use App\Models\Feature;
 use App\Services\Partner\PropertyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class PropertyController
@@ -179,7 +180,7 @@ class PropertyController extends Controller
                 ->each(fn($media) => $media->delete());
 
             if ($keepIds !== []) {
-                \Spatie\MediaLibrary\MediaCollections\Models\Media::setNewOrder($keepIds);
+                Media::setNewOrder($keepIds);
             }
         }
 

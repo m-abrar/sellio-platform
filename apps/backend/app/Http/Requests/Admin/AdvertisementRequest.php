@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Advertisement;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -47,8 +48,8 @@ class AdvertisementRequest extends FormRequest
         if ($this->has('status') && ! is_string($this->input('status'))) {
             $this->merge([
                 'status' => $this->boolean('status')
-                    ? \App\Models\Advertisement::STATUS_ACTIVE
-                    : \App\Models\Advertisement::STATUS_INACTIVE,
+                    ? Advertisement::STATUS_ACTIVE
+                    : Advertisement::STATUS_INACTIVE,
             ]);
         }
     }
@@ -59,7 +60,7 @@ class AdvertisementRequest extends FormRequest
     protected function passedValidation(): void
     {
         if (! $this->filled('status')) {
-            $this->merge(['status' => \App\Models\Advertisement::STATUS_INACTIVE]);
+            $this->merge(['status' => Advertisement::STATUS_INACTIVE]);
         }
     }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Services\AuthService;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -36,7 +37,7 @@ class RegisteredUserController extends Controller
         $user = $result['user'];
 
         event(new Registered($user));
-        \App\Events\UserRegistered::dispatch($user);
+        UserRegistered::dispatch($user);
 
         Auth::login($user);
 

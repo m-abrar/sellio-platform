@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StartConversationRequest;
 use App\Models\Conversation;
 use App\Models\User;
 use App\Services\ConversationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
 
 class ConversationController extends Controller
 {
@@ -31,13 +33,13 @@ class ConversationController extends Controller
      * @param  \App\Http\Requests\StartConversationRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function start(\App\Http\Requests\StartConversationRequest $request): RedirectResponse
+    public function start(StartConversationRequest $request): RedirectResponse
     {
         // Rate Limiting
-        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts('start-conv:' . Auth::id(), 5)) {
+        if (RateLimiter::tooManyAttempts('start-conv:' . Auth::id(), 5)) {
             return back()->withErrors(['message' => __('Too many requests.')]);
         }
-        \Illuminate\Support\Facades\RateLimiter::hit('start-conv:' . Auth::id(), 60);
+        RateLimiter::hit('start-conv:' . Auth::id(), 60);
 
         $partner = User::where('username', $request->validated()['username'])->firstOrFail();
         

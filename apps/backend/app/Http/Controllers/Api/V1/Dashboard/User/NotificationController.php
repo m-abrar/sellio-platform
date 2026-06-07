@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Dashboard\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Partner\NotificationResource;
+use App\Notifications\Partner\PartnerAlertNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,21 +23,21 @@ class NotificationController extends Controller
         
         // Auto-seed three premium notifications if the database is currently empty
         if ($user->notifications()->count() === 0) {
-            $user->notify(new \App\Notifications\Partner\PartnerAlertNotification(
+            $user->notify(new PartnerAlertNotification(
                 type: 'booking',
                 title: __('Booking Confirmed!'),
                 message: __('Your booking request for "Cozy Mountain Chalet" has been approved by the host! Get ready for your trip starting next Friday.'),
                 route: '/bookings'
             ));
             
-            $user->notify(new \App\Notifications\Partner\PartnerAlertNotification(
+            $user->notify(new PartnerAlertNotification(
                 type: 'message',
                 title: __('New Inbox Message'),
                 message: __('You received a new message from Sarah Connor regarding your inquiry on "Tesla Model S". Open your inbox to reply.'),
                 route: '/messages'
             ));
             
-            $user->notify(new \App\Notifications\Partner\PartnerAlertNotification(
+            $user->notify(new PartnerAlertNotification(
                 type: 'favorite',
                 title: __('Price Drop Alert!'),
                 message: __('Great news! "Minimalist Leather Sofa" in your Favorites list has dropped by 15%. Grab it now while stock lasts.'),

@@ -1,13 +1,18 @@
 <?php
 
-use Illuminate\Auth\AuthenticationException;
+use App\Http\Middleware\CheckBuiltInWebsiteStatus;
+use App\Http\Middleware\CheckModuleEnabled;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Middleware\RoleMiddleware;
 
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -51,9 +56,9 @@ return Application::configure(basePath: dirname(__DIR__))
             // LoadTheme::class removed
         ]);
         $middleware->alias([
-            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-            'module' => \App\Http\Middleware\CheckModuleEnabled::class,
-            'built_in_website' => \App\Http\Middleware\CheckBuiltInWebsiteStatus::class,
+            'role' => RoleMiddleware::class,
+            'module' => CheckModuleEnabled::class,
+            'built_in_website' => CheckBuiltInWebsiteStatus::class,
         ]);
         // Add this to ensure CORS headers are attached even if auth fails
         $middleware->validateCsrfTokens(except: [
@@ -94,7 +99,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         // 422 — Validation Exception
-        $exceptions->render(function (\Illuminate\Validation\ValidationException $e, Request $request) {
+        $exceptions->render(function (ValidationException $e, Request $request) {
             if ($request->expectsJson() || $request->is('api/*')) {
                 return response()->json([
                     'success' => false,
@@ -105,7 +110,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         // Database Connection Error — Dedicated Polish Screen
-        $exceptions->render(function (\Illuminate\Database\QueryException $e, Request $request) {
+        $exceptions->render(function (QueryException $e, Request $request) {
             $isConnectionError = str_contains($e->getMessage(), '[2002]') || 
                                str_contains($e->getMessage(), 'Connection refused');
             

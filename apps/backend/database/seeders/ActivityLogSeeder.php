@@ -2,16 +2,18 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use App\Models\Property;
-use App\Models\Event;
 use App\Models\Auto;
-use App\Models\Service;
-use App\Models\Joblisting;
+use App\Models\Blog;
 use App\Models\Classified;
+use App\Models\Event;
+use App\Models\JobListing;
+use App\Models\Product;
+use App\Models\Property;
+use App\Models\Service;
 use App\Models\User;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class ActivityLogSeeder
@@ -28,14 +30,14 @@ class ActivityLogSeeder extends Seeder
         $this->command->info('🚀 Starting High-Volume Activity Log Seeder...');
 
         $modelClasses = [
-            'Property'   => \App\Models\Property::class,
-            'Event'      => \App\Models\Event::class,
-            'Auto'       => \App\Models\Auto::class,
-            'Service'    => \App\Models\Service::class,
-            'JobListing' => \App\Models\JobListing::class,
-            'Classified' => \App\Models\Classified::class,
-            'Product'    => \App\Models\Product::class,
-            'Blog'       => \App\Models\Blog::class,
+            'Property'   => Property::class,
+            'Event'      => Event::class,
+            'Auto'       => Auto::class,
+            'Service'    => Service::class,
+            'JobListing' => JobListing::class,
+            'Classified' => Classified::class,
+            'Product'    => Product::class,
+            'Blog'       => Blog::class,
         ];
 
         $userIds = User::pluck('id')->toArray();

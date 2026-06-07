@@ -4,10 +4,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\User;
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class SubscriptionSeeder
@@ -27,7 +28,7 @@ class SubscriptionSeeder extends Seeder
     {
         if ($this->command) {
             $this->command->info('📩 Starting Subscription Seeder...');
-            \Illuminate\Support\Facades\DB::table('subscriptions')->delete();
+            DB::table('subscriptions')->delete();
             $this->command->line('  🗑️ Cleared existing subscriptions.');
         }
 

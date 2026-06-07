@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CalculatePriceRequest;
 use App\Http\Requests\SaveProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\Tag;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests\CalculatePriceRequest;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductController extends Controller
 {
@@ -56,7 +60,7 @@ class ProductController extends Controller
             return $this->successResponse(null, __('You have reached your listing limit. Please upgrade your plan.'), 403);
         }
 
-        return \Illuminate\Support\Facades\DB::transaction(function () use ($request, $user) {
+        return DB::transaction(function () use ($request, $user) {
             // Use safe()->except to remove media and polymorphic fields from the SQL insert
             $data = $request->safe()->except(['main_image', 'gallery', 'approved_at', 'user_id', 'tags', 'features']);
 
@@ -76,9 +80,9 @@ class ProductController extends Controller
             if ($request->has('tags')) {
                 $tagIds = [];
                 foreach ($request->input('tags') ?? [] as $tagName) {
-                    $tag = \App\Models\Tag::firstOrCreate(
+                    $tag = Tag::firstOrCreate(
                         ['title' => trim($tagName)],
-                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_product' => true, 'is_published' => true]
+                        ['slug' => Str::slug($tagName), 'is_product' => true, 'is_published' => true]
                     );
                     $tagIds[] = $tag->id;
                 }
@@ -94,7 +98,7 @@ class ProductController extends Controller
     }
 
     public function update(SaveProductRequest $request, $id) {
-        return \Illuminate\Support\Facades\DB::transaction(function () use ($request, $id) {
+        return DB::transaction(function () use ($request, $id) {
             $product = Product::where('user_id', auth()->id())->findOrFail($id);
 
             // Prevent partners from changing ownership or approval status
@@ -113,9 +117,9 @@ class ProductController extends Controller
             if ($request->has('tags')) {
                 $tagIds = [];
                 foreach ($request->input('tags') ?? [] as $tagName) {
-                    $tag = \App\Models\Tag::firstOrCreate(
+                    $tag = Tag::firstOrCreate(
                         ['title' => trim($tagName)],
-                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_product' => true, 'is_published' => true]
+                        ['slug' => Str::slug($tagName), 'is_product' => true, 'is_published' => true]
                     );
                     $tagIds[] = $tag->id;
                 }
@@ -207,7 +211,7 @@ class ProductController extends Controller
 
             // CRITICAL: Re-apply order column based on the order of IDs sent from React
             // Spatie provides a utility for this:
-            \Spatie\MediaLibrary\MediaCollections\Models\Media::setNewOrder($keepIds);
+            Media::setNewOrder($keepIds);
         }
 
         // 3. Add New Gallery Images

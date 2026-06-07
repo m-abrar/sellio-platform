@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\AuthService;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Support\Facades\Log;
+
 /**
  * Class SocialLoginController
  *
@@ -20,7 +23,7 @@ class SocialLoginController extends Controller
 {
     protected $authService;
 
-    public function __construct(\App\Services\AuthService $authService)
+    public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
     }
@@ -40,7 +43,7 @@ class SocialLoginController extends Controller
 
         try {
             $socialUser = Socialite::driver($provider)->user();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Social Login Failed for provider [$provider]: " . $e->getMessage(), [
                 'exception' => $e,
                 'provider' => $provider,

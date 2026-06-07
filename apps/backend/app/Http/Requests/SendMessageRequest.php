@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Conversation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SendMessageRequest extends FormRequest
@@ -11,11 +12,11 @@ class SendMessageRequest extends FormRequest
         $conversation = $this->route('conversation') ?? $this->route('conversationId');
 
         if ($conversation) {
-            $conversationId = $conversation instanceof \App\Models\Conversation
+            $conversationId = $conversation instanceof Conversation
                 ? $conversation->id
                 : $conversation;
 
-            return \App\Models\Conversation::where('id', $conversationId)
+            return Conversation::where('id', $conversationId)
                 ->where(function ($query) {
                     $query->where('user_id', auth()->id())
                           ->orWhere('partner_id', auth()->id());

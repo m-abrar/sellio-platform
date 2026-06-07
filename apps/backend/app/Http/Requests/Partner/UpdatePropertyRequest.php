@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Partner;
 
+use App\Models\Property;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,8 +26,8 @@ class UpdatePropertyRequest extends FormRequest
         // If updating, verify the user owns the property
         $property = $this->route('property');
         if ($property) {
-            $propertyId = $property instanceof \App\Models\Property ? $property->id : $property;
-            return \App\Models\Property::where('id', $propertyId)
+            $propertyId = $property instanceof Property ? $property->id : $property;
+            return Property::where('id', $propertyId)
                 ->where('user_id', Auth::id())
                 ->exists();
         }

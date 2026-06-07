@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
-use App\Models\ServiceQuote;
 use App\Http\Resources\ServiceQuoteResource;
+use App\Models\ServiceQuote;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -78,7 +79,7 @@ class ServiceQuoteController extends Controller
      * @param ServiceQuote $serviceQuote
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(string $status, ServiceQuote $serviceQuote): \Illuminate\Http\JsonResponse
+    public function update(string $status, ServiceQuote $serviceQuote): JsonResponse
     {
         $this->authorizeOwner($serviceQuote);
 

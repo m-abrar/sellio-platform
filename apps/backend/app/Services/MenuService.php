@@ -4,9 +4,14 @@ namespace App\Services;
 
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\Theme;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Cache, Config, Route, Schema};
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class MenuService
@@ -152,7 +157,7 @@ class MenuService
 
     public function updateStructure(Menu $menu, array $data): void
     {
-        \Illuminate\Support\Facades\DB::transaction(function () use ($menu, $data) {
+        DB::transaction(function () use ($menu, $data) {
             if (! empty($data['new_items'])) {
                 foreach ($data['new_items'] as $newItem) {
                     if (! empty($newItem['title']) && ! empty($newItem['url'])) {
@@ -407,7 +412,7 @@ class MenuService
 
         if ($requestedTheme) {
             $themeExists = Cache::remember("theme_exists.{$requestedTheme}", 3600, function () use ($requestedTheme) {
-                return \App\Models\Theme::where('theme_key', $requestedTheme)->exists();
+                return Theme::where('theme_key', $requestedTheme)->exists();
             });
 
             if ($themeExists) {
@@ -415,7 +420,7 @@ class MenuService
             }
         }
 
-        return \App\Models\Theme::where('is_active', 1)->value('theme_key')
+        return Theme::where('is_active', 1)->value('theme_key')
             ?? Config::get('app.default_theme', self::GLOBAL_FALLBACK_THEME);
     }
 

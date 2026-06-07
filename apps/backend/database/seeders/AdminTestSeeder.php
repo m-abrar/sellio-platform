@@ -25,6 +25,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 /**
  * Deterministic seed data for admin dashboard feature/E2E tests.
@@ -43,7 +44,7 @@ class AdminTestSeeder extends Seeder
         ]);
 
         Permission::firstOrCreate(['name' => 'manage-marketing']);
-        \Spatie\Permission\Models\Role::where('name', 'super-admin')->first()
+        Role::where('name', 'super-admin')->first()
             ?->givePermissionTo('manage-marketing');
 
         $this->enableAllModules();
@@ -138,7 +139,7 @@ class AdminTestSeeder extends Seeder
             ['url' => '/', 'order' => 0]
         );
 
-        $this->call(\Database\Seeders\Payment\PaymentGatewaysSeeder::class);
+        $this->call(Payment\PaymentGatewaysSeeder::class);
     }
 
     private function enableAllModules(): void

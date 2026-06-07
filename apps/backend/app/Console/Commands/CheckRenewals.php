@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Services\SubscriptionService;
 use Illuminate\Console\Command;
-use App\Models\Subscription;
-use App\Events\PlanAboutToExpire;
-use Carbon\Carbon;
 
 class CheckRenewals extends Command
 {
@@ -26,7 +24,7 @@ class CheckRenewals extends Command
     /**
      * Execute the console command.
      */
-    public function handle(\App\Services\SubscriptionService $subscriptionService)
+    public function handle(SubscriptionService $subscriptionService)
     {
         $this->info('Starting renewal check...');
 

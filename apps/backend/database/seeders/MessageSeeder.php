@@ -7,12 +7,15 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\Auto;
 use App\Models\Conversation;
 use App\Models\Message;
-use Illuminate\Support\Facades\DB;
+use App\Models\Property;
+use App\Models\Service;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class MessageSeeder
@@ -57,9 +60,9 @@ class MessageSeeder extends Seeder
         $partner2 = $partners->count() > 1 ? $partners[1] : $partner1; 
         $client3 = $buyers->count() > 2 ? $buyers[2] : $client1; 
 
-        $service = \App\Models\Service::first();
-        $property = \App\Models\Property::first();
-        $auto = \App\Models\Auto::first();
+        $service = Service::first();
+        $property = Property::first();
+        $auto = Auto::first();
 
         $this->command->line("\n--- 📝 Defining Conversations ---");
         $this->command->line("  - Pairs: {$client1->title} <-> {$partner1->title}, {$client2->title} <-> {$partner2->title}, {$client3->title} <-> {$partner1->title}");
@@ -75,7 +78,7 @@ class MessageSeeder extends Seeder
                 'subject' => 'Booking Confirmation: Deep Tissue Massage',
                 'start_time' => Carbon::now()->subHours(5),
                 'last_update' => Carbon::now()->subMinutes(1),
-                'inquiriable_type' => $service ? \App\Models\Service::class : null,
+                'inquiriable_type' => $service ? Service::class : null,
                 'inquiriable_id' => $service ? $service->id : null,
                 'messages' => [
                     // Messages include sender_id and a time delay (delay_mins) for sequencing
@@ -92,7 +95,7 @@ class MessageSeeder extends Seeder
                 'subject' => 'Inquiry: Warehouse Space Rental (5,000 sq ft)',
                 'start_time' => Carbon::now()->subDay(),
                 'last_update' => Carbon::now()->subMinutes(30),
-                'inquiriable_type' => $property ? \App\Models\Property::class : null,
+                'inquiriable_type' => $property ? Property::class : null,
                 'inquiriable_id' => $property ? $property->id : null,
                 'messages' => [
                     ['sender_id' => $client2->id, 'body' => 'Hi, I saw your listing for the warehouse space. Is it suitable for storing paper products?', 'delay_mins' => 5],
@@ -108,7 +111,7 @@ class MessageSeeder extends Seeder
                 'subject' => 'Urgent Consultation Request - Tomorrow at 6 PM',
                 'start_time' => Carbon::now()->subDays(3),
                 'last_update' => Carbon::now()->subHours(2),
-                'inquiriable_type' => $auto ? \App\Models\Auto::class : null,
+                'inquiriable_type' => $auto ? Auto::class : null,
                 'inquiriable_id' => $auto ? $auto->id : null,
                 'messages' => [
                     ['sender_id' => $client3->id, 'body' => 'I require an urgent consultation. Are you available this week?', 'delay_mins' => 1],

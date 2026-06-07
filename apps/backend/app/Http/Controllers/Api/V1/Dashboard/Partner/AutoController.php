@@ -10,6 +10,7 @@ use App\Services\Partner\AutoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AutoController extends Controller
 {
@@ -122,7 +123,7 @@ class AutoController extends Controller
                 ->each(fn ($media) => $media->delete());
 
             if ($keepIds !== []) {
-                \Spatie\MediaLibrary\MediaCollections\Models\Media::setNewOrder($keepIds);
+                Media::setNewOrder($keepIds);
             }
         }
 

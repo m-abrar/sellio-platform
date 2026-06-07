@@ -2,39 +2,42 @@
 
 namespace App\Services\Admin;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use App\Models\User;
-use App\Models\Property;
 use App\Models\Auto;
-use App\Models\Event;
-use App\Models\JobListing;
-use App\Models\Service;
-use App\Models\Classified;
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\Order;
-use App\Models\PropertyBooking;
 use App\Models\AutoInquiry;
+use App\Models\Campaign;
+use App\Models\Category;
+use App\Models\Classified;
+use App\Models\ClassifiedInquiry;
+use App\Models\Event;
 use App\Models\EventBooking;
 use App\Models\JobApplication;
-use App\Models\ServiceQuote;
-use App\Models\ServiceAppointment;
-use App\Models\ClassifiedInquiry;
-use App\Models\Ticket;
+use App\Models\JobListing;
 use App\Models\NewsletterSubscriber;
-use App\Models\Subscription;
-use App\Models\Withdrawal;
-use App\Models\Campaign;
+use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\Property;
+use App\Models\PropertyBooking;
+use App\Models\Service;
+use App\Models\ServiceAppointment;
+use App\Models\ServiceQuote;
+use App\Models\Subscription;
+use App\Models\Ticket;
+use App\Models\User;
+use App\Models\Withdrawal;
 use Bavix\Wallet\Models\Transaction as WalletTransaction;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class DashboardService
 {
     public function getGlobalMetrics(): array
     {
-        return \Illuminate\Support\Facades\Cache::remember('admin_dashboard_metrics_v2', 300, function() {
+        return Cache::remember('admin_dashboard_metrics_v2', 300, function() {
             $today = now();
             $limit = 5;
             $last24Hours = $today->copy()->subHours(24);
@@ -540,8 +543,8 @@ class DashboardService
                     foreach ($records as $r) {
                         $points[] = [(float) $r->latitude, (float) $r->longitude, 0.6];
                     }
-                } catch (\Exception $e) {
-                    \Illuminate\Support\Facades\Log::warning("Failed to fetch heatmap data for module {$mod}: " . $e->getMessage());
+                } catch (Exception $e) {
+                    Log::warning("Failed to fetch heatmap data for module {$mod}: " . $e->getMessage());
                 }
             }
         }

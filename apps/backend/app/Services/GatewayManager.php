@@ -1,11 +1,11 @@
 <?php
 
-// app/Services/GatewayManager.php
-
 namespace App\Services;
 
-use App\Models\PaymentGateway;
 use App\Contracts\PaymentGatewayService;
+use App\Exceptions\WebhookSignatureException;
+use App\Models\PaymentGateway;
+use Exception;
 use Illuminate\Container\Container;
 
 class GatewayManager
@@ -14,8 +14,8 @@ class GatewayManager
      * Map of allowed gateway identifiers to their respective service classes.
      */
     protected array $gatewayMap = [
-        'stripe' => \App\Services\StripeGatewayService::class,
-        'paypal' => \App\Services\PaypalGatewayService::class,
+        'stripe' => StripeGatewayService::class,
+        'paypal' => PaypalGatewayService::class,
     ];
 
     /**
@@ -26,7 +26,7 @@ class GatewayManager
         $key = $gateway->slug; // Using 'slug' as the unique identifier
         
         if (!isset($this->gatewayMap[$key])) {
-            throw new \Exception("Unsupported or unauthorized gateway: {$key}");
+            throw new Exception("Unsupported or unauthorized gateway: {$key}");
         }
 
         $className = $this->gatewayMap[$key];

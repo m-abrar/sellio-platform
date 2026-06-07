@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Standard Web Routes
  *
@@ -7,22 +8,39 @@
  * module-specific booking engines (Real Estate, Automotive, Events, Services, etc.),
  * cart/checkout flows, and CMS page rendering.
  */
-use Illuminate\Support\Facades\Route;
-
-// --- CORE & AUTH ---
-use App\Http\Controllers\{HomeController, PageController, BlogController, PartnerController, ReviewController, ConversationController, CheckoutController, WebhookController, AdminBarStatusController, AdminBarContextController};
+use App\Http\Controllers\AdminBarContextController;
+use App\Http\Controllers\AdminBarStatusController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\AutoController;
+use App\Http\Controllers\AutoInquiryController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ClassifiedController;
+use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\Dashboard\DashboardRedirectController;
-
-// --- MARKETPLACE & TRANSACTIONS ---
-use App\Http\Controllers\{PropertyController, PropertyBookingController, PropertyVisitController};
-use App\Http\Controllers\{EventController, EventBookingController, EventTicketController};
-use App\Http\Controllers\{AutoController, AutoInquiryController};
-use App\Http\Controllers\{JobController, JobApplicationController};
-use App\Http\Controllers\{ServiceController, ClassifiedController};
-use App\Http\Controllers\{ProductController, OrderController, CartController};
-// --- TAXONOMIES ---
-use App\Http\Controllers\{CategoryController, BrandController, TagController, TypeController};
+use App\Http\Controllers\EventBookingController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventTicketController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobApplicationController;
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PropertyBookingController;
+use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\PropertyVisitController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\TypeController;
+use App\Http\Controllers\WebhookController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -224,8 +242,8 @@ Route::middleware(['built_in_website'])->group(function () {
     Route::get('/conversation/{user:username}', [ConversationController::class, 'start'])->middleware('auth')->name('conversation.start');
 
     // Newsletter
-    Route::post('/newsletter/subscribe', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
-    Route::get('/newsletter/confirm/{token}', [\App\Http\Controllers\NewsletterController::class, 'confirm'])->name('newsletter.confirm');
+    Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+    Route::get('/newsletter/confirm/{token}', [NewsletterController::class, 'confirm'])->name('newsletter.confirm');
 
     // Demo & Support
     Route::get('/landing-page/{group}/{type}', [HomeController::class, 'landing'])->name('landing.page');

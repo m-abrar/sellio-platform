@@ -2,8 +2,9 @@
 
 namespace App\Services\Partner;
 
-use App\Models\User;
 use App\Models\Property;
+use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -81,9 +82,9 @@ class PropertyService
             if (isset($data['tags'])) {
                 $tagIds = [];
                 foreach ($data['tags'] as $tagName) {
-                    $tag = \App\Models\Tag::firstOrCreate(
+                    $tag = Tag::firstOrCreate(
                         ['title' => trim($tagName)],
-                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_property' => true, 'is_published' => true]
+                        ['slug' => Str::slug($tagName), 'is_property' => true, 'is_published' => true]
                     );
                     $tagIds[] = $tag->id;
                 }

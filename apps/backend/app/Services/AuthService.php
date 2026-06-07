@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Contracts\User as UserImport;
 
 class AuthService
 {
@@ -95,7 +97,7 @@ class AuthService
      * @param \Laravel\Socialite\Contracts\User $socialUser
      * @return User
      */
-    public function findOrCreateSocialUser(string $provider, \Laravel\Socialite\Contracts\User $socialUser): User
+    public function findOrCreateSocialUser(string $provider, UserImport $socialUser): User
     {
         // Security: Attempt to find user by provider identity first
         $user = User::where('provider_name', $provider)
@@ -126,7 +128,7 @@ class AuthService
             'social_avatar_url' => $socialUser->getAvatar(),
             'provider_name'     => $provider,
             'provider_id'       => $socialUser->getId(),
-            'password'          => Hash::make(\Illuminate\Support\Str::random(24)),
+            'password'          => Hash::make(Str::random(24)),
             'email_verified_at' => now(), // Social accounts are pre-verified
             'is_buyer'          => true,
         ]);

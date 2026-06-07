@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\EventOccurrenceTicket
@@ -74,7 +75,7 @@ class EventOccurrenceTicket extends Model
     /**
      * Get all bookings associated with this specific ticket inventory record.
      */
-    public function bookings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function bookings(): HasMany
     {
         return $this->hasMany(EventBooking::class, 'occurrence_ticket_id');
     }

@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Events\Partner\PartnerLeadCreated;
 use App\Models\Property;
 use App\Models\PropertyVisit;
-use App\Events\Partner\PartnerLeadCreated;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -19,7 +20,7 @@ class PropertyVisitService
      */
     public function scheduleVisit(Property $property, array $data): PropertyVisit
     {
-        return \Illuminate\Support\Facades\DB::transaction(function () use ($property, $data) {
+        return DB::transaction(function () use ($property, $data) {
             // Log the 'lead' activity
             activity('listings')
                 ->performedOn($property)

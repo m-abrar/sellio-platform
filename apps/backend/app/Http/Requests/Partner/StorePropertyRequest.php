@@ -4,6 +4,7 @@ namespace App\Http\Requests\Partner;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 /**
  * Class StorePropertyRequest
@@ -138,7 +139,7 @@ class StorePropertyRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         if ($this->has('title') && !$this->has('slug')) {
-            $this->merge(['slug' => \Illuminate\Support\Str::slug($this->title)]);
+            $this->merge(['slug' => Str::slug($this->title)]);
         }
     }
 }

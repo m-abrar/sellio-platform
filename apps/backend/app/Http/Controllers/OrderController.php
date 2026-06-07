@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreOrderRequest;
 use App\Models\Cart;
 use App\Services\CheckoutService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +42,7 @@ class OrderController extends Controller
      * @param  \App\Http\Requests\StoreOrderRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(\App\Http\Requests\StoreOrderRequest $request): RedirectResponse
+    public function store(StoreOrderRequest $request): RedirectResponse
     {
         $cart = Cart::where('user_id', Auth::id())
                     ->with(['items.product', 'items.cart'])
@@ -56,7 +58,7 @@ class OrderController extends Controller
             return redirect()->route('orders.show', $order->order_number)
                              ->with('success', __('Thank you! Your order has been placed.'));
                              
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Order Processing Failed: " . $e->getMessage());
             return redirect()->back()->with('error', __('There was an issue processing your order. Please try again.'));
         }

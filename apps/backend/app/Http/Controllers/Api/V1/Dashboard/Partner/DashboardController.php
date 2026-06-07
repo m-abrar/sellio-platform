@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
+use App\Services\Partner\DashboardService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -25,7 +26,7 @@ class DashboardController extends Controller
      *
      * @param \App\Services\Partner\DashboardService $dashboardService
      */
-    public function __construct(\App\Services\Partner\DashboardService $dashboardService)
+    public function __construct(DashboardService $dashboardService)
     {
         $this->dashboardService = $dashboardService;
     }

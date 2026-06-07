@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Tests\Concerns\InteractsWithAdmin;
 use Tests\TestCase;
@@ -194,7 +195,7 @@ class AdminExtendedResourcesTest extends TestCase
             'key' => 'site_logo',
         ]);
 
-        $logoPath = \Illuminate\Support\Facades\DB::table('settings')
+        $logoPath = DB::table('settings')
             ->where('key', 'site_logo')
             ->value('value');
 

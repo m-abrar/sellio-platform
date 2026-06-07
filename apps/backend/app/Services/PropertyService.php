@@ -2,20 +2,21 @@
 
 namespace App\Services;
 
+use App\Events\Partner\PartnerLeadCreated;
 use App\Models\Amenity;
-use App\Models\Feature;
 use App\Models\Category;
+use App\Models\Feature;
 use App\Models\Location;
+use App\Models\Payment;
 use App\Models\Property;
 use App\Models\PropertyBooking;
-use App\Models\Payment;
 use App\Models\Tag;
-use App\Models\User;
 use App\Models\TransactionLine;
-use App\Events\Partner\PartnerLeadCreated;
+use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -37,7 +38,7 @@ class PropertyService
     public function getSearchPageData(array $filters, ?User $user): array
     {
         // Calculate Max Price (Cached to prevent heavy aggregate query on every search)
-        $maxAllowedPrice = \Illuminate\Support\Facades\Cache::remember('property_max_price', 3600, function() {
+        $maxAllowedPrice = Cache::remember('property_max_price', 3600, function() {
             $rawMax = Property::active()
                 ->selectRaw('MAX(COALESCE(sale_price, base_price)) as max_price')
                 ->value('max_price');
@@ -78,12 +79,12 @@ class PropertyService
         $locationVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
         $tagVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
 
-        $categories = \Illuminate\Support\Facades\Cache::remember('property_categories', 3600, fn() => Category::where('is_property', true)->withCount($verticals)->get());
-        $locations  = \Illuminate\Support\Facades\Cache::remember('property_locations', 3600, fn() => Location::where('is_property', true)->withCount($locationVerticals)->get());
-        $amenities  = \Illuminate\Support\Facades\Cache::remember('property_amenities', 3600, fn() => \App\Models\Amenity::where('is_property', true)->pluck('title', 'id'));
-        $features   = \Illuminate\Support\Facades\Cache::remember('property_features', 3600, fn() => \App\Models\Feature::where('is_property', true)->pluck('title', 'id'));
-        $tags       = \Illuminate\Support\Facades\Cache::remember('property_tags', 3600, fn() => Tag::where('is_property', true)->withCount($tagVerticals)->get());
-        $agents     = \Illuminate\Support\Facades\Cache::remember('property_top_agents', 600, fn() => User::orderByRating()->take(6)->with('media')->get());
+        $categories = Cache::remember('property_categories', 3600, fn() => Category::where('is_property', true)->withCount($verticals)->get());
+        $locations  = Cache::remember('property_locations', 3600, fn() => Location::where('is_property', true)->withCount($locationVerticals)->get());
+        $amenities  = Cache::remember('property_amenities', 3600, fn() => Amenity::where('is_property', true)->pluck('title', 'id'));
+        $features   = Cache::remember('property_features', 3600, fn() => Feature::where('is_property', true)->pluck('title', 'id'));
+        $tags       = Cache::remember('property_tags', 3600, fn() => Tag::where('is_property', true)->withCount($tagVerticals)->get());
+        $agents     = Cache::remember('property_top_agents', 600, fn() => User::orderByRating()->take(6)->with('media')->get());
 
         return [
             'properties'       => $properties,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UpdateEmailTemplateRequest;
 use App\Models\EmailTemplate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class EmailTemplateController extends Controller
      * @param  \App\Models\EmailTemplate  $emailTemplate
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(\App\Http\Requests\Admin\UpdateEmailTemplateRequest $request, EmailTemplate $emailTemplate): RedirectResponse
+    public function update(UpdateEmailTemplateRequest $request, EmailTemplate $emailTemplate): RedirectResponse
     {
         $emailTemplate->update($request->validated());
         $emailTemplate->forgetCache();

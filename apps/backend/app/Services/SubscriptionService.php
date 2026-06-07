@@ -2,9 +2,17 @@
 
 namespace App\Services;
 
-use App\Models\{Subscription, Plan, Payment, User};
-use App\Events\{PlanSubscribed, PlanUpgraded};
-use Illuminate\Support\Facades\{DB, Log};
+use App\Events\PlanAboutToExpire;
+use App\Events\PlanSubscribed;
+use App\Events\PlanUpgraded;
+use App\Models\Payment;
+use App\Models\Plan;
+use App\Models\Subscription;
+use App\Models\User;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SubscriptionService
 {
@@ -23,7 +31,7 @@ class SubscriptionService
         $oldPlan = $currentSubscription->plan ?? null;
 
         if ($isUpgradeOrChange && $currentSubscription->plan_id == $plan->id && $currentSubscription->ends_at === null) {
-            throw new \Exception("You are already subscribed to the **{$plan->title}** plan.");
+            throw new Exception("You are already subscribed to the **{$plan->title}** plan.");
         }
 
         DB::transaction(function () use ($user, $plan, $currentSubscription) {
@@ -83,7 +91,7 @@ class SubscriptionService
      */
     public function dispatchRenewalReminders(int $daysAhead = 7): int
     {
-        $targetDate = \Carbon\Carbon::now()->addDays($daysAhead)->setTime(0, 0, 0);
+        $targetDate = Carbon::now()->addDays($daysAhead)->setTime(0, 0, 0);
         $targetEndDate = $targetDate->copy()->endOfDay();
         $processedCount = 0;
 
@@ -94,7 +102,7 @@ class SubscriptionService
             ->chunkById(100, function ($subscriptions) use (&$processedCount) {
                 foreach ($subscriptions as $subscription) {
                     if ($subscription->user && $subscription->plan) {
-                        \App\Events\PlanAboutToExpire::dispatch($subscription->user, $subscription);
+                        PlanAboutToExpire::dispatch($subscription->user, $subscription);
                         $processedCount++;
                     }
                 }

@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Database\Seeders\Payment\PaymentGatewaysSeeder;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /**
@@ -181,7 +182,7 @@ class DatabaseSeeder extends Seeder
      */
     private function isModuleEnabled(string $module): bool
     {
-        return \Illuminate\Support\Facades\DB::table('settings')
+        return DB::table('settings')
             ->where('key', 'is_section.' . $module)
             ->where('value', '1')
             ->exists();

@@ -2,19 +2,21 @@
 
 namespace Database\Seeders;
 
-use Database\Seeders\Concerns\SeedsPropertyAddons;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
-use Faker\Factory as Faker;
 use App\Models\Property;
+use App\Models\PropertyBooking;
 use App\Models\PropertyFee;
 use App\Models\PropertyNeighborhood;
-use App\Models\PropertyScore; 
-use App\Models\Review;
+use App\Models\PropertyScore;
 use App\Models\PropertyVisit;
-use App\Models\PropertyBooking;
+use App\Models\Review;
 use Carbon\Carbon;
+use Database\Factories\PropertyNeighborhoodFactory;
+use Database\Factories\PropertyScoreFactory;
+use Database\Seeders\Concerns\SeedsPropertyAddons;
+use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class PropertyModuleSeeder
@@ -211,7 +213,7 @@ class PropertyModuleSeeder extends Seeder
     private function seedNeighborhoods(Property $property): void
     {
         // Use fully qualified class name to avoid resolution issues on restricted servers.
-        $allNeighborhoodData = \Database\Factories\PropertyNeighborhoodFactory::getNeighborhoodData();
+        $allNeighborhoodData = PropertyNeighborhoodFactory::getNeighborhoodData();
 
         $count = mt_rand(3, 6); 
         
@@ -237,7 +239,7 @@ class PropertyModuleSeeder extends Seeder
     private function seedScores(Property $property): void
     {
         // Use fully qualified class name to get the available score definitions.
-        $availableScores = \Database\Factories\PropertyScoreFactory::getAvailableScores();
+        $availableScores = PropertyScoreFactory::getAvailableScores();
         
         $scoresCollection = collect($availableScores);
         // Select a unique subset of score types (3 to 5)

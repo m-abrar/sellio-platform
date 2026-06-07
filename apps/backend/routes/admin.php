@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Routes for the Administrative Backend
  *
@@ -7,77 +8,60 @@
  * Classifieds, Properties, Products), financial operations, user access control (RBAC),
  * and system configuration. All routes are protected by administrative middleware.
  */
-use Illuminate\Support\Facades\Route;
-
-// --- ADMIN DASHBOARD CONTROLLERS ---
-use App\Http\Controllers\Admin\{
-// 1. Core System & Auth
-DashboardController,
-UserController,
-ProfileController,
-RoleController,
-PermissionController,
-ActivityLogController,
-
-// 2. Main Resources
-PropertyController,
-ProductController,
-OrderController,
-ListingController,
-TypeController,
-CategoryController,
-BrandController,
-AmenityController,
-FeatureController,
-TagController,
-LocationController,
-
-// 3. Bookings & Financials
-BookingController,
-PropertyBookingController,
-BookingLineItemController,
-LineItemController,
-AddonController,
-TransactionController,
-WithdrawalController,
-
-// 4. Inquiries
-AutoInquiryController,
-ClassifiedInquiryController,
-EventBookingController,
-JobApplicationController,
-ServiceAppointmentController,
-ServiceQuoteController,
-
-// 5. Subscription & Payments
-PlanController,
-SubscriptionController,
-SubscriptionQuotaController,
-PaymentController,
-PaymentGatewayController,
-
-// 6. Content & Settings
-BlogController,
-PageController,
-PageBuilderController,
-ContentController,
-MenuController,
-ThemeController,
-EmailTemplateController,
-AdvertisementController,
-NewsletterSubscriberController,
-NotificationController,
-ReportController,
-TestimonialController,
-    TicketController,
-    SettingController,
-    SystemController,
-    GalleryController,
-    LanguageController
-};
-
-// Global Dashboard Controllers
+use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\AddonController;
+use App\Http\Controllers\Admin\AdvertisementController;
+use App\Http\Controllers\Admin\AmenityController;
+use App\Http\Controllers\Admin\AutoInquiryController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\BookingLineItemController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ClassifiedInquiryController;
+use App\Http\Controllers\Admin\ContentController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EmailTemplateController;
+use App\Http\Controllers\Admin\EventBookingController;
+use App\Http\Controllers\Admin\FeatureController;
+use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\JobApplicationController;
+use App\Http\Controllers\Admin\LanguageController;
+use App\Http\Controllers\Admin\LineItemController;
+use App\Http\Controllers\Admin\ListingController;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\NewsletterSubscriberController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PageBuilderController;
+use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\PaymentGatewayController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\PropertyBookingController;
+use App\Http\Controllers\Admin\PropertyController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\ServiceAppointmentController;
+use App\Http\Controllers\Admin\ServiceQuoteController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\SubscriptionController;
+use App\Http\Controllers\Admin\SubscriptionQuotaController;
+use App\Http\Controllers\Admin\SystemController;
+use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\ThemeController;
+use App\Http\Controllers\Admin\TicketController;
+use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\TypeController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\Dashboard\MediaController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('test-reach', function() { return "Global Reach Works"; });
 
@@ -125,52 +109,52 @@ Route::prefix('admin')
 
         // Dedicated Vertical List Pages
         Route::middleware('can:manage-auto')->group(function () {
-            Route::controller(\App\Http\Controllers\Admin\AutoController::class)->prefix('autos')->name('autos.')->group(function () {
+            Route::controller(AutoController::class)->prefix('autos')->name('autos.')->group(function () {
                 Route::post('/{auto}/approve', 'approve')->name('approve');
                 Route::post('/{auto}/disapprove', 'disapprove')->name('disapprove');
                 Route::get('/{auto}/duplicate', 'duplicate')->name('duplicate');
             });
-            Route::resource('autos', \App\Http\Controllers\Admin\AutoController::class)->middleware('module:autos');
+            Route::resource('autos', AutoController::class)->middleware('module:autos');
         });
 
         Route::middleware('can:manage-event')->group(function () {
-            Route::controller(\App\Http\Controllers\Admin\EventController::class)->prefix('events')->name('events.')->group(function () {
+            Route::controller(EventController::class)->prefix('events')->name('events.')->group(function () {
                 Route::post('/{event}/approve', 'approve')->name('approve');
                 Route::post('/{event}/disapprove', 'disapprove')->name('disapprove');
                 Route::get('/{event}/duplicate', 'duplicate')->name('duplicate');
             });
-            Route::resource('events', \App\Http\Controllers\Admin\EventController::class)->middleware('module:events');
+            Route::resource('events', EventController::class)->middleware('module:events');
         });
 
         Route::middleware('can:manage-job')->group(function () {
-            Route::controller(\App\Http\Controllers\Admin\JobController::class)->prefix('jobs')->name('jobs.')->group(function () {
+            Route::controller(JobController::class)->prefix('jobs')->name('jobs.')->group(function () {
                 Route::post('/{job}/approve', 'approve')->name('approve');
                 Route::post('/{job}/disapprove', 'disapprove')->name('disapprove');
                 Route::get('/{job}/duplicate', 'duplicate')->name('duplicate');
             });
-            Route::resource('jobs', \App\Http\Controllers\Admin\JobController::class)->middleware('module:jobs');
+            Route::resource('jobs', JobController::class)->middleware('module:jobs');
         });
 
         Route::middleware('can:manage-service')->group(function () {
-            Route::controller(\App\Http\Controllers\Admin\ServiceController::class)->prefix('services')->name('services.')->group(function () {
+            Route::controller(ServiceController::class)->prefix('services')->name('services.')->group(function () {
                 Route::post('/{service}/approve', 'approve')->name('approve');
                 Route::post('/{service}/disapprove', 'disapprove')->name('disapprove');
                 Route::get('/{service}/duplicate', 'duplicate')->name('duplicate');
             });
-            Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class)->middleware('module:services');
+            Route::resource('services', ServiceController::class)->middleware('module:services');
         });
 
         Route::middleware('can:manage-classified')->group(function () {
-            Route::controller(\App\Http\Controllers\Admin\ClassifiedController::class)->prefix('classifieds')->name('classifieds.')->group(function () {
+            Route::controller(ClassifiedController::class)->prefix('classifieds')->name('classifieds.')->group(function () {
                 Route::post('/{classified}/approve', 'approve')->name('approve');
                 Route::post('/{classified}/disapprove', 'disapprove')->name('disapprove');
                 Route::get('/{classified}/duplicate', 'duplicate')->name('duplicate');
             });
-            Route::resource('classifieds', \App\Http\Controllers\Admin\ClassifiedController::class)->middleware('module:classifieds');
+            Route::resource('classifieds', ClassifiedController::class)->middleware('module:classifieds');
         });
 
         Route::middleware('can:manage-property')->group(function () {
-            Route::controller(\App\Http\Controllers\Admin\PropertyController::class)->prefix('properties')->name('properties.')->group(function () {
+            Route::controller(PropertyController::class)->prefix('properties')->name('properties.')->group(function () {
                 Route::post('/{property}/approve', 'approve')->name('approve');
                 Route::post('/{property}/disapprove', 'disapprove')->name('disapprove');
                 Route::get('/{property}/duplicate', 'duplicate')->name('duplicate');

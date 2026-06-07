@@ -3,8 +3,32 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Advertisement;
+use App\Models\Amenity;
+use App\Models\Auto;
+use App\Models\Blog;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Classified;
+use App\Models\Event;
+use App\Models\Feature;
+use App\Models\JobListing;
+use App\Models\LineItem;
+use App\Models\Location;
+use App\Models\Page;
+use App\Models\PageContent;
+use App\Models\Plan;
+use App\Models\Product;
+use App\Models\ProductAddon;
+use App\Models\Property;
+use App\Models\Service;
+use App\Models\Tag;
+use App\Models\Testimonial;
+use App\Models\Transaction;
+use App\Models\Type;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Spatie\MediaLibrary\HasMedia;
 
 class MediaController extends Controller
@@ -16,32 +40,32 @@ class MediaController extends Controller
      * Map of allowed model identifiers to their respective classes.
      */
     public static array $modelMap = [
-        'auto'          => \App\Models\Auto::class,
-        'property'      => \App\Models\Property::class,
-        'event'         => \App\Models\Event::class,
-        'job'           => \App\Models\JobListing::class,
-        'service'       => \App\Models\Service::class,
-        'product'       => \App\Models\Product::class,
-        'classified'    => \App\Models\Classified::class,
-        'blog'          => \App\Models\Blog::class,
-        'user'          => \App\Models\User::class,
-        'advertisement' => \App\Models\Advertisement::class,
-        'testimonial'   => \App\Models\Testimonial::class,
-        'location'      => \App\Models\Location::class,
-        'addon'         => \App\Models\ProductAddon::class,
-        'category'      => \App\Models\Category::class,
-        'brand'         => \App\Models\Brand::class,
-        'tag'           => \App\Models\Tag::class,
-        'type'          => \App\Models\Type::class,
-        'amenity'       => \App\Models\Amenity::class,
-        'feature'       => \App\Models\Feature::class,
-        'plan'          => \App\Models\Plan::class,
-        'page'          => \App\Models\Page::class,
-        'transaction'   => \App\Models\Transaction::class,
-        'line-item'     => \App\Models\LineItem::class,
-        'classified'    => \App\Models\Classified::class,
-        'auto'          => \App\Models\Auto::class,
-        'page-content'  => \App\Models\PageContent::class,
+        'auto'          => Auto::class,
+        'property'      => Property::class,
+        'event'         => Event::class,
+        'job'           => JobListing::class,
+        'service'       => Service::class,
+        'product'       => Product::class,
+        'classified'    => Classified::class,
+        'blog'          => Blog::class,
+        'user'          => User::class,
+        'advertisement' => Advertisement::class,
+        'testimonial'   => Testimonial::class,
+        'location'      => Location::class,
+        'addon'         => ProductAddon::class,
+        'category'      => Category::class,
+        'brand'         => Brand::class,
+        'tag'           => Tag::class,
+        'type'          => Type::class,
+        'amenity'       => Amenity::class,
+        'feature'       => Feature::class,
+        'plan'          => Plan::class,
+        'page'          => Page::class,
+        'transaction'   => Transaction::class,
+        'line-item'     => LineItem::class,
+        'classified'    => Classified::class,
+        'auto'          => Auto::class,
+        'page-content'  => PageContent::class,
     ];
 
     /**
@@ -81,7 +105,7 @@ class MediaController extends Controller
         $isAuthorized = false;
         if (auth()->user()->hasRole(['admin', 'super-admin'])) {
             $isAuthorized = true;
-        } elseif ($model instanceof \App\Models\User) {
+        } elseif ($model instanceof User) {
             $isAuthorized = $model->id === auth()->id();
         } elseif (isset($model->user_id)) {
             $isAuthorized = $model->user_id === auth()->id();
@@ -143,7 +167,7 @@ class MediaController extends Controller
         $isAuthorized = false;
         if (auth()->user()->hasRole(['admin', 'super-admin'])) {
             $isAuthorized = true;
-        } elseif ($model instanceof \App\Models\User) {
+        } elseif ($model instanceof User) {
             $isAuthorized = $model->id === auth()->id();
         } elseif (isset($model->user_id)) {
             $isAuthorized = $model->user_id === auth()->id();

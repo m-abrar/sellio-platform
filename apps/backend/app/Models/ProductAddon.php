@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasImageAccess;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -94,9 +95,9 @@ class ProductAddon extends Model implements HasMedia
     /**
      * Formatted price for the UI.
      */
-    protected function priceFormatted(): \Illuminate\Database\Eloquent\Casts\Attribute
+    protected function priceFormatted(): Attribute
     {
-        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+        return Attribute::make(
             get: function () {
                 $symbol = function_exists('setting') ? setting('currency_symbol', '$') : '$';
                 $formatted = $symbol . number_format($this->price, 2);

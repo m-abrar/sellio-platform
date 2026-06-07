@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
@@ -76,9 +77,9 @@ class Setting extends Model
     /**
      * Sanitize values to prevent XSS, allowing raw scripts only for specific keys.
      */
-    protected function value(): \Illuminate\Database\Eloquent\Casts\Attribute
+    protected function value(): Attribute
     {
-        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+        return Attribute::make(
             set: function ($value, $attributes) {
                 $key = $attributes['key'] ?? '';
                 

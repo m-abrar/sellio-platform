@@ -8,6 +8,8 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
 use App\Notifications\OrderStatusChanged;
+use App\Services\Admin\OrderManagementService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +34,7 @@ class OrderController extends Controller
      *
      * @param \App\Services\Admin\OrderManagementService $orderService
      */
-    public function __construct(\App\Services\Admin\OrderManagementService $orderService)
+    public function __construct(OrderManagementService $orderService)
     {
         $this->orderService = $orderService;
     }
@@ -104,7 +106,7 @@ class OrderController extends Controller
             return redirect()->route('admin.product-orders.index')
                              ->with('success', __('Manual order initialized and synchronized successfully.'));
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Order Creation Failed: " . $e->getMessage());
             return back()->withInput()->with('error', __('Critical synchronization error: :msg', ['msg' => $e->getMessage()]));
         }

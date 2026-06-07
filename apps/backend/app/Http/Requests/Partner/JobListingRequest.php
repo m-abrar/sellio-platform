@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Partner;
 
+use App\Models\JobListing;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -16,9 +17,9 @@ class JobListingRequest extends FormRequest
 
         $jobListing = $this->route('joblisting');
         if ($jobListing) {
-            $jobListingId = $jobListing instanceof \App\Models\JobListing ? $jobListing->id : $jobListing;
+            $jobListingId = $jobListing instanceof JobListing ? $jobListing->id : $jobListing;
 
-            return \App\Models\JobListing::where('id', $jobListingId)
+            return JobListing::where('id', $jobListingId)
                 ->where('user_id', Auth::id())
                 ->exists();
         }
@@ -29,7 +30,7 @@ class JobListingRequest extends FormRequest
     public function rules(): array
     {
         $job = $this->route('joblisting');
-        $jobId = $job instanceof \App\Models\JobListing ? $job->id : $job;
+        $jobId = $job instanceof JobListing ? $job->id : $job;
 
         return [
             'category_id'          => ['required', 'exists:categories,id'],

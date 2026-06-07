@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TicketResource;
-use App\Http\Requests\Api\Tickets\StoreTicketRequest;
 use App\Http\Requests\Api\Tickets\ReplyTicketRequest;
+use App\Http\Requests\Api\Tickets\StoreTicketRequest;
+use App\Http\Resources\TicketResource;
 use App\Models\Ticket;
+use App\Services\TicketService;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -19,7 +20,7 @@ class TicketController extends Controller
     /**
      * TicketController constructor.
      */
-    public function __construct(\App\Services\TicketService $ticketService)
+    public function __construct(TicketService $ticketService)
     {
         $this->ticketService = $ticketService;
     }

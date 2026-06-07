@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PaymentGateway;
+use App\Http\Requests\StoreOrderRequest;
+use App\Models\Order;
 use App\Models\Payment;
-use App\Services\GatewayManager;
-use App\Services\StripeCheckoutConfigService;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+use App\Models\PaymentGateway;
 use App\Services\CartService;
 use App\Services\CheckoutService;
-use App\Http\Requests\StoreOrderRequest;
+use App\Services\GatewayManager;
+use App\Services\StripeCheckoutConfigService;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 /**
@@ -157,7 +159,7 @@ class CheckoutController extends Controller
             
             return redirect()->route('checkout.index')->with('info', $result['message'] ?? 'Payment status unhandled.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::critical("Critical Checkout Error [{$gatewaySlug}]: " . $e->getMessage());
             return redirect()->route('checkout.index')->with('error', 'A severe error occurred during payment. Please contact support.');
         }
@@ -173,7 +175,7 @@ class CheckoutController extends Controller
      * @param  string  $gatewaySlug
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function confirmPayment(Request $request, GatewayManager $manager, CheckoutService $checkoutService, string $gatewaySlug, \App\Models\Order $order): RedirectResponse
+    public function confirmPayment(Request $request, GatewayManager $manager, CheckoutService $checkoutService, string $gatewaySlug, Order $order): RedirectResponse
     {
         if (!Auth::check() || Auth::id() !== $order->user_id) {
             abort(403, __('Unauthorized access.'));
@@ -215,7 +217,7 @@ class CheckoutController extends Controller
             Log::warning("3DS Confirmation Failed for order {$order->order_number}, intent: {$paymentIntentId}.");
             return redirect()->route('checkout.index')->with('error', $result['message'] ?? 'Payment confirmation failed.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::critical("Payment confirmation error for order {$order->order_number}: " . $e->getMessage());
             return redirect()->route('checkout.index')->with('error', 'A confirmation error occurred. Please try again.');
         }

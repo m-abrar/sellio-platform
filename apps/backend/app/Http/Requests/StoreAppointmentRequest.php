@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * Class StoreAppointmentRequest
@@ -34,7 +35,7 @@ class StoreAppointmentRequest extends FormRequest
             'notes'              => 'nullable|string|max:500',
             'service_package_id' => [
                 'required', 
-                \Illuminate\Validation\Rule::exists('service_packages', 'id')->where(function ($query) {
+                Rule::exists('service_packages', 'id')->where(function ($query) {
                     $query->where('service_id', $this->service_id);
                 }),
             ],

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * API Routing Suite (V1)
  *
@@ -7,30 +8,35 @@
  * Autos, Products, Events, Jobs, Services, Classifieds), cart orchestration,
  * order processing, and Sanctum-based authentication workflows.
  */
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\ApiBlogController;
-use App\Http\Controllers\Api\V1\ApiCategoryController;
-use App\Http\Controllers\Api\V1\ApiTypeController;
-use App\Http\Controllers\Api\V1\ApiBrandController;
-use App\Http\Controllers\Api\V1\ApiLocationController;
-use App\Http\Controllers\Api\V1\ApiProductController;
-use App\Http\Controllers\Api\V1\ApiTagController;
+
+use App\Http\Controllers\Api\ApiThemeController;
+use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\V1\ApiAmenityController;
-use App\Http\Controllers\Api\V1\ApiFeatureController;
-use App\Http\Controllers\Api\V1\ApiPropertyController;
 use App\Http\Controllers\Api\V1\ApiAutoController;
-use App\Http\Controllers\Api\V1\ApiEventController;
-use App\Http\Controllers\Api\V1\ApiJobController;
-use App\Http\Controllers\Api\V1\ApiServiceController;
+use App\Http\Controllers\Api\V1\ApiBlogController;
+use App\Http\Controllers\Api\V1\ApiBrandController;
+use App\Http\Controllers\Api\V1\ApiCartController;
+use App\Http\Controllers\Api\V1\ApiCategoryController;
 use App\Http\Controllers\Api\V1\ApiClassifiedController;
+use App\Http\Controllers\Api\V1\ApiEventController;
+use App\Http\Controllers\Api\V1\ApiFeatureController;
+use App\Http\Controllers\Api\V1\ApiJobController;
+use App\Http\Controllers\Api\V1\ApiLocationController;
+use App\Http\Controllers\Api\V1\ApiMenuController;
+use App\Http\Controllers\Api\V1\ApiOrderController;
+use App\Http\Controllers\Api\V1\ApiProductController;
+use App\Http\Controllers\Api\V1\ApiPropertyController;
+use App\Http\Controllers\Api\V1\ApiServiceController;
+use App\Http\Controllers\Api\V1\ApiTagController;
 use App\Http\Controllers\Api\V1\ApiTestimonialController;
 use App\Http\Controllers\Api\V1\ApiThemeContentController;
-use App\Http\Controllers\Api\V1\ApiCartController;
-use App\Http\Controllers\Api\V1\ApiOrderController;
+use App\Http\Controllers\Api\V1\ApiTypeController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
-use App\Http\Controllers\Api\ApiThemeController;
-use App\Http\Controllers\Api\V1\ApiMenuController;
+use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
+use App\Http\Controllers\Api\V1\Auth\ProfileController;
+use App\Http\Controllers\Api\V1\BrandSettingsController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,7 +64,7 @@ Route::prefix('menus')->group(function () {
 // =======================
 Route::get('testimonials', [ApiTestimonialController::class, 'index']);
 Route::get('theme-content', [ApiThemeContentController::class, 'show']);
-Route::get('brand-settings', [\App\Http\Controllers\Api\V1\BrandSettingsController::class, 'show']);
+Route::get('brand-settings', [BrandSettingsController::class, 'show']);
 
 // =======================
 // Category Routes
@@ -213,8 +219,8 @@ Route::middleware(['auth:sanctum', 'module:products'])->prefix('orders')->group(
 // Ticket Routes
 // =======================
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('tickets', \App\Http\Controllers\Api\TicketController::class)->only(['index', 'store', 'show']);
-    Route::post('tickets/{ticket}/reply', [\App\Http\Controllers\Api\TicketController::class, 'reply']);
+    Route::apiResource('tickets', TicketController::class)->only(['index', 'store', 'show']);
+    Route::post('tickets/{ticket}/reply', [TicketController::class, 'reply']);
 });
 
 // =======================
@@ -223,17 +229,17 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/password/email', [\App\Http\Controllers\Api\V1\Auth\PasswordResetController::class, 'sendResetLinkEmail']);
-    Route::post('/password/reset', [\App\Http\Controllers\Api\V1\Auth\PasswordResetController::class, 'reset']);
+    Route::post('/password/email', [PasswordResetController::class, 'sendResetLinkEmail']);
+    Route::post('/password/reset', [PasswordResetController::class, 'reset']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/refresh-token', [AuthController::class, 'refresh']);
 
         // Profile Routes (api/v1/auth/me)
-        Route::get('/me', [\App\Http\Controllers\Api\V1\Auth\ProfileController::class, 'show']);
-        Route::put('/profile', [\App\Http\Controllers\Api\V1\Auth\ProfileController::class, 'update']);
-        Route::put('/profile/password', [\App\Http\Controllers\Api\V1\Auth\ProfileController::class, 'updatePassword']);
+        Route::get('/me', [ProfileController::class, 'show']);
+        Route::put('/profile', [ProfileController::class, 'update']);
+        Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
     });
 });
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Withdrawal;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,7 +20,7 @@ class TransactionResource extends JsonResource
         
         if ($this->type === 'withdraw') {
             if (isset($meta['withdrawal_id'])) {
-                $withdrawal = \App\Models\Withdrawal::find($meta['withdrawal_id']);
+                $withdrawal = Withdrawal::find($meta['withdrawal_id']);
                 if ($withdrawal) {
                     $status = $withdrawal->status; // 'pending', 'approved', 'rejected'
                 } else {

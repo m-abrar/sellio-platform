@@ -3,6 +3,10 @@
 namespace App\Services\Admin;
 
 use App\Models\Auto;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Location;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -21,16 +25,16 @@ class AutoManagementService
      * @param \Illuminate\Http\Request $request
      * @return array
      */
-    public function getListingData(\Illuminate\Http\Request $request): array
+    public function getListingData(Request $request): array
     {
-        $categories = \App\Models\Category::active()->where('is_auto', 1)->get();
-        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+        $categories = Category::active()->where('is_auto', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
 
-        $brands = \App\Models\Brand::active()->where('is_auto', 1)->get();
-        if ($brands->isEmpty()) $brands = \App\Models\Brand::active()->get();
+        $brands = Brand::active()->where('is_auto', 1)->get();
+        if ($brands->isEmpty()) $brands = Brand::active()->get();
 
-        $locations = \App\Models\Location::active()->where('is_auto', 1)->get();
-        if ($locations->isEmpty()) $locations = \App\Models\Location::active()->get();
+        $locations = Location::active()->where('is_auto', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
 
         $autos = Auto::query()
             ->with(['user', 'category', 'brand', 'location'])
@@ -52,14 +56,14 @@ class AutoManagementService
      */
     public function getFormData(): array
     {
-        $categories = \App\Models\Category::active()->where('is_auto', 1)->get();
-        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+        $categories = Category::active()->where('is_auto', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
 
-        $brands = \App\Models\Brand::active()->where('is_auto', 1)->get();
-        if ($brands->isEmpty()) $brands = \App\Models\Brand::active()->get();
+        $brands = Brand::active()->where('is_auto', 1)->get();
+        if ($brands->isEmpty()) $brands = Brand::active()->get();
 
-        $locations = \App\Models\Location::active()->where('is_auto', 1)->get();
-        if ($locations->isEmpty()) $locations = \App\Models\Location::active()->get();
+        $locations = Location::active()->where('is_auto', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
 
         return compact('categories', 'brands', 'locations');
     }

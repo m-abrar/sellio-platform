@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Withdrawal;
+use App\Services\Admin\WithdrawalManagementService;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,7 +41,7 @@ class WithdrawalController extends Controller
      *
      * @param \App\Services\Admin\WithdrawalManagementService $withdrawalService
      */
-    public function __construct(\App\Services\Admin\WithdrawalManagementService $withdrawalService)
+    public function __construct(WithdrawalManagementService $withdrawalService)
     {
         $this->withdrawalService = $withdrawalService;
     }
@@ -67,7 +70,7 @@ class WithdrawalController extends Controller
         }
         
         $withdrawals = $query->paginate(20);
-        $users = \App\Models\User::whereHas('withdrawals')->orderBy('name')->get(['id', 'name', 'email']);
+        $users = User::whereHas('withdrawals')->orderBy('name')->get(['id', 'name', 'email']);
         
         return view('admin.withdrawals.index', compact('withdrawals', 'filter_status', 'users', 'userId'));
     }
@@ -89,7 +92,7 @@ class WithdrawalController extends Controller
         
         $withdrawals = $query->paginate(20);
         $filter_status = 'pending';
-        $users = \App\Models\User::whereHas('withdrawals')->orderBy('name')->get(['id', 'name', 'email']);
+        $users = User::whereHas('withdrawals')->orderBy('name')->get(['id', 'name', 'email']);
         
         return view('admin.withdrawals.index', compact('withdrawals', 'filter_status', 'users', 'userId'));
     }
@@ -111,7 +114,7 @@ class WithdrawalController extends Controller
         
         $withdrawals = $query->paginate(20);
         $filter_status = 'rejected';
-        $users = \App\Models\User::whereHas('withdrawals')->orderBy('name')->get(['id', 'name', 'email']);
+        $users = User::whereHas('withdrawals')->orderBy('name')->get(['id', 'name', 'email']);
         
         return view('admin.withdrawals.index', compact('withdrawals', 'filter_status', 'users', 'userId'));
     }
@@ -153,7 +156,7 @@ class WithdrawalController extends Controller
             
             return back()->with('success', __('Withdrawal approved successfully. Reservation finalized for payout.'));
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Withdrawal Approval Failure: {$e->getMessage()}", ['id' => $withdrawal->id]);
             return back()->with('error', $e->getMessage() ?: __('Approval failed.'));
         }
@@ -177,7 +180,7 @@ class WithdrawalController extends Controller
 
             return back()->with('success', __('Withdrawal rejected and funds refunded to the user wallet.'));
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Withdrawal Rejection Failure: {$e->getMessage()}", ['id' => $withdrawal->id]);
             return back()->with('error', $e->getMessage() ?: __('Rejection failed.'));
         }

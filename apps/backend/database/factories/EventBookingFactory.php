@@ -1,9 +1,9 @@
 <?php
-// database/factories/EventBookingFactory.php
 
 namespace Database\Factories;
 
 use App\Models\EventBooking;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -28,7 +28,7 @@ class EventBookingFactory extends Factory
 
 
         return [
-            'user_id'                 => \App\Models\User::query()->inRandomOrder()->value('id'),
+            'user_id'                 => User::query()->inRandomOrder()->value('id'),
             'event_occurrence_id'    => null,
             'event_ticket_type_id'   => null,
             'quantity'               => $quantity,

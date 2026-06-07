@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Partner;
 
+use App\Models\Event;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,9 +20,9 @@ class EventRequest extends FormRequest
 
         $event = $this->route('event');
         if ($event) {
-            $eventId = $event instanceof \App\Models\Event ? $event->id : $event;
+            $eventId = $event instanceof Event ? $event->id : $event;
 
-            return \App\Models\Event::where('id', $eventId)
+            return Event::where('id', $eventId)
                 ->where('user_id', Auth::id())
                 ->exists();
         }

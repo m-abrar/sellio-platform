@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SendContactRequest;
+use App\Models\Page;
+use App\Services\ContactService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -26,7 +28,7 @@ class PageController extends Controller
      *
      * @param \App\Services\ContactService $contactService
      */
-    public function __construct(\App\Services\ContactService $contactService)
+    public function __construct(ContactService $contactService)
     {
         $this->contactService = $contactService;
     }
@@ -39,7 +41,7 @@ class PageController extends Controller
      */
     public function show(string $slug): View
     {
-        $page = \App\Models\Page::active()->where('slug', $slug)->first();
+        $page = Page::active()->where('slug', $slug)->first();
 
         if ($page) {
             return view('frontend.pages.dynamic', compact('page'));

@@ -2,17 +2,62 @@
 
 namespace App\Providers;
 
-use App\Services\CartService;
-use App\DTOs\ContentResult; // Import the DTO
+use App\DTOs\ContentResult;
+use App\Events\BookingCancelled;
+use App\Events\EventTicketPurchased;
 use App\Events\JobApplicationReceived;
+use App\Events\ListingApproved;
+use App\Events\ListingRejected;
+use App\Events\NewListingLead;
 use App\Events\NewMessageSent;
+use App\Events\NewsletterOptinAttempted;
+use App\Events\NewsletterSubscriptionConfirmed;
 use App\Events\Partner\PartnerLeadCreated;
+use App\Events\PaymentFailed;
+use App\Events\PlanAboutToExpire;
+use App\Events\PlanDowngraded;
+use App\Events\PlanExpired;
+use App\Events\PlanSubscribed;
+use App\Events\PlanUpgraded;
+use App\Events\PropertyBookingConfirmed;
 use App\Events\ReviewReceived;
+use App\Events\ReviewRequested;
+use App\Events\UserRegistered;
 use App\Listeners\Partner\SendPartnerDatabaseNotification;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\{View, Auth, Gate, Event, Session, Storage, Cache, Blade, Schema};
+use App\Listeners\SendBookingCancelledEmail;
+use App\Listeners\SendBookingConfirmedEmail;
+use App\Listeners\SendEventTicketEmail;
+use App\Listeners\SendJobApplicationReceivedEmail;
+use App\Listeners\SendListingApprovedEmail;
+use App\Listeners\SendListingRejectedEmail;
+use App\Listeners\SendNewListingLeadEmail;
+use App\Listeners\SendNewsletterWelcomeEmail;
+use App\Listeners\SendOptinConfirmationEmail;
+use App\Listeners\SendPaymentFailedEmail;
+use App\Listeners\SendPlanDowngradedEmail;
+use App\Listeners\SendPlanExpiredEmail;
+use App\Listeners\SendPlanSubscribedEmail;
+use App\Listeners\SendPlanUpgradedEmail;
+use App\Listeners\SendRenewalReminderEmail;
+use App\Listeners\SendReviewReceivedEmail;
+use App\Listeners\SendReviewRequestEmail;
+use App\Listeners\SendWelcomeEmail;
+use App\Models\CartItem;
+use App\Models\PageContent;
+use App\Observers\CartItemObserver;
+use App\Services\CartService;
 use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -71,27 +116,27 @@ class AppServiceProvider extends ServiceProvider
         ], SendPartnerDatabaseNotification::class);
 
         // 2.1 Register CartItem Observer
-        \App\Models\CartItem::observe(\App\Observers\CartItemObserver::class);
+        CartItem::observe(CartItemObserver::class);
 
         // 2.2 Wire Core Platform Event-to-Email Listener Mappings
-        Event::listen(\App\Events\UserRegistered::class, \App\Listeners\SendWelcomeEmail::class);
-        Event::listen(\App\Events\PropertyBookingConfirmed::class, \App\Listeners\SendBookingConfirmedEmail::class);
-        Event::listen(\App\Events\BookingCancelled::class, \App\Listeners\SendBookingCancelledEmail::class);
-        Event::listen(\App\Events\EventTicketPurchased::class, \App\Listeners\SendEventTicketEmail::class);
-        Event::listen(\App\Events\JobApplicationReceived::class, \App\Listeners\SendJobApplicationReceivedEmail::class);
-        Event::listen(\App\Events\ReviewReceived::class, \App\Listeners\SendReviewReceivedEmail::class);
-        Event::listen(\App\Events\ReviewRequested::class, \App\Listeners\SendReviewRequestEmail::class);
-        Event::listen(\App\Events\ListingApproved::class, \App\Listeners\SendListingApprovedEmail::class);
-        Event::listen(\App\Events\ListingRejected::class, \App\Listeners\SendListingRejectedEmail::class);
-        Event::listen(\App\Events\NewListingLead::class, \App\Listeners\SendNewListingLeadEmail::class);
-        Event::listen(\App\Events\PaymentFailed::class, \App\Listeners\SendPaymentFailedEmail::class);
-        Event::listen(\App\Events\PlanAboutToExpire::class, \App\Listeners\SendRenewalReminderEmail::class);
-        Event::listen(\App\Events\PlanDowngraded::class, \App\Listeners\SendPlanDowngradedEmail::class);
-        Event::listen(\App\Events\PlanExpired::class, \App\Listeners\SendPlanExpiredEmail::class);
-        Event::listen(\App\Events\PlanSubscribed::class, \App\Listeners\SendPlanSubscribedEmail::class);
-        Event::listen(\App\Events\PlanUpgraded::class, \App\Listeners\SendPlanUpgradedEmail::class);
-        Event::listen(\App\Events\NewsletterOptinAttempted::class, \App\Listeners\SendOptinConfirmationEmail::class);
-        Event::listen(\App\Events\NewsletterSubscriptionConfirmed::class, \App\Listeners\SendNewsletterWelcomeEmail::class);
+        Event::listen(UserRegistered::class, SendWelcomeEmail::class);
+        Event::listen(PropertyBookingConfirmed::class, SendBookingConfirmedEmail::class);
+        Event::listen(BookingCancelled::class, SendBookingCancelledEmail::class);
+        Event::listen(EventTicketPurchased::class, SendEventTicketEmail::class);
+        Event::listen(JobApplicationReceived::class, SendJobApplicationReceivedEmail::class);
+        Event::listen(ReviewReceived::class, SendReviewReceivedEmail::class);
+        Event::listen(ReviewRequested::class, SendReviewRequestEmail::class);
+        Event::listen(ListingApproved::class, SendListingApprovedEmail::class);
+        Event::listen(ListingRejected::class, SendListingRejectedEmail::class);
+        Event::listen(NewListingLead::class, SendNewListingLeadEmail::class);
+        Event::listen(PaymentFailed::class, SendPaymentFailedEmail::class);
+        Event::listen(PlanAboutToExpire::class, SendRenewalReminderEmail::class);
+        Event::listen(PlanDowngraded::class, SendPlanDowngradedEmail::class);
+        Event::listen(PlanExpired::class, SendPlanExpiredEmail::class);
+        Event::listen(PlanSubscribed::class, SendPlanSubscribedEmail::class);
+        Event::listen(PlanUpgraded::class, SendPlanUpgradedEmail::class);
+        Event::listen(NewsletterOptinAttempted::class, SendOptinConfirmationEmail::class);
+        Event::listen(NewsletterSubscriptionConfirmed::class, SendNewsletterWelcomeEmail::class);
 
         // 3. Global View Composer (Common Branding)
         View::composer(['frontend._layouts._app', 'frontend._layouts._guest'], function ($view) use ($cartService) {
@@ -104,7 +149,7 @@ class AppServiceProvider extends ServiceProvider
                 'siteFavicon'       => $faviconPath ? Storage::url($faviconPath) : ($logoPath ? Storage::url($logoPath) : asset('images/app-logo.webp')),
                 'bladeContentScope' => config('content.blade_scope', 'laravel_blade'),
                 'bladePages'        => Schema::hasTable('page_contents')
-                    ? \App\Models\PageContent::where('theme_key', config('content.blade_scope', 'laravel_blade'))
+                    ? PageContent::where('theme_key', config('content.blade_scope', 'laravel_blade'))
                     ->select('page', 'theme_key')
                     ->groupBy('page', 'theme_key')
                     ->get()
@@ -114,10 +159,12 @@ class AppServiceProvider extends ServiceProvider
 
         // 3. Aligned Blade Directive (Matching your CSS)
         Blade::directive('editable', function ($expression) {
+            $contentResultClass = ContentResult::class;
+
             return "<?php 
                 \$data = page_content($expression);
                 
-                if (\$data instanceof \App\DTOs\ContentResult) {
+                if (\$data instanceof {$contentResultClass}) {
                     \$editUrl = route('admin.content.edit.item', ['id' => \$data->id]);
                     echo '<span class=\"editable-group d-inline-flex align-items-center\">';
                         echo '<span class=\"editable-text\">' . e(content_display(\$data->value, '')) . '</span>';

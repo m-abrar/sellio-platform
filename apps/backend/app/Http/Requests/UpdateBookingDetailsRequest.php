@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\EventBooking;
+use App\Models\PropertyBooking;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -24,11 +26,11 @@ class UpdateBookingDetailsRequest extends FormRequest
             // This is a common pattern in the unified dashboard
             $userId = auth()->id();
             
-            $isPropertyOwner = \App\Models\PropertyBooking::where('id', $booking instanceof \App\Models\PropertyBooking ? $booking->id : $booking)
+            $isPropertyOwner = PropertyBooking::where('id', $booking instanceof PropertyBooking ? $booking->id : $booking)
                 ->where('user_id', $userId)
                 ->exists();
                 
-            $isEventOwner = \App\Models\EventBooking::where('id', $booking instanceof \App\Models\EventBooking ? $booking->id : $booking)
+            $isEventOwner = EventBooking::where('id', $booking instanceof EventBooking ? $booking->id : $booking)
                 ->where('user_id', $userId)
                 ->exists();
                 

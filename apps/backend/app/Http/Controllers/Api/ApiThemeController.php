@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use App\Models\Theme;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ class ApiThemeController extends Controller
             ], 404);
         }
 
-        $settings = \App\Models\Setting::whereIn('key', ['site_name', 'site_logo', 'hide_site_name'])->pluck('value', 'key');
+        $settings = Setting::whereIn('key', ['site_name', 'site_logo', 'hide_site_name'])->pluck('value', 'key');
 
         return response()->json([
             'success' => true,

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Property;
 use App\Models\PropertyVisit;
+use App\Services\PropertyVisitService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class PropertyVisitController extends Controller
      *
      * @param  \App\Services\PropertyVisitService  $visitService
      */
-    public function __construct(\App\Services\PropertyVisitService $visitService)
+    public function __construct(PropertyVisitService $visitService)
     {
         $this->visitService = $visitService;
     }

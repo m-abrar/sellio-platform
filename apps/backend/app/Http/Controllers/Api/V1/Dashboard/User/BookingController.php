@@ -7,6 +7,7 @@ use App\Models\EventBooking;
 use App\Models\PropertyBooking;
 use App\Models\PropertyVisit;
 use App\Models\ServiceAppointment;
+use App\Services\Dashboard\User\DashboardBookingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ class BookingController extends Controller
      *
      * @param \App\Services\Dashboard\User\DashboardBookingService $bookingService
      */
-    public function __construct(\App\Services\Dashboard\User\DashboardBookingService $bookingService)
+    public function __construct(DashboardBookingService $bookingService)
     {
         $this->bookingService = $bookingService;
     }
@@ -49,7 +50,7 @@ class BookingController extends Controller
         $cancelled = false;
         
         if ($type === 'property_visit' || !$type) {
-            $visit = \App\Models\PropertyVisit::where('user_id', $user->id)->where('id', $id)->first();
+            $visit = PropertyVisit::where('user_id', $user->id)->where('id', $id)->first();
             if ($visit) {
                 $visit->update(['status' => 'cancelled']);
                 $cancelled = true;
@@ -57,7 +58,7 @@ class BookingController extends Controller
         }
         
         if (!$cancelled && ($type === 'property_booking' || !$type)) {
-            $booking = \App\Models\PropertyBooking::where('user_id', $user->id)->where('id', $id)->first();
+            $booking = PropertyBooking::where('user_id', $user->id)->where('id', $id)->first();
             if ($booking) {
                 $booking->update(['status' => 'cancelled']);
                 $cancelled = true;
@@ -65,7 +66,7 @@ class BookingController extends Controller
         }
         
         if (!$cancelled && ($type === 'event_booking' || !$type)) {
-            $booking = \App\Models\EventBooking::where('user_id', $user->id)->where('id', $id)->first();
+            $booking = EventBooking::where('user_id', $user->id)->where('id', $id)->first();
             if ($booking) {
                 $booking->update(['status' => 'cancelled']);
                 $cancelled = true;
@@ -73,7 +74,7 @@ class BookingController extends Controller
         }
         
         if (!$cancelled && ($type === 'service_appointment' || !$type)) {
-            $appointment = \App\Models\ServiceAppointment::where('user_id', $user->id)->where('id', $id)->first();
+            $appointment = ServiceAppointment::where('user_id', $user->id)->where('id', $id)->first();
             if ($appointment) {
                 $appointment->update(['status' => 'cancelled']);
                 $cancelled = true;

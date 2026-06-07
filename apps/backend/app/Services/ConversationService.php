@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Conversation;
+use App\Models\Message;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -44,7 +46,7 @@ class ConversationService
     /**
      * Get all conversations for a user.
      */
-    public function getConversationsForUser(int $userId): \Illuminate\Database\Eloquent\Builder
+    public function getConversationsForUser(int $userId): Builder
     {
         return Conversation::where('user_id', $userId)
                            ->orWhere('partner_id', $userId);
@@ -53,10 +55,10 @@ class ConversationService
     /**
      * Get all messages received by a user across all conversations.
      */
-    public function getReceivedMessagesForUser(int $userId): \Illuminate\Database\Eloquent\Builder
+    public function getReceivedMessagesForUser(int $userId): Builder
     {
         $conversationIds = $this->getConversationsForUser($userId)->pluck('id');
-        return \App\Models\Message::whereIn('conversation_id', $conversationIds)
+        return Message::whereIn('conversation_id', $conversationIds)
                                   ->where('sender_id', '!=', $userId);
     }
 

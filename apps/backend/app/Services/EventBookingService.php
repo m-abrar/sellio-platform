@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\EventTicketPurchased;
 use App\Models\Event;
 use App\Models\EventBooking;
 use App\Models\EventOccurrence;
@@ -53,7 +54,7 @@ class EventBookingService
         
         $saved = $booking->save();
         if ($saved) {
-            event(new \App\Events\EventTicketPurchased($booking->user, $booking));
+            event(new EventTicketPurchased($booking->user, $booking));
         }
         return $saved;
     }

@@ -2,26 +2,28 @@
 
 namespace App\Services\Partner;
 
-use App\Models\User;
-use App\Models\Property;
-use App\Models\Event;
-use App\Models\Service;
-use App\Models\Classified;
 use App\Models\Auto;
-use App\Models\JobListing;
-use App\Models\PropertyBooking;
+use App\Models\AutoInquiry;
+use App\Models\Classified;
+use App\Models\ClassifiedInquiry;
+use App\Models\Event;
 use App\Models\EventBooking;
+use App\Models\JobApplication;
+use App\Models\JobListing;
+use App\Models\Message;
+use App\Models\Property;
+use App\Models\PropertyBooking;
+use App\Models\PropertyVisit;
+use App\Models\Service;
 use App\Models\ServiceAppointment;
 use App\Models\ServiceQuote;
-use App\Models\PropertyVisit;
-use App\Models\AutoInquiry;
-use App\Models\ClassifiedInquiry;
-use App\Models\JobApplication;
-use Spatie\Activitylog\Models\Activity as ActivityLog;
-use Illuminate\Support\Collection;
+use App\Models\User;
+use App\Models\Withdrawal;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Spatie\Activitylog\Models\Activity as ActivityLog;
 
 class DashboardService
 {
@@ -55,14 +57,14 @@ class DashboardService
         $unreadNotifications = $partner->unreadNotifications()->count();
 
         // Fetch unread messages count across all active conversations
-        $unreadMessages = \App\Models\Message::whereIn('conversation_id', $partner->allConversations()->pluck('id'))
+        $unreadMessages = Message::whereIn('conversation_id', $partner->allConversations()->pluck('id'))
             ->where('sender_id', '!=', $partner->id)
             ->whereNull('read_at')
             ->count();
 
         // Calculate total approved withdrawals / payouts in dollars
         $totalPayouts = (float) ($partner->withdrawals()
-            ->where('status', \App\Models\Withdrawal::STATUS_APPROVED)
+            ->where('status', Withdrawal::STATUS_APPROVED)
             ->sum('amount') / 100);
 
         // Calculate total lifetime earnings (revenue) in dollars - Exclude refunded withdrawals to prevent double-counting

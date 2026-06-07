@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\GatewayManager;
+use App\Services\StripeGatewayService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
@@ -296,7 +297,7 @@ class ProductCheckoutPaymentTest extends TestCase
         $gateway = PaymentGateway::create([
             'title' => 'Stripe',
             'slug' => 'stripe',
-            'class_name' => \App\Services\StripeGatewayService::class,
+            'class_name' => StripeGatewayService::class,
             'is_active' => true,
             'mode' => PaymentGateway::MODE_SANDBOX,
         ]);

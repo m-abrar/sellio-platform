@@ -3,7 +3,14 @@
 namespace App\Services\Partner;
 
 use App\Models\Auto;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Feature;
+use App\Models\Location;
+use App\Models\Tag;
+use App\Models\Type;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -29,11 +36,11 @@ class AutoService
     public function getFormData(): array
     {
         return [
-            'categories' => \App\Models\Category::where('is_auto', true)->get(),
-            'brands'     => \App\Models\Brand::where('is_auto', true)->get(),
-            'types'      => \App\Models\Type::where('is_auto', true)->get(),
-            'locations'  => \App\Models\Location::all(),
-            'features'   => \App\Models\Feature::where('is_auto', true)->active()->get(['id', 'title']),
+            'categories' => Category::where('is_auto', true)->get(),
+            'brands'     => Brand::where('is_auto', true)->get(),
+            'types'      => Type::where('is_auto', true)->get(),
+            'locations'  => Location::all(),
+            'features'   => Feature::where('is_auto', true)->active()->get(['id', 'title']),
         ];
     }
 
@@ -47,7 +54,7 @@ class AutoService
      */
     public function saveAuto(User $user, array $data, ?Auto $auto = null): Auto
     {
-        return \Illuminate\Support\Facades\DB::transaction(function () use ($user, $data, $auto) {
+        return DB::transaction(function () use ($user, $data, $auto) {
             $coreData = collect($data)->except(['features', 'tags'])->toArray();
             $coreData['slug'] = $this->generateUniqueSlug($coreData['title'], $auto?->id);
             
@@ -74,9 +81,9 @@ class AutoService
             if (isset($data['tags'])) {
                 $tagIds = [];
                 foreach ($data['tags'] as $tagName) {
-                    $tag = \App\Models\Tag::firstOrCreate(
+                    $tag = Tag::firstOrCreate(
                         ['title' => trim($tagName)],
-                        ['slug' => \Illuminate\Support\Str::slug($tagName), 'is_auto' => true, 'is_published' => true]
+                        ['slug' => Str::slug($tagName), 'is_auto' => true, 'is_published' => true]
                     );
                     $tagIds[] = $tag->id;
                 }

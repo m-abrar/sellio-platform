@@ -2,7 +2,14 @@
 
 namespace App\Services\Admin;
 
+use App\Models\Amenity;
+use App\Models\Category;
+use App\Models\Feature;
+use App\Models\Location;
 use App\Models\Property;
+use App\Models\Tag;
+use App\Models\Type;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -23,13 +30,13 @@ class PropertyManagementService
      * @param \Illuminate\Http\Request $request
      * @return array
      */
-    public function getListingData(\Illuminate\Http\Request $request): array
+    public function getListingData(Request $request): array
     {
-        $categories = \App\Models\Category::active()->forType('property')->get();
-        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+        $categories = Category::active()->forType('property')->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
 
-        $locations = \App\Models\Location::active()->forType('property')->get();
-        if ($locations->isEmpty()) $locations = \App\Models\Location::active()->get();
+        $locations = Location::active()->forType('property')->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
 
         $properties = Property::query()
             ->when($request->query('name'), fn($q) => $q->where('title', 'like', '%' . $request->query('name') . '%'))
@@ -60,15 +67,15 @@ class PropertyManagementService
      */
     public function getFormData(): array
     {
-        $amenities  = \App\Models\Amenity::active()->forType('property')->get();
-        $features   = \App\Models\Feature::active()->forType('property')->get();
-        $types      = \App\Models\Type::active()->forType('property')->get();
-        $tags       = \App\Models\Tag::active()->forType('property')->get();
-        $categories = \App\Models\Category::active()->forType('property')->get();
-        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+        $amenities  = Amenity::active()->forType('property')->get();
+        $features   = Feature::active()->forType('property')->get();
+        $types      = Type::active()->forType('property')->get();
+        $tags       = Tag::active()->forType('property')->get();
+        $categories = Category::active()->forType('property')->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
 
-        $locations = \App\Models\Location::active()->forType('property')->get();
-        if ($locations->isEmpty()) $locations = \App\Models\Location::active()->get();
+        $locations = Location::active()->forType('property')->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
         
         $titleSuggestions = Property::select('title')->distinct()->limit(20)->pluck('title');
 

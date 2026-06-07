@@ -5,9 +5,12 @@ namespace App\Services;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
-use App\Models\ProductAttribute;
 use App\Models\ProductAddon;
-use Illuminate\Support\Facades\{Auth, Session, DB, Schema};
+use App\Models\ProductAttribute;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Session;
 
 class CartService
 {
@@ -110,7 +113,7 @@ class CartService
     {
         // We delegate the heavy SQL lifting to the Cart model's static method
         // which we defined earlier to handle JSON matching and quantity increments.
-        \App\Models\Cart::mergeGuestCart(session()->getId(), $userId);
+        Cart::mergeGuestCart(session()->getId(), $userId);
         
         // Mark as processed to prevent redundant merges in the same session
         session()->put('cart_merging_processed', true);

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Plan;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,8 +25,8 @@ class SubscriptionFactory extends Factory
         $endsAt = (clone $startsAt)->modify('+1 year');
 
         return [
-            'user_id'   => \App\Models\User::factory(),
-            'plan_id'   => \App\Models\Plan::factory(),
+            'user_id'   => User::factory(),
+            'plan_id'   => Plan::factory(),
             'title'     => $this->faker->randomElement(['Pro Monthly', 'Elite Annual', 'Starter Plan']),
             'status'    => 'active',
             'starts_at' => $startsAt,

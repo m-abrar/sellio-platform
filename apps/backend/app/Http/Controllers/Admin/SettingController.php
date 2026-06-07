@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Setting;
 use App\Models\Page;
+use App\Models\Setting;
 use App\Models\Theme;
+use App\Services\Admin\SettingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,7 @@ class SettingController extends Controller
      *
      * @param  \App\Services\Admin\SettingService  $settingService
      */
-    public function __construct(\App\Services\Admin\SettingService $settingService)
+    public function __construct(SettingService $settingService)
     {
         $this->settingService = $settingService;
     }

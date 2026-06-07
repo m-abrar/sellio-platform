@@ -2,6 +2,8 @@
 
 namespace App\Contracts;
 
+use Illuminate\Http\Request;
+
 interface PaymentGatewayService
 {
     /**
@@ -35,5 +37,5 @@ interface PaymentGatewayService
      * @param \Illuminate\Http\Request $request
      * @return array
      */
-    public function handleWebhook(\Illuminate\Http\Request $request): array;
+    public function handleWebhook(Request $request): array;
 }

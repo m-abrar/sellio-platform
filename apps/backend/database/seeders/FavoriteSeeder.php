@@ -4,15 +4,19 @@
 
 namespace Database\Seeders;
 
+use App\Models\Auto;
+use App\Models\Blog;
+use App\Models\Classified;
+use App\Models\Event;
+use App\Models\Favorite;
+use App\Models\JobListing;
+use App\Models\Product;
+use App\Models\Property;
+use App\Models\Service;
+use App\Models\User;
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
-use App\Models\User;
-use App\Models\Property;
-use App\Models\JobListing;
-use App\Models\Service;
-use App\Models\Classified;
-use App\Models\Favorite;
 
 /**
  * Class FavoriteSeeder
@@ -52,14 +56,14 @@ class FavoriteSeeder extends Seeder
 
         // Collect all models that can be favorited using their fully qualified class names.
         $favoritableModels = [
-            'App\Models\Property' => \App\Models\Property::all(),
-            'App\Models\JobListing' => \App\Models\JobListing::all(),
-            'App\Models\Service' => \App\Models\Service::all(),
-            'App\Models\Classified' => \App\Models\Classified::all(),
-            'App\Models\Auto' => \App\Models\Auto::all(),
-            'App\Models\Event' => \App\Models\Event::all(),
-            'App\Models\Product' => \App\Models\Product::all(),
-            'App\Models\Blog' => \App\Models\Blog::all(),
+            'App\Models\Property' => Property::all(),
+            'App\Models\JobListing' => JobListing::all(),
+            'App\Models\Service' => Service::all(),
+            'App\Models\Classified' => Classified::all(),
+            'App\Models\Auto' => Auto::all(),
+            'App\Models\Event' => Event::all(),
+            'App\Models\Product' => Product::all(),
+            'App\Models\Blog' => Blog::all(),
         ];
 
         // Store all favorite records to insert in bulk

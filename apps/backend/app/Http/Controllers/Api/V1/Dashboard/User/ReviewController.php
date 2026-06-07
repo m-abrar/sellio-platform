@@ -3,12 +3,19 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\User\UpdateReviewRequest;
+use App\Http\Resources\ReviewResource;
+use App\Models\Auto;
+use App\Models\Classified;
+use App\Models\Event;
+use App\Models\JobListing;
+use App\Models\Product;
+use App\Models\Property;
 use App\Models\Review;
+use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Resources\ReviewResource;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Dashboard\User\UpdateReviewRequest;
 use Illuminate\View\View;
 
 /**
@@ -111,20 +118,20 @@ class ReviewController extends Controller
 
         // Standardize reviewable type names if they are short names
         $typeMap = [
-            'properties'   => \App\Models\Property::class,
-            'property'     => \App\Models\Property::class,
-            'autos'        => \App\Models\Auto::class,
-            'auto'         => \App\Models\Auto::class,
-            'events'       => \App\Models\Event::class,
-            'event'        => \App\Models\Event::class,
-            'services'     => \App\Models\Service::class,
-            'service'      => \App\Models\Service::class,
-            'jobs'         => \App\Models\JobListing::class,
-            'job'          => \App\Models\JobListing::class,
-            'products'     => \App\Models\Product::class,
-            'product'      => \App\Models\Product::class,
-            'classifieds'  => \App\Models\Classified::class,
-            'classified'   => \App\Models\Classified::class,
+            'properties'   => Property::class,
+            'property'     => Property::class,
+            'autos'        => Auto::class,
+            'auto'         => Auto::class,
+            'events'       => Event::class,
+            'event'        => Event::class,
+            'services'     => Service::class,
+            'service'      => Service::class,
+            'jobs'         => JobListing::class,
+            'job'          => JobListing::class,
+            'products'     => Product::class,
+            'product'      => Product::class,
+            'classifieds'  => Classified::class,
+            'classified'   => Classified::class,
         ];
 
         $lowerType = strtolower($validated['reviewable_type']);

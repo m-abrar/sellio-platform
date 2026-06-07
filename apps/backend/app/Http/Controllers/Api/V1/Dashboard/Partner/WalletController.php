@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Bavix\Wallet\Models\Transaction; 
+use App\Http\Requests\Partner\ProcessWithdrawalRequest;
 use App\Http\Resources\TransactionResource;
 use App\Models\Withdrawal;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
-use App\Http\Requests\Partner\ProcessWithdrawalRequest;
-use Illuminate\Support\Facades\Log;
 use App\Services\WalletService;
+use Bavix\Wallet\Models\Transaction;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class WalletController extends Controller
 {
@@ -98,12 +100,12 @@ class WalletController extends Controller
             ]);
             
             return $this->successResponse(null, 'Withdrawal request for $' . number_format($request->validated()['amount'], 2) . ' submitted successfully. It is now pending approval.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), 422);
         }
     }
 
-    public function deposit(Request $request): \Illuminate\Http\JsonResponse
+    public function deposit(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'amount' => 'required|numeric|min:1',
@@ -127,7 +129,7 @@ class WalletController extends Controller
                 null,
                 __('Funds deposited successfully! Your wallet balance has been updated.')
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Wallet deposit error: ' . $e->getMessage());
             return $this->errorResponse($e->getMessage(), 422);
         }

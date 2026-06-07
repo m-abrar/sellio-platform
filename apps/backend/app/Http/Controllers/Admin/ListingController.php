@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\ListingApproved;
+use App\Events\ListingRejected;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\Admin\ListingQueryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
@@ -68,7 +71,7 @@ class ListingController extends Controller
             'is_published' => true,
         ]);
 
-        event(new \App\Events\ListingApproved($listing));
+        event(new ListingApproved($listing));
 
         return back()->with('success', __('Asset #:id approved and published.', ['id' => $listing_id]));
     }
@@ -93,7 +96,7 @@ class ListingController extends Controller
             'is_published' => false,
         ]);
 
-        event(new \App\Events\ListingRejected($listing, 'Admin disapproval'));
+        event(new ListingRejected($listing, 'Admin disapproval'));
 
         return back()->with('success', __('Asset #:id moved to pending.', ['id' => $listing_id]));
     }
@@ -117,7 +120,7 @@ class ListingController extends Controller
         ];
         
         $modelKey = strtolower($listing_type);
-        $vertical = $pluralMap[$modelKey] ?? \Illuminate\Support\Str::plural($modelKey);
+        $vertical = $pluralMap[$modelKey] ?? Str::plural($modelKey);
         
         return redirect()->route('admin.' . $vertical . '.edit', $listing_id);
     }

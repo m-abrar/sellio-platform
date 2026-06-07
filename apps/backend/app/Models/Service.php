@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 use App\Traits\HasImageAccess;
+use App\Traits\Models\HasStatusModeration;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,8 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use App\Models\User;
-use App\Traits\Models\HasStatusModeration;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
@@ -220,8 +220,8 @@ class Service extends Model implements HasMedia
                     // Parses "Monday - Friday" or "Saturday - Sunday"
                     $days = explode(' - ', $this->operating_days_label);
                     if (count($days) === 2) {
-                        $startDay = \Carbon\Carbon::parse($days[0])->dayOfWeek;
-                        $endDay = \Carbon\Carbon::parse($days[1])->dayOfWeek;
+                        $startDay = Carbon::parse($days[0])->dayOfWeek;
+                        $endDay = Carbon::parse($days[1])->dayOfWeek;
                         $currentDay = $now->dayOfWeek;
 
                         // Handle ranges that cross over weekends (e.g., Thursday - Tuesday)
@@ -238,12 +238,12 @@ class Service extends Model implements HasMedia
                     if (count($times) !== 2) return false;
 
                     // Create Carbon instances for today with the service's hours
-                    $start = \Carbon\Carbon::createFromFormat('h:i A', $times[0], $now->timezone);
-                    $end = \Carbon\Carbon::createFromFormat('h:i A', $times[1], $now->timezone);
+                    $start = Carbon::createFromFormat('h:i A', $times[0], $now->timezone);
+                    $end = Carbon::createFromFormat('h:i A', $times[1], $now->timezone);
 
                     return $now->between($start, $end);
 
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     // Log error if needed: \Log::error("Schedule Parsing Error: " . $e->getMessage());
                     return false;
                 }

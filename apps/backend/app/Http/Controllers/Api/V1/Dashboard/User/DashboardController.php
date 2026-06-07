@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\User\UpdateProfileRequest;
+use App\Http\Resources\UserResource;
+use App\Models\AutoInquiry;
+use App\Models\Review;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Dashboard\User\UpdateProfileRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use App\Http\Resources\UserResource;
 
 class DashboardController extends Controller
 {
@@ -32,8 +34,8 @@ class DashboardController extends Controller
             'appsCount'         => $user->jobApplications()->count(),
             'appointmentsCount' => $user->serviceAppointments()->count(),
             'quotesCount'       => $user->serviceQuotes()->count(),
-            'inquiriesCount'    => $user->classifiedInquiries()->count() + \App\Models\AutoInquiry::where('user_id', $user->id)->count(),
-            'reviewsCount'      => \App\Models\Review::where('user_id', $user->id)->count(),
+            'inquiriesCount'    => $user->classifiedInquiries()->count() + AutoInquiry::where('user_id', $user->id)->count(),
+            'reviewsCount'      => Review::where('user_id', $user->id)->count(),
         ];
 
         // Placeholder for theme logic

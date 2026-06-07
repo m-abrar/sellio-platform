@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Dashboard\Partner\Traits;
 
+use App\Models\Review;
+use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 trait Activities
 {
@@ -41,15 +44,15 @@ trait Activities
                     // Reviews Count matching partner listing IDs
                     $itemIds = $partner->$relation()->pluck('id')->toArray();
                     if (!empty($itemIds)) {
-                        $modelName = 'App\\Models\\' . \Illuminate\Support\Str::studly(\Illuminate\Support\Str::singular($mod));
+                        $modelName = 'App\\Models\\' . Str::studly(Str::singular($mod));
                         if ($mod === 'jobs') $modelName = 'App\\Models\\JobListing';
                         if ($mod === 'classifieds') $modelName = 'App\\Models\\Classified';
 
-                        $reviewsCount += \App\Models\Review::where('reviewable_type', $modelName)
+                        $reviewsCount += Review::where('reviewable_type', $modelName)
                             ->whereIn('reviewable_id', $itemIds)
                             ->count();
                     }
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     // Fail silently
                 }
             }
