@@ -405,7 +405,13 @@ p {
 .mb-3 { margin-bottom: 0.85rem !important; }
 .mb-4 { margin-bottom: 1.25rem !important; }
 .mb-5 { margin-bottom: 2rem !important; }
+.mt-3 { margin-top: 0.85rem !important; }
 .mt-5 { margin-top: 2.5rem !important; }
+
+.feature-card h4 i,
+.alert-box h3 i {
+    margin-right: 0.4rem;
+}
 
 .d-flex { display: flex; }
 .justify-content-between { justify-content: space-between; }
@@ -958,5 +964,195 @@ pre code {
 @media (min-width: 769px) {
     .sidebar-overlay {
         display: none !important;
+    }
+}
+
+/* Utilities */
+.text-uppercase {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.req-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.35rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+@media (min-width: 640px) {
+    .req-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.req-grid li {
+    font-size: 0.88rem;
+    color: #475569;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+}
+
+.section-heading > span {
+    flex: 1 1 auto;
+}
+
+.section-anchor {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.section-heading:hover .section-anchor,
+.section-anchor:focus-visible {
+    opacity: 1;
+}
+
+.section-anchor:hover,
+.section-anchor:focus-visible {
+    background: var(--primary-soft);
+    color: var(--primary-hover);
+}
+
+.demo-cred-row {
+    margin-bottom: 0.35rem;
+}
+
+.demo-cred-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 0.15rem;
+}
+
+.demo-note {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(118, 192, 67, 0.2);
+}
+
+.code-wrap {
+    position: relative;
+    margin: 1.15rem 0;
+}
+
+.code-wrap pre {
+    margin: 0;
+}
+
+.code-copy-btn {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    color: #e2e8f0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.3rem 0.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.code-copy-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
+.code-copy-btn.is-copied {
+    background: rgba(16, 185, 129, 0.25);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #6ee7b7;
+}
+
+.callout-danger {
+    background: rgba(239, 68, 68, 0.06);
+    border-color: var(--accent-danger);
+}
+
+.checklist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.checklist li {
+    position: relative;
+    padding-left: 1.65rem;
+    margin-bottom: 0.65rem;
+    font-size: 0.9rem;
+    color: #475569;
+}
+
+.checklist li::before {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    top: 0.15rem;
+    color: var(--primary-hover);
+    font-size: 0.75rem;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.doc-menu-btn:focus-visible,
+.tab-btn:focus-visible,
+.back-to-top:focus-visible,
+.code-copy-btn:focus-visible {
+    outline-color: var(--primary-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .reveal-up,
+    .image-stack,
+    .seeding-success-panel,
+    .tab-content.active,
+    .feature-card,
+    .back-to-top {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .cursor-blink {
+        animation: none;
+        opacity: 1;
     }
 }

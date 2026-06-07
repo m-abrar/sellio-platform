@@ -7,6 +7,7 @@
     const progressBar = document.querySelector('.reading-progress-bar');
     const navLinks = document.querySelectorAll('.nav-item a');
     const sections = document.querySelectorAll('.doc-section');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function setSidebarOpen(open) {
         body.classList.toggle('sidebar-open', open);
@@ -34,6 +35,12 @@
         overlay.addEventListener('click', () => setSidebarOpen(false));
     }
 
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            setSidebarOpen(false);
+        }
+    });
+
     navLinks.forEach((link) => {
         link.addEventListener('click', () => {
             if (window.matchMedia('(max-width: 768px)').matches) {
@@ -43,21 +50,67 @@
     });
 
     window.showTab = function showTab(tabId, button) {
-        document.querySelectorAll('.tab-content').forEach((tab) => tab.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach((btn) => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach((tab) => {
+            tab.classList.remove('active');
+            tab.setAttribute('aria-hidden', 'true');
+        });
+
+        document.querySelectorAll('.tab-btn').forEach((btn) => {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false');
+        });
 
         const panel = document.getElementById(tabId);
         if (panel) {
             panel.classList.add('active');
+            panel.setAttribute('aria-hidden', 'false');
         }
 
         if (button) {
             button.classList.add('active');
+            button.setAttribute('aria-selected', 'true');
         }
     };
 
+    document.querySelectorAll('pre').forEach((pre) => {
+        const code = pre.querySelector('code') || pre;
+        const text = code.textContent?.trim() || '';
+        if (!text) {
+            return;
+        }
+
+        const wrap = document.createElement('div');
+        wrap.className = 'code-wrap';
+        pre.parentNode?.insertBefore(wrap, pre);
+        wrap.appendChild(pre);
+
+        const copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'code-copy-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+        wrap.appendChild(copyBtn);
+
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(text);
+                copyBtn.textContent = 'Copied';
+                copyBtn.classList.add('is-copied');
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.classList.remove('is-copied');
+                }, 1800);
+            } catch {
+                copyBtn.textContent = 'Failed';
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy';
+                }, 1800);
+            }
+        });
+    });
+
     const typewriterElement = document.getElementById('typewriter');
-    if (typewriterElement) {
+    if (typewriterElement && !prefersReducedMotion) {
         const words = ['Marketplace', 'SaaS Engine', 'Multi-Vertical', 'Modular'];
         let wordIndex = 0;
         let charIndex = 0;
@@ -89,6 +142,16 @@
         }
 
         type();
+    } else if (typewriterElement) {
+        typewriterElement.textContent = 'Marketplace';
+    }
+
+    function setActiveNav(id) {
+        navLinks.forEach((link) => {
+            const item = link.parentElement;
+            const href = link.getAttribute('href') || '';
+            item?.classList.toggle('active', href === `#${id}`);
+        });
     }
 
     function updateScrollState() {
@@ -101,24 +164,43 @@
         }
 
         if (backToTop) {
-            backToTop.classList.toggle('is-visible', scrollTop > 480);
-            backToTop.hidden = scrollTop <= 480;
+            const show = scrollTop > 480;
+            backToTop.classList.toggle('is-visible', show);
+            backToTop.hidden = !show;
         }
+    }
 
-        let current = sections[0]?.getAttribute('id') || '';
+    if ('IntersectionObserver' in window && sections.length) {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const visible = entries
+                    .filter((entry) => entry.isIntersecting)
+                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
-        sections.forEach((section) => {
-            const sectionTop = section.offsetTop - 160;
-            if (scrollTop >= sectionTop) {
-                current = section.getAttribute('id');
-            }
-        });
+                if (visible.length) {
+                    setActiveNav(visible[0].target.id);
+                }
+            },
+            {
+                rootMargin: '-20% 0px -55% 0px',
+                threshold: [0, 0.15, 0.35],
+            },
+        );
 
-        navLinks.forEach((link) => {
-            const item = link.parentElement;
-            const href = link.getAttribute('href') || '';
-            item?.classList.toggle('active', href === `#${current}`);
-        });
+        sections.forEach((section) => observer.observe(section));
+    } else {
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset;
+            let current = sections[0]?.getAttribute('id') || '';
+
+            sections.forEach((section) => {
+                if (scrollTop >= section.offsetTop - 160) {
+                    current = section.getAttribute('id') || current;
+                }
+            });
+
+            setActiveNav(current);
+        }, { passive: true });
     }
 
     window.addEventListener('scroll', updateScrollState, { passive: true });
@@ -126,7 +208,7 @@
 
     if (backToTop) {
         backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
         });
     }
 

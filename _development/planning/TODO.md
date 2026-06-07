@@ -395,3 +395,30 @@ https://demo.sellio.vebdez.com/buyer
 
 -----------------
 
+Live demo access
+update these links on documentation
+
+Storefront (show two types of frontend https://sellio.vebdez.com laravel, https://frontend.sellio.vebdez.com nextjs)
+·
+Installer (https://sellio.vebdez.com/demo/install - show an HTML install wizard preview )
+·
+Marketing landing page (https://sellio.vebdez.com/)
+ 
+-------------------
+
+Expert CLI
+FTP / cPanel (auto install wizard) add this text here and make it more highlighted for reader's attention
+
+
+documentation
+recheck for errors?
+
+Upload the contents of the backend folder to your web root (usually public_html). Distribution packages include pre-built vendor/ and public/build/ assets.
+
+---------------
+
+Contact support via Envato
+this has to be updated in documentation, mark as TODO
+
+-----------------
+

@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Official Sellio marketplace documentation — installation, configuration, vertical modules, API reference, and production hardening.">
+    <meta name="theme-color" content="#76c043">
     <title>Sellio Documentation | Technical Guide</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2376c043'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-size='18' font-family='system-ui' font-weight='700'%3ES%3C/text%3E%3C/svg%3E">
     <link href="assets/vendor/fontsource/bundle.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -45,8 +48,10 @@
                     <ul class="nav-list">
                         <li class="nav-item"><a href="#installation">Installation Guide</a></li>
                         <li class="nav-item"><a href="#configuration">Core Configuration</a></li>
+                        <li class="nav-item"><a href="#portals">Portal Panels</a></li>
                         <li class="nav-item"><a href="#cron">Crons &amp; Workers</a></li>
                         <li class="nav-item"><a href="#updating">Maintenance &amp; Updates</a></li>
+                        <li class="nav-item"><a href="#security">Post-install Security</a></li>
                     </ul>
                 </div>
 
@@ -58,6 +63,8 @@
                         <li class="nav-item"><a href="#ecommerce">E-Commerce Engine</a></li>
                         <li class="nav-item"><a href="#jobs">Jobs &amp; Talent</a></li>
                         <li class="nav-item"><a href="#services">Services &amp; Booking</a></li>
+                        <li class="nav-item"><a href="#events">Events &amp; Tickets</a></li>
+                        <li class="nav-item"><a href="#classifieds">Classified Ads</a></li>
                     </ul>
                 </div>
 
@@ -96,9 +103,9 @@
             <section id="welcome" class="doc-section">
                 <div class="doc-hero">
                     <header>
-                        <span class="version-badge">v2.4 Stable</span>
+                        <span class="version-badge">v1.0.0 · June 2026</span>
                         <h1>The modular <br><span id="typewriter" class="text-primary"></span><span class="cursor-blink"></span><br>marketplace engine</h1>
-                        <p class="lead">Sellio is a modular marketplace ecosystem built with Laravel 12 and a service-oriented architecture. Host multiple verticals — real estate, automotive, e-commerce, jobs, and more — from a single unified core.</p>
+                        <p class="lead">Sellio is a modular marketplace ecosystem built with Laravel 12 and a service-oriented architecture. Activate eight marketplace verticals — products, properties, autos, events, jobs, services, and classifieds — from one unified admin core.</p>
                     </header>
 
                     <div class="image-stack reveal-up" aria-hidden="true">
@@ -121,28 +128,29 @@
 
                 <div class="alert-box">
                     <h3><i class="fas fa-rocket"></i> Live demo access</h3>
-                    <p>Explore the seeded demo environment before you deploy. Use the credentials below on each portal.</p>
+                    <p>Explore the seeded demo environment before you deploy. These accounts are created by <code>DatabaseSeeder</code> when demo data is imported.</p>
                     <div class="demo-grid">
                         <div class="demo-card">
                             <strong>Admin</strong>
-                            <code>admin@sellio-platform.test</code>
-                            <code>admin123</code>
+                            <div class="demo-cred-row"><span class="demo-cred-label">Email</span><code>admin@sellio-platform.test</code></div>
+                            <div class="demo-cred-row"><span class="demo-cred-label">Password</span><code>admin123</code></div>
                             <a href="https://demo.sellio.vebdez.com/admin" target="_blank" rel="noopener">Open admin dashboard</a>
                         </div>
                         <div class="demo-card">
-                            <strong>Seller</strong>
-                            <code>partner@sellio-platform.test</code>
-                            <code>partner123</code>
+                            <strong>Partner (seller)</strong>
+                            <div class="demo-cred-row"><span class="demo-cred-label">Email</span><code>partner@sellio-platform.test</code></div>
+                            <div class="demo-cred-row"><span class="demo-cred-label">Password</span><code>partner123</code></div>
                             <a href="https://seller-panel.sellio.vebdez.com" target="_blank" rel="noopener">Open seller panel</a>
                         </div>
                         <div class="demo-card">
                             <strong>Buyer</strong>
-                            <code>buyer@sellio-platform.test</code>
-                            <code>buyer123</code>
+                            <div class="demo-cred-row"><span class="demo-cred-label">Email</span><code>buyer@sellio-platform.test</code></div>
+                            <div class="demo-cred-row"><span class="demo-cred-label">Password</span><code>buyer123</code></div>
                             <a href="https://buyer-panel.sellio.vebdez.com" target="_blank" rel="noopener">Open buyer panel</a>
                         </div>
                     </div>
-                    <p class="demo-links mb-0">
+                    <p class="demo-note mb-0">If you used the web installer, the <strong>admin</strong> account is the one you created on the final step (it may replace user ID 1). Partner and buyer demo accounts still exist when demo seeding ran. Rotate or remove all demo passwords before production.</p>
+                    <p class="demo-links mb-0 mt-3">
                         <a href="https://demo.sellio.vebdez.com" target="_blank" rel="noopener">Storefront</a>
                         <span class="text-muted">·</span>
                         <a href="https://demo.sellio.vebdez.com/install" target="_blank" rel="noopener">Installer</a>
@@ -174,15 +182,18 @@
             </section>
 
             <section id="requirements" class="doc-section">
-                <h2>Environment Specification</h2>
-                <p>Sellio requires a modern server environment to handle multi-vertical processing.</p>
+                <h2 class="section-heading"><span>Environment Specification</span><a href="#requirements" class="section-anchor" aria-label="Link to Environment Specification"><i class="fas fa-link"></i></a></h2>
+                <p>Sellio requires a modern server environment. The web installer audits these automatically; use this list when preparing a host.</p>
                 <div class="feature-card feature-card-accent mb-4">
-                    <ul class="nav-list smallest" style="columns: 2; column-gap: 2rem;">
-                        <li><strong>PHP Version</strong>: 8.2 or 8.3</li>
+                    <ul class="req-grid">
+                        <li><strong>PHP</strong>: 8.2+ (8.3 recommended)</li>
                         <li><strong>Database</strong>: MySQL 8.0+ or MariaDB 10.11+</li>
                         <li><strong>Server</strong>: Nginx or Apache with <code>mod_rewrite</code></li>
-                        <li><strong>Memory</strong>: 512MB RAM (minimum)</li>
-                        <li><strong>Extensions</strong>: BCMath, Ctype, Fileinfo, GD/Imagick, Intl, Mbstring, OpenSSL, PDO, Tokenizer, XML, Zip</li>
+                        <li><strong>Memory</strong>: 512MB RAM minimum (1GB+ for seeding)</li>
+                        <li><strong>Functions</strong>: <code>exec</code> and <code>passthru</code> enabled (web installer)</li>
+                        <li><strong>Writable</strong>: <code>storage/</code> and <code>bootstrap/cache/</code></li>
+                        <li><strong>Extensions</strong>: BCMath, Ctype, Exif, Fileinfo, GD, Intl, Mbstring, OpenSSL, PDO, Tokenizer, XML, Zip</li>
+                        <li><strong>Assets</strong>: <code>public/build/manifest.json</code> (included in distribution ZIP)</li>
                     </ul>
                 </div>
             </section>
@@ -194,12 +205,12 @@
                     <button type="button" class="tab-btn" role="tab" aria-selected="false" onclick="showTab('web', this)">FTP / cPanel</button>
                 </div>
 
-                <div id="cli" class="tab-content active" role="tabpanel">
+                <div id="cli" class="tab-content active" role="tabpanel" aria-hidden="false">
                     <div class="step-item">
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <h4>Asset extraction &amp; dependency sync</h4>
-                            <p>Upload the <code>apps/backend</code> folder to your server. Run the composer orchestration:</p>
+                            <p>From the monorepo, work inside <code>apps/backend</code>. On a production server after extracting the distribution package, run Composer in the uploaded backend root:</p>
                             <pre><code>composer install --no-dev --optimize-autoloader</code></pre>
                         </div>
                     </div>
@@ -224,12 +235,12 @@
                     </div>
                 </div>
 
-                <div id="web" class="tab-content" role="tabpanel">
+                <div id="web" class="tab-content" role="tabpanel" aria-hidden="true">
                     <div class="step-item">
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <h4>Payload upload</h4>
-                            <p>Upload the contents of the backend folder to your web root (usually <code>public_html</code>). Distribution packages include pre-built <code>vendor/</code> and <code>public/build/</code> assets.</p>
+                            <p>Upload the Laravel backend to your main domain document root (<code>public_html</code> or equivalent). CodeCanyon distribution builds include <code>vendor/</code>, <code>public/build/</code>, and <code>public/vendor/</code> so shared hosting can skip Composer when those folders are present.</p>
                         </div>
                     </div>
                     <div class="step-item">
@@ -250,12 +261,12 @@
             </section>
 
             <section id="configuration" class="doc-section">
-                <h2>Core Configuration</h2>
-                <p>The primary configuration hub is the <code>.env</code> file. After any modification, run <code>php artisan config:clear</code>.</p>
+                <h2 class="section-heading"><span>Core Configuration</span><a href="#configuration" class="section-anchor" aria-label="Link to Core Configuration"><i class="fas fa-link"></i></a></h2>
+                <p>The primary configuration hub is the <code>.env</code> file. After any modification, run <code>php artisan config:clear</code> (or <code>php artisan optimize:clear</code> in production after testing).</p>
 
                 <div class="feature-card mb-4">
                     <h4 class="small fw-bold"><i class="fas fa-envelope text-primary"></i> Mail service setup</h4>
-                    <p class="small">We recommend a transactional service like Mailgun or SendGrid for platform notifications.</p>
+                    <p class="small">Configure SMTP in <code>.env</code> or use the optional mail fields in the web installer. Transactional providers like Mailgun or SendGrid are recommended.</p>
                     <pre><code>MAIL_MAILER=smtp
 MAIL_HOST=smtp.mailgun.org
 MAIL_PORT=587
@@ -264,15 +275,53 @@ MAIL_PASSWORD=your-secure-password
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=no-reply@yourdomain.com</code></pre>
                 </div>
+
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold"><i class="fas fa-shield-halved text-primary"></i> CORS &amp; API origins</h4>
+                    <p class="small mb-0">Seller and buyer panels call the Laravel API from separate subdomains. Set allowed origins in <strong>Admin → Settings → General → API CORS Origins</strong>, or optionally seed <code>CORS_ALLOWED_ORIGINS</code> in <code>.env</code> as a fallback.</p>
+                </div>
+            </section>
+
+            <section id="portals" class="doc-section">
+                <h2 class="section-heading"><span>Portal Panels (Seller &amp; Buyer)</span><a href="#portals" class="section-anchor" aria-label="Link to Portal Panels"><i class="fas fa-link"></i></a></h2>
+                <p>Production deployments usually host the React seller and buyer panels on separate subdomains. Upload only the pre-built <code>dist/</code> contents — no Node.js build is required on the server.</p>
+
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Upload panel builds</h4>
+                        <p class="mb-0">Deploy <code>apps/seller/dist/</code> to your seller subdomain and <code>apps/buyer/dist/</code> to your buyer subdomain (see <code>distribution/SERVER-DEPLOY.md</code> after running <code>npm run prepare:distribution</code>).</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Edit <code>public/config.js</code></h4>
+                        <p>Each panel reads runtime config from <code>config.js</code> — update this file in cPanel without rebuilding:</p>
+                        <pre><code>window.SELLIO_CONFIG = {
+  apiUrl: 'https://your-laravel-domain.com/api',
+  storefrontUrl: 'https://your-laravel-domain.com',
+  basePath: '' // e.g. '/buyer' when not on a dedicated subdomain
+};</code></pre>
+                        <div class="callout callout-info">
+                            <p>An amber setup banner appears on login when <code>config.js</code> still contains placeholder URLs. The buyer Settings → Backend tab shows the live values read from this file.</p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <section id="cron" class="doc-section">
-                <h2>Background Orchestration</h2>
-                <p>Critical platform features like expiration tracking and notifications require background workers.</p>
-                <div class="feature-card">
+                <h2 class="section-heading"><span>Background Orchestration</span><a href="#cron" class="section-anchor" aria-label="Link to Background Orchestration"><i class="fas fa-link"></i></a></h2>
+                <p>Expiration tracking, notifications, and queued jobs require the scheduler and (when using the database/redis queue driver) a long-running worker.</p>
+                <div class="feature-card mb-4">
                     <h4 class="small fw-bold">Scheduler (cron job)</h4>
                     <pre><code>* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1</code></pre>
-                    <p class="smallest text-muted mb-0">This runs cleanup tasks, recurring payments, and email queues every minute.</p>
+                    <p class="smallest text-muted mb-0">Runs cleanup tasks, recurring payments, and scheduled commands every minute.</p>
+                </div>
+                <div class="feature-card">
+                    <h4 class="small fw-bold">Queue worker</h4>
+                    <pre><code>php artisan queue:work --tries=3</code></pre>
+                    <p class="smallest text-muted mb-0">Keep a worker process alive under Supervisor or systemd when <code>QUEUE_CONNECTION</code> is not <code>sync</code>. Use <code>database</code> on shared hosting if Redis is unavailable.</p>
                 </div>
             </section>
 
@@ -370,13 +419,43 @@ MAIL_FROM_ADDRESS=no-reply@yourdomain.com</code></pre>
                 </div>
             </section>
 
+            <section id="events" class="doc-section">
+                <h2>Events &amp; Tickets</h2>
+                <p>Ticketed events, conferences, and venue listings with inventory-aware booking.</p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4 class="small fw-bold">Ticket tiers</h4>
+                        <p class="smallest mb-0">Multiple ticket types per event with independent pricing and capacity limits.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="small fw-bold">Booking manifest</h4>
+                        <p class="smallest mb-0">Admins and partners review attendee bookings, payment status, and check-in data from the dashboard.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="classifieds" class="doc-section">
+                <h2>Classified Ads</h2>
+                <p>General-purpose listings for local marketplaces, community boards, and peer-to-peer sales.</p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4 class="small fw-bold">Flexible taxonomy</h4>
+                        <p class="smallest mb-0">Category trees and location filters adapt to any non-specialized inventory type.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="small fw-bold">Lead capture</h4>
+                        <p class="smallest mb-0">Buyers contact sellers through built-in messaging and inquiry flows shared across verticals.</p>
+                    </div>
+                </div>
+            </section>
+
             <section id="financials" class="doc-section">
                 <h2>Financial Ecosystem</h2>
-                <p>Sellio manages the flow of capital between buyers, sellers, and the platform admin.</p>
+                <p>Sellio manages capital flow between buyers, partners, and the platform admin. Partner wallets and withdrawals are managed from the admin panel; the buyer panel focuses on orders and bookings rather than wallet top-ups.</p>
 
                 <div class="feature-card mb-4">
-                    <h4 class="small fw-bold"><i class="fas fa-wallet text-primary"></i> Atomic wallet protocol</h4>
-                    <p class="small">Powered by <code>bavix/laravel-wallet</code>, every transaction uses double-entry bookkeeping to prevent balance discrepancies during high-concurrency operations.</p>
+                    <h4 class="small fw-bold"><i class="fas fa-wallet text-primary"></i> Partner wallet ledger</h4>
+                    <p class="small mb-0">Powered by <code>bavix/laravel-wallet</code>, partner balances use double-entry bookkeeping to prevent discrepancies during concurrent payouts and commission deductions.</p>
                 </div>
 
                 <div class="doc-grid-2 mb-4">
@@ -472,19 +551,35 @@ MAIL_FROM_ADDRESS=no-reply@yourdomain.com</code></pre>
 
             <section id="api" class="doc-section">
                 <h2>API Integration</h2>
-                <p>Sellio ships with a documented REST API for mobile apps, headless storefronts, and third-party integrations.</p>
+                <p>Sellio ships with a documented REST API consumed by the seller and buyer panels, plus optional mobile or headless clients.</p>
                 <div class="feature-grid">
                     <div class="feature-card">
                         <h4 class="small fw-bold">Scramble documentation</h4>
-                        <p class="smallest mb-0">Auto-generated OpenAPI docs are available at <code>/docs/api</code> when enabled. Endpoints reflect live request validation rules.</p>
+                        <p class="smallest mb-0">Interactive OpenAPI docs are served at <code>/docs/api</code> on your Laravel host (dedoc/scramble). Endpoints reflect live validation rules and rate limits.</p>
                     </div>
                     <div class="feature-card">
                         <h4 class="small fw-bold">Sanctum authentication</h4>
-                        <p class="smallest mb-0">Issue bearer tokens for SPA and mobile clients. Protect routes with standard Laravel middleware and permission gates.</p>
+                        <p class="smallest mb-0">Issue bearer tokens for SPA and mobile clients. API routes use throttled limiters (<code>api</code>, <code>api-auth</code>, <code>api-write</code>) for production safety.</p>
                     </div>
                 </div>
                 <div class="callout callout-info">
-                    <p>Configure CORS, portal URLs, and API base paths in <code>.env</code> and the admin settings panel so buyer and seller SPAs resolve the correct backend host.</p>
+                    <p>Point portal <code>config.js</code> <code>apiUrl</code> values to <code>https://your-domain.com/api</code> and whitelist panel origins in admin CORS settings.</p>
+                </div>
+            </section>
+
+            <section id="security" class="doc-section">
+                <h2 class="section-heading"><span>Post-install Security</span><a href="#security" class="section-anchor" aria-label="Link to Post-install Security"><i class="fas fa-link"></i></a></h2>
+                <p>Complete this checklist before accepting live traffic.</p>
+                <div class="feature-card callout-danger">
+                    <ul class="checklist mb-0">
+                        <li>Delete or rename <code>public/install/</code> after setup (<code>installed.lock</code> blocks re-entry).</li>
+                        <li>Set <code>APP_ENV=production</code>, <code>APP_DEBUG=false</code>, and <code>INSTALLER_DEBUG=false</code> in <code>.env</code>.</li>
+                        <li>Rotate or remove all demo user passwords if sample data was imported.</li>
+                        <li>Run <code>php artisan storage:link</code> so uploaded media is publicly reachable.</li>
+                        <li>Cache config, routes, and views in production (<code>php artisan optimize</code>).</li>
+                        <li>Configure cron + queue worker for mail, expirations, and background jobs.</li>
+                        <li>Ensure <code>storage/</code> and <code>bootstrap/cache/</code> are writable by the web server.</li>
+                    </ul>
                 </div>
             </section>
 
@@ -501,7 +596,11 @@ MAIL_FROM_ADDRESS=no-reply@yourdomain.com</code></pre>
                 </div>
                 <div class="feature-card mb-4">
                     <h4 class="small fw-bold">Missing styles on login</h4>
-                    <p class="small mb-0">Run <code>npm run build</code> to generate <code>public/build/</code>, or deploy the distribution ZIP which includes pre-built assets. A guest CSS fallback covers basic login styling when the manifest is absent.</p>
+                    <p class="small mb-0">Run <code>npm run build</code> in the backend to generate <code>public/build/</code>, or deploy the distribution ZIP which includes pre-built assets. A guest CSS fallback covers basic login styling when the Vite manifest is absent.</p>
+                </div>
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold">Seller / buyer panel shows empty data</h4>
+                    <p class="small mb-0">Almost always incorrect <code>public/config.js</code> on the panel subdomain. Set <code>apiUrl</code> to your Laravel host + <code>/api</code> and add the panel origin to API CORS in admin settings.</p>
                 </div>
             </section>
 
@@ -510,19 +609,19 @@ MAIL_FROM_ADDRESS=no-reply@yourdomain.com</code></pre>
                 <div class="feature-card mb-4">
                     <h4 class="small fw-bold">Scope of support</h4>
                     <p class="small">Assistance is provided for platform bugs and documented features. Free support does not cover third-party customizations or server-side configuration issues.</p>
-                    <a href="#" class="btn-text">Contact support via Envato <i class="fas fa-external-link-alt"></i></a>
+                    <a href="mailto:support@sellio-platform.test" class="btn-text">Contact support <i class="fas fa-envelope"></i></a>
                 </div>
 
                 <h3>Release registry</h3>
                 <div class="feature-card">
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="text-primary fw-bold">v2.4 Stable</span>
-                        <span class="text-muted smallest">2026</span>
+                        <span class="text-primary fw-bold">v1.0.0</span>
+                        <span class="text-muted smallest">7 Jun 2026</span>
                     </div>
                     <ul class="nav-list smallest mb-0">
-                        <li><span class="badge-pill badge-success-light">New</span> Polished web installer with step progress and failure recovery.</li>
-                        <li><span class="badge-pill badge-success-light">New</span> Buyer and seller portal UX improvements with module-aware routing.</li>
-                        <li><span class="badge-pill badge-info-light">Update</span> Laravel 12.x core synchronization.</li>
+                        <li><span class="badge-pill badge-success-light">New</span> Multi-vertical marketplace baseline with installer, demo seeding, and portal panels.</li>
+                        <li><span class="badge-pill badge-success-light">New</span> Scramble API docs, HTML sanitization, and API rate limiters.</li>
+                        <li><span class="badge-pill badge-info-light">Update</span> Laravel 12.x core with hardened installer error visibility.</li>
                     </ul>
                 </div>
             </section>
