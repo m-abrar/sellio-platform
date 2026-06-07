@@ -34,6 +34,7 @@ class SettingService
                 'url_admin'               => 'nullable|url',
                 'url_partner'             => 'nullable|url',
                 'url_user'                => 'nullable|url',
+                'cors_allowed_origins'    => 'nullable|string|max:4000',
                 'built_in_website_status' => 'nullable|string|in:active,redirect',
             ],
             'modules' => [

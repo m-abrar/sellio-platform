@@ -194,6 +194,45 @@
                     </div>
                 </div>
 
+                @php
+                    $corsOrigins = app(\App\Services\CorsOriginResolver::class)->resolve();
+                @endphp
+
+                <div class="row mt-4 pt-4 border-top">
+                    <div class="col-md-12 mb-3">
+                        <h5 class="font-weight-bold text-dark text-uppercase small ls-1">
+                            <i class="fas fa-shield-alt mr-2 text-primary"></i> {{ __('API CORS Origins') }}
+                        </h5>
+                        <p class="text-muted small mb-0">
+                            {{ __('Browser requests from your Storefront (Next.js), Partner Portal (seller), and Customer App (buyer) URLs above are automatically allowed to call the Laravel API. Add extra origins below for staging hosts or custom domains.') }}
+                        </p>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group mb-0">
+                            <label class="small font-weight-bold text-secondary">{{ __('Additional CORS Origins') }}</label>
+                            <textarea name="cors_allowed_origins" rows="4" class="form-control"
+                                placeholder="https://staging.example.com&#10;https://preview.example.com">{{ old('cors_allowed_origins', $settings['cors_allowed_origins'] ?? '') }}</textarea>
+                            <small class="text-muted d-block mt-2">
+                                {{ __('One origin per line or comma-separated. Paths are ignored — only the domain is used.') }}
+                            </small>
+                        </div>
+                    </div>
+                    @if (!empty($corsOrigins))
+                        <div class="col-md-12 mt-3">
+                            <div class="bg-light p-3 rounded-xl border">
+                                <p class="small font-weight-bold text-secondary text-uppercase mb-2 ls-05">
+                                    {{ __('Active CORS Origins') }}
+                                </p>
+                                <ul class="mb-0 pl-3 small text-dark">
+                                    @foreach ($corsOrigins as $origin)
+                                        <li><code>{{ $origin }}</code></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
                 <div class="row mt-4 pt-4 border-top">
                     <div class="col-md-12 mb-3">
                         <div class="form-group">

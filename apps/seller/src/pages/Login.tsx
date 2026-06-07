@@ -10,6 +10,7 @@ import {
 } from 'react-icons/hi2';
 import { getAuthErrorMessage, useAuth } from '../context/AuthContext';
 import { getBrandSettings } from '../api/brand';
+import { applyBrandToDocumentHead } from '../lib/brandHead';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -25,6 +26,7 @@ export default function Login() {
       try {
         const data = await getBrandSettings();
         setBrand(data);
+        applyBrandToDocumentHead(data);
       } catch (error) {
         console.error('Failed to load brand settings in login:', error);
       }

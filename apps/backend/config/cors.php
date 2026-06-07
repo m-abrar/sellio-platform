@@ -26,23 +26,8 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => array_values(array_unique(array_filter(array_merge(
-        [
-            env('FRONTEND_URL', 'http://localhost:5173'),
-            env('STOREFRONT_URL'),
-            env('SELLER_APP_URL'),
-            env('BUYER_APP_URL'),
-        ],
-        array_map('trim', explode(',', (string) env('CORS_ALLOWED_ORIGINS', ''))),
-        [
-            'http://localhost:3000',
-            'http://127.0.0.1:3000',
-            'http://localhost:3002',
-            'http://127.0.0.1:3002',
-            'http://localhost:5173',
-            'http://127.0.0.1:5173',
-        ],
-    )))),
+    // Resolved dynamically on boot via CorsOriginResolver (admin settings + .env fallbacks).
+    'allowed_origins' => [],
 
     'allowed_origins_patterns' => [
         '#^https?://(localhost|127\.0\.0\.1)(:\d+)?$#',

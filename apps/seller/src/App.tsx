@@ -48,35 +48,16 @@ import Error404 from './pages/Error404';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Toaster } from 'sonner';
 import { getBrandSettings } from './api/brand';
+import { applyBrandToDocumentHead } from './lib/brandHead';
 import SetupReminderBanner from './components/SetupReminderBanner';
 
 function App() {
   useEffect(() => {
-    const updateHeadLink = (rel: string, href: string, type?: string) => {
-      let link = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement;
-      if (!link) {
-        link = document.createElement('link');
-        link.rel = rel;
-        if (type) link.type = type;
-        document.head.appendChild(link);
-      }
-      link.href = href;
-    };
-
     const loadBrandSettings = async () => {
       try {
         const brand = await getBrandSettings();
         if (brand) {
-          if (brand.site_name) {
-            document.title = `${brand.site_name} - Seller Dashboard`;
-          }
-          if (brand.site_favicon) {
-            updateHeadLink('icon', brand.site_favicon, 'image/svg+xml');
-            updateHeadLink('alternate icon', brand.site_favicon, 'image/x-icon');
-          }
-          if (brand.site_logo) {
-            updateHeadLink('apple-touch-icon', brand.site_logo);
-          }
+          applyBrandToDocumentHead(brand);
         }
       } catch (error) {
         console.error('Failed to load dynamic brand settings:', error);

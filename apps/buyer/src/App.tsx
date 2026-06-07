@@ -47,6 +47,7 @@ import { fetchNotifications } from './api/notificationApi';
 import { StatsProvider, useStats } from './context/StatsContext';
 import { UserProvider, useUser } from './context/UserContext';
 import { getBrandSettings, BrandSettings } from './api/brandApi';
+import { applyBrandToDocumentHead } from './lib/brandHead';
 import SetupReminderBanner from './components/SetupReminderBanner';
 
 const MAIN_NAV = [
@@ -429,32 +430,12 @@ function AppContent() {
   const [brand, setBrand] = useState<BrandSettings | null>(null);
 
   useEffect(() => {
-    const updateHeadLink = (rel: string, href: string, type?: string) => {
-      let link = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement;
-      if (!link) {
-        link = document.createElement('link');
-        link.rel = rel;
-        if (type) link.type = type;
-        document.head.appendChild(link);
-      }
-      link.href = href;
-    };
-
     const loadBrandSettings = async () => {
       try {
         const data = await getBrandSettings();
         if (data) {
           setBrand(data);
-          if (data.site_name) {
-            document.title = `${data.site_name} - Buyer Dashboard`;
-          }
-          if (data.site_favicon) {
-            updateHeadLink('icon', data.site_favicon, 'image/svg+xml');
-            updateHeadLink('alternate icon', data.site_favicon, 'image/x-icon');
-          }
-          if (data.site_logo) {
-            updateHeadLink('apple-touch-icon', data.site_logo);
-          }
+          applyBrandToDocumentHead(data);
         }
       } catch (error) {
         console.error('Failed to load dynamic brand settings:', error);
@@ -477,8 +458,11 @@ function AppContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f7f8f5] text-sm font-bold text-zinc-500">
-        Loading buyer panel...
+      <div className="min-h-screen bg-[#f7f8f5]">
+        <SetupReminderBanner />
+        <div className="flex min-h-[calc(100vh-1px)] items-center justify-center text-sm font-bold text-zinc-500">
+          Loading buyer panel...
+        </div>
       </div>
     );
   }

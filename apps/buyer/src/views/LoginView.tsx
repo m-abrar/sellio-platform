@@ -3,6 +3,7 @@ import { Lock, Mail, Rocket } from 'lucide-react';
 import { Button } from '../components/Button';
 import { useUser } from '../context/UserContext';
 import { getBrandSettings, BrandSettings } from '../api/brandApi';
+import { applyBrandToDocumentHead } from '../lib/brandHead';
 import SetupReminderBanner from '../components/SetupReminderBanner';
 
 export default function LoginView() {
@@ -18,6 +19,7 @@ export default function LoginView() {
       try {
         const data = await getBrandSettings();
         setBrand(data);
+        applyBrandToDocumentHead(data);
       } catch (error) {
         console.error('Failed to load brand settings in login:', error);
       }

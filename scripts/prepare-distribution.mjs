@@ -14,6 +14,7 @@ import {
   mkdir,
   readdir,
   readFile,
+  rename,
   rm,
   stat,
   writeFile,
@@ -114,6 +115,17 @@ const INCLUDE_ROOTS = [
 
 /** Dev-uploaded media — never ship; demo seed recreates files after install. */
 const STORAGE_APP_PUBLIC_PREFIX = 'backend/storage/app/public';
+/** Brand logo/favicon — always ship so /storage/settings/* works before seed. */
+const STORAGE_SETTINGS_PREFIX = `${STORAGE_APP_PUBLIC_PREFIX}/settings`;
+
+function isShippedStoragePublicPath(relPath) {
+  const normalized = relPath.replace(/\\/g, '/');
+
+  return (
+    normalized === STORAGE_SETTINGS_PREFIX ||
+    normalized.startsWith(`${STORAGE_SETTINGS_PREFIX}/`)
+  );
+}
 
 function isDevUploadedMedia(relPath, name) {
   const normalized = relPath.replace(/\\/g, '/');
@@ -121,6 +133,9 @@ function isDevUploadedMedia(relPath, name) {
     return false;
   }
   if (!normalized.startsWith(`${STORAGE_APP_PUBLIC_PREFIX}/`)) {
+    return false;
+  }
+  if (isShippedStoragePublicPath(normalized)) {
     return false;
   }
   return name !== '.gitignore';
@@ -267,7 +282,7 @@ async function cleanBackendRuntimeArtifacts(backendRoot) {
     if (await pathExists(dir)) {
       const entries = await readdir(dir);
       for (const entry of entries) {
-        if (entry === '.gitignore') {
+        if (entry === '.gitignore' || entry === 'settings') {
           continue;
         }
         await rm(join(dir, entry), { recursive: true, force: true });
@@ -276,6 +291,60 @@ async function cleanBackendRuntimeArtifacts(backendRoot) {
       await mkdir(dir, { recursive: true });
     }
   }
+}
+
+async function ensureBrandSettingsInDistribution(backendRoot) {
+  const destDir = join(backendRoot, 'storage', 'app', 'public', 'settings');
+  await mkdir(destDir, { recursive: true });
+
+  const sourceSettingsDir = join(
+    repoRoot,
+    'apps',
+    'backend',
+    'storage',
+    'app',
+    'public',
+    'settings',
+  );
+  const seederImagesDir = join(repoRoot, 'apps', 'backend', 'database', 'seeders', 'images');
+
+  const assetMap = [
+    { destName: 'logo.png', sources: ['logo.png', 'logo.webp'] },
+    { destName: 'favicon.ico', sources: ['favicon.ico'] },
+  ];
+
+  for (const asset of assetMap) {
+    const destPath = join(destDir, asset.destName);
+    if (await pathExists(destPath)) {
+      continue;
+    }
+
+    let copied = false;
+
+    for (const sourceName of asset.sources) {
+      const fromSettings = join(sourceSettingsDir, sourceName);
+      if (await pathExists(fromSettings)) {
+        await cp(fromSettings, destPath);
+        copied = true;
+        break;
+      }
+
+      const fromSeeders = join(seederImagesDir, sourceName);
+      if (await pathExists(fromSeeders)) {
+        await cp(fromSeeders, destPath);
+        copied = true;
+        break;
+      }
+    }
+
+    if (!copied) {
+      console.warn(
+        `Warning: brand asset missing for distribution: settings/${asset.destName}`,
+      );
+    }
+  }
+
+  console.log('Ensured storage/app/public/settings/ in distribution');
 }
 
 async function downloadComposerPhar(destPath) {
@@ -302,13 +371,13 @@ async function writePortalProductionEnv() {
   await writeFile(join(buyerRoot, '.env.production'), buyerEnv, 'utf8');
 
   const sellerConfigJs = `/**
- * Sellio Seller Panel — API connection (edit after upload, no rebuild needed)
+ * Sellio Partner Panel — API connection (edit after upload, no rebuild needed)
  *
  * Set apiUrl to your Laravel backend URL + /api
  * Example: https://marketplace.yourdomain.com/api
  */
 window.SELLIO_CONFIG = {
-  apiUrl: '${distributionApiUrl}',
+  apiUrl: 'https://your-laravel-domain.com/api',
 };
 `;
 
@@ -319,8 +388,8 @@ window.SELLIO_CONFIG = {
  * storefrontUrl — Public storefront base URL
  */
 window.SELLIO_CONFIG = {
-  apiUrl: '${distributionApiUrl}',
-  storefrontUrl: '${distributionStorefrontUrl}',
+  apiUrl: 'https://your-laravel-domain.com/api',
+  storefrontUrl: 'https://your-laravel-domain.com',
 };
 `;
 
@@ -493,7 +562,12 @@ To change domain later, edit \`config.js\` on the server and refresh the browser
 
 ### Laravel CORS (required for cross-subdomain API calls)
 
-In \`apps/backend/.env\` on the main Laravel host:
+Primary control: **Admin → Settings → General → Platform Ecosystem URLs** and **API CORS Origins**.
+
+- Storefront / Partner / Customer URLs are auto-allowed for browser API calls.
+- Add staging or extra hosts under **Additional CORS Origins** (one per line).
+
+Optional \`.env\` fallback before first admin save:
 
 \`\`\`env
 APP_URL=${distributionStorefrontUrl}
@@ -502,7 +576,7 @@ SELLER_APP_URL=${distributionSellerUrl}
 BUYER_APP_URL=${distributionBuyerUrl}
 \`\`\`
 
-Then run \`php artisan config:clear\`. Without this, browser requests from the React subdomains are blocked.
+Without matching origins, browser requests from the React subdomains are blocked.
 
 ## 6. Hostinger / isolated subdomains
 
@@ -547,7 +621,8 @@ Change these before production.
 
 - \`composer.phar\` in \`apps/backend/\` for hosts without global Composer
 - Seeder images in \`apps/backend/database/seeders/images/\` (CMS + listing demo media; required for demo seed)
-- \`storage/app/public/\` is intentionally empty — run demo seed + \`php artisan storage:link\` after install
+- \`storage/app/public/settings/\` ships default logo + favicon (from repo or \`database/seeders/images/\`)
+- Other \`storage/app/public/\` paths stay empty — run demo seed + \`php artisan storage:link\` after install
 `;
 
   await writeFile(join(outputDir, 'SERVER-DEPLOY.md'), guide, 'utf8');
@@ -569,7 +644,8 @@ async function writeManifest() {
       'node_modules/ intentionally omitted',
       'packages/ intentionally omitted — dev-only shared TypeScript; not used at runtime',
       'installed.lock and .env removed for fresh-install testing',
-      'storage/app/public/ always emptied — dev uploads excluded; demo seed repopulates media',
+      'storage/app/public/settings/ always shipped (logo.png, favicon.ico)',
+      'other storage/app/public/ paths emptied — dev uploads excluded; demo seed repopulates listing media',
       'bootstrap cache and runtime storage artifacts cleared',
     ],
   };
@@ -603,6 +679,41 @@ async function createZipArchive() {
   console.log(`\nCreated ZIP: ${zipPath}`);
 }
 
+async function prepareOutputDirectory() {
+  if (!(await pathExists(outputDir))) {
+    await mkdir(outputDir, { recursive: true });
+    return;
+  }
+
+  console.log('\n==> Removing previous distribution folder...');
+  try {
+    await rm(outputDir, {
+      recursive: true,
+      force: true,
+      maxRetries: 3,
+      retryDelay: 250,
+    });
+  } catch (error) {
+    const locked =
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      ['EBUSY', 'EPERM', 'EACCES'].includes(error.code);
+
+    if (!locked) {
+      throw error;
+    }
+
+    const stalePath = `${outputDir}.stale-${Date.now()}`;
+    console.warn(
+      `Warning: could not delete ${outputDir} (${error.code}). Renaming to ${stalePath}`,
+    );
+    await rename(outputDir, stalePath);
+  }
+
+  await mkdir(outputDir, { recursive: true });
+}
+
 async function main() {
   console.log(`Sellio distribution prep`);
   console.log(`Source: ${repoRoot}`);
@@ -612,12 +723,7 @@ async function main() {
   console.log(`Seller panel URL: ${distributionSellerUrl}`);
   console.log(`Buyer panel URL: ${distributionBuyerUrl}`);
 
-  if (await pathExists(outputDir)) {
-    console.log('\n==> Removing previous distribution folder...');
-    await rm(outputDir, { recursive: true, force: true });
-  }
-
-  await mkdir(outputDir, { recursive: true });
+  await prepareOutputDirectory();
 
   console.log('\n==> Copying submission package files...');
   for (const item of INCLUDE_ROOTS) {
@@ -633,6 +739,7 @@ async function main() {
 
   console.log('\n==> Cleaning runtime artifacts in distribution copy...');
   await cleanBackendRuntimeArtifacts(join(outputDir, 'apps', 'backend'));
+  await ensureBrandSettingsInDistribution(join(outputDir, 'apps', 'backend'));
 
   console.log('\n==> Downloading composer.phar for shared hosting...');
   try {

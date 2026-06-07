@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ApplyDynamicCorsOrigins;
 use App\Http\Middleware\CheckBuiltInWebsiteStatus;
 use App\Http\Middleware\CheckModuleEnabled;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -53,6 +54,7 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->prepend(ApplyDynamicCorsOrigins::class);
         $middleware->statefulApi();
         $middleware->api(prepend: [
             ThrottleRequests::class . ':api',
