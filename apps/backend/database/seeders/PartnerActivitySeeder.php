@@ -62,8 +62,7 @@ class PartnerActivitySeeder extends Seeder
 
         $buyerId = $buyer ? $buyer->id : 3;
 
-        // Clear any old Julian Sterling partner activities to ensure clean seeding
-        $this->cleanupOldRecords($partner->id);
+        $this->cleanupOldRecords($partner->id, $buyer?->id);
 
         // --- 2. RETRIEVE & ASSIGN LISTINGS TO JULIAN STERLING ---
         $this->command->line('  ⚙️ Transferring listing ownerships to Julian Sterling...');
@@ -535,50 +534,68 @@ class PartnerActivitySeeder extends Seeder
     }
 
     /**
-     * Cleans up any existing partner activity records specifically for Julian to avoid duplicates.
-     * Note: We don't delete listings, only activities and payouts.
+     * Cleans up partner demo leads on Julian's core listings without wiping the demo buyer account.
      *
-     * @param int $userId
+     * @param int $userId Partner user id (Julian Sterling)
+     * @param int|null $preserveBuyerId Demo buyer user id to keep untouched (buyer@sellio-platform.test)
      * @return void
      */
-    private function cleanupOldRecords(int $userId): void
+    private function cleanupOldRecords(int $userId, ?int $preserveBuyerId = null): void
     {
+        $excludeDemoBuyer = function ($query) use ($preserveBuyerId) {
+            if ($preserveBuyerId) {
+                $query->where('user_id', '!=', $preserveBuyerId);
+            }
+
+            return $query;
+        };
+
         $propertyIds = Property::limit(4)->pluck('id')->toArray();
         if (!empty($propertyIds)) {
-            $bookingIds = DB::table('property_bookings')->whereIn('property_id', $propertyIds)->pluck('id')->toArray();
+            $bookingIds = $excludeDemoBuyer(
+                DB::table('property_bookings')->whereIn('property_id', $propertyIds)
+            )->pluck('id')->toArray();
             if (!empty($bookingIds)) {
                 DB::table('transaction_lines')->whereIn('property_booking_id', $bookingIds)->delete();
                 DB::table('property_bookings')->whereIn('id', $bookingIds)->delete();
             }
-            DB::table('property_visits')->whereIn('property_id', $propertyIds)->delete();
-            DB::table('reviews')->whereIn('reviewable_id', $propertyIds)->where('reviewable_type', Property::class)->delete();
+            $excludeDemoBuyer(DB::table('property_visits')->whereIn('property_id', $propertyIds))->delete();
+            DB::table('reviews')
+                ->whereIn('reviewable_id', $propertyIds)
+                ->where('reviewable_type', Property::class)
+                ->when($preserveBuyerId, fn ($query) => $query->where('user_id', '!=', $preserveBuyerId))
+                ->delete();
         }
 
         $eventIds = Event::limit(4)->pluck('id')->toArray();
         if (!empty($eventIds)) {
-            DB::table('event_bookings')->whereIn('event_id', $eventIds)->delete();
+            $excludeDemoBuyer(DB::table('event_bookings')->whereIn('event_id', $eventIds))->delete();
         }
 
         $serviceIds = Service::limit(4)->pluck('id')->toArray();
         if (!empty($serviceIds)) {
-            DB::table('service_appointments')->whereIn('service_id', $serviceIds)->delete();
-            DB::table('service_quotes')->whereIn('service_id', $serviceIds)->delete();
-            DB::table('reviews')->whereIn('reviewable_id', $serviceIds)->where('reviewable_type', Service::class)->delete();
+            $excludeDemoBuyer(DB::table('service_appointments')->whereIn('service_id', $serviceIds))->delete();
+            $excludeDemoBuyer(DB::table('service_quotes')->whereIn('service_id', $serviceIds))->delete();
+            DB::table('reviews')
+                ->whereIn('reviewable_id', $serviceIds)
+                ->where('reviewable_type', Service::class)
+                ->when($preserveBuyerId, fn ($query) => $query->where('user_id', '!=', $preserveBuyerId))
+                ->delete();
         }
 
         $jobIds = JobListing::limit(4)->pluck('id')->toArray();
         if (!empty($jobIds)) {
-            DB::table('job_applications')->whereIn('job_listing_id', $jobIds)->delete();
+            $excludeDemoBuyer(DB::table('job_applications')->whereIn('job_listing_id', $jobIds))->delete();
         }
 
         $autoIds = Auto::limit(4)->pluck('id')->toArray();
         if (!empty($autoIds)) {
-            DB::table('auto_inquiries')->whereIn('auto_id', $autoIds)->delete();
+            $excludeDemoBuyer(DB::table('auto_inquiries')->whereIn('auto_id', $autoIds))->delete();
         }
 
         $classifiedIds = Classified::limit(4)->pluck('id')->toArray();
         if (!empty($classifiedIds)) {
-            DB::table('classified_inquiries')->whereIn('classified_id', $classifiedIds)->delete();
+            $excludeDemoBuyer(DB::table('classified_inquiries')->whereIn('classified_id', $classifiedIds))->delete();
         }
 
         DB::table('withdrawals')->where('user_id', $userId)->delete();

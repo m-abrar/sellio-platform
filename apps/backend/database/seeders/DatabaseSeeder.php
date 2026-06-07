@@ -160,8 +160,8 @@ class DatabaseSeeder extends Seeder
             ActivityLogSeeder::class,
             PageContentMediaSeeder::class,
             MediaFullSeeder::class,
-            BuyerActivitySeeder::class,
             PartnerActivitySeeder::class,
+            BuyerActivitySeeder::class,
             UserRoleAssignmentSeeder::class,
             PendingPartnerApplicationSeeder::class,
         ]);
