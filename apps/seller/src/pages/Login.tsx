@@ -11,6 +11,7 @@ import {
 import { getAuthErrorMessage, useAuth } from '../context/AuthContext';
 import { getBrandSettings } from '../api/brand';
 import { applyBrandToDocumentHead } from '../lib/brandHead';
+import SetupReminderBanner from '../components/SetupReminderBanner';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -86,7 +87,9 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-slate-50 flex flex-col items-center justify-center p-4 sm:p-6 select-none">
+    <div className="min-h-[100dvh] bg-slate-50 flex flex-col select-none">
+      <SetupReminderBanner />
+      <div className="flex flex-1 flex-col items-center justify-center p-4 sm:p-6">
       <div className="w-full max-w-[420px] animate-in fade-in slide-in-from-bottom-6 duration-700">
 
         <div className="text-center mb-8 sm:mb-10">
@@ -155,6 +158,7 @@ export default function Login() {
           <div className="h-px w-12 bg-slate-200" />
           <span className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.25em]">© 2026 Sellio Global</span>
         </div>
+      </div>
       </div>
     </div>
   );

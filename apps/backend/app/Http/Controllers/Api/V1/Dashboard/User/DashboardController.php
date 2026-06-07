@@ -22,20 +22,34 @@ class DashboardController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        $favoritesCount = $user->userFavorites()->count();
+        $bookingsCount = $user->propertyBookings()->count() + $user->eventBookings()->count();
+        $messagesCount = $user->new_messages;
+        $appsCount = $user->jobApplications()->count();
+        $appointmentsCount = $user->serviceAppointments()->count();
+        $quotesCount = $user->serviceQuotes()->count();
+        $classifiedInquiriesCount = $user->classifiedInquiries()->count();
+        $autoInquiriesCount = AutoInquiry::where('user_id', $user->id)->count();
+        $inquiriesCount = $classifiedInquiriesCount + $autoInquiriesCount;
+        $reviewsCount = Review::where('user_id', $user->id)->count();
+
         // Using the Recovered Model Attributes for the Overview
         $stats = [
-            'totalBookings'     => $user->pending_bookings_count, 
-            'totalMessages'     => $user->new_messages,
+            'totalBookings'     => $user->pending_bookings_count,
+            'totalMessages'     => $messagesCount,
             'activeInquiries'   => $user->pending_inquiries_count,
             'walletBalance'     => $user->wallet_balance,
-            'favoritesCount'    => $user->userFavorites()->count(),
-            'bookingsCount'     => $user->propertyBookings()->count() + $user->eventBookings()->count(),
-            'messagesCount'     => $user->new_messages,
-            'appsCount'         => $user->jobApplications()->count(),
-            'appointmentsCount' => $user->serviceAppointments()->count(),
-            'quotesCount'       => $user->serviceQuotes()->count(),
-            'inquiriesCount'    => $user->classifiedInquiries()->count() + AutoInquiry::where('user_id', $user->id)->count(),
-            'reviewsCount'      => Review::where('user_id', $user->id)->count(),
+            'favoritesCount'    => $favoritesCount,
+            'bookingsCount'     => $bookingsCount,
+            'messagesCount'     => $messagesCount,
+            'appsCount'         => $appsCount,
+            'appointmentsCount' => $appointmentsCount,
+            'quotesCount'       => $quotesCount,
+            'inquiriesCount'    => $inquiriesCount,
+            'classifiedsActivityCount' => $classifiedInquiriesCount,
+            'reviewsCount'      => $reviewsCount,
+            'totalItemsCount'   => $bookingsCount + $favoritesCount + $messagesCount + $appsCount
+                + $appointmentsCount + $quotesCount + $inquiriesCount + $reviewsCount,
         ];
 
         // Placeholder for theme logic

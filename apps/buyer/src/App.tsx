@@ -80,7 +80,7 @@ const API_ORIGIN = (() => {
 
 const FALLBACK_AVATAR = `${API_ORIGIN}/images/fallbacks/default-avatar.png`;
 
-function Sidebar({ isOpen, setIsOpen, stats, brand }: { isOpen: boolean; setIsOpen: (v: boolean) => void; stats: any; brand: BrandSettings | null }) {
+function Sidebar({ isOpen, setIsOpen, stats, statsLoaded, brand }: { isOpen: boolean; setIsOpen: (v: boolean) => void; stats: any; statsLoaded: boolean; brand: BrandSettings | null }) {
   const location = useLocation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showTopIndicator, setShowTopIndicator] = useState(false);
@@ -128,7 +128,7 @@ function Sidebar({ isOpen, setIsOpen, stats, brand }: { isOpen: boolean; setIsOp
 
   const NavItem = ({ item }: { item: any }) => {
     const isActive = location.pathname === item.path;
-    const badgeValue = item.badge ? (stats as any)[item.badge] : 0;
+    const badgeValue = statsLoaded && item.badge ? (stats as any)[item.badge] : 0;
 
     return (
       <Link
@@ -305,7 +305,7 @@ function Sidebar({ isOpen, setIsOpen, stats, brand }: { isOpen: boolean; setIsOp
   );
 }
 
-function Header({ setIsSidebarOpen, stats, brand }: { setIsSidebarOpen: (v: boolean) => void; stats: any; brand: BrandSettings | null }) {
+function Header({ setIsSidebarOpen, stats, statsLoaded, brand }: { setIsSidebarOpen: (v: boolean) => void; stats: any; statsLoaded: boolean; brand: BrandSettings | null }) {
   const { user, logout } = useUser();
   const [localUnreadCount, setLocalUnreadCount] = useState<number | null>(null);
 
@@ -367,7 +367,7 @@ function Header({ setIsSidebarOpen, stats, brand }: { setIsSidebarOpen: (v: bool
           <Link to="/messages" className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-xl cursor-pointer transition-colors" title="Inbox">
             <div className="relative inline-flex">
               <MessageSquare size={20} />
-              {stats.messagesCount > 0 && (
+              {statsLoaded && stats.messagesCount > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 bg-amber-400 text-zinc-900 text-[8px] font-extrabold flex items-center justify-center rounded-full border border-white shadow-2xs">
                   {stats.messagesCount > 9 ? '9+' : stats.messagesCount}
                 </span>
@@ -426,7 +426,7 @@ export default function App() {
 function AppContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { isAuthenticated, isLoading } = useUser();
-  const { stats } = useStats();
+  const { stats, hasLoaded: statsLoaded } = useStats();
   const [brand, setBrand] = useState<BrandSettings | null>(null);
 
   useEffect(() => {
@@ -475,10 +475,10 @@ function AppContent() {
     <Router>
       <div className="min-h-screen font-sans selection:bg-[var(--primary-color)] selection:text-white">
         <SetupReminderBanner />
-        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} stats={stats} brand={brand} />
+        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} stats={stats} statsLoaded={statsLoaded} brand={brand} />
         
         <div className="lg:pl-[280px] flex flex-col min-h-screen">
-          <Header setIsSidebarOpen={setIsSidebarOpen} stats={stats} brand={brand} />
+          <Header setIsSidebarOpen={setIsSidebarOpen} stats={stats} statsLoaded={statsLoaded} brand={brand} />
           
           <main className="flex-1 p-4 lg:p-8 max-w-7xl mx-auto w-full">
             <ErrorBoundary>

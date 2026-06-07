@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sellio — Marketplace Platform</title>
+    <link href="introduction/assets/vendor/fontsource/bundle.css" rel="stylesheet">
+    <link href="introduction/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="introduction/assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="introduction/css/style.css">
+    <style>
+        body.portal-page {
+            padding-top: 0;
+        }
+        .portal-hero {
+            min-height: 100vh;
+            background: linear-gradient(160deg, #f8fafc 0%, #ffffff 45%, #f1f5f9 100%);
+            padding: 3rem 0 5rem;
+        }
+        @media (min-width: 768px) {
+            .portal-hero {
+                padding: 4rem 0 5rem;
+            }
+        }
+        .portal-section-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+        @media (min-width: 768px) {
+            .portal-grid {
+                grid-template-columns: repeat(12, 1fr);
+                gap: 1.5rem;
+            }
+            .portal-item-intro { grid-column: span 8; }
+            .portal-item-docs { grid-column: span 4; }
+            .portal-item-admin,
+            .portal-item-seller,
+            .portal-item-buyer { grid-column: span 4; }
+            .portal-item-frontend { grid-column: span 12; }
+        }
+        .portal-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            height: 100%;
+        }
+        .portal-card {
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 24px;
+            background: #fff;
+            height: 100%;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .portal-link:hover .portal-card {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-executive);
+            border-color: rgba(118, 192, 67, 0.35);
+        }
+        .portal-card-body {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .portal-card--featured .portal-card-body {
+            padding: 2rem 2rem 2.25rem;
+        }
+        @media (min-width: 992px) {
+            .portal-card--featured .portal-card-body {
+                padding: 2.5rem 2.75rem 2.75rem;
+                min-height: 280px;
+            }
+            .portal-card--compact .portal-card-body {
+                min-height: 260px;
+            }
+        }
+        .portal-card--wide .portal-card-body {
+            padding: 1.75rem 2rem;
+        }
+        @media (min-width: 768px) {
+            .portal-card--wide .portal-card-body {
+                flex-direction: row;
+                align-items: center;
+                gap: 2rem;
+                padding: 2rem 2.5rem;
+            }
+            .portal-card--wide .portal-card-wide-main {
+                flex: 1;
+            }
+            .portal-card--wide .portal-card-wide-cta {
+                flex-shrink: 0;
+            }
+        }
+        .portal-card-top {
+            height: 5px;
+            background: var(--primary-sellio);
+        }
+        .portal-card-top.bg-primary { background: #0d6efd; }
+        .portal-card-top.bg-success { background: #198754; }
+        .portal-card-top.bg-info { background: #0dcaf0; }
+        .portal-card-top.bg-warning { background: #ffc107; }
+        .portal-card-top.bg-dark { background: #0f172a; }
+        .portal-card-top.bg-sellio { background: var(--primary-sellio); }
+        .portal-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .portal-card--featured .portal-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            font-size: 1.75rem;
+        }
+        .portal-card--wide .portal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            font-size: 1.5rem;
+        }
+        .portal-icon.bg-primary-soft { background: rgba(13, 110, 253, 0.08); color: #0d6efd; }
+        .portal-icon.bg-success-soft { background: rgba(25, 135, 84, 0.08); color: #198754; }
+        .portal-icon.bg-info-soft { background: rgba(13, 202, 240, 0.08); color: #0dcaf0; }
+        .portal-icon.bg-warning-soft { background: rgba(255, 193, 7, 0.12); color: #b58100; }
+        .portal-icon.bg-dark-soft { background: rgba(15, 23, 42, 0.08); color: #0f172a; }
+        .portal-icon.bg-sellio-soft { background: rgba(118, 192, 67, 0.12); color: #5ba32d; }
+        .portal-credentials {
+            font-size: 0.72rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 0.65rem 0.8rem;
+            margin-top: auto;
+        }
+        .portal-credentials code {
+            font-size: 0.72rem;
+            color: #0f172a;
+        }
+        .portal-pill {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
+            background: rgba(118, 192, 67, 0.1);
+            color: #5ba32d;
+        }
+        .portal-card-cta {
+            margin-top: auto;
+            padding-top: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-sellio);
+        }
+        .portal-card--wide {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 55%, rgba(118, 192, 67, 0.06) 100%);
+        }
+        .portal-btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            border: 2px solid #0f172a;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #0f172a;
+            white-space: nowrap;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .portal-link:hover .portal-btn-outline {
+            background: #0f172a;
+            color: #fff;
+        }
+        .portal-footer {
+            border-top: 1px solid rgba(15, 23, 42, 0.06);
+            background: #fff;
+        }
+    </style>
+</head>
+<body class="portal-page">
+    <section class="portal-hero position-relative overflow-hidden">
+        <div class="position-absolute top-0 end-0 opacity-10 pe-none">
+            <svg width="700" height="700" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="300" cy="300" r="300" fill="url(#portal-grad)"/>
+                <defs>
+                    <radialGradient id="portal-grad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(300 300) rotate(90) scale(300)">
+                        <stop stop-color="#76c043"/>
+                        <stop offset="1" stop-color="#76c043" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="container position-relative">
+            <div class="text-center mb-5">
+                <div class="d-inline-flex align-items-center gap-3 mb-4">
+                    <img src="introduction/images/logo.png" alt="Sellio" width="48" height="48" class="rounded-3 shadow-sm">
+                    <span class="display-6 fw-800 mb-0">SELLIO</span>
+                </div>
+                <div class="badge bg-sellio-solid rounded-pill px-3 py-2 mb-3">MULTI-VENDOR MARKETPLACE SUITE</div>
+                <h1 class="display-4 fw-800 mb-3">Choose where to <span class="text-sellio">proceed</span></h1>
+                <p class="lead text-muted mx-auto mb-0" style="max-width: 640px;">
+                    Welcome to Sellio. Select an option below to explore the introduction, read the documentation, or open a live demo portal.
+                </p>
+            </div>
+
+            <p class="portal-section-label">Get Started</p>
+            <div class="portal-grid mb-4 mb-md-5">
+                <div class="portal-item-intro">
+                    <a href="introduction/" class="portal-link">
+                        <article class="portal-card portal-card--featured shadow-premium-sm">
+                            <div class="portal-card-top bg-sellio"></div>
+                            <div class="portal-card-body">
+                                <div class="d-flex align-items-start justify-content-between gap-3 mb-4">
+                                    <div class="portal-icon bg-sellio-soft">
+                                        <i class="fas fa-rocket"></i>
+                                    </div>
+                                    <span class="badge bg-sellio-solid rounded-pill px-3 py-2 smallest fw-bold text-uppercase">Start Here</span>
+                                </div>
+                                <h2 class="h3 fw-800 mb-3">Introduction</h2>
+                                <p class="text-muted mb-4">Product overview, industry modules, automation features, and live demo credentials — your first stop before installing.</p>
+                                <div class="d-flex flex-wrap gap-2 mb-4">
+                                    <span class="portal-pill">50+ Themes</span>
+                                    <span class="portal-pill">7 Modules</span>
+                                    <span class="portal-pill">Live Previews</span>
+                                </div>
+                                <div class="portal-card-cta">
+                                    <span>Explore introduction</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </article>
+                    </a>
+                </div>
+
+                <div class="portal-item-docs">
+                    <a href="Documentation/" class="portal-link">
+                        <article class="portal-card shadow-premium-sm">
+                            <div class="portal-card-top bg-dark"></div>
+                            <div class="portal-card-body">
+                                <div class="d-flex align-items-start justify-content-between gap-3 mb-3">
+                                    <div class="portal-icon bg-dark-soft">
+                                        <i class="fas fa-book-open"></i>
+                                    </div>
+                                    <span class="badge rounded-pill bg-light text-dark border smallest fw-bold text-uppercase">Guide</span>
+                                </div>
+                                <h2 class="h5 fw-800 mb-2">Documentation</h2>
+                                <p class="text-muted small mb-0">Installation, configuration, API reference, and server deployment.</p>
+                                <div class="portal-card-cta">
+                                    <span>Read docs</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </article>
+                    </a>
+                </div>
+            </div>
+
+            <p class="portal-section-label">Live Demos</p>
+            <div class="portal-grid mb-4 mb-md-5">
+                <div class="portal-item-admin">
+                    <a href="https://demo.sellio.vebdez.com/admin" target="_blank" rel="noopener" class="portal-link">
+                        <article class="portal-card portal-card--compact shadow-premium-sm">
+                            <div class="portal-card-top bg-primary"></div>
+                            <div class="portal-card-body">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <div class="portal-icon bg-primary-soft">
+                                        <i class="fas fa-shield-halved"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="h6 fw-800 mb-0">Admin Demo</h2>
+                                        <small class="text-muted">Laravel control hub</small>
+                                    </div>
+                                </div>
+                                <div class="portal-credentials">
+                                    <div class="text-muted text-uppercase smallest fw-bold mb-1">Login</div>
+                                    <div><code>admin@sellio-platform.test</code></div>
+                                    <div class="mb-0"><code>admin123</code></div>
+                                </div>
+                                <div class="portal-card-cta">
+                                    <span>Open portal</span>
+                                    <i class="fas fa-external-link-alt"></i>
+                                </div>
+                            </div>
+                        </article>
+                    </a>
+                </div>
+
+                <div class="portal-item-seller">
+                    <a href="https://seller-panel.sellio.vebdez.com" target="_blank" rel="noopener" class="portal-link">
+                        <article class="portal-card portal-card--compact shadow-premium-sm">
+                            <div class="portal-card-top bg-success"></div>
+                            <div class="portal-card-body">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <div class="portal-icon bg-success-soft">
+                                        <i class="fas fa-store"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="h6 fw-800 mb-0">Seller Demo</h2>
+                                        <small class="text-muted">Partner dashboard</small>
+                                    </div>
+                                </div>
+                                <div class="portal-credentials">
+                                    <div class="text-muted text-uppercase smallest fw-bold mb-1">Login</div>
+                                    <div><code>partner@sellio-platform.test</code></div>
+                                    <div class="mb-0"><code>partner123</code></div>
+                                </div>
+                                <div class="portal-card-cta">
+                                    <span>Open portal</span>
+                                    <i class="fas fa-external-link-alt"></i>
+                                </div>
+                            </div>
+                        </article>
+                    </a>
+                </div>
+
+                <div class="portal-item-buyer">
+                    <a href="https://buyer-panel.sellio.vebdez.com" target="_blank" rel="noopener" class="portal-link">
+                        <article class="portal-card portal-card--compact shadow-premium-sm">
+                            <div class="portal-card-top bg-info"></div>
+                            <div class="portal-card-body">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <div class="portal-icon bg-info-soft">
+                                        <i class="fas fa-shopping-bag"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="h6 fw-800 mb-0">Buyer Demo</h2>
+                                        <small class="text-muted">Customer experience</small>
+                                    </div>
+                                </div>
+                                <div class="portal-credentials">
+                                    <div class="text-muted text-uppercase smallest fw-bold mb-1">Login</div>
+                                    <div><code>buyer@sellio-platform.test</code></div>
+                                    <div class="mb-0"><code>buyer123</code></div>
+                                </div>
+                                <div class="portal-card-cta">
+                                    <span>Open portal</span>
+                                    <i class="fas fa-external-link-alt"></i>
+                                </div>
+                            </div>
+                        </article>
+                    </a>
+                </div>
+            </div>
+
+            <p class="portal-section-label">Storefront Themes</p>
+            <div class="portal-grid">
+                <div class="portal-item-frontend">
+                    <a href="introduction/#demos" class="portal-link">
+                        <article class="portal-card portal-card--wide shadow-premium-sm">
+                            <div class="portal-card-top bg-warning"></div>
+                            <div class="portal-card-body">
+                                <div class="portal-card-wide-main d-flex flex-column flex-md-row align-items-md-center gap-3 gap-md-4">
+                                    <div class="portal-icon bg-warning-soft">
+                                        <i class="fas fa-palette"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h2 class="h4 fw-800 mb-2">Frontend Demos</h2>
+                                        <p class="text-muted small mb-md-0">Browse 50+ Blade storefront themes on the introduction page — unified marketplaces, properties, autos, jobs, classifieds, and more.</p>
+                                    </div>
+                                </div>
+                                <div class="portal-card-wide-cta mt-3 mt-md-0">
+                                    <span class="portal-btn-outline">
+                                        View all themes
+                                        <i class="fas fa-arrow-right"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </article>
+                    </a>
+                </div>
+            </div>
+
+            <div class="text-center mt-5 pt-3">
+                <p class="text-muted small mb-2">
+                    Frontend theme previews live on the <a href="introduction/#demos" class="fw-bold text-decoration-none">Introduction page</a>.
+                </p>
+                <p class="text-muted smallest mb-0">
+                    Laravel backend: <code>apps/backend</code> &middot; Seller app: <code>apps/seller</code> &middot; Buyer app: <code>apps/buyer</code>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="portal-footer py-4">
+        <div class="container text-center">
+            <p class="text-muted smallest mb-0">&copy; <span id="year"></span> Sellio Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="introduction/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

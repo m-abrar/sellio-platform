@@ -7,6 +7,7 @@
  *   node scripts/prepare-distribution.mjs --output D:/sellio-staging
  *   node scripts/prepare-distribution.mjs --skip-build
  *   node scripts/prepare-distribution.mjs --zip
+ *   node scripts/prepare-distribution.mjs --seller-only [--zip]
  */
 
 import {
@@ -32,11 +33,12 @@ const repoRoot = resolve(__dirname, '..');
 const args = process.argv.slice(2);
 const skipBuild = args.includes('--skip-build');
 const makeZip = args.includes('--zip');
+const sellerOnly = args.includes('--seller-only');
 const outputIndex = args.indexOf('--output');
 const outputDir = resolve(
   outputIndex >= 0 && args[outputIndex + 1]
     ? args[outputIndex + 1]
-    : join(repoRoot, 'distribution'),
+    : join(repoRoot, sellerOnly ? 'distribution-seller' : 'distribution'),
 );
 
 function readArg(flag, envKey, fallback = '') {
@@ -108,6 +110,7 @@ const INCLUDE_ROOTS = [
   'Documentation',
   'introduction',
   'listing-description',
+  'index.html',
   'CHANGELOG.md',
   'README.md',
   'LICENSE',
@@ -357,6 +360,36 @@ async function downloadComposerPhar(destPath) {
   await pipeline(Readable.fromWeb(response.body), createWriteStream(destPath));
 }
 
+async function buildSellerApp() {
+  const sellerRoot = join(repoRoot, 'apps', 'seller');
+  await writeSellerProductionEnv();
+  console.log('\n==> Building seller dashboard...');
+  await npmInstall(sellerRoot);
+  await runCommand('npm', ['run', 'build'], sellerRoot);
+}
+
+async function writeSellerProductionEnv() {
+  const sellerRoot = join(repoRoot, 'apps', 'seller');
+  const sellerEnv = `VITE_API_URL=${distributionApiUrl}\n`;
+  await writeFile(join(sellerRoot, '.env.production'), sellerEnv, 'utf8');
+
+  const sellerConfigJs = `/**
+ * Sellio Partner Panel — API connection (edit after upload, no rebuild needed)
+ *
+ * Set apiUrl to your Laravel backend URL + /api
+ * Example: https://marketplace.yourdomain.com/api
+ */
+window.SELLIO_CONFIG = {
+  apiUrl: 'https://your-laravel-domain.com/api',
+};
+`;
+
+  await mkdir(join(sellerRoot, 'public'), { recursive: true });
+  await writeFile(join(sellerRoot, 'public', 'config.js'), sellerConfigJs, 'utf8');
+  console.log(`Portal API URL for production build: ${distributionApiUrl}`);
+  console.log('Wrote seller/public/config.js');
+}
+
 async function writePortalProductionEnv() {
   const sellerRoot = join(repoRoot, 'apps', 'seller');
   const buyerRoot = join(repoRoot, 'apps', 'buyer');
@@ -421,6 +454,107 @@ async function buildFrontendApps() {
   console.log('\n==> Building buyer dashboard...');
   await npmInstall(buyerRoot);
   await runCommand('npm', ['run', 'build'], buyerRoot);
+}
+
+async function copySellerDistToOutput() {
+  const src = join(repoRoot, 'apps', 'seller', 'dist');
+  if (!(await pathExists(src))) {
+    throw new Error('Seller dist missing — run build first or omit --skip-build');
+  }
+
+  await copyTree(src, outputDir);
+  console.log(`Copied seller dist → ${outputDir}`);
+}
+
+async function writeSellerDeployGuide() {
+  const guide = `# Sellio Partner (Seller) Panel — deploy package
+
+Generated: ${new Date().toISOString()}
+Source repo: ${repoRoot}
+
+Upload **everything in this folder** to your seller subdomain document root
+(for example \`seller.yourdomain.com\`). Files must sit next to \`index.html\`.
+
+## 1. Configure API URL (no rebuild)
+
+Edit \`config.js\` in this folder:
+
+\`\`\`js
+window.SELLIO_CONFIG = {
+  apiUrl: 'https://your-laravel-domain.com/api',
+};
+\`\`\`
+
+Save and refresh the browser.
+
+## 2. Laravel admin (CORS)
+
+In Laravel admin → **Settings → General**, set **Partner Portal URL** to this panel's full URL
+(for example \`${distributionSellerUrl}\`). CORS updates automatically.
+
+## 3. Demo login (after backend seed)
+
+See \`apps/backend/README.md\` on the main site for partner demo credentials.
+
+---
+Build API URL used: \`${distributionApiUrl}\`
+Expected panel URL: \`${distributionSellerUrl}\`
+`;
+
+  await writeFile(join(outputDir, 'README-DEPLOY.md'), guide, 'utf8');
+}
+
+async function writeSellerManifest() {
+  const manifest = {
+    generatedAt: new Date().toISOString(),
+    package: 'seller-panel',
+    sourceRoot: repoRoot,
+    outputDir,
+    skipBuild,
+    sellerPanelUrl: distributionSellerUrl,
+    apiUrl: distributionApiUrl,
+    notes: [
+      'Upload this folder contents to the seller subdomain document root only',
+      'Edit config.js after upload — no rebuild required',
+    ],
+  };
+
+  await writeFile(
+    join(outputDir, 'DISTRIBUTION-MANIFEST.json'),
+    `${JSON.stringify(manifest, null, 2)}\n`,
+    'utf8',
+  );
+}
+
+async function runSellerOnlyDistribution() {
+  console.log('Sellio seller panel distribution');
+  console.log(`Source: ${repoRoot}`);
+  console.log(`Output: ${outputDir}`);
+  console.log(`Build: ${skipBuild ? 'no' : 'yes'}`);
+  console.log(`Portal API URL: ${distributionApiUrl}`);
+  console.log(`Seller panel URL: ${distributionSellerUrl}`);
+
+  await prepareOutputDirectory();
+
+  if (!skipBuild) {
+    await buildSellerApp();
+  } else {
+    console.log('\n==> Skipping seller build (--skip-build)');
+  }
+
+  console.log('\n==> Copying seller dist into output folder...');
+  await copySellerDistToOutput();
+  await writeSellerDeployGuide();
+  await writeSellerManifest();
+
+  if (makeZip) {
+    console.log('\n==> Creating ZIP archive...');
+    await createZipArchive();
+  }
+
+  console.log('\nDone.');
+  console.log(`Seller panel package: ${outputDir}`);
+  console.log('Next: upload to seller subdomain root and edit config.js');
 }
 
 async function copyBuildArtifacts() {
@@ -715,6 +849,11 @@ async function prepareOutputDirectory() {
 }
 
 async function main() {
+  if (sellerOnly) {
+    await runSellerOnlyDistribution();
+    return;
+  }
+
   console.log(`Sellio distribution prep`);
   console.log(`Source: ${repoRoot}`);
   console.log(`Output: ${outputDir}`);

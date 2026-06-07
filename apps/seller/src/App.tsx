@@ -49,7 +49,6 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Toaster } from 'sonner';
 import { getBrandSettings } from './api/brand';
 import { applyBrandToDocumentHead } from './lib/brandHead';
-import SetupReminderBanner from './components/SetupReminderBanner';
 
 function App() {
   useEffect(() => {
@@ -69,7 +68,6 @@ function App() {
 
   return (
     <LayoutProvider>
-      <SetupReminderBanner />
       <Toaster position="top-right" richColors />
       <Router>
         <Routes>

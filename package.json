@@ -10,6 +10,8 @@
     "prepare:distribution": "node scripts/prepare-distribution.mjs",
     "prepare:distribution:quick": "node scripts/prepare-distribution.mjs --skip-build",
     "prepare:distribution:zip": "node scripts/prepare-distribution.mjs --zip",
+    "prepare:distribution:seller": "node scripts/prepare-distribution.mjs --seller-only",
+    "prepare:distribution:seller:zip": "node scripts/prepare-distribution.mjs --seller-only --zip",
     "build:all": "echo 'Run build in each app directory'",
     "lint:all": "echo 'Run lint in each app directory'"
   },

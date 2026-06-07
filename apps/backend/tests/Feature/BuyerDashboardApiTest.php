@@ -148,4 +148,42 @@ class BuyerDashboardApiTest extends TestCase
             ->assertOk()
             ->assertJsonPath('data.upcomingBookings.0.property.title', 'Buyer Dashboard Rental');
     }
+
+    public function test_buyer_welcome_returns_activity_stats_and_total_items_count(): void
+    {
+        $buyer = $this->createBuyer();
+        $property = Property::factory()->create([
+            'is_sale' => false,
+            'is_rental' => true,
+        ]);
+
+        PropertyBooking::factory()
+            ->forDateRange(now()->addDays(3), now()->addDays(6), 180)
+            ->confirmed()
+            ->create([
+                'user_id' => $buyer->id,
+                'property_id' => $property->id,
+            ]);
+
+        Review::factory()->create([
+            'user_id' => $buyer->id,
+            'reviewable_id' => $property->id,
+            'reviewable_type' => Property::class,
+            'rating' => 5,
+            'comment' => 'Excellent rental experience.',
+        ]);
+
+        $response = $this->actingAs($buyer, 'sanctum')
+            ->getJson('/api/dashboard/user/welcome');
+
+        $response->assertOk()
+            ->assertJsonPath('data.stats.bookingsCount', 1)
+            ->assertJsonPath('data.stats.reviewsCount', 1)
+            ->assertJsonPath('data.stats.totalItemsCount', 2);
+
+        $this->assertGreaterThanOrEqual(
+            2,
+            $response->json('data.stats.totalItemsCount'),
+        );
+    }
 }

@@ -316,3 +316,14 @@ in the partner dashboard
 ------------------------
 
 the buyer app does not load correct title, favicon, and logo, and more problems like this, fix them (see seller portal for reference)
+
+--------------------
+
+login screen has no proper CSS
+https://demo.sellio.vebdez.com/login
+
+--------------------
+
+the dist version of buyer and seller panels change URL in the browser, which is fake and it becomes 404 when we refresh the browser.
+
+on the buyer login screen, can you show an eye icon to show password

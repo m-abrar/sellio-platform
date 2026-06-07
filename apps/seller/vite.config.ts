@@ -8,6 +8,8 @@ export default defineConfig(({mode}) => {
   const apiProxyTarget = env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:8000';
 
   return {
+    // Relative asset URLs so dist/ works from file:// and any subdomain document root.
+    base: './',
     plugins: [react(), tailwindcss()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),

@@ -1,12 +1,14 @@
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar';
 import { useAuth } from '../../context/AuthContext';
+import SetupReminderBanner from '../SetupReminderBanner';
 
 export default function DashboardLayout() {
   const { user } = useAuth();
   return (
-    <div className="min-h-screen bg-[#fbfcfd] text-slate-900 selection:bg-purple-100 selection:text-[#6610f2]">
-      <div id="wrapper" className="flex flex-col lg:flex-row max-w-[1640px] mx-auto min-h-screen relative">
+    <div className="min-h-screen bg-[#fbfcfd] text-slate-900 selection:bg-purple-100 selection:text-[#6610f2] flex flex-col">
+      <SetupReminderBanner />
+      <div id="wrapper" className="flex flex-1 flex-col lg:flex-row max-w-[1640px] mx-auto w-full relative">
         
         {/* SIDEBAR CONTAINER */}
         <div className="lg:sticky lg:top-0 lg:h-screen lg:py-8 lg:pl-8 z-[1050] shrink-0">
