@@ -1,12 +1,12 @@
 ---
 description: Distribution and CodeCanyon packaging rules for Sellio
-globs: scripts/prepare-distribution.mjs,distribution/**,distribution-fresh/**,_development/planning/DISTRIBUTION_PREP_PLAN.md,_development/planning/CODECANYON_SUBMISSION_CHECKLIST.md
+globs: scripts/prepare-distribution.mjs,distribution/**,distribution-fresh/**,.cursor/skills/prepare-distribution/**,_development/planning/DISTRIBUTION_PREP_PLAN.md,_development/planning/CODECANYON_SUBMISSION_CHECKLIST.md
 alwaysApply: false
 ---
 
 # Distribution packaging
 
-When preparing `distribution/` (or `distribution-fresh/`, `distribution.zip`) via `scripts/prepare-distribution.mjs`:
+When preparing `distribution/` (or `distribution-fresh/`, `distribution.zip`) via `scripts/prepare-distribution.mjs`, read `.cursor/skills/prepare-distribution/SKILL.md` for the full workflow, commands, and post-build verification.
 
 ## Always ship `storage/app/public/settings/`
 

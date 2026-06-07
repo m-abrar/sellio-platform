@@ -4,6 +4,8 @@ Last updated: 2026-06-07
 
 Use this when preparing a **fresh-server test package** or a **CodeCanyon ZIP** without manual copy/paste.
 
+**Cursor Agent:** use the project skill `.cursor/skills/prepare-distribution/SKILL.md` when packaging, verifying the bundle, or editing `scripts/prepare-distribution.mjs`.
+
 ## One command (from repo root)
 
 ```bash
@@ -30,7 +32,7 @@ node scripts/prepare-distribution.mjs --output D:/sellio-staging
 2. **Copies** submission roots: `apps/`, `documentation/`, `Documentation/`, `introduction/`, `listing-description/`, `CHANGELOG.md`, `README.md`, `LICENSE` (excludes `packages/` — dev-only, not deployed)
 3. **Excludes** dev/heavy paths: `_development/`, `.cursor/`, `.git/`, all `node_modules/`, all `vendor/`, `.env*`, `installed.lock`, test caches, `*.zip`
 4. **Clears** runtime artifacts in the copy: Laravel bootstrap cache, logs, compiled views, `public/hot`, `public/storage`
-5. **Always empties** `apps/backend/storage/app/public/` — skips dev-uploaded media (~1.3 GB locally); demo seed repopulates on install
+5. **Clears** `apps/backend/storage/app/public/` except `settings/` (logo + favicon) — skips dev-uploaded media (~1.3 GB locally); demo seed repopulates the rest on install
 6. **Copies** theme WebP bundle from `_development/storefront/app/public/themes/` → `apps/backend/public/themes/`
 7. **Downloads** `composer.phar` into `apps/backend/` (for cPanel / no global Composer)
 8. **Builds** (unless `--skip-build`):
@@ -68,5 +70,7 @@ Produces `distribution.zip` next to the repo root.
 
 ## Related
 
+- `.cursor/skills/prepare-distribution/SKILL.md` — Cursor agent skill (workflow + verification)
+- `.cursor/rules/distribution.mdc` — packaging invariants for the script
 - `CODECANYON_SUBMISSION_CHECKLIST.md` — section G (Distribution ZIP), section B (Fresh install)
 - `scripts/prepare-distribution.mjs` — implementation
