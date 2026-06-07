@@ -14,6 +14,7 @@ $fontawesomeCss = installer_asset_or_cdn(
 );
 
 $progress = installer_step_progress();
+$installerLogoUrl = installer_logo_url();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +32,11 @@ $progress = installer_step_progress();
 <div class="container container-installer">
     <div class="install-card fade-in">
         <div class="installer-brand">
-            <div class="installer-logo" aria-hidden="true">S</div>
+            <?php if ($installerLogoUrl): ?>
+                <img src="<?= htmlspecialchars($installerLogoUrl) ?>" alt="Sellio" class="installer-logo installer-logo-img" width="52" height="52">
+            <?php else: ?>
+                <div class="installer-logo" aria-hidden="true">S</div>
+            <?php endif; ?>
             <div>
                 <div class="installer-brand-name">Sellio</div>
                 <div class="installer-brand-tag">Installation Wizard</div>

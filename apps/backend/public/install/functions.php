@@ -119,6 +119,38 @@ function installer_support_url(): string
 }
 
 /**
+ * Resolve the Sellio logo for the installer header (pre-install safe paths only).
+ */
+function installer_logo_url(): ?string
+{
+    global $basePath;
+
+    $publicCandidates = [
+        'install/assets/logo.webp',
+        'install/assets/logo.png',
+        'images/logo.png',
+        'images/app-logo.webp',
+        'images/app-logo.png',
+    ];
+
+    foreach ($publicCandidates as $publicPath) {
+        $full = $basePath . '/public/' . str_replace('/', DIRECTORY_SEPARATOR, $publicPath);
+
+        if (is_file($full)) {
+            return installer_asset($publicPath);
+        }
+    }
+
+    $linkedLogo = $basePath . '/public/storage/settings/logo.png';
+
+    if (is_file($linkedLogo)) {
+        return installer_asset('storage/settings/logo.png');
+    }
+
+    return null;
+}
+
+/**
  * Web path to a file inside public/install/.
  */
 function installer_url(string $path = ''): string
