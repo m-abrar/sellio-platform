@@ -48,6 +48,7 @@ import Error404 from './pages/Error404';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Toaster } from 'sonner';
 import { getBrandSettings } from './api/brand';
+import SetupReminderBanner from './components/SetupReminderBanner';
 
 function App() {
   useEffect(() => {
@@ -87,6 +88,7 @@ function App() {
 
   return (
     <LayoutProvider>
+      <SetupReminderBanner />
       <Toaster position="top-right" richColors />
       <Router>
         <Routes>

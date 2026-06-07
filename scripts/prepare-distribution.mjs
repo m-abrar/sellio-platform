@@ -38,6 +38,39 @@ const outputDir = resolve(
     : join(repoRoot, 'distribution'),
 );
 
+function readArg(flag, envKey, fallback = '') {
+  const index = args.indexOf(flag);
+  if (index >= 0 && args[index + 1]) {
+    return args[index + 1];
+  }
+
+  return process.env[envKey] || fallback;
+}
+
+const distributionApiUrl = readArg(
+  '--api-url',
+  'DISTRIBUTION_API_URL',
+  'https://demo.sellio.vebdez.com/api',
+).replace(/\/$/, '');
+
+const distributionStorefrontUrl = readArg(
+  '--storefront-url',
+  'DISTRIBUTION_STOREFRONT_URL',
+  distributionApiUrl.replace(/\/api$/, ''),
+).replace(/\/$/, '');
+
+const distributionSellerUrl = readArg(
+  '--seller-url',
+  'DISTRIBUTION_SELLER_URL',
+  'https://seller-panel.sellio.vebdez.com',
+).replace(/\/$/, '');
+
+const distributionBuyerUrl = readArg(
+  '--buyer-url',
+  'DISTRIBUTION_BUYER_URL',
+  'https://buyer-panel.sellio.vebdez.com',
+).replace(/\/$/, '');
+
 const EXCLUDED_DIR_NAMES = new Set([
   'node_modules',
   'vendor',
@@ -255,10 +288,58 @@ async function downloadComposerPhar(destPath) {
   await pipeline(Readable.fromWeb(response.body), createWriteStream(destPath));
 }
 
+async function writePortalProductionEnv() {
+  const sellerRoot = join(repoRoot, 'apps', 'seller');
+  const buyerRoot = join(repoRoot, 'apps', 'buyer');
+
+  const sellerEnv = `VITE_API_URL=${distributionApiUrl}\n`;
+  const buyerEnv = [
+    `VITE_API_URL=${distributionApiUrl}`,
+    `VITE_STOREFRONT_URL=${distributionStorefrontUrl}`,
+  ].join('\n') + '\n';
+
+  await writeFile(join(sellerRoot, '.env.production'), sellerEnv, 'utf8');
+  await writeFile(join(buyerRoot, '.env.production'), buyerEnv, 'utf8');
+
+  const sellerConfigJs = `/**
+ * Sellio Seller Panel — API connection (edit after upload, no rebuild needed)
+ *
+ * Set apiUrl to your Laravel backend URL + /api
+ * Example: https://marketplace.yourdomain.com/api
+ */
+window.SELLIO_CONFIG = {
+  apiUrl: '${distributionApiUrl}',
+};
+`;
+
+  const buyerConfigJs = `/**
+ * Sellio Buyer Panel — API connection (edit after upload, no rebuild needed)
+ *
+ * apiUrl        — Laravel backend URL + /api
+ * storefrontUrl — Public storefront base URL
+ */
+window.SELLIO_CONFIG = {
+  apiUrl: '${distributionApiUrl}',
+  storefrontUrl: '${distributionStorefrontUrl}',
+};
+`;
+
+  await mkdir(join(sellerRoot, 'public'), { recursive: true });
+  await mkdir(join(buyerRoot, 'public'), { recursive: true });
+  await writeFile(join(sellerRoot, 'public', 'config.js'), sellerConfigJs, 'utf8');
+  await writeFile(join(buyerRoot, 'public', 'config.js'), buyerConfigJs, 'utf8');
+
+  console.log(`Portal API URL for production build: ${distributionApiUrl}`);
+  console.log(`Portal storefront URL for buyer build: ${distributionStorefrontUrl}`);
+  console.log('Wrote seller/public/config.js and buyer/public/config.js');
+}
+
 async function buildFrontendApps() {
   const backendRoot = join(repoRoot, 'apps', 'backend');
   const sellerRoot = join(repoRoot, 'apps', 'seller');
   const buyerRoot = join(repoRoot, 'apps', 'buyer');
+
+  await writePortalProductionEnv();
 
   console.log('\n==> Building backend Vite assets...');
   await npmInstall(backendRoot);
@@ -374,7 +455,54 @@ Serve them via Nginx/Apache (subdomain or subpath) and set Admin → Settings:
 - Partner URL → seller app URL
 - Buyer URL → buyer app URL
 
-Default seeded values expect \`{APP_URL}/seller\` and \`{APP_URL}/buyer\`.
+Set these in Admin → Settings (or seed via \`.env\` before install):
+
+- Partner URL → \`${distributionSellerUrl}\`
+- Buyer URL → \`${distributionBuyerUrl}\`
+
+Seeder reads \`SELLER_APP_URL\` / \`BUYER_APP_URL\` from backend \`.env\` when present.
+
+### React portals — edit \`config.js\` (no programming required)
+
+Seller and buyer ship a small file at the root of each subdomain:
+
+- Seller: \`config.js\` next to \`index.html\`
+- Buyer: \`config.js\` next to \`index.html\`
+
+Buyers change their domain by editing that one file in cPanel File Manager (or FTP). **No npm, no rebuild.**
+
+\`\`\`javascript
+// seller config.js
+window.SELLIO_CONFIG = {
+  apiUrl: 'https://your-laravel-domain.com/api',
+};
+
+// buyer config.js
+window.SELLIO_CONFIG = {
+  apiUrl: 'https://your-laravel-domain.com/api',
+  storefrontUrl: 'https://your-laravel-domain.com',
+};
+\`\`\`
+
+This distribution pre-filled those values with:
+
+- \`apiUrl\`: \`${distributionApiUrl}\`
+- \`storefrontUrl\` (buyer): \`${distributionStorefrontUrl}\`
+
+To change domain later, edit \`config.js\` on the server and refresh the browser.
+
+### Laravel CORS (required for cross-subdomain API calls)
+
+In \`apps/backend/.env\` on the main Laravel host:
+
+\`\`\`env
+APP_URL=${distributionStorefrontUrl}
+STOREFRONT_URL=${distributionStorefrontUrl}
+SELLER_APP_URL=${distributionSellerUrl}
+BUYER_APP_URL=${distributionBuyerUrl}
+\`\`\`
+
+Then run \`php artisan config:clear\`. Without this, browser requests from the React subdomains are blocked.
 
 ## 6. Hostinger / isolated subdomains
 
@@ -480,6 +608,9 @@ async function main() {
   console.log(`Source: ${repoRoot}`);
   console.log(`Output: ${outputDir}`);
   console.log(`Build frontend assets: ${skipBuild ? 'no' : 'yes'}`);
+  console.log(`Portal API URL: ${distributionApiUrl}`);
+  console.log(`Seller panel URL: ${distributionSellerUrl}`);
+  console.log(`Buyer panel URL: ${distributionBuyerUrl}`);
 
   if (await pathExists(outputDir)) {
     console.log('\n==> Removing previous distribution folder...');

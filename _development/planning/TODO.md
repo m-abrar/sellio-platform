@@ -299,4 +299,20 @@ in the partner dashboard
 - [ ] **Demo server restyle:** `/login` and `/admin` on `demo.sellio.vebdez.com` still broken until server is redeployed with `public/vendor/` from a fresh distribution build + `php artisan storage:link`.
 - [ ] **Link naming suggestion:** keep subdomain split (`demo.*` = Laravel monolith, `seller-panel.*` / `buyer-panel.*` = React portals, `frontend.*` = Next.js storefront). Single config file: `Introduction/sites.php`.
 
------------------------
+### React portal login failures — 2026-06-07
+
+- [x] **Root cause identified**
+  - **Seller 404:** dist built with `VITE_API_URL=/api` → login POST hits `seller-panel.../api/v1/auth/login` on the static host (no Laravel there).
+  - **Buyer CORS/localhost:** dist built with `VITE_API_URL=http://127.0.0.1:8000/api` baked in.
+- [x] **Code fixes:** `prepare-distribution.mjs` writes `.env.production` with `--api-url` before building seller/buyer; `config/cors.php` reads `SELLER_APP_URL` / `BUYER_APP_URL`; `SettingSeeder` seeds portal URLs from env; `sites.php` + docs use `seller-panel.sellio.vebdez.com` / `buyer-panel.sellio.vebdez.com`.
+- [x] **Permanent buyer fix:** seller/buyer load `public/config.js` at runtime — buyers edit one file in cPanel, no rebuild.
+- [x] **Setup reminder UI:** amber banner on login + dashboard when `config.js` still has placeholder/localhost values.
+- [ ] **Server action (demo):** Rebuild + redeploy portals, then set on Laravel host `.env`:
+  - `SELLER_APP_URL=https://seller-panel.sellio.vebdez.com`
+  - `BUYER_APP_URL=https://buyer-panel.sellio.vebdez.com`
+  - `php artisan config:clear`
+  - Re-upload `apps/seller/dist/*` and `apps/buyer/dist/*` from `npm run prepare:distribution`
+
+------------------------
+
+the buyer app does not load correct title, favicon, and logo, and more problems like this, fix them (see seller portal for reference)

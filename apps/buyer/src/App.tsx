@@ -47,6 +47,7 @@ import { fetchNotifications } from './api/notificationApi';
 import { StatsProvider, useStats } from './context/StatsContext';
 import { UserProvider, useUser } from './context/UserContext';
 import { getBrandSettings, BrandSettings } from './api/brandApi';
+import SetupReminderBanner from './components/SetupReminderBanner';
 
 const MAIN_NAV = [
   { name: 'Dashboard', path: '/', icon: LayoutDashboard, badge: 'totalItemsCount' },
@@ -489,6 +490,7 @@ function AppContent() {
   return (
     <Router>
       <div className="min-h-screen font-sans selection:bg-[var(--primary-color)] selection:text-white">
+        <SetupReminderBanner />
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} stats={stats} brand={brand} />
         
         <div className="lg:pl-[280px] flex flex-col min-h-screen">

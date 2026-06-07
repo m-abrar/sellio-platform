@@ -3,6 +3,7 @@ import { Lock, Mail, Rocket } from 'lucide-react';
 import { Button } from '../components/Button';
 import { useUser } from '../context/UserContext';
 import { getBrandSettings, BrandSettings } from '../api/brandApi';
+import SetupReminderBanner from '../components/SetupReminderBanner';
 
 export default function LoginView() {
   const { login } = useUser();
@@ -39,7 +40,9 @@ export default function LoginView() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f8f5] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[#f7f8f5] flex flex-col">
+      <SetupReminderBanner />
+      <div className="flex flex-1 items-center justify-center p-6">
       <form onSubmit={handleSubmit} className="w-full max-w-md glass-surface p-8 space-y-6">
         <div className="flex items-center gap-3">
           {brand?.site_logo ? (
@@ -95,6 +98,7 @@ export default function LoginView() {
           Sign In
         </Button>
       </form>
+      </div>
     </div>
   );
 }

@@ -12,8 +12,8 @@ return [
         'admin' => 'https://demo.sellio.vebdez.com/admin',
         'login' => 'https://demo.sellio.vebdez.com/login',
         'install' => 'https://demo.sellio.vebdez.com/install',
-        'seller' => 'https://seller-panel.vebdez.com',
-        'buyer' => 'https://buyer-panel.vebdez.com',
+        'seller' => 'https://seller-panel.sellio.vebdez.com',
+        'buyer' => 'https://buyer-panel.sellio.vebdez.com',
         'nextjs' => 'https://frontend.sellio.vebdez.com',
     ],
     'demo_accounts' => [

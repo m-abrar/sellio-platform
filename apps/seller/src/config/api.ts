@@ -1,9 +1,7 @@
-const trimTrailingSlash = (url: string) => url.replace(/\/$/, '');
+import { resolveApiBaseUrl } from './resolveApiBaseUrl';
 
-// In dev, use same-origin `/api` so Vite proxies to Laravel and avoids CORS issues.
-export const API_BASE_URL = trimTrailingSlash(
-  import.meta.env.VITE_API_URL || '/api',
-);
+// Production buyers edit public/config.js — no rebuild required.
+export const API_BASE_URL = resolveApiBaseUrl();
 
 export const AUTH_BASE = `${API_BASE_URL}/v1/auth`;
 export const PARTNER_BASE = `${API_BASE_URL}/dashboard/partner`;
