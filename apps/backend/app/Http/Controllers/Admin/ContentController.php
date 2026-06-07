@@ -112,6 +112,18 @@ class ContentController extends Controller
     }
 
     /**
+     * Edit a single CMS field opened from the storefront inline pencil control.
+     */
+    public function editItem(int $id): View
+    {
+        $item = PageContent::findOrFail($id);
+
+        return view('admin.content.edit-item', [
+            'item' => $item,
+        ]);
+    }
+
+    /**
      * Handle bulk updates for text-based content settings.
      * Note: Media-based settings are managed via specialized AJAX endpoints.
      *

@@ -409,14 +409,24 @@ class PropertyService
      */
     public function confirmBookingPayment(PropertyBooking $booking): void
     {
+        $wasAlreadyConfirmed = $booking->status === PropertyBooking::STATUS_CONFIRMED;
+
         DB::transaction(function () use ($booking) {
             if (auth()->check() && !$booking->user_id) {
                 $booking->user_id = auth()->id();
             }
 
-            $booking->status = 'confirmed';
+            $booking->status = PropertyBooking::STATUS_CONFIRMED;
             $booking->save();
         });
+
+        if (!$wasAlreadyConfirmed) {
+            $booking->loadMissing(['user', 'property']);
+
+            if ($booking->user && $booking->property) {
+                event(new \App\Events\PropertyBookingConfirmed($booking->user, $booking));
+            }
+        }
     }
 
     public function recordBookingPayment(

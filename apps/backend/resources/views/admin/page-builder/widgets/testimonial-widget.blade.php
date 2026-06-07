@@ -30,7 +30,7 @@
                             classes: ['testimonial'],
                             components: `
                                 <div class="testimonial-wrapper">
-                                    <img class="testimonial-img" src="https://placehold.co/80x80">
+                                    <img class="testimonial-img" src="/images/fallbacks/default-avatar.png">
                                     <p class="testimonial-text">"This is a great product!"</p>
                                     <h4 class="testimonial-name">John Doe</h4>
                                 </div>

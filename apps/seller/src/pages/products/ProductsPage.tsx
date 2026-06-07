@@ -9,6 +9,7 @@ import { getWelcomeData } from '../../api/dashboard';
 import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
 import ListingCountCards from '../../components/listings/ListingCountCards';
 import { getListingCounts } from '../../utils/listingCounts';
+import { PLACEHOLDER_LISTING } from '../../constants/placeholders';
 
 export default function ProductsPage() {
   const navigate = useNavigate();
@@ -113,7 +114,7 @@ export default function ProductsPage() {
                 <div key={product.id} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-premium relative overflow-hidden group">
                   <div className="flex gap-6">
                     <div className="w-24 h-24 rounded-[2rem] overflow-hidden bg-slate-50 shrink-0 border-4 border-white shadow-md cursor-pointer" onClick={() => navigate(`/dashboard/products/view/${product.slug}`)}>
-                      <img src={product.featured_image || 'https://via.placeholder.com/150'} className="w-full h-full object-cover" alt={product.title} />
+                      <img src={product.featured_image || PLACEHOLDER_LISTING} className="w-full h-full object-cover" alt={product.title} />
                     </div>
                     <div className="min-w-0 flex-1 pt-1">
                       <span className="text-[9px] font-black text-[#6610f2] bg-[#6610f2]/5 px-3 py-1 rounded-full uppercase tracking-widest">{product.sku || 'NO-SKU'}</span>

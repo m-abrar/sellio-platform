@@ -1,3 +1,5 @@
+import { PLACEHOLDER_LISTING_CLASSIFIEDS } from '../constants/placeholders';
+
 export interface NormalizedClassified {
   id: number;
   title: string;
@@ -98,7 +100,7 @@ export const normalizeClassified = (classified: any): NormalizedClassified => {
     featured_image: featuredImage,
     main_photo_id: classified.media?.main_photo_id ?? null,
     gallery,
-    media: media.length ? media : [{ original_url: 'https://via.placeholder.com/400x300?text=Listing' }],
+    media: media.length ? media : [{ original_url: PLACEHOLDER_LISTING_CLASSIFIEDS }],
     category_id: classified.taxonomy?.category?.id ?? classified.category_id,
     type_id: classified.taxonomy?.type?.id ?? classified.type_id,
     location_id: classified.location_id,

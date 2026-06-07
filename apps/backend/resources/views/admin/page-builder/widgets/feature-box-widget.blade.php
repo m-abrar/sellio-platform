@@ -31,7 +31,7 @@
                                 classes: ['feature-box'],
                                 components: `
                                     <div class="feature-box-wrapper">
-                                        <img class="feature-icon" src="https://placehold.co/80x80">
+                                        <img class="feature-icon" src="/images/fallbacks/default-square.jpg">
                                         <h3 class="feature-title">Awesome Feature</h3>
                                         <p class="feature-description">This feature helps you achieve greatness!</p>
                                         <a href="#" class="feature-button">Learn More</a>

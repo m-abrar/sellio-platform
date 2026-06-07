@@ -65,9 +65,7 @@ class Testimonial extends Model implements HasMedia
             return $mediaUrl;
         }
 
-        $color = config('ui.avatar_color', '6366f1');
-
-        return 'https://ui-avatars.com/api/?name=' . urlencode($this->author_name ?: 'Testimonial') . "&background={$color}&color=fff&size=160&font-size=0.35";
+        return asset('images/fallbacks/default-avatar.png');
     }
 
     public function registerMediaCollections(): void

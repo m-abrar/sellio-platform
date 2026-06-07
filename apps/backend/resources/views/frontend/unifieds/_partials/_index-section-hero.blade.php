@@ -4,15 +4,15 @@
         <div class="row pt-2 pt-md-5 pb-2 pb-md-4" data-aos="fade-up">
             <div class="col-12 text-center">
                 <span class="badge bg-primary-light border border-primary border-opacity-25 text-primary rounded-pill px-4 py-2 fw-800 mb-3 tracking-wider">
-                    {!! page_content('home.hero.badge', __('THE ALL-IN-ONE MARKETPLACE')) !!}
+                    @editable('home.hero.badge', __('THE ALL-IN-ONE MARKETPLACE'))
                 </span>
 
                 <h1 class="fw-800 display-3 mb-3 tracking-tight text-dark">
-                    {!! page_content('home.hero.title', 'Find Everything <span class="text-primary">Extraordinary.</span>') !!}
+                    @editableHtml('home.hero.title', 'Find Everything <span class="text-primary">Extraordinary.</span>')
                 </h1>
 
                 <p class="fs-5 text-muted mx-auto mb-5 hero-text-max">
-                    {{ page_content('home.hero.description', __('The ultimate destination to buy, sell, and discover premium properties, verified vehicles, and top-tier careers.')) }}
+                    @editable('home.hero.description', __('The ultimate destination to buy, sell, and discover premium properties, verified vehicles, and top-tier careers.'))
                 </p>
             </div>
         </div>

@@ -1,3 +1,5 @@
+import { PLACEHOLDER_LISTING_PROPERTIES } from '../constants/placeholders';
+
 export interface NormalizedProperty {
   id: number;
   title: string;
@@ -103,7 +105,7 @@ export const normalizeProperty = (property: any): NormalizedProperty => {
     featured_image: featuredImage,
     featured_image_id: property.featured_image_id ?? null,
     gallery,
-    media: media.length ? media : [{ original_url: 'https://via.placeholder.com/400x300?text=Property' }],
+    media: media.length ? media : [{ original_url: PLACEHOLDER_LISTING_PROPERTIES }],
     category_id: property.category_id,
     type_id: property.type_id,
     location_id: property.location_id,

@@ -5,10 +5,10 @@
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3">
             <div>
                 <h2 class="fw-800 text-dark h1 mb-1">
-                    {!! page_content('home.discovery.heading', __('Explore the Marketplace')) !!}
+                    @editable('home.discovery.heading', __('Explore the Marketplace'))
                 </h2>
                 <p class="lead text-muted mb-0 sub-heading">
-                    {{ page_content('home.discovery.description', __('Start with any category, then filter into the exact listing you need.')) }}
+                    @editable('home.discovery.description', __('Start with any category, then filter into the exact listing you need.'))
                 </p>
             </div>
             <a href="{{ setting('url_partner', '#') }}" class="btn btn-outline-primary rounded-pill fw-bold px-4">

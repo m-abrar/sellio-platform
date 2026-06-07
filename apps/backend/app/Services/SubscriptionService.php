@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\PlanAboutToExpire;
+use App\Events\PlanExpired;
 use App\Events\PlanSubscribed;
 use App\Events\PlanUpgraded;
 use App\Models\Payment;
@@ -96,7 +97,8 @@ class SubscriptionService
         $processedCount = 0;
 
         Subscription::with('user', 'plan')
-            ->where('name', 'default')
+            ->where('title', 'default')
+            ->where('status', Subscription::STATUS_ACTIVE)
             ->whereNotNull('ends_at')
             ->whereBetween('ends_at', [$targetDate, $targetEndDate])
             ->chunkById(100, function ($subscriptions) use (&$processedCount) {
@@ -105,6 +107,37 @@ class SubscriptionService
                         PlanAboutToExpire::dispatch($subscription->user, $subscription);
                         $processedCount++;
                     }
+                }
+            });
+
+        return $processedCount;
+    }
+
+    /**
+     * Expire subscriptions past their end date and notify affected users.
+     */
+    public function dispatchExpiredSubscriptions(): int
+    {
+        $processedCount = 0;
+
+        Subscription::with('user', 'plan')
+            ->where('title', 'default')
+            ->where('status', Subscription::STATUS_ACTIVE)
+            ->whereNotNull('ends_at')
+            ->where('ends_at', '<', now())
+            ->chunkById(100, function ($subscriptions) use (&$processedCount) {
+                foreach ($subscriptions as $subscription) {
+                    if (!$subscription->user || !$subscription->plan) {
+                        continue;
+                    }
+
+                    $subscription->forceFill([
+                        'status' => Subscription::STATUS_EXPIRED,
+                        'title' => 'expired_' . $subscription->id . '_' . now()->format('YmdHis'),
+                    ])->save();
+
+                    PlanExpired::dispatch($subscription->user, $subscription->plan);
+                    $processedCount++;
                 }
             });
 

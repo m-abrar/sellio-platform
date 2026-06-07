@@ -1,46 +1,37 @@
+@php
+    $fallbackImage = asset('images/fallbacks/default-card.jpg');
+@endphp
+
 <div class="row g-4">
-    {{-- Related Service Card 1 --}}
-    <div class="col-md-4">
-        <div class="card glass-surface related-service-card">
-            <img src="https://picsum.photos/400/200?random=15" class="card-img-top related-img" alt="Service 1">
-            <div class="card-body">
-                <h6 class="card-title fw-bold">{{ ($isConsult ?? false) ? 'Estate Planning' : 'Hot Stone Therapy' }}</h6>
-                <p class="card-text small text-muted mb-2">{{ ($isConsult ?? false) ? 'Secure your assets for the future with a personalized plan.' : '90 min of warm stone massage for ultimate muscle relaxation.' }}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-bold text-success">{{ ($isConsult ?? false) ? 'Free Consult' : '$160' }}</span>
-                    <a href="#" class="btn btn-sm btn-primary-outline-cta">Explore</a>
+    @forelse (($relatedServices ?? collect())->take(3) as $related)
+        <div class="col-md-4">
+            <div class="card glass-surface related-service-card h-100">
+                <img src="{{ $related->primary_image_url ?? $related->thumbnail_url ?? $fallbackImage }}"
+                     class="card-img-top related-img"
+                     alt="{{ $related->title }}">
+                <div class="card-body d-flex flex-column">
+                    <h6 class="card-title fw-bold">{{ $related->title }}</h6>
+                    @if (!empty($related->short_description))
+                        <p class="card-text small text-muted mb-2">{{ \Illuminate\Support\Str::limit($related->short_description, 100) }}</p>
+                    @endif
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <span class="fw-bold text-success">
+                            @if (!empty($related->price))
+                                ${{ number_format((float) $related->price, 0) }}
+                            @else
+                                {{ __('Contact') }}
+                            @endif
+                        </span>
+                        <a href="{{ route('services.show', $related->slug) }}" class="btn btn-sm btn-primary-outline-cta">
+                            {{ __('Explore') }}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    {{-- Related Service Card 2 --}}
-    <div class="col-md-4">
-        <div class="card glass-surface related-service-card">
-            <img src="https://picsum.photos/400/200?random=16" class="card-img-top related-img" alt="Service 2">
-            <div class="card-body">
-                <h6 class="card-title fw-bold">{{ ($isConsult ?? false) ? 'Investment Analysis' : 'Ultimate Couple\'s Package' }}</h6>
-                <p class="card-text small text-muted mb-2">{{ ($isConsult ?? false) ? 'Comprehensive look at your portfolio performance.' : 'Includes massage, facial, and private sauna access.' }}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-bold text-success">{{ ($isConsult ?? false) ? '$199' : '$350' }}</span>
-                    <a href="#" class="btn btn-sm btn-primary-outline-cta">Explore</a>
-                </div>
-            </div>
+    @empty
+        <div class="col-12">
+            <p class="text-muted mb-0">{{ __('No related services are available right now.') }}</p>
         </div>
-    </div>
-
-    {{-- Related Service Card 3 --}}
-    <div class="col-md-4">
-        <div class="card glass-surface related-service-card">
-            <img src="https://picsum.photos/400/200?random=17" class="card-img-top related-img" alt="Service 3">
-            <div class="card-body">
-                <h6 class="card-title fw-bold">Loyalty Program</h6>
-                <p class="card-text small text-muted mb-2">Sign up for exclusive discounts and early access to new services.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-bold text-primary-color">Free</span>
-                    <a href="#" class="btn btn-sm btn-primary-outline-cta">Sign Up</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    @endforelse
 </div>

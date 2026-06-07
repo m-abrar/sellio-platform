@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PaymentFailed;
 use App\Exceptions\WebhookSignatureException;
 use Exception;
 use App\Models\EventBooking;
@@ -56,8 +57,18 @@ class WebhookController extends Controller
                 $plan = Plan::find($result['subscription_plan_id']);
 
                 if ($user && $plan) {
-                    app(SubscriptionService::class)->subscribe($user, $plan);
-                    Log::info("Webhook activated partner subscription for user {$user->id} on plan {$plan->id} via {$gatewaySlug}");
+                    if (($result['payment_status'] ?? null) === 'failed') {
+                        PaymentFailed::dispatch(
+                            $user,
+                            $plan,
+                            null,
+                            $result['message'] ?? __('Subscription payment failed.')
+                        );
+                        Log::warning("Webhook recorded failed partner subscription payment for user {$user->id} on plan {$plan->id} via {$gatewaySlug}");
+                    } else {
+                        app(SubscriptionService::class)->subscribe($user, $plan);
+                        Log::info("Webhook activated partner subscription for user {$user->id} on plan {$plan->id} via {$gatewaySlug}");
+                    }
                 }
             }
 

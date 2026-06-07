@@ -24,6 +24,8 @@ use App\Events\ReviewReceived;
 use App\Events\ReviewRequested;
 use App\Events\UserRegistered;
 use App\Listeners\Partner\SendPartnerDatabaseNotification;
+use App\Listeners\Partner\SendPartnerLeadEmail;
+use App\Listeners\RequestPostPurchaseReview;
 use App\Listeners\SendBookingCancelledEmail;
 use App\Listeners\SendBookingConfirmedEmail;
 use App\Listeners\SendEventTicketEmail;
@@ -113,8 +115,9 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
+        Event::listen(PartnerLeadCreated::class, SendPartnerDatabaseNotification::class);
+        Event::listen(PartnerLeadCreated::class, SendPartnerLeadEmail::class);
         Event::listen([
-            PartnerLeadCreated::class,
             ReviewReceived::class,
             JobApplicationReceived::class,
             NewMessageSent::class,
@@ -126,8 +129,10 @@ class AppServiceProvider extends ServiceProvider
         // 2.2 Wire Core Platform Event-to-Email Listener Mappings
         Event::listen(UserRegistered::class, SendWelcomeEmail::class);
         Event::listen(PropertyBookingConfirmed::class, SendBookingConfirmedEmail::class);
+        Event::listen(PropertyBookingConfirmed::class, RequestPostPurchaseReview::class);
         Event::listen(BookingCancelled::class, SendBookingCancelledEmail::class);
         Event::listen(EventTicketPurchased::class, SendEventTicketEmail::class);
+        Event::listen(EventTicketPurchased::class, RequestPostPurchaseReview::class);
         Event::listen(JobApplicationReceived::class, SendJobApplicationReceivedEmail::class);
         Event::listen(ReviewReceived::class, SendReviewReceivedEmail::class);
         Event::listen(ReviewRequested::class, SendReviewRequestEmail::class);
@@ -162,7 +167,7 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        // 3. Aligned Blade Directive (Matching your CSS)
+        // 3. Aligned Blade Directive (Matching editable-ui.css)
         Blade::directive('editable', function ($expression) {
             $contentResultClass = ContentResult::class;
 
@@ -173,12 +178,34 @@ class AppServiceProvider extends ServiceProvider
                     \$editUrl = route('admin.content.edit.item', ['id' => \$data->id]);
                     echo '<span class=\"editable-group d-inline-flex align-items-center\">';
                         echo '<span class=\"editable-text\">' . e(content_display(\$data->value, '')) . '</span>';
-                        echo '<a href=\"' . \$editUrl . '\" class=\"edit-link\" target=\"_blank\">';
+                        echo '<a href=\"' . \$editUrl . '\" class=\"edit-link\" target=\"_blank\" title=\"' . e(__('Edit content')) . '\">';
                             echo '<i class=\"fa-solid fa-pencil edit-icon\"></i>';
                         echo '</a>';
                     echo '</span>';
                 } else {
                     echo e(content_display(\$data, ''));
+                }
+            ?>";
+        });
+
+        Blade::directive('editableHtml', function ($expression) {
+            $contentResultClass = ContentResult::class;
+
+            return "<?php 
+                \$data = page_content($expression);
+                \$allowedTags = page_content_editor_allowed_tags();
+                
+                if (\$data instanceof {$contentResultClass}) {
+                    \$editUrl = route('admin.content.edit.item', ['id' => \$data->id]);
+                    \$display = sanitize_rich_html(content_display(\$data->value, ''), \$allowedTags);
+                    echo '<span class=\"editable-group d-inline-flex align-items-center\">';
+                        echo '<span class=\"editable-text\">' . \$display . '</span>';
+                        echo '<a href=\"' . \$editUrl . '\" class=\"edit-link\" target=\"_blank\" title=\"' . e(__('Edit content')) . '\">';
+                            echo '<i class=\"fa-solid fa-pencil edit-icon\"></i>';
+                        echo '</a>';
+                    echo '</span>';
+                } else {
+                    echo sanitize_rich_html(content_display(\$data, ''), \$allowedTags);
                 }
             ?>";
         });

@@ -1,3 +1,5 @@
+import { PLACEHOLDER_LISTING_AUTOS } from '../constants/placeholders';
+
 export interface NormalizedAuto {
   id: number;
   title: string;
@@ -85,7 +87,7 @@ export const normalizeAuto = (auto: any): NormalizedAuto => {
     featured_image: featuredImage,
     main_photo_id: auto.media?.main_photo_id ?? auto.main_photo_id ?? null,
     gallery,
-    media: media.length ? media : [{ original_url: 'https://via.placeholder.com/400x300?text=Vehicle' }],
+    media: media.length ? media : [{ original_url: PLACEHOLDER_LISTING_AUTOS }],
     category_id: auto.taxonomy?.category?.id ?? auto.category_id,
     brand_id: auto.taxonomy?.brand?.id ?? auto.brand_id,
     type_id: auto.taxonomy?.type?.id ?? auto.type_id,

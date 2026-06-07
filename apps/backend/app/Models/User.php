@@ -343,13 +343,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
                     return $mediaUrl;
                 }
 
-                // 3. Third Priority: UI-Avatars (Dynamic name-based)
-                if (!empty($this->name)) {
-                    $color = config('ui.avatar_color', '6366f1');
-                    return "https://ui-avatars.com/api/?name=" . urlencode($this->name) . "&background={$color}&color=fff&size=150&font-size=0.35";
-                }
-
-                // 4. Final Priority: Static Fallback from Trait
+                // 3. Final Priority: bundled fallback avatar
                 return $this->getFallbackImage('avatar');
             }
         );

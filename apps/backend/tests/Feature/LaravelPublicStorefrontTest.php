@@ -596,6 +596,54 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertSee(route('admin.content.edit.item', ['id' => $content->id]), false);
     }
 
+    public function test_admin_can_open_single_content_item_editor_from_storefront_pencil_link(): void
+    {
+        Role::firstOrCreate(['name' => 'super-admin']);
+        $admin = User::factory()->create();
+        $admin->assignRole('super-admin');
+
+        $content = PageContent::create([
+            'theme_key' => config('content.blade_scope', 'laravel_blade'),
+            'page' => 'home',
+            'section' => 'hero',
+            'content_key' => 'badge',
+            'value' => 'Editable Badge',
+            'input_type' => 'text',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.content.edit.item', $content))
+            ->assertOk()
+            ->assertSee('Editable Badge', false)
+            ->assertSee(route('admin.content.bulk_update'), false);
+    }
+
+    public function test_home_hero_fields_show_editable_controls_for_admins_when_frontend_edit_is_enabled(): void
+    {
+        Setting::set('frontend_edit', '1');
+        Cache::flush();
+
+        Role::firstOrCreate(['name' => 'admin']);
+        $admin = User::factory()->create();
+        $admin->assignRole('admin');
+
+        $heroTitle = PageContent::create([
+            'theme_key' => config('content.blade_scope', 'laravel_blade'),
+            'page' => 'home',
+            'section' => 'hero',
+            'content_key' => 'title',
+            'value' => 'Editable <span class="text-primary">Hero</span>',
+            'input_type' => 'text',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('index'))
+            ->assertOk()
+            ->assertSee('Editable <span class="text-primary">Hero</span>', false)
+            ->assertSee('editable-group', false)
+            ->assertSee(route('admin.content.edit.item', ['id' => $heroTitle->id]), false);
+    }
+
     public function test_property_booking_checkout_renders_step_one_of_three(): void
     {
         Setting::set('is_section.properties', '1');

@@ -9,6 +9,7 @@ import { getWelcomeData } from '../../api/dashboard';
 import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
 import ListingCountCards from '../../components/listings/ListingCountCards';
 import { getListingCounts } from '../../utils/listingCounts';
+import { PLACEHOLDER_LISTING_CLASSIFIEDS } from '../../constants/placeholders';
 
 export default function ClassifiedsPage() {
   const navigate = useNavigate();
@@ -116,7 +117,7 @@ export default function ClassifiedsPage() {
                       className="w-24 h-24 rounded-[2rem] overflow-hidden bg-slate-50 shrink-0 border-4 border-white shadow-md cursor-pointer"
                       onClick={() => navigate(`/dashboard/classifieds/view/${item.slug}`)}
                     >
-                      <img src={item.media?.[0]?.original_url || 'https://via.placeholder.com/150'} className="w-full h-full object-cover" alt={item.title} />
+                      <img src={item.media?.[0]?.original_url || PLACEHOLDER_LISTING_CLASSIFIEDS} className="w-full h-full object-cover" alt={item.title} />
                     </div>
                     <div className="min-w-0 flex-1 pt-1">
                       <span className="text-[9px] font-black text-[#6610f2] bg-[#6610f2]/5 px-3 py-1 rounded-full uppercase tracking-widest">{item.sku || 'NO-SKU'}</span>

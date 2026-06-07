@@ -6,14 +6,14 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
-use App\Models\Listing; // Assumed model for the listing
+use Illuminate\Database\Eloquent\Model;
 
 class NewListingLead
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     
-    public $owner; // The user who owns the listing
-    public $listing; // The listing model
+    public $owner;
+    public $listing;
     public $leadName;
     public $leadEmail;
     public $leadMessage;
@@ -22,12 +22,12 @@ class NewListingLead
      * Create a new event instance.
      *
      * @param  \App\Models\User $owner The user who owns the listing.
-     * @param  \App\Models\Listing $listing The listing record.
+     * @param  \Illuminate\Database\Eloquent\Model $listing The listing record.
      * @param  string $leadName The name of the person submitting the lead.
      * @param  string $leadEmail The email of the person submitting the lead.
      * @param  string $leadMessage The message from the lead.
      */
-    public function __construct(User $owner, Listing $listing, string $leadName, string $leadEmail, string $leadMessage)
+    public function __construct(User $owner, Model $listing, string $leadName, string $leadEmail, string $leadMessage)
     {
         $this->owner = $owner;
         $this->listing = $listing;

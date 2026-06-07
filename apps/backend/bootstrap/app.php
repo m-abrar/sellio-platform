@@ -12,6 +12,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schedule;
 use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Middleware\RoleMiddleware;
 
@@ -130,4 +131,8 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
+    })
+    ->withSchedule(function () {
+        Schedule::command('app:check-renewals')->dailyAt('08:00');
+        Schedule::command('app:check-expired-subscriptions')->dailyAt('08:15');
     })->create();

@@ -253,13 +253,34 @@ in the partner dashboard
 -----------------------------
 
 
-is the admin and frontend blade views translatable?
-are all the events/listeners working?
-are all the email templates working?
-is the laravel frontend home built with dynamic strings pagecontent() like other pages?
-can we impersonate a user or partner then connect to their redirected react panel?
-scan blade/view files if they have php/css/js?
-does permissions really work, should we code our application according to permissions preferred over roles where possible?
-scan the full app for any 3rd party image URL, like unsplash, etc. Download and save them in our project instead.
-when you add comments to code, your message is a response to my recent request, but we need to write commnets for new developers who buy the product on codecanyon, not for me or current situation.
-because each demo refresh / migration will delete the keys for stripe from database table, can we solve this problem?
+## Open Audit Items — 2026-06-07
+
+### Translatability (admin + frontend Blade)
+- [ ] **Partial — needs follow-up.** ~65% of Blade files use `__()`, but `lang/en.json` has only ~39 keys. Many partials (filters, sidebars, page-builder widgets, ecommerce dashboard) remain hardcoded English. Frontend CMS uses `page_content()` / `@editable()` on home and several index pages — not a full i18n layer. **Action:** expand `en.json`, wrap remaining partials, split admin/frontend string catalogs.
+
+### Events / listeners / email templates
+- [x] Wired orphaned flows: `PartnerLeadCreated` → `NewListingLead` email; `PropertyBookingConfirmed` now dispatches from public checkout; `ReviewRequested` after property/event purchase; `PaymentFailed` on Stripe subscription webhook failure; `PlanExpired` via `app:check-expired-subscriptions`; renewal query fixed (`title` not `name`).
+- [x] Scheduled `app:check-renewals` (daily 08:00) and `app:check-expired-subscriptions` (daily 08:15).
+- [ ] **Orphan template:** `password_reset_link` seeded but Laravel default reset flow does not use `DynamicEmail` — wire custom notification or remove template.
+
+### Home page dynamic content
+- [x] **Yes.** Home (`frontend/unifieds/index.blade.php`) uses `page_content()` for hero badge, title, and description — same pattern as footer, search meta, and unified index body. There is no `pagecontent()` helper; the correct helper is `page_content()`.
+
+### Impersonation → React portal
+- [x] **Working.** Admin impersonate logs in as target user, redirects to `route('dashboard')` → `DashboardRedirectController` sends partners to `url_partner` and buyers to `url_user` from settings. Coverage: `AdminImpersonateTest`.
+
+### Blade inline PHP / CSS / JS
+- [ ] **Needs cleanup pass.** Many Blade files embed `<style>` blocks, inline `<script>`, and `@php` blocks (admin dashboard widgets, checkout panels, page-builder). Not blocking, but CodeCanyon buyers benefit from moving scripts to `public/` assets and minimizing inline CSS. **Action:** incremental extraction per module.
+
+### Permissions vs roles
+- [ ] **Mixed — prefer permissions for admin routes.** Admin routes already use `can:manage-*` and `can:app-settings` middleware (Spatie permissions). API routes use `role:partner|admin` middleware. Policies exist on some resources (e.g. `ThemePolicy`). **Recommendation:** keep roles for portal routing (partner vs buyer vs admin); use permissions for admin CRUD gates; add policies for partner API mutations where missing.
+
+### Third-party image URLs
+- [x] Production fixes: replaced `picsum.photos` related-services partial with dynamic listing images + local fallback; replaced `via.placeholder.com` in seller adapters/pages with bundled SVG placeholders; replaced `placehold.co` in page-builder widget defaults; removed `ui-avatars.com` from `User` and `Testimonial` models.
+- [ ] **Remaining:** admin/show blades still reference `ui-avatars.com` as inline fallbacks (~15 files); `_development/` reference library still has Unsplash/Picsum (not shipped). **Action:** replace admin blade ui-avatars with `avatar_url` or `asset('images/fallbacks/default-avatar.png')`.
+
+### Code comments for CodeCanyon buyers
+- [ ] **Guideline for future PRs:** comments should explain *why* and *how to configure*, not session context. No bulk rewrite scheduled — apply on touch.
+
+### Stripe keys lost on demo refresh
+- [x] `StripeGatewaySeeder` now seeds `sandbox_config` / `live_config` from `.env` (`STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_CURRENCY`) and auto-activates sandbox mode when keys are present. Admin UI edits still persist in DB; re-seed restores env defaults without wiping manually saved keys if using `updateOrCreate` on credentials (existing row updated, not deleted).

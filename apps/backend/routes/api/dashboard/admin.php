@@ -177,8 +177,8 @@ Route::name('dashboard.admin.')->group(function () {
 
     Route::controller(ContentController::class)->prefix('content')->name('content.')->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/{page}/{theme_key?}', 'editPage')->name('edit');
         Route::get('/edit/item/{id}', 'editItem')->name('edit.item');
+        Route::get('/{page}/{theme_key?}', 'editPage')->name('edit');
         Route::post('/update', 'bulkUpdate')->name('bulk_update');
     });
 

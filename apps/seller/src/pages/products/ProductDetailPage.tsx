@@ -13,6 +13,7 @@ import PageHeader from '../../components/layout/PageHeader';
 import { getProductBySlug } from '../../api/products';
 import ListingAnalyticsWidget from '../../components/studio/ListingAnalyticsWidget';
 import ListingActivityWidget from '../../components/studio/ListingActivityWidget';
+import { PLACEHOLDER_LISTING } from '../../constants/placeholders';
 import { toast } from 'sonner';
 
 export default function ProductDetailPage() {
@@ -94,7 +95,7 @@ export default function ProductDetailPage() {
         <div className="lg:col-span-7 space-y-6">
           <div className={`${containerClass} !p-0 overflow-hidden`}>
             <img
-              src={product.featured_image || gallery[0]?.original_url || 'https://via.placeholder.com/800x600'}
+              src={product.featured_image || gallery[0]?.original_url || PLACEHOLDER_LISTING}
               alt={product.title}
               className="w-full h-[420px] object-cover"
             />

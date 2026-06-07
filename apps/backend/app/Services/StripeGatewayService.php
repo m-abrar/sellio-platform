@@ -481,6 +481,20 @@ class StripeGatewayService implements PaymentGatewayService
             Log::info("Handled 'invoice.paid'. Invoice ID: " . ($eventData['id'] ?? 'N/A'));
             return ['status' => 'processed', 'message' => 'Invoice paid event handled.'];
         }
+
+        if (in_array($eventType, ['checkout.session.async_payment_failed', 'invoice.payment_failed'], true)) {
+            $metadata = $eventData['metadata'] ?? [];
+            $isPartnerSubscription = ($metadata['purpose'] ?? null) === 'partner_subscription';
+
+            return [
+                'status' => 'failed',
+                'payment_status' => 'failed',
+                'subscription_user_id' => $isPartnerSubscription ? ($metadata['user_id'] ?? null) : null,
+                'subscription_plan_id' => $isPartnerSubscription ? ($metadata['plan_id'] ?? null) : null,
+                'reference' => $eventData['id'] ?? null,
+                'message' => $eventData['last_payment_error']['message'] ?? __('Subscription payment failed.'),
+            ];
+        }
         
         // Handle other relevant event types (e.g., charge.succeeded, customer.subscription.deleted)
         

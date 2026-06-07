@@ -1,3 +1,5 @@
+import { PLACEHOLDER_LISTING_EVENTS } from '../constants/placeholders';
+
 export interface NormalizedEvent {
   id: number;
   title: string;
@@ -120,7 +122,7 @@ export const normalizeEvent = (event: any): NormalizedEvent => {
     is_published: event.status?.is_published ?? false,
     featured_image: featuredImage,
     gallery,
-    media: media.length ? media : [{ original_url: 'https://via.placeholder.com/400x300?text=Event' }],
+    media: media.length ? media : [{ original_url: PLACEHOLDER_LISTING_EVENTS }],
     category_id: event.category_id,
     base_price: event.ticketing?.base_price,
     date,

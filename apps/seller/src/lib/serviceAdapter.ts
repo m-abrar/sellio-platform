@@ -1,3 +1,5 @@
+import { PLACEHOLDER_LISTING } from '../constants/placeholders';
+
 export interface NormalizedService {
   id: number;
   title: string;
@@ -91,7 +93,7 @@ export const normalizeService = (service: any): NormalizedService => {
     featured_image: featuredImage,
     main_photo_id: service.media?.main_photo_id ?? null,
     gallery,
-    media: media.length ? media : [{ original_url: 'https://via.placeholder.com/400x300?text=Service' }],
+    media: media.length ? media : [{ original_url: PLACEHOLDER_LISTING }],
     category_id: service.professional?.category?.id ?? service.category_id,
     type_id: service.professional?.type?.id ?? service.type_id,
     location_id: service.location_id,

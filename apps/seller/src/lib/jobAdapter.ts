@@ -1,3 +1,5 @@
+import { PLACEHOLDER_LISTING_JOBS } from '../constants/placeholders';
+
 export interface NormalizedJob {
   id: number;
   title: string;
@@ -111,7 +113,7 @@ export const normalizeJob = (job: any): NormalizedJob => {
     is_active: job.status?.is_published ?? false,
     featured_image: featuredImage,
     gallery,
-    media: media.length ? media : [{ original_url: 'https://via.placeholder.com/400x300?text=Job' }],
+    media: media.length ? media : [{ original_url: PLACEHOLDER_LISTING_JOBS }],
     category_id: job.category_id,
     location_id: job.location_id,
     company: job.company?.name ?? '',
