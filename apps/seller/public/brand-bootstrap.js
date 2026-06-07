@@ -15,7 +15,7 @@
       return location.origin + '/api';
     }
 
-    return '';
+    return location.origin + '/api';
   }
 
   function updateLink(rel, href, type) {

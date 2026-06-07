@@ -11,7 +11,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . setting('site_favicon')) }}"> 
     <link rel="apple-touch-icon" href="{{ asset('storage/' . setting('site_favicon')) }}">
     
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('frontend._partials._guest_assets')
     <link rel="stylesheet" href="{{ asset('frontend/css/auth.css') }}">
     
     @stack('styles')

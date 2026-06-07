@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\Setting;
 use App\Models\Theme;
+use App\Services\Admin\PlatformUrlVerificationService;
 use App\Services\Admin\SettingService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,8 +32,10 @@ class SettingController extends Controller
      *
      * @param  \App\Services\Admin\SettingService  $settingService
      */
-    public function __construct(SettingService $settingService)
-    {
+    public function __construct(
+        SettingService $settingService,
+        protected PlatformUrlVerificationService $platformUrlVerificationService,
+    ) {
         $this->settingService = $settingService;
     }
 
@@ -107,5 +111,28 @@ class SettingController extends Controller
         return back()->with('success', __(':section settings updated successfully!', [
             'section' => ucfirst($section)
         ]));
+    }
+
+    /**
+     * Verify that a platform ecosystem URL is reachable before marking it connected.
+     */
+    public function verifyPlatformUrl(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'field' => 'required|string|in:' . implode(',', array_keys(PlatformUrlVerificationService::URL_FIELDS)),
+            'url' => 'required|string|max:500',
+        ]);
+
+        $result = $this->platformUrlVerificationService->verify(
+            $validated['field'],
+            $validated['url'],
+        );
+
+        return response()->json([
+            'field' => $validated['field'],
+            'connected' => $result['connected'],
+            'message' => $result['message'],
+            'status_code' => $result['status_code'],
+        ]);
     }
 }

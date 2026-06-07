@@ -55,6 +55,10 @@ class ServiceAppointment extends Model
         'topic',
         'status',               // e.g., 'pending', 'confirmed', 'completed', 'cancelled'
         'notes',                // User-provided details at booking
+        'admin_note',           // Provider / admin notes
+        'price',                // Locked-in package or service price
+        'payment_status',
+        'transaction_id',
         'cancellation_reason',  // Provided if status changes to 'cancelled'
         'viewed_at',            // Tracked for provider notification badges
     ];

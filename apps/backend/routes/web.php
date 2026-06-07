@@ -137,11 +137,15 @@ Route::middleware(['built_in_website'])->group(function () {
     });
 
     /** PRODUCTS **/
+    Route::prefix('product')->name('product.')->middleware('module:products')->group(function () {
+        Route::get('/{product:slug}', [ProductController::class, 'show'])->name('show');
+    });
+
     Route::prefix('products')->name('products.')->middleware('module:products')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('index');
         Route::get('/search', [ProductController::class, 'search'])->name('search');
-        Route::get('/{product:slug}', [ProductController::class, 'show'])->name('show');
-        
+        Route::get('/{product:slug}', fn (\App\Models\Product $product) => redirect()->route('product.show', $product, 301));
+
         // Dynamic Pricing for variations/addons
         Route::get('/{product}/calculate-dynamic-price', [ProductController::class, 'calculateDynamicPrice'])->name('calculate-dynamic-price');
     });

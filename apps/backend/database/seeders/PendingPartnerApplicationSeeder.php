@@ -14,6 +14,8 @@ class PendingPartnerApplicationSeeder extends Seeder
      */
     public function run(): void
     {
+        config(['activitylog.enabled' => false]);
+
         $this->command?->info('📝 Seeding pending partner applications...');
 
         $applicants = [
@@ -46,28 +48,40 @@ class PendingPartnerApplicationSeeder extends Seeder
             ],
         ];
 
-        foreach ($applicants as $applicant) {
-            $user = User::updateOrCreate(
+        $passwordHash = null;
+
+        foreach ($applicants as $index => $applicant) {
+            $this->command?->line('  → Applicant ' . ($index + 1) . '/' . count($applicants) . ': ' . $applicant['name']);
+
+            $existing = User::where('email', $applicant['email'])->first();
+
+            $attributes = [
+                'name' => $applicant['name'],
+                'email_verified_at' => now(),
+                'phone' => $applicant['phone'],
+                'is_admin' => false,
+                'username' => $applicant['username'],
+                'company' => $applicant['company'],
+                'bio' => $applicant['bio'],
+                'years_of_experience' => $applicant['years_of_experience'],
+                'status' => 'pending',
+                'is_premium' => false,
+                'admin_note' => 'Demo partner application awaiting admin approval.',
+                'is_partner' => true,
+                'is_buyer' => true,
+                'is_verified' => false,
+            ];
+
+            if (!$existing) {
+                $passwordHash ??= Hash::make('partner123');
+                $attributes['password'] = $passwordHash;
+                $attributes['remember_token'] = Str::random(10);
+            }
+
+            $user = User::withoutEvents(fn () => User::updateOrCreate(
                 ['email' => $applicant['email']],
-                [
-                    'name' => $applicant['name'],
-                    'email_verified_at' => now(),
-                    'password' => Hash::make('partner123'),
-                    'phone' => $applicant['phone'],
-                    'is_admin' => false,
-                    'username' => $applicant['username'],
-                    'company' => $applicant['company'],
-                    'bio' => $applicant['bio'],
-                    'years_of_experience' => $applicant['years_of_experience'],
-                    'status' => 'pending',
-                    'is_premium' => false,
-                    'admin_note' => 'Demo partner application awaiting admin approval.',
-                    'is_partner' => true,
-                    'is_buyer' => true,
-                    'is_verified' => false,
-                    'remember_token' => Str::random(10),
-                ]
-            );
+                $attributes
+            ));
 
             $user->syncRoles(['user']);
         }

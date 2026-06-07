@@ -60,7 +60,7 @@ export default function FavoritesView() {
               module={fav.module}
               index={i}
               onToggleFavorite={handleRemove}
-              onAction={(item) => window.location.assign(storefrontListingUrl(item.id))}
+              onAction={(item) => window.location.assign(storefrontListingUrl(item.id, item.module))}
             />
           ))}
         </AnimatePresence>

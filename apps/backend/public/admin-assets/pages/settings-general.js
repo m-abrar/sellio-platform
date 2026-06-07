@@ -1,10 +1,7 @@
 /**
  * Administrative Infrastructure: General Identity Orchestration
- * 
- * This module facilitates the brand asset management (logo/favicon) 
- * for the platform identity interface. It orchestrates drag-and-drop 
- * uploads and real-time previews, ensuring 100% CSP compliance by 
- * eliminating inline interaction logic.
+ *
+ * Brand asset uploads and platform URL connection testing.
  */
 $(document).ready(function() {
     // Brand Logo Logic
@@ -76,4 +73,115 @@ $(document).ready(function() {
             }
         });
     }
+
+    const platformUrlSettings = $('#platform-url-settings');
+
+    if (!platformUrlSettings.length) {
+        return;
+    }
+
+    const verifyUrl = platformUrlSettings.data('verify-url');
+    const csrfToken = $('input[name="_token"]').first().val();
+
+    const normalizeUrl = (value) => {
+        const trimmed = (value || '').trim().replace(/\/+$/, '');
+        if (!trimmed) {
+            return '';
+        }
+
+        return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+    };
+
+    const setFieldStatus = ($fieldWrap, status, message) => {
+        const $badge = $fieldWrap.find('.platform-url-status');
+        const $feedback = $fieldWrap.find('.platform-url-feedback');
+
+        $badge
+            .removeClass('badge-success badge-warning badge-secondary badge-danger')
+            .attr('data-status', status);
+
+        if (status === 'connected') {
+            $badge.addClass('badge-success').html('<i class="fas fa-check-circle mr-1"></i> Connected');
+        } else if (status === 'empty') {
+            $badge.addClass('badge-secondary').html('<i class="fas fa-circle mr-1"></i> Not configured');
+        } else if (status === 'checking') {
+            $badge.addClass('badge-warning').html('<i class="fas fa-spinner fa-spin mr-1"></i> Checking');
+        } else if (status === 'failed') {
+            $badge.addClass('badge-danger').html('<i class="fas fa-times-circle mr-1"></i> Failed');
+        } else {
+            $badge.addClass('badge-warning').html('<i class="fas fa-exclamation-circle mr-1"></i> Not verified');
+        }
+
+        if (message) {
+            $feedback.text(message);
+        }
+    };
+
+    const markFieldUnverified = ($fieldWrap) => {
+        const value = $fieldWrap.find('.platform-url-input').val().trim();
+        setFieldStatus(
+            $fieldWrap,
+            value === '' ? 'empty' : 'unverified',
+            value === '' ? 'Not configured' : 'Not verified — test the URL before saving'
+        );
+    };
+
+    platformUrlSettings.on('input', '.platform-url-input', function() {
+        const $fieldWrap = $(this).closest('.platform-url-field');
+        const currentValue = normalizeUrl($(this).val());
+        const verifiedValue = normalizeUrl($(this).data('verified-value'));
+
+        if (currentValue !== verifiedValue) {
+            markFieldUnverified($fieldWrap);
+        }
+    });
+
+    platformUrlSettings.on('click', '.btn-verify-platform-url', function() {
+        const $button = $(this);
+        const field = $button.data('field');
+        const $fieldWrap = $button.closest('.platform-url-field');
+        const $input = $fieldWrap.find('.platform-url-input');
+        const url = normalizeUrl($input.val());
+
+        if (!url) {
+            setFieldStatus($fieldWrap, 'empty', 'Enter a URL before testing the connection.');
+            $input.focus();
+            return;
+        }
+
+        $input.val(url);
+        setFieldStatus($fieldWrap, 'checking', 'Testing connection...');
+        $button.prop('disabled', true);
+
+        $.ajax({
+            url: verifyUrl,
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                _token: csrfToken,
+                field: field,
+                url: url,
+            },
+        })
+            .done(function(response) {
+                if (response.connected) {
+                    $input.data('verified-value', url);
+                    setFieldStatus($fieldWrap, 'connected', response.message || 'Connected');
+                } else {
+                    $input.data('verified-value', '');
+                    setFieldStatus($fieldWrap, 'failed', response.message || 'Connection failed');
+                }
+            })
+            .fail(function(xhr) {
+                const message = xhr.responseJSON && xhr.responseJSON.message
+                    ? xhr.responseJSON.message
+                    : 'Could not verify this URL. Check the value and try again.';
+
+                $input.data('verified-value', '');
+                setFieldStatus($fieldWrap, 'failed', message);
+            })
+            .always(function() {
+                $button.prop('disabled', false);
+            });
+    });
 });

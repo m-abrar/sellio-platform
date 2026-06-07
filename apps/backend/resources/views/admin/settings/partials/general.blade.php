@@ -154,44 +154,72 @@
                     </div>
                 </div>
 
-                <div class="row mt-4 pt-4 border-top">
+                @php
+                    $platformUrlFields = app(\App\Services\Admin\PlatformUrlVerificationService::class)->getFieldsMetadata($settings);
+                    $unconfiguredPlatformUrls = collect($platformUrlFields)->filter(fn ($field) => $field['status'] !== 'connected')->count();
+                @endphp
+
+                <div class="row mt-4 pt-4 border-top" id="platform-url-settings"
+                    data-verify-url="{{ route('admin.settings.verify.platform-url') }}">
                     <div class="col-md-12 mb-3">
                         <h5 class="font-weight-bold text-dark text-uppercase small ls-1"><i class="fas fa-link mr-2 text-primary"></i>
                             {{ __('Platform Ecosystem URLs') }}</h5>
-                        <p class="text-muted small">
-                            {{ __('Configure the absolute domains for your distributed application components.') }}
+                        <p class="text-muted small mb-3">
+                            {{ __('Enter the real absolute URLs for your storefront, admin panel, partner portal, and customer app. Test each URL before saving so Sellio can confirm the path exists.') }}
                         </p>
+
+                        @if ($unconfiguredPlatformUrls > 0)
+                            <div class="alert alert-warning-light border-0 shadow-xs rounded-xl mb-0">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-exclamation-triangle text-warning mt-1 mr-3"></i>
+                                    <div class="small">
+                                        <strong class="text-dark d-block mb-1">{{ __('Action required after installation') }}</strong>
+                                        <span class="text-secondary">
+                                            {{ __('These URLs are intentionally left blank during setup. Replace any demo or placeholder values with your own domains, click Test connection for each field, then save once every URL shows Connected.') }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="small font-weight-bold text-secondary">{{ __('Public Storefront URL') }}</label>
-                            <input type="url" name="url_frontend" class="form-control"
-                                value="{{ old('url_frontend', $settings['url_frontend'] ?? 'http://localhost:3000') }}">
+
+                    @foreach ($platformUrlFields as $fieldKey => $fieldMeta)
+                        <div class="col-md-6">
+                            <div class="form-group platform-url-field" data-field="{{ $fieldKey }}">
+                                <label class="small font-weight-bold text-secondary d-flex align-items-center justify-content-between">
+                                    <span>{{ $fieldMeta['label'] }}</span>
+                                    <span class="platform-url-status badge badge-{{ $fieldMeta['status'] === 'connected' ? 'success' : ($fieldMeta['status'] === 'empty' ? 'secondary' : 'warning') }} font-weight-bold"
+                                        data-status="{{ $fieldMeta['status'] }}">
+                                        @if ($fieldMeta['status'] === 'connected')
+                                            <i class="fas fa-check-circle mr-1"></i> {{ __('Connected') }}
+                                        @elseif ($fieldMeta['status'] === 'empty')
+                                            <i class="fas fa-circle mr-1"></i> {{ __('Not configured') }}
+                                        @else
+                                            <i class="fas fa-exclamation-circle mr-1"></i> {{ __('Not verified') }}
+                                        @endif
+                                    </span>
+                                </label>
+                                <div class="input-group shadow-xs">
+                                    <input type="url"
+                                        name="{{ $fieldKey }}"
+                                        class="form-control platform-url-input"
+                                        placeholder="{{ $fieldMeta['placeholder'] }}"
+                                        value="{{ old($fieldKey, $fieldMeta['value']) }}"
+                                        data-verified-value="{{ $settings[$fieldKey . '_verified_url'] ?? '' }}">
+                                    <div class="input-group-append">
+                                        <button type="button"
+                                            class="btn btn-outline-primary btn-verify-platform-url font-weight-bold"
+                                            data-field="{{ $fieldKey }}">
+                                            <i class="fas fa-plug mr-1"></i> {{ __('Test') }}
+                                        </button>
+                                    </div>
+                                </div>
+                                <small class="platform-url-feedback text-muted d-block mt-2">
+                                    {{ $fieldMeta['status_message'] }}
+                                </small>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="small font-weight-bold text-secondary">{{ __('Admin Control Panel URL') }}</label>
-                            <input type="url" name="url_admin" class="form-control"
-                                value="{{ old('url_admin', $settings['url_admin'] ?? 'http://127.0.0.1:8000/admin') }}">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="small font-weight-bold text-secondary">{{ __('Partner Portal URL') }}</label>
-                            <input type="url" name="url_partner" class="form-control"
-                                placeholder="https://partners.sellio.com"
-                                value="{{ old('url_partner', $settings['url_partner'] ?? '') }}">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="small font-weight-bold text-secondary">{{ __('Customer App URL') }}</label>
-                            <input type="url" name="url_user" class="form-control"
-                                placeholder="https://app.sellio.com"
-                                value="{{ old('url_user', $settings['url_user'] ?? '') }}">
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
                 @php

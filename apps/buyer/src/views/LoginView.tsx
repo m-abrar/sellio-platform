@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, EyeOff, Lock, Mail, Rocket } from 'lucide-react';
-import { Button } from '../components/Button';
+import { Eye, EyeOff, Lock, Mail, Rocket, ShieldAlert } from 'lucide-react';
+import { toast } from 'sonner';
 import { useUser } from '../context/UserContext';
 import { getBrandSettings, BrandSettings } from '../api/brandApi';
 import { applyBrandToDocumentHead } from '../lib/brandHead';
+import { getAuthErrorMessage } from '../lib/authErrors';
 import SetupReminderBanner from '../components/SetupReminderBanner';
 
 export default function LoginView() {
@@ -11,8 +12,7 @@ export default function LoginView() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [brand, setBrand] = useState<BrandSettings | null>(null);
 
   useEffect(() => {
@@ -30,85 +30,115 @@ export default function LoginView() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setError(null);
-    setIsSubmitting(true);
+    if (isLoading) return;
 
-    try {
+    setIsLoading(true);
+
+    const loginAction = async () => {
       await login(email, password);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
-    } finally {
-      setIsSubmitting(false);
-    }
+      await new Promise((resolve) => setTimeout(resolve, 300));
+    };
+
+    toast.promise(loginAction(), {
+      loading: 'Verifying your account...',
+      success: () => ({
+        message: 'Welcome back',
+        description: brand?.site_name ? `Signed in to ${brand.site_name}` : 'Buyer portal access granted',
+      }),
+      error: (err: unknown) => ({
+        message: 'Login failed',
+        description: getAuthErrorMessage(err),
+      }),
+      finally: () => setIsLoading(false),
+    });
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f8f5] flex flex-col">
+    <div className="min-h-[100dvh] bg-slate-50 flex flex-col select-none">
       <SetupReminderBanner />
-      <div className="flex flex-1 items-center justify-center p-6">
-      <form onSubmit={handleSubmit} className="w-full max-w-md glass-surface p-8 space-y-6">
-        <div className="flex items-center gap-3">
-          {brand?.site_logo ? (
-            <img src={brand.site_logo} alt={brand.site_name} className="w-12 h-12 object-contain rounded-2xl bg-zinc-50 border border-zinc-100 p-1 shrink-0" />
-          ) : (
-            <div className="h-12 w-12 rounded-2xl bg-[var(--primary-color)] text-white flex items-center justify-center shrink-0">
-              <Rocket size={24} />
-            </div>
-          )}
-          <div>
-            <h1 className="text-2xl font-extrabold text-zinc-950">
-              {brand?.site_name || 'Sellio'}
+      <div className="flex flex-1 flex-col items-center justify-center p-4 sm:p-6">
+        <div className="w-full max-w-[420px] animate-in fade-in slide-in-from-bottom-6 duration-700">
+          <div className="text-center mb-8 sm:mb-10">
+            {brand?.site_logo ? (
+              <img
+                src={brand.site_logo}
+                alt={brand.site_name}
+                className="w-14 h-14 sm:w-16 sm:h-16 object-contain rounded-2xl sm:rounded-3xl mx-auto mb-5 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-300 bg-white border border-slate-100 p-1.5"
+              />
+            ) : (
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[var(--primary-color)] rounded-2xl sm:rounded-3xl flex items-center justify-center text-white mx-auto mb-5 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-300">
+                <Rocket size={28} />
+              </div>
+            )}
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tighter">
+              {brand?.site_name || 'Sellio'} Buyer
             </h1>
-            <p className="text-sm text-zinc-500">Buyer Portal Access</p>
+            <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mt-2">
+              Customer Portal Access
+            </p>
+          </div>
+
+          <div className="bg-white rounded-[2.5rem] p-8 sm:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-slate-100">
+            <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase text-slate-400 ml-4 tracking-widest">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    className="w-full bg-slate-50 border-2 border-transparent rounded-2xl px-6 py-4 pl-12 text-sm font-bold focus:bg-white focus:border-[var(--primary-color)]/10 focus:ring-4 focus:ring-[var(--primary-color)]/5 transition-all outline-none"
+                    placeholder="you@example.com"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase text-slate-400 ml-4 tracking-widest">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    className="w-full bg-slate-50 border-2 border-transparent rounded-2xl px-6 py-4 pl-12 pr-14 text-sm font-bold focus:bg-white focus:border-[var(--primary-color)]/10 focus:ring-4 focus:ring-[var(--primary-color)]/5 transition-all outline-none"
+                    placeholder="••••••••"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-[var(--primary-color)] transition-colors rounded-xl"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-slate-900 text-white py-4 sm:py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-[var(--primary-color)] transition-all active:scale-[0.97] shadow-xl shadow-slate-200 disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isLoading ? (
+                  <>
+                    <ShieldAlert size={16} />
+                    Authenticating...
+                  </>
+                ) : (
+                  'Sign In'
+                )}
+              </button>
+            </form>
           </div>
         </div>
-
-        {error && (
-          <div className="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-bold text-red-600">
-            {error}
-          </div>
-        )}
-
-        <label className="block space-y-2">
-          <span className="text-xs font-bold uppercase tracking-widest text-zinc-400">Email</span>
-          <div className="relative">
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
-            <input
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              className="w-full rounded-2xl border-none bg-zinc-50 py-3 pl-12 pr-4 text-sm focus:ring-2 focus:ring-zinc-900"
-              required
-            />
-          </div>
-        </label>
-
-        <label className="block space-y-2">
-          <span className="text-xs font-bold uppercase tracking-widest text-zinc-400">Password</span>
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
-            <input
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded-2xl border-none bg-zinc-50 py-3 pl-12 pr-12 text-sm focus:ring-2 focus:ring-zinc-900"
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 transition-colors"
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
-          </div>
-        </label>
-
-        <Button type="submit" className="w-full" isLoading={isSubmitting}>
-          Sign In
-        </Button>
-      </form>
       </div>
     </div>
   );

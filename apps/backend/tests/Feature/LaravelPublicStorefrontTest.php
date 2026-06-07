@@ -166,6 +166,30 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertSee(__('Or continue with'), false);
     }
 
+    public function test_login_page_falls_back_to_vendor_styles_when_vite_build_missing(): void
+    {
+        $manifestPath = public_path('build/manifest.json');
+        $backupPath = public_path('build/manifest.json.login-fallback-test.bak');
+        $hadManifest = file_exists($manifestPath);
+
+        if ($hadManifest) {
+            rename($manifestPath, $backupPath);
+        }
+
+        try {
+            $response = $this->get(route('login'));
+
+            $response->assertOk()
+                ->assertSee('vendor/npm/bootstrap/css/bootstrap.min.css', false)
+                ->assertSee('frontend/css/style.css', false)
+                ->assertSee('frontend/css/auth.css', false);
+        } finally {
+            if ($hadManifest && file_exists($backupPath)) {
+                rename($backupPath, $manifestPath);
+            }
+        }
+    }
+
     public function test_login_page_survives_missing_page_contents_table(): void
     {
         Schema::dropIfExists('page_contents');
@@ -1069,7 +1093,7 @@ class LaravelPublicStorefrontTest extends TestCase
             'category_id' => $product->category_id,
         ]);
 
-        $this->get(route('products.show', $product->slug))
+        $this->get(route('product.show', $product->slug))
             ->assertOk()
             ->assertSee('Primary Detail Product', false)
             ->assertSee('Related Shelf Product', false)
@@ -1088,10 +1112,24 @@ class LaravelPublicStorefrontTest extends TestCase
             'is_digital' => true,
         ]);
 
-        $this->get(route('products.show', $product->slug))
+        $this->get(route('product.show', $product->slug))
             ->assertOk()
             ->assertSee('Digital Download Product', false)
             ->assertSee('DIGITAL', false);
+    }
+
+    public function test_legacy_products_detail_url_redirects_to_product_show(): void
+    {
+        Setting::set('is_section.products', '1');
+        Cache::forget('settings_all');
+
+        $product = Product::factory()->create([
+            'title' => 'Legacy Route Product',
+            'is_published' => true,
+        ]);
+
+        $this->get('/products/' . $product->slug)
+            ->assertRedirect(route('product.show', $product->slug));
     }
 
     public function test_classified_detail_page_renders_token_aligned_header_and_seller_card(): void

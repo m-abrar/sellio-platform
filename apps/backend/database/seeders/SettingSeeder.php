@@ -44,10 +44,11 @@ class SettingSeeder extends Seeder
             ['group' => 'general', 'key' => 'frontend_edit', 'value' => '1'],
             
             // --- External Application URLs (Group: general) ---
-            ['group' => 'general', 'key' => 'url_frontend', 'value' => env('APP_URL', 'http://localhost')],
-            ['group' => 'general', 'key' => 'url_admin', 'value' => env('APP_URL', 'http://localhost') . '/admin'],
-            ['group' => 'general', 'key' => 'url_partner', 'value' => env('SELLER_APP_URL', env('APP_URL', 'http://localhost') . '/seller')],
-            ['group' => 'general', 'key' => 'url_user', 'value' => env('BUYER_APP_URL', env('APP_URL', 'http://localhost') . '/buyer')],
+            // Left blank on install — admin must enter and verify real production URLs.
+            ['group' => 'general', 'key' => 'url_frontend', 'value' => env('STOREFRONT_URL') ?: ''],
+            ['group' => 'general', 'key' => 'url_admin', 'value' => env('ADMIN_APP_URL') ?: ''],
+            ['group' => 'general', 'key' => 'url_partner', 'value' => env('SELLER_APP_URL') ?: ''],
+            ['group' => 'general', 'key' => 'url_user', 'value' => env('BUYER_APP_URL') ?: ''],
 
             // --- Contact & API Keys (Group: contact / api) ---
             ['group' => 'contact', 'key' => 'email_contact', 'value' => 'support@sellio-platform.test'],

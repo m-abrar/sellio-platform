@@ -47,6 +47,8 @@ class BuyerActivitySeeder extends Seeder
      */
     public function run(): void
     {
+        config(['activitylog.enabled' => false]);
+
         $this->command->info('👤✨ Starting **Buyer Activity Seeder** for buyer@sellio-platform.test...');
 
         // 1. Fetch Eleanor Vance (Buyer) & Julian Sterling (Partner)
@@ -209,7 +211,9 @@ class BuyerActivitySeeder extends Seeder
                 $status = $statuses[$index % count($statuses)];
                 $price = $package ? $package->price : ($service->sale_price ?? $service->base_price ?? 75.00);
 
-                ServiceAppointment::create([
+                $this->command->line('    → Appointment ' . ($index + 1) . '/' . $services->count() . '...');
+
+                ServiceAppointment::withoutEvents(fn () => ServiceAppointment::create([
                     'user_id' => $buyer->id,
                     'service_id' => $service->id,
                     'service_package_id' => $package ? $package->id : null,
@@ -222,7 +226,7 @@ class BuyerActivitySeeder extends Seeder
                     'notes' => 'Need to coordinate customized delivery instructions.',
                     'admin_note' => 'Priority booking from high-value Eleanor.',
                     'price' => $price,
-                ]);
+                ]));
             }
         }
 
@@ -476,8 +480,8 @@ class BuyerActivitySeeder extends Seeder
         PropertyBooking::where('user_id', $userId)->delete();
         PropertyVisit::where('user_id', $userId)->delete();
         EventBooking::where('user_id', $userId)->delete();
-        ServiceAppointment::where('user_id', $userId)->delete();
-        ServiceQuote::where('user_id', $userId)->delete();
+        DB::table('service_appointments')->where('user_id', $userId)->delete();
+        DB::table('service_quotes')->where('user_id', $userId)->delete();
         JobApplication::where('user_id', $userId)->forceDelete();
         AutoInquiry::where('user_id', $userId)->delete();
         DB::table('classified_inquiries')->where('user_id', $userId)->delete();

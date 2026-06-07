@@ -22,6 +22,8 @@ class UserRoleAssignmentSeeder extends Seeder
      */
     public function run(): void
     {
+        config(['activitylog.enabled' => false]);
+
         $this->command->info('🤝 Starting **UserRoleAssignment Seeder**...');
 
         // 1. Assign 'super-admin' and 'admin' roles to User ID 1

@@ -146,5 +146,6 @@ export function exampleConfigSnippet(context: PortalSetupContext): string {
 
   return `window.SELLIO_CONFIG = {
   apiUrl: '${apiExample}',
+  basePath: '',
 };`;
 }

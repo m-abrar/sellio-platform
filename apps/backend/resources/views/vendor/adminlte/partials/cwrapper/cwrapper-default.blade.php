@@ -16,6 +16,7 @@
     @endif
 
     @include('admin.partials._cors-setup-reminder')
+    @include('admin.partials._storage-link-reminder')
 
     {{-- Content Header --}}
     @hasSection('content_header')

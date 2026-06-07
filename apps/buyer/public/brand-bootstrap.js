@@ -15,7 +15,7 @@
       return 'http://127.0.0.1:8000/api';
     }
 
-    return '';
+    return location.origin + '/api';
   }
 
   function updateLink(rel, href, type) {

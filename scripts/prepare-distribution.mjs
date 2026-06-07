@@ -74,6 +74,22 @@ const distributionBuyerUrl = readArg(
   'https://buyer-panel.sellio.vebdez.com',
 ).replace(/\/$/, '');
 
+function portalBasePathFromUrl(url) {
+  try {
+    const pathname = new URL(url).pathname.replace(/\/$/, '');
+    if (!pathname || pathname === '/') {
+      return '';
+    }
+
+    return pathname.startsWith('/') ? pathname : `/${pathname}`;
+  } catch {
+    return '';
+  }
+}
+
+const distributionSellerBasePath = portalBasePathFromUrl(distributionSellerUrl);
+const distributionBuyerBasePath = portalBasePathFromUrl(distributionBuyerUrl);
+
 const EXCLUDED_DIR_NAMES = new Set([
   'node_modules',
   'vendor',
@@ -394,10 +410,14 @@ async function writePortalProductionEnv() {
   const sellerRoot = join(repoRoot, 'apps', 'seller');
   const buyerRoot = join(repoRoot, 'apps', 'buyer');
 
-  const sellerEnv = `VITE_API_URL=${distributionApiUrl}\n`;
+  const sellerEnv = [
+    `VITE_API_URL=${distributionApiUrl}`,
+    `VITE_BASE_PATH=${distributionSellerBasePath || '/'}`,
+  ].join('\n') + '\n';
   const buyerEnv = [
     `VITE_API_URL=${distributionApiUrl}`,
     `VITE_STOREFRONT_URL=${distributionStorefrontUrl}`,
+    `VITE_BASE_PATH=${distributionBuyerBasePath || '/'}`,
   ].join('\n') + '\n';
 
   await writeFile(join(sellerRoot, '.env.production'), sellerEnv, 'utf8');
@@ -406,11 +426,12 @@ async function writePortalProductionEnv() {
   const sellerConfigJs = `/**
  * Sellio Partner Panel — API connection (edit after upload, no rebuild needed)
  *
- * Set apiUrl to your Laravel backend URL + /api
- * Example: https://marketplace.yourdomain.com/api
+ * apiUrl   — Laravel backend URL + /api
+ * basePath — Subfolder path when not on a dedicated subdomain (e.g. '/seller')
  */
 window.SELLIO_CONFIG = {
-  apiUrl: 'https://your-laravel-domain.com/api',
+  apiUrl: '${distributionApiUrl}',
+  basePath: '${distributionSellerBasePath}',
 };
 `;
 
@@ -419,10 +440,12 @@ window.SELLIO_CONFIG = {
  *
  * apiUrl        — Laravel backend URL + /api
  * storefrontUrl — Public storefront base URL
+ * basePath      — Subfolder path when not on a dedicated subdomain (e.g. '/buyer')
  */
 window.SELLIO_CONFIG = {
-  apiUrl: 'https://your-laravel-domain.com/api',
-  storefrontUrl: 'https://your-laravel-domain.com',
+  apiUrl: '${distributionApiUrl}',
+  storefrontUrl: '${distributionStorefrontUrl}',
+  basePath: '${distributionBuyerBasePath}',
 };
 `;
 

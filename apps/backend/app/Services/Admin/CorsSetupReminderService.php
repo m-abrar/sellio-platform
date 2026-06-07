@@ -13,6 +13,7 @@ class CorsSetupReminderService
         'your-domain.com',
         'yourdomain.com',
         'marketplace.yourdomain.com',
+        'demo.sellio.vebdez.com',
         'example.com',
         'changeme',
         'replace-me',
@@ -23,13 +24,15 @@ class CorsSetupReminderService
      * @var array<string, string>
      */
     private const PORTAL_FIELDS = [
-        'url_frontend' => 'Public Storefront URL (Next.js)',
-        'url_partner' => 'Partner Portal URL (seller)',
-        'url_user' => 'Customer App URL (buyer)',
+        'url_frontend' => 'Public Storefront URL',
+        'url_admin' => 'Admin Control Panel URL',
+        'url_partner' => 'Partner Portal URL',
+        'url_user' => 'Customer App URL',
     ];
 
     public function __construct(
         protected CorsOriginResolver $corsOriginResolver,
+        protected PlatformUrlVerificationService $platformUrlVerificationService,
     ) {}
 
     /**
@@ -54,8 +57,8 @@ class CorsSetupReminderService
         }
 
         return [
-            'title' => __('API CORS setup required'),
-            'summary' => __('Your seller, buyer, or storefront panels cannot call the Laravel API until their domains are saved in Settings → General. CORS updates automatically after you save.'),
+            'title' => __('Platform URLs need your attention'),
+            'summary' => __('Enter your real storefront, admin, partner, and customer URLs in Settings → General, then verify each one. CORS updates automatically after you save verified URLs.'),
             'issues' => $issues,
             'settings_url' => route('admin.settings.group', ['section' => 'general']),
             'active_origins' => $this->corsOriginResolver->resolve(),
@@ -138,6 +141,15 @@ class CorsSetupReminderService
                 'label' => $label,
                 'value' => $value,
                 'detail' => __('Still points to localhost'),
+            ];
+        }
+
+        if (! $this->platformUrlVerificationService->isConnected($field, $value)) {
+            return [
+                'field' => $field,
+                'label' => $label,
+                'value' => $value,
+                'detail' => __('Saved but not verified — open Settings → General and test the connection'),
             ];
         }
 

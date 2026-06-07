@@ -1,7 +1,7 @@
 <div class="row g-3">
     @forelse ($related_products->take(2) as $item)
         <div class="col-md-4 col-6">
-            <a href="{{ route('products.show', $item->slug) }}" class="text-decoration-none text-dark">
+            <a href="{{ route('product.show', $item->slug) }}" class="text-decoration-none text-dark">
                 <div class="card glass-surface related-listing-card h-100 border-0 shadow-sm transition-all shadow-hover">
                     <div class="aspect-ratio-1-1 overflow-hidden rounded-top">
                         <img src="{{ $item->primary_image_url }}"

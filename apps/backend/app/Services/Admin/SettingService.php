@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\Setting;
 use App\Models\Theme;
+use App\Services\Admin\PlatformUrlVerificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -11,6 +12,10 @@ use Illuminate\Support\Facades\Storage;
 
 class SettingService
 {
+    public function __construct(
+        protected PlatformUrlVerificationService $platformUrlVerificationService,
+    ) {}
+
     /**
      * Define the operational validation schema for each settings segment.
      *
@@ -152,6 +157,10 @@ class SettingService
                 } 
                 // Handle Standard Scalars
                 else {
+                    if (array_key_exists($key, PlatformUrlVerificationService::URL_FIELDS)) {
+                        $this->platformUrlVerificationService->syncVerificationOnSave($key, $value);
+                    }
+
                     Setting::updateOrCreate(['key' => $key], ['value' => $value]);
                 }
             }

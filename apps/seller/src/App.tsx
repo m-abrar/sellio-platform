@@ -49,6 +49,9 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Toaster } from 'sonner';
 import { getBrandSettings } from './api/brand';
 import { applyBrandToDocumentHead } from './lib/brandHead';
+import { resolvePortalBasePath } from './config/portalBase';
+
+const PORTAL_BASE_PATH = resolvePortalBasePath();
 
 function App() {
   useEffect(() => {
@@ -69,7 +72,7 @@ function App() {
   return (
     <LayoutProvider>
       <Toaster position="top-right" richColors />
-      <Router>
+      <Router basename={PORTAL_BASE_PATH}>
         <Routes>
           {/* Public Route */}
           <Route path="/login" element={<Login />} />

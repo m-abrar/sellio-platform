@@ -5,6 +5,8 @@ declare global {
     SELLIO_CONFIG?: {
       apiUrl?: string;
       storefrontUrl?: string;
+      basePath?: string;
     };
+    SELLIO_PANEL_LABEL?: string;
   }
 }

@@ -80,6 +80,63 @@ class StorageLinkService
     }
 
     /**
+     * @return array<int, array{link: string, target: string, healthy: bool, detail: string}>
+     */
+    public function diagnoseLinks(): array
+    {
+        $results = [];
+
+        foreach ($this->configuredLinks() as $link => $target) {
+            $resolvedTarget = realpath($target) ?: $target;
+
+            if (! file_exists($link)) {
+                $results[] = [
+                    'link' => $link,
+                    'target' => $resolvedTarget,
+                    'healthy' => false,
+                    'detail' => __('Missing symlink: :link', ['link' => $link]),
+                ];
+
+                continue;
+            }
+
+            if ($this->isValidLink($link, $resolvedTarget)) {
+                $results[] = [
+                    'link' => $link,
+                    'target' => $resolvedTarget,
+                    'healthy' => true,
+                    'detail' => __('Storage symlink is connected.'),
+                ];
+
+                continue;
+            }
+
+            $results[] = [
+                'link' => $link,
+                'target' => $resolvedTarget,
+                'healthy' => false,
+                'detail' => __(':link exists but is not linked to :target', [
+                    'link' => $link,
+                    'target' => $resolvedTarget,
+                ]),
+            ];
+        }
+
+        return $results;
+    }
+
+    public function linksAreHealthy(): bool
+    {
+        foreach ($this->diagnoseLinks() as $result) {
+            if (! $result['healthy']) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @return array<string, string>
      */
     protected function configuredLinks(): array

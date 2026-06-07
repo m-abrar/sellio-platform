@@ -34,8 +34,42 @@
 @stop
 
 @section('content')
+@php
+    $storageLinkReminder = app(\App\Services\Admin\StorageLinkReminderService::class)->getReminder();
+@endphp
+
 <div class="container-fluid pb-5">
     @include('admin.alert')
+
+    @if ($storageLinkReminder)
+        <div class="alert alert-danger-light border-0 shadow-premium rounded-24 mb-4" role="alert">
+            <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center">
+                <div class="icon-box-soft bg-danger-soft text-danger mr-0 mr-lg-3 mb-3 mb-lg-0 shadow-xs alert-icon-box">
+                    <i class="fas fa-unlink fa-lg"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="font-weight-bold text-dark mb-1">{{ $storageLinkReminder['title'] }}</h6>
+                    <p class="mb-2 text-secondary small font-weight-600">{{ $storageLinkReminder['summary'] }}</p>
+                    <ul class="mb-0 pl-3 small text-secondary font-weight-600">
+                        @foreach ($storageLinkReminder['issues'] as $issue)
+                            <li class="mb-1">
+                                <code>{{ $issue['link'] }}</code>
+                                <span class="text-muted d-block">{{ $issue['detail'] }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="ml-lg-auto mt-3 mt-lg-0">
+                    <form action="{{ $storageLinkReminder['fix_url'] }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-danger rounded-pill px-4 font-weight-bold shadow-sm">
+                            <i class="fas fa-link mr-1"></i> {{ __('Fix Storage Link Now') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
 
     {{-- System Maintenance Greeting --}}
     <div class="card border-0 shadow-premium mb-5 overflow-hidden rounded-24">
@@ -82,7 +116,8 @@
                         </form>
                         <form action="{{ route('admin.system.storage.link') }}" method="POST" class="mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-outline-dark rounded-pill px-5 py-2 font-weight-bold small min-w-220 h-48-p">
+                            <button type="submit"
+                                class="btn {{ $storageLinkReminder ? 'btn-danger shadow-sm' : 'btn-outline-dark' }} rounded-pill px-5 py-2 font-weight-bold small min-w-220 h-48-p">
                                 <i class="fas fa-link mr-2"></i> {{ __('Fix Storage Link') }}
                             </button>
                         </form>

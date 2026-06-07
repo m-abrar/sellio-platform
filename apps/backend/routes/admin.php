@@ -255,6 +255,7 @@ Route::prefix('admin')
                     Route::get('/', 'index')->name('index');
                     Route::get('/group/{section}', 'getSection')->name('group');
                     Route::post('/group/{section}/update', 'updateSection')->name('update.group');
+                    Route::post('/verify-platform-url', 'verifyPlatformUrl')->name('verify.platform-url');
                 }
                 );
 

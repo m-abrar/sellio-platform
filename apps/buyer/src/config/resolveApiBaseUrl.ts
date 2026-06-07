@@ -18,6 +18,10 @@ export function resolveApiBaseUrl(): string {
   const envUrl = import.meta.env.VITE_API_URL?.trim();
   if (envUrl) return trimTrailingSlash(envUrl);
 
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return trimTrailingSlash(`${window.location.origin}/api`);
+  }
+
   return 'http://127.0.0.1:8000/api';
 }
 

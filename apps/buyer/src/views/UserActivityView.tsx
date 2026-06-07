@@ -243,7 +243,7 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
                   size="sm"
                   variant="outline"
                   rightIcon={<ChevronRight size={14} />}
-                  onClick={() => window.location.assign(storefrontListingUrl(activity.item_id))}
+                  onClick={() => window.location.assign(storefrontListingUrl(activity.item_id, activity.module))}
                 >
                   View Details
                 </Button>

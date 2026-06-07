@@ -1,7 +1,7 @@
 <div class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4 position-relative">
         
         {{-- Link wrapper for the main content --}}
-        <a href="{{ route('products.show', $product->slug) }}" class="text-decoration-none text-dark flex-grow-1 d-flex flex-column">
+        <a href="{{ route('product.show', $product->slug) }}" class="text-decoration-none text-dark flex-grow-1 d-flex flex-column">
             
             <div class="img-container position-relative overflow-hidden rounded-top-4">
                 <div class="listing-card-img aspect-ratio-1-1"> {{-- Products often look better in 1:1 square ratio --}}
@@ -81,7 +81,7 @@
                     
                     @if($product->attributes_count > 0 || $product->addons_count > 0)
                         {{-- If product has options, don't allow direct add --}}
-                        <a href="{{ route('products.show', $product->slug) }}" class="btn btn-outline-primary btn-sm rounded-pill fw-bold" style="font-size: 0.7rem;">
+                        <a href="{{ route('product.show', $product->slug) }}" class="btn btn-outline-primary btn-sm rounded-pill fw-bold" style="font-size: 0.7rem;">
                             <i class="bi bi-eye me-1"></i>{{ __('Options') }}
                         </a>
                     @else

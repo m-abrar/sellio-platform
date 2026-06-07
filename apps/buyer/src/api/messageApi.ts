@@ -93,7 +93,7 @@ export const fetchConversations = async () => {
         price,
         image,
         details: inquiriable.short_description ?? inquiriable.description ?? '',
-        viewUrl: storefrontListingUrl(inquiriable.slug || inquiriable.id),
+        viewUrl: storefrontListingUrl(inquiriable.slug || inquiriable.id, vertical),
       };
     }
 

@@ -315,15 +315,91 @@ in the partner dashboard
 
 ------------------------
 
-the buyer app does not load correct title, favicon, and logo, and more problems like this, fix them (see seller portal for reference)
+- [x] the buyer app does not load correct title, favicon, and logo, and more problems like this, fix them (see seller portal for reference)
 
 --------------------
 
-login screen has no proper CSS
-https://demo.sellio.vebdez.com/login
+- [x] Login screen CSS without Vite build — guest layout falls back to `public/vendor/npm/*` + `frontend/css/style.css`
 
 --------------------
 
-the dist version of buyer and seller panels change URL in the browser, which is fake and it becomes 404 when we refresh the browser.
+- [x] the dist version of buyer and seller panels change URL in the browser, which is fake and it becomes 404 when we refresh the browser.
 
-on the buyer login screen, can you show an eye icon to show password
+- [x] on the buyer login screen, can you show an eye icon to show password
+
+-----------------
+
+- [x] can you show alert messages on login screen of buyer panel just like seller panel, either success or error with detail.
+
+-----------------
+
+- [x] https://demo.sellio.vebdez.com/products/[slug] → https://demo.sellio.vebdez.com/product/[slug]
+
+-------------------------
+
+- [x] Platform ecosystem URLs: leave blank/unverified with placeholders; admin warning + HTTP verify + Connected tick (not pre-filled demo URLs).
+
+Public Storefront URL
+https://demo.sellio.vebdez.com
+Admin Control Panel URL
+https://demo.sellio.vebdez.com/admin
+Partner Portal URL
+https://demo.sellio.vebdez.com/seller
+Customer App URL
+https://demo.sellio.vebdez.com/buyer
+
+-----------------
+
+- [x] Floating admin warning to fix storage link after fresh install (`/admin/system/maintenance`)
+
+--------------------
+
+- [x] Buyer panel "View Details" — module-aware storefront URLs (properties, events, vehicles, services, jobs, classifieds, product)
+
+---------------------
+
+- [x] Dist buyer/seller: deep URL refresh blank page — Vite `base` + `%BASE_URL%` static assets (rebuild + redeploy required)
+
+-----------------
+
+- [x] Introduction exit popup — replaced 10% OFF email capture with free installation help + documentation/demos/support CTAs
+
+-------------------
+
+messages are not showing in the seller panel, why?
+
+------------------
+
+should we use pusher for this project?
+give me a plan here?
+
+-----------------
+
+in the dist
+notifications are not showing in the seller panel
+messages are not showing in the seller panel
+reviews are not showing
+customer directory page is empty
+make sure you have live products?
+fix the bug, profile settings page is empty
+-----------
+
+on the user panel
+wallet is not needed
+
+when i am on the server, why i see this
+VITE_STOREFRONT_URL=http://localhost:3000
+in the settings > backend
+
+----------------
+
+Two-Factor Authentication is Off
+
+this feature is coming soon.
+mention there.
+
+--------------------
+ in the buyer panel, notifications center is empty
+
+-----------------
+

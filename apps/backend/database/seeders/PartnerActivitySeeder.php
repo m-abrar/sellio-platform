@@ -48,6 +48,8 @@ class PartnerActivitySeeder extends Seeder
      */
     public function run(): void
     {
+        config(['activitylog.enabled' => false]);
+
         $this->command->info('👤✨ Starting **Partner Activity Seeder** for partner@sellio-platform.test...');
 
         // 1. Fetch Julian Sterling (Partner) and some buyers
@@ -241,7 +243,7 @@ class PartnerActivitySeeder extends Seeder
                 $customer = $otherBuyers->random();
                 $price = $package ? $package->price : ($service->sale_price ?? $service->base_price ?? 90.00);
 
-                ServiceAppointment::create([
+                ServiceAppointment::withoutEvents(fn () => ServiceAppointment::create([
                     'user_id' => $customer->id,
                     'service_id' => $service->id,
                     'service_package_id' => $package ? $package->id : null,
@@ -254,7 +256,7 @@ class PartnerActivitySeeder extends Seeder
                     'notes' => 'Looking forward to meeting to detail the operational roadmap.',
                     'admin_note' => 'Standard appointment.',
                     'price' => $price,
-                ]);
+                ]));
             }
         }
 

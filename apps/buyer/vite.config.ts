@@ -2,12 +2,12 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig, loadEnv} from 'vite';
+import { resolveViteBase } from './src/config/resolveViteBase';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
-    // Relative asset URLs so dist/ works from file:// and any subdomain document root.
-    base: './',
+    base: resolveViteBase(env.VITE_BASE_PATH),
     plugins: [react(), tailwindcss()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),

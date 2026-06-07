@@ -1,4 +1,4 @@
-import { STOREFRONT_BASE_URL } from '../config/api';
+import { storefrontListingUrl } from '../config/api';
 import { toActivity } from './adapters';
 import { apiRequest, buyerUrl, collectionData } from './apiClient';
 
@@ -32,19 +32,20 @@ export const fetchBookings = async (type: string = 'booking', module?: string) =
 
 export const createBuyerActivity = async ({
   itemId,
+  module = 'products',
   type = 'booking',
   bookingDate,
   status = 'pending',
 }: {
   itemId: string;
+  module?: string;
   type?: 'booking' | 'quote';
   bookingDate?: string;
   status?: 'pending' | 'confirmed';
 }) => {
   void type;
   void bookingDate;
-  // Redirect to Storefront product page for actual checkout
-  window.location.assign(`${STOREFRONT_BASE_URL}/product/${encodeURIComponent(itemId)}`);
+  window.location.assign(storefrontListingUrl(itemId, module));
   return { id: 0, item_id: itemId, status };
 };
 

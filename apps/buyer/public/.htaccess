@@ -1,5 +1,6 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  # When hosting in a subfolder (config.js basePath: '/buyer'), set RewriteBase /buyer/
   RewriteBase /
 
   # Serve existing files and directories as-is.

@@ -49,6 +49,10 @@ import { UserProvider, useUser } from './context/UserContext';
 import { getBrandSettings, BrandSettings } from './api/brandApi';
 import { applyBrandToDocumentHead } from './lib/brandHead';
 import SetupReminderBanner from './components/SetupReminderBanner';
+import { Toaster } from 'sonner';
+import { resolvePortalBasePath } from './config/portalBase';
+
+const PORTAL_BASE_PATH = resolvePortalBasePath();
 
 const MAIN_NAV = [
   { name: 'Dashboard', path: '/', icon: LayoutDashboard, badge: 'totalItemsCount' },
@@ -417,6 +421,7 @@ export default function App() {
   return (
     <UserProvider>
       <StatsProvider>
+        <Toaster position="top-right" richColors closeButton />
         <AppContent />
       </StatsProvider>
     </UserProvider>
@@ -472,7 +477,7 @@ function AppContent() {
   }
 
   return (
-    <Router>
+    <Router basename={PORTAL_BASE_PATH}>
       <div className="min-h-screen font-sans selection:bg-[var(--primary-color)] selection:text-white">
         <SetupReminderBanner />
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} stats={stats} statsLoaded={statsLoaded} brand={brand} />
