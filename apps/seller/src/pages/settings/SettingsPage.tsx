@@ -3,6 +3,7 @@ import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlineShieldCheck, HiOutlineUserCircle, HiOutlineLockClosed, HiOutlineBellAlert } from 'react-icons/hi2';
 import { getProfile, updateProfile } from '../../api/profile';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '../../lib/apiErrorMessage';
 
 export default function SettingsPage() {
   const [profile, setProfile] = useState({
@@ -15,10 +16,12 @@ export default function SettingsPage() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        setLoadError(null);
         const response = await getProfile();
         setProfile({
           name: response.data.name ?? '',
@@ -29,6 +32,9 @@ export default function SettingsPage() {
           bio: response.data.bio ?? '',
         });
       } catch (error) {
+        const message = getApiErrorMessage(error, 'Failed to load profile.');
+        setLoadError(message);
+        toast.error(message);
         console.error('Failed to fetch profile', error);
       } finally {
         setIsLoading(false);
@@ -55,9 +61,9 @@ export default function SettingsPage() {
 
   const sections = [
     { title: 'Profile Identity', icon: HiOutlineUserCircle, description: 'Manage your studio avatar, display name, and public bio.' },
-    { title: 'Security & Access', icon: HiOutlineShieldCheck, description: 'Two-factor authentication and session management.' },
-    { title: 'Password Control', icon: HiOutlineLockClosed, description: 'Update your credentials and recovery options.' },
-    { title: 'Alert Preferences', icon: HiOutlineBellAlert, description: 'Configure how you receive system and market alerts.' },
+    { title: 'Security & Access', icon: HiOutlineShieldCheck, description: 'Two-factor authentication — coming soon.', comingSoon: true },
+    { title: 'Password Control', icon: HiOutlineLockClosed, description: 'Update your credentials from the Laravel account area — coming soon.', comingSoon: true },
+    { title: 'Alert Preferences', icon: HiOutlineBellAlert, description: 'Configure how you receive system and market alerts — coming soon.', comingSoon: true },
   ];
 
   return (
@@ -73,6 +79,10 @@ export default function SettingsPage() {
         {isLoading ? (
           <div className="h-40 flex items-center justify-center">
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading Profile...</span>
+          </div>
+        ) : loadError ? (
+          <div className="rounded-2xl border border-red-100 bg-red-50 px-6 py-8 text-sm font-bold text-red-600">
+            {loadError}
           </div>
         ) : (
           <>
@@ -153,7 +163,14 @@ export default function SettingsPage() {
                 <section.icon className="w-8 h-8" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-black text-slate-900 italic tracking-tight mb-2">{section.title}</h3>
+                <div className="flex items-center gap-3 mb-2">
+                  <h3 className="text-xl font-black text-slate-900 italic tracking-tight">{section.title}</h3>
+                  {'comingSoon' in section && section.comingSoon ? (
+                    <span className="text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-100">
+                      Coming soon
+                    </span>
+                  ) : null}
+                </div>
                 <p className="text-sm text-slate-400 font-medium leading-relaxed">{section.description}</p>
               </div>
             </div>

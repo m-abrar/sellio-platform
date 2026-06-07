@@ -13,7 +13,7 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user() && $this->user()->hasRole('partner');
+        return $this->user()?->hasAnyRole(['partner', 'admin', 'super-admin']) ?? false;
     }
 
     public function rules(): array

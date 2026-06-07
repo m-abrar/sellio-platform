@@ -346,7 +346,9 @@ export default function AnalyticsPage() {
         <div className="overflow-x-auto px-8 md:px-12 pb-12">
           {filteredListings.length === 0 ? (
             <div className="py-20 text-center text-slate-400 font-bold text-sm">
-              No active listings found in this category.
+              {selectedVertical === 'Product'
+                ? 'No product analytics yet. Sales and impressions appear here after customers view or purchase your products.'
+                : 'No analytics data for this category in the selected period.'}
             </div>
           ) : (
             <table className="w-full border-separate border-spacing-y-4">

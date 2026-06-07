@@ -10,6 +10,7 @@ import {
 } from 'react-icons/hi2';
 import { getConversations, getConversationThread, sendMessage } from '../../api/messages';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '../../lib/apiErrorMessage';
 
 const getCategoryStyles = (type: string) => {
   switch (type) {
@@ -49,6 +50,7 @@ export default function MessagesPage() {
         setMessages(response.data.data);
         setPartnerId(response.data.partnerId ?? 0);
       } catch (error) {
+        toast.error(getApiErrorMessage(error, 'Failed to load conversations.'));
         console.error('Failed to fetch messages', error);
       } finally {
         setIsLoading(false);
@@ -123,7 +125,15 @@ export default function MessagesPage() {
               />
             </div>
             <div className="flex-1 overflow-y-auto custom-scrollbar">
-              {messages.map((msg) => (
+              {messages.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full px-8 py-16 text-center">
+                  <HiOutlineEnvelope className="w-10 h-10 text-slate-200 mb-4" />
+                  <p className="text-sm font-black text-slate-700">No conversations yet</p>
+                  <p className="text-xs text-slate-400 font-medium mt-2">
+                    Buyer inquiries appear here when customers message you about a listing.
+                  </p>
+                </div>
+              ) : messages.map((msg) => (
                 <div
                   key={msg.id}
                   onClick={() => navigate(`/dashboard/messages/${msg.id}`)}

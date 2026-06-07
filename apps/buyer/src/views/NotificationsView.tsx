@@ -98,6 +98,7 @@ import {
   deleteNotification as deleteNotificationApi, 
   NotificationItem 
 } from '../api/notificationApi';
+import { toast } from 'sonner';
 
 export default function NotificationsView() {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
@@ -110,6 +111,8 @@ export default function NotificationsView() {
       const data = await fetchNotifications();
       setNotifications(data);
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to load notifications.';
+      toast.error(message);
       console.error('Failed to load notifications from database:', error);
     } finally {
       setLoading(false);

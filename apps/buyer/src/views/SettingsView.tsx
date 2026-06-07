@@ -5,7 +5,6 @@ import {
   Lock, 
   Bell, 
   Shield, 
-  CreditCard, 
   Globe, 
   Mail, 
   Phone, 
@@ -16,7 +15,6 @@ import {
   Database,
   ExternalLink,
   Loader2,
-  X
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Badge } from '../components/Badge';
@@ -37,7 +35,7 @@ const API_ORIGIN = (() => {
 const FALLBACK_AVATAR = `${API_ORIGIN}/images/fallbacks/default-avatar.png`;
 
 export default function SettingsView() {
-  const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'notifications' | 'billing' | 'developer'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'notifications' | 'developer'>('profile');
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -142,12 +140,6 @@ export default function SettingsView() {
   // Auto-Save Notification settings state
   const [savingSettings, setSavingSettings] = useState<Record<string, 'saving' | 'saved' | null>>({});
 
-  // 2FA states
-  const [show2FAModal, setShow2FAModal] = useState(false);
-  const [twoFactorPin, setTwoFactorPin] = useState('');
-  const [is2FASaving, setIs2FASaving] = useState(false);
-  const [twoFactorError, setTwoFactorError] = useState<string | null>(null);
-
   const handleAutoSaveSettings = async (newSettings: any, settingId: string) => {
     setSavingSettings(prev => ({ ...prev, [settingId]: 'saving' }));
     try {
@@ -168,69 +160,10 @@ export default function SettingsView() {
     }
   };
 
-  const handleToggle2FA = async () => {
-    if (!profile) return;
-    const isCurrentlyEnabled = !!profile.settings?.two_factor_enabled;
-
-    if (isCurrentlyEnabled) {
-      setIsSaving(true);
-      try {
-        const newSettings = { ...profile.settings, two_factor_enabled: false };
-        const updated = await updateUserProfile({
-          name: profile.name,
-          email: profile.email,
-          phone: profile.phone,
-          location: profile.location,
-          settings: newSettings
-        });
-        setProfile(updated);
-      } catch (err) {
-        alert('Failed to disable Two-Factor Authentication');
-      } finally {
-        setIsSaving(false);
-      }
-    } else {
-      setTwoFactorPin('');
-      setTwoFactorError(null);
-      setShow2FAModal(true);
-    }
-  };
-
-  const handleVerify2FA = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!profile) return;
-    setTwoFactorError(null);
-
-    const cleanPin = twoFactorPin.replace(/\s+/g, '');
-    if (cleanPin !== '123456' && cleanPin.length !== 6) {
-      setTwoFactorError('Invalid verification code. Please enter 6 digits (e.g. 123456).');
-      return;
-    }
-
-    setIs2FASaving(true);
-    try {
-      const newSettings = { ...profile.settings, two_factor_enabled: true };
-      const updated = await updateUserProfile({
-        name: profile.name,
-        email: profile.email,
-        phone: profile.phone,
-        location: profile.location,
-        settings: newSettings
-      });
-      setProfile(updated);
-      setShow2FAModal(false);
-    } catch (err) {
-      setTwoFactorError('Failed to enable Two-Factor Authentication');
-    } finally {
-      setIs2FASaving(false);
-    }
-  };
-
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'security', label: 'Security', icon: Lock },
     { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'billing', label: 'Billing', icon: CreditCard },
     { id: 'developer', label: 'Backend', icon: Terminal },
   ];
 
@@ -386,43 +319,19 @@ export default function SettingsView() {
 
             {activeTab === 'security' && profile && (
               <form onSubmit={handlePasswordUpdate} className="space-y-8">
-                <div className={cn(
-                  "flex items-center gap-4 p-4 rounded-2xl border transition-all",
-                  profile.settings?.two_factor_enabled 
-                    ? "bg-emerald-50 border-emerald-100" 
-                    : "bg-amber-50 border-amber-100"
-                )}>
-                  <Shield className={cn(
-                    profile.settings?.two_factor_enabled ? "text-emerald-500" : "text-amber-500"
-                  )} size={24} />
-                  <div>
-                    <p className={cn(
-                      "text-sm font-bold",
-                      profile.settings?.two_factor_enabled ? "text-emerald-900" : "text-amber-900"
-                    )}>
-                      Two-Factor Authentication is {profile.settings?.two_factor_enabled ? 'On' : 'Off'}
-                    </p>
-                    <p className={cn(
-                      "text-xs",
-                      profile.settings?.two_factor_enabled ? "text-emerald-700" : "text-amber-700"
-                    )}>
-                      Add an extra layer of security to your account by requiring an authenticator code.
+                <div className="flex items-start gap-4 p-4 rounded-2xl border bg-amber-50 border-amber-100">
+                  <Shield className="text-amber-500 shrink-0" size={24} />
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <p className="text-sm font-bold text-amber-900">
+                        Two-Factor Authentication is Off
+                      </p>
+                      <Badge variant="warning">Coming soon</Badge>
+                    </div>
+                    <p className="text-xs text-amber-700">
+                      Authenticator-based 2FA will be available in a future release. Password changes below are active today.
                     </p>
                   </div>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={handleToggle2FA}
-                    className={cn(
-                      "ml-auto text-white border-none cursor-pointer",
-                      profile.settings?.two_factor_enabled 
-                        ? "bg-red-500 hover:bg-red-650" 
-                        : "bg-amber-500 hover:bg-amber-600"
-                    )}
-                  >
-                    {profile.settings?.two_factor_enabled ? 'Disable' : 'Enable'}
-                  </Button>
                 </div>
 
                 {passwordSuccess && (
@@ -538,37 +447,6 @@ export default function SettingsView() {
               </div>
             )}
 
-            {activeTab === 'billing' && profile && (
-              <div className="space-y-8">
-                <div className="p-6 bg-zinc-900 rounded-3xl text-white relative overflow-hidden">
-                  <div className="relative z-10">
-                    <p className="text-xs font-bold text-white/50 uppercase tracking-widest mb-2">Wallet Balance</p>
-                    <p className="text-3xl font-extrabold mb-1">
-                      ${Number(profile.wallet_balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </p>
-                    <p className="text-sm text-white/70">Credits and refunds from marketplace activity.</p>
-                  </div>
-                  <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
-                </div>
-
-                <div className="p-6 border border-zinc-200 rounded-2xl bg-zinc-50 space-y-3">
-                  <h4 className="text-sm font-bold text-zinc-900 uppercase tracking-wider">Booking payments</h4>
-                  <p className="text-sm text-zinc-600 leading-relaxed">
-                    Property and event bookings are paid during storefront checkout. The buyer panel does not store payment cards yet.
-                  </p>
-                  <a
-                    href={STOREFRONT_BASE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm font-bold text-zinc-900 hover:text-[var(--primary-color)] transition-colors"
-                  >
-                    Browse storefront
-                    <ExternalLink size={14} />
-                  </a>
-                </div>
-              </div>
-            )}
-
             {activeTab === 'developer' && (
               <div className="space-y-8">
                 <div className="flex flex-col md:flex-row gap-6">
@@ -620,13 +498,13 @@ export default function SettingsView() {
                       </div>
                     </div>
                     <p className="text-xs text-zinc-400 mb-4 leading-relaxed">
-                      The buyer panel now talks directly to Laravel. Configure your <strong>.env</strong> file:
+                      Production buyers edit <strong>public/config.js</strong> on the server — no rebuild required:
                     </p>
                     <div className="bg-black/30 rounded-xl p-3 font-mono text-[10px] space-y-1">
-                      <p className="text-amber-400"># Local Laravel</p>
-                      <p className="text-zinc-300">VITE_API_URL=http://127.0.0.1:8000/api</p>
-                      <p className="text-amber-400"># Storefront browsing</p>
-                      <p className="text-zinc-300">VITE_STOREFRONT_URL=http://localhost:3000</p>
+                      <p className="text-amber-400">// public/config.js</p>
+                      <p className="text-zinc-300">apiUrl: &apos;{API_BASE_URL}&apos;</p>
+                      <p className="text-zinc-300">storefrontUrl: &apos;{STOREFRONT_BASE_URL}&apos;</p>
+                      <p className="text-zinc-300">basePath: &apos;&apos;</p>
                     </div>
                   </div>
                 </div>
@@ -673,100 +551,6 @@ export default function SettingsView() {
           </motion.div>
         )}
       </div>
-
-      {/* 2FA Verification Modal */}
-      <AnimatePresence>
-        {show2FAModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative border border-zinc-100 text-left"
-            >
-              <button 
-                type="button"
-                onClick={() => setShow2FAModal(false)}
-                className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-zinc-900 rounded-full hover:bg-zinc-100 transition-colors cursor-pointer border-none bg-transparent"
-              >
-                <X size={18} />
-              </button>
-
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center">
-                  <Shield size={20} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-zinc-900 leading-tight">Enable 2FA</h3>
-                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Secure Authentication</p>
-                </div>
-              </div>
-
-              <div className="space-y-4 text-center pb-2">
-                <p className="text-xs text-zinc-500 leading-relaxed">
-                  Scan this QR code with your Google Authenticator or custom 2FA app, then enter the 6-digit verification code below.
-                </p>
-                {/* Mock QR Code */}
-                <div className="w-40 h-40 mx-auto border-2 border-zinc-150 rounded-2xl bg-zinc-100 flex flex-col items-center justify-center p-2 relative group overflow-hidden shadow-2xs">
-                  <div className="w-full h-full bg-zinc-950 flex flex-wrap p-1 gap-1.5 opacity-90 transition-opacity group-hover:opacity-100">
-                    {[...Array(64)].map((_, i) => (
-                      <div 
-                        key={i} 
-                        className={cn(
-                          "w-3 h-3 rounded-[2px]", 
-                          (i % 3 === 0 || i % 7 === 0) ? "bg-white" : "bg-black"
-                        )} 
-                      />
-                    ))}
-                  </div>
-                  <div className="absolute inset-0 bg-white/95 flex flex-col items-center justify-center p-4 text-center transition-transform duration-300 translate-y-full group-hover:translate-y-0">
-                    <span className="text-[10px] font-black uppercase text-zinc-900 tracking-wider">Secret Key</span>
-                    <code className="bg-zinc-100 px-2 py-1 rounded font-mono text-[9px] mt-1 text-zinc-650">SELLIO-BUYER-KEY</code>
-                  </div>
-                </div>
-              </div>
-
-              {twoFactorError && (
-                <div className="rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-xs font-bold text-red-650 mb-4">
-                  {twoFactorError}
-                </div>
-              )}
-
-              <form onSubmit={handleVerify2FA} className="space-y-4">
-                <div className="space-y-2 text-left">
-                  <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-1">Verification Code</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Enter 123456"
-                    value={twoFactorPin}
-                    onChange={(e) => setTwoFactorPin(e.target.value)}
-                    maxLength={6}
-                    className="w-full text-center tracking-[0.4em] font-mono font-bold px-4 py-3 bg-zinc-50 border-none rounded-2xl text-base focus:ring-2 focus:ring-zinc-900 transition-all placeholder-zinc-300 placeholder:tracking-normal placeholder:font-sans placeholder:text-xs"
-                  />
-                </div>
-
-                <div className="pt-2 flex justify-end gap-3">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={() => setShow2FAModal(false)}
-                    disabled={is2FASaving}
-                  >
-                    Cancel
-                  </Button>
-                  <Button 
-                    type="submit" 
-                    isLoading={is2FASaving}
-                  >
-                    Verify & Enable
-                  </Button>
-                </div>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
       </div>
     </div>
   );

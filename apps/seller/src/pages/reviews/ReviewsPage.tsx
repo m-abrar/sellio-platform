@@ -3,6 +3,7 @@ import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlineStar, HiStar, HiOutlineChatBubbleLeftRight } from 'react-icons/hi2';
 import { getReviews, replyToReview, toggleFeaturedReview } from '../../api/reviews';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '../../lib/apiErrorMessage';
 
 interface VerticalMetadata {
   label: string;
@@ -42,6 +43,7 @@ export default function ReviewsPage() {
       setPagination(response.data.meta);
       setCurrentPage(page);
     } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Failed to load reviews.'));
       console.error('Failed to fetch reviews', error);
     } finally {
       setIsLoading(false);

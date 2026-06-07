@@ -8,6 +8,7 @@ use App\Models\EventBooking;
 use App\Models\JobApplication;
 use App\Models\PropertyBooking;
 use App\Models\PropertyVisit;
+use App\Models\OrderItem;
 use App\Models\ServiceAppointment;
 use App\Models\ServiceQuote;
 use App\Models\User;
@@ -103,6 +104,15 @@ class CustomerService
                     ->latest()
                     ->get()
                     ->map(fn ($record) => $this->normalizeLeadRecord($record, 'classifieds', 'inquiries'))
+            )
+            ->merge(
+                OrderItem::query()
+                    ->whereHas('product', fn (Builder $q) => $q->where('user_id', $partnerId))
+                    ->whereHas('order')
+                    ->with(['product', 'order.user'])
+                    ->latest()
+                    ->get()
+                    ->map(fn ($record) => $this->normalizeOrderItemRecord($record))
             );
 
         foreach ($records as $record) {
@@ -161,6 +171,34 @@ class CustomerService
 
             return $customer;
         });
+    }
+
+    protected function normalizeOrderItemRecord(OrderItem $record): array
+    {
+        $order = $record->order;
+        $user = $order?->user;
+        $email = $user?->email ?? $order?->shipping_name;
+        $name = $user?->name ?? $order?->shipping_name ?? __('Customer');
+        $phone = $user?->phone ?? '—';
+
+        $customerKey = $user?->id
+            ? 'user:' . $user->id
+            : 'guest:' . md5(strtolower((string) $email) . '|' . strtolower((string) $name));
+
+        return [
+            'id' => $record->id,
+            'customer_key' => $customerKey,
+            'module' => 'products',
+            'type' => 'orders',
+            'name' => $name,
+            'email' => $email ?: '—',
+            'phone' => $phone ?: '—',
+            'avatar_url' => $user?->avatar_url,
+            'asset' => $record->product?->title ?? $record->product_name ?? __('Product'),
+            'status' => $order?->status ?? 'pending',
+            'amount' => (float) $record->total_price,
+            'created_at' => $record->created_at,
+        ];
     }
 
     protected function normalizeLeadRecord(object $record, string $module, string $type): array

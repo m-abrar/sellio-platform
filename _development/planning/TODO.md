@@ -366,40 +366,32 @@ https://demo.sellio.vebdez.com/buyer
 
 -------------------
 
-messages are not showing in the seller panel, why?
+- [x] **Seller panel empty screens (dist):** root cause is usually wrong `public/config.js` apiUrl — added error toasts + empty states on Messages, Notifications, Reviews, Customers, Settings.
+- [x] **Customer directory blank on mobile:** table was `hidden lg:block` only — added card layout + empty state.
+- [x] **Product analytics empty:** `AnalyticsService::getDetailedListingPerformance()` now includes Product + order revenue.
+- [x] **Customer directory missing ecommerce buyers:** `CustomerService` now aggregates product `OrderItem` records.
+- [x] **Profile settings empty:** load error UI + widened `ProfileUpdateRequest` authorize for admin demo accounts.
+
+### Realtime messaging plan (Pusher) — recommendation
+
+**Phase 0 (current, no Pusher):** REST + poll on page load; `PartnerNotificationService::syncUnread()` builds notifications from DB activity; buyer notifications auto-seed on first API call.
+
+**Phase 1 (optional, low scope):** Laravel Broadcasting + Pusher (or Laravel Reverb self-hosted) for:
+- `NewMessageSent` → seller/buyer message threads
+- `PartnerAlertNotification` → notification badge increment
+
+**Phase 2:** Presence channels for “typing…” and online status.
+
+**Config surface:** `.env` keys `PUSHER_APP_*`, `BROADCAST_CONNECTION=pusher`; expose read-only app key/cluster to portals via `config.js` (`pusherKey`, `pusherCluster`). Keep REST fallback when broadcasting disabled (CodeCanyon buyers without Pusher account).
+
+**Why not mandatory:** Sellio ships as self-hosted marketplace; polling + refresh is enough for v1; Pusher is an upgrade path for high-traffic demos.
 
 ------------------
 
-should we use pusher for this project?
-give me a plan here?
-
------------------
-
-in the dist
-notifications are not showing in the seller panel
-messages are not showing in the seller panel
-reviews are not showing
-customer directory page is empty
-make sure you have live products?
-fix the bug, profile settings page is empty
------------
-
-on the user panel
-wallet is not needed
-
-when i am on the server, why i see this
-VITE_STOREFRONT_URL=http://localhost:3000
-in the settings > backend
-
-----------------
-
-Two-Factor Authentication is Off
-
-this feature is coming soon.
-mention there.
-
---------------------
- in the buyer panel, notifications center is empty
+- [x] Buyer panel: removed Wallet/Billing tab (not needed for buyers).
+- [x] Buyer Settings → Backend tab: shows live `config.js` values instead of hardcoded `VITE_STOREFRONT_URL=http://localhost:3000`.
+- [x] Two-Factor Authentication: “Coming soon” badge (buyer Security tab + seller Settings cards); removed fake QR modal.
+- [x] Buyer notifications: `collectionData()` parsing + error toast on fetch failure.
 
 -----------------
 

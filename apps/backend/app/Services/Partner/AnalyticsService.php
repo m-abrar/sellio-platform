@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 // Models
 use App\Models\{Property, Event, JobListing, Service, Classified, Auto, Product};
-use App\Models\{PropertyBooking, EventBooking, JobApplication, ServiceAppointment, ServiceQuote, ClassifiedInquiry, AutoInquiry};
+use App\Models\{PropertyBooking, EventBooking, JobApplication, ServiceAppointment, ServiceQuote, ClassifiedInquiry, AutoInquiry, OrderItem};
 
 class AnalyticsService
 {
@@ -286,6 +286,7 @@ class AnalyticsService
             'Auto'       => ['model' => Auto::class,       'relation' => 'autos',        'lead_col' => 'auto_id'],
             'Service'    => ['model' => Service::class,    'relation' => 'services',     'lead_col' => 'service_id'],
             'Classified' => ['model' => Classified::class, 'relation' => 'classifieds',  'lead_col' => 'classified_id'],
+            'Product'    => ['model' => Product::class,    'relation' => 'products',     'lead_col' => 'product_id'],
         ];
 
         foreach ($listingTypes as $type => $config) {
@@ -363,6 +364,7 @@ class AnalyticsService
             'Auto'       => $partner->autos(),
             'Service'    => $partner->services(),
             'Classified' => $partner->classifieds(),
+            'Product'    => $partner->products(),
         ])->flatMap(fn($query, $type) => $query->get(['id', 'title'])->map(fn($l) => [
             'id'    => $l->id,
             'title' => $l->title,
@@ -421,6 +423,7 @@ class AnalyticsService
             'auto_id'         => AutoInquiry::class,
             'service_id'      => ServiceAppointment::class, // Plus ServiceQuote below
             'classified_id'   => ClassifiedInquiry::class,
+            'product_id'      => OrderItem::class,
         ];
     }
 
@@ -433,6 +436,7 @@ class AnalyticsService
             'auto_id'        => Auto::class,
             'service_id'     => Service::class,
             'classified_id'  => Classified::class,
+            'product_id'     => Product::class,
         };
     }
 
@@ -445,6 +449,7 @@ class AnalyticsService
             Auto::class       => AutoInquiry::where('auto_id', $id)->where('created_at', '>=', $startDate)->count(),
             Service::class    => ServiceAppointment::where('service_id', $id)->where('created_at', '>=', $startDate)->count() + ServiceQuote::where('service_id', $id)->where('created_at', '>=', $startDate)->count(),
             Classified::class => ClassifiedInquiry::where('classified_id', $id)->where('created_at', '>=', $startDate)->count(),
+            Product::class    => OrderItem::where('product_id', $id)->where('created_at', '>=', $startDate)->count(),
             default           => 0
         };
     }
@@ -487,6 +492,14 @@ class AnalyticsService
                     ->pluck('total', 'id')
                     ->all()
             ),
+
+            Product::class => OrderItem::whereIn('product_id', $ids)
+                ->whereHas('order', fn ($query) => $query
+                    ->where('payment_status', 'paid')
+                    ->where('created_at', '>=', $startDate))
+                ->selectRaw('product_id as id, SUM(total_price) as total')
+                ->groupBy('product_id')
+                ->pluck('total', 'id'),
 
             default => collect(),
         };

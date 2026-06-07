@@ -15,6 +15,7 @@ import {
 } from 'react-icons/hi2';
 import { toast } from 'sonner';
 import { getNotifications, markNotificationAsRead, markAllNotificationsAsRead, deleteNotification as deleteNotificationApi } from '../../api/notifications';
+import { getApiErrorMessage } from '../../lib/apiErrorMessage';
 
 const getIcon = (type: string) => {
   switch (type) {
@@ -51,6 +52,7 @@ export default function NotificationsPage() {
         const response = await getNotifications();
         setNotifications(response.data.data);
       } catch (error) {
+        toast.error(getApiErrorMessage(error, 'Failed to load notifications.'));
         console.error("Failed to fetch notifications", error);
       } finally {
         setIsLoading(false);

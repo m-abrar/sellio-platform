@@ -1,4 +1,4 @@
-import { apiRequest, buyerUrl } from './apiClient';
+import { apiRequest, buyerUrl, collectionData } from './apiClient';
 
 export interface NotificationItem {
   id: string;
@@ -15,7 +15,7 @@ export const fetchNotifications = async (unreadOnly = false): Promise<Notificati
     { authenticated: true },
   );
 
-  return (payload || []).map((n: any) => ({
+  return collectionData(payload).map((n: any) => ({
     id: n.id,
     type: n.type,
     title: n.title,
