@@ -164,8 +164,10 @@ From `_development/planning/TODO.md` — verify and check when confirmed.
 ## G — Distribution ZIP
 
 Exclude `_development/`, `.cursor/`, `node_modules/`, `.env`, test artifacts.  
-Always empty `apps/backend/storage/app/public/` in the distribution copy (dev uploads only; demo seed repopulates).  
+Clear `apps/backend/storage/app/public/` in the distribution copy **except** `settings/` (logo + favicon); skip dev uploads (~1.3 GB locally); demo seed repopulates the rest.  
 Include `documentation/reviewer/`, `Documentation/`, `apps/`, root `CHANGELOG.md`. Exclude `packages/` (dev-only shared TypeScript; not used at runtime).
+
+Run from repo root: `npm run prepare:distribution` (or `:zip`). Agent workflow: `.cursor/skills/prepare-distribution/SKILL.md`.
 
 ### Assets
 
