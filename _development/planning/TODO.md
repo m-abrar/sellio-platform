@@ -256,7 +256,7 @@ in the partner dashboard
 is the admin and frontend blade views translatable?
 are all the events/listeners working?
 are all the email templates working?
-is the laravel frontend home built with dynamic content like other pages?
+is the laravel frontend home built with dynamic strings pagecontent() like other pages?
 can we impersonate a user or partner then connect to their redirected react panel?
 scan blade/view files if they have php/css/js?
 does permissions really work, should we code our application according to permissions preferred over roles where possible?
