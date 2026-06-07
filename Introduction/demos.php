@@ -44,8 +44,7 @@
                             $parts = explode('_', $demo['slug']);
                             $catSegment = $parts[0] ?? 'unifieds';
                             $typeSegment = $parts[1] ?? 'default';
-                            // Generate the URL pattern: http://sellio.vebdez.com/landing-page/unifieds/mega
-                            $previewUrl = "http://sellio.vebdez.com/landing-page/" . $catSegment . "/" . $typeSegment;
+                            $previewUrl = rtrim($sites['demo']['storefront'], '/') . '/landing-page/' . $catSegment . '/' . $typeSegment;
                         ?>
 
                         <?php if($isSoon): ?>

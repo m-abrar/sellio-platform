@@ -128,7 +128,7 @@
                                 <td class="align-middle py-4">
                                     <div class="d-flex align-items-center">
                                         <div class="rounded-circle overflow-hidden border bg-white mr-3 shadow-xs icon-box-42">
-                                            <img src="{{ $ticket->user?->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode(__('Guest User')) . '&background=6366f1&color=fff&size=120&font-size=0.35' }}"
+                                            <img src="{{ $ticket->user?->avatar_url ?? asset('images/fallbacks/default-avatar.png') }}"
                                                  alt="{{ $ticket->user->name ?? __('Guest User') }}"
                                                  class="w-100 h-100 object-fit-cover">
                                         </div>

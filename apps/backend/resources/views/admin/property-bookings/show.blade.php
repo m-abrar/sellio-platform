@@ -201,7 +201,7 @@
                     <div class="card-body p-4">
                         @if($booking->user)
                             <div class="mb-4 d-inline-block p-1 rounded-circle border shadow-sm bg-white">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($booking->user->name) }}&background=46a5ac&color=fff&bold=true" class="rounded-circle icon-box-lg">
+                                <img src="{{ $booking->user->avatar_url }}" class="rounded-circle icon-box-lg">
                             </div>
                             <h6 class="font-weight-bold text-dark mb-1 smallest uppercase letter-spacing-1">{{ $booking->user->name }}</h6>
                             <p class="text-muted smallest font-weight-bold letter-spacing-1 text-monospace mb-4">{{ $booking->user->email }}</p>

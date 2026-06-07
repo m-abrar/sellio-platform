@@ -33,6 +33,8 @@
         </div>
     </section>
 
+    <?php include('demo-access.php'); ?>
+
     <section id="automation" class="py-100 bg-automation border-bottom reveal position-relative" data-animation="animate__fadeIn">
         <div class="container">
             <div class="row align-items-center g-5">

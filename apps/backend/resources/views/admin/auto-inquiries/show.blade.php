@@ -108,7 +108,7 @@
                     </div>
                     <div class="card-body p-4 text-center">
                         <div class="position-relative d-inline-block mb-4">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($inquiry->full_name ?? 'Lead') }}&background=dc3545&color=fff"
+                            <img src="{{ asset('images/fallbacks/default-avatar.png') }}"
                                  class="rounded-circle shadow-sm border border-white border-4 icon-box-lg"
                                  alt="Avatar">
                             <div class="bg-success position-absolute" style="width: 18px; height: 18px; border-radius: 50%; bottom: 5px; right: 5px; border: 3px solid #fff;"></div>

@@ -277,7 +277,8 @@ in the partner dashboard
 
 ### Third-party image URLs
 - [x] Production fixes: replaced `picsum.photos` related-services partial with dynamic listing images + local fallback; replaced `via.placeholder.com` in seller adapters/pages with bundled SVG placeholders; replaced `placehold.co` in page-builder widget defaults; removed `ui-avatars.com` from `User` and `Testimonial` models.
-- [ ] **Remaining:** admin/show blades still reference `ui-avatars.com` as inline fallbacks (~15 files); `_development/` reference library still has Unsplash/Picsum (not shipped). **Action:** replace admin blade ui-avatars with `avatar_url` or `asset('images/fallbacks/default-avatar.png')`.
+- [x] Admin show/index blades now use `$user->avatar_url` or `asset('images/fallbacks/default-avatar.png')` instead of `ui-avatars.com` (11 files). Frontend partials may still use ui-avatars for guest leads — lower priority.
+- [ ] `_development/` reference library still has Unsplash/Picsum (not shipped).
 
 ### Code comments for CodeCanyon buyers
 - [ ] **Guideline for future PRs:** comments should explain *why* and *how to configure*, not session context. No bulk rewrite scheduled — apply on touch.
@@ -287,45 +288,15 @@ in the partner dashboard
 
 ---------------------------
 
-in the landing page, give an opportunity to click and explore these: admin | seller | buyer dashboards with passwords
+### Distribution / marketing polish — 2026-06-07
 
----------------------
-
-https://sellio.vebdez.com/documentation
-https://demo.sellio.vebdez.com/admin (laravel)
-https://demo.sellio.vebdez.com (laravel blades frontend)
-https://frontend.sellio.vebdez.com (nextjs frontend)
-https://seller-panel.vebdez.com
-https://buyer-panel.vebdez.com
-
-update the links
-suggest if we can make better and practical links?
-
---------------------------
-on the landing page and documentation, we need to update the logo
-also update the links as discussed
-
----------------
-
-on the introduction page, can you show day / night modes toggle button together? or show a label for easy finding (attention)
-
---------------
-
-the install wizard has lost css styling, please fix.
-
-------------------
-
-the footer links on install wizard are dead
-
-----------------------
-https://demo.sellio.vebdez.com/login
-styling is crashed here
-
------------------------------------------------
-
-
-http://127.0.0.1:8000/install/
-
-css styling is lost here
+- [x] **Introduction landing page:** `sites.php` centralizes demo URLs; `#live-demo` section with admin/seller/buyer credentials + portal links; navbar/footer logo; theme toggle shows Day/Night label; `demos.php` preview URLs use `demo.sellio.vebdez.com`.
+- [x] **Documentation:** logo at `assets/img/logo.png`; live demo access block with portal links and credentials.
+- [x] **Install wizard CSS (Windows):** `installer_public_base()` normalizes backslashes so asset URLs resolve.
+- [x] **Install wizard footer:** dead `docs.sellio.com` / `support.sellio.com` replaced with `installer_doc_url()` / `installer_support_url()` helpers.
+- [x] **`prepare-distribution.mjs`:** `shouldExclude()` now skips only Composer `backend/vendor`, not `public/vendor/` (AdminLTE/Bootstrap assets).
+- [x] **Admin ui-avatars:** replaced in 11 admin blade files (see Third-party image URLs above).
+- [ ] **Demo server restyle:** `/login` and `/admin` on `demo.sellio.vebdez.com` still broken until server is redeployed with `public/vendor/` from a fresh distribution build + `php artisan storage:link`.
+- [ ] **Link naming suggestion:** keep subdomain split (`demo.*` = Laravel monolith, `seller-panel.*` / `buyer-panel.*` = React portals, `frontend.*` = Next.js storefront). Single config file: `Introduction/sites.php`.
 
 -----------------------

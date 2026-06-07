@@ -1,5 +1,7 @@
 <?php 
 
+  $sites = require __DIR__ . '/sites.php';
+
   // Hero Wheel Screenshots
   $screenshots = [
       ['img' => 'images/properties_default.webp', 'url' => 'website.com/properties'],

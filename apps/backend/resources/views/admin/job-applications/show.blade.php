@@ -146,7 +146,7 @@
                     </div>
                     <div class="card-body px-4 pb-4 text-center">
                         <div class="position-relative d-inline-block mb-3">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($application->user->name) }}&background=46a5ac&color=fff&size=200" 
+                            <img src="{{ $application->user->avatar_url }}" 
                                  class="img-circle shadow-premium border border-white icon-box-lg border-4">
                             <div class="status-indicator bg-success position-absolute b-5-r-5-w-20-h-20-round-border-3"></div>
                         </div>

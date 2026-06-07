@@ -85,7 +85,7 @@
             <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-4">
-                        <img src="{{ $withdrawal->user?->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode(__('Partner')) . '&background=6366f1&color=fff&size=120&font-size=0.35' }}"
+                        <img src="{{ $withdrawal->user?->avatar_url ?? asset('images/fallbacks/default-avatar.png') }}"
                              alt="{{ $withdrawal->user->name ?? __('Partner') }}"
                              class="rounded-circle shadow-xs border mr-3"
                              width="52"

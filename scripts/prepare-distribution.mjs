@@ -93,10 +93,26 @@ function isDevUploadedMedia(relPath, name) {
   return name !== '.gitignore';
 }
 
+function isComposerVendorPath(relPath) {
+  const normalized = relPath.replace(/\\/g, '/');
+
+  return /(^|\/)backend\/vendor(\/|$)/.test(normalized);
+}
+
 function shouldExclude(relPath, isDir, name) {
   const parts = relPath.split(/[/\\]/);
 
-  if (parts.some((part) => EXCLUDED_DIR_NAMES.has(part))) {
+  if (isComposerVendorPath(relPath)) {
+    return true;
+  }
+
+  if (
+    parts.some(
+      (part) =>
+        EXCLUDED_DIR_NAMES.has(part) &&
+        !(part === 'vendor' && !isComposerVendorPath(relPath)),
+    )
+  ) {
     return true;
   }
 

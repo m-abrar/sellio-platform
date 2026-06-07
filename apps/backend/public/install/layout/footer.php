@@ -16,9 +16,9 @@ $bootstrapJs = installer_asset_or_cdn(
             &copy; <?= date('Y') ?> Sellio Platform. All rights reserved.
         </p>
         <div class="d-flex justify-content-center gap-3">
-            <a href="https://docs.sellio.com" target="_blank" class="text-muted smallest text-decoration-none hover-primary">Documentation</a>
+            <a href="<?= htmlspecialchars(installer_doc_url()) ?>" target="_blank" rel="noopener" class="text-muted smallest text-decoration-none hover-primary">Documentation</a>
             <span class="text-muted opacity-25">|</span>
-            <a href="https://support.sellio.com" target="_blank" class="text-muted smallest text-decoration-none hover-primary">Technical Support</a>
+            <a href="<?= htmlspecialchars(installer_support_url()) ?>" class="text-muted smallest text-decoration-none hover-primary">Technical Support</a>
         </div>
     </div>
 </div> <!-- .container-installer -->

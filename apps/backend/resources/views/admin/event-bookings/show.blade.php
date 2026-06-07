@@ -165,7 +165,7 @@
                     </div>
                     <div class="card-body p-4">
                         <div class="mb-4 d-inline-block p-1 rounded-circle border shadow-sm bg-white">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($booking->user->name ?? 'Guest') }}&background=46a5ac&color=fff&bold=true" 
+                            <img src="{{ $booking->user?->avatar_url ?? asset('images/fallbacks/default-avatar.png') }}" 
                                  class="rounded-circle" style="width: 84px; height: 84px; object-fit: cover;">
                         </div>
                         <h6 class="font-weight-bold text-dark mb-1 smallest uppercase letter-spacing-1">{{ $booking->user->name ?? __('Guest Attendee') }}</h6>

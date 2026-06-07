@@ -156,7 +156,7 @@
                     <div class="card-body px-4 pb-4 text-center">
                         @if($quote->user)
                             <div class="position-relative d-inline-block mb-3">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($quote->user->name) }}&background=46a5ac&color=fff&size=200" 
+                                <img src="{{ $quote->user->avatar_url }}" 
                                      class="img-circle shadow-premium border-4-fff icon-box-90">
                             </div>
                             <h5 class="font-weight-bold text-dark mb-1">{{ $quote->user->name }}</h5>

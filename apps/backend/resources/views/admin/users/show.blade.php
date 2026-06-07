@@ -40,7 +40,7 @@
                 <div class="card-body box-profile">
                     <div class="text-center mb-3">
                         <img class="profile-user-img img-fluid img-circle border-primary shadow-sm icon-box-100 object-fit-cover"
-                             src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&size=128&background=007bff&color=fff"
+                             src="{{ $user->avatar_url }}"
                              alt="User profile picture">
                     </div>
 

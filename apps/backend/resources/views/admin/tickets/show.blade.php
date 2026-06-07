@@ -55,7 +55,7 @@
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div class="d-flex align-items-center">
                                 <div class="bg-white rounded-circle shadow-sm mr-3 overflow-hidden icon-box-48 border-2-fff">
-                                    <img src="{{ $ticket->user?->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode(__('Guest Participant')) . '&background=6366f1&color=fff&size=120&font-size=0.35' }}"
+                                    <img src="{{ $ticket->user?->avatar_url ?? asset('images/fallbacks/default-avatar.png') }}"
                                          alt="{{ $ticket->user->name ?? __('Guest Participant') }}"
                                          class="w-100 h-100 object-fit-cover">
                                 </div>

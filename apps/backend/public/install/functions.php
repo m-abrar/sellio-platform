@@ -103,6 +103,22 @@ function installer_asset_or_cdn(string $publicPath, string $cdnUrl): string
 }
 
 /**
+ * Marketing documentation URL shown in the installer footer.
+ */
+function installer_doc_url(): string
+{
+    return 'https://sellio.vebdez.com/documentation';
+}
+
+/**
+ * Support contact URL shown in the installer footer.
+ */
+function installer_support_url(): string
+{
+    return 'mailto:support@sellio-platform.test';
+}
+
+/**
  * Web path to a file inside public/install/.
  */
 function installer_url(string $path = ''): string

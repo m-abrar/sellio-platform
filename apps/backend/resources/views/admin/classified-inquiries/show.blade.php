@@ -96,7 +96,7 @@
                     <div class="card-body px-4 pb-4 text-center">
                         <div class="position-relative d-inline-block mb-3">
                              <img class="img-circle shadow-premium border border-white"
-                                 src="https://ui-avatars.com/api/?name={{ urlencode($inquiry->full_name ?? $inquiry->user->name ?? 'Buyer') }}&background=46a5ac&color=fff&size=200"
+                                 src="{{ $inquiry->user?->avatar_url ?? asset('images/fallbacks/default-avatar.png') }}"
                                  style="width: 90px; height: 90px; border-width: 4px !important;">
                         </div>
                         

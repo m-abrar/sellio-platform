@@ -130,7 +130,7 @@
                     <div class="card-body p-4">
                         <div class="position-relative d-inline-block mb-4 p-1 rounded-circle border shadow-sm bg-white">
                             <img class="rounded-circle icon-box-84 object-fit-cover"
-                                 src="https://ui-avatars.com/api/?name={{ urlencode($appointment->user->name) }}&background=46a5ac&color=fff&bold=true"
+                                 src="{{ $appointment->user->avatar_url }}"
                                  alt="Principal">
                             <div class="bg-success position-absolute border border-white status-dot b-4 r-4"></div>
                         </div>

@@ -2,8 +2,9 @@
     <div class="container">
         <div class="row g-5">
             <div class="col-lg-5">
-                <a class="navbar-brand d-flex align-items-center mb-4" href="#">
-                    <span>S</span> SELLIO
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-4" href="#">
+                    <img src="images/logo.png" alt="Sellio" width="34" height="34" class="rounded-3 shadow-sm">
+                    <span>SELLIO</span>
                 </a>
                 <p class="text-muted pe-lg-5">The definitive marketplace solution for elite digital entrepreneurs. Eliminate recurring SaaS fees and take absolute control of your data and revenue.</p>
                 <div class="d-flex gap-3 mt-4">
@@ -24,7 +25,9 @@
             <div class="col-6 col-lg-2">
                 <h6 class="fw-800 mb-4 text-uppercase smallest" style="letter-spacing: 2px;">Developers</h6>
                 <ul class="list-unstyled text-muted">
-                    <li class="mb-3"><a href="../documentation/index.html" target="_blank" class="text-muted text-decoration-none hover-sellio">Documentation</a></li>
+                    <li class="mb-3"><a href="<?= htmlspecialchars($sites['documentation']) ?>" target="_blank" rel="noopener" class="text-muted text-decoration-none hover-sellio">Documentation</a></li>
+                    <li class="mb-3"><a href="<?= htmlspecialchars($sites['demo']['storefront']) ?>" target="_blank" rel="noopener" class="text-muted text-decoration-none hover-sellio">Live Storefront</a></li>
+                    <li class="mb-3"><a href="#live-demo" class="text-muted text-decoration-none hover-sellio">Demo Logins</a></li>
                     <li class="mb-3"><a href="#" class="text-muted text-decoration-none hover-sellio">API Reference</a></li>
                     <li class="mb-3"><a href="#" class="text-muted text-decoration-none hover-sellio">Change Log</a></li>
                     <li class="mb-3"><a href="#" class="text-muted text-decoration-none hover-sellio">License Details</a></li>
@@ -44,4 +47,4 @@
 
 <style>
     .hover-sellio:hover { color: var(--primary-sellio) !important; padding-left: 5px; transition: all 0.3s ease; }
-</style>
+</style>

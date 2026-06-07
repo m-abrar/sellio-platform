@@ -153,27 +153,36 @@ const themeToggle = document.getElementById('theme-toggle');
 const htmlEl = document.documentElement;
 const darkIcon = document.querySelector('.theme-icon-dark');
 const lightIcon = document.querySelector('.theme-icon-light');
+const themeToggleLabel = document.querySelector('.theme-toggle-label');
+
+function syncThemeToggleUi(isDark) {
+    if (!darkIcon || !lightIcon) return;
+    darkIcon.classList.toggle('d-none', isDark);
+    lightIcon.classList.toggle('d-none', !isDark);
+    if (themeToggleLabel) {
+        themeToggleLabel.textContent = isDark ? 'Day' : 'Night';
+    }
+}
 
 if (localStorage.getItem('theme') === 'dark') {
     htmlEl.setAttribute('data-theme', 'dark');
-    darkIcon.classList.add('d-none');
-    lightIcon.classList.remove('d-none');
+    syncThemeToggleUi(true);
 }
 
-themeToggle.addEventListener('click', () => {
-    const isDark = htmlEl.getAttribute('data-theme') === 'dark';
-    if (isDark) {
-        htmlEl.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
-        darkIcon.classList.remove('d-none');
-        lightIcon.classList.add('d-none');
-    } else {
-        htmlEl.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-        darkIcon.classList.add('d-none');
-        lightIcon.classList.remove('d-none');
-    }
-});
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        const isDark = htmlEl.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            htmlEl.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            syncThemeToggleUi(false);
+        } else {
+            htmlEl.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            syncThemeToggleUi(true);
+        }
+    });
+}
 
 // 6. PERSONA NEXUS INTERACTION
 function initPersonaNexus() {
