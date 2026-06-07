@@ -40,32 +40,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = 'Importing Demo Demos';
     include __DIR__ . '/../layout/header.php';
     ?>
-    <div class="mb-5">
-        <h2 class="fw-bold text-dark">Data Orchestration</h2>
-        <p class="text-muted">Populating your environment with high-fidelity sample data and initial configurations.</p>
+    <?php installer_step_intro('Data orchestration', 'Importing demo listings, roles, and settings for your activated modules.'); ?>
+
+    <div class="status-banner status-banner-success">
+        <div class="spinner-grow spinner-grow-sm text-success" role="status"><span class="visually-hidden">Loading...</span></div>
+        <div class="fw-bold text-success"><i class="fas fa-seedling me-2"></i>Planting data seeds…</div>
     </div>
 
-    <div class="p-3 mb-4 rounded-4 shadow-sm border border-success-subtle" style="background: rgba(16, 185, 129, 0.05);">
-        <div class="d-flex align-items-center">
-            <div class="spinner-grow text-success me-3" role="status" style="width: 1.5rem; height: 1.5rem;">
-                <span class="visually-hidden">Loading...</span>
+    <div class="terminal-window">
+        <div class="terminal-header">
+            <div class="terminal-dots">
+                <span class="terminal-dot terminal-dot-red"></span>
+                <span class="terminal-dot terminal-dot-amber"></span>
+                <span class="terminal-dot terminal-dot-green"></span>
             </div>
-            <div class="fw-bold text-success">
-                <i class="fas fa-seedling me-2"></i> PLANTING DATA SEEDS...
-            </div>
+            <span class="terminal-title">database_seeding.log</span>
         </div>
-    </div>
-
-    <div class="bg-dark rounded-4 p-0 shadow-lg border border-secondary mb-4 overflow-hidden">
-        <div class="bg-secondary bg-opacity-25 px-3 py-2 border-bottom border-secondary d-flex align-items-center">
-            <div class="d-flex gap-1 me-3">
-                <div style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></div>
-                <div style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b;"></div>
-                <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></div>
-            </div>
-            <span class="text-muted smallest fw-bold uppercase letter-spacing-1">Terminal Session: database_seeding.log</span>
-        </div>
-        <pre class="text-light mb-0 p-4" style="max-height:450px; overflow:auto; font-family: 'Fira Code', monospace; font-size: 0.8rem; line-height: 1.6; white-space: pre-wrap; background: #0f172a;">
+        <pre class="terminal-body">
 <?php
     flush();
     chdir($basePath);
@@ -152,44 +143,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $title = 'Import Demo Content';
 include __DIR__ . '/../layout/header.php';
 ?>
-<div class="mb-5">
-    <h2 class="fw-bold text-dark">Mock Content Injection</h2>
-    <p class="text-muted">Populate your new marketplace with realistic sample data to visualize the platform's full potential.</p>
-</div>
+<?php installer_step_intro('Demo content import', 'Populate your marketplace with realistic sample data so you can explore every module immediately.'); ?>
 
-<div class="card border-0 shadow-sm mb-5 overflow-hidden" style="border-radius: 24px; background: #fff;">
-    <div class="card-body p-5">
-        <h3 class="h6 fw-bold mb-4 text-dark uppercase letter-spacing-1 small">
-            <i class="fas fa-layer-group me-2 text-primary"></i> Planned Data Packages:
-        </h3>
-        <div class="d-flex flex-wrap gap-3 mb-5">
-            <span class="badge bg-indigo-soft text-indigo px-4 py-2 border border-indigo-subtle rounded-pill">Core Settings Registry</span>
-            <span class="badge bg-indigo-soft text-indigo px-4 py-2 border border-indigo-subtle rounded-pill">ACL Roles & Permissions</span>
-            <span class="badge bg-indigo-soft text-indigo px-4 py-2 border border-indigo-subtle rounded-pill">Editorial Blog Content</span>
-            <?php foreach ($enabledModules as $mod): ?>
-                <span class="badge bg-primary-soft text-primary px-4 py-2 border border-primary-subtle rounded-pill"><?= htmlspecialchars($mod) ?> Ecosystem</span>
-            <?php endforeach; ?>
-        </div>
+<div class="info-panel mb-4">
+    <h3 class="h6 fw-bold mb-3 text-brand smallest text-uppercase letter-spacing-1">
+        <i class="fas fa-layer-group me-2"></i> Planned data packages
+    </h3>
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <span class="badge-pill badge-pill-muted">Core settings</span>
+        <span class="badge-pill badge-pill-muted">Roles & permissions</span>
+        <span class="badge-pill badge-pill-muted">Blog content</span>
+        <?php foreach ($enabledModules as $mod): ?>
+            <span class="badge-pill badge-pill-brand"><?= htmlspecialchars($mod) ?> ecosystem</span>
+        <?php endforeach; ?>
+    </div>
 
-        <div class="p-3 rounded-4 bg-light bg-opacity-50 d-flex align-items-center">
-            <i class="fas fa-magic-wand-sparkles text-primary me-3"></i>
-            <p class="text-muted smallest mb-0 fw-bold">The intelligent importer will only seed data for your activated marketplace verticals.</p>
-        </div>
+    <div class="d-flex align-items-center gap-2 small text-muted">
+        <i class="fas fa-wand-magic-sparkles text-brand"></i>
+        <span>Only enabled marketplace verticals receive demo listings.</span>
     </div>
 </div>
 
-<div class="text-center">
-    <form method="post">
-        <button type="submit" class="btn btn-primary btn-lg px-5 shadow-lg">
-            <i class="fas fa-rocket me-2"></i> Launch Data Import Pipeline
-        </button>
-    </form>
-</div>
-
-<style>
-    .bg-indigo-soft { background: rgba(99, 102, 241, 0.08); }
-    .text-indigo { color: #4f46e5; }
-    .border-indigo-subtle { border-color: rgba(99, 102, 241, 0.2) !important; }
-    .bg-primary-soft { background: rgba(13, 148, 136, 0.08); }
-</style>
+<form method="post">
+    <?php installer_step_nav('modules', '#', 'Launch Data Import Pipeline', true); ?>
+</form>
 <?php include __DIR__ . '/../layout/footer.php'; ?>

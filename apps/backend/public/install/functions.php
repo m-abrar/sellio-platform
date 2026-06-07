@@ -262,9 +262,9 @@ function display_message(?string $message, bool $isError = false): void
     if ($message) {
         $class = $isError ? 'border-danger-subtle bg-danger-subtle text-danger' : 'border-success-subtle bg-success-subtle text-success';
         $icon = $isError ? 'fa-circle-xmark' : 'fa-circle-check';
-        echo "<div class='alert {$class} rounded-4 d-flex align-items-center mb-4 px-4 py-3' style='border: 1px solid !important;' role='alert'>
-                <i class='fa-solid {$icon} fs-4 me-3'></i>
-                <div class='fw-bold'>{$message}</div>
+        echo "<div class='alert {$class} rounded-4 d-flex align-items-start mb-4 px-4 py-3 border' role='alert'>
+                <i class='fa-solid {$icon} fs-5 me-3 mt-1'></i>
+                <div class='fw-semibold small'>" . htmlspecialchars($message) . "</div>
               </div>";
     }
 }
@@ -298,3 +298,70 @@ if (!array_key_exists($currentStepKey, $steps)) {
 // Get the friendly name and icon for the current step
 $currentStepName = $steps[$currentStepKey][0];
 $currentStepIcon = $steps[$currentStepKey][1];
+
+/**
+ * Current step position for the progress header.
+ */
+function installer_step_progress(): array
+{
+    global $steps, $currentStepKey;
+
+    $keys = array_keys($steps);
+    $index = array_search($currentStepKey, $keys, true);
+    $index = $index === false ? 0 : $index;
+    $total = max(count($keys), 1);
+
+    return [
+        'current' => $index + 1,
+        'total' => $total,
+        'percent' => (int) round((($index + 1) / $total) * 100),
+        'label' => $steps[$currentStepKey][0] ?? 'Setup',
+    ];
+}
+
+/**
+ * Standard step heading block.
+ */
+function installer_step_intro(string $title, string $description): void
+{
+    echo '<div class="step-intro">';
+    echo '<h2 class="step-title">' . htmlspecialchars($title) . '</h2>';
+    echo '<p class="step-lead">' . htmlspecialchars($description) . '</p>';
+    echo '</div>';
+}
+
+/**
+ * Consistent back / continue navigation row.
+ */
+function installer_step_nav(
+    ?string $backStep = null,
+    ?string $nextHref = null,
+    string $nextLabel = 'Continue',
+    bool $nextIsButton = false,
+    ?string $nextHint = null,
+): void {
+    echo '<div class="step-nav">';
+
+    if ($backStep) {
+        echo '<a href="?step=' . htmlspecialchars($backStep) . '" class="btn btn-outline-secondary">';
+        echo '<i class="fa-solid fa-arrow-left me-2"></i>Back';
+        echo '</a>';
+    } else {
+        echo '<span></span>';
+    }
+
+    echo '<div class="text-end ms-auto">';
+    if ($nextHref) {
+        if ($nextIsButton) {
+            echo '<button type="submit" class="btn btn-primary btn-lg shadow-sm">' . htmlspecialchars($nextLabel) . ' <i class="fa-solid fa-chevron-right ms-2"></i></button>';
+        } else {
+            echo '<a href="' . htmlspecialchars($nextHref) . '" class="btn btn-primary btn-lg shadow-sm">' . htmlspecialchars($nextLabel) . ' <i class="fa-solid fa-chevron-right ms-2"></i></a>';
+        }
+        if ($nextHint) {
+            echo '<p class="text-danger smallest fw-bold mt-2 mb-0 text-uppercase letter-spacing-1">' . htmlspecialchars($nextHint) . '</p>';
+        }
+    }
+    echo '</div>';
+
+    echo '</div>';
+}

@@ -129,16 +129,18 @@ $title = 'Database Connection';
 // --- PHP LOGIC END ---
 
 include __DIR__ . '/../layout/header.php';
+
+installer_step_intro(
+    'Environment setup',
+    'Configure your app URL, database connection, and optional mail settings. Mail can be updated later in the admin panel.'
+);
+
+if ($errorMessage) {
+    display_message($errorMessage, true);
+}
 ?>
 
-<div class="mb-5">
-    <h2 class="fw-bold text-dark">Environment Setup</h2>
-    <p class="text-muted">Configure your platform settings and establish a secure database link.</p>
-</div>
-
-<?php if ($errorMessage) display_message($errorMessage, true); ?>
-
-<form method="post" class="mx-auto" style="max-width:650px;">
+<form method="post" class="mx-auto" style="max-width:680px;">
     
     <div class="row g-4 mb-4">
         <div class="col-md-6">
@@ -160,9 +162,9 @@ include __DIR__ . '/../layout/header.php';
         </div>
     </div>
 
-    <div class="p-4 rounded-4 mb-4" style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.1);">
-        <h3 class="h6 mb-4 fw-bold text-uppercase letter-spacing-1" style="color: var(--primary-dark);">
-            <i class="fas fa-database me-2"></i> Database Configuration
+    <div class="form-section info-panel-primary">
+        <h3 class="form-section-title text-brand">
+            <i class="fas fa-database me-2"></i> Database configuration
         </h3>
         
         <div class="row g-3 mb-3">
@@ -193,16 +195,28 @@ include __DIR__ . '/../layout/header.php';
             </div>
             <div class="col-md-6">
                 <label for="db_pass" class="form-label">Password</label>
-                <input type="password" id="db_pass" name="db_pass" class="form-control"
-                    placeholder="••••••••"
-                    value="<?= htmlspecialchars($_POST['db_pass'] ?? $existingEnv['DB_PASSWORD'] ?? '') ?>">
+                <div class="password-field">
+                    <input type="password" id="db_pass" name="db_pass" class="form-control pe-5"
+                        placeholder="Leave blank if none"
+                        value="<?= htmlspecialchars($_POST['db_pass'] ?? $existingEnv['DB_PASSWORD'] ?? '') ?>">
+                    <button type="button" class="password-toggle-btn" data-password-toggle="db_pass" aria-label="Show password">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="p-4 rounded-4 mb-4" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.1);">
-        <h3 class="h6 mb-4 fw-bold text-uppercase letter-spacing-1 text-success">
-            <i class="fas fa-envelope me-2"></i> Mail Server Configuration
+    <div class="mb-3">
+        <button class="btn btn-outline-secondary btn-sm w-100" type="button" data-bs-toggle="collapse" data-bs-target="#mailSettings" aria-expanded="false" aria-controls="mailSettings">
+            <i class="fas fa-envelope me-2"></i> Optional: mail server settings
+        </button>
+    </div>
+
+    <div class="collapse" id="mailSettings">
+    <div class="form-section info-panel-success mb-4">
+        <h3 class="form-section-title text-success">
+            <i class="fas fa-envelope me-2"></i> Mail server
         </h3>
         
         <div class="row g-3 mb-3">
@@ -254,35 +268,30 @@ include __DIR__ . '/../layout/header.php';
             </div>
         </div>
     </div>
+    </div>
 
-    <div class="d-flex flex-wrap align-items-center justify-content-center gap-4 mb-5">
-        <?php if (file_exists($envPath)): ?>
-            <div class="form-check custom-check">
-                <input class="form-check-input" type="checkbox" name="overwrite_env" value="1" id="overwrite_env_check">
-                <label class="form-check-label text-muted small fw-bold" for="overwrite_env_check">
-                    OVERWRITE .ENV
+    <div class="info-panel info-panel-warning mb-4">
+        <p class="small fw-bold text-warning-emphasis mb-3"><i class="fas fa-triangle-exclamation me-2"></i>Advanced options</p>
+        <div class="d-flex flex-column gap-2">
+            <?php if (file_exists($envPath)): ?>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="overwrite_env" value="1" id="overwrite_env_check">
+                    <label class="form-check-label" for="overwrite_env_check">
+                        Overwrite existing <code>.env</code> file
+                    </label>
+                </div>
+            <?php endif; ?>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="overwrite_db" value="1" id="overwrite_db_check">
+                <label class="form-check-label" for="overwrite_db_check">
+                    Overwrite database tables (runs <code>migrate:fresh</code> — deletes all data)
                 </label>
             </div>
-        <?php endif; ?>
-        
-        <div class="form-check custom-check">
-            <input class="form-check-input" type="checkbox" name="overwrite_db" value="1" id="overwrite_db_check">
-            <label class="form-check-label text-muted small fw-bold" for="overwrite_db_check">
-                OVERWRITE TABLES (drops all tables on migration)
-            </label>
         </div>
     </div>
 
-    <div class="mt-4 pt-4 border-top d-flex justify-content-between align-items-center">
-        <a href="?step=requirements" class="btn btn-outline-secondary px-4">
-            <i class="fa-solid fa-arrow-left me-2"></i>Back
-        </a>
-
-        <button type="submit" class="btn btn-primary btn-lg px-4 shadow-lg">
-            Connect & Initialize <i class="fa-solid fa-chevron-right ms-2"></i>
-        </button>
-    </div>
-
+    <?php installer_step_nav('requirements', '#', 'Connect & Initialize', true); ?>
 </form>
 
 <?php

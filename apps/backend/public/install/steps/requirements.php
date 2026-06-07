@@ -29,37 +29,48 @@ $requirements = [
     'Frontend assets (public/build/manifest.json)' => file_exists($viteManifest),
 ];
 
-$allPassed = !in_array(false, $requirements, true);
+$passedCount = count(array_filter($requirements));
+$failedCount = count($requirements) - $passedCount;
+$allPassed = $failedCount === 0;
 $title = 'System Requirements';
 
 include __DIR__ . '/../layout/header.php';
+
+installer_step_intro(
+    'Server verification',
+    'We audit PHP, extensions, and writable folders so Sellio can install reliably on your host.'
+);
 ?>
 
-<div class="mb-5">
-    <h2 class="fw-bold text-dark">Server Verification</h2>
-    <p class="text-muted">
-        We're auditing your server environment to ensure it meets all necessary dependencies for a stable installation of **Sellio**.
-    </p>
+<div class="d-flex flex-wrap gap-2 mb-4">
+    <span class="summary-pill summary-pill-success">
+        <i class="fas fa-check"></i> <?= (int) $passedCount ?> passed
+    </span>
+    <?php if ($failedCount > 0): ?>
+        <span class="summary-pill summary-pill-danger">
+            <i class="fas fa-times"></i> <?= (int) $failedCount ?> need attention
+        </span>
+    <?php endif; ?>
 </div>
 
-<div class="row g-3 mb-5">
+<div class="row g-3 mb-4">
     <?php foreach ($requirements as $label => $ok): ?>
         <div class="col-md-6">
-            <div class="requirement-item <?= $ok ? 'border-light' : 'border-danger-subtle' ?>" style="<?= $ok ? '' : 'background: rgba(239, 68, 68, 0.05);' ?>">
-                <div class="me-3">
+            <div class="requirement-item <?= $ok ? '' : 'is-fail' ?>">
+                <div>
                     <?php if (strpos($label, 'Writable') !== false): ?>
-                        <i class="fa-solid fa-folder-open <?= $ok ? 'text-primary' : 'text-danger' ?>"></i>
+                        <i class="fa-solid fa-folder-open <?= $ok ? 'text-brand' : 'text-danger' ?>"></i>
                     <?php elseif (strpos($label, 'PHP') !== false): ?>
-                        <i class="fa-brands fa-php <?= $ok ? 'text-primary' : 'text-danger' ?>"></i>
+                        <i class="fa-brands fa-php <?= $ok ? 'text-brand' : 'text-danger' ?>"></i>
                     <?php else: ?>
-                        <i class="fa-solid fa-puzzle-piece <?= $ok ? 'text-primary' : 'text-danger' ?>"></i>
+                        <i class="fa-solid fa-puzzle-piece <?= $ok ? 'text-brand' : 'text-danger' ?>"></i>
                     <?php endif; ?>
                 </div>
-                
+
                 <div class="flex-grow-1">
                     <span class="d-block fw-bold small text-dark"><?= htmlspecialchars($label) ?></span>
                 </div>
-                
+
                 <div>
                     <?php if ($ok): ?>
                         <span class="badge bg-success-subtle text-success badge-status">
@@ -76,25 +87,22 @@ include __DIR__ . '/../layout/header.php';
     <?php endforeach; ?>
 </div>
 
-<div class="mt-4 pt-4 border-top d-flex justify-content-between align-items-center">
-    <a href="?step=welcome" class="btn btn-outline-secondary px-4">
+<div class="step-nav">
+    <a href="?step=welcome" class="btn btn-outline-secondary">
         <i class="fa-solid fa-arrow-left me-2"></i>Back
     </a>
-
-    <?php if ($allPassed): ?>
-        <a href="?step=environment" class="btn btn-primary btn-lg px-5 shadow-lg">
-            Continue Setup <i class="fa-solid fa-chevron-right ms-2"></i>
-        </a>
-    <?php else: ?>
-        <div class="text-end">
-            <button class="btn btn-danger btn-lg px-5 shadow-lg" onclick="window.location.reload();">
-                <i class="fa-solid fa-rotate me-2"></i>Retry Audit
+    <div class="text-end ms-auto">
+        <?php if ($allPassed): ?>
+            <a href="?step=environment" class="btn btn-primary btn-lg shadow-sm">
+                Continue Setup <i class="fa-solid fa-chevron-right ms-2"></i>
+            </a>
+        <?php else: ?>
+            <button type="button" class="btn btn-primary btn-lg shadow-sm" onclick="window.location.reload();">
+                <i class="fa-solid fa-rotate me-2"></i>Retry audit
             </button>
-            <p class="text-danger smallest fw-bold mt-2 mb-0 uppercase letter-spacing-1">Missing requirements must be resolved to proceed.</p>
-        </div>
-    <?php endif; ?>
+            <p class="text-danger smallest fw-bold mt-2 mb-0 text-uppercase letter-spacing-1">Resolve failed checks before continuing.</p>
+        <?php endif; ?>
+    </div>
 </div>
 
-<?php
-include __DIR__ . '/../layout/footer.php'; 
-?>
+include __DIR__ . '/../layout/footer.php';

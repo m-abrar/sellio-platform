@@ -36,32 +36,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = 'Installing Packages';
     include __DIR__ . '/../layout/header.php';
     ?>
-    <div class="mb-5">
-        <h2 class="fw-bold text-dark">Initializing Application Core</h2>
-        <p class="text-muted">Orchestrating system dependencies. This process may take a minute depending on your connection.</p>
+    <?php installer_step_intro('Initializing application core', 'Installing Composer dependencies. This may take a few minutes on shared hosting.'); ?>
+
+    <div class="status-banner status-banner-warning">
+        <div class="spinner-grow spinner-grow-sm text-warning" role="status"><span class="visually-hidden">Loading...</span></div>
+        <div class="fw-bold"><i class="fas fa-terminal me-2"></i>Executing Composer pipeline…</div>
     </div>
 
-    <div class="p-3 mb-4 rounded-4 shadow-sm border border-warning-subtle" style="background: rgba(245, 158, 11, 0.05);">
-        <div class="d-flex align-items-center">
-            <div class="spinner-grow text-warning me-3" role="status" style="width: 1.5rem; height: 1.5rem;">
-                <span class="visually-hidden">Loading...</span>
+    <div class="terminal-window">
+        <div class="terminal-header">
+            <div class="terminal-dots">
+                <span class="terminal-dot terminal-dot-red"></span>
+                <span class="terminal-dot terminal-dot-amber"></span>
+                <span class="terminal-dot terminal-dot-green"></span>
             </div>
-            <div class="fw-bold text-warning-emphasis">
-                <i class="fas fa-terminal me-2"></i> EXECUTING COMPOSER PIPELINE...
-            </div>
+            <span class="terminal-title">composer_install.log</span>
         </div>
-    </div>
-
-    <div class="bg-dark rounded-4 p-0 shadow-lg border border-secondary mb-4 overflow-hidden">
-        <div class="bg-secondary bg-opacity-25 px-3 py-2 border-bottom border-secondary d-flex align-items-center">
-            <div class="d-flex gap-1 me-3">
-                <div style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></div>
-                <div style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b;"></div>
-                <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></div>
-            </div>
-            <span class="text-muted smallest fw-bold uppercase letter-spacing-1">Terminal Session: composer_install.log</span>
-        </div>
-        <pre class="text-light mb-0 p-4" style="max-height:450px; overflow:auto; font-family: 'Fira Code', monospace; font-size: 0.8rem; line-height: 1.6; white-space: pre-wrap; background: #0f172a;">
+        <pre class="terminal-body">
 <?php
     flush();
     chdir($basePath);
@@ -135,37 +126,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $title = 'Composer Packages';
 include __DIR__ . '/../layout/header.php';
 ?>
-<div class="mb-5">
-    <h2 class="fw-bold text-dark">Dependency Registry</h2>
-    <p class="text-muted">The platform requires several core libraries to be initialized before it can operate.</p>
-</div>
+<?php installer_step_intro('Dependency registry', 'Sellio ships with a pre-built vendor folder in distribution packages. Run this step only if Composer packages are missing.'); ?>
 
-<div class="card border-0 shadow-sm mb-5 overflow-hidden" style="border-radius: 20px;">
-    <div class="card-header bg-light py-3 border-0">
-        <h3 class="h6 fw-bold mb-0 text-dark uppercase letter-spacing-1 small">
-            <i class="fas fa-boxes me-2 text-primary"></i> Required Package Audit
-        </h3>
-    </div>
-    <div class="card-body p-4">
-        <div class="row g-3" style="max-height:280px; overflow-y:auto;">
-            <?php foreach ($packages as $pkg): ?>
-                <div class="col-md-6">
-                    <div class="d-flex align-items-center p-2 rounded-3 bg-light bg-opacity-50 border border-light">
-                        <i class="fa-solid fa-check-circle me-2 text-success" style="font-size: 0.8rem;"></i>
-                        <code class="smallest text-dark" style="font-family: 'Fira Code', monospace;"><?= htmlspecialchars($pkg) ?></code>
-                    </div>
+<div class="info-panel mb-4">
+    <h3 class="h6 fw-bold mb-3 text-brand smallest text-uppercase letter-spacing-1">
+        <i class="fas fa-boxes me-2"></i> Required packages
+    </h3>
+    <div class="row g-2" style="max-height:280px; overflow-y:auto;">
+        <?php foreach ($packages as $pkg): ?>
+            <div class="col-md-6">
+                <div class="package-chip">
+                    <i class="fa-solid fa-check-circle text-success smallest"></i>
+                    <code><?= htmlspecialchars($pkg) ?></code>
                 </div>
-            <?php endforeach; ?>
-        </div>
+            </div>
+        <?php endforeach; ?>
     </div>
 </div>
 
-<div class="text-center">
-    <form method="post">
-        <button type="submit" class="btn btn-primary btn-lg px-5 shadow-lg">
-            <i class="fas fa-play-circle me-2"></i> Execute Package Installation
-        </button>
-    </form>
-    <p class="text-muted smallest mt-3 fw-bold uppercase letter-spacing-1">Warning: Ensure your internet connection is stable.</p>
-</div>
+<form method="post">
+    <?php installer_step_nav('environment', '#', 'Execute Package Installation', true); ?>
+    <p class="text-center text-muted smallest mt-n3">Keep your connection stable — do not close this tab during installation.</p>
+</form>
 <?php include __DIR__ . '/../layout/footer.php'; ?>
