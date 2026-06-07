@@ -29,7 +29,7 @@ node scripts/prepare-distribution.mjs --output D:/sellio-staging
 ## What the script does automatically
 
 1. **Creates** `distribution/` (or your `--output` path), wiping any previous run
-2. **Copies** submission roots: `apps/`, `documentation/`, `Documentation/`, `introduction/`, `listing-description/`, `CHANGELOG.md`, `README.md`, `LICENSE` (excludes `packages/` — dev-only, not deployed)
+2. **Copies** submission roots: `apps/`, `documentation/`, `Documentation/`, `introduction/`, `listing-description/`, `CHANGELOG.md`, `README.md`, `LICENSE` (Envato CodeCanyon commercial notice — **not** MIT/open source; excludes `packages/` — dev-only, not deployed)
 3. **Excludes** dev/heavy paths: `_development/`, `.cursor/`, `.git/`, all `node_modules/`, all `vendor/`, `.env*`, `installed.lock`, test caches, `*.zip`
 4. **Clears** runtime artifacts in the copy: Laravel bootstrap cache, logs, compiled views, `public/hot`, `public/storage`
 5. **Clears** `apps/backend/storage/app/public/` except `settings/` (logo + favicon) — skips dev-uploaded media (~1.3 GB locally); demo seed repopulates the rest on install
@@ -42,6 +42,12 @@ node scripts/prepare-distribution.mjs --output D:/sellio-staging
 9. **Writes** `SERVER-DEPLOY.md` and `DISTRIBUTION-MANIFEST.json` in the output folder
 
 Your **source repo is never modified** (no `installed.lock` removal in dev).
+
+## LICENSE file (required)
+
+Root `LICENSE` and `apps/backend/LICENSE` must both state that Sellio is **paid CodeCanyon / Envato Market** software — proprietary, governed by the buyer's Regular or Extended license. **Never** ship MIT, GPL, or other open-source license text for Sellio itself.
+
+After editing `LICENSE`, rebuild the distribution so `distribution/LICENSE` and `distribution/apps/backend/LICENSE` are updated.
 
 ## After the script finishes
 

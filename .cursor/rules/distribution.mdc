@@ -33,7 +33,13 @@ When preparing `distribution/` (or `distribution-fresh/`, `distribution.zip`) vi
 
 1. Skip copying anything under `backend/storage/app/public/` **except** `.gitignore` and `settings/**`
 2. Clear `storage/app/public/` after copy but **preserve** `settings/`
-3. Run `ensureBrandSettingsInDistribution()` to copy logo/favicon if missing
+3. Run `ensureBrandSettingsInDistribution()` if logo/favicon missing
+
+## LICENSE file (required)
+
+- Root `LICENSE` and `apps/backend/LICENSE` must describe **paid CodeCanyon / Envato** licensing (Regular and Extended).
+- **Never** use MIT, GPL, or open-source license text for Sellio's own code.
+- Rebuild after any `LICENSE` change.
 
 ## Rebuild after rule changes
 

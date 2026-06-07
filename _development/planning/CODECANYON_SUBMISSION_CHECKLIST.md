@@ -165,7 +165,7 @@ From `_development/planning/TODO.md` — verify and check when confirmed.
 
 Exclude `_development/`, `.cursor/`, `node_modules/`, `.env`, test artifacts.  
 Clear `apps/backend/storage/app/public/` in the distribution copy **except** `settings/` (logo + favicon); skip dev uploads (~1.3 GB locally); demo seed repopulates the rest.  
-Include `documentation/reviewer/`, `Documentation/`, `apps/`, root `CHANGELOG.md`. Exclude `packages/` (dev-only shared TypeScript; not used at runtime).
+Include `documentation/reviewer/`, `Documentation/`, `apps/`, root `CHANGELOG.md`, root `LICENSE` (Envato CodeCanyon commercial notice — not MIT). Exclude `packages/` (dev-only shared TypeScript; not used at runtime).
 
 Run from repo root: `npm run prepare:distribution` (or `:zip`). Agent workflow: `.cursor/skills/prepare-distribution/SKILL.md`.
 
@@ -176,6 +176,7 @@ Run from repo root: `npm run prepare:distribution` (or `:zip`). Agent workflow: 
 - [ ] `database/seeders/images/` — only redistributable images; add `ATTRIBUTION.txt` if required
 - [ ] `public/images/` placeholders and fallbacks present
 - [ ] No `.env` or real API secrets in ZIP
+- [ ] `LICENSE` and `apps/backend/LICENSE` state CodeCanyon / Envato commercial terms (not MIT or GPL)
 - [ ] `grep -ri "unsplash.com" apps/` → zero matches in shipped code
 
 ### Documentation in ZIP

@@ -47,7 +47,7 @@ Env equivalents: `DISTRIBUTION_API_URL`, `DISTRIBUTION_STOREFRONT_URL`, `DISTRIB
 ## What the script does
 
 1. Wipes and recreates `distribution/` (or `--output` path)
-2. Copies: `apps/`, `documentation/`, `Documentation/`, `introduction/`, `listing-description/`, `CHANGELOG.md`, `README.md`, `LICENSE`
+2. Copies: `apps/`, `documentation/`, `Documentation/`, `introduction/`, `listing-description/`, `CHANGELOG.md`, `README.md`, `LICENSE` (Envato CodeCanyon commercial notice — not MIT)
 3. Excludes: `_development/`, `.cursor/`, `.git/`, all `node_modules/`, all `vendor/`, `.env*`, `installed.lock`, test caches, `*.zip`, `packages/`
 4. Clears runtime artifacts in the copy: bootstrap cache, logs, compiled views, `public/hot`, `public/storage`
 5. **Storage rule:** skips dev media under `backend/storage/app/public/` except `.gitignore` and `settings/**`; runs `ensureBrandSettingsInDistribution()` for `logo.png` + `favicon.ico`
@@ -77,12 +77,21 @@ Env equivalents: `DISTRIBUTION_API_URL`, `DISTRIBUTION_STOREFRONT_URL`, `DISTRIB
 
 When editing `scripts/prepare-distribution.mjs`, verify these three behaviors still hold, then rebuild.
 
+### LICENSE must be CodeCanyon / Envato (not MIT)
+
+- Root `LICENSE` and `apps/backend/LICENSE` state that Sellio is **paid commercial software** on CodeCanyon
+- Governed by the buyer's **Regular** or **Extended** Envato license — links to official terms included
+- **Never** ship MIT, GPL, or open-source license text for Sellio itself (third-party deps keep their own licenses)
+- Post-build: confirm `distribution/LICENSE` does not contain "MIT License"
+
 ## Post-build verification
 
 After a successful run, confirm:
 
 ```
 distribution/
+├── LICENSE                             # Envato CodeCanyon notice (not MIT)
+├── apps/backend/LICENSE                # same notice
 ├── apps/backend/public/build/          # Vite manifest present (unless --skip-build)
 ├── apps/backend/storage/app/public/
 │   ├── .gitignore
@@ -110,6 +119,10 @@ ls distribution/apps/backend/storage/app/public/
 
 # no secrets
 rg -l "\.env" distribution/ --glob '!*.md'
+
+# LICENSE is commercial CodeCanyon (must NOT say MIT License)
+rg "MIT License" distribution/LICENSE distribution/apps/backend/LICENSE
+# expect: no matches
 ```
 
 ## After the script finishes
@@ -144,6 +157,7 @@ Production deploy with separate subdomains: upload `apps/backend` to main site; 
 - Copy `_development/`, `.env`, `installed.lock`, or local `storage/app/public/` media into the bundle
 - Modify the source repo's `installed.lock` or `.env` as part of packaging
 - Ship `:quick` output to buyers without a separate build step for `public/build/` and portal `dist/` folders
+- Replace `LICENSE` with MIT, GPL, or other open-source terms — Sellio is a paid CodeCanyon product
 - Commit `distribution/` or `distribution.zip` unless the user explicitly asks
 
 ## Related files

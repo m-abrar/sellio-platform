@@ -71,7 +71,10 @@ npm run dev --workspace=apps/backend
 
 ## 🛡 License & Credits
 
-© 2024 Sellio Platform. All Rights Reserved.
+© 2026 Sellio Platform. All rights reserved.
+
+Sellio is **paid commercial software** sold exclusively on [CodeCanyon](https://codecanyon.net) (Envato Market). Use is governed by the **Regular** or **Extended** license purchased at checkout — see root `LICENSE` for links to the official Envato terms. This is not open-source software.
+
 Designed for professional distribution via CodeCanyon.
 
 > [!IMPORTANT]
