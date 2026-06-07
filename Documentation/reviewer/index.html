@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sellio CodeCanyon reviewer guide — package map, installer, demo credentials, automated tests, and security posture.">
+    <meta name="theme-color" content="#76c043">
+    <title>Sellio Reviewer Guide | CodeCanyon</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2376c043'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-size='18' font-family='system-ui' font-weight='700'%3ES%3C/text%3E%3C/svg%3E">
+    <link href="../assets/vendor/fontsource/bundle.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+    <a href="#welcome" class="skip-link">Skip to content</a>
+
+    <header class="doc-mobile-bar" aria-label="Reviewer guide navigation">
+        <button type="button" class="doc-menu-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="doc-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <span class="doc-mobile-title">Reviewer Guide</span>
+        <a href="../index.html" class="doc-mobile-demo">Buyer docs</a>
+    </header>
+
+    <div class="sidebar-overlay" hidden></div>
+
+    <div class="doc-wrapper">
+        <aside class="sidebar" id="doc-sidebar" aria-label="Table of contents">
+            <div class="logo-container">
+                <img src="../assets/img/logo.png" alt="Sellio">
+                <div class="logo-text">Sellio</div>
+                <div class="logo-sub">CodeCanyon Reviewer</div>
+            </div>
+
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-title">I. Overview</div>
+                    <ul class="nav-list">
+                        <li class="nav-item active"><a href="#welcome">Purpose</a></li>
+                        <li class="nav-item"><a href="#package">Package map</a></li>
+                        <li class="nav-item"><a href="#excluded">Excluded from ZIP</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">II. Evaluation path</div>
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#requirements">Environment</a></li>
+                        <li class="nav-item"><a href="#install">Install &amp; demo</a></li>
+                        <li class="nav-item"><a href="#credentials">Demo accounts</a></li>
+                        <li class="nav-item"><a href="#smoke-test">Manual smoke test</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">III. Automated QA</div>
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#tests">Reproduce tests</a></li>
+                        <li class="nav-item"><a href="#audits">Audit reports</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">IV. Security</div>
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#security">Posture summary</a></li>
+                        <li class="nav-item"><a href="#licensing">License &amp; assets</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-footer-links">
+                    <a href="../index.html"><i class="fas fa-book"></i> Buyer documentation</a>
+                    <a href="../../apps/backend/README.md"><i class="fas fa-file-code"></i> Backend README</a>
+                    <a href="https://demo.sellio.vebdez.com" target="_blank" rel="noopener"><i class="fas fa-store"></i> Live demo</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="reading-progress" aria-hidden="true"><div class="reading-progress-bar"></div></div>
+
+            <section id="welcome" class="doc-section">
+                <div class="doc-hero">
+                    <header>
+                        <span class="version-badge">v1.0.0 · June 2026 · Envato submission</span>
+                        <h1>CodeCanyon <br><span class="text-primary">reviewer guide</span></h1>
+                        <p class="lead">This page is written for Envato marketplace reviewers. It explains what ships in the submission ZIP, how to install and evaluate Sellio quickly, and where to find dated QA evidence (PHPUnit, Playwright, dependency audits, and image provenance).</p>
+                    </header>
+                </div>
+
+                <div class="callout callout-info">
+                    <p><strong>Item type:</strong> Laravel 12 multi-vertical marketplace (Blade storefront + React seller/buyer panels). <strong>License:</strong> proprietary / CodeCanyon commercial terms — see root <code>LICENSE</code>, not MIT/GPL.</p>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4 class="small fw-bold"><i class="fas fa-clock text-primary"></i> ~15 min smoke path</h4>
+                        <p class="smallest mb-0">Web installer → admin login → one listing per vertical → partner/buyer panel login. Details in <a href="#smoke-test">Manual smoke test</a>.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="small fw-bold"><i class="fas fa-vial text-primary"></i> Automated evidence</h4>
+                        <p class="smallest mb-0"><strong>259</strong> PHPUnit tests, <strong>48</strong> Playwright admin E2E specs — reproducible commands in <a href="#tests">Reproduce tests</a>.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="small fw-bold"><i class="fas fa-shield-halved text-primary"></i> Security fixes</h4>
+                        <p class="smallest mb-0">HTML sanitization, installer lock, API rate limits, dependency bumps — summarized in <a href="#security">Security posture</a> and <a href="QA_REVIEW_2026-06-07.md">QA review</a>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="package" class="doc-section">
+                <h2 class="section-heading"><span>Package map</span><a href="#package" class="section-anchor" aria-label="Link to Package map"><i class="fas fa-link"></i></a></h2>
+                <p>After extracting the CodeCanyon ZIP, the layout is a monorepo-style tree. Production deploys use <code>apps/backend</code> as the Laravel document root (point the web server at <code>public/</code>).</p>
+
+                <table class="table-premium">
+                        <thead>
+                            <tr>
+                                <th>Path</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>apps/backend/</code></td>
+                                <td>Laravel 12 core — API, admin panel, Blade storefront, web installer (<code>public/install/</code>), migrations, seeders, PHPUnit + Playwright tests.</td>
+                            </tr>
+                            <tr>
+                                <td><code>apps/seller/dist/</code></td>
+                                <td>Pre-built React partner dashboard (static files; configure <code>public/config.js</code>).</td>
+                            </tr>
+                            <tr>
+                                <td><code>apps/buyer/dist/</code></td>
+                                <td>Pre-built React buyer dashboard (static files; configure <code>public/config.js</code>).</td>
+                            </tr>
+                            <tr>
+                                <td><code>Documentation/</code></td>
+                                <td>Buyer HTML docs (<code>index.html</code>) and this reviewer pack.</td>
+                            </tr>
+                            <tr>
+                                <td><code>CHANGELOG.md</code></td>
+                                <td>Version history for marketplace updates.</td>
+                            </tr>
+                            <tr>
+                                <td><code>LICENSE</code></td>
+                                <td>Envato / CodeCanyon commercial license notice.</td>
+                            </tr>
+                        </tbody>
+                </table>
+
+                <div class="callout callout-info">
+                    <p>Distribution builds include <code>vendor/</code>, <code>public/build/</code>, and <code>public/vendor/</code> so shared hosting can skip Composer when those folders are present. Node.js is <strong>not</strong> required on the server for seller/buyer panels — only pre-built <code>dist/</code> is deployed.</p>
+                </div>
+            </section>
+
+            <section id="excluded" class="doc-section">
+                <h2 class="section-heading"><span>Excluded from the submission ZIP</span><a href="#excluded" class="section-anchor" aria-label="Link to Excluded"><i class="fas fa-link"></i></a></h2>
+                <p>Internal development artifacts are stripped by <code>npm run prepare:distribution</code> and are <strong>not</strong> part of the buyer item:</p>
+                <ul>
+                    <li><code>_development/</code> — audits, TODOs, theme reference storefront, planning notes</li>
+                    <li><code>.cursor/</code> — editor/agent configuration</li>
+                    <li><code>packages/</code> — shared TypeScript types for local monorepo dev only (not used at runtime)</li>
+                    <li><code>node_modules/</code>, <code>.env</code>, dev uploads under <code>storage/app/public/</code> (except brand <code>settings/</code> logo/favicon)</li>
+                </ul>
+                <p>Curated QA summaries from internal passes are copied into <code>Documentation/reviewer/</code> (this folder) before each submission.</p>
+            </section>
+
+            <section id="requirements" class="doc-section">
+                <h2 class="section-heading"><span>Environment requirements</span><a href="#requirements" class="section-anchor" aria-label="Link to Environment"><i class="fas fa-link"></i></a></h2>
+                <table class="table-premium">
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Minimum</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PHP</td>
+                                <td>8.2+</td>
+                                <td>Extensions: mbstring, openssl, pdo, tokenizer, xml, ctype, json, fileinfo, gd or imagick (media).</td>
+                            </tr>
+                            <tr>
+                                <td>Database</td>
+                                <td>MySQL 8.0+</td>
+                                <td>PostgreSQL and SQLite supported; installer targets MySQL. PHPUnit uses SQLite in-memory.</td>
+                            </tr>
+                            <tr>
+                                <td>Web server</td>
+                                <td>Apache / Nginx</td>
+                                <td>Document root must be <code>apps/backend/public</code>. <code>mod_rewrite</code> or equivalent required.</td>
+                            </tr>
+                            <tr>
+                                <td>Composer</td>
+                                <td>Optional on host</td>
+                                <td>Pre-bundled <code>vendor/</code> in distribution ZIP for cPanel/FTP installs.</td>
+                            </tr>
+                            <tr>
+                                <td>Node.js</td>
+                                <td>20.x (dev/tests only)</td>
+                                <td>Required only to run Playwright E2E locally — not for production panel hosting.</td>
+                            </tr>
+                        </tbody>
+                </table>
+            </section>
+
+            <section id="install" class="doc-section">
+                <h2 class="section-heading"><span>Installation &amp; demo data</span><a href="#install" class="section-anchor" aria-label="Link to Installation"><i class="fas fa-link"></i></a></h2>
+
+                <div class="nav-tabs" role="tablist">
+                    <button type="button" class="tab-btn active" role="tab" aria-selected="true" onclick="showTab('web-install', this)">Web installer (recommended)</button>
+                    <button type="button" class="tab-btn" role="tab" aria-selected="false" onclick="showTab('cli-install', this)">CLI (expert)</button>
+                </div>
+
+                <div id="web-install" class="tab-content active" role="tabpanel" aria-hidden="false">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Upload &amp; browse to installer</h4>
+                            <p>Extract the ZIP so <code>public/index.php</code> is web-accessible. Open <code>https://your-domain.test/install</code>. If no lock file exists, Laravel redirects root requests to the installer automatically.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Complete wizard steps</h4>
+                            <p>Requirements check → database credentials → <code>APP_KEY</code> generation → optional mail fields → <strong>run migrations</strong> → <strong>import demo seed</strong> (recommended for review) → create admin account.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Post-install lock</h4>
+                            <p>Successful install writes <code>storage/installed.lock</code>. Subsequent visits to <code>/install</code> are blocked at runtime. The finished step documents removing <code>public/install/</code> on production servers.</p>
+                            <div class="callout callout-warning">
+                                <p>Installer browser error output is gated: disabled when <code>installed.lock</code> exists; during active install, remote hosts default <code>INSTALLER_DEBUG=false</code> (local dev may show errors when <code>INSTALLER_DEBUG=true</code>).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="cli-install" class="tab-content" role="tabpanel" aria-hidden="true">
+                    <pre><code>cd apps/backend
+cp .env.example .env
+php artisan key:generate
+# Set DB_* in .env, then:
+php artisan migrate --seed --force
+php artisan storage:link</code></pre>
+                    <p class="small text-muted">Creates the same golden demo dataset as the installer seed step. See <code>apps/backend/README.md</code> for cron, queue, and cache guidance.</p>
+                </div>
+            </section>
+
+            <section id="credentials" class="doc-section">
+                <h2 class="section-heading"><span>Demo accounts</span><a href="#credentials" class="section-anchor" aria-label="Link to Demo accounts"><i class="fas fa-link"></i></a></h2>
+                <p>After demo seeding, these accounts exist for evaluation. They are <strong>intentional</strong> for local/demo use and must be rotated or removed before production (documented in README and installer finished step).</p>
+
+                <table class="table-premium">
+                        <thead>
+                            <tr>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Password</th>
+                                <th>URL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Admin</td>
+                                <td><code>admin@sellio-platform.test</code></td>
+                                <td><code>admin123</code></td>
+                                <td><code>/admin</code></td>
+                            </tr>
+                            <tr>
+                                <td>Partner (seller)</td>
+                                <td><code>partner@sellio-platform.test</code></td>
+                                <td><code>partner123</code></td>
+                                <td><code>/dashboard/partner</code> (React panel or impersonate from admin)</td>
+                            </tr>
+                            <tr>
+                                <td>Buyer</td>
+                                <td><code>buyer@sellio-platform.test</code></td>
+                                <td><code>buyer123</code></td>
+                                <td><code>/dashboard/user</code> (React panel or impersonate from admin)</td>
+                            </tr>
+                        </tbody>
+                </table>
+
+                <p class="small">If the web installer created a custom admin on the final step, that account may replace user ID 1; partner and buyer demo rows from seeding remain available. Additional seeded buyers: <code>user1@sellio-platform.test</code> … <code>user20@sellio-platform.test</code> with password <code>password</code>.</p>
+
+                <div class="callout callout-info">
+                    <p><strong>Impersonation:</strong> Admin → Users → Impersonate routes to the correct React portal URLs (<code>url_partner</code> / <code>url_user</code>). Covered by <code>AdminImpersonateTest</code> in PHPUnit.</p>
+                </div>
+            </section>
+
+            <section id="smoke-test" class="doc-section">
+                <h2 class="section-heading"><span>Manual smoke test</span><a href="#smoke-test" class="section-anchor" aria-label="Link to Manual smoke test"><i class="fas fa-link"></i></a></h2>
+                <p>Suggested reviewer path after install + demo seed:</p>
+
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Admin core</h4>
+                        <p class="mb-0">Login at <code>/admin</code> → dashboard widgets show non-zero metrics → open Settings (logo, payment gateways) → Users &amp; roles → Partner applications queue.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Storefront (Blade)</h4>
+                        <p class="mb-0">Homepage CMS content → property search with date validation → product detail → cart → checkout UI (Stripe test keys optional) → blog list/detail (sanitized HTML).</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Vertical coverage</h4>
+                        <p class="mb-0">Spot-check detail pages: autos, events, jobs, services, classifieds — no HTTP 500, images load from local/bundled paths (no third-party hotlinks in shipped code).</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>React panels</h4>
+                        <p class="mb-0">Deploy or open pre-built <code>apps/seller/dist</code> and <code>apps/buyer/dist</code>; set <code>public/config.js</code> <code>apiUrl</code> to your Laravel host + <code>/api</code>. Login as partner/buyer demo accounts or use admin impersonation.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>API docs</h4>
+                        <p class="mb-0">OpenAPI via Scramble at <code>/docs/api</code> (when enabled). Public/partner JSON resources use <code>whenLoaded()</code> to avoid N+1 leakage in list endpoints.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tests" class="doc-section">
+                <h2 class="section-heading"><span>Reproduce automated tests</span><a href="#tests" class="section-anchor" aria-label="Link to Tests"><i class="fas fa-link"></i></a></h2>
+                <p>All commands run from the extracted package. Latest pass: <strong>2026-06-07</strong> — full log in <a href="TEST_PASS_2026-06-07.md">TEST_PASS_2026-06-07.md</a>.</p>
+
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold">PHPUnit — 259 tests (SQLite, no MySQL)</h4>
+                    <pre><code>cd apps/backend
+php artisan test</code></pre>
+                    <p class="smallest text-muted mb-0">Uses in-memory SQLite per test case. No external services required.</p>
+                </div>
+
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold">Playwright — 48 admin E2E specs (MySQL)</h4>
+                    <pre><code>cd apps/backend
+php scripts/create-testing-db.php   # first time: creates sellio_testing
+npm install
+npx playwright install chromium
+npm run test:browser</code></pre>
+                    <p class="smallest text-muted mb-0">Requires MySQL on <code>127.0.0.1</code>, database <code>sellio_testing</code>, port <code>8000</code> free. Uses <code>.env.testing</code> with <code>SESSION_DRIVER=cookie</code> for CSRF persistence.</p>
+                </div>
+
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold">Installer E2E (isolated DB)</h4>
+                    <pre><code>cd apps/backend
+npm run test:browser:installer:setup
+npm run test:browser:installer</code></pre>
+                    <p class="smallest text-muted mb-0">Uses <code>sellio_install_test</code> database; backs up and restores <code>.env</code> and <code>installed.lock</code>.</p>
+                </div>
+
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold">Dependency audits</h4>
+                    <pre><code>cd apps/backend && composer audit
+cd apps/seller && npm audit
+cd apps/buyer && npm audit</code></pre>
+                    <p class="smallest text-muted mb-0">See <a href="PACKAGE_AUDIT_2026-06-07.md">PACKAGE_AUDIT</a> and <a href="NPM_AUDIT_2026-06-07.md">NPM_AUDIT</a> for resolved advisories and one residual low-severity JWT transitive note.</p>
+                </div>
+            </section>
+
+            <section id="audits" class="doc-section">
+                <h2 class="section-heading"><span>Audit report index</span><a href="#audits" class="section-anchor" aria-label="Link to Audit reports"><i class="fas fa-link"></i></a></h2>
+                <p>Dated markdown reports in this folder (also listed in <a href="README.md">README.md</a>):</p>
+
+                <table class="table-premium">
+                        <thead>
+                            <tr>
+                                <th>Report</th>
+                                <th>Scope</th>
+                                <th>Result (2026-06-07)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="QA_REVIEW_2026-06-07.md">QA_REVIEW_2026-06-07.md</a></td>
+                                <td>15-area CodeCanyon checklist (security, install, API, marketplace)</td>
+                                <td><span class="badge-pill badge-warning-light">Needs work</span> 0 critical, 0 high open</td>
+                            </tr>
+                            <tr>
+                                <td><a href="TEST_PASS_2026-06-07.md">TEST_PASS_2026-06-07.md</a></td>
+                                <td>PHPUnit + Playwright commands and fixes applied</td>
+                                <td><span class="badge-pill badge-success-light">259 + 48 pass</span></td>
+                            </tr>
+                            <tr>
+                                <td><a href="PACKAGE_AUDIT_2026-06-07.md">PACKAGE_AUDIT_2026-06-07.md</a></td>
+                                <td>Composer audit, license compatibility, CHANGELOG</td>
+                                <td><span class="badge-pill badge-success-light">Pass</span> (1 low residual)</td>
+                            </tr>
+                            <tr>
+                                <td><a href="NPM_AUDIT_2026-06-07.md">NPM_AUDIT_2026-06-07.md</a></td>
+                                <td>npm audit — seller and buyer React apps</td>
+                                <td><span class="badge-pill badge-success-light">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td><a href="DEMO_IMAGE_AUDIT_2026-06-07.md">DEMO_IMAGE_AUDIT_2026-06-07.md</a></td>
+                                <td>Demo image provenance, Unsplash removal from <code>apps/</code></td>
+                                <td><span class="badge-pill badge-success-light">Pass</span></td>
+                            </tr>
+                        </tbody>
+                </table>
+            </section>
+
+            <section id="security" class="doc-section">
+                <h2 class="section-heading"><span>Security posture summary</span><a href="#security" class="section-anchor" aria-label="Link to Security"><i class="fas fa-link"></i></a></h2>
+                <p>Key controls verified in the 2026-06-07 QA pass:</p>
+
+                <ul>
+                    <li><strong>Rich HTML output</strong> — Blog, product descriptions, CMS <code>page_content()</code>, and page-builder HTML/CSS pass through <code>sanitize_rich_html()</code> / dedicated CSS sanitizer on save and render.</li>
+                    <li><strong>Page builder access</strong> — GrapesJS routes restricted to <strong>super-admin</strong> role.</li>
+                    <li><strong>Installer exposure</strong> — <code>installed.lock</code> blocks re-entry; README and installer UI instruct removal of <code>public/install/</code> on production.</li>
+                    <li><strong>API throttling</strong> — Rate limiters on public and partner API route groups (see <code>bootstrap/app.php</code> / route middleware).</li>
+                    <li><strong>Webhooks</strong> — Stripe/PayPal webhook routes excluded from CSRF; fulfillment handled server-side.</li>
+                    <li><strong>Demo credentials</strong> — Documented with explicit production rotation warning (not hidden defaults).</li>
+                    <li><strong>Debug surface</strong> — No <code>dd()</code>/<code>dump()</code> in <code>app/</code>; production expects <code>APP_DEBUG=false</code>.</li>
+                </ul>
+
+                <div class="callout callout-warning">
+                    <p><strong>Trust model:</strong> Admin-editable CMS HTML is sanitized but still intended for trusted staff only. Buyers are advised to limit admin accounts and enable RBAC — see <code>apps/backend/README.md</code> §5.</p>
+                </div>
+            </section>
+
+            <section id="licensing" class="doc-section">
+                <h2 class="section-heading"><span>License &amp; redistributable assets</span><a href="#licensing" class="section-anchor" aria-label="Link to Licensing"><i class="fas fa-link"></i></a></h2>
+                <ul>
+                    <li><strong>Item license:</strong> Proprietary CodeCanyon / Envato commercial terms — root <code>LICENSE</code> and <code>apps/backend/LICENSE</code>.</li>
+                    <li><strong>PHP dependencies:</strong> Production Composer packages are MIT/BSD/Apache/ISC compatible — see PACKAGE_AUDIT.</li>
+                    <li><strong>Demo photos:</strong> Seeded from <code>database/seeders/images/</code>; include only royalty-free assets in distribution. Theme preview WebP under <code>public/themes/</code>.</li>
+                    <li><strong>Third-party hotlinks:</strong> <code>unsplash.com</code> references removed from <code>apps/backend</code>, <code>apps/seller</code>, and <code>apps/buyer</code> shipping code (re-grep before release).</li>
+                </ul>
+            </section>
+
+            <footer class="doc-footer">
+                &copy; 2024–2026 Sellio Marketplace Suite. Reviewer pack — June 2026.
+            </footer>
+        </main>
+    </div>
+
+    <button type="button" class="back-to-top" aria-label="Back to top" hidden>
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="../assets/js/doc.js"></script>
+</body>
+</html>

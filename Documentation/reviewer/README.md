@@ -2,6 +2,10 @@
 
 This folder is included in the **CodeCanyon submission bundle** so Envato reviewers can verify security remediation, dependency hygiene, and automated test coverage without digging through internal development files.
 
+## Reviewer guide (start here)
+
+**[index.html](./index.html)** — HTML guide for Envato reviewers: package map, installer steps, demo credentials, smoke-test path, test reproduction commands, and security summary. Styled consistently with the buyer documentation at [../index.html](../index.html).
+
 ## Contents (2026-06-07 pass)
 
 | Document | Purpose |

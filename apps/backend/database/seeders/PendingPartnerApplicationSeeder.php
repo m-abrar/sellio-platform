@@ -76,6 +76,9 @@ class PendingPartnerApplicationSeeder extends Seeder
                 $passwordHash ??= Hash::make('partner123');
                 $attributes['password'] = $passwordHash;
                 $attributes['remember_token'] = Str::random(10);
+                $attributes['uuid'] = (string) Str::uuid();
+            } elseif (empty($existing->uuid)) {
+                $attributes['uuid'] = (string) Str::uuid();
             }
 
             $user = User::withoutEvents(fn () => User::updateOrCreate(
