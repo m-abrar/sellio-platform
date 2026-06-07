@@ -1,11 +1,4 @@
-@php
-    /** * Since these are usually in a 2-column or 4-column grid, 
-     * we stagger the entry for a "wave" effect.
-     */
-    $delay = ($iteration ?? 1) * 50;
-@endphp
-
-<div data-aos="zoom-in" data-aos-delay="{{ $delay }}">
+<div>
     <a href="{{ route('classifieds.show', $item->slug) }}" class="text-decoration-none group d-block">
         <div class="rounded-4 overflow-hidden mb-2 shadow-sm position-relative hover-lift border border-white border-opacity-50 glass-surface">
             
@@ -14,7 +7,8 @@
                 <img src="{{ $item->primary_image_url }}" 
                      class="w-100 h-100 object-fit-cover transition-img" 
                      alt="{{ $item->title }}"
-                     loading="lazy">
+                     loading="lazy"
+                     onerror="this.onerror=null;this.src='{{ asset('images/fallbacks/default-card.svg') }}';">
             </div>
 
             {{-- Price Badge Overlay --}}

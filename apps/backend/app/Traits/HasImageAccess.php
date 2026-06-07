@@ -127,12 +127,12 @@ trait HasImageAccess
         $basePath = 'images/fallbacks/';
 
         $fallbacks = [
-            'avatar' => asset($basePath . 'default-avatar.png'),
-            'thumb'  => asset($basePath . 'default-square.jpg'),
-            'card'   => asset($basePath . 'default-card.jpg'),
-            'detail' => asset($basePath . 'default-detail.jpg'),
-            'hero'   => asset($basePath . 'default-hero.jpg'),
-            'default'=> asset($basePath . 'default.jpg'),
+            'avatar' => asset($basePath . 'default-avatar.svg'),
+            'thumb'  => asset($basePath . 'default-square.svg'),
+            'card'   => asset($basePath . 'default-card.svg'),
+            'detail' => asset($basePath . 'default-detail.svg'),
+            'hero'   => asset($basePath . 'default-hero.svg'),
+            'default'=> asset($basePath . 'default.svg'),
         ];
         
         return $fallbacks[$type] ?? $fallbacks['default'];

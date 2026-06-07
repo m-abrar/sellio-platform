@@ -17,7 +17,7 @@
                         {{ __('List your property, vehicle, or job opening on the most trusted marketplace. Our verified community ensures high-quality leads every time.') }}
                     </p>
                     <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
-                        <a href="{{ setting('url_partner', '#') }}" class="btn btn-primary btn-lg rounded-pill px-5 fw-800 hover-lift shadow-sm">
+                        <a href="{{ filled(setting('url_partner')) ? setting('url_partner') : route('register') }}" class="btn btn-primary btn-lg rounded-pill px-5 fw-800 hover-lift shadow-sm">
                             {{ __('POST A LISTING') }}
                         </a>
                         <a href="{{ route('register') }}" class="btn btn-outline-light btn-lg rounded-pill px-5 fw-800 hover-lift">
@@ -33,14 +33,14 @@
                                 <i class="bi bi-shield-check text-success fs-4"></i>
                             </div>
                             <div class="text-start">
-                                <h6 class="mb-0 fw-800">{{ __('Verified Safety') }}</h6>
-                                <small>{{ __('Secure transactions only') }}</small>
+                                <h6 class="mb-0 fw-800 text-white">{{ __('Verified Safety') }}</h6>
+                                <small class="text-white-50">{{ __('Secure transactions only') }}</small>
                             </div>
                         </div>
-                        <hr class="border-dark opacity-25">
-                        <div class="text-start">
+                        <hr class="border-light opacity-25">
+                        <div class="text-start text-white">
                             <h4 class="fw-800 mb-0">1.2k+</h4>
-                            <p class="small mb-0">{{ __('Successful listings this week') }}</p>
+                            <p class="small text-white-50 mb-0">{{ __('Successful listings this week') }}</p>
                         </div>
                     </div>
                 </div>

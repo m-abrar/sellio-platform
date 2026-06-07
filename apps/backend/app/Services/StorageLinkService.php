@@ -148,16 +148,36 @@ class StorageLinkService
 
     protected function isValidLink(string $link, string $target): bool
     {
-        if (! is_link($link)) {
+        if (! file_exists($link)) {
             return false;
         }
 
         $resolvedLink = realpath($link);
         $resolvedTarget = realpath($target);
 
-        return $resolvedLink !== false
-            && $resolvedTarget !== false
-            && $resolvedLink === $resolvedTarget;
+        if ($resolvedLink === false || $resolvedTarget === false) {
+            return false;
+        }
+
+        if ($resolvedLink !== $resolvedTarget) {
+            return false;
+        }
+
+        // Unix symlinks and Windows symlinks.
+        if (is_link($link)) {
+            return true;
+        }
+
+        // Windows directory junctions (mklink /J) are not reported by is_link().
+        if (windows_os()) {
+            $readTarget = @readlink($link);
+
+            return is_string($readTarget)
+                && $readTarget !== ''
+                && realpath($readTarget) === $resolvedTarget;
+        }
+
+        return false;
     }
 
     protected function createLink(string $target, string $link): bool

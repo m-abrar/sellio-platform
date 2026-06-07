@@ -25,7 +25,10 @@
     @stack('styles')
 </head>
 
-<body class="no-js antialiased frontend-site @yield('body_class', 'has-body-glow bg-light')">
+<body @class(array_merge(
+    explode(' ', 'no-js antialiased frontend-site ' . trim($__env->yieldContent('body_class') ?: 'has-body-glow bg-light')),
+    auth()->check() && auth()->user()->can('manage-pages') ? ['has-admin-bar'] : []
+))>
 
     @auth
         @can('manage-pages')
@@ -33,8 +36,11 @@
         @endcan
     @endauth
 
-    <header class="main-header border-bottom bg-white sticky-top" role="banner">
-        {{-- Look how clean this is now --}}
+    <header @class([
+        'main-header',
+        'main-header--home border-0 bg-transparent position-absolute top-0 start-0 w-100' => request()->routeIs('index', 'home'),
+        'border-bottom bg-white sticky-top' => ! request()->routeIs('index', 'home'),
+    ]) role="banner">
         @includeIf('frontend._partials._header')
     </header>
     

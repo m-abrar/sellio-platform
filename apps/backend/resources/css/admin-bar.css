@@ -1,16 +1,21 @@
 /* --- VARIABLES --- */
 :root {
     --admin-bar-height: 32px;
+    --admin-bar-offset: 0px;
     --admin-bar-bg: #23282d;
     --admin-link-color: #00a0d2;
     --admin-link-hover: #00b9eb;
+}
+
+body.has-admin-bar {
+    --admin-bar-offset: var(--admin-bar-height);
 }
 
 /* --- ADMIN BAR LAYOUT --- */
 #admin-bar {
     background: var(--admin-bar-bg);
     color: #ccc;
-    height: var(--admin-bar-height);
+    min-height: var(--admin-bar-height);
     position: fixed;
     top: 0;
     left: 0;
@@ -38,12 +43,13 @@
     color: #444;
 }
 
-/* Layout Adjustments for Admin Bar */
-body {
-    padding-top: var(--admin-bar-height); 
+/* Push in-flow page content below the fixed admin bar */
+body.has-admin-bar {
+    padding-top: var(--admin-bar-offset, var(--admin-bar-height));
 }
 
-/* Overwrite Bootstrap fixed-top to respect admin bar */
-.fixed-top {
-    top: var(--admin-bar-height) !important;
+/* Bootstrap / theme fixed & sticky elements */
+body.has-admin-bar .fixed-top,
+body.has-admin-bar .sticky-top {
+    top: var(--admin-bar-offset, var(--admin-bar-height)) !important;
 }

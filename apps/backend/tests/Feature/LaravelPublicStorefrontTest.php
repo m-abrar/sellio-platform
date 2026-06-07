@@ -302,7 +302,7 @@ class LaravelPublicStorefrontTest extends TestCase
             ->assertOk()
             ->assertSee('detail-page--property-sale', false)
             ->assertSee('Completed Sale Property', false)
-            ->assertSee('images/fallbacks/default-detail.jpg', false)
+            ->assertSee('images/fallbacks/default-detail.svg', false)
             ->assertSee('1 Photo', false)
             ->assertSee(__('Schedule a Visit'), false)
             ->assertSee(__('Your Dedicated Agent'), false);

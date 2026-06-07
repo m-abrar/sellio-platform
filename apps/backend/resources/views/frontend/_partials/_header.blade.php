@@ -4,10 +4,10 @@ Description: Smart sticky navbar with transparency toggling and dynamic user con
 Features: Responsive menu, auth-aware actions, and cart integration.
 --}}
 <nav @class([
-    'navbar navbar-expand-lg sticky-top transition-all',
-    'navbar-transparent' => request()->is('/'),
-    'navbar-light bg-white shadow-sm' => !request()->is('/')
-]) id="mainNav" data-aos="fade-in" data-aos-duration="800">
+    'navbar navbar-expand-lg transition-all',
+    'navbar-transparent navbar-light' => request()->routeIs('index', 'home'),
+    'navbar-light bg-white shadow-sm sticky-top' => ! request()->routeIs('index', 'home'),
+]) id="mainNav" data-aos="fade-in" data-aos-duration="800" data-navbar-scroll>
 
     <div class="container-xl">
         {{-- Brand Identity --}}
@@ -130,7 +130,7 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                 @endif
 
                 {{-- Primary Conversion Button --}}
-                <a href="{{ setting('url_partner', '#') }}"
+                <a href="{{ filled(setting('url_partner')) ? setting('url_partner') : route('register') }}"
                     class="btn btn-primary rounded-pill fw-bold px-4 shadow-sm hover-lift text-uppercase">
                     <i class="bi bi-plus-lg me-1"></i> {{ __('Post Listing') }}
                 </a>

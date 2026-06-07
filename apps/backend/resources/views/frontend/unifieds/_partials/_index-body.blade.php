@@ -11,7 +11,7 @@
                     @editable('home.discovery.description', __('Start with any category, then filter into the exact listing you need.'))
                 </p>
             </div>
-            <a href="{{ setting('url_partner', '#') }}" class="btn btn-outline-primary rounded-pill fw-bold px-4">
+            <a href="{{ filled(setting('url_partner')) ? setting('url_partner') : route('register') }}" class="btn btn-outline-primary rounded-pill fw-bold px-4">
                 <i class="bi bi-plus-lg me-1"></i> {{ __('Post Listing') }}
             </a>
         </div>

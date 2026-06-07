@@ -1,15 +1,11 @@
 @php
-    /** * Stagger the AOS animations using the loop iteration
-     */
-    $delay = ($iteration ?? 1) * 100;
     $isOnSale = $auto->on_sale ?? false;
     $isFeatured = $auto->is_featured ?? false;
     $fuelBadgeLabel = $auto->fuel_badge_label ?? null;
 @endphp
 
-<div class="col" data-aos="fade-up" data-aos-delay="{{ $delay }}">
-    <a href="{{ route('autos.show', $auto->slug) }}" 
-       class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column hover-lift shadow-sm rounded-4">
+<a href="{{ route('autos.show', $auto->slug) }}"
+   class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column hover-lift shadow-sm rounded-4">
         
         {{-- Media Container --}}
         <div class="img-container position-relative overflow-hidden rounded-top-4" style="aspect-ratio: 16/9;">
@@ -17,7 +13,8 @@
                 <img src="{{ $auto->primary_image_url }}" 
                      alt="{{ $auto->year }} {{ $auto->make }} {{ $auto->model }}" 
                      class="transition-img w-100 h-100 object-fit-cover" 
-                     loading="lazy">
+                     loading="lazy"
+                     onerror="this.onerror=null;this.src='{{ asset('images/fallbacks/default-card.svg') }}';">
             </div>
             
             {{-- Badges --}}
@@ -82,5 +79,4 @@
                 </div>
             </div>
         </div>
-    </a>
-</div>
+</a>

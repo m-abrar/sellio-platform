@@ -1,18 +1,14 @@
-{{-- 
-    Note: Ensure $loop->index is available from the parent file.
-    Usage: @include('...', ['property' => $item, 'iteration' => $loop->iteration])
---}}
-<div class="col" data-aos="fade-up" data-aos-delay="{{ ($iteration ?? 1) * 100 }}">
-    <a href="{{ route('properties.show', $property->slug) }}" 
-       class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column hover-lift shadow-sm">
+<a href="{{ route('properties.show', $property->slug) }}"
+   class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column hover-lift shadow-sm rounded-4 overflow-hidden">
         
         {{-- Media Container --}}
-        <div class="img-container position-relative overflow-hidden" style="aspect-ratio: 4/3;">
+        <div class="img-container position-relative overflow-hidden rounded-top-4" style="aspect-ratio: 4/3;">
             <div class="listing-card-img h-100">
                 <img src="{{ $property->primary_image_url }}" 
                      alt="{{ $property->title }}" 
                      class="transition-img w-100 h-100 object-fit-cover"
-                     loading="lazy">
+                     loading="lazy"
+                     onerror="this.onerror=null;this.src='{{ asset('images/fallbacks/default-card.svg') }}';">
             </div>
             
             <span class="badge property-status-badge position-absolute top-0 end-0 m-3 rounded-pill shadow-sm fw-800 {{ $property->status_color }}">
@@ -58,5 +54,4 @@
                 </div>
             </div>
         </div>
-    </a>
-</div>
+</a>
