@@ -18,7 +18,7 @@
     </div>
 </div> <!-- .container-installer -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/vendor/npm/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <style>
     .hover-primary:hover { color: var(--primary) !important; }

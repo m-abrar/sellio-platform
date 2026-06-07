@@ -18,7 +18,7 @@
 @section('title', ($booking->exists ? __('Modify') : __('Create')) . ' ' . __('Property Booking'))
 
 @section('css')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="{{ asset('vendor/npm/flatpickr/flatpickr.min.css') }}">
 <style>
     .flatpickr-calendar { border-radius: 16px; border: 0; box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.05); padding: 5px; }
     .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.prevMonthDay.selected, .flatpickr-day.nextMonthDay.selected, .flatpickr-day.prevMonthDay.startRange, .flatpickr-day.nextMonthDay.startRange, .flatpickr-day.prevMonthDay.endRange, .flatpickr-day.nextMonthDay.endRange { background: var(--primary) !important; border-color: var(--primary) !important; color: #ffffff !important; }
@@ -263,7 +263,7 @@
 @stop
 
 @push('js')
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{{ asset('vendor/npm/fullcalendar/index.global.min.js') }}"></script>
+<script src="{{ asset('vendor/npm/flatpickr/flatpickr.min.js') }}"></script>
 <script src="{{ asset('admin-assets/pages/property-bookings-form.js') }}"></script>
 @endpush

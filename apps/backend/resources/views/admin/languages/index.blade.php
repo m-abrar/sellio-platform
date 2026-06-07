@@ -158,7 +158,7 @@
 @endsection
 
 @section('css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/npm/flag-icon-css/flag-icons.min.css') }}">
 @stop
 
 @section('js')

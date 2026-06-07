@@ -16,9 +16,8 @@
 
 @section('css')
     @include('admin._partials._toggle-card-css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ asset('vendor/npm/animate.css/animate.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('vendor/npm/leaflet/leaflet.css') }}" />
 @stop
 
 @section('content_header')
@@ -81,10 +80,10 @@
 @stop
 
 @push('js')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    <script src="{{ asset('vendor/npm/chart.js/chart.umd.min.js') }}"></script>
+    <script src="{{ asset('vendor/npm/fullcalendar/index.global.min.js') }}"></script>
+    <script src="{{ asset('vendor/npm/leaflet/leaflet.js') }}"></script>
+    <script src="{{ asset('vendor/npm/leaflet.heat/leaflet-heat.js') }}"></script>
 
     <script src="{{ asset('admin-assets/pages/dashboard.js') }}"></script>
 @endpush

@@ -197,7 +197,7 @@
 @endsection
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nestable2@1.6.0/jquery.nestable.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/npm/nestable2/jquery.nestable.min.css') }}">
     <style>
         .dd-handle {
             background: #fff;
@@ -223,7 +223,7 @@
 @stop
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/nestable2@1.6.0/jquery.nestable.min.js"></script>
+    <script src="{{ asset('vendor/npm/nestable2/jquery.nestable.min.js') }}"></script>
     <script>
         function showAlert(message, type = 'success') {
             let alertContainer = document.querySelector('.content').querySelector('.container-fluid');

@@ -17,7 +17,7 @@
 @section('title', $reportTitle)
 
 @section('css')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="{{ asset('vendor/npm/flatpickr/flatpickr.min.css') }}">
 @include('admin.reports._date_range_picker_css')
 @endsection
 
@@ -254,7 +254,7 @@
 @stop
 
 @section('js')
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{{ asset('vendor/npm/flatpickr/flatpickr.min.js') }}"></script>
 <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 <script src="{{ asset('admin-assets/pages/reports-filters.js') }}"></script>
 <script src="{{ asset('admin-assets/pages/reports-bookings.js') }}"></script>

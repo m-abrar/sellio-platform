@@ -4,91 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database Connection Error | Sellio </title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/vendor/npm/fontsource/plus-jakarta-sans-400.css" rel="stylesheet">
+    <link href="/vendor/npm/fontsource/plus-jakarta-sans-600.css" rel="stylesheet">
+    <link href="/vendor/npm/fontsource/plus-jakarta-sans-800.css" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        .gradient-bg {
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
             background: radial-gradient(circle at top left, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
         }
-        .shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite;
+        .card {
+            max-width: 42rem;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 32px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+        .icon-wrap { position: relative; display: inline-block; margin-bottom: 2rem; }
+        .icon-box {
+            width: 6rem; height: 6rem; background: #fff; border-radius: 1.5rem;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,.1);
         }
+        .icon-badge {
+            position: absolute; bottom: -.5rem; right: -.5rem; width: 2.5rem; height: 2.5rem;
+            background: #ef4444; border-radius: 1rem; border: 4px solid #fff;
+            display: flex; align-items: center; justify-content: center;
+        }
+        h1 { font-size: 2.25rem; font-weight: 800; color: #0f172a; margin: 0 0 1rem; }
+        p { color: #475569; font-size: 1.125rem; line-height: 1.6; max-width: 28rem; margin: 0 auto 2rem; }
+        .btn {
+            background: #0f172a; color: #fff; border: 0; border-radius: 1rem;
+            padding: 1rem 2rem; font-weight: 700; cursor: pointer;
+            box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.2);
+        }
+        .btn:hover { background: #1e293b; }
+        .code { color: #0f172a; background: #f1f5f9; padding: .125rem .5rem; border-radius: .25rem; }
+        .footer { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(226,232,240,.6); color: #64748b; font-size: .875rem; }
+        .brand { margin-top: 2rem; text-align: center; color: #94a3b8; font-size: .875rem; }
     </style>
 </head>
-<body class="gradient-bg min-h-screen flex items-center justify-center p-6">
-    <div class="max-w-2xl w-full">
-        <div class="glass rounded-[32px] p-12 shadow-2xl text-center space-y-8 relative overflow-hidden">
-            <!-- Decorative Accent -->
-            <div class="absolute -top-24 -left-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl"></div>
-
-            <!-- Icon Stack -->
-            <div class="relative inline-block">
-                <div class="w-24 h-24 bg-white rounded-3xl shadow-xl flex items-center justify-center mx-auto transition-transform hover:scale-105 duration-300">
-                    <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<body>
+    <div>
+        <div class="card">
+            <div class="icon-wrap">
+                <div class="icon-box">
+                    <svg width="48" height="48" class="text-slate-400" fill="none" stroke="#94a3b8" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
                     </svg>
                 </div>
-                <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-red-500 rounded-2xl shadow-lg flex items-center justify-center border-4 border-white">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="icon-badge">
+                    <svg width="20" height="20" fill="none" stroke="#fff" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </div>
             </div>
 
-            <!-- Content -->
-            <div class="space-y-4">
-                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
-                    Connection Refused
-                </h1>
-                <p class="text-lg text-slate-600 leading-relaxed max-w-md mx-auto">
-                    Sellio was unable to establish a secure link with the database cluster. This is typically a temporary service disruption.
-                </p>
-            </div>
+            <h1>Connection Refused</h1>
+            <p>Sellio was unable to establish a secure link with the database cluster. This is typically a temporary service disruption.</p>
 
-            <!-- Action Area -->
-            <div class="pt-6 space-y-4">
-                <button onclick="window.location.reload()" class="w-full sm:w-auto bg-slate-900 text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-slate-900/20 hover:bg-slate-800 transition-all active:scale-[0.98]">
-                    Retry Connection
-                </button>
-                <div class="text-sm text-slate-500 font-medium">
-                    Diagnostic Code: <span class="text-slate-900 bg-slate-100 px-2 py-0.5 rounded">ERR_DB_CON_REFUSED</span>
-                </div>
-            </div>
-
-            <!-- Footer Details -->
-            <div class="pt-8 border-t border-slate-200/60 mt-8">
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-slate-500">
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                        MySQL Instance Down
-                    </div>
-                    <div class="hidden sm:block text-slate-300">|</div>
-                    <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Admin Portal Offline
-                    </div>
-                </div>
+            <button type="button" class="btn" onclick="window.location.reload()">Retry Connection</button>
+            <div class="footer">
+                Diagnostic Code: <span class="code">ERR_DB_CON_REFUSED</span>
             </div>
         </div>
-        
-        <!-- Subtle Branding -->
-        <p class="mt-8 text-center text-slate-400 text-sm font-medium">
-            Powered by <span class="text-slate-500">Sellio Core 12.0</span>
-        </p>
+        <p class="brand">Powered by <strong>Sellio Core 12.0</strong></p>
     </div>
 </body>
 </html>

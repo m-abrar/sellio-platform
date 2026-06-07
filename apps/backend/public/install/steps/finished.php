@@ -64,7 +64,7 @@ include __DIR__ . '/../layout/header.php';
     </div>
 </div>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link rel="stylesheet" href="/vendor/npm/animate.css/animate.min.css"/>
 
 <?php
 include __DIR__ . '/../layout/footer.php'; 

@@ -19,16 +19,20 @@
             return name.replace(/['"]/g, '');
         }
 
-        /**
-         * Asynchronously load Google Fonts into the document head
-         */
+        const LOCAL_FONT_STYLESHEETS = {
+            Inter: '/vendor/npm/fontsource/bundle.css',
+            Outfit: '/vendor/npm/fontsource/bundle.css',
+        };
+
         function loadGoogleFont(fontName) {
             if (!fontName || ['serif', 'sans-serif', 'monospace', 'cursive', 'system-ui'].includes(fontName.toLowerCase())) return;
-            
-            const fontId = 'google-font-' + fontName.replace(/\s+/g, '-').toLowerCase();
+
+            const stylesheet = LOCAL_FONT_STYLESHEETS[fontName];
+            if (!stylesheet) return;
+
+            const fontId = 'local-font-' + fontName.replace(/\s+/g, '-').toLowerCase();
             if ($('#' + fontId).length === 0) {
-                const link = `<link id="${fontId}" href="https://fonts.googleapis.com/css2?family=${fontName.replace(/\s+/g, '+')}:wght@400;700&display=swap" rel="stylesheet">`;
-                $('head').append(link);
+                $('head').append(`<link id="${fontId}" href="${stylesheet}" rel="stylesheet">`);
             }
         }
 

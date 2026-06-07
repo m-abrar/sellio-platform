@@ -17,15 +17,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('Page Builder') }} | {{ $page->title }}</title>
     
-    <!-- Premium Font Orchestration -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
-    <!-- GrapesJS Core & Plugins -->
-    <link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css">
-    <script src="https://unpkg.com/grapesjs"></script>
-    <script src="https://unpkg.com/grapesjs-blocks-basic"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="{{ asset('vendor/npm/fontsource/bundle.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/npm/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/npm/grapesjs/grapes.min.css') }}">
+    <script src="{{ asset('vendor/npm/grapesjs/grapes.min.js') }}"></script>
+    <script src="{{ asset('vendor/npm/grapesjs-blocks-basic/index.js') }}"></script>
+    <script src="{{ asset('vendor/npm/sweetalert2/sweetalert2.all.min.js') }}"></script>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -246,7 +243,7 @@
             pluginsOpts: { 'gjs-blocks-basic': {} },
             canvas: {
                 styles: [
-                    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap'
+                    '{{ asset('vendor/npm/fontsource/bundle.css') }}'
                 ]
             }
         });
