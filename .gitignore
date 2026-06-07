@@ -26,3 +26,7 @@ Thumbs.db
 
 # Development workspace scratch files
 /_development/temp/
+
+# Automated distribution output (scripts/prepare-distribution.mjs)
+/distribution/
+/distribution.zip

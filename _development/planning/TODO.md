@@ -284,3 +284,42 @@ in the partner dashboard
 
 ### Stripe keys lost on demo refresh
 - [x] `StripeGatewaySeeder` now seeds `sandbox_config` / `live_config` from `.env` (`STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_CURRENCY`) and auto-activates sandbox mode when keys are present. Admin UI edits still persist in DB; re-seed restores env defaults without wiping manually saved keys if using `updateOrCreate` on credentials (existing row updated, not deleted).
+
+---------------------------
+
+in the landing page, give an opportunity to click and explore these: admin | seller | buyer dashboards with passwords
+
+---------------------
+
+https://sellio.vebdez.com/documentation
+https://demo.sellio.vebdez.com/admin (laravel)
+https://demo.sellio.vebdez.com (laravel blades frontend)
+https://frontend.sellio.vebdez.com (nextjs frontend)
+https://seller-panel.vebdez.com
+https://buyer-panel.vebdez.com
+
+update the links
+suggest if we can make better and practical links?
+
+--------------------------
+on the landing page and documentation, we need to update the logo
+also update the links as discussed
+
+---------------
+
+on the introduction page, can you show day / night modes toggle button together? or show a label for easy finding (attention)
+
+--------------
+
+the install wizard has lost css styling, please fix.
+
+------------------
+
+the footer links on install wizard are dead
+
+----------------------
+
+
+-----------------------------------------------
+
+

@@ -7,6 +7,29 @@
  * grouping administrative features into high-priority operational blocks
  * (Listings, Bookings, Financials, Content, RBAC).
  */
+
+if (! function_exists('admin_sidebar_item')) {
+    /**
+     * @param  array<string, mixed>  $item
+     * @return array<string, mixed>
+     */
+    function admin_sidebar_item(string $short, array $item = [], ?string $full = null): array
+    {
+        $full = $full ?? $short;
+        $item['text'] = $short;
+
+        if ($full !== $short) {
+            $item['data'] = array_merge($item['data'] ?? [], [
+                'toggle' => 'tooltip',
+                'placement' => 'right',
+                'full-title' => $full,
+            ]);
+        }
+
+        return $item;
+    }
+}
+
 return [
     // TOP NAVIGATION (No change)
     [
@@ -52,13 +75,12 @@ return [
         'url'  => 'admin/welcome',
         'icon' => 'fas fa-tachometer-alt',
     ],
-    [
-        'text' => 'Ecommerce Overview',
+    admin_sidebar_item('Ecommerce', [
         'url'  => 'admin/dashboard/ecommerce',
         'icon' => 'fas fa-shopping-cart',
         'module' => 'products',
         'can'    => 'manage-products',
-    ],
+    ], 'Ecommerce Overview'),
 
     // 2. CORE BUSINESS - PROPERTY & OPERATIONS
     ['header' => 'LISTINGS & OPERATIONS'],
@@ -73,11 +95,10 @@ return [
                 'url' => 'admin/listings',
                 'icon' => 'fas fa-layer-group',
             ],
-            [
-                'text' => 'Pending Approval',
+            admin_sidebar_item('Pending', [
                 'url' => 'admin/listings/pending',
                 'icon' => 'fas fa-hourglass-start',
-            ],
+            ], 'Pending Approval'),
             [
                 'text' => 'Products',
                 'url' => 'admin/products',
@@ -131,69 +152,60 @@ return [
     ],
 
     // B. Operations (Bookings & Leads)
-    [
-        'text' => 'Bookings & Inquiries',
+    admin_sidebar_item('Bookings', [
         'icon' => 'fas fa-calendar-alt',
         'can'  => 'manage-bookings',
         'submenu' => [
-             [
-                'text' => 'All Bookings & Leads',
+             admin_sidebar_item('All Bookings', [
                 'url' => 'admin/bookings',
                 'icon' => 'fas fa-layer-group',
-             ],
+             ], 'All Bookings & Leads'),
              [
                 'text' => 'Product Orders',
                 'url' => 'admin/product-orders',
                 'icon' => 'fas fa-truck',
                 'module' => 'products',
              ],
-             [
-                'text' => 'Property Bookings',
+             admin_sidebar_item('Property', [
                 'url' => 'admin/bookings/properties',
                 'icon' => 'fas fa-building',
                 'module' => 'properties',
-             ],
-             [
-                'text' => 'Auto Inquiries',
+             ], 'Property Bookings'),
+             admin_sidebar_item('Auto', [
                 'url' => 'admin/bookings/autos',
                 'icon' => 'fas fa-car',
                 'module' => 'autos',
-             ],
-             [
-                'text' => 'Event Bookings',
+             ], 'Auto Inquiries'),
+             admin_sidebar_item('Events', [
                 'url' => 'admin/bookings/events',
                 'icon' => 'fas fa-calendar-check',
                 'module' => 'events',
-             ],
-             [
-                'text' => 'Job Applications',
+             ], 'Event Bookings'),
+             admin_sidebar_item('Jobs', [
                 'url' => 'admin/bookings/jobs',
                 'icon' => 'fas fa-briefcase',
                 'module' => 'jobs',
-             ],
-             [
-                'text' => 'Service Bookings',
+             ], 'Job Applications'),
+             admin_sidebar_item('Services', [
                 'url' => 'admin/bookings/services',
                 'icon' => 'fas fa-hand-holding-heart',
                 'module' => 'services',
-             ],
-             [
-                'text' => 'Classified Leads',
+             ], 'Service Bookings'),
+             admin_sidebar_item('Classifieds', [
                 'url' => 'admin/bookings/classifieds',
                 'icon' => 'fas fa-bullhorn',
                 'module' => 'classifieds',
-             ],
+             ], 'Classified Leads'),
         ],
-    ],
+    ], 'Bookings & Inquiries'),
 
     // 3. CORE BUSINESS - LISTING ATTRIBUTES (Sub-settings for Listings)
     [
         'header' => 'LISTING ATTRIBUTES',
     ],
-    [
-        'text' => 'Manage Attributes',
-        'icon' => 'fas fa-sliders-h', // Updated Icon for "attributes"
-        'color' => 'secondary', // Applied color
+    admin_sidebar_item('Attributes', [
+        'icon' => 'fas fa-sliders-h',
+        'color' => 'secondary',
         'can'   => 'manage-taxonomies',
         'submenu' => [
             // Reordered sub-items to place the most essential/frequently used first
@@ -233,7 +245,7 @@ return [
                 'icon' => 'fas fa-award',
             ],
         ],
-    ],
+    ], 'Manage Attributes'),
 
 
     // 4. FINANCIALS & MEMBERSHIP
@@ -246,70 +258,59 @@ return [
         'color' => 'warning', // Applied color
         'can'   => 'manage-financials',
         'submenu' => [
-            [
-                'text' => 'Payments / Checkout',
+            admin_sidebar_item('Payments', [
                 'icon' => 'fas fa-money-bill-wave',
                 'submenu' => [
-                    [
-                        'text' => 'All Transactions',
+                    admin_sidebar_item('Transactions', [
                         'url' => 'admin/payments',
                         'icon' => 'fas fa-receipt',
-                    ],
-                    [
-                        'text' => 'Failed Payments',
+                    ], 'All Transactions'),
+                    admin_sidebar_item('Failed', [
                         'url' => 'admin/payments/failed',
                         'icon' => 'fas fa-exclamation-triangle',
-                        'color' => 'danger', // Applied color
-                    ],
+                        'color' => 'danger',
+                    ], 'Failed Payments'),
                 ],
-            ],
+            ], 'Payments / Checkout'),
             // ** NEW WITHDRAWALS MENU ITEM ADDED HERE **
             [
                 'text' => 'Withdrawals',
                 'icon' => 'fas fa-hand-holding-usd',
                 'submenu' => [
-                    [
-                        'text' => 'Pending Withdrawals',
+                    admin_sidebar_item('Pending', [
                         'url' => 'admin/withdrawals/pending',
                         'icon' => 'fas fa-hourglass-start',
-                        'color' => 'warning', // Applied color
-                    ],
-                    [
-                        'text' => 'All Withdrawals',
+                        'color' => 'warning',
+                    ], 'Pending Withdrawals'),
+                    admin_sidebar_item('All', [
                         'url' => 'admin/withdrawals',
                         'icon' => 'fas fa-list-alt',
-                    ],
-                    [
-                        'text' => 'Failed Withdrawals',
+                    ], 'All Withdrawals'),
+                    admin_sidebar_item('Failed', [
                         'url' => 'admin/withdrawals/failed',
                         'icon' => 'fas fa-times-circle',
-                        'color' => 'danger', // Applied color
-                    ],
+                        'color' => 'danger',
+                    ], 'Failed Withdrawals'),
                 ],
             ],
-            // Reports & Analytics
-            [
-                'text' => 'Reports & Analytics',
+            admin_sidebar_item('Reports', [
                 'icon' => 'fas fa-chart-bar',
                 'can' => 'edit',
                 'submenu' => [
-                    [
-                        'text' => 'Revenue & Payments',
+                    admin_sidebar_item('Revenue', [
                         'url' => 'admin/reports/payments',
                         'icon' => 'fas fa-dollar-sign',
-                    ],
-                    [
-                        'text' => 'Booking Summary',
+                    ], 'Revenue & Payments'),
+                    admin_sidebar_item('Bookings', [
                         'url' => 'admin/reports/bookings',
                         'icon' => 'fas fa-calendar-day',
-                    ],
-                    [
-                        'text' => 'Property Occupancy',
+                    ], 'Booking Summary'),
+                    admin_sidebar_item('Occupancy', [
                         'url' => 'admin/reports/properties',
                         'icon' => 'fas fa-building',
-                    ],
+                    ], 'Property Occupancy'),
                 ],
-            ],
+            ], 'Reports & Analytics'),
         ],
     ],
 
@@ -325,23 +326,20 @@ return [
                 'icon' => 'fas fa-list-alt',
                 'can'  => 'manage-subscriptions',
                 'submenu' => [
-                    [
-                        'text' => 'Active Subscriptions',
+                    admin_sidebar_item('Active', [
                         'url' => 'admin/subscriptions/active',
                         'icon' => 'fas fa-check-circle',
-                        'color' => 'success', // Applied color
-                    ],
-                    [
-                        'text' => 'All Subscriptions',
+                        'color' => 'success',
+                    ], 'Active Subscriptions'),
+                    admin_sidebar_item('All', [
                         'url' => 'admin/subscriptions',
                         'icon' => 'fas fa-list-alt',
-                    ],
-                    [
-                        'text' => 'Pending / Expired',
+                    ], 'All Subscriptions'),
+                    admin_sidebar_item('Pending', [
                         'url' => 'admin/subscriptions/pending',
                         'icon' => 'fas fa-hourglass-half',
-                        'color' => 'danger', // Applied color
-                    ],
+                        'color' => 'danger',
+                    ], 'Pending / Expired'),
                 ],
             ],
             [
@@ -354,11 +352,10 @@ return [
                         'url' => 'admin/plans',
                         'icon' => 'fas fa-list',
                     ],
-                    [
-                        'text' => 'Add New Plan',
+                    admin_sidebar_item('Add Plan', [
                         'url' => 'admin/plans/create',
                         'icon' => 'fas fa-plus-circle',
-                    ],
+                    ], 'Add New Plan'),
                 ],
             ],
         ],
@@ -369,16 +366,12 @@ return [
     ['header' => 'CONTENT & MARKETING', 'can' => ['manage-blogs', 'manage-pages', 'manage-marketing']],
     
     // A. CMS (Content Management System)
-    [
-        'text' => 'CMS (Content)',
+    admin_sidebar_item('CMS', [
         'icon' => 'fas fa-edit',
-        'color' => 'teal', // Applied color
+        'color' => 'teal',
         'can' => ['manage-blogs', 'manage-pages'],
         'submenu' => [
-            
-            // --- BLOG MANAGEMENT ---
-            [
-                'text'    => 'Blog Management',
+            admin_sidebar_item('Blog', [
                 'icon'    => 'fas fa-blog',
                 'color'   => 'orange',
                 'can'     => 'manage-blogs',
@@ -388,18 +381,16 @@ return [
                         'url'  => 'admin/blogs',
                         'icon' => 'fas fa-list-ul',
                     ],
-                    [
-                        'text' => 'Add New Post',
+                    admin_sidebar_item('Add Post', [
                         'url'  => 'admin/blogs/create',
                         'icon' => 'fas fa-plus-circle',
-                    ],
-                    [
-                        'text' => 'Pending Review',
+                    ], 'Add New Post'),
+                    admin_sidebar_item('Pending', [
                         'url'  => 'admin/blogs/pending',
                         'icon' => 'fas fa-hourglass-half text-warning',
-                    ],
+                    ], 'Pending Review'),
                 ],
-            ],
+            ], 'Blog Management'),
             [
                 'text' => 'Pages',
                 'url' => 'admin/pages',
@@ -416,32 +407,28 @@ return [
                 'url'  => 'admin/pages/type/footer',
                 'icon' => 'fas fa-shoe-prints', // Updated Icon
             ],
-            [
-                'text' => 'Media Gallery',
+            admin_sidebar_item('Gallery', [
                 'url'  => 'admin/gallery',
                 'icon' => 'fas fa-photo-video',
                 'color' => 'indigo',
-            ],
+            ], 'Media Gallery'),
         ],
-    ],
+    ], 'CMS (Content)'),
 
     // B. Marketing Tools
-    [
-        'text' => 'Marketing Tools',
-        'icon' => 'fas fa-chart-pie', // Updated Icon for "Marketing"
-        'color' => 'purple', // Applied color
+    admin_sidebar_item('Marketing', [
+        'icon' => 'fas fa-chart-pie',
+        'color' => 'purple',
         'can' => 'manage-marketing',
         'submenu' => [
-            [
-                'text' => 'Newsletter Subscribers',
+            admin_sidebar_item('Newsletter', [
                 'url' => 'admin/newsletter-subscribers',
                 'icon' => 'fas fa-mail-bulk',
-            ],
-            [
-                'text' => 'Email Templates',
+            ], 'Newsletter Subscribers'),
+            admin_sidebar_item('Templates', [
                 'url' => 'admin/email-templates',
-                'icon' => 'far fa-fw fa-envelope-open', // Updated Icon
-            ],
+                'icon' => 'far fa-fw fa-envelope-open',
+            ], 'Email Templates'),
             [
                 'text' => 'Manage Ads',
                 'url'  => 'admin/advertisements',
@@ -455,7 +442,7 @@ return [
                 'can'  => 'manage-marketing',
             ],
         ],
-    ],
+    ], 'Marketing Tools'),
 
 
     // 6. USERS MANAGEMENT
@@ -464,13 +451,11 @@ return [
         'can' => ['manage-users', 'app-settings'],
     ],
 
-    [
-        'text' => 'Users & Roles',
+    admin_sidebar_item('Users', [
         'icon' => 'fas fa-users-cog',
-        'color' => 'danger', // Applied color
+        'color' => 'danger',
         'submenu' => [
-            [
-                'text' => 'Manage Users',
+            admin_sidebar_item('Accounts', [
                 'icon' => 'fas fa-users',
                 'can' => 'manage-users',
                 'submenu' => [
@@ -487,24 +472,22 @@ return [
                     [
                         'text' => 'Partners',
                         'url' => 'admin/users/partners',
-                        'icon' => 'fas fa-handshake', // Updated Icon
+                        'icon' => 'fas fa-handshake',
                     ],
                 ],
-            ],
-            [
-                'text' => 'Manage Roles',
+            ], 'Manage Users'),
+            admin_sidebar_item('Roles', [
                 'url'  => 'admin/roles',
                 'icon' => 'fas fa-user-shield',
                 'can' => 'app-settings',
-            ],
-            [
-                'text' => 'Manage Permissions',
+            ], 'Manage Roles'),
+            admin_sidebar_item('Permissions', [
                 'url'  => 'admin/permissions',
                 'icon' => 'fas fa-unlock-alt',
                 'can' => 'app-settings',
-            ],
+            ], 'Manage Permissions'),
         ],
-    ],
+    ], 'Users & Roles'),
 
 
     // 8. SUPPORT
@@ -519,51 +502,44 @@ return [
 
     // 7. GLOBAL SETTINGS
     ['header' => 'APP SETTINGS', 'can' => 'app-settings'],
-    [
-        'text' => 'System Configuration',
-        'icon' => 'fas fa-cogs', // Updated Icon
-        'color' => 'gray', // Applied color
+    admin_sidebar_item('System', [
+        'icon' => 'fas fa-cogs',
+        'color' => 'gray',
         'can' => 'app-settings',
         'submenu' => [
-            [
-                'text' => 'General Settings',
+            admin_sidebar_item('General', [
                 'url'  => 'admin/settings',
                 'icon' => 'fas fa-cog',
-            ],
-            [
-                'text' => 'Config Gateways',
+            ], 'General Settings'),
+            admin_sidebar_item('Gateways', [
                 'url'  => 'admin/payment-gateways',
                 'icon' => 'fas fa-credit-card',
-            ],
-            [
-                'text' => 'Theme Settings',
+            ], 'Config Gateways'),
+            admin_sidebar_item('Themes', [
                 'url'  => 'admin/themes',
                 'icon' => 'fas fa-palette',
-            ],
-            [
-                'text' => 'Content By Page',
+            ], 'Theme Settings'),
+            admin_sidebar_item('Content', [
                 'url'  => 'admin/content',
                 'icon' => 'fas fa-file-alt',
-            ],
+            ], 'Content By Page'),
             [
-                'text' => 'The Menus',
+                'text' => 'Menus',
                 'url'  => 'admin/menu',
                 'icon' => 'fas fa-bars',
             ],
-            [
-                'text' => 'System Maintenance',
+            admin_sidebar_item('Maintenance', [
                 'url'  => 'admin/system/maintenance',
                 'icon' => 'fas fa-tools',
                 'color' => 'danger',
-            ],
-            [
-                'text' => 'System Health',
+            ], 'System Maintenance'),
+            admin_sidebar_item('Health', [
                 'url'  => 'admin/system/status',
                 'icon' => 'fas fa-heartbeat',
                 'color' => 'success',
-            ],
+            ], 'System Health'),
         ],
-    ],
+    ], 'System Configuration'),
 
     // 8. PERSONAL ACCOUNT (Lowest Priority, placed at the very bottom)
     ['header' => 'MY ACCOUNT'],

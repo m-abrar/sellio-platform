@@ -20,7 +20,7 @@
 }
 
 body {
-    font-family: 'Outfit', 'Inter', sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
     color: var(--text-main);
     min-height: 100vh;

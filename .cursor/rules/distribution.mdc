@@ -1,0 +1,35 @@
+---
+description: Distribution and CodeCanyon packaging rules for Sellio
+globs: scripts/prepare-distribution.mjs,distribution/**,_development/planning/DISTRIBUTION_PREP_PLAN.md,_development/planning/CODECANYON_SUBMISSION_CHECKLIST.md
+alwaysApply: false
+---
+
+# Distribution packaging
+
+When preparing `distribution/` or `distribution.zip` via `scripts/prepare-distribution.mjs`:
+
+## Always empty `storage/app/public`
+
+- **Never** include dev-uploaded media from the local machine in the distribution package.
+- Path: `distribution/apps/backend/storage/app/public/` (and the same cleanup in any staging output).
+- Keep the directory and its `.gitignore`; remove all other files and subdirectories.
+- Demo media is recreated on the target server by `migrate --seed` / installer demo seed (`MediaFullSeeder` reads `database/seeders/images/`).
+
+## Rationale
+
+Local `storage/app/public/` can contain 10k+ files (~1.3 GB) from dev seed runs. Shipping them bloats the ZIP and is environment-specific.
+
+## Script behavior
+
+`prepare-distribution.mjs` must:
+
+1. Skip copying anything under `backend/storage/app/public/` except `.gitignore`
+2. Clear `storage/app/public/` again after copy as a safety net
+
+## Rebuild after rule changes
+
+```bash
+npm run prepare:distribution:zip
+```
+
+Expected package size drops to ~300–350 MB (themes + seeder images + code), not ~1.6 GB.

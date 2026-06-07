@@ -7,6 +7,9 @@
     "dev:storefront": "cd _development/storefront/app && npm run dev -- -p 3001",
     "dev:seller": "cd apps/seller && npm run dev -- --port 3002",
     "dev:buyer": "cd apps/buyer && npm run dev",
+    "prepare:distribution": "node scripts/prepare-distribution.mjs",
+    "prepare:distribution:quick": "node scripts/prepare-distribution.mjs --skip-build",
+    "prepare:distribution:zip": "node scripts/prepare-distribution.mjs --zip",
     "build:all": "echo 'Run build in each app directory'",
     "lint:all": "echo 'Run lint in each app directory'"
   },

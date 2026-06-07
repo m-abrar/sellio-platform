@@ -52,6 +52,72 @@ function is_local_env(): bool {
 }
 
 /**
+ * Web path to Laravel's public/ directory (respects subdirectory installs).
+ */
+function installer_public_base(): string
+{
+    static $base = null;
+
+    if ($base !== null) {
+        return $base;
+    }
+
+    $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '/install/index.php');
+    $publicPath = dirname(dirname($scriptName));
+
+    if ($publicPath === '/' || $publicPath === '.' || $publicPath === '') {
+        $base = '';
+    } else {
+        $base = rtrim($publicPath, '/');
+    }
+
+    return $base;
+}
+
+/**
+ * Resolve a path under public/ for installer views and assets.
+ */
+function installer_asset(string $path): string
+{
+    $path = ltrim(str_replace('\\', '/', $path), '/');
+    $base = installer_public_base();
+
+    return ($base === '' ? '' : $base) . '/' . $path;
+}
+
+/**
+ * Prefer a local public/ asset; fall back to CDN when vendor files were not uploaded.
+ */
+function installer_asset_or_cdn(string $publicPath, string $cdnUrl): string
+{
+    global $basePath;
+
+    $localFile = $basePath . '/public/' . ltrim(str_replace('\\', '/', $publicPath), '/');
+
+    if (is_file($localFile)) {
+        return installer_asset($publicPath);
+    }
+
+    return $cdnUrl;
+}
+
+/**
+ * Web path to a file inside public/install/.
+ */
+function installer_url(string $path = ''): string
+{
+    $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '/install/index.php');
+    $installPath = rtrim(dirname($scriptName), '/');
+    $path = ltrim(str_replace('\\', '/', $path), '/');
+
+    if ($path === '') {
+        return $installPath === '' ? '/install' : $installPath;
+    }
+
+    return ($installPath === '' ? '' : $installPath) . '/' . $path;
+}
+
+/**
  * Returns the correct PHP binary path based on the environment with fallbacks.
  * Checks for specific server paths first, then common binary locations.
  */

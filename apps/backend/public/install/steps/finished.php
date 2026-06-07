@@ -64,7 +64,10 @@ include __DIR__ . '/../layout/header.php';
     </div>
 </div>
 
-<link rel="stylesheet" href="/vendor/npm/animate.css/animate.min.css"/>
+<link rel="stylesheet" href="<?= htmlspecialchars(installer_asset_or_cdn(
+    'vendor/npm/animate.css/animate.min.css',
+    'https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css'
+)) ?>"/>
 
 <?php
 include __DIR__ . '/../layout/footer.php'; 

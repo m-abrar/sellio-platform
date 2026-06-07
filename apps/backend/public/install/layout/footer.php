@@ -3,6 +3,11 @@
 // Sellio Installer - HTML Footer (Premium Edition)
 // File: layout/footer.php
 // =================================================================================
+
+$bootstrapJs = installer_asset_or_cdn(
+    'vendor/npm/bootstrap/js/bootstrap.bundle.min.js',
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'
+);
 ?>
     </div> <!-- .install-card -->
     
@@ -18,7 +23,7 @@
     </div>
 </div> <!-- .container-installer -->
 
-<script src="/vendor/npm/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= htmlspecialchars($bootstrapJs) ?>"></script>
 
 <style>
     .hover-primary:hover { color: var(--primary) !important; }

@@ -133,7 +133,20 @@ $(function() {
     /**
      * 4. Initialize Tooltips & Popovers Globally
      */
-    $('[data-toggle="tooltip"]').tooltip();
+    const tooltipDefaults = {
+        container: 'body',
+        boundary: 'window',
+        trigger: 'hover',
+    };
+
+    $('.nav-sidebar .nav-link[data-full-title]').each(function () {
+        const $link = $(this);
+        if (!$link.attr('title')) {
+            $link.attr('title', $link.attr('data-full-title'));
+        }
+    });
+
+    $('[data-toggle="tooltip"]').tooltip(tooltipDefaults);
     $('[data-toggle="popover"]').popover();
 
     /**

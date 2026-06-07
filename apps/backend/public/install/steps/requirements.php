@@ -5,6 +5,8 @@
 // =================================================================================
 global $basePath;
 
+$viteManifest = $basePath . '/public/build/manifest.json';
+
 $requirements = [
     'PHP >= 8.2' => version_compare(PHP_VERSION, '8.2.0', '>='),
     'BCMath Extension' => extension_loaded('bcmath'),
@@ -24,6 +26,7 @@ $requirements = [
     'passthru() Function' => function_exists('passthru'),
     'Writable storage/' => is_path_writable('storage'),
     'Writable bootstrap/cache/' => is_path_writable('bootstrap/cache'),
+    'Frontend assets (public/build/manifest.json)' => file_exists($viteManifest),
 ];
 
 $allPassed = !in_array(false, $requirements, true);

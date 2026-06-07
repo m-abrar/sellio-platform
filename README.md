@@ -23,13 +23,15 @@
 | **`apps/backend`** | Laravel 12.x core — API, Blade storefront, admin panel |
 | **`apps/seller`** | Partner / seller React dashboard |
 | **`apps/buyer`** | Buyer React dashboard |
-| **`packages/`** | Shared `api-client` and TypeScript `types` |
+| **`packages/`** | Shared TypeScript `types` and `api-client` for **local development only** — not deployed to production; seller/buyer are pre-built and Laravel does not use it |
 | **`documentation/`** | Buyer-facing HTML documentation (`index.html`); **`documentation/reviewer/`** — QA and test reports for Envato reviewers |
 | **`introduction/`** | CodeCanyon item preview pages |
 | **`listing-description/`** | Marketplace listing HTML |
 | **`CHANGELOG.md`** | Version history for updates (CodeCanyon requirement) |
 
 Internal development files (audits, TODOs, theme references, WIP Next.js storefront) live in **`_development/`** and are excluded from the distribution bundle.
+
+**Production deploy (e.g. Hostinger with separate subdomain roots):** upload `apps/backend` to the main site, and only the pre-built `apps/seller/dist/` and `apps/buyer/dist/` contents to their subdomains. See `distribution/SERVER-DEPLOY.md` section 6 after running `npm run prepare:distribution`.
 
 ---
 

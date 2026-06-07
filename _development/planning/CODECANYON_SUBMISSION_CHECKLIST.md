@@ -164,7 +164,8 @@ From `_development/planning/TODO.md` — verify and check when confirmed.
 ## G — Distribution ZIP
 
 Exclude `_development/`, `.cursor/`, `node_modules/`, `.env`, test artifacts.  
-Include `documentation/reviewer/`, `Documentation/`, `apps/`, `packages/`, root `CHANGELOG.md`.
+Always empty `apps/backend/storage/app/public/` in the distribution copy (dev uploads only; demo seed repopulates).  
+Include `documentation/reviewer/`, `Documentation/`, `apps/`, root `CHANGELOG.md`. Exclude `packages/` (dev-only shared TypeScript; not used at runtime).
 
 ### Assets
 
