@@ -492,7 +492,23 @@ Save and refresh the browser.
 In Laravel admin → **Settings → General**, set **Partner Portal URL** to this panel's full URL
 (for example \`${distributionSellerUrl}\`). CORS updates automatically.
 
-## 3. Demo login (after backend seed)
+## 3. Client-side routing (refresh / direct URLs)
+
+This panel uses React Router. Paths such as \`/dashboard/properties\` are handled in the browser.
+The build ships \`.htaccess\` (Apache) and \`web.config\` (IIS) so refresh and bookmarked URLs
+serve \`index.html\` instead of 404.
+
+**Apache:** \`mod_rewrite\` must be enabled (default on most shared hosting).
+
+**Nginx:** add to the seller subdomain server block:
+
+\`\`\`nginx
+location / {
+  try_files $uri $uri/ /index.html;
+}
+\`\`\`
+
+## 4. Demo login (after backend seed)
 
 See \`apps/backend/README.md\` on the main site for partner demo credentials.
 
@@ -733,6 +749,27 @@ Workflow:
 5. In Admin → Settings, set Partner URL and Buyer URL to the full \`https://\` subdomain URLs.
 
 The React apps call the Laravel API over HTTPS. No relative path between subdomain folders is required.
+
+### Client-side routing (refresh / direct URLs)
+
+Buyer and seller panels use React Router. In-app navigation updates the browser path; on refresh
+the server must return \`index.html\` for unknown paths (not a 404 HTML page).
+
+Each \`dist/\` folder includes:
+
+- \`.htaccess\` — Apache / LiteSpeed (most shared hosting, including Hostinger)
+- \`web.config\` — IIS / Windows hosting
+
+**Nginx:** add to each panel subdomain server block:
+
+\`\`\`nginx
+location / {
+  try_files $uri $uri/ /index.html;
+}
+\`\`\`
+
+Without one of these rules, routes like \`/favorites\` or \`/dashboard/properties\` work until
+you refresh the browser.
 
 ## 7. Cron + queue
 

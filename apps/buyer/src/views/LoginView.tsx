@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, Mail, Rocket } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, Rocket } from 'lucide-react';
 import { Button } from '../components/Button';
 import { useUser } from '../context/UserContext';
 import { getBrandSettings, BrandSettings } from '../api/brandApi';
@@ -10,6 +10,7 @@ export default function LoginView() {
   const { login } = useUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [brand, setBrand] = useState<BrandSettings | null>(null);
@@ -87,12 +88,20 @@ export default function LoginView() {
           <div className="relative">
             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded-2xl border-none bg-zinc-50 py-3 pl-12 pr-4 text-sm focus:ring-2 focus:ring-zinc-900"
+              className="w-full rounded-2xl border-none bg-zinc-50 py-3 pl-12 pr-12 text-sm focus:ring-2 focus:ring-zinc-900"
               required
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 transition-colors"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </div>
         </label>
 
