@@ -24,7 +24,7 @@
             <div class="d-flex flex-wrap gap-3">
                 @forelse(menu_items('social_footer') as $menuitem)
                     <a href="{{ $menuitem->url }}" class="social-icon text-light fs-5 transition-all" aria-label="{{ $menuitem->title }}">
-                        {!! $menuitem->title !!}
+                        {{ __($menuitem->title) }}
                     </a>
                 @empty
                     {{-- Default Socials if none configured --}}

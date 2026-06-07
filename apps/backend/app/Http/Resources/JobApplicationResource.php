@@ -31,7 +31,7 @@ class JobApplicationResource extends JsonResource
             'viewed_at' => $this->viewed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'job' => $this->job ? [
+            'job' => $this->whenLoaded('job', fn () => [
                 'id' => $this->job->id,
                 'title' => $this->job->title,
                 'slug' => $this->job->slug,
@@ -39,16 +39,18 @@ class JobApplicationResource extends JsonResource
                 'salary_max' => $this->job->salary_max,
                 'workplace_type' => $this->job->workplace_type,
                 'primary_image_url' => $this->job->primary_image_url,
-            ] : null,
-            'user' => $this->user ? [
+            ]),
+            'user' => $this->whenLoaded('user', fn () => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
                 'avatar_url' => $this->user->avatar_url,
-            ] : null,
-            // Fallback user contact details for consistent detail view UI
-            'full_name' => $this->when($canViewPii, $this->user ? $this->user->name : 'Candidate'),
-            'email' => $this->when($canViewPii, $this->user ? $this->user->email : null),
-            'phone' => $this->when($canViewPii, $this->user ? $this->user->phone : null),
+            ]),
+            'full_name' => $this->when(
+                $canViewPii,
+                $this->relationLoaded('user') ? ($this->user?->name ?? 'Candidate') : 'Candidate'
+            ),
+            'email' => $this->when($canViewPii, $this->relationLoaded('user') ? $this->user?->email : null),
+            'phone' => $this->when($canViewPii, $this->relationLoaded('user') ? $this->user?->phone : null),
         ];
     }
 }

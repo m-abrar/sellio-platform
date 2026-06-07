@@ -56,14 +56,24 @@ class PageContent extends Model implements HasMedia
     ];
 
     /**
-     * Sanitize content before saving to prevent XSS.
+     * Sanitize CMS values on save. Editor fields allow layout/media tags; other fields
+     * keep inline formatting (e.g. hero span highlights) but strip scripts and handlers.
      */
     protected function value(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => is_string($value) 
-                ? strip_tags($value, '<div><section><main><article><aside><header><footer><nav><p><br><hr><a><b><i><u><strong><em><span><ul><li><ol><h1><h2><h3><h4><h5><h6><img><blockquote><video><audio><source><track><canvas><svg><path><circle><rect><line><polyline><polygon><ellipse>')
-                : $value
+            set: function ($value) {
+                if (! is_string($value)) {
+                    return $value;
+                }
+
+                $inputType = $this->attributes['input_type'] ?? null;
+                $allowedTags = $inputType === 'editor'
+                    ? page_content_editor_allowed_tags()
+                    : null;
+
+                return sanitize_rich_html($value, $allowedTags);
+            }
         );
     }
 

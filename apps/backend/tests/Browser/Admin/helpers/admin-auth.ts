@@ -8,7 +8,7 @@ export async function loginAsAdmin(page: Page): Promise<void> {
     await page.locator('#email').fill(adminEmail);
     await page.locator('#password').fill(adminPassword);
     await page.getByRole('button', { name: /sign in/i }).click();
-    await page.waitForURL(/\/admin/);
+    await page.waitForURL(/\/admin/, { timeout: 30_000 });
 }
 
 export async function assertNoServerErrors(page: Page): Promise<void> {

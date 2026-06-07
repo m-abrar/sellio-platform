@@ -2,15 +2,11 @@ import { test, expect } from '@playwright/test';
 import { execSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { assertNoServerErrors, loginAsAdmin } from './helpers/admin-auth';
+import { assertNoServerErrors } from './helpers/admin-auth';
 
 const backendRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
 test.describe('Admin maintenance optimize (browser)', () => {
-    test.beforeEach(async ({ page }) => {
-        await loginAsAdmin(page);
-    });
-
     test('can run optimize action and admin remains reachable', async ({ page }) => {
         await page.goto('/admin/system/maintenance');
         await assertNoServerErrors(page);

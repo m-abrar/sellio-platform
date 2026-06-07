@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { assertNoServerErrors, loginAsAdmin } from './helpers/admin-auth';
+import { assertNoServerErrors } from './helpers/admin-auth';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -13,10 +13,6 @@ function localDateTimeInput(offsetHours = 168): string {
 }
 
 test.describe('Admin verticals (browser)', () => {
-    test.beforeEach(async ({ page }) => {
-        await loginAsAdmin(page);
-    });
-
     test('properties index shows seeded listing', async ({ page }) => {
         await page.goto('/admin/properties');
         await assertNoServerErrors(page);

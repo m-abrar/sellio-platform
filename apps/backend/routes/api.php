@@ -138,7 +138,8 @@ Route::prefix('products')->middleware('module:products')->group(function () {
     Route::get('/', [ApiProductController::class, 'index']);
     Route::get('category/{categorySlug}', [ApiProductController::class, 'category']);
     Route::get('{slug}', [ApiProductController::class, 'show']);
-    Route::post('{product}/calculate-price', [ApiProductController::class, 'calculatePrice']);
+    Route::post('{product}/calculate-price', [ApiProductController::class, 'calculatePrice'])
+        ->middleware('throttle:api-write');
 });
 
 // =======================
@@ -148,7 +149,8 @@ Route::prefix('properties')->middleware('module:properties')->group(function () 
     Route::get('/', [ApiPropertyController::class, 'index']);
     Route::get('category/{categorySlug}', [ApiPropertyController::class, 'category']);
     Route::get('{slug}', [ApiPropertyController::class, 'show']);
-    Route::post('{property}/calculate-lodging-price', [ApiPropertyController::class, 'calculateLodgingPrice']);
+    Route::post('{property}/calculate-lodging-price', [ApiPropertyController::class, 'calculateLodgingPrice'])
+        ->middleware('throttle:api-write');
 });
 
 // =======================
@@ -201,9 +203,9 @@ Route::prefix('classifieds')->middleware('module:classifieds')->group(function (
 // =======================
 Route::prefix('cart')->middleware('module:products')->group(function () {
     Route::get('/', [ApiCartController::class, 'index']);
-    Route::post('add/{product}', [ApiCartController::class, 'add']);
-    Route::patch('{id}', [ApiCartController::class, 'update']);
-    Route::delete('{id}', [ApiCartController::class, 'remove']);
+    Route::post('add/{product}', [ApiCartController::class, 'add'])->middleware('throttle:api-write');
+    Route::patch('{id}', [ApiCartController::class, 'update'])->middleware('throttle:api-write');
+    Route::delete('{id}', [ApiCartController::class, 'remove'])->middleware('throttle:api-write');
 });
 
 // =======================
@@ -211,7 +213,7 @@ Route::prefix('cart')->middleware('module:products')->group(function () {
 // =======================
 Route::middleware(['auth:sanctum', 'module:products'])->prefix('orders')->group(function () {
     Route::get('/', [ApiOrderController::class, 'index']);
-    Route::post('/', [ApiOrderController::class, 'store']);
+    Route::post('/', [ApiOrderController::class, 'store'])->middleware('throttle:api-write');
     Route::get('{orderNumber}', [ApiOrderController::class, 'show']);
 });
 
@@ -219,18 +221,22 @@ Route::middleware(['auth:sanctum', 'module:products'])->prefix('orders')->group(
 // Ticket Routes
 // =======================
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('tickets', TicketController::class)->only(['index', 'store', 'show']);
-    Route::post('tickets/{ticket}/reply', [TicketController::class, 'reply']);
+    Route::get('tickets', [TicketController::class, 'index']);
+    Route::post('tickets', [TicketController::class, 'store'])->middleware('throttle:api-write');
+    Route::get('tickets/{ticket}', [TicketController::class, 'show']);
+    Route::post('tickets/{ticket}/reply', [TicketController::class, 'reply'])->middleware('throttle:api-write');
 });
 
 // =======================
 // Auth Routes
 // =======================
 Route::prefix('auth')->group(function () {
-    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/password/email', [PasswordResetController::class, 'sendResetLinkEmail']);
-    Route::post('/password/reset', [PasswordResetController::class, 'reset']);
+    Route::middleware('throttle:api-auth')->group(function () {
+        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/password/email', [PasswordResetController::class, 'sendResetLinkEmail']);
+        Route::post('/password/reset', [PasswordResetController::class, 'reset']);
+    });
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
@@ -238,8 +244,8 @@ Route::prefix('auth')->group(function () {
 
         // Profile Routes (api/v1/auth/me)
         Route::get('/me', [ProfileController::class, 'show']);
-        Route::put('/profile', [ProfileController::class, 'update']);
-        Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
+        Route::put('/profile', [ProfileController::class, 'update'])->middleware('throttle:api-write');
+        Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->middleware('throttle:api-write');
     });
 });
 });

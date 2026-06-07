@@ -26,6 +26,14 @@ class PageBuilderController extends Controller
     public function __construct(PageBuilderService $pageBuilderService)
     {
         $this->pageBuilderService = $pageBuilderService;
+
+        $this->middleware(function ($request, $next) {
+            if (! auth()->user()?->hasRole('super-admin')) {
+                abort(403, __('The visual page builder is restricted to super administrators.'));
+            }
+
+            return $next($request);
+        });
     }
 
     /**

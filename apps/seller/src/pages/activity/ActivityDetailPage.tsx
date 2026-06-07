@@ -12,6 +12,7 @@ import {
   HiOutlineArrowLeft
 } from 'react-icons/hi2';
 import { getActivityById } from '../../api/activity';
+import { PLACEHOLDER_AVATAR, PLACEHOLDER_LISTING } from '../../constants/placeholders';
 import { toast } from 'sonner';
 
 export default function ActivityDetailPage() {
@@ -147,7 +148,7 @@ export default function ActivityDetailPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-100">
                   <div className="flex items-start gap-4">
                     <img 
-                      src={activity.raw.user?.avatar_url || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80'} 
+                      src={activity.raw.user?.avatar_url || PLACEHOLDER_AVATAR} 
                       className="w-12 h-12 rounded-2xl object-cover border border-slate-100 shadow-sm shrink-0" 
                       alt="guest" 
                     />
@@ -235,7 +236,7 @@ export default function ActivityDetailPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-100">
                   <div className="flex items-start gap-4">
                     <img 
-                      src={activity.raw.user?.avatar_url || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80'} 
+                      src={activity.raw.user?.avatar_url || PLACEHOLDER_AVATAR} 
                       className="w-12 h-12 rounded-2xl object-cover border border-slate-100 shadow-sm shrink-0" 
                       alt="attendee" 
                     />
@@ -319,7 +320,7 @@ export default function ActivityDetailPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-100">
                   <div className="flex items-start gap-4">
                     <img 
-                      src={activity.raw.user?.avatar_url || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80'} 
+                      src={activity.raw.user?.avatar_url || PLACEHOLDER_AVATAR} 
                       className="w-12 h-12 rounded-2xl object-cover border border-slate-100 shadow-sm shrink-0" 
                       alt="lead" 
                     />
@@ -422,7 +423,7 @@ export default function ActivityDetailPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-100">
                   <div className="flex items-start gap-4">
                     <img 
-                      src={activity.raw.user?.avatar_url || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80'} 
+                      src={activity.raw.user?.avatar_url || PLACEHOLDER_AVATAR} 
                       className="w-12 h-12 rounded-2xl object-cover border border-slate-100 shadow-sm shrink-0" 
                       alt="candidate" 
                     />
@@ -530,7 +531,7 @@ export default function ActivityDetailPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-100">
                   <div className="flex items-start gap-4">
                     <img 
-                      src={activity.raw.user?.avatar_url || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80'} 
+                      src={activity.raw.user?.avatar_url || PLACEHOLDER_AVATAR} 
                       className="w-12 h-12 rounded-2xl object-cover border border-slate-100 shadow-sm shrink-0" 
                       alt="client" 
                     />
@@ -612,7 +613,7 @@ export default function ActivityDetailPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-100">
                   <div className="flex items-start gap-4">
                     <img 
-                      src={activity.raw.user?.avatar_url || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80'} 
+                      src={activity.raw.user?.avatar_url || PLACEHOLDER_AVATAR} 
                       className="w-12 h-12 rounded-2xl object-cover border border-slate-100 shadow-sm shrink-0" 
                       alt="client" 
                     />
@@ -737,7 +738,7 @@ export default function ActivityDetailPage() {
             <div className="space-y-6">
               <div className="flex gap-4">
                 <img 
-                  src={activity.raw.user?.avatar_url || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80'} 
+                  src={activity.raw.user?.avatar_url || PLACEHOLDER_AVATAR} 
                   className="w-10 h-10 rounded-xl object-cover border border-slate-100 shrink-0 shadow-xs" 
                   alt="customer" 
                 />
@@ -782,7 +783,7 @@ export default function ActivityDetailPage() {
                           : module === 'joblistings' ? activity.raw.job?.primary_image_url 
                           : module === 'services' ? activity.raw.service?.primary_image_url 
                           : module === 'classifieds' ? activity.raw.classified?.primary_image_url 
-                          : null) || 'https://images.unsplash.com/photo-1521791136368-1a46828d0fa9?auto=format&fit=crop&w=200&h=150&q=80'} 
+                          : null) || PLACEHOLDER_LISTING} 
                     className="w-full h-full object-cover" 
                     alt="asset-preview" 
                   />

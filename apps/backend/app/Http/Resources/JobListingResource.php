@@ -43,8 +43,7 @@ class JobListingResource extends JsonResource
 
             // Company & Branding (Spatie Media)
             'company' => [
-                'name'             => $this->meta_title
-                    ?: $this->whenLoaded('brand', fn () => $this->brand->title, $this->employer->company ?? null),
+                'name'             => $this->meta_title ?: $this->resolveCompanyName(),
                 'brand_id'         => $this->brand_id,
                 'meta_description' => $this->meta_description,
                 'logo'             => $this->primary_image_url,
@@ -105,5 +104,18 @@ class JobListingResource extends JsonResource
         }
 
         return __('Part-time');
+    }
+
+    protected function resolveCompanyName(): ?string
+    {
+        if ($this->relationLoaded('brand') && $this->brand?->title) {
+            return $this->brand->title;
+        }
+
+        if ($this->relationLoaded('employer') && $this->employer?->company) {
+            return $this->employer->company;
+        }
+
+        return null;
     }
 }

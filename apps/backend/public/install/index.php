@@ -4,13 +4,10 @@
 // File: index.php
 // =================================================================================
 
-// Enable error reporting for the installation process
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 // The functions.php file contains shared logic, step definition, and utility functions.
 require_once __DIR__ . '/functions.php';
+
+configure_installer_error_reporting();
 
 // Prevent re-running the installer if a lock file exists
 if (file_exists(__DIR__ . '/../../installed.lock') && ($currentStepKey !== 'finished')) {

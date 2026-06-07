@@ -37,7 +37,7 @@
                 <section id="listing-description" class="mb-5">
                     <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Product Description') }}</h4>
                     <div class="listing-description text-muted lh-lg">
-                        {!! $product->description !!}
+                        {!! sanitize_rich_html($product->description) !!}
                     </div>
                 </section>
 

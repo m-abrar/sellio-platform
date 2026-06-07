@@ -17,6 +17,7 @@ $appUrl = preg_replace('#/install$#i', '', $currentUrl);
 $isLocal = is_local_env();
 $appEnv = $isLocal ? 'local' : 'production';
 $appDebug = $isLocal ? 'true' : 'false';
+$installerDebug = $isLocal ? 'true' : 'false';
 
 $errorMessage = null;
 
@@ -82,6 +83,7 @@ APP_NAME="{$appName}"
 APP_ENV={$appEnv}
 APP_KEY={$appKey}
 APP_DEBUG={$appDebug}
+INSTALLER_DEBUG={$installerDebug}
 APP_URL="{$appUrl}"
 
 LOG_CHANNEL=stack

@@ -177,7 +177,7 @@ class Blog extends Model implements HasMedia
     protected function content(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => strip_tags($value, '<a><b><i><u><strong><em><p><br><ul><li><ol><h1><h2><h3><h4><h5><h6><img><blockquote>')
+            set: fn ($value) => sanitize_rich_html($value)
         );
     }
 }

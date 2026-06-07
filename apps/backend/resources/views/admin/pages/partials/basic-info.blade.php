@@ -44,12 +44,18 @@
         </div>
 
         @if($page->exists)
+            @role('super-admin')
             <div class="bg-primary-soft p-4 rounded-xl mb-4 text-center border border-primary-soft">
                 <p class="small text-dark font-weight-bold text-uppercase mb-3 ls-1-p">Visual Architecture</p>
                 <a href="{{ route('admin.page-builder.edit', $page->id) }}" target="_blank" class="btn btn-primary rounded-pill px-5 font-weight-bold shadow-premium">
                     <i class="fas fa-magic mr-2"></i> OPEN PAGE BUILDER
                 </a>
             </div>
+            @else
+            <div class="alert alert-light border mb-4 small text-muted">
+                {{ __('The visual page builder is available to super administrators only.') }}
+            </div>
+            @endrole
         @endif
 
         <div class="row">

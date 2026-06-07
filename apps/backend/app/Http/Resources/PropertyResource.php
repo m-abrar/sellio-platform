@@ -87,59 +87,56 @@ class PropertyResource extends JsonResource
             'amenities' => AmenityResource::collection($this->whenLoaded('amenities')),
             'owner'     => new UserResource($this->whenLoaded('user')),
             
-            'brand'     => $this->relationLoaded('brand') && $this->brand ? [
+            'brand'     => $this->whenLoaded('brand', fn () => $this->brand ? [
                 'id'    => $this->brand->id,
                 'title' => $this->brand->title,
-            ] : ($this->brand ? ['id' => $this->brand->id, 'title' => $this->brand->title] : null),
-            
-            'tags'      => $this->relationLoaded('tags') ? $this->tags->pluck('title') : $this->tags()->pluck('title'),
-            
-            'features'  => $this->relationLoaded('features') ? $this->features->map(fn($f) => [
+            ] : null),
+
+            'tags'      => $this->whenLoaded('tags', fn () => $this->tags->pluck('title')),
+
+            'features'  => $this->whenLoaded('features', fn () => $this->features->map(fn ($f) => [
                 'id'    => $f->id,
                 'title' => $f->title,
-            ]) : $this->features()->get(['features.id', 'features.title'])->map(fn($f) => [
-                'id'    => $f->id,
-                'title' => $f->title,
-            ]),
-            
-            'neighborhoods' => ($this->relationLoaded('neighborhoods') ? $this->neighborhoods : $this->neighborhoods()->get())->map(fn($n) => [
+            ])),
+
+            'neighborhoods' => $this->whenLoaded('neighborhoods', fn () => $this->neighborhoods->map(fn ($n) => [
                 'id'             => $n->id,
                 'title'          => $n->title,
                 'description'    => $n->description,
                 'distance_miles' => (float) $n->distance_miles,
-            ]),
+            ])),
 
-            'seasonal_prices' => ($this->relationLoaded('prices') ? $this->prices : $this->prices()->get())->map(fn($sp) => [
+            'seasonal_prices' => $this->whenLoaded('prices', fn () => $this->prices->map(fn ($sp) => [
                 'id'          => $sp->id,
                 'season_name' => $sp->title,
                 'start_date'  => $sp->start_date?->toDateString(),
                 'end_date'    => $sp->end_date?->toDateString(),
                 'price'       => (float) $sp->price,
-            ]),
+            ])),
 
-            'addons' => ($this->relationLoaded('addons') ? $this->addons : $this->addons()->get())->map(fn($ad) => [
+            'addons' => $this->whenLoaded('addons', fn () => $this->addons->map(fn ($ad) => [
                 'id'          => $ad->id,
                 'title'       => $ad->title,
                 'description' => $ad->description,
                 'price'       => (float) $ad->price,
-            ]),
+            ])),
 
-            'fees' => ($this->relationLoaded('fees') ? $this->fees : $this->fees()->get())->map(fn($f) => [
+            'fees' => $this->whenLoaded('fees', fn () => $this->fees->map(fn ($f) => [
                 'id'          => $f->id,
                 'title'       => $f->title,
                 'amount'      => (float) $f->amount,
                 'type'        => $f->type,
                 'rate'        => $f->rate !== null ? (float) $f->rate : null,
                 'charge_type' => $f->charge_type,
-            ]),
+            ])),
 
-            'scores' => ($this->relationLoaded('scores') ? $this->scores : $this->scores()->get())->map(fn($s) => [
+            'scores' => $this->whenLoaded('scores', fn () => $this->scores->map(fn ($s) => [
                 'id'          => $s->id,
                 'title'       => $s->title,
                 'description' => $s->description,
                 'score'       => (float) $s->score,
                 'units'       => $s->units,
-            ]),
+            ])),
 
             // Status & Meta
             'status' => [

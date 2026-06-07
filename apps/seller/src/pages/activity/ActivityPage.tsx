@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlineClock, HiOutlineCheckCircle, HiOutlineUser, HiOutlineChevronRight } from 'react-icons/hi2';
 import { getActivities } from '../../api/activity';
+import { PLACEHOLDER_AVATAR, listingPlaceholderForModule } from '../../constants/placeholders';
 
 export default function ActivityPage() {
   const { type, module } = useParams();
@@ -101,12 +102,7 @@ export default function ActivityPage() {
                                : module === 'services' ? item.raw.service?.primary_image_url 
                                : module === 'classifieds' ? item.raw.classified?.primary_image_url 
                                : null) || 
-                               (module === 'properties' ? 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=120&h=80&q=80' 
-                               : module === 'events' ? 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=120&h=80&q=80' 
-                               : module === 'autos' ? 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=120&h=80&q=80' 
-                               : module === 'joblistings' ? 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=120&h=80&q=80' 
-                               : module === 'classifieds' ? 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=120&h=80&q=80'
-                               : 'https://images.unsplash.com/photo-1521791136368-1a46828d0fa9?auto=format&fit=crop&w=120&h=80&q=80')} 
+                               listingPlaceholderForModule(module || '')} 
                           className="shrink-0 w-16 h-10 rounded-lg object-cover border border-slate-100 shadow-xs group-hover:scale-105 transition-transform duration-300"
                           alt="preview"
                         />
@@ -126,7 +122,7 @@ export default function ActivityPage() {
                             <p className="text-sm font-black tracking-tight text-slate-900 leading-tight italic group-hover:text-[#6610f2] transition-colors">{item.asset}</p>
                             <div className="flex items-center gap-2 mt-1.5">
                               <img 
-                                src={item.raw.user?.avatar_url || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80'} 
+                                src={item.raw.user?.avatar_url || PLACEHOLDER_AVATAR} 
                                 className="w-5 h-5 rounded-full object-cover border border-slate-100 shrink-0" 
                                 alt="avatar" 
                               />

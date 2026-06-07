@@ -24,9 +24,10 @@
 | **`apps/seller`** | Partner / seller React dashboard |
 | **`apps/buyer`** | Buyer React dashboard |
 | **`packages/`** | Shared `api-client` and TypeScript `types` |
-| **`documentation/`** | Buyer-facing HTML documentation (`index.html`) |
+| **`documentation/`** | Buyer-facing HTML documentation (`index.html`); **`documentation/reviewer/`** — QA and test reports for Envato reviewers |
 | **`introduction/`** | CodeCanyon item preview pages |
 | **`listing-description/`** | Marketplace listing HTML |
+| **`CHANGELOG.md`** | Version history for updates (CodeCanyon requirement) |
 
 Internal development files (audits, TODOs, theme references, WIP Next.js storefront) live in **`_development/`** and are excluded from the distribution bundle.
 

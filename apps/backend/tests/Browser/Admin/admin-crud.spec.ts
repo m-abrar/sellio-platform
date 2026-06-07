@@ -1,11 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { assertNoServerErrors, loginAsAdmin } from './helpers/admin-auth';
+import { assertNoServerErrors } from './helpers/admin-auth';
 
 test.describe('Admin CRUD (browser)', () => {
-    test.beforeEach(async ({ page }) => {
-        await loginAsAdmin(page);
-    });
-
     test('can create a category from the admin form', async ({ page }) => {
         const title = `Browser Category ${Date.now()}`;
 

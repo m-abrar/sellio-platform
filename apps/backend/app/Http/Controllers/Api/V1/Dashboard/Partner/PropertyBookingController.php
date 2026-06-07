@@ -45,9 +45,12 @@ class PropertyBookingController extends Controller
         $propertyIds = $user->properties()->pluck('id');
 
         $propertyBookings = $this->propertyBooking::whereIn('property_id', $propertyIds)
-            ->with(['property' => function ($query) {
-                $query->select('id', 'title', 'slug');
-            }])
+            ->with([
+                'property' => function ($query) {
+                    $query->select('id', 'title', 'slug');
+                },
+                'user',
+            ])
             ->latest()
             ->paginate(10);
 

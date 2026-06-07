@@ -36,17 +36,17 @@ class PropertyBookingResource extends JsonResource
             'viewed_at' => $this->viewed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'property' => $this->property ? [
+            'property' => $this->whenLoaded('property', fn () => [
                 'id' => $this->property->id,
                 'title' => $this->property->title,
                 'slug' => $this->property->slug,
                 'primary_image_url' => $this->property->primary_image_url,
-            ] : null,
-            'user' => $this->user ? [
+            ]),
+            'user' => $this->whenLoaded('user', fn () => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
                 'avatar_url' => $this->user->avatar_url,
-            ] : null,
+            ]),
             'duration_nights' => $this->duration_nights,
             'base_rental_amount' => $this->base_rental_amount,
             'fees_and_taxes_amount' => $this->fees_and_taxes_amount,

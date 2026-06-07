@@ -170,7 +170,7 @@ Route::name('dashboard.admin.')->group(function () {
     Route::resource('pages', PageController::class);
     Route::get('pages/type/{type}', [PageController::class, 'index'])->name('pages.index.type');
 
-    Route::controller(PageBuilderController::class)->prefix('page-builder')->name('page-builder.')->group(function () {
+    Route::middleware('role:super-admin')->controller(PageBuilderController::class)->prefix('page-builder')->name('page-builder.')->group(function () {
         Route::get('/{id}', 'edit')->name('edit');
         Route::post('/{id}', 'update')->name('update');
     });

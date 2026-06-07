@@ -252,3 +252,14 @@ in the partner dashboard
 
 -----------------------------
 
+
+is the admin and frontend blade views translatable?
+are all the events/listeners working?
+are all the email templates working?
+is the laravel frontend home built with dynamic content like other pages?
+can we impersonate a user or partner then connect to their redirected react panel?
+scan blade/view files if they have php/css/js?
+does permissions really work, should we code our application according to permissions preferred over roles where possible?
+scan the full app for any 3rd party image URL, like unsplash, etc. Download and save them in our project instead.
+when you add comments to code, your message is a response to my recent request, but we need to write commnets for new developers who buy the product on codecanyon, not for me or current situation.
+because each demo refresh / migration will delete the keys for stripe from database table, can we solve this problem?

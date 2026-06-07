@@ -91,7 +91,7 @@ class JobManagementService
             ->when($filters['tags'] ?? null, function ($q, $v) {
                 $q->whereHas('tags', fn($sub) => $sub->whereIn('tags.id', (array) $v));
             })
-            ->with(['employer', 'user', 'category', 'location', 'media'])
+            ->with(['employer', 'user', 'category', 'location', 'brand', 'tags', 'media'])
             ->paginate(12);
     }
 
@@ -108,7 +108,7 @@ class JobManagementService
             ->where('id', '!=', $job->id)
             ->active()
             ->latest()
-            ->with(['employer', 'user', 'category', 'location', 'media'])
+            ->with(['employer', 'user', 'category', 'location', 'brand', 'tags', 'media'])
             ->limit($limit)
             ->get();
     }

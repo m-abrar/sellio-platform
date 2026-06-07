@@ -4,6 +4,7 @@ const baseURL = process.env.ADMIN_BASE_URL ?? 'http://127.0.0.1:8000';
 
 export default defineConfig({
     testDir: './tests/Browser',
+    testIgnore: ['**/installer/**'],
     fullyParallel: false,
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 1 : 0,
@@ -17,8 +18,16 @@ export default defineConfig({
     },
     projects: [
         {
+            name: 'setup',
+            testMatch: /auth\.setup\.ts/,
+        },
+        {
             name: 'chromium',
-            use: { ...devices['Desktop Chrome'] },
+            dependencies: ['setup'],
+            use: {
+                ...devices['Desktop Chrome'],
+                storageState: 'tests/Browser/.auth/admin.json',
+            },
         },
     ],
     globalSetup: './tests/Browser/global-setup.ts',
@@ -27,7 +36,7 @@ export default defineConfig({
         : {
               command: 'php artisan serve --env=testing --host=127.0.0.1 --port=8000',
               url: baseURL,
-              reuseExistingServer: !process.env.CI,
+              reuseExistingServer: false,
               timeout: 120_000,
           },
 });

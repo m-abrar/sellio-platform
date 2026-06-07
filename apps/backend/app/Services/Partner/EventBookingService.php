@@ -23,8 +23,8 @@ class EventBookingService
             ->with([
                 'event',
                 'occurrence',
-                'tickettype',
-                'user' // Added user to list view for consistent UI
+                'ticketType',
+                'user',
             ])
             ->latest()
             ->paginate($perPage);
@@ -38,10 +38,10 @@ class EventBookingService
     public function getBookingDetails(int $id): EventBooking
     {
         return EventBooking::with([
-            'user', 
-            'event', 
-            'occurrence', 
-            'tickettype'
+            'user',
+            'event',
+            'occurrence',
+            'ticketType',
         ])->findOrFail($id);
     }
 }

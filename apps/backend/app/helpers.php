@@ -273,6 +273,59 @@ if (!function_exists('str_limit')) {
 
 
 
+if (!function_exists('page_content_editor_allowed_tags')) {
+    /**
+     * Tags permitted for CMS editor fields (page builder blocks, rich sections).
+     */
+    function page_content_editor_allowed_tags(): string
+    {
+        return '<div><section><main><article><aside><header><footer><nav><p><br><hr><a><b><i><u><strong><em><span><ul><li><ol><h1><h2><h3><h4><h5><h6><img><blockquote><video><audio><source><track><canvas><svg><path><circle><rect><line><polyline><polygon><ellipse>';
+    }
+}
+
+if (!function_exists('sanitize_rich_html')) {
+    /**
+     * Sanitize admin/partner rich HTML for safe storefront output.
+     * Strips disallowed tags, event handlers, and dangerous URI schemes.
+     */
+    function sanitize_rich_html(?string $html, ?string $allowedTags = null): string
+    {
+        if ($html === null || $html === '') {
+            return '';
+        }
+
+        $allowedTags ??= '<a><b><i><u><strong><em><p><br><ul><li><ol><h1><h2><h3><h4><h5><h6><img><blockquote><span><div><hr>';
+
+        $html = strip_tags($html, $allowedTags);
+        $html = preg_replace('/\s+on\w+\s*=\s*["\'].*?["\']/i', '', $html) ?? $html;
+        $html = preg_replace('/\s+on\w+\s*=\s*[^\s>]+/i', '', $html) ?? $html;
+        $html = preg_replace('/(href|src|background|formaction)\s*=\s*["\']\s*(javascript|data):.*?["\']/i', '$1="#"', $html) ?? $html;
+
+        return $html;
+    }
+}
+
+if (!function_exists('sanitize_page_builder_css')) {
+    /**
+     * Strip executable content from page-builder CSS before persistence.
+     */
+    function sanitize_page_builder_css(?string $css): string
+    {
+        if ($css === null || $css === '') {
+            return '';
+        }
+
+        $css = strip_tags($css);
+        $css = preg_replace('/@import\b[^;]*;?/i', '', $css) ?? $css;
+        $css = preg_replace('/expression\s*\([^)]*\)/i', '', $css) ?? $css;
+        $css = preg_replace('/javascript\s*:/i', '', $css) ?? $css;
+        $css = preg_replace('/behavior\s*:/i', '', $css) ?? $css;
+        $css = preg_replace('/-moz-binding\s*:/i', '', $css) ?? $css;
+
+        return trim($css);
+    }
+}
+
 if (!function_exists('get_layout_direction')) {
     function get_layout_direction() {
         return in_array(app()->getLocale(), ['ar', 'he', 'fa']) ? 'rtl' : 'ltr';

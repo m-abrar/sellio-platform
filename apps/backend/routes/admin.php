@@ -12,20 +12,24 @@ use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AddonController;
 use App\Http\Controllers\Admin\AdvertisementController;
 use App\Http\Controllers\Admin\AmenityController;
+use App\Http\Controllers\Admin\AutoController;
 use App\Http\Controllers\Admin\AutoInquiryController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\BookingLineItemController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ClassifiedController;
 use App\Http\Controllers\Admin\ClassifiedInquiryController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmailTemplateController;
 use App\Http\Controllers\Admin\EventBookingController;
+use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\JobApplicationController;
+use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\LineItemController;
 use App\Http\Controllers\Admin\ListingController;
@@ -47,6 +51,7 @@ use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceAppointmentController;
+use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\ServiceQuoteController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SubscriptionController;
@@ -284,7 +289,7 @@ Route::prefix('admin')
             Route::resource('pages', PageController::class)->middleware('can:manage-pages');
             Route::get('pages/type/{type}', [PageController::class , 'index'])->name('pages.index.type')->middleware('can:manage-pages');
 
-            Route::controller(PageBuilderController::class)->prefix('page-builder')->name('page-builder.')->middleware('can:manage-pages')->group(function () {
+            Route::controller(PageBuilderController::class)->prefix('page-builder')->name('page-builder.')->middleware('role:super-admin')->group(function () {
             Route::get('/{page}', 'edit')->name('edit');
             Route::post('/{page}', 'update')->name('update');
         }

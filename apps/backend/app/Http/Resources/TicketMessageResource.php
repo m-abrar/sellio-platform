@@ -16,8 +16,12 @@ class TicketMessageResource extends JsonResource
             'id' => $this->id,
             'ticket_id' => $this->ticket_id,
             'user_id' => $this->user_id,
-            'user_name' => $this->user->name ?? 'Unknown',
-            'is_staff' => $this->user_id !== $this->ticket->user_id, // Simple logic flag
+            'user_name' => $this->whenLoaded('user', fn () => $this->user->name ?? 'Unknown', 'Unknown'),
+            'is_staff' => $this->whenLoaded(
+                'ticket',
+                fn () => $this->user_id !== $this->ticket->user_id,
+                false
+            ),
             'body' => $this->body,
             'read_at' => $this->read_at ? $this->read_at->toIso8601String() : null,
             'created_at' => $this->created_at->toIso8601String(),

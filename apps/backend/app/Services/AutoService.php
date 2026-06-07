@@ -79,7 +79,7 @@ class AutoService
             }
         });
 
-        return $query->with(['category', 'location', 'user', 'media'])->paginate(12);
+            ->with(['category', 'location', 'user', 'media', 'brand', 'type', 'features', 'tags'])->paginate(12);
     }
 
     /**

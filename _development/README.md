@@ -9,6 +9,7 @@ This folder holds **internal development assets** that are not part of the CodeC
 | `planning/` | TODO trackers, roadmaps, status reports |
 | `audits/` | Backend audit trails (`.audit`) |
 | `documentation/` | Theme audits, QA reports, completion plans (buyer docs stay in `/documentation`) |
+| `audits/backend/00_strategic/` | Curated QA pass reports — **copy submission-facing summaries to `/documentation/reviewer/` before Envato ZIP** |
 | `docs/` | Misc dev notes and roadmaps |
 | `reference-library/` | Theme blueprint HTML/Blade references |
 | `storefront/` | Next.js storefront work-in-progress (not shipped) |

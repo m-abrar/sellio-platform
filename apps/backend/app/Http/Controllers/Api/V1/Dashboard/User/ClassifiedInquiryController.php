@@ -29,7 +29,7 @@ class ClassifiedInquiryController extends Controller
 
         // 1. Fetch inquiries made by the user
         $inquiries = ClassifiedInquiry::where('user_id', $user->id)
-            ->with(['classifiedAd.user']) 
+            ->with(['classifiedAd.brand', 'user']) 
             ->latest() 
             ->paginate(10); 
         

@@ -50,7 +50,7 @@
 
                 <div class="article-content-wrapper">
                     <section id="blog-body" class="mb-5 fs-5 lh-lg text-secondary">
-                        {!! $blog->content !!}
+                        {!! sanitize_rich_html($blog->content) !!}
                     </section>
 
                     @if($blog->tags->count() > 0)

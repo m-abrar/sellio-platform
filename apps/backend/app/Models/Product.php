@@ -221,6 +221,16 @@ class Product extends Model implements HasMedia
         );
     }
 
+    /**
+     * Sanitize rich HTML descriptions before persistence.
+     */
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => sanitize_rich_html($value)
+        );
+    }
+
     // --- Activity Log ---
     
     public function getActivitylogOptions(): LogOptions

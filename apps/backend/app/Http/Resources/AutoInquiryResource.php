@@ -34,17 +34,17 @@ class AutoInquiryResource extends JsonResource
             'viewed_at' => $this->viewed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'auto' => $this->auto ? [
+            'auto' => $this->whenLoaded('auto', fn () => [
                 'id' => $this->auto->id,
                 'title' => $this->auto->title,
                 'slug' => $this->auto->slug,
                 'primary_image_url' => $this->auto->primary_image_url,
-            ] : null,
-            'user' => $this->user ? [
+            ]),
+            'user' => $this->whenLoaded('user', fn () => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
                 'avatar_url' => $this->user->avatar_url,
-            ] : null,
+            ]),
         ];
     }
 }

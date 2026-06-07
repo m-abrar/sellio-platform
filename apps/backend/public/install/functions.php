@@ -5,7 +5,43 @@
 // =================================================================================
 
 // Define base path (Installer is assumed to be in a subdirectory like '/install')
-$basePath = realpath(__DIR__ . '/../..'); 
+$basePath = realpath(__DIR__ . '/../..');
+
+require_once __DIR__ . '/support/error_reporting.php';
+
+/**
+ * Path to the lock file that marks a completed installation.
+ */
+function installer_lock_path(): string
+{
+    global $basePath;
+
+    return $basePath . DIRECTORY_SEPARATOR . 'installed.lock';
+}
+
+/**
+ * Configure PHP error visibility for the web installer.
+ */
+function configure_installer_error_reporting(): void
+{
+    global $basePath;
+
+    $lockExists = file_exists(installer_lock_path());
+    $env = parse_installer_env_file($basePath . DIRECTORY_SEPARATOR . '.env');
+    $display = should_installer_display_errors($lockExists, installer_debug_requested($env, is_local_env()));
+
+    if ($display) {
+        ini_set('display_errors', '1');
+        ini_set('display_startup_errors', '1');
+        error_reporting(E_ALL);
+
+        return;
+    }
+
+    ini_set('display_errors', '0');
+    ini_set('display_startup_errors', '0');
+    error_reporting(E_ALL);
+}
 
 /**
  * Detect if the current environment is local (XAMPP/WAMP) or a remote server.

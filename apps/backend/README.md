@@ -64,7 +64,38 @@ php artisan serve
 npm run dev
 ```
 
-### 4. Admin E2E tests
+Access the admin panel at `/admin` and the storefront at `/`.
+
+### 4. Demo credentials (after `migrate:fresh --seed`)
+
+These accounts are created by `DatabaseSeeder` for **local development and demos only**. Change or remove them before production.
+
+| Role | Email | Password | Login URL |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin@sellio-platform.test` | `admin123` | `/admin` |
+| **Partner** | `partner@sellio-platform.test` | `partner123` | `/dashboard/partner` |
+| **Buyer** | `buyer@sellio-platform.test` | `buyer123` | `/dashboard/user` |
+
+Additional seeded users use `user1@sellio-platform.test` … `user20@sellio-platform.test` with password `password`.
+
+**Web installer:** If you used `/install/`, the **admin** account is the one you created on the final step (it may replace user ID 1). Partner and buyer demo accounts above still exist if you ran the demo seeding step.
+
+### 5. Post-install security (production)
+
+Before going live, complete this checklist:
+
+1. **Remove the installer** — Delete or rename `public/install/` after setup. The app blocks re-entry when `installed.lock` exists, and the installer disables browser error output once that lock is present.
+2. **Environment** — Set `APP_ENV=production`, `APP_DEBUG=false`, `INSTALLER_DEBUG=false`, and a strong `APP_KEY` in `.env`.
+3. **Rotate demo passwords** — If you imported demo data, change all seeded user passwords or remove demo accounts.
+4. **Storage** — Run `php artisan storage:link` so uploaded media is publicly reachable.
+5. **Optimize** — Run `php artisan config:cache`, `route:cache`, and `view:cache` on production.
+6. **Queue & scheduler** — Configure a queue worker for `QUEUE_CONNECTION` and add the Laravel scheduler to cron (`* * * * * php artisan schedule:run`).
+7. **Permissions** — Ensure `storage/` and `bootstrap/cache/` are writable by the web server.
+8. **CMS content** — Admin-editable page content (`page_content()`) allows limited inline HTML (e.g. hero highlights). Values are sanitized on save; only trusted admin accounts should edit storefront copy.
+9. **Page builder** — GrapesJS visual builder routes require the **super-admin** role; saved HTML/CSS is sanitized before persistence and on storefront render.
+10. **Demo assets** — Theme preview images use bundled `/themes/...` WebP paths (copy from storefront build into `public/themes/`). Listing seed photos live in `database/seeders/images/` — include only media you may redistribute. See `_development/audits/backend/00_strategic/DEMO_IMAGE_AUDIT_2026-06-07.md`.
+
+### 6. Admin E2E tests
 
 **PHPUnit (in-memory SQLite, isolated per test):**
 
@@ -78,9 +109,10 @@ php artisan test tests/Feature/Admin/
 ```bash
 cd apps/backend
 php scripts/create-testing-db.php   # first-time: creates sellio_testing schema
-npm run test:browser:setup
-npm run test:browser
+npm run test:browser                # admin E2E (48 specs; auth setup runs automatically)
 ```
+
+`.env.testing` uses `SESSION_DRIVER=cookie` so browser login CSRF tokens persist. After editing routes, run `php artisan route:clear` if tests hit stale cached controllers.
 
 Dev/demo data uses `php artisan migrate:fresh --seed` (`DatabaseSeeder`). Browser tests use `AdminTestSeeder` on the separate `sellio_testing` schema so `Browser *` rows do not pollute your dev database.
 

@@ -1,11 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { assertNoServerErrors, loginAsAdmin } from './helpers/admin-auth';
+import { assertNoServerErrors } from './helpers/admin-auth';
 
 test.describe('Admin bookings (browser)', () => {
-    test.beforeEach(async ({ page }) => {
-        await loginAsAdmin(page);
-    });
-
     test('unified bookings index loads', async ({ page }) => {
         await page.goto('/admin/bookings');
         await assertNoServerErrors(page);

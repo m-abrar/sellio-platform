@@ -16,6 +16,7 @@ import {
 import { getDashboardData, getLiveInteractions } from '../../api/dashboard';
 import { ApiError } from '../../lib/apiError';
 import UpgradePlanModal from '../../components/modals/UpgradePlanModal';
+import { PLACEHOLDER_AVATAR, PLACEHOLDER_LISTING } from '../../constants/placeholders';
 
 export default function DashboardHome() {
   const navigate = useNavigate();
@@ -74,8 +75,8 @@ export default function DashboardHome() {
         name: item.user || 'Anon',
         actionText: item.type || 'Activity',
         listingName: item.description || item.title || 'Interaction',
-        avatar: item.avatar || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80',
-        listingImage: item.image || 'https://images.unsplash.com/photo-1521791136368-1a46828d0fa9?auto=format&fit=crop&w=200&h=150&q=80',
+        avatar: item.avatar || PLACEHOLDER_AVATAR,
+        listingImage: item.image || PLACEHOLDER_LISTING,
         time: item.time || 'just now',
         route: item.route || '/dashboard'
       }))
@@ -84,8 +85,8 @@ export default function DashboardHome() {
           name: 'Julian Vance', 
           actionText: 'Viewing',
           listingName: 'Azure Bay Villa', 
-          avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80',
-          listingImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=120&h=80&q=80',
+          avatar: PLACEHOLDER_AVATAR,
+          listingImage: PLACEHOLDER_LISTING,
           time: '2m ago',
           route: '/dashboard'
         },
@@ -93,8 +94,8 @@ export default function DashboardHome() {
           name: 'Sarah Connor', 
           actionText: 'Inquired',
           listingName: 'Tesla Model S Plaid', 
-          avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80',
-          listingImage: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=120&h=80&q=80',
+          avatar: PLACEHOLDER_AVATAR,
+          listingImage: PLACEHOLDER_LISTING,
           time: '15m ago',
           route: '/dashboard'
         },
@@ -102,8 +103,8 @@ export default function DashboardHome() {
           name: 'Michael Ross', 
           actionText: 'Saved',
           listingName: 'Modern Glass Office Space', 
-          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80',
-          listingImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=120&h=80&q=80',
+          avatar: PLACEHOLDER_AVATAR,
+          listingImage: PLACEHOLDER_LISTING,
           time: '1h ago',
           route: '/dashboard'
         },
@@ -111,8 +112,8 @@ export default function DashboardHome() {
           name: 'Emily Watson', 
           actionText: 'Requested Quote',
           listingName: 'Enterprise SEO Campaign', 
-          avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&h=100&q=80',
-          listingImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=120&h=80&q=80',
+          avatar: PLACEHOLDER_AVATAR,
+          listingImage: PLACEHOLDER_LISTING,
           time: '2h ago',
           route: '/dashboard'
         },
@@ -120,8 +121,8 @@ export default function DashboardHome() {
           name: 'David Beckham', 
           actionText: 'Booked Visit',
           listingName: 'Luxury Downtown Penthouse', 
-          avatar: 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?auto=format&fit=crop&w=100&h=100&q=80',
-          listingImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=120&h=80&q=80',
+          avatar: PLACEHOLDER_AVATAR,
+          listingImage: PLACEHOLDER_LISTING,
           time: '4h ago',
           route: '/dashboard'
         },
@@ -129,8 +130,8 @@ export default function DashboardHome() {
           name: 'Jessica Alba', 
           actionText: 'Submitted Application',
           listingName: 'Lead Frontend Architect', 
-          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80',
-          listingImage: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=120&h=80&q=80',
+          avatar: PLACEHOLDER_AVATAR,
+          listingImage: PLACEHOLDER_LISTING,
           time: '1d ago',
           route: '/dashboard'
         }

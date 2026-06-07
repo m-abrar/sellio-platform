@@ -62,7 +62,8 @@ class ApiPropertyController extends Controller
             ->visibleTo(auth()->user())
             ->with([
                 'user', 'category', 'location', 'amenities', 'features',
-                'fees', 'addons', 'neighborhoods', 'scores', 'reviews.user', 'media'
+                'fees', 'addons', 'neighborhoods', 'scores', 'reviews.user', 'media',
+                'brand', 'type', 'tags', 'prices',
             ])
             ->firstOrFail();
 

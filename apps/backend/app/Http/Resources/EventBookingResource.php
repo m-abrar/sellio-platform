@@ -33,31 +33,33 @@ class EventBookingResource extends JsonResource
             'viewed_at' => $this->viewed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'event' => $this->event ? [
+            'event' => $this->whenLoaded('event', fn () => [
                 'id' => $this->event->id,
                 'title' => $this->event->title,
                 'slug' => $this->event->slug,
                 'primary_image_url' => $this->event->primary_image_url,
-            ] : null,
-            'user' => $this->user ? [
+            ]),
+            'user' => $this->whenLoaded('user', fn () => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
                 'avatar_url' => $this->user->avatar_url,
-            ] : null,
-            'occurrence' => $this->relationLoaded('occurrence') && $this->occurrence ? [
+            ]),
+            'occurrence' => $this->whenLoaded('occurrence', fn () => $this->occurrence ? [
                 'id' => $this->occurrence->id,
                 'start_date_time' => $this->occurrence->start_date_time,
                 'end_date_time' => $this->occurrence->end_date_time,
-            ] : null,
-            'ticket_type' => $this->relationLoaded('ticketType') && $this->ticketType ? [
+            ] : null),
+            'ticket_type' => $this->whenLoaded('ticketType', fn () => $this->ticketType ? [
                 'id' => $this->ticketType->id,
                 'name' => $this->ticketType->name,
                 'price' => $this->ticketType->price,
-            ] : null,
-            // Fallback user contact details for consistent detail view UI
-            'full_name' => $this->when($canViewPii, $this->user ? $this->user->name : 'Attendee'),
-            'email' => $this->when($canViewPii, $this->user ? $this->user->email : null),
-            'phone' => $this->when($canViewPii, $this->user ? $this->user->phone : null),
+            ] : null),
+            'full_name' => $this->when(
+                $canViewPii,
+                $this->relationLoaded('user') ? ($this->user?->name ?? 'Attendee') : 'Attendee'
+            ),
+            'email' => $this->when($canViewPii, $this->relationLoaded('user') ? $this->user?->email : null),
+            'phone' => $this->when($canViewPii, $this->relationLoaded('user') ? $this->user?->phone : null),
         ];
     }
 }

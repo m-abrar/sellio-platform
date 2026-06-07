@@ -9,7 +9,6 @@ export default async function globalSetup(): Promise<void> {
         return;
     }
 
-    execSync('php artisan key:generate --env=testing --force', { cwd: backendRoot, stdio: 'pipe' });
     execSync(
         'php artisan migrate:fresh --seeder=Database\\Seeders\\AdminTestSeeder --env=testing --force',
         { cwd: backendRoot, stdio: 'inherit' },

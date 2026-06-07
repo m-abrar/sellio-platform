@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Admin permissions (browser)', () => {
+    test.use({ storageState: { cookies: [], origins: [] } });
+
     test('partner user cannot access admin dashboard', async ({ page }) => {
         await page.goto('/login');
         await page.locator('#email').fill(process.env.PARTNER_EMAIL ?? 'partner@test.test');

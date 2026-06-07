@@ -15,6 +15,7 @@ import {
   HiOutlineTruck
 } from 'react-icons/hi2';
 import { getLiveInteractions } from '../../api/dashboard';
+import { PLACEHOLDER_AVATAR } from '../../constants/placeholders';
 
 const getIcon = (type: string) => {
   switch (type?.toLowerCase()) {
@@ -138,7 +139,7 @@ export default function LiveInteractionsPage() {
                           <div>
                             <div className="flex items-center gap-2">
                               <img 
-                                src={item.avatar || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80'} 
+                                src={item.avatar || PLACEHOLDER_AVATAR} 
                                 className="w-6 h-6 rounded-full object-cover border border-slate-100 shadow-xs shrink-0" 
                                 alt="avatar" 
                               />

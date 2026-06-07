@@ -136,13 +136,22 @@ class Page extends Model implements HasMedia
     // --- UI Helpers ---
     
     /**
-     * Sanitize HTML content before saving to prevent XSS.
-     * We allow common layout tags but block script and other high-risk elements.
+     * Sanitize page-builder HTML/CSS before saving to prevent stored XSS.
      */
     protected function html(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => strip_tags($value, '<div><section><main><article><aside><header><footer><nav><p><br><hr><a><b><i><u><strong><em><span><ul><li><ol><h1><h2><h3><h4><h5><h6><img><blockquote><video><audio><source><track><canvas><svg><path><circle><rect><line><polyline><polygon><ellipse>')
+            set: fn ($value) => sanitize_rich_html(
+                is_string($value) ? $value : '',
+                page_content_editor_allowed_tags()
+            )
+        );
+    }
+
+    protected function css(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => is_string($value) ? sanitize_page_builder_css($value) : $value
         );
     }
 

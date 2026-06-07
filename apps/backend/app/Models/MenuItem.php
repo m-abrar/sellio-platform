@@ -47,6 +47,16 @@ class MenuItem extends Model
     ];
 
     /**
+     * Strip markup from menu labels; social icons should use plain text titles.
+     */
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => is_string($value) ? strip_tags($value) : $value
+        );
+    }
+
+    /**
      * Sanitize URL to prevent stored XSS via javascript: or data: protocols.
      */
     protected function url(): Attribute

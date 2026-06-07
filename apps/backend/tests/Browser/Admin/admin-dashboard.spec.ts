@@ -1,9 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { loginAsAdmin } from './helpers/admin-auth';
 
 test.describe('Admin dashboard', () => {
     test('shows command center after login', async ({ page }) => {
-        await loginAsAdmin(page);
         await page.goto('/admin/welcome');
 
         await expect(page.getByRole('heading', { name: /command center/i })).toBeVisible();

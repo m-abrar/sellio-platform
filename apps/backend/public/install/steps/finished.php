@@ -36,12 +36,31 @@ include __DIR__ . '/../layout/header.php';
             <i class="fas fa-cog me-2"></i> Admin Dashboard
         </a>
     </div>
-    
-    <div class="mt-5 p-4 rounded-4" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.1);">
-        <p class="text-danger small mb-0 fw-bold">
-            <i class="fas fa-shield-alt me-2"></i> SECURITY PROTOCOL:
-            <span class="fw-normal">Please delete or rename the <code>/install</code> directory from your public root to secure your platform.</span>
+
+    <div class="mt-5 p-4 rounded-4 text-start mx-auto" style="max-width: 640px; background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.15);">
+        <p class="text-primary small mb-2 fw-bold">
+            <i class="fas fa-user-circle me-2"></i> DEMO ACCOUNTS (if you imported sample data)
         </p>
+        <p class="text-muted small mb-2">
+            Your <strong>administrator</strong> login is the account you just created. These additional demo users may also exist from seeding:
+        </p>
+        <ul class="small text-muted mb-0 ps-3">
+            <li><strong>Partner:</strong> <code>partner@sellio-platform.test</code> / <code>partner123</code></li>
+            <li><strong>Buyer:</strong> <code>buyer@sellio-platform.test</code> / <code>buyer123</code></li>
+        </ul>
+        <p class="text-muted smallest mt-3 mb-0">Change or remove demo passwords before production. See <code>README.md</code> for the full credentials table.</p>
+    </div>
+    
+    <div class="mt-4 p-4 rounded-4 text-start mx-auto" style="max-width: 640px; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.1);">
+        <p class="text-danger small mb-2 fw-bold">
+            <i class="fas fa-shield-alt me-2"></i> POST-INSTALL SECURITY
+        </p>
+        <ul class="small text-muted mb-0 ps-3">
+            <li>Delete or rename the <code>/public/install</code> directory.</li>
+            <li>Set <code>APP_DEBUG=false</code>, <code>INSTALLER_DEBUG=false</code>, and <code>APP_ENV=production</code> in <code>.env</code>.</li>
+            <li>Run <code>php artisan storage:link</code> for media uploads.</li>
+            <li>Rotate all demo user passwords if sample data was imported.</li>
+        </ul>
     </div>
 </div>
 
