@@ -21,7 +21,7 @@ class PropertyAddonFactory extends Factory
     public function definition(): array
     {
         return [
-            'property_id' => \App\Models\Property::factory(),
+            'property_id' => null,
             'title'       => $this->faker->words(2, true),
             'description' => $this->faker->sentence(10),
             'price'       => $this->faker->randomFloat(2, 15, 150),

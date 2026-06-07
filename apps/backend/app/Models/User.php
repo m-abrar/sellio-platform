@@ -76,16 +76,37 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
                 return;
             }
 
-            $roleName = match (true) {
-                $user->is_admin => 'admin',
-                $user->is_partner => 'partner',
-                default => 'user',
-            };
+            $roleName = $user->defaultRoleName();
 
             if (\Spatie\Permission\Models\Role::where('name', $roleName)->exists()) {
                 $user->assignRole($roleName);
             }
         });
+    }
+
+    /**
+     * Resolve the Spatie role that should be auto-assigned for this identity.
+     */
+    public function defaultRoleName(): string
+    {
+        if ($this->is_admin) {
+            return 'admin';
+        }
+
+        if ($this->is_partner && $this->status === 'pending') {
+            return 'user';
+        }
+
+        if ($this->is_partner) {
+            return 'partner';
+        }
+
+        return 'user';
+    }
+
+    public function isPendingPartnerApplication(): bool
+    {
+        return $this->is_partner && ! $this->hasRole('partner');
     }
 
     /**
@@ -103,7 +124,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
 
         return collect(array_filter([
             $this->is_admin ? 'admin' : null,
-            $this->is_partner ? 'partner' : null,
+            $this->is_partner && $this->hasRole('partner') ? 'partner' : null,
             $this->is_buyer ? 'user' : null,
         ]))->unique()->values();
     }

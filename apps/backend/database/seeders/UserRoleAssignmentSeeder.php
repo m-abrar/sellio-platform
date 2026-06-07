@@ -44,13 +44,7 @@ class UserRoleAssignmentSeeder extends Seeder
         // We use chunkById to handle large datasets efficiently
         User::whereDoesntHave('roles')->chunkById(100, function ($users) use (&$totalAssigned) {
             foreach ($users as $user) {
-                if ($user->is_admin) {
-                    $user->assignRole('admin');
-                } elseif ($user->is_partner) {
-                    $user->assignRole('partner');
-                } else {
-                    $user->assignRole('user');
-                }
+                $user->assignRole($user->defaultRoleName());
                 $totalAssigned++;
             }
         });

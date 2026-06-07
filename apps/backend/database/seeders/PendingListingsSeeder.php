@@ -17,6 +17,11 @@ use App\Models\Brand;
 
 class PendingListingsSeeder extends Seeder
 {
+    private function sampleListingTitle(string $prefix): string
+    {
+        return $prefix . ': ' . ucwords(fake()->words(3, true));
+    }
+
     /**
      * Run the database seeds to create pending listings across all marketplace verticals.
      * This ensures the "Pending Approval" registry has data for demonstration/testing.
@@ -50,7 +55,7 @@ class PendingListingsSeeder extends Seeder
                 'is_published' => true,
                 'approved_at' => null,
                 'status' => 'pending',
-                'title' => 'PENDING: ' . Property::factory()->make()->title,
+                'title' => $this->sampleListingTitle('PENDING'),
             ]);
             
             // 2 Draft Properties
@@ -62,7 +67,7 @@ class PendingListingsSeeder extends Seeder
                 'is_published' => false,
                 'approved_at' => null,
                 'status' => 'draft',
-                'title' => 'DRAFT: ' . Property::factory()->make()->title,
+                'title' => $this->sampleListingTitle('DRAFT'),
             ]);
 
             Property::factory()->create([
@@ -74,7 +79,7 @@ class PendingListingsSeeder extends Seeder
                 'approved_at' => now()->subMonths(2),
                 'expires_at' => now()->subDays(7),
                 'status' => 'expired',
-                'title' => 'EXPIRED: ' . Property::factory()->make()->title,
+                'title' => $this->sampleListingTitle('EXPIRED'),
             ]);
             $this->command->line('   - Created 2 Pending, 2 Draft & 1 Expired Properties');
         }
@@ -90,7 +95,7 @@ class PendingListingsSeeder extends Seeder
                 'is_published' => true,
                 'approved_at' => null,
                 'status' => 'pending',
-                'title' => 'PENDING: ' . Auto::factory()->make()->title,
+                'title' => $this->sampleListingTitle('PENDING'),
             ]);
             Auto::factory()->create([
                 'user_id' => $partner->id,
@@ -102,7 +107,7 @@ class PendingListingsSeeder extends Seeder
                 'approved_at' => now()->subMonths(2),
                 'expires_at' => now()->subDays(5),
                 'status' => 'expired',
-                'title' => 'EXPIRED: ' . Auto::factory()->make()->title,
+                'title' => $this->sampleListingTitle('EXPIRED'),
             ]);
             $this->command->line('   - Created 2 Pending & 1 Expired Autos');
         }
@@ -117,7 +122,7 @@ class PendingListingsSeeder extends Seeder
                 'type_id' => Type::where('is_event', true)->first()?->id ?? Type::factory()->create(['is_event' => true])->id,
                 'is_published' => true,
                 'approved_at' => null,
-                'title' => 'PENDING: ' . Event::factory()->make()->title,
+                'title' => $this->sampleListingTitle('PENDING'),
             ]);
 
             // 2 Draft Events
@@ -128,7 +133,7 @@ class PendingListingsSeeder extends Seeder
                 'type_id' => Type::where('is_event', true)->first()?->id ?? Type::factory()->create(['is_event' => true])->id,
                 'is_published' => false,
                 'approved_at' => null,
-                'title' => 'DRAFT: ' . Event::factory()->make()->title,
+                'title' => $this->sampleListingTitle('DRAFT'),
             ]);
             Event::factory()->create([
                 'user_id' => $partner->id,
@@ -138,7 +143,7 @@ class PendingListingsSeeder extends Seeder
                 'is_published' => true,
                 'approved_at' => now()->subMonths(2),
                 'expires_at' => now()->subDays(3),
-                'title' => 'EXPIRED: ' . Event::factory()->make()->title,
+                'title' => $this->sampleListingTitle('EXPIRED'),
             ]);
             $this->command->line('   - Created 2 Pending, 2 Draft & 1 Expired Events');
         }
@@ -153,7 +158,7 @@ class PendingListingsSeeder extends Seeder
                 'is_published' => true,
                 'approved_at' => null,
                 'status' => 'pending',
-                'title' => 'PENDING: ' . JobListing::factory()->make()->title,
+                'title' => $this->sampleListingTitle('PENDING'),
             ]);
             JobListing::factory()->create([
                 'user_id' => $partner->id,
@@ -164,7 +169,7 @@ class PendingListingsSeeder extends Seeder
                 'approved_at' => now()->subMonths(2),
                 'expires_at' => now()->subDays(4),
                 'status' => 'expired',
-                'title' => 'EXPIRED: ' . JobListing::factory()->make()->title,
+                'title' => $this->sampleListingTitle('EXPIRED'),
             ]);
             $this->command->line('   - Created 2 Pending & 1 Expired Job Listings');
         }
@@ -179,7 +184,7 @@ class PendingListingsSeeder extends Seeder
                 'is_published' => true,
                 'approved_at' => null,
                 'status' => 'pending',
-                'title' => 'PENDING: ' . Service::factory()->make()->title,
+                'title' => $this->sampleListingTitle('PENDING'),
             ]);
             Service::factory()->create([
                 'user_id' => $partner->id,
@@ -190,7 +195,7 @@ class PendingListingsSeeder extends Seeder
                 'approved_at' => now()->subMonths(2),
                 'expires_at' => now()->subDays(6),
                 'status' => 'expired',
-                'title' => 'EXPIRED: ' . Service::factory()->make()->title,
+                'title' => $this->sampleListingTitle('EXPIRED'),
             ]);
             $this->command->line('   - Created 2 Pending & 1 Expired Services');
         }
@@ -205,7 +210,7 @@ class PendingListingsSeeder extends Seeder
                 'brand_id' => Brand::where('is_classified', true)->first()?->id ?? Brand::factory()->create(['is_classified' => true])->id,
                 'is_published' => true,
                 'approved_at' => null,
-                'title' => 'PENDING: ' . Classified::factory()->make()->title,
+                'title' => $this->sampleListingTitle('PENDING'),
             ]);
             Classified::factory()->create([
                 'user_id' => $partner->id,
@@ -216,7 +221,7 @@ class PendingListingsSeeder extends Seeder
                 'is_published' => true,
                 'approved_at' => now()->subMonths(2),
                 'expires_at' => now()->subDays(8),
-                'title' => 'EXPIRED: ' . Classified::factory()->make()->title,
+                'title' => $this->sampleListingTitle('EXPIRED'),
             ]);
             $this->command->line('   - Created 2 Pending & 1 Expired Classifieds');
         }

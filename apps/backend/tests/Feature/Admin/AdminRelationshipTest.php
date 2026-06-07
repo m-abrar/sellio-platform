@@ -153,6 +153,22 @@ class AdminRelationshipTest extends TestCase
         $this->assertTrue($user->hasRole('user'));
     }
 
+    public function test_pending_partner_application_keeps_user_role_until_approved(): void
+    {
+        $applicant = User::factory()->create([
+            'email' => 'pending-partner-demo@test.test',
+            'is_partner' => true,
+            'is_buyer' => true,
+            'status' => 'pending',
+        ]);
+
+        $applicant->syncRoles(['user']);
+
+        $this->assertTrue($applicant->isPendingPartnerApplication());
+        $this->assertFalse($applicant->hasRole('partner'));
+        $this->assertTrue($applicant->hasRole('user'));
+    }
+
     public function test_user_creation_assigns_roles(): void
     {
         $moderatorRole = Role::where('name', 'moderator')->firstOrFail();

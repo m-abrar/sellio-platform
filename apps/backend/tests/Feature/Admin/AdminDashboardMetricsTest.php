@@ -32,6 +32,28 @@ class AdminDashboardMetricsTest extends TestCase
         $this->seedAdminContext();
     }
 
+    public function test_dashboard_counts_pending_partner_applications(): void
+    {
+        $this->clearAdminDashboardCache();
+
+        $pendingApplicants = User::factory()->count(2)->create([
+            'is_partner' => true,
+            'is_buyer' => true,
+            'status' => 'pending',
+        ]);
+
+        foreach ($pendingApplicants as $applicant) {
+            $applicant->syncRoles(['user']);
+        }
+
+        $metrics = app(DashboardService::class)->getGlobalMetrics();
+
+        $this->assertGreaterThanOrEqual(
+            2,
+            $metrics['urgent_actions']['partner_applications'] ?? 0
+        );
+    }
+
     public function test_dashboard_user_metrics_match_database(): void
     {
         $this->clearAdminDashboardCache();

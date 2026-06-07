@@ -28,7 +28,7 @@ class TransactionLineFactory extends Factory
         $type = $this->faker->randomElement(['revenue', 'expense']);
         
         return [
-            'property_id' => \App\Models\Property::factory(),
+            'property_id' => null,
             'description' => $this->faker->randomElement($type === 'revenue' ? $revenueDesc : $expenseDesc),
             'amount' => $this->faker->randomFloat(2, $type === 'revenue' ? 100 : 10, $type === 'revenue' ? 3000 : 500),
             'type' => $type,

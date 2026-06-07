@@ -21,8 +21,9 @@ class AutoInquiryFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\User::factory(),
-            'auto_id' => \App\Models\Auto::factory(),
+            // Set by seeders / parent relationships — never nest factories here.
+            'user_id' => null,
+            'auto_id' => null,
             // Contact Details
             'full_name' => $this->faker->title() .' '. $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),

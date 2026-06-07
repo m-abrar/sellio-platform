@@ -19,9 +19,9 @@ class ReviewFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'         => \App\Models\User::inRandomOrder()->first()?->id ?? \App\Models\User::factory(),
-            'reviewable_id'   => \App\Models\Product::inRandomOrder()->first()?->id ?? \App\Models\Product::factory(), // Default to product, usually overridden
-            'reviewable_type' => 'App\Models\Product',
+            'user_id'         => \App\Models\User::query()->inRandomOrder()->value('id'),
+            'reviewable_id'   => null,
+            'reviewable_type' => null,
             'rating'          => $this->faker->numberBetween(1, 5),
             'comment'         => $this->faker->sentence(10),
             'status'          => 'approved',

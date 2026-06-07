@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Ticket;
-use App\Models\User;
+use Database\Factories\Concerns\ResolvesExistingRecords;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class TicketFactory extends Factory
 {
+    use ResolvesExistingRecords;
+
     /**
      * The name of the factory's corresponding model.
      *
@@ -35,8 +37,8 @@ class TicketFactory extends Factory
         $categories = ['Technical', 'Billing', 'Account', 'Feature Request', 'General Inquiry'];
 
         return [
-            'user_id' => User::factory(), 
-            'assigned_to' => $this->faker->boolean(40) ? User::factory() : null, 
+            'user_id' => $this->existingUserId(),
+            'assigned_to' => $this->faker->boolean(40) ? $this->existingUserId() : null,
             
             // Generate a random, unique title
             'title' => $this->faker->unique()->sentence(rand(3, 6)),
@@ -61,7 +63,7 @@ class TicketFactory extends Factory
     public function assigned(): static
     {
         return $this->state(fn (array $attributes) => [
-            'assigned_to' => User::factory(),
+            'assigned_to' => $this->existingUserId(),
             'status' => 'in-progress',
         ]);
     }

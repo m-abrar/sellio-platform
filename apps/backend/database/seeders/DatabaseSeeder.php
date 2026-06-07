@@ -161,6 +161,7 @@ class DatabaseSeeder extends Seeder
             BuyerActivitySeeder::class,
             PartnerActivitySeeder::class,
             UserRoleAssignmentSeeder::class,
+            PendingPartnerApplicationSeeder::class,
         ]);
         
         // Final Footer

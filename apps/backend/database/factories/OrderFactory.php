@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Order;
 use App\Models\User;
+use Database\Factories\Concerns\ResolvesExistingRecords;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class OrderFactory extends Factory
 {
+    use ResolvesExistingRecords;
+
     protected $model = Order::class;
 
     public function definition(): array
@@ -25,7 +28,7 @@ class OrderFactory extends Factory
         
         return [
             'order_number'    => 'ORD-' . now()->year . '-' . strtoupper($this->faker->unique()->bothify('####??')),
-            'user_id'         => User::factory(),
+            'user_id'         => $this->existingUserId(),
             
             // Statuses
             'status'          => $this->faker->randomElement(['pending', 'processing', 'shipped', 'delivered']),

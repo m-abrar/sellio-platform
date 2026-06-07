@@ -28,9 +28,9 @@ class EventBookingFactory extends Factory
 
 
         return [
-            'user_id'                 => \App\Models\User::inRandomOrder()->first()?->id ?? \App\Models\User::factory(),
-            'event_occurrence_id'    => \App\Models\EventOccurrence::inRandomOrder()->first()?->id ?? \App\Models\EventOccurrence::factory()->state(['event_id' => \App\Models\Event::factory()]),
-            'event_ticket_type_id'   => \App\Models\EventTicketType::inRandomOrder()->first()?->id ?? \App\Models\EventTicketType::factory(),
+            'user_id'                 => \App\Models\User::query()->inRandomOrder()->value('id'),
+            'event_occurrence_id'    => null,
+            'event_ticket_type_id'   => null,
             'quantity'               => $quantity,
             'total_price'            => $quantity * $tempTicketPrice, 
             'status'                 => $this->faker->randomElement(['confirmed', 'pending', 'cancelled', 'refunded']),

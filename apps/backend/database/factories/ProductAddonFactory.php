@@ -22,7 +22,7 @@ class ProductAddonFactory extends Factory
         $addon = $this->faker->randomElement($this->getAddonTemplates());
 
         return [
-            'product_id'   => Product::factory(),
+            'product_id'   => null,
             'title'        => $addon['title'],
             'description'  => $addon['description'],
             'icon'         => $addon['icon'],

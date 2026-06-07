@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use App\Models\Withdrawal;
+use Database\Factories\Concerns\ResolvesExistingRecords;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class WithdrawalFactory extends Factory
 {
+    use ResolvesExistingRecords;
+
     /**
      * The name of the factory's corresponding model.
      *
@@ -45,8 +47,7 @@ class WithdrawalFactory extends Factory
         }
 
         return [
-            // Ensure User::factory() exists or you have existing users in your database
-            'user_id' => User::factory(), 
+            'user_id' => $this->existingUserId(),
             'amount' => $amount,
             'method' => $method,
             'details' => $this->faker->word() . ' Account ID ' . $this->faker->randomNumber(5),

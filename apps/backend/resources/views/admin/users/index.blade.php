@@ -103,7 +103,7 @@
                                     @endforeach
 
                                     {{-- 2. Pending Approval Notification Badge --}}
-                                    @if($user->is_partner && !$user->hasRole('partner'))
+                                    @if($user->isPendingPartnerApplication())
                                         <span class="badge badge-warning-light text-warning px-2 py-1 text-uppercase mr-1 smallest-0-65 ls-0-3">
                                             <i class="fas fa-hourglass-half mr-1 text-xs"></i> {{ __('Pending Partner') }}
                                         </span>
@@ -112,7 +112,7 @@
                                 <td class="text-right align-middle px-4">
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         {{-- Approve Button for Pending Partners --}}
-                                        @if($user->is_partner && !$user->hasRole('partner'))
+                                        @if($user->isPendingPartnerApplication())
                                         <form action="{{ route('admin.users.approve', $user->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-white btn-sm text-success py-2 px-3 border-right" 

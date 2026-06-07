@@ -45,7 +45,7 @@ class JobSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
         
         // Truncating in any order is now safe
-        JobApplication::query()->delete();
+        JobApplication::query()->forceDelete();
         JobListing::query()->delete();
         
         Schema::enableForeignKeyConstraints();

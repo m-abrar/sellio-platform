@@ -257,15 +257,19 @@ class BuyerActivitySeeder extends Seeder
             foreach ($jobs as $index => $job) {
                 $status = $statuses[$index % count($statuses)];
 
-                JobApplication::create([
-                    'job_listing_id' => $job->id,
-                    'user_id' => $buyer->id,
-                    'status' => $status,
-                    'cover_letter' => "Dear Hiring Manager,\n\nI am writing to express my eager interest in the {$job->title} position at your company. With my extensive background in design consultancy and premium portfolio management, I believe I can bring immediate value to the team.\n\nThank you for your consideration.\n\nWarm regards,\nEleanor Vance",
-                    'resume_path' => 'resumes/eleanor-vance-curator-cv.pdf',
-                    'portfolio_url' => 'https://vancecurator-studios.test',
-                    'admin_note' => 'Outstanding portfolio submitted.',
-                ]);
+                JobApplication::updateOrCreate(
+                    [
+                        'job_listing_id' => $job->id,
+                        'user_id' => $buyer->id,
+                    ],
+                    [
+                        'status' => $status,
+                        'cover_letter' => "Dear Hiring Manager,\n\nI am writing to express my eager interest in the {$job->title} position at your company. With my extensive background in design consultancy and premium portfolio management, I believe I can bring immediate value to the team.\n\nThank you for your consideration.\n\nWarm regards,\nEleanor Vance",
+                        'resume_path' => 'resumes/eleanor-vance-curator-cv.pdf',
+                        'portfolio_url' => 'https://vancecurator-studios.test',
+                        'admin_note' => 'Outstanding portfolio submitted.',
+                    ]
+                );
             }
         }
 
@@ -474,7 +478,7 @@ class BuyerActivitySeeder extends Seeder
         EventBooking::where('user_id', $userId)->delete();
         ServiceAppointment::where('user_id', $userId)->delete();
         ServiceQuote::where('user_id', $userId)->delete();
-        JobApplication::where('user_id', $userId)->delete();
+        JobApplication::where('user_id', $userId)->forceDelete();
         AutoInquiry::where('user_id', $userId)->delete();
         DB::table('classified_inquiries')->where('user_id', $userId)->delete();
         Favorite::where('user_id', $userId)->delete();
