@@ -62,7 +62,7 @@ interface MegaItemProps {
 }
 
 const MegaItem = ({ title, value, label }: MegaItemProps) => (
-    <div className="ugm-grid-item" onClick={() => alert(`Reviewing: ${title}`)}>
+    <div className="ugm-grid-item" >
         <div className="ugm-mono" style={{ color: 'var(--ugm-orange)', marginBottom: '1.5rem' }}>{title}</div>
         <div style={{ fontSize: '3.5rem', fontWeight: 900, fontFamily: 'var(--ugm-font-heading)', lineHeight: 1, marginBottom: '0.5rem', color: '#171717' }} className="ugm-value-text">{value}</div>
         <div style={{ fontSize: '0.8rem', opacity: 0.6, fontWeight: 700, color: '#171717' }}>{label}</div>

@@ -1,11 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { MarketGrid, LiquidSyncBar } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = useUnifiedThemeLink();
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
@@ -110,7 +114,7 @@ export default function Page() {
                 {heroDescription}
               </p>
               <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center', flexWrap: 'wrap' }} className="um-hero-buttons">
-                  <button className="trade-btn-primary" id="um-btn-explore" onClick={() => document.getElementById('um-exchange-section')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <button className="trade-btn-primary" id="um-btn-explore" onClick={() => router.push(themeLink('/explore'))}>
                     {heroPrimaryCtaLabel}
                   </button>
                   <button style={{ 
@@ -124,7 +128,7 @@ export default function Page() {
                       fontSize: '1rem', 
                       cursor: 'pointer',
                       transition: 'all 0.3s ease'
-                  }} id="um-btn-market-data" onClick={() => alert('Exchange market data sync active.')}>
+                  }} id="um-btn-market-data" onClick={() => router.push(themeLink('/explore'))}>
                       {heroSecondaryCtaLabel}
                   </button>
               </div>
@@ -173,7 +177,7 @@ export default function Page() {
           ) : (
               <div className="um-listings-grid">
                   {products.slice(0, 6).map((product) => (
-                      <a href={`/product/${product.slug}`} className="um-listing-card" key={product.id}>
+                      <a href={themeLink(`/product/${product.slug}`)} className="um-listing-card" key={product.id}>
                           <div className="um-listing-image-wrap">
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>
@@ -244,7 +248,7 @@ export default function Page() {
               <p style={{ fontSize: '1.5rem', color: '#64748b', lineHeight: 1.8, marginBottom: '6rem' }}>
                 {ctaDescription}
               </p>
-              <button className="trade-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.4rem' }} id="um-btn-cta-handshake" onClick={() => alert('Exchange node handshake synchronized.')}>{ctaButtonLabel}</button>
+              <button className="trade-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.4rem' }} id="um-btn-cta-handshake" onClick={() => router.push(themeLink('/explore'))}>{ctaButtonLabel}</button>
           </div>
       </section>
     </div>

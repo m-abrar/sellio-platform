@@ -1,11 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { EfficiencyBar, ProtocolGrid } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = useUnifiedThemeLink();
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
@@ -112,10 +116,10 @@ export default function Page() {
                 {heroDescription}
               </p>
               <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap' }} className="usp-hero-buttons">
-                  <button className="scale-btn-primary" id="usp-btn-explore" onClick={() => document.getElementById('usp-exchange-section')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <button className="scale-btn-primary" id="usp-btn-explore" onClick={() => router.push(themeLink('/explore'))}>
                     {heroPrimaryCtaLabel}
                   </button>
-                  <button style={{ background: 'transparent', border: '1px solid #ddd', padding: '1.5rem 4rem', borderRadius: '6px', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', color: 'var(--usp-navy)' }} id="usp-btn-doc" onClick={() => alert('Scale Protocol documentation initialized.')}>
+                  <button style={{ background: 'transparent', border: '1px solid #ddd', padding: '1.5rem 4rem', borderRadius: '6px', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', color: 'var(--usp-navy)' }} id="usp-btn-doc" onClick={() => router.push(themeLink('/explore'))}>
                     {heroSecondaryCtaLabel}
                   </button>
               </div>
@@ -167,7 +171,7 @@ export default function Page() {
           ) : (
               <div className="usp-listings-grid">
                   {products.slice(0, 6).map((product) => (
-                      <a href={`/product/${product.slug}`} className="usp-listing-card" key={product.id}>
+                      <a href={themeLink(`/product/${product.slug}`)} className="usp-listing-card" key={product.id}>
                           <div className="usp-listing-image-wrap">
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>
@@ -235,7 +239,7 @@ export default function Page() {
           <p style={{ maxWidth: '600px', margin: '0 auto 6rem', fontSize: '1.25rem', color: 'var(--usp-gray)', fontWeight: 300 }}>
             {ctaDescription}
           </p>
-          <button className="scale-btn-primary" id="usp-btn-cta-handshake" onClick={() => alert('Scale Protocol handshakes active.')}>{ctaButtonLabel}</button>
+          <button className="scale-btn-primary" id="usp-btn-cta-handshake" onClick={() => router.push(themeLink('/explore'))}>{ctaButtonLabel}</button>
       </section>
     </div>
   );

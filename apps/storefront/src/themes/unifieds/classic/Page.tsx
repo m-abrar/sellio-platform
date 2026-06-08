@@ -1,11 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { ChronicleBar, HeritageGrid } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = useUnifiedThemeLink();
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
@@ -110,7 +114,7 @@ export default function Page() {
                 {heroDescription}
               </p>
               <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center', flexWrap: 'wrap' }} className="uc-hero-buttons">
-                  <button className="legacy-btn-primary" id="uc-btn-explore" onClick={() => document.getElementById('uc-heritage-registry')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <button className="legacy-btn-primary" id="uc-btn-explore" onClick={() => router.push(themeLink('/explore'))}>
                     {heroPrimaryCtaLabel}
                   </button>
                   <button style={{ 
@@ -123,7 +127,7 @@ export default function Page() {
                       cursor: 'pointer',
                       color: 'var(--uc-burgundy)',
                       transition: 'all 0.3s ease'
-                  }} id="uc-btn-chronicles" onClick={() => alert('Chronicles handbook initialized.')}>
+                  }} id="uc-btn-chronicles" onClick={() => router.push(themeLink('/explore'))}>
                       {heroSecondaryCtaLabel}
                   </button>
               </div>
@@ -172,7 +176,7 @@ export default function Page() {
           ) : (
               <div className="uc-listings-grid">
                   {products.slice(0, 6).map((product) => (
-                      <a href={`/product/${product.slug}`} className="uc-listing-card" key={product.id}>
+                      <a href={themeLink(`/product/${product.slug}`)} className="uc-listing-card" key={product.id}>
                           <div className="uc-listing-image-wrap">
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>
@@ -239,7 +243,7 @@ export default function Page() {
               <p style={{ fontSize: '1.4rem', color: '#666', lineHeight: 1.8, marginBottom: '6rem' }}>
                 {ctaDescription}
               </p>
-              <button className="legacy-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.35rem' }} id="uc-btn-cta-handshake" onClick={() => alert('Legacy node handshake handshake synchronized.')}>{ctaButtonLabel}</button>
+              <button className="legacy-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.35rem' }} id="uc-btn-cta-handshake" onClick={() => router.push(themeLink('/explore'))}>{ctaButtonLabel}</button>
           </div>
       </section>
     </div>

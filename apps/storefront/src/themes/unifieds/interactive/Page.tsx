@@ -1,11 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { InteractionCanvas, FluidLogicBar } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = useUnifiedThemeLink();
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
@@ -105,7 +109,7 @@ export default function Page() {
             {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '2.5rem', justifyContent: 'center', flexWrap: 'wrap' }} className="ui-hero-buttons">
-              <button className="motion-btn-primary" id="ui-btn-explore" onClick={() => document.getElementById('ui-interactive-canvas-section')?.scrollIntoView({ behavior: 'smooth' })}>
+              <button className="motion-btn-primary" id="ui-btn-explore" onClick={() => router.push(themeLink('/explore'))}>
                 {heroPrimaryCtaLabel}
               </button>
               <button style={{ 
@@ -118,7 +122,7 @@ export default function Page() {
                   fontSize: '0.85rem', 
                   cursor: 'pointer',
                   transition: 'all 0.3s ease'
-              }} id="ui-btn-dynamics" onClick={() => alert('Dynamics console initialized.')}>
+              }} id="ui-btn-dynamics" onClick={() => router.push(themeLink('/explore'))}>
                   {heroSecondaryCtaLabel}
               </button>
           </div>
@@ -166,7 +170,7 @@ export default function Page() {
           ) : (
               <div className="ui-listings-grid">
                   {products.slice(0, 6).map((product) => (
-                      <a href={`/product/${product.slug}`} className="ui-listing-card" key={product.id}>
+                      <a href={themeLink(`/product/${product.slug}`)} className="ui-listing-card" key={product.id}>
                           <div className="ui-listing-image-wrap">
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>
@@ -231,7 +235,7 @@ export default function Page() {
           <p style={{ maxWidth: '700px', margin: '0 auto 6rem', fontSize: '1.25rem', color: '#888', lineHeight: 1.8 }}>
             {ctaDescription}
           </p>
-          <button className="motion-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.2rem' }} id="ui-btn-cta-handshake" onClick={() => alert('Interaction node handshake synchronized.')}>{ctaButtonLabel}</button>
+          <button className="motion-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.2rem' }} id="ui-btn-cta-handshake" onClick={() => router.push(themeLink('/explore'))}>{ctaButtonLabel}</button>
       </section>
     </div>
   );

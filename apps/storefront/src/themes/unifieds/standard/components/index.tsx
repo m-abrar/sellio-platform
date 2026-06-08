@@ -62,7 +62,7 @@ interface ProtocolCardProps {
 }
 
 const ProtocolCard = ({ tag, title, description }: ProtocolCardProps) => (
-    <div className="usp-grid-item" onClick={() => alert(`Reviewing Layer: ${tag}`)}>
+    <div className="usp-grid-item" >
         <span className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '1.5rem', display: 'block' }}>{tag}</span>
         <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--usp-navy)' }}>{title}</h3>
         <p style={{ color: 'var(--usp-gray)', fontSize: '0.9rem', lineHeight: 1.7 }}>{description}</p>

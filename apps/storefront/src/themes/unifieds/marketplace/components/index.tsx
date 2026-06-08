@@ -63,7 +63,7 @@ interface MarketItemProps {
 }
 
 const MarketItem = ({ title, volume, nodes, icon }: MarketItemProps) => (
-    <div className="um-market-card-premium" onClick={() => alert(`Synchronizing: ${title}`)}>
+    <div className="um-market-card-premium" >
         <div style={{ fontSize: '2.5rem', marginBottom: '2rem' }}>{icon}</div>
         <h3 style={{ fontFamily: 'var(--um-font-heading)', fontSize: '1.5rem', fontWeight: 800, marginBottom: '1rem', color: '#1e293b' }}>{title}</h3>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--um-border)' }} className="um-card-metrics">

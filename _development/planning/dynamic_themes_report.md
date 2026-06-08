@@ -1,6 +1,6 @@
 # Dynamic Theme Conversion Status Report
 
-Last verified: 2026-06-08 (Round 1 — Classifieds phase complete; 16/16 baselined).
+Last verified: 2026-06-08 (Round 2 — Unifieds phase complete; 22/52 baselined).
 
 This report tracks which Sellio storefront themes have moved from static prototype markup toward live, API-backed React views. It should be read together with `apps/backend/database/seeders/ThemeSeeder.php`, which is the current seeded theme source of truth.
 
@@ -27,7 +27,20 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Classifieds | `classifieds_local` | ✅ | Map + list split; shared catalog; inquiry forms |
 | Classifieds | `classifieds_general` | ✅ | Sidebar filters + chat widget; demo fallback policy |
 
-**Completed:** 16 / 16
+**Completed:** 22 / 52 (Round 1: 16 + Round 2 Unifieds: 6)
+
+## Round 2 Progress
+
+| Vertical | Theme | Status | Notes |
+| :--- | :--- | :---: | :--- |
+| Unifieds | `unifieds_classic` | ✅ | Shared explore/cart; theme links; cart on product |
+| Unifieds | `unifieds_interactive` | ✅ | Shared explore/cart; theme links; cart on product |
+| Unifieds | `unifieds_marketplace` | ✅ | Shared explore/cart; theme links; cart on product |
+| Unifieds | `unifieds_mega` | ✅ | Shared explore/cart; theme links; cart on product |
+| Unifieds | `unifieds_modern` | ✅ | Shared explore/cart; theme links; cart on product |
+| Unifieds | `unifieds_standard` | ✅ | Shared explore/cart; theme links; cart on product |
+
+Tracker: `_development/docs/storefront-round2-roadmap.md`.
 
 ## Current Summary
 
@@ -44,6 +57,8 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Theme folders with `CartPage.tsx` | 5 |
 | Theme folders with static fallback/mock content in TSX | 36 |
 | Round 1 baselined themes | 16 |
+| Round 2 baselined themes | 6 |
+| Total baselined themes | 22 |
 
 Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx` source files. This confirms live-data wiring exists, not that every route, interaction, empty state, fallback path, and visual breakpoint has been manually QA certified.
 

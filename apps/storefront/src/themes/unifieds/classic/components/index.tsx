@@ -62,7 +62,7 @@ interface HeritageCardProps {
 }
 
 const HeritageCard = ({ num, title, description }: HeritageCardProps) => (
-    <div className="uc-legacy-card" onClick={() => alert(`Reviewing registry node: ${title}`)}>
+    <div className="uc-legacy-card" >
         <span className="uc-card-num">{num}</span>
         <h3 style={{ fontFamily: 'var(--uc-font-heading)', fontSize: '2rem', fontWeight: 900, color: 'var(--uc-burgundy)', marginBottom: '2rem' }}>{title}</h3>
         <p style={{ color: '#666', lineHeight: 2, fontSize: '1rem' }}>{description}</p>

@@ -109,7 +109,7 @@ export const NexusPricing = () => {
                                 </div>
                             ))}
                         </div>
-                        <button className="unp-btn-primary" style={{ width: '100%', borderRadius: '12px', background: plan.featured ? 'var(--unp-cyan)' : 'transparent', border: plan.featured ? 'none' : '1px solid var(--unp-border)', color: plan.featured ? 'var(--unp-bg)' : 'white' }} onClick={() => alert(`Subscribed to: ${plan.name}`)}>
+                        <button className="unp-btn-primary" style={{ width: '100%', borderRadius: '12px', background: plan.featured ? 'var(--unp-cyan)' : 'transparent', border: plan.featured ? 'none' : '1px solid var(--unp-border)', color: plan.featured ? 'var(--unp-bg)' : 'white' }} >
                             ACTIVATE NODE
                         </button>
                     </div>
