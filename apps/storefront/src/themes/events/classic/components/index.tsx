@@ -56,7 +56,7 @@ export const VenueHeader = () => {
             className={className}
             style={{ ...patronPortalStyle, padding: '1rem 2rem', textAlign: 'center', marginTop: '2rem', width: '100%' }}
             onClick={() => {
-              alert('Patron Portal synchronized.');
+              document.getElementById('ecl-patron-section')?.scrollIntoView({ behavior: 'smooth' });
               onNavigate?.();
             }}
             id="ecl-btn-patron-portal-mobile"
@@ -76,7 +76,7 @@ export const VenueHeader = () => {
             className={className}
             style={{ ...patronPortalStyle, padding: '0.5rem 2rem' }}
             onClick={() => {
-              alert('Patron Portal synchronized.');
+              document.getElementById('ecl-patron-section')?.scrollIntoView({ behavior: 'smooth' });
               onNavigate?.();
             }}
             id="ecl-btn-patron-portal"
@@ -97,7 +97,7 @@ interface OccasionCardProps {
 }
 
 export const OccasionCard = ({ title, location, date, category }: OccasionCardProps) => (
-  <div className="ecl-occasion-card" onClick={() => alert(`RSVP requested for: ${title}`)}>
+  <div className="ecl-occasion-card">
     <div className="ecl-mono" style={{ marginBottom: '2.5rem' }}>{date}{' // '}{category.toUpperCase()}</div>
     <h3 style={{ fontFamily: 'var(--ecl-serif)', fontSize: '2.25rem', fontWeight: 900, marginBottom: '2rem', lineHeight: 1.1, color: 'var(--ecl-burgundy)' }}>{title}</h3>
     <div style={{ fontStyle: 'italic', color: 'var(--ecl-gold)', fontSize: '1.1rem', marginBottom: '3.5rem', fontFamily: 'var(--ecl-serif)' }}>{location}</div>

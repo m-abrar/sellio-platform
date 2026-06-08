@@ -7,9 +7,16 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
+import {
+  formatEventDateShort,
+  formatEventPrice,
+  getCorporateEventImage,
+} from '@/themes/events/shared/event-utils';
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useEventsThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'FORUM26');
   const brandHighlight = useThemeContent('header.brand_highlight', '26');
   const brandPrefix = brandLabel.endsWith(brandHighlight)
@@ -19,7 +26,7 @@ export const Header = () => {
   return (
     <header className="ecc-header">
       <div className="ecc-header-container">
-        <Link href="/preview/events_corporate" style={{ textDecoration: 'none' }}>
+        <Link href={themeLink('')} style={{ textDecoration: 'none' }}>
           <div className="ecc-logo">
             {brandPrefix}<span>{brandHighlight}</span>
           </div>
@@ -140,7 +147,7 @@ type SpeakerCardProps = {
 };
 
 export const SpeakerCard = ({ name, role, company, image }: SpeakerCardProps) => (
-  <div className="ecc-speaker-card" onClick={() => alert(`Speaker bio loaded: ${name}`)}>
+  <div className="ecc-speaker-card">
     <img src={image} alt={name} className="ecc-speaker-image" />
     <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.5rem', color: 'var(--ecc-obsidian)' }}>{name}</h3>
     <div style={{ color: 'var(--ecc-blue)', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.2rem' }}>{company}</div>
@@ -156,7 +163,7 @@ type AgendaItemProps = {
 };
 
 export const AgendaItem = ({ time, title, speaker, track }: AgendaItemProps) => (
-  <div className="ecc-agenda-item" onClick={() => alert(`Agenda Details for: ${title}`)}>
+  <div className="ecc-agenda-item">
     <div className="ecc-mono" style={{ fontSize: '0.85rem' }}>{time}</div>
     <div>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
@@ -177,13 +184,12 @@ export const AgendaItem = ({ time, title, speaker, track }: AgendaItemProps) => 
 );
 
 export const EventCard = ({ event }: { event: EventListing }) => {
-  const poster = event.media?.poster || '/themes/events/corporate/1.webp';
-  const priceLabel = event.ticketing?.is_free 
-    ? 'Free' 
-    : event.ticketing?.price_formatted || `$${event.ticketing?.base_price}`;
-  
+  const themeLink = useEventsThemeLink();
+  const poster = getCorporateEventImage(event);
+  const priceLabel = formatEventPrice(event);
+
   return (
-    <Link href={`/preview/events_corporate/product/${event.slug}`} style={{ textDecoration: 'none' }}>
+    <Link href={themeLink(`/product/${event.slug}`)} style={{ textDecoration: 'none' }}>
       <div className="ecc-event-card">
         <div className="ecc-event-poster-wrapper">
           <img src={poster} alt={event.title} className="ecc-event-poster" />
@@ -195,7 +201,7 @@ export const EventCard = ({ event }: { event: EventListing }) => {
           <div className="ecc-event-card-meta">
             <div className="ecc-event-card-meta-item">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--ecc-blue)' }}><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-              <span>{event.schedule?.start_at ? new Date(event.schedule.start_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'October 14-16, 2026'}</span>
+              <span>{formatEventDateShort(event)}</span>
             </div>
             <div className="ecc-event-card-meta-item">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--ecc-blue)' }}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>

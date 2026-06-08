@@ -17,7 +17,7 @@ Goal: baseline **2 themes per vertical** (16 total).
 2. Properties — `properties_rental`, `properties_modern` ✅
 3. Ecommerce — `ecommerce_default`, `ecommerce_luxury` ✅
 4. Autos — `autos_modern`, `autos_luxury` ✅
-5. Events — `events_corporate`, `events_classic`
+5. Events — `events_corporate`, `events_classic` ✅
 6. Jobs — `jobs_startup`, `jobs_corporate`
 7. Services — `services_marketplace`, `services_local`
 8. Classifieds — `classifieds_local`, `classifieds_general`
@@ -57,6 +57,15 @@ Clone these patterns for other verticals in later phases.
 - `apps/storefront/src/themes/autos/shared/vehicle-utils.ts`
 - `apps/storefront/src/themes/autos/shared/CatalogSyncAlert.tsx`
 
+## Shared utilities (Events)
+
+- `apps/storefront/src/themes/events/shared/useEventsThemeLink.ts`
+- `apps/storefront/src/themes/events/shared/demo-fallback.ts`
+- `apps/storefront/src/themes/events/shared/catalog.ts`
+- `apps/storefront/src/themes/events/shared/fallback-data.ts`
+- `apps/storefront/src/themes/events/shared/event-utils.ts`
+- `apps/storefront/src/themes/events/shared/CatalogSyncAlert.tsx`
+
 ## Rework notes (2026-06-08)
 
 ### Unifieds
@@ -81,3 +90,8 @@ Clone these patterns for other verticals in later phases.
 - Shared catalog fetch, demo fallback policy, and theme-aware links for modern + luxury
 - Explore pages use shared vehicle utils; empty states instead of silent fallback grids
 - Product inquiry forms use inline validation (no `alert()`); `CatalogSyncAlert` on demo mode
+
+### Events
+- Shared catalog fetch, demo fallback policy, and theme-aware links for corporate + classic
+- Corporate Explore uses shared filters; booking/RSVP forms use inline validation
+- Classic repertoire grid links via `useEventsThemeLink`; patron CTA shows inline confirmation

@@ -1,79 +1,81 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { EventListing } from '@sellio/types';
+import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
+import { fetchEventDetail, resolveEventFailure } from '@/themes/events/shared/catalog';
+import {
+  formatEventDateLong,
+  getClassicEventImage,
+  getClassicEventPriceLabel,
+  getEventLocationLabel,
+} from '@/themes/events/shared/event-utils';
+import { useDemoFallbackAllowed } from '@/themes/events/shared/useDemoFallbackAllowed';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
 
 interface ProductPageProps {
   slug: string;
 }
 
-function getThemeLink(path: string) {
-  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/preview/')) {
-    const themeKey = window.location.pathname.split('/')[2];
-    return `/preview/${themeKey}${path}`;
-  }
-  return path || '/';
-}
-
-function formatEventDate(event: EventListing) {
-  if (!event.schedule?.start_at) return 'Date TBA';
-  return new Date(event.schedule.start_at).toLocaleDateString(undefined, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
-
-function getEventImage(event: EventListing) {
-  return event.media?.poster || event.media?.preview || event.media?.gallery?.[0]?.url || '/themes/events/classic/1.webp';
-}
-
-function getEventPrice(event: EventListing) {
-  return event.ticketing?.price_formatted || (event.ticketing?.is_free ? 'Free admission' : 'Tickets on request');
-}
-
-function getEventLocation(event: EventListing) {
-  return event.location?.map_title || [event.location?.city, event.location?.state].filter(Boolean).join(', ') || 'Venue TBA';
-}
-
 export default function ProductPage({ slug }: ProductPageProps) {
+  const themeLink = useEventsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const [event, setEvent] = useState<EventListing | null>(null);
   const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', tickets: '1' });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadEvent() {
-      try {
-        const response = await api.getEventDetails(slug);
-        if (!isMounted) return;
-        if (response?.data) {
-          setEvent(response.data);
-          setErrorMessage(null);
+      setLoading(true);
+      setNotFound(false);
+      const result = await fetchEventDetail(slug);
+
+      if (!isMounted) return;
+
+      if (result.ok && result.response.data) {
+        setEvent(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'Event not found or API returned no data.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveEventFailure(slug, allowDemo, 'classic');
+
+        if (resolution.mode === 'demo') {
+          setEvent(resolution.event);
+          setUseFallback(true);
+        } else if (resolution.mode === 'notFound') {
+          setEvent(null);
+          setNotFound(true);
+          setUseFallback(false);
         } else {
-          setErrorMessage('Event not found.');
+          setEvent(null);
+          setUseFallback(false);
         }
-      } catch (error: unknown) {
-        if (!isMounted) return;
-        console.error('Failed to load events classic detail:', error);
-        setErrorMessage(error instanceof Error ? error.message : 'The event could not be synchronized.');
-      } finally {
-        if (isMounted) setLoading(false);
       }
+
+      setLoading(false);
     }
 
     loadEvent();
     return () => { isMounted = false; };
-  }, [slug]);
+  }, [slug, allowDemo]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!event || !form.name || !form.email) return;
+    if (!event || !form.name || !form.email) {
+      setFormError('Please enter your name and email to reserve tickets.');
+      return;
+    }
+
+    setFormError(null);
 
     try {
       const stored = JSON.parse(localStorage.getItem('sellio_events_classic_rsvps') || '[]');
@@ -91,6 +93,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       setForm({ name: '', email: '', tickets: '1' });
     } catch (error) {
       console.error('Failed to persist RSVP:', error);
+      setFormError('Could not save your reservation locally. Please try again.');
     }
   };
 
@@ -104,14 +107,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
     );
   }
 
-  if (errorMessage || !event) {
+  if (notFound || !event) {
     return (
       <main className="ecl-detail-page">
         <section className="ecl-detail-state" role="status">
           <div className="ecl-detail-kicker">Event Unavailable</div>
           <h1 className="ecl-serif">Performance could not be loaded.</h1>
-          <p>{errorMessage || 'The requested event does not exist or has been removed.'}</p>
-          <a href={getThemeLink('')} className="ecl-btn-primary">Return to Repertoire</a>
+          <p>{apiError || 'The requested event does not exist or has been removed.'}</p>
+          <a href={themeLink('')} className="ecl-btn-primary">Return to Repertoire</a>
         </section>
       </main>
     );
@@ -119,17 +122,23 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="ecl-detail-page">
-      <a href={getThemeLink('')} className="ecl-detail-back">&larr; Back to Repertoire</a>
+      <a href={themeLink('')} className="ecl-detail-back">&larr; Back to Repertoire</a>
+
+      {apiError && useFallback && (
+        <div className="ecl-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="ecl" />
+        </div>
+      )}
 
       <header className="ecl-detail-hero">
-        <img src={getEventImage(event)} alt={event.title} />
+        <img src={getClassicEventImage(event)} alt={event.title} />
         <div className="ecl-detail-hero-overlay">
           <div className="ecl-detail-kicker">{event.specs?.category || 'Grand Occasion'}</div>
           <h1 className="ecl-serif">{event.title}</h1>
           <div className="ecl-detail-meta">
-            <span>{formatEventDate(event)}</span>
-            <span>{getEventLocation(event)}</span>
-            <span>{getEventPrice(event)}</span>
+            <span>{formatEventDateLong(event)}</span>
+            <span>{getEventLocationLabel(event)}</span>
+            <span>{getClassicEventPriceLabel(event)}</span>
           </div>
         </div>
       </header>
@@ -147,7 +156,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
         <aside className="ecl-detail-sidebar">
           <h3 className="ecl-serif">Reserve Tickets</h3>
-          <p className="ecl-detail-price">{getEventPrice(event)}</p>
+          <p className="ecl-detail-price">{getClassicEventPriceLabel(event)}</p>
           {isSubmitted ? (
             <div className="ecl-detail-success" role="status">Reservation saved locally.</div>
           ) : (
@@ -155,6 +164,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
               <label>Full Name<input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
               <label>Email<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
               <label>Tickets<input type="number" min="1" max="10" value={form.tickets} onChange={(e) => setForm({ ...form, tickets: e.target.value })} /></label>
+              {formError && <p className="ecl-form-error" role="alert">{formError}</p>}
               <button className="ecl-btn-primary" type="submit">Confirm Reservation</button>
             </form>
           )}

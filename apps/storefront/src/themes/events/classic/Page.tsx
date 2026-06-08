@@ -1,41 +1,23 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { EventListing } from '@sellio/types';
 import { OccasionCard, BookingHUD } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
-
-const months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
-
-function formatEventDateUnderscore(dateStr?: string | null) {
-  if (!dateStr) {
-    return 'DATE_TBA';
-  }
-
-  const date = new Date(dateStr);
-  return `${months[date.getMonth()]}_${String(date.getDate()).padStart(2, '0')}_${date.getFullYear()}`;
-}
-
-function mapEventToOccasion(event: EventListing) {
-  const location = event.location?.map_title
-    || [event.location?.city, event.location?.state].filter(Boolean).join(', ')
-    || event.location?.address
-    || 'Venue TBA';
-
-  return {
-    title: event.title,
-    location,
-    date: formatEventDateUnderscore(event.schedule?.start_at),
-    category: event.specs?.category || event.specs?.type || 'Event',
-    slug: event.slug,
-  };
-}
+import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
+import { fetchEventsHome, resolveEventsFailure } from '@/themes/events/shared/catalog';
+import { mapEventToOccasion } from '@/themes/events/shared/event-utils';
+import { useDemoFallbackAllowed } from '@/themes/events/shared/useDemoFallbackAllowed';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
 
 export default function Page() {
+  const themeLink = useEventsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const [events, setEvents] = useState<EventListing[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
-  const [eventError, setEventError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [patronSubmitted, setPatronSubmitted] = useState(false);
   const heroTitle = useThemeContent('hero.title', 'Cultural\nHeritage.');
   const heroDescription = useThemeContent(
     'hero.description',
@@ -70,26 +52,30 @@ export default function Page() {
     let isMounted = true;
 
     async function loadEvents() {
-      try {
-        const response = await api.getEvents({ per_page: 6 });
-        if (!isMounted) {
-          return;
-        }
+      setLoadingEvents(true);
+      const result = await fetchEventsHome(6);
 
-        setEvents(Array.isArray(response.data) ? response.data : []);
-        setEventError(null);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
+      if (!isMounted) return;
 
-        console.error('Failed to load events classic listings:', error);
-        setEventError(error instanceof Error ? error.message : 'Events are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoadingEvents(false);
+      if (result.ok && result.response.data) {
+        setEvents(Array.isArray(result.response.data) ? result.response.data : []);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No events returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveEventsFailure(allowDemo, 'classic');
+
+        if (resolution.mode === 'demo') {
+          setEvents(resolution.events);
+          setUseFallback(true);
+        } else {
+          setEvents([]);
+          setUseFallback(false);
         }
       }
+
+      setLoadingEvents(false);
     }
 
     loadEvents();
@@ -97,11 +83,10 @@ export default function Page() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [allowDemo]);
 
   return (
     <div className="events-classic-theme">
-      {/* Cinematic Cultural Hero */}
       <section className="ecl-hero" aria-labelledby="ecl-hero-title">
           <div style={{ width: '100px', height: '1px', background: 'var(--ecl-gold)', marginBottom: '4rem' }}></div>
           <h1 className="ecl-heading-xl" style={{ color: 'white' }} id="ecl-hero-title">
@@ -120,14 +105,12 @@ export default function Page() {
           </div>
       </section>
 
-      {/* Trust & Logistics Bar */}
       <section className="ecl-trust-bar" aria-label="Artistic Integrity Status">
           {trustItems.map(logic => (
               <div key={logic} className="ecl-mono" style={{ fontSize: '0.65rem', opacity: 0.5 }}>{logic}</div>
           ))}
       </section>
 
-      {/* Booking HUD Section */}
       <section className="ecl-section ecl-hud-section" aria-label="Live Statistics Dashboard">
           <BookingHUD label="VERIFIED_VENUES" value="42" />
           <BookingHUD label="INSTITUTIONAL_NODES" value="156" />
@@ -135,7 +118,6 @@ export default function Page() {
           <BookingHUD label="ARCHIVE_STABILITY" value="100%" />
       </section>
 
-      {/* Repertoire Registry Section */}
       <section className="ecl-section" id="ecl-exchange-section" aria-labelledby="ecl-repertoire-title">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
               <div>
@@ -154,6 +136,17 @@ export default function Page() {
               </div>
           </div>
 
+          {apiError && useFallback && (
+            <div className="ecl-alert-slot">
+              <CatalogSyncAlert variant="demo" error={apiError} classPrefix="ecl" />
+            </div>
+          )}
+          {apiError && !useFallback && (
+            <div className="ecl-alert-slot">
+              <CatalogSyncAlert variant="production" error={apiError} classPrefix="ecl" />
+            </div>
+          )}
+
           <div className="ec-repertoire-grid">
             {loadingEvents ? (
               [1, 2, 3, 4, 5, 6].map((item) => (
@@ -163,14 +156,8 @@ export default function Page() {
                   <div className="ecl-skeleton-line ecl-skeleton-line-short" />
                 </div>
               ))
-            ) : eventError ? (
-              <div className="ecl-listing-state">
-                <div className="ecl-listing-kicker">Cultural Sync Offline</div>
-                <h3>The repertoire could not be loaded.</h3>
-                <p>{eventError}</p>
-              </div>
             ) : events.length === 0 ? (
-              <div className="ecl-listing-state">
+              <div className="ecl-empty-state" role="status">
                 <div className="ecl-listing-kicker">Empty Event Registry</div>
                 <h3>No live events are published yet.</h3>
                 <p>Add event records in the backend and this repertoire grid will hydrate automatically.</p>
@@ -179,7 +166,7 @@ export default function Page() {
               events.slice(0, 6).map((event) => {
                 const occasion = mapEventToOccasion(event);
                 return (
-                  <a className="ecl-occasion-link" href={`/product/${occasion.slug}`} key={event.id}>
+                  <a className="ecl-occasion-link" href={themeLink(`/product/${occasion.slug}`)} key={event.id}>
                     <OccasionCard {...occasion} />
                   </a>
                 );
@@ -188,8 +175,7 @@ export default function Page() {
           </div>
       </section>
 
-      {/* Institutional / Patron Section */}
-      <section className="ecl-section ecl-patron-section" aria-labelledby="ecl-patron-title">
+      <section className="ecl-section ecl-patron-section" id="ecl-patron-section" aria-labelledby="ecl-patron-title">
           <div style={{ padding: '8rem' }}>
               <div className="ecl-mono" style={{ marginBottom: '3rem' }}>{patronEyebrow}</div>
               <h2 className="ecl-heading-xl" style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', marginBottom: '4rem' }} id="ecl-patron-title">
@@ -214,7 +200,19 @@ export default function Page() {
               <p style={{ color: 'rgba(26, 26, 26, 0.4)', lineHeight: 2, marginBottom: '4rem' }}>
                   {patronCardDescription}
               </p>
-              <button className="ecl-btn-primary" style={{ width: '100%', padding: '2rem' }} id="ecl-btn-patron-apply" onClick={() => alert('Patron circle application transmitted.')}>{patronCardCta}</button>
+              {patronSubmitted ? (
+                <div className="ecl-detail-success" role="status">Your patron inquiry has been recorded locally.</div>
+              ) : (
+                <button
+                  type="button"
+                  className="ecl-btn-primary"
+                  style={{ width: '100%', padding: '2rem' }}
+                  id="ecl-btn-patron-apply"
+                  onClick={() => setPatronSubmitted(true)}
+                >
+                  {patronCardCta}
+                </button>
+              )}
           </div>
       </section>
 
