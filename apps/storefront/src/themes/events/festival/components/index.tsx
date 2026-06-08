@@ -1,10 +1,12 @@
 'use client';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
 
 const vibeSyncStyle = {
   fontSize: '0.65rem',
@@ -15,6 +17,7 @@ const vibeSyncStyle = {
 
 export const FestivalHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useEventsThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'NEONPulse');
   const midpoint = Math.max(1, Math.ceil(brandLabel.length / 2));
 
@@ -51,16 +54,14 @@ export const FestivalHeader = () => {
           as="button"
           onNavigate={() => setIsOpen(false)}
           renderItem={(item, { className, onNavigate }) => (
-            <div
-              className={className}
-              style={{ ...vibeSyncStyle, padding: '1rem 2rem', textAlign: 'center', marginTop: '2rem', width: '100%' }}
-              onClick={() => {
-                alert('Vibe sync active.');
-                onNavigate?.();
-              }}
-            >
-              {item.title.toUpperCase()}_ACTIVE
-            </div>
+            <Link href={themeLink('/explore')} style={{ textDecoration: 'none', width: '100%' }} onClick={onNavigate}>
+              <div
+                className={className}
+                style={{ ...vibeSyncStyle, padding: '1rem 2rem', textAlign: 'center', marginTop: '2rem', width: '100%' }}
+              >
+                {item.title.toUpperCase()}_ACTIVE
+              </div>
+            </Link>
           )}
         />
 
@@ -69,17 +70,15 @@ export const FestivalHeader = () => {
           className="eff-mono eff-desktop-btn"
           as="button"
           renderItem={(item, { className, onNavigate }) => (
-            <div
-              className={className}
-              style={{ ...vibeSyncStyle, padding: '0.5rem 2rem' }}
-              onClick={() => {
-                alert('Vibe sync active.');
-                onNavigate?.();
-              }}
-              id="eff-btn-vibe-status"
-            >
-              {item.title.toUpperCase()}_ACTIVE
-            </div>
+            <Link href={themeLink('/explore')} style={{ textDecoration: 'none' }} onClick={onNavigate}>
+              <div
+                className={className}
+                style={{ ...vibeSyncStyle, padding: '0.5rem 2rem' }}
+                id="eff-btn-vibe-status"
+              >
+                {item.title.toUpperCase()}_ACTIVE
+              </div>
+            </Link>
           )}
         />
       </div>
@@ -95,7 +94,7 @@ interface StageLineupCardProps {
 }
 
 export const StageLineupCard = ({ title, location, date, image }: StageLineupCardProps) => (
-  <div className="eff-stage-card" onClick={() => alert(`Securing pass for: ${title}`)}>
+  <div className="eff-stage-card">
     <img src={image} alt={title} className="eff-img" />
     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '4rem', background: 'linear-gradient(to top, #000 0%, transparent 100%)' }} className="eff-card-content">
         <div className="eff-mono" style={{ marginBottom: '1.5rem', color: 'var(--eff-magenta)' }}>{date} {'//'} {location.toUpperCase()}</div>

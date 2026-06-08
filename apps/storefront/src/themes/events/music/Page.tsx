@@ -1,9 +1,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { EventListing } from '@sellio/types';
 import { PulseExperience, LineupGrid } from './components';
+import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
+import { fetchEventsHome, resolveEventsFailure } from '@/themes/events/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/events/shared/useDemoFallbackAllowed';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
+import { formatEventDateShort, getMusicEventImage } from '@/themes/events/shared/event-utils';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackImages = [
@@ -13,29 +17,19 @@ const fallbackImages = [
   '/themes/events/music/14.webp',
 ];
 
-function formatEventDateReadable(dateStr?: string | null) {
-  if (!dateStr) {
-    return 'Date TBA';
-  }
-
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
-}
-
 function mapEventToHeadliner(event: EventListing, index: number) {
   return {
-    name: event.specs?.brand || event.organizer?.name || event.specs?.category || 'HEADLINER',
+    name: event.specs?.brand || event.specs?.category || 'HEADLINER',
     event: event.title,
-    date: formatEventDateReadable(event.schedule?.start_at),
-    image: event.media?.poster || event.media?.preview || fallbackImages[index % fallbackImages.length],
+    date: formatEventDateShort(event),
+    image: getMusicEventImage(event) || fallbackImages[index % fallbackImages.length],
     slug: event.slug,
   };
 }
 
 export default function Page() {
+  const themeLink = useEventsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const heroEyebrow = useThemeContent('hero.eyebrow', 'PULSE // LIVE TRANSMISSION');
   const heroTitle = useThemeContent('hero.title', 'FEEL THE\nMUSIC LIVE.');
   const heroDescription = useThemeContent(
@@ -60,40 +54,37 @@ export default function Page() {
   const ctaButtonLabel = useThemeContent('cta.button_label', 'Reserve Access');
   const [events, setEvents] = useState<EventListing[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
-  const [eventError, setEventError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
-
     async function loadEvents() {
-      try {
-        const response = await api.getEvents({ per_page: 6 });
-        if (!isMounted) {
-          return;
-        }
+      setLoadingEvents(true);
+      const result = await fetchEventsHome(6);
 
-        setEvents(Array.isArray(response.data) ? response.data : []);
-        setEventError(null);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
+      if (result.ok && result.response.data?.length) {
+        setEvents(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No events returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveEventsFailure(allowDemo, 'music');
 
-        console.error('Failed to load events music listings:', error);
-        setEventError(error instanceof Error ? error.message : 'Events are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoadingEvents(false);
+        if (resolution.mode === 'demo') {
+          setEvents(resolution.events);
+          setUseFallback(true);
+        } else {
+          setEvents([]);
+          setUseFallback(false);
         }
       }
+
+      setLoadingEvents(false);
     }
 
     loadEvents();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  }, [allowDemo]);
 
   return (
     <div className="sonic-pulse-wrapper">
@@ -114,13 +105,13 @@ export default function Page() {
                   {heroDescription}
               </p>
               <div style={{ display: 'flex', gap: '3rem', marginTop: '6rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                  <button className="sonic-btn-primary" onClick={() => document.getElementById('sonic-cta-section')?.scrollIntoView({ behavior: 'smooth' })}>{primaryCtaLabel}</button>
-                  <button
-                    style={{ background: 'transparent', border: '2px solid var(--neon-blue)', color: 'white', padding: '1.5rem 5rem', fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '1.1rem', cursor: 'pointer', borderRadius: '50px', boxShadow: '0 0 20px var(--neon-blue)', transition: 'all 0.3s ease' }}
-                    onClick={() => document.getElementById('sonic-lineup-section')?.scrollIntoView({ behavior: 'smooth' })}
+                  <a href={themeLink('/explore')} className="sonic-btn-primary">{primaryCtaLabel}</a>
+                  <a
+                    href={themeLink('/explore')}
+                    style={{ background: 'transparent', border: '2px solid var(--neon-blue)', color: 'white', padding: '1.5rem 5rem', fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '1.1rem', cursor: 'pointer', borderRadius: '50px', boxShadow: '0 0 20px var(--neon-blue)', transition: 'all 0.3s ease', textDecoration: 'none', display: 'inline-block' }}
                   >
                     {secondaryCtaLabel}
-                  </button>
+                  </a>
               </div>
           </div>
       </section>
@@ -145,6 +136,16 @@ export default function Page() {
       </section>
 
       <section style={{ padding: '0 6% 8rem' }}>
+          {useFallback && apiError && (
+            <div className="evm-alert-slot" style={{ marginBottom: '2rem' }}>
+              <CatalogSyncAlert variant="demo" error={apiError} classPrefix="evm" />
+            </div>
+          )}
+          {apiError && !useFallback && (
+            <div className="evm-alert-slot" style={{ marginBottom: '2rem' }}>
+              <CatalogSyncAlert variant="production" error={apiError} classPrefix="evm" />
+            </div>
+          )}
           <div className="lineup-grid" style={{ padding: 0 }}>
               {loadingEvents ? (
                 [1, 2, 3, 4].map((item) => (
@@ -154,12 +155,6 @@ export default function Page() {
                     <div className="evm-skeleton-line evm-skeleton-line-short" />
                   </div>
                 ))
-              ) : eventError ? (
-                <div className="evm-listing-state">
-                  <div className="evm-listing-kicker">Lineup Sync Offline</div>
-                  <h3>The core lineup could not be loaded.</h3>
-                  <p>{eventError}</p>
-                </div>
               ) : events.length === 0 ? (
                 <div className="evm-listing-state">
                   <div className="evm-listing-kicker">Empty Event Registry</div>
@@ -170,7 +165,7 @@ export default function Page() {
                 events.slice(0, 6).map((event, index) => {
                   const headliner = mapEventToHeadliner(event, index);
                   return (
-                    <a className="evm-headliner-link" href={`/product/${headliner.slug}`} key={event.id}>
+                    <a className="evm-headliner-link" href={themeLink(`/product/${headliner.slug}`)} key={event.id}>
                       <div className="artist-card-premium">
                         <img src={headliner.image} alt={headliner.name} className="artist-img" />
                         <div className="artist-info">
@@ -223,7 +218,7 @@ export default function Page() {
           <p style={{ maxWidth: '700px', margin: '0 auto 6rem', fontSize: '1.25rem', color: '#888', lineHeight: 1.8 }}>
               {ctaDescription}
           </p>
-          <button className="sonic-btn-primary" style={{ padding: '2rem 10rem', fontSize: '1.5rem' }} onClick={() => alert('Access registration protocol activated.')}>{ctaButtonLabel}</button>
+          <a href={themeLink('/explore')} className="sonic-btn-primary" style={{ padding: '2rem 10rem', fontSize: '1.5rem', display: 'inline-block', textDecoration: 'none' }}>{ctaButtonLabel}</a>
       </section>
     </div>
   );

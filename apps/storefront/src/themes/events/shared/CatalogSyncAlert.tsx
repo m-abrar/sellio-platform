@@ -5,7 +5,7 @@ import React from 'react';
 type CatalogSyncAlertProps = {
   variant: 'demo' | 'production';
   error: string;
-  classPrefix?: 'ecc' | 'ecl';
+  classPrefix?: 'ecc' | 'ecl' | 'evm' | 'evc' | 'eff';
 };
 
 export function CatalogSyncAlert({

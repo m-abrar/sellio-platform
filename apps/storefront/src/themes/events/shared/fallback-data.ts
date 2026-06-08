@@ -376,18 +376,193 @@ export const CLASSIC_FALLBACK_EVENTS: EventListing[] = [
   },
 ];
 
+export const MUSIC_FALLBACK_EVENTS: EventListing[] = [
+  {
+    id: 301,
+    title: 'Electric Pulse Festival 2026',
+    slug: 'electric-pulse-festival-2026',
+    description: 'A three-day electronic music takeover featuring global headliners, immersive light rigs, and 120dB precision sound.',
+    schedule: { start_at: '2026-07-18T18:00:00Z', end_at: '2026-07-20T04:00:00Z', duration_hours: 34, is_virtual: false },
+    ticketing: { is_paid: true, is_free: false, base_price: 249, sale_price: 199, price_formatted: '$199.00', price_formatted_k: '$0.2k', max_attendees: 25000, tickets_left: 4200 },
+    specs: { category: 'Festival', type: 'Live', brand: 'PULSE Series', event_genre: 'Electronic', venue_size: 'Large', tags: ['House', 'Techno', 'Live'] },
+    media: { poster: '/themes/events/music/11.webp', preview: '/themes/events/music/11.webp', gallery: [] },
+    location: { address: 'Bayfront Park', city: 'Miami', state: 'FL', country: 'USA', latitude: 25.775, longitude: -80.186, map_title: 'Bayfront Park' },
+    status: { ...published, rating: 4.8 },
+  },
+  {
+    id: 302,
+    title: 'Underground House Sessions',
+    slug: 'underground-house-sessions',
+    description: 'Intimate warehouse sessions with curated underground house selectors and analog sound systems.',
+    schedule: { start_at: '2026-09-12T22:00:00Z', end_at: '2026-09-13T06:00:00Z', duration_hours: 8, is_virtual: false },
+    ticketing: { is_paid: true, is_free: false, base_price: 65, sale_price: 55, price_formatted: '€55.00', price_formatted_k: '€0.1k', max_attendees: 800, tickets_left: 120 },
+    specs: { category: 'Club Night', type: 'Live', brand: 'Sonic Node', event_genre: 'House', venue_size: 'Medium', tags: ['Underground', 'Vinyl', 'Warehouse'] },
+    media: { poster: '/themes/events/music/12.webp', preview: '/themes/events/music/12.webp', gallery: [] },
+    location: { address: 'RAW Gelände', city: 'Berlin', state: 'BE', country: 'Germany', latitude: 52.52, longitude: 13.405, map_title: 'RAW Gelände' },
+    status: published,
+  },
+  {
+    id: 303,
+    title: 'Bass Culture Live',
+    slug: 'bass-culture-live',
+    description: 'Heavy bass programming with live MC showcases, dubstep collectives, and festival-grade sub arrays.',
+    schedule: { start_at: '2026-10-03T19:00:00Z', end_at: '2026-10-04T02:00:00Z', duration_hours: 7, is_virtual: false },
+    ticketing: { is_paid: true, is_free: false, base_price: 89, sale_price: 79, price_formatted: '£79.00', price_formatted_k: '£0.1k', max_attendees: 5000, tickets_left: 890 },
+    specs: { category: 'Concert', type: 'Live', brand: 'Bass Registry', event_genre: 'Bass', venue_size: 'Large', tags: ['Dubstep', 'Drum & Bass', 'Live MC'] },
+    media: { poster: '/themes/events/music/13.webp', preview: '/themes/events/music/13.webp', gallery: [] },
+    location: { address: 'Printworks London', city: 'London', state: 'England', country: 'UK', latitude: 51.497, longitude: -0.032, map_title: 'Printworks London' },
+    status: published,
+  },
+  {
+    id: 304,
+    title: 'Sonic Summit LA',
+    slug: 'sonic-summit-la',
+    description: 'West coast showcase of chart-topping artists, brand activations, and high-fidelity festival production.',
+    schedule: { start_at: '2026-11-08T16:00:00Z', end_at: '2026-11-08T23:59:00Z', duration_hours: 8, is_virtual: false },
+    ticketing: { is_paid: true, is_free: false, base_price: 149, sale_price: 129, price_formatted: '$129.00', price_formatted_k: '$0.1k', max_attendees: 12000, tickets_left: 2100 },
+    specs: { category: 'Summit', type: 'Festival', brand: 'Sonic Pulse', event_genre: 'Pop/Electronic', venue_size: 'Large', tags: ['Headliners', 'LA', 'Live'] },
+    media: { poster: '/themes/events/music/14.webp', preview: '/themes/events/music/14.webp', gallery: [] },
+    location: { address: 'LA State Historic Park', city: 'Los Angeles', state: 'CA', country: 'USA', latitude: 34.062, longitude: -118.234, map_title: 'LA State Historic Park' },
+    status: { ...published, rating: 4.7 },
+  },
+];
+
+export const CREATIVE_FALLBACK_EVENTS: EventListing[] = [
+  {
+    id: 401,
+    title: 'Algorithmic Light Lab',
+    slug: 'algorithmic-light-lab',
+    description: 'Interactive light installations driven by generative algorithms and real-time audience input modules.',
+    schedule: { start_at: '2026-08-22T18:00:00Z', end_at: '2026-08-23T02:00:00Z', duration_hours: 8, is_virtual: false },
+    ticketing: { is_paid: true, is_free: false, base_price: 45, sale_price: 45, price_formatted: '¥4,500', price_formatted_k: '¥4.5k', max_attendees: 600, tickets_left: 88 },
+    specs: { category: 'Installation', type: 'Lab', brand: 'Creative Node', event_genre: 'Digital Art', venue_size: 'Medium', tags: ['Generative', 'Light', 'Interactive'] },
+    media: { poster: '/themes/events/creative/1.webp', preview: '/themes/events/creative/1.webp', gallery: [] },
+    location: { address: 'TeamLab Planets', city: 'Tokyo', state: 'Tokyo', country: 'Japan', latitude: 35.649, longitude: 139.789, map_title: 'TeamLab Planets' },
+    status: published,
+  },
+  {
+    id: 402,
+    title: 'Bio-Digital Synthesis',
+    slug: 'bio-digital-synthesis',
+    description: 'Experimental assemblies merging biofeedback sensors with modular synthesizers and projection mapping.',
+    schedule: { start_at: '2026-09-15T20:00:00Z', end_at: '2026-09-16T01:00:00Z', duration_hours: 5, is_virtual: false },
+    ticketing: { is_paid: true, is_free: false, base_price: 38, sale_price: 38, price_formatted: '€38.00', price_formatted_k: '€0.0k', max_attendees: 400, tickets_left: 56 },
+    specs: { category: 'Workshop', type: 'Lab', brand: 'Resonance Lab', event_genre: 'Bio-Art', venue_size: 'Small', tags: ['Synthesis', 'Biofeedback', 'Modular'] },
+    media: { poster: '/themes/events/creative/2.webp', preview: '/themes/events/creative/2.webp', gallery: [] },
+    location: { address: 'NDSM Wharf', city: 'Amsterdam', state: 'NH', country: 'Netherlands', latitude: 52.401, longitude: 4.892, map_title: 'NDSM Wharf' },
+    status: published,
+  },
+  {
+    id: 403,
+    title: 'Resonance Wave Assembly',
+    slug: 'resonance-wave-assembly',
+    description: 'Community-driven audio-visual performances with open-protocol artist nodes and live coding stages.',
+    schedule: { start_at: '2026-10-10T19:00:00Z', end_at: '2026-10-11T03:00:00Z', duration_hours: 8, is_virtual: false },
+    ticketing: { is_paid: false, is_free: true, base_price: 0, sale_price: 0, price_formatted: 'Free entry', price_formatted_k: 'Free', max_attendees: 900, tickets_left: 320 },
+    specs: { category: 'Assembly', type: 'Performance', brand: 'Wave Collective', event_genre: 'AV Performance', venue_size: 'Medium', tags: ['Live Coding', 'Community', 'Open Protocol'] },
+    media: { poster: '/themes/events/creative/3.webp', preview: '/themes/events/creative/3.webp', gallery: [] },
+    location: { address: 'Brooklyn Navy Yard', city: 'Brooklyn', state: 'NY', country: 'USA', latitude: 40.699, longitude: -73.971, map_title: 'Brooklyn Navy Yard' },
+    status: published,
+  },
+  {
+    id: 404,
+    title: 'Modular Art Pulse',
+    slug: 'modular-art-pulse',
+    description: 'A decentralized showcase of artisan makers, kinetic sculptures, and algorithmic print studios.',
+    schedule: { start_at: '2026-11-01T17:00:00Z', end_at: '2026-11-02T00:00:00Z', duration_hours: 7, is_virtual: false },
+    ticketing: { is_paid: true, is_free: false, base_price: 28, sale_price: 28, price_formatted: '$28.00', price_formatted_k: '$0.0k', max_attendees: 750, tickets_left: 190 },
+    specs: { category: 'Showcase', type: 'Exhibition', brand: 'Artisan Registry', event_genre: 'Mixed Media', venue_size: 'Medium', tags: ['Sculpture', 'Print', 'Kinetic'] },
+    media: { poster: '/themes/events/creative/4.webp', preview: '/themes/events/creative/4.webp', gallery: [] },
+    location: { address: 'Pearl District Studios', city: 'Portland', state: 'OR', country: 'USA', latitude: 45.523, longitude: -122.676, map_title: 'Pearl District' },
+    status: published,
+  },
+];
+
+export const FESTIVAL_FALLBACK_EVENTS: EventListing[] = [
+  {
+    id: 501,
+    title: 'Neon Desert Vibe',
+    slug: 'neon-desert-vibe',
+    description: 'High-intensity desert festival with neon stages, art cars, and sunrise sets across three curated zones.',
+    schedule: { start_at: '2026-04-10T16:00:00Z', end_at: '2026-04-13T06:00:00Z', duration_hours: 62, is_virtual: false },
+    ticketing: { is_paid: true, is_free: false, base_price: 399, sale_price: 349, price_formatted: '$349.00', price_formatted_k: '$0.3k', max_attendees: 18000, tickets_left: 2400 },
+    specs: { category: 'Festival', type: 'Multi-Stage', brand: 'Neon Collective', event_genre: 'EDM', venue_size: 'Large', tags: ['Desert', 'Neon', 'Art Cars'] },
+    media: { poster: '/themes/events/festival/11.webp', preview: '/themes/events/festival/11.webp', gallery: [] },
+    location: { address: 'Moapa Valley', city: 'Las Vegas', state: 'NV', country: 'USA', latitude: 36.687, longitude: -114.593, map_title: 'Moapa Valley' },
+    status: { ...published, rating: 4.9 },
+  },
+  {
+    id: 502,
+    title: 'Electric Horizon Fest',
+    slug: 'electric-horizon-fest',
+    description: 'Mediterranean waterfront festival blending house, techno, and live electronic ensembles at sunset.',
+    schedule: { start_at: '2026-06-20T17:00:00Z', end_at: '2026-06-22T05:00:00Z', duration_hours: 36, is_virtual: false },
+    ticketing: { is_paid: true, is_free: false, base_price: 189, sale_price: 169, price_formatted: '€169.00', price_formatted_k: '€0.2k', max_attendees: 22000, tickets_left: 5100 },
+    specs: { category: 'Festival', type: 'Waterfront', brand: 'Horizon Series', event_genre: 'House/Techno', venue_size: 'Large', tags: ['Sunset', 'Waterfront', 'Live'] },
+    media: { poster: '/themes/events/festival/12.webp', preview: '/themes/events/festival/12.webp', gallery: [] },
+    location: { address: 'Parc del Fòrum', city: 'Barcelona', state: 'Catalonia', country: 'Spain', latitude: 41.411, longitude: 2.226, map_title: 'Parc del Fòrum' },
+    status: published,
+  },
+  {
+    id: 503,
+    title: 'Pulse Collective Weekend',
+    slug: 'pulse-collective-weekend',
+    description: 'Island club takeover with pool stages, beach sets, and curated after-hours neon nodes.',
+    schedule: { start_at: '2026-08-01T14:00:00Z', end_at: '2026-08-03T06:00:00Z', duration_hours: 40, is_virtual: false },
+    ticketing: { is_paid: true, is_free: false, base_price: 299, sale_price: 279, price_formatted: '€279.00', price_formatted_k: '€0.3k', max_attendees: 8000, tickets_left: 980 },
+    specs: { category: 'Weekender', type: 'Club Festival', brand: 'Pulse Node', event_genre: 'Dance', venue_size: 'Large', tags: ['Ibiza', 'Pool', 'After Hours'] },
+    media: { poster: '/themes/events/festival/13.webp', preview: '/themes/events/festival/13.webp', gallery: [] },
+    location: { address: 'Playa d\'en Bossa', city: 'Ibiza', state: 'Balearic Islands', country: 'Spain', latitude: 38.876, longitude: 1.396, map_title: 'Playa d\'en Bossa' },
+    status: published,
+  },
+  {
+    id: 504,
+    title: 'Lumina Stage Series',
+    slug: 'lumina-stage-series',
+    description: 'Harbor-front light festival with synchronized LED stages, drone shows, and global DJ collectives.',
+    schedule: { start_at: '2026-12-05T18:00:00Z', end_at: '2026-12-07T04:00:00Z', duration_hours: 34, is_virtual: false },
+    ticketing: { is_paid: true, is_free: false, base_price: 219, sale_price: 199, price_formatted: 'A$199.00', price_formatted_k: 'A$0.2k', max_attendees: 15000, tickets_left: 3300 },
+    specs: { category: 'Festival', type: 'Light Show', brand: 'Lumina Group', event_genre: 'Electronic', venue_size: 'Large', tags: ['Harbor', 'LED', 'Drones'] },
+    media: { poster: '/themes/events/festival/14.webp', preview: '/themes/events/festival/14.webp', gallery: [] },
+    location: { address: 'Darling Harbour', city: 'Sydney', state: 'NSW', country: 'Australia', latitude: -33.874, longitude: 151.2, map_title: 'Darling Harbour' },
+    status: { ...published, rating: 4.8 },
+  },
+];
+
+export type EventsFallbackVariant = 'corporate' | 'classic' | 'music' | 'creative' | 'festival';
+
+const FALLBACK_BY_VARIANT: Record<EventsFallbackVariant, EventListing[]> = {
+  corporate: CORPORATE_FALLBACK_EVENTS,
+  classic: CLASSIC_FALLBACK_EVENTS,
+  music: MUSIC_FALLBACK_EVENTS,
+  creative: CREATIVE_FALLBACK_EVENTS,
+  festival: FESTIVAL_FALLBACK_EVENTS,
+};
+
+export function getFallbackEvents(variant: EventsFallbackVariant): EventListing[] {
+  return FALLBACK_BY_VARIANT[variant];
+}
+
+export function findFallbackEvent(slug: string, variant: EventsFallbackVariant): EventListing | undefined {
+  return FALLBACK_BY_VARIANT[variant].find((event) => event.slug === slug);
+}
+
+export function getRelatedFallbackEvents(slug: string, variant: EventsFallbackVariant): EventListing[] {
+  return FALLBACK_BY_VARIANT[variant].filter((event) => event.slug !== slug).slice(0, 3);
+}
+
 export function findCorporateFallbackEvent(slug: string): EventListing | undefined {
-  return CORPORATE_FALLBACK_EVENTS.find((event) => event.slug === slug);
+  return findFallbackEvent(slug, 'corporate');
 }
 
 export function findClassicFallbackEvent(slug: string): EventListing | undefined {
-  return CLASSIC_FALLBACK_EVENTS.find((event) => event.slug === slug);
+  return findFallbackEvent(slug, 'classic');
 }
 
 export function getCorporateRelatedEvents(slug: string): EventListing[] {
-  return CORPORATE_FALLBACK_EVENTS.filter((event) => event.slug !== slug);
+  return getRelatedFallbackEvents(slug, 'corporate');
 }
 
 export function getClassicRelatedEvents(slug: string): EventListing[] {
-  return CLASSIC_FALLBACK_EVENTS.filter((event) => event.slug !== slug);
+  return getRelatedFallbackEvents(slug, 'classic');
 }

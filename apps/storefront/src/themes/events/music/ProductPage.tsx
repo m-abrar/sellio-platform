@@ -1,74 +1,95 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { EventListing } from '@sellio/types';
+import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
+import { fetchEventDetail, resolveEventFailure } from '@/themes/events/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/events/shared/useDemoFallbackAllowed';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
+import {
+  formatEventDateShort,
+  formatEventPrice,
+  getEventLocationLabel,
+  getMusicEventImage,
+} from '@/themes/events/shared/event-utils';
 
 interface ProductPageProps {
   slug: string;
 }
 
-function getThemeLink(path: string) {
-  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/preview/')) {
-    const themeKey = window.location.pathname.split('/')[2];
-    return `/preview/${themeKey}${path}`;
-  }
-  return path || '/';
-}
-
-function formatEventDate(event: EventListing) {
-  if (!event.schedule?.start_at) return 'Date TBA';
-  return new Date(event.schedule.start_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-}
-
-function getEventImage(event: EventListing) {
-  return event.media?.poster || event.media?.preview || '/themes/events/music/1.webp';
-}
-
-function getEventPrice(event: EventListing) {
-  return event.ticketing?.price_formatted || (event.ticketing?.is_free ? 'Free entry' : 'Ticket price TBA');
-}
-
-function getEventLocation(event: EventListing) {
-  return event.location?.map_title || event.location?.city || 'Venue TBA';
-}
-
 export default function ProductPage({ slug }: ProductPageProps) {
+  const themeLink = useEventsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const [event, setEvent] = useState<EventListing | null>(null);
   const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', tickets: '2' });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
     async function loadEvent() {
-      try {
-        const response = await api.getEventDetails(slug);
-        if (!isMounted) return;
-        if (response?.data) { setEvent(response.data); setErrorMessage(null); }
-        else setErrorMessage('Event not found.');
-      } catch (error: unknown) {
-        if (!isMounted) return;
-        setErrorMessage(error instanceof Error ? error.message : 'The headliner could not be synchronized.');
-      } finally {
-        if (isMounted) setLoading(false);
+      if (!slug) return;
+
+      setLoading(true);
+      setNotFound(false);
+      const result = await fetchEventDetail(slug);
+
+      if (result.ok && result.response.data) {
+        setEvent(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'Event not found or API returned no data.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveEventFailure(slug, allowDemo, 'music');
+
+        if (resolution.mode === 'demo') {
+          setEvent(resolution.event);
+          setUseFallback(true);
+        } else if (resolution.mode === 'notFound') {
+          setEvent(null);
+          setNotFound(true);
+        } else {
+          setEvent(null);
+          setUseFallback(false);
+        }
       }
+
+      setLoading(false);
     }
+
     loadEvent();
-    return () => { isMounted = false; };
-  }, [slug]);
+  }, [slug, allowDemo]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!event || !form.name || !form.email) return;
+    if (!event || !form.name || !form.email) {
+      setFormError('Please fill in your name and email.');
+      return;
+    }
+
+    setFormError(null);
+
     try {
       const stored = JSON.parse(localStorage.getItem('sellio_events_music_rsvps') || '[]');
-      stored.push({ id: Date.now(), event_id: event.id, event_title: event.title, guest_name: form.name, guest_email: form.email, tickets: form.tickets, submitted_at: new Date().toISOString() });
+      stored.push({
+        id: Date.now(),
+        event_id: event.id,
+        event_title: event.title,
+        guest_name: form.name,
+        guest_email: form.email,
+        tickets: form.tickets,
+        submitted_at: new Date().toISOString(),
+      });
       localStorage.setItem('sellio_events_music_rsvps', JSON.stringify(stored));
       setIsSubmitted(true);
       setForm({ name: '', email: '', tickets: '2' });
-    } catch (error) { console.error('Failed to persist RSVP:', error); }
+    } catch (error) {
+      console.error('Failed to persist RSVP:', error);
+    }
   };
 
   if (loading) {
@@ -80,30 +101,46 @@ export default function ProductPage({ slug }: ProductPageProps) {
     );
   }
 
-  if (errorMessage || !event) {
+  if (notFound || (!event && !useFallback)) {
     return (
       <main className="sonic-detail-page">
         <section className="sonic-detail-state" role="status">
           <h2>Lineup Sync Error</h2>
-          <p>{errorMessage}</p>
-          <a href={getThemeLink('')} className="sonic-btn-primary">Return to Lineup</a>
+          <p>{apiError || 'Event not found.'}</p>
+          <a href={themeLink('/')} className="sonic-btn-primary">Return to Lineup</a>
         </section>
       </main>
     );
   }
 
+  if (!event) {
+    return null;
+  }
+
   return (
     <main className="sonic-detail-page">
-      <a href={getThemeLink('')} className="sonic-detail-back">&larr; Back to Core Lineup</a>
+      <a href={themeLink('/')} className="sonic-detail-back">&larr; Back to Core Lineup</a>
+
+      {useFallback && apiError && (
+        <div className="evm-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="evm" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="evm-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="evm" />
+        </div>
+      )}
+
       <header className="sonic-detail-hero">
-        <img src={getEventImage(event)} alt={event.title} />
+        <img src={getMusicEventImage(event)} alt={event.title} />
         <div className="sonic-detail-hero-overlay">
           <div className="sonic-detail-kicker">{event.specs?.category || 'Headliner'}</div>
           <h1>{event.title}</h1>
           <div className="sonic-detail-meta">
-            <span>{formatEventDate(event)}</span>
-            <span>{getEventLocation(event)}</span>
-            <span>{getEventPrice(event)}</span>
+            <span>{formatEventDateShort(event)}</span>
+            <span>{getEventLocationLabel(event)}</span>
+            <span>{formatEventPrice(event)}</span>
           </div>
         </div>
       </header>
@@ -117,7 +154,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </article>
         <aside className="sonic-detail-sidebar">
           <h3>Get Your Tickets</h3>
-          <p className="sonic-detail-price">{getEventPrice(event)}</p>
+          <p className="sonic-detail-price">{formatEventPrice(event)}</p>
           {isSubmitted ? (
             <div className="sonic-detail-success" role="status">Access reserved locally.</div>
           ) : (
@@ -126,6 +163,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
               <label>Email<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
               <label>Tickets<input type="number" min="1" max="8" value={form.tickets} onChange={(e) => setForm({ ...form, tickets: e.target.value })} /></label>
               <button className="sonic-btn-primary" type="submit">Reserve Access</button>
+              {formError && <p style={{ color: '#fca5a5', fontSize: '0.85rem', marginTop: '0.75rem' }}>{formError}</p>}
             </form>
           )}
         </aside>

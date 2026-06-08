@@ -1,12 +1,15 @@
 'use client';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
 
 export const SonicHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useEventsThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'PULSE');
 
   return (
@@ -39,7 +42,11 @@ export const SonicHeader = () => {
         as="button"
         buttonClassName="sonic-btn-primary sonic-mobile-btn"
         onNavigate={() => setIsOpen(false)}
-        onAction={() => alert('Ticket registration protocol activated.')}
+        renderItem={(item, { className, onNavigate }) => (
+          <Link href={themeLink('/explore')} style={{ width: '100%', textDecoration: 'none' }} onClick={onNavigate}>
+            <button type="button" className={className}>{item.title}</button>
+          </Link>
+        )}
       />
 
       <div className="sonic-desktop-btn-container">
@@ -48,19 +55,12 @@ export const SonicHeader = () => {
           className="sonic-desktop-btn-container"
           as="button"
           buttonClassName="sonic-btn-primary sonic-desktop-btn"
-          onAction={() => alert('Ticket registration protocol activated.')}
           renderItem={(item, { className, onNavigate }) => (
-            <button
-              type="button"
-              className={className}
-              id="sonic-btn-vibe-status"
-              onClick={() => {
-                alert('Ticket registration protocol activated.');
-                onNavigate?.();
-              }}
-            >
-              {item.title}
-            </button>
+            <Link href={themeLink('/explore')} style={{ textDecoration: 'none' }} onClick={onNavigate}>
+              <button type="button" className={className} id="sonic-btn-vibe-status">
+                {item.title}
+              </button>
+            </Link>
           )}
         />
       </div>

@@ -97,6 +97,21 @@ Deliverables:
 
 **Progress:** 38 / 52 themes baselined (Round 1: 16 + Round 2: 22)
 
+## Phase 5 — Events ✅
+
+Themes: `events_music`, `events_creative`, `events_festival`.
+
+Deliverables:
+
+- Shared `EventsExplorePage` + extended `catalog.ts` / `fallback-data.ts` for music, creative, festival variants
+- `CatalogSyncAlert` + `subpages.css` prefixes (`evm`, `evc`, `eff`)
+- Theme-aware links on home grids and product pages (`useEventsThemeLink`)
+- Demo fallback gated by `useDemoFallbackAllowed`; production empty states when API fails and demo off
+- Hero/header CTAs route to `/explore`; Explore exported on all three themes
+- Inline RSVP form validation; removed `alert()` CTAs and hardcoded preview URLs
+
+**Progress:** 41 / 52 themes baselined (Round 1: 16 + Round 2: 25)
+
 ## Shared utilities (Round 2 additions)
 
 - `apps/storefront/src/themes/unifieds/shared/useDemoFallbackAllowed.ts`
@@ -111,3 +126,6 @@ Deliverables:
 - `apps/storefront/src/themes/autos/shared/AutosExplorePage.tsx`
 - `apps/storefront/src/themes/autos/shared/fallback-data.ts` (classic / used / electric variants)
 - `apps/storefront/src/themes/autos/shared/subpages.css` (ac / us / ev prefixes)
+- `apps/storefront/src/themes/events/shared/EventsExplorePage.tsx`
+- `apps/storefront/src/themes/events/shared/fallback-data.ts` (music / creative / festival variants)
+- `apps/storefront/src/themes/events/shared/subpages.css` (evm / evc / eff prefixes)

@@ -2,6 +2,9 @@ import type { EventListing } from '@sellio/types';
 
 const CORPORATE_IMAGE_FALLBACK = '/themes/events/corporate/1.webp';
 const CLASSIC_IMAGE_FALLBACK = '/themes/events/classic/1.webp';
+const MUSIC_IMAGE_FALLBACK = '/themes/events/music/11.webp';
+const CREATIVE_IMAGE_FALLBACK = '/themes/events/creative/1.webp';
+const FESTIVAL_IMAGE_FALLBACK = '/themes/events/festival/11.webp';
 
 const months = [
   'JANUARY',
@@ -45,6 +48,18 @@ export function getClassicEventImage(event: EventListing): string {
     event.media?.gallery?.[0]?.url ||
     CLASSIC_IMAGE_FALLBACK
   );
+}
+
+export function getMusicEventImage(event: EventListing): string {
+  return event.media?.poster || event.media?.preview || MUSIC_IMAGE_FALLBACK;
+}
+
+export function getCreativeEventImage(event: EventListing): string {
+  return event.media?.poster || event.media?.preview || CREATIVE_IMAGE_FALLBACK;
+}
+
+export function getFestivalEventImage(event: EventListing): string {
+  return event.media?.poster || event.media?.preview || FESTIVAL_IMAGE_FALLBACK;
 }
 
 export function formatEventDateLong(event: EventListing): string {

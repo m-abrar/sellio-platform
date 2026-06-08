@@ -1,6 +1,7 @@
 import React from 'react';
 import { CreativeHeader, VibrantFooter } from './components';
 import './styles.css';
+import '@/themes/events/shared/subpages.css';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

@@ -1,9 +1,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { EventListing } from '@sellio/types';
 import { StageLineupCard, AtmosphereHUD } from './components';
+import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
+import { fetchEventsHome, resolveEventsFailure } from '@/themes/events/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/events/shared/useDemoFallbackAllowed';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
+import { getFestivalEventImage } from '@/themes/events/shared/event-utils';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -36,15 +40,18 @@ function mapEventToStage(event: EventListing, index: number) {
     title: event.title,
     location,
     date: formatEventDateShort(event.schedule?.start_at),
-    image: event.media?.poster || event.media?.preview || fallbackImages[index % fallbackImages.length],
+    image: getFestivalEventImage(event) || fallbackImages[index % fallbackImages.length],
     slug: event.slug,
   };
 }
 
 export default function Page() {
+  const themeLink = useEventsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const [events, setEvents] = useState<EventListing[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
-  const [eventError, setEventError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const heroImage = useThemeMedia('hero.image', '/themes/events/festival/10.webp');
   const heroEyebrow = useThemeContent('hero.eyebrow', 'THE_GLOBAL_COLLECTIVE_V8');
   const heroTitle = useThemeContent('hero.title', 'Neon\nPulse.');
@@ -61,37 +68,33 @@ export default function Page() {
   const ctaButton = useThemeContent('cta.button_label', 'Secure Tickets Now');
 
   useEffect(() => {
-    let isMounted = true;
-
     async function loadEvents() {
-      try {
-        const response = await api.getEvents({ per_page: 6 });
-        if (!isMounted) {
-          return;
-        }
+      setLoadingEvents(true);
+      const result = await fetchEventsHome(6);
 
-        setEvents(Array.isArray(response.data) ? response.data : []);
-        setEventError(null);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
+      if (result.ok && result.response.data?.length) {
+        setEvents(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No events returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveEventsFailure(allowDemo, 'festival');
 
-        console.error('Failed to load events festival listings:', error);
-        setEventError(error instanceof Error ? error.message : 'Events are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoadingEvents(false);
+        if (resolution.mode === 'demo') {
+          setEvents(resolution.events);
+          setUseFallback(true);
+        } else {
+          setEvents([]);
+          setUseFallback(false);
         }
       }
+
+      setLoadingEvents(false);
     }
 
     loadEvents();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  }, [allowDemo]);
 
   return (
     <div className="events-festival-theme">
@@ -112,8 +115,8 @@ export default function Page() {
                   {heroDescription}
               </p>
               <div style={{ marginTop: '7rem', display: 'flex', gap: '3rem', justifyContent: 'center', flexWrap: 'wrap' }} className="eff-hero-buttons">
-                <button className="eff-btn-primary" id="eff-btn-explore" onClick={() => document.getElementById('eff-stages-section')?.scrollIntoView({ behavior: 'smooth' })}>{heroPrimaryCta}</button>
-                <button style={{
+                <a href={themeLink('/explore')} className="eff-btn-primary" id="eff-btn-explore">{heroPrimaryCta}</a>
+                <a href={themeLink('/explore')} style={{
                     background: 'transparent',
                     border: '1px solid rgba(255,255,255,0.2)',
                     color: 'white',
@@ -123,10 +126,12 @@ export default function Page() {
                     cursor: 'pointer',
                     fontFamily: 'var(--eff-alt)',
                     fontSize: '0.8rem',
-                    letterSpacing: '3px'
-                }} id="eff-btn-pulse" onClick={() => alert('Vibe sync requested.')}>
+                    letterSpacing: '3px',
+                    textDecoration: 'none',
+                    display: 'inline-block',
+                }} id="eff-btn-pulse">
                     {heroSecondaryCta}
-                </button>
+                </a>
               </div>
           </div>
       </section>
@@ -158,6 +163,16 @@ export default function Page() {
           </div>
 
           <div className="ef-festival-grid">
+            {useFallback && apiError && (
+              <div className="eff-alert-slot" style={{ gridColumn: '1 / -1' }}>
+                <CatalogSyncAlert variant="demo" error={apiError} classPrefix="eff" />
+              </div>
+            )}
+            {apiError && !useFallback && (
+              <div className="eff-alert-slot" style={{ gridColumn: '1 / -1' }}>
+                <CatalogSyncAlert variant="production" error={apiError} classPrefix="eff" />
+              </div>
+            )}
             {loadingEvents ? (
               [1, 2, 3, 4, 5, 6].map((item) => (
                 <div className="eff-stage-card evf-listing-skeleton" key={item}>
@@ -166,12 +181,6 @@ export default function Page() {
                   <div className="evf-skeleton-line evf-skeleton-line-short" />
                 </div>
               ))
-            ) : eventError ? (
-              <div className="evf-listing-state">
-                <div className="evf-listing-kicker">Festival Sync Offline</div>
-                <h3>Neon stages could not be loaded.</h3>
-                <p>{eventError}</p>
-              </div>
             ) : events.length === 0 ? (
               <div className="evf-listing-state">
                 <div className="evf-listing-kicker">Empty Event Registry</div>
@@ -182,7 +191,7 @@ export default function Page() {
               events.slice(0, 6).map((event, index) => {
                 const stage = mapEventToStage(event, index);
                 return (
-                  <a className="evf-stage-link" href={`/product/${stage.slug}`} key={event.id}>
+                  <a className="evf-stage-link" href={themeLink(`/product/${stage.slug}`)} key={event.id}>
                     <StageLineupCard {...stage} />
                   </a>
                 );
@@ -207,9 +216,9 @@ export default function Page() {
               <p style={{ maxWidth: '800px', margin: '0 auto 8rem', fontSize: '1.5rem', color: 'var(--eff-grey)', lineHeight: 1.8, fontWeight: 300 }}>
                   {ctaDescription}
               </p>
-              <button className="eff-btn-primary" style={{ padding: '2rem 8rem' }} id="eff-btn-cta-pass" onClick={() => alert('Pass registration active.')}>
+              <a href={themeLink('/explore')} className="eff-btn-primary" style={{ padding: '2rem 8rem', display: 'inline-block', textDecoration: 'none' }} id="eff-btn-cta-pass">
                   {ctaButton}
-              </button>
+              </a>
           </div>
       </section>
 

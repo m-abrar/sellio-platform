@@ -1,10 +1,12 @@
 'use client';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
 
 const experimentModeStyle = {
   fontSize: '0.65rem',
@@ -15,6 +17,7 @@ const experimentModeStyle = {
 
 export const CreativeHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useEventsThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'CREATIVENode');
   const midpoint = Math.max(1, Math.ceil(brandLabel.length / 2));
 
@@ -51,16 +54,14 @@ export const CreativeHeader = () => {
           as="button"
           onNavigate={() => setIsOpen(false)}
           renderItem={(item, { className, onNavigate }) => (
-            <div
-              className={className}
-              style={{ ...experimentModeStyle, padding: '1rem 2rem', textAlign: 'center', marginTop: '2rem', width: '100%' }}
-              onClick={() => {
-                alert('Experiment mode active.');
-                onNavigate?.();
-              }}
-            >
-              {item.title.toUpperCase()}: ACTIVE
-            </div>
+            <Link href={themeLink('/explore')} style={{ textDecoration: 'none', width: '100%' }} onClick={onNavigate}>
+              <div
+                className={className}
+                style={{ ...experimentModeStyle, padding: '1rem 2rem', textAlign: 'center', marginTop: '2rem', width: '100%' }}
+              >
+                {item.title.toUpperCase()}: ACTIVE
+              </div>
+            </Link>
           )}
         />
 
@@ -69,17 +70,15 @@ export const CreativeHeader = () => {
           className="evc-label evc-desktop-btn"
           as="button"
           renderItem={(item, { className, onNavigate }) => (
-            <div
-              className={className}
-              style={{ ...experimentModeStyle, padding: '0.5rem 1.5rem' }}
-              onClick={() => {
-                alert('Experiment mode active.');
-                onNavigate?.();
-              }}
-              id="evc-btn-experiment-status"
-            >
-              {item.title.toUpperCase()}: ACTIVE
-            </div>
+            <Link href={themeLink('/explore')} style={{ textDecoration: 'none' }} onClick={onNavigate}>
+              <div
+                className={className}
+                style={{ ...experimentModeStyle, padding: '0.5rem 1.5rem' }}
+                id="evc-btn-experiment-status"
+              >
+                {item.title.toUpperCase()}: ACTIVE
+              </div>
+            </Link>
           )}
         />
       </div>
@@ -95,7 +94,7 @@ interface ArtisanEventCardProps {
 }
 
 export const ArtisanEventCard = ({ title, location, date, status }: ArtisanEventCardProps) => (
-  <div className="evc-artisan-card" onClick={() => alert(`Syncing node for: ${title}`)}>
+  <div className="evc-artisan-card">
     <div className="evc-tag">{status.toUpperCase()} {'//'} 2026</div>
     <div className="evc-label" style={{ marginBottom: '1.5rem', fontSize: '0.55rem', color: 'var(--evc-grey)' }}>{date} {'//'} {location.toUpperCase()}</div>
     <h3 style={{ fontSize: '2.25rem', fontWeight: 900, marginBottom: '3.5rem', lineHeight: 1.1, letterSpacing: '-1.5px', color: 'white' }}>{title}</h3>

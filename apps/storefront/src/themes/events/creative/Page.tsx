@@ -1,31 +1,19 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { EventListing } from '@sellio/types';
 import { ArtisanEventCard, PulseHUD } from './components';
+import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
+import { fetchEventsHome, resolveEventsFailure } from '@/themes/events/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/events/shared/useDemoFallbackAllowed';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
+import { formatEventDateUnderscore, getEventLocationLabel } from '@/themes/events/shared/event-utils';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
-const months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
-
-function formatEventDateUnderscore(dateStr?: string | null) {
-  if (!dateStr) {
-    return 'DATE_TBA';
-  }
-
-  const date = new Date(dateStr);
-  return `${months[date.getMonth()]}_${String(date.getDate()).padStart(2, '0')}_${date.getFullYear()}`;
-}
-
 function mapEventToArtisan(event: EventListing) {
-  const location = event.location?.map_title
-    || [event.location?.city, event.location?.state].filter(Boolean).join(' // ')
-    || event.location?.address
-    || 'NODE_TBA';
-
   return {
     title: event.title,
-    location,
+    location: getEventLocationLabel(event),
     date: formatEventDateUnderscore(event.schedule?.start_at),
     status: event.specs?.event_genre || event.specs?.category || 'active',
     slug: event.slug,
@@ -33,9 +21,12 @@ function mapEventToArtisan(event: EventListing) {
 }
 
 export default function Page() {
+  const themeLink = useEventsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const [events, setEvents] = useState<EventListing[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
-  const [eventError, setEventError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const heroEyebrow = useThemeContent('hero.eyebrow', 'SYNTHETIC_CULTURE_EXCHANGE // 2026');
   const heroTitle = useThemeContent('hero.title', 'Creative\nPulses.');
   const heroDescription = useThemeContent('hero.description', 'A curated decentralized architecture for experimental audio-visual modules and algorithmic community assemblies.');
@@ -52,37 +43,33 @@ export default function Page() {
   const syncCta = useThemeContent('sync.cta_label', 'Initiate Synchronous Wave');
 
   useEffect(() => {
-    let isMounted = true;
-
     async function loadEvents() {
-      try {
-        const response = await api.getEvents({ per_page: 6 });
-        if (!isMounted) {
-          return;
-        }
+      setLoadingEvents(true);
+      const result = await fetchEventsHome(6);
 
-        setEvents(Array.isArray(response.data) ? response.data : []);
-        setEventError(null);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
+      if (result.ok && result.response.data?.length) {
+        setEvents(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No events returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveEventsFailure(allowDemo, 'creative');
 
-        console.error('Failed to load events creative listings:', error);
-        setEventError(error instanceof Error ? error.message : 'Events are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoadingEvents(false);
+        if (resolution.mode === 'demo') {
+          setEvents(resolution.events);
+          setUseFallback(true);
+        } else {
+          setEvents([]);
+          setUseFallback(false);
         }
       }
+
+      setLoadingEvents(false);
     }
 
     loadEvents();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  }, [allowDemo]);
 
   return (
     <div className="events-creative-theme">
@@ -102,7 +89,7 @@ export default function Page() {
               {heroDescription}
           </p>
           <div style={{ marginTop: '6rem' }}>
-            <button className="evc-btn-primary" id="evc-btn-explore" onClick={() => document.getElementById('evc-protocols-section')?.scrollIntoView({ behavior: 'smooth' })}>{heroCta}</button>
+            <a href={themeLink('/explore')} className="evc-btn-primary" id="evc-btn-explore">{heroCta}</a>
           </div>
       </section>
 
@@ -126,6 +113,16 @@ export default function Page() {
           </div>
 
           <div className="evc-artisan-grid">
+            {useFallback && apiError && (
+              <div className="evc-alert-slot" style={{ gridColumn: '1 / -1' }}>
+                <CatalogSyncAlert variant="demo" error={apiError} classPrefix="evc" />
+              </div>
+            )}
+            {apiError && !useFallback && (
+              <div className="evc-alert-slot" style={{ gridColumn: '1 / -1' }}>
+                <CatalogSyncAlert variant="production" error={apiError} classPrefix="evc" />
+              </div>
+            )}
             {loadingEvents ? (
               [1, 2, 3, 4, 5, 6].map((item) => (
                 <div className="evc-artisan-card evc-listing-skeleton" key={item}>
@@ -134,12 +131,6 @@ export default function Page() {
                   <div className="evc-skeleton-line evc-skeleton-line-short" />
                 </div>
               ))
-            ) : eventError ? (
-              <div className="evc-listing-state">
-                <div className="evc-listing-kicker">Registry Sync Offline</div>
-                <h3>Experimental events could not be loaded.</h3>
-                <p>{eventError}</p>
-              </div>
             ) : events.length === 0 ? (
               <div className="evc-listing-state">
                 <div className="evc-listing-kicker">Empty Event Registry</div>
@@ -150,7 +141,7 @@ export default function Page() {
               events.slice(0, 6).map((event) => {
                 const artisan = mapEventToArtisan(event);
                 return (
-                  <a className="evc-artisan-link" href={`/product/${artisan.slug}`} key={event.id}>
+                  <a className="evc-artisan-link" href={themeLink(`/product/${artisan.slug}`)} key={event.id}>
                     <ArtisanEventCard {...artisan} />
                   </a>
                 );
@@ -186,7 +177,7 @@ export default function Page() {
                   <p style={{ color: 'var(--evc-grey)', lineHeight: 1.8, marginBottom: '4rem' }}>
                       {syncDescription}
                   </p>
-                  <button className="evc-btn-primary" style={{ width: '100%', padding: '2rem' }} id="evc-btn-sync" onClick={() => alert('Resonance wave broadcasted successfully.')}>{syncCta}</button>
+                  <a href={themeLink('/explore')} className="evc-btn-primary" style={{ width: '100%', padding: '2rem', display: 'block', textAlign: 'center', textDecoration: 'none' }} id="evc-btn-sync">{syncCta}</a>
               </div>
           </div>
       </section>

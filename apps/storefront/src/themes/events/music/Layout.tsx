@@ -1,6 +1,7 @@
 
 import React from 'react';
 import './styles.css';
+import '@/themes/events/shared/subpages.css';
 import { SonicHeader, VoltageFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {

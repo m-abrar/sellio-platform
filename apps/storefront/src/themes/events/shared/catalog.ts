@@ -1,15 +1,16 @@
 import { api } from '@sellio/api-client';
 import type { EventListing } from '@sellio/types';
 import {
-  CLASSIC_FALLBACK_EVENTS,
-  CORPORATE_FALLBACK_EVENTS,
   findClassicFallbackEvent,
   findCorporateFallbackEvent,
+  findFallbackEvent,
   getClassicRelatedEvents,
   getCorporateRelatedEvents,
+  getFallbackEvents,
+  getRelatedFallbackEvents,
 } from './fallback-data';
 
-export type EventsThemeVariant = 'corporate' | 'classic';
+export type EventsThemeVariant = 'corporate' | 'classic' | 'music' | 'creative' | 'festival';
 
 function toErrorMessage(error: unknown): string {
   if (error instanceof Error) {
@@ -60,7 +61,7 @@ export function resolveEventsFailure(allowDemo: boolean, variant: EventsThemeVar
   if (allowDemo) {
     return {
       mode: 'demo' as const,
-      events: variant === 'corporate' ? CORPORATE_FALLBACK_EVENTS : CLASSIC_FALLBACK_EVENTS,
+      events: getFallbackEvents(variant),
     };
   }
 
@@ -76,21 +77,17 @@ export function resolveEventFailure(
     return { mode: 'empty' as const };
   }
 
-  const event =
-    variant === 'corporate'
-      ? findCorporateFallbackEvent(slug)
-      : findClassicFallbackEvent(slug);
+  const event = findFallbackEvent(slug, variant);
 
   if (!event) {
     return { mode: 'notFound' as const };
   }
 
-  const related =
-    variant === 'corporate'
-      ? getCorporateRelatedEvents(event.slug)
-      : getClassicRelatedEvents(event.slug);
-
-  return { mode: 'demo' as const, event, related };
+  return {
+    mode: 'demo' as const,
+    event,
+    related: getRelatedFallbackEvents(slug, variant),
+  };
 }
 
 export function extractEventFilters(data: EventListing[]) {
@@ -139,3 +136,5 @@ export function filterFallbackEvents(
     return matchesSearch && matchesCategory && matchesLocation && matchesGenre;
   });
 }
+
+export { findClassicFallbackEvent, findCorporateFallbackEvent, getClassicRelatedEvents, getCorporateRelatedEvents };
