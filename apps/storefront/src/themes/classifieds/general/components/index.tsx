@@ -42,19 +42,6 @@ export const GeneralHeader = ({ searchTerm, onSearchChange, onReset }: HeaderPro
         />
         <MenuActionButtons
           linkClassName="cg-btn cg-btn-primary"
-          renderItem={(item, { href, className, onNavigate }) => (
-            <a
-              href={href}
-              className={className}
-              onClick={(e) => {
-                e.preventDefault();
-                alert("Post Classified Ad: Redirecting to partner dashboard in sandbox mode.");
-                onNavigate?.();
-              }}
-            >
-              <span>➕</span> {item.title}
-            </a>
-          )}
         />
       </div>
     </header>

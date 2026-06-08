@@ -8,56 +8,18 @@ import {
   MarketplaceFooter,
   SmCategorySkeleton,
   SmProviderSkeleton,
-  getServiceCategoryLabel,
 } from './components';
-import { api } from '@sellio/api-client';
 import type { ServiceListing, Category, Location } from '@sellio/types';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
-
-const FALLBACK_CATEGORIES = [
-  { id: 1, title: "Home Repair", slug: "home-repair", icon: "🛠️" },
-  { id: 2, title: "Design", slug: "design", icon: "🎨" },
-  { id: 3, title: "Education", slug: "education", icon: "🎓" },
-  { id: 4, title: "Health", slug: "health", icon: "❤️" },
-  { id: 5, title: "Events", slug: "events", icon: "📅" },
-  { id: 6, title: "Tech Support", slug: "tech-support", icon: "💻" }
-];
-
-const FALLBACK_PROVIDERS = [
-  { 
-    id: 991, 
-    title: "Anna J.", 
-    professional: { category: "Professional Designer" }, 
-    status: { is_featured: true }, 
-    media: { main_photo: "/themes/services/marketplace/15.webp" },
-    pricing: { base_price: 75, billing_type: { is_project_based: false } }
-  },
-  { 
-    id: 992, 
-    title: "Mark T.", 
-    professional: { category: "24/7 Plumber Expert" }, 
-    status: { is_featured: true }, 
-    media: { main_photo: "/themes/services/marketplace/16.webp" },
-    pricing: { base_price: 120, billing_type: { is_project_based: false } }
-  },
-  { 
-    id: 993, 
-    title: "Ben L.", 
-    professional: { category: "Advanced Math Tutor" }, 
-    status: { is_featured: true }, 
-    media: { main_photo: "/themes/services/marketplace/17.webp" },
-    pricing: { base_price: 50, billing_type: { is_project_based: false } }
-  },
-  { 
-    id: 994, 
-    title: "Laura S.", 
-    professional: { category: "Certified Electrician" }, 
-    status: { is_featured: true }, 
-    media: { main_photo: "/themes/services/marketplace/18.webp" },
-    pricing: { base_price: 90, billing_type: { is_project_based: false } }
-  }
-] as ServiceListing[];
+import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';
+import { fetchServicesHome, resolveServicesFailure } from '@/themes/services/shared/catalog';
+import {
+  getCategoryIcon,
+  MARKETPLACE_FALLBACK_CATEGORIES,
+} from '@/themes/services/shared/fallback-data';
+import { getServiceCategoryLabel } from '@/themes/services/shared/service-utils';
+import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
 
 export default function Page() {
   const heroTitle = useThemeContent('hero.title', 'Find Trusted Services Near You');
@@ -79,12 +41,13 @@ export default function Page() {
   const ctaDescription = useThemeContent('cta.description', 'Join our growing community today and connect with thousands of users.');
   const ctaPrimary = useThemeContent('cta.primary_cta_label', 'Find Services');
   const ctaSecondary = useThemeContent('cta.secondary_cta_label', 'Offer Your Services');
-  // Dynamic collections
-  const [services, setServices] = useState<ServiceListing[] | null>(null);
+  const allowDemo = useDemoFallbackAllowed();
+  const [services, setServices] = useState<ServiceListing[]>([]);
   const [categoriesList, setCategoriesList] = useState<Category[]>([]);
   const [locationsList, setLocationsList] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
@@ -102,61 +65,47 @@ export default function Page() {
     contactInfo: ''
   });
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingError, setBookingError] = useState<string | null>(null);
 
   // Fetch data
   const fetchServicesData = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
+    setLoading(true);
 
-      // Map active UI filter selections to API search params
-      const params: Record<string, string | number> = {
-        per_page: 8
-      };
+    const params: Record<string, string | number> = { per_page: 8 };
+    if (searchQuery.trim() !== '') params.search = searchQuery.trim();
+    if (selectedCategory !== '') params.category = selectedCategory;
+    if (selectedLocation !== '') params.location = selectedLocation;
+    if (priceRange !== '') params.price_range = priceRange;
+    if (selectedRating !== '') params.rating = selectedRating;
 
-      if (searchQuery.trim() !== '') {
-        params.search = searchQuery.trim();
-      }
-      if (selectedCategory !== '') {
-        params.category = selectedCategory;
-      }
-      if (selectedLocation !== '') {
-        params.location = selectedLocation;
-      }
-      if (priceRange !== '') {
-        params.price_range = priceRange;
-      }
-      if (selectedRating !== '') {
-        params.rating = selectedRating;
-      }
+    const result = await fetchServicesHome(params);
 
-      const response = await api.getServices(params);
+    if (result.ok && result.response.data) {
+      setServices(result.response.data);
+      if (result.response.sidebar?.categories?.length) {
+        setCategoriesList(result.response.sidebar.categories);
+      }
+      if (result.response.sidebar?.locations?.length) {
+        setLocationsList(result.response.sidebar.locations);
+      }
+      setUseFallback(false);
+      setApiError(null);
+    } else {
+      const errorMsg = result.ok ? 'No services returned from API.' : result.error;
+      setApiError(errorMsg);
+      const resolution = resolveServicesFailure(allowDemo, 'marketplace');
 
-      if (response && response.data) {
-        setServices(response.data);
+      if (resolution.mode === 'demo') {
+        setServices(resolution.services);
+        setUseFallback(true);
       } else {
         setServices([]);
+        setUseFallback(false);
       }
-
-      // Populate filters sidebar metadata dynamically from the first API client return
-      if (response && response.sidebar) {
-        if (response.sidebar.categories && response.sidebar.categories.length > 0) {
-          setCategoriesList(response.sidebar.categories);
-        }
-        if (response.sidebar.locations && response.sidebar.locations.length > 0) {
-          setLocationsList(response.sidebar.locations);
-        }
-      }
-    } catch (err: unknown) {
-      const apiError = err as { message?: string };
-      console.error("Failed to load live services backend, loading offline resilience backups:", err);
-      setError(apiError.message || 'Service backend database node is currently offline.');
-      // Load fallback mockups for resilient failover
-      setServices(FALLBACK_PROVIDERS);
-    } finally {
-      setLoading(false);
     }
-  }, [searchQuery, selectedCategory, selectedLocation, priceRange, selectedRating]);
+
+    setLoading(false);
+  }, [searchQuery, selectedCategory, selectedLocation, priceRange, selectedRating, allowDemo]);
 
   // Initial load
   useEffect(() => {
@@ -226,9 +175,18 @@ export default function Page() {
 
     } catch (err) {
       console.error("Failed to record local storage booking details:", err);
-      alert("Booking failed. Please try again.");
+      setBookingError('Booking failed. Please try again.');
     }
   };
+
+  const categoryCards = useFallback
+    ? MARKETPLACE_FALLBACK_CATEGORIES
+    : categoriesList.map((category) => ({
+        id: category.id,
+        title: category.title,
+        slug: category.slug,
+        icon: getCategoryIcon(category.slug, category.title),
+      }));
 
   return (
     <div className="services-marketplace-theme">
@@ -246,9 +204,10 @@ export default function Page() {
             >
               {heroPrimaryCta}
             </button>
-            <button 
+            <button
+              type="button"
               className="sm-btn sm-btn-secondary"
-              onClick={() => alert('Becoming a provider flow starting...')}
+              onClick={() => document.getElementById('sm-providers-section')?.scrollIntoView({ behavior: 'smooth' })}
             >
               {heroSecondaryCta}
             </button>
@@ -278,15 +237,18 @@ export default function Page() {
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
           <option value="">All Categories</option>
-          {categoriesList.length > 0 ? (
-            categoriesList.map(cat => (
-              <option key={cat.id} value={cat.slug}>{cat.title}</option>
-            ))
-          ) : (
-            FALLBACK_CATEGORIES.map(cat => (
-              <option key={cat.id} value={cat.slug}>{cat.title}</option>
-            ))
-          )}
+          {(categoriesList.length > 0
+            ? categoriesList
+            : useFallback
+              ? MARKETPLACE_FALLBACK_CATEGORIES.map((cat) => ({
+                  id: cat.id,
+                  title: cat.title,
+                  slug: cat.slug,
+                }))
+              : []
+          ).map((cat) => (
+            <option key={cat.id} value={cat.slug}>{cat.title}</option>
+          ))}
         </select>
         <select 
           className="sm-filter-select" 
@@ -333,22 +295,14 @@ export default function Page() {
         </button>
       </section>
 
-      {/* Connection Diagnostics Recovery Notification */}
-      {error && (
-        <div style={{ padding: '0 5%' }}>
-          <div className="sm-offline-panel">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <span style={{ fontSize: '1.5rem' }}>⚠️</span>
-              <div style={{ fontWeight: 800, letterSpacing: '0.5px', color: '#dc2626' }}>
-                DATABASE_OFFLINE_DIAGNOSTICS_TRACE
-              </div>
-            </div>
-            <div style={{ fontSize: '0.85rem', opacity: 0.9, lineHeight: 1.6, color: '#4b5563' }}>
-              STATUS: [OFFLINE] | LATENCY: [TIMEOUT] | REASON: [{error}]
-              <br/>
-              ACTION: Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...
-            </div>
-          </div>
+      {apiError && useFallback && (
+        <div style={{ padding: '0 5%' }} className="sm-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="sm" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div style={{ padding: '0 5%' }} className="sm-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="sm" />
         </div>
       )}
 
@@ -356,37 +310,25 @@ export default function Page() {
       <section className="sm-section" id="sm-categories-section" aria-labelledby="sm-categories-title" style={{ paddingTop: '2rem' }}>
         <h2 className="sm-section-title" id="sm-categories-title">{categoriesTitle}</h2>
         <div className="sm-category-grid">
-          {loading && categoriesList.length === 0 ? (
+          {loading && categoryCards.length === 0 ? (
             Array.from({ length: 6 }).map((_, i) => (
               <SmCategorySkeleton key={i} />
             ))
+          ) : categoryCards.length > 0 ? (
+            categoryCards.map((c) => (
+              <SmCategoryCard
+                key={c.id}
+                title={c.title}
+                icon={c.icon}
+                onClick={() => handleCategoryBadgeClick(c.slug)}
+                active={selectedCategory === c.slug}
+              />
+            ))
           ) : (
-            categoriesList.length > 0 ? (
-              categoriesList.map((c) => {
-                // Find matching emoji for fallback
-                const fallbackMatch = FALLBACK_CATEGORIES.find(f => f.slug === c.slug || c.title.toLowerCase().includes(f.title.toLowerCase()));
-                const icon = fallbackMatch ? fallbackMatch.icon : "💼";
-                return (
-                  <SmCategoryCard 
-                    key={c.id} 
-                    title={c.title} 
-                    icon={icon} 
-                    onClick={() => handleCategoryBadgeClick(c.slug)}
-                    active={selectedCategory === c.slug}
-                  />
-                );
-              })
-            ) : (
-              FALLBACK_CATEGORIES.map((c) => (
-                <SmCategoryCard 
-                  key={c.id} 
-                  title={c.title} 
-                  icon={c.icon} 
-                  onClick={() => handleCategoryBadgeClick(c.slug)}
-                  active={selectedCategory === c.slug}
-                />
-              ))
-            )
+            <div className="sm-empty-state" role="status">
+              <h3>No categories published yet.</h3>
+              <p>Category filters will appear once services are synced from the backend.</p>
+            </div>
           )}
         </div>
       </section>
@@ -401,8 +343,7 @@ export default function Page() {
               <SmProviderSkeleton key={i} />
             ))}
           </div>
-        ) : (
-          services && services.length > 0 ? (
+        ) : services.length > 0 ? (
             <div className="sm-provider-grid">
               {services.map((p) => (
                 <SmProviderCard 
@@ -412,15 +353,13 @@ export default function Page() {
                 />
               ))}
             </div>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '4rem 1rem', background: 'white', borderRadius: '16px', border: '1px solid var(--sm-border)' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔍</div>
-              <h4 style={{ fontWeight: 800, marginBottom: '0.5rem' }}>No Providers Found</h4>
-              <p style={{ color: 'var(--sm-text-muted)', fontSize: '0.95rem' }}>
-                We couldn&apos;t find any professionals matching your exact criteria. Try resetting filters.
-              </p>
-              <button 
-                className="sm-btn sm-btn-primary" 
+        ) : (
+            <div className="sm-empty-state" role="status">
+              <h4>No Providers Found</h4>
+              <p>We couldn&apos;t find any professionals matching your exact criteria. Try resetting filters.</p>
+              <button
+                type="button"
+                className="sm-btn sm-btn-primary"
                 style={{ marginTop: '1.5rem' }}
                 onClick={() => {
                   setSearchQuery('');
@@ -434,7 +373,6 @@ export default function Page() {
                 Reset All Filters
               </button>
             </div>
-          )
         )}
       </section>
 
@@ -467,6 +405,10 @@ export default function Page() {
                         Category: {getServiceCategoryLabel(bookingService.professional?.category)}
                       </div>
                     </div>
+
+                    {bookingError && (
+                      <p className="sm-form-error" role="alert">{bookingError}</p>
+                    )}
 
                     <div className="sm-form-group">
                       <label className="sm-form-label" htmlFor="booking-name">Your Full Name</label>
@@ -580,8 +522,8 @@ export default function Page() {
             {ctaDescription}
         </p>
         <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button className="sm-btn sm-btn-primary" onClick={() => document.getElementById('sm-categories-section')?.scrollIntoView({ behavior: 'smooth' })}>{ctaPrimary}</button>
-            <button className="sm-btn sm-btn-secondary" onClick={() => alert('Provider signup wizard opened.')}>{ctaSecondary}</button>
+            <button type="button" className="sm-btn sm-btn-primary" onClick={() => document.getElementById('sm-categories-section')?.scrollIntoView({ behavior: 'smooth' })}>{ctaPrimary}</button>
+            <button type="button" className="sm-btn sm-btn-secondary" onClick={() => document.getElementById('sm-providers-section')?.scrollIntoView({ behavior: 'smooth' })}>{ctaSecondary}</button>
         </div>
       </section>
 

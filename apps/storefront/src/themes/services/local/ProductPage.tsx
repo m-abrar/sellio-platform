@@ -1,8 +1,16 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
+import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';
+import { fetchServiceDetail, resolveServiceFailure } from '@/themes/services/shared/catalog';
+import {
+  getServiceImage,
+  getServiceLocationLabel,
+  getServicePriceLabel,
+} from '@/themes/services/shared/service-utils';
+import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 interface ProductPageProps {
   slug: string;
@@ -19,62 +27,65 @@ interface LocalLead {
   created_at: string;
 }
 
-const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='900' height='640' viewBox='0 0 900 640'><rect width='100%' height='100%' fill='%23f8f9fa'/><rect x='90' y='95' width='720' height='450' rx='16' fill='%23ffffff' stroke='%23dee2e6'/><g transform='translate(405,260)' stroke='%23198754' stroke-width='10' fill='none' stroke-linecap='round' stroke-linejoin='round'><path d='M45 74V18h90v56'/><path d='M63 18V0h54v18'/><path d='M45 74h90'/></g><text x='50%' y='62%' dominant-baseline='middle' text-anchor='middle' font-family='Inter, Arial, sans-serif' font-size='15' font-weight='700' letter-spacing='2' fill='%23666666'>LOCAL SERVICE</text></svg>";
-
-function getThemeLink(path: string) {
-  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/preview/')) {
-    const themeKey = window.location.pathname.split('/')[2];
-    return `/preview/${themeKey}${path}`;
-  }
-  return path || '/';
-}
-
 export default function ProductPage({ slug }: ProductPageProps) {
+  const themeLink = useServicesThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const [service, setService] = useState<ServiceListing | null>(null);
   const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
   const [leadForm, setLeadForm] = useState({ contactName: '', contactInfo: '', address: '', notes: '' });
   const [leadSaved, setLeadSaved] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadService() {
-      try {
-        const fetchedService = await api.getServiceBySlug(slug);
-        if (!isMounted) return;
-        setService(fetchedService);
-        setErrorMessage(null);
-      } catch (error: unknown) {
-        if (!isMounted) return;
-        console.error('Failed to load services local detail:', error);
-        setErrorMessage(error instanceof Error ? error.message : 'The local service could not be synchronized.');
-      } finally {
-        if (isMounted) setLoading(false);
+      setLoading(true);
+      setNotFound(false);
+      const result = await fetchServiceDetail(slug);
+
+      if (!isMounted) return;
+
+      if (result.ok && result.service) {
+        setService(result.service);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'Service not found or API returned no data.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveServiceFailure(slug, allowDemo, 'local');
+
+        if (resolution.mode === 'demo') {
+          setService(resolution.service);
+          setUseFallback(true);
+        } else if (resolution.mode === 'notFound') {
+          setService(null);
+          setNotFound(true);
+          setUseFallback(false);
+        } else {
+          setService(null);
+          setUseFallback(false);
+        }
       }
+
+      setLoading(false);
     }
 
     loadService();
     return () => { isMounted = false; };
-  }, [slug]);
-
-  const getServiceImage = (item: ServiceListing) => (
-    item.media?.main_photo || item.media?.gallery?.[0]?.url || placeholderImage
-  );
-
-  const getServicePrice = (item: ServiceListing) => (
-    item.pricing?.formatted || item.pricing?.formatted_short || (
-      item.pricing?.base_price ? `$${Number(item.pricing.base_price).toLocaleString()}` : 'Get estimate'
-    )
-  );
-
-  const getLocationLabel = (item: ServiceListing) => (
-    [item.location?.city, item.location?.state, item.location?.country].filter(Boolean).join(', ') || 'Your neighborhood'
-  );
+  }, [slug, allowDemo]);
 
   const handleLeadSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!service) return;
+    if (!service || !leadForm.contactName || !leadForm.contactInfo || !leadForm.address) {
+      setFormError('Please enter your name, contact details, and service address.');
+      return;
+    }
+
+    setFormError(null);
 
     const newLead: LocalLead = {
       id: `local_lead_${Date.now()}`,
@@ -95,6 +106,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       setLeadForm({ contactName: '', contactInfo: '', address: '', notes: '' });
     } catch (error) {
       console.error('Failed to persist local service lead:', error);
+      setFormError('Could not save your service request locally. Please try again.');
     }
   };
 
@@ -116,14 +128,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
     );
   }
 
-  if (errorMessage || !service) {
+  if (notFound || !service) {
     return (
       <main className="local-detail-page">
         <section className="local-detail-state" role="status">
           <div className="local-detail-kicker">Service Unavailable</div>
           <h1>Service could not be loaded.</h1>
-          <p>{errorMessage || 'The requested local service does not exist or has been removed.'}</p>
-          <a href={getThemeLink('')} className="local-btn local-btn-primary">Return to Services</a>
+          <p>{apiError || 'The requested local service does not exist or has been removed.'}</p>
+          <a href={themeLink('')} className="local-btn local-btn-primary">Return to Services</a>
         </section>
       </main>
     );
@@ -131,10 +143,16 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="local-detail-page">
-      <a href={getThemeLink('')} className="local-detail-back">
+      <a href={themeLink('')} className="local-detail-back">
         <span aria-hidden="true">&larr;</span>
         Back to Local Services
       </a>
+
+      {apiError && useFallback && (
+        <div className="local-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="local" />
+        </div>
+      )}
 
       <section className="local-detail-grid" aria-labelledby="local-detail-title">
         <div className="local-detail-media">
@@ -144,7 +162,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
         <article className="local-detail-panel">
           <div className="local-detail-kicker">{service.professional?.category || 'Local Service'}</div>
           <h1 id="local-detail-title">{service.title}</h1>
-          <div className="local-detail-price">{getServicePrice(service)}</div>
+          <div className="local-detail-price">{getServicePriceLabel(service)}</div>
 
           <p className="local-detail-description">
             {service.description || service.short_description || 'This live local service is synchronized from the Sellio services catalog.'}
@@ -157,7 +175,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </div>
             <div>
               <span>Service Area</span>
-              <strong>{getLocationLabel(service)}</strong>
+              <strong>{getServiceLocationLabel(service)}</strong>
             </div>
             <div>
               <span>Provider</span>
@@ -223,6 +241,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
               onChange={(event) => setLeadForm({ ...leadForm, notes: event.target.value })}
             />
           </label>
+          {formError && <p className="local-form-error" role="alert">{formError}</p>}
           <button className="local-btn local-btn-primary" type="submit">Request Service</button>
         </form>
       </section>

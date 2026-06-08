@@ -1,6 +1,6 @@
 # Dynamic Theme Conversion Status Report
 
-Last verified: 2026-06-08 (Round 1 — Jobs phase complete).
+Last verified: 2026-06-08 (Round 1 — Classifieds phase complete; 16/16 baselined).
 
 This report tracks which Sellio storefront themes have moved from static prototype markup toward live, API-backed React views. It should be read together with `apps/backend/database/seeders/ThemeSeeder.php`, which is the current seeded theme source of truth.
 
@@ -22,12 +22,12 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Events | `events_classic` | ✅ | Repertoire grid + RSVP; demo fallback policy; inline form validation |
 | Jobs | `jobs_startup` | ✅ | Explore + apply flow; shared catalog; theme-aware links |
 | Jobs | `jobs_corporate` | ✅ | Corporate board + application; demo fallback policy |
-| Services | `services_marketplace` | ⏳ | Pending |
-| Services | `services_local` | ⏳ | Pending |
-| Classifieds | `classifieds_local` | ⏳ | Pending |
-| Classifieds | `classifieds_general` | ⏳ | Pending |
+| Services | `services_marketplace` | ✅ | Provider grid + booking modal; shared catalog; theme-aware links |
+| Services | `services_local` | ✅ | Local service grid + booking; demo fallback policy |
+| Classifieds | `classifieds_local` | ✅ | Map + list split; shared catalog; inquiry forms |
+| Classifieds | `classifieds_general` | ✅ | Sidebar filters + chat widget; demo fallback policy |
 
-**Completed:** 12 / 16
+**Completed:** 16 / 16
 
 ## Current Summary
 
@@ -43,7 +43,7 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Theme folders with `ExplorePage.tsx` | 12 |
 | Theme folders with `CartPage.tsx` | 5 |
 | Theme folders with static fallback/mock content in TSX | 36 |
-| Round 1 baselined themes | 12 |
+| Round 1 baselined themes | 16 |
 
 Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx` source files. This confirms live-data wiring exists, not that every route, interaction, empty state, fallback path, and visual breakpoint has been manually QA certified.
 

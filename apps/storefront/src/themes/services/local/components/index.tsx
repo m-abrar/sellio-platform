@@ -3,18 +3,23 @@ import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
-export const LocalHeader = () => {
+export const LocalHeader = ({ onBookService }: { onBookService?: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useServicesThemeLink();
+
+  const handleBook = () => {
+    onBookService?.();
+  };
 
   return (
     <header className="local-header">
-      <div className="local-logo">
+      <a href={themeLink('')} className="local-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         <span style={{ fontSize: '1.25rem' }}>🔧</span> HomeFix
-      </div>
-      
-      {/* Mobile Hamburger Trigger */}
-      <button 
+      </a>
+
+      <button
         className={`local-hamburger ${isOpen ? 'local-hamburger-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle Navigation"
@@ -34,18 +39,23 @@ export const LocalHeader = () => {
           onNavigate={() => setIsOpen(false)}
           renderItem={hashAwareNavItemRenderer}
         />
-        <button 
-          className="local-btn local-btn-primary local-mobile-btn" 
-          onClick={() => alert('Booking portal initializing...')}
+        <button
+          type="button"
+          className="local-btn local-btn-primary local-mobile-btn"
+          onClick={() => {
+            handleBook();
+            setIsOpen(false);
+          }}
         >
           Book a Service
         </button>
       </div>
 
       <div className="local-desktop-btn-container">
-        <button 
-          className="local-btn local-btn-primary local-desktop-btn" 
-          onClick={() => alert('Booking portal initializing...')}
+        <button
+          type="button"
+          className="local-btn local-btn-primary local-desktop-btn"
+          onClick={handleBook}
           id="local-btn-vibe-status"
         >
           Book a Service
@@ -55,28 +65,39 @@ export const LocalHeader = () => {
   );
 };
 
-export const LocalServiceCard = ({ title, description, icon }: any) => (
+export const LocalServiceCard = ({ title, description, icon }: { title: string; description: string; icon: string }) => (
     <div className="local-service-card">
         <div style={{ width: '60px', height: '60px', background: 'var(--local-yellow-light)', color: 'var(--local-yellow)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', fontSize: '1.5rem' }}>
             {icon}
         </div>
         <h5 style={{ fontWeight: 700, marginBottom: '1rem', fontSize: '1.2rem' }}>{title}</h5>
         <p style={{ color: 'var(--local-text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>{description}</p>
-        <button 
-          style={{ background: 'transparent', border: '1px solid var(--local-border)', color: 'var(--local-blue)', padding: '0.5rem 1.25rem', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}
-          onClick={() => alert(`Exploring details for ${title}...`)}
-        >
+        <span style={{ background: 'transparent', border: '1px solid var(--local-border)', color: 'var(--local-blue)', padding: '0.5rem 1.25rem', borderRadius: '4px', fontWeight: 600, fontSize: '0.85rem', display: 'inline-block' }}>
           View Details
-        </button>
+        </span>
     </div>
 );
 
-export const ProviderCard = ({ name, title, rating, jobs, image }: any) => (
+export const ProviderCard = ({
+  name,
+  title,
+  rating,
+  jobs,
+  image,
+  onBook,
+}: {
+  name: string;
+  title: string;
+  rating: string;
+  jobs: string;
+  image: string;
+  onBook?: () => void;
+}) => (
     <div className="local-provider-card">
         <div style={{ position: 'relative', overflow: 'hidden' }}>
             <img src={image} alt={name} className="local-provider-img" />
             <div className="local-cta-overlay">
-                <button className="local-btn local-btn-primary" onClick={() => alert(`Booking a consult with ${name}...`)}>Book Now</button>
+                <button type="button" className="local-btn local-btn-primary" onClick={onBook}>Book Now</button>
             </div>
         </div>
         <div style={{ padding: '1.5rem', textAlign: 'center' }}>

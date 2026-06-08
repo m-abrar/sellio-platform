@@ -19,8 +19,8 @@ Goal: baseline **2 themes per vertical** (16 total).
 4. Autos — `autos_modern`, `autos_luxury` ✅
 5. Events — `events_corporate`, `events_classic` ✅
 6. Jobs — `jobs_startup`, `jobs_corporate` ✅
-7. Services — `services_marketplace`, `services_local`
-8. Classifieds — `classifieds_local`, `classifieds_general`
+7. Services — `services_marketplace`, `services_local` ✅
+8. Classifieds — `classifieds_local`, `classifieds_general` ✅
 
 ## Shared utilities (Unifieds)
 
@@ -75,6 +75,24 @@ Clone these patterns for other verticals in later phases.
 - `apps/storefront/src/themes/jobs/shared/job-utils.ts`
 - `apps/storefront/src/themes/jobs/shared/CatalogSyncAlert.tsx`
 
+## Shared utilities (Services)
+
+- `apps/storefront/src/themes/services/shared/useServicesThemeLink.ts`
+- `apps/storefront/src/themes/services/shared/demo-fallback.ts`
+- `apps/storefront/src/themes/services/shared/catalog.ts`
+- `apps/storefront/src/themes/services/shared/fallback-data.ts`
+- `apps/storefront/src/themes/services/shared/service-utils.ts`
+- `apps/storefront/src/themes/services/shared/CatalogSyncAlert.tsx`
+
+## Shared utilities (Classifieds)
+
+- `apps/storefront/src/themes/classifieds/shared/useClassifiedsThemeLink.ts`
+- `apps/storefront/src/themes/classifieds/shared/demo-fallback.ts`
+- `apps/storefront/src/themes/classifieds/shared/catalog.ts`
+- `apps/storefront/src/themes/classifieds/shared/fallback-data.ts`
+- `apps/storefront/src/themes/classifieds/shared/listing-utils.ts`
+- `apps/storefront/src/themes/classifieds/shared/CatalogSyncAlert.tsx`
+
 ## Rework notes (2026-06-08)
 
 ### Unifieds
@@ -109,3 +127,13 @@ Clone these patterns for other verticals in later phases.
 - Shared catalog fetch, demo fallback policy, and theme-aware links for startup + corporate
 - Startup Explore uses shared filters; application forms use inline validation
 - Corporate home grid links via `useJobsThemeLink`; demo sample jobs when API is down in preview
+
+### Services
+- Shared catalog fetch, demo fallback policy, and theme-aware links for marketplace + local
+- Marketplace booking modal uses inline errors; provider cards link via `useServicesThemeLink`
+- Local service grid and product booking forms follow the same demo policy and validation pattern
+
+### Classifieds
+- Shared catalog fetch, demo fallback policy, and theme-aware links for local + general
+- Local map/list split uses inquiry navigation instead of alert-based messaging
+- General sidebar chat widget retained; inquiry forms use inline validation

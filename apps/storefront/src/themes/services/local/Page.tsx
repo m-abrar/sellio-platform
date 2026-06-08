@@ -1,11 +1,15 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
 import { LocalHeader, LocalServiceCard, ProviderCard, LocalFooter } from './components';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';
+import { fetchServicesHome, resolveServicesFailure } from '@/themes/services/shared/catalog';
+import { mapServiceToLocalCard } from '@/themes/services/shared/service-utils';
+import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 const serviceIcons = ['🏠', '🔧', '⚡', '🌳', '🌡️', '🔨'];
 
@@ -16,24 +20,9 @@ const providers = [
   { name: 'Lisa M.', title: 'Lawn & Garden Specialist', rating: '5.0', jobs: '55', image: '/themes/services/local/18.webp' },
 ];
 
-function getServicePrice(service: ServiceListing) {
-  return service.pricing?.formatted || service.pricing?.formatted_short || (
-    service.pricing?.base_price ? `From $${Number(service.pricing.base_price).toLocaleString()}` : 'Free Quote'
-  );
-}
-
-function mapServiceToCard(service: ServiceListing, index: number) {
-  const price = getServicePrice(service);
-
-  return {
-    title: `${service.title} – ${price}`,
-    description: service.short_description || service.description || 'A trusted local service available through the HomeFix network.',
-    icon: serviceIcons[index % serviceIcons.length],
-    slug: service.slug,
-  };
-}
-
 export default function Page() {
+  const themeLink = useServicesThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const heroTitle = useThemeContent('hero.title', 'Trusted Services for \nYour Home & Family');
   const heroDescription = useThemeContent('hero.description', 'Find background-checked professionals for cleaning, repair, maintenance, and more—all in one place.');
   const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Explore Services');
@@ -58,34 +47,46 @@ export default function Page() {
   const safetyStep3Title = useThemeContent('safety.step_3_title', '24/7 Support');
   const safetyStep3Desc = useThemeContent('safety.step_3_description', 'Help is always just a call or click away, day or night.');
 
+  const emptyKicker = useThemeContent('empty.kicker', 'Empty Service Registry');
+  const emptyTitle = useThemeContent('empty.title', 'No live services are published yet.');
+  const emptyDescription = useThemeContent(
+    'empty.description',
+    'Add service records in the backend and this local services grid will hydrate automatically.',
+  );
+
   const [services, setServices] = useState<ServiceListing[]>([]);
   const [loadingServices, setLoadingServices] = useState(true);
-  const [serviceError, setServiceError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadServices() {
-      try {
-        const response = await api.getServices({ per_page: 6 });
-        if (!isMounted) {
-          return;
-        }
+      setLoadingServices(true);
+      const result = await fetchServicesHome({ per_page: 6 });
 
-        setServices(Array.isArray(response.data) ? response.data : []);
-        setServiceError(null);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
+      if (!isMounted) return;
 
-        console.error('Failed to load services local listings:', error);
-        setServiceError(error instanceof Error ? error.message : 'Services are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoadingServices(false);
+      if (result.ok && result.response.data) {
+        setServices(Array.isArray(result.response.data) ? result.response.data : []);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No services returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveServicesFailure(allowDemo, 'local');
+
+        if (resolution.mode === 'demo') {
+          setServices(resolution.services);
+          setUseFallback(true);
+        } else {
+          setServices([]);
+          setUseFallback(false);
         }
       }
+
+      setLoadingServices(false);
     }
 
     loadServices();
@@ -93,13 +94,16 @@ export default function Page() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [allowDemo]);
+
+  const scrollToServices = () => {
+    document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="services-local-wrapper">
-      <LocalHeader />
+      <LocalHeader onBookService={scrollToServices} />
 
-      {/* Hero Section */}
       <section className="local-hero" id="local-hero-section" aria-labelledby="local-hero-title">
         <div style={{ position: 'relative', zIndex: 1 }}>
           <h1 id="local-hero-title">
@@ -112,13 +116,11 @@ export default function Page() {
           </h1>
           <p>{heroDescription}</p>
           <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button
-              className="local-btn local-btn-primary"
-              onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-            >
+            <button type="button" className="local-btn local-btn-primary" onClick={scrollToServices}>
               {heroPrimaryCta}
             </button>
             <button
+              type="button"
               className="local-btn local-btn-outline"
               onClick={() => document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' })}
             >
@@ -128,19 +130,29 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Filter Bar */}
       <section className="local-filter-bar" aria-label="Search Filter Bar">
         <div style={{ fontWeight: 600, color: 'var(--local-text-muted)', marginRight: '1rem' }}>Quick Filter:</div>
         <select className="local-select" aria-label="Service Type Select"><option>Service Type</option></select>
         <select className="local-select" aria-label="Location Select"><option>Location (Zip)</option></select>
         <select className="local-select" aria-label="Availability Select"><option>Availability</option></select>
         <select className="local-select" aria-label="Price Select"><option>Price Range</option></select>
-        <button className="local-btn" style={{ background: 'var(--local-green)', color: 'white', border: 'none', flex: 1, minWidth: '150px' }} onClick={() => alert('Search initiated.')}>Search</button>
+        <button type="button" className="local-btn" style={{ background: 'var(--local-green)', color: 'white', border: 'none', flex: 1, minWidth: '150px' }} onClick={scrollToServices}>Search</button>
       </section>
 
-      {/* Popular Services */}
       <section id="services" className="local-section" aria-labelledby="local-services-title">
         <h2 id="local-services-title" style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>{servicesTitle}</h2>
+
+        {apiError && useFallback && (
+          <div className="local-alert-slot">
+            <CatalogSyncAlert variant="demo" error={apiError} classPrefix="local" />
+          </div>
+        )}
+        {apiError && !useFallback && (
+          <div className="local-alert-slot">
+            <CatalogSyncAlert variant="production" error={apiError} classPrefix="local" />
+          </div>
+        )}
+
         <div className="local-grid">
           {loadingServices ? (
             [1, 2, 3, 4, 5, 6].map((item) => (
@@ -151,23 +163,17 @@ export default function Page() {
                 <div className="local-skeleton-line local-skeleton-line-short" />
               </div>
             ))
-          ) : serviceError ? (
-            <div className="local-listing-state">
-              <div className="local-listing-kicker">Service Sync Offline</div>
-              <h3>Popular services could not be loaded.</h3>
-              <p>{serviceError}</p>
-            </div>
           ) : services.length === 0 ? (
-            <div className="local-listing-state">
-              <div className="local-listing-kicker">Empty Service Registry</div>
-              <h3>No live services are published yet.</h3>
-              <p>Add service records in the backend and this local services grid will hydrate automatically.</p>
+            <div className="local-empty-state" role="status">
+              <div className="local-listing-kicker">{emptyKicker}</div>
+              <h3>{emptyTitle}</h3>
+              <p>{emptyDescription}</p>
             </div>
           ) : (
             services.slice(0, 6).map((service, index) => {
-              const card = mapServiceToCard(service, index);
+              const card = mapServiceToLocalCard(service, index, serviceIcons);
               return (
-                <a className="local-service-link" href={`/product/${card.slug}`} key={service.id}>
+                <a className="local-service-link" href={themeLink(`/product/${card.slug}`)} key={service.id}>
                   <LocalServiceCard title={card.title} description={card.description} icon={card.icon} />
                 </a>
               );
@@ -176,17 +182,15 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Top Providers */}
       <section id="providers" className="local-section" style={{ background: 'white' }} aria-labelledby="local-providers-title">
         <h2 id="local-providers-title" style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>{providersTitle}</h2>
         <div className="local-grid">
-          {providers.map((p, i) => (
-            <ProviderCard key={i} {...p} />
+          {providers.map((p) => (
+            <ProviderCard key={p.name} {...p} onBook={scrollToServices} />
           ))}
         </div>
       </section>
 
-      {/* How It Works */}
       <section className="local-section text-center" aria-labelledby="local-how-title">
         <h2 id="local-how-title" style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>{howWorksTitle}</h2>
         <div className="local-steps-grid">
@@ -222,7 +226,6 @@ export default function Page() {
         headingId="sc-testimonials-title"
       />
 
-      {/* Trust/Safety */}
       <section className="local-section text-center" aria-labelledby="local-safety-title">
         <h2 id="local-safety-title" style={{ fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>{safetyTitle}</h2>
         <div className="local-safety-grid">

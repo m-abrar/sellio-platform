@@ -3,17 +3,19 @@ import React from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 interface HeaderProps {
   onPostClick: () => void;
   onLocationClick: () => void;
   locationName: string;
+  homeHref?: string;
 }
 
-export const LocalHeader = ({ onPostClick, onLocationClick, locationName }: HeaderProps) => (
+export const LocalHeader = ({ onPostClick, onLocationClick, locationName, homeHref = '/' }: HeaderProps) => (
   <header className="cl-header">
     <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-      <a href="#" className="cl-logo" onClick={(e) => { e.preventDefault(); window.location.reload(); }}>
+      <a href={homeHref} className="cl-logo">
         <span className="cl-logo-icon">🌿</span> NeighborHood
       </a>
       <div className="cl-location-picker" onClick={onLocationClick}>
@@ -27,26 +29,7 @@ export const LocalHeader = ({ onPostClick, onLocationClick, locationName }: Head
         flat
         className="cl-nav"
         linkClassName="cl-nav-link d-none d-md-block"
-        renderItem={(item, { href, className, onNavigate }) => (
-          <a
-            href={href}
-            className={`${className} d-none d-md-block`}
-            onClick={(e) => {
-              e.preventDefault();
-              if (item.title === 'Messages') {
-                alert("Opening neighbors messaging panel...");
-              } else {
-                alert("Viewing local community board posts...");
-              }
-              onNavigate?.();
-            }}
-          >
-            {item.title}
-            {item.title === 'Messages' && (
-              <span style={{ backgroundColor: 'var(--cl-primary-green)', color: 'white', borderRadius: '50px', padding: '0.1rem 0.4rem', fontSize: '0.7rem', fontWeight: 800 }}>3</span>
-            )}
-          </a>
-        )}
+        renderItem={defaultNavItemRenderer}
       />
       <MenuActionButtons
         buttonClassName="cl-btn-post"

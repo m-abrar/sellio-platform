@@ -6,54 +6,19 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
+import {
+  getProviderRating,
+  getServiceCategoryLabel,
+  getServiceImage,
+  getServicePriceLabel,
+} from '@/themes/services/shared/service-utils';
 
-function getThemeLink(path: string) {
-  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/preview/')) {
-    const themeKey = window.location.pathname.split('/')[2];
-    return `/preview/${themeKey}${path}`;
-  }
-  return path || '/';
-}
-
-type ServiceCategoryRef =
-  | string
-  | {
-      id?: number;
-      title?: string;
-      slug?: string;
-    }
-  | null
-  | undefined;
-
-export function getServiceCategoryLabel(
-  category: ServiceCategoryRef,
-  fallback = 'Professional Service',
-): string {
-  if (!category) {
-    return fallback;
-  }
-
-  if (typeof category === 'string') {
-    return category;
-  }
-
-  if (category.title) {
-    return category.title;
-  }
-
-  if (category.slug) {
-    return category.slug;
-  }
-
-  if (category.id != null) {
-    return String(category.id);
-  }
-
-  return fallback;
-}
+export { getServiceCategoryLabel };
 
 export const MarketplaceHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useServicesThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'ServiceConnect');
   const connectIndex = brandLabel.toLowerCase().indexOf('connect');
   const brandPrimary = connectIndex >= 0 ? brandLabel.slice(0, connectIndex) : brandLabel;
@@ -62,7 +27,9 @@ export const MarketplaceHeader = () => {
   return (
     <header className="sm-header">
       <div className="sm-logo">
-        {brandPrimary}<span>{brandSecondary}</span>
+        <a href={themeLink('')} style={{ color: 'inherit', textDecoration: 'none' }}>
+          {brandPrimary}<span>{brandSecondary}</span>
+        </a>
       </div>
       
       {/* Mobile Hamburger Trigger */}
@@ -90,7 +57,7 @@ export const MarketplaceHeader = () => {
         <MenuActionButtons
           linkClassName="sm-btn sm-btn-primary sm-mobile-btn"
           as="button"
-          onAction={() => alert('Service posting wizard starting...')}
+          onAction={() => document.getElementById('sm-providers-section')?.scrollIntoView({ behavior: 'smooth' })}
           onNavigate={() => setIsOpen(false)}
         />
       </div>
@@ -99,7 +66,7 @@ export const MarketplaceHeader = () => {
         <MenuActionButtons
           linkClassName="sm-btn sm-btn-primary sm-desktop-btn"
           as="button"
-          onAction={() => alert('Service posting wizard starting...')}
+          onAction={() => document.getElementById('sm-providers-section')?.scrollIntoView({ behavior: 'smooth' })}
         />
       </div>
     </header>
@@ -127,16 +94,17 @@ interface SmProviderCardProps {
 }
 
 export const SmProviderCard = ({ name, title, rating, image, service, onHire }: SmProviderCardProps) => {
+  const themeLink = useServicesThemeLink();
   const isDynamic = !!service;
   const displayName = isDynamic ? service.title : name;
   const displayTitle = isDynamic
     ? getServiceCategoryLabel(service.professional?.category)
     : title;
-  const displayRating = isDynamic ? (4.6 + (service.id % 5) * 0.1).toFixed(1) : rating;
-  const displayImage = isDynamic ? (service.media?.main_photo || '/themes/services/marketplace/15.webp') : image;
+  const displayRating = isDynamic ? getProviderRating(service) : rating;
+  const displayImage = isDynamic ? getServiceImage(service) : image;
   const isTopPro = isDynamic ? service.status?.is_featured : true;
-  const priceLabel = isDynamic ? (service.pricing?.formatted || `$${service.pricing?.base_price}`) : null;
-  const productHref = isDynamic && service.slug ? getThemeLink(`/product/${service.slug}`) : null;
+  const priceLabel = isDynamic ? getServicePriceLabel(service) : null;
+  const productHref = isDynamic && service.slug ? themeLink(`/product/${service.slug}`) : null;
 
   const imageBlock = (
     <>
@@ -176,14 +144,13 @@ export const SmProviderCard = ({ name, title, rating, image, service, onHire }: 
             {productHref && (
               <a href={productHref} className="sm-view-profile">View Profile</a>
             )}
-            <button 
-              className="sm-btn sm-btn-primary hire-btn" 
-              style={{ width: '100%', marginTop: productHref ? 0 : 'auto' }} 
+            <button
+              type="button"
+              className="sm-btn sm-btn-primary hire-btn"
+              style={{ width: '100%', marginTop: productHref ? 0 : 'auto' }}
               onClick={() => {
                 if (isDynamic && onHire && service) {
                   onHire(service);
-                } else {
-                  alert(`Direct hiring interface initialized for ${displayName}...`);
                 }
               }}
             >
