@@ -4,7 +4,7 @@
   "private": true,
   "description": "Multi-platform e-commerce and vertical marketplace engine",
   "scripts": {
-    "dev:storefront": "cd _development/storefront/app && npm run dev -- -p 3001",
+    "dev:storefront": "cd apps/storefront && npm run dev",
     "dev:seller": "cd apps/seller && npm run dev -- --port 3002",
     "dev:buyer": "cd apps/buyer && npm run dev",
     "prepare:distribution": "node scripts/prepare-distribution.mjs",
