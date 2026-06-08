@@ -1,13 +1,13 @@
 import { api } from '@sellio/api-client';
 import type { Vehicle } from '@sellio/types';
 import {
+  findFallbackVehicle,
   findLuxuryFallbackVehicle,
   findModernFallbackVehicle,
-  LUXURY_FALLBACK_VEHICLES,
-  MODERN_FALLBACK_VEHICLES,
+  getFallbackVehicles,
 } from './fallback-data';
 
-export type AutosThemeVariant = 'modern' | 'luxury';
+export type AutosThemeVariant = 'modern' | 'luxury' | 'classic' | 'used' | 'electric';
 
 function toErrorMessage(error: unknown): string {
   if (error instanceof Error) {
@@ -58,7 +58,7 @@ export function resolveVehiclesFailure(allowDemo: boolean, variant: AutosThemeVa
   if (allowDemo) {
     return {
       mode: 'demo' as const,
-      vehicles: variant === 'modern' ? MODERN_FALLBACK_VEHICLES : LUXURY_FALLBACK_VEHICLES,
+      vehicles: getFallbackVehicles(variant),
     };
   }
 
@@ -74,17 +74,13 @@ export function resolveVehicleFailure(
     return { mode: 'empty' as const };
   }
 
-  const vehicle =
-    variant === 'modern'
-      ? findModernFallbackVehicle(slug)
-      : findLuxuryFallbackVehicle(slug);
+  const vehicle = findFallbackVehicle(slug, variant);
 
   if (vehicle) {
-    const pool = variant === 'modern' ? MODERN_FALLBACK_VEHICLES : LUXURY_FALLBACK_VEHICLES;
     return {
       mode: 'demo' as const,
       vehicle,
-      related: pool.filter((item) => item.slug !== slug).slice(0, 3),
+      related: getFallbackVehicles(variant).filter((item) => item.slug !== slug).slice(0, 3),
     };
   }
 
@@ -95,6 +91,7 @@ export function getFallbackRelatedVehicles(
   slug: string,
   variant: AutosThemeVariant,
 ): Vehicle[] {
-  const pool = variant === 'modern' ? MODERN_FALLBACK_VEHICLES : LUXURY_FALLBACK_VEHICLES;
-  return pool.filter((vehicle) => vehicle.slug !== slug).slice(0, 3);
+  return getFallbackVehicles(variant).filter((vehicle) => vehicle.slug !== slug).slice(0, 3);
 }
+
+export { findLuxuryFallbackVehicle, findModernFallbackVehicle };

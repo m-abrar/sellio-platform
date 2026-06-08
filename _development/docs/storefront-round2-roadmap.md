@@ -82,6 +82,21 @@ Deliverables:
 
 **Progress:** 35 / 52 themes baselined (Round 1: 16 + Round 2: 19)
 
+## Phase 4 — Autos ✅
+
+Themes: `autos_classic`, `autos_used`, `autos_electric`.
+
+Deliverables:
+
+- Shared `AutosExplorePage` + extended `catalog.ts` / `fallback-data.ts` for classic, used, electric variants
+- `CatalogSyncAlert` + `subpages.css` prefixes (`ac`, `us`, `ev`)
+- Theme-aware links on home grids and product pages (`useAutosThemeLink`)
+- Demo fallback gated by `useDemoFallbackAllowed`; production empty states when API fails and demo off
+- Hero CTAs route to `/explore`; Explore exported on all three themes (no Cart — inquiry CTAs)
+- Removed hardcoded `/preview/autos_*` URLs and `alert()` CTAs
+
+**Progress:** 38 / 52 themes baselined (Round 1: 16 + Round 2: 22)
+
 ## Shared utilities (Round 2 additions)
 
 - `apps/storefront/src/themes/unifieds/shared/useDemoFallbackAllowed.ts`
@@ -93,3 +108,6 @@ Deliverables:
 - `apps/storefront/src/themes/ecommerce/shared/EcommerceExplorePage.tsx`
 - `apps/storefront/src/themes/ecommerce/shared/EcommerceCartPage.tsx`
 - `apps/storefront/src/themes/ecommerce/shared/subpages.css`
+- `apps/storefront/src/themes/autos/shared/AutosExplorePage.tsx`
+- `apps/storefront/src/themes/autos/shared/fallback-data.ts` (classic / used / electric variants)
+- `apps/storefront/src/themes/autos/shared/subpages.css` (ac / us / ev prefixes)

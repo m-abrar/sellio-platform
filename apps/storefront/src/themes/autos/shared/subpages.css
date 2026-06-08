@@ -1,0 +1,72 @@
+/* Catalog sync alerts for Round 2 autos themes */
+.autos-classic-wrapper .ac-catalog-alert,
+.autos-used-wrapper .us-catalog-alert,
+.autos-electric-wrapper .ev-catalog-alert {
+  border-radius: 8px;
+  margin: 0 5% 2rem;
+  padding: 1.5rem;
+}
+
+.autos-classic-wrapper .ac-catalog-alert--demo {
+  background: #fffaf0;
+  border: 1px solid var(--ac-secondary);
+}
+
+.autos-classic-wrapper .ac-catalog-alert--prod {
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+}
+
+.autos-used-wrapper .us-catalog-alert--demo {
+  background: #fffaf0;
+  border: 2px dashed var(--us-orange);
+}
+
+.autos-used-wrapper .us-catalog-alert--prod {
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+}
+
+.autos-electric-wrapper .ev-catalog-alert--demo {
+  background: #121b2d;
+  border: 2px dashed var(--ev-accent-green);
+  color: #f1f5f9;
+}
+
+.autos-electric-wrapper .ev-catalog-alert--prod {
+  background: rgba(255, 0, 85, 0.08);
+  border: 1px solid var(--ev-accent-blue);
+  color: #f1f5f9;
+}
+
+.ac-catalog-alert__diag,
+.us-catalog-alert__diag,
+.ev-catalog-alert__diag {
+  font-family: monospace;
+  font-size: 0.75rem;
+  margin: 1rem 0 0;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.autos-classic-wrapper .ac-explore-hero,
+.autos-used-wrapper .us-explore-hero,
+.autos-electric-wrapper .ev-explore-hero {
+  padding: 4rem 5% 2rem;
+  text-align: center;
+}
+
+.autos-classic-wrapper .ac-explore-hero h1,
+.autos-used-wrapper .us-explore-hero h1,
+.autos-electric-wrapper .ev-explore-hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 0 0 1rem;
+}
+
+.autos-classic-wrapper .ac-empty-state,
+.autos-used-wrapper .us-empty-state,
+.autos-electric-wrapper .ev-empty-state {
+  grid-column: 1 / -1;
+  padding: 4rem 2rem;
+  text-align: center;
+}

@@ -272,10 +272,179 @@ export const LUXURY_FALLBACK_VEHICLES: Vehicle[] = [
   },
 ];
 
+export const CLASSIC_FALLBACK_VEHICLES: Vehicle[] = [
+  {
+    id: 301,
+    title: '1965 Ford Mustang Convertible',
+    slug: '1965-ford-mustang',
+    description: 'Iconic American classic with V8 power and convertible styling.',
+    pricing: { base_price: 45000, formatted: '$45,000', is_lease: false, is_selling: true },
+    specs: { year: 1965, make: 'Ford', model: 'Mustang', transmission: 'Manual', engine: 'V8 Engine' },
+    media: { main_photo: 'https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?q=80&w=600' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'New York', state: 'NY', country: 'USA' },
+    status: publishedStatus,
+  },
+  {
+    id: 302,
+    title: '1970 Porsche 911 T',
+    slug: '1970-porsche-911',
+    description: 'Rally-ready flat-six coupe with matching numbers provenance.',
+    pricing: { base_price: 120000, formatted: '$120,000', is_lease: false, is_selling: true },
+    specs: { year: 1970, make: 'Porsche', model: '911', transmission: 'Manual', engine: 'Flat-Six' },
+    media: { main_photo: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=600' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'Los Angeles', state: 'CA', country: 'USA' },
+    status: publishedStatus,
+  },
+  {
+    id: 303,
+    title: '1961 Jaguar E-Type Coupe',
+    slug: '1961-jaguar-etype',
+    description: 'Series 1 E-Type restored to concours presentation.',
+    pricing: { base_price: 185000, formatted: '$185,000', is_lease: false, is_selling: true },
+    specs: { year: 1961, make: 'Jaguar', model: 'E-Type', transmission: 'Manual', engine: 'Inline-Six' },
+    media: { main_photo: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=600' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'Chicago', state: 'IL', country: 'USA' },
+    status: publishedStatus,
+  },
+  {
+    id: 304,
+    title: '1955 Mercedes-Benz 300 SL',
+    slug: '1955-mercedes-300sl',
+    description: 'Gullwing coupe with museum-grade preservation.',
+    pricing: { base_price: 1500000, formatted: '$1,500,000', is_lease: false, is_selling: true },
+    specs: { year: 1955, make: 'Mercedes-Benz', model: '300 SL', transmission: 'Manual', engine: 'Fuel-Injected I6' },
+    media: { main_photo: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=600' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'Dallas', state: 'TX', country: 'USA' },
+    status: publishedStatus,
+  },
+];
+
+export const USED_FALLBACK_VEHICLES: Vehicle[] = [
+  {
+    id: 401,
+    title: '2018 Honda Civic Sedan',
+    slug: '2018-honda-civic',
+    description: 'Reliable commuter sedan with clean service history.',
+    pricing: { base_price: 15500, formatted: '$15,500', is_lease: false, is_selling: true },
+    specs: { year: 2018, make: 'Honda', model: 'Civic', mileage: '40000' },
+    media: { main_photo: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=600' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'New York', state: 'NY', country: 'USA' },
+    status: publishedStatus,
+  },
+  {
+    id: 402,
+    title: '2020 Toyota Camry XLE',
+    slug: '2020-toyota-camry',
+    description: 'Certified pre-owned sedan with premium interior.',
+    pricing: { base_price: 19800, formatted: '$19,800', is_lease: false, is_selling: true },
+    specs: { year: 2020, make: 'Toyota', model: 'Camry', mileage: '25000' },
+    media: { main_photo: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=600' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'Los Angeles', state: 'CA', country: 'USA' },
+    status: publishedStatus,
+  },
+  {
+    id: 403,
+    title: '2016 Ford Focus SE',
+    slug: '2016-ford-focus',
+    description: 'Affordable hatchback with agile handling.',
+    pricing: { base_price: 9200, formatted: '$9,200', is_lease: false, is_selling: true },
+    specs: { year: 2016, make: 'Ford', model: 'Focus', mileage: '60000' },
+    media: { main_photo: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=600' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'Chicago', state: 'IL', country: 'USA' },
+    status: publishedStatus,
+  },
+  {
+    id: 404,
+    title: '2019 Mazda 3 Touring',
+    slug: '2019-mazda-3',
+    description: 'Upscale compact with responsive chassis tuning.',
+    pricing: { base_price: 17000, formatted: '$17,000', is_lease: false, is_selling: true },
+    specs: { year: 2019, make: 'Mazda', model: '3', mileage: '30000' },
+    media: { main_photo: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=600' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'Dallas', state: 'TX', country: 'USA' },
+    status: publishedStatus,
+  },
+];
+
+export const ELECTRIC_FALLBACK_VEHICLES: Vehicle[] = [
+  {
+    id: 501,
+    title: '2025 Tesla Model Y',
+    slug: 'tesla-model-y',
+    description: 'Dual-motor electric SUV with advanced driver assist.',
+    pricing: { base_price: 47000, formatted: '$47,000', is_lease: true, is_selling: true },
+    specs: { year: 2025, make: 'Tesla', model: 'Model Y', engine: 'Dual Motor AWD' },
+    media: { main_photo: '/themes/autos/electric/tesla_y.png' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'Austin', state: 'TX', country: 'USA' },
+    status: publishedStatus,
+  },
+  {
+    id: 502,
+    title: '2025 Rivian R1T',
+    slug: 'rivian-r1t',
+    description: 'Adventure electric truck with quad-motor torque vectoring.',
+    pricing: { base_price: 70000, formatted: '$70,000', is_lease: true, is_selling: true },
+    specs: { year: 2025, make: 'Rivian', model: 'R1T', engine: 'Quad Motor AWD' },
+    media: { main_photo: '/themes/autos/electric/rivian_r1t.png' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'Denver', state: 'CO', country: 'USA' },
+    status: publishedStatus,
+  },
+  {
+    id: 503,
+    title: '2024 Kia EV6',
+    slug: 'kia-ev6',
+    description: '800V architecture crossover with ultra-fast charging.',
+    pricing: { base_price: 42000, formatted: '$42,000', is_lease: true, is_selling: true },
+    specs: { year: 2024, make: 'Kia', model: 'EV6', engine: 'Single Motor RWD' },
+    media: { main_photo: '/themes/autos/electric/kia_ev6.png' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'Seattle', state: 'WA', country: 'USA' },
+    status: publishedStatus,
+  },
+  {
+    id: 504,
+    title: '2024 Lucid Air',
+    slug: 'lucid-air',
+    description: 'Luxury electric sedan with industry-leading range.',
+    pricing: { base_price: 87400, formatted: '$87,400', is_lease: true, is_selling: true },
+    specs: { year: 2024, make: 'Lucid', model: 'Air', engine: 'Dual Motor AWD' },
+    media: { main_photo: '/themes/autos/electric/lucid_air.png' },
+    taxonomy: emptyTaxonomy,
+    location: { city: 'San Francisco', state: 'CA', country: 'USA' },
+    status: publishedStatus,
+  },
+];
+
+const FALLBACK_BY_VARIANT = {
+  modern: MODERN_FALLBACK_VEHICLES,
+  luxury: LUXURY_FALLBACK_VEHICLES,
+  classic: CLASSIC_FALLBACK_VEHICLES,
+  used: USED_FALLBACK_VEHICLES,
+  electric: ELECTRIC_FALLBACK_VEHICLES,
+} as const;
+
 export function findModernFallbackVehicle(slug: string): Vehicle | null {
   return MODERN_FALLBACK_VEHICLES.find((vehicle) => vehicle.slug === slug) || null;
 }
 
 export function findLuxuryFallbackVehicle(slug: string): Vehicle | null {
   return LUXURY_FALLBACK_VEHICLES.find((vehicle) => vehicle.slug === slug) || null;
+}
+
+export function findFallbackVehicle(slug: string, variant: keyof typeof FALLBACK_BY_VARIANT): Vehicle | null {
+  return FALLBACK_BY_VARIANT[variant].find((vehicle) => vehicle.slug === slug) || null;
+}
+
+export function getFallbackVehicles(variant: keyof typeof FALLBACK_BY_VARIANT): Vehicle[] {
+  return FALLBACK_BY_VARIANT[variant];
 }

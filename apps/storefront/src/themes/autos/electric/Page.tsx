@@ -2,9 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@sellio/api-client';
 import type { Vehicle } from '@sellio/types';
 import { ElectricHeader, EVCard, IconBox, ElectricFooter } from './components';
+import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
+import { fetchVehiclesHome, resolveVehiclesFailure } from '@/themes/autos/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 interface EVItem {
@@ -77,6 +80,8 @@ const translateVehicleToEV = (car: Vehicle): EVItem => {
 
 export default function Page() {
   const router = useRouter();
+  const themeLink = useAutosThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const heroTitle = useThemeContent('hero.title', 'The Future is Electric');
   const heroHighlight = useThemeContent('hero.highlight', 'Electric');
   const heroDescription = useThemeContent('hero.description', 'Explore revolutionary vehicles and sustainable living. Experience peak performance with zero emissions.');
@@ -102,7 +107,7 @@ export default function Page() {
   const [brandsList, setBrandsList] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
-  const [errorTrace, setErrorTrace] = useState<string>('');
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // Dropdown filter selections
   const [selectedBrand, setSelectedBrand] = useState('');
@@ -110,50 +115,39 @@ export default function Page() {
   const [selectedPrice, setSelectedPrice] = useState('');
   const [selectedCharge, setSelectedCharge] = useState('');
 
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/autos_electric${path}`;
-      }
-    }
-    return path;
-  };
-
   useEffect(() => {
-    const fetchEVShowroom = async () => {
+    async function loadHomepageData() {
       setLoading(true);
-      try {
-        const response = await api.getVehicles({ per_page: 6 });
-        if (response && response.data && response.data.length > 0) {
-          const evsMapped = response.data.map(translateVehicleToEV);
+      const result = await fetchVehiclesHome(6);
+
+      if (result.ok && result.response.data?.length) {
+        const evsMapped = result.response.data.map(translateVehicleToEV);
+        setVehicles(evsMapped);
+        setBrandsList(Array.from(new Set(evsMapped.map((v) => v.brand))));
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No vehicles returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveVehiclesFailure(allowDemo, 'electric');
+
+        if (resolution.mode === 'demo') {
+          const evsMapped = resolution.vehicles.map(translateVehicleToEV);
           setVehicles(evsMapped);
-          setUseFallback(false);
-
-          // Populate Brands dynamically from loaded listings
-          const brands = Array.from(new Set(evsMapped.map(v => v.brand)));
-          setBrandsList(brands);
+          setBrandsList(Array.from(new Set(evsMapped.map((v) => v.brand))));
+          setUseFallback(true);
         } else {
-          console.warn("Autos Electric database empty. Engaging fallback simulated showroom.");
-          loadFallbackShowroom();
+          setVehicles([]);
+          setBrandsList([]);
+          setUseFallback(false);
         }
-      } catch (err: unknown) {
-        console.error("AxiosError: Connection failure fetching EV models:", err);
-        setErrorTrace(err instanceof Error ? (err.stack || err.message) : String(err));
-        loadFallbackShowroom();
-      } finally {
-        setLoading(false);
       }
-    };
 
-    const loadFallbackShowroom = () => {
-      setVehicles(FALLBACK_CLASSIFIEDS);
-      setBrandsList(["Tesla", "Rivian", "Kia", "Lucid"]);
-      setUseFallback(true);
-    };
+      setLoading(false);
+    }
 
-    fetchEVShowroom();
-  }, []);
+    loadHomepageData();
+  }, [allowDemo]);
 
   // Filter dynamic vehicles list
   const filteredEvs = vehicles.filter((ev) => {
@@ -186,7 +180,7 @@ export default function Page() {
     : vehicles.slice(0, 3);
 
   const handleCardClick = (slug: string) => {
-    router.push(getThemeLink(`/product/${slug}`));
+    router.push(themeLink(`/product/${slug}`));
   };
 
   return (
@@ -205,32 +199,20 @@ export default function Page() {
             {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <a href="#featured-evs" className="ev-btn ev-btn-green" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>{heroPrimaryCta}</a>
+            <a href={themeLink('/explore')} className="ev-btn ev-btn-green" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>{heroPrimaryCta}</a>
             <a href="#charging" className="ev-btn ev-btn-blue" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>{heroSecondaryCta}</a>
           </div>
         </div>
       </section>
 
-      {/* Resilience diagnostics warning panel themed electric */}
-      {useFallback && errorTrace && (
-        <div style={{
-          backgroundColor: '#121b2d',
-          border: '2.5px dashed var(--ev-accent-green)',
-          borderRadius: '15px',
-          padding: '2rem',
-          margin: '2rem 5% 0',
-          fontFamily: 'var(--ev-font-main)',
-          boxShadow: '0 0 20px rgba(57, 255, 20, 0.15)',
-          color: '#f1f5f9'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--ev-accent-green)', fontWeight: '700', fontSize: '1.2rem', marginBottom: '0.75rem', textShadow: '0 0 8px rgba(57,255,20,0.5)' }}>
-            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--ev-accent-green)' }}></span>
-            🛰️ EVOLVE CHARGING DIAGNOSTICS & RESILIENCE PANEL
-          </div>
-          <div style={{ opacity: 0.8, fontSize: '0.9rem', marginBottom: '1rem', lineHeight: '1.6' }}>
-            <strong>Offline Grid Node intercepted.</strong> The electric storefront activated secure sovereign fallback catalog buffers to bypass database network exceptions.
-          </div>
-          <pre style={{ margin: 0, padding: '1rem', backgroundColor: '#090d16', border: '1px solid rgba(0,255,255,0.2)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.8rem', color: '#ff4d4d', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>{errorTrace}</pre>
+      {useFallback && apiError && (
+        <div className="ev-alert-slot" style={{ margin: '2rem 5% 0' }}>
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="ev" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="ev-alert-slot" style={{ margin: '2rem 5% 0' }}>
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="ev" />
         </div>
       )}
 
@@ -385,7 +367,7 @@ export default function Page() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><span className="ev-text-green">✓</span> Integrated payment solutions</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><span className="ev-text-green">✓</span> Filter by plug type (CCS, NACS, CHAdeMO)</div>
             </div>
-            <button className="ev-btn ev-btn-green" onClick={() => alert("GPS Map Console: Scanning surrounding charging stations in real-time...")}>{chargingCta}</button>
+            <a href="#charging" className="ev-btn ev-btn-green">{chargingCta}</a>
           </div>
           <div>
             <div style={{ aspectRatio: '16/9', background: 'var(--ev-card-bg)', border: '1px solid var(--ev-accent-blue)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 30px rgba(0,255,255,0.2)' }}>

@@ -2,9 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@sellio/api-client';
 import type { Vehicle } from '@sellio/types';
 import { UsedCarCard } from './components';
+import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
+import { fetchVehicleDetail, resolveVehicleFailure } from '@/themes/autos/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 
 interface UsedCarItem {
   id: number;
@@ -111,13 +114,15 @@ const translateVehicle = (rawItem: Vehicle): UsedCarItem => {
 
 export default function ProductPage({ slug }: { slug: string }) {
   const router = useRouter();
+  const themeLink = useAutosThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
 
   // Dynamic States
   const [car, setCar] = useState<UsedCarItem | null>(null);
   const [related, setRelated] = useState<UsedCarItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
-  const [errorTrace, setErrorTrace] = useState<string>('');
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // Booking drawer states
   const [clientName, setClientName] = useState('');
@@ -129,66 +134,53 @@ export default function ProductPage({ slug }: { slug: string }) {
   
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [receiptCode, setReceiptCode] = useState('');
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/autos_used${path}`;
-      }
-    }
-    return path;
-  };
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchCarDetails = async () => {
+    async function loadVehicle() {
       setLoading(true);
-      try {
-        const response = await api.getVehicleDetails(slug);
-        if (response && response.data) {
-          const mapped = translateVehicle(response.data);
-          setCar(mapped);
-          setUseFallback(false);
-          
-          // Fetch related cars
-          const listRes = await api.getVehicles({ per_page: 10 });
-          if (listRes && listRes.data) {
-            const mappedList = listRes.data
-              .map(translateVehicle)
-              .filter((c: UsedCarItem) => c.slug !== slug)
-              .slice(0, 3);
-            setRelated(mappedList);
-          }
+      const result = await fetchVehicleDetail(slug);
+
+      if (result.ok) {
+        setCar(translateVehicle(result.response.data));
+        const relatedRaw = result.response.related_vehicles || [];
+        setRelated(
+          relatedRaw
+            .map(translateVehicle)
+            .filter((item) => item.slug !== slug)
+            .slice(0, 3),
+        );
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        setApiError(result.error);
+        const resolution = resolveVehicleFailure(slug, allowDemo, 'used');
+
+        if (resolution.mode === 'demo') {
+          setCar(translateVehicle(resolution.vehicle));
+          setRelated(resolution.related.map(translateVehicle));
+          setUseFallback(true);
         } else {
-          console.warn("Autos Used details query empty. Engaging fallback item matching slug:", slug);
-          loadFallbackItem();
+          setCar(null);
+          setRelated([]);
+          setUseFallback(false);
         }
-      } catch (err: any) {
-        console.error("Autos Used details fetch failed:", err);
-        setErrorTrace(err.stack || err.message || String(err));
-        loadFallbackItem();
-      } finally {
-        setLoading(false);
       }
-    };
 
-    const loadFallbackItem = () => {
-      // Find fallback matching slug or take the first one
-      const found = FALLBACK_CARS.find(c => c.slug === slug) || FALLBACK_CARS[0];
-      setCar(found);
-      
-      const filteredRelated = FALLBACK_CARS.filter(c => c.slug !== found.slug).slice(0, 3);
-      setRelated(filteredRelated);
-      setUseFallback(true);
-    };
+      setLoading(false);
+    }
 
-    fetchCarDetails();
-  }, [slug]);
+    loadVehicle();
+  }, [slug, allowDemo]);
 
   const handleTestDriveBooking = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!clientName || !clientEmail || !bookingDate) return;
+    if (!clientName || !clientEmail || !bookingDate) {
+      setFormError('Please fill in name, email, and your preferred test drive date.');
+      return;
+    }
 
+    setFormError(null);
     setIsSubmitting(true);
 
     setTimeout(() => {
@@ -255,7 +247,7 @@ export default function ProductPage({ slug }: { slug: string }) {
         <span style={{ fontSize: '3rem' }}>⚠️</span>
         <h3 style={{ color: 'var(--us-blue)', fontWeight: 700, marginTop: '1rem' }}>Vehicle Not Found</h3>
         <p style={{ color: '#666' }}>We couldn't locate the specified vehicle listing.</p>
-        <button onClick={() => router.push(getThemeLink('/'))} className="us-btn us-btn-orange">Return to Showroom</button>
+        <button onClick={() => router.push(themeLink('/'))} className="us-btn us-btn-orange">Return to Showroom</button>
       </div>
     );
   }
@@ -265,25 +257,21 @@ export default function ProductPage({ slug }: { slug: string }) {
       {/* Back to Catalog Breadcrumb */}
       <div style={{ marginBottom: '2rem' }}>
         <button 
-          onClick={() => router.push(getThemeLink('/'))} 
+          onClick={() => router.push(themeLink('/'))} 
           style={{ background: 'none', border: 'none', color: 'var(--us-blue)', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem', padding: 0 }}
         >
           ← Back to Used Showroom
         </button>
       </div>
 
-      {/* Diagnostics resilience report box */}
-      {useFallback && errorTrace && (
-        <div style={{ padding: '1.5rem', backgroundColor: '#fffaf0', border: '2px dashed var(--us-orange)', borderRadius: '12px', marginBottom: '2rem' }}>
-          <h4 style={{ color: 'var(--us-orange)', margin: '0 0 0.5rem 0', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span>⚠️</span> Database Offline - High-Fidelity Details Hydrated Offline
-          </h4>
-          <p style={{ margin: '0 0 1rem 0', fontSize: '0.9rem', color: '#666', lineHeight: 1.5 }}>
-            API exception caught on live endpoint query. Tracing simulated coordinates:
-          </p>
-          <pre style={{ margin: 0, padding: '1rem', backgroundColor: '#1e293b', color: '#f8fafc', borderRadius: '8px', fontSize: '0.8rem', overflowX: 'auto', fontFamily: 'monospace' }}>
-            {errorTrace}
-          </pre>
+      {useFallback && apiError && (
+        <div className="us-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="us" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="us-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="us" />
         </div>
       )}
 
@@ -443,6 +431,11 @@ export default function ProductPage({ slug }: { slug: string }) {
                 >
                   {isSubmitting ? 'Submitting Reservation...' : 'Request Booking Appointment'}
                 </button>
+                {formError && (
+                  <p style={{ color: '#c53030', fontSize: '0.85rem', marginTop: '0.75rem', textAlign: 'center' }}>
+                    {formError}
+                  </p>
+                )}
               </form>
             ) : (
               <div style={{ textAlign: 'center', padding: '1rem 0' }}>
@@ -497,7 +490,7 @@ export default function ProductPage({ slug }: { slug: string }) {
               <UsedCarCard 
                 key={item.id} 
                 {...item} 
-                onClick={() => router.push(getThemeLink(`/product/${item.slug}`))}
+                onClick={() => router.push(themeLink(`/product/${item.slug}`))}
               />
             ))}
           </div>

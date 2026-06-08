@@ -2,9 +2,12 @@
 
 import React, { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@sellio/api-client';
 import type { Vehicle } from '@sellio/types';
 import { ClassicCarCard, AuctionCard } from './components';
+import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
+import { fetchVehiclesHome, resolveVehiclesFailure } from '@/themes/autos/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 interface ClassicCarItem {
@@ -97,6 +100,8 @@ const ShimmerCard = () => (
 
 export default function Page() {
   const router = useRouter();
+  const themeLink = useAutosThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const heroEyebrow = useThemeContent('hero.eyebrow', "The Collector's Choice");
   const heroTitle = useThemeContent('hero.title', 'Discover Timeless Classics');
   const heroDescription = useThemeContent(
@@ -133,7 +138,7 @@ export default function Page() {
   const [cars, setCars] = useState<ClassicCarItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
-  const [errorTrace, setErrorTrace] = useState<string>('');
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // Dropdown options
   const [makesList, setMakesList] = useState<string[]>([]);
@@ -157,50 +162,38 @@ export default function Page() {
     );
   }, [selectedMake, cars]);
 
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/autos_classic${path}`;
-      }
-    }
-    return path;
-  };
-
   useEffect(() => {
-    const fetchVehicles = async () => {
+    async function loadHomepageData() {
       setLoading(true);
-      try {
-        const response = await api.getVehicles({ per_page: 20 });
-        if (response && response.data && response.data.length > 0) {
-          const mapped = response.data.map(translateVehicle);
+      const result = await fetchVehiclesHome(20);
+
+      if (result.ok && result.response.data?.length) {
+        const mapped = result.response.data.map(translateVehicle);
+        setCars(mapped);
+        setMakesList(Array.from(new Set(mapped.map((c) => c.make).filter(Boolean))));
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No vehicles returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveVehiclesFailure(allowDemo, 'classic');
+        if (resolution.mode === 'demo') {
+          const mapped = resolution.vehicles.map(translateVehicle);
           setCars(mapped);
-          
-          // Deduplicate makes and models
-          const makes = Array.from(new Set(mapped.map(c => c.make).filter(Boolean)));
-          setMakesList(makes);
-          setUseFallback(false);
+          setMakesList(Array.from(new Set(mapped.map((c) => c.make).filter(Boolean))));
+          setUseFallback(true);
         } else {
-          console.warn("Autos Classic database empty. Engaging custom simulated showroom.");
-          loadFallbacks();
+          setCars([]);
+          setMakesList([]);
+          setUseFallback(false);
         }
-      } catch (err: unknown) {
-        console.error("Autos Classic Database connection exception caught:", err);
-        setErrorTrace(err instanceof Error ? (err.stack || err.message) : String(err));
-        loadFallbacks();
-      } finally {
-        setLoading(false);
       }
-    };
 
-    const loadFallbacks = () => {
-      setCars(FALLBACK_CARS);
-      setMakesList(Array.from(new Set(FALLBACK_CARS.map(c => c.make))));
-      setUseFallback(true);
-    };
+      setLoading(false);
+    }
 
-    fetchVehicles();
-  }, []);
+    loadHomepageData();
+  }, [allowDemo]);
 
   // Stateful filtering matching HUD filters
   const filteredCars = cars.filter(car => {
@@ -244,7 +237,7 @@ export default function Page() {
                 {heroDescription}
             </p>
             <div className="ac-hero-buttons">
-                <a href="#listings" className="ac-btn ac-btn-cta" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>{heroPrimaryCta}</a>
+                <a href={themeLink('/explore')} className="ac-btn ac-btn-cta" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>{heroPrimaryCta}</a>
                 <a href="#auctions" className="ac-btn ac-btn-gold" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>{heroSecondaryCta}</a>
             </div>
         </div>
@@ -328,18 +321,15 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Connection Diagnostics overlay if database server is offline */}
-      {useFallback && errorTrace && (
-        <div style={{ margin: '0 5% 3rem 5%', padding: '1.5rem', backgroundColor: '#fffdf5', border: '2px dashed var(--ac-primary)', borderRadius: '8px' }}>
-          <h4 style={{ color: 'var(--ac-primary)', margin: '0 0 0.5rem 0', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'var(--ac-font-heading)' }}>
-            <span>⚠️</span> Database Offline - High-Fidelity Diagnostics Active
-          </h4>
-          <p style={{ margin: '0 0 1rem 0', fontSize: '0.9rem', color: '#666', lineHeight: 1.5 }}>
-            API exception caught on live database endpoint query. Engage local diagnostic trace block:
-          </p>
-          <pre style={{ margin: 0, padding: '1rem', backgroundColor: '#1e293b', color: '#f8fafc', borderRadius: '4px', fontSize: '0.8rem', overflowX: 'auto', fontFamily: 'monospace', lineHeight: 1.4 }}>
-            {errorTrace}
-          </pre>
+      {/* Catalog sync status */}
+      {useFallback && apiError && (
+        <div className="ac-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="ac" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="ac-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="ac" />
         </div>
       )}
 
@@ -371,7 +361,7 @@ export default function Page() {
                   <ClassicCarCard 
                     key={car.id} 
                     {...car} 
-                    onClick={() => router.push(getThemeLink(`/product/${car.slug}`))}
+                    onClick={() => router.push(themeLink(`/product/${car.slug}`))}
                   />
               ))}
           </div>

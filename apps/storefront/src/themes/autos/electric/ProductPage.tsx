@@ -2,9 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@sellio/api-client';
 import type { Vehicle } from '@sellio/types';
 import { ElectricHeader, ElectricFooter } from './components';
+import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
+import { fetchVehicleDetail, resolveVehicleFailure } from '@/themes/autos/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 
 interface EVItem {
   id: number;
@@ -99,13 +102,15 @@ const translateVehicleToEV = (car: Vehicle): EVItem => {
 
 export default function ProductPage({ slug }: { slug: string }) {
   const router = useRouter();
+  const themeLink = useAutosThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
 
   // Component states
   const [item, setItem] = useState<EVItem | null>(null);
   const [related, setRelated] = useState<EVItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
-  const [errorTrace, setErrorTrace] = useState<string>('');
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // Lease Estimator Calculator state variables
   const [downPayment, setDownPayment] = useState(5000);
@@ -118,63 +123,46 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [buyerNotes, setBuyerNotes] = useState('');
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderSuccessData, setOrderSuccessData] = useState<any>(null);
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/autos_electric${path}`;
-      }
-    }
-    return path;
-  };
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchListingDetails = async () => {
+    async function loadVehicle() {
+      if (!slug) return;
+
       setLoading(true);
-      try {
-        const response = await api.getVehicleDetails(slug);
-        if (response && response.data) {
-          setItem(translateVehicleToEV(response.data));
-          setUseFallback(false);
+      const result = await fetchVehicleDetail(slug);
 
-          // Fetch related EV items
-          const listRes = await api.getVehicles();
-          if (listRes && listRes.data) {
-            const matched = listRes.data
-              .filter(c => c.slug !== slug)
-              .slice(0, 3)
-              .map(translateVehicleToEV);
-            setRelated(matched);
-          }
+      if (result.ok) {
+        setItem(translateVehicleToEV(result.response.data));
+        const relatedRaw = result.response.related_vehicles || [];
+        setRelated(
+          relatedRaw
+            .filter((car) => car.slug !== slug)
+            .slice(0, 3)
+            .map(translateVehicleToEV),
+        );
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        setApiError(result.error);
+        const resolution = resolveVehicleFailure(slug, allowDemo, 'electric');
+
+        if (resolution.mode === 'demo') {
+          setItem(translateVehicleToEV(resolution.vehicle));
+          setRelated(resolution.related.map(translateVehicleToEV));
+          setUseFallback(true);
         } else {
-          console.warn("EV details returned empty. Loading fallback simulation.");
-          loadFallbackDetails();
+          setItem(null);
+          setRelated([]);
+          setUseFallback(false);
         }
-      } catch (err: any) {
-        console.error("[Offline Resilience] failed to fetch EV details: ", err);
-        setErrorTrace(err?.stack || err?.message || String(err));
-        loadFallbackDetails();
-      } finally {
-        setLoading(false);
       }
-    };
 
-    const loadFallbackDetails = () => {
-      const matched = FALLBACK_CLASSIFIEDS.find(c => c.slug === slug) || FALLBACK_CLASSIFIEDS[0];
-      setItem(matched);
-      setUseFallback(true);
-
-      const relatedMatched = FALLBACK_CLASSIFIEDS
-        .filter(c => c.slug !== slug)
-        .slice(0, 3);
-      setRelated(relatedMatched);
-    };
-
-    if (slug) {
-      fetchListingDetails();
+      setLoading(false);
     }
-  }, [slug]);
+
+    loadVehicle();
+  }, [slug, allowDemo]);
 
   // Compute monthly lease dynamically
   const calculateLeaseRate = () => {
@@ -196,11 +184,13 @@ export default function ProductPage({ slug }: { slug: string }) {
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!buyerName || !buyerEmail) {
-      alert("Please fill in all required fields.");
+      setFormError('Please fill in all required fields.');
       return;
     }
 
     if (!item) return;
+
+    setFormError(null);
 
     const orderData = {
       orderId: `EV-RES-${Date.now()}-${item.id}`,
@@ -234,7 +224,7 @@ export default function ProductPage({ slug }: { slug: string }) {
 
   const handleBackNavigation = (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push(getThemeLink(''));
+    router.push(themeLink('/'));
   };
 
   return (
@@ -248,26 +238,14 @@ export default function ProductPage({ slug }: { slug: string }) {
           </a>
         </div>
 
-        {/* Resilience diagnostics warning panel themed electric */}
-        {useFallback && errorTrace && (
-          <div style={{
-            backgroundColor: '#121b2d',
-            border: '2.5px dashed var(--ev-accent-green)',
-            borderRadius: '15px',
-            padding: '2rem',
-            marginBottom: '2.5rem',
-            fontFamily: 'var(--ev-font-main)',
-            boxShadow: '0 0 20px rgba(57, 255, 20, 0.15)',
-            color: '#f1f5f9'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--ev-accent-green)', fontWeight: '700', fontSize: '1.2rem', marginBottom: '0.75rem', textShadow: '0 0 8px rgba(57,255,20,0.5)' }}>
-              <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--ev-accent-green)' }}></span>
-              🛰️ EVOLVE CHARGING DIAGNOSTICS & RESILIENCE PANEL
-            </div>
-            <div style={{ opacity: 0.8, fontSize: '0.9rem', marginBottom: '1rem', lineHeight: '1.6' }}>
-              <strong>Offline Grid Node intercepted.</strong> The electric storefront activated secure sovereign fallback catalog buffers to bypass database network exceptions.
-            </div>
-            <pre style={{ margin: 0, padding: '1rem', backgroundColor: '#090d16', border: '1px solid rgba(0,255,255,0.2)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.8rem', color: '#ff4d4d', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>{errorTrace}</pre>
+        {useFallback && apiError && (
+          <div className="ev-alert-slot">
+            <CatalogSyncAlert variant="demo" error={apiError} classPrefix="ev" />
+          </div>
+        )}
+        {apiError && !useFallback && (
+          <div className="ev-alert-slot">
+            <CatalogSyncAlert variant="production" error={apiError} classPrefix="ev" />
           </div>
         )}
 
@@ -504,6 +482,11 @@ export default function ProductPage({ slug }: { slug: string }) {
                       <button type="submit" className="ev-product-btn-reserve">
                         Lock Grid Allocation & Request Test Drive
                       </button>
+                      {formError && (
+                        <p style={{ color: '#fca5a5', fontSize: '0.85rem', marginTop: '0.75rem', textAlign: 'center' }}>
+                          {formError}
+                        </p>
+                      )}
                     </form>
                   )}
                 </div>
@@ -519,7 +502,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                     <div 
                       key={relItem.id} 
                       className="ev-related-card"
-                      onClick={() => router.push(getThemeLink(`/product/${relItem.slug}`))}
+                      onClick={() => router.push(themeLink(`/product/${relItem.slug}`))}
                     >
                       <div className="ev-related-img-wrap">
                         <img src={relItem.image} className="ev-related-img" alt={relItem.title} />
