@@ -14,7 +14,7 @@ Goal: baseline **2 themes per vertical** (16 total).
 ## Phase order
 
 1. Unifieds — `unifieds_minimal`, `unifieds_default` ✅
-2. Properties — `properties_rental`, `properties_modern`
+2. Properties — `properties_rental`, `properties_modern` ✅
 3. Ecommerce — `ecommerce_default`, `ecommerce_luxury`
 4. Autos — `autos_modern`, `autos_luxury`
 5. Events — `events_corporate`, `events_classic`
@@ -32,12 +32,23 @@ Goal: baseline **2 themes per vertical** (16 total).
 - `apps/storefront/src/themes/unifieds/shared/useUnifiedCartCount.ts`
 - `apps/storefront/src/themes/unifieds/shared/menu-utils.ts`
 
+## Shared utilities (Properties)
+
+- `apps/storefront/src/themes/properties/shared/usePropertyThemeLink.ts`
+- `apps/storefront/src/themes/properties/shared/demo-fallback.ts`
+
 Clone these patterns for other verticals in later phases.
 
 ## Rework notes (2026-06-08)
 
+### Unifieds
 - Centralized cart read/write/add and cart badge syncing
 - Theme-aware nav defaults now include Cart for `unifieds_minimal` and `unifieds_default`
 - Removed hardcoded preview URLs, alert-based CTAs, and fake `$980` pricing
 - Product pages show inline add-to-cart feedback with View cart link
 - Explore pages share sort typing, price formatting, and API error states
+
+### Properties
+- Shared `usePropertyThemeLink` and demo-fallback policy for rental + modern
+- `properties_rental`: List property CTA links to admin create flow (no alert)
+- `properties_modern`: theme links via MenuProvider; product/home API error parity with rental

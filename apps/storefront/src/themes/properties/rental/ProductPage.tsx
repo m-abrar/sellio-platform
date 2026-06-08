@@ -251,7 +251,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <span className="pr-kicker">Not found</span>
           <h1 className="pr-section-title">Listing could not be loaded</h1>
           <p className="pr-lead" style={{ margin: '0 auto 2rem' }}>
-            This rental does not exist, or the listing API is unavailable.
+            {apiError ||
+              'This rental does not exist, or the listing API is unavailable.'}
           </p>
           <a href={themeLink('/explore')} className="pr-btn-primary">
             Browse rentals

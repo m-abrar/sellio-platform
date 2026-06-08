@@ -1529,6 +1529,14 @@ body.pm-explore-filters-open {
   aspect-ratio: 4 / 5;
 }
 
+.pm-home-alert-slot,
+.pm-detail-alert-slot {
+  margin: 0 auto 1.25rem;
+  max-width: var(--urban-content-max, 1200px);
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
 .pm-registry-alert {
   border: 1px solid var(--urban-border);
   border-radius: 16px;

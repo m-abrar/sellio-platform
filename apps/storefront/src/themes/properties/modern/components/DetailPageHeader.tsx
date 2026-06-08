@@ -1,17 +1,13 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import { useMenuContext } from '@/components/menu/MenuProvider';
-import { getThemeLinkFromPathname } from '@/lib/links';
+import { useModernThemeLink } from '../hooks/useModernThemeLink';
 
 interface DetailPageHeaderProps {
   title: string;
 }
 
 export function DetailPageHeader({ title }: DetailPageHeaderProps) {
-  const pathname = usePathname();
-  const { themeKey } = useMenuContext();
-  const themeLink = (path: string) => getThemeLinkFromPathname(path, pathname, themeKey);
+  const themeLink = useModernThemeLink();
 
   return (
     <header className="pm-detail-header">

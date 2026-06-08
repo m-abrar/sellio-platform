@@ -1,13 +1,9 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import { useMenuContext } from '@/components/menu/MenuProvider';
-import { getThemeLinkFromPathname } from '@/lib/links';
+import { useModernThemeLink } from '../hooks/useModernThemeLink';
 
 export function ExplorePageHeader() {
-  const pathname = usePathname();
-  const { themeKey } = useMenuContext();
-  const themeLink = (path: string) => getThemeLinkFromPathname(path, pathname, themeKey);
+  const themeLink = useModernThemeLink();
 
   return (
     <header className="pm-detail-header pm-explore-page__header">

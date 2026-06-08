@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { StructureGrid, SkylineSyncBar, HeroSearchBar } from './components';
+import { StructureGrid, SkylineSyncBar, HeroSearchBar, CatalogRegistryAlert } from './components';
 import { scrollToSection } from './utils';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 import { useModernThemeLink } from './hooks/useModernThemeLink';
@@ -16,6 +16,8 @@ export default function Page() {
   const [structureItems, setStructureItems] = useState<ReturnType<typeof mapPropertyToStructure>[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [propertyError, setPropertyError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [nodeCount, setNodeCount] = useState(0);
 
   useEffect(() => {
@@ -31,17 +33,22 @@ export default function Page() {
         setStructureItems(items);
         setNodeCount(result.data.length);
         setPropertyError(null);
+        setUseFallback(false);
+        setApiError(null);
       } else {
+        setApiError(result.error);
         const resolution = resolveCatalogFailure({}, allowDemoCatalog);
         if (resolution.mode === 'demo') {
           const items = resolution.estates.slice(0, 6).map(mapPropertyToStructure);
           setStructureItems(items);
           setNodeCount(resolution.estates.length);
           setPropertyError(null);
+          setUseFallback(true);
         } else {
           setStructureItems([]);
           setNodeCount(0);
           setPropertyError(result.error);
+          setUseFallback(false);
         }
       }
 
@@ -136,7 +143,24 @@ export default function Page() {
 
       <SkylineSyncBar nodeCount={nodeCount || structureItems.length} />
 
-      <StructureGrid items={structureItems} loading={loadingProperties} error={propertyError} />
+      {apiError && useFallback && (
+        <div className="pm-home-alert-slot">
+          <CatalogRegistryAlert variant="demo" error={apiError} />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="pm-home-alert-slot">
+          <CatalogRegistryAlert variant="production" error={apiError} />
+        </div>
+      )}
+
+      {!(apiError && !useFallback) && (
+        <StructureGrid
+          items={structureItems}
+          loading={loadingProperties}
+          error={propertyError}
+        />
+      )}
 
       <section className="urban-precision-section" id="urban-precision-section">
         <div className="urban-precision-visual">

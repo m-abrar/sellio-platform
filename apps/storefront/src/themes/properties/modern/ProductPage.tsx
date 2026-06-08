@@ -13,6 +13,7 @@ import {
   RelatedStructures,
   RentalDetailSidebar,
   SaleDetailSidebar,
+  CatalogRegistryAlert,
 } from './components';
 import { useModernThemeLink } from './hooks/useModernThemeLink';
 import { useDemoFallbackAllowed } from './hooks/useDemoFallbackAllowed';
@@ -44,6 +45,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [bookings, setBookings] = useState<PropertyBookingBlock[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -74,12 +76,15 @@ export default function ProductPage({ slug }: ProductPageProps) {
           setRelated(response.related_properties || []);
           setBookings((response.bookings as PropertyBookingBlock[]) || []);
           setUseFallback(false);
+          setApiError(null);
         } else {
+          setApiError('Property not found or API returned no data.');
           loadFallback();
         }
       } catch (error: unknown) {
         if (!isMounted) return;
         console.error('Failed to load properties modern detail:', error);
+        setApiError(error instanceof Error ? error.message : String(error));
         loadFallback();
       } finally {
         if (isMounted) setLoading(false);
@@ -219,10 +224,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="urban-detail-kicker">Not found</div>
           <h1>Property could not be loaded</h1>
           <p>
-            This property does not exist, or the listing API is unavailable in production mode.
+            {apiError ||
+              'This property does not exist, or the listing API is unavailable in production mode.'}
           </p>
-          <a href={themeLink('/')} className="urban-btn-primary">
-            Back to properties
+          <a href={themeLink('/explore')} className="urban-btn-primary">
+            Browse properties
           </a>
         </section>
       </main>
@@ -237,9 +243,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
     <main className={`pm-detail-page pm-detail-page--${listingMode}`}>
       <DetailPageHeader title={property.title} />
 
-      {useFallback && (
-        <div className="pm-detail-demo-banner" role="status">
-          Preview mode — showing sample data because the live API is unavailable.
+      {useFallback && apiError && (
+        <div className="pm-detail-alert-slot">
+          <CatalogRegistryAlert variant="demo" error={apiError} />
         </div>
       )}
 

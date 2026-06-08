@@ -12,7 +12,10 @@ import {
   filterRentalProperties,
 } from './catalog';
 import { mapPropertyToLeaseCard, type RentalUnitCard } from './property-utils';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
 import { CatalogRegistryAlert } from './components/explore';
+
+const adminListPropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
 
 function renderMultilineTitle(
   text: string,
@@ -174,14 +177,15 @@ export default function Page() {
             >
               {heroPrimaryCta}
             </button>
-            <button
-              type="button"
+            <a
+              href={adminListPropertyUrl}
               className="pr-btn-secondary"
               id="pr-btn-list"
-              onClick={() => alert('Landlord listing flow coming soon.')}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {heroSecondaryCta}
-            </button>
+            </a>
           </div>
         </div>
 

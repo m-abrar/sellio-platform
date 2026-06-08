@@ -1,9 +1,7 @@
 'use client';
 
 import React from 'react';
-import { usePathname } from 'next/navigation';
-import { useMenuContext } from '@/components/menu/MenuProvider';
-import { getThemeLinkFromPathname } from '@/lib/links';
+import { useModernThemeLink } from '../hooks/useModernThemeLink';
 import type { ExplorePropertyCard } from '../property-utils';
 
 interface ExplorePropertyGridProps {
@@ -12,9 +10,7 @@ interface ExplorePropertyGridProps {
 }
 
 export function ExplorePropertyGrid({ items, loading = false }: ExplorePropertyGridProps) {
-  const pathname = usePathname();
-  const { themeKey } = useMenuContext();
-  const themeLink = (path: string) => getThemeLinkFromPathname(path, pathname, themeKey);
+  const themeLink = useModernThemeLink();
 
   if (loading) {
     return (
