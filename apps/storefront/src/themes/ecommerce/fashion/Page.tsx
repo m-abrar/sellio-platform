@@ -2,9 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { EditorialLookCard, TrendHUD } from './components';
+import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
+import { fetchProductsCatalog, resolveProductsFailure } from '@/themes/ecommerce/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';
+import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 // Curated high-fidelity mock capsule collection fallbacks
@@ -113,21 +116,10 @@ type FashionProduct = Product & {
   } | null;
 };
 
-type ApiSyncError = {
-  message?: string;
-  code?: string;
-  config?: {
-    baseURL?: string;
-    url?: string;
-    method?: string;
-  };
-  response?: {
-    status?: number;
-  };
-};
-
 export default function Page() {
   const router = useRouter();
+  const themeLink = useEcommerceThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const heroEyebrow = useThemeContent('hero.eyebrow', 'FALL_WINTER_2026_COLLECTION');
   const heroTitle = useThemeContent('hero.title', 'Silent\nLuxury.');
   const heroCtaLabel = useThemeContent('hero.primary_cta_label', 'Explore Editorial');
@@ -150,55 +142,46 @@ export default function Page() {
   const philosophyEyebrow = useThemeContent('philosophy.eyebrow', 'ATELIER_PHILOSOPHY_SYNC');
   const [products, setProducts] = useState<FashionProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [errorTrace, setErrorTrace] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        setLoading(true);
-        setErrorTrace(null);
-        const data = await api.getProducts();
-        
-        // Filter out non-applicable vertical items if the API returns mixed catalogs,
-        // or load them directly. For fallback sync, map them beautifully.
-        if (data && data.length > 0) {
-          setProducts(data);
-        } else {
-          // Empty state resilience
-          setProducts(FALLBACK_COLLECTION);
-        }
-      } catch (err: unknown) {
-        const apiError = err as ApiSyncError;
-        console.error("Atelier Node API Sync Failed:", err);
-        // Build robust, descriptive trace content
-        const traceInfo = {
-          message: apiError.message || "Unknown Connection Exception",
-          url: apiError.config?.url ? `${apiError.config.baseURL || ''}${apiError.config.url}` : "v1/products",
-          method: apiError.config?.method?.toUpperCase() || "GET",
-          status: apiError.response?.status || "TIMEOUT",
-          reason: apiError.code || "ERR_NETWORK"
-        };
-        setErrorTrace(JSON.stringify(traceInfo, null, 2));
-        setProducts(FALLBACK_COLLECTION);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, []);
+    let isMounted = true;
 
-  const resolveProductUrl = (slug: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/ecommerce_fashion/product/${slug}`;
+    async function loadData() {
+      setLoading(true);
+      const result = await fetchProductsCatalog();
+
+      if (!isMounted) return;
+
+      if (result.ok) {
+        setProducts(result.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        setApiError(result.error);
+        const resolution = resolveProductsFailure(allowDemo);
+        if (resolution.mode === 'demo') {
+          setProducts(FALLBACK_COLLECTION);
+          setUseFallback(true);
+        } else {
+          setProducts([]);
+          setUseFallback(false);
+        }
       }
+
+      setLoading(false);
     }
-    return `/product/${slug}`;
-  };
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [allowDemo]);
 
   const handleCardClick = (slug: string) => {
-    router.push(resolveProductUrl(slug));
+    router.push(themeLink(`/product/${slug}`));
   };
 
   return (
@@ -230,7 +213,7 @@ export default function Page() {
                 ))}
               </h1>
               <div style={{ marginTop: '4rem' }}>
-                  <button className="ef-btn-primary" style={{ background: 'white', color: 'black' }}>{heroCtaLabel}</button>
+                  <a href={themeLink('/explore')} className="ef-btn-primary" style={{ background: 'white', color: 'black', textDecoration: 'none', display: 'inline-block' }}>{heroCtaLabel}</a>
               </div>
           </div>
         </div>
@@ -255,48 +238,17 @@ export default function Page() {
           <TrendHUD label="ACTIVE_CURATIONS" value={products.length ? `0${products.length}` : "00"} />
           <TrendHUD label="ATELIER_NODES" value="08" />
           <TrendHUD label="SILHOUETTE_PRECISION" value="100%" />
-          <TrendHUD label="GLOBAL_SYNC" value={errorTrace ? "OFFLINE" : "STABLE"} />
+          <TrendHUD label="GLOBAL_SYNC" value={useFallback ? "OFFLINE" : "STABLE"} />
       </section>
 
-      {/* Connection Offline Diagnostics Board */}
-      {errorTrace && (
-        <div style={{
-          background: 'var(--ef-oyster)',
-          border: '1px solid var(--ef-champagne)',
-          padding: '3rem',
-          marginBottom: '8rem',
-          maxWidth: '1200px',
-          margin: '0 auto 8rem',
-          textAlign: 'left',
-          fontFamily: 'var(--ef-sans)'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.5rem' }}>
-            <span style={{ color: 'var(--ef-champagne)', fontSize: '1.8rem', fontWeight: 'bold' }}>✦</span>
-            <h3 style={{ fontFamily: 'var(--ef-serif)', fontSize: '1.6rem', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', margin: 0 }}>
-              {diagnosticsTitle}
-            </h3>
-          </div>
-          
-          <p style={{ fontSize: '0.9rem', color: 'var(--ef-ebony)', opacity: 0.8, lineHeight: '1.8', marginBottom: '2rem' }}>
-            {diagnosticsDescription}
-          </p>
-
-          <div style={{ background: 'white', border: '1px solid var(--ef-border)', padding: '1.5rem' }}>
-            <div className="ef-mono" style={{ fontSize: '0.6rem', opacity: 0.5, marginBottom: '0.75rem' }}>
-              DATABASE_OFFLINE_DIAGNOSTICS_TRACE
-            </div>
-            <pre style={{
-              margin: 0,
-              fontSize: '0.75rem',
-              color: '#bd2c00',
-              fontFamily: 'monospace',
-              whiteSpace: 'pre-wrap',
-              overflowX: 'auto',
-              lineHeight: '1.5'
-            }}>
-              {errorTrace}
-            </pre>
-          </div>
+      {apiError && useFallback && (
+        <div style={{ maxWidth: '1200px', margin: '0 auto 8rem', padding: '0 6%' }}>
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="ef" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div style={{ maxWidth: '1200px', margin: '0 auto 8rem', padding: '0 6%' }}>
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="ef" />
         </div>
       )}
 
@@ -320,6 +272,15 @@ export default function Page() {
                   </div>
                 </div>
               ))
+            ) : products.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '6rem 2rem', border: '1px solid var(--ef-border)' }}>
+                <div className="ef-mono" style={{ marginBottom: '1rem' }}>EMPTY_LOOKBOOK</div>
+                <h3 style={{ fontFamily: 'var(--ef-serif)', fontSize: '2rem' }}>No live products available.</h3>
+                <p style={{ opacity: 0.6, marginTop: '1rem' }}>Publish products in the admin or browse the full collection.</p>
+                <a href={themeLink('/explore')} className="ef-btn-primary" style={{ display: 'inline-block', marginTop: '2rem', textDecoration: 'none' }}>
+                  Explore catalog
+                </a>
+              </div>
             ) : (
               products.map((item, i: number) => {
                 // Safely extract price, mapping fallback correctly

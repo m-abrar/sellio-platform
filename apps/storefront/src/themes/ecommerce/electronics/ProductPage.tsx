@@ -1,9 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { ElectronicsHeader, ProductCard, ElectronicsFooter } from './components';
+import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
+import { fetchProductDetail, fetchProductsCatalog, resolveProductFailure } from '@/themes/ecommerce/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';
+import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
+import { addProductToCart } from '@/themes/unifieds/shared/cart';
 
 interface ProductPageProps {
   slug: string;
@@ -126,64 +130,79 @@ const getFallbackProduct = (slug: string): any => {
 };
 
 export default function ProductPage({ slug }: ProductPageProps) {
+  const themeLink = useEcommerceThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const [product, setProduct] = useState<any | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [errorTrace, setErrorTrace] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [cartNotice, setCartNotice] = useState(false);
 
   // Form states
   const [form, setForm] = useState<SpecOrderForm>({ name: '', email: '', tuningRequests: '' });
   const [quantity, setQuantity] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        setLoading(true);
-        setErrorTrace(null);
-        
-        // Load target product by slug
-        const fetched = await api.getProductBySlug(slug);
-        if (fetched) {
-          setProduct(fetched);
-          
-          // Query related listings
-          const list = await api.getProducts();
-          if (list && list.length > 0) {
-            const filtered = list.filter(p => p.slug !== slug);
-            setRelatedProducts(filtered.slice(0, 4));
-          }
-        } else {
-          throw new Error("Empty details response returned from dynamic API node.");
-        }
-      } catch (err: any) {
-        console.error("Laravel Database connection failure. Activating resilience fallback.", err);
-        setErrorTrace(
-          `DATABASE_OFFLINE_DIAGNOSTICS_TRACE\n` +
-          `STATUS: [OFFLINE] | LATENCY: [TIMEOUT] | REASON: [${err.message || 'axios connection refused'}]\n` +
-          `ACTION: Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...`
-        );
-        // Map resilience fallbacks
-        const targetFallback = getFallbackProduct(slug);
-        setProduct(targetFallback);
+    let isMounted = true;
 
-        // Load fallback related listings
-        const fallbacksList = [
-          getFallbackProduct('nvidia-rtx-5090-ti'),
-          getFallbackProduct('amd-ryzen-9-9950x'),
-          getFallbackProduct('corsair-dominator-titanium-64gb'),
-          getFallbackProduct('asus-rog-swift-oled-32'),
-          getFallbackProduct('logitech-g-pro-x-superlight-2'),
-          getFallbackProduct('wooting-60he-analog-keyboard')
-        ].filter(p => p.slug !== slug);
-        setRelatedProducts(fallbacksList.slice(0, 4));
-      } finally {
-        setLoading(false);
+    async function loadData() {
+      setLoading(true);
+      const result = await fetchProductDetail(slug);
+
+      if (!isMounted) return;
+
+      if (result.ok) {
+        setProduct(result.data);
+        setUseFallback(false);
+        setApiError(null);
+
+        const listResult = await fetchProductsCatalog();
+        if (listResult.ok) {
+          setRelatedProducts(listResult.data.filter((p) => p.slug !== slug).slice(0, 4));
+        }
+      } else {
+        setApiError(result.error);
+        const resolution = resolveProductFailure(slug, allowDemo);
+        if (resolution.mode === 'demo' && resolution.product) {
+          setProduct(resolution.product);
+          setUseFallback(true);
+        } else if (allowDemo) {
+          setProduct(getFallbackProduct(slug));
+          setUseFallback(true);
+        } else {
+          setProduct(null);
+          setUseFallback(false);
+        }
+
+        if (allowDemo) {
+          const fallbacksList = [
+            getFallbackProduct('nvidia-rtx-5090-ti'),
+            getFallbackProduct('amd-ryzen-9-9950x'),
+            getFallbackProduct('corsair-dominator-titanium-64gb'),
+            getFallbackProduct('asus-rog-swift-oled-32'),
+            getFallbackProduct('logitech-g-pro-x-superlight-2'),
+            getFallbackProduct('wooting-60he-analog-keyboard'),
+          ].filter((p) => p.slug !== slug);
+          setRelatedProducts(fallbacksList.slice(0, 4));
+        } else {
+          setRelatedProducts([]);
+        }
       }
+
+      setLoading(false);
     }
+
     loadData();
-  }, [slug]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [slug, allowDemo]);
 
   const getProductImage = (p: any, index: number) => {
     if (p.media?.featured_image) {
@@ -223,7 +242,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   const handleInquirySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email) return;
+    if (!form.name || !form.email) {
+      setFormError('Please enter your name and email to transmit the order protocol.');
+      return;
+    }
+    setFormError(null);
 
     setIsSubmitting(true);
     setTimeout(() => {
@@ -248,16 +271,29 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }, 800);
   };
 
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        const themeKey = window.location.pathname.split('/')[2];
-        return `/preview/${themeKey}${path}`;
-      }
-    }
-    return path;
+  const getThemeLink = (path: string) => themeLink(path);
+
+  const handleAddToCart = () => {
+    if (!product) return;
+    setAddingToCart(true);
+    addProductToCart(product as Product);
+    setCartNotice(true);
+    setAddingToCart(false);
   };
+
+  if (!loading && !product) {
+    return (
+      <div className="ecommerce-electronics-wrapper">
+        <ElectronicsHeader />
+        <div style={{ textAlign: 'center', padding: '8rem 2rem' }}>
+          <h1 className="el-tech-font" style={{ fontSize: '2rem', marginBottom: '1rem' }}>Product not found</h1>
+          <p style={{ color: 'var(--el-text-muted)', marginBottom: '2rem' }}>{apiError || 'This hardware node could not be loaded.'}</p>
+          <a href={themeLink('/explore')} className="el-btn el-btn-primary">Browse catalog</a>
+        </div>
+        <ElectronicsFooter />
+      </div>
+    );
+  }
 
   return (
     <div className="ecommerce-electronics-wrapper">
@@ -505,21 +541,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
         <span style={{ color: 'white' }}>{loading ? 'SYNCING...' : product?.title}</span>
       </div>
 
-      {/* Diagnostics Tracing Warning */}
-      {errorTrace && (
-        <div className="el-diagnostics-card" id="el-diagnostics-notice">
-          <div className="el-diagnostics-header">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-              <line x1="12" y1="9" x2="12" y2="13"></line>
-              <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
-            <span>DATABASE CONNECTION WARNING</span>
-          </div>
-          <p style={{ fontWeight: 600, fontSize: '0.95rem' }}>
-            The dynamic Laravel API database is currently offline. Activating premium local node resilience fallback.
-          </p>
-          <pre className="el-diagnostics-trace">{errorTrace}</pre>
+      {/* Catalog sync notice */}
+      {useFallback && apiError && (
+        <div style={{ margin: '0 5% 2rem' }}>
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="el" />
         </div>
       )}
 
@@ -589,9 +614,25 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </div>
 
             {/* Description */}
-            <p style={{ color: 'var(--el-text-muted)', lineHeight: 1.8, fontSize: '1.1rem', marginBottom: '2.5rem' }}>
+            <p style={{ color: 'var(--el-text-muted)', lineHeight: 1.8, fontSize: '1.1rem', marginBottom: '1.5rem' }}>
               {product.description}
             </p>
+
+            <button
+              type="button"
+              className="el-btn el-btn-primary"
+              style={{ width: '100%', marginBottom: cartNotice ? '0.75rem' : '2rem' }}
+              onClick={handleAddToCart}
+              disabled={addingToCart}
+            >
+              {addingToCart ? 'Adding...' : 'Add to cart'}
+            </button>
+            {cartNotice && (
+              <p role="status" style={{ color: 'var(--el-text-muted)', marginBottom: '2rem' }}>
+                Added to cart.{' '}
+                <a href={themeLink('/cart')} style={{ color: 'var(--el-primary)' }}>View cart</a>
+              </p>
+            )}
 
             {/* Order inquiry Console */}
             <div className="el-inquiry-box">
@@ -681,6 +722,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   >
                     {isSubmitting ? 'TRANSMITTING...' : 'TRANSMIT TUNING PROTOCOL'}
                   </button>
+                  {formError && (
+                    <p role="alert" style={{ marginTop: '1rem', color: 'var(--el-secondary)', fontSize: '0.85rem' }}>
+                      {formError}
+                    </p>
+                  )}
                 </form>
               )}
             </div>

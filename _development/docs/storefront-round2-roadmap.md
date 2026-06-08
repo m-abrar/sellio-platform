@@ -68,6 +68,20 @@ Deliverables:
 
 **Progress:** 33 / 52 themes baselined (Round 1: 16 + Round 2 Phase 1: 6 + Phase 2: 11)
 
+## Phase 3 — Ecommerce ✅
+
+Themes: `ecommerce_fashion`, `ecommerce_electronics`.
+
+Deliverables:
+
+- Shared `EcommerceExplorePage` + `EcommerceCartPage` + `subpages.css` (ef/el prefixes)
+- Theme-aware links on home grids and product pages
+- Shared cart helpers + inline “View cart” feedback on product pages
+- Demo fallback gated by `useDemoFallbackAllowed`; `CatalogSyncAlert` on home + product
+- Hero CTAs route to `/explore`; Explore + Cart exported on both themes
+
+**Progress:** 35 / 52 themes baselined (Round 1: 16 + Round 2: 19)
+
 ## Shared utilities (Round 2 additions)
 
 - `apps/storefront/src/themes/unifieds/shared/useDemoFallbackAllowed.ts`
@@ -76,3 +90,6 @@ Deliverables:
 - `apps/storefront/src/themes/unifieds/shared/subpages.css`
 - `apps/storefront/src/themes/properties/shared/useDemoFallbackAllowed.ts`
 - `apps/storefront/src/themes/properties/shared/property-utils.ts`
+- `apps/storefront/src/themes/ecommerce/shared/EcommerceExplorePage.tsx`
+- `apps/storefront/src/themes/ecommerce/shared/EcommerceCartPage.tsx`
+- `apps/storefront/src/themes/ecommerce/shared/subpages.css`

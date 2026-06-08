@@ -5,7 +5,7 @@ import React from 'react';
 type CatalogSyncAlertProps = {
   variant: 'demo' | 'production';
   error: string;
-  classPrefix?: 'ed' | 'ecl';
+  classPrefix?: 'ed' | 'ecl' | 'ef' | 'el';
 };
 
 export function CatalogSyncAlert({
@@ -23,7 +23,7 @@ export function CatalogSyncAlert({
     >
       <div className={`${prefix}-catalog-alert__badge`}>
         <span className={`${prefix}-catalog-alert__dot`} aria-hidden="true" />
-        <span className={prefix === 'ed' ? 'ed-mono' : 'ecl-product-kicker'}>
+        <span className={prefix === 'ed' ? 'ed-mono' : prefix === 'ef' ? 'ef-mono' : prefix === 'el' ? 'el-tech-font' : 'ecl-product-kicker'}>
           {isDemo ? 'Preview mode' : 'Connection error'}
         </span>
       </div>

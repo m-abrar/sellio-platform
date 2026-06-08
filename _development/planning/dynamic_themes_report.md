@@ -1,6 +1,6 @@
 # Dynamic Theme Conversion Status Report
 
-Last verified: 2026-06-08 (Round 2 — Properties phase complete; 33/52 baselined).
+Last verified: 2026-06-08 (Round 2 — Ecommerce phase complete; 35/52 baselined).
 
 This report tracks which Sellio storefront themes have moved from static prototype markup toward live, API-backed React views. It should be read together with `apps/backend/database/seeders/ThemeSeeder.php`, which is the current seeded theme source of truth.
 
@@ -27,7 +27,7 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Classifieds | `classifieds_local` | ✅ | Map + list split; shared catalog; inquiry forms |
 | Classifieds | `classifieds_general` | ✅ | Sidebar filters + chat widget; demo fallback policy |
 
-**Completed:** 33 / 52 (Round 1: 16 + Round 2 Unifieds: 6 + Round 2 Properties: 11)
+**Completed:** 35 / 52 (Round 1: 16 + Round 2: 19)
 
 ## Round 2 Progress
 
@@ -50,6 +50,8 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Properties | `properties_unified` | ✅ | Theme links; inquiry form inline validation |
 | Properties | `properties_urban` | ✅ | Theme links; inquiry form inline validation |
 | Properties | `properties_vacation` | ✅ | Booking form inline validation; theme links (hard lift) |
+| Ecommerce | `ecommerce_fashion` | ✅ | Explore + Cart; theme links; cart on product; demo policy (hard lift) |
+| Ecommerce | `ecommerce_electronics` | ✅ | Explore + Cart; theme links; cart on product; demo policy (hard lift) |
 
 Tracker: `_development/docs/storefront-round2-roadmap.md`.
 
@@ -64,12 +66,12 @@ Tracker: `_development/docs/storefront-round2-roadmap.md`.
 | Theme folders with direct `api.*` usage in theme TSX files | 52 |
 | Static / mostly static homepage themes remaining | 0 |
 | Product detail pages remaining | 0 |
-| Theme folders with `ExplorePage.tsx` | 12 |
-| Theme folders with `CartPage.tsx` | 5 |
+| Theme folders with `ExplorePage.tsx` | 14 |
+| Theme folders with `CartPage.tsx` | 7 |
 | Theme folders with static fallback/mock content in TSX | 36 |
 | Round 1 baselined themes | 16 |
-| Round 2 baselined themes | 17 |
-| Total baselined themes | 33 |
+| Round 2 baselined themes | 19 |
+| Total baselined themes | 35 |
 
 Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx` source files. This confirms live-data wiring exists, not that every route, interaction, empty state, fallback path, and visual breakpoint has been manually QA certified.
 
@@ -87,6 +89,8 @@ Only these themes currently provide dedicated explore route templates:
 - `autos_luxury`
 - `autos_modern`
 - `ecommerce_default`
+- `ecommerce_electronics`
+- `ecommerce_fashion`
 - `ecommerce_luxury`
 - `events_corporate`
 - `jobs_startup`
@@ -99,6 +103,8 @@ Only these themes currently provide dedicated explore route templates:
 Only these themes currently provide dedicated cart route templates:
 
 - `ecommerce_default`
+- `ecommerce_electronics`
+- `ecommerce_fashion`
 - `ecommerce_luxury`
 - `properties_classic`
 - `unifieds_default`
@@ -118,7 +124,7 @@ Product fallback should rarely be reached because all themes export `ProductPage
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Autos | 5 | 5 | 5 | 2 | 0 | 5 |
 | Classifieds | 6 | 6 | 6 | 0 | 0 | 6 |
-| Ecommerce | 4 | 4 | 4 | 0 | 0 | 2 |
+| Ecommerce | 4 | 4 | 4 | 4 | 4 | 2 |
 | Events | 5 | 5 | 5 | 1 | 0 | 3 |
 | Jobs | 6 | 6 | 6 | 1 | 0 | 5 |
 | Properties | 13 | 13 | 13 | 2 | 1 | 12 |

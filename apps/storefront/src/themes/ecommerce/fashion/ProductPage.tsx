@@ -2,9 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
-import { RunwayHeader, AtelierFooter, EditorialLookCard } from './components';
+import { EditorialLookCard } from './components';
+import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
+import { fetchProductDetail, resolveProductFailure } from '@/themes/ecommerce/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';
+import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
+import { addProductToCart } from '@/themes/unifieds/shared/cart';
 
 interface ProductPageProps {
   slug: string;
@@ -116,9 +120,14 @@ const SUGGESTED_LOOKS = [
 
 export default function ProductPage({ slug }: ProductPageProps) {
   const router = useRouter();
+  const themeLink = useEcommerceThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const [product, setProduct] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [errorTrace, setErrorTrace] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [cartNotice, setCartNotice] = useState(false);
 
   // Bespoke form states
   const [selectedSize, setSelectedSize] = useState<string>("M");
@@ -133,35 +142,45 @@ export default function ProductPage({ slug }: ProductPageProps) {
   });
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     async function loadData() {
-      try {
-        setLoading(true);
-        setErrorTrace(null);
-        const fetched = await api.getProductBySlug(slug);
-        if (fetched) {
-          setProduct(fetched);
-        } else {
+      setLoading(true);
+      const result = await fetchProductDetail(slug);
+
+      if (!isMounted) return;
+
+      if (result.ok) {
+        setProduct(result.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        setApiError(result.error);
+        const resolution = resolveProductFailure(slug, allowDemo);
+        if (resolution.mode === 'demo' && resolution.product) {
+          setProduct(resolution.product);
+          setUseFallback(true);
+        } else if (allowDemo) {
           setProduct(getFallbackProduct(slug));
+          setUseFallback(true);
+        } else {
+          setProduct(null);
+          setUseFallback(false);
         }
-      } catch (err: any) {
-        console.error("Atelier Single Product Load Failed:", err);
-        const traceInfo = {
-          message: err.message || "Axios API Failure",
-          url: err.config?.url ? `${err.config.baseURL || ''}${err.config.url}` : `/v1/products/${slug}`,
-          method: err.config?.method?.toUpperCase() || "GET",
-          status: err.response?.status || "TIMEOUT",
-          reason: err.code || "ERR_NETWORK"
-        };
-        setErrorTrace(JSON.stringify(traceInfo, null, 2));
-        setProduct(getFallbackProduct(slug));
-      } finally {
-        setLoading(false);
       }
+
+      setLoading(false);
     }
+
     loadData();
-  }, [slug]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [slug, allowDemo]);
 
   // Sync selected standard size to form
   const handleSizeSelect = (size: string) => {
@@ -176,7 +195,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   const handleBespokeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email) return;
+    if (!form.name || !form.email) {
+      setFormError('Please enter your name and email to submit a fitting request.');
+      return;
+    }
+    setFormError(null);
 
     setIsSubmitting(true);
     setTimeout(() => {
@@ -205,18 +228,16 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }, 1200);
   };
 
-  const resolveUrl = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/ecommerce_fashion${path}`;
-      }
-    }
-    return path === '/' ? '/' : path;
+  const handleAddToCart = () => {
+    if (!product) return;
+    setAddingToCart(true);
+    addProductToCart(product as Product);
+    setCartNotice(true);
+    setAddingToCart(false);
   };
 
   const handleSuggestedClick = (suggestedSlug: string) => {
-    router.push(resolveUrl(`/product/${suggestedSlug}`));
+    router.push(themeLink(`/product/${suggestedSlug}`));
   };
 
   if (loading) {
@@ -241,7 +262,17 @@ export default function ProductPage({ slug }: ProductPageProps) {
     );
   }
 
-  const priceFormatted = product?.pricing?.formatted || 
+  if (!product) {
+    return (
+      <div style={{ textAlign: 'center', padding: '8rem 2rem' }}>
+        <h2 style={{ fontFamily: 'var(--ef-serif)', fontSize: '2rem' }}>Garment not found</h2>
+        <p style={{ opacity: 0.6, margin: '1rem 0 2rem' }}>{apiError || 'This lookbook item could not be loaded.'}</p>
+        <a href={themeLink('/explore')} className="ef-btn-primary" style={{ textDecoration: 'none' }}>Browse lookbook</a>
+      </div>
+    );
+  }
+
+  const priceFormatted = product?.pricing?.formatted ||
     (typeof product?.price === 'number' ? `$${product.price.toLocaleString()}` : "$0.00");
   
   // Clean fallback values for specifications
@@ -255,42 +286,16 @@ export default function ProductPage({ slug }: ProductPageProps) {
   return (
     <div style={{ background: '#ffffff', minHeight: '100vh', padding: '0 0 10rem 0' }}>
       
-      {/* Dynamic Oyster Beige Connection Alert Trace */}
-      {errorTrace && (
-        <div style={{
-          background: 'var(--ef-oyster)',
-          borderBottom: '1px solid var(--ef-champagne)',
-          padding: '2.5rem 6%',
-          maxWidth: '100%',
-          textAlign: 'left',
-          fontFamily: 'var(--ef-sans)'
-        }}>
-          <div style={{ maxWidth: '1800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <span style={{ color: 'var(--ef-champagne)', fontSize: '1.2rem' }}>✦</span>
-              <h4 style={{ fontFamily: 'var(--ef-serif)', fontSize: '1.1rem', fontWeight: 700, margin: 0, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                Atelier Registry Off-Sync Fallback Mode
-              </h4>
-            </div>
-            <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.7, lineHeight: 1.6 }}>
-              The dynamic Laravel API database is currently offline. Activating premium local node resilience fallback. Loaded catalog backup details dynamically for: <code style={{ color: 'var(--ef-champagne)' }}>{slug}</code>.
-            </p>
-            <details style={{ cursor: 'pointer', marginTop: '0.5rem' }}>
-              <summary className="ef-mono" style={{ fontSize: '0.55rem', opacity: 0.6 }}>View Diagnostics Trace Console</summary>
-              <div style={{ background: '#ffffff', padding: '1.5rem', border: '1px solid var(--ef-border)', marginTop: '1rem' }}>
-                <pre style={{ margin: 0, fontSize: '0.75rem', fontFamily: 'monospace', color: '#bd2c00', whiteSpace: 'pre-wrap' }}>
-                  {errorTrace}
-                </pre>
-              </div>
-            </details>
-          </div>
+      {useFallback && apiError && (
+        <div style={{ padding: '0 6% 2rem', maxWidth: '1800px', margin: '0 auto' }}>
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="ef" />
         </div>
       )}
 
       {/* Back to Atelier Catalog Navigation */}
       <div style={{ padding: '4rem 6% 1rem', maxWidth: '1800px', margin: '0 auto' }}>
         <button 
-          onClick={() => router.push(resolveUrl('/'))}
+          onClick={() => router.push(themeLink('/'))}
           style={{
             background: 'none',
             border: 'none',
@@ -392,10 +397,28 @@ export default function ProductPage({ slug }: ProductPageProps) {
               fontSize: '0.95rem',
               lineHeight: 1.9,
               opacity: 0.7,
-              marginBottom: '4rem'
+              marginBottom: '2rem'
             }}>
               {product?.description}
             </p>
+
+            <button
+              type="button"
+              className="ef-btn-primary"
+              style={{ width: '100%', padding: '1.4rem', marginBottom: cartNotice ? '1rem' : '4rem' }}
+              onClick={handleAddToCart}
+              disabled={addingToCart}
+            >
+              {addingToCart ? 'Adding...' : 'Add to cart'}
+            </button>
+            {cartNotice && (
+              <p role="status" style={{ marginBottom: '4rem', fontSize: '0.9rem', opacity: 0.7 }}>
+                Added to cart.{' '}
+                <a href={themeLink('/cart')} style={{ color: 'var(--ef-champagne)', fontWeight: 700 }}>
+                  View cart
+                </a>
+              </p>
+            )}
 
             {/* Size Selector */}
             <div style={{ marginBottom: '4rem' }}>
@@ -580,6 +603,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   >
                     {isSubmitting ? "TRANSMITTING INQUIRY..." : "SUBMIT ATELIER SPECS"}
                   </button>
+                  {formError && (
+                    <p role="alert" style={{ marginTop: '1rem', color: '#b45309', fontSize: '0.85rem', textAlign: 'center' }}>
+                      {formError}
+                    </p>
+                  )}
                 </form>
               )}
             </div>

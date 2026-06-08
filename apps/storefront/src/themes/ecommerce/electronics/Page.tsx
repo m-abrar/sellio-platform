@@ -1,8 +1,11 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { ElectronicsHeader, ProductCard, SpecFeature, ElectronicsFooter } from './components';
+import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
+import { fetchProductsCatalog, resolveProductsFailure } from '@/themes/ecommerce/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';
+import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const FALLBACK_TRENDING_PRODUCTS = [
@@ -20,6 +23,8 @@ const FALLBACK_PERIPHERAL_PRODUCTS = [
 ];
 
 export default function Page() {
+  const themeLink = useEcommerceThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const heroBadge = useThemeContent('hero.badge', 'NEXT GEN RELEASE');
   const heroTitle = useThemeContent('hero.title', 'QUANTUM\nPERFORMANCE');
   const heroDescription = useThemeContent('hero.description', 'Experience untethered speed with the all-new line of RTX 50-Series Architecture. Built for the creators of tomorrow.');
@@ -36,27 +41,43 @@ export default function Page() {
   const peripheralsTitle = useThemeContent('peripherals.title', 'PRO PERIPHERALS');
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [errorTrace, setErrorTrace] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     async function loadData() {
-      try {
-        setLoading(true);
-        const res = await api.getProducts();
-        setProducts(res || []);
-      } catch (err: unknown) {
-        console.error("Laravel Database connection failure. Activating resilience fallback.", err);
-        setErrorTrace(
-          `DATABASE_OFFLINE_DIAGNOSTICS_TRACE\n` +
-          `STATUS: [OFFLINE] | LATENCY: [TIMEOUT] | REASON: [${err instanceof Error ? err.message : 'axios connection refused'}]\n` +
-          `ACTION: Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...`
-        );
-      } finally {
-        setLoading(false);
+      setLoading(true);
+      const result = await fetchProductsCatalog();
+
+      if (!isMounted) return;
+
+      if (result.ok) {
+        setProducts(result.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        setApiError(result.error);
+        const resolution = resolveProductsFailure(allowDemo);
+        if (resolution.mode === 'demo') {
+          setProducts(resolution.products);
+          setUseFallback(true);
+        } else {
+          setProducts([]);
+          setUseFallback(false);
+        }
       }
+
+      setLoading(false);
     }
+
     loadData();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [allowDemo]);
 
   const getProductImage = (product: Product, index: number) => {
     if (product.media?.featured_image) {
@@ -69,16 +90,7 @@ export default function Page() {
     return `/themes/ecommerce/electronics/${21 + (index % 8)}.webp`;
   };
 
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        const themeKey = window.location.pathname.split('/')[2];
-        return `/preview/${themeKey}${path}`;
-      }
-    }
-    return path;
-  };
+  const getThemeLink = (path: string) => themeLink(path);
 
   const mapApiProductToFrontend = (p: Product, index: number) => {
     const priceStr = p.pricing?.formatted || `$${Number(p.price).toFixed(2)}`;
@@ -120,29 +132,26 @@ export default function Page() {
     };
   };
 
-  const hasDynamicProducts = !errorTrace && products.length > 0;
+  const mapFallbackProduct = (p: typeof FALLBACK_TRENDING_PRODUCTS[number]) => ({
+    ...p,
+    onClick: () => {
+      window.location.href = getThemeLink(`/product/${p.slug}`);
+    },
+  });
 
-  const trendingProductsList = hasDynamicProducts
+  const trendingProductsList = products.length > 0
     ? products.slice(0, 4).map((p, idx) => mapApiProductToFrontend(p, idx))
-    : FALLBACK_TRENDING_PRODUCTS.map(p => ({
-        ...p,
-        onClick: () => {
-          if (typeof window !== 'undefined') {
-            window.location.href = getThemeLink(`/product/${p.slug}`);
-          }
-        }
-      }));
+    : useFallback
+      ? FALLBACK_TRENDING_PRODUCTS.map(mapFallbackProduct)
+      : [];
 
-  const peripheralProductsList = hasDynamicProducts
+  const peripheralProductsList = products.length > 4
     ? products.slice(4, 8).map((p, idx) => mapApiProductToFrontend(p, idx + 4))
-    : FALLBACK_PERIPHERAL_PRODUCTS.map(p => ({
-        ...p,
-        onClick: () => {
-          if (typeof window !== 'undefined') {
-            window.location.href = getThemeLink(`/product/${p.slug}`);
-          }
-        }
-      }));
+    : useFallback
+      ? FALLBACK_PERIPHERAL_PRODUCTS.map(mapFallbackProduct)
+      : products.length > 0
+        ? products.slice(0, Math.min(4, products.length)).map((p, idx) => mapApiProductToFrontend(p, idx + 4))
+        : [];
 
   return (
     <div className="ecommerce-electronics-wrapper">
@@ -201,8 +210,8 @@ export default function Page() {
                 {heroDescription}
             </p>
             <div style={{ display: 'flex', gap: '1rem' }}>
-                <a href="#components" className="el-btn el-btn-primary">{heroPrimaryCta}</a>
-                <a href="#specs" className="el-btn el-btn-outline">{heroSecondaryCta}</a>
+                <a href={themeLink('/explore')} className="el-btn el-btn-primary">{heroPrimaryCta}</a>
+                <a href={themeLink('/explore')} className="el-btn el-btn-outline">{heroSecondaryCta}</a>
             </div>
         </div>
         <div style={{ position: 'absolute', right: '5%', top: '50%', transform: 'translateY(-50%)', zIndex: 2, width: '45%' }}>
@@ -217,21 +226,14 @@ export default function Page() {
           <SpecFeature icon="🚀" title="Same-Day Dispatch" desc="Order by 4 PM EST for guaranteed same-day shipping via overnight couriers." />
       </div>
 
-      {/* Resilience Warning Diagnostic Tracer */}
-      {errorTrace && (
-        <div className="el-diagnostics-card" id="el-diagnostics-notice">
-          <div className="el-diagnostics-header">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-              <line x1="12" y1="9" x2="12" y2="13"></line>
-              <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
-            <span>{diagnosticsTitle}</span>
-          </div>
-          <p style={{ fontWeight: 600, fontSize: '0.95rem' }}>
-            {diagnosticsDescription}
-          </p>
-          <pre className="el-diagnostics-trace">{errorTrace}</pre>
+      {apiError && useFallback && (
+        <div style={{ margin: '0 5% 2rem' }}>
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="el" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div style={{ margin: '0 5% 2rem' }}>
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="el" />
         </div>
       )}
 
@@ -251,8 +253,13 @@ export default function Page() {
                     </div>
                   </div>
                 ))
-              ) : (
+              ) : trendingProductsList.length > 0 ? (
                 trendingProductsList.map((p, i) => <ProductCard key={i} {...p} />)
+              ) : (
+                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '4rem 2rem', border: '1px solid var(--el-border)', borderRadius: '8px' }}>
+                  <p style={{ color: 'var(--el-text-muted)' }}>No live products available. Publish inventory or browse explore.</p>
+                  <a href={themeLink('/explore')} className="el-btn el-btn-primary" style={{ display: 'inline-block', marginTop: '1.5rem' }}>Browse catalog</a>
+                </div>
               )}
           </div>
       </section>
@@ -283,9 +290,9 @@ export default function Page() {
                     </div>
                   </div>
                 ))
-              ) : (
+              ) : peripheralProductsList.length > 0 ? (
                 peripheralProductsList.map((p, i) => <ProductCard key={i} {...p} />)
-              )}
+              ) : null}
           </div>
       </section>
 
