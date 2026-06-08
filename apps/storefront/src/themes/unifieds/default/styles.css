@@ -644,6 +644,26 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none;
+}
+
+.ud-detail-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ud-detail-cart-notice {
+    color: var(--ud-slate);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.ud-detail-cart-notice a {
+    color: var(--ud-azure);
+    font-weight: 700;
+    text-decoration: none;
 }
 
 .core-btn-primary:hover {

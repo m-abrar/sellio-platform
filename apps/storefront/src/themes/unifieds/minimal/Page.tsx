@@ -6,6 +6,7 @@ import { useThemeContent } from '@/components/theme-content/ThemeContentProvider
 import { useMenuContext } from '@/components/menu/MenuProvider';
 import { isDemoFallbackAllowed } from '@/themes/unifieds/shared/demo-fallback';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
+import { formatProductPrice, getProductImage } from '@/themes/unifieds/shared/product-utils';
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -69,10 +70,11 @@ export default function Page() {
     { title: "Brushed Brass Wall Sconce", category: "Lighting", price: "$410", image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'><rect width='100%' height='100%' fill='%23fafafa'/><circle cx='300' cy='250' r='60' fill='%23e5e7eb'/><path d='M300 310v100' stroke='%23d1d5db' stroke-width='8'/></svg>" }
   ];
 
-  const getProductImage = (product: Product, index: number) => {
+  const getProductImageForCard = (product: Product, index: number) => {
     if (product.media?.featured_image || product.image_url) {
-      return product.media?.featured_image || product.image_url;
+      return getProductImage(product);
     }
+
     return defaultListings[index % defaultListings.length].image;
   };
 
@@ -196,7 +198,7 @@ export default function Page() {
           <p style={{ color: '#666', fontSize: '1.1rem', fontWeight: 300, maxWidth: '600px', margin: '0 auto' }}>{collectionDescription}</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem' }}>
+        <div className="usm-listings-grid">
           {loading ? (
             // Skeleton Loader
             [1, 2, 3].map((n) => (
@@ -218,7 +220,7 @@ export default function Page() {
             products.slice(0, 6).map((product, i) => (
               <a href={themeLink(`/product/${product.slug}`)} key={product.id || i} className="usm-listing-card" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="usm-card-img-wrap">
-                  <img src={getProductImage(product, i)} className="usm-card-img" alt={product.title} />
+                  <img src={getProductImageForCard(product, i)} className="usm-card-img" alt={product.title} />
                 </div>
                 <div className="usm-card-body">
                   <span className="usm-card-category">
@@ -226,14 +228,14 @@ export default function Page() {
                   </span>
                   <h3 className="usm-card-title">{product.title}</h3>
                   <div className="usm-card-price">
-                    {product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : '$980')}
+                    {formatProductPrice(product)}
                   </div>
                 </div>
               </a>
             ))
           ) : allowDemoFallback ? (
             defaultListings.map((item, i) => (
-              <div key={i} className="usm-listing-card" onClick={() => alert(`Reviewing: ${item.title}`)}>
+              <a href={themeLink('/explore')} key={i} className="usm-listing-card" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="usm-card-img-wrap">
                   <img src={item.image} className="usm-card-img" alt={item.title} />
                 </div>
@@ -242,7 +244,7 @@ export default function Page() {
                   <h3 className="usm-card-title">{item.title}</h3>
                   <div className="usm-card-price">{item.price}</div>
                 </div>
-              </div>
+              </a>
             ))
           ) : (
             <div className="usm-listing-state" role="status">
@@ -321,7 +323,7 @@ export default function Page() {
             <p style={{ color: '#666', fontSize: '1.1rem', fontWeight: 300 }}>{ctaDescription}</p>
           </div>
           <div>
-            <button className="silent-btn-primary" onClick={() => alert('Welcome to Universal Marketplace!')}>{ctaButtonLabel}</button>
+            <a href={themeLink('/explore')} className="silent-btn-primary" style={{ textDecoration: 'none' }}>{ctaButtonLabel}</a>
           </div>
         </div>
       </section>

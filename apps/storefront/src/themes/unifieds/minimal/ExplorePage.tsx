@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '@sellio/api-client';
 import type { Product, Category } from '@sellio/types';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
+import { formatProductPrice, getProductImage, isExploreSortOption, type ExploreSortOption } from '@/themes/unifieds/shared/product-utils';
 
 interface ExplorePageProps {
   initialCategorySlug?: string;
@@ -13,14 +14,13 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [listingError, setListingError] = useState<string | null>(null);
   const themeLink = useUnifiedThemeLink();
   
   // Search and Filter State
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [sortBy, setSortBy] = useState<'default' | 'price_asc' | 'price_desc'>('default');
-
-  const SYSTEM_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'><rect width='100%' height='100%' fill='%23F9FAFB'/><g transform='translate(176,110)' stroke='%23D1D5DB' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='44' height='44' rx='4'/><circle cx='15' cy='15' r='4'/><path d='M42 34L30 22 8 44'/></g><text x='50%' y='64%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='500' fill='%239CA3AF'>No image uploaded</text></svg>";
+  const [sortBy, setSortBy] = useState<ExploreSortOption>('default');
 
   useEffect(() => {
     async function loadData() {
@@ -31,6 +31,7 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
         ]);
         setProducts(fetchedProducts || []);
         setCategories(fetchedCategories || []);
+        setListingError(null);
 
         if (initialCategorySlug) {
           const matchedCategory = fetchedCategories?.find(
@@ -42,6 +43,7 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
         }
       } catch (err) {
         console.error('Failed to load explore content:', err);
+        setListingError(err instanceof Error ? err.message : 'Listings are temporarily unavailable.');
       } finally {
         setLoading(false);
       }
@@ -59,15 +61,7 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
   };
 
 
-  const getProductImage = (product: Product) => {
-    if (product.media?.featured_image) {
-      return product.media.featured_image;
-    }
-    if (product.image_url) {
-      return product.image_url;
-    }
-    return SYSTEM_PLACEHOLDER;
-  };
+  const getListingImage = (product: Product) => getProductImage(product);
 
   // Filter and Sort Logic
   const filteredProducts = products
@@ -175,7 +169,11 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
             </label>
             <select 
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(event) => {
+                if (isExploreSortOption(event.target.value)) {
+                  setSortBy(event.target.value);
+                }
+              }}
               style={{
                 width: '100%',
                 padding: '0.9rem 1.2rem',
@@ -209,6 +207,11 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
             </div>
           ))}
         </div>
+      ) : listingError ? (
+        <div className="usm-listing-state" role="status">
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 500, marginBottom: '0.5rem' }}>Explore listings could not be synchronized.</h3>
+          <p style={{ color: '#888', fontWeight: 300 }}>{listingError}</p>
+        </div>
       ) : filteredProducts.length > 0 ? (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem' }}>
           {filteredProducts.map((product) => (
@@ -219,7 +222,7 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
               <div className="usm-card-img-wrap">
-                <img src={getProductImage(product)} className="usm-card-img" alt={product.title} />
+                <img src={getListingImage(product)} className="usm-card-img" alt={product.title} />
               </div>
               <div className="usm-card-body">
                 <span className="usm-card-category">
@@ -227,7 +230,7 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
                 </span>
                 <h3 className="usm-card-title">{product.title}</h3>
                 <div className="usm-card-price">
-                  {product.pricing?.formatted || `$${Number(product.price).toLocaleString()}`}
+                  {formatProductPrice(product)}
                 </div>
               </div>
             </a>

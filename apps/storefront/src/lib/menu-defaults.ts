@@ -18,7 +18,9 @@ function fallbackHeaderItems(themeKey?: string): MenuItem[] {
     case 'classifieds':
       return links(['Listings', '/explore']);
     case 'ecommerce':
-      return links(['Shop', '/explore'], ['Explore', '/explore']);
+      return links(['Shop', '/explore'], ['Explore', '/explore'], ['Cart', '/cart']);
+    case 'unifieds':
+      return links(['Home', '/'], ['Explore', '/explore'], ['Cart', '/cart']);
     default:
       return links(['Home', '/'], ['Explore', '/explore']);
   }
@@ -76,9 +78,16 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
     if (themeKey === 'unifieds_default') {
       return footerMenu(location, 'Main Header Menu', links(
         ['Registry', '/'],
-        ['Features', '/explore'],
-        ['Analytics', '/explore'],
-        ['Enterprise', '/explore'],
+        ['Explore', '/explore'],
+        ['Cart', '/cart'],
+      ));
+    }
+
+    if (themeKey === 'unifieds_minimal') {
+      return footerMenu(location, 'Main Header Menu', links(
+        ['Home', '/'],
+        ['Explore', '/explore'],
+        ['Cart', '/cart'],
       ));
     }
 

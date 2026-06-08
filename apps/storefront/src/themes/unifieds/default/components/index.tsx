@@ -1,36 +1,16 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
+import { isCartMenuItem } from '@/themes/unifieds/shared/menu-utils';
+import { useUnifiedCartCount } from '@/themes/unifieds/shared/useUnifiedCartCount';
 
 export const OriginHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
+  const cartCount = useUnifiedCartCount();
   const themeLink = useUnifiedThemeLink();
-
-  useEffect(() => {
-    function updateCount() {
-      try {
-        const cartStr = localStorage.getItem('sellio_cart') || '[]';
-        const cart = JSON.parse(cartStr);
-        const count = cart.reduce((acc: number, item: { quantity?: number }) => acc + (item.quantity || 0), 0);
-        setCartCount(count);
-      } catch (error) {
-        console.error('Failed to parse unified default cart badge:', error);
-      }
-    }
-
-    updateCount();
-    window.addEventListener('cartUpdated', updateCount);
-    window.addEventListener('storage', updateCount);
-
-    return () => {
-      window.removeEventListener('cartUpdated', updateCount);
-      window.removeEventListener('storage', updateCount);
-    };
-  }, []);
 
   return (
     <header className="ud-header">
@@ -58,7 +38,7 @@ export const OriginHeader = () => {
         renderItem={(item, { href, className, onNavigate }) => (
           <a href={href} className={className} onClick={onNavigate} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
             {item.title}
-            {item.title === 'Cart' && cartCount > 0 && (
+            {isCartMenuItem(item) && cartCount > 0 && (
               <span className="ud-cart-badge">{cartCount}</span>
             )}
           </a>

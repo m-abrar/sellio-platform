@@ -4,6 +4,7 @@ import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { CoreFeatures, GlobalTrust } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+import { formatProductPrice, getProductImage } from '@/themes/unifieds/shared/product-utils';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
@@ -78,13 +79,9 @@ export default function Page() {
     };
   }, []);
 
-  const getProductImage = (product: Product) => (
-    product.media?.featured_image || product.image_url || placeholderImage
-  );
+  const getProductImageForCard = (product: Product) => getProductImage(product, placeholderImage);
 
-  const formatPrice = (product: Product) => (
-    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Contact for pricing')
-  );
+  const formatPrice = (product: Product) => formatProductPrice(product);
 
   return (
     <div>
@@ -208,7 +205,7 @@ export default function Page() {
                   {products.slice(0, 6).map((product) => (
                       <a href={themeLink(`/product/${product.slug}`)} className="ud-listing-card" key={product.id}>
                           <div className="ud-listing-image-wrap">
-                              <img src={getProductImage(product)} alt={product.title} />
+                              <img src={getProductImageForCard(product)} alt={product.title} />
                           </div>
                           <div className="ud-listing-body">
                               <div className="ud-mono">CATALOG_ID_{product.id}</div>
@@ -241,7 +238,7 @@ export default function Page() {
               <p style={{ fontSize: '1.25rem', color: 'var(--ud-slate)', lineHeight: 2, marginBottom: '5rem' }}>
                 {ctaDescription}
               </p>
-              <button className="core-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.2rem' }} id="ud-btn-cta-handshake" onClick={() => alert('Core node handshake handshake synchronized.')}>{ctaButtonLabel}</button>
+              <a href={themeLink('/explore')} className="core-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.2rem', textDecoration: 'none' }} id="ud-btn-cta-handshake">{ctaButtonLabel}</a>
           </div>
       </section>
     </div>

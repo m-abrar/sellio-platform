@@ -328,6 +328,12 @@
     grid-column: 1 / -1;
 }
 
+.usm-listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 3rem;
+}
+
 .usm-cart-layout {
     display: grid;
     grid-template-columns: 2.5fr 1fr;

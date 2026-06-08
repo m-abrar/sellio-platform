@@ -3,14 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Category, Product } from '@sellio/types';
+import { formatProductPrice, getProductImage, isExploreSortOption, type ExploreSortOption } from '@/themes/unifieds/shared/product-utils';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 interface ExplorePageProps {
   initialCategorySlug?: string;
   initialSearch?: string;
 }
-
-const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%23f8fafc'/><g transform='translate(328,214)' stroke='%2394a3b8' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='8'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='Inter, sans-serif' font-size='13' font-weight='700' letter-spacing='2' fill='%2364758b'>LISTING IMAGE</text></svg>";
 
 export default function ExplorePage({ initialCategorySlug, initialSearch = '' }: ExplorePageProps) {
   const [products, setProducts] = useState<Product[]>([]);
@@ -19,7 +18,7 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
   const [listingError, setListingError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [sortBy, setSortBy] = useState<'default' | 'price_asc' | 'price_desc'>('default');
+  const [sortBy, setSortBy] = useState<ExploreSortOption>('default');
   const themeLink = useUnifiedThemeLink();
 
   useEffect(() => {
@@ -78,13 +77,7 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
     window.history.pushState(null, '', newPath);
   };
 
-  const getProductImage = (product: Product) => (
-    product.media?.featured_image || product.image_url || placeholderImage
-  );
-
-  const formatPrice = (product: Product) => (
-    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Contact for pricing')
-  );
+  const getListingImage = (product: Product) => getProductImage(product);
 
   const filteredProducts = products
     .filter((product) => {
@@ -141,7 +134,11 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
           <select
             id="ud-explore-sort"
             value={sortBy}
-            onChange={(event) => setSortBy(event.target.value as 'default' | 'price_asc' | 'price_desc')}
+            onChange={(event) => {
+              if (isExploreSortOption(event.target.value)) {
+                setSortBy(event.target.value);
+              }
+            }}
           >
             <option value="default">Default Registry</option>
             <option value="price_asc">Price: Low to High</option>
@@ -174,14 +171,14 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
           {filteredProducts.map((product) => (
             <a href={themeLink(`/product/${product.slug}`)} className="ud-listing-card" key={product.id}>
               <div className="ud-listing-image-wrap">
-                <img src={getProductImage(product)} alt={product.title} />
+                <img src={getListingImage(product)} alt={product.title} />
               </div>
               <div className="ud-listing-body">
                 <div className="ud-mono">CATALOG_ID_{product.id}</div>
                 <h3>{product.title}</h3>
                 <p>{product.description || 'Verified marketplace listing synchronized from the Sellio catalog.'}</p>
                 <div className="ud-listing-meta">
-                  <span>{formatPrice(product)}</span>
+                  <span>{formatProductPrice(product)}</span>
                   <span>View Record</span>
                 </div>
               </div>

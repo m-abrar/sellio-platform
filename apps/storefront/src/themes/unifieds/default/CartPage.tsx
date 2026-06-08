@@ -1,90 +1,27 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import type { Product } from '@sellio/types';
+import React, { useState } from 'react';
+import { calculateCartTotals } from '@/themes/unifieds/shared/cart';
+import { CART_THUMB_PLACEHOLDER, getProductImage } from '@/themes/unifieds/shared/product-utils';
+import { useUnifiedCart } from '@/themes/unifieds/shared/useUnifiedCart';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
-
-const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='75' viewBox='0 0 100 75'><rect width='100%' height='100%' fill='%23F9FAFB'/><g transform='translate(38,25)' stroke='%23D1D5DB' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='20' height='20' rx='2'/><circle cx='8' cy='8' r='2'/><path d='M20 16L14 10 4 20'/></g></svg>";
-
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { items, loading, updateQuantity, removeItem, clearCart } = useUnifiedCart();
   const [checkoutComplete, setCheckoutComplete] = useState(false);
   const [submittingOrder, setSubmittingOrder] = useState(false);
   const themeLink = useUnifiedThemeLink();
-
-  useEffect(() => {
-    function loadCart() {
-      try {
-        const cartStr = localStorage.getItem('sellio_cart') || '[]';
-        setCartItems(JSON.parse(cartStr));
-      } catch (error) {
-        console.error('Failed to load unified default cart:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadCart();
-    window.addEventListener('storage', loadCart);
-    window.addEventListener('cartUpdated', loadCart);
-
-    return () => {
-      window.removeEventListener('storage', loadCart);
-      window.removeEventListener('cartUpdated', loadCart);
-    };
-  }, []);
-
-  const saveCart = (items: CartItem[]) => {
-    setCartItems(items);
-    try {
-      localStorage.setItem('sellio_cart', JSON.stringify(items));
-      window.dispatchEvent(new Event('cartUpdated'));
-    } catch (error) {
-      console.error('Failed to save unified default cart:', error);
-    }
-  };
-
-  const updateQuantity = (productId: number, delta: number) => {
-    const updated = cartItems.map((item) => {
-      if (item.product.id === productId) {
-        return { ...item, quantity: Math.max(1, item.quantity + delta) };
-      }
-      return item;
-    });
-    saveCart(updated);
-  };
-
-  const removeItem = (productId: number) => {
-    saveCart(cartItems.filter((item) => item.product.id !== productId));
-  };
-
-  const getProductImage = (product: Product) => (
-    product.media?.featured_image || product.image_url || placeholderImage
-  );
-
-  const calculateSubtotal = () => (
-    cartItems.reduce((total, item) => total + (Number(item.product.price) * item.quantity), 0)
-  );
 
   const handleCheckout = () => {
     setSubmittingOrder(true);
     window.setTimeout(() => {
       setSubmittingOrder(false);
       setCheckoutComplete(true);
-      saveCart([]);
+      clearCart();
     }, 1500);
   };
 
-  const subtotal = calculateSubtotal();
-  const shipping = subtotal > 0 ? 15 : 0;
-  const tax = subtotal * 0.085;
-  const total = subtotal + shipping + tax;
+  const { subtotal, shipping, tax, total } = calculateCartTotals(items);
 
   if (loading) {
     return (
@@ -114,13 +51,13 @@ export default function CartPage() {
         <h1>Shopping Cart</h1>
       </div>
 
-      {cartItems.length > 0 ? (
+      {items.length > 0 ? (
         <div className="ud-cart-layout">
           <div className="ud-cart-items">
-            {cartItems.map((item) => (
+            {items.map((item) => (
               <article className="ud-cart-item" key={item.product.id}>
                 <div className="ud-cart-item-image">
-                  <img src={getProductImage(item.product)} alt={item.product.title} />
+                  <img src={getProductImage(item.product, CART_THUMB_PLACEHOLDER)} alt={item.product.title} />
                 </div>
                 <div className="ud-cart-item-meta">
                   <h2>{item.product.title}</h2>

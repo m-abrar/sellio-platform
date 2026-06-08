@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
-import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
+import { isCartMenuItem } from '@/themes/unifieds/shared/menu-utils';
+import { useUnifiedCartCount } from '@/themes/unifieds/shared/useUnifiedCartCount';
 
 export const SilentHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
+  const cartCount = useUnifiedCartCount();
   const themeLink = useUnifiedThemeLink();
 
   // Post Listing Modal States
@@ -19,26 +20,6 @@ export const SilentHeader = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  React.useEffect(() => {
-    function updateCount() {
-      try {
-        const cartStr = localStorage.getItem('sellio_cart') || '[]';
-        const cart = JSON.parse(cartStr);
-        const count = cart.reduce((acc: number, item: any) => acc + item.quantity, 0);
-        setCartCount(count);
-      } catch (err) {
-        console.error('Failed to parse cart badge:', err);
-      }
-    }
-    updateCount();
-    window.addEventListener('cartUpdated', updateCount);
-    window.addEventListener('storage', updateCount);
-    return () => {
-      window.removeEventListener('cartUpdated', updateCount);
-      window.removeEventListener('storage', updateCount);
-    };
-  }, []);
 
   const handlePostSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,7 +87,7 @@ export const SilentHeader = () => {
                 onClick={onNavigate}
               >
                 {item.title}
-                {item.title === 'Cart' && cartCount > 0 && (
+                {isCartMenuItem(item) && cartCount > 0 && (
                   <span
                     style={{
                       background: 'var(--usm-primary)',

@@ -26,5 +26,18 @@ Goal: baseline **2 themes per vertical** (16 total).
 
 - `apps/storefront/src/themes/unifieds/shared/useUnifiedThemeLink.ts`
 - `apps/storefront/src/themes/unifieds/shared/demo-fallback.ts`
+- `apps/storefront/src/themes/unifieds/shared/cart.ts`
+- `apps/storefront/src/themes/unifieds/shared/product-utils.ts`
+- `apps/storefront/src/themes/unifieds/shared/useUnifiedCart.ts`
+- `apps/storefront/src/themes/unifieds/shared/useUnifiedCartCount.ts`
+- `apps/storefront/src/themes/unifieds/shared/menu-utils.ts`
 
 Clone these patterns for other verticals in later phases.
+
+## Rework notes (2026-06-08)
+
+- Centralized cart read/write/add and cart badge syncing
+- Theme-aware nav defaults now include Cart for `unifieds_minimal` and `unifieds_default`
+- Removed hardcoded preview URLs, alert-based CTAs, and fake `$980` pricing
+- Product pages show inline add-to-cart feedback with View cart link
+- Explore pages share sort typing, price formatting, and API error states
