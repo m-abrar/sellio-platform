@@ -15,7 +15,7 @@ Goal: baseline **2 themes per vertical** (16 total).
 
 1. Unifieds — `unifieds_minimal`, `unifieds_default` ✅
 2. Properties — `properties_rental`, `properties_modern` ✅
-3. Ecommerce — `ecommerce_default`, `ecommerce_luxury`
+3. Ecommerce — `ecommerce_default`, `ecommerce_luxury` ✅
 4. Autos — `autos_modern`, `autos_luxury`
 5. Events — `events_corporate`, `events_classic`
 6. Jobs — `jobs_startup`, `jobs_corporate`
@@ -39,6 +39,15 @@ Goal: baseline **2 themes per vertical** (16 total).
 
 Clone these patterns for other verticals in later phases.
 
+## Shared utilities (Ecommerce)
+
+- `apps/storefront/src/themes/ecommerce/shared/useEcommerceThemeLink.ts`
+- `apps/storefront/src/themes/ecommerce/shared/demo-fallback.ts`
+- `apps/storefront/src/themes/ecommerce/shared/catalog.ts`
+- `apps/storefront/src/themes/ecommerce/shared/fallback-data.ts`
+- `apps/storefront/src/themes/ecommerce/shared/CatalogSyncAlert.tsx`
+- Cart reuses `apps/storefront/src/themes/unifieds/shared/cart.ts` (`sellio_cart` storage key)
+
 ## Rework notes (2026-06-08)
 
 ### Unifieds
@@ -52,3 +61,9 @@ Clone these patterns for other verticals in later phases.
 - Shared `usePropertyThemeLink` and demo-fallback policy for rental + modern
 - `properties_rental`: List property CTA links to admin create flow (no alert)
 - `properties_modern`: theme links via MenuProvider; product/home API error parity with rental
+
+### Ecommerce
+- Shared catalog fetch + demo fallback products for default and luxury
+- Added themed Explore + Cart pages; removed hardcoded `/preview/` URLs
+- Product pages use shared cart helpers with inline “View cart” feedback
+- Theme-aware links on home grids, hero CTAs, and luxury header logo

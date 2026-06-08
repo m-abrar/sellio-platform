@@ -5,6 +5,7 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 
 const luxuryActionIcon = (title: string) => {
     if (title === 'Search') return '🔍';
@@ -14,12 +15,13 @@ const luxuryActionIcon = (title: string) => {
 };
 
 export const LuxuryHeader = () => {
+    const themeLink = useEcommerceThemeLink();
     const [isOpen, setIsOpen] = useState(false);
     const brandLabel = useThemeContent('header.brand_label', 'AURELIA');
 
     return (
         <header className="ecl-header">
-            <a href="#" className="ecl-logo">{brandLabel}</a>
+            <a href={themeLink('/')} className="ecl-logo">{brandLabel}</a>
             
             <button 
                 className={`ecl-hamburger ${isOpen ? 'ecl-hamburger-open' : ''}`} 
