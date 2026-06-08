@@ -4,11 +4,13 @@ import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { CoreFeatures, GlobalTrust } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
+  const themeLink = useUnifiedThemeLink();
 
   const heroEyebrow = useThemeContent('hero.eyebrow', 'FOUNDATIONAL_DISTRIBUTION_V1');
   const heroTitle = useThemeContent('hero.title', 'The Core of\nDistribution.');
@@ -111,23 +113,31 @@ export default function Page() {
                 {heroDescription}
               </p>
               <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }} className="ud-hero-buttons">
-                  <button className="core-btn-primary" id="ud-btn-explore" onClick={() => document.getElementById('ud-features-section')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <button className="core-btn-primary" id="ud-btn-explore" onClick={() => document.getElementById('ud-listings-section')?.scrollIntoView({ behavior: 'smooth' })}>
                     {heroPrimaryCtaLabel}
                   </button>
-                  <button style={{ 
-                      background: 'transparent', 
-                      border: '2px solid var(--ud-azure)', 
+                  <a
+                    href={themeLink('/explore')}
+                    style={{
+                      background: 'transparent',
+                      border: '2px solid var(--ud-azure)',
                       color: 'var(--ud-azure)',
-                      padding: '1.25rem 3.5rem', 
-                      borderRadius: '12px', 
-                      fontFamily: 'var(--ud-font-heading)', 
-                      fontWeight: 700, 
-                      fontSize: '0.9rem', 
+                      padding: '1.25rem 3.5rem',
+                      borderRadius: '12px',
+                      fontFamily: 'var(--ud-font-heading)',
+                      fontWeight: 700,
+                      fontSize: '0.9rem',
                       cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                  }} id="ud-btn-spec" onClick={() => alert('Core protocol spec initialized.')}>
-                      {heroSecondaryCtaLabel}
-                  </button>
+                      transition: 'all 0.3s ease',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    id="ud-btn-spec"
+                  >
+                    {heroSecondaryCtaLabel}
+                  </a>
               </div>
           </div>
           <div style={{ position: 'relative' }} className="ud-hero-img-wrapper">
@@ -196,7 +206,7 @@ export default function Page() {
           ) : (
               <div className="ud-listings-grid">
                   {products.slice(0, 6).map((product) => (
-                      <a href={`/product/${product.slug}`} className="ud-listing-card" key={product.id}>
+                      <a href={themeLink(`/product/${product.slug}`)} className="ud-listing-card" key={product.id}>
                           <div className="ud-listing-image-wrap">
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>

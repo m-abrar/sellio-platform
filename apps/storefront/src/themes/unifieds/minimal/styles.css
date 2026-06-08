@@ -320,6 +320,21 @@
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
 }
 
+.usm-listing-state {
+    border: 1px dashed var(--usm-border);
+    border-radius: 12px;
+    padding: 4rem 2rem;
+    text-align: center;
+    grid-column: 1 / -1;
+}
+
+.usm-cart-layout {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
 /* --- RESPONSIVE & MOBILE STRUCTURAL REFOLDING --- */
 @media (max-width: 1024px) {
     .usm-hamburger {
@@ -575,4 +590,11 @@
 
 .usm-category-card:hover .usm-category-title {
     color: var(--usm-primary);
+}
+
+@media (max-width: 768px) {
+    .usm-cart-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
 }

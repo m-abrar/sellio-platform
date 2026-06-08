@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import type { Product } from '@sellio/types';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 interface CartItem {
   product: Product;
@@ -12,6 +13,7 @@ export default function CartPage() {
   const [loading, setLoading] = useState(true);
   const [checkoutComplete, setCheckoutComplete] = useState(false);
   const [submittingOrder, setSubmittingOrder] = useState(false);
+  const themeLink = useUnifiedThemeLink();
 
   const SYSTEM_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='75' viewBox='0 0 100 75'><rect width='100%' height='100%' fill='%23F9FAFB'/><g transform='translate(38,25)' stroke='%23D1D5DB' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='20' height='20' rx='2'/><circle cx='8' cy='8' r='2'/><path d='M20 16L14 10 4 20'/></g></svg>";
 
@@ -110,7 +112,7 @@ export default function CartPage() {
         <p style={{ maxWidth: '600px', margin: '0 auto 3rem', color: '#666', fontWeight: 300, lineHeight: 1.8 }}>
           Thank you for your purchase. Your dynamic order has been generated under the Universal checkouts process.
         </p>
-        <a href="/preview/unifieds_minimal" className="silent-btn-primary" style={{ textDecoration: 'none' }}>
+        <a href={themeLink('/')} className="silent-btn-primary" style={{ textDecoration: 'none' }}>
           Continue Browsing
         </a>
       </div>
@@ -127,7 +129,7 @@ export default function CartPage() {
       </div>
 
       {cartItems.length > 0 ? (
-        <div style={{ display: 'grid', gridTemplateColumns: '2.5fr 1fr', gap: '4rem', alignItems: 'start' }}>
+        <div className="usm-cart-layout">
           
           {/* Cart Line Items */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -258,7 +260,7 @@ export default function CartPage() {
           </svg>
           <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: 'var(--usm-ink)', marginBottom: '0.5rem' }}>Your Bag is Empty</h3>
           <p style={{ color: '#888', fontWeight: 300, marginBottom: '2.5rem' }}>Browse our curated catalog to add premium elements.</p>
-          <a href="/preview/unifieds_minimal" className="silent-btn-primary" style={{ textDecoration: 'none' }}>
+          <a href={themeLink('/explore')} className="silent-btn-primary" style={{ textDecoration: 'none' }}>
             Browse Directory
           </a>
         </div>

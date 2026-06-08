@@ -1,8 +1,33 @@
 # Dynamic Theme Conversion Status Report
 
-Last verified: 2026-05-26 by workspace scan.
+Last verified: 2026-06-08 (Round 1 — Unifieds phase complete).
 
 This report tracks which Sellio storefront themes have moved from static prototype markup toward live, API-backed React views. It should be read together with `apps/backend/database/seeders/ThemeSeeder.php`, which is the current seeded theme source of truth.
+
+## Round 1 Progress (2 themes per vertical)
+
+Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/storefront-round1-roadmap.md`.
+
+| Vertical | Theme | Status | Notes |
+| :--- | :--- | :---: | :--- |
+| Unifieds | `unifieds_minimal` | ✅ | Theme-aware links, live empty/error states, Explore + Cart certified |
+| Unifieds | `unifieds_default` | ✅ | Explore + Cart added; theme-aware links; cart badge in header |
+| Properties | `properties_rental` | ⏳ | Next phase |
+| Properties | `properties_modern` | ⏳ | Pending |
+| Ecommerce | `ecommerce_default` | ⏳ | Pending |
+| Ecommerce | `ecommerce_luxury` | ⏳ | Pending |
+| Autos | `autos_modern` | ⏳ | Pending |
+| Autos | `autos_luxury` | ⏳ | Pending |
+| Events | `events_corporate` | ⏳ | Pending |
+| Events | `events_classic` | ⏳ | Pending |
+| Jobs | `jobs_startup` | ⏳ | Pending |
+| Jobs | `jobs_corporate` | ⏳ | Pending |
+| Services | `services_marketplace` | ⏳ | Pending |
+| Services | `services_local` | ⏳ | Pending |
+| Classifieds | `classifieds_local` | ⏳ | Pending |
+| Classifieds | `classifieds_general` | ⏳ | Pending |
+
+**Completed:** 2 / 16
 
 ## Current Summary
 
@@ -15,9 +40,10 @@ This report tracks which Sellio storefront themes have moved from static prototy
 | Theme folders with direct `api.*` usage in theme TSX files | 52 |
 | Static / mostly static homepage themes remaining | 0 |
 | Product detail pages remaining | 0 |
-| Theme folders with `ExplorePage.tsx` | 7 |
+| Theme folders with `ExplorePage.tsx` | 10 |
 | Theme folders with `CartPage.tsx` | 2 |
 | Theme folders with static fallback/mock content in TSX | 36 |
+| Round 1 baselined themes | 2 |
 
 Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx` source files. This confirms live-data wiring exists, not that every route, interaction, empty state, fallback path, and visual breakpoint has been manually QA certified.
 

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 interface ProductPageProps {
   slug: string;
@@ -20,6 +21,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [addingToCart, setAddingToCart] = useState(false);
+  const themeLink = useUnifiedThemeLink();
 
   useEffect(() => {
     let isMounted = true;
@@ -114,7 +116,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="ud-mono" style={{ color: 'var(--ud-azure)', marginBottom: '1rem' }}>RECORD_UNAVAILABLE</div>
           <h1>Listing details could not be loaded.</h1>
           <p>{errorMessage || 'The requested listing does not exist or has been removed.'}</p>
-          <a href="/preview/unifieds_default" className="core-btn-primary">Return to Core Feed</a>
+          <a href={themeLink('/')} className="core-btn-primary">Return to Core Feed</a>
         </section>
       </main>
     );
@@ -122,7 +124,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="ud-detail-page">
-      <a href="/preview/unifieds_default" className="ud-detail-back">
+      <a href={themeLink('/')} className="ud-detail-back">
         <span aria-hidden="true">←</span>
         Back to Core Feed
       </a>

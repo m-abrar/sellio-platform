@@ -2,12 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '@sellio/api-client';
 import type { Product, Category } from '@sellio/types';
-import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useMenuContext } from '@/components/menu/MenuProvider';
+import { isDemoFallbackAllowed } from '@/themes/unifieds/shared/demo-fallback';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [listingError, setListingError] = useState<string | null>(null);
+  const themeLink = useUnifiedThemeLink();
+  const { isPreview } = useMenuContext();
+  const allowDemoFallback = isDemoFallbackAllowed(isPreview);
 
   const heroEyebrow = useThemeContent('hero.eyebrow', 'UNIVERSAL MINIMALISM');
   const heroTitle = useThemeContent('hero.title', 'Discover the Art\nof Simplicity.');
@@ -45,8 +52,10 @@ export default function Page() {
         ]);
         setProducts(fetchedProducts || []);
         setCategories(fetchedCategories || []);
+        setListingError(null);
       } catch (err) {
         console.error('Failed to load unified minimal data:', err);
+        setListingError(err instanceof Error ? err.message : 'Listings are temporarily unavailable.');
       } finally {
         setLoading(false);
       }
@@ -133,13 +142,13 @@ export default function Page() {
             >
               {heroPrimaryCtaLabel}
             </button>
-            <button 
-              className="silent-btn-primary" 
-              style={{ backgroundColor: 'transparent', border: '1px solid var(--usm-border)', color: 'var(--usm-ink)' }}
-              onClick={() => document.getElementById('usm-explore-section')?.scrollIntoView({ behavior: 'smooth' })}
+            <a
+              href={themeLink('/explore')}
+              className="silent-btn-primary"
+              style={{ backgroundColor: 'transparent', border: '1px solid var(--usm-border)', color: 'var(--usm-ink)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             >
               {heroSecondaryCtaLabel}
-            </button>
+            </a>
           </div>
         </div>
       </header>
@@ -200,9 +209,14 @@ export default function Page() {
                 </div>
               </div>
             ))
+          ) : listingError ? (
+            <div className="usm-listing-state" role="status">
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 500, marginBottom: '0.5rem' }}>Listings could not be synchronized.</h3>
+              <p style={{ color: '#888', fontWeight: 300 }}>{listingError}</p>
+            </div>
           ) : products.length > 0 ? (
             products.slice(0, 6).map((product, i) => (
-              <a href={`/preview/unifieds_minimal/product/${product.slug}`} key={product.id || i} className="usm-listing-card" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <a href={themeLink(`/product/${product.slug}`)} key={product.id || i} className="usm-listing-card" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="usm-card-img-wrap">
                   <img src={getProductImage(product, i)} className="usm-card-img" alt={product.title} />
                 </div>
@@ -217,7 +231,7 @@ export default function Page() {
                 </div>
               </a>
             ))
-          ) : (
+          ) : allowDemoFallback ? (
             defaultListings.map((item, i) => (
               <div key={i} className="usm-listing-card" onClick={() => alert(`Reviewing: ${item.title}`)}>
                 <div className="usm-card-img-wrap">
@@ -230,6 +244,11 @@ export default function Page() {
                 </div>
               </div>
             ))
+          ) : (
+            <div className="usm-listing-state" role="status">
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 500, marginBottom: '0.5rem' }}>No live listings are available yet.</h3>
+              <p style={{ color: '#888', fontWeight: 300 }}>Add product records in the backend and this feed will hydrate automatically.</p>
+            </div>
           )}
         </div>
       </section>
@@ -244,18 +263,22 @@ export default function Page() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2rem', justifyContent: 'center' }}>
           {categories.length > 0 ? (
             categories.slice(0, 8).map((cat, i) => (
-              <a href={`/preview/unifieds_minimal/explore/${cat.slug.toLowerCase()}`} key={cat.id || i} className="usm-category-card">
+              <a href={themeLink(`/explore/${cat.slug.toLowerCase()}`)} key={cat.id || i} className="usm-category-card">
                 {defaultCategories[i % defaultCategories.length].icon}
                 <h5 className="usm-category-title">{cat.title}</h5>
               </a>
             ))
-          ) : (
+          ) : allowDemoFallback ? (
             defaultCategories.map((cat, i) => (
-              <a href={`/preview/unifieds_minimal/explore/${cat.slug.toLowerCase()}`} key={i} className="usm-category-card">
+              <a href={themeLink(`/explore/${cat.slug.toLowerCase()}`)} key={i} className="usm-category-card">
                 {cat.icon}
                 <h5 className="usm-category-title">{cat.title}</h5>
               </a>
             ))
+          ) : (
+            <div className="usm-listing-state" role="status" style={{ gridColumn: '1 / -1' }}>
+              <p style={{ color: '#888', fontWeight: 300 }}>Categories will appear once the catalog registry is populated.</p>
+            </div>
           )}
         </div>
       </section>

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '@sellio/api-client';
 import type { Product, Category } from '@sellio/types';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 interface ExplorePageProps {
   initialCategorySlug?: string;
@@ -12,6 +13,7 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const themeLink = useUnifiedThemeLink();
   
   // Search and Filter State
   const [searchQuery, setSearchQuery] = useState(initialSearch);
@@ -49,16 +51,10 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
 
   const handleCategoryChange = (catId: number | null) => {
     setSelectedCategory(catId);
-    
-    // Update browser URL state dynamically
-    const isPreview = window.location.pathname.startsWith('/preview/');
-    const prefix = isPreview ? window.location.pathname.split('/').slice(0, 3).join('/') : '';
     const matchedCategory = categories.find(c => c.id === catId);
-    
     const newPath = matchedCategory
-      ? `${prefix}/explore/${matchedCategory.slug.toLowerCase()}`
-      : `${prefix}/explore`;
-      
+      ? themeLink(`/explore/${matchedCategory.slug.toLowerCase()}`)
+      : themeLink('/explore');
     window.history.pushState(null, '', newPath);
   };
 
@@ -217,7 +213,7 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem' }}>
           {filteredProducts.map((product) => (
             <a 
-              href={`/preview/unifieds_minimal/product/${product.slug}`} 
+              href={themeLink(`/product/${product.slug}`)} 
               key={product.id} 
               className="usm-listing-card" 
               style={{ textDecoration: 'none', color: 'inherit' }}

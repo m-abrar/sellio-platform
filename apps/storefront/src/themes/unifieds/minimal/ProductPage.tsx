@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 interface ProductPageProps {
   slug: string;
@@ -11,6 +12,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false);
+  const themeLink = useUnifiedThemeLink();
 
   const SYSTEM_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='450' viewBox='0 0 600 450'><rect width='100%' height='100%' fill='%23F9FAFB'/><g transform='translate(276,185)' stroke='%23D1D5DB' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='44' height='44' rx='4'/><circle cx='15' cy='15' r='4'/><path d='M42 34L30 22 8 44'/></g><text x='50%' y='60%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='500' fill='%239CA3AF'>No image uploaded</text></svg>";
 
@@ -84,7 +86,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       <div className="usm-product-details-container" style={{ padding: '10rem 6% 10rem', textAlign: 'center' }}>
         <h2 style={{ fontFamily: 'var(--usm-font-heading)', fontSize: '2rem', marginBottom: '1.5rem' }}>Listing Not Found</h2>
         <p style={{ color: '#666', marginBottom: '2.5rem' }}>The requested product listing does not exist or has been removed.</p>
-        <a href="/preview/unifieds_minimal" className="silent-btn-primary" style={{ textDecoration: 'none', padding: '0.8rem 2.5rem' }}>
+        <a href={themeLink('/')} className="silent-btn-primary" style={{ textDecoration: 'none', padding: '0.8rem 2.5rem' }}>
           Return to Catalog
         </a>
       </div>
@@ -96,7 +98,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       {/* Back Navigator */}
       <div style={{ marginBottom: '3rem' }}>
         <a 
-          href="/preview/unifieds_minimal" 
+          href={themeLink('/')} 
           style={{ textDecoration: 'none', color: '#666', fontSize: '0.9rem', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export const SilentHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const themeLink = useUnifiedThemeLink();
 
   // Post Listing Modal States
   const [showModal, setShowModal] = useState(false);
@@ -64,7 +66,7 @@ export const SilentHeader = () => {
 
   return (
     <header className="usm-header">
-      <a href="/preview/unifieds_minimal" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <a href={themeLink('/')} style={{ textDecoration: 'none', color: 'inherit' }}>
         <div className="usm-logo" style={{ textTransform: 'none', letterSpacing: 'normal', fontSize: '1.4rem', fontWeight: 700 }}>
           Universal<span style={{ color: 'var(--usm-primary)' }}>.</span>
         </div>

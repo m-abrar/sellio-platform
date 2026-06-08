@@ -1,18 +1,42 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
-import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export const OriginHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+  const themeLink = useUnifiedThemeLink();
+
+  useEffect(() => {
+    function updateCount() {
+      try {
+        const cartStr = localStorage.getItem('sellio_cart') || '[]';
+        const cart = JSON.parse(cartStr);
+        const count = cart.reduce((acc: number, item: { quantity?: number }) => acc + (item.quantity || 0), 0);
+        setCartCount(count);
+      } catch (error) {
+        console.error('Failed to parse unified default cart badge:', error);
+      }
+    }
+
+    updateCount();
+    window.addEventListener('cartUpdated', updateCount);
+    window.addEventListener('storage', updateCount);
+
+    return () => {
+      window.removeEventListener('cartUpdated', updateCount);
+      window.removeEventListener('storage', updateCount);
+    };
+  }, []);
 
   return (
     <header className="ud-header">
-      <div className="ud-logo">
+      <a href={themeLink('/')} className="ud-logo" style={{ textDecoration: 'none' }}>
         CORE<span style={{ color: 'var(--ud-azure)' }}>ORIGIN</span>
-      </div>
+      </a>
       
       <button 
           className={`ud-hamburger ${isOpen ? 'ud-hamburger-open' : ''}`} 
@@ -31,7 +55,14 @@ export const OriginHeader = () => {
         className={`ud-nav ${isOpen ? 'ud-nav-open' : ''}`}
         linkClassName="ud-nav-link"
         onNavigate={() => setIsOpen(false)}
-        renderItem={defaultNavItemRenderer}
+        renderItem={(item, { href, className, onNavigate }) => (
+          <a href={href} className={className} onClick={onNavigate} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+            {item.title}
+            {item.title === 'Cart' && cartCount > 0 && (
+              <span className="ud-cart-badge">{cartCount}</span>
+            )}
+          </a>
+        )}
       />
 
       <MenuActionButtons
