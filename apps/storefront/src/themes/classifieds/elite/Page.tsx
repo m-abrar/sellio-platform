@@ -2,267 +2,31 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@sellio/api-client';
-import type { ClassifiedListing, Category } from '@sellio/types';
+import type { ClassifiedListing } from '@sellio/types';
 import {
   getClassifiedCategoryKey,
   getClassifiedCategoryTitle,
 } from '@/lib/classified-category';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
 import { PremiumCard } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
+import { fetchClassifiedsHome, resolveClassifiedsFailure } from '@/themes/classifieds/shared/catalog';
+import { ELITE_DEMO_CATEGORIES } from '@/themes/classifieds/shared/fallback-data';
+import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
+import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
 // Premium high-fidelity Classifieds Elite fallback listings matching ClassifiedListing schema
-const FALLBACK_CLASSIFIEDS: ClassifiedListing[] = [
-  {
-    id: 1,
-    title: "1963 Ferrari 250 GTO Berlinetta",
-    slug: "1963-ferrari-250-gto-berlinetta",
-    description: "One of only 36 models ever built by Scaglietti. Completely documented ownership lineage, Ferrari Classiche certified. Features matching numbers, pristine race record, and iconic Rosso Corsa paintwork.",
-    pricing: {
-      base_price: 72000000,
-      sale_price: 72000000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$72,000,000",
-      formatted_short: "$72M",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 5,
-      condition_label: "Classiche A+",
-      badge_class: "cd-badge-like-new",
-      quantity: 1,
-      dimensions: "VAULT_MILAN_98"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=400",
-    },
-    taxonomy: {
-      category: "motors",
-      brand: "Ferrari"
-    },
-    location: {
-      city: "Maranello",
-      state: "Italy"
-    },
-    status: {
-      is_published: true,
-      is_featured: true,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  },
-  {
-    id: 2,
-    title: "Claude Monet 'Water Lilies' (1906 Oil)",
-    slug: "claude-monet-water-lilies-1906-oil",
-    description: "A signature oil on canvas masterpiece from Monet's highly coveted water garden series in Giverny. Flawless canvas preservation, documented in major museum exhibitions globally.",
-    pricing: {
-      base_price: 54000000,
-      sale_price: 54000000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$54,000,000",
-      formatted_short: "$54M",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 5,
-      condition_label: "Certified Museum Grade",
-      badge_class: "cd-badge-like-new",
-      quantity: 1,
-      dimensions: "VAULT_GENEVA_12"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=400",
-    },
-    taxonomy: {
-      category: "art",
-      brand: "Claude Monet"
-    },
-    location: {
-      city: "Paris",
-      state: "France"
-    },
-    status: {
-      is_published: true,
-      is_featured: true,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  },
-  {
-    id: 3,
-    title: "Macallan Fine & Rare 1926 Whisky (60 Year)",
-    slug: "macallan-fine-rare-1926-whisky-60-year",
-    description: "Voted the most collectible single-malt bottle in existence. Matured in seasoned sherry casks for 60 years. Hand-signed label from the master distiller with original presentation chest.",
-    pricing: {
-      base_price: 1900000,
-      sale_price: 1900000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$1,900,000",
-      formatted_short: "$1.9M",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 5,
-      condition_label: "Grade 10 Cask",
-      badge_class: "cd-badge-like-new",
-      quantity: 1,
-      dimensions: "VAULT_EDINBURGH_44"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1527061011665-3652c757a4d4?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1527061011665-3652c757a4d4?q=80&w=400",
-    },
-    taxonomy: {
-      category: "spirits",
-      brand: "Macallan"
-    },
-    location: {
-      city: "Speyside",
-      state: "Scotland"
-    },
-    status: {
-      is_published: true,
-      is_featured: false,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  },
-  {
-    id: 4,
-    title: "Patek Philippe Sky Moon Tourbillon",
-    slug: "patek-philippe-sky-moon-tourbillon",
-    description: "One of the most complicated wristwatches in horological history. Dual-faced dial showing cathedral gongs minute repeater, perpetual calendar, solar time, and sky chart configurations.",
-    pricing: {
-      base_price: 3200000,
-      sale_price: 3200000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$3,200,000",
-      formatted_short: "$3.2M",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 5,
-      condition_label: "Patek Seal Perfect",
-      badge_class: "cd-badge-like-new",
-      quantity: 1,
-      dimensions: "VAULT_ZURICH_87"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=400",
-    },
-    taxonomy: {
-      category: "horology",
-      brand: "Patek Philippe"
-    },
-    location: {
-      city: "Geneva",
-      state: "Switzerland"
-    },
-    status: {
-      is_published: true,
-      is_featured: true,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  },
-  {
-    id: 5,
-    title: "The Pink Star Oval Vivid Diamond Ring",
-    slug: "the-pink-star-oval-vivid-diamond-ring",
-    description: "A monumental 59.60 carat oval mixed-cut fancy vivid pink diamond. Flawless clarity grade, verified by GIA. Mounted on an elegant premium platinum band setting.",
-    pricing: {
-      base_price: 71200000,
-      sale_price: 71200000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$71,200,000",
-      formatted_short: "$71.2M",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 5,
-      condition_label: "Flawless Fancy Vivid",
-      badge_class: "cd-badge-like-new",
-      quantity: 1,
-      dimensions: "VAULT_LONDON_02"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=400",
-    },
-    taxonomy: {
-      category: "art",
-      brand: "Sotheby's Fine Jewelry"
-    },
-    location: {
-      city: "London",
-      state: "United Kingdom"
-    },
-    status: {
-      is_published: true,
-      is_featured: false,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  },
-  {
-    id: 6,
-    title: "Koenigsegg Jesko Absolut Hypercar",
-    slug: "koenigsegg-jesko-absolut-hypercar",
-    description: "The fastest car Koenigsegg will ever build. Custom carbon weave active bodywork, 1600 HP twin-turbo V8, and custom titanium exhaust components. 1 of 1 signature specification.",
-    pricing: {
-      base_price: 3400000,
-      sale_price: 3400000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$3,400,000",
-      formatted_short: "$3.4M",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 5,
-      condition_label: "Factory Certified 1 of 1",
-      badge_class: "cd-badge-like-new",
-      quantity: 1,
-      dimensions: "VAULT_GOTHENBURG_30"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=400",
-    },
-    taxonomy: {
-      category: "motors",
-      brand: "Koenigsegg"
-    },
-    location: {
-      city: "Ängelholm",
-      state: "Sweden"
-    },
-    status: {
-      is_published: true,
-      is_featured: false,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  }
-];
+const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
 
 export default function Page() {
   const router = useRouter();
+  const themeLink = useClassifiedsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const heroSubtitle = useThemeContent('hero.subtitle', 'Vetted Global Advisory Node');
   const heroTitle = useThemeContent('hero.title', 'Curating high-value vaults for serious collectors.');
   const heroSearchPlaceholder = useThemeContent('hero.search_placeholder', 'Search by collection title, artist, country origin...');
   const heroSearchButton = useThemeContent('hero.search_button', 'Search');
-  const diagnosticsTitle = useThemeContent('diagnostics.title', 'VAULT RESILIENCE LAYER: Private Catalog Backups Engaged');
-  const diagnosticsTrace = useThemeContent('diagnostics.trace', 'Axios connection refused. Sandboxed database unreachable. Displaying curated assets.');
   const spotlightTag = useThemeContent('spotlight.tag', 'CURATED SPOTLIGHT OF THE WEEK');
   const spotlightTitle = useThemeContent('spotlight.title', 'Featured High-Value Acquisitions');
   const catalogEyebrow = useThemeContent('catalog.eyebrow', 'Browse Curated Catalog');
@@ -272,16 +36,6 @@ export default function Page() {
   const emptyButton = useThemeContent('empty.clear_button', 'Clear Refinements');
   const prospectusButton = useThemeContent('quickview.prospectus_button', 'Request Prospectus memorandum');
   const inquiryButton = useThemeContent('quickview.inquiry_button', 'Inquire Concierge Vault');
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/classifieds_elite${path}`;
-      }
-    }
-    return path;
-  };
 
   // Stateful client bindings
   const [items, setItems] = useState<ClassifiedListing[]>([]);
@@ -294,7 +48,7 @@ export default function Page() {
   // Resiliency status markers
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
-  const [errorTrace, setErrorTrace] = useState<string>('');
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // Local Favorites
   const [favorites, setFavorites] = useState<number[]>([]);
@@ -306,69 +60,68 @@ export default function Page() {
   const [spotlightIndex, setSpotlightIndex] = useState(0);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchEliteClassifieds = async () => {
       setLoading(true);
-      try {
-        const response = await api.getClassifieds();
-        if (response && response.data && response.data.length > 0) {
-          setItems(response.data);
-          setUseFallback(false);
+      const result = await fetchClassifiedsHome();
 
-          // Extract category ribbon from API categories sidebar if populated
-          if (response.sidebar?.categories) {
-            const mappedCats = response.sidebar.categories.map((cat: Category) => ({
-              id: cat.slug || String(cat.id),
-              name: cat.title
-            }));
-            const deduplicated = [{ id: "all", name: "All Vaults" }];
-            mappedCats.forEach((c) => {
-              if (!deduplicated.some(d => d.id === c.id)) {
-                deduplicated.push(c);
-              }
-            });
-            setCategories(deduplicated);
-          } else {
-            // Deduplicate from data taxonomy categories if sidebar categories aren't present
-            const dynamicCategories = [{ id: "all", name: "All Vaults" }];
-            response.data.forEach((item) => {
-              const catSlug = getClassifiedCategoryKey(item.taxonomy?.category);
-              if (catSlug && !dynamicCategories.some(d => d.id === catSlug)) {
-                dynamicCategories.push({
-                  id: catSlug,
-                  name: getClassifiedCategoryTitle(item.taxonomy?.category, catSlug),
-                });
-              }
-            });
-            setCategories(dynamicCategories);
-          }
+      if (!isMounted) return;
+
+      if (result.ok && result.response.data && result.response.data.length > 0) {
+        setItems(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+
+        if (result.response.sidebar?.categories) {
+          const mappedCats = result.response.sidebar.categories.map((cat) => ({
+            id: cat.slug || String(cat.id),
+            name: cat.title,
+          }));
+          const deduplicated = [{ id: 'all', name: 'All Vaults' }];
+          mappedCats.forEach((c) => {
+            if (!deduplicated.some((d) => d.id === c.id)) {
+              deduplicated.push(c);
+            }
+          });
+          setCategories(deduplicated);
         } else {
-          console.warn("Classifieds Elite database returned empty. Running backups.");
-          setErrorTrace("Classifieds Elite database returned empty.");
-          loadLocalFallback();
+          const dynamicCategories = [{ id: 'all', name: 'All Vaults' }];
+          result.response.data.forEach((item) => {
+            const catSlug = getClassifiedCategoryKey(item.taxonomy?.category);
+            if (catSlug && !dynamicCategories.some((d) => d.id === catSlug)) {
+              dynamicCategories.push({
+                id: catSlug,
+                name: getClassifiedCategoryTitle(item.taxonomy?.category, catSlug),
+              });
+            }
+          });
+          setCategories(dynamicCategories);
         }
-      } catch (err: any) {
-        console.error("AxiosError: Connection failure while fetching elite assets:", err);
-        setErrorTrace(err?.stack || err?.message || String(err));
-        loadLocalFallback();
-      } finally {
-        setLoading(false);
-      }
-    };
+      } else {
+        const errorMsg = result.ok ? 'No classifieds returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveClassifiedsFailure(allowDemo, 'elite');
 
-    const loadLocalFallback = () => {
-      setItems(FALLBACK_CLASSIFIEDS);
-      setCategories([
-        { id: "all", name: "All Vaults" },
-        { id: "motors", name: "Exotic Motors" },
-        { id: "art", name: "Fine Art" },
-        { id: "spirits", name: "Rare Vintages" },
-        { id: "horology", name: "Luxury Horology" }
-      ]);
-      setUseFallback(true);
+        if (resolution.mode === 'demo') {
+          setItems(resolution.listings);
+          setCategories(ELITE_DEMO_CATEGORIES);
+          setUseFallback(true);
+        } else {
+          setItems([]);
+          setUseFallback(false);
+        }
+      }
+
+      setLoading(false);
     };
 
     fetchEliteClassifieds();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [allowDemo]);
 
   // Filter listings based on category pills and search inputs
   const filteredAssets = items.filter((item) => {
@@ -408,8 +161,12 @@ export default function Page() {
     }
   };
 
-  const handleShareClick = (title: string, channel: string) => {
-    alert(`🔒 Premium Share: Vetted investor invitation link for "${title}" copied to ${channel} successfully.`);
+  const handleShareClick = async (title: string, channel: string) => {
+    try {
+      await navigator.clipboard.writeText(`${title} (${channel})`);
+    } catch {
+      // Clipboard API may be unavailable in some contexts; ignore quietly.
+    }
   };
 
   // Helper translators to fit Premium theme structures
@@ -468,25 +225,13 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Gold connection resilient diagnostics warning panel themed matching elite styles */}
-      {useFallback && (
-        <div style={{
-          backgroundColor: '#0c0c0d',
-          border: '2.5px dashed var(--prem-accent)',
-          borderRadius: '16px',
-          padding: '1.75rem',
-          margin: '2.5rem 5% 0',
-          fontFamily: 'var(--prem-sans)',
-          boxShadow: '0 8px 32px rgba(212, 175, 55, 0.05)',
-          color: '#ffffff'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--prem-accent)', fontWeight: '800', fontSize: '1.1rem', marginBottom: '0.6rem', fontFamily: 'var(--prem-serif)', letterSpacing: '1px' }}>
-            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--prem-accent)', animation: 'pulse 1.5s infinite' }}></span>
-            {diagnosticsTitle}
-          </div>
-          <div style={{ color: 'var(--prem-muted)', fontSize: '0.85rem', lineHeight: '1.6' }}>
-            <strong>DIAGNOSTICS TRACE:</strong> {errorTrace || diagnosticsTrace}
-          </div>
+      {(useFallback || apiError) && apiError && (
+        <div style={{ margin: '2.5rem 5% 0' }}>
+          <CatalogSyncAlert
+            classPrefix="ce"
+            variant={useFallback ? 'demo' : 'production'}
+            error={apiError}
+          />
         </div>
       )}
 
@@ -565,7 +310,7 @@ export default function Page() {
       </section>
 
       {/* Main Collections Grid */}
-      <section className="elite-section">
+      <section id="ce-catalog" className="elite-section">
         <div className="section-head">
           <div>
             <span style={{ fontSize: '0.75rem', color: 'var(--prem-accent)', fontWeight: 800, letterSpacing: '3px', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>
@@ -614,7 +359,7 @@ export default function Page() {
                 onQuickView={() => setQuickViewAsset(asset)}
                 onToggleFavorite={() => toggleFavoriteAsset(asset.id)}
                 onShare={() => handleShareClick(asset.title, 'clipboard')}
-                onClick={() => router.push(getThemeLink(`/product/${asset.slug}`))}
+                onClick={() => router.push(themeLink(`/product/${asset.slug}`))}
               />
             ))}
           </div>
@@ -662,7 +407,7 @@ export default function Page() {
 
             <button 
               className="elite-modal-cta"
-              onClick={() => alert(`🔒 SECURE CONCIERGE LINK:\nDirect live terminal communication initiated with key vault custodian at ${getAssetVaultId(quickViewAsset)} regarding acquisition of "${quickViewAsset.title}".`)}
+              onClick={() => window.open(adminCreateClassifiedUrl, '_blank', 'noopener,noreferrer')}
             >
               {inquiryButton}
             </button>

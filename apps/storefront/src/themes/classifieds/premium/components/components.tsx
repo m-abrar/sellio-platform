@@ -4,14 +4,17 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
 
 interface HeaderProps {
-  onPostClick: () => void;
+  homeHref?: string;
 }
 
-export const PremiumHeader = ({ onPostClick }: HeaderProps) => (
+const adminCreateClassifiedUrl = getAdminBaseUrl() + '/admin/classifieds/create';
+
+export const PremiumHeader = ({ homeHref = '#' }: HeaderProps) => (
   <header className="cp-header">
-    <a href="#" className="cp-logo" onClick={(e) => { e.preventDefault(); window.location.reload(); }}>
+    <a href={homeHref} className="cp-logo">
       Sellio<span>Premium</span>
     </a>
     
@@ -25,13 +28,17 @@ export const PremiumHeader = ({ onPostClick }: HeaderProps) => (
         renderItem={defaultNavItemRenderer}
       />
       <MenuActionButtons
-        buttonClassName="cp-btn-post"
-        as="button"
-        onAction={onPostClick}
+        linkClassName="cp-btn-post"
         renderItem={(item, { className, onNavigate }) => (
-          <button type="button" className={className} onClick={() => { onPostClick(); onNavigate?.(); }}>
+          <a
+            href={adminCreateClassifiedUrl}
+            className={className}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => onNavigate?.()}
+          >
             💼 {item.title}
-          </button>
+          </a>
         )}
       />
     </div>

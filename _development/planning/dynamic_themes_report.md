@@ -1,6 +1,6 @@
 # Dynamic Theme Conversion Status Report
 
-Last verified: 2026-06-08 (Round 2 — Services phase complete; 48/52 baselined).
+Last verified: 2026-06-08 (Round 2 complete; 52/52 baselined).
 
 This report tracks which Sellio storefront themes have moved from static prototype markup toward live, API-backed React views. It should be read together with `apps/backend/database/seeders/ThemeSeeder.php`, which is the current seeded theme source of truth.
 
@@ -27,7 +27,7 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Classifieds | `classifieds_local` | ✅ | Map + list split; shared catalog; inquiry forms |
 | Classifieds | `classifieds_general` | ✅ | Sidebar filters + chat widget; demo fallback policy |
 
-**Completed:** 48 / 52 (Round 1: 16 + Round 2: 32)
+**Completed:** 52 / 52 (Round 1: 16 + Round 2: 36) — Round 2 complete
 
 ## Round 2 Progress
 
@@ -65,6 +65,10 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Services | `services_corporate` | ✅ | Shared catalog; consultation lead form; theme links; demo policy |
 | Services | `services_creative` | ✅ | Shared catalog; project brief form; theme links; demo policy |
 | Services | `services_health` | ✅ | Shared catalog; consultation form; theme links; demo policy |
+| Classifieds | `classifieds_deals` | ✅ | Shared catalog; flash deal inquiry; theme links; demo policy (hard lift) |
+| Classifieds | `classifieds_elite` | ✅ | Shared catalog; vault inquiry; theme links; demo policy |
+| Classifieds | `classifieds_modern` | ✅ | Shared catalog; marketplace inquiry; theme links; demo policy (hard lift) |
+| Classifieds | `classifieds_premium` | ✅ | Shared catalog; M&A inquiry; theme links; demo policy |
 
 Tracker: `_development/docs/storefront-round2-roadmap.md`.
 

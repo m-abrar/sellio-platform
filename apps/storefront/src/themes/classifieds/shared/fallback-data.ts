@@ -1,4 +1,13 @@
 import type { ClassifiedListing } from '@sellio/types';
+import { DEALS_FALLBACK_CLASSIFIEDS } from './fallback-deals';
+import { ELITE_FALLBACK_CLASSIFIEDS } from './fallback-elite';
+import { MODERN_FALLBACK_CLASSIFIEDS } from './fallback-modern';
+import { PREMIUM_FALLBACK_CLASSIFIEDS } from './fallback-premium';
+
+export { DEALS_FALLBACK_CLASSIFIEDS } from './fallback-deals';
+export { ELITE_FALLBACK_CLASSIFIEDS } from './fallback-elite';
+export { MODERN_FALLBACK_CLASSIFIEDS } from './fallback-modern';
+export { PREMIUM_FALLBACK_CLASSIFIEDS } from './fallback-premium';
 
 export const LOCAL_FALLBACK_CLASSIFIEDS: ClassifiedListing[] = [
   {
@@ -445,3 +454,65 @@ export function getGeneralRelatedListings(listing: ClassifiedListing, limit = 3)
     (item) => item.taxonomy?.category === listing.taxonomy?.category && item.slug !== listing.slug,
   ).slice(0, limit);
 }
+
+
+export type ClassifiedsFallbackVariant =
+  | 'local'
+  | 'general'
+  | 'deals'
+  | 'elite'
+  | 'modern'
+  | 'premium';
+
+const FALLBACK_LISTINGS: Record<ClassifiedsFallbackVariant, ClassifiedListing[]> = {
+  local: LOCAL_FALLBACK_CLASSIFIEDS,
+  general: GENERAL_FALLBACK_CLASSIFIEDS,
+  deals: DEALS_FALLBACK_CLASSIFIEDS,
+  elite: ELITE_FALLBACK_CLASSIFIEDS,
+  modern: MODERN_FALLBACK_CLASSIFIEDS,
+  premium: PREMIUM_FALLBACK_CLASSIFIEDS,
+};
+
+export function getFallbackClassifieds(variant: ClassifiedsFallbackVariant) {
+  return FALLBACK_LISTINGS[variant];
+}
+
+export function findFallbackListing(slug: string, variant: ClassifiedsFallbackVariant) {
+  return FALLBACK_LISTINGS[variant].find((item) => item.slug === slug);
+}
+
+export function getFallbackRelatedListings(
+  listing: ClassifiedListing,
+  variant: ClassifiedsFallbackVariant,
+  limit = 4,
+) {
+  return FALLBACK_LISTINGS[variant]
+    .filter(
+      (item) =>
+        item.taxonomy?.category === listing.taxonomy?.category && item.slug !== listing.slug,
+    )
+    .slice(0, limit);
+}
+
+export const ELITE_DEMO_CATEGORIES = [
+  { id: 'all', name: 'All Vaults' },
+  { id: 'motors', name: 'Exotic Motors' },
+  { id: 'art', name: 'Fine Art' },
+  { id: 'spirits', name: 'Rare Vintages' },
+  { id: 'horology', name: 'Luxury Horology' },
+];
+
+export const MODERN_DEMO_CATEGORIES = [
+  { id: 'all', name: 'Everything' },
+  { id: 'electronics', name: 'Electronics' },
+  { id: 'furniture', name: 'Furniture' },
+  { id: 'fashion', name: 'Fashion' },
+];
+
+export const PREMIUM_DEMO_CATEGORIES = [
+  { id: 'all', name: 'All Categories' },
+  { id: 'tech', name: 'Technology' },
+  { id: 'hospitality', name: 'Hospitality' },
+  { id: 'manufacturing', name: 'Manufacturing' },
+  { id: 'retail', name: 'Retail' },
+];

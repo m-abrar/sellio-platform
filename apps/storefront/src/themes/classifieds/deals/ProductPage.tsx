@@ -1,355 +1,33 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@sellio/api-client';
 import type { ClassifiedListing } from '@sellio/types';
 import { DealsHeader, DealCard, DealsFooter, CountdownTimer } from './components';
+import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
+import {
+  fetchClassifiedDetail,
+  fetchClassifiedsHome,
+  getRelatedFromApi,
+  resolveClassifiedFailure,
+} from '@/themes/classifieds/shared/catalog';
+import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
+import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
 interface ProductPageProps {
   slug: string;
 }
 
-const FALLBACK_DEALS: ClassifiedListing[] = [
-  {
-    id: 1,
-    title: "Apple Watch Series 8 (GPS, 41mm)",
-    slug: "apple-watch-series-8-gps-41mm",
-    description: "Keep track of your health and fitness with the Apple Watch Series 8. Features advanced sensors for insights into your physical well-being, an Always-On Retina display, robust water resistance, and fast-charging capabilities. Perfect condition, original packaging included.",
-    short_description: "Apple Watch Series 8 in pristine space gray condition.",
-    pricing: {
-      base_price: 399,
-      sale_price: 249,
-      is_on_sale: true,
-      discount: "37",
-      formatted: "$249.00",
-      formatted_short: "$249",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 5,
-      condition_label: "Like New",
-      badge_class: "cd-badge-like-new",
-      age_years: 1,
-      quantity: 3,
-      dimensions: "41mm x 35mm x 10.7mm",
-      warranty: "6 Months Seller Warranty"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?q=80&w=400",
-      gallery: [],
-      all_photos_count: 1
-    },
-    taxonomy: {
-      category: "electronics",
-      type: "For Sale",
-      brand: "Apple",
-      tags: ["smartwatch", "fitness", "apple", "wearables"]
-    },
-    location: {
-      city: "San Francisco",
-      state: "CA",
-      country: "USA",
-      address: "Downtown SF"
-    },
-    status: {
-      is_published: true,
-      is_featured: true,
-      is_new_listing: false,
-      is_shipping: true,
-      inquiry_count: 5
-    },
-    seller: {
-      id: 101,
-      name: "GadgetPro",
-      avatar: null
-    }
-  },
-  {
-    id: 2,
-    title: "Canon EOS R6 Mirrorless Camera (Body Only)",
-    slug: "canon-eos-r6-mirrorless-camera-body-only",
-    description: "The Canon EOS R6 is a versatile tool for photographers and videographers alike. Boasting a 20MP Full-Frame sensor, 4K60 video capabilities, 5-axis in-body image stabilization, and up to 20 fps mechanical shooting. Exceptionally clean body, negligible shutter count.",
-    short_description: "Pro-tier mirrorless camera body, pristine condition.",
-    pricing: {
-      base_price: 2299,
-      sale_price: 1399,
-      is_on_sale: true,
-      discount: "39",
-      formatted: "$1,399.00",
-      formatted_short: "$1,399",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 4.8,
-      condition_label: "Excellent",
-      badge_class: "cd-badge-excellent",
-      age_years: 1.5,
-      quantity: 1,
-      dimensions: "138.4mm x 97.5mm x 88.4mm",
-      warranty: "1 Year Remaining"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=400",
-      gallery: [],
-      all_photos_count: 1
-    },
-    taxonomy: {
-      category: "electronics",
-      type: "For Sale",
-      brand: "Canon",
-      tags: ["camera", "mirrorless", "canon", "photography"]
-    },
-    location: {
-      city: "New York",
-      state: "NY",
-      country: "USA",
-      address: "Manhattan Studio"
-    },
-    status: {
-      is_published: true,
-      is_featured: true,
-      is_new_listing: true,
-      is_shipping: true,
-      inquiry_count: 12
-    },
-    seller: {
-      id: 102,
-      name: "LensMaster",
-      avatar: null
-    }
-  },
-  {
-    id: 3,
-    title: "Sony WH-1000XM5 Headphones",
-    slug: "sony-wh-1000xm5-headphones",
-    description: "Industry-leading noise canceling wireless headphones with crystal-clear hands-free calling, smart features, and unmatched audio fidelity. Features a lightweight design with soft fit leather headband.",
-    short_description: "Sony WH-1000XM5 wireless ANC headphones in black.",
-    pricing: {
-      base_price: 399,
-      sale_price: 219,
-      is_on_sale: true,
-      discount: "45",
-      formatted: "$219.00",
-      formatted_short: "$219",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 5,
-      condition_label: "Brand New",
-      badge_class: "cd-badge-new",
-      age_years: 0.1,
-      quantity: 5,
-      dimensions: "Standard Over-Ear",
-      warranty: "2 Year Global Warranty"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400",
-      gallery: [],
-      all_photos_count: 1
-    },
-    taxonomy: {
-      category: "electronics",
-      type: "For Sale",
-      brand: "Sony",
-      tags: ["headphones", "anc", "audio", "sony", "music"]
-    },
-    location: {
-      city: "Los Angeles",
-      state: "CA",
-      country: "USA",
-      address: "Beverly Hills"
-    },
-    status: {
-      is_published: true,
-      is_featured: true,
-      is_new_listing: false,
-      is_shipping: true,
-      inquiry_count: 9
-    },
-    seller: {
-      id: 103,
-      name: "AudioDepot",
-      avatar: null
-    }
-  },
-  {
-    id: 4,
-    title: "Nike Air Max 270 Running Shoes",
-    slug: "nike-air-max-270-running-shoes",
-    description: "Nike's first lifestyle Air Max brings you style, comfort, and big attitude. Features an extra-large air pocket for supreme cushioning. Vibrant crimson red accents that match your active daily energy.",
-    short_description: "Nike Air Max 270 in original box, never worn outdoors.",
-    pricing: {
-      base_price: 160,
-      sale_price: 85,
-      is_on_sale: true,
-      discount: "47",
-      formatted: "$85.00",
-      formatted_short: "$85",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 4.9,
-      condition_label: "Like New",
-      badge_class: "cd-badge-like-new",
-      age_years: 0.2,
-      quantity: 2,
-      dimensions: "US Men Size 10.5",
-      warranty: "No Warranty"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=400",
-      gallery: [],
-      all_photos_count: 1
-    },
-    taxonomy: {
-      category: "fashion",
-      type: "For Sale",
-      brand: "Nike",
-      tags: ["shoes", "sneakers", "nike", "fashion", "running"]
-    },
-    location: {
-      city: "Chicago",
-      state: "IL",
-      country: "USA",
-      address: "Lincoln Park"
-    },
-    status: {
-      is_published: true,
-      is_featured: false,
-      is_new_listing: false,
-      is_shipping: true,
-      inquiry_count: 2
-    },
-    seller: {
-      id: 104,
-      name: "KickZilla",
-      avatar: null
-    }
-  },
-  {
-    id: 5,
-    title: "Herman Miller Aeron Ergonomic Chair - Size B",
-    slug: "herman-miller-aeron-ergonomic-chair-size-b",
-    description: "The gold standard of ergonomic office seating. Fully loaded Size B model with posturefit lumbar support, tilt limiter, seat angle adjustment, and fully adjustable vinyl armrests. Pellet mesh is in superb shape without any tears.",
-    short_description: "Classic Herman Miller Aeron office chair, Size B.",
-    pricing: {
-      base_price: 1200,
-      sale_price: 450,
-      is_on_sale: true,
-      discount: "62",
-      formatted: "$450.00",
-      formatted_short: "$450",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 4.5,
-      condition_label: "Very Good",
-      badge_class: "cd-badge-very-good",
-      age_years: 3,
-      quantity: 1,
-      dimensions: "Size B (Medium)",
-      warranty: "5 Years Warranty Remaining"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?q=80&w=400",
-      gallery: [],
-      all_photos_count: 1
-    },
-    taxonomy: {
-      category: "home",
-      type: "For Sale",
-      brand: "Herman Miller",
-      tags: ["chair", "ergonomic", "office", "furniture"]
-    },
-    location: {
-      city: "Boston",
-      state: "MA",
-      country: "USA",
-      address: "Financial District"
-    },
-    status: {
-      is_published: true,
-      is_featured: false,
-      is_new_listing: false,
-      is_shipping: false,
-      inquiry_count: 14
-    },
-    seller: {
-      id: 105,
-      name: "OfficeClearance",
-      avatar: null
-    }
-  },
-  {
-    id: 6,
-    title: "DeWalt 20V Max Cordless Drill Kit",
-    slug: "dewalt-20v-max-cordless-drill-kit",
-    description: "High performance DeWalt 20V cordless compact drill and driver kit. Includes two 20V lithium-ion batteries, a charger, and a heavy-duty contractor carrying bag. Ideal for home projects or contractor duties.",
-    short_description: "DeWalt Cordless Drill Kit, complete set with 2 batteries.",
-    pricing: {
-      base_price: 179,
-      sale_price: 99,
-      is_on_sale: true,
-      discount: "45",
-      formatted: "$99.00",
-      formatted_short: "$99",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    item_specs: {
-      condition_rating: 4.8,
-      condition_label: "Like New",
-      badge_class: "cd-badge-like-new",
-      age_years: 0.5,
-      quantity: 2,
-      dimensions: "Compact 20V",
-      warranty: "1 Year Remaining"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=600",
-      thumbnail: "https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=400",
-      gallery: [],
-      all_photos_count: 1
-    },
-    taxonomy: {
-      category: "tools",
-      type: "For Sale",
-      brand: "DeWalt",
-      tags: ["drill", "tools", "dewalt", "cordless"]
-    },
-    location: {
-      city: "Seattle",
-      state: "WA",
-      country: "USA",
-      address: "Greenwood"
-    },
-    status: {
-      is_published: true,
-      is_featured: false,
-      is_new_listing: true,
-      is_shipping: true,
-      inquiry_count: 4
-    },
-    seller: {
-      id: 106,
-      name: "HardwareDirect",
-      avatar: null
-    }
-  }
-];
-
 export default function ProductPage({ slug }: ProductPageProps) {
   const router = useRouter();
+  const themeLink = useClassifiedsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const [deal, setDeal] = useState<ClassifiedListing | null>(null);
   const [related, setRelated] = useState<ClassifiedListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
   const [activePhoto, setActivePhoto] = useState<string>('');
-  const [errorTrace, setErrorTrace] = useState<string>('');
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
 
   // Inquiry Form States
   const [fullName, setFullName] = useState('');
@@ -358,76 +36,88 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [quantity, setQuantity] = useState(1);
   const [buyerNotes, setBuyerNotes] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Follow states
   const [isFollowing, setIsFollowing] = useState(false);
 
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/classifieds_deals${path}`;
-      }
-    }
-    return path;
-  };
-
   useEffect(() => {
-    const loadDeal = async () => {
+    async function loadDeal() {
       setLoading(true);
-      try {
-        const response = await api.getClassifiedDetails(slug);
-        if (response && response.success && response.data) {
-          setDeal(response.data);
-          setActivePhoto(response.data.media?.main_photo || '');
-          setUseFallback(false);
-          
-          // Load related excluding current
-          const relatedResp = await api.getClassifieds({ limit: 4 });
-          if (relatedResp && relatedResp.data) {
-            setRelated(relatedResp.data.filter(d => d.slug !== slug).slice(0, 4));
+      setNotFound(false);
+      const result = await fetchClassifiedDetail(slug);
+
+      if (result.ok && result.response.data) {
+        setDeal(result.response.data);
+        setActivePhoto(result.response.data.media?.main_photo || '');
+        setRelated(
+          getRelatedFromApi(
+            result.response.data,
+            result.response.related_classifieds,
+            slug,
+            undefined,
+          ),
+        );
+        setUseFallback(false);
+        setApiError(null);
+
+        if (!result.response.related_classifieds?.length) {
+          const listResult = await fetchClassifiedsHome({ limit: 4 });
+          if (listResult.ok && listResult.response.data) {
+            setRelated(
+              getRelatedFromApi(
+                result.response.data,
+                undefined,
+                slug,
+                listResult.response.data,
+              ),
+            );
           }
-        } else {
-          console.warn("Classifieds Deals details API response unsuccessful. Restoring local reserves.");
-          setErrorTrace("Classifieds Deals details API response unsuccessful.");
-          loadLocalFallback();
         }
-      } catch (err: any) {
-        console.error("Classifieds Deals details API connection failed. Activating fallback.", err);
-        setErrorTrace(err?.stack || err?.message || String(err));
-        loadLocalFallback();
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const loadLocalFallback = () => {
-      const matched = FALLBACK_DEALS.find(d => d.slug === slug);
-      if (matched) {
-        setDeal(matched);
-        setActivePhoto(matched.media?.main_photo || '');
-        setRelated(FALLBACK_DEALS.filter(d => d.slug !== slug).slice(0, 4));
       } else {
-        setDeal(FALLBACK_DEALS[0]);
-        setActivePhoto(FALLBACK_DEALS[0].media?.main_photo || '');
-        setRelated(FALLBACK_DEALS.slice(1, 5));
-      }
-      setUseFallback(true);
-    };
+        const errorMsg = result.ok ? 'Listing not found or API returned no data.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveClassifiedFailure(slug, allowDemo, 'deals');
 
-    loadDeal();
-  }, [slug]);
+        if (resolution.mode === 'demo') {
+          setDeal(resolution.listing);
+          setActivePhoto(resolution.listing.media?.main_photo || '');
+          setRelated(resolution.related);
+          setUseFallback(true);
+        } else if (resolution.mode === 'notFound') {
+          setDeal(null);
+          setNotFound(true);
+          setUseFallback(false);
+        } else {
+          setDeal(null);
+          setUseFallback(false);
+        }
+      }
+
+      setLoading(false);
+    }
+
+    if (slug) {
+      loadDeal();
+    }
+  }, [slug, allowDemo]);
 
   const handleCardClick = (targetSlug: string) => {
-    router.push(getThemeLink(`/product/${targetSlug}`));
+    router.push(themeLink(`/product/${targetSlug}`));
+  };
+
+  const scrollToInquiryForm = () => {
+    document.getElementById('cd-deal-inquiry')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleSnagDealSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName.trim() || !email.trim() || !phone.trim() || quantity <= 0) {
-      alert("❌ Please complete all required checkout inquiry fields!");
+      setFormError('Please complete all required checkout inquiry fields.');
       return;
     }
+
+    setFormError(null);
 
     if (!deal) return;
 
@@ -473,10 +163,23 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   if (!deal) {
     return (
-      <div style={{ background: '#111827', minHeight: '100vh', padding: '10rem 2rem', textAlign: 'center', color: '#ffffff', fontFamily: 'var(--cd-font)' }}>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--cd-primary-red)', marginBottom: '1.5rem' }}>BARGAIN NOT FOUND</h2>
-        <p style={{ color: 'var(--cd-text-muted)', marginBottom: '3rem' }}>The requested bargain listing is either expired or offline.</p>
-        <button onClick={() => router.push(getThemeLink('/'))} className="cd-btn-post">Return to Flash Feed</button>
+      <div className="classifieds-deals-wrapper">
+        <DealsHeader onSearch={() => {}} onSelectCategory={() => router.push(themeLink('/'))} selectedCategory="all" />
+        {(useFallback || apiError) && apiError && (
+          <CatalogSyncAlert classPrefix="cd" variant={useFallback ? 'demo' : 'production'} error={apiError} />
+        )}
+        <div style={{ background: '#111827', minHeight: '50vh', padding: '6rem 2rem', textAlign: 'center', color: '#ffffff', fontFamily: 'var(--cd-font)' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--cd-primary-red)', marginBottom: '1.5rem' }}>
+            {notFound ? 'BARGAIN NOT FOUND' : 'UNABLE TO LOAD BARGAIN'}
+          </h2>
+          <p style={{ color: 'var(--cd-text-muted)', marginBottom: '3rem' }}>
+            {notFound
+              ? 'The requested bargain listing is either expired or offline.'
+              : 'Connect your Sellio API or enable demo fallback to preview this theme.'}
+          </p>
+          <button onClick={() => router.push(themeLink('/'))} className="cd-btn-post">Return to Flash Feed</button>
+        </div>
+        <DealsFooter />
       </div>
     );
   }
@@ -505,47 +208,27 @@ export default function ProductPage({ slug }: ProductPageProps) {
         onSearch={() => {}} 
         onSelectCategory={(cat) => {
           if (cat === 'all') {
-            router.push(getThemeLink('/'));
+            router.push(themeLink('/'));
           } else {
-            router.push(getThemeLink(`/?cat=${cat}`));
+            router.push(themeLink(`/?cat=${cat}`));
           }
         }} 
         selectedCategory="all" 
       />
 
-      {/* Connection warning dashboard */}
-      {useFallback && (
-        <div style={{
-          backgroundColor: '#0f172a',
-          border: '2px solid #e71d36',
-          borderRadius: '12px',
-          padding: '1.5rem',
-          margin: '2rem 5%',
-          fontFamily: 'monospace',
-          color: '#f3f4f6',
-          boxShadow: '0 0 20px rgba(231, 29, 54, 0.25)'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#e71d36', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '1rem' }}>
-            <span className="cd-pulse-dot" style={{ backgroundColor: '#e71d36' }}></span>
-            DATABASE CONNECTION WARNING: Local catalog resilience fallback active
-          </div>
-          <div style={{ color: '#9ca3af', fontSize: '0.85rem', lineHeight: '1.6' }}>
-            <strong>STATUS:</strong> [OFFLINE] | LATENCY: [TIMEOUT]
-            <br />
-            <strong>REASON:</strong> {errorTrace && errorTrace.includes('is not a function') ? 'Turbopack cache mismatch. Browser is running an outdated build of @sellio/api-client.' : 'Axios connection failed to 127.0.0.1:8000. Laravel backend database node unresponsive.'}
-            <br />
-            <strong>DIAGNOSTICS:</strong> {errorTrace || 'api.getClassifiedBySlug is not a function (Turbopack cache mismatch).'}
-            <br />
-            <strong>ACTION:</strong> Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...
-          </div>
-        </div>
+      {(useFallback || apiError) && apiError && (
+        <CatalogSyncAlert
+          classPrefix="cd"
+          variant={useFallback ? 'demo' : 'production'}
+          error={apiError}
+        />
       )}
 
       {/* Main Single Page Content */}
       <main style={{ padding: '0 5%', marginTop: '2rem' }}>
         {/* Breadcrumbs */}
         <div style={{ display: 'flex', gap: '8px', fontSize: '0.85rem', color: 'var(--cd-text-muted)', marginBottom: '1.5rem', fontWeight: 600 }}>
-          <span style={{ cursor: 'pointer' }} onClick={() => router.push(getThemeLink('/'))}>Feed</span>
+          <span style={{ cursor: 'pointer' }} onClick={() => router.push(themeLink('/'))}>Feed</span>
           <span>&gt;</span>
           <span style={{ color: 'var(--cd-primary-red)', textTransform: 'capitalize' }}>{deal.taxonomy?.category || 'Bargains'}</span>
           <span>&gt;</span>
@@ -702,7 +385,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             
             {/* Flash Buy/Reservation Card */}
-            <div style={{ backgroundColor: '#111827', color: '#ffffff', borderRadius: '16px', padding: '2rem', border: '2px solid var(--cd-primary-red)', boxShadow: 'var(--cd-shadow-md)' }}>
+            <div style={{ backgroundColor: '#111827', color: '#ffffff', borderRadius: '16px', padding: '2rem', border: '2px solid var(--cd-primary-red)', boxShadow: 'var(--cd-shadow-md)' }} id="cd-deal-inquiry">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.5rem' }}>
                 <div>
                   <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--cd-secondary-yellow)', textTransform: 'uppercase' }}>Flash Price Drop</div>
@@ -737,6 +420,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </div>
               ) : (
                 <form onSubmit={handleSnagDealSubmit}>
+                  {formError && <div className="cd-form-error">{formError}</div>}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
                     
                     <div>
@@ -857,7 +541,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   {isFollowing ? '✓ Following Seller' : 'Follow Seller'}
                 </button>
                 <button 
-                  onClick={() => alert(`📩 Contacting ${deal.seller?.name || 'Seller'}... Directing to live chat.`)}
+                  onClick={scrollToInquiryForm}
                   style={{
                     flex: 1,
                     padding: '0.6rem 1rem',

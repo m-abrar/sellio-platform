@@ -1,15 +1,13 @@
 import { api } from '@sellio/api-client';
 import type { ClassifiedListing } from '@sellio/types';
 import {
-  GENERAL_FALLBACK_CLASSIFIEDS,
-  LOCAL_FALLBACK_CLASSIFIEDS,
-  findGeneralFallbackListing,
-  findLocalFallbackListing,
-  getGeneralRelatedListings,
-  getLocalRelatedListings,
+  findFallbackListing,
+  getFallbackClassifieds,
+  getFallbackRelatedListings,
+  type ClassifiedsFallbackVariant,
 } from './fallback-data';
 
-export type ClassifiedsThemeVariant = 'local' | 'general';
+export type ClassifiedsThemeVariant = ClassifiedsFallbackVariant;
 
 function toErrorMessage(error: unknown): string {
   if (error instanceof Error) {
@@ -51,8 +49,7 @@ export function resolveClassifiedsFailure(allowDemo: boolean, variant: Classifie
   if (allowDemo) {
     return {
       mode: 'demo' as const,
-      listings:
-        variant === 'local' ? LOCAL_FALLBACK_CLASSIFIEDS : GENERAL_FALLBACK_CLASSIFIEDS,
+      listings: getFallbackClassifieds(variant),
     };
   }
 
@@ -68,21 +65,17 @@ export function resolveClassifiedFailure(
     return { mode: 'empty' as const };
   }
 
-  const listing =
-    variant === 'local'
-      ? findLocalFallbackListing(slug)
-      : findGeneralFallbackListing(slug);
+  const listing = findFallbackListing(slug, variant);
 
   if (!listing) {
     return { mode: 'notFound' as const };
   }
 
-  const related =
-    variant === 'local'
-      ? getLocalRelatedListings(listing)
-      : getGeneralRelatedListings(listing);
-
-  return { mode: 'demo' as const, listing, related };
+  return {
+    mode: 'demo' as const,
+    listing,
+    related: getFallbackRelatedListings(listing, variant),
+  };
 }
 
 export function getRelatedFromApi(
@@ -92,7 +85,7 @@ export function getRelatedFromApi(
   allListings: ClassifiedListing[] | undefined,
 ): ClassifiedListing[] {
   if (related && related.length > 0) {
-    return related.slice(0, 3);
+    return related.slice(0, 4);
   }
 
   if (!allListings) {
@@ -104,5 +97,5 @@ export function getRelatedFromApi(
       (item) =>
         item.taxonomy?.category === listing.taxonomy?.category && item.slug !== slug,
     )
-    .slice(0, 3);
+    .slice(0, 4);
 }

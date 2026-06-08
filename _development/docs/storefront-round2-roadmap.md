@@ -142,6 +142,21 @@ Deliverables:
 
 **Progress:** 48 / 52 themes baselined (Round 1: 16 + Round 2: 32)
 
+## Phase 8 — Classifieds ✅
+
+Themes: `classifieds_deals`, `classifieds_elite`, `classifieds_modern`, `classifieds_premium`.
+
+Deliverables:
+
+- Extended `catalog.ts` / `fallback-data.ts` for deals, elite, modern, premium variants (`fallback-deals.ts`, etc.)
+- `CatalogSyncAlert` + `subpages.css` prefixes (`cd`, `ce`, `cm`, `cp`)
+- Theme-aware links on home grids and product pages (`useClassifiedsThemeLink`)
+- Demo fallback gated by `useDemoFallbackAllowed`; production empty states when API fails and demo off
+- Inquiry/reservation forms with inline validation; admin create URL for post-ad CTAs
+- Removed `alert()` CTAs and hardcoded preview URLs (local reference has no separate Explore page)
+
+**Progress:** 52 / 52 themes baselined — Round 2 complete (Round 1: 16 + Round 2: 36)
+
 ## Shared utilities (Round 2 additions)
 
 - `apps/storefront/src/themes/unifieds/shared/useDemoFallbackAllowed.ts`
@@ -164,3 +179,5 @@ Deliverables:
 - `apps/storefront/src/themes/jobs/shared/subpages.css` (jt / jm / jbc / jf prefixes)
 - `apps/storefront/src/themes/services/shared/fallback-data.ts` (corporate / creative / health variants)
 - `apps/storefront/src/themes/services/shared/subpages.css` (sc / crtv / sh prefixes)
+- `apps/storefront/src/themes/classifieds/shared/fallback-deals.ts` (+ elite / modern / premium)
+- `apps/storefront/src/themes/classifieds/shared/subpages.css` (cd / ce / cm / cp prefixes)

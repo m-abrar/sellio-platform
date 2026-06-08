@@ -40,6 +40,10 @@ export const CountdownTimer = ({ hours: initialHours = 4, seconds: initialSecond
   );
 };
 
+import { getAdminBaseUrl } from '@/lib/admin-urls';
+
+const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
+
 interface HeaderProps {
   onSearch: (term: string) => void;
   onSelectCategory: (category: string) => void;
@@ -112,13 +116,11 @@ export const DealsHeader = ({ onSearch, onSelectCategory, selectedCategory }: He
             linkClassName="cd-btn-post"
             renderItem={(item, { href, className, onNavigate }) => (
               <a
-                href={href}
+                href={adminCreateClassifiedUrl}
                 className={className}
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert("Feature coming soon! In compliance with monorepo rules, posting is routed to dynamic state.");
-                  onNavigate?.();
-                }}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => onNavigate?.()}
               >
                 <span>➕</span> {item.title}
               </a>
@@ -229,7 +231,6 @@ export const DealCard = ({ title, currentPrice, originalPrice, discount, image, 
               onClick(slug);
             } else {
               setClaimed(true);
-              alert(`🎉 Deal Snagged! Redirecting to checkout for ${title}...`);
             }
           }}
           disabled={claimed}

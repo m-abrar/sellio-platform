@@ -3,12 +3,15 @@ import React from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
 
 interface HeaderProps {
   onPostClick: () => void;
   searchTerm: string;
   onSearchChange: (val: string) => void;
 }
+
+const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
 
 export const ModernHeader = ({ onPostClick, searchTerm, onSearchChange }: HeaderProps) => (
   <header className="cm-header">
@@ -25,13 +28,20 @@ export const ModernHeader = ({ onPostClick, searchTerm, onSearchChange }: Header
         renderItem={defaultNavItemRenderer}
       />
       <MenuActionButtons
-        buttonClassName="cm-btn cm-btn-primary"
-        as="button"
-        onAction={onPostClick}
+        linkClassName="cm-btn cm-btn-primary"
         renderItem={(item, { className, onNavigate }) => (
-          <button type="button" className={className} onClick={() => { onPostClick(); onNavigate?.(); }}>
+          <a
+            href={adminCreateClassifiedUrl}
+            className={className}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => {
+              onPostClick();
+              onNavigate?.();
+            }}
+          >
             📸 {item.title}
-          </button>
+          </a>
         )}
       />
     </div>

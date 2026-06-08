@@ -5,6 +5,10 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
+const scrollToCatalog = () => {
+    document.getElementById('ce-catalog')?.scrollIntoView({ behavior: 'smooth' });
+};
+
 export const EliteHeader = () => (
     <header className="elite-header">
         <div className="elite-logo">SELLIO_ELITE</div>
@@ -19,7 +23,7 @@ export const EliteHeader = () => (
             <MenuActionButtons
                 buttonClassName="elite-btn-login"
                 as="button"
-                onAction={() => alert('Member login portal initializing...')}
+                onAction={scrollToCatalog}
             />
         </div>
     </header>

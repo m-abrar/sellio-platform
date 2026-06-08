@@ -2,9 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@sellio/api-client';
 import type { ClassifiedListing } from '@sellio/types';
 import { PremiumHeader, PremiumFooter } from './components';
+import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
+import {
+  fetchClassifiedDetail,
+  fetchClassifiedsHome,
+  getRelatedFromApi,
+  resolveClassifiedFailure,
+} from '@/themes/classifieds/shared/catalog';
+import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
+import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
 interface OpportunityItem {
   id: number;
@@ -21,231 +29,6 @@ interface OpportunityItem {
 }
 
 // Fallback opportunities matching Page.tsx
-const FALLBACK_CLASSIFIEDS: ClassifiedListing[] = [
-  {
-    id: 1,
-    title: "Global SaaS Platform & API",
-    slug: "global-saas-platform-api",
-    description: "Recurring revenue subscription model with high-margin customer base and fully automated delivery workflow.",
-    pricing: {
-      base_price: 2500000,
-      sale_price: 2500000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$2,500,000",
-      formatted_short: "$2.5M",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    location: {
-      city: "Fully Remote",
-      state: "Global"
-    },
-    taxonomy: {
-      category: "tech"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=400"
-    },
-    item_specs: {
-      condition_rating: 5,
-      condition_label: "Verified",
-      badge_class: "cp-badge-verified",
-      quantity: 1
-    },
-    status: {
-      is_featured: true,
-      is_published: true,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  },
-  {
-    id: 2,
-    title: "Upscale Urban Health Club",
-    slug: "upscale-urban-health-club",
-    description: "Established high-tier brand in a fast-growing metropolitan area with stable recurring memberships.",
-    pricing: {
-      base_price: 950000,
-      sale_price: 950000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$950,000",
-      formatted_short: "$950K",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    location: {
-      city: "New York City",
-      state: "NY"
-    },
-    taxonomy: {
-      category: "hospitality"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=400"
-    },
-    item_specs: {
-      condition_rating: 5,
-      condition_label: "Verified",
-      badge_class: "cp-badge-verified",
-      quantity: 1
-    },
-    status: {
-      is_featured: true,
-      is_published: true,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  },
-  {
-    id: 3,
-    title: "B2B Logistics & Warehousing",
-    slug: "b2b-logistics-warehousing",
-    description: "Asset-heavy operation with stable long-term contracts and prime midwest hub access.",
-    pricing: {
-      base_price: 1200000,
-      sale_price: 1200000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$1,200,000",
-      formatted_short: "$1.2M",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    location: {
-      city: "Chicago",
-      state: "IL"
-    },
-    taxonomy: {
-      category: "manufacturing"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=400"
-    },
-    item_specs: {
-      condition_rating: 5,
-      condition_label: "Verified",
-      badge_class: "cp-badge-verified",
-      quantity: 1
-    },
-    status: {
-      is_featured: true,
-      is_published: true,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  },
-  {
-    id: 4,
-    title: "Niche E-Commerce Coffee Brand",
-    slug: "niche-e-commerce-coffee-brand",
-    description: "Fully custom Shopify setup specializing in organic micro-lot coffee blends with solid organic search presence.",
-    pricing: {
-      base_price: 350000,
-      sale_price: 350000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$350,000",
-      formatted_short: "$350K",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    location: {
-      city: "Remote",
-      state: "US"
-    },
-    taxonomy: {
-      category: "retail"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1507133750040-4a8f57021571?q=80&w=400"
-    },
-    item_specs: {
-      condition_rating: 4,
-      condition_label: "Verified",
-      badge_class: "cp-badge-verified",
-      quantity: 1
-    },
-    status: {
-      is_featured: false,
-      is_published: true,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  },
-  {
-    id: 5,
-    title: "Local Cafe & Organic Bakery",
-    slug: "local-cafe-organic-bakery",
-    description: "Highly rated local spot in historic district featuring state-of-the-art kitchen equipment and high foot traffic.",
-    pricing: {
-      base_price: 120000,
-      sale_price: 120000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$120,000",
-      formatted_short: "$120K",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    location: {
-      city: "Seattle",
-      state: "WA"
-    },
-    taxonomy: {
-      category: "hospitality"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=400"
-    },
-    item_specs: {
-      condition_rating: 4,
-      condition_label: "Verified",
-      badge_class: "cp-badge-verified",
-      quantity: 1
-    },
-    status: {
-      is_featured: false,
-      is_published: true,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  },
-  {
-    id: 6,
-    title: "Regional Trucking Fleet Operation",
-    slug: "regional-trucking-fleet-operation",
-    description: "Operable fleet of 12 well-maintained semi-trucks, active CDL driver rosters, and contracted shipping lanes.",
-    pricing: {
-      base_price: 800000,
-      sale_price: 800000,
-      is_on_sale: false,
-      discount: null,
-      formatted: "$800,000",
-      formatted_short: "$800K",
-      transaction_type: { for_sale: true, for_rent: false }
-    },
-    location: {
-      city: "Dallas",
-      state: "TX"
-    },
-    taxonomy: {
-      category: "manufacturing"
-    },
-    media: {
-      main_photo: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=400"
-    },
-    item_specs: {
-      condition_rating: 4,
-      condition_label: "Verified",
-      badge_class: "cp-badge-verified",
-      quantity: 1
-    },
-    status: {
-      is_featured: false,
-      is_published: true,
-      is_new_listing: false,
-      is_shipping: false
-    }
-  }
-];
-
 // Translators to fit OpportunityItem schema
 const translateOpportunity = (item: ClassifiedListing): OpportunityItem => {
   const generatedSlug = item.slug || item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -266,13 +49,16 @@ const translateOpportunity = (item: ClassifiedListing): OpportunityItem => {
 
 export default function ProductPage({ slug }: { slug: string }) {
   const router = useRouter();
+  const themeLink = useClassifiedsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
 
   // Component states
   const [item, setItem] = useState<OpportunityItem | null>(null);
   const [related, setRelated] = useState<OpportunityItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
-  const [errorTrace, setErrorTrace] = useState<string>('');
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
 
   // Inquiry/Booking states
   const [buyerName, setBuyerName] = useState('');
@@ -280,82 +66,84 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [buyerOffer, setBuyerOffer] = useState('');
   const [buyerNotes, setBuyerNotes] = useState('');
   const [orderSuccess, setOrderSuccess] = useState(false);
-  const [orderSuccessData, setOrderSuccessData] = useState<any>(null);
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/classifieds_premium${path}`;
-      }
-    }
-    return path;
-  };
+  const [orderSuccessData, setOrderSuccessData] = useState<Record<string, string> | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchListingDetails = async () => {
       setLoading(true);
-      try {
-        const response = await api.getClassifiedDetails(slug);
-        if (response && response.data) {
-          setItem(translateOpportunity(response.data));
-          setUseFallback(false);
+      setNotFound(false);
+      const result = await fetchClassifiedDetail(slug);
 
-          // Get related items
-          if (response.related_classifieds && response.related_classifieds.length > 0) {
-            setRelated(response.related_classifieds.map(translateOpportunity));
-          } else {
-            const listRes = await api.getClassifieds();
-            if (listRes && listRes.data) {
-              const matched = listRes.data
-                .filter(c => c.taxonomy?.category === response.data.taxonomy?.category && c.slug !== slug)
-                .slice(0, 3)
-                .map(translateOpportunity);
-              setRelated(matched);
-            }
+      if (result.ok && result.response.data) {
+        setItem(translateOpportunity(result.response.data));
+        setRelated(
+          getRelatedFromApi(
+            result.response.data,
+            result.response.related_classifieds,
+            slug,
+            undefined,
+          ).map(translateOpportunity),
+        );
+        setUseFallback(false);
+        setApiError(null);
+
+        if (
+          !result.response.related_classifieds?.length &&
+          result.response.data.taxonomy?.category
+        ) {
+          const listResult = await fetchClassifiedsHome({ limit: 4 });
+          if (listResult.ok && listResult.response.data) {
+            setRelated(
+              getRelatedFromApi(
+                result.response.data,
+                undefined,
+                slug,
+                listResult.response.data,
+              ).map(translateOpportunity),
+            );
           }
-        } else {
-          console.warn("Classified details response returned empty. Loading fallback.");
-          loadFallbackDetails();
         }
-      } catch (err: any) {
-        console.error("[Offline Resilience] failed to fetch listing details: ", err);
-        setErrorTrace(err?.stack || err?.message || String(err));
-        loadFallbackDetails();
-      } finally {
-        setLoading(false);
+      } else {
+        const errorMsg = result.ok ? 'Listing not found or API returned no data.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveClassifiedFailure(slug, allowDemo, 'premium');
+
+        if (resolution.mode === 'demo') {
+          setItem(translateOpportunity(resolution.listing));
+          setRelated(resolution.related.map(translateOpportunity));
+          setUseFallback(true);
+        } else if (resolution.mode === 'notFound') {
+          setItem(null);
+          setNotFound(true);
+          setUseFallback(false);
+        } else {
+          setItem(null);
+          setUseFallback(false);
+        }
       }
-    };
 
-    const loadFallbackDetails = () => {
-      const matched = FALLBACK_CLASSIFIEDS.find(c => c.slug === slug) || FALLBACK_CLASSIFIEDS[0];
-      setItem(translateOpportunity(matched));
-      setUseFallback(true);
-
-      const relatedMatched = FALLBACK_CLASSIFIEDS
-        .filter(c => c.taxonomy?.category === matched.taxonomy?.category && c.slug !== slug)
-        .slice(0, 3)
-        .map(translateOpportunity);
-      setRelated(relatedMatched);
+      setLoading(false);
     };
 
     if (slug) {
       fetchListingDetails();
     }
-  }, [slug]);
+  }, [slug, allowDemo]);
 
   const handleInquirySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!buyerName || !buyerEmail) {
-      alert("Please fill in all required fields.");
+      setFormError('Please fill in all required fields.');
       return;
     }
 
     if (!item) return;
+    setFormError(null);
 
     const orderData = {
       orderId: `PREM-INQ-${Date.now()}-${item.id}`,
-      listingId: item.id,
+      listingId: String(item.id),
       title: item.title,
       price: item.price,
       buyerName,
@@ -382,7 +170,7 @@ export default function ProductPage({ slug }: { slug: string }) {
 
   const handleBackNavigation = (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push(getThemeLink(''));
+    router.push(themeLink(''));
   };
 
   // Generate premium opportunity spec multipliers based on category
@@ -411,37 +199,22 @@ export default function ProductPage({ slug }: { slug: string }) {
   return (
     <div className="cp-product-wrapper">
       <PremiumHeader 
-        onPostClick={() => alert("🔑 Institutional M&A Hub:\nPlease authenticate using your brokerage secure key to list a new private memorandum opportunity.")} 
+        homeHref={themeLink('')}
       />
 
       <div className="cp-product-container">
         <div>
-          <a href="#" className="cp-product-back-link" onClick={handleBackNavigation}>
+          <a href={themeLink('')} className="cp-product-back-link" onClick={handleBackNavigation}>
             &larr; Return to M&A Investment Catalog
           </a>
         </div>
 
-        {/* Resilience diagnostics trace block */}
-        {useFallback && errorTrace && (
-          <div className="cp-resilience-panel" style={{
-            backgroundColor: '#ffffff',
-            border: '2.5px dashed var(--cp-teal)',
-            borderRadius: '12px',
-            padding: '1.75rem',
-            marginBottom: '2.5rem',
-            fontFamily: 'var(--cp-font-body)',
-            boxShadow: 'var(--cp-shadow-md)',
-            color: 'var(--cp-navy)'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--cp-teal)', fontWeight: '800', fontSize: '1.1rem', marginBottom: '0.6rem', fontFamily: 'var(--cp-font-heading)', letterSpacing: '0.5px' }}>
-              <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--cp-teal)' }}></span>
-              🛰️ VETTED NETWORK DIAGNOSTICS & RESILIENCE PANEL
-            </div>
-            <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#475569', marginBottom: '0.5rem' }}>
-              Status: Local Database Node Offline. Activating Vetted sovereign proxy backup assets gracefully.
-            </div>
-            <pre style={{ margin: 0, padding: '0.8rem 1.25rem', backgroundColor: '#f1f5f9', border: '1px solid var(--cp-border)', borderRadius: '6px', fontFamily: 'monospace', fontSize: '0.8rem', color: '#334155', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>{errorTrace}</pre>
-          </div>
+        {(useFallback || apiError) && apiError && (
+          <CatalogSyncAlert
+            classPrefix="cp"
+            variant={useFallback ? 'demo' : 'production'}
+            error={apiError}
+          />
         )}
 
         {loading ? (
@@ -459,7 +232,9 @@ export default function ProductPage({ slug }: { slug: string }) {
           </div>
         ) : !item ? (
           <div style={{ textAlign: 'center', padding: '6rem 1rem', background: '#ffffff', borderRadius: '12px', border: '1px solid var(--cp-border)' }}>
-            <h3 style={{ fontFamily: 'var(--cp-font-heading)', color: 'var(--cp-navy)' }}>Acquisition profile not found.</h3>
+            <h3 style={{ fontFamily: 'var(--cp-font-heading)', color: 'var(--cp-navy)' }}>
+              {notFound ? 'Acquisition profile not found.' : 'Unable to load acquisition profile.'}
+            </h3>
           </div>
         ) : (
           <>
@@ -563,6 +338,23 @@ export default function ProductPage({ slug }: { slug: string }) {
                     </div>
                   ) : (
                     <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                      {formError && (
+                        <p
+                          style={{
+                            margin: 0,
+                            color: '#b91c1c',
+                            backgroundColor: '#fef2f2',
+                            border: '1px solid #fecaca',
+                            borderRadius: '6px',
+                            padding: '0.6rem 0.8rem',
+                            fontSize: '0.8rem',
+                            fontWeight: 600,
+                          }}
+                          role="alert"
+                        >
+                          {formError}
+                        </p>
+                      )}
                       <div className="cp-booking-form-group">
                         <label className="cp-booking-label">Broker / Lead Investor Name *</label>
                         <input 
@@ -624,7 +416,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                     <div 
                       key={relItem.id} 
                       className="cp-related-card"
-                      onClick={() => router.push(getThemeLink(`/product/${relItem.slug}`))}
+                      onClick={() => router.push(themeLink(`/product/${relItem.slug}`))}
                     >
                       <div className="cp-related-img-wrap">
                         <img src={relItem.image} className="cp-related-img" alt={relItem.title} />
