@@ -127,6 +127,21 @@ Deliverables:
 
 **Progress:** 45 / 52 themes baselined (Round 1: 16 + Round 2: 29)
 
+## Phase 7 — Services ✅
+
+Themes: `services_corporate`, `services_creative`, `services_health`.
+
+Deliverables:
+
+- Extended `catalog.ts` / `fallback-data.ts` for corporate, creative, health variants
+- `CatalogSyncAlert` + `subpages.css` prefixes (`sc`, `crtv`, `sh`)
+- Theme-aware links on home grids and product pages (`useServicesThemeLink`)
+- Demo fallback gated by `useDemoFallbackAllowed`; production empty states when API fails and demo off
+- Home booking/consultation CTAs scroll to service grids or lead forms; inline validation on product pages
+- Removed `alert()` CTAs and hardcoded preview URLs (marketplace reference has no separate Explore page)
+
+**Progress:** 48 / 52 themes baselined (Round 1: 16 + Round 2: 32)
+
 ## Shared utilities (Round 2 additions)
 
 - `apps/storefront/src/themes/unifieds/shared/useDemoFallbackAllowed.ts`
@@ -147,3 +162,5 @@ Deliverables:
 - `apps/storefront/src/themes/jobs/shared/JobsExplorePage.tsx`
 - `apps/storefront/src/themes/jobs/shared/fallback-data.ts` (tech / modern / blue_collar / freelance variants)
 - `apps/storefront/src/themes/jobs/shared/subpages.css` (jt / jm / jbc / jf prefixes)
+- `apps/storefront/src/themes/services/shared/fallback-data.ts` (corporate / creative / health variants)
+- `apps/storefront/src/themes/services/shared/subpages.css` (sc / crtv / sh prefixes)

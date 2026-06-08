@@ -101,12 +101,9 @@ export const PractitionerCard = ({ name, title, image, rating, availability }: a
     </div>
     
     <div style={{ display: 'flex', justifyContent: 'center', borderTop: '1px solid var(--sh-border)', paddingTop: '2rem' }}>
-        <button 
-          style={{ background: 'transparent', border: 'none', fontSize: '0.8rem', fontWeight: 900, color: 'var(--sh-blue)', letterSpacing: '2px', cursor: 'pointer' }}
-          onClick={() => alert(`Consultation portal initializing for ${name}...`)}
-        >
+        <span style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--sh-blue)', letterSpacing: '2px' }}>
           BOOK CONSULTATION →
-        </button>
+        </span>
     </div>
   </div>
 );

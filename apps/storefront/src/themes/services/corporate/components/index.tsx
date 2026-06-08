@@ -1,21 +1,28 @@
-
 'use client';
 import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 export const CorporateHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useServicesThemeLink();
+
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <header className="sc-header">
       <div className="sc-logo">
-        <span className="text-primary">Corporate</span> <span style={{ color: 'var(--sc-text-dim)' }}>Services</span>
+        <a href={themeLink('')} style={{ color: 'inherit', textDecoration: 'none' }}>
+          <span className="text-primary">Corporate</span>{' '}
+          <span style={{ color: 'var(--sc-text-dim)' }}>Services</span>
+        </a>
       </div>
       
-      {/* Mobile Hamburger Trigger */}
       <button 
         className={`sc-hamburger ${isOpen ? 'sc-hamburger-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
@@ -39,7 +46,7 @@ export const CorporateHeader = () => {
         <MenuActionButtons
           linkClassName="sc-btn sc-btn-primary sc-mobile-btn"
           as="button"
-          onAction={() => alert('Consultation portal activated.')}
+          onAction={scrollToContact}
           onNavigate={() => setIsOpen(false)}
         />
       </div>
@@ -47,6 +54,8 @@ export const CorporateHeader = () => {
       <div className="sc-desktop-btn-container">
         <MenuActionButtons
           linkClassName="sc-btn sc-btn-primary sc-desktop-btn"
+          as="button"
+          onAction={scrollToContact}
           renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false })}
         />
       </div>
@@ -54,8 +63,7 @@ export const CorporateHeader = () => {
   );
 };
 
-
-export const ServiceCard = ({ title, description, icon }: any) => (
+export const ServiceCard = ({ title, description, icon }: { title: string; description: string; icon: string }) => (
   <div className="sc-service-card">
     <div className="icon">{icon}</div>
     <h4 style={{ fontFamily: 'var(--sc-font-heading)', fontWeight: 600, color: 'var(--sc-dark)', marginBottom: '1rem', fontSize: '1.25rem' }}>{title}</h4>
@@ -63,20 +71,20 @@ export const ServiceCard = ({ title, description, icon }: any) => (
   </div>
 );
 
-export const CaseStudyCard = ({ title, description, image }: any) => (
+export const CaseStudyCard = ({ title, description, image, href }: { title: string; description: string; image: string; href?: string }) => (
     <div className="sc-case-card">
         <img src={image} alt={title} className="sc-case-img" />
         <div className="sc-case-body">
             <h5 style={{ fontFamily: 'var(--sc-font-heading)', fontWeight: 600, color: 'var(--sc-dark)', marginBottom: '0.75rem', fontSize: '1.25rem' }}>{title}</h5>
             <p style={{ color: 'var(--sc-text-dim)', fontSize: '0.95rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>{description}</p>
-            <a href="#" style={{ color: 'var(--sc-primary)', textDecoration: 'none', fontWeight: 600, fontSize: '0.95rem' }}>Read More →</a>
+            <a href={href || '#services'} style={{ color: 'var(--sc-primary)', textDecoration: 'none', fontWeight: 600, fontSize: '0.95rem' }}>Read More →</a>
         </div>
     </div>
 );
 
-export const TestimonialCard = ({ quote, name, title, avatar }: any) => (
+export const TestimonialCard = ({ quote, name, title, avatar }: { quote: string; name: string; title: string; avatar: string }) => (
     <div className="sc-testimonial-card">
-        <p style={{ fontStyle: 'italic', fontSize: '1.1rem', color: '#555', marginBottom: '1.5rem', lineHeight: 1.8 }}>"{quote}"</p>
+        <p style={{ fontStyle: 'italic', fontSize: '1.1rem', color: '#555', marginBottom: '1.5rem', lineHeight: 1.8 }}>&quot;{quote}&quot;</p>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <img src={avatar} alt={name} style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover' }} />
             <div>
@@ -96,7 +104,7 @@ export const CorporateFooter = () => (
                     Providing strategic consulting and innovative solutions to drive business growth and success.
                 </p>
                 <div style={{ display: 'flex', gap: '1.5rem' }}>
-                    {['fb', 'tw', 'in', 'ig'].map(social => (
+                    {['fb', 'tw', 'in', 'ig'].map((social) => (
                         <div key={social} style={{ color: '#adb5bd', cursor: 'pointer' }}>•</div>
                     ))}
                 </div>

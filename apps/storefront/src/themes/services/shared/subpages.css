@@ -1,0 +1,101 @@
+/* Round 2 services subpages — corporate, creative, health */
+.sc-catalog-alert,
+.crtv-catalog-alert,
+.sh-catalog-alert,
+.sm-catalog-alert,
+.local-catalog-alert {
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+}
+
+.sc-catalog-alert--demo {
+  background: rgba(0, 123, 255, 0.06);
+  border: 1px solid rgba(0, 123, 255, 0.25);
+  border-left: 4px solid var(--sc-primary, #007bff);
+}
+
+.sc-catalog-alert--prod {
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #f97316;
+}
+
+.crtv-catalog-alert--demo {
+  background: rgba(255, 105, 180, 0.08);
+  border: 1px solid rgba(255, 105, 180, 0.35);
+}
+
+.crtv-catalog-alert--prod {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid #fecaca;
+}
+
+.sh-catalog-alert--demo {
+  background: rgba(13, 148, 136, 0.08);
+  border: 1px solid rgba(13, 148, 136, 0.35);
+}
+
+.sh-catalog-alert--prod {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid #fecaca;
+}
+
+.sc-catalog-alert__badge,
+.crtv-catalog-alert__badge,
+.sh-catalog-alert__badge {
+  align-items: center;
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: 700;
+  gap: 0.65rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.sc-catalog-alert__dot,
+.crtv-catalog-alert__dot,
+.sh-catalog-alert__dot {
+  border-radius: 50%;
+  height: 8px;
+  width: 8px;
+}
+
+.sc-catalog-alert__title,
+.crtv-catalog-alert__title,
+.sh-catalog-alert__title {
+  font-size: 1.25rem;
+  margin: 0 0 0.75rem;
+}
+
+.sc-catalog-alert__copy,
+.crtv-catalog-alert__copy,
+.sh-catalog-alert__copy {
+  line-height: 1.7;
+  margin: 0 0 1rem;
+}
+
+.sc-catalog-alert__diag,
+.crtv-catalog-alert__diag,
+.sh-catalog-alert__diag {
+  font-family: monospace;
+  font-size: 0.75rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.sc-alert-slot,
+.crtv-alert-slot,
+.sh-alert-slot {
+  margin-bottom: 2rem;
+  padding: 0 5%;
+}
+
+.sc-form-error,
+.crtv-form-error,
+.sh-form-error {
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}

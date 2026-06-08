@@ -1,92 +1,92 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
 import { CorporateHeader, CaseStudyCard, CorporateFooter } from './components';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';
+import { fetchServicesHome, resolveServicesFailure } from '@/themes/services/shared/catalog';
+import {
+  getServiceCategoryLabel,
+  getServicePriceLabel,
+} from '@/themes/services/shared/service-utils';
+import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 const serviceIcons = ['01', '02', '03', '04', '05', '06'];
 
 export default function Page() {
+  const themeLink = useServicesThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
+
   const heroTitle = useThemeContent('hero.title', 'Empowering Businesses \nfor Growth');
   const heroDescription = useThemeContent('hero.description', 'Strategic insights and innovative solutions to drive your success forward.');
   const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Explore Services');
   const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'Get in Touch');
-  
   const servicesTitle = useThemeContent('services.title', 'Our Core Services');
   const servicesDescription = useThemeContent('services.description', 'Solutions designed to meet your unique business challenges.');
-  
   const aboutTitle = useThemeContent('about.title', 'Why Partner with Us?');
   const aboutDescription = useThemeContent('about.description', 'We are committed to delivering exceptional value through our deep expertise and client-centric approach.');
   const aboutImage = useThemeMedia('about.image', '/themes/services/corporate/11.webp');
-  
   const caseTitle = useThemeContent('case_studies.title', 'Our Success Stories');
   const caseDescription = useThemeContent('case_studies.description', 'Real-world impact of our strategic partnerships.');
-  
   const ctaTitle = useThemeContent('cta.title', 'Ready to Transform Your Business?');
   const ctaDescription = useThemeContent('cta.description', 'Connect with our experts today to discuss your specific needs and goals.');
   const ctaPrimaryCta = useThemeContent('cta.primary_cta_label', 'Request a Consultation');
 
   const [services, setServices] = useState<ServiceListing[]>([]);
   const [loadingServices, setLoadingServices] = useState(true);
-  const [serviceError, setServiceError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const caseStudies = [
-    { title: "GlobalTech Solutions", description: "Implemented a new operational strategy, boosting efficiency by 40% and reducing costs by 15%.", image: "/themes/services/corporate/12.webp" },
-    { title: "Innovate Pharmaceuticals", description: "Facilitated a successful market entry for a new drug, capturing 10% market share in the first year.", image: "/themes/services/corporate/13.webp" },
-    { title: "Future Retail Group", description: "Developed a digital transformation roadmap, leading to a 25% increase in online sales.", image: "/themes/services/corporate/14.webp" },
+    { title: 'GlobalTech Solutions', description: 'Implemented a new operational strategy, boosting efficiency by 40% and reducing costs by 15%.', image: '/themes/services/corporate/12.webp' },
+    { title: 'Innovate Pharmaceuticals', description: 'Facilitated a successful market entry for a new drug, capturing 10% market share in the first year.', image: '/themes/services/corporate/13.webp' },
+    { title: 'Future Retail Group', description: 'Developed a digital transformation roadmap, leading to a 25% increase in online sales.', image: '/themes/services/corporate/14.webp' },
   ];
 
   useEffect(() => {
-    let isMounted = true;
-
     async function loadServices() {
-      try {
-        const response = await api.getServices({ per_page: 6 });
-        if (!isMounted) {
-          return;
-        }
+      setLoadingServices(true);
+      const result = await fetchServicesHome({ per_page: 6 });
 
-        setServices(Array.isArray(response.data) ? response.data : []);
-        setServiceError(null);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
+      if (result.ok && result.response.data?.length) {
+        setServices(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No services returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveServicesFailure(allowDemo, 'corporate');
 
-        console.error('Failed to load services corporate listings:', error);
-        setServiceError(error instanceof Error ? error.message : 'Services are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoadingServices(false);
+        if (resolution.mode === 'demo') {
+          setServices(resolution.services);
+          setUseFallback(true);
+        } else {
+          setServices([]);
+          setUseFallback(false);
         }
       }
+
+      setLoadingServices(false);
     }
 
     loadServices();
+  }, [allowDemo]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const scrollToServices = () => {
+    document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-  const getServiceDescription = (service: ServiceListing) => (
-    service.short_description || service.description || 'A live service record synchronized from the Sellio service catalog.'
-  );
-
-  const getServicePrice = (service: ServiceListing) => (
-    service.pricing?.formatted || service.pricing?.formatted_short || (
-      service.pricing?.base_price ? `$${Number(service.pricing.base_price).toLocaleString()}` : 'Request quote'
-    )
-  );
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="services-corporate-theme">
       <CorporateHeader />
 
-      {/* Hero Section */}
       <section className="sc-hero" id="sc-hero-section" aria-labelledby="sc-hero-title">
         <div className="sc-hero-content">
           <h1 className="sc-heading-xl" id="sc-hero-title" style={{ marginBottom: '1.5rem', textShadow: '0 4px 10px rgba(0,0,0,0.3)' }}>
@@ -101,28 +101,33 @@ export default function Page() {
             {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button
-              className="sc-btn sc-btn-primary"
-              onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-            >
+            <button type="button" className="sc-btn sc-btn-primary" onClick={scrollToServices}>
               {heroPrimaryCta}
             </button>
-            <button
-              className="sc-btn sc-btn-outline"
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            >
+            <button type="button" className="sc-btn sc-btn-outline" onClick={scrollToContact}>
               {heroSecondaryCta}
             </button>
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
       <section id="services" className="sc-section sc-bg-light" aria-labelledby="sc-services-title">
         <div className="sc-section-title">
           <h2 id="sc-services-title">{servicesTitle}</h2>
           <p>{servicesDescription}</p>
         </div>
+
+        {apiError && useFallback && (
+          <div className="sc-alert-slot">
+            <CatalogSyncAlert variant="demo" error={apiError} classPrefix="sc" />
+          </div>
+        )}
+        {apiError && !useFallback && (
+          <div className="sc-alert-slot">
+            <CatalogSyncAlert variant="production" error={apiError} classPrefix="sc" />
+          </div>
+        )}
+
         <div className="sc-services-grid">
           {loadingServices ? (
             [1, 2, 3, 4, 5, 6].map((item) => (
@@ -133,12 +138,6 @@ export default function Page() {
                 <div className="sc-service-line sc-service-line-short" />
               </div>
             ))
-          ) : serviceError ? (
-            <div className="sc-service-state">
-              <div className="sc-service-kicker">Service Sync Offline</div>
-              <h3>Core services could not be loaded.</h3>
-              <p>{serviceError}</p>
-            </div>
           ) : services.length === 0 ? (
             <div className="sc-service-state">
               <div className="sc-service-kicker">Empty Service Registry</div>
@@ -147,18 +146,22 @@ export default function Page() {
             </div>
           ) : (
             services.slice(0, 6).map((service, index) => (
-              <a className="sc-service-card sc-service-link-card" href={`/product/${service.slug}`} key={service.id}>
+              <a className="sc-service-card sc-service-link-card" href={themeLink(`/product/${service.slug}`)} key={service.id}>
                 <div className="icon">{serviceIcons[index % serviceIcons.length]}</div>
                 <h4 style={{ fontFamily: 'var(--sc-font-heading)', fontWeight: 600, color: 'var(--sc-dark)', marginBottom: '1rem', fontSize: '1.25rem' }}>{service.title}</h4>
-                <p style={{ color: 'var(--sc-text-dim)', lineHeight: 1.6, fontSize: '0.95rem' }}>{getServiceDescription(service)}</p>
-                <div className="sc-service-price">{getServicePrice(service)}</div>
+                <p style={{ color: 'var(--sc-text-dim)', lineHeight: 1.6, fontSize: '0.95rem' }}>
+                  {service.short_description || service.description || 'A live service record synchronized from the Sellio service catalog.'}
+                </p>
+                <div className="sc-service-price">{getServicePriceLabel(service)}</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--sc-text-dim)', marginTop: '0.75rem' }}>
+                  {getServiceCategoryLabel(service.professional?.category)}
+                </div>
               </a>
             ))
           )}
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
       <section id="about" className="sc-section" aria-labelledby="sc-about-title">
         <div className="sc-why-us-grid">
             <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '12px' }}>
@@ -170,27 +173,32 @@ export default function Page() {
                     {aboutDescription}
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '1.1rem', fontWeight: 500, color: 'var(--sc-dark)' }}>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✓</span> Proven Track Record of Success</div>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✓</span> Expert Team with Diverse Industry Experience</div>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✓</span> Tailored Solutions for Unique Challenges</div>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✓</span> Data-Driven Insights and Strategies</div>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✓</span> Unwavering Commitment to Client Satisfaction</div>
+                    {[
+                      'Proven Track Record of Success',
+                      'Expert Team with Diverse Industry Experience',
+                      'Tailored Solutions for Unique Challenges',
+                      'Data-Driven Insights and Strategies',
+                      'Unwavering Commitment to Client Satisfaction',
+                    ].map((item) => (
+                      <div key={item} style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✓</span> {item}
+                      </div>
+                    ))}
                 </div>
             </div>
         </div>
       </section>
 
-      {/* Case Studies Section */}
       <section id="case-studies" className="sc-section sc-bg-light" aria-labelledby="sc-case-title">
         <div className="sc-section-title">
           <h2 id="sc-case-title">{caseTitle}</h2>
           <p>{caseDescription}</p>
         </div>
         <div className="sc-case-grid">
-          {caseStudies.map((c, i) => (
-            <div key={i} onClick={() => alert(`Reviewing case study: ${c.title}`)}>
-              <CaseStudyCard {...c} />
-            </div>
+          {caseStudies.map((study) => (
+            <a href="#services" key={study.title} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <CaseStudyCard {...study} href="#services" />
+            </a>
           ))}
         </div>
       </section>
@@ -207,14 +215,13 @@ export default function Page() {
         headingId="sc-testimonials-title"
       />
 
-      {/* CTA Banner Section */}
       <section id="contact" className="sc-cta-banner" aria-labelledby="sc-cta-title">
         <div style={{ position: 'relative', zIndex: 1, maxWidth: '800px', margin: '0 auto' }}>
             <h2 className="sc-heading" id="sc-cta-title" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '1.5rem' }}>{ctaTitle}</h2>
             <p style={{ fontSize: '1.25rem', marginBottom: '2.5rem', opacity: 0.9 }}>
                 {ctaDescription}
             </p>
-            <button className="sc-btn" style={{ background: 'white', color: 'var(--sc-navy)', fontWeight: 700, padding: '1rem 3rem' }} onClick={() => alert('Consultation request protocol initialized.')}>{ctaPrimaryCta}</button>
+            <button type="button" className="sc-btn" style={{ background: 'white', color: 'var(--sc-navy)', fontWeight: 700, padding: '1rem 3rem' }} onClick={scrollToServices}>{ctaPrimaryCta}</button>
         </div>
       </section>
 

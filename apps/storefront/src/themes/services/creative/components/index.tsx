@@ -4,15 +4,20 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 export const CrtvHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useServicesThemeLink();
+
+  const scrollToCreatives = () => {
+    document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <header className="crtv-header">
-      <a href="#" className="crtv-logo gradient-text">CRTV</a>
+      <a href={themeLink('')} className="crtv-logo gradient-text">CRTV</a>
       
-      {/* Mobile Hamburger Trigger */}
       <button 
         className={`crtv-hamburger ${isOpen ? 'crtv-hamburger-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
@@ -36,7 +41,7 @@ export const CrtvHeader = () => {
         <MenuActionButtons
           linkClassName="crtv-btn crtv-btn-gradient crtv-mobile-btn"
           as="button"
-          onAction={() => alert('Vibe-matching dynamic portal activated!')}
+          onAction={scrollToCreatives}
           onNavigate={() => setIsOpen(false)}
         />
       </div>
@@ -45,15 +50,14 @@ export const CrtvHeader = () => {
         <MenuActionButtons
           linkClassName="crtv-btn crtv-btn-gradient crtv-desktop-btn"
           as="button"
-          onAction={() => alert('Consultation portal activated.')}
+          onAction={scrollToCreatives}
         />
       </div>
     </header>
   );
 };
 
-
-export const CrtvCategoryCard = ({ title, rate, icon }: any) => (
+export const CrtvCategoryCard = ({ title, rate, icon }: { title: string; rate: string; icon: string }) => (
     <div className="crtv-category-card">
         <div className="crtv-category-content">
             <div className="crtv-category-icon">{icon}</div>
@@ -63,7 +67,7 @@ export const CrtvCategoryCard = ({ title, rate, icon }: any) => (
     </div>
 );
 
-export const CrtvCreativeCard = ({ name, title, rating, rate, image }: any) => (
+export const CrtvCreativeCard = ({ name, title, rating, rate, image }: { name: string; title: string; rating: string; rate: string; image: string }) => (
     <div className="crtv-creative-card">
         <div style={{ display: 'flex', alignItems: 'center' }}>
             <img src={image} alt={name} className="crtv-avatar" />
@@ -77,12 +81,12 @@ export const CrtvCreativeCard = ({ name, title, rating, rate, image }: any) => (
         </div>
         <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontWeight: 800, fontSize: '1.2rem', color: '#198754' }}>{rate}</span>
-            <button className="crtv-btn crtv-btn-gradient" style={{ padding: '0.5rem 1.5rem', fontSize: '0.9rem' }}>Hire Now</button>
+            <span className="crtv-btn crtv-btn-gradient" style={{ padding: '0.5rem 1.5rem', fontSize: '0.9rem' }}>View Profile</span>
         </div>
     </div>
 );
 
-export const CrtvPortfolioItem = ({ title, category, image }: any) => (
+export const CrtvPortfolioItem = ({ title, category, image }: { title: string; category: string; image: string }) => (
     <div className="crtv-portfolio-item">
         <img src={image} alt={title} />
         <div className="crtv-portfolio-overlay">
@@ -97,7 +101,7 @@ export const CrtvFooter = () => (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
                 <a href="#" className="crtv-logo" style={{ color: 'white' }}>CRTV</a>
-                <p style={{ marginTop: '1rem', fontSize: '0.9rem', lineHeight: 1.6 }}>Connecting visionary clients with the world's finest creative talent.</p>
+                <p style={{ marginTop: '1rem', fontSize: '0.9rem', lineHeight: 1.6 }}>Connecting visionary clients with the world&apos;s finest creative talent.</p>
             </div>
             <FooterMenuColumn
                 location="footer_column_1"
@@ -118,8 +122,8 @@ export const CrtvFooter = () => (
                 linkClassName="crtv-footer-link"
             />
         </div>
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '1.5rem', textAlign: 'center', fontSize: '0.85rem' }}>
-            &copy; 2026 CRTV. All Rights Reserved.
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem', textAlign: 'center', opacity: 0.6 }}>
+            &copy; 2026 CRTV Creative Network. All rights reserved.
         </div>
     </footer>
 );

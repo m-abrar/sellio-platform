@@ -1,13 +1,13 @@
 import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
 import {
-  LOCAL_FALLBACK_SERVICES,
-  MARKETPLACE_FALLBACK_SERVICES,
+  findFallbackService,
   findLocalFallbackService,
   findMarketplaceFallbackService,
+  getFallbackServices,
 } from './fallback-data';
 
-export type ServicesThemeVariant = 'marketplace' | 'local';
+export type ServicesThemeVariant = 'marketplace' | 'local' | 'corporate' | 'creative' | 'health';
 
 function toErrorMessage(error: unknown): string {
   if (error instanceof Error) {
@@ -49,8 +49,7 @@ export function resolveServicesFailure(allowDemo: boolean, variant: ServicesThem
   if (allowDemo) {
     return {
       mode: 'demo' as const,
-      services:
-        variant === 'marketplace' ? MARKETPLACE_FALLBACK_SERVICES : LOCAL_FALLBACK_SERVICES,
+      services: getFallbackServices(variant),
     };
   }
 
@@ -66,10 +65,7 @@ export function resolveServiceFailure(
     return { mode: 'empty' as const };
   }
 
-  const service =
-    variant === 'marketplace'
-      ? findMarketplaceFallbackService(slug)
-      : findLocalFallbackService(slug);
+  const service = findFallbackService(slug, variant);
 
   if (!service) {
     return { mode: 'notFound' as const };
@@ -77,3 +73,5 @@ export function resolveServiceFailure(
 
   return { mode: 'demo' as const, service };
 }
+
+export { findLocalFallbackService, findMarketplaceFallbackService };

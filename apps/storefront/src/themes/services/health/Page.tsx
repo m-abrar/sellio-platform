@@ -1,96 +1,81 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
-import { PractitionerCard, VitalityHUD, getServiceTaxonomyLabel } from './components';
+import { PractitionerCard, VitalityHUD } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
-
-const fallbackImages = [
-  '/themes/services/health/15.webp',
-  '/themes/services/health/16.webp',
-  '/themes/services/health/17.webp',
-  '/themes/services/health/18.webp',
-];
-
-function mapServiceToPractitioner(service: ServiceListing, index: number) {
-  const specialty = getServiceTaxonomyLabel(
-    service.professional?.category || service.professional?.type,
-    'SPECIALIST',
-  );
-
-  return {
-    name: service.provider?.name || service.title,
-    title: specialty.toUpperCase(),
-    image: service.media?.main_photo || service.provider?.avatar || fallbackImages[index % fallbackImages.length],
-    rating: service.provider?.rating ? service.provider.rating.toFixed(1) : '4.9',
-    availability: service.operations?.hours_label || service.operations?.days_label || 'AVAILABLE',
-    slug: service.slug,
-  };
-}
+import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';
+import { fetchServicesHome, resolveServicesFailure } from '@/themes/services/shared/catalog';
+import { mapServiceToHealthPractitioner } from '@/themes/services/shared/service-utils';
+import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 export default function Page() {
+  const themeLink = useServicesThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
+
   const heroKicker = useThemeContent('hero.kicker', 'VITALITY PROTOCOL');
   const heroTitle = useThemeContent('hero.title', 'Precision \nMedicine, \nDelivered.');
   const heroDescription = useThemeContent('hero.description', 'Connect with an elite network of specialists and diagnosticians. We engineer personalized physiological protocols for peak human performance.');
   const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'INITIALIZE CONSULTATION');
   const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'VIEW CLINICIANS');
-
   const hudPractitionersLabel = useThemeContent('hud.practitioners_label', 'PRACTITIONERS');
   const hudPractitionersSub = useThemeContent('hud.practitioners_sub', 'Vetted specialists active across our global clinical network.');
   const hudAccuracyLabel = useThemeContent('hud.accuracy_label', 'ACCURACY');
   const hudAccuracySub = useThemeContent('hud.accuracy_sub', 'High-fidelity data synchronization for real-time monitoring.');
   const hudResponseLabel = useThemeContent('hud.response_label', 'RESPONSE RATE');
   const hudResponseSub = useThemeContent('hud.response_sub', 'Instant consultation availability for critical wellness nodes.');
-
   const registryKicker = useThemeContent('registry.kicker', 'OFFICIAL REGISTRY');
   const registryTitle = useThemeContent('registry.title', 'Top Rated \nPractitioners.');
   const registryDescription = useThemeContent('registry.description', 'Our unified protocol vetting process ensures that every specialist on the node meets our high-fidelity clinical standards.');
-
   const protocolsKicker = useThemeContent('protocols.kicker', 'CLINICAL TIERS');
   const protocolsTitle = useThemeContent('protocols.title', 'Optimized \nPhysiology.');
   const protocolsDescription = useThemeContent('protocols.description', 'Move beyond reactive care. Our elite protocols integrate preventive diagnostics, continuous biomarker tracking, and personalized nutritional algorithms.');
 
   const [services, setServices] = useState<ServiceListing[]>([]);
   const [loadingServices, setLoadingServices] = useState(true);
-  const [serviceError, setServiceError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
-
     async function loadServices() {
-      try {
-        const response = await api.getServices({ per_page: 6 });
-        if (!isMounted) {
-          return;
-        }
+      setLoadingServices(true);
+      const result = await fetchServicesHome({ per_page: 6 });
 
-        setServices(Array.isArray(response.data) ? response.data : []);
-        setServiceError(null);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
+      if (result.ok && result.response.data?.length) {
+        setServices(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No services returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveServicesFailure(allowDemo, 'health');
 
-        console.error('Failed to load services health listings:', error);
-        setServiceError(error instanceof Error ? error.message : 'Services are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoadingServices(false);
+        if (resolution.mode === 'demo') {
+          setServices(resolution.services);
+          setUseFallback(true);
+        } else {
+          setServices([]);
+          setUseFallback(false);
         }
       }
+
+      setLoadingServices(false);
     }
 
     loadServices();
+  }, [allowDemo]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const scrollToRegistry = () => {
+    document.getElementById('registry')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const scrollToProtocols = () => {
+    document.getElementById('protocols')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="services-health-theme">
-      {/* Precision Clinical Hero */}
       <section className="sh-hero" id="sh-hero-section" aria-labelledby="sh-hero-title">
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '3rem' }}>
@@ -109,13 +94,10 @@ export default function Page() {
             {heroDescription}
           </p>
           <div style={{ marginTop: '5rem', display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-            <button className="sh-btn-primary" onClick={() => document.getElementById('protocols')?.scrollIntoView({ behavior: 'smooth' })}>
+            <button type="button" className="sh-btn-primary" onClick={scrollToProtocols}>
               {heroPrimaryCta}
             </button>
-            <button
-              className="sh-btn-outline-clinicians"
-              onClick={() => document.getElementById('registry')?.scrollIntoView({ behavior: 'smooth' })}
-            >
+            <button type="button" className="sh-btn-outline-clinicians" onClick={scrollToRegistry}>
               {heroSecondaryCta}
             </button>
           </div>
@@ -132,14 +114,12 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Vitality HUD Section */}
       <section className="sh-section sh-hud-section" id="telemetry" aria-label="Telemetry HUD">
           <VitalityHUD label={hudPractitionersLabel} value="1.2k+" sub={hudPractitionersSub} />
           <VitalityHUD label={hudAccuracyLabel} value="99.9%" sub={hudAccuracySub} />
           <VitalityHUD label={hudResponseLabel} value="0.01s" sub={hudResponseSub} />
       </section>
 
-      {/* Specialist Registry Section */}
       <section className="sh-section" id="registry" aria-labelledby="sh-registry-title">
           <div className="sh-registry-header">
               <div>
@@ -158,6 +138,17 @@ export default function Page() {
               </div>
           </div>
 
+          {apiError && useFallback && (
+            <div className="sh-alert-slot">
+              <CatalogSyncAlert variant="demo" error={apiError} classPrefix="sh" />
+            </div>
+          )}
+          {apiError && !useFallback && (
+            <div className="sh-alert-slot">
+              <CatalogSyncAlert variant="production" error={apiError} classPrefix="sh" />
+            </div>
+          )}
+
           <div className="sh-specialist-grid">
             {loadingServices ? (
               [1, 2, 3, 4].map((item) => (
@@ -168,12 +159,6 @@ export default function Page() {
                   <div className="sh-skeleton-line sh-skeleton-line-short" />
                 </div>
               ))
-            ) : serviceError ? (
-              <div className="sh-listing-state">
-                <div className="sh-listing-kicker">Clinical Sync Offline</div>
-                <h3>Practitioner registry could not be loaded.</h3>
-                <p>{serviceError}</p>
-              </div>
             ) : services.length === 0 ? (
               <div className="sh-listing-state">
                 <div className="sh-listing-kicker">Empty Clinical Registry</div>
@@ -182,9 +167,9 @@ export default function Page() {
               </div>
             ) : (
               services.slice(0, 6).map((service, index) => {
-                const practitioner = mapServiceToPractitioner(service, index);
+                const practitioner = mapServiceToHealthPractitioner(service, index);
                 return (
-                  <a className="sh-practitioner-link" href={`/product/${practitioner.slug}`} key={service.id}>
+                  <a className="sh-practitioner-link" href={themeLink(`/product/${practitioner.slug}`)} key={service.id}>
                     <PractitionerCard {...practitioner} />
                   </a>
                 );
@@ -193,7 +178,6 @@ export default function Page() {
           </div>
       </section>
 
-      {/* Wellness Protocols Section */}
       <section className="sh-section sh-pricing-section" id="protocols" aria-labelledby="sh-protocols-title">
           <div className="sh-pricing-body">
               <div className="sh-mono" style={{ marginBottom: '2rem', color: 'var(--sh-teal)' }}>{protocolsKicker}</div>
@@ -209,7 +193,7 @@ export default function Page() {
                   {protocolsDescription}
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
-                  {['Biomarker Telemetry', 'Genetic Mapping', '24/7 Concierge'].map(item => (
+                  {['Biomarker Telemetry', 'Genetic Mapping', '24/7 Concierge'].map((item) => (
                       <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', fontSize: '0.85rem', fontWeight: 600, letterSpacing: '1px', opacity: 0.9 }}>
                           <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--sh-teal)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.5rem', color: 'white' }}>✓</div>
                           {item.toUpperCase()}
@@ -223,20 +207,17 @@ export default function Page() {
                       <div className="sh-mono" style={{ marginBottom: '0.5rem' }}>STANDARD PLAN</div>
                       <div style={{ fontSize: '2rem', fontWeight: 800 }}>$49<span style={{ fontSize: '1rem', opacity: 0.5 }}>/mo</span></div>
                   </div>
-                  <button className="sh-plan-btn" onClick={() => alert('Standard plan consultation initialized.')}>SELECT</button>
+                  <button type="button" className="sh-plan-btn" onClick={scrollToRegistry}>SELECT</button>
               </div>
               <div className="sh-plan-card sh-plan-card-pro">
                   <div>
                       <div className="sh-mono" style={{ marginBottom: '0.5rem', color: 'white' }}>VITALITY PRO</div>
                       <div style={{ fontSize: '2rem', fontWeight: 800 }}>$149<span style={{ fontSize: '1rem', opacity: 0.7 }}>/mo</span></div>
                   </div>
-                  <button className="sh-plan-btn-pro" onClick={() => alert('Vitality Pro clinical protocol started!')}>INITIALIZE</button>
+                  <button type="button" className="sh-plan-btn-pro" onClick={scrollToRegistry}>INITIALIZE</button>
               </div>
           </div>
       </section>
-
-      {/* Direct inquiry consult trigger section */}
-      <section className="sh-section sh-consultation-section" id="contact" style={{ display: 'none' }}></section>
 
       <div style={{ height: '6rem' }}></div>
     </div>

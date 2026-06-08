@@ -1,17 +1,15 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
 import { CrtvHeader, CrtvCategoryCard, CrtvCreativeCard, CrtvPortfolioItem, CrtvFooter } from './components';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
-
-const fallbackImages = [
-  '/themes/services/creative/15.webp',
-  '/themes/services/creative/16.webp',
-  '/themes/services/creative/17.webp',
-];
+import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';
+import { fetchServicesHome, resolveServicesFailure } from '@/themes/services/shared/catalog';
+import { mapServiceToCreativeCard } from '@/themes/services/shared/service-utils';
+import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 const categories = [
   { title: 'Graphic Design', rate: 'From $100', icon: '🎨' },
@@ -31,24 +29,10 @@ const portfolios = [
   { title: 'Mobile App Concept', category: 'Development', image: '/themes/services/creative/3.webp' },
 ];
 
-function getServicePrice(service: ServiceListing) {
-  return service.pricing?.formatted || service.pricing?.formatted_short || (
-    service.pricing?.base_price ? `$${Number(service.pricing.base_price).toLocaleString()}/hr` : 'Request quote'
-  );
-}
-
-function mapServiceToCreative(service: ServiceListing, index: number) {
-  return {
-    name: service.provider?.name || service.title,
-    title: service.professional?.category || service.professional?.type || service.short_description || 'Creative Professional',
-    rating: service.provider?.rating ? service.provider.rating.toFixed(1) : '5.0',
-    rate: getServicePrice(service),
-    image: service.media?.main_photo || service.provider?.avatar || fallbackImages[index % fallbackImages.length],
-    slug: service.slug,
-  };
-}
-
 export default function Page() {
+  const themeLink = useServicesThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
+
   const heroTitle = useThemeContent('hero.title', 'Hire Creative Talent Worldwide');
   const heroDescription = useThemeContent('hero.description', 'Discover exceptional freelancers for your projects, from design to development.');
   const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Browse Creatives');
@@ -62,46 +46,50 @@ export default function Page() {
 
   const [services, setServices] = useState<ServiceListing[]>([]);
   const [loadingServices, setLoadingServices] = useState(true);
-  const [serviceError, setServiceError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
-
     async function loadServices() {
-      try {
-        const response = await api.getServices({ per_page: 6 });
-        if (!isMounted) {
-          return;
-        }
+      setLoadingServices(true);
+      const result = await fetchServicesHome({ per_page: 6 });
 
-        setServices(Array.isArray(response.data) ? response.data : []);
-        setServiceError(null);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
+      if (result.ok && result.response.data?.length) {
+        setServices(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No services returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveServicesFailure(allowDemo, 'creative');
 
-        console.error('Failed to load services creative listings:', error);
-        setServiceError(error instanceof Error ? error.message : 'Services are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoadingServices(false);
+        if (resolution.mode === 'demo') {
+          setServices(resolution.services);
+          setUseFallback(true);
+        } else {
+          setServices([]);
+          setUseFallback(false);
         }
       }
+
+      setLoadingServices(false);
     }
 
     loadServices();
+  }, [allowDemo]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const scrollToCreatives = () => {
+    document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="services-creative-theme">
       <CrtvHeader />
 
-      {/* Hero Section */}
       <section className="crtv-hero" id="crtv-hero-section" aria-labelledby="crtv-hero-title">
         <div className="crtv-hero-overlay"></div>
         <div className="crtv-hero-content">
@@ -110,46 +98,35 @@ export default function Page() {
             {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button
-              className="crtv-btn crtv-btn-gradient"
-              style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}
-              onClick={() => document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' })}
-            >
+            <button type="button" className="crtv-btn crtv-btn-gradient" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }} onClick={scrollToCreatives}>
               {heroPrimaryCta}
             </button>
-            <button
-              className="crtv-btn crtv-btn-outline"
-              style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            >
+            <button type="button" className="crtv-btn crtv-btn-outline" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }} onClick={scrollToContact}>
               {heroSecondaryCta}
             </button>
           </div>
         </div>
       </section>
 
-      {/* Search Filters */}
       <section className="crtv-search-bar" aria-label="Creative Search Filters">
-        <input type="text" className="crtv-search-input" placeholder="Search for skills, creatives, or projects..." style={{ flex: 2 }} />
-        <select className="crtv-select" aria-label="Category Selection"><option>Category</option></select>
-        <select className="crtv-select" aria-label="Budget Selection"><option>Budget</option></select>
-        <select className="crtv-select" aria-label="Rating Selection"><option>Rating</option></select>
-        <button className="crtv-btn" style={{ background: '#6c757d', color: 'white' }} onClick={() => alert('Filters applied.')}>Filter</button>
+        <input type="text" className="crtv-search-input" placeholder="Search for skills, creatives, or projects..." style={{ flex: 2 }} readOnly onFocus={scrollToCreatives} />
+        <select className="crtv-select" aria-label="Category Selection" defaultValue="" onChange={scrollToCreatives}><option value="">Category</option></select>
+        <select className="crtv-select" aria-label="Budget Selection" defaultValue="" onChange={scrollToCreatives}><option value="">Budget</option></select>
+        <select className="crtv-select" aria-label="Rating Selection" defaultValue="" onChange={scrollToCreatives}><option value="">Rating</option></select>
+        <button type="button" className="crtv-btn" style={{ background: '#6c757d', color: 'white' }} onClick={scrollToCreatives}>Filter</button>
       </section>
 
-      {/* Categories */}
       <section className="crtv-section" id="categories" aria-labelledby="crtv-cat-title">
         <h2 className="crtv-section-title" id="crtv-cat-title"><span className="gradient-text">{categoriesTitle}</span></h2>
         <div className="crtv-category-grid">
-          {categories.map((c, i) => (
-            <div key={i} onClick={() => alert(`Exploring Category: ${c.title}`)}>
-              <CrtvCategoryCard {...c} />
-            </div>
+          {categories.map((category) => (
+            <button type="button" key={category.title} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'inherit' }} onClick={scrollToCreatives}>
+              <CrtvCategoryCard {...category} />
+            </button>
           ))}
         </div>
       </section>
 
-      {/* Top Creatives */}
       <section className="crtv-section" style={{ background: 'white' }} id="pricing" aria-labelledby="crtv-creatives-title">
         <h2 className="crtv-section-title" id="crtv-creatives-title">
           {creativesTitle.includes('Top Creatives') ? (
@@ -159,6 +136,18 @@ export default function Page() {
             </>
           ) : creativesTitle}
         </h2>
+
+        {apiError && useFallback && (
+          <div className="crtv-alert-slot">
+            <CatalogSyncAlert variant="demo" error={apiError} classPrefix="crtv" />
+          </div>
+        )}
+        {apiError && !useFallback && (
+          <div className="crtv-alert-slot">
+            <CatalogSyncAlert variant="production" error={apiError} classPrefix="crtv" />
+          </div>
+        )}
+
         <div className="crtv-creative-grid">
           {loadingServices ? (
             [1, 2, 3].map((item) => (
@@ -169,12 +158,6 @@ export default function Page() {
                 <div className="crtv-skeleton-line crtv-skeleton-line-short" />
               </div>
             ))
-          ) : serviceError ? (
-            <div className="crtv-listing-state">
-              <div className="crtv-listing-kicker">Creative Sync Offline</div>
-              <h3>Top creatives could not be loaded.</h3>
-              <p>{serviceError}</p>
-            </div>
           ) : services.length === 0 ? (
             <div className="crtv-listing-state">
               <div className="crtv-listing-kicker">Empty Creative Registry</div>
@@ -183,9 +166,9 @@ export default function Page() {
             </div>
           ) : (
             services.slice(0, 6).map((service, index) => {
-              const creative = mapServiceToCreative(service, index);
+              const creative = mapServiceToCreativeCard(service, index);
               return (
-                <a className="crtv-creative-link" href={`/product/${creative.slug}`} key={service.id}>
+                <a className="crtv-creative-link" href={themeLink(`/product/${creative.slug}`)} key={service.id}>
                   <CrtvCreativeCard {...creative} />
                 </a>
               );
@@ -194,12 +177,11 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Portfolio Showcase */}
       <section className="crtv-section" id="portfolios" aria-labelledby="crtv-showcase-title">
         <h2 className="crtv-section-title" id="crtv-showcase-title"><span className="gradient-text">{showcaseTitle}</span></h2>
         <div className="crtv-masonry">
-          {portfolios.map((p, i) => (
-            <CrtvPortfolioItem key={i} {...p} />
+          {portfolios.map((portfolio) => (
+            <CrtvPortfolioItem key={portfolio.title} {...portfolio} />
           ))}
         </div>
       </section>
@@ -217,11 +199,10 @@ export default function Page() {
         headingId="sc-testimonials-title"
       />
 
-      {/* CTA Banner */}
       <section className="crtv-cta-banner" id="contact" aria-labelledby="crtv-cta-title">
         <h2 id="crtv-cta-title" style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '1rem' }}>{ctaTitle}</h2>
         <p style={{ fontSize: '1.25rem', marginBottom: '2.5rem', opacity: 0.9 }}>{ctaDescription}</p>
-        <button className="crtv-btn" style={{ background: 'white', color: '#121212', padding: '1.2rem 3rem', fontSize: '1.1rem', fontWeight: 700 }} onClick={() => alert('Onboarding sequence started!')}>{ctaPrimaryCta}</button>
+        <button type="button" className="crtv-btn" style={{ background: 'white', color: '#121212', padding: '1.2rem 3rem', fontSize: '1.1rem', fontWeight: 700 }} onClick={scrollToCreatives}>{ctaPrimaryCta}</button>
       </section>
 
       <CrtvFooter />

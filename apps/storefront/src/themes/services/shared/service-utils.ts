@@ -79,3 +79,44 @@ export function mapServiceToLocalCard(service: ServiceListing, index: number, ic
 export function getProviderRating(service: ServiceListing): string {
   return (4.6 + (service.id % 5) * 0.1).toFixed(1);
 }
+
+const CREATIVE_FALLBACK_IMAGES = [
+  '/themes/services/creative/15.webp',
+  '/themes/services/creative/16.webp',
+  '/themes/services/creative/17.webp',
+];
+
+const HEALTH_FALLBACK_IMAGES = [
+  '/themes/services/health/15.webp',
+  '/themes/services/health/16.webp',
+  '/themes/services/health/17.webp',
+  '/themes/services/health/18.webp',
+];
+
+export function mapServiceToCreativeCard(service: ServiceListing, index = 0) {
+  return {
+    name: service.provider?.name || service.title,
+    title: getServiceCategoryLabel(service.professional?.category || service.professional?.type, 'Creative Professional'),
+    rating: service.provider?.rating ? service.provider.rating.toFixed(1) : '5.0',
+    rate: getServicePriceLabel(service),
+    image:
+      service.media?.main_photo ||
+      service.provider?.avatar ||
+      CREATIVE_FALLBACK_IMAGES[index % CREATIVE_FALLBACK_IMAGES.length],
+    slug: service.slug,
+  };
+}
+
+export function mapServiceToHealthPractitioner(service: ServiceListing, index = 0) {
+  return {
+    name: service.provider?.name || service.title,
+    title: getServiceCategoryLabel(service.professional?.category || service.professional?.type, 'SPECIALIST').toUpperCase(),
+    image:
+      service.media?.main_photo ||
+      service.provider?.avatar ||
+      HEALTH_FALLBACK_IMAGES[index % HEALTH_FALLBACK_IMAGES.length],
+    rating: service.provider?.rating ? service.provider.rating.toFixed(1) : '4.9',
+    availability: service.operations?.hours_label || service.operations?.days_label || 'AVAILABLE',
+    slug: service.slug,
+  };
+}

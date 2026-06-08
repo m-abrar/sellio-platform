@@ -1,8 +1,17 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
+import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';
+import { fetchServiceDetail, resolveServiceFailure } from '@/themes/services/shared/catalog';
+import {
+  getServiceCategoryLabel,
+  getServiceImage,
+  getServiceLocationLabel,
+  getServicePriceLabel,
+} from '@/themes/services/shared/service-utils';
+import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 interface ProductPageProps {
   slug: string;
@@ -18,72 +27,65 @@ interface ServiceLead {
   created_at: string;
 }
 
-const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='900' height='640' viewBox='0 0 900 640'><rect width='100%' height='100%' fill='%23f8f9fa'/><rect x='90' y='95' width='720' height='450' rx='20' fill='%23ffffff' stroke='%23eeeeee'/><g transform='translate(405,260)' stroke='%23007bff' stroke-width='10' fill='none' stroke-linecap='round' stroke-linejoin='round'><path d='M0 74V18h90v56'/><path d='M18 18V0h54v18'/><path d='M0 74h90'/></g><text x='50%' y='62%' dominant-baseline='middle' text-anchor='middle' font-family='Inter, Arial, sans-serif' font-size='15' font-weight='700' letter-spacing='2' fill='%23666666'>SERVICE RECORD</text></svg>";
-
 export default function ProductPage({ slug }: ProductPageProps) {
+  const themeLink = useServicesThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const [service, setService] = useState<ServiceListing | null>(null);
   const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
   const [leadForm, setLeadForm] = useState({
     contactName: '',
     contactInfo: '',
-    requirements: ''
+    requirements: '',
   });
   const [leadSaved, setLeadSaved] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
-
     async function loadService() {
-      try {
-        const fetchedService = await api.getServiceBySlug(slug);
-        if (!isMounted) {
-          return;
-        }
+      setLoading(true);
+      setNotFound(false);
+      const result = await fetchServiceDetail(slug);
 
-        setService(fetchedService);
-        setErrorMessage(null);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
+      if (result.ok && result.service) {
+        setService(result.service);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'Service not found or API returned no data.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveServiceFailure(slug, allowDemo, 'corporate');
 
-        console.error('Failed to load services corporate detail:', error);
-        setErrorMessage(error instanceof Error ? error.message : 'The service record could not be synchronized.');
-      } finally {
-        if (isMounted) {
-          setLoading(false);
+        if (resolution.mode === 'demo') {
+          setService(resolution.service);
+          setUseFallback(true);
+        } else if (resolution.mode === 'notFound') {
+          setService(null);
+          setNotFound(true);
+          setUseFallback(false);
+        } else {
+          setService(null);
+          setUseFallback(false);
         }
       }
+
+      setLoading(false);
     }
 
     loadService();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [slug]);
-
-  const getServiceImage = (item: ServiceListing) => (
-    item.media?.main_photo || item.media?.gallery?.[0]?.url || placeholderImage
-  );
-
-  const getServicePrice = (item: ServiceListing) => (
-    item.pricing?.formatted || item.pricing?.formatted_short || (
-      item.pricing?.base_price ? `$${Number(item.pricing.base_price).toLocaleString()}` : 'Request quote'
-    )
-  );
-
-  const getLocationLabel = (item: ServiceListing) => (
-    [item.location?.city, item.location?.state, item.location?.country].filter(Boolean).join(', ') || 'Remote / On-site'
-  );
+  }, [slug, allowDemo]);
 
   const handleLeadSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!service) {
+    if (!service || !leadForm.contactName || !leadForm.contactInfo) {
+      setFormError('Please enter your name and contact details.');
       return;
     }
+
+    setFormError(null);
 
     const newLead: ServiceLead = {
       id: `service_lead_${Date.now()}`,
@@ -92,7 +94,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       contactName: leadForm.contactName,
       contactInfo: leadForm.contactInfo,
       requirements: leadForm.requirements,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
 
     try {
@@ -103,6 +105,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       setLeadForm({ contactName: '', contactInfo: '', requirements: '' });
     } catch (error) {
       console.error('Failed to persist services corporate lead:', error);
+      setFormError('Could not save your consultation request locally. Please try again.');
     }
   };
 
@@ -124,14 +127,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
     );
   }
 
-  if (errorMessage || !service) {
+  if (notFound || !service) {
     return (
       <main className="sc-detail-page">
         <section className="sc-detail-state" role="status">
           <div className="sc-service-kicker">Service Unavailable</div>
           <h1>Service could not be loaded.</h1>
-          <p>{errorMessage || 'The requested service does not exist or has been removed.'}</p>
-          <a href="/preview/services_corporate" className="sc-btn sc-btn-primary">Return to Services</a>
+          <p>{apiError || 'The requested service does not exist or has been removed.'}</p>
+          <a href={themeLink('')} className="sc-btn sc-btn-primary">Return to Services</a>
         </section>
       </main>
     );
@@ -139,10 +142,21 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="sc-detail-page">
-      <a href="/preview/services_corporate" className="sc-detail-back">
+      <a href={themeLink('')} className="sc-detail-back">
         <span aria-hidden="true">&larr;</span>
         Back to Services
       </a>
+
+      {apiError && useFallback && (
+        <div className="sc-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="sc" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="sc-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="sc" />
+        </div>
+      )}
 
       <section className="sc-detail-grid" aria-labelledby="sc-detail-title">
         <div className="sc-detail-media">
@@ -150,9 +164,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
 
         <article className="sc-detail-panel">
-          <div className="sc-service-kicker">{service.professional?.category || 'Corporate Service'}</div>
+          <div className="sc-service-kicker">{getServiceCategoryLabel(service.professional?.category, 'Corporate Service')}</div>
           <h1 id="sc-detail-title">{service.title}</h1>
-          <div className="sc-detail-price">{getServicePrice(service)}</div>
+          <div className="sc-detail-price">{getServicePriceLabel(service)}</div>
 
           <p className="sc-detail-description">
             {service.description || service.short_description || 'This live service record is synchronized from the Sellio service catalog and ready for client inquiries.'}
@@ -165,7 +179,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </div>
             <div>
               <span>Location</span>
-              <strong>{getLocationLabel(service)}</strong>
+              <strong>{getServiceLocationLabel(service)}</strong>
             </div>
             <div>
               <span>Provider</span>
@@ -222,6 +236,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
               onChange={(event) => setLeadForm({ ...leadForm, requirements: event.target.value })}
             />
           </label>
+          {formError && <p className="sc-form-error" role="alert">{formError}</p>}
           <button className="sc-btn sc-btn-primary" type="submit">Request Consultation</button>
         </form>
       </section>
