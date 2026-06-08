@@ -54,9 +54,25 @@ Deliverables:
 
 **Progress:** 22 / 52 themes baselined (Round 1: 16 + Round 2 Phase 1: 6)
 
+## Phase 2 — Properties ✅
+
+Themes: `properties_classic`, `properties_commercial`, `properties_investment`, `properties_luxury`, `properties_map`, `properties_neighborhood`, `properties_platinum`, `properties_showcase`, `properties_unified`, `properties_urban`, `properties_vacation`.
+
+Deliverables:
+
+- Shared `usePropertyThemeLink`, `useDemoFallbackAllowed`, `property-utils` (`getPropertyPrice`, `getPropertyLocation`, `getPropertyImage`, `scrollToSection`)
+- Theme-aware product/home links; admin create URL for list CTAs
+- Inline form validation (`formError` / success states) — no `alert()` CTAs
+- Removed hardcoded `/preview/properties_*` URLs
+- Classic keeps `/listing/{slug}` via `useClassicListingLink`; luxury Explore + classic Cart preserved
+
+**Progress:** 33 / 52 themes baselined (Round 1: 16 + Round 2 Phase 1: 6 + Phase 2: 11)
+
 ## Shared utilities (Round 2 additions)
 
 - `apps/storefront/src/themes/unifieds/shared/useDemoFallbackAllowed.ts`
 - `apps/storefront/src/themes/unifieds/shared/UnifiedExplorePage.tsx`
 - `apps/storefront/src/themes/unifieds/shared/UnifiedCartPage.tsx`
 - `apps/storefront/src/themes/unifieds/shared/subpages.css`
+- `apps/storefront/src/themes/properties/shared/useDemoFallbackAllowed.ts`
+- `apps/storefront/src/themes/properties/shared/property-utils.ts`

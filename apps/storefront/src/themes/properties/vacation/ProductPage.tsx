@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { RetreatBentoCard } from './components';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 interface VacationItem {
   id: number;
@@ -97,6 +98,7 @@ const translateProperty = (rawItem: Property): VacationItem => {
 
 export default function ProductPage({ slug }: { slug: string }) {
   const router = useRouter();
+  const themeLink = usePropertyThemeLink();
 
   // Dynamic States
   const [retreat, setRetreat] = useState<VacationItem | null>(null);
@@ -125,16 +127,7 @@ export default function ProductPage({ slug }: { slug: string }) {
   
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [receiptCode, setReceiptCode] = useState('');
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/properties_vacation${path}`;
-      }
-    }
-    return path;
-  };
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchRetreatDetails = async () => {
@@ -216,7 +209,11 @@ export default function ProductPage({ slug }: { slug: string }) {
 
   const handleEscapeCheckout = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!travelerName || !travelerEmail || !checkIn || !checkOut) return;
+    if (!travelerName || !travelerEmail || !checkIn || !checkOut) {
+      setFormError('Please complete all required booking details before checkout.');
+      return;
+    }
+    setFormError(null);
 
     setIsSubmitting(true);
 
@@ -289,7 +286,7 @@ export default function ProductPage({ slug }: { slug: string }) {
         <span style={{ fontSize: '3rem' }}>⚠️</span>
         <h3 style={{ fontFamily: 'var(--pv-font-serif)', fontSize: '2rem', color: 'var(--pv-ink)', marginTop: '1rem', fontWeight: 900 }}>Retreat Node Not Found</h3>
         <p style={{ color: 'var(--pv-text-muted)' }}>We couldn't locate the specified vacation retreat node.</p>
-        <button onClick={() => router.push(getThemeLink('/'))} className="pv-btn-primary">Return to Showroom</button>
+        <button onClick={() => router.push(themeLink('/'))} className="pv-btn-primary">Return to Showroom</button>
       </div>
     );
   }
@@ -299,7 +296,7 @@ export default function ProductPage({ slug }: { slug: string }) {
       {/* Back to Showroom Breadcrumb */}
       <div style={{ marginBottom: '3rem' }}>
         <button 
-          onClick={() => router.push(getThemeLink('/'))} 
+          onClick={() => router.push(themeLink('/'))} 
           style={{ background: 'none', border: 'none', color: 'var(--pv-azure)', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', padding: 0, fontFamily: 'monospace', letterSpacing: '2px' }}
         >
           ← RETREAT_CATALOG_CONSOLE
@@ -523,6 +520,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                 >
                   {isSubmitting ? 'SECURE_REGISTRY_LOCK...' : 'SECURE BOOKING RESERVATION'}
                 </button>
+                {formError && <p className="prop-form-error" role="alert">{formError}</p>}
               </form>
             ) : (
               <div style={{ textAlign: 'center', padding: '1rem 0' }}>
@@ -582,7 +580,7 @@ export default function ProductPage({ slug }: { slug: string }) {
               <RetreatBentoCard 
                 key={item.id} 
                 {...item} 
-                onClick={() => router.push(getThemeLink(`/product/${item.slug}`))}
+                onClick={() => router.push(themeLink(`/product/${item.slug}`))}
               />
             ))}
           </div>

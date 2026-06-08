@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 interface ProductPageProps {
   slug: string;
@@ -24,19 +25,10 @@ interface RelatedCardProps {
 }
 
 const RelatedCard = ({ title, price, location, tag, image, slug }: RelatedCardProps) => {
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        const themeKey = window.location.pathname.split('/')[2];
-        return `/preview/${themeKey}${path}`;
-      }
-    }
-    return path;
-  };
+  const themeLink = usePropertyThemeLink();
 
   return (
-    <div className="estate-card-premium" style={{ cursor: 'pointer' }} onClick={() => window.location.href = getThemeLink(`/product/${slug}`)}>
+    <div className="estate-card-premium" style={{ cursor: 'pointer' }} onClick={() => { window.location.href = themeLink(`/product/${slug}`); }}>
       <div style={{ overflow: 'hidden' }}>
         <img src={image} alt={title} className="estate-card-img" />
       </div>
@@ -53,6 +45,7 @@ const RelatedCard = ({ title, price, location, tag, image, slug }: RelatedCardPr
 };
 
 export default function ProductPage({ slug }: ProductPageProps) {
+  const themeLink = usePropertyThemeLink();
   const [property, setProperty] = useState<Property | null>(null);
   const [related, setRelated] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,17 +64,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [estimatingPrice, setEstimatingPrice] = useState(false);
   const [estimation, setEstimation] = useState<{ total_nights: number; estimated_lodging_total: string } | null>(null);
   const [inquiryAdded, setInquiryAdded] = useState(false);
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        const themeKey = window.location.pathname.split('/')[2];
-        return `/preview/${themeKey}${path}`;
-      }
-    }
-    return path;
-  };
+  const [registryFeedback, setRegistryFeedback] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [inquiryDispatched, setInquiryDispatched] = useState(false);
 
   useEffect(() => {
     const loadDetails = async () => {
@@ -176,22 +161,23 @@ export default function ProductPage({ slug }: ProductPageProps) {
       }];
       localStorage.setItem('sellio_luxury_inquiries', JSON.stringify(updatedList));
       setInquiryAdded(true);
-      alert('Sovereign Luxury Registry: Estate collected successfully for direct coordination.');
+      setRegistryFeedback('Estate collected successfully for direct coordination.');
     } else {
       const updatedList = currentList.filter((item: any) => item.id !== property.id);
       localStorage.setItem('sellio_luxury_inquiries', JSON.stringify(updatedList));
       setInquiryAdded(false);
-      alert('Sovereign Luxury Registry: Estate removed from your Heritage collection.');
+      setRegistryFeedback('Estate removed from your Heritage collection.');
     }
   };
 
   const handleInquirySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName || !email) {
-      alert("Please complete the required details before dispatch.");
+      setFormError('Please complete the required details before dispatch.');
       return;
     }
-    alert(`Thank you, ${fullName}. An Estate Heritage Coordinator has been notified. We will verify architectural provenance and contact you at ${email} shortly.`);
+    setFormError(null);
+    setInquiryDispatched(true);
     setFullName('');
     setEmail('');
     setMessage('');
@@ -213,7 +199,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       <div style={{ background: 'var(--luxury-platinum)', minHeight: '100vh', padding: '12rem 2rem', textAlign: 'center', fontFamily: 'var(--font-sans)' }}>
         <h2 style={{ fontSize: '2.5rem', fontFamily: 'var(--font-serif)', color: 'var(--luxury-charcoal)', marginBottom: '2rem' }}>Estate Not Found</h2>
         <p style={{ color: '#666', marginBottom: '4rem' }}>The requested listing signature could not be matched with the Global Heritage Catalog.</p>
-        <a href={getThemeLink('/')} className="luxury-btn-primary" style={{ textDecoration: 'none' }}>Return to Homepage</a>
+        <a href={themeLink('/')} className="luxury-btn-primary" style={{ textDecoration: 'none' }}>Return to Homepage</a>
       </div>
     );
   }
@@ -416,6 +402,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
               >
                 {inquiryAdded ? '✓ ADDED TO HERITAGE REGISTRY' : '❦ COLLECT FOR DIRECT INQUIRY'}
               </button>
+              {registryFeedback && (
+                <p role="status" style={{ margin: '-1rem 0 2rem', fontSize: '0.8rem', color: 'var(--luxury-gold)', textAlign: 'center' }}>
+                  {registryFeedback}
+                </p>
+              )}
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
                 <div style={{ flex: 1, height: '1px', background: 'var(--luxury-border)' }} />
@@ -423,6 +414,22 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 <div style={{ flex: 1, height: '1px', background: 'var(--luxury-border)' }} />
               </div>
 
+              {inquiryDispatched ? (
+                <div role="status" style={{ padding: '2.5rem 1.5rem', border: '1px solid var(--luxury-border)', background: 'var(--luxury-platinum)', textAlign: 'center' }}>
+                  <span style={{ fontSize: '2rem', color: 'var(--luxury-gold)', display: 'block', marginBottom: '1rem' }}>✦</span>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--luxury-charcoal)', lineHeight: 1.8, margin: 0 }}>
+                    An Estate Heritage Coordinator has been notified. We will verify architectural provenance and contact you shortly.
+                  </p>
+                  <button
+                    type="button"
+                    className="luxury-btn-primary"
+                    style={{ marginTop: '2rem', width: '100%', padding: '1.25rem', fontSize: '0.75rem' }}
+                    onClick={() => setInquiryDispatched(false)}
+                  >
+                    DISPATCH ANOTHER INQUIRY
+                  </button>
+                </div>
+              ) : (
               <form onSubmit={handleInquirySubmit}>
                 {/* Date Estimator if rental */}
                 {isRental && (
@@ -517,7 +524,13 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 <button type="submit" className="luxury-btn-primary" style={{ width: '100%', padding: '1.5rem', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '3px' }}>
                   DISPATCH DIRECT INQUIRY
                 </button>
+                {formError && (
+                  <p role="alert" style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#b45309', textAlign: 'center' }}>
+                    {formError}
+                  </p>
+                )}
               </form>
+              )}
               
               <div style={{ marginTop: '2.5rem', textAlign: 'center', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '3px', color: '#999' }}>
                 HERITAGE_COORDINATION_DESK

@@ -826,3 +826,10 @@
 /* Product detail page */
 .pc-detail-page { background: #0a0a0a; color: white; min-height: 100vh; padding: 6rem 5%; }
 .pc-detail-back { color: var(--pc-blue); display: inline-block; font-weight: 700; margin-bottom: 2rem; text-decoration: none; }
+
+.prop-form-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}

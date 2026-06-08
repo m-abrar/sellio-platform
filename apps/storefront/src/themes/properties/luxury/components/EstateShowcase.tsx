@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 interface EstateCardProps {
     title: string;
@@ -14,20 +15,11 @@ interface EstateCardProps {
     slug: string;
 }
 
-const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-        const isPreview = window.location.pathname.startsWith('/preview/');
-        if (isPreview) {
-            const themeKey = window.location.pathname.split('/')[2];
-            return `/preview/${themeKey}${path}`;
-        }
-    }
-    return path;
-};
-
 const EstateCard = ({ title, price, location, tag, image, slug }: EstateCardProps) => {
+    const themeLink = usePropertyThemeLink();
+
     const handleClick = () => {
-        window.location.href = getThemeLink(`/product/${slug}`);
+        window.location.href = themeLink(`/product/${slug}`);
     };
 
     return (
@@ -53,6 +45,7 @@ const FALLBACK_ESTATES = [
 ];
 
 export const EstateShowcase = () => {
+    const themeLink = usePropertyThemeLink();
     const [estates, setEstates] = useState<EstateCardProps[]>([]);
     const [loading, setLoading] = useState(true);
     const [apiError, setApiError] = useState<string | null>(null);
@@ -162,7 +155,7 @@ export const EstateShowcase = () => {
             {!loading && estates.length > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '6rem' }}>
                     <button 
-                        onClick={() => window.location.href = '/preview/properties_luxury/explore'}
+                        onClick={() => { window.location.href = themeLink('/explore'); }}
                         className="luxury-btn-primary"
                         style={{
                             background: 'none',

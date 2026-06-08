@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { PortfolioAssetCard, YieldAnalyticsHUD } from './components';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const assetTypes = ['Residential', 'Commercial', 'Industrial', 'Retail', 'Specialty', 'Development', 'Infrastructure', 'Commercial'];
@@ -30,6 +33,9 @@ function mapPropertyToAsset(property: Property, index: number) {
 }
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = usePropertyThemeLink();
+  const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [propertyError, setPropertyError] = useState<string | null>(null);
@@ -166,7 +172,7 @@ export default function Page() {
               properties.slice(0, 9).map((property, index) => {
                 const asset = mapPropertyToAsset(property, index);
                 return (
-                  <a className="pi-asset-link" href={`/product/${asset.slug}`} key={property.id}>
+                  <a className="pi-asset-link" href={themeLink(`/product/${asset.slug}`)} key={property.id}>
                     <PortfolioAssetCard {...asset} />
                   </a>
                 );

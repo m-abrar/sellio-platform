@@ -4,7 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import { AssetRegistryCard, IntelligenceHUD } from './components';
-import { getThemeLink, scrollToSection } from './utils';
+import { scrollToSection } from '@/themes/properties/shared/property-utils';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
  
 const HERO_IMAGE = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80';
@@ -20,6 +22,8 @@ const FALLBACK_ASSETS = [
  
 export default function Page() {
   const router = useRouter();
+  const themeLink = usePropertyThemeLink();
+  const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [assets, setAssets] = useState<any[]>([]);
   const [filteredAssets, setFilteredAssets] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -344,7 +348,7 @@ export default function Page() {
                 <AssetRegistryCard
                   key={asset.id}
                   {...asset}
-                  onClick={() => router.push(getThemeLink(`/product/${asset.slug}`))}
+                  onClick={() => router.push(themeLink(`/product/${asset.slug}`))}
                 />
               ))}
             </div>

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import { AssetRegistryCard } from './components';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 // High-fidelity local commercial assets fallback seeds
 const FALLBACK_ASSETS = [
@@ -16,6 +17,7 @@ const FALLBACK_ASSETS = [
 
 export default function ProductPage({ slug }: { slug: string }) {
   const router = useRouter();
+  const themeLink = usePropertyThemeLink();
   const [asset, setAsset] = useState<any>(null);
   const [related, setRelated] = useState<any[]>([]);
 
@@ -32,6 +34,7 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [targetBudget, setTargetBudget] = useState('');
   const [isRouting, setIsRouting] = useState(false);
   const [auditReceipt, setAuditReceipt] = useState<any>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const translateProperty = (p: any) => {
     const rawPrice = p.price || 14000000;
@@ -202,9 +205,10 @@ export default function ProductPage({ slug }: { slug: string }) {
   const handleAuditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!repName || !corpEmail || !corpFirm || !preferredDate || !targetBudget) {
-      alert("Please specify all core institutional appraisal parameters.");
+      setFormError('Please specify all core institutional appraisal parameters.');
       return;
     }
+    setFormError(null);
 
     setIsRouting(true);
     await new Promise(resolve => setTimeout(resolve, 1400));
@@ -236,16 +240,6 @@ export default function ProductPage({ slug }: { slug: string }) {
     } finally {
       setIsRouting(false);
     }
-  };
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/properties_commercial${path}`;
-      }
-    }
-    return path;
   };
 
   if (loading) {
@@ -281,7 +275,7 @@ export default function ProductPage({ slug }: { slug: string }) {
         <div className="pc-mono" style={{ marginBottom: '1.5rem' }}>RESOLVE_NODE_NULL</div>
         <h2 style={{ fontSize: '3rem', fontWeight: 900, textTransform: 'uppercase' }}>Asset Blueprints Unresolved</h2>
         <p style={{ color: 'var(--pc-slate)', margin: '2rem 0 5rem', fontSize: '1.1rem' }}>The institutional real estate coordinates could not be recovered from the Sellio Ledger.</p>
-        <button className="pc-btn-primary" onClick={() => router.push(getThemeLink('/'))}>RETURN_TO_REGISTRY</button>
+        <button className="pc-btn-primary" onClick={() => router.push(themeLink('/'))}>RETURN_TO_REGISTRY</button>
       </div>
     );
   }
@@ -292,7 +286,7 @@ export default function ProductPage({ slug }: { slug: string }) {
       {/* Return Navigation */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6rem', marginTop: '2rem' }}>
         <button 
-          onClick={() => router.push(getThemeLink('/'))}
+          onClick={() => router.push(themeLink('/'))}
           style={{
             background: 'transparent',
             border: 'none',
@@ -541,6 +535,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                 >
                   {isRouting ? 'ROUTING_BLUEPRINTS...' : '⚡ INITIALIZE SITE AUDIT GATE'}
                 </button>
+                {formError && <p className="prop-form-error" role="alert">{formError}</p>}
               </form>
             </div>
           )}
@@ -567,7 +562,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                   setCorpFirm('');
                   setPreferredDate('');
                   setTargetBudget('');
-                  router.push(getThemeLink(`/product/${item.slug}`));
+                  router.push(themeLink(`/product/${item.slug}`));
                 }}
               />
             ))}

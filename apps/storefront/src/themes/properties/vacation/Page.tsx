@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { RetreatBentoCard, ExperienceStats } from './components';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 interface VacationItem {
@@ -86,8 +88,9 @@ const ShimmerCard = () => (
 
 export default function Page() {
   const router = useRouter();
+  const themeLink = usePropertyThemeLink();
+  const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
 
-  // Dynamic States
   const [retreats, setRetreats] = useState<VacationItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
@@ -102,16 +105,6 @@ export default function Page() {
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
   const [priceRange, setPriceRange] = useState('');
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/properties_vacation${path}`;
-      }
-    }
-    return path;
-  };
 
   useEffect(() => {
     const fetchRetreats = async () => {
@@ -358,7 +351,7 @@ export default function Page() {
                 <RetreatBentoCard 
                   key={retreat.id} 
                   {...retreat} 
-                  onClick={() => router.push(getThemeLink(`/product/${retreat.slug}`))}
+                  onClick={() => router.push(themeLink(`/product/${retreat.slug}`))}
                 />
               ))}
             </div>

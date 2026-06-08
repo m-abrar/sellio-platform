@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { UnifiedPropCard, MarketMetricsHUD } from './components';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackImages = [
@@ -41,6 +44,9 @@ function mapPropertyToCard(property: Property, index: number) {
 }
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = usePropertyThemeLink();
+  const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [propertyError, setPropertyError] = useState<string | null>(null);
@@ -123,7 +129,7 @@ export default function Page() {
                 fontWeight: 800,
                 cursor: 'pointer',
                 transition: 'all 0.3s ease'
-            }} id="uh-btn-list" onClick={() => alert('Registering new properties node. Developer active.')}>
+            }} id="uh-btn-list" onClick={() => window.open(adminCreatePropertyUrl, '_blank', 'noopener,noreferrer')}>
                 {useThemeContent('hero.secondary_cta_label', 'List Asset')}
             </button>
           </div>
@@ -182,7 +188,7 @@ export default function Page() {
               properties.slice(0, 8).map((property, index) => {
                 const card = mapPropertyToCard(property, index);
                 return (
-                  <a className="uh-prop-link" href={`/product/${card.slug}`} key={property.id}>
+                  <a className="uh-prop-link" href={themeLink(`/product/${card.slug}`)} key={property.id}>
                     <UnifiedPropCard {...card} />
                   </a>
                 );
@@ -209,7 +215,7 @@ export default function Page() {
           </div>
 
           <div style={{ zIndex: 2 }}>
-            <button className="uh-btn-primary" style={{ padding: '2rem 7rem', fontSize: '1.15rem' }} id="uh-btn-cta-initialize" onClick={() => alert('Authentication and master node allocation protocol running.')}>
+            <button className="uh-btn-primary" style={{ padding: '2rem 7rem', fontSize: '1.15rem' }} id="uh-btn-cta-initialize" onClick={() => router.push(themeLink('/'))}>
                 {useThemeContent('cta.button_label', 'Initialize Master Node')}
             </button>
           </div>

@@ -1,6 +1,6 @@
 # Dynamic Theme Conversion Status Report
 
-Last verified: 2026-06-08 (Round 2 — Unifieds phase complete; 22/52 baselined).
+Last verified: 2026-06-08 (Round 2 — Properties phase complete; 33/52 baselined).
 
 This report tracks which Sellio storefront themes have moved from static prototype markup toward live, API-backed React views. It should be read together with `apps/backend/database/seeders/ThemeSeeder.php`, which is the current seeded theme source of truth.
 
@@ -27,7 +27,7 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Classifieds | `classifieds_local` | ✅ | Map + list split; shared catalog; inquiry forms |
 | Classifieds | `classifieds_general` | ✅ | Sidebar filters + chat widget; demo fallback policy |
 
-**Completed:** 22 / 52 (Round 1: 16 + Round 2 Unifieds: 6)
+**Completed:** 33 / 52 (Round 1: 16 + Round 2 Unifieds: 6 + Round 2 Properties: 11)
 
 ## Round 2 Progress
 
@@ -39,6 +39,17 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Unifieds | `unifieds_mega` | ✅ | Shared explore/cart; theme links; cart on product |
 | Unifieds | `unifieds_modern` | ✅ | Shared explore/cart; theme links; cart on product |
 | Unifieds | `unifieds_standard` | ✅ | Shared explore/cart; theme links; cart on product |
+| Properties | `properties_classic` | ✅ | Listing routes preserved; Cart inline validation; theme links |
+| Properties | `properties_commercial` | ✅ | Theme links; audit form inline validation |
+| Properties | `properties_investment` | ✅ | Theme links; inquiry form inline validation |
+| Properties | `properties_luxury` | ✅ | Explore preserved; theme links; inline registry/inquiry feedback |
+| Properties | `properties_map` | ✅ | Theme links; spatial inquiry form inline validation |
+| Properties | `properties_neighborhood` | ✅ | Theme links; inquiry form inline validation |
+| Properties | `properties_platinum` | ✅ | Theme links; inquiry form inline validation |
+| Properties | `properties_showcase` | ✅ | Theme links; inquiry form inline validation |
+| Properties | `properties_unified` | ✅ | Theme links; inquiry form inline validation |
+| Properties | `properties_urban` | ✅ | Theme links; inquiry form inline validation |
+| Properties | `properties_vacation` | ✅ | Booking form inline validation; theme links (hard lift) |
 
 Tracker: `_development/docs/storefront-round2-roadmap.md`.
 
@@ -57,8 +68,8 @@ Tracker: `_development/docs/storefront-round2-roadmap.md`.
 | Theme folders with `CartPage.tsx` | 5 |
 | Theme folders with static fallback/mock content in TSX | 36 |
 | Round 1 baselined themes | 16 |
-| Round 2 baselined themes | 6 |
-| Total baselined themes | 22 |
+| Round 2 baselined themes | 17 |
+| Total baselined themes | 33 |
 
 Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx` source files. This confirms live-data wiring exists, not that every route, interaction, empty state, fallback path, and visual breakpoint has been manually QA certified.
 

@@ -46,7 +46,7 @@ export const UniversalHeader = () => {
 };
 
 export const UnifiedPropCard = ({ title, price, location, type, image }: any) => (
-  <div className="uh-prop-card" onClick={() => alert(`Details portal for: ${title} routing active.`)}>
+  <div className="uh-prop-card" >
     <div className="uh-card-img-wrapper">
       <img src={image} alt={title} className="uh-card-img" />
       <span style={{

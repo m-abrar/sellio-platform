@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { BrutalistUnitCard, StructuralStat } from './components';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackImages = [
@@ -41,6 +44,9 @@ function mapPropertyToUnit(property: Property, index: number) {
 }
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = usePropertyThemeLink();
+  const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [propertyError, setPropertyError] = useState<string | null>(null);
@@ -108,7 +114,7 @@ export default function Page() {
                 textTransform: 'uppercase',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease'
-            }} id="pu-btn-list" onClick={() => alert('Registering new urban unit node.')}>
+            }} id="pu-btn-list" onClick={() => window.open(adminCreatePropertyUrl, '_blank', 'noopener,noreferrer')}>
               {useThemeContent('hero.secondary_cta_label', 'List Unit')}
             </button>
           </div>
@@ -180,7 +186,7 @@ export default function Page() {
               properties.slice(0, 6).map((property, index) => {
                 const unit = mapPropertyToUnit(property, index);
                 return (
-                  <a className="pu-unit-link" href={`/product/${unit.slug}`} key={property.id}>
+                  <a className="pu-unit-link" href={themeLink(`/product/${unit.slug}`)} key={property.id}>
                     <BrutalistUnitCard {...unit} />
                   </a>
                 );
@@ -203,7 +209,7 @@ export default function Page() {
           <p style={{ maxWidth: '700px', margin: '0 auto 6rem', opacity: 0.6, fontSize: '1.25rem', lineHeight: 1.8 }}>
               {useThemeContent('cta.description', 'From the industrial lofts of the Arts District to the high-energy penthouses of the Financial Center, find the urban node that matches your frequency.')}
           </p>
-          <button className="pu-btn-primary" style={{ padding: '2.5rem 8rem', fontSize: '1.2rem' }} id="pu-btn-cta-auth" onClick={() => alert('District sync authorization handshake initiated.')}>
+          <button className="pu-btn-primary" style={{ padding: '2.5rem 8rem', fontSize: '1.2rem' }} id="pu-btn-cta-auth" onClick={() => router.push(themeLink('/'))}>
               {useThemeContent('cta.button_label', 'Authorize District Sync')}
           </button>
       </section>

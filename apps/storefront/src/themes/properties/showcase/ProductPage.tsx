@@ -3,17 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 interface ProductPageProps {
   slug: string;
-}
-
-function getThemeLink(path: string) {
-  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/preview/')) {
-    const themeKey = window.location.pathname.split('/')[2];
-    return `/preview/${themeKey}${path}`;
-  }
-  return path || '/';
 }
 
 function getPropertyPrice(property: Property) {
@@ -31,11 +24,13 @@ function getPropertyImage(property: Property) {
 }
 
 export default function ProductPage({ slug }: ProductPageProps) {
+  const themeLink = usePropertyThemeLink();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -58,7 +53,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!property || !form.name || !form.email) return;
+    if (!property || !form.name || !form.email) {
+      setFormError('Please enter your name and email to submit an inquiry.');
+      return;
+    }
+    setFormError(null);
     try {
       const stored = JSON.parse(localStorage.getItem('sellio_properties_showcase_inquiries') || '[]');
       stored.push({ id: Date.now(), property_id: property.id, property_title: property.title, contact_name: form.name, contact_email: form.email, message: form.message, submitted_at: new Date().toISOString() });
@@ -87,7 +86,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="ps-detail-kicker">Showcase Unavailable</div>
           <h1>Property could not be loaded.</h1>
           <p>{errorMessage}</p>
-          <a href={getThemeLink('')} className="ps-btn ps-btn-primary">Return to Showcase</a>
+          <a href={themeLink('')} className="ps-btn ps-btn-primary">Return to Showcase</a>
         </section>
       </main>
     );
@@ -95,7 +94,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="ps-detail-page">
-      <a href={getThemeLink('')} className="ps-detail-back">&larr; Back to Curated Showcase</a>
+      <a href={themeLink('')} className="ps-detail-back">&larr; Back to Curated Showcase</a>
       <header className="ps-detail-hero">
         <img src={getPropertyImage(property)} alt={property.title} />
         <div className="ps-detail-hero-overlay">

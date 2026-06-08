@@ -71,7 +71,7 @@ export const CinematicPropertyCard = ({ title, price, location, description, ima
         
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
             <div style={{ fontSize: '2.5rem', fontFamily: 'var(--ps-font-serif)', fontWeight: 700, color: 'var(--ps-gold)' }}>{price}</div>
-            <button style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--ps-gold)', color: 'white', padding: '1rem 0', fontWeight: 900, fontSize: '0.9rem', letterSpacing: '4px', cursor: 'pointer', transition: 'all 0.3s ease' }} className="ps-provenance-btn" onClick={() => alert(`Accessing provenance records for: ${title}`)}>
+            <button style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--ps-gold)', color: 'white', padding: '1rem 0', fontWeight: 900, fontSize: '0.9rem', letterSpacing: '4px', cursor: 'pointer', transition: 'all 0.3s ease' }} className="ps-provenance-btn" >
                 VIEW_PROVENANCE_DATA →
             </button>
         </div>

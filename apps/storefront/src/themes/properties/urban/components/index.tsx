@@ -46,7 +46,7 @@ export const SkylineHeader = () => {
 };
 
 export const BrutalistUnitCard = ({ title, price, location, beds, sqft, image }: any) => (
-  <div className="pu-unit-card" onClick={() => alert(`Connecting unit master: ${title}`)}>
+  <div className="pu-unit-card" >
     <div className="pu-unit-img-wrapper">
       <img src={image} alt={title} className="pu-unit-img" />
     </div>

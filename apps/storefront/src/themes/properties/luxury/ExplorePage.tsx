@@ -4,6 +4,7 @@ import React, { useEffect, useState, Suspense } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property, Category, Location } from '@sellio/types';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 const FALLBACK_CATEGORIES: Category[] = [
     { id: 1, title: 'Country Manors', slug: 'country-manors' },
@@ -33,20 +34,11 @@ interface EstateCardProps {
     slug: string;
 }
 
-const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-        const isPreview = window.location.pathname.startsWith('/preview/');
-        if (isPreview) {
-            const themeKey = window.location.pathname.split('/')[2];
-            return `/preview/${themeKey}${path}`;
-        }
-    }
-    return path;
-};
-
 const EstateCard = ({ title, price, location, tag, image, slug }: EstateCardProps) => {
+    const themeLink = usePropertyThemeLink();
+
     const handleClick = () => {
-        window.location.href = getThemeLink(`/product/${slug}`);
+        window.location.href = themeLink(`/product/${slug}`);
     };
 
     return (

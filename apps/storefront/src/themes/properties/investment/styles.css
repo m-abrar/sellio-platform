@@ -383,3 +383,10 @@
 @media (max-width: 768px) {
   .pi-detail-grid, .pi-detail-specs { grid-template-columns: 1fr; }
 }
+
+.prop-form-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}

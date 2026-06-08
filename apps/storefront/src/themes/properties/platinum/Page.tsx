@@ -1,10 +1,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { ShowcaseCard, StatisticsNode } from './components';
-import { getThemeLink, scrollToSection } from './utils';
+import { scrollToSection } from '@/themes/properties/shared/property-utils';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const spans = ['span-8', 'span-4', 'span-4', 'span-8', 'span-4', 'span-8'];
@@ -34,6 +37,9 @@ function mapPropertyToShowcase(property: Property, index: number) {
 }
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = usePropertyThemeLink();
+  const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [propertyError, setPropertyError] = useState<string | null>(null);
@@ -156,7 +162,7 @@ export default function Page() {
               return (
                 <a
                   className={`pl-showcase-link pl-${card.span}`}
-                  href={getThemeLink(`/product/${card.slug}`)}
+                  href={themeLink(`/product/${card.slug}`)}
                   key={property.id}
                 >
                   <ShowcaseCard title={card.title} price={card.price} image={card.image} />

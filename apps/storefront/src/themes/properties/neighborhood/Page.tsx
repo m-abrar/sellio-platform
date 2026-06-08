@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { NeighborPropertyCard, LocalInsightHUD } from './components';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackImages = [
@@ -39,6 +42,9 @@ function mapPropertyToHome(property: Property, index: number) {
 }
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = usePropertyThemeLink();
+  const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [propertyError, setPropertyError] = useState<string | null>(null);
@@ -191,7 +197,7 @@ export default function Page() {
               properties.slice(0, 6).map((property, index) => {
                 const home = mapPropertyToHome(property, index);
                 return (
-                  <a className="pn-home-link" href={`/product/${home.slug}`} key={property.id}>
+                  <a className="pn-home-link" href={themeLink(`/product/${home.slug}`)} key={property.id}>
                     <NeighborPropertyCard {...home} />
                   </a>
                 );

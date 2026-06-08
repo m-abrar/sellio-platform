@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { MapListCard, MapPriceMarker, MapHUD } from './components';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackImages = [
@@ -37,6 +40,9 @@ function mapPropertyToListing(property: Property, index: number) {
 }
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = usePropertyThemeLink();
+  const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [propertyError, setPropertyError] = useState<string | null>(null);
@@ -128,7 +134,7 @@ export default function Page() {
             </div>
           ) : (
             listings.map((item) => (
-              <a className="pm-list-link" href={`/product/${item.slug}`} key={item.slug}>
+              <a className="pm-list-link" href={themeLink(`/product/${item.slug}`)} key={item.slug}>
                 <MapListCard {...item} />
               </a>
             ))

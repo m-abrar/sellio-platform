@@ -36,6 +36,7 @@ export default function CartPage() {
   const [phone, setPhone] = useState('');
   const [specialRegistryText, setSpecialRegistryText] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Load from local storage
   useEffect(() => {
@@ -112,9 +113,10 @@ export default function CartPage() {
   const handleInquirySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName || !email) {
-      alert("Please complete the required coordination details.");
+      setFormError('Please complete the required coordination details.');
       return;
     }
+    setFormError(null);
     
     // Simulate API dispatch
     setFormSubmitted(true);
@@ -345,6 +347,11 @@ export default function CartPage() {
                   <button type="submit" className="pc-btn-primary" style={{ width: '100%', padding: '1.5rem' }}>
                     DISPATCH UNIFIED DOSSIER
                   </button>
+                  {formError && (
+                    <p role="alert" style={{ marginTop: '1rem', color: 'var(--pc-accent)', fontSize: '0.85rem', textAlign: 'center' }}>
+                      {formError}
+                    </p>
+                  )}
                 </form>
 
                 <div style={{ marginTop: '2.5rem', textAlign: 'center', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.3 }}>

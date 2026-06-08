@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { CinematicPropertyCard, CuratorStats } from './components';
+import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackImages = [
@@ -35,6 +38,9 @@ function mapPropertyToShowcase(property: Property, index: number) {
 }
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = usePropertyThemeLink();
+  const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [propertyError, setPropertyError] = useState<string | null>(null);
@@ -93,7 +99,7 @@ export default function Page() {
             <button className="ps-btn-primary" id="ps-btn-explore" onClick={() => document.getElementById('ps-story-grid')?.scrollIntoView({ behavior: 'smooth' })}>
               {useThemeContent('hero.primary_cta_label', 'Explore Curation')}
             </button>
-            <button style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--ps-canvas)', color: 'white', padding: '1rem 0', fontWeight: 900, fontSize: '1rem', letterSpacing: '4px', cursor: 'pointer' }} id="ps-btn-manifesto" onClick={() => alert('Atelier Curation Manifesto loaded into memory bank node.')}>
+            <button style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--ps-canvas)', color: 'white', padding: '1rem 0', fontWeight: 900, fontSize: '1rem', letterSpacing: '4px', cursor: 'pointer' }} id="ps-btn-manifesto" onClick={() => router.push(themeLink('/'))}>
               {useThemeContent('hero.secondary_cta_label', 'READ_MANIFESTO')}
             </button>
         </div>
@@ -164,7 +170,7 @@ export default function Page() {
             properties.slice(0, 6).map((property, index) => {
               const card = mapPropertyToShowcase(property, index);
               return (
-                <a className="ps-showcase-link" href={`/product/${card.slug}`} key={property.id}>
+                <a className="ps-showcase-link" href={themeLink(`/product/${card.slug}`)} key={property.id}>
                   <CinematicPropertyCard {...card} />
                 </a>
               );
@@ -208,7 +214,7 @@ export default function Page() {
           <p style={{ maxWidth: '800px', margin: '0 auto 6rem', color: 'var(--ps-text-dim)', fontSize: '1.35rem', lineHeight: 1.8 }}>
               {useThemeContent('cta.description', 'Our institutional nodes are currently accepting select inquiries for the 2026/27 global collection. Submit your provenance for review.')}
           </p>
-          <button className="ps-btn-primary" id="ps-btn-cta-auth" onClick={() => alert('Authentication and signature pipeline initializing.')}>
+          <button className="ps-btn-primary" id="ps-btn-cta-auth" onClick={() => router.push(themeLink('/'))}>
               {useThemeContent('cta.button_label', 'Request Private Access')}
           </button>
       </section>

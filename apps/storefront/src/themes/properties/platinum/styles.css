@@ -725,3 +725,10 @@
 @media (max-width: 768px) {
   .pl-detail-grid, .pl-detail-specs { grid-template-columns: 1fr; }
 }
+
+.prop-form-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}
