@@ -1,15 +1,25 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { api } from '@sellio/api-client';
 import type { Vehicle, Category } from '@sellio/types';
 import { useRouter } from 'next/navigation';
 import { LuxuryHeader, LuxuryCarCard, LuxuryFooter } from './components';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
+import { fetchVehiclesHome, resolveVehiclesFailure } from '@/themes/autos/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
+import {
+  formatVehiclePrice,
+  getLuxuryVehicleImage,
+  getLuxuryVehicleSpecLabel,
+} from '@/themes/autos/shared/vehicle-utils';
 
 export default function Page() {
   const router = useRouter();
+  const themeLink = useAutosThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const heroTitle = useThemeContent('hero.title', 'Experience the Luxury You Deserve');
   const heroDescription = useThemeContent(
     'hero.description',
@@ -37,7 +47,8 @@ export default function Page() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<{ id: number; title: string }[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // Filter Selection States
   const [selectedBrand, setSelectedBrand] = useState('');
@@ -45,60 +56,44 @@ export default function Page() {
   const [selectedPriceRange, setSelectedPriceRange] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
 
-  // Fallback Simulation Assets
-  const FALLBACK_CARS = [
-    { title: "2025 Mercedes S-Class", specs: "Sleek Sedan | 5,000 mi", price: "$110,000", image: "/themes/autos/luxury/mercedes.png", slug: "mercedes-s-class" },
-    { title: "2024 Rolls Royce Phantom", specs: "Ultra Luxury | 2,100 mi", price: "$420,000", image: "/themes/autos/luxury/rolls.png", slug: "rolls-royce-phantom" },
-    { title: "2025 Porsche Taycan Turbo", specs: "Electric Coupe | 800 mi", price: "$160,000", image: "/themes/autos/luxury/porsche.png", slug: "porsche-taycan" },
-    { title: "2023 Bentley Continental GT", specs: "Grand Tourer | 6,500 mi", price: "$245,000", image: "/themes/autos/luxury/bentley.png", slug: "bentley-continental" }
-  ];
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-        const isPreview = window.location.pathname.startsWith('/preview/');
-        if (isPreview) {
-            return `/preview/autos_luxury${path}`;
-        }
-    }
-    return path;
-  };
-
   useEffect(() => {
     async function loadHomepageData() {
-      try {
-        setLoading(true);
-        // Query paginated vehicles and get sidebar filter metadata
-        const response = await api.getVehicles({ per_page: 6 });
-        
-        if (response && response.data) {
-          setVehicles(response.data);
-          
-          if (response.sidebar) {
-            if (response.sidebar.categories) setCategories(response.sidebar.categories);
-            if (response.sidebar.brands) setBrands(response.sidebar.brands);
+      setLoading(true);
+      const result = await fetchVehiclesHome(6);
+
+      if (result.ok && result.response.data) {
+        setVehicles(result.response.data);
+
+        if (result.response.sidebar) {
+          if (result.response.sidebar.categories) {
+            setCategories(result.response.sidebar.categories);
+          }
+          if (result.response.sidebar.brands) {
+            setBrands(result.response.sidebar.brands);
           }
         }
-        setError(null);
-      } catch (err: unknown) {
-        const apiError = err as {
-          message?: string;
-          response?: {
-            data?: {
-              message?: string;
-            };
-          };
-        };
-        console.error("Failed to load live showroom data from API:", err);
-        // Capture connection error string for luxury diagnostics trace
-        const errorMsg = apiError.response?.data?.message || apiError.message || "AxiosError: Network Error - Server offline at http://127.0.0.1:8000/api";
-        setError(errorMsg);
-      } finally {
-        setLoading(false);
+
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No vehicles returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveVehiclesFailure(allowDemo, 'luxury');
+
+        if (resolution.mode === 'demo') {
+          setVehicles(resolution.vehicles);
+          setUseFallback(true);
+        } else {
+          setVehicles([]);
+          setUseFallback(false);
+        }
       }
+
+      setLoading(false);
     }
 
     loadHomepageData();
-  }, []);
+  }, [allowDemo]);
 
   const handleSearchSubmit = () => {
     const params = new URLSearchParams();
@@ -112,7 +107,7 @@ export default function Page() {
       if (max) params.set('max_price', max);
     }
 
-    router.push(getThemeLink(`/explore?${params.toString()}`));
+    router.push(themeLink(`/explore?${params.toString()}`));
   };
 
   return (
@@ -128,7 +123,9 @@ export default function Page() {
                 {heroDescription}
             </p>
             <div style={{ display: 'flex', gap: '1rem' }}>
-                <a href="#collections" className="lx-btn lx-btn-gold">{heroPrimaryCta}</a>
+                <a href={themeLink('/explore')} className="lx-btn lx-btn-gold">
+                  {heroPrimaryCta}
+                </a>
                 <a href="#contact" className="lx-btn lx-btn-outline">{heroSecondaryCta}</a>
             </div>
         </div>
@@ -200,34 +197,14 @@ export default function Page() {
         <button className="lx-btn lx-btn-gold" style={{ flex: 1, padding: '0.8rem' }} onClick={handleSearchSubmit}>{searchButtonLabel}</button>
       </section>
 
-      {/* Showroom Diagnostics Panel */}
-      {error && (
-        <div className="lx-error-alert" style={{
-            border: '2px solid var(--lx-gold)',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            margin: '2rem 5%',
-            backgroundColor: 'rgba(26, 26, 26, 0.9)',
-            boxShadow: '0 0 15px rgba(195, 161, 109, 0.2)'
-        }}>
-            <h4 className="lx-text-gold" style={{ fontFamily: 'var(--lx-font-heading)', fontSize: '1.4rem', margin: '0 0 0.5rem' }}>
-                🛰️ Showroom Diagnostics Connection Trace
-            </h4>
-            <p style={{ fontSize: '0.95rem', margin: '0 0 1rem', color: 'var(--lx-text-muted)', lineHeight: 1.6 }}>
-                The retail discovery engine detected an offline API connection. Displaying premium showroom simulation assets.
-            </p>
-            <div style={{
-                fontFamily: 'monospace',
-                fontSize: '0.85rem',
-                backgroundColor: '#000',
-                padding: '1rem',
-                borderRadius: '4px',
-                color: '#ff4d4d',
-                overflowX: 'auto',
-                border: '1px solid #333'
-            }}>
-                {error}
-            </div>
+      {apiError && useFallback && (
+        <div className="lx-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="lx" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="lx-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="lx" />
         </div>
       )}
 
@@ -251,40 +228,33 @@ export default function Page() {
               </div>
             ))}
           </div>
-        ) : (
+        ) : vehicles.length > 0 ? (
           <div className="lx-grid">
-            {vehicles.length > 0 ? (
-              vehicles.map((car) => {
-                const vehicleSpecs = `${car.specs?.year || ''} ${car.specs?.engine || ''} | ${car.specs?.transmission || ''} | ${car.specs?.mileage || ''}`;
-                return (
-                  <LuxuryCarCard 
-                    key={car.id} 
-                    title={car.title}
-                    specs={vehicleSpecs}
-                    price={car.pricing?.formatted || `$${Number(car.pricing?.base_price || 0).toLocaleString()}`}
-                    image={car.media?.main_photo || car.featured_image || "/themes/autos/luxury/mercedes.png"}
-                    slug={car.slug}
-                  />
-                );
-              })
-            ) : (
-              // Fallback cards displayed when error occurred or empty results
-              FALLBACK_CARS.map((car, i) => (
-                <LuxuryCarCard 
-                  key={i} 
-                  title={car.title}
-                  specs={car.specs}
-                  price={car.price}
-                  image={car.image}
-                  slug={car.slug}
-                />
-              ))
-            )}
+            {vehicles.map((car) => (
+              <LuxuryCarCard
+                key={car.id}
+                title={car.title}
+                specs={getLuxuryVehicleSpecLabel(car)}
+                price={formatVehiclePrice(car)}
+                image={getLuxuryVehicleImage(car)}
+                slug={car.slug}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="lx-empty-state" role="status">
+            <h3>No vehicles are published yet.</h3>
+            <p>Add and publish vehicles in the admin panel to populate this showroom.</p>
+            <a href={themeLink('/explore')} className="lx-btn lx-btn-gold">
+              Browse inventory
+            </a>
           </div>
         )}
 
         <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-            <a href={getThemeLink('/explore')} className="lx-btn lx-btn-gold" style={{ padding: '1rem 3rem' }}>{viewAllLabel}</a>
+            <a href={themeLink('/explore')} className="lx-btn lx-btn-gold" style={{ padding: '1rem 3rem' }}>
+              {viewAllLabel}
+            </a>
         </div>
       </section>
 
@@ -301,7 +271,9 @@ export default function Page() {
                 <p style={{ marginBottom: '2rem', lineHeight: 1.6 }}>
                     {showcaseDescription}
                 </p>
-                <a href={getThemeLink('/explore?search=Ferrari')} className="lx-btn lx-btn-gold">{showcaseCta}</a>
+                <a href={themeLink('/explore?search=Ferrari')} className="lx-btn lx-btn-gold">
+                  {showcaseCta}
+                </a>
             </div>
         </div>
       </section>
@@ -310,11 +282,11 @@ export default function Page() {
       <section className="lx-section" id="brands">
         <h2 className="lx-section-title">{brandsTitle}</h2>
         <div className="lx-brand-grid">
-            <a href={getThemeLink('/explore?brand=Ferrari')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Ferrari</a>
-            <a href={getThemeLink('/explore?brand=Lamborghini')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Lamborghini</a>
-            <a href={getThemeLink('/explore?brand=Mercedes-Benz')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Mercedes</a>
-            <a href={getThemeLink('/explore?brand=Rolls-Royce')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Rolls Royce</a>
-            <a href={getThemeLink('/explore?brand=Porsche')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Porsche</a>
+            <a href={themeLink('/explore?brand=Ferrari')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Ferrari</a>
+            <a href={themeLink('/explore?brand=Lamborghini')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Lamborghini</a>
+            <a href={themeLink('/explore?brand=Mercedes-Benz')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Mercedes</a>
+            <a href={themeLink('/explore?brand=Rolls-Royce')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Rolls Royce</a>
+            <a href={themeLink('/explore?brand=Porsche')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Porsche</a>
         </div>
       </section>
 

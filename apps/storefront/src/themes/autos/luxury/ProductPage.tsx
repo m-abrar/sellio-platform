@@ -1,67 +1,34 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { api } from '@sellio/api-client';
 import type { Vehicle } from '@sellio/types';
 import { LuxuryHeader, LuxuryCarCard, LuxuryFooter } from './components';
+import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
+import {
+  fetchVehicleDetail,
+  resolveVehicleFailure,
+} from '@/themes/autos/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
+import {
+  formatVehiclePrice,
+  getLuxuryVehicleImage,
+  getLuxuryVehicleSpecLabel,
+} from '@/themes/autos/shared/vehicle-utils';
 
 interface ProductPageProps {
   slug: string;
 }
 
-const STATIC_VEHICLES_MAP: Record<string, any> = {
-  'mercedes-s-class': {
-    id: 101,
-    title: "2025 Mercedes S-Class",
-    slug: "mercedes-s-class",
-    description: "A pinnacle of luxury motoring. This 2025 Mercedes S-Class combines advanced mild-hybrid performance with an interior modeled after premium executive lounges. Features ambient multi-contour seating, cinematic dashboard displays, and unmatched road comfort.",
-    short_description: "Mild-hybrid luxury sedan with state-of-the-art cabin diagnostics.",
-    pricing: { base_price: 110000, formatted: "$110,000", is_lease: true, is_selling: true },
-    specs: { year: 2025, make: "Mercedes-Benz", model: "S-Class", vin: "WD19999**********", condition: "9.9/10", mileage: "5,000 mi", raw_mileage: 5000, mileage_units: "mi", engine: "Gasoline (Mild Hybrid)", transmission: "Automatic", fuel_economy: "24.5 mpg", drivetrain: "AWD", exterior_color: "Obsidian Black", warranty: "48 Months" },
-    media: { main_photo: "/themes/autos/luxury/mercedes.png" },
-    location: { address: "100 Prestige Way", city: "Los Angeles", state: "CA", country: "USA" }
-  },
-  'rolls-royce-phantom': {
-    id: 102,
-    title: "2024 Rolls Royce Phantom",
-    slug: "rolls-royce-phantom",
-    description: "The absolute benchmark of automotive status. Crafted by hand in Goodwood, this Phantom presents an unyielding V12 profile, soundproofing that creates a museum-like silence inside the cabin, and bespoke starlight headlining.",
-    short_description: "Hand-crafted V12 masterpiece representing ultimate status.",
-    pricing: { base_price: 420000, formatted: "$420,000", is_lease: false, is_selling: true },
-    specs: { year: 2024, make: "Rolls Royce", model: "Phantom", vin: "SCA8888**********", condition: "10/10", mileage: "2,100 mi", raw_mileage: 2100, mileage_units: "mi", engine: "6.75L V12 Twin-Turbo", transmission: "Automatic", fuel_economy: "14.2 mpg", drivetrain: "RWD", exterior_color: "Selenite Grey", warranty: "72 Months" },
-    media: { main_photo: "/themes/autos/luxury/rolls.png" },
-    location: { address: "500 Heritage Blvd", city: "Miami", state: "FL", country: "USA" }
-  },
-  'porsche-taycan': {
-    id: 103,
-    title: "2025 Porsche Taycan Turbo",
-    slug: "porsche-taycan",
-    description: "A blistering electric sports saloon that bridges historic track heritage with the performance of tomorrow. Rapid charging architecture combined with high-precision cornering dynamics makes the Taycan an exhilarating experience.",
-    short_description: "All-electric performance coupe with lightning-fast charging.",
-    pricing: { base_price: 160000, formatted: "$160,000", is_lease: true, is_selling: true },
-    specs: { year: 2025, make: "Porsche", model: "Taycan Turbo", vin: "WP03333**********", condition: "9.8/10", mileage: "800 mi", raw_mileage: 800, mileage_units: "mi", engine: "Electric Dual Motor", transmission: "Automatic", fuel_economy: "85.0 MPGe", drivetrain: "AWD", exterior_color: "Chalk White", warranty: "36 Months" },
-    media: { main_photo: "/themes/autos/luxury/porsche.png" },
-    location: { address: "75 Circuit Lane", city: "Austin", state: "TX", country: "USA" }
-  },
-  'bentley-continental': {
-    id: 104,
-    title: "2023 Bentley Continental GT",
-    slug: "bentley-continental",
-    description: "Grand touring defined. This Continental GT represents the perfect intersection between raw sportiness and classic British craftsmanship. Meticulously finished wood veneers align with a high-torque performance profile.",
-    short_description: "Exquisite grand tourer combining speed and craftsmanship.",
-    pricing: { base_price: 245000, formatted: "$245,000", is_lease: true, is_selling: true },
-    specs: { year: 2023, make: "Bentley", model: "Continental GT", vin: "SCB5555**********", condition: "9.6/10", mileage: "6,500 mi", raw_mileage: 6500, mileage_units: "mi", engine: "4.0L V8 Twin-Turbo", transmission: "Automatic", fuel_economy: "19.0 mpg", drivetrain: "AWD", exterior_color: "Tanzanite Blue", warranty: "36 Months" },
-    media: { main_photo: "/themes/autos/luxury/bentley.png" },
-    location: { address: "12 British Way", city: "Greenwich", state: "CT", country: "USA" }
-  }
-};
-
 export default function ProductPage({ slug }: ProductPageProps) {
-  // Dynamic States
+  const themeLink = useAutosThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
+
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [relatedVehicles, setRelatedVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // Leasing Calculator Inputs
   const [downPaymentPercent, setDownPaymentPercent] = useState(20); // Default 20%
@@ -75,41 +42,38 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [inquiryDate, setInquiryDate] = useState('');
   const [inquiryTime, setInquiryTime] = useState('');
   const [inquirySuccess, setInquirySuccess] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadVehicleDetails() {
-      try {
-        setLoading(true);
-        // Call explicit getVehicleDetails API endpoint
-        const response = await api.getVehicleDetails(slug);
-        
-        if (response && response.success && response.data) {
-          setVehicle(response.data);
-          
-          if (response.related_vehicles) {
-            setRelatedVehicles(response.related_vehicles);
-          }
+      setLoading(true);
+      const result = await fetchVehicleDetail(slug);
+
+      if (result.ok) {
+        setVehicle(result.response.data);
+        setRelatedVehicles(result.response.related_vehicles || []);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        setApiError(result.error);
+        const resolution = resolveVehicleFailure(slug, allowDemo, 'luxury');
+
+        if (resolution.mode === 'demo') {
+          setVehicle(resolution.vehicle);
+          setRelatedVehicles(resolution.related);
+          setUseFallback(true);
+        } else {
+          setVehicle(null);
+          setRelatedVehicles([]);
+          setUseFallback(false);
         }
-        setError(null);
-      } catch (err: any) {
-        console.error("API error loading vehicle details page:", err);
-        const errorMsg = err.response?.data?.message || err.message || "AxiosError: Network Error - Server offline at http://127.0.0.1:8000/api";
-        setError(errorMsg);
-        
-        // Dynamic matching of fallback mock assets when API goes offline
-        const matchedMock = STATIC_VEHICLES_MAP[slug] || STATIC_VEHICLES_MAP['rolls-royce-phantom'];
-        setVehicle(matchedMock);
-        
-        // Populate fallback related vehicles using other entries in the map
-        const otherMocks = Object.values(STATIC_VEHICLES_MAP).filter((car: any) => car.slug !== slug);
-        setRelatedVehicles(otherMocks);
-      } finally {
-        setLoading(false);
       }
+
+      setLoading(false);
     }
 
     loadVehicleDetails();
-  }, [slug]);
+  }, [slug, allowDemo]);
 
   // Dynamic Monthly Payment Lease/Finance Estimator calculation
   const calculateMonthlyPayment = () => {
@@ -135,9 +99,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const handleVIPInquirySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inquiryName || !inquiryEmail || !inquiryPhone || !inquiryDate) {
-      alert("Please fill in all the required booking criteria.");
+      setFormError('Please fill in all required booking details.');
       return;
     }
+
+    setFormError(null);
 
     // Save inquiry dynamically to local storage under key 'sellio_autos_luxury_inquiries'
     const newInquiry = {
@@ -188,8 +154,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
       <div style={{ backgroundColor: '#1a1a1a', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#fff', fontFamily: 'sans-serif', padding: '2rem' }}>
         <div style={{ textAlign: 'center' }}>
           <h2 className="lx-text-gold">Asset Not Located</h2>
-          <p style={{ color: 'var(--lx-text-muted)', marginBottom: '2rem' }}>The requested vehicle could not be loaded from the ledger.</p>
-          <a href="/preview/autos_luxury/explore" className="lx-btn lx-btn-gold">Back to Catalog</a>
+          <p style={{ color: 'var(--lx-text-muted)', marginBottom: '2rem' }}>
+            {apiError || 'The requested vehicle could not be loaded from the ledger.'}
+          </p>
+          <a href={themeLink('/explore')} className="lx-btn lx-btn-gold">
+            Back to catalog
+          </a>
         </div>
       </div>
     );
@@ -229,34 +199,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
       </section>
 
-      {/* Showroom Network Connection Diagnostics Alert */}
-      {error && (
-        <div className="lx-error-alert" style={{
-            border: '2px solid var(--lx-gold)',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            margin: '2rem 5% 0',
-            backgroundColor: 'rgba(26, 26, 26, 0.9)',
-            boxShadow: '0 0 15px rgba(195, 161, 109, 0.2)'
-        }}>
-            <h4 className="lx-text-gold" style={{ fontFamily: 'var(--lx-font-heading)', fontSize: '1.4rem', margin: '0 0 0.5rem' }}>
-                🛰️ Showroom Diagnostics Connection Trace
-            </h4>
-            <p style={{ fontSize: '0.95rem', margin: '0 0 1rem', color: 'var(--lx-text-muted)', lineHeight: 1.6 }}>
-                The vehicle discovery engine detected an offline API connection. Rendering luxury backup showroom database.
-            </p>
-            <div style={{
-                fontFamily: 'monospace',
-                fontSize: '0.85rem',
-                backgroundColor: '#000',
-                padding: '1rem',
-                borderRadius: '4px',
-                color: '#ff4d4d',
-                overflowX: 'auto',
-                border: '1px solid #333'
-            }}>
-                {error}
-            </div>
+      {useFallback && apiError && (
+        <div className="lx-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="lx" />
         </div>
       )}
 
@@ -442,6 +387,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </div>
             ) : (
               <form onSubmit={handleVIPInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {formError && (
+                  <p className="lx-form-error" role="alert">
+                    {formError}
+                  </p>
+                )}
                 
                 <div>
                   <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Full Name *</label>
@@ -527,27 +477,16 @@ export default function ProductPage({ slug }: ProductPageProps) {
         <section className="lx-section" style={{ borderTop: '1px solid #333', backgroundColor: '#111' }}>
           <h3 className="lx-section-title" style={{ color: '#fff' }}>Related Masterpieces</h3>
           <div className="lx-grid">
-            {relatedVehicles.slice(0, 3).map((car) => {
-              // Standard rendering of the related card
-              const relatedSpecs = `${car.specs?.year || ''} ${car.specs?.engine || ''} | ${car.specs?.transmission || ''} | ${car.specs?.mileage || ''}`;
-              
-              const isStaticModel = !car.id || car.id >= 100;
-              const title = car.title;
-              const specs = isStaticModel ? (car as any).specs : relatedSpecs;
-              const price = isStaticModel ? (car as any).price : (car.pricing?.formatted || `$${Number(car.pricing?.base_price || 0).toLocaleString()}`);
-              const image = isStaticModel ? (car as any).image : (car.media?.main_photo || car.featured_image || "/themes/autos/luxury/mercedes.png");
-
-              return (
-                <LuxuryCarCard 
-                  key={car.slug}
-                  title={title}
-                  specs={specs}
-                  price={price}
-                  image={image}
-                  slug={car.slug}
-                />
-              );
-            })}
+            {relatedVehicles.slice(0, 3).map((car) => (
+              <LuxuryCarCard
+                key={car.slug}
+                title={car.title}
+                specs={getLuxuryVehicleSpecLabel(car)}
+                price={formatVehiclePrice(car)}
+                image={getLuxuryVehicleImage(car)}
+                slug={car.slug}
+              />
+            ))}
           </div>
         </section>
       )}

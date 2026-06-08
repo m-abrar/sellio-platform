@@ -1,21 +1,24 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { api } from '@sellio/api-client';
 import type { Vehicle, Category, Location } from '@sellio/types';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { LuxuryHeader, LuxuryCarCard, LuxuryFooter } from './components';
-
-const FALLBACK_CARS = [
-  { title: "2025 Mercedes S-Class", specs: "Sleek Sedan | 5,000 mi", price: "$110,000", image: "/themes/autos/luxury/mercedes.png", slug: "mercedes-s-class" },
-  { title: "2024 Rolls Royce Phantom", specs: "Ultra Luxury | 2,100 mi", price: "$420,000", image: "/themes/autos/luxury/rolls.png", slug: "rolls-royce-phantom" },
-  { title: "2025 Porsche Taycan Turbo", specs: "Electric Coupe | 800 mi", price: "$160,000", image: "/themes/autos/luxury/porsche.png", slug: "porsche-taycan" },
-  { title: "2023 Bentley Continental GT", specs: "Grand Tourer | 6,500 mi", price: "$245,000", image: "/themes/autos/luxury/bentley.png", slug: "bentley-continental" }
-];
+import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
+import { fetchVehiclesExplore, resolveVehiclesFailure } from '@/themes/autos/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
+import {
+  formatVehiclePrice,
+  getLuxuryVehicleImage,
+  getLuxuryVehicleSpecLabel,
+} from '@/themes/autos/shared/vehicle-utils';
 
 function ExplorePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const themeLink = useAutosThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
 
   // Dynamic States
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -25,7 +28,8 @@ function ExplorePageContent() {
   const [transmissionOptions, setTransmissionOptions] = useState<string[]>([]);
   
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,18 +44,7 @@ function ExplorePageContent() {
   const [selectedTransmission, setSelectedTransmission] = useState(searchParams.get('transmission') || '');
   const [selectedPriceRange, setSelectedPriceRange] = useState('');
 
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-        const isPreview = window.location.pathname.startsWith('/preview/');
-        if (isPreview) {
-            return `/preview/autos_luxury${path}`;
-        }
-    }
-    return path;
-  };
-
-  // Synchronize dynamic parameters with the browser URL
-  const applyFilters = (pageNumber = 1, append = false) => {
+  const applyFilters = (pageNumber = 1) => {
     const params = new URLSearchParams();
     
     if (searchQuery) params.set('q', searchQuery);
@@ -67,65 +60,82 @@ function ExplorePageContent() {
       if (max) params.set('max_price', max);
     }
 
-    router.push(getThemeLink(`/explore?${params.toString()}`));
+    router.push(themeLink(`/explore?${params.toString()}`));
   };
 
   useEffect(() => {
     async function fetchShowroomVehicles() {
-      try {
-        if (currentPage === 1) {
-          setLoading(true);
-        } else {
-          setLoadingMore(true);
-        }
-
-        // Construct API query payload from active URL parameters
-        const queryParams: Record<string, any> = {
-          page: searchParams.get('page') || 1,
-          search: searchParams.get('q') || undefined,
-          make: searchParams.get('brand') || undefined,
-          category: searchParams.get('category') || undefined,
-          location: searchParams.get('location') || undefined,
-          transmission: searchParams.get('transmission') || undefined,
-          min_price: searchParams.get('min_price') || undefined,
-          max_price: searchParams.get('max_price') || undefined,
-          per_page: 9
-        };
-
-        const response = await api.getVehicles(queryParams);
-
-        if (response && response.data) {
-          if (currentPage === 1) {
-            setVehicles(response.data);
-          } else {
-            setVehicles(prev => [...prev, ...response.data]);
-          }
-
-          if (response.meta) {
-            setCurrentPage(response.meta.current_page);
-            setLastPage(response.meta.last_page);
-          }
-
-          if (response.sidebar) {
-            if (response.sidebar.categories) setCategories(response.sidebar.categories);
-            if (response.sidebar.locations) setLocations(response.sidebar.locations);
-            if (response.sidebar.brands) setBrands(response.sidebar.brands);
-            if (response.sidebar.transmission_options) setTransmissionOptions(response.sidebar.transmission_options);
-          }
-        }
-        setError(null);
-      } catch (err: any) {
-        console.error("API error loading supercars in catalog:", err);
-        const errorMsg = err.response?.data?.message || err.message || "AxiosError: Network Error - Server offline at http://127.0.0.1:8000/api";
-        setError(errorMsg);
-      } finally {
-        setLoading(false);
-        setLoadingMore(false);
+      if (currentPage === 1) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
       }
+
+      const queryParams: Record<string, unknown> = {
+        page: searchParams.get('page') || 1,
+        search: searchParams.get('q') || undefined,
+        make: searchParams.get('brand') || undefined,
+        category: searchParams.get('category') || undefined,
+        location: searchParams.get('location') || undefined,
+        transmission: searchParams.get('transmission') || undefined,
+        min_price: searchParams.get('min_price') || undefined,
+        max_price: searchParams.get('max_price') || undefined,
+        per_page: 9,
+      };
+
+      const result = await fetchVehiclesExplore(queryParams);
+
+      if (result.ok && result.response.data) {
+        if (currentPage === 1) {
+          setVehicles(result.response.data);
+        } else {
+          setVehicles((prev) => [...prev, ...result.response.data]);
+        }
+
+        if (result.response.meta) {
+          setCurrentPage(result.response.meta.current_page);
+          setLastPage(result.response.meta.last_page);
+        }
+
+        if (result.response.sidebar) {
+          if (result.response.sidebar.categories) {
+            setCategories(result.response.sidebar.categories);
+          }
+          if (result.response.sidebar.locations) {
+            setLocations(result.response.sidebar.locations);
+          }
+          if (result.response.sidebar.brands) {
+            setBrands(result.response.sidebar.brands);
+          }
+          if (result.response.sidebar.transmission_options) {
+            setTransmissionOptions(result.response.sidebar.transmission_options);
+          }
+        }
+
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No vehicles returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveVehiclesFailure(allowDemo, 'luxury');
+
+        if (resolution.mode === 'demo') {
+          if (currentPage === 1) {
+            setVehicles(resolution.vehicles);
+          }
+          setUseFallback(true);
+        } else if (currentPage === 1) {
+          setVehicles([]);
+          setUseFallback(false);
+        }
+      }
+
+      setLoading(false);
+      setLoadingMore(false);
     }
 
     fetchShowroomVehicles();
-  }, [searchParams, currentPage]);
+  }, [searchParams, currentPage, allowDemo]);
 
   const handleFilterSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,7 +146,7 @@ function ExplorePageContent() {
   const handleLoadMore = () => {
     const nextPage = currentPage + 1;
     setCurrentPage(nextPage);
-    applyFilters(nextPage, true);
+    applyFilters(nextPage);
   };
 
   const handleResetFilters = () => {
@@ -147,7 +157,7 @@ function ExplorePageContent() {
     setSelectedTransmission('');
     setSelectedPriceRange('');
     setCurrentPage(1);
-    router.push(getThemeLink('/explore'));
+    router.push(themeLink('/explore'));
   };
 
   return (
@@ -244,34 +254,14 @@ function ExplorePageContent() {
         </form>
       </section>
 
-      {/* Dynamic Showroom Network Connection Diagnostics Alert */}
-      {error && (
-        <div className="lx-error-alert" style={{
-            border: '2px solid var(--lx-gold)',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            margin: '0 5% 3rem',
-            backgroundColor: 'rgba(26, 26, 26, 0.9)',
-            boxShadow: '0 0 15px rgba(195, 161, 109, 0.2)'
-        }}>
-            <h4 className="lx-text-gold" style={{ fontFamily: 'var(--lx-font-heading)', fontSize: '1.4rem', margin: '0 0 0.5rem' }}>
-                🛰️ Showroom Diagnostics Connection Trace
-            </h4>
-            <p style={{ fontSize: '0.95rem', margin: '0 0 1rem', color: 'var(--lx-text-muted)', lineHeight: 1.6 }}>
-                The vehicle discovery engine detected an offline API connection. Rendering luxury backup showroom database.
-            </p>
-            <div style={{
-                fontFamily: 'monospace',
-                fontSize: '0.85rem',
-                backgroundColor: '#000',
-                padding: '1rem',
-                borderRadius: '4px',
-                color: '#ff4d4d',
-                overflowX: 'auto',
-                border: '1px solid #333'
-            }}>
-                {error}
-            </div>
+      {apiError && useFallback && (
+        <div className="lx-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="lx" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="lx-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="lx" />
         </div>
       )}
 
@@ -297,36 +287,28 @@ function ExplorePageContent() {
           <>
             <div className="lx-grid">
               {vehicles.length > 0 ? (
-                vehicles.map((car) => {
-                  const vehicleSpecs = `${car.specs?.year || ''} ${car.specs?.engine || ''} | ${car.specs?.transmission || ''} | ${car.specs?.mileage || ''}`;
-                  return (
-                    <LuxuryCarCard 
-                      key={car.id} 
-                      title={car.title}
-                      specs={vehicleSpecs}
-                      price={car.pricing?.formatted || `$${Number(car.pricing?.base_price || 0).toLocaleString()}`}
-                      image={car.media?.main_photo || car.featured_image || "/themes/autos/luxury/mercedes.png"}
-                      slug={car.slug}
-                    />
-                  );
-                })
-              ) : (
-                // Safe Fallbacks
-                FALLBACK_CARS.map((car, i) => (
-                  <LuxuryCarCard 
-                    key={i} 
+                vehicles.map((car) => (
+                  <LuxuryCarCard
+                    key={car.id}
                     title={car.title}
-                    specs={car.specs}
-                    price={car.price}
-                    image={car.image}
+                    specs={getLuxuryVehicleSpecLabel(car)}
+                    price={formatVehiclePrice(car)}
+                    image={getLuxuryVehicleImage(car)}
                     slug={car.slug}
                   />
                 ))
+              ) : (
+                <div className="lx-empty-state" role="status">
+                  <h3>No vehicles match your filters.</h3>
+                  <p>Try clearing filters or searching with fewer keywords.</p>
+                  <button type="button" className="lx-btn lx-btn-gold" onClick={handleResetFilters}>
+                    Reset filters
+                  </button>
+                </div>
               )}
             </div>
 
-            {/* Pagination Actions */}
-            {currentPage < lastPage && !error && (
+            {currentPage < lastPage && !useFallback && (
               <div style={{ textAlign: 'center', marginTop: '4rem' }}>
                 <button 
                   className="lx-btn lx-btn-gold" 

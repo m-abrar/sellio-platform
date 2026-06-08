@@ -1,23 +1,24 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { api } from '@sellio/api-client';
 import type { Vehicle, Category } from '@sellio/types';
 import { useRouter } from 'next/navigation';
 import { ModernHeader, ModernCarCard, CompareItem, ModernFooter } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
-
-type VehicleRecord = Vehicle & {
-  year?: number | string;
-  fuel_type?: string;
-  transmission?: string;
-  specs?: Vehicle['specs'] & {
-    drivetrain?: string;
-  };
-};
+import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
+import { fetchVehiclesHome, resolveVehiclesFailure } from '@/themes/autos/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
+import {
+  formatVehiclePrice,
+  getVehicleImage,
+  getVehicleSpecLabel,
+} from '@/themes/autos/shared/vehicle-utils';
 
 export default function Page() {
   const router = useRouter();
+  const themeLink = useAutosThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const heroTitle = useThemeContent('hero.title', 'Drive the Future Today');
   const heroDescription = useThemeContent('hero.description', 'Explore revolutionary vehicles and redefine your journey.');
   const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Browse Cars');
@@ -42,7 +43,8 @@ export default function Page() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<{ id: number; title: string }[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // Filter Selection States
   const [selectedBrand, setSelectedBrand] = useState('');
@@ -51,51 +53,44 @@ export default function Page() {
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedKeyword, setSelectedKeyword] = useState('');
 
-  // Fallback High-Fidelity Simulation Assets
-  const FALLBACK_CARS = [
-    { title: "2025 Tesla Model 3", desc: "Available Now | Premium", price: "$39,000", image: "/themes/autos/modern/11.webp", slug: "tesla-model-3", stats: "Range: 333 mi | 0-60: 4.2s", priceShort: "$39k" },
-    { title: "2025 BMW i4", desc: "Premium Electric Sedan", price: "$55,000", image: "/themes/autos/modern/12.webp", slug: "bmw-i4", stats: "Range: 301 mi | 0-60: 5.5s", priceShort: "$55k" },
-    { title: "2025 Toyota Corolla", desc: "Reliable Everyday Car", price: "$22,000", image: "/themes/autos/modern/13.webp", slug: "toyota-corolla", stats: "Range: 550 mi | 0-60: 7.2s", priceShort: "$22k" },
-    { title: "2025 Audi e-tron GT", desc: "Luxury Performance EV", price: "$88,000", image: "/themes/autos/modern/14.webp", slug: "audi-e-tron-gt", stats: "Range: 249 mi | 0-60: 3.9s", priceShort: "$88k" }
-  ];
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/autos_modern${path}`;
-      }
-    }
-    return path;
-  };
-
   useEffect(() => {
     async function loadHomepageData() {
-      try {
-        setLoading(true);
-        // Query dynamic vehicles and get filters sidebar metadata
-        const response = await api.getVehicles({ per_page: 6 });
-        
-        if (response && response.data) {
-          setVehicles(response.data);
-          
-          if (response.sidebar) {
-            if (response.sidebar.categories) setCategories(response.sidebar.categories);
-            if (response.sidebar.brands) setBrands(response.sidebar.brands);
+      setLoading(true);
+      const result = await fetchVehiclesHome(6);
+
+      if (result.ok && result.response.data) {
+        setVehicles(result.response.data);
+
+        if (result.response.sidebar) {
+          if (result.response.sidebar.categories) {
+            setCategories(result.response.sidebar.categories);
+          }
+          if (result.response.sidebar.brands) {
+            setBrands(result.response.sidebar.brands);
           }
         }
-        setError(null);
-      } catch (err: unknown) {
-        console.error("Failed to load live catalog showroom data from API:", err);
-        const errorMsg = err instanceof Error ? err.message : "AxiosError: Network Error - Server offline at http://127.0.0.1:8000/api";
-        setError(errorMsg);
-      } finally {
-        setLoading(false);
+
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No vehicles returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveVehiclesFailure(allowDemo, 'modern');
+
+        if (resolution.mode === 'demo') {
+          setVehicles(resolution.vehicles);
+          setUseFallback(true);
+        } else {
+          setVehicles([]);
+          setUseFallback(false);
+        }
       }
+
+      setLoading(false);
     }
 
     loadHomepageData();
-  }, []);
+  }, [allowDemo]);
 
   const handleSearchSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -111,7 +106,7 @@ export default function Page() {
       if (max) params.set('max_price', max);
     }
 
-    router.push(getThemeLink(`/explore?${params.toString()}`));
+    router.push(themeLink(`/explore?${params.toString()}`));
   };
 
   return (
@@ -123,7 +118,9 @@ export default function Page() {
         <h1 className="md-hero-title">{heroTitle}</h1>
         <p className="md-hero-subtitle">{heroDescription}</p>
         <div style={{ display: 'flex', gap: '1rem' }}>
-            <a href="#listings" className="md-btn md-btn-cta">{heroPrimaryCta}</a>
+            <a href={themeLink('/explore')} className="md-btn md-btn-cta">
+              {heroPrimaryCta}
+            </a>
             <a href="#compare" className="md-btn md-btn-outline">{heroSecondaryCta}</a>
         </div>
       </section>
@@ -204,37 +201,14 @@ export default function Page() {
         </div>
       </form>
 
-      {/* Showroom Diagnostics Panel */}
-      {error && (
-        <div className="md-error-alert" style={{
-            border: '2px solid var(--md-primary)',
-            borderRadius: '10px',
-            padding: '1.5rem',
-            margin: '0 5% 3rem',
-            backgroundColor: 'rgba(0, 31, 64, 0.95)',
-            boxShadow: '0 4px 20px rgba(0, 123, 255, 0.2)',
-            color: 'white'
-        }}>
-            <h4 className="md-text-primary md-fw-bold" style={{ fontSize: '1.3rem', margin: '0 0 0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#66b2ff' }}>
-                🛰️ DATABASE CONNECTION WARNING: Local catalog resilience fallback active
-            </h4>
-            <p style={{ fontSize: '0.95rem', margin: '0 0 1rem', color: '#ccc', lineHeight: 1.6 }}>
-                STATUS: [OFFLINE] | LATENCY: [TIMEOUT] <br/>
-                REASON: Axios connection failed to 127.0.0.1:8000. Laravel backend database node unresponsive.<br/>
-                ACTION: Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...
-            </p>
-            <div style={{
-                fontFamily: 'monospace',
-                fontSize: '0.85rem',
-                backgroundColor: '#020d1a',
-                padding: '1rem',
-                borderRadius: '6px',
-                color: '#ff6b6b',
-                overflowX: 'auto',
-                border: '1px solid #002d5a'
-            }}>
-                {error}
-            </div>
+      {apiError && useFallback && (
+        <div className="md-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="md" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="md-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="md" />
         </div>
       )}
 
@@ -257,36 +231,26 @@ export default function Page() {
               </div>
             ))}
           </div>
-        ) : (
+        ) : vehicles.length > 0 ? (
           <div className="md-grid">
-            {vehicles.length > 0 ? (
-              vehicles.slice(0, 6).map((car) => {
-                const vehicle = car as VehicleRecord;
-                const specLabel = `${vehicle.specs?.year || vehicle.year || '2025'} | ${vehicle.specs?.engine || vehicle.fuel_type || 'Electric'} | ${vehicle.specs?.transmission || vehicle.transmission || 'Automatic'}`;
-                return (
-                  <ModernCarCard 
-                    key={car.id} 
-                    title={car.title}
-                    desc={specLabel}
-                    price={car.pricing?.formatted || `$${Number(car.pricing?.base_price || 0).toLocaleString()}`}
-                    image={car.media?.main_photo || car.featured_image || "/themes/autos/modern/11.webp"}
-                    slug={car.slug}
-                  />
-                );
-              })
-            ) : (
-              // Offline simulator catalog drops
-              FALLBACK_CARS.map((car, i) => (
-                <ModernCarCard 
-                  key={i} 
-                  title={car.title}
-                  desc={car.desc}
-                  price={car.price}
-                  image={car.image}
-                  slug={car.slug}
-                />
-              ))
-            )}
+            {vehicles.slice(0, 6).map((car) => (
+              <ModernCarCard
+                key={car.id}
+                title={car.title}
+                desc={getVehicleSpecLabel(car)}
+                price={formatVehiclePrice(car)}
+                image={getVehicleImage(car)}
+                slug={car.slug}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="md-empty-state" role="status">
+            <h3>No vehicles are published yet.</h3>
+            <p>Add and publish vehicles in the admin panel to populate this showroom.</p>
+            <a href={themeLink('/explore')} className="md-btn md-btn-cta">
+              Browse inventory
+            </a>
           </div>
         )}
       </section>
@@ -304,40 +268,34 @@ export default function Page() {
                   <div style={{ height: '35px', width: '50%', backgroundColor: '#cbd5e1', margin: '0 auto', borderRadius: '20px', animation: 'pulse 1.5s infinite ease-in-out' }}></div>
                 </div>
               ))
-            ) : (
-              vehicles.length >= 3 ? (
-                vehicles.slice(0, 3).map((car, idx) => {
-                  const vehicle = car as VehicleRecord;
-                  const statsLabel = `Transmission: ${vehicle.specs?.transmission || vehicle.transmission || 'Auto'} | Drivetrain: ${vehicle.specs?.drivetrain || 'RWD'}`;
-                  return (
-                    <CompareItem 
-                      key={car.id}
-                      title={car.title} 
-                      stats={statsLabel} 
-                      price={car.pricing?.formatted || `$${Number(car.pricing?.base_price || 0).toLocaleString()}`} 
-                      image={car.media?.main_photo || car.featured_image || "/themes/autos/modern/11.webp"} 
-                      slug={car.slug}
-                      highlight={idx === 1}
-                    />
-                  );
-                })
-              ) : (
-                FALLBACK_CARS.slice(0, 3).map((car, idx) => (
-                  <CompareItem 
-                    key={idx}
-                    title={car.title} 
-                    stats={car.stats} 
-                    price={car.priceShort} 
-                    image={car.image} 
+            ) : vehicles.length >= 3 ? (
+                vehicles.slice(0, 3).map((car, idx) => (
+                  <CompareItem
+                    key={car.id}
+                    title={car.title}
+                    stats={`Transmission: ${car.specs?.transmission || 'Auto'} | Drivetrain: ${car.specs?.drivetrain || 'RWD'}`}
+                    price={formatVehiclePrice(car)}
+                    image={getVehicleImage(car)}
                     slug={car.slug}
                     highlight={idx === 1}
                   />
                 ))
-              )
-            )}
+              ) : useFallback ? (
+                vehicles.slice(0, 3).map((car, idx) => (
+                  <CompareItem
+                    key={car.id}
+                    title={car.title}
+                    stats={getVehicleSpecLabel(car)}
+                    price={formatVehiclePrice(car)}
+                    image={getVehicleImage(car)}
+                    slug={car.slug}
+                    highlight={idx === 1}
+                  />
+                ))
+              ) : null}
         </div>
         <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-            <a href={getThemeLink('/explore')} className="md-btn md-btn-cta">{compareCta}</a>
+            <a href={themeLink('/explore')} className="md-btn md-btn-cta">{compareCta}</a>
         </div>
       </section>
 
@@ -345,11 +303,11 @@ export default function Page() {
       <section className="md-section" id="brands">
         <h2 className="md-section-title">{brandsTitle}</h2>
         <div className="md-brand-grid">
-            <a href={getThemeLink('/explore?brand=Tesla')} className="md-brand-img" style={{ textDecoration: 'none' }}>Tesla</a>
-            <a href={getThemeLink('/explore?brand=BMW')} className="md-brand-img" style={{ textDecoration: 'none' }}>BMW</a>
-            <a href={getThemeLink('/explore?brand=Audi')} className="md-brand-img" style={{ textDecoration: 'none' }}>Audi</a>
-            <a href={getThemeLink('/explore?brand=Toyota')} className="md-brand-img" style={{ textDecoration: 'none' }}>Toyota</a>
-            <a href={getThemeLink('/explore?brand=Ford')} className="md-brand-img" style={{ textDecoration: 'none' }}>Ford</a>
+            <a href={themeLink('/explore?brand=Tesla')} className="md-brand-img" style={{ textDecoration: 'none' }}>Tesla</a>
+            <a href={themeLink('/explore?brand=BMW')} className="md-brand-img" style={{ textDecoration: 'none' }}>BMW</a>
+            <a href={themeLink('/explore?brand=Audi')} className="md-brand-img" style={{ textDecoration: 'none' }}>Audi</a>
+            <a href={themeLink('/explore?brand=Toyota')} className="md-brand-img" style={{ textDecoration: 'none' }}>Toyota</a>
+            <a href={themeLink('/explore?brand=Ford')} className="md-brand-img" style={{ textDecoration: 'none' }}>Ford</a>
         </div>
       </section>
 

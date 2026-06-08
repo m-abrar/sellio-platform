@@ -1,22 +1,24 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { api } from '@sellio/api-client';
 import type { Vehicle, Category, Location } from '@sellio/types';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ModernHeader, ModernCarCard, ModernFooter } from './components';
-
-const FALLBACK_CARS = [
-  { title: "2025 Tesla Model 3", desc: "Available Now | Premium", price: "$39,000", image: "/themes/autos/modern/11.webp", slug: "tesla-model-3" },
-  { title: "2025 BMW i4", desc: "Premium Electric Sedan", price: "$55,000", image: "/themes/autos/modern/12.webp", slug: "bmw-i4" },
-  { title: "2025 Toyota Corolla", desc: "Reliable Everyday Car", price: "$22,000", image: "/themes/autos/modern/13.webp", slug: "toyota-corolla" },
-  { title: "2025 Audi e-tron GT", desc: "Luxury Performance EV", price: "$88,000", image: "/themes/autos/modern/14.webp", slug: "audi-e-tron-gt" },
-  { title: "2025 Hyundai IONIQ 6", desc: "Eco-Friendly Sedan", price: "$46,000", image: "/themes/autos/modern/15.webp", slug: "hyundai-ioniq-6" }
-];
+import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
+import { fetchVehiclesExplore, resolveVehiclesFailure } from '@/themes/autos/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
+import {
+  formatVehiclePrice,
+  getVehicleImage,
+  getVehicleSpecLabel,
+} from '@/themes/autos/shared/vehicle-utils';
 
 function ExplorePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const themeLink = useAutosThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
 
   // Dynamic API States
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -24,7 +26,8 @@ function ExplorePageContent() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [brands, setBrands] = useState<{ id: number; title: string }[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,16 +41,6 @@ function ExplorePageContent() {
   const [selectedLocation, setSelectedLocation] = useState(searchParams.get('location') || '');
   const [selectedPriceRange, setSelectedPriceRange] = useState('');
   const [selectedYear, setSelectedYear] = useState(searchParams.get('year_min') || '');
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/autos_modern${path}`;
-      }
-    }
-    return path;
-  };
 
   const applyFilters = (pageNumber = 1) => {
     const params = new URLSearchParams();
@@ -65,63 +58,79 @@ function ExplorePageContent() {
       if (max) params.set('max_price', max);
     }
 
-    router.push(getThemeLink(`/explore?${params.toString()}`));
+    router.push(themeLink(`/explore?${params.toString()}`));
   };
 
   useEffect(() => {
     async function loadCatalog() {
-      try {
-        if (currentPage === 1) {
-          setLoading(true);
-        } else {
-          setLoadingMore(true);
-        }
-
-        const queryParams: Record<string, any> = {
-          page: searchParams.get('page') || currentPage,
-          search: searchParams.get('q') || undefined,
-          make: searchParams.get('brand') || undefined,
-          category: searchParams.get('category') || undefined,
-          location: searchParams.get('location') || undefined,
-          year_min: searchParams.get('year_min') || undefined,
-          min_price: searchParams.get('min_price') || undefined,
-          max_price: searchParams.get('max_price') || undefined,
-          per_page: 9
-        };
-
-        const response = await api.getVehicles(queryParams);
-
-        if (response && response.data) {
-          if (currentPage === 1) {
-            setVehicles(response.data);
-          } else {
-            setVehicles(prev => [...prev, ...response.data]);
-          }
-
-          if (response.meta) {
-            setCurrentPage(response.meta.current_page);
-            setLastPage(response.meta.last_page);
-          }
-
-          if (response.sidebar) {
-            if (response.sidebar.categories) setCategories(response.sidebar.categories);
-            if (response.sidebar.locations) setLocations(response.sidebar.locations);
-            if (response.sidebar.brands) setBrands(response.sidebar.brands);
-          }
-        }
-        setError(null);
-      } catch (err: any) {
-        console.error("API error loading catalog entries:", err);
-        const errorMsg = err.response?.data?.message || err.message || "AxiosError: Network Error - Server offline at http://127.0.0.1:8000/api";
-        setError(errorMsg);
-      } finally {
-        setLoading(false);
-        setLoadingMore(false);
+      if (currentPage === 1) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
       }
+
+      const queryParams: Record<string, unknown> = {
+        page: searchParams.get('page') || currentPage,
+        search: searchParams.get('q') || undefined,
+        make: searchParams.get('brand') || undefined,
+        category: searchParams.get('category') || undefined,
+        location: searchParams.get('location') || undefined,
+        year_min: searchParams.get('year_min') || undefined,
+        min_price: searchParams.get('min_price') || undefined,
+        max_price: searchParams.get('max_price') || undefined,
+        per_page: 9,
+      };
+
+      const result = await fetchVehiclesExplore(queryParams);
+
+      if (result.ok && result.response.data) {
+        if (currentPage === 1) {
+          setVehicles(result.response.data);
+        } else {
+          setVehicles((prev) => [...prev, ...result.response.data]);
+        }
+
+        if (result.response.meta) {
+          setCurrentPage(result.response.meta.current_page);
+          setLastPage(result.response.meta.last_page);
+        }
+
+        if (result.response.sidebar) {
+          if (result.response.sidebar.categories) {
+            setCategories(result.response.sidebar.categories);
+          }
+          if (result.response.sidebar.locations) {
+            setLocations(result.response.sidebar.locations);
+          }
+          if (result.response.sidebar.brands) {
+            setBrands(result.response.sidebar.brands);
+          }
+        }
+
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No vehicles returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveVehiclesFailure(allowDemo, 'modern');
+
+        if (resolution.mode === 'demo') {
+          if (currentPage === 1) {
+            setVehicles(resolution.vehicles);
+          }
+          setUseFallback(true);
+        } else if (currentPage === 1) {
+          setVehicles([]);
+          setUseFallback(false);
+        }
+      }
+
+      setLoading(false);
+      setLoadingMore(false);
     }
 
     loadCatalog();
-  }, [searchParams, currentPage]);
+  }, [searchParams, currentPage, allowDemo]);
 
   const handleSearchClick = (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,7 +152,7 @@ function ExplorePageContent() {
     setSelectedPriceRange('');
     setSelectedYear('');
     setCurrentPage(1);
-    router.push(getThemeLink('/explore'));
+    router.push(themeLink('/explore'));
   };
 
   return (
@@ -230,37 +239,14 @@ function ExplorePageContent() {
         </form>
       </section>
 
-      {/* Catalog Network Resilience trace */}
-      {error && (
-        <div className="md-error-alert" style={{
-            border: '2px solid var(--md-primary)',
-            borderRadius: '10px',
-            padding: '1.5rem',
-            margin: '0 5% 3rem',
-            backgroundColor: 'rgba(0, 31, 64, 0.95)',
-            boxShadow: '0 4px 20px rgba(0, 123, 255, 0.2)',
-            color: 'white'
-        }}>
-            <h4 className="md-text-primary md-fw-bold" style={{ fontSize: '1.3rem', margin: '0 0 0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#66b2ff' }}>
-                🛰️ DATABASE CONNECTION WARNING: Local catalog resilience fallback active
-            </h4>
-            <p style={{ fontSize: '0.95rem', margin: '0 0 1rem', color: '#ccc', lineHeight: 1.6 }}>
-                STATUS: [OFFLINE] | LATENCY: [TIMEOUT] <br/>
-                REASON: Axios connection failed to 127.0.0.1:8000. Laravel backend database node unresponsive.<br/>
-                ACTION: Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...
-            </p>
-            <div style={{
-                fontFamily: 'monospace',
-                fontSize: '0.85rem',
-                backgroundColor: '#020d1a',
-                padding: '1rem',
-                borderRadius: '6px',
-                color: '#ff6b6b',
-                overflowX: 'auto',
-                border: '1px solid #002d5a'
-            }}>
-                {error}
-            </div>
+      {apiError && useFallback && (
+        <div className="md-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="md" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="md-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="md" />
         </div>
       )}
 
@@ -285,36 +271,28 @@ function ExplorePageContent() {
           <>
             <div className="md-grid">
               {vehicles.length > 0 ? (
-                vehicles.map((car) => {
-                  const specLabel = `${car.specs?.year || (car as any).year || '2025'} | ${car.specs?.engine || (car as any).fuel_type || 'Electric'} | ${car.specs?.transmission || (car as any).transmission || 'Automatic'}`;
-                  return (
-                    <ModernCarCard 
-                      key={car.id} 
-                      title={car.title}
-                      desc={specLabel}
-                      price={car.pricing?.formatted || `$${Number(car.pricing?.base_price || 0).toLocaleString()}`}
-                      image={car.media?.main_photo || car.featured_image || "/themes/autos/modern/11.webp"}
-                      slug={car.slug}
-                    />
-                  );
-                })
-              ) : (
-                // Local static resilient mocks
-                FALLBACK_CARS.map((car, i) => (
-                  <ModernCarCard 
-                    key={i} 
+                vehicles.map((car) => (
+                  <ModernCarCard
+                    key={car.id}
                     title={car.title}
-                    desc={car.desc}
-                    price={car.price}
-                    image={car.image}
+                    desc={getVehicleSpecLabel(car)}
+                    price={formatVehiclePrice(car)}
+                    image={getVehicleImage(car)}
                     slug={car.slug}
                   />
                 ))
+              ) : (
+                <div className="md-empty-state" role="status">
+                  <h3>No vehicles match your filters.</h3>
+                  <p>Try clearing filters or searching with fewer keywords.</p>
+                  <button type="button" className="md-btn md-btn-cta" onClick={handleResetFilters}>
+                    Reset filters
+                  </button>
+                </div>
               )}
             </div>
 
-            {/* Pagination Load More trigger */}
-            {currentPage < lastPage && (
+            {currentPage < lastPage && !useFallback && (
               <div style={{ textAlign: 'center', marginTop: '4rem' }}>
                 <button 
                   className="md-btn md-btn-cta" 

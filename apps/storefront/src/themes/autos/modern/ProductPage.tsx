@@ -1,79 +1,36 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { api } from '@sellio/api-client';
 import type { Vehicle } from '@sellio/types';
 import Link from 'next/link';
 import { ModernHeader, ModernCarCard, ModernFooter } from './components';
+import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
+import {
+  fetchVehicleDetail,
+  getFallbackRelatedVehicles,
+  resolveVehicleFailure,
+} from '@/themes/autos/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
+import {
+  formatVehiclePrice,
+  getVehicleImage,
+  getVehicleSpecLabel,
+} from '@/themes/autos/shared/vehicle-utils';
 
 interface ProductPageProps {
   slug: string;
 }
 
-const STATIC_VEHICLES_MAP: Record<string, any> = {
-  'tesla-model-3': {
-    id: 201,
-    title: "2025 Tesla Model 3",
-    slug: "tesla-model-3",
-    description: "The absolute standard in modern electric commuting. This Tesla Model 3 features dual-motor AWD, an expansive minimalist interior with cinematic center screen, and industry-leading Autopilot driver assist arrays.",
-    short_description: "Futuristic all-electric dual-motor sedan with full autonomy suites.",
-    pricing: { base_price: 39000, formatted: "$39,000", is_lease: true, is_selling: true },
-    specs: { year: 2025, make: "Tesla", model: "Model 3", vin: "5YJ3E1EA**********", condition: "New", mileage: "Available Now", raw_mileage: 0, mileage_units: "mi", engine: "Electric Dual Motor", transmission: "Automatic", fuel_economy: "132 MPGe", drivetrain: "AWD", exterior_color: "Pearl White", warranty: "48 Months" },
-    media: { main_photo: "/themes/autos/modern/11.webp" },
-    location: { address: "88 Electric Blvd", city: "Palo Alto", state: "CA", country: "USA" }
-  },
-  'bmw-i4': {
-    id: 202,
-    title: "2025 BMW i4",
-    slug: "bmw-i4",
-    description: "Gran Coupe styling meets advanced electric mobility. The BMW i4 delivers signature brand dynamics, high-torque acceleration, and a curved display cockpit that seamlessly maps the drive.",
-    short_description: "All-electric premium Gran Coupe showcasing athletic performance.",
-    pricing: { base_price: 55000, formatted: "$55,000", is_lease: true, is_selling: true },
-    specs: { year: 2025, make: "BMW", model: "i4", vin: "WBA31AW0**********", condition: "New", mileage: "800 mi", raw_mileage: 800, mileage_units: "mi", engine: "eDrive40 Electric", transmission: "Automatic", fuel_economy: "109 MPGe", drivetrain: "RWD", exterior_color: "Portimao Blue", warranty: "48 Months" },
-    media: { main_photo: "/themes/autos/modern/12.webp" },
-    location: { address: "100 Bavarian Way", city: "Munich", state: "Bavaria", country: "Germany" }
-  },
-  'toyota-corolla': {
-    id: 203,
-    title: "2025 Toyota Corolla",
-    slug: "toyota-corolla",
-    description: "The world's most trusted everyday vehicle, upgraded for the future. Efficient, reliable, and featuring Toyota Safety Sense 3.0 suite to safeguard every leg of your travel.",
-    short_description: "Unmatched daily reliability meets smart hybrid efficiency.",
-    pricing: { base_price: 22000, formatted: "$22,000", is_lease: false, is_selling: true },
-    specs: { year: 2025, make: "Toyota", model: "Corolla", vin: "JTDDPRA1**********", condition: "New", mileage: "50 mi", raw_mileage: 50, mileage_units: "mi", engine: "2.0L 4-Cylinder Hybrid", transmission: "CVT", fuel_economy: "41.0 mpg", drivetrain: "FWD", exterior_color: "Classic Silver", warranty: "36 Months" },
-    media: { main_photo: "/themes/autos/modern/13.webp" },
-    location: { address: "25 Safety Avenue", city: "Toyota", state: "Aichi", country: "Japan" }
-  },
-  'audi-e-tron-gt': {
-    id: 204,
-    title: "2025 Audi e-tron GT",
-    slug: "audi-e-tron-gt",
-    description: "A blistering electric masterpiece of automotive design. Aerodynamic sculpts, quattro handling, and pure battery-propelled acceleration combined in a design that stops spectators in their tracks.",
-    short_description: "Aerodynamic dual-motor luxury tourer with hyper-charging options.",
-    pricing: { base_price: 88000, formatted: "$88,000", is_lease: true, is_selling: true },
-    specs: { year: 2025, make: "Audi", model: "e-tron GT", vin: "WA1EABFF**********", condition: "New", mileage: "150 mi", raw_mileage: 150, mileage_units: "mi", engine: "Dual Motor e-quattro", transmission: "2-Speed Automatic", fuel_economy: "85.0 MPGe", drivetrain: "AWD", exterior_color: "Kemora Gray", warranty: "48 Months" },
-    media: { main_photo: "/themes/autos/modern/14.webp" },
-    location: { address: "55 Progressive Loop", city: "Ingolstadt", state: "Bavaria", country: "Germany" }
-  },
-  'hyundai-ioniq-6': {
-    id: 205,
-    title: "2025 Hyundai IONIQ 6",
-    slug: "hyundai-ioniq-6",
-    description: "An incredibly aerodynamic electric streamliner engineered to maximize efficiency. Features interactive pixel light accents, custom premium audio, and rapid 800V charging compatibility.",
-    short_description: "Ultra-aerodynamic EV streamliner with 800V charging capabilities.",
-    pricing: { base_price: 46000, formatted: "$46,000", is_lease: true, is_selling: true },
-    specs: { year: 2025, make: "Hyundai", model: "IONIQ 6", vin: "KMHCF4AE**********", condition: "New", mileage: "300 mi", raw_mileage: 300, mileage_units: "mi", engine: "Electric Propulsion", transmission: "Automatic", fuel_economy: "140 MPGe", drivetrain: "RWD", exterior_color: "Digital Teal", warranty: "60 Months" },
-    media: { main_photo: "/themes/autos/modern/15.webp" },
-    location: { address: "90 Streamline Plaza", city: "Seoul", state: "Seoul", country: "South Korea" }
-  }
-};
-
 export default function ProductPage({ slug }: ProductPageProps) {
-  // Dynamic API States
+  const themeLink = useAutosThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
+
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [relatedVehicles, setRelatedVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // Leasing Calculator Inputs
   const [downPaymentPercent, setDownPaymentPercent] = useState(15); // Default 15%
@@ -90,48 +47,38 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [customWinterTires, setCustomWinterTires] = useState(false);
   const [customPerformanceTuning, setCustomPerformanceTuning] = useState(false);
   const [inquirySuccess, setInquirySuccess] = useState(false);
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/autos_modern${path}`;
-      }
-    }
-    return path;
-  };
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadVehicle() {
-      try {
-        setLoading(true);
-        const response = await api.getVehicleDetails(slug);
-        
-        if (response && response.success && response.data) {
-          setVehicle(response.data);
-          if (response.related_vehicles) {
-            setRelatedVehicles(response.related_vehicles);
-          }
+      setLoading(true);
+      const result = await fetchVehicleDetail(slug);
+
+      if (result.ok) {
+        setVehicle(result.response.data);
+        setRelatedVehicles(result.response.related_vehicles || []);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        setApiError(result.error);
+        const resolution = resolveVehicleFailure(slug, allowDemo, 'modern');
+
+        if (resolution.mode === 'demo') {
+          setVehicle(resolution.vehicle);
+          setRelatedVehicles(resolution.related);
+          setUseFallback(true);
+        } else {
+          setVehicle(null);
+          setRelatedVehicles([]);
+          setUseFallback(false);
         }
-        setError(null);
-      } catch (err: any) {
-        console.error("API error loading vehicle details subpage:", err);
-        const errorMsg = err.response?.data?.message || err.message || "AxiosError: Network Error - Server offline at http://127.0.0.1:8000/api";
-        setError(errorMsg);
-        
-        // Retrieve offline simulation data
-        const matched = STATIC_VEHICLES_MAP[slug] || STATIC_VEHICLES_MAP['tesla-model-3'];
-        setVehicle(matched);
-        
-        const otherMocks = Object.values(STATIC_VEHICLES_MAP).filter((car: any) => car.slug !== slug);
-        setRelatedVehicles(otherMocks);
-      } finally {
-        setLoading(false);
       }
+
+      setLoading(false);
     }
 
     loadVehicle();
-  }, [slug]);
+  }, [slug, allowDemo]);
 
   // Estimator logic
   const calculateMonthlyPayment = () => {
@@ -162,9 +109,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inquiryName || !inquiryEmail || !inquiryPhone) {
-      alert("Please fill in your contact information.");
+      setFormError('Please fill in your contact information.');
       return;
     }
+
+    setFormError(null);
 
     const upgrades = [];
     if (customCeramicCoating) upgrades.push("Ceramic Coating ($1,200)");
@@ -233,9 +182,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
       <div style={{ backgroundColor: '#f4f7fa', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: 'sans-serif', padding: '2rem' }}>
         <div style={{ textAlign: 'center' }}>
           <h2>Vehicle Not Found</h2>
-          <p style={{ color: '#666', marginBottom: '2rem' }}>The requested vehicle specs sheet could not be mapped.</p>
-          <Link href={getThemeLink('/explore')} className="md-btn md-btn-cta">
-            Back to Registry Catalog
+          <p style={{ color: '#666', marginBottom: '2rem' }}>
+            {apiError || 'The requested vehicle specs sheet could not be mapped.'}
+          </p>
+          <Link href={themeLink('/explore')} className="md-btn md-btn-cta">
+            Back to inventory
           </Link>
         </div>
       </div>
@@ -251,44 +202,18 @@ export default function ProductPage({ slug }: ProductPageProps) {
         
         {/* Breadcrumb navigation links */}
         <div style={{ marginBottom: '2rem', display: 'flex', gap: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
-          <Link href={getThemeLink('/')} style={{ color: '#007bff', textDecoration: 'none' }}>Home</Link>
+          <Link href={themeLink('/')} style={{ color: '#007bff', textDecoration: 'none' }}>Home</Link>
           <span>/</span>
-          <Link href={getThemeLink('/explore')} style={{ color: '#007bff', textDecoration: 'none' }}>Listings</Link>
+          <Link href={themeLink('/explore')} style={{ color: '#007bff', textDecoration: 'none' }}>
+            Listings
+          </Link>
           <span>/</span>
           <span style={{ color: '#333', fontWeight: 600 }}>{vehicle.title}</span>
         </div>
 
-        {/* Catalog Connection Offline Resiliency alerts */}
-        {error && (
-          <div className="md-error-alert" style={{
-              border: '2px solid var(--md-primary)',
-              borderRadius: '10px',
-              padding: '1.5rem',
-              marginBottom: '2rem',
-              backgroundColor: 'rgba(0, 31, 64, 0.95)',
-              boxShadow: '0 4px 20px rgba(0, 123, 255, 0.2)',
-              color: 'white'
-          }}>
-              <h4 className="md-text-primary md-fw-bold" style={{ fontSize: '1.3rem', margin: '0 0 0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#66b2ff' }}>
-                  🛰️ DATABASE CONNECTION WARNING: Local catalog resilience fallback active
-              </h4>
-              <p style={{ fontSize: '0.95rem', margin: '0 0 1rem', color: '#ccc', lineHeight: 1.6 }}>
-                  STATUS: [OFFLINE] | LATENCY: [TIMEOUT] <br/>
-                  REASON: Axios connection failed to 127.0.0.1:8000. Laravel backend database node unresponsive.<br/>
-                  ACTION: Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...
-              </p>
-              <div style={{
-                  fontFamily: 'monospace',
-                  fontSize: '0.85rem',
-                  backgroundColor: '#020d1a',
-                  padding: '1rem',
-                  borderRadius: '6px',
-                  color: '#ff6b6b',
-                  overflowX: 'auto',
-                  border: '1px solid #002d5a'
-              }}>
-                  {error}
-              </div>
+        {useFallback && apiError && (
+          <div className="md-alert-slot">
+            <CatalogSyncAlert variant="demo" error={apiError} classPrefix="md" />
           </div>
         )}
 
@@ -299,7 +224,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div>
             <div style={{ overflow: 'hidden', borderRadius: '12px', boxShadow: '0 10px 25px rgba(0,0,0,0.05)', backgroundColor: 'white', padding: '1rem', marginBottom: '1.5rem' }}>
               <img 
-                src={vehicle.media?.main_photo || vehicle.featured_image || "/themes/autos/modern/11.webp"} 
+                src={getVehicleImage(vehicle)} 
                 alt={vehicle.title} 
                 style={{ width: '100%', borderRadius: '8px', objectFit: 'contain' }}
               />
@@ -332,7 +257,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </span>
               <h1 style={{ fontWeight: 700, fontSize: '2.5rem', marginBottom: '0.5rem', lineHeight: 1.2 }}>{vehicle.title}</h1>
               <h2 style={{ color: 'var(--md-primary)', fontWeight: 700, fontSize: '2rem', margin: 0 }}>
-                {vehicle.pricing?.formatted || `$${Number(vehicle.pricing?.base_price || 0).toLocaleString()}`}
+                {formatVehiclePrice(vehicle)}
               </h2>
             </div>
 
@@ -424,6 +349,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </div>
               ) : (
                 <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {formError && (
+                    <p className="md-form-error" role="alert">
+                      {formError}
+                    </p>
+                  )}
                   <input 
                     type="text" 
                     className="md-search-input"
@@ -526,35 +456,28 @@ export default function ProductPage({ slug }: ProductPageProps) {
           
           <div className="md-grid">
             {relatedVehicles.length > 0 ? (
-              relatedVehicles.slice(0, 3).map((car) => {
-                const specLabel = `${car.specs?.year || (car as any).year || '2025'} | ${car.specs?.engine || (car as any).fuel_type || 'Electric'} | ${car.specs?.transmission || (car as any).transmission || 'Automatic'}`;
-                return (
-                  <ModernCarCard 
-                    key={car.id} 
-                    title={car.title}
-                    desc={specLabel}
-                    price={car.pricing?.formatted || `$${Number(car.pricing?.base_price || 0).toLocaleString()}`}
-                    image={car.media?.main_photo || car.featured_image || "/themes/autos/modern/11.webp"}
-                    slug={car.slug}
-                  />
-                );
-              })
-            ) : (
-              // Offline fallback models list
-              Object.values(STATIC_VEHICLES_MAP)
-                .filter(c => c.slug !== slug)
-                .slice(0, 3)
-                .map((car, idx) => (
-                  <ModernCarCard 
-                    key={idx} 
-                    title={car.title}
-                    desc={car.short_description}
-                    price={car.pricing?.formatted}
-                    image={car.media?.main_photo}
-                    slug={car.slug}
-                  />
-                ))
-            )}
+              relatedVehicles.slice(0, 3).map((car) => (
+                <ModernCarCard
+                  key={car.id}
+                  title={car.title}
+                  desc={getVehicleSpecLabel(car)}
+                  price={formatVehiclePrice(car)}
+                  image={getVehicleImage(car)}
+                  slug={car.slug}
+                />
+              ))
+            ) : useFallback ? (
+              getFallbackRelatedVehicles(slug, 'modern').map((car) => (
+                <ModernCarCard
+                  key={car.id}
+                  title={car.title}
+                  desc={getVehicleSpecLabel(car)}
+                  price={formatVehiclePrice(car)}
+                  image={getVehicleImage(car)}
+                  slug={car.slug}
+                />
+              ))
+            ) : null}
           </div>
         </section>
 
