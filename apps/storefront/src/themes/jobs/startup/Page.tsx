@@ -1,15 +1,23 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { OpportunityGrid, MissionControlSection } from './components';
-import { api } from '@sellio/api-client';
+import { useRouter } from 'next/navigation';
 import type { JobListing } from '@sellio/types';
+import { OpportunityGrid, MissionControlSection } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
+import { fetchJobsHome, resolveJobsFailure } from '@/themes/jobs/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 export default function Page() {
-  const [jobs, setJobs] = useState<JobListing[] | null>(null);
+  const router = useRouter();
+  const themeLink = useJobsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
+  const [jobs, setJobs] = useState<JobListing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const heroEyebrow = useThemeContent('hero.eyebrow', 'SYNCHRONIZE_TALENT_V5');
   const heroTitle = useThemeContent('hero.title', 'Join the\nHypergrowth.');
   const heroDescription = useThemeContent(
@@ -35,38 +43,40 @@ export default function Page() {
   const ctaButtonLabel = useThemeContent('cta.button_label', 'INITIALIZE_GROWTH_NODE');
 
   useEffect(() => {
-    async function fetchJobs() {
-      try {
-        setLoading(true);
-        const response = await api.getJobs({ per_page: 6 });
-        if (response && response.data) {
-          setJobs(response.data);
-        }
-      } catch (err: unknown) {
-        console.error("Failed to load live jobs database, using static fallback mockups:", err);
-        setError(err instanceof Error ? err.message : 'Network connectivity latency or database server offline.');
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchJobs();
-  }, []);
+    async function loadJobs() {
+      setLoading(true);
+      const result = await fetchJobsHome(6);
 
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        const segments = window.location.pathname.split('/');
-        const themeKey = segments[2];
-        return `/preview/${themeKey}${path}`;
+      if (result.ok && result.response.data) {
+        setJobs(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No jobs returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveJobsFailure(allowDemo, 'startup');
+
+        if (resolution.mode === 'demo') {
+          setJobs(resolution.jobs);
+          setUseFallback(true);
+        } else {
+          setJobs([]);
+          setUseFallback(false);
+        }
       }
+
+      setLoading(false);
     }
-    return path;
+
+    loadJobs();
+  }, [allowDemo]);
+
+  const goToExplore = () => {
+    router.push(themeLink('/explore'));
   };
 
   return (
     <div>
-      {/* Hero Section */}
       <section className="growth-hero">
           <div className="growth-hero-glow"></div>
           <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.9rem', color: 'var(--growth-neon)', letterSpacing: '8px', marginBottom: '2.5rem', fontWeight: 700 }}>{heroEyebrow}</div>
@@ -82,34 +92,22 @@ export default function Page() {
               {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '2rem' }}>
-              <button 
-                className="growth-btn-primary"
-                onClick={() => {
-                  window.location.href = getThemeLink('/explore');
-                }}
-              >
+              <button type="button" className="growth-btn-primary" onClick={goToExplore}>
                 {heroPrimaryCta}
               </button>
-              <button 
-                className="growth-btn-outline"
-                onClick={() => {
-                  window.location.href = getThemeLink('/explore');
-                }}
-              >
+              <button type="button" className="growth-btn-outline" onClick={goToExplore}>
                 {heroSecondaryCta}
               </button>
           </div>
       </section>
 
-      {/* Trust Bar */}
       <section style={{ padding: '4rem 6%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(15, 23, 42, 0.5)', borderTop: '1px solid var(--growth-border)', borderBottom: '1px solid var(--growth-border)', color: 'var(--growth-dim)', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '3px' }}>
           <span>{trustLeft}</span>
-          <span>LATENCY: {loading ? '...' : error ? 'TIMEOUT' : '14ms'}</span>
+          <span>LATENCY: {loading ? '...' : apiError && !useFallback ? 'TIMEOUT' : '14ms'}</span>
           <span>{trustRight}</span>
           <span>{trustNetwork}</span>
       </section>
 
-      {/* Stats Bar */}
       <section style={{ padding: '6rem 6%', display: 'flex', justifyContent: 'center', gap: '8rem' }}>
           <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '3rem', fontWeight: 700, color: 'white', fontFamily: 'var(--font-heading)' }}>{statsStartupsValue}</div>
@@ -125,30 +123,21 @@ export default function Page() {
           </div>
       </section>
 
-      {/* Network Offline Diagnostics Warning Alert */}
-      {error && (
-        <div style={{ padding: '0 6%' }}>
-          <div className="growth-offline-panel">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <span style={{ fontSize: '1.5rem' }}>⚠️</span>
-              <div style={{ fontWeight: 700, letterSpacing: '1px', color: '#f87171' }}>DATABASE_OFFLINE_DIAGNOSTICS_TRACE</div>
-            </div>
-            <div style={{ fontSize: '0.8rem', opacity: 0.8, lineHeight: 1.5 }}>
-              STATUS: [OFFLINE] | LATENCY: [TIMEOUT] | REASON: [{error}]
-              <br/>
-              ACTION: Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...
-            </div>
-          </div>
+      {apiError && useFallback && (
+        <div style={{ padding: '0 6%' }} className="gr-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="gr" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div style={{ padding: '0 6%' }} className="gr-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="gr" />
         </div>
       )}
 
-      {/* Opportunity Grid */}
       <OpportunityGrid jobs={jobs} loading={loading} />
 
-      {/* Mission Control */}
       <MissionControlSection />
 
-      {/* Final CTA */}
       <section style={{ padding: '15rem 6%', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', bottom: '-20%', left: '50%', transform: 'translateX(-50%)', width: '1000px', height: '600px', background: 'radial-gradient(circle, var(--growth-purple) 0%, transparent 70%)', opacity: 0.1, filter: 'blur(100px)', zIndex: -1 }}></div>
           <h2 style={{ fontSize: '6rem', fontWeight: 700, fontFamily: 'var(--font-heading)', marginBottom: '3.5rem', letterSpacing: '-4px', color: 'white' }}>
@@ -162,13 +151,7 @@ export default function Page() {
           <p style={{ maxWidth: '600px', margin: '0 auto 5rem', fontSize: '1.25rem', color: 'var(--growth-dim)' }}>
               {ctaDescription}
           </p>
-          <button 
-            className="growth-btn-primary" 
-            style={{ padding: '2rem 6rem', fontSize: '1.1rem' }}
-            onClick={() => {
-              window.location.href = getThemeLink('/explore');
-            }}
-          >
+          <button type="button" className="growth-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.1rem' }} onClick={goToExplore}>
             {ctaButtonLabel}
           </button>
       </section>

@@ -18,7 +18,7 @@ Goal: baseline **2 themes per vertical** (16 total).
 3. Ecommerce — `ecommerce_default`, `ecommerce_luxury` ✅
 4. Autos — `autos_modern`, `autos_luxury` ✅
 5. Events — `events_corporate`, `events_classic` ✅
-6. Jobs — `jobs_startup`, `jobs_corporate`
+6. Jobs — `jobs_startup`, `jobs_corporate` ✅
 7. Services — `services_marketplace`, `services_local`
 8. Classifieds — `classifieds_local`, `classifieds_general`
 
@@ -66,6 +66,15 @@ Clone these patterns for other verticals in later phases.
 - `apps/storefront/src/themes/events/shared/event-utils.ts`
 - `apps/storefront/src/themes/events/shared/CatalogSyncAlert.tsx`
 
+## Shared utilities (Jobs)
+
+- `apps/storefront/src/themes/jobs/shared/useJobsThemeLink.ts`
+- `apps/storefront/src/themes/jobs/shared/demo-fallback.ts`
+- `apps/storefront/src/themes/jobs/shared/catalog.ts`
+- `apps/storefront/src/themes/jobs/shared/fallback-data.ts`
+- `apps/storefront/src/themes/jobs/shared/job-utils.ts`
+- `apps/storefront/src/themes/jobs/shared/CatalogSyncAlert.tsx`
+
 ## Rework notes (2026-06-08)
 
 ### Unifieds
@@ -95,3 +104,8 @@ Clone these patterns for other verticals in later phases.
 - Shared catalog fetch, demo fallback policy, and theme-aware links for corporate + classic
 - Corporate Explore uses shared filters; booking/RSVP forms use inline validation
 - Classic repertoire grid links via `useEventsThemeLink`; patron CTA shows inline confirmation
+
+### Jobs
+- Shared catalog fetch, demo fallback policy, and theme-aware links for startup + corporate
+- Startup Explore uses shared filters; application forms use inline validation
+- Corporate home grid links via `useJobsThemeLink`; demo sample jobs when API is down in preview

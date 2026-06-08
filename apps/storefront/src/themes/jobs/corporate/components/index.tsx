@@ -6,9 +6,11 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 export const CorporateHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useJobsThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'TalentCorp');
   const brandHighlight = useThemeContent('header.brand_highlight', 'Talent');
   const brandRest = brandLabel.startsWith(brandHighlight)
@@ -17,7 +19,7 @@ export const CorporateHeader = () => {
 
   return (
     <header className="jc-header">
-      <a href="#" className="jc-logo">
+      <a href={themeLink('')} className="jc-logo">
         <span style={{ color: 'var(--jc-blue-accent)' }}>{brandHighlight}</span>{brandRest}
       </a>
 
@@ -123,6 +125,7 @@ export const DashboardCard = () => {
 };
 
 export const CorporateFooter = () => {
+  const themeLink = useJobsThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'TalentCorp');
   const brandHighlight = useThemeContent('header.brand_highlight', 'Talent');
   const brandRest = brandLabel.startsWith(brandHighlight)
@@ -139,7 +142,7 @@ export const CorporateFooter = () => {
     <footer className="jc-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <a href="#" className="jc-logo" style={{ marginBottom: '1rem' }}>
+                <a href={themeLink('')} className="jc-logo" style={{ marginBottom: '1rem' }}>
                     <span style={{ color: 'var(--jc-blue-accent)' }}>{brandHighlight}</span>{brandRest}
                 </a>
                 <p style={{ color: 'var(--jc-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>{description}</p>
