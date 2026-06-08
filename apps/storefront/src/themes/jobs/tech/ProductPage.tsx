@@ -1,153 +1,92 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@sellio/api-client';
 import { TechJobCard } from './components';
-import type { JobListing } from '@sellio/types';
+import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
+import { fetchJobDetail, resolveJobFailure } from '@/themes/jobs/shared/catalog';
+import {
+  translateJobListingToTechJob,
+  type TechJobCardData,
+} from '@/themes/jobs/shared/job-utils';
+import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
-// High-fidelity local developer jobs fallback
-const FALLBACK_JOBS = [
-  { id: 1, slug: "senior-react-engineer", title: "Senior React Engineer", company: "Vercel", location: "Remote - Worldwide", type: "Full-Time", salary: "$140k - $180k", time: "2h ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Vercel_logo_black.svg/512px-Vercel_logo_black.svg.png", skills: ["React", "Next.js", "TypeScript"], description: "Join Vercel's core framework team to innovate Next.js and frontend delivery systems. Optimize compilation streams, hydration metrics, and SSR edge rendering." },
-  { id: 2, slug: "backend-systems-developer", title: "Backend Systems Developer", company: "Stripe", location: "Remote - US/Canada", type: "Full-Time", salary: "$160k - $210k", time: "5h ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/512px-Stripe_Logo%2C_revised_2016.svg.png", skills: ["Go", "Ruby", "PostgreSQL", "AWS"], description: "Architect robust transactional APIs and secure ledger databases that route global trade and multi-currency billing networks with absolute uptime compliance." },
-  { id: 3, slug: "frontend-architect", title: "Frontend Architect", company: "Linear", location: "San Francisco, CA", type: "Full-Time", salary: "$180k - $220k", time: "1d ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Linear_Logo_1.svg/512px-Linear_Logo_1.svg.png", skills: ["React", "GraphQL", "MobX"], description: "Craft highly interactive, responsive toolings for task management workflows. Master absolute visual fluidity, localized storage query state sync, and keyboard-first navigation." },
-  { id: 4, slug: "devops-engineer", title: "DevOps Engineer", company: "Discord", location: "Remote - US", type: "Full-Time", salary: "$150k - $190k", time: "1d ago", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Discord_logo.svg/512px-Discord_logo.svg.png", skills: ["Kubernetes", "Rust", "GCP"], description: "Manage highly scalable orchestration nodes routing voice and socket data. Optimize low-latency pipelines and configure secure multi-cloud clusters." },
-  { id: 5, slug: "full-stack-developer", title: "Full Stack Developer", company: "Supabase", location: "Remote - EMEA", type: "Full-Time", salary: "$120k - $150k", time: "2d ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Supabase_logo.svg/512px-Supabase_logo.svg.png", skills: ["TypeScript", "PostgreSQL", "Elixir"], description: "Develop and scale open-source database client abstractions and serverless edge functions. Support developer onboarding with high-quality tech documentation." },
-];
+type TechJob = TechJobCardData;
 
 export default function ProductPage({ slug }: { slug: string }) {
   const router = useRouter();
-  const [job, setJob] = useState<any>(null);
-  const [related, setRelated] = useState<any[]>([]);
-
-  // Hydration status
+  const themeLink = useJobsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
+  const [job, setJob] = useState<TechJob | null>(null);
+  const [related, setRelated] = useState<TechJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-
-  // Application Form States
+  const [notFound, setNotFound] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
   const [coverNote, setCoverNote] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [applicationReceipt, setApplicationReceipt] = useState<any>(null);
-
-  const translateJob = (j: any) => {
-    let logo = j.company?.logo || j.company_logo || j.logo;
-    if (!logo) {
-      logo = `https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&h=80&q=80`;
-    }
-    
-    let salary = `$130k - $160k`;
-    if (j.compensation) {
-      if (typeof j.compensation === 'object') {
-        salary = j.compensation.range_compact || j.compensation.range_full || `$130k - $160k`;
-      } else {
-        salary = String(j.compensation);
-      }
-    } else if (j.salary_range) {
-      salary = j.salary_range;
-    }
-    
-    let loc = 'Remote - Worldwide';
-    if (j.location) {
-      if (typeof j.location === 'object') {
-        loc = j.location.title || (j.location.city ? `${j.location.city}, ${j.location.state || j.location.country || ''}` : 'Remote - Worldwide');
-      } else {
-        loc = String(j.location);
-      }
-    } else if (j.city) {
-      loc = `${j.city}, ${j.state || j.country || ''}`;
-    }
-    
-    let jobType = 'Full-Time';
-    if (j.job_type) {
-      jobType = typeof j.job_type === 'object' ? (j.job_type.title || j.job_type.name || 'Full-Time') : String(j.job_type);
-    } else if (j.workplace_type) {
-      jobType = typeof j.workplace_type === 'object' ? (j.workplace_type.title || j.workplace_type.name || 'Full-Time') : String(j.workplace_type);
-    }
-    
-    let skills = ['TypeScript', 'Node.js', 'React'];
-    if (Array.isArray(j.skills_list)) {
-      skills = j.skills_list;
-    } else if (j.skills) {
-      skills = j.skills.split(',').map((s: string) => s.trim());
-    } else if (j.tags) {
-      skills = typeof j.tags === 'string' ? j.tags.split(',').map((t: string) => t.trim()) : j.tags.map((t: any) => t.title || t);
-    }
-    
-    const time = j.created_at ? `${Math.max(1, Math.round((new Date().getTime() - new Date(j.created_at).getTime()) / (1000 * 60 * 60 * 24)))}d ago` : '2h ago';
-
-    return {
-      id: j.id,
-      title: j.title,
-      slug: j.slug || `job-${j.id}`,
-      company: j.company?.title || (j.company_name || 'Tech Startup'),
-      location: loc,
-      type: jobType,
-      salary: salary,
-      time: time,
-      logo: logo,
-      skills: skills,
-      description: j.description || j.short_description || `High-fidelity engineering opportunity at ${j.company?.title || j.company_name || 'Tech Startup'}. Solve mission-critical problems with absolute autonomy.`
-    };
-  };
-
-  const loadJobDetails = async () => {
-    setLoading(true);
-    try {
-      const response = await api.getJobDetails(slug);
-      if (response && response.data) {
-        const translated = translateJob(response.data);
-        setJob(translated);
-        setUseFallback(false);
-        setApiError(null);
-
-        // Fetch other jobs to populate related recommendations
-        const relatedRes = await api.getJobs({ per_page: 6 });
-        if (relatedRes && relatedRes.data) {
-          const mappedRelated = relatedRes.data
-            .filter((j: any) => j.slug !== slug)
-            .slice(0, 3)
-            .map((j: any) => translateJob(j));
-          setRelated(mappedRelated);
-        }
-      } else {
-        triggerFallbackNode();
-      }
-    } catch (error) {
-      console.error("Jobs Tech Theme: Failed to fetch job details. Engaging fallback.", error);
-      setApiError(error instanceof Error ? error.message : String(error));
-      triggerFallbackNode();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const triggerFallbackNode = () => {
-    setUseFallback(true);
-    const found = FALLBACK_JOBS.find(j => j.slug === slug) || FALLBACK_JOBS[0];
-    setJob(found);
-
-    const filtered = FALLBACK_JOBS.filter(j => j.slug !== found.slug).slice(0, 3);
-    setRelated(filtered);
-  };
+  const [applicationReceipt, setApplicationReceipt] = useState<Record<string, string> | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
+    async function loadJobDetails() {
+      setLoading(true);
+      setNotFound(false);
+      const result = await fetchJobDetail(slug);
+
+      if (result.ok && result.response.data) {
+        setJob(translateJobListingToTechJob(result.response.data));
+        setRelated(
+          (result.response.related_jobs || [])
+            .slice(0, 3)
+            .map(translateJobListingToTechJob),
+        );
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'Job not found or API returned no data.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveJobFailure(slug, allowDemo, 'tech');
+
+        if (resolution.mode === 'demo') {
+          setJob(translateJobListingToTechJob(resolution.job));
+          setRelated(resolution.related.map(translateJobListingToTechJob));
+          setUseFallback(true);
+        } else if (resolution.mode === 'notFound') {
+          setJob(null);
+          setNotFound(true);
+          setUseFallback(false);
+        } else {
+          setJob(null);
+          setUseFallback(false);
+        }
+      }
+
+      setLoading(false);
+    }
+
     loadJobDetails();
-  }, [slug]);
+  }, [slug, allowDemo]);
 
   const handleApplicationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !githubUrl) {
-      alert("Please fill in all core developer applicant parameters.");
+      setFormError('Please fill in your name, email, and GitHub profile link.');
       return;
     }
 
+    setFormError(null);
     setIsSubmitting(true);
     
     // Simulate compilation/crypto application routing delay
     await new Promise(resolve => setTimeout(resolve, 1200));
+
+    if (!job) {
+      return;
+    }
 
     const shaHash = `SHA256-${Math.random().toString(36).substring(2, 10).toUpperCase()}-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
 
@@ -159,7 +98,7 @@ export default function ProductPage({ slug }: { slug: string }) {
       applicantName: name,
       applicantEmail: email,
       githubUrl: githubUrl,
-      shaHash: shaHash
+      shaHash: shaHash,
     };
 
     try {
@@ -175,16 +114,6 @@ export default function ProductPage({ slug }: { slug: string }) {
       setApplicationReceipt(receipt);
       setIsSubmitting(false);
     }
-  };
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/jobs_tech${path}`;
-      }
-    }
-    return path;
   };
 
   if (loading) {
@@ -214,23 +143,27 @@ export default function ProductPage({ slug }: { slug: string }) {
     );
   }
 
-  if (!job) {
+  if (notFound || (!job && !useFallback)) {
     return (
       <div className="jt-layout-base text-center" style={{ padding: '8rem 2rem', color: 'var(--jt-text-main)' }}>
         <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Developer Node Not Resolved</h2>
-        <p style={{ color: 'var(--jt-text-muted)', margin: '2rem 0 4rem' }}>The requested engineering opportunity could not be recovered from DevJobs registries.</p>
-        <button className="jt-btn jt-btn-primary" onClick={() => router.push(getThemeLink('/'))}>Back to Console</button>
+        <p style={{ color: 'var(--jt-text-muted)', margin: '2rem 0 4rem' }}>{apiError || 'The requested engineering opportunity could not be recovered from DevJobs registries.'}</p>
+        <button type="button" className="jt-btn jt-btn-primary" onClick={() => router.push(themeLink('/'))}>Back to Console</button>
       </div>
     );
+  }
+
+  if (!job) {
+    return null;
   }
 
   return (
     <div className="jt-layout-base" style={{ padding: '0 6% 8rem', maxWidth: '1400px', margin: '0 auto' }}>
       
-      {/* Return Navigation */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3rem 0 4rem' }}>
         <button 
-          onClick={() => router.push(getThemeLink('/'))}
+          type="button"
+          onClick={() => router.push(themeLink('/'))}
           style={{
             background: 'transparent',
             border: 'none',
@@ -241,7 +174,7 @@ export default function ProductPage({ slug }: { slug: string }) {
             fontFamily: 'var(--jt-font-mono)',
             display: 'flex',
             alignItems: 'center',
-            gap: '0.5rem'
+            gap: '0.5rem',
           }}
         >
           {`<-`} BACK_TO_CONSOLE
@@ -251,24 +184,14 @@ export default function ProductPage({ slug }: { slug: string }) {
         </div>
       </div>
 
-      {/* Diagnostics exception panel */}
-      {useFallback && apiError && (
-        <div style={{
-          background: '#090d16',
-          border: '1px dashed var(--jt-purple)',
-          borderLeft: '4px solid var(--jt-purple)',
-          padding: '2rem',
-          borderRadius: '16px',
-          marginBottom: '4rem',
-          color: '#f8fafc'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }} className="jt-mono">
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', animation: 'pulse 1.5s infinite' }}></span>
-            <span style={{ color: 'var(--jt-purple)', fontSize: '0.75rem', fontFamily: 'var(--jt-font-mono)', fontWeight: 800 }}>API_CONNECTION_EXCEPTION_TRACE</span>
-          </div>
-          <p style={{ margin: '0 0 1rem 0', color: 'var(--jt-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-            Viewing high-fidelity backup simulation parameters because the live database connection threw a {apiError}. Specifications have loaded safely.
-          </p>
+      {apiError && useFallback && (
+        <div className="jt-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="jt" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="jt-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="jt" />
         </div>
       )}
 
@@ -394,6 +317,9 @@ export default function ProductPage({ slug }: { slug: string }) {
               </p>
 
               <form onSubmit={handleApplicationSubmit}>
+                {formError && (
+                  <p style={{ color: '#f87171', marginBottom: '1rem', fontSize: '0.9rem' }} role="alert">{formError}</p>
+                )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3.5rem' }}>
                   <div>
                     <label className="pr-booking-label" style={{ fontSize: '0.7rem', color: 'var(--jt-text-muted)', display: 'block', marginBottom: '0.5rem', fontFamily: 'var(--jt-font-mono)' }}>Full Name</label>
@@ -475,7 +401,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                 setEmail('');
                 setGithubUrl('');
                 setCoverNote('');
-                router.push(getThemeLink(`/product/${r.slug}`));
+                router.push(themeLink(`/product/${r.slug}`));
               }}
             />
           ))}

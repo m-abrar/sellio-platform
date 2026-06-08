@@ -1,6 +1,6 @@
 # Dynamic Theme Conversion Status Report
 
-Last verified: 2026-06-08 (Round 2 — Events phase complete; 41/52 baselined).
+Last verified: 2026-06-08 (Round 2 — Jobs phase complete; 45/52 baselined).
 
 This report tracks which Sellio storefront themes have moved from static prototype markup toward live, API-backed React views. It should be read together with `apps/backend/database/seeders/ThemeSeeder.php`, which is the current seeded theme source of truth.
 
@@ -27,7 +27,7 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Classifieds | `classifieds_local` | ✅ | Map + list split; shared catalog; inquiry forms |
 | Classifieds | `classifieds_general` | ✅ | Sidebar filters + chat widget; demo fallback policy |
 
-**Completed:** 41 / 52 (Round 1: 16 + Round 2: 25)
+**Completed:** 45 / 52 (Round 1: 16 + Round 2: 29)
 
 ## Round 2 Progress
 
@@ -58,6 +58,10 @@ Target: **16 themes** baselined (2 × 8 verticals). Tracker: `_development/docs/
 | Events | `events_music` | ✅ | Explore; shared catalog; ticket RSVP; theme links; demo policy |
 | Events | `events_creative` | ✅ | Explore; shared catalog; registry RSVP; theme links; demo policy |
 | Events | `events_festival` | ✅ | Explore; shared catalog; pass RSVP; theme links; demo policy |
+| Jobs | `jobs_tech` | ✅ | Explore; shared catalog; developer apply; theme links; demo policy |
+| Jobs | `jobs_modern` | ✅ | Explore; shared catalog; application form; theme links; demo policy |
+| Jobs | `jobs_blue_collar` | ✅ | Explore; shared catalog; trades apply; theme links; demo policy |
+| Jobs | `jobs_freelance` | ✅ | Explore; shared catalog; gig request form; theme links; demo policy |
 
 Tracker: `_development/docs/storefront-round2-roadmap.md`.
 
@@ -72,12 +76,12 @@ Tracker: `_development/docs/storefront-round2-roadmap.md`.
 | Theme folders with direct `api.*` usage in theme TSX files | 52 |
 | Static / mostly static homepage themes remaining | 0 |
 | Product detail pages remaining | 0 |
-| Theme folders with `ExplorePage.tsx` | 20 |
+| Theme folders with `ExplorePage.tsx` | 24 |
 | Theme folders with `CartPage.tsx` | 7 |
 | Theme folders with static fallback/mock content in TSX | 36 |
 | Round 1 baselined themes | 16 |
-| Round 2 baselined themes | 25 |
-| Total baselined themes | 41 |
+| Round 2 baselined themes | 29 |
+| Total baselined themes | 45 |
 
 Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx` source files. This confirms live-data wiring exists, not that every route, interaction, empty state, fallback path, and visual breakpoint has been manually QA certified.
 

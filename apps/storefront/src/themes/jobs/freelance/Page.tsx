@@ -1,92 +1,69 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
+import { useRouter } from 'next/navigation';
 import type { JobListing } from '@sellio/types';
 import { FreelanceHeader, GigCard, FreelanceFooter } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
-
-const fallbackAvatars = [
-  '/themes/jobs/freelance/1.webp',
-  '/themes/jobs/freelance/2.webp',
-  '/themes/jobs/freelance/3.webp',
-  '/themes/jobs/freelance/4.webp',
-];
-
-const fallbackImages = [
-  '/themes/jobs/freelance/10.webp',
-  '/themes/jobs/freelance/11.webp',
-  '/themes/jobs/freelance/12.webp',
-  '/themes/jobs/freelance/13.webp',
-];
-
-function mapJobToGig(job: JobListing, index: number) {
-  const companyName = job.company?.name || job.employer?.name || 'Top Freelancer';
-  const price = job.compensation?.range_compact || job.compensation?.range_full || 'Quote';
-
-  return {
-    title: job.title,
-    name: companyName,
-    avatar: job.company?.logo_card || job.company?.logo || fallbackAvatars[index % fallbackAvatars.length],
-    image: job.company?.photos?.[0]?.url || fallbackImages[index % fallbackImages.length],
-    rating: 4.9,
-    reviews: job.status?.application_count || 100 + index * 47,
-    price,
-    slug: job.slug,
-  };
-}
+import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
+import { fetchJobsHome, resolveJobsFailure } from '@/themes/jobs/shared/catalog';
+import { mapJobToFreelanceGig } from '@/themes/jobs/shared/job-utils';
+import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = useJobsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
+
   const heroTitle = useThemeContent('hero.title', 'Find the perfect freelance services\nfor your business');
-  
   const gigsTitle = useThemeContent('gigs.title', 'Popular professional services');
-  
   const promoTitle = useThemeContent('promo.title', 'A whole world of freelance talent at your fingertips');
   const promoButton = useThemeContent('promo.button_label', 'Explore GigHive Pro');
   const promoImage = useThemeMedia('promo.image', '/themes/jobs/freelance/14.webp');
 
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
-  const [jobError, setJobError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
-
     async function loadJobs() {
-      try {
-        const response = await api.getJobs({ per_page: 6 });
-        if (!isMounted) {
-          return;
-        }
+      setLoadingJobs(true);
+      const result = await fetchJobsHome(6);
 
-        setJobs(Array.isArray(response.data) ? response.data : []);
-        setJobError(null);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
+      if (result.ok && result.response.data?.length) {
+        setJobs(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No jobs returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveJobsFailure(allowDemo, 'freelance');
 
-        console.error('Failed to load jobs freelance listings:', error);
-        setJobError(error instanceof Error ? error.message : 'Jobs are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoadingJobs(false);
+        if (resolution.mode === 'demo') {
+          setJobs(resolution.jobs);
+          setUseFallback(true);
+        } else {
+          setJobs([]);
+          setUseFallback(false);
         }
       }
+
+      setLoadingJobs(false);
     }
 
     loadJobs();
+  }, [allowDemo]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const goToExplore = () => {
+    router.push(themeLink('/explore'));
+  };
 
   return (
     <div className="jobs-freelance-wrapper">
       <FreelanceHeader />
 
-      {/* Hero */}
       <section className="jf-hero">
         <h1 className="jf-hero-title">
           {heroTitle.split('\n').map((line, index) => {
@@ -110,30 +87,37 @@ export default function Page() {
         </h1>
       </section>
 
-      {/* Search Bar */}
       <div className="jf-search-container">
           <span style={{ padding: '1rem', fontSize: '1.25rem', color: 'var(--jf-text-muted)' }}>🔍</span>
-          <input type="text" className="jf-search-input" placeholder='Try "logo design" or "React developer"' />
-          <button className="jf-btn jf-btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>Search</button>
+          <input type="text" className="jf-search-input" placeholder='Try "logo design" or "React developer"' readOnly onFocus={goToExplore} />
+          <button type="button" className="jf-btn jf-btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }} onClick={goToExplore}>Search</button>
       </div>
 
-      {/* Categories Slider */}
       <div className="jf-categories">
-          <div className="jf-cat-pill active">All Categories</div>
-          <div className="jf-cat-pill">Graphics & Design</div>
-          <div className="jf-cat-pill">Programming & Tech</div>
-          <div className="jf-cat-pill">Digital Marketing</div>
-          <div className="jf-cat-pill">Video & Animation</div>
-          <div className="jf-cat-pill">Writing & Translation</div>
-          <div className="jf-cat-pill">Music & Audio</div>
-          <div className="jf-cat-pill">Business</div>
+          <button type="button" className="jf-cat-pill active" onClick={goToExplore}>All Categories</button>
+          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Graphics & Design</button>
+          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Programming & Tech</button>
+          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Digital Marketing</button>
+          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Video & Animation</button>
+          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Writing & Translation</button>
+          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Music & Audio</button>
+          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Business</button>
       </div>
 
-      {/* Popular Gigs */}
       <section className="jf-section" id="explore">
-          <h2 className="jf-section-title">
-              {gigsTitle}
-          </h2>
+          <h2 className="jf-section-title">{gigsTitle}</h2>
+
+          {apiError && useFallback && (
+            <div className="jf-alert-slot">
+              <CatalogSyncAlert variant="demo" error={apiError} classPrefix="jf" />
+            </div>
+          )}
+          {apiError && !useFallback && (
+            <div className="jf-alert-slot">
+              <CatalogSyncAlert variant="production" error={apiError} classPrefix="jf" />
+            </div>
+          )}
+
           <div className="jf-grid">
               {loadingJobs ? (
                 [1, 2, 3, 4].map((item) => (
@@ -144,23 +128,18 @@ export default function Page() {
                     <div className="jf-skeleton-line jf-skeleton-line-short" />
                   </div>
                 ))
-              ) : jobError ? (
-                <div className="jf-listing-state">
-                  <div className="jf-listing-kicker">Gig Sync Offline</div>
-                  <h3>Popular services could not be loaded.</h3>
-                  <p>{jobError}</p>
-                </div>
               ) : jobs.length === 0 ? (
                 <div className="jf-listing-state">
                   <div className="jf-listing-kicker">Empty Gig Registry</div>
                   <h3>No live jobs are published yet.</h3>
-                  <p>Add job records in the backend and this freelance grid will hydrate automatically.</p>
+                  <p>Browse the explore page or add job records in the backend to hydrate this grid.</p>
+                  <button type="button" className="jf-btn jf-btn-primary" style={{ marginTop: '1.5rem' }} onClick={goToExplore}>Explore gigs</button>
                 </div>
               ) : (
                 jobs.slice(0, 6).map((job, index) => {
-                  const gig = mapJobToGig(job, index);
+                  const gig = mapJobToFreelanceGig(job, index);
                   return (
-                    <a className="jf-gig-link" href={`/product/${gig.slug}`} key={job.id}>
+                    <a className="jf-gig-link" href={themeLink(`/product/${gig.slug}`)} key={job.id}>
                       <GigCard {...gig} />
                     </a>
                   );
@@ -169,7 +148,6 @@ export default function Page() {
           </div>
       </section>
 
-      {/* Promo Block */}
       <section className="jf-promo">
           <div>
               <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1.5rem', lineHeight: 1.1 }}>{promoTitle}</h2>
@@ -179,7 +157,7 @@ export default function Page() {
                   <li>✓ Protected payments, every time</li>
                   <li>✓ 24/7 support</li>
               </ul>
-              <button className="jf-btn" style={{ backgroundColor: 'white', color: 'var(--jf-accent)' }}>{promoButton}</button>
+              <button type="button" className="jf-btn" style={{ backgroundColor: 'white', color: 'var(--jf-accent)' }} onClick={goToExplore}>{promoButton}</button>
           </div>
           <div className="d-none d-lg-block" style={{ width: '40%' }}>
               <img src={promoImage} alt="Team" style={{ width: '100%', borderRadius: '16px', transform: 'rotate(5deg)', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }} />

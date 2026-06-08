@@ -1,118 +1,51 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TechJobCard } from './components';
-import { api } from '@sellio/api-client';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
+import { fetchJobsHome, resolveJobsFailure } from '@/themes/jobs/shared/catalog';
+import {
+  translateJobListingToTechJob,
+  type TechJobCardData,
+} from '@/themes/jobs/shared/job-utils';
+import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
-type TechJob = {
-  id: string | number;
-  slug: string;
-  title: string;
-  company: string;
-  location: string;
-  type: string;
-  salary: string;
-  time: string;
-  logo: string;
-  skills: string[];
-  description: string;
-};
-
-type LooseJobListing = {
-  id?: string | number;
-  slug?: string;
-  title?: string;
-  description?: string;
-  created_at?: string;
-  compensation?: string | {
-    range_compact?: string;
-    range_full?: string;
-  };
-  company?: {
-    name?: string;
-    title?: string;
-    logo?: string;
-  };
-  employer?: {
-    name?: string;
-  };
-  location?: string | {
-    title?: string;
-    display?: string;
-    city?: string | null;
-    state?: string | null;
-    country?: string | null;
-  };
-  job_type?: string | {
-    title?: string;
-    name?: string;
-  };
-  workplace_type?: string | {
-    title?: string;
-    name?: string;
-  };
-  company_logo?: string;
-  logo?: string;
-  salary_range?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  skills?: string;
-  tags?: string | Array<string | { title?: string }>;
-  skills_list?: string[];
-  short_description?: string;
-  company_name?: string;
-};
-
-// High-fidelity local developer jobs fallback
-const FALLBACK_JOBS: TechJob[] = [
-  { id: 1, slug: "senior-react-engineer", title: "Senior React Engineer", company: "Vercel", location: "Remote - Worldwide", type: "Full-Time", salary: "$140k - $180k", time: "2h ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Vercel_logo_black.svg/512px-Vercel_logo_black.svg.png", skills: ["React", "Next.js", "TypeScript"], description: "Join Vercel's core framework team to innovate Next.js and frontend delivery systems. Optimize compilation streams, hydration metrics, and SSR edge rendering." },
-  { id: 2, slug: "backend-systems-developer", title: "Backend Systems Developer", company: "Stripe", location: "Remote - US/Canada", type: "Full-Time", salary: "$160k - $210k", time: "5h ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/512px-Stripe_Logo%2C_revised_2016.svg.png", skills: ["Go", "Ruby", "PostgreSQL", "AWS"], description: "Architect robust transactional APIs and secure ledger databases that route global trade and multi-currency billing networks with absolute uptime compliance." },
-  { id: 3, slug: "frontend-architect", title: "Frontend Architect", company: "Linear", location: "San Francisco, CA", type: "Full-Time", salary: "$180k - $220k", time: "1d ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Linear_Logo_1.svg/512px-Linear_Logo_1.svg.png", skills: ["React", "GraphQL", "MobX"], description: "Craft highly interactive, responsive toolings for task management workflows. Master absolute visual fluidity, localized storage query state sync, and keyboard-first navigation." },
-  { id: 4, slug: "devops-engineer", title: "DevOps Engineer", company: "Discord", location: "Remote - US", type: "Full-Time", salary: "$150k - $190k", time: "1d ago", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Discord_logo.svg/512px-Discord_logo.svg.png", skills: ["Kubernetes", "Rust", "GCP"], description: "Manage highly scalable orchestration nodes routing voice and socket data. Optimize low-latency pipelines and configure secure multi-cloud clusters." },
-  { id: 5, slug: "full-stack-developer", title: "Full Stack Developer", company: "Supabase", location: "Remote - EMEA", type: "Full-Time", salary: "$120k - $150k", time: "2d ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Supabase_logo.svg/512px-Supabase_logo.svg.png", skills: ["TypeScript", "PostgreSQL", "Elixir"], description: "Develop and scale open-source database client abstractions and serverless edge functions. Support developer onboarding with high-quality tech documentation." },
-];
+type TechJob = TechJobCardData;
 
 export default function Page() {
   const router = useRouter();
+  const themeLink = useJobsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
+
   const heroTitle = useThemeContent('hero.title', 'Find the best tech jobs\nfor your stack.');
   const heroHighlight = useThemeContent('hero.highlight', 'best tech jobs');
   const heroDescription = useThemeContent(
     'hero.description',
-    'Connecting world-class developers with top-tier tech companies. Skip the recruiters and apply directly to the engineering team.'
+    'Connecting world-class developers with top-tier tech companies. Skip the recruiters and apply directly to the engineering team.',
   );
   const searchPlaceholder = useThemeContent('search.placeholder', "grep -i 'React OR Go OR Rust'");
   const searchButtonLabel = useThemeContent('search.button_label', 'Search');
-  const diagnosticsTitle = useThemeContent('diagnostics.title', 'Recruiting Registry Offline // Engaging Local Backup');
-  const diagnosticsDescription = useThemeContent(
-    'diagnostics.description',
-    'A network latency exception was encountered while querying the active recruiting databases. dev_jobs_ has activated localized mock seeds to guarantee uninterrupted professional routing.'
-  );
   const stackTitle = useThemeContent('filters.stack_title', 'Tech Stack');
   const typeTitle = useThemeContent('filters.type_title', 'Job Type');
   const locationTitle = useThemeContent('filters.location_title', 'Location');
   const collectionCountLabel = useThemeContent('collection.count_label', 'developer opportunities');
   const emptyTitle = useThemeContent('empty.title', 'No Developer Jobs Found');
   const emptyDescription = useThemeContent('empty.description', 'Adjust your grep filters or tags to search alternative developer channels.');
-  const refreshLabel = useThemeContent('collection.refresh_label', './refresh_catalog.sh');
+  const exploreAllLabel = useThemeContent('collection.refresh_label', 'Browse all roles');
+
   const [jobs, setJobs] = useState<TechJob[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<TechJob[]>([]);
-  
-  // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStack, setActiveStack] = useState<string | null>(null);
-  
-  // Checkbox filters
   const [typeFullTime, setTypeFullTime] = useState(true);
   const [typeContract, setTypeContract] = useState(false);
   const [typeFreelance, setTypeFreelance] = useState(false);
-
   const [locRemote, setLocRemote] = useState(true);
   const [locUS, setLocUS] = useState(false);
   const [locEMEA, setLocEMEA] = useState(false);
-
-  // Hydration status
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -134,160 +67,93 @@ export default function Page() {
       );
     });
 
-  const translateJob = (j: LooseJobListing): TechJob => {
-    let logo = j.company?.logo || j.company_logo || j.logo;
-    if (!logo) {
-      logo = `https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&h=80&q=80`;
-    }
-    
-    let salary = `$130k - $160k`;
-    if (j.compensation) {
-      if (typeof j.compensation === 'object') {
-        salary = j.compensation.range_compact || j.compensation.range_full || `$130k - $160k`;
-      } else {
-        salary = String(j.compensation);
-      }
-    } else if (j.salary_range) {
-      salary = j.salary_range;
-    }
-    
-    let loc = 'Remote - Worldwide';
-    if (j.location) {
-      if (typeof j.location === 'object') {
-        loc = j.location.title || j.location.display || (j.location.city ? `${j.location.city}, ${j.location.state || j.location.country || ''}` : 'Remote - Worldwide');
-      } else {
-        loc = String(j.location);
-      }
-    } else if (j.city) {
-      loc = `${j.city}, ${j.state || j.country || ''}`;
-    }
-    
-    let jobType = 'Full-Time';
-    if (j.job_type) {
-      jobType = typeof j.job_type === 'object' ? (j.job_type.title || j.job_type.name || 'Full-Time') : String(j.job_type);
-    } else if (j.workplace_type) {
-      jobType = typeof j.workplace_type === 'object' ? (j.workplace_type.title || j.workplace_type.name || 'Full-Time') : String(j.workplace_type);
-    }
-    
-    let skills = ['TypeScript', 'Node.js', 'React'];
-    if (Array.isArray(j.skills_list)) {
-      skills = j.skills_list;
-    } else if (j.skills) {
-      skills = j.skills.split(',').map((s: string) => s.trim());
-    } else if (j.tags) {
-      skills = typeof j.tags === 'string' ? j.tags.split(',').map((t: string) => t.trim()) : j.tags.map((t) => typeof t === 'string' ? t : t.title || '');
-    }
-    
-    const time = j.created_at ? `${Math.max(1, Math.round((new Date().getTime() - new Date(j.created_at).getTime()) / (1000 * 60 * 60 * 24)))}d ago` : '2h ago';
+  const applyRefinements = (
+    query: string,
+    stack: string | null,
+    ft: boolean,
+    ct: boolean,
+    fl: boolean,
+    remote: boolean,
+    us: boolean,
+    emea: boolean,
+    source: TechJob[] = jobs,
+  ) => {
+    let result = [...source];
 
-    return {
-      id: j.id ?? j.slug ?? 'fallback-job',
-      title: j.title || 'Software Engineering Role',
-      slug: j.slug || `job-${j.id}`,
-      company: j.company?.title || j.company?.name || j.employer?.name || (j.company_name || 'Tech Startup'),
-      location: loc,
-      type: jobType,
-      salary: salary,
-      time: time,
-      logo: logo,
-      skills: skills,
-      description: j.description || j.short_description || `High-fidelity engineering opportunity at ${j.company?.title || j.company?.name || j.company_name || 'Tech Startup'}. Solve mission-critical problems with absolute autonomy.`
-    };
-  };
-
-  const fetchLiveJobs = async () => {
-    setLoading(true);
-    try {
-      const response = await api.getJobs({ per_page: 20 });
-      if (response && response.data && response.data.length > 0) {
-        const translated = response.data.map((j) => translateJob(j as LooseJobListing));
-        setJobs(translated);
-        setFilteredJobs(translated);
-        setUseFallback(false);
-        setApiError(null);
-      } else {
-        console.warn("Jobs Tech Theme: Live registry returned empty. Initializing backups.");
-        setApiError("Database returned no listings. Ensure recruiting seeds have run.");
-        triggerLocalFallbacks();
-      }
-    } catch (error) {
-      console.error("Jobs Tech Theme: Connection failure querying database nodes. Engaging fallback.", error);
-      setApiError(error instanceof Error ? error.message : String(error));
-      triggerLocalFallbacks();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const triggerLocalFallbacks = () => {
-    setUseFallback(true);
-    setJobs(FALLBACK_JOBS);
-    setFilteredJobs(FALLBACK_JOBS);
-  };
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      void fetchLiveJobs();
-    }, 0);
-
-    return () => window.clearTimeout(timer);
-    // The first catalog sync should run once on mount; interactive refreshes call fetchLiveJobs directly.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const getThemeLink = (path: string) => {
-    if (typeof window !== 'undefined') {
-      const isPreview = window.location.pathname.startsWith('/preview/');
-      if (isPreview) {
-        return `/preview/jobs_tech${path}`;
-      }
-    }
-    return path;
-  };
-
-  // Perform search and checkbox modifications statefully
-  const applyRefinements = (query: string, stack: string | null, ft: boolean, ct: boolean, fl: boolean, remote: boolean, us: boolean, emea: boolean) => {
-    let result = [...jobs];
-
-    // Filter by Stack text query
     if (query) {
       const q = query.toLowerCase();
-      result = result.filter(j => 
-        j.title.toLowerCase().includes(q) || 
-        j.company.toLowerCase().includes(q) ||
-        j.skills.some((s: string) => s.toLowerCase().includes(q))
+      result = result.filter(
+        (j) =>
+          j.title.toLowerCase().includes(q) ||
+          j.company.toLowerCase().includes(q) ||
+          j.skills.some((s) => s.toLowerCase().includes(q)),
       );
     }
 
-    // Filter by tech stack tags
     if (stack) {
       const s = stack.toLowerCase();
-      result = result.filter(j => j.skills.some((sk: string) => sk.toLowerCase() === s));
+      result = result.filter((j) => j.skills.some((sk) => sk.toLowerCase() === s));
     }
 
-    // Filter by Job Types
     const allowedTypes: string[] = [];
     if (ft) allowedTypes.push('full-time');
     if (ct) allowedTypes.push('contract');
     if (fl) allowedTypes.push('freelance');
 
     if (allowedTypes.length > 0) {
-      result = result.filter(j => allowedTypes.includes(j.type.toLowerCase()));
+      result = result.filter((j) => allowedTypes.includes(j.type.toLowerCase()));
     }
 
-    // Filter by Locations
     const locQueries: string[] = [];
     if (remote) locQueries.push('remote', 'worldwide');
     if (us) locQueries.push('us', 'canada', 'san francisco');
     if (emea) locQueries.push('emea', 'europe', 'london');
 
     if (locQueries.length > 0) {
-      result = result.filter(j => 
-        locQueries.some(l => j.location.toLowerCase().includes(l))
-      );
+      result = result.filter((j) => locQueries.some((l) => j.location.toLowerCase().includes(l)));
     }
 
     setFilteredJobs(result);
+  };
+
+  useEffect(() => {
+    async function loadJobs() {
+      setLoading(true);
+      const result = await fetchJobsHome(20);
+
+      if (result.ok && result.response.data?.length) {
+        const translated = result.response.data.map(translateJobListingToTechJob);
+        setJobs(translated);
+        applyRefinements(searchQuery, activeStack, typeFullTime, typeContract, typeFreelance, locRemote, locUS, locEMEA, translated);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No jobs returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveJobsFailure(allowDemo, 'tech');
+
+        if (resolution.mode === 'demo') {
+          const translated = resolution.jobs.map(translateJobListingToTechJob);
+          setJobs(translated);
+          applyRefinements(searchQuery, activeStack, typeFullTime, typeContract, typeFreelance, locRemote, locUS, locEMEA, translated);
+          setUseFallback(true);
+        } else {
+          setJobs([]);
+          setFilteredJobs([]);
+          setUseFallback(false);
+        }
+      }
+
+      setLoading(false);
+    }
+
+    loadJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allowDemo]);
+
+  const goToExplore = (query?: string) => {
+    const path = query ? `/explore?q=${encodeURIComponent(query)}` : '/explore';
+    router.push(themeLink(path));
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -303,8 +169,6 @@ export default function Page() {
 
   return (
     <div className="jt-layout-base" style={{ padding: '0 6% 8rem', maxWidth: '1400px', margin: '0 auto' }}>
-      
-      {/* Hero Section */}
       <section className="jt-hero">
         <div className="jt-hero-content">
             <h1 className="jt-hero-title">{renderHighlightedTitle(heroTitle, heroHighlight)}</h1>
@@ -318,11 +182,15 @@ export default function Page() {
                   placeholder={searchPlaceholder}
                   value={searchQuery}
                   onChange={handleSearchChange}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') goToExplore(searchQuery);
+                  }}
                 />
                 <button 
+                  type="button"
                   className="jt-btn jt-btn-primary" 
                   style={{ margin: '0.25rem' }}
-                  onClick={() => applyRefinements(searchQuery, activeStack, typeFullTime, typeContract, typeFreelance, locRemote, locUS, locEMEA)}
+                  onClick={() => goToExplore(searchQuery)}
                 >
                   {searchButtonLabel}
                 </button>
@@ -330,62 +198,23 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Database Offline Diagnostics warning block */}
-      {useFallback && apiError && (
-        <div style={{
-          background: '#090d16',
-          border: '1px dashed var(--jt-purple)',
-          borderLeft: '4px solid var(--jt-purple)',
-          padding: '2.5rem',
-          borderRadius: '16px',
-          marginBottom: '5rem',
-          color: '#f8fafc'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-            <span style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: '#ef4444',
-              display: 'inline-block',
-              animation: 'pulse 1.5s infinite'
-            }}></span>
-            <span className="jt-mono" style={{ color: 'var(--jt-purple)', fontSize: '0.75rem', fontFamily: 'var(--jt-font-mono)', fontWeight: 800 }}>
-              DATABASE_OFFLINE_DIAGNOSTICS_TRACE
-            </span>
-          </div>
-          <div>
-            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: '0 0 1rem 0', letterSpacing: '-0.5px' }}>
-              {diagnosticsTitle}
-            </h3>
-            <p style={{ color: 'var(--jt-text-muted)', fontSize: '0.95rem', margin: '0 0 2rem 0', lineHeight: '1.8' }}>
-              {diagnosticsDescription}
-            </p>
-          </div>
-          <div style={{
-            background: 'rgba(168, 85, 247, 0.05)',
-            padding: '1.5rem',
-            borderRadius: '8px',
-            fontFamily: 'monospace',
-            fontSize: '0.85rem',
-            color: 'var(--jt-purple)',
-            borderLeft: '2px solid var(--jt-purple)',
-            overflowX: 'auto',
-            whiteSpace: 'pre-wrap'
-          }}>
-            Traceback Exception details: {apiError}
-          </div>
+      {apiError && useFallback && (
+        <div className="jt-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="jt" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="jt-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="jt" />
         </div>
       )}
 
-      {/* Main Layout Grid */}
       <div className="jt-layout">
-          {/* Sidebar Filters */}
           <aside className="jt-sidebar">
               <div style={{ marginBottom: '2.5rem' }}>
                   <h4 className="jt-sidebar-title">{stackTitle}</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                      {['React', 'Next.js', 'TypeScript', 'Node.js', 'Python', 'Go', 'Rust', 'GraphQL'].map(tag => (
+                      {['React', 'Next.js', 'TypeScript', 'Node.js', 'Python', 'Go', 'Rust', 'GraphQL'].map((tag) => (
                           <span 
                             key={tag} 
                             className="jt-tag"
@@ -394,7 +223,7 @@ export default function Page() {
                               color: activeStack === tag ? 'white' : 'var(--jt-text-main)',
                               borderColor: activeStack === tag ? 'var(--jt-purple)' : 'var(--jt-border)',
                               cursor: 'pointer',
-                              fontWeight: 700
+                              fontWeight: 700,
                             }}
                             onClick={() => handleStackTagClick(tag)}
                           >
@@ -485,7 +314,6 @@ export default function Page() {
               </div>
           </aside>
 
-          {/* Job Listings Column */}
           <main>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--jt-border)', paddingBottom: '1rem' }}>
                   <div style={{ fontFamily: 'var(--jt-font-mono)', color: 'var(--jt-text-muted)' }}>
@@ -495,7 +323,7 @@ export default function Page() {
                     style={{ backgroundColor: 'transparent', border: 'none', color: 'var(--jt-text-purple)', fontFamily: 'var(--jt-font-mono)', outline: 'none', cursor: 'pointer', fontWeight: 800 }}
                     onChange={(e) => {
                       if (e.target.value === 'Highest Paid') {
-                        const sorted = [...filteredJobs].sort((a,b) => {
+                        const sorted = [...filteredJobs].sort((a, b) => {
                           const valA = Number(a.salary.replace(/[^\d]/g, ''));
                           const valB = Number(b.salary.replace(/[^\d]/g, ''));
                           return valB - valA;
@@ -505,6 +333,7 @@ export default function Page() {
                         applyRefinements(searchQuery, activeStack, typeFullTime, typeContract, typeFreelance, locRemote, locUS, locEMEA);
                       }
                     }}
+                    defaultValue="Latest"
                   >
                       <option>Latest</option>
                       <option>Highest Paid</option>
@@ -512,28 +341,22 @@ export default function Page() {
               </div>
 
               {loading ? (
-                /* Shimmer pulsing layout */
                 <div className="jt-job-list">
-                  {[1, 2, 3].map(i => (
+                  {[1, 2, 3].map((i) => (
                     <div 
                       key={i} 
                       className="jt-job-card" 
-                      style={{ 
-                        height: '140px', 
-                        opacity: 0.6, 
-                        background: 'var(--jt-bg-light)', 
-                        animation: 'pulse 1.5s infinite ease-in-out' 
-                      }} 
+                      style={{ height: '140px', opacity: 0.6, background: 'var(--jt-bg-light)', animation: 'pulse 1.5s infinite ease-in-out' }} 
                     />
                   ))}
                 </div>
               ) : filteredJobs.length > 0 ? (
                 <div className="jt-job-list">
-                    {filteredJobs.map((job, i) => (
+                    {filteredJobs.map((job) => (
                         <TechJobCard 
-                          key={i} 
+                          key={job.slug} 
                           {...job} 
-                          onClick={() => router.push(getThemeLink(`/product/${job.slug}`))}
+                          onClick={() => router.push(themeLink(`/product/${job.slug}`))}
                         />
                     ))}
                 </div>
@@ -545,7 +368,7 @@ export default function Page() {
               )}
               
               <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-                  <button className="jt-btn jt-btn-outline" onClick={() => fetchLiveJobs()}>{refreshLabel}</button>
+                  <button type="button" className="jt-btn jt-btn-outline" onClick={() => goToExplore()}>{exploreAllLabel}</button>
               </div>
           </main>
       </div>

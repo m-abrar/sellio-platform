@@ -1,15 +1,16 @@
 import { api } from '@sellio/api-client';
 import type { JobListing } from '@sellio/types';
 import {
-  CORPORATE_FALLBACK_JOBS,
-  STARTUP_FALLBACK_JOBS,
   findCorporateFallbackJob,
+  findFallbackJob,
   findStartupFallbackJob,
   getCorporateRelatedJobs,
+  getFallbackJobs,
+  getRelatedFallbackJobs,
   getStartupRelatedJobs,
 } from './fallback-data';
 
-export type JobsThemeVariant = 'startup' | 'corporate';
+export type JobsThemeVariant = 'startup' | 'corporate' | 'tech' | 'modern' | 'freelance' | 'blue_collar';
 
 function toErrorMessage(error: unknown): string {
   if (error instanceof Error) {
@@ -60,7 +61,7 @@ export function resolveJobsFailure(allowDemo: boolean, variant: JobsThemeVariant
   if (allowDemo) {
     return {
       mode: 'demo' as const,
-      jobs: variant === 'startup' ? STARTUP_FALLBACK_JOBS : CORPORATE_FALLBACK_JOBS,
+      jobs: getFallbackJobs(variant),
     };
   }
 
@@ -76,21 +77,17 @@ export function resolveJobFailure(
     return { mode: 'empty' as const };
   }
 
-  const job =
-    variant === 'startup'
-      ? findStartupFallbackJob(slug)
-      : findCorporateFallbackJob(slug);
+  const job = findFallbackJob(slug, variant);
 
   if (!job) {
     return { mode: 'notFound' as const };
   }
 
-  const related =
-    variant === 'startup'
-      ? getStartupRelatedJobs(job.slug)
-      : getCorporateRelatedJobs(job.slug);
-
-  return { mode: 'demo' as const, job, related };
+  return {
+    mode: 'demo' as const,
+    job,
+    related: getRelatedFallbackJobs(slug, variant),
+  };
 }
 
 export type JobExploreFilters = {
@@ -131,3 +128,5 @@ export function filterFallbackJobs(
     return matchesSearch && matchesCategory && matchesLocation && matchesWorkplace && matchesExperience;
   });
 }
+
+export { findCorporateFallbackJob, findStartupFallbackJob, getCorporateRelatedJobs, getStartupRelatedJobs };

@@ -1,34 +1,21 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
+import { useRouter } from 'next/navigation';
 import type { JobListing } from '@sellio/types';
 import { ModernHeader, ModernJobCard, ModernFooter } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
-
-const fallbackLogos = [
-  '/themes/jobs/modern/1.webp',
-  '/themes/jobs/modern/2.webp',
-  '/themes/jobs/modern/3.webp',
-  '/themes/jobs/modern/4.webp',
-  '/themes/jobs/modern/5.webp',
-  '/themes/jobs/modern/6.webp',
-];
-
-function mapJobToCard(job: JobListing, index: number) {
-  return {
-    title: job.title,
-    company: job.company?.name || job.employer?.name || 'Innovative Company',
-    location: job.location?.display || [job.location?.city, job.location?.state].filter(Boolean).join(', ') || 'Remote',
-    type: job.employment?.workplace || job.employment?.type || 'Full-Time',
-    level: job.employment?.experience_level || 'Mid-Level',
-    salary: job.compensation?.range_compact || job.compensation?.range_full || 'Competitive',
-    logo: job.company?.logo_card || job.company?.logo || fallbackLogos[index % fallbackLogos.length],
-    slug: job.slug,
-  };
-}
+import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
+import { fetchJobsHome, resolveJobsFailure } from '@/themes/jobs/shared/catalog';
+import { mapJobToModernCard } from '@/themes/jobs/shared/job-utils';
+import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 export default function Page() {
+  const router = useRouter();
+  const themeLink = useJobsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
+
   const heroBadge = useThemeContent('hero.badge', '🚀 Over 10,000+ new roles added this week');
   const heroTitle = useThemeContent('hero.title', 'Find work that \nmatches your ambition.');
   const heroDescription = useThemeContent('hero.description', 'The modern way to discover roles at innovative startups and world-class tech companies.');
@@ -45,46 +32,46 @@ export default function Page() {
 
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
-  const [jobError, setJobError] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
-
     async function loadJobs() {
-      try {
-        const response = await api.getJobs({ per_page: 6 });
-        if (!isMounted) {
-          return;
-        }
+      setLoadingJobs(true);
+      const result = await fetchJobsHome(6);
 
-        setJobs(Array.isArray(response.data) ? response.data : []);
-        setJobError(null);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
+      if (result.ok && result.response.data?.length) {
+        setJobs(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'No jobs returned from API.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveJobsFailure(allowDemo, 'modern');
 
-        console.error('Failed to load jobs modern listings:', error);
-        setJobError(error instanceof Error ? error.message : 'Jobs are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoadingJobs(false);
+        if (resolution.mode === 'demo') {
+          setJobs(resolution.jobs);
+          setUseFallback(true);
+        } else {
+          setJobs([]);
+          setUseFallback(false);
         }
       }
+
+      setLoadingJobs(false);
     }
 
     loadJobs();
+  }, [allowDemo]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const goToExplore = () => {
+    router.push(themeLink('/explore'));
+  };
 
   return (
     <div className="jobs-modern-wrapper">
       <ModernHeader />
 
-      {/* Hero */}
       <section className="jm-hero">
         <div className="jm-hero-badge">{heroBadge}</div>
         <h1 className="jm-hero-title">
@@ -110,14 +97,13 @@ export default function Page() {
         <p className="jm-hero-subtitle">{heroDescription}</p>
 
         <div className="jm-search-box">
-            <input type="text" className="jm-search-input" placeholder="Job title, skill, or company" />
+            <input type="text" className="jm-search-input" placeholder="Job title, skill, or company" readOnly onFocus={goToExplore} />
             <div className="jm-search-divider"></div>
-            <input type="text" className="jm-search-input" placeholder="City or Remote" />
-            <button className="jm-btn jm-btn-primary" style={{ margin: '4px' }}>Search</button>
+            <input type="text" className="jm-search-input" placeholder="City or Remote" readOnly onFocus={goToExplore} />
+            <button type="button" className="jm-btn jm-btn-primary" style={{ margin: '4px' }} onClick={goToExplore}>Search</button>
         </div>
       </section>
 
-      {/* Stats */}
       <div className="jm-stats">
           <div className="jm-stat-item">
               <div className="jm-stat-number jm-text-gradient">{statsUsersVal}</div>
@@ -133,12 +119,22 @@ export default function Page() {
           </div>
       </div>
 
-      {/* Job Grid */}
       <section className="jm-section" id="discover">
           <div className="jm-section-header">
               <h2 className="jm-section-title">{jobsTitle}</h2>
-              <a href="#" className="jm-btn jm-btn-outline">{jobsViewAll}</a>
+              <a href={themeLink('/explore')} className="jm-btn jm-btn-outline">{jobsViewAll}</a>
           </div>
+
+          {apiError && useFallback && (
+            <div className="jm-alert-slot">
+              <CatalogSyncAlert variant="demo" error={apiError} classPrefix="jm" />
+            </div>
+          )}
+          {apiError && !useFallback && (
+            <div className="jm-alert-slot">
+              <CatalogSyncAlert variant="production" error={apiError} classPrefix="jm" />
+            </div>
+          )}
 
           <div className="jm-grid">
               {loadingJobs ? (
@@ -150,23 +146,18 @@ export default function Page() {
                     <div className="jm-skeleton-line jm-skeleton-line-short" />
                   </div>
                 ))
-              ) : jobError ? (
-                <div className="jm-listing-state">
-                  <div className="jm-listing-kicker">Job Sync Offline</div>
-                  <h3>Curated roles could not be loaded.</h3>
-                  <p>{jobError}</p>
-                </div>
               ) : jobs.length === 0 ? (
                 <div className="jm-listing-state">
                   <div className="jm-listing-kicker">Empty Job Registry</div>
                   <h3>No live jobs are published yet.</h3>
-                  <p>Add job records in the backend and this modern grid will hydrate automatically.</p>
+                  <p>Browse the explore page or add job records in the backend to hydrate this grid.</p>
+                  <a href={themeLink('/explore')} className="jm-btn jm-btn-primary" style={{ marginTop: '1.5rem', display: 'inline-block', textDecoration: 'none' }}>Explore roles</a>
                 </div>
               ) : (
                 jobs.slice(0, 6).map((job, index) => {
-                  const card = mapJobToCard(job, index);
+                  const card = mapJobToModernCard(job, index);
                   return (
-                    <a className="jm-job-link" href={`/product/${card.slug}`} key={job.id}>
+                    <a className="jm-job-link" href={themeLink(`/product/${card.slug}`)} key={job.id}>
                       <ModernJobCard {...card} />
                     </a>
                   );

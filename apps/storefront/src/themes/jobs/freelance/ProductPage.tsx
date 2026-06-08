@@ -1,59 +1,71 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
 import type { JobListing } from '@sellio/types';
+import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
+import { fetchJobDetail, resolveJobFailure } from '@/themes/jobs/shared/catalog';
+import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 interface ProductPageProps {
   slug: string;
 }
 
-function getThemeLink(path: string) {
-  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/preview/')) {
-    const themeKey = window.location.pathname.split('/')[2];
-    return `/preview/${themeKey}${path}`;
-  }
-  return path || '/';
-}
-
 export default function ProductPage({ slug }: ProductPageProps) {
+  const themeLink = useJobsThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
   const [job, setJob] = useState<JobListing | null>(null);
   const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [useFallback, setUseFallback] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', portfolio: '', note: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
-
     async function loadJob() {
-      try {
-        const response = await api.getJobDetails(slug);
-        if (!isMounted) return;
-        if (response?.data) {
-          setJob(response.data);
-          setErrorMessage(null);
+      setLoading(true);
+      setNotFound(false);
+      const result = await fetchJobDetail(slug);
+
+      if (result.ok && result.response.data) {
+        setJob(result.response.data);
+        setUseFallback(false);
+        setApiError(null);
+      } else {
+        const errorMsg = result.ok ? 'Gig not found or API returned no data.' : result.error;
+        setApiError(errorMsg);
+        const resolution = resolveJobFailure(slug, allowDemo, 'freelance');
+
+        if (resolution.mode === 'demo') {
+          setJob(resolution.job);
+          setUseFallback(true);
+        } else if (resolution.mode === 'notFound') {
+          setJob(null);
+          setNotFound(true);
+          setUseFallback(false);
         } else {
-          setErrorMessage('Gig listing not found.');
+          setJob(null);
+          setUseFallback(false);
         }
-      } catch (error: unknown) {
-        if (!isMounted) return;
-        console.error('Failed to load jobs freelance detail:', error);
-        setErrorMessage(error instanceof Error ? error.message : 'The gig listing could not be synchronized.');
-      } finally {
-        if (isMounted) setLoading(false);
       }
+
+      setLoading(false);
     }
 
     loadJob();
-    return () => { isMounted = false; };
-  }, [slug]);
+  }, [slug, allowDemo]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!job || !form.name || !form.email) return;
+    if (!job || !form.name || !form.email) {
+      setFormError('Please enter your name and email to apply.');
+      return;
+    }
 
+    setFormError(null);
     setIsSubmitting(true);
     setTimeout(() => {
       try {
@@ -94,43 +106,53 @@ export default function ProductPage({ slug }: ProductPageProps) {
     );
   }
 
-  if (errorMessage || !job) {
+  if (notFound || (!job && !useFallback)) {
     return (
       <main className="jf-detail-page">
         <section className="jf-detail-state" role="status">
           <div className="jf-detail-kicker">Gig Unavailable</div>
           <h1>Gig could not be loaded.</h1>
-          <p>{errorMessage || 'The requested gig does not exist or has been removed.'}</p>
-          <a href={getThemeLink('')} className="jf-btn jf-btn-primary">Return to Gigs</a>
+          <p>{apiError || 'The requested gig does not exist or has been removed.'}</p>
+          <a href={themeLink('/')} className="jf-btn jf-btn-primary">Return to Gigs</a>
         </section>
       </main>
     );
   }
 
+  if (!job) {
+    return null;
+  }
+
   return (
     <main className="jf-detail-page">
-      <a href={getThemeLink('')} className="jf-detail-back">&larr; Back to Popular Gigs</a>
+      <a href={themeLink('/')} className="jf-detail-back">&larr; Back to Popular Services</a>
+
+      {apiError && useFallback && (
+        <div className="jf-alert-slot">
+          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="jf" />
+        </div>
+      )}
+      {apiError && !useFallback && (
+        <div className="jf-alert-slot">
+          <CatalogSyncAlert variant="production" error={apiError} classPrefix="jf" />
+        </div>
+      )}
 
       <header className="jf-detail-header">
         <div className="jf-detail-kicker">{job.taxonomy?.category || 'Professional Service'}</div>
         <h1>{job.title}</h1>
-        <div className="jf-detail-company">{job.company?.name || 'Independent Client'}</div>
+        <div className="jf-detail-company">{job.company?.name || 'Top Freelancer'}</div>
         <div className="jf-detail-meta">
           <span>{job.location?.display || 'Remote'}</span>
           <span>{job.employment?.type || 'Contract'}</span>
-          <span>{job.compensation?.range_compact || 'Project rate'}</span>
+          <span>{job.compensation?.range_compact || 'Quote on request'}</span>
         </div>
       </header>
 
       <section className="jf-detail-grid">
         <article className="jf-detail-main">
-          <h2>Gig Overview</h2>
+          <h2>Service Overview</h2>
           <p>{job.description || 'This live gig listing is synchronized from the Sellio jobs catalog.'}</p>
-          <div className="jf-detail-specs">
-            <div><span>Workplace</span><strong>{job.employment?.workplace || 'Remote'}</strong></div>
-            <div><span>Experience</span><strong>{job.employment?.experience_level || 'Professional'}</strong></div>
-            <div><span>Engagement</span><strong>{job.employment?.type || 'Contract'}</strong></div>
-          </div>
           {job.taxonomy?.tags && (
             <div className="jf-detail-tags">
               {job.taxonomy.tags.map((tag) => <span key={tag}>{tag}</span>)}
@@ -139,19 +161,20 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </article>
 
         <aside className="jf-detail-sidebar">
-          <div className="jf-detail-salary">{job.compensation?.range_full || job.compensation?.range_compact || 'Project rate'}</div>
+          <div className="jf-detail-salary">{job.compensation?.range_full || job.compensation?.range_compact || 'Quote on request'}</div>
           <div className="jf-detail-apply">
-            <h3>Submit Proposal</h3>
+            <h3>Request this service</h3>
             {isSubmitted ? (
-              <div className="jf-detail-success" role="status">Proposal saved.</div>
+              <div className="jf-detail-success" role="status">Request saved.</div>
             ) : (
               <form onSubmit={handleSubmit}>
+                {formError && <div className="jf-detail-error" role="alert">{formError}</div>}
                 <label>Full Name<input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
                 <label>Email<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
-                <label>Portfolio URL<input type="url" value={form.portfolio} onChange={(e) => setForm({ ...form, portfolio: e.target.value })} /></label>
-                <label>Proposal<textarea rows={4} value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} /></label>
+                <label>Portfolio<input type="url" value={form.portfolio} onChange={(e) => setForm({ ...form, portfolio: e.target.value })} /></label>
+                <label>Project Brief<textarea rows={4} value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} /></label>
                 <button className="jf-btn jf-btn-primary" type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? 'Submitting...' : 'Send Proposal'}
+                  {isSubmitting ? 'Submitting...' : 'Submit Request'}
                 </button>
               </form>
             )}

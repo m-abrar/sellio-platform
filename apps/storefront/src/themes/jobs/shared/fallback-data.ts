@@ -330,30 +330,398 @@ export const CORPORATE_FALLBACK_JOBS: JobListing[] = [
 ];
 
 export function findStartupFallbackJob(slug: string): JobListing | undefined {
-  const exact = STARTUP_FALLBACK_JOBS.find((job) => job.slug === slug);
-  if (exact) return exact;
-
-  return {
-    ...STARTUP_FALLBACK_JOBS[0],
-    id: 999,
-    title: slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-    slug,
-    description:
-      'Hypergrowth startup looking for a mission-critical specialist to optimize dynamic corporate networks and implement foundational microservice systems.',
-    company: { name: 'Venture Corp', logo: null },
-    taxonomy: { category: 'Technical Talent', tags: ['Startup', 'Next.js', 'Docker', 'Seed'] },
-    location: { display: 'Berlin / Remote', city: 'Berlin', country: 'Germany' },
-  };
+  return findFallbackJob(slug, 'startup');
 }
 
 export function findCorporateFallbackJob(slug: string): JobListing | undefined {
-  return CORPORATE_FALLBACK_JOBS.find((job) => job.slug === slug);
+  return findFallbackJob(slug, 'corporate');
 }
 
 export function getStartupRelatedJobs(slug: string): JobListing[] {
-  return STARTUP_FALLBACK_JOBS.filter((job) => job.slug !== slug).slice(0, 3);
+  return getRelatedFallbackJobs(slug, 'startup');
 }
 
 export function getCorporateRelatedJobs(slug: string): JobListing[] {
-  return CORPORATE_FALLBACK_JOBS.filter((job) => job.slug !== slug).slice(0, 3);
+  return getRelatedFallbackJobs(slug, 'corporate');
+}
+
+export const TECH_FALLBACK_JOBS: JobListing[] = [
+  buildJob(
+    901,
+    'Senior React Engineer',
+    'senior-react-engineer',
+    "Join the core framework team to innovate Next.js and frontend delivery systems. Optimize compilation streams, hydration metrics, and SSR edge rendering.",
+    'Vercel',
+    'Engineering',
+    'Remote',
+    1,
+    'Senior',
+    'Remote - Worldwide',
+    'Remote',
+    'United States',
+    '$140k–$180k/yr',
+    '$140,000 - $180,000/yr',
+    140000,
+    180000,
+    ['React', 'Next.js', 'TypeScript'],
+  ),
+  buildJob(
+    902,
+    'Backend Systems Developer',
+    'backend-systems-developer',
+    'Architect robust transactional APIs and secure ledger databases that route global trade and multi-currency billing networks.',
+    'Stripe',
+    'Engineering',
+    'Remote',
+    1,
+    'Senior',
+    'Remote - US/Canada',
+    'Remote',
+    'United States',
+    '$160k–$210k/yr',
+    '$160,000 - $210,000/yr',
+    160000,
+    210000,
+    ['Go', 'Ruby', 'PostgreSQL', 'AWS'],
+  ),
+  buildJob(
+    903,
+    'Frontend Architect',
+    'frontend-architect',
+    'Craft highly interactive, responsive tooling for task management workflows with keyboard-first navigation.',
+    'Linear',
+    'Engineering',
+    'On-Site',
+    2,
+    'Senior',
+    'San Francisco, CA',
+    'San Francisco',
+    'United States',
+    '$180k–$220k/yr',
+    '$180,000 - $220,000/yr',
+    180000,
+    220000,
+    ['React', 'GraphQL', 'MobX'],
+  ),
+  buildJob(
+    904,
+    'DevOps Engineer',
+    'devops-engineer',
+    'Manage highly scalable orchestration nodes routing voice and socket data across multi-cloud clusters.',
+    'Discord',
+    'Operations',
+    'Remote',
+    1,
+    'Mid-level',
+    'Remote - US',
+    'Remote',
+    'United States',
+    '$150k–$190k/yr',
+    '$150,000 - $190,000/yr',
+    150000,
+    190000,
+    ['Kubernetes', 'Rust', 'GCP'],
+  ),
+  buildJob(
+    905,
+    'Full Stack Developer',
+    'full-stack-developer',
+    'Develop and scale open-source database client abstractions and serverless edge functions.',
+    'Supabase',
+    'Engineering',
+    'Remote',
+    1,
+    'Mid-level',
+    'Remote - EMEA',
+    'Remote',
+    'United Kingdom',
+    '$120k–$150k/yr',
+    '$120,000 - $150,000/yr',
+    120000,
+    150000,
+    ['TypeScript', 'PostgreSQL', 'Elixir'],
+  ),
+];
+
+export const MODERN_FALLBACK_JOBS: JobListing[] = [
+  buildJob(
+    911,
+    'Senior Product Designer',
+    'senior-product-designer',
+    'Own end-to-end product design for a fast-growing SaaS platform serving millions of users.',
+    'Nova Labs',
+    'Design',
+    'Hybrid',
+    3,
+    'Senior',
+    'New York, NY',
+    'New York',
+    'United States',
+    '$130k–$165k/yr',
+    '$130,000 - $165,000/yr',
+    130000,
+    165000,
+    ['Figma', 'Design Systems', 'SaaS'],
+  ),
+  buildJob(
+    912,
+    'Growth Marketing Manager',
+    'growth-marketing-manager',
+    'Drive acquisition campaigns and lifecycle programs for an ambitious consumer fintech brand.',
+    'PulsePay',
+    'Marketing',
+    'Remote',
+    1,
+    'Mid-level',
+    'Remote',
+    'Remote',
+    'United States',
+    '$95k–$130k/yr',
+    '$95,000 - $130,000/yr',
+    95000,
+    130000,
+    ['Growth', 'Paid Media', 'Analytics'],
+  ),
+  buildJob(
+    913,
+    'Staff Software Engineer',
+    'staff-software-engineer',
+    'Lead platform architecture decisions and mentor engineers building high-scale APIs.',
+    'Cloudframe',
+    'Engineering',
+    'Hybrid',
+    3,
+    'Staff',
+    'Seattle, WA',
+    'Seattle',
+    'United States',
+    '$170k–$220k/yr',
+    '$170,000 - $220,000/yr',
+    170000,
+    220000,
+    ['TypeScript', 'AWS', 'Platform'],
+  ),
+  buildJob(
+    914,
+    'Customer Success Lead',
+    'customer-success-lead',
+    'Build onboarding playbooks and retention programs for enterprise SaaS accounts.',
+    'Brightdesk',
+    'Customer Success',
+    'Remote',
+    1,
+    'Lead',
+    'Remote - US',
+    'Remote',
+    'United States',
+    '$110k–$145k/yr',
+    '$110,000 - $145,000/yr',
+    110000,
+    145000,
+    ['SaaS', 'Enterprise', 'Retention'],
+  ),
+];
+
+export const FREELANCE_FALLBACK_JOBS: JobListing[] = [
+  buildJob(
+    921,
+    'Brand Identity Designer',
+    'brand-identity-designer',
+    'Create premium logo systems, style guides, and launch assets for funded startups.',
+    'Studio Meridian',
+    'Design',
+    'Remote',
+    1,
+    'Expert',
+    'Remote',
+    'Remote',
+    'United States',
+    '$800–$2,500/project',
+    '$800 - $2,500/project',
+    800,
+    2500,
+    ['Branding', 'Logo', 'Figma'],
+  ),
+  buildJob(
+    922,
+    'React Developer for MVP',
+    'react-developer-mvp',
+    'Build a polished MVP dashboard with authentication, billing, and admin tooling.',
+    'Launch Collective',
+    'Programming',
+    'Remote',
+    1,
+    'Mid-level',
+    'Remote',
+    'Remote',
+    'United States',
+    '$60–$120/hr',
+    '$60 - $120/hr',
+    60,
+    120,
+    ['React', 'Next.js', 'Stripe'],
+  ),
+  buildJob(
+    923,
+    'SEO Content Strategist',
+    'seo-content-strategist',
+    'Plan and write high-converting landing pages and blog content for B2B SaaS brands.',
+    'RankForge',
+    'Writing',
+    'Remote',
+    1,
+    'Senior',
+    'Remote',
+    'Remote',
+    'United Kingdom',
+    '$45–$85/hr',
+    '$45 - $85/hr',
+    45,
+    85,
+    ['SEO', 'Copywriting', 'SaaS'],
+  ),
+  buildJob(
+    924,
+    'Video Editor for Product Launch',
+    'video-editor-product-launch',
+    'Edit launch trailers, social cutdowns, and paid ad creatives for a consumer app release.',
+    'Motion Hive',
+    'Video',
+    'Remote',
+    1,
+    'Mid-level',
+    'Remote',
+    'Remote',
+    'Canada',
+    '$500–$1,800/project',
+    '$500 - $1,800/project',
+    500,
+    1800,
+    ['Premiere', 'After Effects', 'Ads'],
+  ),
+];
+
+export const BLUE_COLLAR_FALLBACK_JOBS: JobListing[] = [
+  buildJob(
+    931,
+    'Licensed Electrician',
+    'licensed-electrician',
+    'Commercial wiring projects with union benefits, overtime availability, and tool stipend.',
+    'Metro Power Co.',
+    'Electrical',
+    'On-Site',
+    2,
+    'Journeyman',
+    'Chicago, IL',
+    'Chicago',
+    'United States',
+    '$32–$42/hr',
+    '$32 - $42/hr',
+    32,
+    42,
+    ['Commercial', 'Union', 'Licensed'],
+  ),
+  buildJob(
+    932,
+    'CNC Machine Operator',
+    'cnc-machine-operator',
+    'Operate precision CNC equipment for aerospace components on second shift with training provided.',
+    'Precision Works',
+    'Manufacturing',
+    'On-Site',
+    2,
+    'Mid-level',
+    'Detroit, MI',
+    'Detroit',
+    'United States',
+    '$22–$28/hr',
+    '$22 - $28/hr',
+    22,
+    28,
+    ['CNC', 'Manufacturing', 'Aerospace'],
+  ),
+  buildJob(
+    933,
+    'CDL Class A Driver',
+    'cdl-class-a-driver',
+    'Regional routes with home weekly schedule, sign-on bonus, and full benefits package.',
+    'Heartland Logistics',
+    'Transportation',
+    'On-Site',
+    2,
+    'Experienced',
+    'Dallas, TX',
+    'Dallas',
+    'United States',
+    '$0.58–$0.72/mi',
+    '$0.58 - $0.72/mi',
+    58,
+    72,
+    ['CDL', 'Regional', 'Benefits'],
+  ),
+  buildJob(
+    934,
+    'Commercial HVAC Technician',
+    'commercial-hvac-technician',
+    'Service and install rooftop units for commercial clients with overtime and company vehicle.',
+    'CoolAir Services',
+    'Maintenance',
+    'On-Site',
+    2,
+    'Mid-level',
+    'Phoenix, AZ',
+    'Phoenix',
+    'United States',
+    '$28–$36/hr',
+    '$28 - $36/hr',
+    28,
+    36,
+    ['HVAC', 'Commercial', 'EPA'],
+  ),
+];
+
+export type JobsFallbackVariant = 'startup' | 'corporate' | 'tech' | 'modern' | 'freelance' | 'blue_collar';
+
+const FALLBACK_BY_VARIANT: Record<JobsFallbackVariant, JobListing[]> = {
+  startup: STARTUP_FALLBACK_JOBS,
+  corporate: CORPORATE_FALLBACK_JOBS,
+  tech: TECH_FALLBACK_JOBS,
+  modern: MODERN_FALLBACK_JOBS,
+  freelance: FREELANCE_FALLBACK_JOBS,
+  blue_collar: BLUE_COLLAR_FALLBACK_JOBS,
+};
+
+export function getFallbackJobs(variant: JobsFallbackVariant): JobListing[] {
+  return FALLBACK_BY_VARIANT[variant];
+}
+
+export function findFallbackJob(slug: string, variant: JobsFallbackVariant): JobListing | undefined {
+  const exact = FALLBACK_BY_VARIANT[variant].find((job) => job.slug === slug);
+  if (exact) return exact;
+
+  if (variant === 'startup' || variant === 'tech') {
+    const base = FALLBACK_BY_VARIANT[variant][0];
+    return {
+      ...base,
+      id: 999,
+      slug,
+      title: slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+      description:
+        variant === 'tech'
+          ? 'High-fidelity engineering opportunity. Solve mission-critical problems with modern tooling and strong autonomy.'
+          : 'Hypergrowth startup looking for a mission-critical specialist to optimize dynamic corporate networks.',
+      company: { name: variant === 'tech' ? 'Tech Startup' : 'Venture Corp', logo: null },
+      taxonomy: {
+        category: variant === 'tech' ? 'Engineering' : 'Technical Talent',
+        tags: variant === 'tech' ? ['TypeScript', 'React', 'Remote'] : ['Startup', 'Next.js', 'Docker'],
+      },
+      location: { display: 'Remote', city: 'Remote', country: 'United States' },
+    };
+  }
+
+  return undefined;
+}
+
+export function getRelatedFallbackJobs(slug: string, variant: JobsFallbackVariant): JobListing[] {
+  return FALLBACK_BY_VARIANT[variant].filter((job) => job.slug !== slug).slice(0, 3);
 }

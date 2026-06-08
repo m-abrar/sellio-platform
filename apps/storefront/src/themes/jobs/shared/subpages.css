@@ -1,0 +1,194 @@
+/* Round 2 jobs subpages — tech, modern, blue_collar, freelance */
+.jt-catalog-alert,
+.jm-catalog-alert,
+.jbc-catalog-alert,
+.jf-catalog-alert,
+.gr-catalog-alert {
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+}
+
+.jt-catalog-alert__badge,
+.jm-catalog-alert__badge,
+.jbc-catalog-alert__badge,
+.jf-catalog-alert__badge,
+.gr-catalog-alert__badge {
+  align-items: center;
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: 700;
+  gap: 0.65rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.jt-catalog-alert__dot,
+.jm-catalog-alert__dot,
+.jbc-catalog-alert__dot,
+.jf-catalog-alert__dot,
+.gr-catalog-alert__dot {
+  border-radius: 50%;
+  height: 8px;
+  width: 8px;
+}
+
+.jt-catalog-alert__title,
+.jm-catalog-alert__title,
+.jbc-catalog-alert__title,
+.jf-catalog-alert__title,
+.gr-catalog-alert__title {
+  font-size: 1.25rem;
+  margin: 0 0 0.75rem;
+}
+
+.jt-catalog-alert__copy,
+.jm-catalog-alert__copy,
+.jbc-catalog-alert__copy,
+.jf-catalog-alert__copy,
+.gr-catalog-alert__copy {
+  line-height: 1.7;
+  margin: 0 0 1rem;
+}
+
+.jt-catalog-alert--demo {
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px dashed var(--jt-purple, #a855f7);
+  color: #f8fafc;
+}
+
+.jt-catalog-alert--prod {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid #fca5a5;
+  color: #f8fafc;
+}
+
+.jm-catalog-alert--demo {
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+.jm-catalog-alert--prod {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid #fecaca;
+}
+
+.jbc-catalog-alert--demo {
+  background: #fffaf0;
+  border: 2px dashed var(--jbc-orange, #ea580c);
+}
+
+.jbc-catalog-alert--prod {
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+}
+
+.jf-catalog-alert--demo {
+  background: rgba(29, 191, 115, 0.08);
+  border: 1px solid var(--jf-accent, #1dbf73);
+}
+
+.jf-catalog-alert--prod {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid #fecaca;
+}
+
+.jt-catalog-alert__diag,
+.jm-catalog-alert__diag,
+.jbc-catalog-alert__diag,
+.jf-catalog-alert__diag,
+.gr-catalog-alert__diag {
+  font-family: monospace;
+  font-size: 0.75rem;
+  margin: 1rem 0 0;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.jt-explore-page,
+.jm-explore-page,
+.jbc-explore-page,
+.jf-explore-page {
+  min-height: 100vh;
+  padding: 0 6% 4rem;
+}
+
+.jt-explore-hero,
+.jm-explore-hero,
+.jbc-explore-hero,
+.jf-explore-hero {
+  padding: 4rem 0 2rem;
+}
+
+.jt-explore-hero h1,
+.jm-explore-hero h1,
+.jbc-explore-hero h1,
+.jf-explore-hero h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin: 1rem 0;
+}
+
+.jt-explore-back,
+.jm-explore-back,
+.jbc-explore-back,
+.jf-explore-back {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  opacity: 0.7;
+  text-decoration: none;
+  color: inherit;
+}
+
+.jt-explore-filters,
+.jm-explore-filters,
+.jbc-explore-filters,
+.jf-explore-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.jt-explore-grid,
+.jm-explore-grid,
+.jbc-explore-grid,
+.jf-explore-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.jt-empty-state,
+.jm-empty-state,
+.jbc-empty-state,
+.jf-empty-state,
+.gr-empty-state {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.jt-explore-load-more,
+.jm-explore-load-more,
+.jbc-explore-load-more,
+.jf-explore-load-more {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.jt-alert-slot,
+.jm-alert-slot,
+.jbc-alert-slot,
+.jf-alert-slot,
+.gr-alert-slot {
+  margin-bottom: 2rem;
+}
+
+.jt-explore-card-link,
+.jm-explore-card-link,
+.jbc-explore-card-link,
+.jf-explore-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}

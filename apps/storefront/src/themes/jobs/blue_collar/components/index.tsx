@@ -1,16 +1,19 @@
 'use client';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 export const BlueCollarHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useJobsThemeLink();
 
   return (
     <header className="jbc-header">
-      <a href="#" className="jbc-logo">
+      <a href={themeLink('/')} className="jbc-logo">
         Trades<span>Work</span>
       </a>
 
@@ -40,7 +43,11 @@ export const BlueCollarHeader = () => {
         as="button"
         buttonClassName="jbc-btn jbc-btn-primary jbc-mobile-btn"
         onNavigate={() => setIsOpen(false)}
-        onAction={() => alert('Job posting form starting...')}
+        renderItem={(item, { className, onNavigate }) => (
+          <Link href={themeLink('/explore')} style={{ textDecoration: 'none', width: '100%' }} onClick={onNavigate}>
+            <button type="button" className={className}>{item.title}</button>
+          </Link>
+        )}
       />
 
       <div className="jbc-desktop-btn-container">
@@ -48,19 +55,10 @@ export const BlueCollarHeader = () => {
           location="action_buttons"
           as="button"
           buttonClassName="jbc-btn jbc-btn-primary jbc-desktop-btn"
-          onAction={() => alert('Job posting form starting...')}
           renderItem={(item, { className, onNavigate }) => (
-            <button
-              type="button"
-              className={className}
-              id="jbc-btn-vibe-status"
-              onClick={() => {
-                alert('Job posting form starting...');
-                onNavigate?.();
-              }}
-            >
-              {item.title}
-            </button>
+            <Link href={themeLink('/explore')} style={{ textDecoration: 'none' }} onClick={onNavigate}>
+              <button type="button" className={className} id="jbc-btn-vibe-status">{item.title}</button>
+            </Link>
           )}
         />
       </div>
@@ -68,7 +66,14 @@ export const BlueCollarHeader = () => {
   );
 };
 
-export const BlueCollarJobCard = ({ title, company, location, type, wage, time }: any) => (
+export const BlueCollarJobCard = ({ title, company, location, type, wage, time }: {
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  wage: string;
+  time: string;
+}) => (
     <div className="jbc-job-card">
         <h3 className="jbc-job-title">{title}</h3>
         <div className="jbc-job-company">{company}</div>
@@ -81,7 +86,7 @@ export const BlueCollarJobCard = ({ title, company, location, type, wage, time }
         
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem' }}>
             <div className="jbc-wage">{wage}</div>
-            <button className="jbc-btn jbc-btn-secondary" style={{ padding: '0.6rem 1.25rem', fontSize: '0.85rem' }} onClick={() => alert(`Applying to ${title} at ${company}...`)}>Apply Now</button>
+            <span className="jbc-btn jbc-btn-secondary" style={{ padding: '0.6rem 1.25rem', fontSize: '0.85rem' }}>View Job</span>
         </div>
     </div>
 );

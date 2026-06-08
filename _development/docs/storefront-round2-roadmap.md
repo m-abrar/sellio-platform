@@ -112,6 +112,21 @@ Deliverables:
 
 **Progress:** 41 / 52 themes baselined (Round 1: 16 + Round 2: 25)
 
+## Phase 6 — Jobs ✅
+
+Themes: `jobs_tech`, `jobs_modern`, `jobs_blue_collar`, `jobs_freelance`.
+
+Deliverables:
+
+- Shared `JobsExplorePage` + extended `catalog.ts` / `fallback-data.ts` for tech, modern, blue_collar, freelance variants
+- `CatalogSyncAlert` + `subpages.css` prefixes (`jt`, `jm`, `jbc`, `jf`)
+- Theme-aware links on home grids and product pages (`useJobsThemeLink`)
+- Demo fallback gated by `useDemoFallbackAllowed`; production empty states when API fails and demo off
+- Hero/header CTAs route to `/explore`; Explore exported on all four themes (apply flow, no Cart)
+- Inline application form validation; removed `alert()` CTAs and hardcoded preview URLs
+
+**Progress:** 45 / 52 themes baselined (Round 1: 16 + Round 2: 29)
+
 ## Shared utilities (Round 2 additions)
 
 - `apps/storefront/src/themes/unifieds/shared/useDemoFallbackAllowed.ts`
@@ -129,3 +144,6 @@ Deliverables:
 - `apps/storefront/src/themes/events/shared/EventsExplorePage.tsx`
 - `apps/storefront/src/themes/events/shared/fallback-data.ts` (music / creative / festival variants)
 - `apps/storefront/src/themes/events/shared/subpages.css` (evm / evc / eff prefixes)
+- `apps/storefront/src/themes/jobs/shared/JobsExplorePage.tsx`
+- `apps/storefront/src/themes/jobs/shared/fallback-data.ts` (tech / modern / blue_collar / freelance variants)
+- `apps/storefront/src/themes/jobs/shared/subpages.css` (jt / jm / jbc / jf prefixes)
