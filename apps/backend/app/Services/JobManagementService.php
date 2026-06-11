@@ -123,9 +123,11 @@ class JobManagementService
     public function submitApplication(JobListing $job, array $data): JobApplication
     {
         $application = $job->applications()->create([
-            'user_id'      => Auth::id(),
-            'cover_letter' => $data['cover_letter'] ?? null,
-            'status'       => 'pending',
+            'user_id'       => Auth::id(),
+            'cover_letter'  => $data['cover_letter'] ?? null,
+            'portfolio_url' => $data['portfolio_url'] ?? null,
+            'resume_path'   => $data['resume_path'] ?? null,
+            'status'        => 'pending',
         ]);
 
         // Log the activity (compatible with Spatie Activitylog)

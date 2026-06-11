@@ -1,5 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
 
+.services-marketplace-theme .sm-explore-page {
+    margin: 0 auto;
+    max-width: 1400px;
+    padding: 3rem 5% 5rem;
+}
+
+.services-marketplace-theme .sm-explore-header {
+    margin-bottom: 2rem;
+}
+
+.services-marketplace-theme .sm-explore-header h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin: 0.5rem 0 1rem;
+}
+
 :root {
     --sm-primary: #198754; /* Green accent */
     --sm-primary-dark: #157347;

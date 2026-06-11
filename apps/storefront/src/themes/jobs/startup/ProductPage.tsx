@@ -13,6 +13,8 @@ import {
   getStartupEquityFill,
   getStartupEquityRange,
 } from '@/themes/jobs/shared/job-utils';
+import { useAuth } from '@/components/auth/AuthProvider';
+import { api } from '@/lib/storefront-api';
 
 interface ProductPageProps {
   slug: string;
@@ -35,9 +37,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [apiError, setApiError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
 
+  const { user, login, register } = useAuth();
   const [form, setForm] = useState<JobApplicationForm>({ name: '', email: '', portfolio: '', note: '' });
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authBusy, setAuthBusy] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [applicationId, setApplicationId] = useState<number | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -76,18 +83,42 @@ export default function ProductPage({ slug }: ProductPageProps) {
     loadJobDetails();
   }, [slug, allowDemo]);
 
-  const handleApplySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAuthSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (!form.name || !form.email) {
+      setFormError('Please enter your name and email before signing in.');
+      return;
+    }
+
+    setAuthBusy(true);
+    setFormError(null);
+
+    try {
+      if (authMode === 'login') {
+        await login(form.email, authPassword);
+      } else {
+        await register(form.name, form.email, authPassword);
+      }
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      setFormError(axiosError.response?.data?.message ?? 'Authentication failed.');
+    } finally {
+      setAuthBusy(false);
+    }
+  };
+
+  const handleApplySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!job || !form.name || !form.email) {
       setFormError('Please enter your name and email to apply.');
       return;
     }
 
     setFormError(null);
-    setIsSubmitting(true);
 
-    setTimeout(() => {
-      if (typeof window !== 'undefined' && job) {
+    if (useFallback) {
+      setIsSubmitting(true);
+      setTimeout(() => {
         const storedApplications = JSON.parse(localStorage.getItem('sellio_jobs_startup_applications') || '[]');
         storedApplications.push({
           id: Date.now(),
@@ -101,10 +132,33 @@ export default function ProductPage({ slug }: ProductPageProps) {
           submitted_at: new Date().toISOString(),
         });
         localStorage.setItem('sellio_jobs_startup_applications', JSON.stringify(storedApplications));
-      }
-      setIsSubmitting(false);
+        setIsSubmitting(false);
+        setIsSubmitted(true);
+      }, 1200);
+      return;
+    }
+
+    if (!user) {
+      setFormError('Sign in to submit your application.');
+      return;
+    }
+
+    const coverLetter = form.note.trim() || 'Application submitted via Sellio storefront.';
+
+    setIsSubmitting(true);
+    try {
+      const application = await api.createJobApplication(slug, {
+        cover_letter: coverLetter,
+        portfolio_url: form.portfolio.trim() || undefined,
+      });
+      setApplicationId(application.id);
       setIsSubmitted(true);
-    }, 1200);
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      setFormError(axiosError.response?.data?.message ?? 'Failed to submit application. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -274,12 +328,40 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   TALENT_NODE_SYNCHRONIZED
                 </h4>
                 <p style={{ color: 'var(--growth-dim)', fontSize: '0.8rem', marginTop: '0.5rem', lineHeight: 1.5 }}>
-                  Candidate ledger successfully time-stamped. Look out for a confirmation email.
+                  {useFallback
+                    ? 'Application saved in demo mode.'
+                    : `Application #${applicationId ?? '—'} submitted. The hiring team will follow up by email.`}
                 </p>
-                <button type="button" className="growth-btn-outline" style={{ marginTop: '1.5rem', width: '100%', padding: '0.8rem' }} onClick={() => setIsSubmitted(false)}>
+                <button type="button" className="growth-btn-outline" style={{ marginTop: '1.5rem', width: '100%', padding: '0.8rem' }} onClick={() => { setIsSubmitted(false); setApplicationId(null); }}>
                   SUBMIT_ANOTHER
                 </button>
               </div>
+            ) : !useFallback && !user ? (
+              <form onSubmit={handleAuthSubmit}>
+                <p style={{ color: 'var(--growth-dim)', fontSize: '0.8rem', marginBottom: '1.5rem' }}>
+                  Sign in to apply for this role.
+                </p>
+                <div className="growth-form-group">
+                  <label>Full Name</label>
+                  <input type="text" className="growth-input" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                </div>
+                <div className="growth-form-group">
+                  <label>Email</label>
+                  <input type="email" className="growth-input" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                </div>
+                <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
+                  <button type="button" className="growth-btn-outline" onClick={() => setAuthMode('login')} disabled={authMode === 'login'}>Login</button>
+                  <button type="button" className="growth-btn-outline" onClick={() => setAuthMode('register')} disabled={authMode === 'register'}>Register</button>
+                </div>
+                <div className="growth-form-group">
+                  <label>Password</label>
+                  <input type="password" className="growth-input" required value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} />
+                </div>
+                {formError && <p className="gr-form-error" role="alert">{formError}</p>}
+                <button type="submit" className="growth-btn-primary" disabled={authBusy} style={{ width: '100%', padding: '1.25rem', fontSize: '0.9rem', marginTop: '1rem' }}>
+                  {authBusy ? 'PLEASE_WAIT...' : authMode === 'login' ? 'SIGN_IN_TO_APPLY' : 'CREATE_ACCOUNT'}
+                </button>
+              </form>
             ) : (
               <form onSubmit={handleApplySubmit}>
                 <div className="growth-form-group">

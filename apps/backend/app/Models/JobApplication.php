@@ -61,6 +61,8 @@ class JobApplication extends Model
         'user_id',
         'status',
         'cover_letter',
+        'portfolio_url',
+        'resume_path',
         'viewed_at',
     ];
 

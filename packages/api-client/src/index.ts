@@ -28,6 +28,8 @@ import type {
   PropertyBookingRecord,
   PropertyLeadRecord,
   AutoInquiryRecord,
+  JobApplicationRecord,
+  ServiceConsultationRecord,
   EventBookingPaymentContext,
   EventBookingPaymentResult,
   EventBookingRecord,
@@ -287,6 +289,16 @@ export class SellioAPI {
     return response.data;
   }
 
+  async createJobApplication(
+    slug: string,
+    payload: {
+      cover_letter: string;
+      portfolio_url?: string;
+    },
+  ): Promise<JobApplicationRecord> {
+    return this.post<JobApplicationRecord>(`/v1/jobs/${slug}/applications`, payload);
+  }
+
   // === Service Vertical Endpoints ===
 
   async getServices(params?: Record<string, any>): Promise<{
@@ -311,6 +323,20 @@ export class SellioAPI {
 
   async getServiceBySlug(slug: string): Promise<ServiceListing> {
     return this.request<ServiceListing>(`/v1/services/${slug}`);
+  }
+
+  async createServiceConsultation(
+    serviceId: number,
+    payload: {
+      full_name: string;
+      email: string;
+      phone?: string;
+      preferred_date?: string;
+      requirements?: string;
+      topic?: string;
+    },
+  ): Promise<ServiceConsultationRecord> {
+    return this.post<ServiceConsultationRecord>(`/v1/services/${serviceId}/consultations`, payload);
   }
 
   // === Event Vertical Endpoints ===

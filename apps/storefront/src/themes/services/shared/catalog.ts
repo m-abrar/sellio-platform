@@ -24,9 +24,35 @@ function toErrorMessage(error: unknown): string {
   return 'Services are temporarily unavailable.';
 }
 
+export function normalizeServiceQueryParams(params: Record<string, unknown> = {}) {
+  const normalized: Record<string, unknown> = { ...params };
+
+  if (normalized.search === undefined && normalized.q) {
+    normalized.search = normalized.q;
+    delete normalized.q;
+  }
+
+  return normalized;
+}
+
 export async function fetchServicesHome(params: Record<string, unknown> = {}) {
   try {
-    const response = await api.getServices({ per_page: 8, ...params });
+    const response = await api.getServices({
+      per_page: 8,
+      ...normalizeServiceQueryParams(params),
+    });
+    return { ok: true as const, response };
+  } catch (error) {
+    return { ok: false as const, error: toErrorMessage(error) };
+  }
+}
+
+export async function fetchServicesExplore(params: Record<string, unknown> = {}) {
+  try {
+    const response = await api.getServices({
+      per_page: 12,
+      ...normalizeServiceQueryParams(params),
+    });
     return { ok: true as const, response };
   } catch (error) {
     return { ok: false as const, error: toErrorMessage(error) };

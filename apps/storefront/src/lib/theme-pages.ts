@@ -48,7 +48,7 @@ const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, st
   },
   services: {
     ProductPage: 'services/marketplace',
-    ExplorePage: 'unifieds/minimal',
+    ExplorePage: 'services/marketplace',
   },
   classifieds: {
     ProductPage: 'classifieds/local',

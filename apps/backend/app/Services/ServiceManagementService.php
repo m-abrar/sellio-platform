@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\Partner\PartnerLeadCreated;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Feature;
 use App\Models\Location;
 use App\Models\Service;
@@ -45,6 +46,8 @@ class ServiceManagementService
      */
     public function searchServices(array $filters, ?User $user = null): LengthAwarePaginator
     {
+        $filters = $this->normalizeServiceFilters($filters);
+
         return Service::orderByDesc('is_featured')
             ->latest()
             ->visibleTo($user)
@@ -150,6 +153,53 @@ class ServiceManagementService
             'status'  => 'pending',
             'price'   => $service->sale_price ?? $service->base_price,
         ])->tap(fn ($appointment) => PartnerLeadCreated::dispatch($appointment));
+    }
+
+    public function createGuestConsultation(array $data, Service $service): ServiceAppointment
+    {
+        $notes = $data['requirements'] ?? $data['notes'] ?? null;
+        if (!empty($data['preferred_date'])) {
+            $notes = trim(($notes ? $notes . "\n\n" : '') . __('Preferred date: :date', [
+                'date' => $data['preferred_date'],
+            ]));
+        }
+
+        return $service->appointments()->create([
+            'user_id'      => Auth::id(),
+            'name'         => $data['full_name'],
+            'email'        => $data['email'],
+            'phone'        => $data['phone'] ?? null,
+            'topic'        => $data['topic'] ?? __('Service consultation'),
+            'notes'        => $notes,
+            'scheduled_at' => !empty($data['preferred_date'])
+                ? Carbon::parse($data['preferred_date'])->setTime(10, 0)
+                : null,
+            'status'       => 'pending',
+            'price'        => $service->sale_price ?? $service->base_price,
+        ])->tap(fn ($appointment) => PartnerLeadCreated::dispatch($appointment));
+    }
+
+    protected function normalizeServiceFilters(array $filters): array
+    {
+        if (!empty($filters['category']) && !is_numeric($filters['category'])) {
+            $filters['category_id'] = Category::where('slug', $filters['category'])->value('id');
+            unset($filters['category']);
+        }
+
+        if (!empty($filters['location']) && !is_numeric($filters['location'])) {
+            $filters['location'] = Location::where('slug', $filters['location'])->value('id');
+        }
+
+        if (!empty($filters['price_range']) && empty($filters['min_price']) && empty($filters['max_price'])) {
+            $parts = explode('-', (string) $filters['price_range'], 2);
+            if (count($parts) === 2) {
+                $filters['min_price'] = $parts[0];
+                $filters['max_price'] = $parts[1];
+            }
+            unset($filters['price_range']);
+        }
+
+        return $filters;
     }
 
     /**

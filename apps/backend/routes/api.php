@@ -24,7 +24,9 @@ use App\Http\Controllers\Api\V1\ApiCategoryController;
 use App\Http\Controllers\Api\V1\ApiClassifiedController;
 use App\Http\Controllers\Api\V1\ApiEventController;
 use App\Http\Controllers\Api\V1\ApiFeatureController;
+use App\Http\Controllers\Api\V1\ApiJobApplicationController;
 use App\Http\Controllers\Api\V1\ApiJobController;
+use App\Http\Controllers\Api\V1\ApiServiceConsultationController;
 use App\Http\Controllers\Api\V1\ApiLocationController;
 use App\Http\Controllers\Api\V1\ApiMenuController;
 use App\Http\Controllers\Api\V1\ApiOrderController;
@@ -213,6 +215,10 @@ Route::middleware(['auth:sanctum', 'module:events'])->prefix('event-bookings')->
 Route::prefix('jobs')->middleware('module:jobs')->group(function () {
     Route::get('/', [ApiJobController::class, 'index']);
     Route::get('category/{categorySlug}', [ApiJobController::class, 'category']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('{slug}/applications', [ApiJobApplicationController::class, 'store'])
+            ->middleware('throttle:api-write');
+    });
     Route::get('{slug}', [ApiJobController::class, 'show']);
 });
 
@@ -222,6 +228,8 @@ Route::prefix('jobs')->middleware('module:jobs')->group(function () {
 Route::prefix('services')->middleware('module:services')->group(function () {
     Route::get('/', [ApiServiceController::class, 'index']);
     Route::get('category/{categorySlug}', [ApiServiceController::class, 'category']);
+    Route::post('{service}/consultations', [ApiServiceConsultationController::class, 'store'])
+        ->middleware('throttle:api-write');
     Route::get('{slug}', [ApiServiceController::class, 'show']);
 });
 

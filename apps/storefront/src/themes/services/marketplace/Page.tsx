@@ -20,6 +20,8 @@ import {
 } from '@/themes/services/shared/fallback-data';
 import { getServiceCategoryLabel } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
+import { parseServiceContactInfo } from '@/themes/services/shared/service-utils';
+import { api } from '@/lib/storefront-api';
 
 export default function Page() {
   const heroTitle = useThemeContent('hero.title', 'Find Trusted Services Near You');
@@ -65,6 +67,7 @@ export default function Page() {
     contactInfo: ''
   });
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingSubmitting, setBookingSubmitting] = useState(false);
   const [bookingError, setBookingError] = useState<string | null>(null);
 
   // Fetch data
@@ -133,49 +136,83 @@ export default function Page() {
   }, [selectedCategory]);
 
   // Submit booking
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!bookingService) return;
+    if (!bookingService || !bookingForm.candidateName || !bookingForm.contactInfo) {
+      setBookingError('Please enter your name and contact details.');
+      return;
+    }
 
+    setBookingError(null);
+
+    if (useFallback) {
+      try {
+        const newBooking = {
+          id: `book_${Date.now()}`,
+          serviceId: bookingService.id,
+          serviceTitle: bookingService.title,
+          serviceProvider: getServiceCategoryLabel(
+            bookingService.professional?.category,
+            'Professional Provider',
+          ),
+          candidateName: bookingForm.candidateName,
+          serviceDate: bookingForm.serviceDate,
+          requirements: bookingForm.requirements,
+          contactInfo: bookingForm.contactInfo,
+          created_at: new Date().toISOString(),
+        };
+
+        const storedBookingsJson = localStorage.getItem('sellio_services_marketplace_bookings');
+        const currentBookings = storedBookingsJson ? JSON.parse(storedBookingsJson) : [];
+        currentBookings.push(newBooking);
+        localStorage.setItem('sellio_services_marketplace_bookings', JSON.stringify(currentBookings));
+
+        setBookingSuccess(true);
+        setBookingForm({
+          candidateName: '',
+          serviceDate: '',
+          requirements: '',
+          contactInfo: '',
+        });
+
+        setTimeout(() => {
+          setBookingService(null);
+          setBookingSuccess(false);
+        }, 2500);
+      } catch (err) {
+        console.error('Failed to record local storage booking details:', err);
+        setBookingError('Booking failed. Please try again.');
+      }
+      return;
+    }
+
+    setBookingSubmitting(true);
     try {
-      const newBooking = {
-        id: `book_${Date.now()}`,
-        serviceId: bookingService.id,
-        serviceTitle: bookingService.title,
-        serviceProvider: getServiceCategoryLabel(
-          bookingService.professional?.category,
-          'Professional Provider',
-        ),
-        candidateName: bookingForm.candidateName,
-        serviceDate: bookingForm.serviceDate,
-        requirements: bookingForm.requirements,
-        contactInfo: bookingForm.contactInfo,
-        created_at: new Date().toISOString()
-      };
-
-      // Read, append, and save state to LocalStorage
-      const storedBookingsJson = localStorage.getItem('sellio_services_marketplace_bookings');
-      const currentBookings = storedBookingsJson ? JSON.parse(storedBookingsJson) : [];
-      currentBookings.push(newBooking);
-      localStorage.setItem('sellio_services_marketplace_bookings', JSON.stringify(currentBookings));
+      const contact = parseServiceContactInfo(bookingForm.candidateName, bookingForm.contactInfo);
+      await api.createServiceConsultation(bookingService.id, {
+        ...contact,
+        preferred_date: bookingForm.serviceDate || undefined,
+        requirements: bookingForm.requirements || undefined,
+        topic: `Hire request: ${bookingService.title}`,
+      });
 
       setBookingSuccess(true);
       setBookingForm({
         candidateName: '',
         serviceDate: '',
         requirements: '',
-        contactInfo: ''
+        contactInfo: '',
       });
 
-      // Clear success and close modal after brief delay
       setTimeout(() => {
         setBookingService(null);
         setBookingSuccess(false);
       }, 2500);
-
-    } catch (err) {
-      console.error("Failed to record local storage booking details:", err);
-      setBookingError('Booking failed. Please try again.');
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      setBookingError(axiosError.response?.data?.message ?? 'Booking failed. Please try again.');
+    } finally {
+      setBookingSubmitting(false);
     }
   };
 
@@ -468,8 +505,8 @@ export default function Page() {
                   <button type="button" className="sm-btn sm-btn-secondary" style={{ padding: '0.6rem 1.4rem' }} onClick={() => setBookingService(null)}>
                     Cancel
                   </button>
-                  <button type="submit" className="sm-btn sm-btn-primary" style={{ padding: '0.6rem 1.4rem' }}>
-                    Confirm Booking
+                  <button type="submit" className="sm-btn sm-btn-primary" style={{ padding: '0.6rem 1.4rem' }} disabled={bookingSubmitting}>
+                    {bookingSubmitting ? 'Sending...' : 'Confirm Booking'}
                   </button>
                 </div>
               )}

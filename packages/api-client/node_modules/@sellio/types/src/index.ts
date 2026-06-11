@@ -222,6 +222,36 @@ export interface PropertyLeadRecord {
   message?: string;
 }
 
+export interface JobApplicationRecord {
+  id: number;
+  job_listing_id: number;
+  status: string;
+  cover_letter?: string;
+  portfolio_url?: string | null;
+  job?: {
+    id: number;
+    title: string;
+    slug: string;
+  };
+}
+
+export interface ServiceConsultationRecord {
+  id: number;
+  service_id: number;
+  status: string;
+  name?: string;
+  email?: string;
+  phone?: string | null;
+  topic?: string;
+  notes?: string | null;
+  scheduled_at?: string | null;
+  service?: {
+    id: number;
+    title: string;
+    slug: string;
+  };
+}
+
 export interface AutoInquiryRecord {
   id: number;
   auto_id: number;

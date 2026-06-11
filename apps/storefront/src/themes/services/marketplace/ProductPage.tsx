@@ -9,9 +9,11 @@ import {
   getServiceImage,
   getServiceLocationLabel,
   getServicePriceLabel,
+  parseServiceContactInfo,
 } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
 import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
+import { api } from '@/lib/storefront-api';
 
 interface ProductPageProps {
   slug: string;
@@ -43,6 +45,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
     requirements: '',
   });
   const [leadSaved, setLeadSaved] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -84,7 +87,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
     return () => { isMounted = false; };
   }, [slug, allowDemo]);
 
-  const handleLeadSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLeadSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!service || !leadForm.contactName || !leadForm.contactInfo) {
       setFormError('Please enter your name and contact details.');
@@ -93,26 +96,47 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
     setFormError(null);
 
-    const newLead: MarketplaceLead = {
-      id: `sm_lead_${Date.now()}`,
-      serviceId: service.id,
-      serviceTitle: service.title,
-      contactName: leadForm.contactName,
-      contactInfo: leadForm.contactInfo,
-      serviceDate: leadForm.serviceDate,
-      requirements: leadForm.requirements,
-      created_at: new Date().toISOString(),
-    };
+    if (useFallback) {
+      const newLead: MarketplaceLead = {
+        id: `sm_lead_${Date.now()}`,
+        serviceId: service.id,
+        serviceTitle: service.title,
+        contactName: leadForm.contactName,
+        contactInfo: leadForm.contactInfo,
+        serviceDate: leadForm.serviceDate,
+        requirements: leadForm.requirements,
+        created_at: new Date().toISOString(),
+      };
 
+      try {
+        const stored = JSON.parse(localStorage.getItem('sellio_services_marketplace_leads') || '[]') as MarketplaceLead[];
+        stored.push(newLead);
+        localStorage.setItem('sellio_services_marketplace_leads', JSON.stringify(stored));
+        setLeadSaved(true);
+        setLeadForm({ contactName: '', contactInfo: '', serviceDate: '', requirements: '' });
+      } catch (error) {
+        console.error('Failed to persist marketplace service lead:', error);
+        setFormError('Could not save your booking request locally. Please try again.');
+      }
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
-      const stored = JSON.parse(localStorage.getItem('sellio_services_marketplace_leads') || '[]') as MarketplaceLead[];
-      stored.push(newLead);
-      localStorage.setItem('sellio_services_marketplace_leads', JSON.stringify(stored));
+      const contact = parseServiceContactInfo(leadForm.contactName, leadForm.contactInfo);
+      await api.createServiceConsultation(service.id, {
+        ...contact,
+        preferred_date: leadForm.serviceDate || undefined,
+        requirements: leadForm.requirements || undefined,
+        topic: `Booking request: ${service.title}`,
+      });
       setLeadSaved(true);
       setLeadForm({ contactName: '', contactInfo: '', serviceDate: '', requirements: '' });
-    } catch (error) {
-      console.error('Failed to persist marketplace service lead:', error);
-      setFormError('Could not save your booking request locally. Please try again.');
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      setFormError(axiosError.response?.data?.message ?? 'Failed to send booking request. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -211,13 +235,13 @@ export default function ProductPage({ slug }: ProductPageProps) {
         <div>
           <div className="sm-detail-kicker">Hire This Provider</div>
           <h2 id="sm-lead-title">Request a booking or quote.</h2>
-          <p>Enter your contact details and preferred service date. This records the request locally for the preview flow.</p>
+          <p>Enter your contact details and preferred service date. {useFallback ? 'Demo mode saves requests locally.' : 'Your request is sent directly to the provider.'}</p>
         </div>
 
         <form onSubmit={handleLeadSubmit}>
           {leadSaved && (
             <div className="sm-detail-success" role="status">
-              Booking request saved.
+              {useFallback ? 'Booking request saved in demo mode.' : 'Booking request sent to the provider.'}
             </div>
           )}
           <label>
@@ -256,7 +280,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
             />
           </label>
           {formError && <p className="sm-form-error" role="alert">{formError}</p>}
-          <button className="sm-btn sm-btn-primary" type="submit">Send Booking Request</button>
+          <button className="sm-btn sm-btn-primary" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Sending...' : 'Send Booking Request'}
+          </button>
         </form>
       </section>
     </main>

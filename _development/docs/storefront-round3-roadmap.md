@@ -39,8 +39,8 @@ Last updated: 2026-06-11
 | 4 | `properties_modern` | ✅ | ✅ | ✅ | ✅ | ✅ | Sale inquiry API + rental booking |
 | 5 | `autos_modern` | ✅ | ✅ | ✅ | ✅ | — | Vehicle inquiry API |
 | 6 | `events_corporate` | ✅ | ✅ | ✅ | ✅ | ✅ | Ticket booking + `/booking` payment |
-| 7 | `jobs_startup` | ✅ | ✅ | ✅ | ⬜ | ⬜ | Application API |
-| 8 | `services_marketplace` | ✅ | ⬜ | ✅ | ⬜ | ⬜ | Explore + lead API |
+| 7 | `jobs_startup` | ✅ | ✅ | ✅ | ✅ | — | Application API (auth required) |
+| 8 | `services_marketplace` | ✅ | ✅ | ✅ | ✅ | — | Native explore + consultation API |
 | 9 | `classifieds_local` | ✅ | ⬜ | ✅ | ⬜ | ⬜ | Explore + inquiry API |
 
 ---
@@ -58,10 +58,10 @@ Clone from golden template per vertical. See conversation roadmap for per-theme 
 | Properties | 13 | 2 |
 | Autos | 5 | 1 |
 | Events | 5 | 1 |
-| Jobs | 6 | 0 |
-| Services | 5 | 0 |
+| Jobs | 6 | 1 |
+| Services | 5 | 1 |
 | Classifieds | 6 | 0 |
-| **Total** | **52** | **9** |
+| **Total** | **52** | **11** |
 
 ---
 
@@ -93,8 +93,8 @@ Clone from golden template per vertical. See conversation roadmap for per-theme 
 | `POST /v1/events/{id}/bookings` | Events | ✅ |
 | `POST /v1/event-bookings/{id}/pay` | Events | ✅ |
 | `POST /v1/vehicles/{id}/inquiries` | Autos | ✅ |
-| `POST /v1/jobs/{slug}/applications` | Jobs | P2 |
-| `POST /v1/services/{slug}/consultations` | Services | P2 |
+| `POST /v1/jobs/{slug}/applications` | Jobs | ✅ |
+| `POST /v1/services/{id}/consultations` | Services | ✅ |
 | `POST /v1/classifieds/{slug}/inquiries` | Classifieds | P2 |
 | `POST /v1/properties/{id}/inquiries` | Properties sale | ✅ |
 
