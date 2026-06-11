@@ -1,6 +1,7 @@
 
 import React from 'react';
 import './styles.css';
+import '@/themes/properties/shared/subpages.css';
 import { UrbanHeader, CivicFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {

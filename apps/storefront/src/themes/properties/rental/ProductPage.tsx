@@ -62,6 +62,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [tenantEmail, setTenantEmail] = useState('');
   const [tenantPhone, setTenantPhone] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const [bookingReceipt, setBookingReceipt] = useState<RentalApplicationReceipt | null>(null);
   const [addFiber, setAddFiber] = useState(false);
   const [addParking, setAddParking] = useState(false);
@@ -199,6 +200,27 @@ export default function ProductPage({ slug }: ProductPageProps) {
       return;
     }
 
+    setFormError(null);
+
+    if (checkIn && checkOut) {
+      if (useFallback) {
+        setFormError('Live booking requires the property API. Demo listings cannot reserve dates.');
+        return;
+      }
+
+      const params = new URLSearchParams({
+        property_id: String(property.id),
+        check_in: checkIn,
+        check_out: checkOut,
+        guests: '2',
+        full_name: tenantName.trim(),
+        email: tenantEmail.trim(),
+        phone: tenantPhone.trim(),
+      });
+      window.location.assign(themeLink(`/booking/reserve?${params}`));
+      return;
+    }
+
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 900));
 
@@ -316,6 +338,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
           addParking={addParking}
           addValet={addValet}
           isSubmitting={isSubmitting}
+          formError={formError}
+          hasStayDates={Boolean(checkIn && checkOut)}
           receipt={bookingReceipt}
           onTenantNameChange={setTenantName}
           onTenantEmailChange={setTenantEmail}

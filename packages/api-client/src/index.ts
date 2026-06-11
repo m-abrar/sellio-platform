@@ -22,6 +22,11 @@ import type {
   CheckoutPaymentResult,
   Order,
   PaymentGatewayOption,
+  PropertyBookingBreakdown,
+  PropertyBookingPaymentContext,
+  PropertyBookingPaymentResult,
+  PropertyBookingRecord,
+  PropertyLeadRecord,
   User,
 } from '@sellio/types';
 
@@ -443,6 +448,74 @@ export class SellioAPI {
 
   async getOrder(orderNumber: string): Promise<Order> {
     return this.request<Order>(`/v1/orders/${orderNumber}`);
+  }
+
+  // === Property bookings & inquiries ===
+
+  async previewPropertyBooking(
+    propertyId: number,
+    payload: { check_in: string; check_out: string; guests: number },
+  ): Promise<PropertyBookingBreakdown> {
+    return this.post<PropertyBookingBreakdown>(`/v1/properties/${propertyId}/booking-preview`, payload);
+  }
+
+  async createPropertyBooking(
+    propertyId: number,
+    payload: {
+      check_in: string;
+      check_out: string;
+      guests: number;
+      full_name: string;
+      email: string;
+      phone?: string;
+      message?: string;
+    },
+  ): Promise<PropertyBookingRecord> {
+    return this.post<PropertyBookingRecord>(`/v1/properties/${propertyId}/bookings`, payload);
+  }
+
+  async getPropertyBooking(bookingId: number): Promise<PropertyBookingRecord> {
+    return this.request<PropertyBookingRecord>(`/v1/property-bookings/${bookingId}`);
+  }
+
+  async getPropertyBookingPaymentContext(bookingId: number): Promise<PropertyBookingPaymentContext> {
+    return this.request<PropertyBookingPaymentContext>(`/v1/property-bookings/${bookingId}/payment-context`);
+  }
+
+  async payPropertyBooking(
+    bookingId: number,
+    gateway: string,
+    payload: {
+      payment_method: string;
+      payment_token?: string;
+      return_url?: string;
+    },
+  ): Promise<PropertyBookingPaymentResult> {
+    return this.post<PropertyBookingPaymentResult>(`/v1/property-bookings/${bookingId}/pay/${gateway}`, payload);
+  }
+
+  async confirmPropertyBookingPayment(
+    bookingId: number,
+    gateway: string,
+    paymentIntent: string,
+  ): Promise<PropertyBookingPaymentResult> {
+    return this.post<PropertyBookingPaymentResult>(`/v1/property-bookings/${bookingId}/confirm/${gateway}`, {
+      payment_intent: paymentIntent,
+    });
+  }
+
+  async createPropertyInquiry(
+    propertyId: number,
+    payload: {
+      full_name: string;
+      email: string;
+      phone?: string;
+      message?: string;
+      check_in?: string;
+      check_out?: string;
+    },
+  ): Promise<PropertyLeadRecord> {
+    return this.post<PropertyLeadRecord>(`/v1/properties/${propertyId}/inquiries`, payload);
   }
 }
 

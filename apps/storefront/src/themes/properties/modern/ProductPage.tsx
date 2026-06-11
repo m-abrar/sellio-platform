@@ -50,6 +50,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [formErrors, setFormErrors] = useState<{ name?: string; email?: string }>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [checkIn, setCheckIn] = useState('');
@@ -182,34 +184,88 @@ export default function ProductPage({ slug }: ProductPageProps) {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!property || !validateForm()) return;
 
-    try {
-      const stored = JSON.parse(
-        localStorage.getItem('sellio_properties_modern_inquiries') || '[]',
-      );
-      stored.push({
-        id: Date.now(),
-        property_id: property.id,
-        property_title: property.title,
-        listing_mode: listingMode,
-        contact_name: form.name.trim(),
-        contact_email: form.email.trim(),
-        message: form.message.trim(),
-        check_in: checkIn || null,
-        check_out: checkOut || null,
-        submitted_at: new Date().toISOString(),
+    setSubmitError(null);
+
+    if (isRental && checkIn && checkOut) {
+      if (useFallback) {
+        setSubmitError('Live booking requires the property API. Demo listings cannot reserve dates.');
+        return;
+      }
+
+      const params = new URLSearchParams({
+        property_id: String(property.id),
+        check_in: checkIn,
+        check_out: checkOut,
+        guests: '2',
+        full_name: form.name.trim(),
+        email: form.email.trim(),
+        phone: '',
       });
-      localStorage.setItem('sellio_properties_modern_inquiries', JSON.stringify(stored));
+      if (form.message.trim()) {
+        params.set('message', form.message.trim());
+      }
+      window.location.assign(themeLink(`/booking/reserve?${params}`));
+      return;
+    }
+
+    if (isRental && property.is_rental && !property.is_sale) {
+      setSubmitError('Select check-in and check-out dates to reserve this rental.');
+      return;
+    }
+
+    if (useFallback) {
+      try {
+        const stored = JSON.parse(
+          localStorage.getItem('sellio_properties_modern_inquiries') || '[]',
+        );
+        stored.push({
+          id: Date.now(),
+          property_id: property.id,
+          property_title: property.title,
+          listing_mode: listingMode,
+          contact_name: form.name.trim(),
+          contact_email: form.email.trim(),
+          message: form.message.trim(),
+          check_in: checkIn || null,
+          check_out: checkOut || null,
+          submitted_at: new Date().toISOString(),
+        });
+        localStorage.setItem('sellio_properties_modern_inquiries', JSON.stringify(stored));
+        setIsSubmitted(true);
+        setForm({ name: '', email: '', message: '' });
+        setCheckIn('');
+        setCheckOut('');
+        setFormErrors({});
+      } catch (error) {
+        console.error('Failed to persist property inquiry:', error);
+        setSubmitError('Unable to save inquiry in demo mode.');
+      }
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await api.createPropertyInquiry(property.id, {
+        full_name: form.name.trim(),
+        email: form.email.trim(),
+        message: form.message.trim(),
+        check_in: checkIn || undefined,
+        check_out: checkOut || undefined,
+      });
       setIsSubmitted(true);
       setForm({ name: '', email: '', message: '' });
       setCheckIn('');
       setCheckOut('');
       setFormErrors({});
-    } catch (error) {
-      console.error('Failed to persist property inquiry:', error);
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      setSubmitError(axiosError.response?.data?.message ?? 'Failed to send inquiry. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -292,6 +348,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
       <ProductInquirySection
         listingMode={listingMode}
         isSubmitted={isSubmitted}
+        isSubmitting={isSubmitting}
+        submitError={submitError}
         form={form}
         formErrors={formErrors}
         checkIn={checkIn}

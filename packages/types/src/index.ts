@@ -164,6 +164,64 @@ export interface CheckoutPaymentResult {
   message?: string;
 }
 
+export interface PropertyBookingLine {
+  title: string;
+  amount: number;
+  type?: string;
+}
+
+export interface PropertyBookingBreakdown {
+  property_id: number;
+  check_in: string;
+  check_out: string;
+  nights: number;
+  guests: number;
+  lines: PropertyBookingLine[];
+  initial_total: number;
+}
+
+export interface PropertyBookingRecord {
+  id: number;
+  property_id: number;
+  check_in_date: string;
+  check_out_date: string;
+  guests: number;
+  total_price: number;
+  status: string;
+  full_name?: string;
+  email?: string;
+  phone?: string;
+  duration_nights?: number;
+  property?: {
+    id: number;
+    title: string;
+    slug: string;
+    primary_image_url?: string | null;
+  };
+}
+
+export interface PropertyBookingPaymentContext {
+  booking: PropertyBookingRecord;
+  gateways: PaymentGatewayOption[];
+  stripe_publishable_key: string | null;
+}
+
+export interface PropertyBookingPaymentResult {
+  status: 'successful' | 'pending_auth' | 'pending_manual' | 'failed';
+  booking?: PropertyBookingRecord;
+  reference?: string | null;
+  redirect_url?: string;
+  message?: string;
+}
+
+export interface PropertyLeadRecord {
+  id: number;
+  property_id: number;
+  status: string;
+  scheduled_at?: string;
+  message?: string;
+}
+
 export interface Amenity {
   id: number;
   title: string;

@@ -1,12 +1,26 @@
 import type { ComponentType } from 'react';
 
-export type ThemeSubpage = 'ProductPage' | 'ExplorePage' | 'CartPage' | 'CheckoutPage' | 'CheckoutConfirmationPage' | 'CheckoutConfirmPage';
+export type ThemeSubpage =
+  | 'ProductPage'
+  | 'ExplorePage'
+  | 'CartPage'
+  | 'CheckoutPage'
+  | 'CheckoutConfirmationPage'
+  | 'CheckoutConfirmPage'
+  | 'BookingPage'
+  | 'BookingConfirmationPage'
+  | 'BookingConfirmPage'
+  | 'BookingReservePage';
 
 const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, string>>> = {
   properties: {
     ProductPage: 'properties/classic',
     ExplorePage: 'properties/classic',
     CartPage: 'properties/classic',
+    BookingPage: 'properties/rental',
+    BookingConfirmationPage: 'properties/rental',
+    BookingConfirmPage: 'properties/rental',
+    BookingReservePage: 'properties/rental',
   },
   ecommerce: {
     ProductPage: 'ecommerce/default',
@@ -53,6 +67,10 @@ const GLOBAL_SUBPAGE_FALLBACKS: Record<ThemeSubpage, string> = {
   CheckoutPage: 'unifieds/minimal',
   CheckoutConfirmationPage: 'unifieds/minimal',
   CheckoutConfirmPage: 'unifieds/minimal',
+  BookingPage: 'properties/rental',
+  BookingConfirmationPage: 'properties/rental',
+  BookingConfirmPage: 'properties/rental',
+  BookingReservePage: 'properties/rental',
 };
 
 async function importThemeSubpage(

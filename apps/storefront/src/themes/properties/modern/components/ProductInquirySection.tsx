@@ -6,6 +6,8 @@ import type { ListingMode } from '../listing-mode';
 interface ProductInquirySectionProps {
   listingMode: ListingMode;
   isSubmitted: boolean;
+  isSubmitting?: boolean;
+  submitError?: string | null;
   form: { name: string; email: string; message: string };
   formErrors: { name?: string; email?: string };
   checkIn: string;
@@ -46,6 +48,8 @@ const COPY = {
 export function ProductInquirySection({
   listingMode,
   isSubmitted,
+  isSubmitting = false,
+  submitError,
   form,
   formErrors,
   checkIn,
@@ -150,8 +154,21 @@ export function ProductInquirySection({
                   onChange={(event) => onFormChange({ ...form, message: event.target.value })}
                 />
               </label>
-              <button className="urban-btn-primary pm-inquiry-submit" type="submit">
-                {copy.submit}
+              {submitError && (
+                <p role="alert" className="pm-form-error">
+                  {submitError}
+                </p>
+              )}
+              <button
+                className="urban-btn-primary pm-inquiry-submit"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting
+                  ? 'Sending...'
+                  : listingMode === 'rental' && checkIn && checkOut
+                    ? 'Continue to payment'
+                    : copy.submit}
               </button>
             </form>
           )}

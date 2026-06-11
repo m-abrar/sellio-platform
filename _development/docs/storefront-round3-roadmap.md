@@ -35,8 +35,8 @@ Last updated: 2026-06-11
 | 2b | `ecommerce_fashion` | ✅ | ✅ | ✅ | ✅ | ✅ | Themed checkout |
 | 2c | `ecommerce_electronics` | ✅ | ✅ | ✅ | ✅ | ✅ | Themed checkout |
 | 2d | `ecommerce_luxury` | ✅ | ✅ | ✅ | ✅ | ✅ | Themed checkout |
-| 3 | `properties_rental` | ✅ | ✅ | ✅ | ⬜ | ⬜ | Booking flow |
-| 4 | `properties_modern` | ✅ | ✅ | ✅ | ⬜ | ⬜ | Inquiry + rental |
+| 3 | `properties_rental` | ✅ | ✅ | ✅ | ✅ | ✅ | API booking + `/booking` payment |
+| 4 | `properties_modern` | ✅ | ✅ | ✅ | ✅ | ✅ | Sale inquiry API + rental booking |
 | 5 | `autos_modern` | ✅ | ✅ | ✅ | ⬜ | ⬜ | Inquiry API |
 | 6 | `events_corporate` | ✅ | ✅ | ✅ | ⬜ | ⬜ | Ticket booking |
 | 7 | `jobs_startup` | ✅ | ✅ | ✅ | ⬜ | ⬜ | Application API |
@@ -55,13 +55,13 @@ Clone from golden template per vertical. See conversation roadmap for per-theme 
 |----------|------:|:-------------:|
 | Unifieds | 8 | 1 |
 | Ecommerce | 4 | 4 |
-| Properties | 13 | 0 |
+| Properties | 13 | 2 |
 | Autos | 5 | 0 |
 | Events | 5 | 0 |
 | Jobs | 6 | 0 |
 | Services | 5 | 0 |
 | Classifieds | 6 | 0 |
-| **Total** | **52** | **5** |
+| **Total** | **52** | **7** |
 
 ---
 
@@ -88,15 +88,15 @@ Clone from golden template per vertical. See conversation roadmap for per-theme 
 
 | Endpoint | Vertical | Priority |
 |----------|----------|:--------:|
-| `POST /v1/properties/{id}/bookings` | Properties rental | P1 |
-| `POST /v1/bookings/{id}/pay` | Properties | P1 |
+| `POST /v1/properties/{id}/bookings` | Properties rental | ✅ |
+| `POST /v1/property-bookings/{id}/pay` | Properties | ✅ |
 | `POST /v1/events/{id}/bookings` | Events | P1 |
 | `POST /v1/event-bookings/{id}/pay` | Events | P1 |
 | `POST /v1/vehicles/{slug}/inquiries` | Autos | P2 |
 | `POST /v1/jobs/{slug}/applications` | Jobs | P2 |
 | `POST /v1/services/{slug}/consultations` | Services | P2 |
 | `POST /v1/classifieds/{slug}/inquiries` | Classifieds | P2 |
-| `POST /v1/properties/{slug}/inquiries` | Properties sale | P2 |
+| `POST /v1/properties/{id}/inquiries` | Properties sale | ✅ |
 
 ---
 

@@ -27,7 +27,9 @@ use App\Http\Controllers\Api\V1\ApiLocationController;
 use App\Http\Controllers\Api\V1\ApiMenuController;
 use App\Http\Controllers\Api\V1\ApiOrderController;
 use App\Http\Controllers\Api\V1\ApiProductController;
+use App\Http\Controllers\Api\V1\ApiPropertyBookingController;
 use App\Http\Controllers\Api\V1\ApiPropertyController;
+use App\Http\Controllers\Api\V1\ApiPropertyLeadController;
 use App\Http\Controllers\Api\V1\ApiServiceController;
 use App\Http\Controllers\Api\V1\ApiTagController;
 use App\Http\Controllers\Api\V1\ApiTestimonialController;
@@ -153,6 +155,22 @@ Route::prefix('properties')->middleware('module:properties')->group(function () 
     Route::get('{slug}', [ApiPropertyController::class, 'show']);
     Route::post('{property}/calculate-lodging-price', [ApiPropertyController::class, 'calculateLodgingPrice'])
         ->middleware('throttle:api-write');
+    Route::post('{property}/booking-preview', [ApiPropertyBookingController::class, 'preview'])
+        ->middleware('throttle:api-write');
+    Route::post('{property}/inquiries', [ApiPropertyLeadController::class, 'store'])
+        ->middleware('throttle:api-write');
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('{property}/bookings', [ApiPropertyBookingController::class, 'store'])
+            ->middleware('throttle:api-write');
+    });
+});
+
+Route::middleware(['auth:sanctum', 'module:properties'])->prefix('property-bookings')->group(function () {
+    Route::get('{booking}', [ApiPropertyBookingController::class, 'show']);
+    Route::get('{booking}/payment-context', [ApiPropertyBookingController::class, 'paymentContext']);
+    Route::post('{booking}/pay/{gateway}', [ApiPropertyBookingController::class, 'processPayment'])
+        ->middleware('throttle:api-write');
+    Route::match(['get', 'post'], '{booking}/confirm/{gateway}', [ApiPropertyBookingController::class, 'confirmPayment']);
 });
 
 // =======================

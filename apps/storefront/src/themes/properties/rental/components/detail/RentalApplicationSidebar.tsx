@@ -32,6 +32,8 @@ interface RentalApplicationSidebarProps {
   addParking: boolean;
   addValet: boolean;
   isSubmitting: boolean;
+  formError?: string | null;
+  hasStayDates?: boolean;
   receipt: RentalApplicationReceipt | null;
   onTenantNameChange: (value: string) => void;
   onTenantEmailChange: (value: string) => void;
@@ -60,6 +62,8 @@ export function RentalApplicationSidebar({
   addParking,
   addValet,
   isSubmitting,
+  formError,
+  hasStayDates = false,
   receipt,
   onTenantNameChange,
   onTenantEmailChange,
@@ -228,8 +232,17 @@ export function RentalApplicationSidebar({
           ))}
           </div>
 
+          {formError && (
+            <p role="alert" className="pr-booking-hint" style={{ color: '#b42318' }}>
+              {formError}
+            </p>
+          )}
           <button type="submit" className="pr-btn-primary pr-btn-block" disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting…' : 'Submit lease inquiry'}
+            {isSubmitting
+              ? 'Submitting…'
+              : hasStayDates
+                ? 'Continue to payment'
+                : 'Submit lease inquiry'}
           </button>
         </form>
       </div>

@@ -1,0 +1,90 @@
+/* Property booking payment, reserve, and confirmation pages */
+
+.properties-rental-theme .pr-booking-page,
+.urban-node-wrapper .pm-booking-page {
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 3rem 6% 5rem;
+}
+
+.properties-rental-theme .pr-booking-header,
+.urban-node-wrapper .pm-booking-header {
+  margin-bottom: 2rem;
+}
+
+.properties-rental-theme .pr-booking-header h1,
+.urban-node-wrapper .pm-booking-header h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  margin: 0.5rem 0;
+}
+
+.properties-rental-theme .pr-booking-form,
+.urban-node-wrapper .pm-booking-form,
+.properties-rental-theme .pr-booking-layout,
+.urban-node-wrapper .pm-booking-layout {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.properties-rental-theme .pr-booking-layout,
+.urban-node-wrapper .pm-booking-layout {
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+}
+
+.properties-rental-theme .pr-booking-form label,
+.urban-node-wrapper .pm-booking-form label,
+.properties-rental-theme .pr-booking-panel label,
+.urban-node-wrapper .pm-booking-panel label {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.properties-rental-theme .pr-booking-form input,
+.urban-node-wrapper .pm-booking-form input,
+.properties-rental-theme .pr-booking-panel input,
+.urban-node-wrapper .pm-booking-panel input,
+.properties-rental-theme .pr-booking-panel select,
+.urban-node-wrapper .pm-booking-panel select {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 0.5rem;
+  font: inherit;
+  padding: 0.75rem 0.9rem;
+  width: 100%;
+}
+
+.properties-rental-theme .pr-booking-auth-toggle,
+.urban-node-wrapper .pm-booking-auth-toggle {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.properties-rental-theme .pr-booking-panel,
+.urban-node-wrapper .pm-booking-panel,
+.properties-rental-theme .pr-booking-summary,
+.urban-node-wrapper .pm-booking-summary {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+
+.properties-rental-theme .pr-booking-summary-total,
+.urban-node-wrapper .pm-booking-summary-total {
+  align-items: center;
+  display: flex;
+  font-size: 1.1rem;
+  justify-content: space-between;
+  margin: 1rem 0 1.25rem;
+}
+
+.properties-rental-theme .pr-booking-error,
+.urban-node-wrapper .pm-booking-error {
+  color: #b42318;
+  margin: 0.5rem 0 0;
+}
+
+@media (max-width: 768px) {
+  .properties-rental-theme .pr-booking-layout,
+  .urban-node-wrapper .pm-booking-layout {
+    grid-template-columns: 1fr;
+  }
+}
