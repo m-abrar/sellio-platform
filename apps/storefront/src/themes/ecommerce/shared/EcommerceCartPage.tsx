@@ -5,10 +5,10 @@ import { calculateCartTotals } from '@/themes/unifieds/shared/cart';
 import { CART_THUMB_PLACEHOLDER, getProductImage } from '@/themes/unifieds/shared/product-utils';
 import { useUnifiedCart } from '@/themes/unifieds/shared/useUnifiedCart';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
-import type { EcommerceSubpagePrefix } from '@/themes/ecommerce/shared/EcommerceExplorePage';
+import type { EcommerceCheckoutPrefix } from '@/themes/ecommerce/shared/EcommerceCheckoutPage';
 
 interface CartPageProps {
-  classPrefix: EcommerceSubpagePrefix;
+  classPrefix: EcommerceCheckoutPrefix;
   shell?: (content: React.ReactNode) => React.ReactNode;
 }
 
@@ -21,8 +21,16 @@ export default function EcommerceCartPage({ classPrefix: prefix, shell }: CartPa
   const [submittingOrder, setSubmittingOrder] = useState(false);
   const themeLink = useEcommerceThemeLink();
 
-  const monoClass = prefix === 'el' ? 'el-tech-font' : `${prefix}-mono`;
-  const primaryBtnClass = prefix === 'el' ? 'el-btn el-btn-primary' : `${prefix}-btn-primary`;
+  const monoClass = prefix === 'el'
+    ? 'el-tech-font'
+    : prefix === 'ecl'
+      ? 'ecl-product-kicker'
+      : `${prefix}-mono`;
+  const primaryBtnClass = prefix === 'el'
+    ? 'el-btn el-btn-primary'
+    : prefix === 'ecl'
+      ? 'ecl-btn-gold'
+      : `${prefix}-btn-primary`;
 
   const handleCheckout = () => {
     setSubmittingOrder(true);

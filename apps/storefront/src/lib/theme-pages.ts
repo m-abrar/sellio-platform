@@ -12,9 +12,9 @@ const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, st
     ProductPage: 'ecommerce/default',
     ExplorePage: 'ecommerce/default',
     CartPage: 'ecommerce/default',
-    CheckoutPage: 'unifieds/minimal',
-    CheckoutConfirmationPage: 'unifieds/minimal',
-    CheckoutConfirmPage: 'unifieds/minimal',
+    CheckoutPage: 'ecommerce/default',
+    CheckoutConfirmationPage: 'ecommerce/default',
+    CheckoutConfirmPage: 'ecommerce/default',
   },
   events: {
     ProductPage: 'events/classic',

@@ -8,18 +8,13 @@ import { useUnifiedCart } from '@/themes/unifieds/shared/useUnifiedCart';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 
 export default function CartPage() {
-  const { items, loading, updateQuantity, removeItem, clearCart } = useUnifiedCart();
-  const [checkoutComplete, setCheckoutComplete] = useState(false);
+  const { items, loading, updateQuantity, removeItem } = useUnifiedCart();
   const [submittingOrder, setSubmittingOrder] = useState(false);
   const themeLink = useEcommerceThemeLink();
 
   const handleCheckout = () => {
     setSubmittingOrder(true);
-    window.setTimeout(() => {
-      setSubmittingOrder(false);
-      setCheckoutComplete(true);
-      clearCart();
-    }, 1500);
+    window.location.assign(themeLink('/checkout'));
   };
 
   const { subtotal, shipping, tax, total } = calculateCartTotals(items);
@@ -30,24 +25,6 @@ export default function CartPage() {
         <LuxuryHeader />
         <div className="ecl-cart-page">
           <p className="ecl-cart-loading">Loading bag...</p>
-        </div>
-      </>
-    );
-  }
-
-  if (checkoutComplete) {
-    return (
-      <>
-        <LuxuryHeader />
-        <div className="ecl-cart-page">
-          <section className="ecl-cart-state" role="status">
-            <div className="ecl-product-kicker">Order confirmed</div>
-            <h1 className="ecl-heading">Thank you</h1>
-            <p>Your checkout simulation completed successfully. Continue browsing the collection.</p>
-            <a href={themeLink('/')} className="ecl-btn-gold">
-              Continue shopping
-            </a>
-          </section>
         </div>
       </>
     );

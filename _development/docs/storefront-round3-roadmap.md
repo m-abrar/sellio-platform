@@ -8,7 +8,9 @@ Last updated: 2026-06-11
 
 ---
 
-## Phase 0 — Platform plumbing (in progress)
+## Phase 0 — Platform plumbing ✅
+
+## Phase 1 — Golden templates (in progress)
 
 | Task | Status | Notes |
 |------|:------:|-------|
@@ -28,8 +30,11 @@ Last updated: 2026-06-11
 
 | # | Theme | Home | Explore | Product | Cart/Book | Checkout | Status |
 |---|-------|:----:|:-------:|:-------:|:---------:|:--------:|:------:|
-| 1 | `unifieds_minimal` | ✅ | ✅ | ✅ | ✅ | 🔄 | Phase 0 pilot |
-| 2 | `ecommerce_default` | ✅ | ✅ | ✅ | ✅ | ⬜ | |
+| 1 | `unifieds_minimal` | ✅ | ✅ | ✅ | ✅ | ✅ | Phase 0 pilot |
+| 2 | `ecommerce_default` | ✅ | ✅ | ✅ | ✅ | ✅ | API cart + themed checkout |
+| 2b | `ecommerce_fashion` | ✅ | ✅ | ✅ | ✅ | ✅ | Themed checkout |
+| 2c | `ecommerce_electronics` | ✅ | ✅ | ✅ | ✅ | ✅ | Themed checkout |
+| 2d | `ecommerce_luxury` | ✅ | ✅ | ✅ | ✅ | ✅ | Themed checkout |
 | 3 | `properties_rental` | ✅ | ✅ | ✅ | ⬜ | ⬜ | Booking flow |
 | 4 | `properties_modern` | ✅ | ✅ | ✅ | ⬜ | ⬜ | Inquiry + rental |
 | 5 | `autos_modern` | ✅ | ✅ | ✅ | ⬜ | ⬜ | Inquiry API |
@@ -48,15 +53,15 @@ Clone from golden template per vertical. See conversation roadmap for per-theme 
 
 | Vertical | Total | 100% complete |
 |----------|------:|:-------------:|
-| Unifieds | 8 | 0 |
-| Ecommerce | 4 | 0 |
+| Unifieds | 8 | 1 |
+| Ecommerce | 4 | 4 |
 | Properties | 13 | 0 |
 | Autos | 5 | 0 |
 | Events | 5 | 0 |
 | Jobs | 6 | 0 |
 | Services | 5 | 0 |
 | Classifieds | 6 | 0 |
-| **Total** | **52** | **0** |
+| **Total** | **52** | **5** |
 
 ---
 

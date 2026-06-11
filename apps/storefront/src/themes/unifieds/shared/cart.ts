@@ -1,35 +1,21 @@
 import type { Product } from '@sellio/types';
+import { addProductToStorefrontCart } from '@/lib/storefront-cart';
+import {
+  CART_STORAGE_KEY,
+  getCartItemCount,
+  readCart,
+  writeCart,
+  type UnifiedCartItem,
+} from '@/lib/cart-storage';
 
-export interface UnifiedCartItem {
-  product: Product;
-  quantity: number;
-}
-
-export const CART_STORAGE_KEY = 'sellio_cart';
-
-export function readCart(): UnifiedCartItem[] {
-  if (typeof window === 'undefined') {
-    return [];
-  }
-
-  try {
-    const parsed = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '[]') as UnifiedCartItem[];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
-export function writeCart(items: UnifiedCartItem[]): void {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-  window.dispatchEvent(new Event('cartUpdated'));
-}
+export type { UnifiedCartItem };
+export { CART_STORAGE_KEY, readCart, writeCart, getCartItemCount };
 
 export function addProductToCart(product: Product): UnifiedCartItem[] {
+  if (typeof window !== 'undefined') {
+    void addProductToStorefrontCart(product);
+  }
+
   const cart = readCart();
   const existing = cart.find((item) => item.product.id === product.id);
 
@@ -43,15 +29,11 @@ export function addProductToCart(product: Product): UnifiedCartItem[] {
   return cart;
 }
 
-export function getCartItemCount(items: UnifiedCartItem[] = readCart()): number {
-  return items.reduce((total, item) => total + item.quantity, 0);
-}
-
 export function calculateCartTotals(items: UnifiedCartItem[]) {
-  const subtotal = items.reduce(
-    (total, item) => total + (Number(item.product.price) * item.quantity),
-    0,
-  );
+  const subtotal = items.reduce((total, item) => {
+    const unitPrice = item.unitPrice ?? Number(item.product.price);
+    return total + (unitPrice * item.quantity);
+  }, 0);
   const shipping = subtotal > 0 ? 15 : 0;
   const tax = subtotal * 0.085;
   const total = subtotal + shipping + tax;

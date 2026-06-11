@@ -433,6 +433,65 @@
   margin: 0;
 }
 
+.ecommerce-fashion-theme .ef-checkout-page,
+.ecommerce-electronics-wrapper .el-checkout-page,
+.ecommerce-luxury-theme .ecl-checkout-page {
+  margin: 0 auto;
+  max-width: 1400px;
+  padding: 4rem 6% 6rem;
+}
+
+.ecommerce-fashion-theme .ef-checkout-layout,
+.ecommerce-electronics-wrapper .el-checkout-layout,
+.ecommerce-luxury-theme .ecl-checkout-layout {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+}
+
+.ecommerce-fashion-theme .ef-checkout-panel,
+.ecommerce-fashion-theme .ef-checkout-summary,
+.ecommerce-fashion-theme .ef-checkout-form,
+.ecommerce-electronics-wrapper .el-checkout-panel,
+.ecommerce-electronics-wrapper .el-checkout-summary,
+.ecommerce-electronics-wrapper .el-checkout-form,
+.ecommerce-luxury-theme .ecl-checkout-panel,
+.ecommerce-luxury-theme .ecl-checkout-summary,
+.ecommerce-luxury-theme .ecl-checkout-form {
+  border: 1px solid var(--ef-border, #e2e8f0);
+  padding: 1.5rem;
+}
+
+.ecommerce-fashion-theme .ef-checkout-form label,
+.ecommerce-fashion-theme .ef-checkout-panel label,
+.ecommerce-electronics-wrapper .el-checkout-form label,
+.ecommerce-electronics-wrapper .el-checkout-panel label,
+.ecommerce-luxury-theme .ecl-checkout-form label,
+.ecommerce-luxury-theme .ecl-checkout-panel label {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ecommerce-fashion-theme .ef-checkout-form input,
+.ecommerce-fashion-theme .ef-checkout-form select,
+.ecommerce-electronics-wrapper .el-checkout-form input,
+.ecommerce-electronics-wrapper .el-checkout-form select,
+.ecommerce-luxury-theme .ecl-checkout-form input,
+.ecommerce-luxury-theme .ecl-checkout-form select {
+  font: inherit;
+  padding: 0.75rem 0.875rem;
+  width: 100%;
+}
+
+.ecommerce-fashion-theme .ef-checkout-grid,
+.ecommerce-electronics-wrapper .el-checkout-grid,
+.ecommerce-luxury-theme .ecl-checkout-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 @media (max-width: 900px) {
   .ecommerce-fashion-theme .ef-explore-controls,
   .ecommerce-electronics-wrapper .el-explore-controls {
@@ -448,7 +507,13 @@
   }
 
   .ecommerce-fashion-theme .ef-cart-layout,
-  .ecommerce-electronics-wrapper .el-cart-layout {
+  .ecommerce-electronics-wrapper .el-cart-layout,
+  .ecommerce-fashion-theme .ef-checkout-layout,
+  .ecommerce-electronics-wrapper .el-checkout-layout,
+  .ecommerce-luxury-theme .ecl-checkout-layout,
+  .ecommerce-fashion-theme .ef-checkout-grid,
+  .ecommerce-electronics-wrapper .el-checkout-grid,
+  .ecommerce-luxury-theme .ecl-checkout-grid {
     grid-template-columns: 1fr;
   }
 }
