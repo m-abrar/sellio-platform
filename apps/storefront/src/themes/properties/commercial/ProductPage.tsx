@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import { AssetRegistryCard } from './components';
+import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 // High-fidelity local commercial assets fallback seeds
@@ -204,14 +205,19 @@ export default function ProductPage({ slug }: { slug: string }) {
 
   const handleAuditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!repName || !corpEmail || !corpFirm || !preferredDate || !targetBudget) {
+    if (!asset || !repName || !corpEmail || !corpFirm || !preferredDate || !targetBudget) {
       setFormError('Please specify all core institutional appraisal parameters.');
       return;
     }
     setFormError(null);
-
     setIsRouting(true);
-    await new Promise(resolve => setTimeout(resolve, 1400));
+
+    const propertyId = asset.rawId ?? asset.id;
+    const inquiryMessage = [
+      `Firm: ${corpFirm}`,
+      `Preferred audit date: ${preferredDate}`,
+      `Target budget: ${targetBudget}`,
+    ].join('\n');
 
     const shaHash = `SHA256-${Math.random().toString(36).substring(2, 10).toUpperCase()}-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
     const receipt = {
@@ -223,23 +229,31 @@ export default function ProductPage({ slug }: { slug: string }) {
       corporateEmail: corpEmail,
       firmName: corpFirm,
       auditDate: preferredDate,
-      targetBudget: targetBudget,
-      shaHash: shaHash
+      targetBudget,
+      shaHash,
     };
 
-    try {
-      const existing = localStorage.getItem('sellio_properties_commercial_orders');
-      const list = existing ? JSON.parse(existing) : [];
-      list.unshift(receipt);
-      localStorage.setItem('sellio_properties_commercial_orders', JSON.stringify(list));
+    const result = await submitPropertyInquiry({
+      propertyId: Number(propertyId),
+      useFallback,
+      storageKey: 'sellio_properties_commercial_orders',
+      fullName: repName,
+      email: corpEmail,
+      message: inquiryMessage,
+      demoRecord: receipt,
+    });
 
-      setAuditReceipt(receipt);
-    } catch (error) {
-      console.error("LocalStorage commercial audit write failure", error);
-      setAuditReceipt(receipt);
-    } finally {
-      setIsRouting(false);
+    setIsRouting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
     }
+
+    setAuditReceipt({
+      ...receipt,
+      auditId: String(result.leadId),
+    });
   };
 
   if (loading) {

@@ -4,6 +4,8 @@ import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { EstateCard } from './components';
 import { FALLBACK_ESTATES } from './fallback-data';
+import { redirectToPropertyBookingReserve } from '@/themes/properties/shared/property-booking-utils';
+import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
 import { useClassicThemeLink } from './hooks/useClassicThemeLink';
 import { useDemoFallbackAllowed } from './hooks/useDemoFallbackAllowed';
 
@@ -31,6 +33,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [inquiryAdded, setInquiryAdded] = useState(false);
   const [collectNotice, setCollectNotice] = useState(false);
   const [inquirySubmitted, setInquirySubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadDetails = async () => {
@@ -140,9 +144,62 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }
   };
 
-  const handleInquirySubmit = (e: React.FormEvent) => {
+  const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !email) return;
+    if (!property || !fullName || !email) return;
+
+    setSubmitError(null);
+
+    const isRentalListing = property.is_rental || property.status?.is_rental;
+
+    if (isRentalListing && checkIn && checkOut) {
+      if (useFallback) {
+        setSubmitError('Live booking requires the property API. Demo listings cannot reserve dates.');
+        return;
+      }
+
+      redirectToPropertyBookingReserve(themeLink, {
+        propertyId: property.id,
+        checkIn,
+        checkOut,
+        guests: Number(guests) || 2,
+        fullName,
+        email,
+        message: message.trim() || undefined,
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const result = await submitPropertyInquiry({
+      propertyId: property.id,
+      useFallback,
+      storageKey: 'sellio_classic_inquiries',
+      fullName,
+      email,
+      message: message.trim() || undefined,
+      checkIn: checkIn || undefined,
+      checkOut: checkOut || undefined,
+      demoRecord: {
+        id: Date.now(),
+        property_id: property.id,
+        property_title: property.title,
+        contact_name: fullName,
+        contact_email: email,
+        message,
+        check_in: checkIn || null,
+        check_out: checkOut || null,
+        submitted_at: new Date().toISOString(),
+      },
+    });
+
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setSubmitError(result.error);
+      return;
+    }
 
     setInquirySubmitted(true);
     setFullName('');
@@ -378,6 +435,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
               )}
 
               <form className="pc-inquiry-form" onSubmit={handleInquirySubmit}>
+                {submitError && (
+                  <p className="pc-inquiry-notice" role="alert">{submitError}</p>
+                )}
                 {isRental && (
                   <div className="pc-inquiry-rental-box">
                     <div className="pc-caps pc-inquiry-rental-box__title">Estimated Lodging Rental</div>
@@ -466,8 +526,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   />
                 </div>
 
-                <button type="submit" className="pc-btn-primary pc-inquiry-submit">
-                  Dispatch Direct Inquiry
+                <button type="submit" className="pc-btn-primary pc-inquiry-submit" disabled={isSubmitting}>
+                  {isSubmitting ? 'Sending…' : 'Dispatch Direct Inquiry'}
                 </button>
               </form>
 

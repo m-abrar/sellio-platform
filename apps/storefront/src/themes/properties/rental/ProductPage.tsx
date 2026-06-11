@@ -22,6 +22,7 @@ import { FALLBACK_RENTALS } from './fallback-data';
 import { asPropertyDetail } from './property-detail-utils';
 import type { PropertyBookingBlock, PropertyDetail } from './property-detail-types';
 import { collectPropertyImages, getMonthlyRent } from './property-utils';
+import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
 import { useRentalThemeLink } from './hooks/useRentalThemeLink';
 
 const DEMO_RENTAL_BOOKINGS: PropertyBookingBlock[] = [
@@ -222,13 +223,23 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }
 
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 900));
 
     const finalMonthlyRent = calculateLongTermRent();
     let totalAddons = 0;
     if (addFiber) totalAddons += 80;
     if (addParking) totalAddons += 150;
     if (addValet) totalAddons += 35;
+
+    const inquiryMessage = [
+      `Lease duration: ${leaseDuration} months`,
+      `Down payment: $${downPayment.toLocaleString()}`,
+      `Estimated monthly rent: $${(finalMonthlyRent + totalAddons).toLocaleString()}`,
+      addFiber ? 'Fiber internet add-on' : '',
+      addParking ? 'Parking add-on' : '',
+      addValet ? 'Valet add-on' : '',
+    ]
+      .filter(Boolean)
+      .join('\n');
 
     const receipt: RentalApplicationReceipt = {
       orderId: `RE-${Math.floor(100000 + Math.random() * 900000)}`,
@@ -239,6 +250,32 @@ export default function ProductPage({ slug }: ProductPageProps) {
       utilityAddons: { addonsTotal: `$${totalAddons.toLocaleString()}` },
       netMonthlyTotal: `$${(finalMonthlyRent + totalAddons).toLocaleString()}`,
     };
+
+    if (!useFallback) {
+      const result = await submitPropertyInquiry({
+        propertyId: property.id,
+        useFallback: false,
+        storageKey: 'sellio_properties_rental_orders',
+        fullName: tenantName.trim(),
+        email: tenantEmail.trim(),
+        phone: tenantPhone.trim(),
+        message: inquiryMessage,
+        demoRecord: receipt,
+      });
+
+      setIsSubmitting(false);
+
+      if (!result.ok) {
+        setFormError(result.error);
+        return;
+      }
+
+      setBookingReceipt({
+        ...receipt,
+        orderId: String(result.leadId),
+      });
+      return;
+    }
 
     try {
       const existing = localStorage.getItem('sellio_properties_rental_orders');

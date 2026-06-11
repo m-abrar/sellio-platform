@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { RetreatBentoCard } from './components';
+import { redirectToPropertyBookingReserve } from '@/themes/properties/shared/property-booking-utils';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 interface VacationItem {
@@ -209,11 +210,34 @@ export default function ProductPage({ slug }: { slug: string }) {
 
   const handleEscapeCheckout = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!travelerName || !travelerEmail || !checkIn || !checkOut) {
+    if (!retreat || !travelerName || !travelerEmail || !checkIn || !checkOut) {
       setFormError('Please complete all required booking details before checkout.');
       return;
     }
     setFormError(null);
+
+    if (!useFallback) {
+      const upgradeNotes = [
+        travelerNotes.trim(),
+        chefUpgrade ? 'Chef upgrade requested' : '',
+        yachtUpgrade ? 'Yacht upgrade requested' : '',
+        helicopterUpgrade ? 'Helicopter transfer requested' : '',
+      ]
+        .filter(Boolean)
+        .join('\n');
+
+      redirectToPropertyBookingReserve(themeLink, {
+        propertyId: retreat.id,
+        checkIn,
+        checkOut,
+        guests: 2,
+        fullName: travelerName,
+        email: travelerEmail,
+        phone: travelerPhone.trim() || undefined,
+        message: upgradeNotes || undefined,
+      });
+      return;
+    }
 
     setIsSubmitting(true);
 

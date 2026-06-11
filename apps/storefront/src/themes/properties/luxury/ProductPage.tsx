@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
+import { redirectToPropertyBookingReserve } from '@/themes/properties/shared/property-booking-utils';
+import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 interface ProductPageProps {
@@ -67,6 +69,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [registryFeedback, setRegistryFeedback] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [inquiryDispatched, setInquiryDispatched] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const loadDetails = async () => {
@@ -170,13 +173,65 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }
   };
 
-  const handleInquirySubmit = (e: React.FormEvent) => {
+  const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !email) {
+    if (!property || !fullName || !email) {
       setFormError('Please complete the required details before dispatch.');
       return;
     }
     setFormError(null);
+
+    const isRentalListing = property.is_rental || property.status === 'rental';
+
+    if (isRentalListing && checkIn && checkOut) {
+      if (useFallback) {
+        setFormError('Live booking requires the property API. Demo listings cannot reserve dates.');
+        return;
+      }
+
+      redirectToPropertyBookingReserve(themeLink, {
+        propertyId: property.id,
+        checkIn,
+        checkOut,
+        guests: Number(guests) || 2,
+        fullName,
+        email,
+        message: message.trim() || undefined,
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const result = await submitPropertyInquiry({
+      propertyId: property.id,
+      useFallback,
+      storageKey: 'sellio_luxury_inquiries',
+      fullName,
+      email,
+      message: message.trim() || undefined,
+      checkIn: checkIn || undefined,
+      checkOut: checkOut || undefined,
+      demoRecord: {
+        id: Date.now(),
+        property_id: property.id,
+        property_title: property.title,
+        contact_name: fullName,
+        contact_email: email,
+        message,
+        check_in: checkIn || null,
+        check_out: checkOut || null,
+        submitted_at: new Date().toISOString(),
+      },
+    });
+
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
+    }
+
     setInquiryDispatched(true);
     setFullName('');
     setEmail('');
@@ -521,7 +576,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   />
                 </div>
 
-                <button type="submit" className="luxury-btn-primary" style={{ width: '100%', padding: '1.5rem', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '3px' }}>
+                <button type="submit" className="luxury-btn-primary" style={{ width: '100%', padding: '1.5rem', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '3px' }} disabled={isSubmitting}>
                   DISPATCH DIRECT INQUIRY
                 </button>
                 {formError && (
