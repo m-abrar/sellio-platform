@@ -1,4 +1,5 @@
 import type { Category, ClassifiedListing } from '@sellio/types';
+import { getClassifiedCategoryKey } from '@/lib/classified-category';
 
 export type LocalCardItem = {
   id: number;
@@ -99,8 +100,8 @@ export function mapClassifiedToLocalCard(item: ClassifiedListing): LocalCardItem
   const mapTop = coords.length === 2 ? parseInt(coords[0], 10) : 20 + ((item.id * 7) % 70);
   const mapLeft = coords.length === 2 ? parseInt(coords[1], 10) : 15 + ((item.id * 9) % 75);
   const numericDistance = item.id * 0.45;
-  const category = item.taxonomy?.category || 'home';
-  const seller = item.taxonomy?.brand || 'Neighbor';
+  const categoryKey = getClassifiedCategoryKey(item.taxonomy?.category) || 'home';
+  const seller = item.taxonomy?.brand || item.seller?.name || 'Neighbor';
   const initials =
     seller
       .split(' ')
@@ -128,8 +129,8 @@ export function mapClassifiedToLocalCard(item: ClassifiedListing): LocalCardItem
       'https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?q=80&w=400',
     sellerInitials: initials,
     sellerName: seller,
-    category,
-    categoryIcon: getLocalCategoryIcon(category),
+    category: categoryKey,
+    categoryIcon: getLocalCategoryIcon(categoryKey),
     conditionLabel: item.item_specs?.condition_label || 'Good',
     mapTop,
     mapLeft,

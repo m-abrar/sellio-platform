@@ -10,7 +10,7 @@ Last updated: 2026-06-11
 
 ## Phase 0 — Platform plumbing ✅
 
-## Phase 1 — Golden templates (in progress)
+## Phase 1 — Golden templates ✅ (9/9 pilots)
 
 | Task | Status | Notes |
 |------|:------:|-------|
@@ -41,13 +41,18 @@ Last updated: 2026-06-11
 | 6 | `events_corporate` | ✅ | ✅ | ✅ | ✅ | ✅ | Ticket booking + `/booking` payment |
 | 7 | `jobs_startup` | ✅ | ✅ | ✅ | ✅ | — | Application API (auth required) |
 | 8 | `services_marketplace` | ✅ | ✅ | ✅ | ✅ | — | Native explore + consultation API |
-| 9 | `classifieds_local` | ✅ | ⬜ | ✅ | ⬜ | ⬜ | Explore + inquiry API |
+| 9 | `classifieds_local` | ✅ | ✅ | ✅ | ✅ | — | Native explore + inquiry API |
+| — | `classifieds_*` (5 more) | ✅ | ✅ | ✅ | ✅ | — | Shared explore + inquiry API |
 
 ---
 
-## Phase 2–9 — Theme rollout (43 remaining)
+## Phase 2–9 — Theme rollout (40 remaining)
 
 Clone from golden template per vertical. See conversation roadmap for per-theme order.
+
+### Phase 2a — Classifieds vertical ✅ (6/6)
+
+All classifieds themes share `classifieds/local` ExplorePage fallback and `submitClassifiedInquiry()` on ProductPage (live API + demo localStorage).
 
 ### Vertical completion tracker
 
@@ -60,8 +65,8 @@ Clone from golden template per vertical. See conversation roadmap for per-theme 
 | Events | 5 | 1 |
 | Jobs | 6 | 1 |
 | Services | 5 | 1 |
-| Classifieds | 6 | 0 |
-| **Total** | **52** | **11** |
+| Classifieds | 6 | 6 |
+| **Total** | **52** | **17** |
 
 ---
 
@@ -95,7 +100,7 @@ Clone from golden template per vertical. See conversation roadmap for per-theme 
 | `POST /v1/vehicles/{id}/inquiries` | Autos | ✅ |
 | `POST /v1/jobs/{slug}/applications` | Jobs | ✅ |
 | `POST /v1/services/{id}/consultations` | Services | ✅ |
-| `POST /v1/classifieds/{slug}/inquiries` | Classifieds | P2 |
+| `POST /v1/classifieds/{slug}/inquiries` | Classifieds | ✅ |
 | `POST /v1/properties/{id}/inquiries` | Properties sale | ✅ |
 
 ---

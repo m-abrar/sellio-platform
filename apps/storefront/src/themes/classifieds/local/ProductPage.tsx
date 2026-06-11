@@ -12,9 +12,11 @@ import {
   resolveClassifiedFailure,
 } from '@/themes/classifieds/shared/catalog';
 import {
+  getLocalCategoryLabel,
   mapClassifiedToLocalCard,
   type LocalCardItem,
 } from '@/themes/classifieds/shared/listing-utils';
+import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
@@ -38,6 +40,8 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [buyerNotes, setBuyerNotes] = useState('');
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderSuccessData, setOrderSuccessData] = useState<Record<string, string> | null>(null);
+  const [inquiryId, setInquiryId] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -102,7 +106,12 @@ export default function ProductPage({ slug }: { slug: string }) {
     }
   }, [slug, allowDemo]);
 
-  const handleInquirySubmit = (e: React.FormEvent) => {
+  const buildInquiryMessage = () => {
+    const parts = [buyerNotes.trim()].filter(Boolean);
+    return parts.length ? parts.join('\n\n') : undefined;
+  };
+
+  const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!buyerName || !buyerEmail) {
       setFormError('Please fill in your name and email to send an inquiry.');
@@ -112,31 +121,47 @@ export default function ProductPage({ slug }: { slug: string }) {
     if (!item) return;
 
     setFormError(null);
+    setIsSubmitting(true);
 
-    const orderData = {
-      orderId: `ORD-${Date.now()}-${item.id}`,
-      listingId: String(item.id),
-      title: item.title,
-      price: item.price,
-      buyerName,
-      buyerEmail,
-      offerPrice: buyerOffer || item.price,
-      notes: buyerNotes,
-      date: new Date().toLocaleString(),
-      theme: 'classifieds_local',
-    };
+    const result = await submitClassifiedInquiry({
+      slug,
+      useFallback,
+      storageKey: 'sellio_classifieds_local_orders',
+      fullName: buyerName,
+      email: buyerEmail,
+      message: buildInquiryMessage(),
+      offerPrice: buyerOffer.trim() || item.price,
+      demoOrderData: {
+        orderId: `ORD-${Date.now()}-${item.id}`,
+        listingId: String(item.id),
+        title: item.title,
+        price: item.price,
+        buyerName,
+        buyerEmail,
+        offerPrice: buyerOffer || item.price,
+        notes: buyerNotes,
+        date: new Date().toLocaleString(),
+        theme: 'classifieds_local',
+      },
+    });
 
-    try {
-      const existing = localStorage.getItem('sellio_classifieds_local_orders');
-      const list = existing ? JSON.parse(existing) : [];
-      list.push(orderData);
-      localStorage.setItem('sellio_classifieds_local_orders', JSON.stringify(list));
-    } catch (storageError) {
-      console.error('LocalStorage write failed:', storageError);
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
     }
 
+    setInquiryId(typeof result.inquiryId === 'number' ? result.inquiryId : null);
     setOrderSuccess(true);
-    setOrderSuccessData(orderData);
+    setOrderSuccessData({
+      ...result.summary,
+      offerPrice: buyerOffer || item.price,
+    });
+    setBuyerName('');
+    setBuyerEmail('');
+    setBuyerOffer('');
+    setBuyerNotes('');
   };
 
   const handleBackNavigation = (e: React.MouseEvent) => {
@@ -218,7 +243,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                     </div>
                     <div className="cl-product-spec-item">
                       <span className="cl-product-spec-label">Item Category</span>
-                      <span className="cl-product-spec-value">{item.categoryIcon} {item.category}</span>
+                      <span className="cl-product-spec-value">{item.categoryIcon} {getLocalCategoryLabel(item.category)}</span>
                     </div>
                   </div>
                 </div>
@@ -232,7 +257,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                     </div>
                     <div className="cl-product-price">{item.price}</div>
                     <div className="cl-product-meta-row">
-                      <span className="cl-product-badge">{item.category}</span>
+                      <span className="cl-product-badge">{getLocalCategoryLabel(item.category)}</span>
                       <span className="cl-product-badge cl-badge-excellent">{item.conditionLabel}</span>
                       <span className="cl-product-badge">📍 {item.neighborhood}</span>
                     </div>
@@ -267,7 +292,9 @@ export default function ProductPage({ slug }: { slug: string }) {
                         <span>✓</span> <span>Inquiry Dispatch Complete!</span>
                       </div>
                       <div style={{ fontSize: '0.8rem', color: 'var(--cl-text-muted)', fontWeight: 600, borderBottom: '1px dashed var(--cl-primary-green)', paddingBottom: '0.5rem' }}>
-                        Your message has been saved locally. Receipt:
+                        {useFallback
+                          ? 'Your message has been saved locally. Receipt:'
+                          : `Inquiry #${inquiryId ?? orderSuccessData.orderId} sent to the seller.`}
                       </div>
                       <div className="cl-receipt-row">
                         <span>Receipt ID:</span>
@@ -328,8 +355,8 @@ export default function ProductPage({ slug }: { slug: string }) {
                           onChange={(e) => setBuyerNotes(e.target.value)}
                         />
                       </div>
-                      <button type="submit" className="cl-product-btn-reserve">
-                        Send Message & Request Pickup
+                      <button type="submit" className="cl-product-btn-reserve" disabled={isSubmitting}>
+                        {isSubmitting ? 'Sending...' : 'Send Message & Request Pickup'}
                       </button>
                     </form>
                   )}

@@ -10,6 +10,7 @@ import {
   getRelatedFromApi,
   resolveClassifiedFailure,
 } from '@/themes/classifieds/shared/catalog';
+import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
@@ -58,6 +59,7 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderSuccessData, setOrderSuccessData] = useState<any>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     async function fetchListingDetails() {
@@ -118,7 +120,7 @@ export default function ProductPage({ slug }: { slug: string }) {
     }
   }, [slug, allowDemo]);
 
-  const handleInquirySubmit = (e: React.FormEvent) => {
+  const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!buyerName || !buyerEmail) {
       setFormError('Please fill in all required fields.');
@@ -128,31 +130,44 @@ export default function ProductPage({ slug }: { slug: string }) {
 
     if (!item) return;
 
-    const orderData = {
-      orderId: `ELITE-INQ-${Date.now()}-${item.id}`,
-      listingId: item.id,
-      title: item.title,
-      price: getAssetPrice(item),
-      vaultId: getAssetVaultId(item),
-      buyerName,
-      buyerEmail,
-      offerPrice: buyerOffer || getAssetPrice(item),
-      notes: buyerNotes,
-      date: new Date().toLocaleString(),
-      theme: 'classifieds_elite',
-    };
+    const assetPrice = getAssetPrice(item);
+    setIsSubmitting(true);
 
-    try {
-      const existing = localStorage.getItem('sellio_classifieds_elite_orders');
-      const list = existing ? JSON.parse(existing) : [];
-      list.push(orderData);
-      localStorage.setItem('sellio_classifieds_elite_orders', JSON.stringify(list));
-    } catch (error) {
-      console.error('LocalStorage write failed:', error);
+    const result = await submitClassifiedInquiry({
+      slug,
+      useFallback,
+      storageKey: 'sellio_classifieds_elite_orders',
+      fullName: buyerName,
+      email: buyerEmail,
+      message: buyerNotes.trim() || undefined,
+      offerPrice: buyerOffer.trim() || assetPrice,
+      demoOrderData: {
+        orderId: `ELITE-INQ-${Date.now()}-${item.id}`,
+        listingId: item.id,
+        title: item.title,
+        price: assetPrice,
+        vaultId: getAssetVaultId(item),
+        buyerName,
+        buyerEmail,
+        offerPrice: buyerOffer || assetPrice,
+        notes: buyerNotes,
+        date: new Date().toLocaleString(),
+        theme: 'classifieds_elite',
+      },
+    });
+
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
     }
 
     setOrderSuccess(true);
-    setOrderSuccessData(orderData);
+    setOrderSuccessData({
+      ...result.summary,
+      offerPrice: buyerOffer || assetPrice,
+    });
   };
 
   const handleBackNavigation = (e: React.MouseEvent) => {

@@ -11,6 +11,7 @@ import {
   getRelatedFromApi,
   resolveClassifiedFailure,
 } from '@/themes/classifieds/shared/catalog';
+import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
@@ -39,6 +40,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [orderComplete, setOrderComplete] = useState(false);
   const [generatedRef, setGeneratedRef] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const scrollToFeed = () => {
     document.getElementById('cm-feed')?.scrollIntoView({ behavior: 'smooth' });
@@ -161,7 +163,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const rating = listing.item_specs?.condition_rating || 5;
   const starsArray = Array.from({ length: 5 }, (_, idx) => (idx < Math.floor(rating) ? '★' : '☆'));
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formName.trim() || !formEmail.trim() || !formPhone.trim()) {
@@ -170,28 +172,52 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }
 
     setFormError(null);
+    setIsSubmitting(true);
+
     const orderId = `CM-BARGAIN-${Math.floor(Math.random() * 900000 + 100000)}`;
-    const existingOrders = JSON.parse(localStorage.getItem('sellio_classifieds_modern_orders') || '[]');
+    const inquiryMessage = [
+      formNotes.trim(),
+      `Quantity requested: ${formQuantity}`,
+      `Unit price: $${salePrice.toLocaleString()}`,
+    ]
+      .filter(Boolean)
+      .join('\n');
 
-    const newOrder = {
-      orderId,
-      timestamp: new Date().toISOString(),
-      listingId: listing.id,
-      title: listing.title,
-      slug: listing.slug,
-      quantity: formQuantity,
-      priceEach: salePrice,
-      totalPrice: salePrice * formQuantity,
-      buyer: {
-        name: formName,
-        email: formEmail,
-        phone: formPhone,
-        notes: formNotes,
+    const result = await submitClassifiedInquiry({
+      slug,
+      useFallback,
+      storageKey: 'sellio_classifieds_modern_orders',
+      fullName: formName,
+      email: formEmail,
+      phone: formPhone,
+      message: inquiryMessage,
+      offerPrice: String(salePrice * formQuantity),
+      demoOrderData: {
+        orderId,
+        timestamp: new Date().toISOString(),
+        listingId: listing.id,
+        title: listing.title,
+        slug: listing.slug,
+        quantity: formQuantity,
+        priceEach: salePrice,
+        totalPrice: salePrice * formQuantity,
+        buyer: {
+          name: formName,
+          email: formEmail,
+          phone: formPhone,
+          notes: formNotes,
+        },
       },
-    };
+    });
 
-    localStorage.setItem('sellio_classifieds_modern_orders', JSON.stringify([newOrder, ...existingOrders]));
-    setGeneratedRef(orderId);
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
+    }
+
+    setGeneratedRef(String(result.inquiryId));
     setOrderComplete(true);
   };
 

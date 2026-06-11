@@ -28,6 +28,7 @@ import type {
   PropertyBookingRecord,
   PropertyLeadRecord,
   AutoInquiryRecord,
+  ClassifiedInquiryRecord,
   JobApplicationRecord,
   ServiceConsultationRecord,
   EventBookingPaymentContext,
@@ -408,9 +409,29 @@ export class SellioAPI {
     message: string | null;
     data: ClassifiedListing;
     related_classifieds?: ClassifiedListing[];
+    meta?: { related_items?: ClassifiedListing[] };
   }> {
     const response = await this.client.get(`/v1/classifieds/${slug}`);
-    return response.data;
+    const body = response.data;
+    const relatedFromMeta = body.meta?.related_items;
+
+    return {
+      ...body,
+      related_classifieds: body.related_classifieds ?? relatedFromMeta ?? [],
+    };
+  }
+
+  async createClassifiedInquiry(
+    slug: string,
+    payload: {
+      full_name: string;
+      email: string;
+      phone?: string;
+      message?: string;
+      offer_price?: string;
+    },
+  ): Promise<ClassifiedInquiryRecord> {
+    return this.post<ClassifiedInquiryRecord>(`/v1/classifieds/${slug}/inquiries`, payload);
   }
 
   // === Auth ===

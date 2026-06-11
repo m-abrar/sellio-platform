@@ -47,6 +47,9 @@ class ClassifiedManagementService
      */
     public function getPaginatedClassifieds(array $filters, ?User $user = null, int $perPage = 12): LengthAwarePaginator
     {
+        $filters = $this->normalizeClassifiedFilters($filters);
+        $perPage = (int) ($filters['per_page'] ?? $perPage);
+
         return Classified::visibleTo($user)
             ->orderByDesc('is_featured')
             ->latest()
@@ -83,5 +86,36 @@ class ClassifiedManagementService
             ->with(['media', 'category', 'location'])
             ->limit($limit)
             ->get();
+    }
+
+    protected function normalizeClassifiedFilters(array $filters): array
+    {
+        if (!empty($filters['category']) && empty($filters['category_id'])) {
+            $category = Category::where('slug', $filters['category'])->first();
+            if ($category) {
+                $filters['category_id'] = $category->id;
+            }
+            unset($filters['category']);
+        }
+
+        if (!empty($filters['location']) && !is_numeric($filters['location'])) {
+            $filters['location'] = Location::where('slug', $filters['location'])->value('id');
+        }
+
+        if (!empty($filters['price_range']) && empty($filters['min_price']) && empty($filters['max_price'])) {
+            $parts = explode('-', (string) $filters['price_range'], 2);
+            if (count($parts) === 2) {
+                $filters['min_price'] = $parts[0];
+                $filters['max_price'] = $parts[1];
+            }
+            unset($filters['price_range']);
+        }
+
+        if (!empty($filters['q']) && empty($filters['search'])) {
+            $filters['search'] = $filters['q'];
+            unset($filters['q']);
+        }
+
+        return $filters;
     }
 }

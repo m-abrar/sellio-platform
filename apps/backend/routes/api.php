@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\V1\ApiCheckoutController;
 use App\Http\Controllers\Api\V1\ApiPaymentGatewayController;
 use App\Http\Controllers\Api\V1\ApiCategoryController;
 use App\Http\Controllers\Api\V1\ApiClassifiedController;
+use App\Http\Controllers\Api\V1\ApiClassifiedInquiryController;
 use App\Http\Controllers\Api\V1\ApiEventController;
 use App\Http\Controllers\Api\V1\ApiFeatureController;
 use App\Http\Controllers\Api\V1\ApiJobApplicationController;
@@ -239,6 +240,8 @@ Route::prefix('services')->middleware('module:services')->group(function () {
 Route::prefix('classifieds')->middleware('module:classifieds')->group(function () {
     Route::get('/', [ApiClassifiedController::class, 'index']);
     Route::get('category/{categorySlug}', [ApiClassifiedController::class, 'category']);
+    Route::post('{slug}/inquiries', [ApiClassifiedInquiryController::class, 'store'])
+        ->middleware('throttle:api-write');
     Route::get('{slug}', [ApiClassifiedController::class, 'show']);
 });
 

@@ -55,8 +55,14 @@ class ClassifiedInquiry extends Pivot
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_id',
+        'classified_id',
+        'name',
+        'email',
+        'phone',
         'status',
         'message',
+        'viewed_at',
     ];
 
     /**

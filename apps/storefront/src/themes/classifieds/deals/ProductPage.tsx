@@ -10,6 +10,7 @@ import {
   getRelatedFromApi,
   resolveClassifiedFailure,
 } from '@/themes/classifieds/shared/catalog';
+import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
@@ -37,6 +38,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [buyerNotes, setBuyerNotes] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Follow states
   const [isFollowing, setIsFollowing] = useState(false);
@@ -110,7 +112,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
     document.getElementById('cd-deal-inquiry')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSnagDealSubmit = (e: React.FormEvent) => {
+  const handleSnagDealSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName.trim() || !email.trim() || !phone.trim() || quantity <= 0) {
       setFormError('Please complete all required checkout inquiry fields.');
@@ -121,26 +123,52 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
     if (!deal) return;
 
-    // Persist reservation orders to LocalStorage key sellio_classifieds_deals_orders
-    const existingOrders = JSON.parse(localStorage.getItem('sellio_classifieds_deals_orders') || '[]');
-    const newOrder = {
-      orderId: 'DEAL-' + Math.floor(Math.random() * 900000 + 100000),
-      timestamp: new Date().toISOString(),
-      dealId: deal.id,
-      dealTitle: deal.title,
-      dealSlug: deal.slug,
-      quantity,
-      priceEach: deal.pricing?.sale_price || deal.pricing?.base_price || 0,
-      totalPrice: (deal.pricing?.sale_price || deal.pricing?.base_price || 0) * quantity,
-      buyer: {
-        fullName,
-        email,
-        phone,
-        notes: buyerNotes
-      }
-    };
+    const priceEach = deal.pricing?.sale_price || deal.pricing?.base_price || 0;
+    const orderId = `DEAL-${Math.floor(Math.random() * 900000 + 100000)}`;
+    const inquiryMessage = [
+      buyerNotes.trim(),
+      `Quantity: ${quantity}`,
+      `Price each: $${priceEach.toLocaleString()}`,
+    ]
+      .filter(Boolean)
+      .join('\n');
 
-    localStorage.setItem('sellio_classifieds_deals_orders', JSON.stringify([...existingOrders, newOrder]));
+    setIsSubmitting(true);
+
+    const result = await submitClassifiedInquiry({
+      slug,
+      useFallback,
+      storageKey: 'sellio_classifieds_deals_orders',
+      fullName,
+      email,
+      phone,
+      message: inquiryMessage,
+      offerPrice: String(priceEach * quantity),
+      demoOrderData: {
+        orderId,
+        timestamp: new Date().toISOString(),
+        dealId: deal.id,
+        dealTitle: deal.title,
+        dealSlug: deal.slug,
+        quantity,
+        priceEach,
+        totalPrice: priceEach * quantity,
+        buyer: {
+          fullName,
+          email,
+          phone,
+          notes: buyerNotes,
+        },
+      },
+    });
+
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
+    }
+
     setFormSubmitted(true);
   };
 

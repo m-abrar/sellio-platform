@@ -1,5 +1,6 @@
 import { api } from '@sellio/api-client';
 import type { ClassifiedListing } from '@sellio/types';
+import { classifiedCategoriesMatch } from '@/lib/classified-category';
 import {
   findFallbackListing,
   getFallbackClassifieds,
@@ -24,9 +25,32 @@ function toErrorMessage(error: unknown): string {
   return 'Classifieds are temporarily unavailable.';
 }
 
+export function normalizeClassifiedQueryParams(params: Record<string, unknown> = {}) {
+  const normalized: Record<string, unknown> = { ...params };
+
+  if (normalized.search === undefined && normalized.q) {
+    normalized.search = normalized.q;
+    delete normalized.q;
+  }
+
+  return normalized;
+}
+
 export async function fetchClassifiedsHome(params: Record<string, unknown> = {}) {
   try {
-    const response = await api.getClassifieds(params);
+    const response = await api.getClassifieds(normalizeClassifiedQueryParams(params));
+    return { ok: true as const, response };
+  } catch (error) {
+    return { ok: false as const, error: toErrorMessage(error) };
+  }
+}
+
+export async function fetchClassifiedsExplore(params: Record<string, unknown> = {}) {
+  try {
+    const response = await api.getClassifieds({
+      per_page: 12,
+      ...normalizeClassifiedQueryParams(params),
+    });
     return { ok: true as const, response };
   } catch (error) {
     return { ok: false as const, error: toErrorMessage(error) };
@@ -95,7 +119,8 @@ export function getRelatedFromApi(
   return allListings
     .filter(
       (item) =>
-        item.taxonomy?.category === listing.taxonomy?.category && item.slug !== slug,
+        classifiedCategoriesMatch(item.taxonomy?.category, listing.taxonomy?.category) &&
+        item.slug !== slug,
     )
     .slice(0, 4);
 }

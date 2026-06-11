@@ -11,6 +11,7 @@ import {
   getRelatedFromApi,
   resolveClassifiedFailure,
 } from '@/themes/classifieds/shared/catalog';
+import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
@@ -68,6 +69,7 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderSuccessData, setOrderSuccessData] = useState<Record<string, string> | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchListingDetails = async () => {
@@ -131,7 +133,7 @@ export default function ProductPage({ slug }: { slug: string }) {
     }
   }, [slug, allowDemo]);
 
-  const handleInquirySubmit = (e: React.FormEvent) => {
+  const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!buyerName || !buyerEmail) {
       setFormError('Please fill in all required fields.');
@@ -140,32 +142,43 @@ export default function ProductPage({ slug }: { slug: string }) {
 
     if (!item) return;
     setFormError(null);
+    setIsSubmitting(true);
 
-    const orderData = {
-      orderId: `PREM-INQ-${Date.now()}-${item.id}`,
-      listingId: String(item.id),
-      title: item.title,
-      price: item.price,
-      buyerName,
-      buyerEmail,
-      offerPrice: buyerOffer || item.price,
-      notes: buyerNotes,
-      date: new Date().toLocaleString(),
-      theme: 'classifieds_premium'
-    };
+    const result = await submitClassifiedInquiry({
+      slug,
+      useFallback,
+      storageKey: 'sellio_classifieds_premium_orders',
+      fullName: buyerName,
+      email: buyerEmail,
+      message: buyerNotes.trim() || undefined,
+      offerPrice: buyerOffer.trim() || item.price,
+      demoOrderData: {
+        orderId: `PREM-INQ-${Date.now()}-${item.id}`,
+        listingId: String(item.id),
+        title: item.title,
+        price: item.price,
+        buyerName,
+        buyerEmail,
+        offerPrice: buyerOffer || item.price,
+        notes: buyerNotes,
+        date: new Date().toLocaleString(),
+        theme: 'classifieds_premium',
+      },
+    });
 
-    // Save to LocalStorage
-    try {
-      const existing = localStorage.getItem('sellio_classifieds_premium_orders');
-      const list = existing ? JSON.parse(existing) : [];
-      list.push(orderData);
-      localStorage.setItem('sellio_classifieds_premium_orders', JSON.stringify(list));
-    } catch (e) {
-      console.error("LocalStorage write failed:", e);
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
     }
 
     setOrderSuccess(true);
-    setOrderSuccessData(orderData);
+    setOrderSuccessData({
+      ...result.summary,
+      title: item.title,
+      offerPrice: buyerOffer || item.price,
+    });
   };
 
   const handleBackNavigation = (e: React.MouseEvent) => {

@@ -252,6 +252,18 @@ export interface ServiceConsultationRecord {
   };
 }
 
+export interface ClassifiedInquiryRecord {
+  id: number;
+  classified_id: number;
+  status: string;
+  message?: string | null;
+  classified?: {
+    id: number;
+    title: string;
+    slug: string;
+  };
+}
+
 export interface AutoInquiryRecord {
   id: number;
   auto_id: number;

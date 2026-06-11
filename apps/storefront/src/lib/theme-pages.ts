@@ -52,7 +52,7 @@ const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, st
   },
   classifieds: {
     ProductPage: 'classifieds/local',
-    ExplorePage: 'unifieds/minimal',
+    ExplorePage: 'classifieds/local',
   },
   unifieds: {
     ProductPage: 'unifieds/default',
