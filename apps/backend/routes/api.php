@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\ApiThemeController;
 use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\V1\ApiAmenityController;
 use App\Http\Controllers\Api\V1\ApiAutoController;
+use App\Http\Controllers\Api\V1\ApiAutoInquiryController;
+use App\Http\Controllers\Api\V1\ApiEventBookingController;
 use App\Http\Controllers\Api\V1\ApiBlogController;
 use App\Http\Controllers\Api\V1\ApiBrandController;
 use App\Http\Controllers\Api\V1\ApiCartController;
@@ -179,6 +181,8 @@ Route::middleware(['auth:sanctum', 'module:properties'])->prefix('property-booki
 Route::prefix('vehicles')->middleware('module:autos')->group(function () {
     Route::get('/', [ApiAutoController::class, 'index']);
     Route::get('category/{categorySlug}', [ApiAutoController::class, 'category']);
+    Route::post('{auto}/inquiries', [ApiAutoInquiryController::class, 'store'])
+        ->middleware('throttle:api-write');
     Route::get('{slug}', [ApiAutoController::class, 'show']);
 });
 
@@ -188,7 +192,19 @@ Route::prefix('vehicles')->middleware('module:autos')->group(function () {
 Route::prefix('events')->middleware('module:events')->group(function () {
     Route::get('/', [ApiEventController::class, 'index']);
     Route::get('category/{categorySlug}', [ApiEventController::class, 'category']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('{event}/bookings', [ApiEventBookingController::class, 'store'])
+            ->middleware('throttle:api-write');
+    });
     Route::get('{slug}', [ApiEventController::class, 'show']);
+});
+
+Route::middleware(['auth:sanctum', 'module:events'])->prefix('event-bookings')->group(function () {
+    Route::get('{booking}', [ApiEventBookingController::class, 'show']);
+    Route::get('{booking}/payment-context', [ApiEventBookingController::class, 'paymentContext']);
+    Route::post('{booking}/pay/{gateway}', [ApiEventBookingController::class, 'processPayment'])
+        ->middleware('throttle:api-write');
+    Route::match(['get', 'post'], '{booking}/confirm/{gateway}', [ApiEventBookingController::class, 'confirmPayment']);
 });
 
 // =======================

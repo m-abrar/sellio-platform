@@ -17,6 +17,7 @@ import {
   getVehicleImage,
   getVehicleSpecLabel,
 } from '@/themes/autos/shared/vehicle-utils';
+import { api } from '@/lib/storefront-api';
 
 interface ProductPageProps {
   slug: string;
@@ -47,6 +48,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [customWinterTires, setCustomWinterTires] = useState(false);
   const [customPerformanceTuning, setCustomPerformanceTuning] = useState(false);
   const [inquirySuccess, setInquirySuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -106,19 +108,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
     return isNaN(payment) ? "0.00" : payment.toFixed(2);
   };
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inquiryName || !inquiryEmail || !inquiryPhone) {
-      setFormError('Please fill in your contact information.');
-      return;
-    }
-
-    setFormError(null);
-
+  const buildInquiryMessage = () => {
     const upgrades = [];
-    if (customCeramicCoating) upgrades.push("Ceramic Coating ($1,200)");
-    if (customWinterTires) upgrades.push("Winter Tires Pack ($1,500)");
-    if (customPerformanceTuning) upgrades.push("AI Performance Tuning ($2,500)");
+    if (customCeramicCoating) upgrades.push('Ceramic Coating ($1,200)');
+    if (customWinterTires) upgrades.push('Winter Tires Pack ($1,500)');
+    if (customPerformanceTuning) upgrades.push('AI Performance Tuning ($2,500)');
 
     const basePrice = Number(vehicle?.pricing?.base_price || 0);
     let finalQuote = basePrice;
@@ -126,36 +120,77 @@ export default function ProductPage({ slug }: ProductPageProps) {
     if (customWinterTires) finalQuote += 1500;
     if (customPerformanceTuning) finalQuote += 2500;
 
-    const newOrder = {
-      id: Date.now(),
-      vehicle_id: vehicle?.id || 0,
-      vehicle_title: vehicle?.title || "Modern Vehicle",
-      vehicle_slug: vehicle?.slug || "vehicle-slug",
-      customer_name: inquiryName,
-      customer_email: inquiryEmail,
-      customer_phone: inquiryPhone,
-      selected_upgrades: upgrades,
-      estimated_monthly_payment: calculateMonthlyPayment(),
-      final_quote: finalQuote,
-      timestamp: new Date().toISOString()
-    };
+    const lines = [
+      `Estimated monthly payment: $${calculateMonthlyPayment()}/mo`,
+      `Finance: ${downPaymentPercent}% down, ${interestAPR}% APR, ${loanTerm} months`,
+      `Configured quote: $${finalQuote.toLocaleString()}`,
+    ];
 
-    const existing = localStorage.getItem('sellio_autos_modern_orders');
-    const list = existing ? JSON.parse(existing) : [];
-    list.push(newOrder);
-    localStorage.setItem('sellio_autos_modern_orders', JSON.stringify(list));
+    if (upgrades.length) {
+      lines.push(`Selected upgrades: ${upgrades.join(', ')}`);
+    }
 
-    setInquirySuccess(true);
+    return lines.join('\n');
+  };
+
+  const resetInquiryForm = () => {
     setInquiryName('');
     setInquiryEmail('');
     setInquiryPhone('');
     setCustomCeramicCoating(false);
     setCustomWinterTires(false);
     setCustomPerformanceTuning(false);
+  };
 
-    setTimeout(() => {
-      setInquirySuccess(false);
-    }, 5000);
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!vehicle || !inquiryName || !inquiryEmail || !inquiryPhone) {
+      setFormError('Please fill in your contact information.');
+      return;
+    }
+
+    setFormError(null);
+
+    if (useFallback) {
+      const newOrder = {
+        id: Date.now(),
+        vehicle_id: vehicle.id,
+        vehicle_title: vehicle.title,
+        vehicle_slug: vehicle.slug,
+        customer_name: inquiryName,
+        customer_email: inquiryEmail,
+        customer_phone: inquiryPhone,
+        selected_upgrades: buildInquiryMessage(),
+        timestamp: new Date().toISOString(),
+      };
+
+      const existing = localStorage.getItem('sellio_autos_modern_orders');
+      const list = existing ? JSON.parse(existing) : [];
+      list.push(newOrder);
+      localStorage.setItem('sellio_autos_modern_orders', JSON.stringify(list));
+      setInquirySuccess(true);
+      resetInquiryForm();
+      setTimeout(() => setInquirySuccess(false), 5000);
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await api.createVehicleInquiry(vehicle.id, {
+        full_name: inquiryName.trim(),
+        email: inquiryEmail.trim(),
+        phone: inquiryPhone.trim(),
+        message: buildInquiryMessage(),
+      });
+      setInquirySuccess(true);
+      resetInquiryForm();
+      setTimeout(() => setInquirySuccess(false), 5000);
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      setFormError(axiosError.response?.data?.message ?? 'Failed to send inquiry. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -345,7 +380,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   lineHeight: 1.5,
                   border: '1px solid #c3e6cb'
                 }}>
-                  🎉 <strong>Booking Secured!</strong> Your modern catalog quote inquiry has been successfully dispatched to the executive dealers desk. Check LocalStorage order registry keys!
+                  🎉 <strong>Inquiry sent!</strong> {useFallback ? 'Your quote request was saved in demo mode.' : 'The dealer will contact you shortly with next steps.'}
                 </div>
               ) : (
                 <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -381,8 +416,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     onChange={(e) => setInquiryPhone(e.target.value)}
                     style={{ width: '100%', boxSizing: 'border-box' }}
                   />
-                  <button type="submit" className="md-btn md-btn-cta" style={{ width: '100%', boxSizing: 'border-box', padding: '1rem' }}>
-                    Lock In Quote & Secure Ride
+                  <button type="submit" className="md-btn md-btn-cta" style={{ width: '100%', boxSizing: 'border-box', padding: '1rem' }} disabled={isSubmitting}>
+                    {isSubmitting ? 'Sending inquiry...' : 'Lock In Quote & Secure Ride'}
                   </button>
                 </form>
               )}

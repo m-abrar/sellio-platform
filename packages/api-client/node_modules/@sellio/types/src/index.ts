@@ -222,6 +222,78 @@ export interface PropertyLeadRecord {
   message?: string;
 }
 
+export interface AutoInquiryRecord {
+  id: number;
+  auto_id: number;
+  status: string;
+  preferred_date?: string;
+  preferred_time?: string;
+  message?: string;
+  auto?: {
+    id: number;
+    title: string;
+    slug: string;
+    primary_image_url?: string | null;
+  };
+}
+
+export interface EventTicketInventoryItem {
+  id: number;
+  name: string;
+  price: number;
+  available: number;
+}
+
+export interface EventOccurrenceTicketData {
+  start_date_formatted: string;
+  start_date_iso: string;
+  slug: string;
+  inventory: EventTicketInventoryItem[];
+}
+
+export type EventTicketDataMap = Record<string, EventOccurrenceTicketData>;
+
+export interface EventBookingRecord {
+  id: number;
+  event_id: number;
+  event_occurrence_id: number;
+  event_ticket_type_id: number;
+  quantity: number;
+  total_price: number;
+  status: string;
+  event?: {
+    id: number;
+    title: string;
+    slug: string;
+    primary_image_url?: string | null;
+  };
+  occurrence?: {
+    id: number;
+    start_date_time: string;
+    end_date_time?: string | null;
+  } | null;
+  ticket_type?: {
+    id: number;
+    name: string;
+    price?: number | null;
+  } | null;
+}
+
+export interface EventBookingPaymentContext {
+  booking: EventBookingRecord;
+  gateways: PaymentGatewayOption[];
+  stripe_publishable_key: string | null;
+  payment_total: number;
+}
+
+export interface EventBookingPaymentResult {
+  status: 'successful' | 'pending_auth' | 'pending_manual' | 'failed';
+  booking?: EventBookingRecord;
+  reference?: string | null;
+  redirect_url?: string;
+  message?: string;
+}
+
 export interface Amenity {
   id: number;
   title: string;
@@ -625,6 +697,7 @@ export interface EventListing {
   } | null;
   created_at?: string | null;
   updated_at?: string | null;
+  ticket_data?: EventTicketDataMap;
 }
 
 export interface ClassifiedPricing {

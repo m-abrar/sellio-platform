@@ -1,13 +1,39 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import type { EventListing } from '@sellio/types';
+import type { EventListing, EventTicketDataMap } from '@sellio/types';
 import { EventCard } from './components';
 import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
 import { fetchEventDetail, resolveEventFailure } from '@/themes/events/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/events/shared/useDemoFallbackAllowed';
 import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
 import { getCorporateEventImage } from '@/themes/events/shared/event-utils';
+
+type TicketOption = {
+  occurrenceId: number;
+  occurrenceLabel: string;
+  ticketTypeId: number;
+  ticketName: string;
+  price: number;
+  available: number;
+};
+
+function buildTicketOptions(ticketData: EventTicketDataMap): TicketOption[] {
+  return Object.entries(ticketData).flatMap(([occurrenceId, occurrence]) =>
+    occurrence.inventory.map((item) => ({
+      occurrenceId: Number(occurrenceId),
+      occurrenceLabel: occurrence.start_date_formatted,
+      ticketTypeId: item.id,
+      ticketName: item.name,
+      price: item.price,
+      available: item.available,
+    })),
+  );
+}
+
+function ticketOptionKey(option: TicketOption) {
+  return `${option.occurrenceId}-${option.ticketTypeId}`;
+}
 
 export default function ProductPage() {
   const { slug } = useParams() as { slug: string };
@@ -20,6 +46,8 @@ export default function ProductPage() {
   const [apiError, setApiError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
 
+  const [ticketOptions, setTicketOptions] = useState<TicketOption[]>([]);
+  const [selectedTicketKey, setSelectedTicketKey] = useState<string>('');
   const [ticketType, setTicketType] = useState<'general' | 'vip'>('general');
   const [ticketsCount, setTicketsCount] = useState<number>(1420);
 
@@ -39,8 +67,15 @@ export default function ProductPage() {
       const result = await fetchEventDetail(slug);
 
       if (result.ok && result.response.data) {
+        const ticketData = result.response.meta?.ticket_data ?? {};
+        const options = buildTicketOptions(ticketData);
+
         setEvent(result.response.data);
-        setTicketsCount(result.response.data.ticketing?.tickets_left || 880);
+        setTicketOptions(options);
+        setSelectedTicketKey(options[0] ? ticketOptionKey(options[0]) : '');
+        setTicketsCount(
+          options[0]?.available ?? result.response.data.ticketing?.tickets_left ?? 0,
+        );
         setRelated(result.response.related_events || []);
         setUseFallback(false);
         setApiError(null);
@@ -70,24 +105,47 @@ export default function ProductPage() {
     loadProduct();
   }, [slug, allowDemo]);
 
+  const selectedTicket = ticketOptions.find(
+    (option) => ticketOptionKey(option) === selectedTicketKey,
+  );
+
   function handleBooking(e: React.FormEvent) {
     e.preventDefault();
-    if (!fullName || !email) {
+    if (!event || !fullName || !email) {
       setFormError('Please input your name and professional email.');
       return;
     }
 
     setFormError(null);
 
+    if (!useFallback) {
+      if (!selectedTicket) {
+        setFormError('No tickets are currently available for this event.');
+        return;
+      }
+
+      const params = new URLSearchParams({
+        event_id: String(event.id),
+        event_occurrence_id: String(selectedTicket.occurrenceId),
+        event_ticket_type_id: String(selectedTicket.ticketTypeId),
+        quantity: '1',
+        full_name: fullName.trim(),
+        email: email.trim(),
+      });
+
+      window.location.assign(themeLink(`/booking/reserve?${params}`));
+      return;
+    }
+
     const price =
       ticketType === 'general'
-        ? event?.ticketing?.sale_price || event?.ticketing?.base_price || 0
-        : (event?.ticketing?.sale_price || event?.ticketing?.base_price || 0) * 2;
+        ? event.ticketing?.sale_price || event.ticketing?.base_price || 0
+        : (event.ticketing?.sale_price || event.ticketing?.base_price || 0) * 2;
 
     const registrationPayload = {
-      event_id: event?.id,
-      event_title: event?.title,
-      event_slug: event?.slug,
+      event_id: event.id,
+      event_title: event.title,
+      event_slug: event.slug,
       ticket_type: ticketType,
       price,
       delegate_name: fullName,
@@ -141,8 +199,15 @@ export default function ProductPage() {
   }
 
   const basePriceVal = event.ticketing?.sale_price || event.ticketing?.base_price || 0;
-  const currentPrice = ticketType === 'general' ? basePriceVal : basePriceVal * 2;
-  const formattedPrice = event.ticketing?.is_free ? 'Free' : `$${currentPrice.toFixed(2)}`;
+  const demoPrice = ticketType === 'general' ? basePriceVal : basePriceVal * 2;
+  const livePrice = selectedTicket?.price ?? basePriceVal;
+  const currentPrice = useFallback ? demoPrice : livePrice;
+  const formattedPrice = event.ticketing?.is_free || currentPrice <= 0
+    ? 'Free'
+    : `$${Number(currentPrice).toFixed(2)}`;
+  const passesLeft = useFallback
+    ? ticketsCount
+    : selectedTicket?.available ?? event.ticketing?.tickets_left ?? 0;
 
   return (
     <div style={{ background: 'white', minHeight: '100vh' }}>
@@ -225,23 +290,52 @@ export default function ProductPage() {
               <h3 className="ecc-booking-title">Get Delegate Pass</h3>
 
               <div className="ecc-ticket-tabs">
-                <button
-                  type="button"
-                  className={`ecc-ticket-tab ${ticketType === 'general' ? 'ecc-ticket-tab-active' : ''}`}
-                  onClick={() => { if (!isBooked) setTicketType('general'); }}
-                  aria-label="General pass ticket selection option"
-                >
-                  GENERAL PASS
-                </button>
-                <button
-                  type="button"
-                  className={`ecc-ticket-tab ${ticketType === 'vip' ? 'ecc-ticket-tab-active' : ''}`}
-                  onClick={() => { if (!isBooked) setTicketType('vip'); }}
-                  aria-label="VIP Deluxe ticket selection option"
-                >
-                  VIP DELUXE
-                </button>
+                {useFallback ? (
+                  <>
+                    <button
+                      type="button"
+                      className={`ecc-ticket-tab ${ticketType === 'general' ? 'ecc-ticket-tab-active' : ''}`}
+                      onClick={() => { if (!isBooked) setTicketType('general'); }}
+                      aria-label="General pass ticket selection option"
+                    >
+                      GENERAL PASS
+                    </button>
+                    <button
+                      type="button"
+                      className={`ecc-ticket-tab ${ticketType === 'vip' ? 'ecc-ticket-tab-active' : ''}`}
+                      onClick={() => { if (!isBooked) setTicketType('vip'); }}
+                      aria-label="VIP Deluxe ticket selection option"
+                    >
+                      VIP DELUXE
+                    </button>
+                  </>
+                ) : ticketOptions.length > 0 ? (
+                  ticketOptions.map((option) => {
+                    const key = ticketOptionKey(option);
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        className={`ecc-ticket-tab ${selectedTicketKey === key ? 'ecc-ticket-tab-active' : ''}`}
+                        onClick={() => {
+                          setSelectedTicketKey(key);
+                          setTicketsCount(option.available);
+                        }}
+                        aria-label={`${option.ticketName} ticket option`}
+                      >
+                        {option.ticketName.toUpperCase()}
+                      </button>
+                    );
+                  })
+                ) : (
+                  <p className="ecc-form-error">No ticket inventory is available for upcoming dates.</p>
+                )}
               </div>
+              {!useFallback && selectedTicket && (
+                <p className="ecc-mono" style={{ fontSize: '0.7rem', marginBottom: '1rem' }}>
+                  {selectedTicket.occurrenceLabel}
+                </p>
+              )}
 
               <div className="ecc-price-summary">
                 <span className="ecc-summary-label">Pass Valuation</span>
@@ -311,13 +405,19 @@ export default function ProductPage() {
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--ecc-text-muted)', margin: '1rem 0' }}>
                     <span>Passes Left</span>
-                    <span style={{ fontWeight: 800, color: ticketsCount < 100 ? '#dc2626' : 'var(--ecc-obsidian)' }}>
-                      {ticketsCount} Left
+                    <span style={{ fontWeight: 800, color: passesLeft < 100 ? '#dc2626' : 'var(--ecc-obsidian)' }}>
+                      {passesLeft} Left
                     </span>
                   </div>
 
-                  <button type="submit" className="ec-btn-primary" style={{ width: '100%', borderRadius: '12px' }} id="ecc-btn-reserve">
-                    RESERVE MY SEAT NOW
+                  <button
+                    type="submit"
+                    className="ec-btn-primary"
+                    style={{ width: '100%', borderRadius: '12px' }}
+                    id="ecc-btn-reserve"
+                    disabled={!useFallback && !selectedTicket}
+                  >
+                    {useFallback ? 'RESERVE MY SEAT NOW' : 'CONTINUE TO PAYMENT'}
                   </button>
                 </form>
               )}

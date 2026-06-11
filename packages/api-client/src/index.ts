@@ -27,6 +27,11 @@ import type {
   PropertyBookingPaymentResult,
   PropertyBookingRecord,
   PropertyLeadRecord,
+  AutoInquiryRecord,
+  EventBookingPaymentContext,
+  EventBookingPaymentResult,
+  EventBookingRecord,
+  EventTicketDataMap,
   User,
 } from '@sellio/types';
 
@@ -231,6 +236,20 @@ export class SellioAPI {
     return response.data;
   }
 
+  async createVehicleInquiry(
+    autoId: number,
+    payload: {
+      full_name: string;
+      email: string;
+      phone?: string;
+      message?: string;
+      preferred_date?: string;
+      preferred_time?: 'AM' | 'PM' | 'Anytime';
+    },
+  ): Promise<AutoInquiryRecord> {
+    return this.post<AutoInquiryRecord>(`/v1/vehicles/${autoId}/inquiries`, payload);
+  }
+
   // === Job Vertical Endpoints ===
 
   async getJobs(params?: Record<string, any>): Promise<{
@@ -325,6 +344,7 @@ export class SellioAPI {
     message: string | null;
     data: EventListing;
     related_events?: EventListing[];
+    meta?: { ticket_data?: EventTicketDataMap };
   }> {
     const response = await this.client.get(`/v1/events/${slug}`);
     return response.data;
@@ -516,6 +536,50 @@ export class SellioAPI {
     },
   ): Promise<PropertyLeadRecord> {
     return this.post<PropertyLeadRecord>(`/v1/properties/${propertyId}/inquiries`, payload);
+  }
+
+  async createEventBooking(
+    eventId: number,
+    payload: {
+      event_occurrence_id: number;
+      event_ticket_type_id: number;
+      quantity: number;
+      name?: string;
+      email?: string;
+      phone?: string;
+    },
+  ): Promise<EventBookingRecord> {
+    return this.post<EventBookingRecord>(`/v1/events/${eventId}/bookings`, payload);
+  }
+
+  async getEventBooking(bookingId: number): Promise<EventBookingRecord> {
+    return this.request<EventBookingRecord>(`/v1/event-bookings/${bookingId}`);
+  }
+
+  async getEventBookingPaymentContext(bookingId: number): Promise<EventBookingPaymentContext> {
+    return this.request<EventBookingPaymentContext>(`/v1/event-bookings/${bookingId}/payment-context`);
+  }
+
+  async payEventBooking(
+    bookingId: number,
+    gateway: string,
+    payload: {
+      payment_method: string;
+      payment_token?: string;
+      return_url?: string;
+    },
+  ): Promise<EventBookingPaymentResult> {
+    return this.post<EventBookingPaymentResult>(`/v1/event-bookings/${bookingId}/pay/${gateway}`, payload);
+  }
+
+  async confirmEventBookingPayment(
+    bookingId: number,
+    gateway: string,
+    paymentIntent: string,
+  ): Promise<EventBookingPaymentResult> {
+    return this.post<EventBookingPaymentResult>(`/v1/event-bookings/${bookingId}/confirm/${gateway}`, {
+      payment_intent: paymentIntent,
+    });
   }
 }
 

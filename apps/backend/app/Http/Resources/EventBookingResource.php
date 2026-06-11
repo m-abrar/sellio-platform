@@ -51,8 +51,8 @@ class EventBookingResource extends JsonResource
             ] : null),
             'ticket_type' => $this->whenLoaded('ticketType', fn () => $this->ticketType ? [
                 'id' => $this->ticketType->id,
-                'name' => $this->ticketType->name,
-                'price' => $this->ticketType->price,
+                'name' => $this->ticketType->title,
+                'price' => $this->ticketType->base_price,
             ] : null),
             'full_name' => $this->when(
                 $canViewPii,

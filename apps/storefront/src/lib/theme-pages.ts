@@ -33,6 +33,10 @@ const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, st
   events: {
     ProductPage: 'events/classic',
     ExplorePage: 'events/corporate',
+    BookingPage: 'events/corporate',
+    BookingReservePage: 'events/corporate',
+    BookingConfirmationPage: 'events/corporate',
+    BookingConfirmPage: 'events/corporate',
   },
   autos: {
     ProductPage: 'autos/classic',
