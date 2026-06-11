@@ -380,3 +380,40 @@
     grid-template-columns: 1fr;
   }
 }
+
+.uni-checkout-form {
+  display: grid;
+  gap: 2rem;
+  max-width: 960px;
+}
+
+.uni-checkout-section,
+.uni-checkout-form .uni-cart-summary {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.uni-checkout-section h2,
+.uni-checkout-form .uni-cart-summary h2 {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  color: #1e293b;
+}
+
+.uni-checkout-form label {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: #334155;
+  font-size: 0.875rem;
+}
+
+.uni-checkout-form input,
+.uni-checkout-form select {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.875rem;
+  font: inherit;
+}

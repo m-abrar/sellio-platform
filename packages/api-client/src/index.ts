@@ -1,5 +1,29 @@
 import axios, { AxiosInstance } from 'axios';
-import type { Product, Category, Theme, ThemeContentResponse, Testimonial, ApiResponse, Property, Location, Vehicle, JobListing, ServiceListing, EventListing, ClassifiedListing, Menu, MenuMap, MenuLocationKey } from '@sellio/types';
+import type {
+  Product,
+  Category,
+  Theme,
+  ThemeContentResponse,
+  Testimonial,
+  ApiResponse,
+  Property,
+  Location,
+  Vehicle,
+  JobListing,
+  ServiceListing,
+  EventListing,
+  ClassifiedListing,
+  Menu,
+  MenuMap,
+  MenuLocationKey,
+  AuthSession,
+  Cart,
+  CheckoutContext,
+  CheckoutPaymentResult,
+  Order,
+  PaymentGatewayOption,
+  User,
+} from '@sellio/types';
 
 export class SellioAPI {
   private client: AxiosInstance;
@@ -23,6 +47,7 @@ export class SellioAPI {
 
     this.client = axios.create({
       baseURL: resolvedURL,
+      withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -30,9 +55,37 @@ export class SellioAPI {
     });
   }
 
-  private async request<T>(url: string, options: any = {}): Promise<T> {
-    const response = await this.client.get<ApiResponse<T>>(url, options);
+  setAuthToken(token: string | null): void {
+    if (token) {
+      this.client.defaults.headers.common.Authorization = `Bearer ${token}`;
+      return;
+    }
+
+    delete this.client.defaults.headers.common.Authorization;
+  }
+
+  private unwrap<T>(response: { data: ApiResponse<T> }): T {
     return response.data.data;
+  }
+
+  private async request<T>(url: string, options: Record<string, unknown> = {}): Promise<T> {
+    const response = await this.client.get<ApiResponse<T>>(url, options);
+    return this.unwrap(response);
+  }
+
+  private async post<T>(url: string, body?: Record<string, unknown>, options: Record<string, unknown> = {}): Promise<T> {
+    const response = await this.client.post<ApiResponse<T>>(url, body, options);
+    return this.unwrap(response);
+  }
+
+  private async patch<T>(url: string, body?: Record<string, unknown>): Promise<T> {
+    const response = await this.client.patch<ApiResponse<T>>(url, body);
+    return this.unwrap(response);
+  }
+
+  private async delete<T>(url: string): Promise<T> {
+    const response = await this.client.delete<ApiResponse<T>>(url);
+    return this.unwrap(response);
   }
 
   async getProducts(): Promise<Product[]> {
@@ -307,6 +360,89 @@ export class SellioAPI {
   }> {
     const response = await this.client.get(`/v1/classifieds/${slug}`);
     return response.data;
+  }
+
+  // === Auth ===
+
+  async login(email: string, password: string): Promise<AuthSession> {
+    return this.post<AuthSession>('/v1/auth/login', { email, password });
+  }
+
+  async register(name: string, email: string, password: string, password_confirmation: string): Promise<AuthSession> {
+    return this.post<AuthSession>('/v1/auth/register', {
+      name,
+      email,
+      password,
+      password_confirmation,
+      role: 'user',
+    });
+  }
+
+  async getMe(): Promise<User> {
+    return this.request<User>('/v1/auth/me');
+  }
+
+  async logout(): Promise<null> {
+    return this.post<null>('/v1/auth/logout');
+  }
+
+  // === Cart ===
+
+  async getCart(): Promise<Cart> {
+    return this.request<Cart>('/v1/cart');
+  }
+
+  async addToCart(productId: number, quantity = 1): Promise<Cart> {
+    return this.post<Cart>(`/v1/cart/add/${productId}`, { quantity });
+  }
+
+  async updateCartItem(itemId: number, quantity: number): Promise<Cart> {
+    return this.patch<Cart>(`/v1/cart/${itemId}`, { quantity });
+  }
+
+  async removeCartItem(itemId: number): Promise<Cart> {
+    return this.delete<Cart>(`/v1/cart/${itemId}`);
+  }
+
+  // === Checkout ===
+
+  async getPaymentGateways(): Promise<PaymentGatewayOption[]> {
+    return this.request<PaymentGatewayOption[]>('/v1/payment-gateways');
+  }
+
+  async getCheckoutContext(): Promise<CheckoutContext> {
+    return this.request<CheckoutContext>('/v1/checkout/context');
+  }
+
+  async processCheckout(
+    gateway: string,
+    payload: {
+      shipping_name: string;
+      shipping_address: string;
+      shipping_city: string;
+      shipping_state?: string;
+      shipping_zip: string;
+      shipping_country: string;
+      payment_method: string;
+      payment_token?: string;
+      return_url?: string;
+    },
+  ): Promise<CheckoutPaymentResult> {
+    return this.post<CheckoutPaymentResult>(`/v1/checkout/process/${gateway}`, payload);
+  }
+
+  async confirmCheckoutPayment(
+    gateway: string,
+    orderId: number,
+    paymentIntent: string,
+  ): Promise<CheckoutPaymentResult> {
+    return this.post<CheckoutPaymentResult>(`/v1/checkout/confirm/${gateway}/${orderId}`, {
+      payment_intent: paymentIntent,
+    });
+  }
+
+  async getOrder(orderNumber: string): Promise<Order> {
+    return this.request<Order>(`/v1/orders/${orderNumber}`);
   }
 }
 

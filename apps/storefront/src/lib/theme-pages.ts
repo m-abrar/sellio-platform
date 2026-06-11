@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 
-export type ThemeSubpage = 'ProductPage' | 'ExplorePage' | 'CartPage';
+export type ThemeSubpage = 'ProductPage' | 'ExplorePage' | 'CartPage' | 'CheckoutPage' | 'CheckoutConfirmationPage' | 'CheckoutConfirmPage';
 
 const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, string>>> = {
   properties: {
@@ -12,6 +12,9 @@ const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, st
     ProductPage: 'ecommerce/default',
     ExplorePage: 'ecommerce/default',
     CartPage: 'ecommerce/default',
+    CheckoutPage: 'unifieds/minimal',
+    CheckoutConfirmationPage: 'unifieds/minimal',
+    CheckoutConfirmPage: 'unifieds/minimal',
   },
   events: {
     ProductPage: 'events/classic',
@@ -37,6 +40,9 @@ const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, st
     ProductPage: 'unifieds/default',
     ExplorePage: 'unifieds/minimal',
     CartPage: 'unifieds/minimal',
+    CheckoutPage: 'unifieds/minimal',
+    CheckoutConfirmationPage: 'unifieds/minimal',
+    CheckoutConfirmPage: 'unifieds/minimal',
   },
 };
 
@@ -44,6 +50,9 @@ const GLOBAL_SUBPAGE_FALLBACKS: Record<ThemeSubpage, string> = {
   ProductPage: 'unifieds/default',
   ExplorePage: 'unifieds/minimal',
   CartPage: 'unifieds/minimal',
+  CheckoutPage: 'unifieds/minimal',
+  CheckoutConfirmationPage: 'unifieds/minimal',
+  CheckoutConfirmPage: 'unifieds/minimal',
 };
 
 async function importThemeSubpage(

@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { getActiveTheme } from "@/lib/theme";
 import { getMenus } from "@/lib/menu";
 import { getThemeContent } from "@/lib/theme-content";
+import { AuthProvider } from "@/components/auth/AuthProvider";
 import { MenuProvider } from "@/components/menu/MenuProvider";
 import { ThemeContentProvider } from "@/components/theme-content/ThemeContentProvider";
 import UnifiedDefaultLayout from "@/themes/unifieds/default/Layout";
@@ -60,13 +61,15 @@ export default async function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <AdminBar theme={theme} />
-        <MenuProvider menus={menus} themeKey={theme.theme_key} isPreview={isPreview}>
-          <ThemeContentProvider content={themeContent}>
-            <IndustryLayout>
-              {children}
-            </IndustryLayout>
-          </ThemeContentProvider>
-        </MenuProvider>
+        <AuthProvider>
+          <MenuProvider menus={menus} themeKey={theme.theme_key} isPreview={isPreview}>
+            <ThemeContentProvider content={themeContent}>
+              <IndustryLayout>
+                {children}
+              </IndustryLayout>
+            </ThemeContentProvider>
+          </MenuProvider>
+        </AuthProvider>
         {databaseOffline && <DatabaseOfflineResilience errorDetails={errorDetails} />}
         <ThemeSwitcher />
       </body>

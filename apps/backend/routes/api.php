@@ -16,6 +16,8 @@ use App\Http\Controllers\Api\V1\ApiAutoController;
 use App\Http\Controllers\Api\V1\ApiBlogController;
 use App\Http\Controllers\Api\V1\ApiBrandController;
 use App\Http\Controllers\Api\V1\ApiCartController;
+use App\Http\Controllers\Api\V1\ApiCheckoutController;
+use App\Http\Controllers\Api\V1\ApiPaymentGatewayController;
 use App\Http\Controllers\Api\V1\ApiCategoryController;
 use App\Http\Controllers\Api\V1\ApiClassifiedController;
 use App\Http\Controllers\Api\V1\ApiEventController;
@@ -199,6 +201,12 @@ Route::prefix('classifieds')->middleware('module:classifieds')->group(function (
 });
 
 // =======================
+// Payment Gateway Routes (Public config)
+// =======================
+Route::get('payment-gateways', [ApiPaymentGatewayController::class, 'index'])
+    ->middleware('module:products');
+
+// =======================
 // Cart Routes (Guest + Auth)
 // =======================
 Route::prefix('cart')->middleware('module:products')->group(function () {
@@ -206,6 +214,15 @@ Route::prefix('cart')->middleware('module:products')->group(function () {
     Route::post('add/{product}', [ApiCartController::class, 'add'])->middleware('throttle:api-write');
     Route::patch('{id}', [ApiCartController::class, 'update'])->middleware('throttle:api-write');
     Route::delete('{id}', [ApiCartController::class, 'remove'])->middleware('throttle:api-write');
+});
+
+// =======================
+// Checkout Routes (Auth Required)
+// =======================
+Route::middleware(['auth:sanctum', 'module:products'])->prefix('checkout')->group(function () {
+    Route::get('context', [ApiCheckoutController::class, 'context']);
+    Route::post('process/{gateway}', [ApiCheckoutController::class, 'processPayment'])->middleware('throttle:api-write');
+    Route::match(['get', 'post'], 'confirm/{gateway}/{order}', [ApiCheckoutController::class, 'confirmPayment']);
 });
 
 // =======================

@@ -18,19 +18,14 @@ export default function UnifiedCartPage({
   title = 'Shopping Cart',
   primaryButtonClass = 'uni-btn-primary',
 }: UnifiedCartPageProps) {
-  const { items, loading, updateQuantity, removeItem, clearCart } = useUnifiedCart();
-  const [checkoutComplete, setCheckoutComplete] = useState(false);
+  const { items, loading, updateQuantity, removeItem } = useUnifiedCart();
   const [submittingOrder, setSubmittingOrder] = useState(false);
   const themeLink = useUnifiedThemeLink();
   const buttonClass = `${primaryButtonClass} uni-cart-checkout`.trim();
 
   const handleCheckout = () => {
     setSubmittingOrder(true);
-    window.setTimeout(() => {
-      setSubmittingOrder(false);
-      setCheckoutComplete(true);
-      clearCart();
-    }, 1500);
+    window.location.assign(themeLink('/checkout'));
   };
 
   const { subtotal, shipping, tax, total } = calculateCartTotals(items);
@@ -39,23 +34,6 @@ export default function UnifiedCartPage({
     return (
       <main className="uni-cart-page">
         <p style={{ color: '#64748b' }}>Loading shopping cart details...</p>
-      </main>
-    );
-  }
-
-  if (checkoutComplete) {
-    return (
-      <main className="uni-cart-page">
-        <section className="uni-cart-state" role="status">
-          <div className="uni-mono" style={{ color: '#2563eb', marginBottom: '1rem' }}>
-            ORDER_CONFIRMED
-          </div>
-          <h1>Order Confirmed</h1>
-          <p>Your checkout simulation completed successfully. Continue browsing the catalog.</p>
-          <a href={themeLink('/')} className={primaryButtonClass}>
-            Continue Browsing
-          </a>
-        </section>
       </main>
     );
   }

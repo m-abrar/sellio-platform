@@ -81,6 +81,89 @@ export interface User {
   role: 'admin' | 'seller' | 'customer' | 'partner';
 }
 
+export interface AuthSession {
+  access_token: string;
+  token_type: string;
+  user: User;
+}
+
+export interface CartItem {
+  id: number;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+  product?: {
+    id: number;
+    title: string;
+    slug: string;
+    price: number;
+    image?: string | null;
+  };
+  attribute_ids?: number[];
+  addon_ids?: number[];
+}
+
+export interface Cart {
+  id: number;
+  items: CartItem[];
+  total: number;
+  item_count: number;
+  currency_symbol: string;
+}
+
+export interface OrderPricing {
+  subtotal: number;
+  shipping_cost: number;
+  tax_amount: number;
+  discount_amount: number;
+  total_amount: number;
+  currency_symbol: string;
+}
+
+export interface Order {
+  id: number;
+  order_number: string;
+  status: string;
+  payment_status: string;
+  payment_method: string;
+  pricing: OrderPricing;
+  shipping?: Record<string, string | null>;
+  items?: Array<{
+    id: number;
+    product_name: string;
+    quantity: number;
+    unit_price: number;
+    total_price: number;
+  }>;
+  created_at?: string;
+}
+
+export interface PaymentGatewayOption {
+  slug: string;
+  title: string;
+  mode: string;
+  frontend_config?: Record<string, string | null>;
+}
+
+export interface CheckoutContext {
+  cart: Cart;
+  order_preview: {
+    amount: number;
+    currency: string;
+    description: string;
+  };
+  gateways: PaymentGatewayOption[];
+  stripe_publishable_key: string | null;
+}
+
+export interface CheckoutPaymentResult {
+  status: 'successful' | 'pending_auth' | 'pending_manual' | 'failed';
+  order?: Order;
+  reference?: string | null;
+  redirect_url?: string;
+  message?: string;
+}
+
 export interface Amenity {
   id: number;
   title: string;

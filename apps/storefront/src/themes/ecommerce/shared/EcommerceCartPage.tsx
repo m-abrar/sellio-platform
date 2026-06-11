@@ -17,8 +17,7 @@ function cls(prefix: string, suffix: string) {
 }
 
 export default function EcommerceCartPage({ classPrefix: prefix, shell }: CartPageProps) {
-  const { items, loading, updateQuantity, removeItem, clearCart } = useUnifiedCart();
-  const [checkoutComplete, setCheckoutComplete] = useState(false);
+  const { items, loading, updateQuantity, removeItem } = useUnifiedCart();
   const [submittingOrder, setSubmittingOrder] = useState(false);
   const themeLink = useEcommerceThemeLink();
 
@@ -27,11 +26,7 @@ export default function EcommerceCartPage({ classPrefix: prefix, shell }: CartPa
 
   const handleCheckout = () => {
     setSubmittingOrder(true);
-    window.setTimeout(() => {
-      setSubmittingOrder(false);
-      setCheckoutComplete(true);
-      clearCart();
-    }, 1500);
+    window.location.assign(themeLink('/checkout'));
   };
 
   const { subtotal, shipping, tax, total } = calculateCartTotals(items);
@@ -43,24 +38,6 @@ export default function EcommerceCartPage({ classPrefix: prefix, shell }: CartPa
       </main>
     );
     return shell ? shell(loadingContent) : loadingContent;
-  }
-
-  if (checkoutComplete) {
-    const completeContent = (
-      <main className={cls(prefix, 'cart-page')}>
-        <section className={cls(prefix, 'cart-state')} role="status">
-          <div className={monoClass} style={{ marginBottom: '1rem' }}>
-            ORDER_CONFIRMED
-          </div>
-          <h1>Order confirmed</h1>
-          <p>Your checkout simulation completed successfully. Continue browsing the collection.</p>
-          <a href={themeLink('/')} className={primaryBtnClass} style={{ display: 'inline-block', marginTop: '1.5rem', textDecoration: 'none' }}>
-            Continue shopping
-          </a>
-        </section>
-      </main>
-    );
-    return shell ? shell(completeContent) : completeContent;
   }
 
   const content = (
