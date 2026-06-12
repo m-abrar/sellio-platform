@@ -15,8 +15,6 @@ class StorePropertyBookingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -24,8 +22,20 @@ class StorePropertyBookingRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
+     * API bookings pass the property via route model binding; web forms post property_id.
+     */
+    protected function prepareForValidation(): void
+    {
+        $property = $this->route('property');
+
+        if ($property instanceof Property) {
+            $this->merge([
+                'property_id' => $property->id,
+            ]);
+        }
+    }
+
+    /**
      * @return array<string, array<int, string>>
      */
     public function rules(): array
@@ -39,7 +49,6 @@ class StorePropertyBookingRequest extends FormRequest
             'email'       => ['required', 'email', 'max:255'],
             'phone'       => ['nullable', 'string', 'max:20'],
             'message'     => ['nullable', 'string', 'max:500'],
-            // Added validation for add-ons
             'add_ons'     => ['nullable', 'array'],
             'add_ons.*.qty' => ['required', 'integer', 'min:0', 'max:20'],
         ];

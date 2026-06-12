@@ -3,6 +3,7 @@
 import React from 'react';
 import { CheckoutPaymentSection } from '@/components/checkout/CheckoutPaymentSection';
 import { usePropertyBookingPayment } from '@/lib/usePropertyBookingPayment';
+import { formatBookingStayRange } from '@/themes/properties/shared/property-booking-utils';
 
 export type PropertyBookingPrefix = 'pr' | 'pm';
 
@@ -71,18 +72,17 @@ export default function PropertyBookingPaymentPage({
   return (
     <main className={cls(prefix, 'booking-page')}>
       <header className={cls(prefix, 'booking-header')}>
-        <a href={themeLink(`/product/${booking.property?.slug ?? ''}`)} className={cls(prefix, 'detail-back')}>
+        <a href={themeLink(`/product/${booking.property?.slug ?? ''}`)} className={prefix === 'pm' ? 'pm-detail-back-btn' : 'pr-detail-back'}>
           ← Back to property
         </a>
         <span className={prefix === 'pm' ? 'urban-detail-kicker' : 'pr-kicker'}>BOOKING_PAYMENT</span>
         <h1>Complete your reservation</h1>
         <p>{booking.property?.title}</p>
-        <p>{booking.check_in_date} → {booking.check_out_date} · {booking.guests} guests</p>
+        <p>{formatBookingStayRange(booking.check_in_date, booking.check_out_date, booking.guests)}</p>
       </header>
 
       <form className={cls(prefix, 'booking-layout')} onSubmit={payment.handlePaymentSubmit}>
         <CheckoutPaymentSection
-          className={cls(prefix, 'booking-panel')}
           title="Payment"
           subtitle="Complete your reservation with a secure payment."
           gateways={payment.context.gateways}

@@ -3,6 +3,7 @@
 import type { Property } from '@sellio/types';
 import type { PropertyBookingBlock, PropertyDetail } from '../../property-detail-types';
 import { formatMonthlyRent } from '../../property-utils';
+import { formatLocalDate } from '../../property-detail-utils';
 import { AvailabilityCalendar } from './AvailabilityCalendar';
 
 export type RentalApplicationReceipt = {
@@ -74,6 +75,9 @@ export function RentalApplicationSidebar({
   onSubmit,
   onResetReceipt,
 }: RentalApplicationSidebarProps) {
+  const todayValue = formatLocalDate(new Date());
+  const checkoutMin = checkIn || todayValue;
+
   if (receipt) {
     return (
       <aside className="pr-detail-sidebar" aria-label="Application confirmation">
@@ -142,6 +146,7 @@ export function RentalApplicationSidebar({
               <input
                 type="date"
                 className="pr-booking-input"
+                min={todayValue}
                 value={checkIn}
                 onChange={(event) => onCheckInChange(event.target.value)}
               />
@@ -151,6 +156,7 @@ export function RentalApplicationSidebar({
               <input
                 type="date"
                 className="pr-booking-input"
+                min={checkoutMin}
                 value={checkOut}
                 onChange={(event) => onCheckOutChange(event.target.value)}
               />
@@ -174,6 +180,10 @@ export function RentalApplicationSidebar({
         <AvailabilityCalendar
           bookings={bookings}
           minimumRentalDays={detail.minimum_rental_days}
+          checkIn={checkIn}
+          checkOut={checkOut}
+          onCheckInChange={onCheckInChange}
+          onCheckOutChange={onCheckOutChange}
         />
 
         <form onSubmit={onSubmit} className="pr-application-form">

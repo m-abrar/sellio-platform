@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { api } from '@/lib/storefront-api';
+import { formatBookingStayRange } from '@/themes/properties/shared/property-booking-utils';
 import type { PropertyBookingPrefix } from '@/themes/properties/shared/PropertyBookingPaymentPage';
 
 interface PropertyBookingReservePageProps {
@@ -118,7 +119,7 @@ export default function PropertyBookingReservePage({
       <main className={cls(prefix, 'booking-page')}>
         <header className={cls(prefix, 'booking-header')}>
           <h1>Sign in to reserve</h1>
-          <p>{checkIn} → {checkOut} · {guests} guests</p>
+          <p>{formatBookingStayRange(checkIn, checkOut, guests)}</p>
         </header>
         <form className={cls(prefix, 'booking-form')} onSubmit={handleAuthSubmit}>
           <div className={cls(prefix, 'booking-auth-toggle')}>

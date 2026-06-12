@@ -31,9 +31,61 @@ export function getFullAddress(property: PropertyDetail): string {
   return parts.join(', ');
 }
 
+export function formatLocalDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+export function parseLocalDate(value: string): Date {
+  const [year, month, day] = value.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+export function isPastDate(date: Date): boolean {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const compare = new Date(date);
+  compare.setHours(0, 0, 0, 0);
+  return compare < today;
+}
+
 export function isDateWithinBooking(date: Date, bookings: PropertyBookingBlock[]): boolean {
-  const day = date.toISOString().slice(0, 10);
+  const day = formatLocalDate(date);
   return bookings.some((block) => day >= block.start && day <= block.end);
+}
+
+export function isStayRangeBlocked(
+  checkIn: string,
+  checkOut: string,
+  bookings: PropertyBookingBlock[],
+): boolean {
+  if (!checkIn || !checkOut || checkOut <= checkIn) {
+    return false;
+  }
+
+  const cursor = parseLocalDate(checkIn);
+  const end = parseLocalDate(checkOut);
+
+  while (cursor < end) {
+    if (isDateWithinBooking(cursor, bookings)) {
+      return true;
+    }
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return false;
+}
+
+export function countNightsBetween(checkIn: string, checkOut: string): number {
+  if (!checkIn || !checkOut || checkOut <= checkIn) {
+    return 0;
+  }
+
+  const start = parseLocalDate(checkIn);
+  const end = parseLocalDate(checkOut);
+  return Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
 }
 
 export function getGoogleMapsEmbedUrl(lat: number, lng: number): string {

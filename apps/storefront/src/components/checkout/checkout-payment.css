@@ -2,6 +2,8 @@
   --sellio-pay-accent: #2563eb;
   --sellio-pay-accent-hover: #1d4ed8;
   --sellio-pay-accent-ring: rgba(37, 99, 235, 0.14);
+  --sellio-pay-accent-soft: #eff6ff;
+  --sellio-pay-accent-border: rgba(37, 99, 235, 0.16);
   --sellio-pay-surface: rgba(255, 255, 255, 0.96);
   --sellio-pay-surface-muted: #f8fafc;
   --sellio-pay-border: #e2e8f0;
@@ -11,6 +13,7 @@
   --sellio-pay-radius: 1rem;
   --sellio-pay-radius-sm: 0.75rem;
   --sellio-pay-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 32px rgba(15, 23, 42, 0.06);
+  --sellio-pay-font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   background: var(--sellio-pay-surface);
   border: 1px solid var(--sellio-pay-border);
@@ -28,8 +31,8 @@
 
 .sellio-checkout-payment__icon {
   align-items: center;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(37, 99, 235, 0.04));
-  border: 1px solid rgba(37, 99, 235, 0.16);
+  background: var(--sellio-pay-accent-soft, #eff6ff);
+  border: 1px solid var(--sellio-pay-accent-border, rgba(37, 99, 235, 0.16));
   border-radius: 0.875rem;
   color: var(--sellio-pay-accent);
   display: flex;
@@ -105,7 +108,7 @@
 }
 
 .sellio-pay-gateway.is-selected .sellio-pay-gateway__icon {
-  border-color: rgba(37, 99, 235, 0.2);
+  border-color: var(--sellio-pay-accent-border, rgba(37, 99, 235, 0.2));
   color: var(--sellio-pay-accent);
 }
 

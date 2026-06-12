@@ -69,6 +69,26 @@ function loadStripeScript(): Promise<void> {
   });
 }
 
+function resolvePaymentTheme(mountNode: HTMLElement) {
+  const host = mountNode.closest('.sellio-checkout-payment');
+  const styles = host ? getComputedStyle(host) : getComputedStyle(document.documentElement);
+
+  const readVar = (name: string, fallback: string) => {
+    const value = styles.getPropertyValue(name).trim();
+    return value || fallback;
+  };
+
+  return {
+    accent: readVar('--sellio-pay-accent', '#2563eb'),
+    text: readVar('--sellio-pay-text', '#0f172a'),
+    textMuted: readVar('--sellio-pay-text-muted', '#94a3b8'),
+    surface: readVar('--sellio-pay-surface', '#ffffff'),
+    border: readVar('--sellio-pay-border-strong', '#cbd5e1'),
+    radius: readVar('--sellio-pay-radius-sm', '12px'),
+    font: readVar('--sellio-pay-font', 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'),
+  };
+}
+
 export const StripeCardForm = React.forwardRef<StripeCardFormHandle, StripeCardFormProps>(
   function StripeCardForm({ publishableKey, cardholderName, onReadyChange, onError }, ref) {
     const mountRef = useRef<HTMLDivElement>(null);
@@ -94,20 +114,21 @@ export const StripeCardForm = React.forwardRef<StripeCardFormHandle, StripeCardF
             return;
           }
 
+          const theme = resolvePaymentTheme(mountNode);
           const stripe = window.Stripe(publishableKey);
           const elements = stripe.elements({
             appearance: {
               theme: 'stripe',
               variables: {
-                colorPrimary: '#2563eb',
-                colorBackground: '#ffffff',
-                colorText: '#0f172a',
-                colorTextPlaceholder: '#94a3b8',
+                colorPrimary: theme.accent,
+                colorBackground: theme.surface,
+                colorText: theme.text,
+                colorTextPlaceholder: theme.textMuted,
                 colorDanger: '#dc2626',
-                fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                fontFamily: theme.font,
                 fontSizeBase: '16px',
                 spacingUnit: '4px',
-                borderRadius: '12px',
+                borderRadius: theme.radius,
               },
             },
           });
@@ -118,10 +139,10 @@ export const StripeCardForm = React.forwardRef<StripeCardFormHandle, StripeCardF
               base: {
                 fontSize: '16px',
                 lineHeight: '24px',
-                color: '#0f172a',
-                fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                color: theme.text,
+                fontFamily: theme.font,
                 '::placeholder': {
-                  color: '#94a3b8',
+                  color: theme.textMuted,
                 },
               },
               invalid: {
