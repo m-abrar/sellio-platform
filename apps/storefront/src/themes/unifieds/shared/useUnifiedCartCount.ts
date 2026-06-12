@@ -1,25 +1,38 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { getCartItemCount, readCart } from '@/themes/unifieds/shared/cart';
+import { useCallback, useEffect, useState } from 'react';
+import { api } from '@/lib/storefront-api';
+import { getCartItemCount, readCart } from '@/lib/cart-storage';
+import { mapApiCart } from '@/lib/storefront-cart';
 
 export function useUnifiedCartCount(): number {
   const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    function refresh() {
+  const refresh = useCallback(async () => {
+    try {
+      const cart = await api.getCart();
+      setCount(getCartItemCount(mapApiCart(cart)));
+    } catch {
       setCount(getCartItemCount(readCart()));
     }
+  }, []);
 
-    refresh();
-    window.addEventListener('cartUpdated', refresh);
-    window.addEventListener('storage', refresh);
+  useEffect(() => {
+    void refresh();
+    const onRefresh = () => {
+      void refresh();
+    };
+
+    window.addEventListener('cartUpdated', onRefresh);
+    window.addEventListener('storage', onRefresh);
+    window.addEventListener('authUpdated', onRefresh);
 
     return () => {
-      window.removeEventListener('cartUpdated', refresh);
-      window.removeEventListener('storage', refresh);
+      window.removeEventListener('cartUpdated', onRefresh);
+      window.removeEventListener('storage', onRefresh);
+      window.removeEventListener('authUpdated', onRefresh);
     };
-  }, []);
+  }, [refresh]);
 
   return count;
 }

@@ -417,3 +417,12 @@
   padding: 0.75rem 0.875rem;
   font: inherit;
 }
+
+.silent-edge-wrapper .sellio-checkout-payment,
+.uni-cart-page .sellio-checkout-payment {
+  --sellio-pay-accent: var(--usm-primary, #4f46e5);
+  --sellio-pay-accent-hover: #4338ca;
+  --sellio-pay-accent-ring: rgba(79, 70, 229, 0.14);
+  --sellio-pay-radius: 12px;
+  --sellio-pay-shadow: 0 4px 24px rgba(15, 23, 42, 0.04);
+}

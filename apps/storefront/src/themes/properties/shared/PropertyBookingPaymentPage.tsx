@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { StripeCardForm } from '@/components/checkout/StripeCardForm';
+import { CheckoutPaymentSection } from '@/components/checkout/CheckoutPaymentSection';
 import { usePropertyBookingPayment } from '@/lib/usePropertyBookingPayment';
 
 export type PropertyBookingPrefix = 'pr' | 'pm';
@@ -81,24 +81,19 @@ export default function PropertyBookingPaymentPage({
       </header>
 
       <form className={cls(prefix, 'booking-layout')} onSubmit={payment.handlePaymentSubmit}>
-        <section className={cls(prefix, 'booking-panel')}>
-          <h2>Payment method</h2>
-          <select value={payment.paymentMethod} onChange={(e) => payment.setPaymentMethod(e.target.value)}>
-            {payment.context.gateways.map((gateway) => (
-              <option key={gateway.slug} value={gateway.slug}>{gateway.title}</option>
-            ))}
-            {!payment.context.gateways.length && <option value="bank_transfer">Bank transfer</option>}
-          </select>
-
-          {payment.paymentMethod === 'stripe' && stripeEnabled && (
-            <StripeCardForm
-              ref={payment.stripeRef}
-              publishableKey={payment.context.stripe_publishable_key!}
-              cardholderName={booking.full_name ?? ''}
-              onError={payment.setStripeError}
-            />
-          )}
-        </section>
+        <CheckoutPaymentSection
+          className={cls(prefix, 'booking-panel')}
+          title="Payment"
+          subtitle="Complete your reservation with a secure payment."
+          gateways={payment.context.gateways}
+          paymentMethod={payment.paymentMethod}
+          onPaymentMethodChange={payment.setPaymentMethod}
+          stripePublishableKey={payment.context.stripe_publishable_key}
+          stripeEnabled={stripeEnabled}
+          cardholderName={booking.full_name ?? ''}
+          stripeRef={payment.stripeRef}
+          onStripeError={payment.setStripeError}
+        />
 
         <aside className={cls(prefix, 'booking-summary')}>
           <h2>Booking total</h2>

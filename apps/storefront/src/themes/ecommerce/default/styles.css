@@ -1109,3 +1109,11 @@ a.ed-btn-primary,
     grid-template-columns: 1fr;
   }
 }
+
+.ed-checkout-page .sellio-checkout-payment {
+  --sellio-pay-accent: var(--ed-blue, #2563eb);
+  --sellio-pay-accent-hover: #1d4ed8;
+  --sellio-pay-accent-ring: rgba(37, 99, 235, 0.14);
+  --sellio-pay-radius: 24px;
+  --sellio-pay-surface: var(--ed-frost, #f8fafc);
+}

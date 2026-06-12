@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { StripeCardForm } from '@/components/checkout/StripeCardForm';
+import { CheckoutPaymentSection } from '@/components/checkout/CheckoutPaymentSection';
 import { useCheckoutFlow } from '@/lib/useCheckoutFlow';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 
@@ -125,28 +125,16 @@ export default function EcommerceCheckoutPage({ classPrefix: prefix, shell }: Ec
             </div>
           </section>
 
-          <section className={cls(prefix, 'checkout-panel')}>
-            <h2>Payment method</h2>
-            <select value={checkout.paymentMethod} onChange={(e) => checkout.setPaymentMethod(e.target.value)}>
-              {checkout.context.gateways.map((gateway) => (
-                <option key={gateway.slug} value={gateway.slug}>{gateway.title}</option>
-              ))}
-              {!checkout.context.gateways.length && <option value="bank_transfer">Bank transfer</option>}
-            </select>
-
-            {checkout.paymentMethod === 'stripe' && stripeEnabled && (
-              <StripeCardForm
-                ref={checkout.stripeRef}
-                publishableKey={checkout.context.stripe_publishable_key!}
-                cardholderName={checkout.shippingName}
-                onError={checkout.setStripeError}
-              />
-            )}
-
-            {checkout.paymentMethod === 'stripe' && !stripeEnabled && (
-              <p className={cls(prefix, 'checkout-warning')}>Stripe is not configured. Choose another payment method.</p>
-            )}
-          </section>
+          <CheckoutPaymentSection
+            gateways={checkout.context.gateways}
+            paymentMethod={checkout.paymentMethod}
+            onPaymentMethodChange={checkout.setPaymentMethod}
+            stripePublishableKey={checkout.context.stripe_publishable_key}
+            stripeEnabled={stripeEnabled}
+            cardholderName={checkout.shippingName}
+            stripeRef={checkout.stripeRef}
+            onStripeError={checkout.setStripeError}
+          />
         </div>
 
         <aside className={cls(prefix, 'checkout-summary')}>

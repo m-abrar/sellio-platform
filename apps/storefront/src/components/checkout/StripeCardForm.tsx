@@ -1,13 +1,24 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import './checkout-payment.css';
 
 declare global {
   interface Window {
     Stripe?: (key: string) => {
-      elements: () => {
-        create: (type: string) => {
+      elements: (options?: {
+        appearance?: {
+          theme?: string;
+          variables?: Record<string, string>;
+          rules?: Record<string, Record<string, string>>;
+        };
+      }) => {
+        create: (
+          type: string,
+          options?: Record<string, unknown>,
+        ) => {
           mount: (element: HTMLElement) => void;
+          unmount: () => void;
           on: (event: string, handler: (event: { error?: { message?: string } }) => void) => void;
         };
       };
@@ -61,45 +72,106 @@ function loadStripeScript(): Promise<void> {
 export const StripeCardForm = React.forwardRef<StripeCardFormHandle, StripeCardFormProps>(
   function StripeCardForm({ publishableKey, cardholderName, onReadyChange, onError }, ref) {
     const mountRef = useRef<HTMLDivElement>(null);
-    const cardElementRef = useRef<unknown>(null);
+    const cardElementRef = useRef<{ unmount: () => void } | null>(null);
     const stripeRef = useRef<ReturnType<NonNullable<typeof window.Stripe>> | null>(null);
+    const onErrorRef = useRef(onError);
+    const onReadyChangeRef = useRef(onReadyChange);
     const [ready, setReady] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [fieldError, setFieldError] = useState<string | null>(null);
+
+    onErrorRef.current = onError;
+    onReadyChangeRef.current = onReadyChange;
 
     useEffect(() => {
       let cancelled = false;
+      const mountNode = mountRef.current;
 
       async function init() {
         try {
           await loadStripeScript();
-          if (cancelled || !mountRef.current || !window.Stripe) {
+          if (cancelled || !mountNode || !window.Stripe) {
             return;
           }
 
           const stripe = window.Stripe(publishableKey);
-          const elements = stripe.elements();
-          const card = elements.create('card');
-
-          card.mount(mountRef.current);
-          card.on('change', (event) => {
-            onError?.(event.error?.message ?? null);
+          const elements = stripe.elements({
+            appearance: {
+              theme: 'stripe',
+              variables: {
+                colorPrimary: '#2563eb',
+                colorBackground: '#ffffff',
+                colorText: '#0f172a',
+                colorTextPlaceholder: '#94a3b8',
+                colorDanger: '#dc2626',
+                fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                fontSizeBase: '16px',
+                spacingUnit: '4px',
+                borderRadius: '12px',
+              },
+            },
           });
+
+          const card = elements.create('card', {
+            hidePostalCode: true,
+            style: {
+              base: {
+                fontSize: '16px',
+                lineHeight: '24px',
+                color: '#0f172a',
+                fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                '::placeholder': {
+                  color: '#94a3b8',
+                },
+              },
+              invalid: {
+                color: '#dc2626',
+                iconColor: '#dc2626',
+              },
+            },
+          });
+
+          card.mount(mountNode);
+          card.on('change', (event) => {
+            const message = event.error?.message ?? null;
+            setFieldError(message);
+            onErrorRef.current?.(message);
+          });
+
+          if (cancelled) {
+            card.unmount();
+            return;
+          }
 
           stripeRef.current = stripe;
           cardElementRef.current = card;
           setReady(true);
-          onReadyChange?.(true);
+          setLoading(false);
+          onReadyChangeRef.current?.(true);
         } catch (error) {
-          onError?.(error instanceof Error ? error.message : 'Unable to initialize Stripe.');
-          onReadyChange?.(false);
+          if (cancelled) {
+            return;
+          }
+
+          const message = error instanceof Error ? error.message : 'Unable to initialize Stripe.';
+          setFieldError(message);
+          setLoading(false);
+          onErrorRef.current?.(message);
+          onReadyChangeRef.current?.(false);
         }
       }
 
-      init();
+      void init();
 
       return () => {
         cancelled = true;
+        cardElementRef.current?.unmount();
+        cardElementRef.current = null;
+        stripeRef.current = null;
+        setReady(false);
+        setLoading(true);
       };
-    }, [publishableKey, onError, onReadyChange]);
+    }, [publishableKey]);
 
     React.useImperativeHandle(ref, () => ({
       createPaymentMethod: async () => {
@@ -126,9 +198,35 @@ export const StripeCardForm = React.forwardRef<StripeCardFormHandle, StripeCardF
     }));
 
     return (
-      <div>
-        <div ref={mountRef} />
-        {!ready && <p style={{ color: '#64748b', fontSize: '0.875rem' }}>Loading secure payment form...</p>}
+      <div className="sellio-stripe-card-field">
+        <span className="sellio-stripe-card-field__label" id="sellio-stripe-card-label">
+          Card number, expiry, and CVC
+        </span>
+        <div
+          className={[
+            'sellio-stripe-card-shell',
+            ready ? 'is-ready' : '',
+            fieldError ? 'is-invalid' : '',
+          ].filter(Boolean).join(' ')}
+        >
+          {!ready && (
+            <div className="sellio-stripe-card-skeleton" aria-hidden="true">
+              <span />
+            </div>
+          )}
+          <div
+            ref={mountRef}
+            className="sellio-stripe-card-mount"
+            role="group"
+            aria-labelledby="sellio-stripe-card-label"
+          />
+        </div>
+        {loading && !fieldError && (
+          <p className="sellio-stripe-card-loading">Loading secure payment form…</p>
+        )}
+        {fieldError && (
+          <p className="sellio-stripe-card-error" role="alert">{fieldError}</p>
+        )}
       </div>
     );
   },
