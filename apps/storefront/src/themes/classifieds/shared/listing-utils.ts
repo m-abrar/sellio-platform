@@ -1,5 +1,11 @@
 import type { Category, ClassifiedListing } from '@sellio/types';
-import { getClassifiedCategoryKey } from '@/lib/classified-category';
+import {
+  getClassifiedCategoryKey,
+  getClassifiedCategoryTitle,
+} from '@/lib/classified-category';
+
+const LOCAL_IMAGE_FALLBACK =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"%3E%3Crect fill="%23e2e8f0" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%2394a3b8" font-family="sans-serif" font-size="18"%3ENo photo%3C/text%3E%3C/svg%3E';
 
 export type LocalCardItem = {
   id: number;
@@ -65,7 +71,56 @@ export function getLocalCategoryLabel(slug: string): string {
   if (slug === 'pets') return 'Pet Supplies';
   if (slug === 'garage') return 'Garage Sales';
   if (slug === 'free') return 'Free Stuff';
-  return slug.charAt(0).toUpperCase() + slug.slice(1);
+  return slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
+}
+
+export function formatListingLocation(item: ClassifiedListing): string {
+  const city = item.location?.city;
+  const state = item.location?.state;
+
+  if (city && state) {
+    return `${city}, ${state}`;
+  }
+
+  if (city) {
+    return city;
+  }
+
+  return 'Nearby';
+}
+
+export function deriveAreaLabelFromListings(listings: ClassifiedListing[]): string {
+  if (!listings.length) {
+    return 'Your area';
+  }
+
+  const cityCounts = new Map<string, number>();
+
+  listings.forEach((item) => {
+    const city = item.location?.city;
+    if (city) {
+      cityCounts.set(city, (cityCounts.get(city) ?? 0) + 1);
+    }
+  });
+
+  let topCity = '';
+  let topCount = 0;
+
+  cityCounts.forEach((count, city) => {
+    if (count > topCount) {
+      topCity = city;
+      topCount = count;
+    }
+  });
+
+  const sample =
+    listings.find((item) => item.location?.city === topCity) ?? listings[0];
+
+  return formatListingLocation(sample);
+}
+
+export function getClassifiedListingImage(item: ClassifiedListing): string {
+  return item.media?.main_photo || item.media?.thumbnail || LOCAL_IMAGE_FALLBACK;
 }
 
 export function getGeneralCategoryIcon(slug: string): string {
@@ -122,11 +177,8 @@ export function mapClassifiedToLocalCard(item: ClassifiedListing): LocalCardItem
     numericPrice: item.pricing?.sale_price || item.pricing?.base_price || 0,
     distance: numericDistance.toFixed(1),
     numericDistance,
-    neighborhood: item.location?.city || 'Capitol Hill',
-    image:
-      item.media?.main_photo ||
-      item.media?.thumbnail ||
-      'https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?q=80&w=400',
+    neighborhood: formatListingLocation(item),
+    image: getClassifiedListingImage(item),
     sellerInitials: initials,
     sellerName: seller,
     category: categoryKey,
@@ -190,12 +242,15 @@ export function buildLocalCategoriesFromSidebar(categories: Category[]): Categor
 export function buildLocalCategoriesFromListings(listings: ClassifiedListing[]): CategoryPill[] {
   const pills: CategoryPill[] = [{ id: 'all', name: 'All Nearby', icon: '📍' }];
   listings.forEach((item) => {
-    const catSlug = item.taxonomy?.category;
-    if (catSlug && !pills.some((pill) => pill.id === catSlug)) {
+    const catKey = getClassifiedCategoryKey(item.taxonomy?.category);
+    if (catKey && !pills.some((pill) => pill.id === catKey)) {
       pills.push({
-        id: catSlug,
-        name: getLocalCategoryLabel(catSlug),
-        icon: getLocalCategoryIcon(catSlug),
+        id: catKey,
+        name: getClassifiedCategoryTitle(
+          item.taxonomy?.category,
+          getLocalCategoryLabel(catKey),
+        ),
+        icon: getLocalCategoryIcon(catKey),
       });
     }
   });

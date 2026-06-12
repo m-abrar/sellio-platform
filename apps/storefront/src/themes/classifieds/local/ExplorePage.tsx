@@ -6,11 +6,7 @@ import type { Category, ClassifiedListing } from '@sellio/types';
 import { LocalHeader, LocalCard, LocalFooter } from './components';
 import { getAdminBaseUrl } from '@/lib/admin-urls';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
-import {
-  fetchClassifiedsExplore,
-  resolveClassifiedsFailure,
-} from '@/themes/classifieds/shared/catalog';
-import { LOCAL_DEMO_CATEGORIES } from '@/themes/classifieds/shared/fallback-data';
+import { fetchClassifiedsExplore } from '@/themes/classifieds/shared/catalog';
 import {
   buildLocalCategoriesFromListings,
   buildLocalCategoriesFromSidebar,
@@ -19,7 +15,6 @@ import {
   type LocalCardItem,
 } from '@/themes/classifieds/shared/listing-utils';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
-import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
 const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
 
@@ -27,31 +22,31 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
   const router = useRouter();
   const searchParams = useSearchParams();
   const themeLink = useClassifiedsThemeLink();
-  const allowDemo = useDemoFallbackAllowed();
 
   const [items, setItems] = useState<LocalCardItem[]>([]);
   const [categories, setCategories] = useState<CategoryPill[]>([
     { id: 'all', name: 'All Nearby', icon: '📍' },
   ]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [inventoryTotal, setInventoryTotal] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+
+  const page = Math.max(1, Number(searchParams.get('page') || 1));
+  const [lastPage, setLastPage] = useState(1);
 
   const searchQuery = searchParams.get('search') || searchParams.get('q') || '';
   const selectedCategory = searchParams.get('category') || initialCategorySlug || 'all';
   const sortBy = searchParams.get('sort') || 'distance';
 
-  const getQueryParams = (page: number) => {
-    const params: Record<string, unknown> = { page, per_page: 12 };
+  const getQueryParams = (pageNumber: number) => {
+    const params: Record<string, unknown> = { page: pageNumber, per_page: 12 };
     if (searchQuery) params.search = searchQuery;
     if (selectedCategory && selectedCategory !== 'all') params.category = selectedCategory;
     return params;
   };
 
-  const updateFilters = (updates: Record<string, string>) => {
+  const updateFilters = (updates: Record<string, string>, pageNumber = 1) => {
     const params = new URLSearchParams(searchParams.toString());
     Object.entries(updates).forEach(([key, value]) => {
       if (value) {
@@ -60,63 +55,74 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
         params.delete(key);
       }
     });
-    params.delete('page');
+
+    if (pageNumber > 1) {
+      params.set('page', pageNumber.toString());
+    } else {
+      params.delete('page');
+    }
+
     router.push(themeLink(`/explore?${params.toString()}`));
   };
 
   useEffect(() => {
     async function loadData() {
-      setLoading(true);
-      setCurrentPage(1);
-      const result = await fetchClassifiedsExplore(getQueryParams(1));
+      const isFirstPage = page === 1;
+
+      if (isFirstPage) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
+
+      const result = await fetchClassifiedsExplore(getQueryParams(page));
 
       if (result.ok && result.response.data) {
         const listings = result.response.data as ClassifiedListing[];
-        setItems(listings.map(mapClassifiedToLocalCard));
-        setTotalPages(result.response.meta?.last_page || 1);
+        const newItems = listings.map(mapClassifiedToLocalCard);
 
-        if (result.response.sidebar?.categories) {
-          setCategories(buildLocalCategoriesFromSidebar(result.response.sidebar.categories as Category[]));
-        } else {
-          setCategories(buildLocalCategoriesFromListings(listings));
+        setItems((prev) => {
+          const merged = isFirstPage ? newItems : [...prev, ...newItems];
+          const seen = new Set<number>();
+
+          return merged.filter((item) => {
+            if (seen.has(item.id)) {
+              return false;
+            }
+            seen.add(item.id);
+            return true;
+          });
+        });
+
+        setLastPage(result.response.meta?.last_page || 1);
+        setInventoryTotal(result.response.meta?.total ?? listings.length);
+
+        if (isFirstPage) {
+          if (result.response.sidebar?.categories) {
+            setCategories(
+              buildLocalCategoriesFromSidebar(result.response.sidebar.categories as Category[]),
+            );
+          } else {
+            setCategories(buildLocalCategoriesFromListings(listings));
+          }
         }
 
-        setUseFallback(false);
         setApiError(null);
       } else {
         const errorMsg = result.ok ? 'No classifieds returned from API.' : result.error;
         setApiError(errorMsg);
-        const resolution = resolveClassifiedsFailure(allowDemo, 'local');
-
-        if (resolution.mode === 'demo') {
-          setItems(resolution.listings.map(mapClassifiedToLocalCard));
-          setCategories(LOCAL_DEMO_CATEGORIES);
-          setUseFallback(true);
-        } else {
+        if (isFirstPage) {
           setItems([]);
-          setUseFallback(false);
+          setInventoryTotal(null);
         }
       }
 
       setLoading(false);
+      setLoadingMore(false);
     }
 
     loadData();
-  }, [searchQuery, selectedCategory, allowDemo]);
-
-  const loadMore = async () => {
-    if (loadingMore || currentPage >= totalPages) return;
-    setLoadingMore(true);
-    const nextPage = currentPage + 1;
-    const result = await fetchClassifiedsExplore(getQueryParams(nextPage));
-
-    if (result.ok && result.response.data) {
-      setItems((prev) => [...prev, ...result.response.data.map(mapClassifiedToLocalCard)]);
-      setCurrentPage(nextPage);
-    }
-
-    setLoadingMore(false);
-  };
+  }, [searchParams, page, searchQuery, selectedCategory]);
 
   const filteredItems = items
     .filter((item) => {
@@ -130,6 +136,10 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
       return a.numericDistance - b.numericDistance;
     });
 
+  const handleLoadMore = () => {
+    updateFilters({}, page + 1);
+  };
+
   return (
     <div className="classifieds-local-wrapper">
       <LocalHeader
@@ -139,15 +149,20 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
         homeHref={themeLink('')}
       />
 
-      <div className="cl-product-container" style={{ paddingTop: '2rem' }}>
-        <header className="cl-panel-header" style={{ marginBottom: '1.5rem' }}>
-          <h1 className="cl-panel-title" style={{ fontSize: '1.75rem' }}>Explore nearby listings</h1>
-          <p style={{ color: 'var(--cl-text-muted)', marginTop: '0.5rem' }}>
-            Browse classifieds by category and send inquiries directly to neighbors.
-          </p>
+      <div className="cl-product-container cl-explore-container">
+        <header className="cl-panel-header cl-explore-header">
+          <div>
+            <h1 className="cl-panel-title cl-explore-title">Explore nearby listings</h1>
+            <p className="cl-explore-lead">
+              Browse classifieds by category and send inquiries directly to neighbors.
+            </p>
+            {!loading && inventoryTotal != null && (
+              <p className="cl-panel-meta">{inventoryTotal} listings in catalog</p>
+            )}
+          </div>
         </header>
 
-        <div className="cl-filter-row" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+        <div className="cl-filter-row">
           <input
             type="search"
             className="cl-booking-input"
@@ -158,7 +173,6 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
                 updateFilters({ search: (event.target as HTMLInputElement).value });
               }
             }}
-            style={{ flex: '1 1 220px' }}
           />
           <select
             className="cl-select"
@@ -184,13 +198,13 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
           ))}
         </div>
 
-        {apiError && useFallback && (
+        {apiError && (
           <div className="cl-alert-slot">
-            <CatalogSyncAlert classPrefix="cl" variant="demo" error={apiError} />
+            <CatalogSyncAlert classPrefix="cl" variant="production" error={apiError} />
           </div>
         )}
 
-        <div className="cl-listing-list" style={{ marginTop: '1.5rem' }}>
+        <div className="cl-listing-list cl-explore-list">
           {loading ? (
             Array.from({ length: 4 }).map((_, index) => (
               <div key={index} className="cl-shimmer-card">
@@ -205,6 +219,9 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
             <div className="cl-empty-state">
               <h3>No listings match your filters</h3>
               <p>Try another category or broaden your search.</p>
+              <a href={themeLink('')} className="cl-btn-post cl-empty-cta">
+                Back to map view
+              </a>
             </div>
           ) : (
             filteredItems.map((item) => (
@@ -225,9 +242,9 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
           )}
         </div>
 
-        {currentPage < totalPages && !useFallback && !loading && (
-          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-            <button type="button" className="cl-btn-post" onClick={loadMore} disabled={loadingMore}>
+        {page < lastPage && !loading && (
+          <div className="cl-load-more-wrap">
+            <button type="button" className="cl-btn-post" onClick={handleLoadMore} disabled={loadingMore}>
               {loadingMore ? 'Loading...' : 'Load more listings'}
             </button>
           </div>

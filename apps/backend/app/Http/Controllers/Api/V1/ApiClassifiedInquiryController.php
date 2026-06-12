@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ClassifiedInquiryResource;
 use App\Models\Classified;
+use App\Models\ClassifiedInquiry;
 use App\Services\ClassifiedInquiryService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -45,5 +46,12 @@ class ApiClassifiedInquiryController extends Controller
 
             return $this->errorResponse(__('Failed to submit inquiry. Please try again.'), 500);
         }
+    }
+
+    public function show(ClassifiedInquiry $inquiry): JsonResponse
+    {
+        return $this->successResponse(
+            new ClassifiedInquiryResource($inquiry->load(['classifiedAd', 'user'])),
+        );
     }
 }

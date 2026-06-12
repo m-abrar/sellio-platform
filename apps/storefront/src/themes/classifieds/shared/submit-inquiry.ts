@@ -2,14 +2,14 @@ import { api } from '@/lib/storefront-api';
 
 export type ClassifiedInquiryInput = {
   slug: string;
-  useFallback: boolean;
-  storageKey: string;
   fullName: string;
   email: string;
   phone?: string;
   message?: string;
   offerPrice?: string;
-  demoOrderData: Record<string, unknown>;
+  useFallback?: boolean;
+  storageKey?: string;
+  demoOrderData?: Record<string, unknown>;
 };
 
 export type ClassifiedInquiryResult =
@@ -19,7 +19,7 @@ export type ClassifiedInquiryResult =
 export async function submitClassifiedInquiry(
   input: ClassifiedInquiryInput,
 ): Promise<ClassifiedInquiryResult> {
-  if (input.useFallback) {
+  if (input.useFallback && input.storageKey && input.demoOrderData) {
     try {
       const existing = localStorage.getItem(input.storageKey);
       const list = existing ? JSON.parse(existing) : [];

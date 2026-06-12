@@ -1,5 +1,5 @@
 import { api, SellioAPI } from '@sellio/api-client';
-import type { ServiceConsultationRecord } from '@sellio/types';
+import type { ClassifiedInquiryRecord, ServiceConsultationRecord } from '@sellio/types';
 import { readAuthToken } from '@/lib/auth-storage';
 
 function syncAuthToken(): void {
@@ -13,6 +13,7 @@ if (typeof window !== 'undefined') {
 
 type ApiClientWithConsultation = SellioAPI & {
   getServiceConsultation?: (consultationId: number) => Promise<ServiceConsultationRecord>;
+  getClassifiedInquiry?: (inquiryId: number) => Promise<ClassifiedInquiryRecord>;
 };
 
 function resolveApiBaseUrl(): string {
@@ -50,6 +51,29 @@ if (typeof apiClient.getServiceConsultation !== 'function') {
     const payload = (await response.json()) as { data?: ServiceConsultationRecord };
     if (!payload.data) {
       throw new Error('Consultation not found.');
+    }
+
+    return payload.data;
+  };
+}
+
+if (typeof apiClient.getClassifiedInquiry !== 'function') {
+  apiClient.getClassifiedInquiry = async (inquiryId: number) => {
+    const response = await fetch(`${resolveApiBaseUrl()}/v1/classifieds/inquiries/${inquiryId}`, {
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        ...(readAuthToken() ? { Authorization: `Bearer ${readAuthToken()}` } : {}),
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Unable to load inquiry details.');
+    }
+
+    const payload = (await response.json()) as { data?: ClassifiedInquiryRecord };
+    if (!payload.data) {
+      throw new Error('Inquiry not found.');
     }
 
     return payload.data;

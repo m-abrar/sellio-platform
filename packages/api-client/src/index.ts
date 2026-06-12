@@ -438,6 +438,10 @@ export class SellioAPI {
     return this.post<ClassifiedInquiryRecord>(`/v1/classifieds/${slug}/inquiries`, payload);
   }
 
+  async getClassifiedInquiry(inquiryId: number): Promise<ClassifiedInquiryRecord> {
+    return this.request<ClassifiedInquiryRecord>(`/v1/classifieds/inquiries/${inquiryId}`);
+  }
+
   // === Auth ===
 
   async login(email: string, password: string): Promise<AuthSession> {

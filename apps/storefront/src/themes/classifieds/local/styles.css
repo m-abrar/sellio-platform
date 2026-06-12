@@ -1162,3 +1162,329 @@
     margin: 0.5rem 0;
 }
 
+.cl-panel-meta {
+    color: var(--cl-text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0.25rem 0 0;
+}
+
+.cl-alerts-heading {
+    color: var(--cl-primary-blue);
+    font-size: 0.85rem;
+    font-weight: 800;
+    margin: 0.5rem 0 0;
+    text-transform: uppercase;
+}
+
+.cl-panel-divider {
+    border: 0;
+    border-top: 1.5px dashed var(--cl-border);
+    margin: 0.5rem 0;
+}
+
+.cl-empty-icon {
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.cl-empty-cta {
+    display: inline-flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.cl-expand-radius-btn {
+    background-color: transparent;
+    border: 1.5px solid var(--cl-primary-blue);
+    box-shadow: none;
+    color: var(--cl-primary-blue);
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.cl-explore-container {
+    padding-top: 2rem;
+}
+
+.cl-explore-header {
+    margin-bottom: 1.5rem;
+}
+
+.cl-explore-title {
+    font-size: 1.75rem;
+}
+
+.cl-explore-lead {
+    color: var(--cl-text-muted);
+    margin-top: 0.5rem;
+}
+
+.cl-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.cl-filter-row .cl-booking-input {
+    flex: 1 1 220px;
+}
+
+.cl-explore-list {
+    margin-top: 1.5rem;
+}
+
+.cl-load-more-wrap {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.cl-product-gallery-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.cl-shimmer-block {
+    animation: cl-shimmer-pulse 1.5s infinite;
+    background-color: rgba(66, 165, 245, 0.06);
+    border-radius: 12px;
+    height: 100%;
+    width: 100%;
+}
+
+.cl-product-description-divider {
+    border-top: 1.5px dashed var(--cl-border);
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+}
+
+.cl-product-description-heading {
+    color: var(--cl-text-main);
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+.cl-booking-drawer-title {
+    margin: 0;
+}
+
+.cl-booking-drawer-lead {
+    color: var(--cl-text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.cl-booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cl-booking-textarea {
+    height: 60px;
+    resize: none;
+}
+
+.cl-related-distance {
+    color: var(--cl-text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Inquiry confirmation */
+.cl-inquiry-page {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem 4%;
+}
+
+.cl-inquiry-confirm {
+    animation: cl-inquiry-confirm-in 0.55s ease;
+    margin: 0 auto;
+    max-width: 920px;
+}
+
+@keyframes cl-inquiry-confirm-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cl-inquiry-confirm-hero {
+    background: linear-gradient(135deg, rgba(66, 187, 106, 0.12), rgba(66, 165, 245, 0.1));
+    border: 1.5px solid var(--cl-border);
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    padding: 2.5rem 2rem;
+    text-align: center;
+}
+
+.cl-inquiry-confirm-hero h1 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    margin: 0.75rem 0;
+}
+
+.cl-inquiry-kicker {
+    color: var(--cl-primary-green);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.cl-inquiry-confirm-icon {
+    align-items: center;
+    border-radius: 999px;
+    display: inline-flex;
+    height: 4.5rem;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    width: 4.5rem;
+}
+
+.cl-inquiry-confirm-icon--success {
+    background: rgba(66, 187, 106, 0.15);
+    color: var(--cl-primary-green);
+}
+
+.cl-inquiry-confirm-lead {
+    color: var(--cl-text-muted);
+    line-height: 1.7;
+    margin: 0 auto;
+    max-width: 560px;
+}
+
+.cl-inquiry-confirm-ref {
+    align-items: center;
+    background: var(--cl-bg-card);
+    border: 1px solid var(--cl-border);
+    border-radius: 999px;
+    display: inline-flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding: 0.5rem 1rem;
+}
+
+.cl-inquiry-confirm-ref span {
+    color: var(--cl-text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.cl-inquiry-confirm-ref strong {
+    color: var(--cl-text-main);
+    font-size: 1rem;
+}
+
+.cl-inquiry-confirm-layout {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1.2fr 0.8fr;
+}
+
+.cl-inquiry-confirm-summary,
+.cl-inquiry-confirm-actions {
+    background: var(--cl-bg-card);
+    border: 1.5px solid var(--cl-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.cl-inquiry-confirm-summary-head {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.cl-inquiry-confirm-summary-head h2,
+.cl-inquiry-confirm-actions h2 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.cl-inquiry-confirm-status {
+    background: rgba(66, 187, 106, 0.12);
+    border-radius: 999px;
+    color: var(--cl-primary-green);
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.35rem 0.75rem;
+    text-transform: uppercase;
+}
+
+.cl-inquiry-confirm-listing {
+    border-bottom: 1px dashed var(--cl-border);
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+}
+
+.cl-inquiry-confirm-listing span {
+    color: var(--cl-text-muted);
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+}
+
+.cl-inquiry-confirm-listing strong {
+    font-size: 1rem;
+}
+
+.cl-inquiry-confirm-receipt {
+    display: grid;
+    gap: 0.85rem;
+    margin: 0;
+}
+
+.cl-inquiry-confirm-receipt div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.cl-inquiry-confirm-receipt dt {
+    color: var(--cl-text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.cl-inquiry-confirm-receipt dd {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0;
+    text-align: right;
+}
+
+.cl-inquiry-confirm-actions p {
+    color: var(--cl-text-muted);
+    line-height: 1.7;
+}
+
+.cl-inquiry-confirm-cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 900px) {
+    .cl-inquiry-confirm-layout {
+        grid-template-columns: 1fr;
+    }
+}
+

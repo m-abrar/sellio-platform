@@ -5,12 +5,11 @@ import { useRouter } from 'next/navigation';
 import { LocalHeader, LocalFooter } from './components';
 import { getAdminBaseUrl } from '@/lib/admin-urls';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
+import { loadClassifiedDetailPage } from '@/themes/classifieds/shared/catalog';
 import {
-  fetchClassifiedDetail,
-  fetchClassifiedsHome,
-  getRelatedFromApi,
-  resolveClassifiedFailure,
-} from '@/themes/classifieds/shared/catalog';
+  redirectToClassifiedInquiryConfirmation,
+  saveClassifiedInquirySnapshot,
+} from '@/themes/classifieds/shared/classified-inquiry-confirmation';
 import {
   getLocalCategoryLabel,
   mapClassifiedToLocalCard,
@@ -18,19 +17,16 @@ import {
 } from '@/themes/classifieds/shared/listing-utils';
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
-import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
 const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
 
 export default function ProductPage({ slug }: { slug: string }) {
   const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
-  const allowDemo = useDemoFallbackAllowed();
 
   const [item, setItem] = useState<LocalCardItem | null>(null);
   const [related, setRelated] = useState<LocalCardItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
 
@@ -38,9 +34,6 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [buyerEmail, setBuyerEmail] = useState('');
   const [buyerOffer, setBuyerOffer] = useState('');
   const [buyerNotes, setBuyerNotes] = useState('');
-  const [orderSuccess, setOrderSuccess] = useState(false);
-  const [orderSuccessData, setOrderSuccessData] = useState<Record<string, string> | null>(null);
-  const [inquiryId, setInquiryId] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -48,54 +41,22 @@ export default function ProductPage({ slug }: { slug: string }) {
     async function loadListingDetails() {
       setLoading(true);
       setNotFound(false);
-      const result = await fetchClassifiedDetail(slug);
+      const result = await loadClassifiedDetailPage(slug);
 
-      if (result.ok && result.response.data) {
-        setItem(mapClassifiedToLocalCard(result.response.data));
-        setRelated(
-          getRelatedFromApi(
-            result.response.data,
-            result.response.related_classifieds,
-            slug,
-            undefined,
-          ).map(mapClassifiedToLocalCard),
-        );
-        setUseFallback(false);
+      if (result.mode === 'live' && result.listing) {
+        setItem(mapClassifiedToLocalCard(result.listing));
+        setRelated(result.related.map(mapClassifiedToLocalCard));
         setApiError(null);
-
-        if (
-          !result.response.related_classifieds?.length &&
-          result.response.data.taxonomy?.category
-        ) {
-          const listResult = await fetchClassifiedsHome();
-          if (listResult.ok && listResult.response.data) {
-            setRelated(
-              getRelatedFromApi(
-                result.response.data,
-                undefined,
-                slug,
-                listResult.response.data,
-              ).map(mapClassifiedToLocalCard),
-            );
-          }
-        }
+      } else if (result.mode === 'not-found') {
+        setItem(null);
+        setRelated([]);
+        setNotFound(true);
+        setApiError(result.alertError);
       } else {
-        const errorMsg = result.ok ? 'Listing not found or API returned no data.' : result.error;
-        setApiError(errorMsg);
-        const resolution = resolveClassifiedFailure(slug, allowDemo, 'local');
-
-        if (resolution.mode === 'demo') {
-          setItem(mapClassifiedToLocalCard(resolution.listing));
-          setRelated(resolution.related.map(mapClassifiedToLocalCard));
-          setUseFallback(true);
-        } else if (resolution.mode === 'notFound') {
-          setItem(null);
-          setNotFound(true);
-          setUseFallback(false);
-        } else {
-          setItem(null);
-          setUseFallback(false);
-        }
+        setItem(null);
+        setRelated([]);
+        setNotFound(false);
+        setApiError(result.alertError);
       }
 
       setLoading(false);
@@ -104,7 +65,7 @@ export default function ProductPage({ slug }: { slug: string }) {
     if (slug) {
       loadListingDetails();
     }
-  }, [slug, allowDemo]);
+  }, [slug]);
 
   const buildInquiryMessage = () => {
     const parts = [buyerNotes.trim()].filter(Boolean);
@@ -125,24 +86,10 @@ export default function ProductPage({ slug }: { slug: string }) {
 
     const result = await submitClassifiedInquiry({
       slug,
-      useFallback,
-      storageKey: 'sellio_classifieds_local_orders',
       fullName: buyerName,
       email: buyerEmail,
       message: buildInquiryMessage(),
       offerPrice: buyerOffer.trim() || item.price,
-      demoOrderData: {
-        orderId: `ORD-${Date.now()}-${item.id}`,
-        listingId: String(item.id),
-        title: item.title,
-        price: item.price,
-        buyerName,
-        buyerEmail,
-        offerPrice: buyerOffer || item.price,
-        notes: buyerNotes,
-        date: new Date().toLocaleString(),
-        theme: 'classifieds_local',
-      },
     });
 
     setIsSubmitting(false);
@@ -152,16 +99,19 @@ export default function ProductPage({ slug }: { slug: string }) {
       return;
     }
 
-    setInquiryId(typeof result.inquiryId === 'number' ? result.inquiryId : null);
-    setOrderSuccess(true);
-    setOrderSuccessData({
-      ...result.summary,
-      offerPrice: buyerOffer || item.price,
+    saveClassifiedInquirySnapshot({
+      id: result.inquiryId,
+      listingId: item.id,
+      listingTitle: item.title,
+      listingSlug: item.slug,
+      contactName: buyerName,
+      contactEmail: buyerEmail,
+      offerPrice: buyerOffer.trim() || item.price,
+      message: buildInquiryMessage(),
+      status: 'pending',
     });
-    setBuyerName('');
-    setBuyerEmail('');
-    setBuyerOffer('');
-    setBuyerNotes('');
+
+    redirectToClassifiedInquiryConfirmation(themeLink, result.inquiryId);
   };
 
   const handleBackNavigation = (e: React.MouseEvent) => {
@@ -173,8 +123,8 @@ export default function ProductPage({ slug }: { slug: string }) {
     <div className="cl-product-wrapper">
       <LocalHeader
         onPostClick={() => window.open(adminCreateClassifiedUrl, '_blank', 'noopener,noreferrer')}
-        onLocationClick={handleLocationClick}
-        locationName={item?.neighborhood || 'Capitol Hill'}
+        onLocationClick={() => router.push(themeLink(''))}
+        locationName={item?.neighborhood || 'Nearby'}
         homeHref={themeLink('')}
       />
 
@@ -185,41 +135,35 @@ export default function ProductPage({ slug }: { slug: string }) {
           </a>
         </div>
 
-        {(useFallback || apiError) && apiError && (
+        {apiError && (
           <div className="cl-alert-slot">
-            <CatalogSyncAlert
-              classPrefix="cl"
-              variant={useFallback ? 'demo' : 'production'}
-              error={apiError}
-            />
+            <CatalogSyncAlert classPrefix="cl" variant="production" error={apiError} />
           </div>
         )}
 
         {loading ? (
           <div className="cl-product-main-grid">
             <div className="cl-product-gallery">
-              <div className="cl-product-main-img-wrap" style={{ animation: 'cl-shimmer-pulse 1.5s infinite' }}>
-                <div style={{ width: '100%', height: '100%', backgroundColor: 'rgba(66,165,245,0.06)' }} />
-              </div>
+              <div className="cl-product-main-img-wrap cl-shimmer-block" />
             </div>
             <div className="cl-product-details-block">
-              <div style={{ height: '32px', width: '70%', backgroundColor: 'rgba(51, 65, 85, 0.12)', borderRadius: '4px', animation: 'cl-shimmer-pulse 1.5s infinite' }} />
-              <div style={{ height: '40px', width: '30%', backgroundColor: 'rgba(102, 187, 106, 0.18)', borderRadius: '4px', animation: 'cl-shimmer-pulse 1.5s infinite' }} />
-              <div style={{ height: '150px', width: '100%', backgroundColor: 'rgba(51, 65, 85, 0.06)', borderRadius: '12px', animation: 'cl-shimmer-pulse 1.5s infinite' }} />
+              <div className="cl-shimmer-title" style={{ height: '32px', width: '70%' }} />
+              <div className="cl-shimmer-price" style={{ height: '40px', width: '30%' }} />
+              <div className="cl-shimmer-block" style={{ height: '150px' }} />
             </div>
           </div>
         ) : notFound || !item ? (
           <div className="cl-empty-state">
             <h3>Listing not found</h3>
             <p>This neighborhood listing is unavailable or may have been removed.</p>
-            <a href={themeLink('')} className="cl-btn-post" style={{ display: 'inline-flex', marginTop: '1rem' }}>
+            <a href={themeLink('')} className="cl-btn-post cl-empty-cta">
               Back to listings
             </a>
           </div>
         ) : (
           <>
             <div className="cl-product-main-grid">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div className="cl-product-gallery-column">
                 <div className="cl-product-gallery">
                   <div className="cl-product-main-img-wrap">
                     <img src={item.image} className="cl-product-main-img" alt={item.title} />
@@ -243,7 +187,9 @@ export default function ProductPage({ slug }: { slug: string }) {
                     </div>
                     <div className="cl-product-spec-item">
                       <span className="cl-product-spec-label">Item Category</span>
-                      <span className="cl-product-spec-value">{item.categoryIcon} {getLocalCategoryLabel(item.category)}</span>
+                      <span className="cl-product-spec-value">
+                        {item.categoryIcon} {getLocalCategoryLabel(item.category)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -263,11 +209,11 @@ export default function ProductPage({ slug }: { slug: string }) {
                     </div>
                   </div>
 
-                  <div style={{ borderTop: '1.5px dashed var(--cl-border)', marginTop: '1.5rem', paddingTop: '1.5rem' }}>
-                    <h4 className="cl-product-card-title" style={{ color: 'var(--cl-text-main)', fontSize: '0.95rem', fontWeight: 800 }}>Description</h4>
+                  <div className="cl-product-description-divider">
+                    <h4 className="cl-product-card-title cl-product-description-heading">Description</h4>
                     <p className="cl-product-description">
                       {item.description ||
-                        `This item is listed by a verified neighbor in the ${item.neighborhood} community group. Perfect for local pickup and secure face-to-face neighborhood handovers.`}
+                        `This item is listed by a verified neighbor in the ${item.neighborhood} area. Perfect for local pickup and secure face-to-face neighborhood handovers.`}
                     </p>
                   </div>
                 </div>
@@ -276,90 +222,71 @@ export default function ProductPage({ slug }: { slug: string }) {
                   <div className="cl-product-seller-avatar">{item.sellerInitials}</div>
                   <div className="cl-product-seller-info">
                     <h5 className="cl-product-seller-name">{item.sellerName}</h5>
-                    <span className="cl-product-seller-badge">🛡️ Verified Neighbor &bull; {item.neighborhood}</span>
+                    <span className="cl-product-seller-badge">
+                      🛡️ Verified Neighbor &bull; {item.neighborhood}
+                    </span>
                   </div>
                 </div>
 
                 <div className="cl-product-booking-drawer">
-                  <h4 className="cl-product-card-title" style={{ margin: 0 }}>✉️ Inquire & Reserve</h4>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--cl-text-muted)', fontWeight: 600 }}>
-                    Send a secure community message to {item.sellerName} and request to schedule a local inspection or pickup.
-                  </div>
+                  <h4 className="cl-product-card-title cl-booking-drawer-title">✉️ Inquire & Reserve</h4>
+                  <p className="cl-booking-drawer-lead">
+                    Send a secure community message to {item.sellerName} and request to schedule a local
+                    inspection or pickup.
+                  </p>
 
-                  {orderSuccess && orderSuccessData ? (
-                    <div className="cl-booking-receipt">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--cl-primary-green)', fontWeight: 900, fontSize: '0.95rem' }}>
-                        <span>✓</span> <span>Inquiry Dispatch Complete!</span>
-                      </div>
-                      <div style={{ fontSize: '0.8rem', color: 'var(--cl-text-muted)', fontWeight: 600, borderBottom: '1px dashed var(--cl-primary-green)', paddingBottom: '0.5rem' }}>
-                        {useFallback
-                          ? 'Your message has been saved locally. Receipt:'
-                          : `Inquiry #${inquiryId ?? orderSuccessData.orderId} sent to the seller.`}
-                      </div>
-                      <div className="cl-receipt-row">
-                        <span>Receipt ID:</span>
-                        <span style={{ fontFamily: 'monospace' }}>{orderSuccessData.orderId}</span>
-                      </div>
-                      <div className="cl-receipt-row">
-                        <span>Contact Name:</span>
-                        <span>{orderSuccessData.buyerName}</span>
-                      </div>
-                      <div className="cl-receipt-row">
-                        <span>Proposed Price:</span>
-                        <span style={{ color: 'var(--cl-primary-green)' }}>{orderSuccessData.offerPrice}</span>
-                      </div>
+                  <form onSubmit={handleInquirySubmit} className="cl-booking-form">
+                    {formError && (
+                      <p className="cl-form-error" role="alert">
+                        {formError}
+                      </p>
+                    )}
+                    <div className="cl-booking-form-group">
+                      <label className="cl-booking-label">Your Name *</label>
+                      <input
+                        type="text"
+                        required
+                        className="cl-booking-input"
+                        placeholder="e.g. Alice Cooper"
+                        value={buyerName}
+                        onChange={(e) => setBuyerName(e.target.value)}
+                      />
                     </div>
-                  ) : (
-                    <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                      {formError && <p className="cl-form-error" role="alert">{formError}</p>}
-                      <div className="cl-booking-form-group">
-                        <label className="cl-booking-label">Your Name *</label>
-                        <input
-                          type="text"
-                          required
-                          className="cl-booking-input"
-                          placeholder="e.g. Alice Cooper"
-                          value={buyerName}
-                          onChange={(e) => setBuyerName(e.target.value)}
-                        />
-                      </div>
-                      <div className="cl-booking-form-group">
-                        <label className="cl-booking-label">Your Secure Email *</label>
-                        <input
-                          type="email"
-                          required
-                          className="cl-booking-input"
-                          placeholder="e.g. alice@example.com"
-                          value={buyerEmail}
-                          onChange={(e) => setBuyerEmail(e.target.value)}
-                        />
-                      </div>
-                      <div className="cl-booking-form-group">
-                        <label className="cl-booking-label">Your Price Offer (Optional)</label>
-                        <input
-                          type="text"
-                          className="cl-booking-input"
-                          placeholder={`Default is ${item.price}`}
-                          value={buyerOffer}
-                          onChange={(e) => setBuyerOffer(e.target.value)}
-                        />
-                      </div>
-                      <div className="cl-booking-form-group">
-                        <label className="cl-booking-label">Add a note for {item.sellerName} (Optional)</label>
-                        <textarea
-                          rows={2}
-                          className="cl-booking-input"
-                          style={{ resize: 'none', height: '60px' }}
-                          placeholder="e.g. I can pick this up tomorrow at 5pm."
-                          value={buyerNotes}
-                          onChange={(e) => setBuyerNotes(e.target.value)}
-                        />
-                      </div>
-                      <button type="submit" className="cl-product-btn-reserve" disabled={isSubmitting}>
-                        {isSubmitting ? 'Sending...' : 'Send Message & Request Pickup'}
-                      </button>
-                    </form>
-                  )}
+                    <div className="cl-booking-form-group">
+                      <label className="cl-booking-label">Your Secure Email *</label>
+                      <input
+                        type="email"
+                        required
+                        className="cl-booking-input"
+                        placeholder="e.g. alice@example.com"
+                        value={buyerEmail}
+                        onChange={(e) => setBuyerEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="cl-booking-form-group">
+                      <label className="cl-booking-label">Your Price Offer (Optional)</label>
+                      <input
+                        type="text"
+                        className="cl-booking-input"
+                        placeholder={`Default is ${item.price}`}
+                        value={buyerOffer}
+                        onChange={(e) => setBuyerOffer(e.target.value)}
+                      />
+                    </div>
+                    <div className="cl-booking-form-group">
+                      <label className="cl-booking-label">Add a note for {item.sellerName} (Optional)</label>
+                      <textarea
+                        rows={2}
+                        className="cl-booking-input cl-booking-textarea"
+                        placeholder="e.g. I can pick this up tomorrow at 5pm."
+                        value={buyerNotes}
+                        onChange={(e) => setBuyerNotes(e.target.value)}
+                      />
+                    </div>
+                    <button type="submit" className="cl-product-btn-reserve" disabled={isSubmitting}>
+                      {isSubmitting ? 'Sending...' : 'Send Message & Request Pickup'}
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
@@ -381,7 +308,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                         <h4 className="cl-related-card-title">{relItem.title}</h4>
                         <div className="cl-related-price-row">
                           <span className="cl-related-price">{relItem.price}</span>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--cl-text-muted)', fontWeight: 700 }}>📍 {relItem.distance} mi</span>
+                          <span className="cl-related-distance">📍 {relItem.distance} mi</span>
                         </div>
                       </div>
                     </div>
@@ -396,8 +323,4 @@ export default function ProductPage({ slug }: { slug: string }) {
       <LocalFooter />
     </div>
   );
-}
-
-function handleLocationClick() {
-  // Location radius is controlled on the home map view.
 }

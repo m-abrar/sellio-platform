@@ -5,4 +5,5 @@ import ProductPage from './ProductPage';
 
 export { Layout, ProductPage };
 export { default as ExplorePage } from './ExplorePage';
+export { default as InquiryConfirmationPage } from './InquiryConfirmationPage';
 export default Page;

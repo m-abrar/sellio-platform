@@ -1,4 +1,4 @@
-import { api } from '@sellio/api-client';
+import { api } from '@/lib/storefront-api';
 import type { ClassifiedListing } from '@sellio/types';
 import { classifiedCategoriesMatch } from '@/lib/classified-category';
 import {
@@ -65,8 +65,89 @@ export async function fetchClassifiedDetail(slug: string) {
     }
     return { ok: false as const, error: 'Listing not found or API returned no data.' };
   } catch (error) {
+    const status =
+      typeof error === 'object' && error !== null && 'response' in error
+        ? (error as { response?: { status?: number } }).response?.status
+        : undefined;
+
+    if (status === 404) {
+      return {
+        ok: false as const,
+        notFound: true as const,
+        error: 'Listing not found.',
+      };
+    }
+
     return { ok: false as const, error: toErrorMessage(error) };
   }
+}
+
+export async function fetchClassifiedInquiry(inquiryId: number) {
+  try {
+    if (typeof api.getClassifiedInquiry === 'function') {
+      const inquiry = await api.getClassifiedInquiry(inquiryId);
+      return { ok: true as const, inquiry };
+    }
+
+    return { ok: false as const, error: 'Inquiry lookup is unavailable.' };
+  } catch (error) {
+    return { ok: false as const, error: toErrorMessage(error) };
+  }
+}
+
+export type ClassifiedDetailPageResult = {
+  mode: 'live' | 'not-found' | 'error';
+  listing: ClassifiedListing | null;
+  related: ClassifiedListing[];
+  alertError: string | null;
+};
+
+export async function loadClassifiedDetailPage(slug: string): Promise<ClassifiedDetailPageResult> {
+  const result = await fetchClassifiedDetail(slug);
+
+  if (result.ok && result.response.data) {
+    let related = getRelatedFromApi(
+      result.response.data,
+      result.response.related_classifieds,
+      slug,
+      undefined,
+    );
+
+    if (!related.length && result.response.data.taxonomy?.category) {
+      const listResult = await fetchClassifiedsHome({ per_page: 24 });
+      if (listResult.ok && listResult.response.data) {
+        related = getRelatedFromApi(
+          result.response.data,
+          undefined,
+          slug,
+          listResult.response.data,
+        );
+      }
+    }
+
+    return {
+      mode: 'live',
+      listing: result.response.data,
+      related,
+      alertError: null,
+    };
+  }
+
+  if ('notFound' in result && result.notFound) {
+    return {
+      mode: 'not-found',
+      listing: null,
+      related: [],
+      alertError: `No published listing matched "${slug}". Browse listings from the map or explore page.`,
+    };
+  }
+
+  return {
+    mode: 'error',
+    listing: null,
+    related: [],
+    alertError: result.error ?? 'Classifieds are temporarily unavailable.',
+  };
 }
 
 export function resolveClassifiedsFailure(allowDemo: boolean, variant: ClassifiedsThemeVariant) {

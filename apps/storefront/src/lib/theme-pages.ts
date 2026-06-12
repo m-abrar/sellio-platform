@@ -11,7 +11,8 @@ export type ThemeSubpage =
   | 'BookingConfirmationPage'
   | 'BookingConfirmPage'
   | 'BookingReservePage'
-  | 'ConsultationConfirmationPage';
+  | 'ConsultationConfirmationPage'
+  | 'InquiryConfirmationPage';
 
 const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, string>>> = {
   properties: {
@@ -55,6 +56,7 @@ const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, st
   classifieds: {
     ProductPage: 'classifieds/local',
     ExplorePage: 'classifieds/local',
+    InquiryConfirmationPage: 'classifieds/local',
   },
   unifieds: {
     ProductPage: 'unifieds/default',
@@ -78,6 +80,7 @@ const GLOBAL_SUBPAGE_FALLBACKS: Record<ThemeSubpage, string> = {
   BookingConfirmPage: 'properties/rental',
   BookingReservePage: 'properties/rental',
   ConsultationConfirmationPage: 'services/marketplace',
+  InquiryConfirmationPage: 'classifieds/local',
 };
 
 async function importThemeSubpage(
