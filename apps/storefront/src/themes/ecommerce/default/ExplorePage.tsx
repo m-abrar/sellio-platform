@@ -113,11 +113,17 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
           <span aria-hidden="true">&larr;</span>
           Back to shop
         </a>
-        <div className="ed-mono" style={{ marginBottom: '1.5rem' }}>
-          Product directory
+        <div className="ed-explore-hero-panel">
+          <div>
+            <div className="ed-mono">Product directory</div>
+            <h1>Explore the Collection</h1>
+            <p>Search, filter, and shop live products from your Sellio catalog.</p>
+          </div>
+          <div className="ed-explore-summary" aria-label="Collection summary">
+            <strong>{products.length}</strong>
+            <span>{useFallback ? 'demo products' : 'live products'}</span>
+          </div>
         </div>
-        <h1>Explore the Collection</h1>
-        <p>Search, filter, and shop live products from your Sellio catalog.</p>
       </header>
 
       {apiError && useFallback && (
@@ -176,6 +182,11 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
           </select>
         </div>
       </section>
+
+      <div className="ed-explore-result-row">
+        <span>{loading ? 'Loading collection' : `${filteredProducts.length} products found`}</span>
+        <a href={themeLink('/cart')}>View cart</a>
+      </div>
 
       {loading ? (
         <div className="ed-product-grid ed-explore-grid" aria-busy="true">

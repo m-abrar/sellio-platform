@@ -167,6 +167,17 @@ export default function ProductPage({ slug }: ProductPageProps) {
             {addingToCart ? 'Adding...' : 'Add to cart'}
           </button>
 
+          <div className="ed-detail-assurance" aria-label="Buyer assurance">
+            <div>
+              <strong>Secure checkout</strong>
+              <span>Order flow connected to Sellio cart.</span>
+            </div>
+            <div>
+              <strong>Live catalog</strong>
+              <span>Price and stock come from API records.</span>
+            </div>
+          </div>
+
           {cartNotice && (
             <p className="ed-cart-notice" role="status">
               Added to cart.{' '}

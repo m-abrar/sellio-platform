@@ -9,6 +9,12 @@ import { fetchProductsCatalog, resolveProductsFailure } from '@/themes/ecommerce
 import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 
+const shopAdvantages = [
+  { title: 'Verified products', detail: 'Seller-managed inventory with live product records.' },
+  { title: 'Fast checkout', detail: 'Cart, order, and payment flow ready for buyers.' },
+  { title: 'Responsive storefront', detail: 'Clean buying experience across mobile and desktop.' },
+];
+
 export default function Page() {
   const themeLink = useEcommerceThemeLink();
   const allowDemo = useDemoFallbackAllowed();
@@ -90,58 +96,59 @@ export default function Page() {
   return (
     <div className="ed-section">
       <section className="ed-hero">
-        <div>
-          <div className="ed-mono" style={{ marginBottom: '2.5rem' }}>
-            {heroEyebrow}
-          </div>
+        <div className="ed-hero-copy">
+          <div className="ed-mono ed-hero-kicker">{heroEyebrow}</div>
           <h1 className="ed-heading-xl">
             {heroTitle.split('\n').map((line, index, lines) => (
               <React.Fragment key={`${line}-${index}`}>
-                {line === heroHighlight ? (
-                  <span style={{ color: 'var(--ed-blue)' }}>{line}</span>
-                ) : (
-                  line
-                )}
+                {line === heroHighlight ? <span className="ed-heading-highlight">{line}</span> : line}
                 {index < lines.length - 1 ? <br /> : null}
               </React.Fragment>
             ))}
           </h1>
-          <p
-            style={{
-              marginTop: '5rem',
-              fontSize: '1.25rem',
-              color: 'var(--ed-text-muted)',
-              lineHeight: 1.8,
-              maxWidth: '550px',
-            }}
-          >
-            {heroDescription}
-          </p>
-          <div style={{ marginTop: '6rem' }}>
+          <p className="ed-hero-description">{heroDescription}</p>
+
+          <div className="ed-hero-actions">
             <a href={themeLink('/explore')} className="ed-btn-primary ed-inline-cta">
               {heroCta}
             </a>
+            <a href={themeLink('/cart')} className="ed-btn-secondary ed-inline-cta">
+              View cart
+            </a>
+          </div>
+
+          <div className="ed-hero-stats" aria-label="Storefront snapshot">
+            <div>
+              <strong>{products.length > 0 ? products.length : 'Live'}</strong>
+              <span>catalog items</span>
+            </div>
+            <div>
+              <strong>Secure</strong>
+              <span>checkout flow</span>
+            </div>
+            <div>
+              <strong>Fresh</strong>
+              <span>stock signals</span>
+            </div>
           </div>
         </div>
         <div className="ed-hero-img-wrapper">
           <img src={heroImage} alt="Hero Lifestyle" className="ed-hero-img" />
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '2rem',
-              right: '2rem',
-              background: 'white',
-              padding: '2rem',
-              borderRadius: '16px',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.05)',
-            }}
-          >
-            <div className="ed-mono" style={{ fontSize: '0.65rem', marginBottom: '0.5rem' }}>
-              {heroFeatureEyebrow}
-            </div>
-            <div style={{ fontWeight: 800, fontSize: '1rem' }}>{heroFeatureTitle}</div>
+          <div className="ed-hero-feature-card">
+            <div className="ed-mono">{heroFeatureEyebrow}</div>
+            <strong>{heroFeatureTitle}</strong>
+            <span>Ready for product detail, cart, and checkout.</span>
           </div>
         </div>
+      </section>
+
+      <section className="ed-service-band" aria-label="Store services">
+        {shopAdvantages.map((item) => (
+          <div key={item.title}>
+            <strong>{item.title}</strong>
+            <span>{item.detail}</span>
+          </div>
+        ))}
       </section>
 
       <section className="ed-category-strip">
@@ -154,17 +161,8 @@ export default function Page() {
       <section className="ed-collection-section">
         <div className="ed-section-heading">
           <div>
-            <div className="ed-mono" style={{ marginBottom: '1.5rem' }}>
-              {collectionEyebrow}
-            </div>
-            <h2
-              style={{
-                fontSize: '5rem',
-                fontWeight: 900,
-                letterSpacing: 0,
-                textTransform: 'uppercase',
-              }}
-            >
+            <div className="ed-mono ed-section-kicker">{collectionEyebrow}</div>
+            <h2>
               {collectionTitle.split('\n').map((line, index, lines) => (
                 <React.Fragment key={`${line}-${index}`}>
                   {line}
@@ -203,17 +201,13 @@ export default function Page() {
             ))
           ) : apiError && !useFallback ? (
             <div className="ed-product-state">
-              <div className="ed-mono" style={{ marginBottom: '1rem' }}>
-                {offlineKicker}
-              </div>
+              <div className="ed-mono ed-state-kicker">{offlineKicker}</div>
               <h3>{offlineTitle}</h3>
               <p>{apiError}</p>
             </div>
           ) : products.length === 0 ? (
             <div className="ed-product-state">
-              <div className="ed-mono" style={{ marginBottom: '1rem' }}>
-                {emptyKicker}
-              </div>
+              <div className="ed-mono ed-state-kicker">{emptyKicker}</div>
               <h3>{emptyTitle}</h3>
               <p>{emptyDescription}</p>
             </div>
@@ -239,20 +233,8 @@ export default function Page() {
       </section>
 
       <section className="ed-newsletter">
-        <div className="ed-mono" style={{ marginBottom: '3rem' }}>
-          {newsletterEyebrow}
-        </div>
-        <h2
-          style={{
-            fontSize: '6rem',
-            fontWeight: 900,
-            letterSpacing: 0,
-            textTransform: 'uppercase',
-            color: 'var(--ed-slate)',
-            marginBottom: '4rem',
-            lineHeight: 1,
-          }}
-        >
+        <div className="ed-mono ed-newsletter-kicker">{newsletterEyebrow}</div>
+        <h2>
           {newsletterTitle.split('\n').map((line, index, lines) => (
             <React.Fragment key={`${line}-${index}`}>
               {line}
@@ -260,37 +242,14 @@ export default function Page() {
             </React.Fragment>
           ))}
         </h2>
-        <p
-          style={{
-            maxWidth: '700px',
-            margin: '0 auto 8rem',
-            fontSize: '1.25rem',
-            color: 'var(--ed-text-muted)',
-            lineHeight: 1.8,
-          }}
-        >
-          {newsletterDescription}
-        </p>
+        <p>{newsletterDescription}</p>
         <div className="ed-newsletter-form">
-          <input
-            type="email"
-            placeholder={newsletterPlaceholder}
-            style={{
-              flex: 1,
-              padding: '1.5rem 2rem',
-              borderRadius: '12px',
-              border: '1px solid var(--ed-border)',
-              fontSize: '1rem',
-              fontWeight: 600,
-            }}
-          />
-          <button type="button" className="ed-btn-primary" style={{ padding: '1.5rem 4rem' }}>
+          <input type="email" placeholder={newsletterPlaceholder} />
+          <button type="button" className="ed-btn-primary">
             {newsletterButton}
           </button>
         </div>
       </section>
-
-      <div style={{ height: '15rem' }} />
     </div>
   );
 }

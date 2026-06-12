@@ -81,6 +81,7 @@ export const EcommerceProductCard = ({
         <img src={getProductImage(product)} alt={product.title} className="ed-img" />
         <div className="ed-card-badges">
           {featured ? <span className="ed-badge ed-badge-featured">Featured</span> : null}
+          {!inStock ? <span className="ed-badge ed-badge-muted">Sold out</span> : null}
         </div>
         <div className="ed-price-overlay">{formatProductPrice(product)}</div>
       </div>
@@ -90,12 +91,15 @@ export const EcommerceProductCard = ({
           <span>{sku}</span>
         </div>
         <h3>{product.title}</h3>
-        {product.description ? <p>{product.description}</p> : null}
+        <p>
+          {product.description ||
+            'Live catalog product with pricing, inventory, and checkout support.'}
+        </p>
         <div className="ed-card-footer">
           <span className={inStock ? 'ed-stock ed-stock-in' : 'ed-stock ed-stock-out'}>
             {inStock ? 'In stock' : 'Out of stock'}
           </span>
-          <span className="ed-card-action">View product</span>
+          <span className="ed-card-action">{inStock ? 'View product' : 'Details'}</span>
         </div>
       </div>
     </a>

@@ -104,11 +104,17 @@ Result:
 
 - The previous implementation partially carried the structure, but the concept had drifted into a dark TradeNode/exchange style.
 - The homepage has been realigned to the reference marketplace hub concept with a blue/orange palette, search integration, featured listing carousel, category blocks, trending item cards, top-rated seller trust section, and clear marketplace CTAs.
-- Existing Sellio behavior was preserved: API-backed products, demo fallback listings, theme-aware preview links, shared unified explore/cart/checkout flow, and menu-driven header/footer.
+- Existing Sellio behavior was preserved: API-backed products, theme-aware preview links, shared unified cart/checkout flow, and menu-driven header/footer.
 - Verification passed with `npm.cmd run lint` and `npm.cmd run build` in `apps/storefront`.
 - Second-pass cleanup fixed marketplace action buttons so header CTA menu items navigate correctly, removed one leftover sync-style sentence, and reverified `/preview/unifieds_marketplace` with HTTP 200.
 - Preview stability fix: `getActiveTheme()` is now cached per request and preserves the requested preview theme as the offline fallback, preventing the page from rewrapping in `unifieds_default` if the active-theme API fails during preview.
 - Live preview content fix: stale backend/theme default records for `unifieds_marketplace` were still serving the old Liquid Exchange hero/menu/footer copy. The frontend defaults, backend seeders, and current local DB records were updated to the MarketHub marketplace concept; `/preview/unifieds_marketplace` now returns no old Trade/Exchange hero or menu text.
+- Premium delivery pass: shortened hero/API-backed copy, added hero proof chips, expanded trust metrics, applied stronger card/surface styling, added line clamps for live listing content, and reverified `/preview/unifieds_marketplace` with the premium MarketHub copy and wrapper intact.
+- Competitive polish pass: upgraded the first-screen composition with marketplace snapshot stats, richer featured-card treatment, visible category inventory counts, stronger listing hover states, tighter mobile responsive guards, and a production build plus preview smoke check.
+- Explore page refactor: replaced the generic shared unified explore page with a marketplace-specific directory experience including a premium hero, live inventory summary, vertical selector lanes, category chips, refined filter command bar, polished result cards, load-more support, and stronger empty/loading/error states. Verified `/preview/unifieds_marketplace/explore` and a vertical-filtered preview route with HTTP 200. Cross-vertical detail routing remains a follow-up because the global listing route currently resolves to the active theme `ProductPage`.
+- Explore real-data fix: removed curated fallback/dummy explore records and switched the marketplace directory to real API listings from products, properties, vehicles, jobs, services, events, and classifieds. Verified all seven local `/api/v1/*` listing endpoints return HTTP 200 with records.
+- Explore runtime fix: replaced direct `@sellio/api-client` catalog-method calls with direct public `/api/v1/{vertical}` fetches inside the marketplace explore page, preventing the Turbopack browser runtime from crashing when `api.getProductsCatalog` is unavailable on the client instance.
+- Explore category-shape fix: normalized category/title fields from mixed vertical API responses before rendering, preventing React from receiving objects such as `{ id, title }` as card or filter text.
 
 ### `ecommerce_default` - Polished 2026-06-12
 

@@ -46,12 +46,18 @@ const fallbackListings: DisplayListing[] = [
 ];
 
 const categoryHighlights = [
-  { title: 'Properties', sample: 'Modern apartment', detail: '$1.2M - Downtown', image: '/themes/unifieds/marketplace/5.webp' },
-  { title: 'Events', sample: 'Summer music pass', detail: 'July 20 - Central Park', image: '/themes/unifieds/marketplace/18.webp' },
-  { title: 'Autos', sample: 'Tesla Model 3', detail: '2024 - verified', image: '/themes/unifieds/marketplace/10.webp' },
-  { title: 'Services', sample: 'Photography studio', detail: '5-star local provider', image: '/themes/unifieds/marketplace/14.webp' },
-  { title: 'Jobs', sample: 'Software engineer', detail: 'Remote - full time', image: '/themes/unifieds/marketplace/21.webp' },
-  { title: 'Classifieds', sample: 'Vintage watch', detail: '$250 - verified seller', image: '/themes/unifieds/marketplace/24.webp' },
+  { title: 'Properties', sample: 'Modern apartment', detail: '$1.2M - Downtown', image: '/themes/unifieds/marketplace/5.webp', count: '2.8k' },
+  { title: 'Events', sample: 'Summer music pass', detail: 'July 20 - Central Park', image: '/themes/unifieds/marketplace/18.webp', count: '310' },
+  { title: 'Autos', sample: 'Tesla Model 3', detail: '2024 - verified', image: '/themes/unifieds/marketplace/10.webp', count: '920' },
+  { title: 'Services', sample: 'Photography studio', detail: '5-star local provider', image: '/themes/unifieds/marketplace/14.webp', count: '640' },
+  { title: 'Jobs', sample: 'Software engineer', detail: 'Remote - full time', image: '/themes/unifieds/marketplace/21.webp', count: '1.2k' },
+  { title: 'Classifieds', sample: 'Vintage watch', detail: '$250 - verified seller', image: '/themes/unifieds/marketplace/24.webp', count: '4.6k' },
+];
+
+const heroStats = [
+  { value: '6+', label: 'market categories' },
+  { value: 'Fresh', label: 'listing feed' },
+  { value: 'Secure', label: 'checkout' },
 ];
 
 function productToListing(product: Product): DisplayListing {
@@ -141,6 +147,12 @@ export default function Page() {
           <h1 id="um-hero-title">{heroTitle}</h1>
           <p>{heroDescription}</p>
 
+          <div className="um-hero-proof" aria-label="Marketplace proof points">
+            <span>Multi-category search</span>
+            <span>Verified sellers</span>
+            <span>Fresh listing feed</span>
+          </div>
+
           <form className="um-hero-search" onSubmit={submitSearch}>
             <input
               type="search"
@@ -159,6 +171,15 @@ export default function Page() {
             <button type="button" className="um-btn-secondary" onClick={() => router.push(themeLink('/explore#categories'))}>
               {heroSecondaryCtaLabel}
             </button>
+          </div>
+
+          <div className="um-hero-stats" aria-label="Marketplace snapshot">
+            {heroStats.map((stat) => (
+              <div key={stat.label}>
+                <strong>{stat.value}</strong>
+                <span>{stat.label}</span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -184,10 +205,12 @@ export default function Page() {
                 key={listing.id}
               >
                 <img src={listing.image} alt={listing.title} />
-                <span>{listing.badge}</span>
-                <h2>{listing.title}</h2>
-                <p>{listing.description}</p>
-                <strong>{listing.price}</strong>
+                <div className="um-feature-card-content">
+                  <span>{listing.badge}</span>
+                  <h2>{listing.title}</h2>
+                  <p>{listing.description}</p>
+                  <strong>{listing.price}</strong>
+                </div>
               </a>
             ))
           )}
@@ -208,6 +231,7 @@ export default function Page() {
               <img src={category.image} alt={category.sample} />
               <div>
                 <span>{category.title}</span>
+                <strong>{category.count}</strong>
                 <h3>{category.sample}</h3>
                 <p>{category.detail}</p>
               </div>
@@ -281,6 +305,14 @@ export default function Page() {
             <div>
               <strong>24/7</strong>
               <span>Marketplace discovery</span>
+            </div>
+            <div>
+              <strong>7+</strong>
+              <span>Listing verticals</span>
+            </div>
+            <div>
+              <strong>1 cart</strong>
+              <span>Unified checkout path</span>
             </div>
           </div>
         </div>
