@@ -1,5 +1,5 @@
 import UnifiedCartPage from '@/themes/unifieds/shared/UnifiedCartPage';
 
 export default function CartPage() {
-  return <UnifiedCartPage primaryButtonClass="trade-btn-primary" />;
+  return <UnifiedCartPage primaryButtonClass="um-btn-primary" />;
 }

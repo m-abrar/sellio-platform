@@ -33,7 +33,12 @@ class ApiMenuController extends Controller
 
     public function index(Request $request, MenuService $menuService): JsonResponse
     {
-        $locations = collect(explode(',', (string) $request->query('locations', '')))
+        $requestedLocations = $request->query('locations', '');
+        $locationValues = is_array($requestedLocations)
+            ? $requestedLocations
+            : explode(',', (string) $requestedLocations);
+
+        $locations = collect($locationValues)
             ->map(fn ($location) => trim($location))
             ->filter()
             ->unique()

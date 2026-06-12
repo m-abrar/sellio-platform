@@ -43,7 +43,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
         console.error('Failed to load unified marketplace product details:', error);
         setProduct(null);
         setErrorMessage(
-          error instanceof Error ? error.message : 'The listing record could not be synchronized.',
+          error instanceof Error ? error.message : 'The listing record could not be loaded.',
         );
       } finally {
         if (isMounted) {
@@ -100,10 +100,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
     return (
       <main className="um-detail-page">
         <section className="um-detail-state" role="status">
-          <div className="um-mono" style={{ color: 'var(--um-gold)', marginBottom: '1rem' }}>TRADE_UNAVAILABLE</div>
+          <div className="um-mono" style={{ color: 'var(--um-orange)', marginBottom: '1rem' }}>LISTING_UNAVAILABLE</div>
           <h1>Listing details could not be loaded.</h1>
           <p>{errorMessage || 'The requested listing does not exist or has been removed.'}</p>
-          <a href={themeLink('/')} className="trade-btn-primary">Return to Exchange</a>
+          <a href={themeLink('/')} className="um-btn-primary">Return to marketplace</a>
         </section>
       </main>
     );
@@ -112,8 +112,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
   return (
     <main className="um-detail-page">
       <a href={themeLink('/')} className="um-detail-back">
-        <span aria-hidden="true">←</span>
-        Back to Exchange
+        <span aria-hidden="true">&larr;</span>
+        Back to marketplace
       </a>
 
       <section className="um-detail-grid" aria-labelledby="um-detail-page-title">
@@ -122,7 +122,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
 
         <article className="um-detail-panel">
-          <div className="um-mono" style={{ color: 'var(--um-gold)' }}>TRADE_{product.id}</div>
+          <div className="um-mono" style={{ color: 'var(--um-orange)' }}>LISTING_{product.id}</div>
           <h1 id="um-detail-page-title">{product.title}</h1>
           <div className="um-detail-price">{formatProductPrice(product)}</div>
 
@@ -149,7 +149,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           </div>
 
           <div className="um-detail-actions">
-            <button type="button" className="trade-btn-primary um-detail-action" onClick={handleAddToCart} disabled={addingToCart}>
+            <button type="button" className="um-btn-primary um-detail-action" onClick={handleAddToCart} disabled={addingToCart}>
               {addingToCart ? 'ADDING...' : 'ADD TO CART'}
             </button>
             {cartNotice ? (

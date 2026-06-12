@@ -2,19 +2,18 @@
 
 import React, { useEffect, useState } from 'react';
 import type { Product } from '@sellio/types';
-import { CategoryRibbon } from './components';
+import { CategoryRibbon, EcommerceProductCard } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
 import { fetchProductsCatalog, resolveProductsFailure } from '@/themes/ecommerce/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
-import { formatProductPrice, getProductImage } from '@/themes/unifieds/shared/product-utils';
 
 export default function Page() {
   const themeLink = useEcommerceThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'SUMMER_COLLECTION_2026_V8');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'New season essentials');
   const heroTitle = useThemeContent('hero.title', 'Refined\nEssentials for\nModern Life.');
   const heroHighlight = useThemeContent('hero.highlight', 'Modern Life.');
   const heroDescription = useThemeContent(
@@ -23,17 +22,17 @@ export default function Page() {
   );
   const heroCta = useThemeContent('hero.primary_cta_label', 'Shop Collection');
   const heroImage = useThemeContent('hero.image', '/themes/ecommerce/default/9.webp');
-  const heroFeatureEyebrow = useThemeContent('hero.feature_eyebrow', 'FEATURED_NODE');
-  const heroFeatureTitle = useThemeContent('hero.feature_title', 'Technical_Shell_v4');
-  const collectionEyebrow = useThemeContent('collection.eyebrow', 'CURATED_PRODUCT_REGISTRY');
+  const heroFeatureEyebrow = useThemeContent('hero.feature_eyebrow', 'Featured pick');
+  const heroFeatureTitle = useThemeContent('hero.feature_title', 'Modern wardrobe staples');
+  const collectionEyebrow = useThemeContent('collection.eyebrow', 'Fresh arrivals');
   const collectionTitle = useThemeContent('collection.title', 'New\nArrivals.');
   const collectionDescription = useThemeContent(
     'collection.description',
-    "Our unified protocol synchronizes product availability from the world's most significant garment nodes.",
+    'Browse live products from your Sellio catalog with clear pricing, stock signals, categories, and direct product detail pages.',
   );
-  const offlineKicker = useThemeContent('sync.offline_kicker', 'PRODUCT_SYNC_OFFLINE');
-  const offlineTitle = useThemeContent('sync.offline_title', 'Products could not be synchronized.');
-  const emptyKicker = useThemeContent('empty.kicker', 'EMPTY_PRODUCT_REGISTRY');
+  const offlineKicker = useThemeContent('sync.offline_kicker', 'Catalog unavailable');
+  const offlineTitle = useThemeContent('sync.offline_title', 'Products could not be loaded.');
+  const emptyKicker = useThemeContent('empty.kicker', 'Empty catalog');
   const emptyTitle = useThemeContent('empty.title', 'No live products are available yet.');
   const emptyDescription = useThemeContent(
     'empty.description',
@@ -45,7 +44,7 @@ export default function Page() {
     'newsletter.description',
     'Join our collective and be the first to know about new collection drops, exclusive events, and seasonal sales.',
   );
-  const newsletterPlaceholder = useThemeContent('newsletter.placeholder', 'ENTER_EMAIL_NODE');
+  const newsletterPlaceholder = useThemeContent('newsletter.placeholder', 'Enter your email');
   const newsletterButton = useThemeContent('newsletter.button_label', 'SUBSCRIBE');
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -145,31 +144,15 @@ export default function Page() {
         </div>
       </section>
 
-      <section
-        style={{
-          padding: '8rem 0',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '3rem',
-          borderTop: '1px solid var(--ed-border)',
-          marginTop: '10rem',
-        }}
-      >
-        <CategoryRibbon label="New Arrivals" count="124" />
-        <CategoryRibbon label="Essentials" count="86" />
-        <CategoryRibbon label="Outerwear" count="42" />
-        <CategoryRibbon label="Accessories" count="156" />
+      <section className="ed-category-strip">
+        <CategoryRibbon label="New Arrivals" count="124" href={themeLink('/explore')} />
+        <CategoryRibbon label="Essentials" count="86" href={themeLink('/explore')} />
+        <CategoryRibbon label="Outerwear" count="42" href={themeLink('/explore')} />
+        <CategoryRibbon label="Accessories" count="156" href={themeLink('/explore')} />
       </section>
 
-      <section style={{ marginTop: '15rem' }}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            marginBottom: '8rem',
-          }}
-        >
+      <section className="ed-collection-section">
+        <div className="ed-section-heading">
           <div>
             <div className="ed-mono" style={{ marginBottom: '1.5rem' }}>
               {collectionEyebrow}
@@ -178,7 +161,7 @@ export default function Page() {
               style={{
                 fontSize: '5rem',
                 fontWeight: 900,
-                letterSpacing: '-2px',
+                letterSpacing: 0,
                 textTransform: 'uppercase',
               }}
             >
@@ -190,15 +173,7 @@ export default function Page() {
               ))}
             </h2>
           </div>
-          <div
-            style={{
-              textAlign: 'right',
-              maxWidth: '400px',
-              fontSize: '1rem',
-              color: 'var(--ed-text-muted)',
-              lineHeight: 1.8,
-            }}
-          >
+          <div className="ed-section-description">
             {collectionDescription}
           </div>
         </div>
@@ -244,20 +219,12 @@ export default function Page() {
             </div>
           ) : (
             products.slice(0, 8).map((product) => (
-              <a
+              <EcommerceProductCard
+                product={product}
                 href={themeLink(`/product/${product.slug}`)}
-                className="ed-product-card"
                 key={product.id}
-              >
-                <div className="ed-img-frame">
-                  <img src={getProductImage(product)} alt={product.title} className="ed-img" />
-                </div>
-                <div className="ed-mono" style={{ marginBottom: '0.8rem' }}>
-                  PRODUCT_{product.id}
-                </div>
-                <h3>{product.title}</h3>
-                <div className="ed-product-price">{formatProductPrice(product)}</div>
-              </a>
+                featured={product.id === products[0]?.id}
+              />
             ))
           )}
         </div>
@@ -271,15 +238,7 @@ export default function Page() {
         )}
       </section>
 
-      <section
-        style={{
-          marginTop: '20rem',
-          padding: '15rem 10%',
-          background: 'var(--ed-frost)',
-          borderRadius: '32px',
-          textAlign: 'center',
-        }}
-      >
+      <section className="ed-newsletter">
         <div className="ed-mono" style={{ marginBottom: '3rem' }}>
           {newsletterEyebrow}
         </div>
@@ -287,7 +246,7 @@ export default function Page() {
           style={{
             fontSize: '6rem',
             fontWeight: 900,
-            letterSpacing: '-4px',
+            letterSpacing: 0,
             textTransform: 'uppercase',
             color: 'var(--ed-slate)',
             marginBottom: '4rem',
@@ -312,7 +271,7 @@ export default function Page() {
         >
           {newsletterDescription}
         </p>
-        <div style={{ display: 'flex', gap: '1.5rem', maxWidth: '600px', margin: '0 auto' }}>
+        <div className="ed-newsletter-form">
           <input
             type="email"
             placeholder={newsletterPlaceholder}

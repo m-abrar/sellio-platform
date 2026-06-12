@@ -22,10 +22,10 @@ $modernFooterLinks = tm_links([
 ]);
 
 $marketplaceFooterLinks = tm_links([
-    'Liquid Exchange',
-    'Authority Hub',
-    'Provenances OS',
-    'Market Registry',
+    'Browse Listings',
+    'Seller Directory',
+    'Buyer Protection',
+    'Marketplace Help',
 ]);
 
 $interactiveFooterLinks = tm_links([
@@ -108,15 +108,15 @@ return [
 
     'unifieds_marketplace' => [
         tm_menu('main_header', 'Main Header Menu', tm_links([
-            'Exchange',
-            'Grid',
-            'Analytics',
-            'Institutions',
+            ['Explore', '/explore'],
+            ['Categories', '/explore#categories'],
+            ['Featured', '/explore'],
+            ['Cart', '/cart'],
         ])),
         tm_menu('action_buttons', 'Header Actions', tm_links([
-            'START TRADING',
+            ['Explore listings', '/explore'],
         ])),
-        ...tm_footer_node_cols('EXCHANGES', 'LOGISTICS', 'COMPLIANCE', $marketplaceFooterLinks),
+        ...tm_footer_node_cols('MARKETPLACE', 'SELLERS', 'TRUST', $marketplaceFooterLinks),
         tm_social_os(),
     ],
 

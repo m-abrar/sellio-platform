@@ -1,6 +1,7 @@
 import type { Theme } from "@sellio/types";
 import { api } from "@sellio/api-client";
 import { headers } from "next/headers";
+import { cache } from "react";
 
 export type IndustryLayout = string;
 
@@ -28,14 +29,14 @@ export function resolveIndustryLayout(theme: Theme): IndustryLayout {
 /**
  * Fetches the active theme from the Laravel API.
  */
-export async function getActiveTheme(): Promise<ResolvedTheme> {
+export const getActiveTheme = cache(async function getActiveTheme(): Promise<ResolvedTheme> {
   const headerList = await headers();
   const themeOverride = headerList.get("x-theme-key") || 
                         headerList.get("cookie")?.match(/(?:^|; )theme=([^;]*)/)?.[1];
 
   try {
     const theme = await api.getActiveTheme(themeOverride);
-    
+
     return {
       theme,
       layout: resolveIndustryLayout(theme),
@@ -54,24 +55,38 @@ export async function getActiveTheme(): Promise<ResolvedTheme> {
     };
 
     console.error(`[Offline Resilience] Failed to fetch active theme from API (${apiError.response?.status || 503}: ${apiError.message || error})`);
+
+    const responseCode = apiError.response?.data?.code;
+    const responseStatus = apiError.response?.status || 503;
+    const normalizedStatus = responseCode === "DB_CONNECTION_REFUSED" ? 503 : responseStatus;
+    const normalizedMessage = responseCode === "DB_CONNECTION_REFUSED"
+      ? "Database service is currently unavailable. Please try again later."
+      : apiError.response?.data?.message || "Database service is currently unavailable. Please try again later.";
+
+    const fallbackThemeKey = themeOverride || 'unifieds_default';
+    const fallbackTitle = fallbackThemeKey
+      .split('_')
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
     
     return {
       theme: {
         id: 0,
-        theme_key: 'unifieds_default',
-        title: 'Unified Default',
+        theme_key: fallbackThemeKey,
+        vertical: fallbackThemeKey.split('_')[0] || 'unifieds',
+        title: fallbackTitle,
         is_active: true,
         variables: {},
         app_settings: { site_name: 'Sellio', site_logo: '', hide_site_name: '0' }
       },
-      layout: 'unifieds/default',
+      layout: fallbackThemeKey.toLowerCase().replace('_', '/'),
       databaseOffline: true,
       errorDetails: {
         success: false,
-        message: apiError.response?.data?.message || "Database service is currently unavailable. Please try again later.",
-        code: apiError.response?.data?.code || "DB_CONNECTION_REFUSED",
-        status: apiError.response?.status || 503
+        message: normalizedMessage,
+        code: responseCode || "DB_CONNECTION_REFUSED",
+        status: normalizedStatus
       }
     };
   }
-}
+});

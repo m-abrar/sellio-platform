@@ -1,5 +1,6 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
@@ -7,44 +8,83 @@ import { MarketGrid, LiquidSyncBar } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
+type DisplayListing = {
+  id: string | number;
+  title: string;
+  description: string;
+  price: string;
+  image: string;
+  slug?: string;
+  badge: string;
+};
+
+const fallbackListings: DisplayListing[] = [
+  {
+    id: 'fallback-property',
+    title: 'Modern Penthouse',
+    description: 'Skyline views, concierge service, flexible closing.',
+    price: '$3.5M',
+    image: '/themes/unifieds/marketplace/1.webp',
+    badge: 'Property',
+  },
+  {
+    id: 'fallback-auto',
+    title: 'Electric SUV',
+    description: 'Low mileage, premium package, fast charging.',
+    price: '$55,000',
+    image: '/themes/unifieds/marketplace/10.webp',
+    badge: 'Auto',
+  },
+  {
+    id: 'fallback-service',
+    title: 'Photo Studio',
+    description: 'Top-rated creative team for product shoots.',
+    price: 'From $299',
+    image: '/themes/unifieds/marketplace/14.webp',
+    badge: 'Service',
+  },
+];
+
+const categoryHighlights = [
+  { title: 'Properties', sample: 'Modern apartment', detail: '$1.2M - Downtown', image: '/themes/unifieds/marketplace/5.webp' },
+  { title: 'Events', sample: 'Summer music pass', detail: 'July 20 - Central Park', image: '/themes/unifieds/marketplace/18.webp' },
+  { title: 'Autos', sample: 'Tesla Model 3', detail: '2024 - verified', image: '/themes/unifieds/marketplace/10.webp' },
+  { title: 'Services', sample: 'Photography studio', detail: '5-star local provider', image: '/themes/unifieds/marketplace/14.webp' },
+  { title: 'Jobs', sample: 'Software engineer', detail: 'Remote - full time', image: '/themes/unifieds/marketplace/21.webp' },
+  { title: 'Classifieds', sample: 'Vintage watch', detail: '$250 - verified seller', image: '/themes/unifieds/marketplace/24.webp' },
+];
+
+function productToListing(product: Product): DisplayListing {
+  return {
+    id: product.id,
+    title: product.title,
+    description: product.description || 'Verified marketplace listing.',
+    price: product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Contact seller'),
+    image: product.media?.featured_image || product.image_url || '/themes/unifieds/marketplace/2.webp',
+    slug: product.slug,
+    badge: 'Featured',
+  };
+}
+
 export default function Page() {
   const router = useRouter();
   const themeLink = useUnifiedThemeLink();
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'LIQUID_EXCHANGE_V5');
-  const heroTitle = useThemeContent('hero.title', 'Trade the\nFuture.');
-  const heroHighlight = useThemeContent('hero.highlight', 'Future.');
-  const heroDescription = useThemeContent('hero.description', "The world's most advanced high-fidelity marketplace node. Precision transactional engineering for the modern global economy.");
-  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'START TRADING');
-  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'MARKET DATA');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Marketplace hub');
+  const heroTitle = useThemeContent('hero.title', 'Browse every marketplace in one place.');
+  const heroDescription = useThemeContent('hero.description', 'Find products, properties, cars, services, jobs, events, and classifieds from one polished Sellio storefront.');
+  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'Explore listings');
+  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'View categories');
 
-  const collectionEyebrow = useThemeContent('collection.eyebrow', 'LIVE_TRADE_EXCHANGE');
-  const collectionTitle = useThemeContent('collection.title', 'Marketplace Listings.');
-  const collectionDescription = useThemeContent('collection.description', 'Live product records synchronized into the Trade Node exchange for liquid marketplace discovery.');
-
-  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'EXCHANGE_OFFLINE');
-  const syncOfflineTitle = useThemeContent('sync.offline_title', 'Listings could not be synchronized.');
-  const emptyKicker = useThemeContent('empty.kicker', 'EMPTY_EXCHANGE');
-  const emptyTitle = useThemeContent('empty.title', 'No live listings are available yet.');
-  const emptyDescription = useThemeContent('empty.description', 'Add product records in the backend and this exchange feed will hydrate automatically.');
-
-  const midSectionEyebrow = useThemeContent('mid_section.eyebrow', 'TRANSACTIONAL_AUTHORITY');
-  const midSectionTitle = useThemeContent('mid_section.title', 'Liquid\nLogistics.');
-  const midSectionDescription = useThemeContent('mid_section.description', 'The Trade Node protocol is designed for high-velocity peer-to-peer commerce. Every transaction is a node in the global Sellio registry, ensuring that your digital and physical assets are distributed with absolute precision.');
-  const midSectionMetric1Value = useThemeContent('mid_section.metric_1_value', '1.4B+');
-  const midSectionMetric1Label = useThemeContent('mid_section.metric_1_label', 'ANNUAL_VOLUME');
-  const midSectionMetric2Value = useThemeContent('mid_section.metric_2_value', '24/7');
-  const midSectionMetric2Label = useThemeContent('mid_section.metric_2_label', 'MARKET_UPTIME');
-  const midSectionImage = useThemeMedia('mid_section.image', '/themes/unifieds/marketplace/1.webp');
-
-  const ctaTitle = useThemeContent('cta.title', 'Liquidate the\nFuture.');
-  const ctaDescription = useThemeContent('cta.description', "Connect your trade node to the global exchange and join the world's most liquid high-fidelity distribution network.");
-  const ctaButtonLabel = useThemeContent('cta.button_label', 'INITIALIZE TRADE NODE');
-
-  const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%230f172a'/><g transform='translate(328,214)' stroke='%2310b981' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='8'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='800' letter-spacing='2' fill='%2364748b'>EXCHANGE ASSET</text></svg>";
+  const featuredTitle = useThemeContent('collection.title', 'Featured listings');
+  const featuredDescription = useThemeContent('collection.description', 'Fresh listings from your Sellio catalog.');
+  const trendingTitle = useThemeContent('trending.title', 'Trending items');
+  const trendingDescription = useThemeContent('trending.description', 'Popular listings buyers can scan quickly.');
+  const trustImage = useThemeMedia('mid_section.image', '/themes/unifieds/marketplace/16.webp');
 
   useEffect(() => {
     let isMounted = true;
@@ -79,177 +119,183 @@ export default function Page() {
     };
   }, []);
 
-  const getProductImage = (product: Product) => (
-    product.media?.featured_image || product.image_url || placeholderImage
-  );
+  const displayListings = useMemo(() => {
+    if (loadingListings) {
+      return [];
+    }
 
-  const formatPrice = (product: Product) => (
-    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Negotiate exchange')
-  );
+    return products.length > 0 ? products.slice(0, 6).map(productToListing) : fallbackListings;
+  }, [loadingListings, products]);
+
+  const submitSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const term = searchQuery.trim();
+    router.push(themeLink(term ? `/explore?search=${encodeURIComponent(term)}` : '/explore'));
+  };
 
   return (
     <div>
-      {/* Hero Section */}
-      <section className="trade-hero" aria-labelledby="um-hero-title">
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-              <div className="um-mono" style={{ color: 'var(--um-green)', marginBottom: '3rem' }}>{heroEyebrow}</div>
-              <h1 className="um-heading-xl" id="um-hero-title">
-                {heroTitle.split('\n').map((line, index, lines) => {
-                  const parts = heroHighlight ? line.split(new RegExp(`(${heroHighlight})`, 'g')) : [line];
-                  return (
-                    <React.Fragment key={`${line}-${index}`}>
-                      {parts.map((part, pIdx) => 
-                        part === heroHighlight ? (
-                          <span key={pIdx}>{part}</span>
-                        ) : (
-                          part
-                        )
-                      )}
-                      {index < lines.length - 1 ? <br /> : null}
-                    </React.Fragment>
-                  );
-                })}
-              </h1>
-              <p style={{ maxWidth: '800px', margin: '3rem auto 6rem', fontSize: '1.5rem', color: '#94a3b8', lineHeight: 1.8 }}>
-                {heroDescription}
-              </p>
-              <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center', flexWrap: 'wrap' }} className="um-hero-buttons">
-                  <button className="trade-btn-primary" id="um-btn-explore" onClick={() => router.push(themeLink('/explore'))}>
-                    {heroPrimaryCtaLabel}
-                  </button>
-                  <button style={{ 
-                      background: 'transparent', 
-                      border: '2px solid #334155', 
-                      color: 'white', 
-                      padding: '1.5rem 5rem', 
-                      borderRadius: '12px', 
-                      fontFamily: 'var(--um-font-heading)', 
-                      fontWeight: 800, 
-                      fontSize: '1rem', 
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                  }} id="um-btn-market-data" onClick={() => router.push(themeLink('/explore'))}>
-                      {heroSecondaryCtaLabel}
-                  </button>
-              </div>
+      <section className="um-hero" aria-labelledby="um-hero-title">
+        <div className="um-hero-content">
+          <div className="um-section-kicker">{heroEyebrow}</div>
+          <h1 id="um-hero-title">{heroTitle}</h1>
+          <p>{heroDescription}</p>
+
+          <form className="um-hero-search" onSubmit={submitSearch}>
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Search homes, cars, services, jobs..."
+              aria-label="Search marketplace listings"
+            />
+            <button type="submit">Search</button>
+          </form>
+
+          <div className="um-hero-actions">
+            <button type="button" className="um-btn-primary" onClick={() => router.push(themeLink('/explore'))}>
+              {heroPrimaryCtaLabel}
+            </button>
+            <button type="button" className="um-btn-secondary" onClick={() => router.push(themeLink('/explore#categories'))}>
+              {heroSecondaryCtaLabel}
+            </button>
           </div>
+        </div>
+
+        <div className="um-featured-carousel" aria-label="Featured listings carousel" aria-busy={loadingListings}>
+          {loadingListings ? (
+            [0, 1, 2].map((item) => (
+              <div
+                className={`um-feature-card um-feature-card-loading ${item === 0 ? 'um-feature-card-primary' : ''}`}
+                key={item}
+              >
+                <div className="um-feature-card-skeleton-image" />
+                <span />
+                <h2 />
+                <p />
+                <strong />
+              </div>
+            ))
+          ) : (
+            displayListings.slice(0, 3).map((listing, index) => (
+              <a
+                href={listing.slug ? themeLink(`/product/${listing.slug}`) : themeLink('/explore')}
+                className={`um-feature-card ${index === 0 ? 'um-feature-card-primary' : ''}`}
+                key={listing.id}
+              >
+                <img src={listing.image} alt={listing.title} />
+                <span>{listing.badge}</span>
+                <h2>{listing.title}</h2>
+                <p>{listing.description}</p>
+                <strong>{listing.price}</strong>
+              </a>
+            ))
+          )}
+        </div>
       </section>
 
-      {/* Liquid Sync Bar */}
       <LiquidSyncBar />
 
-      {/* Market Grid Section */}
+      <section className="um-category-blocks" id="categories" aria-labelledby="um-category-blocks-title">
+        <div className="um-section-kicker">Category blocks</div>
+        <div className="um-section-heading-row">
+          <h2 id="um-category-blocks-title">Start with a category.</h2>
+          <a href={themeLink('/explore')} className="um-text-link">View marketplace</a>
+        </div>
+        <div className="um-category-highlight-grid">
+          {categoryHighlights.map((category) => (
+            <a href={themeLink(`/explore?category=${encodeURIComponent(category.title.toLowerCase())}`)} className="um-category-highlight" key={category.title}>
+              <img src={category.image} alt={category.sample} />
+              <div>
+                <span>{category.title}</span>
+                <h3>{category.sample}</h3>
+                <p>{category.detail}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
       <MarketGrid />
 
-      {/* Live Listings */}
-      <section className="um-listings-section" id="um-exchange-section" aria-labelledby="um-exchange-title">
-          <div className="um-listings-header">
-              <div className="um-mono" style={{ color: 'var(--um-green)', marginBottom: '1.5rem' }}>{collectionEyebrow}</div>
-              <h2 id="um-exchange-title">{collectionTitle}</h2>
-              <p>{collectionDescription}</p>
-          </div>
+      <section className="um-listings-section" aria-labelledby="um-trending-title">
+        <div className="um-listings-header">
+          <div className="um-section-kicker">Buyer activity</div>
+          <h2 id="um-trending-title">{trendingTitle}</h2>
+          <p>{trendingDescription}</p>
+        </div>
 
-          {loadingListings ? (
-              <div className="um-listings-grid" aria-label="Loading live listings">
-                  {[1, 2, 3].map((item) => (
-                      <div className="um-listing-card um-listing-skeleton" key={item}>
-                          <div className="um-listing-image-wrap" />
-                          <div className="um-listing-body">
-                              <span />
-                              <strong />
-                              <em />
-                          </div>
-                      </div>
-                  ))}
+        {loadingListings ? (
+          <div className="um-listings-grid" aria-label="Loading live listings">
+            {[1, 2, 3].map((item) => (
+              <div className="um-listing-card um-listing-skeleton" key={item}>
+                <div className="um-listing-image-wrap" />
+                <div className="um-listing-body">
+                  <span />
+                  <strong />
+                  <em />
+                </div>
               </div>
-          ) : listingError ? (
-              <div className="um-listing-state" role="status">
-                  <div className="um-mono" style={{ color: 'var(--um-green)', marginBottom: '1rem' }}>{syncOfflineKicker}</div>
-                  <h3>{syncOfflineTitle}</h3>
-                  <p>{listingError}</p>
-              </div>
-          ) : products.length === 0 ? (
-              <div className="um-listing-state" role="status">
-                  <div className="um-mono" style={{ color: 'var(--um-green)', marginBottom: '1rem' }}>{emptyKicker}</div>
-                  <h3>{emptyTitle}</h3>
-                  <p>{emptyDescription}</p>
-              </div>
-          ) : (
-              <div className="um-listings-grid">
-                  {products.slice(0, 6).map((product) => (
-                      <a href={themeLink(`/product/${product.slug}`)} className="um-listing-card" key={product.id}>
-                          <div className="um-listing-image-wrap">
-                              <img src={getProductImage(product)} alt={product.title} />
-                          </div>
-                          <div className="um-listing-body">
-                              <div className="um-mono">EXCHANGE_{product.id}</div>
-                              <h3>{product.title}</h3>
-                              <p>{product.description || 'Verified marketplace record synchronized into the Trade Node exchange.'}</p>
-                              <div className="um-listing-meta">
-                                  <span>{formatPrice(product)}</span>
-                                  <span>Open Trade</span>
-                              </div>
-                          </div>
-                      </a>
-                  ))}
-              </div>
-          )}
+            ))}
+          </div>
+        ) : listingError && products.length === 0 ? (
+          <div className="um-listing-state" role="status">
+            <div className="um-section-kicker">Demo fallback active</div>
+            <h3>Live listings could not be loaded.</h3>
+            <p>{listingError}</p>
+          </div>
+        ) : (
+          <div className="um-listings-grid">
+            {displayListings.map((listing) => (
+              <a href={listing.slug ? themeLink(`/product/${listing.slug}`) : themeLink('/explore')} className="um-listing-card" key={listing.id}>
+                <div className="um-listing-image-wrap">
+                  <img src={listing.image} alt={listing.title} />
+                </div>
+                <div className="um-listing-body">
+                  <div className="um-listing-badge">{listing.badge}</div>
+                  <h3>{listing.title}</h3>
+                  <p>{listing.description}</p>
+                  <div className="um-listing-meta">
+                    <span>{listing.price}</span>
+                    <span>View details</span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
       </section>
 
-      {/* Mid-Section: Transactional Authority */}
-      <section className="um-logistics-grid" aria-labelledby="um-logistics-title">
-          <div className="um-logistics-grid-container">
-              <div>
-                  <span className="um-mono" style={{ color: 'var(--um-green)' }}>{midSectionEyebrow}</span>
-                  <h2 style={{ fontFamily: 'var(--um-font-heading)', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 900, marginTop: '2rem', marginBottom: '3rem', letterSpacing: '-2px', color: 'var(--um-slate)', lineHeight: 1.1 }} id="um-logistics-title">
-                    {midSectionTitle.split('\n').map((line, index, lines) => (
-                      <React.Fragment key={`${line}-${index}`}>
-                        {line}
-                        {index < lines.length - 1 ? <br /> : null}
-                      </React.Fragment>
-                    ))}
-                  </h2>
-                  <p style={{ fontSize: '1.2rem', color: '#64748b', lineHeight: 2, marginBottom: '4rem' }}>
-                    {midSectionDescription}
-                  </p>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem' }} className="um-metrics-row">
-                      <div>
-                          <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--um-font-heading)', color: 'var(--um-slate)' }}>{midSectionMetric1Value}</div>
-                          <div className="um-mono" style={{ color: '#94a3b8', fontSize: '0.65rem' }}>{midSectionMetric1Label}</div>
-                      </div>
-                      <div>
-                          <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--um-font-heading)', color: 'var(--um-slate)' }}>{midSectionMetric2Value}</div>
-                          <div className="um-mono" style={{ color: '#94a3b8', fontSize: '0.65rem' }}>{midSectionMetric2Label}</div>
-                      </div>
-                  </div>
-              </div>
-              <div style={{ position: 'relative' }}>
-                  <div style={{ height: '600px', background: 'var(--um-bg)', borderRadius: '40px', overflow: 'hidden', border: '1px solid var(--um-border)' }}>
-                      <img src={midSectionImage} alt="Global Trade Operations Hub" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }} />
-                  </div>
-                  <div className="um-floating-verified-badge" id="um-badge-verified">
-                      VERIFIED
-                  </div>
-              </div>
+      <section className="um-trust-section" aria-labelledby="um-trust-title">
+        <div>
+          <div className="um-section-kicker">Top-rated sellers</div>
+          <h2 id="um-trust-title">A marketplace buyers understand fast.</h2>
+          <p>
+            Search first, scan featured listings, browse categories, and move into details without friction.
+          </p>
+          <div className="um-trust-metrics">
+            <div>
+              <strong>4.9/5</strong>
+              <span>Average seller rating</span>
+            </div>
+            <div>
+              <strong>24/7</strong>
+              <span>Marketplace discovery</span>
+            </div>
           </div>
+        </div>
+        <figure>
+          <img src={trustImage} alt="Verified marketplace seller workspace" />
+          <figcaption>Verified sellers</figcaption>
+        </figure>
       </section>
 
-      {/* Final CTA */}
-      <section style={{ padding: '12rem 5%', textAlign: 'center', background: 'var(--um-bg)' }} aria-labelledby="um-cta-title">
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-              <h2 style={{ fontFamily: 'var(--um-font-heading)', fontSize: 'clamp(3rem, 7vw, 6rem)', fontWeight: 900, color: 'var(--um-slate)', marginBottom: '4rem', letterSpacing: '-4px', lineHeight: 1.1 }} id="um-cta-title">
-                {ctaTitle.split('\n').map((line, index, lines) => (
-                  <React.Fragment key={`${line}-${index}`}>
-                    {line}
-                    {index < lines.length - 1 ? <br /> : null}
-                  </React.Fragment>
-                ))}
-              </h2>
-              <p style={{ fontSize: '1.5rem', color: '#64748b', lineHeight: 1.8, marginBottom: '6rem' }}>
-                {ctaDescription}
-              </p>
-              <button className="trade-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.4rem' }} id="um-btn-cta-handshake" onClick={() => router.push(themeLink('/explore'))}>{ctaButtonLabel}</button>
-          </div>
+      <section className="um-final-cta" aria-labelledby="um-final-cta-title">
+        <h2 id="um-final-cta-title">{featuredTitle}</h2>
+        <p>{featuredDescription}</p>
+        <button type="button" className="um-btn-primary" onClick={() => router.push(themeLink('/explore'))}>
+          Browse the marketplace
+        </button>
       </section>
     </div>
   );

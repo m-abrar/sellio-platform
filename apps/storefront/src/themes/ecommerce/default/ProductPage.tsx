@@ -96,7 +96,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       <main className="ed-detail-page">
         <section className="ed-detail-state" role="status">
           <div className="ed-mono" style={{ marginBottom: '1rem' }}>
-            PRODUCT_UNAVAILABLE
+            Product unavailable
           </div>
           <h1>Product could not be loaded.</h1>
           <p>
@@ -113,7 +113,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   return (
     <main className="ed-detail-page">
       <a href={themeLink('/')} className="ed-detail-back">
-        <span aria-hidden="true">←</span>
+        <span aria-hidden="true">&larr;</span>
         Back to shop
       </a>
 
@@ -129,7 +129,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
 
         <article className="ed-detail-panel">
-          <div className="ed-mono">PRODUCT_{product.id}</div>
+          <div className="ed-mono">SKU-{String(product.id).padStart(4, '0')}</div>
           <h1 id="ed-detail-title">{product.title}</h1>
           <div className="ed-detail-price">{formatProductPrice(product)}</div>
 
@@ -139,7 +139,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             <h2>Description</h2>
             <p>
               {product.description ||
-                'This live product record is synchronized from the Sellio catalog and prepared for ecommerce storefront distribution.'}
+                'This product is available from the Sellio catalog with pricing, stock, and checkout handled by the storefront.'}
             </p>
           </div>
 

@@ -2,13 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import type { Category, Product } from '@sellio/types';
+import { EcommerceProductCard } from './components';
 import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
 import { fetchExploreCatalog, resolveExploreFailure } from '@/themes/ecommerce/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 import {
-  formatProductPrice,
-  getProductImage,
   isExploreSortOption,
   type ExploreSortOption,
 } from '@/themes/unifieds/shared/product-utils';
@@ -111,14 +110,14 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
     <main className="ed-explore-page">
       <header className="ed-explore-header">
         <a href={themeLink('/')} className="ed-detail-back">
-          <span aria-hidden="true">←</span>
+          <span aria-hidden="true">&larr;</span>
           Back to shop
         </a>
         <div className="ed-mono" style={{ marginBottom: '1.5rem' }}>
-          PRODUCT_DIRECTORY
+          Product directory
         </div>
         <h1>Explore the Collection</h1>
-        <p>Search, filter, and shop live products synchronized from your Sellio catalog.</p>
+        <p>Search, filter, and shop live products from your Sellio catalog.</p>
       </header>
 
       {apiError && useFallback && (
@@ -194,26 +193,18 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
       ) : filteredProducts.length > 0 ? (
         <div className="ed-product-grid ed-explore-grid">
           {filteredProducts.map((product) => (
-            <a
+            <EcommerceProductCard
+              product={product}
               href={themeLink(`/product/${product.slug}`)}
-              className="ed-product-card"
+              categories={categories}
               key={product.id}
-            >
-              <div className="ed-img-frame">
-                <img src={getProductImage(product)} alt={product.title} className="ed-img" />
-              </div>
-              <div className="ed-mono" style={{ marginBottom: '0.8rem' }}>
-                PRODUCT_{product.id}
-              </div>
-              <h3>{product.title}</h3>
-              <div className="ed-product-price">{formatProductPrice(product)}</div>
-            </a>
+            />
           ))}
         </div>
       ) : (
         <div className="ed-product-state" role="status">
           <div className="ed-mono" style={{ marginBottom: '1rem' }}>
-            EMPTY_RESULTS
+            Empty results
           </div>
           <h3>No products match your filters.</h3>
           <p>Try clearing filters or searching with fewer keywords.</p>
