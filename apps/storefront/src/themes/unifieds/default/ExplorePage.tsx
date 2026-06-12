@@ -1,9 +1,18 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
+import React, { useEffect, useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { Category, Product } from '@sellio/types';
-import { formatProductPrice, getProductImage, isExploreSortOption, type ExploreSortOption } from '@/themes/unifieds/shared/product-utils';
+import { CatalogSyncAlert } from '@/themes/unifieds/shared/CatalogSyncAlert';
+import { fetchProductsExplore } from '@/themes/unifieds/shared/catalog';
+import {
+  formatProductPrice,
+  getProductCategoryLabel,
+  getProductImage,
+  isExploreSortOption,
+  PRODUCT_CARD_PLACEHOLDER,
+  type ExploreSortOption,
+} from '@/themes/unifieds/shared/product-utils';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 interface ExplorePageProps {
@@ -11,80 +20,117 @@ interface ExplorePageProps {
   initialSearch?: string;
 }
 
-export default function ExplorePage({ initialCategorySlug, initialSearch = '' }: ExplorePageProps) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [listingError, setListingError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState(initialSearch);
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [sortBy, setSortBy] = useState<ExploreSortOption>('default');
+function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: ExplorePageProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const themeLink = useUnifiedThemeLink();
 
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [inventoryTotal, setInventoryTotal] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [listingError, setListingError] = useState<string | null>(null);
+
+  const page = Math.max(1, Number(searchParams.get('page') || 1));
+  const [lastPage, setLastPage] = useState(1);
+
+  const searchQuery = searchParams.get('search') || searchParams.get('q') || initialSearch;
+  const selectedCategorySlug = searchParams.get('category') || initialCategorySlug || '';
+  const sortBy = (searchParams.get('sort') as ExploreSortOption) || 'default';
+
+  const selectedCategory =
+    categories.find((category) => category.slug.toLowerCase() === selectedCategorySlug.toLowerCase()) ??
+    null;
+
+  const buildQueryParams = (pageNumber: number) => {
+    const params: Record<string, unknown> = { page: pageNumber, per_page: 12 };
+    if (searchQuery) params.search = searchQuery;
+    if (selectedCategorySlug) params.category = selectedCategorySlug;
+    return params;
+  };
+
+  const updateFilters = (updates: Record<string, string>, pageNumber = 1) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+    });
+
+    if (pageNumber > 1) {
+      params.set('page', pageNumber.toString());
+    } else {
+      params.delete('page');
+    }
+
+    router.push(themeLink(`/explore?${params.toString()}`));
+  };
+
   useEffect(() => {
-    let isMounted = true;
-
     async function loadData() {
-      try {
-        const [fetchedProducts, fetchedCategories] = await Promise.all([
-          api.getProducts(),
-          api.getCategories(),
-        ]);
+      const isFirstPage = page === 1;
 
-        if (!isMounted) {
-          return;
+      if (isFirstPage) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
+
+      const result = await fetchProductsExplore(buildQueryParams(page));
+
+      if (result.ok) {
+        const listings = result.response.data;
+
+        setProducts((prev) => {
+          const merged = isFirstPage ? listings : [...prev, ...listings];
+          const seen = new Set<number>();
+
+          return merged.filter((item) => {
+            if (seen.has(item.id)) {
+              return false;
+            }
+            seen.add(item.id);
+            return true;
+          });
+        });
+
+        setLastPage(result.response.meta?.last_page || 1);
+        setInventoryTotal(result.response.meta?.total ?? listings.length);
+
+        if (isFirstPage && result.response.sidebar?.categories) {
+          setCategories(result.response.sidebar.categories);
         }
 
-        setProducts(Array.isArray(fetchedProducts) ? fetchedProducts : []);
-        setCategories(Array.isArray(fetchedCategories) ? fetchedCategories : []);
         setListingError(null);
-
-        if (initialCategorySlug) {
-          const matchedCategory = fetchedCategories?.find(
-            (category) => category.slug.toLowerCase() === initialCategorySlug.toLowerCase(),
-          );
-          if (matchedCategory) {
-            setSelectedCategory(matchedCategory.id);
-          }
-        }
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
-
-        console.error('Failed to load unified default explore listings:', error);
-        setListingError(error instanceof Error ? error.message : 'Listings are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoading(false);
+      } else {
+        setListingError(result.error);
+        if (isFirstPage) {
+          setProducts([]);
+          setCategories([]);
+          setInventoryTotal(null);
         }
       }
+
+      setLoading(false);
+      setLoadingMore(false);
     }
 
     loadData();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [initialCategorySlug]);
-
-  const handleCategoryChange = (categoryId: number | null) => {
-    setSelectedCategory(categoryId);
-    const matchedCategory = categories.find((category) => category.id === categoryId);
-    const newPath = matchedCategory
-      ? themeLink(`/explore/${matchedCategory.slug.toLowerCase()}`)
-      : themeLink('/explore');
-    window.history.pushState(null, '', newPath);
-  };
-
-  const getListingImage = (product: Product) => getProductImage(product);
+  }, [searchParams, page, searchQuery, selectedCategorySlug]);
 
   const filteredProducts = products
     .filter((product) => {
+      const normalizedSearch = searchQuery.toLowerCase();
       const matchesSearch =
-        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()));
-      const matchesCategory = selectedCategory === null || product.category_id === selectedCategory;
+        !normalizedSearch ||
+        product.title.toLowerCase().includes(normalizedSearch) ||
+        (product.description && product.description.toLowerCase().includes(normalizedSearch));
+      const matchesCategory =
+        !selectedCategory || product.category_id === selectedCategory.id;
       return matchesSearch && matchesCategory;
     })
     .sort((left, right) => {
@@ -97,12 +143,19 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
       return 0;
     });
 
+  const handleLoadMore = () => {
+    updateFilters({}, page + 1);
+  };
+
   return (
     <main className="ud-explore-page">
       <div className="ud-explore-header">
-        <div className="ud-mono" style={{ color: 'var(--ud-azure)', marginBottom: '1.5rem' }}>CORE_DIRECTORY</div>
+        <div className="ud-mono ud-section-eyebrow">CORE_DIRECTORY</div>
         <h1>Explore Catalog Records</h1>
         <p>Search, filter, and inspect live marketplace listings synchronized from the Sellio core registry.</p>
+        {!loading && inventoryTotal != null && (
+          <p className="ud-explore-meta">{inventoryTotal} records indexed</p>
+        )}
       </div>
 
       <section className="ud-explore-controls" aria-label="Explore filters">
@@ -110,22 +163,28 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
           <label htmlFor="ud-explore-search">Search Keywords</label>
           <input
             id="ud-explore-search"
-            type="text"
+            type="search"
             placeholder="Search active listings..."
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
+            defaultValue={searchQuery}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                updateFilters({ search: (event.target as HTMLInputElement).value });
+              }
+            }}
           />
         </div>
         <div>
           <label htmlFor="ud-explore-category">Category</label>
           <select
             id="ud-explore-category"
-            value={selectedCategory === null ? '' : selectedCategory.toString()}
-            onChange={(event) => handleCategoryChange(event.target.value === '' ? null : Number(event.target.value))}
+            value={selectedCategorySlug}
+            onChange={(event) => updateFilters({ category: event.target.value })}
           >
             <option value="">All Categories</option>
             {categories.map((category) => (
-              <option key={category.id} value={category.id.toString()}>{category.title}</option>
+              <option key={category.id} value={category.slug}>
+                {category.title}
+              </option>
             ))}
           </select>
         </div>
@@ -136,7 +195,7 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
             value={sortBy}
             onChange={(event) => {
               if (isExploreSortOption(event.target.value)) {
-                setSortBy(event.target.value);
+                updateFilters({ sort: event.target.value });
               }
             }}
           >
@@ -146,6 +205,12 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
           </select>
         </div>
       </section>
+
+      {listingError && (
+        <div className="ud-alert-slot">
+          <CatalogSyncAlert error={listingError} />
+        </div>
+      )}
 
       {loading ? (
         <div className="ud-listings-grid" aria-label="Loading explore listings">
@@ -160,38 +225,56 @@ export default function ExplorePage({ initialCategorySlug, initialSearch = '' }:
             </div>
           ))}
         </div>
-      ) : listingError ? (
-        <div className="ud-listing-state" role="status">
-          <div className="ud-mono" style={{ color: 'var(--ud-azure)', marginBottom: '1rem' }}>REGISTRY_OFFLINE</div>
-          <h3>Explore listings could not be synchronized.</h3>
-          <p>{listingError}</p>
-        </div>
       ) : filteredProducts.length > 0 ? (
-        <div className="ud-listings-grid">
-          {filteredProducts.map((product) => (
-            <a href={themeLink(`/product/${product.slug}`)} className="ud-listing-card" key={product.id}>
-              <div className="ud-listing-image-wrap">
-                <img src={getListingImage(product)} alt={product.title} />
-              </div>
-              <div className="ud-listing-body">
-                <div className="ud-mono">CATALOG_ID_{product.id}</div>
-                <h3>{product.title}</h3>
-                <p>{product.description || 'Verified marketplace listing synchronized from the Sellio catalog.'}</p>
-                <div className="ud-listing-meta">
-                  <span>{formatProductPrice(product)}</span>
-                  <span>View Record</span>
+        <>
+          <div className="ud-listings-grid">
+            {filteredProducts.map((product) => (
+              <a href={themeLink(`/product/${product.slug}`)} className="ud-listing-card" key={product.id}>
+                <div className="ud-listing-image-wrap">
+                  <img src={getProductImage(product, PRODUCT_CARD_PLACEHOLDER)} alt={product.title} />
                 </div>
-              </div>
-            </a>
-          ))}
-        </div>
+                <div className="ud-listing-body">
+                  <div className="ud-mono">{getProductCategoryLabel(product, categories)}</div>
+                  <h3>{product.title}</h3>
+                  <p>
+                    {product.description ||
+                      'Verified marketplace listing synchronized from the Sellio catalog.'}
+                  </p>
+                  <div className="ud-listing-meta">
+                    <span>{formatProductPrice(product)}</span>
+                    <span>View Record</span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          {page < lastPage && (
+            <div className="ud-load-more-wrap">
+              <button type="button" className="core-btn-primary" onClick={handleLoadMore} disabled={loadingMore}>
+                {loadingMore ? 'Loading records...' : 'Load more listings'}
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="ud-listing-state" role="status">
-          <div className="ud-mono" style={{ color: 'var(--ud-azure)', marginBottom: '1rem' }}>EMPTY_RESULTS</div>
+          <div className="ud-mono ud-section-eyebrow">EMPTY_RESULTS</div>
           <h3>No listings matched your filters.</h3>
           <p>Try adjusting your search keywords or choosing a different category.</p>
+          <a href={themeLink('/')} className="core-btn-primary ud-empty-cta">
+            Back to core feed
+          </a>
         </div>
       )}
     </main>
+  );
+}
+
+export default function ExplorePage(props: ExplorePageProps) {
+  return (
+    <Suspense fallback={<main className="ud-explore-page"><p>Loading explore...</p></main>}>
+      <ExplorePageContent {...props} />
+    </Suspense>
   );
 }

@@ -101,8 +101,51 @@ export class SellioAPI {
     return this.unwrap(response);
   }
 
+  async getProductsCatalog(params?: Record<string, unknown>): Promise<{
+    data: Product[];
+    meta?: {
+      current_page: number;
+      last_page: number;
+      per_page: number;
+      total: number;
+    };
+    sidebar?: {
+      categories?: Category[];
+    };
+  }> {
+    const response = await this.client.get('/v1/products', { params });
+    const body = response.data as Record<string, unknown> & {
+      data?: Product[];
+      meta?: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+      };
+      sidebar?: {
+        categories?: Category[];
+      };
+    };
+
+    if (body && typeof body === 'object' && 'success' in body && 'data' in body) {
+      const envelope = body as ApiResponse<Product[]> & typeof body;
+      return {
+        data: Array.isArray(envelope.data) ? envelope.data : [],
+        meta: envelope.meta,
+        sidebar: envelope.sidebar,
+      };
+    }
+
+    return {
+      data: Array.isArray(body?.data) ? body.data : [],
+      meta: body?.meta,
+      sidebar: body?.sidebar,
+    };
+  }
+
   async getProducts(): Promise<Product[]> {
-    return this.request<Product[]>('/v1/products');
+    const catalog = await this.getProductsCatalog();
+    return catalog.data;
   }
 
   async getProductBySlug(slug: string): Promise<Product> {
