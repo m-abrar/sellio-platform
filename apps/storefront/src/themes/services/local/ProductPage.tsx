@@ -5,9 +5,11 @@ import type { ServiceListing } from '@sellio/types';
 import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';
 import { fetchServiceDetail, resolveServiceFailure } from '@/themes/services/shared/catalog';
 import {
+  getServiceCategoryLabel,
   getServiceImage,
   getServiceLocationLabel,
   getServicePriceLabel,
+  getServiceProviderLabel,
 } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
 import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';
@@ -171,7 +173,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
 
         <article className="local-detail-panel">
-          <div className="local-detail-kicker">{service.professional?.category || 'Local Service'}</div>
+          <div className="local-detail-kicker">{getServiceCategoryLabel(service.professional?.category, 'Local Service')}</div>
           <h1 id="local-detail-title">{service.title}</h1>
           <div className="local-detail-price">{getServicePriceLabel(service)}</div>
 
@@ -190,7 +192,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </div>
             <div>
               <span>Provider</span>
-              <strong>{service.provider?.name || service.professional?.type || 'Local Pro'}</strong>
+              <strong>{getServiceProviderLabel(service, 'Local Pro')}</strong>
             </div>
           </div>
 

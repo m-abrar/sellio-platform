@@ -9,6 +9,7 @@ import {
   getServiceImage,
   getServiceLocationLabel,
   getServicePriceLabel,
+  getServiceProviderLabel,
 } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
 import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';
@@ -194,7 +195,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </div>
             <div>
               <span>Provider</span>
-              <strong>{service.provider?.name || service.professional?.type || 'Corporate Team'}</strong>
+              <strong>{getServiceProviderLabel(service, 'Corporate Team')}</strong>
             </div>
           </div>
 

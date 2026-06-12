@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServiceAppointmentResource;
 use App\Models\Service;
+use App\Models\ServiceAppointment;
 use App\Services\ServiceManagementService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -30,14 +31,14 @@ class ApiServiceConsultationController extends Controller
         ]);
 
         try {
-            $appointment = $this->serviceManagement->createGuestConsultation($service, [
+            $appointment = $this->serviceManagement->createGuestConsultation([
                 'full_name' => $validated['full_name'],
                 'email' => $validated['email'],
                 'phone' => $validated['phone'] ?? null,
                 'preferred_date' => $validated['preferred_date'] ?? null,
                 'requirements' => $validated['requirements'] ?? null,
                 'topic' => $validated['topic'] ?? __('Service consultation'),
-            ]);
+            ], $service);
 
             return $this->successResponse(
                 new ServiceAppointmentResource($appointment->load('service')),
@@ -49,5 +50,12 @@ class ApiServiceConsultationController extends Controller
 
             return $this->errorResponse(__('Failed to submit consultation request. Please try again.'), 500);
         }
+    }
+
+    public function show(ServiceAppointment $appointment): JsonResponse
+    {
+        return $this->successResponse(
+            new ServiceAppointmentResource($appointment->load('service')),
+        );
     }
 }

@@ -622,8 +622,9 @@ export interface ServiceListing {
     expertise_id?: string | number | null;
     schedule_id?: string | number | null;
     certifications?: string | null;
-    category?: string | null;
-    type?: string | null;
+    category?: string | { id?: number; title?: string; slug?: string } | null;
+    brand?: string | { id?: number; title?: string; slug?: string } | null;
+    type?: string | { id?: number; title?: string; slug?: string } | null;
   };
   media: {
     main_photo?: string | null;

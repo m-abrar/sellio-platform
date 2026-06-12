@@ -12,6 +12,7 @@ import {
   formatEventDateShort,
   formatEventPrice,
   getCorporateEventImage,
+  getEventLocationLabel,
 } from '@/themes/events/shared/event-utils';
 
 export const Header = () => {
@@ -205,7 +206,7 @@ export const EventCard = ({ event }: { event: EventListing }) => {
             </div>
             <div className="ecc-event-card-meta-item">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--ecc-blue)' }}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span>{event.location?.city ? `${event.location.city}, ${event.location.state || ''}` : 'San Francisco, CA'}</span>
+              <span>{getEventLocationLabel(event)}</span>
             </div>
           </div>
           

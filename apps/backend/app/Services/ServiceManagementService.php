@@ -143,7 +143,7 @@ class ServiceManagementService
      */
     public function createConsultation(array $data, Service $service): ServiceAppointment
     {
-        return $service->appointments()->create([
+        $appointment = $service->appointments()->create([
             'user_id' => auth()->id(),
             'name'    => $data['name']  ?? auth()->user()->name,
             'email'   => $data['email'] ?? auth()->user()->email,
@@ -152,7 +152,11 @@ class ServiceManagementService
             'notes'   => $data['notes'] ?? null,
             'status'  => 'pending',
             'price'   => $service->sale_price ?? $service->base_price,
-        ])->tap(fn ($appointment) => PartnerLeadCreated::dispatch($appointment));
+        ]);
+
+        PartnerLeadCreated::dispatch($appointment);
+
+        return $appointment;
     }
 
     public function createGuestConsultation(array $data, Service $service): ServiceAppointment
@@ -164,7 +168,7 @@ class ServiceManagementService
             ]));
         }
 
-        return $service->appointments()->create([
+        $appointment = $service->appointments()->create([
             'user_id'      => Auth::id(),
             'name'         => $data['full_name'],
             'email'        => $data['email'],
@@ -176,7 +180,11 @@ class ServiceManagementService
                 : null,
             'status'       => 'pending',
             'price'        => $service->sale_price ?? $service->base_price,
-        ])->tap(fn ($appointment) => PartnerLeadCreated::dispatch($appointment));
+        ]);
+
+        PartnerLeadCreated::dispatch($appointment);
+
+        return $appointment;
     }
 
     protected function normalizeServiceFilters(array $filters): array

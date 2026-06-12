@@ -21,9 +21,15 @@ import {
 import { getServiceCategoryLabel } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
 import { parseServiceContactInfo } from '@/themes/services/shared/service-utils';
+import {
+  redirectToServiceConsultationConfirmation,
+  saveServiceConsultationSnapshot,
+} from '@/themes/services/shared/service-consultation-confirmation';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 import { api } from '@/lib/storefront-api';
 
 export default function Page() {
+  const themeLink = useServicesThemeLink();
   const heroTitle = useThemeContent('hero.title', 'Find Trusted Services Near You');
   const heroDescription = useThemeContent('hero.description', 'Connecting you with skilled professionals, fast and reliably.');
   const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Browse Services');
@@ -167,18 +173,21 @@ export default function Page() {
         currentBookings.push(newBooking);
         localStorage.setItem('sellio_services_marketplace_bookings', JSON.stringify(currentBookings));
 
-        setBookingSuccess(true);
-        setBookingForm({
-          candidateName: '',
-          serviceDate: '',
-          requirements: '',
-          contactInfo: '',
+        saveServiceConsultationSnapshot({
+          id: newBooking.id,
+          serviceId: bookingService.id,
+          serviceTitle: bookingService.title,
+          serviceSlug: bookingService.slug,
+          contactName: bookingForm.candidateName,
+          contactInfo: bookingForm.contactInfo,
+          preferredDate: bookingForm.serviceDate,
+          requirements: bookingForm.requirements,
+          topic: `Hire request: ${bookingService.title}`,
+          status: 'pending',
+          demo: true,
         });
 
-        setTimeout(() => {
-          setBookingService(null);
-          setBookingSuccess(false);
-        }, 2500);
+        redirectToServiceConsultationConfirmation(themeLink, newBooking.id);
       } catch (err) {
         console.error('Failed to record local storage booking details:', err);
         setBookingError('Booking failed. Please try again.');
@@ -189,25 +198,28 @@ export default function Page() {
     setBookingSubmitting(true);
     try {
       const contact = parseServiceContactInfo(bookingForm.candidateName, bookingForm.contactInfo);
-      await api.createServiceConsultation(bookingService.id, {
+      const consultation = await api.createServiceConsultation(bookingService.id, {
         ...contact,
         preferred_date: bookingForm.serviceDate || undefined,
         requirements: bookingForm.requirements || undefined,
         topic: `Hire request: ${bookingService.title}`,
       });
 
-      setBookingSuccess(true);
-      setBookingForm({
-        candidateName: '',
-        serviceDate: '',
-        requirements: '',
-        contactInfo: '',
+      saveServiceConsultationSnapshot({
+        id: consultation.id,
+        serviceId: bookingService.id,
+        serviceTitle: bookingService.title,
+        serviceSlug: bookingService.slug,
+        contactName: bookingForm.candidateName,
+        contactInfo: bookingForm.contactInfo,
+        preferredDate: bookingForm.serviceDate,
+        requirements: bookingForm.requirements,
+        topic: `Hire request: ${bookingService.title}`,
+        status: consultation.status,
+        demo: false,
       });
 
-      setTimeout(() => {
-        setBookingService(null);
-        setBookingSuccess(false);
-      }, 2500);
+      redirectToServiceConsultationConfirmation(themeLink, consultation.id);
     } catch (error: unknown) {
       const axiosError = error as { response?: { data?: { message?: string } } };
       setBookingError(axiosError.response?.data?.message ?? 'Booking failed. Please try again.');

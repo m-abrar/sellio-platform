@@ -1,5 +1,5 @@
 import { api } from '@sellio/api-client';
-import type { ServiceListing } from '@sellio/types';
+import type { ServiceConsultationRecord, ServiceListing } from '@sellio/types';
 import {
   findFallbackService,
   findLocalFallbackService,
@@ -68,6 +68,51 @@ export async function fetchServiceDetail(slug: string) {
     return { ok: false as const, error: 'Service not found or API returned no data.' };
   } catch (error) {
     return { ok: false as const, error: toErrorMessage(error) };
+  }
+}
+
+function resolveApiBaseUrl(): string {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, '');
+  }
+
+  if (typeof window !== 'undefined') {
+    let host = window.location.hostname;
+    if (host === 'localhost') {
+      host = '127.0.0.1';
+    }
+    return `http://${host}:8000/api`;
+  }
+
+  return 'http://127.0.0.1:8000/api';
+}
+
+export async function fetchServiceConsultation(
+  consultationId: number,
+): Promise<{ ok: true; consultation: ServiceConsultationRecord } | { ok: false; error: string }> {
+  try {
+    if (typeof api.getServiceConsultation === 'function') {
+      const consultation = await api.getServiceConsultation(consultationId);
+      return { ok: true, consultation };
+    }
+
+    const response = await fetch(`${resolveApiBaseUrl()}/v1/services/consultations/${consultationId}`, {
+      credentials: 'include',
+      headers: { Accept: 'application/json' },
+    });
+
+    if (!response.ok) {
+      return { ok: false, error: 'Unable to load booking details.' };
+    }
+
+    const payload = (await response.json()) as { data?: ServiceConsultationRecord };
+    if (!payload.data) {
+      return { ok: false, error: 'Consultation not found.' };
+    }
+
+    return { ok: true, consultation: payload.data };
+  } catch (error) {
+    return { ok: false, error: toErrorMessage(error) };
   }
 }
 

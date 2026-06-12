@@ -340,6 +340,10 @@ export class SellioAPI {
     return this.post<ServiceConsultationRecord>(`/v1/services/${serviceId}/consultations`, payload);
   }
 
+  async getServiceConsultation(consultationId: number): Promise<ServiceConsultationRecord> {
+    return this.request<ServiceConsultationRecord>(`/v1/services/consultations/${consultationId}`);
+  }
+
   // === Event Vertical Endpoints ===
 
   async getEvents(params?: Record<string, any>): Promise<{

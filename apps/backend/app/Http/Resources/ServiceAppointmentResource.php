@@ -30,7 +30,11 @@ class ServiceAppointmentResource extends JsonResource
             'viewed_at' => $this->viewed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'service' => $this->whenLoaded("service"),
+            'service' => $this->whenLoaded('service', fn () => [
+                'id' => $this->service->id,
+                'title' => $this->service->title,
+                'slug' => $this->service->slug,
+            ]),
         ];
     }
 }

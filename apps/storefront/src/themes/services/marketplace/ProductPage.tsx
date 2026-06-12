@@ -9,10 +9,15 @@ import {
   getServiceImage,
   getServiceLocationLabel,
   getServicePriceLabel,
+  getServiceProviderLabel,
 } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
 import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';
+import {
+  redirectToServiceConsultationConfirmation,
+  saveServiceConsultationSnapshot,
+} from '@/themes/services/shared/service-consultation-confirmation';
 
 interface ProductPageProps {
   slug: string;
@@ -43,7 +48,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
     serviceDate: '',
     requirements: '',
   });
-  const [leadSaved, setLeadSaved] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -125,8 +129,21 @@ export default function ProductPage({ slug }: ProductPageProps) {
       return;
     }
 
-    setLeadSaved(true);
-    setLeadForm({ contactName: '', contactInfo: '', serviceDate: '', requirements: '' });
+    saveServiceConsultationSnapshot({
+      id: result.consultationId,
+      serviceId: service.id,
+      serviceTitle: service.title,
+      serviceSlug: service.slug,
+      contactName: leadForm.contactName,
+      contactInfo: leadForm.contactInfo,
+      preferredDate: leadForm.serviceDate,
+      requirements: leadForm.requirements,
+      topic: `Booking request: ${service.title}`,
+      status: 'pending',
+      demo: useFallback,
+    });
+
+    redirectToServiceConsultationConfirmation(themeLink, result.consultationId);
   };
 
   if (loading) {
@@ -206,7 +223,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </div>
             <div>
               <span>Provider</span>
-              <strong>{service.provider?.name || service.professional?.type || 'Verified Pro'}</strong>
+              <strong>{getServiceProviderLabel(service)}</strong>
             </div>
           </div>
 
@@ -228,10 +245,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
 
         <form onSubmit={handleLeadSubmit}>
-          {leadSaved && (
-            <div className="sm-detail-success" role="status">
-              {useFallback ? 'Booking request saved in demo mode.' : 'Booking request sent to the provider.'}
-            </div>
+          {formError && (
+            <p className="sm-form-error" role="alert">{formError}</p>
           )}
           <label>
             Full Name
@@ -268,7 +283,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
               onChange={(event) => setLeadForm({ ...leadForm, requirements: event.target.value })}
             />
           </label>
-          {formError && <p className="sm-form-error" role="alert">{formError}</p>}
           <button className="sm-btn sm-btn-primary" type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Sending...' : 'Send Booking Request'}
           </button>

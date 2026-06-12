@@ -60,6 +60,20 @@ export function getServiceCategoryLabel(
   return fallback;
 }
 
+/** @alias getServiceCategoryLabel */
+export const getServiceTaxonomyLabel = getServiceCategoryLabel;
+
+export function getServiceProviderLabel(
+  service: ServiceListing,
+  fallback = 'Verified Pro',
+): string {
+  if (service.provider?.name) {
+    return service.provider.name;
+  }
+
+  return getServiceCategoryLabel(service.professional?.type as ServiceCategoryRef, fallback);
+}
+
 export function getServicePriceLabel(service: ServiceListing): string {
   return (
     service.pricing?.formatted ||

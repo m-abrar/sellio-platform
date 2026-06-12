@@ -229,6 +229,7 @@ Route::prefix('jobs')->middleware('module:jobs')->group(function () {
 Route::prefix('services')->middleware('module:services')->group(function () {
     Route::get('/', [ApiServiceController::class, 'index']);
     Route::get('category/{categorySlug}', [ApiServiceController::class, 'category']);
+    Route::get('consultations/{appointment}', [ApiServiceConsultationController::class, 'show']);
     Route::post('{service}/consultations', [ApiServiceConsultationController::class, 'store'])
         ->middleware('throttle:api-write');
     Route::get('{slug}', [ApiServiceController::class, 'show']);

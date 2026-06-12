@@ -10,6 +10,11 @@ import {
   getRelatedFallbackEvents,
 } from './fallback-data';
 
+import {
+  buildEventTicketOptions,
+  type EventTicketOption,
+} from './event-tickets';
+
 export type EventsThemeVariant = 'corporate' | 'classic' | 'music' | 'creative' | 'festival';
 
 function toErrorMessage(error: unknown): string {
@@ -51,10 +56,95 @@ export async function fetchEventDetail(slug: string) {
     if (response?.success && response.data) {
       return { ok: true as const, response };
     }
-    return { ok: false as const, error: 'Event not found or API returned no data.' };
+    return {
+      ok: false as const,
+      notFound: true,
+      error: 'Event not found or API returned no data.',
+    };
   } catch (error) {
-    return { ok: false as const, error: toErrorMessage(error) };
+    const status =
+      typeof error === 'object' && error !== null && 'response' in error
+        ? (error as { response?: { status?: number } }).response?.status
+        : undefined;
+
+    return {
+      ok: false as const,
+      notFound: status === 404,
+      error: toErrorMessage(error),
+    };
   }
+}
+
+export type EventDetailPageResult = {
+  mode: 'live' | 'not-found' | 'empty';
+  event: EventListing | null;
+  related: EventListing[];
+  ticketOptions: EventTicketOption[];
+  alertError: string | null;
+};
+
+export async function loadEventDetailPage(
+  slug: string,
+  allowDemo: boolean,
+  variant: EventsThemeVariant,
+): Promise<EventDetailPageResult> {
+  const result = await fetchEventDetail(slug);
+
+  if (result.ok) {
+    const ticketData = result.response.meta?.ticket_data ?? {};
+
+    return {
+      mode: 'live',
+      event: result.response.data,
+      related: result.response.related_events ?? [],
+      ticketOptions: buildEventTicketOptions(ticketData),
+      alertError: null,
+    };
+  }
+
+  if (result.notFound) {
+    if (allowDemo) {
+      const resolution = resolveEventFailure(slug, allowDemo, variant);
+      if (resolution.mode === 'demo') {
+        return {
+          mode: 'live',
+          event: resolution.event,
+          related: resolution.related,
+          ticketOptions: [],
+          alertError: null,
+        };
+      }
+    }
+
+    return {
+      mode: 'not-found',
+      event: null,
+      related: [],
+      ticketOptions: [],
+      alertError: `No published event matched "${slug}". Open a listing from Explore or the homepage.`,
+    };
+  }
+
+  if (allowDemo) {
+    const resolution = resolveEventFailure(slug, allowDemo, variant);
+    if (resolution.mode === 'demo') {
+      return {
+        mode: 'live',
+        event: resolution.event,
+        related: resolution.related,
+        ticketOptions: [],
+        alertError: result.error,
+      };
+    }
+  }
+
+  return {
+    mode: 'empty',
+    event: null,
+    related: [],
+    ticketOptions: [],
+    alertError: result.error,
+  };
 }
 
 export function resolveEventsFailure(allowDemo: boolean, variant: EventsThemeVariant) {
