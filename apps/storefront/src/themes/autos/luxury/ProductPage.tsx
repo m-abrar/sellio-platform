@@ -10,6 +10,7 @@ import {
 } from '@/themes/autos/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
 import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
+import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 import {
   formatVehiclePrice,
   getLuxuryVehicleImage,
@@ -43,6 +44,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [inquiryTime, setInquiryTime] = useState('');
   const [inquirySuccess, setInquirySuccess] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     async function loadVehicleDetails() {
@@ -96,46 +98,59 @@ export default function ProductPage({ slug }: ProductPageProps) {
     return isNaN(payment) ? "0.00" : payment.toFixed(2);
   };
 
-  const handleVIPInquirySubmit = (e: React.FormEvent) => {
+  const handleVIPInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inquiryName || !inquiryEmail || !inquiryPhone || !inquiryDate) {
+    if (!vehicle || !inquiryName || !inquiryEmail || !inquiryPhone || !inquiryDate) {
       setFormError('Please fill in all required booking details.');
       return;
     }
 
     setFormError(null);
+    setIsSubmitting(true);
 
-    // Save inquiry dynamically to local storage under key 'sellio_autos_luxury_inquiries'
-    const newInquiry = {
-      id: Date.now(),
-      vehicle_id: vehicle?.id || 0,
-      vehicle_title: vehicle?.title || "Supercar Asset",
-      name: inquiryName,
+    const preferredTime = inquiryTime.includes('PM')
+      ? 'PM'
+      : inquiryTime.includes('AM')
+        ? 'AM'
+        : 'Anytime';
+
+    const result = await submitVehicleInquiry({
+      vehicleId: vehicle.id,
+      useFallback,
+      storageKey: 'sellio_autos_luxury_inquiries',
+      fullName: inquiryName,
       email: inquiryEmail,
       phone: inquiryPhone,
-      preferred_date: inquiryDate,
-      preferred_time: inquiryTime || "12:00 PM",
-      timestamp: new Date().toISOString()
-    };
+      preferredDate: inquiryDate,
+      preferredTime,
+      message: inquiryTime ? `Preferred time: ${inquiryTime}` : undefined,
+      demoRecord: {
+        id: Date.now(),
+        vehicle_id: vehicle.id,
+        vehicle_title: vehicle.title,
+        name: inquiryName,
+        email: inquiryEmail,
+        phone: inquiryPhone,
+        preferred_date: inquiryDate,
+        preferred_time: inquiryTime || '12:00 PM',
+        timestamp: new Date().toISOString(),
+      },
+    });
 
-    const existing = localStorage.getItem('sellio_autos_luxury_inquiries');
-    const list = existing ? JSON.parse(existing) : [];
-    list.push(newInquiry);
-    localStorage.setItem('sellio_autos_luxury_inquiries', JSON.stringify(list));
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
+    }
 
     setInquirySuccess(true);
-    
-    // Clear fields
     setInquiryName('');
     setInquiryEmail('');
     setInquiryPhone('');
     setInquiryDate('');
     setInquiryTime('');
-    
-    // Toast auto fade
-    setTimeout(() => {
-      setInquirySuccess(false);
-    }, 5000);
+    setTimeout(() => setInquirySuccess(false), 5000);
   };
 
   if (loading) {

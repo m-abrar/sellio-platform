@@ -9,11 +9,10 @@ import {
   getServiceImage,
   getServiceLocationLabel,
   getServicePriceLabel,
-  parseServiceContactInfo,
 } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
 import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
-import { api } from '@/lib/storefront-api';
+import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';
 
 interface ProductPageProps {
   slug: string;
@@ -96,8 +95,18 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
     setFormError(null);
 
-    if (useFallback) {
-      const newLead: MarketplaceLead = {
+    setIsSubmitting(true);
+
+    const result = await submitServiceConsultation({
+      serviceId: service.id,
+      useFallback,
+      storageKey: 'sellio_services_marketplace_leads',
+      contactName: leadForm.contactName,
+      contactInfo: leadForm.contactInfo,
+      preferredDate: leadForm.serviceDate,
+      requirements: leadForm.requirements,
+      topic: `Booking request: ${service.title}`,
+      demoRecord: {
         id: `sm_lead_${Date.now()}`,
         serviceId: service.id,
         serviceTitle: service.title,
@@ -106,38 +115,18 @@ export default function ProductPage({ slug }: ProductPageProps) {
         serviceDate: leadForm.serviceDate,
         requirements: leadForm.requirements,
         created_at: new Date().toISOString(),
-      };
+      },
+    });
 
-      try {
-        const stored = JSON.parse(localStorage.getItem('sellio_services_marketplace_leads') || '[]') as MarketplaceLead[];
-        stored.push(newLead);
-        localStorage.setItem('sellio_services_marketplace_leads', JSON.stringify(stored));
-        setLeadSaved(true);
-        setLeadForm({ contactName: '', contactInfo: '', serviceDate: '', requirements: '' });
-      } catch (error) {
-        console.error('Failed to persist marketplace service lead:', error);
-        setFormError('Could not save your booking request locally. Please try again.');
-      }
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
       return;
     }
 
-    setIsSubmitting(true);
-    try {
-      const contact = parseServiceContactInfo(leadForm.contactName, leadForm.contactInfo);
-      await api.createServiceConsultation(service.id, {
-        ...contact,
-        preferred_date: leadForm.serviceDate || undefined,
-        requirements: leadForm.requirements || undefined,
-        topic: `Booking request: ${service.title}`,
-      });
-      setLeadSaved(true);
-      setLeadForm({ contactName: '', contactInfo: '', serviceDate: '', requirements: '' });
-    } catch (error: unknown) {
-      const axiosError = error as { response?: { data?: { message?: string } } };
-      setFormError(axiosError.response?.data?.message ?? 'Failed to send booking request. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    setLeadSaved(true);
+    setLeadForm({ contactName: '', contactInfo: '', serviceDate: '', requirements: '' });
   };
 
   if (loading) {

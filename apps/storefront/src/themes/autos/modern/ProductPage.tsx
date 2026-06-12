@@ -17,7 +17,7 @@ import {
   getVehicleImage,
   getVehicleSpecLabel,
 } from '@/themes/autos/shared/vehicle-utils';
-import { api } from '@/lib/storefront-api';
+import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 
 interface ProductPageProps {
   slug: string;
@@ -151,8 +151,17 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
     setFormError(null);
 
-    if (useFallback) {
-      const newOrder = {
+    setIsSubmitting(true);
+
+    const result = await submitVehicleInquiry({
+      vehicleId: vehicle.id,
+      useFallback,
+      storageKey: 'sellio_autos_modern_orders',
+      fullName: inquiryName,
+      email: inquiryEmail,
+      phone: inquiryPhone,
+      message: buildInquiryMessage(),
+      demoRecord: {
         id: Date.now(),
         vehicle_id: vehicle.id,
         vehicle_title: vehicle.title,
@@ -162,35 +171,19 @@ export default function ProductPage({ slug }: ProductPageProps) {
         customer_phone: inquiryPhone,
         selected_upgrades: buildInquiryMessage(),
         timestamp: new Date().toISOString(),
-      };
+      },
+    });
 
-      const existing = localStorage.getItem('sellio_autos_modern_orders');
-      const list = existing ? JSON.parse(existing) : [];
-      list.push(newOrder);
-      localStorage.setItem('sellio_autos_modern_orders', JSON.stringify(list));
-      setInquirySuccess(true);
-      resetInquiryForm();
-      setTimeout(() => setInquirySuccess(false), 5000);
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
       return;
     }
 
-    setIsSubmitting(true);
-    try {
-      await api.createVehicleInquiry(vehicle.id, {
-        full_name: inquiryName.trim(),
-        email: inquiryEmail.trim(),
-        phone: inquiryPhone.trim(),
-        message: buildInquiryMessage(),
-      });
-      setInquirySuccess(true);
-      resetInquiryForm();
-      setTimeout(() => setInquirySuccess(false), 5000);
-    } catch (error: unknown) {
-      const axiosError = error as { response?: { data?: { message?: string } } };
-      setFormError(axiosError.response?.data?.message ?? 'Failed to send inquiry. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    setInquirySuccess(true);
+    resetInquiryForm();
+    setTimeout(() => setInquirySuccess(false), 5000);
   };
 
   if (loading) {

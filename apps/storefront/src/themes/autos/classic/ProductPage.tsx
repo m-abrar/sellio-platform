@@ -7,6 +7,7 @@ import { ClassicCarCard } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
 import { fetchVehicleDetail, resolveVehicleFailure } from '@/themes/autos/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 
 interface ClassicCarItem {
@@ -164,9 +165,9 @@ export default function ProductPage({ slug }: { slug: string }) {
     loadVehicle();
   }, [slug, allowDemo]);
 
-  const handleCollectorInquiry = (e: React.FormEvent) => {
+  const handleCollectorInquiry = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!clientName || !clientEmail || !offerPrice) {
+    if (!car || !clientName || !clientEmail || !offerPrice) {
       setFormError('Please fill in name, email, and your offer amount.');
       return;
     }
@@ -174,47 +175,48 @@ export default function ProductPage({ slug }: { slug: string }) {
     setFormError(null);
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      // Generate a mock SHA-256 styled hash as visual verification receipt
-      const hashInput = `${clientName}-${clientEmail}-${offerPrice}-${Date.now()}`;
-      let hash = 0;
-      for (let i = 0; i < hashInput.length; i++) {
-        const char = hashInput.charCodeAt(i);
-        hash = (hash << 5) - hash + char;
-        hash = hash & hash;
-      }
-      const hexHash = 'SHA256-CL' + Math.abs(hash).toString(16).toUpperCase().padStart(8, '0') + Math.random().toString(36).substring(2, 6).toUpperCase();
-      
-      const newOrder = {
+    const formattedOffer = offerPrice.startsWith('$')
+      ? offerPrice
+      : `$${Number(offerPrice).toLocaleString()}`;
+    const inquiryMessage = [
+      `Offer: ${formattedOffer}`,
+      clientNotes.trim(),
+    ]
+      .filter(Boolean)
+      .join('\n');
+
+    const result = await submitVehicleInquiry({
+      vehicleId: car.id,
+      useFallback,
+      storageKey: 'sellio_autos_classic_orders',
+      fullName: clientName,
+      email: clientEmail,
+      phone: clientPhone,
+      message: inquiryMessage,
+      demoRecord: {
         id: Date.now(),
-        vehicleTitle: car?.title,
-        vehicleSlug: car?.slug,
-        vehiclePrice: car?.price,
+        vehicleTitle: car.title,
+        vehicleSlug: car.slug,
+        vehiclePrice: car.price,
         clientName,
         clientEmail,
         clientPhone,
-        offerPrice: offerPrice.startsWith('$') ? offerPrice : `$${Number(offerPrice).toLocaleString()}`,
+        offerPrice: formattedOffer,
         clientNotes,
-        receiptCode: hexHash,
-        createdAt: new Date().toISOString()
-      };
+        receiptCode: `SHA256-CL${Date.now()}`,
+        createdAt: new Date().toISOString(),
+      },
+    });
 
-      // Persist bid / offer reservation in client LocalStorage
-      if (typeof window !== 'undefined') {
-        try {
-          const existingOrdersStr = localStorage.getItem('sellio_autos_classic_orders');
-          const existingOrders = existingOrdersStr ? JSON.parse(existingOrdersStr) : [];
-          existingOrders.push(newOrder);
-          localStorage.setItem('sellio_autos_classic_orders', JSON.stringify(existingOrders));
-        } catch (storageErr) {
-          console.error("LocalStorage write failed:", storageErr);
-        }
-      }
+    setIsSubmitting(false);
 
-      setReceiptCode(hexHash);
-      setBookingSuccess(true);
-      setIsSubmitting(false);
-    }, 800);
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
+    }
+
+    setReceiptCode(String(result.inquiryId));
+    setBookingSuccess(true);
   };
 
   if (loading) {

@@ -7,6 +7,7 @@ import { ElectricHeader, ElectricFooter } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
 import { fetchVehicleDetail, resolveVehicleFailure } from '@/themes/autos/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 
 interface EVItem {
@@ -181,7 +182,7 @@ export default function ProductPage({ slug }: { slug: string }) {
     return Math.max(99, Math.round(monthlyRate));
   };
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!buyerName || !buyerEmail) {
       setFormError('Please fill in all required fields.');
@@ -191,6 +192,16 @@ export default function ProductPage({ slug }: { slug: string }) {
     if (!item) return;
 
     setFormError(null);
+
+    const inquiryMessage = [
+      `Down payment: $${downPayment.toLocaleString()}`,
+      `Lease term: ${leaseTerm} months`,
+      `Estimated monthly: $${calculateLeaseRate()}/mo`,
+      includeWallCharger ? 'Wall charger included' : '',
+      buyerNotes.trim(),
+    ]
+      .filter(Boolean)
+      .join('\n');
 
     const orderData = {
       orderId: `EV-RES-${Date.now()}-${item.id}`,
@@ -205,21 +216,29 @@ export default function ProductPage({ slug }: { slug: string }) {
       computedMonthlyLease: `$${calculateLeaseRate()}/mo`,
       notes: buyerNotes,
       date: new Date().toLocaleString(),
-      theme: 'autos_electric'
+      theme: 'autos_electric',
     };
 
-    // Save to LocalStorage
-    try {
-      const existing = localStorage.getItem('sellio_autos_electric_orders');
-      const list = existing ? JSON.parse(existing) : [];
-      list.push(orderData);
-      localStorage.setItem('sellio_autos_electric_orders', JSON.stringify(list));
-    } catch (e) {
-      console.error("LocalStorage write failed:", e);
+    const result = await submitVehicleInquiry({
+      vehicleId: item.id,
+      useFallback,
+      storageKey: 'sellio_autos_electric_orders',
+      fullName: buyerName,
+      email: buyerEmail,
+      message: inquiryMessage,
+      demoRecord: orderData,
+    });
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
     }
 
     setOrderSuccess(true);
-    setOrderSuccessData(orderData);
+    setOrderSuccessData({
+      ...orderData,
+      orderId: String(result.inquiryId),
+    });
   };
 
   const handleBackNavigation = (e: React.MouseEvent) => {

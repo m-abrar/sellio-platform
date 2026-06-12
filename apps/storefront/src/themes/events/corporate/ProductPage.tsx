@@ -7,33 +7,13 @@ import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
 import { fetchEventDetail, resolveEventFailure } from '@/themes/events/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/events/shared/useDemoFallbackAllowed';
 import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
+import { redirectToEventBookingReserve } from '@/themes/events/shared/event-booking-utils';
 import { getCorporateEventImage } from '@/themes/events/shared/event-utils';
-
-type TicketOption = {
-  occurrenceId: number;
-  occurrenceLabel: string;
-  ticketTypeId: number;
-  ticketName: string;
-  price: number;
-  available: number;
-};
-
-function buildTicketOptions(ticketData: EventTicketDataMap): TicketOption[] {
-  return Object.entries(ticketData).flatMap(([occurrenceId, occurrence]) =>
-    occurrence.inventory.map((item) => ({
-      occurrenceId: Number(occurrenceId),
-      occurrenceLabel: occurrence.start_date_formatted,
-      ticketTypeId: item.id,
-      ticketName: item.name,
-      price: item.price,
-      available: item.available,
-    })),
-  );
-}
-
-function ticketOptionKey(option: TicketOption) {
-  return `${option.occurrenceId}-${option.ticketTypeId}`;
-}
+import {
+  buildEventTicketOptions,
+  eventTicketOptionKey,
+  type EventTicketOption,
+} from '@/themes/events/shared/event-tickets';
 
 export default function ProductPage() {
   const { slug } = useParams() as { slug: string };
@@ -46,7 +26,7 @@ export default function ProductPage() {
   const [apiError, setApiError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
 
-  const [ticketOptions, setTicketOptions] = useState<TicketOption[]>([]);
+  const [ticketOptions, setTicketOptions] = useState<EventTicketOption[]>([]);
   const [selectedTicketKey, setSelectedTicketKey] = useState<string>('');
   const [ticketType, setTicketType] = useState<'general' | 'vip'>('general');
   const [ticketsCount, setTicketsCount] = useState<number>(1420);
@@ -68,11 +48,11 @@ export default function ProductPage() {
 
       if (result.ok && result.response.data) {
         const ticketData = result.response.meta?.ticket_data ?? {};
-        const options = buildTicketOptions(ticketData);
+        const options = buildEventTicketOptions(ticketData);
 
         setEvent(result.response.data);
         setTicketOptions(options);
-        setSelectedTicketKey(options[0] ? ticketOptionKey(options[0]) : '');
+        setSelectedTicketKey(options[0] ? eventTicketOptionKey(options[0]) : '');
         setTicketsCount(
           options[0]?.available ?? result.response.data.ticketing?.tickets_left ?? 0,
         );
@@ -106,7 +86,7 @@ export default function ProductPage() {
   }, [slug, allowDemo]);
 
   const selectedTicket = ticketOptions.find(
-    (option) => ticketOptionKey(option) === selectedTicketKey,
+    (option) => eventTicketOptionKey(option) === selectedTicketKey,
   );
 
   function handleBooking(e: React.FormEvent) {
@@ -124,16 +104,14 @@ export default function ProductPage() {
         return;
       }
 
-      const params = new URLSearchParams({
-        event_id: String(event.id),
-        event_occurrence_id: String(selectedTicket.occurrenceId),
-        event_ticket_type_id: String(selectedTicket.ticketTypeId),
-        quantity: '1',
-        full_name: fullName.trim(),
-        email: email.trim(),
+      redirectToEventBookingReserve(themeLink, {
+        eventId: event.id,
+        occurrenceId: selectedTicket.occurrenceId,
+        ticketTypeId: selectedTicket.ticketTypeId,
+        quantity: 1,
+        fullName,
+        email,
       });
-
-      window.location.assign(themeLink(`/booking/reserve?${params}`));
       return;
     }
 
@@ -311,7 +289,7 @@ export default function ProductPage() {
                   </>
                 ) : ticketOptions.length > 0 ? (
                   ticketOptions.map((option) => {
-                    const key = ticketOptionKey(option);
+                    const key = eventTicketOptionKey(option);
                     return (
                       <button
                         key={key}

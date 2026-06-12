@@ -7,6 +7,7 @@ import { UsedCarCard } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
 import { fetchVehicleDetail, resolveVehicleFailure } from '@/themes/autos/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 
 interface UsedCarItem {
@@ -173,9 +174,9 @@ export default function ProductPage({ slug }: { slug: string }) {
     loadVehicle();
   }, [slug, allowDemo]);
 
-  const handleTestDriveBooking = (e: React.FormEvent) => {
+  const handleTestDriveBooking = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!clientName || !clientEmail || !bookingDate) {
+    if (!car || !clientName || !clientEmail || !bookingDate) {
       setFormError('Please fill in name, email, and your preferred test drive date.');
       return;
     }
@@ -183,47 +184,46 @@ export default function ProductPage({ slug }: { slug: string }) {
     setFormError(null);
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      // Generate a mock SHA-256 styled hash as visual verification receipt
-      const hashInput = `${clientName}-${clientEmail}-${bookingDate}-${Date.now()}`;
-      let hash = 0;
-      for (let i = 0; i < hashInput.length; i++) {
-        const char = hashInput.charCodeAt(i);
-        hash = (hash << 5) - hash + char;
-        hash = hash & hash;
-      }
-      const hexHash = 'SHA256-R' + Math.abs(hash).toString(16).toUpperCase().padStart(8, '0') + Math.random().toString(36).substring(2, 6).toUpperCase();
-      
-      const newOrder = {
+    const inquiryMessage = [
+      `Test drive date: ${bookingDate}`,
+      financingNeeded ? 'Financing assistance requested' : '',
+    ]
+      .filter(Boolean)
+      .join('\n');
+
+    const result = await submitVehicleInquiry({
+      vehicleId: car.id,
+      useFallback,
+      storageKey: 'sellio_autos_used_orders',
+      fullName: clientName,
+      email: clientEmail,
+      phone: clientPhone,
+      preferredDate: bookingDate,
+      message: inquiryMessage,
+      demoRecord: {
         id: Date.now(),
-        vehicleTitle: car?.title,
-        vehicleSlug: car?.slug,
-        vehiclePrice: car?.price,
+        vehicleTitle: car.title,
+        vehicleSlug: car.slug,
+        vehiclePrice: car.price,
         clientName,
         clientEmail,
         clientPhone,
         bookingDate,
         financingNeeded,
-        receiptCode: hexHash,
-        createdAt: new Date().toISOString()
-      };
+        receiptCode: `SHA256-R${Date.now()}`,
+        createdAt: new Date().toISOString(),
+      },
+    });
 
-      // Persist test-drive reservation in client LocalStorage
-      if (typeof window !== 'undefined') {
-        try {
-          const existingOrdersStr = localStorage.getItem('sellio_autos_used_orders');
-          const existingOrders = existingOrdersStr ? JSON.parse(existingOrdersStr) : [];
-          existingOrders.push(newOrder);
-          localStorage.setItem('sellio_autos_used_orders', JSON.stringify(existingOrders));
-        } catch (storageErr) {
-          console.error("LocalStorage write failed:", storageErr);
-        }
-      }
+    setIsSubmitting(false);
 
-      setReceiptCode(hexHash);
-      setBookingSuccess(true);
-      setIsSubmitting(false);
-    }, 800);
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
+    }
+
+    setReceiptCode(String(result.inquiryId));
+    setBookingSuccess(true);
   };
 
   if (loading) {

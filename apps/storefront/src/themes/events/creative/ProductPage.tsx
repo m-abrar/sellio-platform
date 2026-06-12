@@ -5,6 +5,11 @@ import type { EventListing } from '@sellio/types';
 import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
 import { fetchEventDetail, resolveEventFailure } from '@/themes/events/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/events/shared/useDemoFallbackAllowed';
+import { redirectToEventBookingReserve } from '@/themes/events/shared/event-booking-utils';
+import {
+  getFirstEventTicketOption,
+  type EventTicketOption,
+} from '@/themes/events/shared/event-tickets';
 import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
 import {
   formatEventDateShort,
@@ -28,6 +33,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [form, setForm] = useState({ name: '', email: '', note: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [selectedTicket, setSelectedTicket] = useState<EventTicketOption | null>(null);
 
   useEffect(() => {
     async function loadEvent() {
@@ -39,6 +45,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
       if (result.ok && result.response.data) {
         setEvent(result.response.data);
+        setSelectedTicket(
+          getFirstEventTicketOption(result.response.meta?.ticket_data),
+        );
         setUseFallback(false);
         setApiError(null);
       } else {
@@ -72,6 +81,22 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }
 
     setFormError(null);
+
+    if (!useFallback) {
+      if (!selectedTicket) {
+        setFormError('No tickets are currently available for this event.');
+        return;
+      }
+
+      redirectToEventBookingReserve(themeLink, {
+        eventId: event.id,
+        occurrenceId: selectedTicket.occurrenceId,
+        ticketTypeId: selectedTicket.ticketTypeId,
+        fullName: form.name,
+        email: form.email,
+      });
+      return;
+    }
 
     try {
       const stored = JSON.parse(localStorage.getItem('sellio_events_creative_rsvps') || '[]');
