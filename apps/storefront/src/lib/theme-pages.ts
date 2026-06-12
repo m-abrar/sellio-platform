@@ -39,7 +39,7 @@ const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, st
     BookingConfirmPage: 'events/corporate',
   },
   autos: {
-    ProductPage: 'autos/classic',
+    ProductPage: 'autos/modern',
     ExplorePage: 'autos/modern',
   },
   jobs: {

@@ -13,8 +13,9 @@ const BrandLogo = ({ label }: { label: string }) => {
   const [firstWord, ...restWords] = label.split(' ');
   return (
     <>
-      <span style={{ color: 'var(--md-primary)' }}>⚡</span> {firstWord}{' '}
-      <span style={{ color: 'var(--md-primary)' }}>{restWords.join(' ')}</span>
+      <span style={{ color: 'var(--md-accent)' }} aria-hidden="true">⚡</span>
+      {firstWord}{' '}
+      <span style={{ color: 'var(--md-accent)' }}>{restWords.join(' ')}</span>
     </>
   );
 };
@@ -31,10 +32,11 @@ export const ModernHeader = () => {
       </Link>
 
       <button
+        type="button"
         className={`md-hamburger ${isOpen ? 'md-hamburger-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle Navigation"
-        id="md-hamburger-toggle"
+        aria-label="Toggle navigation"
+        aria-expanded={isOpen}
       >
         <span className="md-hamburger-bar" />
         <span className="md-hamburger-bar" />
@@ -65,31 +67,59 @@ interface ModernCarCardProps {
   price: string;
   image: string;
   slug?: string;
+  year?: string | number;
+  condition?: string | null;
+  fuelType?: string | null;
 }
 
-export const ModernCarCard = ({ title, desc, price, image, slug }: ModernCarCardProps) => {
+export const ModernCarCard = ({
+  title,
+  desc,
+  price,
+  image,
+  slug,
+  year,
+  condition,
+  fuelType,
+}: ModernCarCardProps) => {
   const themeLink = useAutosThemeLink();
   const detailUrl = slug ? themeLink(`/product/${slug}`) : '#';
+  const chips = [fuelType, year ? String(year) : null].filter(Boolean) as string[];
 
   return (
-    <div className="md-car-card">
-      <div style={{ overflow: 'hidden', height: '200px', position: 'relative' }}>
-        <img
-          src={image}
-          className="md-car-img"
-          alt={title}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-        />
-      </div>
+    <article className="md-car-card">
+      <Link href={detailUrl} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <div className="md-car-media">
+          <img src={image} className="md-car-img" alt={title} loading="lazy" />
+          <div className="md-car-badges">
+            {condition ? <span className="md-car-badge">{condition}</span> : <span />}
+            {year ? <span className="md-car-badge md-car-badge--accent">{year}</span> : null}
+          </div>
+        </div>
+      </Link>
       <div className="md-car-body">
-        <h5 className="md-car-title">{title}</h5>
-        <p style={{ color: '#666', marginBottom: '0.5rem', fontSize: '0.95rem' }}>{desc}</p>
-        <h4 className="md-car-price">{price}</h4>
-        <Link href={detailUrl} className="md-btn md-btn-cta" style={{ width: '100%', boxSizing: 'border-box' }}>
+        <Link href={detailUrl} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <h3 className="md-car-title">{title}</h3>
+          <p className="md-car-specs">{desc}</p>
+        </Link>
+        {chips.length > 0 && (
+          <div className="md-car-chips">
+            {chips.map((chip) => (
+              <span key={chip} className="md-car-chip">
+                {chip}
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="md-car-price-row">
+          <p className="md-car-price">{price}</p>
+          <span className="md-car-price-note">MSRP</span>
+        </div>
+        <Link href={detailUrl} className="md-btn md-btn-cta">
           View Details
         </Link>
       </div>
-    </div>
+    </article>
   );
 };
 
@@ -108,43 +138,44 @@ export const CompareItem = ({ title, stats, price, image, highlight, slug }: Com
 
   return (
     <div className={`md-compare-item ${highlight ? 'highlight' : ''}`}>
-      <div
-        style={{
-          height: '120px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-          marginBottom: '1rem',
-        }}
-      >
-        <img
-          src={image}
-          className="md-compare-img"
-          alt={title}
-          style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
-        />
+      <div className="md-compare-media">
+        <img src={image} className="md-compare-img" alt={title} loading="lazy" />
       </div>
-      <h4
-        className={`md-fw-bold ${highlight ? 'md-text-primary' : ''}`}
-        style={{ marginBottom: '0.5rem' }}
-      >
-        {title}
-      </h4>
-      <p style={{ color: '#666', fontSize: '0.85rem', marginBottom: '1rem' }}>
-        {stats} | Price: {price}
-      </p>
+      <h4 className={`md-compare-title ${highlight ? 'md-text-primary' : ''}`}>{title}</h4>
+      <p className="md-compare-stats">{stats}</p>
+      <p className="md-compare-price">{price}</p>
       <Link
         href={detailUrl}
-        className={`md-btn ${highlight ? 'md-btn-cta' : 'md-btn-outline'}`}
-        style={{
-          color: highlight ? 'white' : 'var(--md-primary)',
-          border: highlight ? 'none' : '2px solid var(--md-primary)',
-          display: 'block',
-        }}
+        className={`md-btn ${highlight ? 'md-btn-cta' : 'md-btn-outline-primary'}`}
+        style={{ width: '100%', boxSizing: 'border-box' }}
       >
         Full Specs
       </Link>
+    </div>
+  );
+};
+
+type BrandOption = { id: number; title: string };
+
+export const ModernBrandGrid = ({ brands = [] }: { brands?: BrandOption[] }) => {
+  const themeLink = useAutosThemeLink();
+
+  if (brands.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="md-brand-grid">
+      {brands.map((brand) => (
+        <Link
+          key={brand.id}
+          href={themeLink(`/explore?brand=${encodeURIComponent(brand.title)}`)}
+          className="md-brand-tile"
+        >
+          <span className="md-brand-monogram">{brand.title.slice(0, 2).toUpperCase()}</span>
+          <span className="md-brand-name">{brand.title}</span>
+        </Link>
+      ))}
     </div>
   );
 };
@@ -163,51 +194,59 @@ export const ModernFooter = () => {
 
   return (
     <footer className="md-footer">
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '3rem',
-          marginBottom: '3rem',
-        }}
-      >
+      <div className="md-footer-grid">
         <div>
-          <Link href={themeLink('/')} className="md-logo" style={{ marginBottom: '1rem' }}>
+          <Link href={themeLink('/')} className="md-logo" style={{ marginBottom: '1rem', display: 'inline-flex' }}>
             <BrandLogo label={brandLabel} />
           </Link>
-          <p style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>{footerDescription}</p>
+          <p style={{ fontSize: '0.92rem', lineHeight: 1.65, margin: 0 }}>{footerDescription}</p>
         </div>
         <FooterMenuColumn
           location="footer_column_1"
           titleTag="h5"
-          titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}
+          titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.25rem', fontSize: '0.95rem' }}
           linkClassName="md-footer-link"
         />
         <FooterMenuColumn
           location="footer_column_2"
           titleTag="h5"
-          titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}
+          titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.25rem', fontSize: '0.95rem' }}
           linkClassName="md-footer-link"
         />
         <div>
           <FooterMenuColumn
             location="footer_column_3"
             titleTag="h5"
-            titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}
+            titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.25rem', fontSize: '0.95rem' }}
             linkClassName="md-footer-link"
           />
-          <MenuNav
-            location="social_footer"
-            flat
-            renderItem={(item, { href, onNavigate }) => (
-              <a href={href} className="md-social" onClick={onNavigate}>
-                {item.title.charAt(0)}
-              </a>
-            )}
-          />
-          <p style={{ fontSize: '0.85rem', marginTop: '1rem' }}>&copy; {footerCopyright}</p>
+          <div style={{ marginTop: '0.5rem' }}>
+            <MenuNav
+              location="social_footer"
+              flat
+              renderItem={(item, { href, onNavigate }) => (
+                <a href={href} className="md-social" onClick={onNavigate} aria-label={item.title}>
+                  {item.title.charAt(0)}
+                </a>
+              )}
+            />
+          </div>
         </div>
       </div>
+      <div className="md-footer-bottom">&copy; {footerCopyright}</div>
     </footer>
   );
 };
+
+export function CarCardSkeleton() {
+  return (
+    <div className="md-car-card" style={{ pointerEvents: 'none' }}>
+      <div className="md-skeleton md-skeleton-block" style={{ height: '210px' }} />
+      <div className="md-car-body">
+        <div className="md-skeleton md-skeleton-block" style={{ height: '20px', width: '72%', marginBottom: '0.65rem' }} />
+        <div className="md-skeleton md-skeleton-block" style={{ height: '14px', width: '55%', marginBottom: '1rem' }} />
+        <div className="md-skeleton md-skeleton-block" style={{ height: '26px', width: '42%' }} />
+      </div>
+    </div>
+  );
+}

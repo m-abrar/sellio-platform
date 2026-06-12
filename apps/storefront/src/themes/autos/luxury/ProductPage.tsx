@@ -116,6 +116,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
     const result = await submitVehicleInquiry({
       vehicleId: vehicle.id,
+      vehicleSlug: vehicle.slug,
       useFallback,
       storageKey: 'sellio_autos_luxury_inquiries',
       fullName: inquiryName,

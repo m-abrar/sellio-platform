@@ -193,6 +193,7 @@ export default function ProductPage({ slug }: { slug: string }) {
 
     const result = await submitVehicleInquiry({
       vehicleId: car.id,
+      vehicleSlug: car.slug,
       useFallback,
       storageKey: 'sellio_autos_used_orders',
       fullName: clientName,

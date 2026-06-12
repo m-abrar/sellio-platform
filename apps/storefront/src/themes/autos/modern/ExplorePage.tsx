@@ -3,10 +3,9 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import type { Vehicle, Category, Location } from '@sellio/types';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { ModernHeader, ModernCarCard, ModernFooter } from './components';
+import { ModernHeader, ModernCarCard, ModernFooter, CarCardSkeleton } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
-import { fetchVehiclesExplore, resolveVehiclesFailure } from '@/themes/autos/shared/catalog';
-import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
+import { fetchVehiclesExplore } from '@/themes/autos/shared/catalog';
 import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 import {
   formatVehiclePrice,
@@ -18,23 +17,18 @@ function ExplorePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const themeLink = useAutosThemeLink();
-  const allowDemo = useDemoFallbackAllowed();
 
-  // Dynamic API States
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [brands, setBrands] = useState<{ id: number; title: string }[]>([]);
   const [loading, setLoading] = useState(true);
-  const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
 
-  // Pagination State
-  const [currentPage, setCurrentPage] = useState(1);
+  const page = Math.max(1, Number(searchParams.get('page') || 1));
   const [lastPage, setLastPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Filter Form States (Sync with URL search parameters)
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || searchParams.get('search') || '');
   const [selectedBrand, setSelectedBrand] = useState(searchParams.get('brand') || searchParams.get('make') || '');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
@@ -44,7 +38,7 @@ function ExplorePageContent() {
 
   const applyFilters = (pageNumber = 1) => {
     const params = new URLSearchParams();
-    
+
     if (searchQuery) params.set('q', searchQuery);
     if (selectedBrand) params.set('brand', selectedBrand);
     if (selectedCategory) params.set('category', selectedCategory);
@@ -63,14 +57,16 @@ function ExplorePageContent() {
 
   useEffect(() => {
     async function loadCatalog() {
-      if (currentPage === 1) {
+      const isFirstPage = page === 1;
+
+      if (isFirstPage) {
         setLoading(true);
       } else {
         setLoadingMore(true);
       }
 
       const queryParams: Record<string, unknown> = {
-        page: searchParams.get('page') || currentPage,
+        page,
         search: searchParams.get('q') || undefined,
         make: searchParams.get('brand') || undefined,
         category: searchParams.get('category') || undefined,
@@ -83,45 +79,37 @@ function ExplorePageContent() {
 
       const result = await fetchVehiclesExplore(queryParams);
 
-      if (result.ok && result.response.data) {
-        if (currentPage === 1) {
-          setVehicles(result.response.data);
-        } else {
-          setVehicles((prev) => [...prev, ...result.response.data]);
-        }
+      if (result.ok && Array.isArray(result.response.data)) {
+        setVehicles((prev) => {
+          const merged = isFirstPage ? result.response.data : [...prev, ...result.response.data];
+          const seen = new Set<number>();
+
+          return merged.filter((vehicle) => {
+            if (seen.has(vehicle.id)) {
+              return false;
+            }
+
+            seen.add(vehicle.id);
+            return true;
+          });
+        });
 
         if (result.response.meta) {
-          setCurrentPage(result.response.meta.current_page);
           setLastPage(result.response.meta.last_page);
         }
 
         if (result.response.sidebar) {
-          if (result.response.sidebar.categories) {
-            setCategories(result.response.sidebar.categories);
-          }
-          if (result.response.sidebar.locations) {
-            setLocations(result.response.sidebar.locations);
-          }
-          if (result.response.sidebar.brands) {
-            setBrands(result.response.sidebar.brands);
-          }
+          setCategories(result.response.sidebar.categories ?? []);
+          setLocations(result.response.sidebar.locations ?? []);
+          setBrands(result.response.sidebar.brands ?? []);
         }
 
-        setUseFallback(false);
         setApiError(null);
       } else {
         const errorMsg = result.ok ? 'No vehicles returned from API.' : result.error;
         setApiError(errorMsg);
-        const resolution = resolveVehiclesFailure(allowDemo, 'modern');
-
-        if (resolution.mode === 'demo') {
-          if (currentPage === 1) {
-            setVehicles(resolution.vehicles);
-          }
-          setUseFallback(true);
-        } else if (currentPage === 1) {
+        if (isFirstPage) {
           setVehicles([]);
-          setUseFallback(false);
         }
       }
 
@@ -130,18 +118,15 @@ function ExplorePageContent() {
     }
 
     loadCatalog();
-  }, [searchParams, currentPage, allowDemo]);
+  }, [searchParams, page]);
 
   const handleSearchClick = (e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentPage(1);
     applyFilters(1);
   };
 
   const handleLoadMore = () => {
-    const nextPage = currentPage + 1;
-    setCurrentPage(nextPage);
-    applyFilters(nextPage);
+    applyFilters(page + 1);
   };
 
   const handleResetFilters = () => {
@@ -151,63 +136,93 @@ function ExplorePageContent() {
     setSelectedLocation('');
     setSelectedPriceRange('');
     setSelectedYear('');
-    setCurrentPage(1);
     router.push(themeLink('/explore'));
   };
 
+  const activeFilterCount = [
+    searchQuery,
+    selectedBrand,
+    selectedCategory,
+    selectedLocation,
+    selectedPriceRange,
+    selectedYear,
+  ].filter(Boolean).length;
+
   return (
-    <div className="autos-modern-wrapper">
+    <>
       <ModernHeader />
 
-      {/* Explore Banner */}
-      <section className="md-hero" style={{ height: '40vh', background: 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/themes/autos/modern/18.webp") center/cover no-repeat' }}>
-        <h1 className="md-hero-title" style={{ fontSize: '3rem' }}>The Modern Catalog</h1>
-        <p className="md-hero-subtitle">Refine your look, filter by specifications, and claim your vehicle.</p>
+      <section className="md-hero md-hero--compact">
+        <div className="md-hero-inner">
+          <span className="md-hero-eyebrow">Full Catalog</span>
+          <h1 className="md-hero-title" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
+            The Modern Catalog
+          </h1>
+          <p className="md-hero-subtitle">
+            Refine your search, filter by specifications, and find your next vehicle.
+          </p>
+        </div>
       </section>
 
-      {/* Advanced Filter drawer Row */}
-      <section className="md-filter-section" style={{ marginTop: '-2rem', marginBottom: '3rem' }}>
-        <form onSubmit={handleSearchClick} style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', width: '100%' }}>
-          <input 
+      <section className="md-filter-section" style={{ marginTop: '-2.5rem' }}>
+        <form onSubmit={handleSearchClick} className="md-filter-form">
+          <input
             type="text"
             className="md-search-input"
             placeholder="Search keywords (e.g. EV, AWD, Autopilot)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ flex: '1 1 200px' }}
+            style={{ flex: '1 1 220px' }}
+            aria-label="Search keywords"
           />
 
-          <select 
+          <select
             className="md-select"
             value={selectedBrand}
             onChange={(e) => setSelectedBrand(e.target.value)}
+            aria-label="Brand"
           >
             <option value="">All Brands</option>
-            {brands.map(b => <option key={b.id} value={b.title}>{b.title}</option>)}
+            {brands.map((b) => (
+              <option key={b.id} value={b.title}>
+                {b.title}
+              </option>
+            ))}
           </select>
 
-          <select 
+          <select
             className="md-select"
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
+            aria-label="Category"
           >
             <option value="">All Categories</option>
-            {categories.map(c => <option key={c.id} value={c.slug}>{c.title}</option>)}
+            {categories.map((c) => (
+              <option key={c.id} value={c.slug}>
+                {c.title}
+              </option>
+            ))}
           </select>
 
-          <select 
+          <select
             className="md-select"
             value={selectedLocation}
             onChange={(e) => setSelectedLocation(e.target.value)}
+            aria-label="Location"
           >
             <option value="">All Locations</option>
-            {locations.map(loc => <option key={loc.id} value={loc.title}>{loc.title}</option>)}
+            {locations.map((loc) => (
+              <option key={loc.id} value={loc.title}>
+                {loc.title}
+              </option>
+            ))}
           </select>
 
-          <select 
+          <select
             className="md-select"
             value={selectedPriceRange}
             onChange={(e) => setSelectedPriceRange(e.target.value)}
+            aria-label="Price range"
           >
             <option value="">Price Range</option>
             <option value="0-30000">Under $30,000</option>
@@ -216,10 +231,11 @@ function ExplorePageContent() {
             <option value="100000-99999999">$100,000 & Above</option>
           </select>
 
-          <select 
+          <select
             className="md-select"
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
+            aria-label="Year"
           >
             <option value="">All Years</option>
             <option value="2025">2025</option>
@@ -228,43 +244,41 @@ function ExplorePageContent() {
             <option value="2022">2022</option>
           </select>
 
-          <div style={{ display: 'flex', gap: '0.5rem', width: '100%', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
-            <button type="button" className="md-btn md-btn-outline" style={{ color: '#007bff', borderColor: '#007bff' }} onClick={handleResetFilters}>
-              Reset Filters
+          <div className="md-filter-actions">
+            {activeFilterCount > 0 && (
+              <span className="md-results-meta" style={{ margin: 0, marginRight: 'auto' }}>
+                {activeFilterCount} filter{activeFilterCount !== 1 ? 's' : ''} active
+              </span>
+            )}
+            <button type="button" className="md-btn md-btn-outline-primary" onClick={handleResetFilters}>
+              Reset
             </button>
             <button type="submit" className="md-btn md-btn-cta">
-              Filter Catalog
+              Apply Filters
             </button>
           </div>
         </form>
       </section>
 
-      {apiError && useFallback && (
-        <div className="md-alert-slot">
-          <CatalogSyncAlert variant="demo" error={apiError} classPrefix="md" />
-        </div>
-      )}
-      {apiError && !useFallback && (
+      {apiError && (
         <div className="md-alert-slot">
           <CatalogSyncAlert variant="production" error={apiError} classPrefix="md" />
         </div>
       )}
 
-      {/* Results Listings Grid */}
       <section className="md-section" style={{ paddingTop: 0 }}>
+        {!loading && vehicles.length > 0 && (
+          <div className="md-results-meta">
+            <span>
+              Showing <strong>{vehicles.length}</strong> vehicle{vehicles.length !== 1 ? 's' : ''}
+            </span>
+          </div>
+        )}
+
         {loading ? (
           <div className="md-grid">
-            {[1, 2, 3, 4, 5, 6].map(idx => (
-              <div key={idx} className="md-car-card" style={{ height: '370px', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ height: '200px', backgroundColor: '#e2e8f0', animation: 'pulse 1.5s infinite ease-in-out' }}></div>
-                <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <div>
-                    <div style={{ height: '22px', width: '70%', backgroundColor: '#cbd5e1', marginBottom: '0.75rem', borderRadius: '4px', animation: 'pulse 1.5s infinite ease-in-out' }}></div>
-                    <div style={{ height: '16px', width: '50%', backgroundColor: '#e2e8f0', borderRadius: '4px', animation: 'pulse 1.5s infinite ease-in-out' }}></div>
-                  </div>
-                  <div style={{ height: '28px', width: '40%', backgroundColor: '#cbd5e1', borderRadius: '4px', marginTop: '1rem', animation: 'pulse 1.5s infinite ease-in-out' }}></div>
-                </div>
-              </div>
+            {[1, 2, 3, 4, 5, 6].map((idx) => (
+              <CarCardSkeleton key={idx} />
             ))}
           </div>
         ) : (
@@ -279,6 +293,9 @@ function ExplorePageContent() {
                     price={formatVehiclePrice(car)}
                     image={getVehicleImage(car)}
                     slug={car.slug}
+                    year={car.specs?.year}
+                    condition={car.specs?.condition || 'Available'}
+                    fuelType={car.specs?.engine}
                   />
                 ))
               ) : (
@@ -292,15 +309,16 @@ function ExplorePageContent() {
               )}
             </div>
 
-            {currentPage < lastPage && !useFallback && (
-              <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-                <button 
-                  className="md-btn md-btn-cta" 
-                  style={{ padding: '1rem 3rem' }} 
+            {page < lastPage && (
+              <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+                <button
+                  type="button"
+                  className="md-btn md-btn-cta"
+                  style={{ padding: '0.85rem 2.5rem' }}
                   onClick={handleLoadMore}
                   disabled={loadingMore}
                 >
-                  {loadingMore ? 'SYNCING MORE VEHICLES...' : 'LOAD MORE MODELS'}
+                  {loadingMore ? 'Loading...' : 'Load More Models'}
                 </button>
               </div>
             )}
@@ -308,26 +326,23 @@ function ExplorePageContent() {
         )}
       </section>
 
-      {/* Pulse keyframe animation */}
-      <style jsx global>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-      `}</style>
-
       <ModernFooter />
-    </div>
+    </>
   );
 }
 
 export default function ExplorePage() {
   return (
-    <Suspense fallback={
-      <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', fontFamily: 'sans-serif' }}>
-        <h3>Configuring Catalogs...</h3>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="md-loading-screen">
+          <div style={{ textAlign: 'center' }}>
+            <h2 style={{ fontWeight: 600, letterSpacing: '0.04em' }}>Loading catalog...</h2>
+            <div className="md-loading-bar" />
+          </div>
+        </div>
+      }
+    >
       <ExplorePageContent />
     </Suspense>
   );

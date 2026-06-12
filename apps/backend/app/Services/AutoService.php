@@ -79,7 +79,9 @@ class AutoService
             }
         });
 
-            ->with(['category', 'location', 'user', 'media', 'brand', 'type', 'features', 'tags'])->paginate(12);
+        return $query
+            ->with(['category', 'location', 'user', 'media', 'brand', 'type', 'features', 'tags'])
+            ->paginate((int) ($filters['per_page'] ?? 12));
     }
 
     /**
