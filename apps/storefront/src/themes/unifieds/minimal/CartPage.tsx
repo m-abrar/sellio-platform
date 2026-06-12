@@ -7,18 +7,13 @@ import { useUnifiedCart } from '@/themes/unifieds/shared/useUnifiedCart';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function CartPage() {
-  const { items, loading, updateQuantity, removeItem, clearCart } = useUnifiedCart();
-  const [checkoutComplete, setCheckoutComplete] = useState(false);
+  const { items, loading, updateQuantity, removeItem } = useUnifiedCart();
   const [submittingOrder, setSubmittingOrder] = useState(false);
   const themeLink = useUnifiedThemeLink();
 
   const handleCheckout = () => {
     setSubmittingOrder(true);
-    window.setTimeout(() => {
-      setSubmittingOrder(false);
-      setCheckoutComplete(true);
-      clearCart();
-    }, 1500);
+    window.location.assign(themeLink('/checkout'));
   };
 
   const { subtotal, shipping, tax, total } = calculateCartTotals(items);
@@ -27,27 +22,6 @@ export default function CartPage() {
     return (
       <div style={{ padding: '8rem 6% 6rem', textAlign: 'center' }}>
         <p style={{ color: '#666' }}>Loading shopping cart details...</p>
-      </div>
-    );
-  }
-
-  if (checkoutComplete) {
-    return (
-      <div style={{ padding: '10rem 6% 10rem', textAlign: 'center', animation: 'fadeIn 0.8s ease-out' }}>
-        <div style={{ marginBottom: '2.5rem' }}>
-          <svg fill="none" stroke="var(--usm-primary)" strokeWidth="1.5" viewBox="0 0 24 24" width="72" height="72" style={{ margin: '0 auto' }}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-          </svg>
-        </div>
-        <h1 className="usm-heading-xl" style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', margin: '1rem 0', fontWeight: 600 }}>
-          Order Confirmed!
-        </h1>
-        <p style={{ maxWidth: '600px', margin: '0 auto 3rem', color: '#666', fontWeight: 300, lineHeight: 1.8 }}>
-          Thank you for your purchase. Your order has been recorded in the local checkout simulation.
-        </p>
-        <a href={themeLink('/')} className="silent-btn-primary" style={{ textDecoration: 'none' }}>
-          Continue Browsing
-        </a>
       </div>
     );
   }

@@ -11,6 +11,7 @@ import {
   getServicePriceLabel,
 } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
+import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';
 import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 interface ProductPageProps {
@@ -42,6 +43,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   });
   const [leadSaved, setLeadSaved] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     async function loadService() {
@@ -77,7 +79,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
     loadService();
   }, [slug, allowDemo]);
 
-  const handleLeadSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLeadSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!service || !leadForm.contactName || !leadForm.contactInfo) {
@@ -86,27 +88,36 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }
 
     setFormError(null);
+    setIsSubmitting(true);
 
-    const newLead: ServiceLead = {
-      id: `service_lead_${Date.now()}`,
+    const result = await submitServiceConsultation({
       serviceId: service.id,
-      serviceTitle: service.title,
+      useFallback,
+      storageKey: 'sellio_services_corporate_leads',
       contactName: leadForm.contactName,
       contactInfo: leadForm.contactInfo,
       requirements: leadForm.requirements,
-      created_at: new Date().toISOString(),
-    };
+      topic: `Consultation request: ${service.title}`,
+      demoRecord: {
+        id: `service_lead_${Date.now()}`,
+        serviceId: service.id,
+        serviceTitle: service.title,
+        contactName: leadForm.contactName,
+        contactInfo: leadForm.contactInfo,
+        requirements: leadForm.requirements,
+        created_at: new Date().toISOString(),
+      },
+    });
 
-    try {
-      const storedLeads = JSON.parse(localStorage.getItem('sellio_services_corporate_leads') || '[]') as ServiceLead[];
-      storedLeads.push(newLead);
-      localStorage.setItem('sellio_services_corporate_leads', JSON.stringify(storedLeads));
-      setLeadSaved(true);
-      setLeadForm({ contactName: '', contactInfo: '', requirements: '' });
-    } catch (error) {
-      console.error('Failed to persist services corporate lead:', error);
-      setFormError('Could not save your consultation request locally. Please try again.');
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
     }
+
+    setLeadSaved(true);
+    setLeadForm({ contactName: '', contactInfo: '', requirements: '' });
   };
 
   if (loading) {

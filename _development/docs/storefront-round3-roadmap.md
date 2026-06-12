@@ -46,31 +46,27 @@ Last updated: 2026-06-11
 
 ---
 
-## Phase 2–9 — Theme rollout (29 remaining)
+## Phase 2–9 — Theme rollout ✅
 
-Clone from golden template per vertical. See conversation roadmap for per-theme order.
+All 52 themes complete.
 
-### Phase 2a — Classifieds vertical ✅ (6/6)
+### Phase 2g — Unifieds vertical ✅ (8/8)
 
-All classifieds themes share `classifieds/local` ExplorePage fallback and `submitClassifiedInquiry()` on ProductPage (live API + demo localStorage).
-
-### Phase 2b — Properties vertical ✅ (13/13)
-
-Shared helpers: `submitPropertyInquiry()`, `redirectToPropertyBookingReserve()`. Sale inquiries hit `POST /v1/properties/{id}/inquiries`; rental/vacation date picks redirect to `/booking/reserve` → API booking + payment (fallback via `properties/rental` booking pages).
+All unified themes use shared `UnifiedCheckoutPage` / confirmation pages. Cart checkout redirects to `/checkout` (fixed `minimal` and `default` simulated checkout). Product pages use `addProductToCart()` (API + localStorage sync).
 
 ### Vertical completion tracker
 
 | Vertical | Total | 100% complete |
 |----------|------:|:-------------:|
-| Unifieds | 8 | 1 |
+| Unifieds | 8 | 8 |
 | Ecommerce | 4 | 4 |
 | Properties | 13 | 13 |
-| Autos | 5 | 1 |
-| Events | 5 | 1 |
-| Jobs | 6 | 1 |
-| Services | 5 | 1 |
+| Autos | 5 | 5 |
+| Events | 5 | 5 |
+| Jobs | 6 | 6 |
+| Services | 5 | 5 |
 | Classifieds | 6 | 6 |
-| **Total** | **52** | **28** |
+| **Total** | **52** | **52** |
 
 ---
 

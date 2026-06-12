@@ -89,11 +89,12 @@ export function useJobApplyFlow(slug: string) {
 
     if (!result.ok) {
       setFormError(result.error);
-      return;
+      return result;
     }
 
     setApplicationId(result.applicationId);
     setIsSubmitted(true);
+    return result;
   };
 
   return {

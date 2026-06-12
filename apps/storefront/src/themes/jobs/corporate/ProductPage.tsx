@@ -5,22 +5,11 @@ import type { JobListing } from '@sellio/types';
 import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
 import { fetchJobDetail, resolveJobFailure } from '@/themes/jobs/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
+import { useJobApplyFlow } from '@/themes/jobs/shared/useJobApplyFlow';
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 interface ProductPageProps {
   slug: string;
-}
-
-interface JobApplication {
-  id: number;
-  job_id?: number;
-  job_title?: string;
-  company?: string;
-  candidate_name: string;
-  candidate_email: string;
-  portfolio: string;
-  cover_note: string;
-  submitted_at: string;
 }
 
 export default function ProductPage({ slug }: ProductPageProps) {
@@ -32,9 +21,23 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [apiError, setApiError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', portfolio: '', note: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
+  const {
+    user,
+    authMode,
+    setAuthMode,
+    authPassword,
+    setAuthPassword,
+    authBusy,
+    isSubmitting,
+    applicationId,
+    isSubmitted,
+    setIsSubmitted,
+    setApplicationId,
+    formError,
+    setFormError,
+    handleAuthSubmit,
+    handleApplySubmit,
+  } = useJobApplyFlow(slug);
 
   useEffect(() => {
     let isMounted = true;
@@ -75,40 +78,17 @@ export default function ProductPage({ slug }: ProductPageProps) {
     return () => { isMounted = false; };
   }, [slug, allowDemo]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!job || !form.name || !form.email) {
-      setFormError('Please enter your name and email to submit an application.');
-      return;
-    }
+    if (!job) return;
 
-    setFormError(null);
-    setIsSubmitting(true);
-    setTimeout(() => {
-      const application: JobApplication = {
-        id: Date.now(),
-        job_id: job.id,
-        job_title: job.title,
-        company: job.company?.name,
-        candidate_name: form.name,
-        candidate_email: form.email,
-        portfolio: form.portfolio,
-        cover_note: form.note,
-        submitted_at: new Date().toISOString(),
-      };
-
-      try {
-        const stored = JSON.parse(localStorage.getItem('sellio_jobs_corporate_applications') || '[]') as JobApplication[];
-        stored.push(application);
-        localStorage.setItem('sellio_jobs_corporate_applications', JSON.stringify(stored));
-        setIsSubmitted(true);
-        setForm({ name: '', email: '', portfolio: '', note: '' });
-      } catch (error) {
-        console.error('Failed to persist job application:', error);
-        setFormError('Could not save your application locally. Please try again.');
-      }
-      setIsSubmitting(false);
-    }, 800);
+    await handleApplySubmit(form, {
+      useFallback,
+      storageKey: 'sellio_jobs_corporate_applications',
+      jobId: job.id,
+      jobTitle: job.title,
+      companyName: job.company?.name,
+    });
   };
 
   if (loading) {
@@ -201,12 +181,43 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
           <div className="jc-detail-apply">
             <h3>Apply for this role</h3>
-            <p>Submit your application details. Saved locally for the preview flow.</p>
+            <p>Submit your application details.</p>
 
             {isSubmitted ? (
               <div className="jc-detail-success" role="status">
-                Application saved successfully.
+                {useFallback
+                  ? 'Application saved in demo mode.'
+                  : `Application #${applicationId ?? '—'} submitted successfully.`}
               </div>
+            ) : !useFallback && !user ? (
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  void handleAuthSubmit(form);
+                }}
+              >
+                <p>Sign in to apply for this role.</p>
+                <label>
+                  Full Name
+                  <input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                </label>
+                <label>
+                  Email
+                  <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                </label>
+                <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
+                  <button type="button" className="jc-btn jc-btn-navy" onClick={() => setAuthMode('login')} disabled={authMode === 'login'}>Login</button>
+                  <button type="button" className="jc-btn jc-btn-navy" onClick={() => setAuthMode('register')} disabled={authMode === 'register'}>Register</button>
+                </div>
+                <label>
+                  Password
+                  <input required type="password" value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} />
+                </label>
+                {formError && <p className="jc-form-error" role="alert">{formError}</p>}
+                <button className="jc-btn jc-btn-navy" type="submit" disabled={authBusy}>
+                  {authBusy ? 'Please wait…' : authMode === 'login' ? 'Sign in to apply' : 'Create account'}
+                </button>
+              </form>
             ) : (
               <form onSubmit={handleSubmit}>
                 <label>

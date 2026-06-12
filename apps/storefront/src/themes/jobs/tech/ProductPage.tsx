@@ -9,6 +9,7 @@ import {
   type TechJobCardData,
 } from '@/themes/jobs/shared/job-utils';
 import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
+import { useJobApplyFlow } from '@/themes/jobs/shared/useJobApplyFlow';
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 type TechJob = TechJobCardData;
@@ -27,9 +28,19 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [email, setEmail] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
   const [coverNote, setCoverNote] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [applicationReceipt, setApplicationReceipt] = useState<Record<string, string> | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
+  const {
+    user,
+    authMode,
+    setAuthMode,
+    authPassword,
+    setAuthPassword,
+    authBusy,
+    isSubmitting,
+    formError,
+    handleAuthSubmit,
+    handleApplySubmit,
+  } = useJobApplyFlow(slug);
 
   useEffect(() => {
     async function loadJobDetails() {
@@ -73,46 +84,36 @@ export default function ProductPage({ slug }: { slug: string }) {
 
   const handleApplicationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !githubUrl) {
-      setFormError('Please fill in your name, email, and GitHub profile link.');
+    if (!job || !name || !email || !githubUrl) {
       return;
     }
 
-    setFormError(null);
-    setIsSubmitting(true);
-    
-    // Simulate compilation/crypto application routing delay
-    await new Promise(resolve => setTimeout(resolve, 1200));
+    const result = await handleApplySubmit(
+      { name, email, portfolio: githubUrl, note: coverNote },
+      {
+        useFallback,
+        storageKey: 'sellio_jobs_tech_orders',
+        jobId: Number(job.id),
+        jobTitle: job.title,
+        companyName: typeof job.company === 'string' ? job.company : undefined,
+      },
+    );
 
-    if (!job) {
-      return;
-    }
-
-    const shaHash = `SHA256-${Math.random().toString(36).substring(2, 10).toUpperCase()}-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
-
-    const receipt = {
-      applicationId: `AP-${Math.floor(100000 + Math.random() * 900000)}`,
-      timestamp: new Date().toLocaleString(),
-      jobTitle: job.title,
-      company: job.company,
-      applicantName: name,
-      applicantEmail: email,
-      githubUrl: githubUrl,
-      shaHash: shaHash,
-    };
-
-    try {
-      const existing = localStorage.getItem('sellio_jobs_tech_orders');
-      const appList = existing ? JSON.parse(existing) : [];
-      appList.unshift(receipt);
-      localStorage.setItem('sellio_jobs_tech_orders', JSON.stringify(appList));
-      
-      setApplicationReceipt(receipt);
-      setIsSubmitting(false);
-    } catch (error) {
-      console.error("LocalStorage application write failure", error);
-      setApplicationReceipt(receipt);
-      setIsSubmitting(false);
+    if (result?.ok) {
+      setApplicationReceipt({
+        applicationId: String(result.applicationId),
+        timestamp: new Date().toLocaleString(),
+        jobTitle: job.title,
+        company: typeof job.company === 'string' ? job.company : '',
+        applicantName: name,
+        applicantEmail: email,
+        githubUrl,
+        shaHash: `SHA256-${result.applicationId}`,
+      });
+      setName('');
+      setEmail('');
+      setGithubUrl('');
+      setCoverNote('');
     }
   };
 
@@ -301,6 +302,29 @@ export default function ProductPage({ slug }: { slug: string }) {
               >
                 SUBMIT NEW APPLICATION
               </button>
+            </div>
+          ) : !useFallback && !user ? (
+            <div style={{
+              background: 'var(--jt-bg-light)',
+              border: '1px solid var(--jt-border)',
+              padding: '4rem 3.5rem',
+              borderRadius: '24px',
+              boxShadow: 'var(--pr-shadow-md)'
+            }}>
+              <h3 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '1rem' }}>Sign in to apply</h3>
+              <form onSubmit={(e) => { e.preventDefault(); void handleAuthSubmit({ name, email, portfolio: githubUrl, note: coverNote }); }}>
+                {formError && <p style={{ color: '#f87171', marginBottom: '1rem' }} role="alert">{formError}</p>}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+                  <input type="text" required placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} className="jt-search-input" />
+                  <input type="email" required placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="jt-search-input" />
+                  <input type="password" required placeholder="Password" value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} className="jt-search-input" />
+                </div>
+                <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
+                  <button type="button" className="jt-btn jt-btn-primary" onClick={() => setAuthMode('login')} disabled={authMode === 'login'}>Login</button>
+                  <button type="button" className="jt-btn jt-btn-primary" onClick={() => setAuthMode('register')} disabled={authMode === 'register'}>Register</button>
+                </div>
+                <button type="submit" className="jt-btn jt-btn-primary" disabled={authBusy}>{authBusy ? 'Please wait…' : 'Continue'}</button>
+              </form>
             </div>
           ) : (
             /* Stateful application form desk */

@@ -7,18 +7,13 @@ import { useUnifiedCart } from '@/themes/unifieds/shared/useUnifiedCart';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function CartPage() {
-  const { items, loading, updateQuantity, removeItem, clearCart } = useUnifiedCart();
-  const [checkoutComplete, setCheckoutComplete] = useState(false);
+  const { items, loading, updateQuantity, removeItem } = useUnifiedCart();
   const [submittingOrder, setSubmittingOrder] = useState(false);
   const themeLink = useUnifiedThemeLink();
 
   const handleCheckout = () => {
     setSubmittingOrder(true);
-    window.setTimeout(() => {
-      setSubmittingOrder(false);
-      setCheckoutComplete(true);
-      clearCart();
-    }, 1500);
+    window.location.assign(themeLink('/checkout'));
   };
 
   const { subtotal, shipping, tax, total } = calculateCartTotals(items);
@@ -27,19 +22,6 @@ export default function CartPage() {
     return (
       <main className="ud-cart-page">
         <p style={{ color: 'var(--ud-slate)' }}>Loading shopping cart details...</p>
-      </main>
-    );
-  }
-
-  if (checkoutComplete) {
-    return (
-      <main className="ud-cart-page">
-        <section className="ud-cart-state" role="status">
-          <div className="ud-mono" style={{ color: 'var(--ud-azure)', marginBottom: '1rem' }}>ORDER_CONFIRMED</div>
-          <h1>Order Confirmed</h1>
-          <p>Your core checkout simulation completed successfully. Continue browsing the live catalog registry.</p>
-          <a href={themeLink('/')} className="core-btn-primary">Continue Browsing</a>
-        </section>
       </main>
     );
   }

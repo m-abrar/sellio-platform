@@ -11,6 +11,7 @@ import {
   getServicePriceLabel,
 } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
+import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';
 import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 interface ProductPageProps {
@@ -38,6 +39,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [leadForm, setLeadForm] = useState({ contactName: '', contactInfo: '', brief: '' });
   const [leadSaved, setLeadSaved] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     async function loadService() {
@@ -73,7 +75,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
     loadService();
   }, [slug, allowDemo]);
 
-  const handleLeadSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLeadSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!service || !leadForm.contactName || !leadForm.contactInfo) {
       setFormError('Please enter your name and contact details.');
@@ -81,27 +83,36 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }
 
     setFormError(null);
+    setIsSubmitting(true);
 
-    const newLead: CreativeLead = {
-      id: `creative_lead_${Date.now()}`,
+    const result = await submitServiceConsultation({
       serviceId: service.id,
-      serviceTitle: service.title,
+      useFallback,
+      storageKey: 'sellio_services_creative_leads',
       contactName: leadForm.contactName,
       contactInfo: leadForm.contactInfo,
-      brief: leadForm.brief,
-      created_at: new Date().toISOString(),
-    };
+      requirements: leadForm.brief,
+      topic: `Creative brief: ${service.title}`,
+      demoRecord: {
+        id: `creative_lead_${Date.now()}`,
+        serviceId: service.id,
+        serviceTitle: service.title,
+        contactName: leadForm.contactName,
+        contactInfo: leadForm.contactInfo,
+        brief: leadForm.brief,
+        created_at: new Date().toISOString(),
+      },
+    });
 
-    try {
-      const stored = JSON.parse(localStorage.getItem('sellio_services_creative_leads') || '[]') as CreativeLead[];
-      stored.push(newLead);
-      localStorage.setItem('sellio_services_creative_leads', JSON.stringify(stored));
-      setLeadSaved(true);
-      setLeadForm({ contactName: '', contactInfo: '', brief: '' });
-    } catch (error) {
-      console.error('Failed to persist creative lead:', error);
-      setFormError('Could not save your project brief locally. Please try again.');
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
     }
+
+    setLeadSaved(true);
+    setLeadForm({ contactName: '', contactInfo: '', brief: '' });
   };
 
   if (loading) {

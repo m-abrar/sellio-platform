@@ -5,6 +5,7 @@ import type { JobListing } from '@sellio/types';
 import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
 import { fetchJobDetail, resolveJobFailure } from '@/themes/jobs/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
+import { useJobApplyFlow } from '@/themes/jobs/shared/useJobApplyFlow';
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 interface ProductPageProps {
@@ -20,9 +21,20 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [apiError, setApiError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', phone: '', note: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
+  const {
+    user,
+    authMode,
+    setAuthMode,
+    authPassword,
+    setAuthPassword,
+    authBusy,
+    isSubmitting,
+    applicationId,
+    isSubmitted,
+    formError,
+    handleAuthSubmit,
+    handleApplySubmit,
+  } = useJobApplyFlow(slug);
 
   useEffect(() => {
     async function loadJob() {
@@ -58,37 +70,25 @@ export default function ProductPage({ slug }: ProductPageProps) {
     loadJob();
   }, [slug, allowDemo]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!job || !form.name || !form.email) {
-      setFormError('Please enter your name and email to apply.');
-      return;
-    }
+    if (!job) return;
 
-    setFormError(null);
-    setIsSubmitting(true);
-    setTimeout(() => {
-      try {
-        const stored = JSON.parse(localStorage.getItem('sellio_jobs_blue_collar_applications') || '[]');
-        stored.push({
-          id: Date.now(),
-          job_id: job.id,
-          job_title: job.title,
-          company: job.company?.name,
-          candidate_name: form.name,
-          candidate_email: form.email,
-          phone: form.phone,
-          cover_note: form.note,
-          submitted_at: new Date().toISOString(),
-        });
-        localStorage.setItem('sellio_jobs_blue_collar_applications', JSON.stringify(stored));
-        setIsSubmitted(true);
-        setForm({ name: '', email: '', phone: '', note: '' });
-      } catch (error) {
-        console.error('Failed to persist job application:', error);
-      }
-      setIsSubmitting(false);
-    }, 800);
+    await handleApplySubmit(
+      {
+        name: form.name,
+        email: form.email,
+        portfolio: '',
+        note: [form.phone && `Phone: ${form.phone}`, form.note].filter(Boolean).join('\n'),
+      },
+      {
+        useFallback,
+        storageKey: 'sellio_jobs_blue_collar_applications',
+        jobId: job.id,
+        jobTitle: job.title,
+        companyName: job.company?.name,
+      },
+    );
   };
 
   if (loading) {
@@ -165,7 +165,22 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="jbc-detail-apply">
             <h3>Apply for this job</h3>
             {isSubmitted ? (
-              <div className="jbc-detail-success" role="status">Application saved.</div>
+              <div className="jbc-detail-success" role="status">
+                {useFallback ? 'Application saved.' : `Application #${applicationId ?? '—'} submitted.`}
+              </div>
+            ) : !useFallback && !user ? (
+              <form onSubmit={(e) => { e.preventDefault(); void handleAuthSubmit({ name: form.name, email: form.email, portfolio: '', note: '' }); }}>
+                <p>Sign in to apply for this job.</p>
+                {formError && <div className="jbc-detail-error" role="alert">{formError}</div>}
+                <label>Full Name<input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
+                <label>Email<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
+                <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
+                  <button type="button" className="jbc-btn jbc-btn-primary" onClick={() => setAuthMode('login')} disabled={authMode === 'login'}>Login</button>
+                  <button type="button" className="jbc-btn jbc-btn-primary" onClick={() => setAuthMode('register')} disabled={authMode === 'register'}>Register</button>
+                </div>
+                <label>Password<input required type="password" value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} /></label>
+                <button className="jbc-btn jbc-btn-primary" type="submit" disabled={authBusy}>{authBusy ? 'Please wait…' : 'Sign in to apply'}</button>
+              </form>
             ) : (
               <form onSubmit={handleSubmit}>
                 {formError && <div className="jbc-detail-error" role="alert">{formError}</div>}

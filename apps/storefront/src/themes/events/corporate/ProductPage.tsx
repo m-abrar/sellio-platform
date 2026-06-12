@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import type { EventListing, EventTicketDataMap } from '@sellio/types';
+import type { EventListing } from '@sellio/types';
 import { EventCard } from './components';
 import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
 import { fetchEventDetail, resolveEventFailure } from '@/themes/events/shared/catalog';

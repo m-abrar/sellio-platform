@@ -10,6 +10,7 @@ import {
   getServicePriceLabel,
 } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
+import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';
 import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 interface ProductPageProps {
@@ -38,6 +39,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [leadForm, setLeadForm] = useState({ contactName: '', contactInfo: '', address: '', notes: '' });
   const [leadSaved, setLeadSaved] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -78,7 +80,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
     return () => { isMounted = false; };
   }, [slug, allowDemo]);
 
-  const handleLeadSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLeadSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!service || !leadForm.contactName || !leadForm.contactInfo || !leadForm.address) {
       setFormError('Please enter your name, contact details, and service address.');
@@ -86,28 +88,37 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }
 
     setFormError(null);
+    setIsSubmitting(true);
 
-    const newLead: LocalLead = {
-      id: `local_lead_${Date.now()}`,
+    const result = await submitServiceConsultation({
       serviceId: service.id,
-      serviceTitle: service.title,
+      useFallback,
+      storageKey: 'sellio_services_local_leads',
       contactName: leadForm.contactName,
       contactInfo: leadForm.contactInfo,
-      address: leadForm.address,
-      notes: leadForm.notes,
-      created_at: new Date().toISOString(),
-    };
+      requirements: [leadForm.address, leadForm.notes].filter(Boolean).join('\n'),
+      topic: `Local service request: ${service.title}`,
+      demoRecord: {
+        id: `local_lead_${Date.now()}`,
+        serviceId: service.id,
+        serviceTitle: service.title,
+        contactName: leadForm.contactName,
+        contactInfo: leadForm.contactInfo,
+        address: leadForm.address,
+        notes: leadForm.notes,
+        created_at: new Date().toISOString(),
+      },
+    });
 
-    try {
-      const stored = JSON.parse(localStorage.getItem('sellio_services_local_leads') || '[]') as LocalLead[];
-      stored.push(newLead);
-      localStorage.setItem('sellio_services_local_leads', JSON.stringify(stored));
-      setLeadSaved(true);
-      setLeadForm({ contactName: '', contactInfo: '', address: '', notes: '' });
-    } catch (error) {
-      console.error('Failed to persist local service lead:', error);
-      setFormError('Could not save your service request locally. Please try again.');
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setFormError(result.error);
+      return;
     }
+
+    setLeadSaved(true);
+    setLeadForm({ contactName: '', contactInfo: '', address: '', notes: '' });
   };
 
   if (loading) {
