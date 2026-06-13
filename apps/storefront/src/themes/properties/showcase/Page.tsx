@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { CinematicPropertyCard, CuratorStats } from './components';
@@ -31,14 +30,13 @@ function mapPropertyToShowcase(property: Property, index: number) {
     title: property.title,
     price: getPropertyPrice(property),
     location: getPropertyLocation(property),
-    description: property.short_description || property.description || 'A curated architectural node synchronized from the Sellio property registry.',
+    description: property.short_description || property.description || 'A distinguished property with verified architectural and heritage significance.',
     image: property.featured_image || property.thumbnail_image || fallbackImages[index % fallbackImages.length],
     slug: property.slug,
   };
 }
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = usePropertyThemeLink();
   const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
@@ -83,7 +81,7 @@ export default function Page() {
       {/* Cinematic Hero */}
       <section className="ps-hero" aria-labelledby="ps-hero-title">
         <div className="ps-hero-line"></div>
-        <div className="ps-mono" style={{ marginBottom: '4rem' }}>{useThemeContent('hero.kicker', 'CURATED_ATELIER_COLLECTION_V8')}</div>
+        <div className="ps-mono" style={{ marginBottom: '4rem' }}>{useThemeContent('hero.kicker', 'Curated Atelier Collection')}</div>
         <h1 className="ps-heading-xl" id="ps-hero-title">
           {useThemeContent('hero.title', 'Living \nAs Art.').split('\n').map((line, i, arr) => (
             <React.Fragment key={i}>
@@ -93,15 +91,15 @@ export default function Page() {
           ))}
         </h1>
         <p style={{ maxWidth: '750px', fontSize: '1.75rem', fontWeight: 300, color: 'var(--ps-text-dim)', lineHeight: 1.6, marginTop: '6rem' }}>
-            {useThemeContent('hero.description', "A curated distribution of the world's most significant architectural achievements. Synchronizing institutional curation with museum-grade provenance.")}
+            {useThemeContent('hero.description', "A curated collection of the world's most significant architectural achievements, selected for provenance, heritage, and artistic significance.")}
         </p>
         <div style={{ marginTop: '8rem', display: 'flex', gap: '4rem', flexWrap: 'wrap' }} className="ps-hero-buttons">
             <button className="ps-btn-primary" id="ps-btn-explore" onClick={() => document.getElementById('ps-story-grid')?.scrollIntoView({ behavior: 'smooth' })}>
               {useThemeContent('hero.primary_cta_label', 'Explore Curation')}
             </button>
-            <button style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--ps-canvas)', color: 'white', padding: '1rem 0', fontWeight: 900, fontSize: '1rem', letterSpacing: '4px', cursor: 'pointer' }} id="ps-btn-manifesto" onClick={() => router.push(themeLink('/'))}>
-              {useThemeContent('hero.secondary_cta_label', 'READ_MANIFESTO')}
-            </button>
+            <a href={themeLink('/')} style={{ background: 'transparent', borderBottom: '2px solid var(--ps-canvas)', color: 'white', padding: '1rem 0', fontWeight: 900, fontSize: '1rem', letterSpacing: '4px', textDecoration: 'none' }} id="ps-btn-manifesto">
+              {useThemeContent('hero.secondary_cta_label', 'Read the Manifesto')}
+            </a>
         </div>
       </section>
 
@@ -133,13 +131,13 @@ export default function Page() {
                   })}
                 </h2>
                 <p style={{ fontSize: '1.35rem', color: 'var(--ps-text-dim)', lineHeight: 1.9 }}>
-                    {useThemeContent('curator.description', 'Every property in the Atelier registry is hand-selected by our board of curators. We validate not just the integrity, but the historical and cultural significance of each node.')}
+                    {useThemeContent('curator.description', 'Every property in the Atelier collection is hand-selected by our board of curators. We validate the integrity, historical significance, and cultural character of each estate.')}
                 </p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5rem' }} className="ps-curator-stats-list">
-                <CuratorStats value={useThemeContent('curator.stat_1_value', 'INSTITUTIONAL')} label={useThemeContent('curator.stat_1_label', 'CURATION_TIER')} />
-                <CuratorStats value={useThemeContent('curator.stat_2_value', 'MUSEUM')} label={useThemeContent('curator.stat_2_label', 'GRADE_PROVENANCE')} />
-                <CuratorStats value={useThemeContent('curator.stat_3_value', 'GLOBAL')} label={useThemeContent('curator.stat_3_label', 'DISTRIBUTION_SYNC')} />
+                <CuratorStats value={useThemeContent('curator.stat_1_value', 'Institutional')} label={useThemeContent('curator.stat_1_label', 'Curation Tier')} />
+                <CuratorStats value={useThemeContent('curator.stat_2_value', 'Museum')} label={useThemeContent('curator.stat_2_label', 'Grade Provenance')} />
+                <CuratorStats value={useThemeContent('curator.stat_3_value', 'Global')} label={useThemeContent('curator.stat_3_label', 'Distribution Reach')} />
             </div>
         </div>
       </section>
@@ -156,15 +154,15 @@ export default function Page() {
             ))
           ) : propertyError ? (
             <div className="prop-listing-state ps-listing-state">
-              <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Property Sync Offline')}</div>
+              <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Connection Error')}</div>
               <h3>{useThemeContent('offline.title', 'Curated showcase could not be loaded.')}</h3>
-              <p>{propertyError}</p>
+              <p>Check your API connection and confirm properties are published in the admin panel.</p>
             </div>
           ) : properties.length === 0 ? (
             <div className="prop-listing-state ps-listing-state">
-              <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'Empty Property Registry')}</div>
+              <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'No Properties Yet')}</div>
               <h3>{useThemeContent('empty.title', 'No live properties are published yet.')}</h3>
-              <p>{useThemeContent('empty.description', 'Add property records in the backend and this showcase will hydrate automatically.')}</p>
+              <p>{useThemeContent('empty.description', 'Add property records in the admin panel and they will appear here.')}</p>
             </div>
           ) : (
             properties.slice(0, 6).map((property, index) => {
@@ -180,16 +178,16 @@ export default function Page() {
 
       {/* Philosophy Bar */}
       <div style={{ padding: '4rem 2rem', border: '1px solid var(--ps-shadow)', borderRadius: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '10rem 0', flexWrap: 'wrap', gap: '2rem' }} className="ps-philosophy-bar">
-          {useThemeContent('philosophy.items', 'INSTITUTIONAL_CURATION|ARCHITECTURAL_INTEGRITY|HISTORIC_PRESERVATION|EDITORIAL_SYNC').split('|').map(trust => (
+          {useThemeContent('philosophy.items', 'Institutional Curation|Architectural Integrity|Historic Preservation|Editorial Excellence').split('|').map(trust => (
               <div key={trust} className="ps-mono" style={{ fontSize: '0.65rem', opacity: 0.4 }}>{trust}</div>
           ))}
       </div>
 
       {/* Final CTA */}
       <section style={{ marginTop: '10rem', padding: '12rem 4rem', background: 'radial-gradient(circle at center, #111 0%, #090909 100%)', border: '1px solid var(--ps-shadow)', textAlign: 'center' }} className="ps-cta-box" aria-labelledby="ps-cta-title">
-          <div className="ps-mono" style={{ marginBottom: '4rem' }}>{useThemeContent('cta.kicker', 'BEGIN_YOUR_CURATION')}</div>
+          <div className="ps-mono" style={{ marginBottom: '4rem' }}>{useThemeContent('cta.kicker', 'Begin Your Curation')}</div>
           <h2 style={{ fontFamily: 'var(--ps-font-serif)', fontSize: 'clamp(3rem, 8vw, 7rem)', fontWeight: 900, letterSpacing: '-4px', marginBottom: '6rem', lineHeight: 1 }} id="ps-cta-title">
-            {useThemeContent('cta.title', 'Authorize Your \nCollection.').split('\n').map((line, i, arr) => {
+            {useThemeContent('cta.title', 'Begin Your \nCollection.').split('\n').map((line, i, arr) => {
               const highlight = useThemeContent('cta.highlight', 'Collection.');
               const hasHighlight = line.includes(highlight);
               return (
@@ -212,11 +210,11 @@ export default function Page() {
             })}
           </h2>
           <p style={{ maxWidth: '800px', margin: '0 auto 6rem', color: 'var(--ps-text-dim)', fontSize: '1.35rem', lineHeight: 1.8 }}>
-              {useThemeContent('cta.description', 'Our institutional nodes are currently accepting select inquiries for the 2026/27 global collection. Submit your provenance for review.')}
+              {useThemeContent('cta.description', 'We are currently accepting inquiries for select properties in the 2026/27 collection. Request access to begin your curation journey.')}
           </p>
-          <button className="ps-btn-primary" id="ps-btn-cta-auth" onClick={() => router.push(themeLink('/'))}>
+          <a href={themeLink('/explore')} className="ps-btn-primary" id="ps-btn-cta-auth" style={{ textDecoration: 'none' }}>
               {useThemeContent('cta.button_label', 'Request Private Access')}
-          </button>
+          </a>
       </section>
     </div>
   );

@@ -4,15 +4,17 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export const MotionHeader = () => {
+  const themeLink = useUnifiedThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="ui-header">
-      <div className="ui-logo">
-        MOTION<span style={{ color: 'var(--ui-yellow)' }}>NODE</span>
-      </div>
+      <a href={themeLink('/')} className="ui-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
+        MOTION<span style={{ color: 'var(--ui-yellow)' }}>HUB</span>
+      </a>
       
       <button 
           className={`ui-hamburger ${isOpen ? 'ui-hamburger-open' : ''}`} 
@@ -62,19 +64,19 @@ export const InteractionCanvas = () => {
     <section className="ui-interaction-canvas" id="ui-interactive-canvas-section">
       <div className="ui-canvas-grid">
           <div className="ui-canvas-item ui-item-main" style={{ padding: '5rem' }}>
-              <div className="ui-mono" style={{ color: 'var(--ui-yellow)', marginBottom: '2rem' }}>DYNAMIC_SCHEMA_V4</div>
+              <div className="ui-mono" style={{ color: 'var(--ui-yellow)', marginBottom: '2rem' }}>Interactive Platform</div>
               <h2 style={{ fontFamily: 'var(--ui-font-heading)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', fontWeight: 800, lineHeight: 0.9, marginBottom: '3rem', color: 'white' }}>Kinetic <br/>Architecture.</h2>
               <p style={{ maxWidth: '600px', fontSize: '1.25rem', color: '#888', lineHeight: 1.8 }}>
-                  The Motion Node is a high-fidelity interactive engine designed for multi-vertical distribution. Synchronize your digital assets through fluid logic and kinetic transitions.
+                  A fast, responsive marketplace platform built for smooth discovery across multiple product categories.
               </p>
               <div style={{ marginTop: '5rem', display: 'flex', gap: '4rem', flexWrap: 'wrap' }} className="ui-stats-container">
                   <div>
                       <div style={{ fontSize: '3rem', fontWeight: 800, color: 'white', fontFamily: 'var(--ui-font-heading)' }}>120fps</div>
-                      <div className="ui-mono" style={{ color: '#444', fontSize: '0.65rem' }}>FLUID_LATENCY</div>
+                      <div className="ui-mono" style={{ color: '#444', fontSize: '0.65rem' }}>Fluid Transitions</div>
                   </div>
                   <div>
                       <div style={{ fontSize: '3rem', fontWeight: 800, color: 'white', fontFamily: 'var(--ui-font-heading)' }}>Realtime</div>
-                      <div className="ui-mono" style={{ color: '#444', fontSize: '0.65rem' }}>INTERACTION_SYNC</div>
+                      <div className="ui-mono" style={{ color: '#444', fontSize: '0.65rem' }}>Live Updates</div>
                   </div>
               </div>
           </div>
@@ -87,13 +89,13 @@ export const InteractionCanvas = () => {
               const next = activeNode === 5 ? 1 : activeNode + 1;
               setActiveNode(next);
           }}>
-              <div style={{ fontSize: '2rem', fontWeight: 800, fontFamily: 'var(--ui-font-heading)', color: 'white' }}>Nodes_Active</div>
+              <div style={{ fontSize: '2rem', fontWeight: 800, fontFamily: 'var(--ui-font-heading)', color: 'white' }}>Channels Active</div>
               <div style={{ display: 'flex', gap: '0.5rem', marginTop: '2rem' }} className="ui-interactive-bars">
                   {[1, 2, 3, 4, 5].map(i => (
-                      <div key={i} style={{ flex: 1, height: '40px', background: i <= activeNode ? 'var(--ui-indigo)' : '#111', cursor: 'pointer', transition: 'background 0.3s ease' }} title={`Toggle node ${i}`}></div>
+                      <div key={i} style={{ flex: 1, height: '40px', background: i <= activeNode ? 'var(--ui-indigo)' : '#111', cursor: 'pointer', transition: 'background 0.3s ease' }} title={`Toggle channel ${i}`}></div>
                   ))}
               </div>
-              <div className="ui-mono" style={{ fontSize: '0.65rem', color: '#444', marginTop: '2rem' }}>CLICK TO TOGGLE ACTIVE FLOWS</div>
+              <div className="ui-mono" style={{ fontSize: '0.65rem', color: '#444', marginTop: '2rem' }}>Click to toggle channels</div>
           </div>
       </div>
     </section>
@@ -102,21 +104,23 @@ export const InteractionCanvas = () => {
 
 export const FluidLogicBar = () => (
     <div className="ui-fluid-logic-bar">
-        <span>★ DYNAMIC TRANSMISSION: CONNECTED // FLOW STABLE</span>
+        <span>★ PLATFORM STATUS: ONLINE // FULLY OPERATIONAL</span>
         <span className="ui-fluid-separator">//</span>
-        <span>LATENCY TARGET: &lt;8ms SYNCED</span>
+        <span>FAST LOAD TIMES &lt;8ms RESPONSE</span>
         <span className="ui-fluid-separator">//</span>
-        <span>HIGH PERFORMANCE SCHEMA ACTIVE</span>
+        <span>SECURE HIGH-PERFORMANCE MARKETPLACE</span>
     </div>
 );
 
-export const KineticFooter = () => (
+export const KineticFooter = () => {
+    const themeLink = useUnifiedThemeLink();
+    return (
     <footer className="ui-kinetic-footer">
         <div className="ui-footer-grid">
             <div>
-                <div className="ui-logo" style={{ color: 'white', fontSize: '2rem', marginBottom: '3rem' }}>MOTIONNODE</div>
+                <a href={themeLink('/')} className="ui-logo" style={{ color: 'white', fontSize: '2rem', marginBottom: '3rem', textDecoration: 'none' }}>MOTIONHUB</a>
                 <p style={{ opacity: 0.5, lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px' }}>
-                    The advanced high-fidelity interactive distribution node. Built for fluid transition and precise multi-vertical operations.
+                    A fast, responsive multi-category marketplace built for smooth discovery and reliable seller operations across all verticals.
                 </p>
             </div>
             <FooterMenuColumn
@@ -139,7 +143,7 @@ export const KineticFooter = () => (
             />
         </div>
         <div className="ui-footer-bottom">
-            <div className="ui-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_MOTION_OS // INSTANT_SYNC_STABLE</div>
+            <div className="ui-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
             <div className="ui-footer-socials">
                 <MenuNav
                     location="social_footer"
@@ -154,4 +158,5 @@ export const KineticFooter = () => (
             </div>
         </div>
     </footer>
-);
+    );
+};

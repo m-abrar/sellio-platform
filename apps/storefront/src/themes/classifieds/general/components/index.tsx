@@ -5,6 +5,7 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 
 interface HeaderProps {
   searchTerm: string;
@@ -13,13 +14,14 @@ interface HeaderProps {
 }
 
 export const GeneralHeader = ({ searchTerm, onSearchChange, onReset }: HeaderProps) => {
+  const themeLink = useClassifiedsThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'CLASAFIND');
   const brandSplit = Math.ceil(brandLabel.length / 2);
   const searchPlaceholder = useThemeContent('search.placeholder', 'Search for anything...');
 
   return (
     <header className="cg-header">
-      <a href="#" className="cg-logo" onClick={(e) => { e.preventDefault(); onReset(); }}>
+      <a href={themeLink('/')} className="cg-logo">
         <div className="cg-logo-icon">📦</div>
         <span>{brandLabel.slice(0, brandSplit)}</span>{brandLabel.slice(brandSplit)}
       </a>
@@ -102,7 +104,7 @@ export const ListingCard = ({ title, price, image, seller, isSaved, onMessageCli
 export const GeneralFooter = () => {
   const footerDescription = useThemeContent(
     'footer.description',
-    '2026 ClasaFind Classifieds Suite. All rights reserved. Engineered to Elite Standards.'
+    '2026 Sellio. All rights reserved.'
   );
 
   return (

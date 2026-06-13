@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import type { JobListing } from '@sellio/types';
 import { FreelanceHeader, GigCard, FreelanceFooter } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
@@ -12,7 +11,6 @@ import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllo
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useJobsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
@@ -56,10 +54,6 @@ export default function Page() {
     loadJobs();
   }, [allowDemo]);
 
-  const goToExplore = () => {
-    router.push(themeLink('/explore'));
-  };
-
   return (
     <div className="jobs-freelance-wrapper">
       <FreelanceHeader />
@@ -89,19 +83,19 @@ export default function Page() {
 
       <div className="jf-search-container">
           <span style={{ padding: '1rem', fontSize: '1.25rem', color: 'var(--jf-text-muted)' }}>🔍</span>
-          <input type="text" className="jf-search-input" placeholder='Try "logo design" or "React developer"' readOnly onFocus={goToExplore} />
-          <button type="button" className="jf-btn jf-btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }} onClick={goToExplore}>Search</button>
+          <input type="text" className="jf-search-input" placeholder='Try "logo design" or "React developer"' readOnly onFocus={() => { window.location.href = themeLink('/explore'); }} />
+          <a href={themeLink('/explore')} className="jf-btn jf-btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem', textDecoration: 'none' }}>Search</a>
       </div>
 
       <div className="jf-categories">
-          <button type="button" className="jf-cat-pill active" onClick={goToExplore}>All Categories</button>
-          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Graphics & Design</button>
-          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Programming & Tech</button>
-          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Digital Marketing</button>
-          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Video & Animation</button>
-          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Writing & Translation</button>
-          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Music & Audio</button>
-          <button type="button" className="jf-cat-pill" onClick={goToExplore}>Business</button>
+          <a href={themeLink('/explore')} className="jf-cat-pill active" style={{ textDecoration: 'none' }}>All Categories</a>
+          <a href={themeLink('/explore')} className="jf-cat-pill" style={{ textDecoration: 'none' }}>Graphics &amp; Design</a>
+          <a href={themeLink('/explore')} className="jf-cat-pill" style={{ textDecoration: 'none' }}>Programming &amp; Tech</a>
+          <a href={themeLink('/explore')} className="jf-cat-pill" style={{ textDecoration: 'none' }}>Digital Marketing</a>
+          <a href={themeLink('/explore')} className="jf-cat-pill" style={{ textDecoration: 'none' }}>Video &amp; Animation</a>
+          <a href={themeLink('/explore')} className="jf-cat-pill" style={{ textDecoration: 'none' }}>Writing &amp; Translation</a>
+          <a href={themeLink('/explore')} className="jf-cat-pill" style={{ textDecoration: 'none' }}>Music &amp; Audio</a>
+          <a href={themeLink('/explore')} className="jf-cat-pill" style={{ textDecoration: 'none' }}>Business</a>
       </div>
 
       <section className="jf-section" id="explore">
@@ -130,10 +124,10 @@ export default function Page() {
                 ))
               ) : jobs.length === 0 ? (
                 <div className="jf-listing-state">
-                  <div className="jf-listing-kicker">Empty Gig Registry</div>
+                  <div className="jf-listing-kicker">No Gigs Yet</div>
                   <h3>No live jobs are published yet.</h3>
-                  <p>Browse the explore page or add job records in the backend to hydrate this grid.</p>
-                  <button type="button" className="jf-btn jf-btn-primary" style={{ marginTop: '1.5rem' }} onClick={goToExplore}>Explore gigs</button>
+                  <p>Browse the explore page or add job records in the admin panel to populate this grid.</p>
+                  <a href={themeLink('/explore')} className="jf-btn jf-btn-primary" style={{ marginTop: '1.5rem', textDecoration: 'none', display: 'inline-block' }}>Explore gigs</a>
                 </div>
               ) : (
                 jobs.slice(0, 6).map((job, index) => {
@@ -157,7 +151,7 @@ export default function Page() {
                   <li>✓ Protected payments, every time</li>
                   <li>✓ 24/7 support</li>
               </ul>
-              <button type="button" className="jf-btn" style={{ backgroundColor: 'white', color: 'var(--jf-accent)' }} onClick={goToExplore}>{promoButton}</button>
+              <a href={themeLink('/explore')} className="jf-btn" style={{ backgroundColor: 'white', color: 'var(--jf-accent)', textDecoration: 'none' }}>{promoButton}</a>
           </div>
           <div className="d-none d-lg-block" style={{ width: '40%' }}>
               <img src={promoImage} alt="Team" style={{ width: '100%', borderRadius: '16px', transform: 'rotate(5deg)', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }} />

@@ -22,38 +22,38 @@ export default function Page() {
   const [listingError, setListingError] = useState<string | null>(null);
   const themeLink = useUnifiedThemeLink();
 
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'FOUNDATIONAL_DISTRIBUTION_V1');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Multi-Vertical Marketplace');
   const heroTitle = useThemeContent('hero.title', 'The Core of\nDistribution.');
   const heroHighlight = useThemeContent('hero.highlight', 'Distribution.');
   const heroDescription = useThemeContent(
     'hero.description',
-    "A high-fidelity foundational node for multi-vertical commerce. Standardize your global presence with Sellio's most trusted high-performance engine.",
+    'A comprehensive marketplace platform for discovering products, properties, services, and more — all in one place.',
   );
-  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'GET STARTED CORE');
-  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'READ THE SPEC');
+  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'Explore listings');
+  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'Browse catalog');
   const heroImage = useThemeMedia('hero.image', '/themes/unifieds/default/1.webp');
-  const heroBadgeLabel = useThemeContent('hero.badge_label', 'LIVE CATALOG');
+  const heroBadgeLabel = useThemeContent('hero.badge_label', 'Live listings');
 
-  const collectionEyebrow = useThemeContent('collection.eyebrow', 'LIVE_REGISTRY');
-  const collectionTitle = useThemeContent('collection.title', 'Core Listings Feed.');
+  const collectionEyebrow = useThemeContent('collection.eyebrow', 'Live Catalog');
+  const collectionTitle = useThemeContent('collection.title', 'Featured Listings.');
   const collectionDescription = useThemeContent(
     'collection.description',
-    'Live marketplace records synchronized from the Sellio product catalog and curated for enterprise-grade discovery.',
+    'Browse real listings from the live Sellio catalog.',
   );
 
-  const emptyKicker = useThemeContent('empty.kicker', 'EMPTY_REGISTRY');
+  const emptyKicker = useThemeContent('empty.kicker', 'No listings yet');
   const emptyTitle = useThemeContent('empty.title', 'No live listings are available yet.');
   const emptyDescription = useThemeContent(
     'empty.description',
-    'Add product records in the backend and this feed will hydrate automatically.',
+    'Add product records in the admin panel and they will appear here automatically.',
   );
 
-  const ctaTitle = useThemeContent('cta.title', 'Scale with the\nFoundation.');
+  const ctaTitle = useThemeContent('cta.title', 'Start browsing\ntoday.');
   const ctaDescription = useThemeContent(
     'cta.description',
-    "Initialize your core node and join the world's most stable high-fidelity distribution network. Institutional grade performance, guaranteed.",
+    'Discover products, properties, services, and more across all categories in one unified marketplace.',
   );
-  const ctaButtonLabel = useThemeContent('cta.button_label', 'INITIALIZE CORE NODE');
+  const ctaButtonLabel = useThemeContent('cta.button_label', 'Browse the catalog');
 
   useEffect(() => {
     let isMounted = true;
@@ -152,15 +152,15 @@ export default function Page() {
       <section className="ud-stats-grid" aria-label="Catalog metrics">
         <div>
           <div className="ud-stat-value">{liveStats.inventory.toLocaleString()}</div>
-          <div className="ud-mono ud-stat-label">LIVE LISTINGS</div>
+          <div className="ud-mono ud-stat-label">Live listings</div>
         </div>
         <div>
           <div className="ud-stat-value">{liveStats.categories.toLocaleString()}</div>
-          <div className="ud-mono ud-stat-label">ACTIVE CATEGORIES</div>
+          <div className="ud-mono ud-stat-label">Active categories</div>
         </div>
         <div>
           <div className="ud-stat-value">{liveStats.inStock.toLocaleString()}</div>
-          <div className="ud-mono ud-stat-label">IN STOCK NOW</div>
+          <div className="ud-mono ud-stat-label">In stock now</div>
         </div>
       </section>
 
@@ -214,8 +214,7 @@ export default function Page() {
                     <div className="ud-mono">{getProductCategoryLabel(product, categories)}</div>
                     <h3>{product.title}</h3>
                     <p>
-                      {product.description ||
-                        'Verified marketplace listing synchronized from the Sellio catalog.'}
+                      {product.description || 'Browse this listing for full details and pricing.'}
                     </p>
                     <div className="ud-listing-meta">
                       <span>{formatProductPrice(product)}</span>

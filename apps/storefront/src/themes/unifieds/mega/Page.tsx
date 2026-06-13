@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { HeavyweightGrid, MassiveSyncBar } from './components';
@@ -8,41 +7,40 @@ import { useThemeContent, useThemeMedia } from '@/components/theme-content/Theme
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useUnifiedThemeLink();
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
 
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'HEAVYWEIGHT_LOGIC_ACTIVE');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Heavyweight Marketplace');
   const heroTitle = useThemeContent('hero.title', 'The Heavyweight\nGrid.');
   const heroHighlight = useThemeContent('hero.highlight', 'Heavyweight');
-  const heroDescription = useThemeContent('hero.description', "The world's most powerful high-fidelity distribution node. Precision structural engineering for multi-vertical commerce at massive scale.");
-  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'INITIALIZE MEGA SYNC');
-  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'INFRASTRUCTURE SPEC');
+  const heroDescription = useThemeContent('hero.description', "A high-capacity marketplace platform built for multi-vertical commerce. Designed to handle large-scale listing catalogs with speed and reliability.");
+  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'Browse Marketplace');
+  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'View Catalog');
 
-  const collectionEyebrow = useThemeContent('collection.eyebrow', 'LIVE_MEGA_EXCHANGE');
+  const collectionEyebrow = useThemeContent('collection.eyebrow', 'Live Marketplace');
   const collectionTitle = useThemeContent('collection.title', 'Heavyweight Listings.');
-  const collectionDescription = useThemeContent('collection.description', 'Live product records reinforced inside the Mega Grid catalog layer for high-volume marketplace distribution.');
+  const collectionDescription = useThemeContent('collection.description', 'Browse live product listings from verified sellers across all marketplace categories.');
 
-  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'GRID_OFFLINE');
+  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'Connection Error');
   const syncOfflineTitle = useThemeContent('sync.offline_title', 'Listings could not be synchronized.');
-  const emptyKicker = useThemeContent('empty.kicker', 'EMPTY_GRID');
+  const emptyKicker = useThemeContent('empty.kicker', 'No Listings Yet');
   const emptyTitle = useThemeContent('empty.title', 'No live listings are available yet.');
-  const emptyDescription = useThemeContent('empty.description', 'Add product records in the backend and this grid will hydrate automatically.');
+  const emptyDescription = useThemeContent('empty.description', 'Add product records in the admin panel and they will appear here.');
 
-  const midSectionEyebrow = useThemeContent('mid_section.eyebrow', 'INDUSTRIAL_STRENGTH');
+  const midSectionEyebrow = useThemeContent('mid_section.eyebrow', 'Built for Scale');
   const midSectionTitle = useThemeContent('mid_section.title', 'Structural\nAuthority.');
-  const midSectionDescription = useThemeContent('mid_section.description', 'The Mega Grid protocol is built for high-density data distribution. Every node is reinforced with multi-layer redundancy, ensuring that your storefront remains stable under any operational volume.');
+  const midSectionDescription = useThemeContent('mid_section.description', 'This marketplace is built to handle high-volume listing catalogs without compromise. Fast load times, reliable uptime, and a smooth experience for buyers and sellers alike.');
   const midSectionMetric1Value = useThemeContent('mid_section.metric_1_value', '8ms');
-  const midSectionMetric1Label = useThemeContent('mid_section.metric_1_label', 'CORE_LATENCY');
+  const midSectionMetric1Label = useThemeContent('mid_section.metric_1_label', 'Core Latency');
   const midSectionMetric2Value = useThemeContent('mid_section.metric_2_value', '99.9%');
-  const midSectionMetric2Label = useThemeContent('mid_section.metric_2_label', 'NODAL_UPTIME');
+  const midSectionMetric2Label = useThemeContent('mid_section.metric_2_label', 'Uptime');
   const midSectionImage = useThemeMedia('mid_section.image', '/themes/unifieds/mega/1.webp');
 
-  const ctaTitle = useThemeContent('cta.title', 'Authorize\nDistribution.');
-  const ctaDescription = useThemeContent('cta.description', "Connect your core node to the Mega Grid and join the world's most robust high-fidelity distribution network. Institutional performance, guaranteed.");
-  const ctaButtonLabel = useThemeContent('cta.button_label', 'INITIALIZE HEAVYWEIGHT NODE');
+  const ctaTitle = useThemeContent('cta.title', 'Grow Your\nMarketplace.');
+  const ctaDescription = useThemeContent('cta.description', "List your products on a platform built for scale. Reach buyers across every category with a storefront that handles high-volume traffic with ease.");
+  const ctaButtonLabel = useThemeContent('cta.button_label', 'Get Started');
 
   const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%23171717'/><g transform='translate(328,214)' stroke='%23f97316' stroke-width='3' fill='none' stroke-linecap='square' stroke-linejoin='miter'><rect x='2' y='2' width='60' height='60'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='13' font-weight='900' letter-spacing='2' fill='%23ffffff'>MEGA RECORD</text></svg>";
 
@@ -114,22 +112,22 @@ export default function Page() {
                 {heroDescription}
               </p>
               <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap' }} className="ugm-hero-buttons">
-                  <button className="mega-btn-primary" id="ugm-btn-explore" onClick={() => router.push(themeLink('/explore'))}>
+                  <a href={themeLink('/explore')} className="mega-btn-primary" id="ugm-btn-explore" style={{ textDecoration: 'none' }}>
                     {heroPrimaryCtaLabel}
-                  </button>
-                  <button style={{ 
-                      background: 'transparent', 
-                      border: '2px solid #333', 
-                      color: 'white', 
-                      padding: '1.5rem 5rem', 
-                      fontFamily: 'var(--ugm-font-heading)', 
-                      fontWeight: 900, 
-                      fontSize: '1.1rem', 
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                  }} id="ugm-btn-spec" onClick={() => router.push(themeLink('/explore'))}>
+                  </a>
+                  <a href={themeLink('/explore')} style={{
+                      background: 'transparent',
+                      border: '2px solid #333',
+                      color: 'white',
+                      padding: '1.5rem 5rem',
+                      fontFamily: 'var(--ugm-font-heading)',
+                      fontWeight: 900,
+                      fontSize: '1.1rem',
+                      transition: 'all 0.3s ease',
+                      textDecoration: 'none'
+                  }} id="ugm-btn-spec">
                       {heroSecondaryCtaLabel}
-                  </button>
+                  </a>
               </div>
           </div>
       </section>
@@ -165,7 +163,7 @@ export default function Page() {
               <div className="ugm-listing-state" role="status">
                   <div className="ugm-mono" style={{ color: 'var(--ugm-orange)', marginBottom: '1rem' }}>{syncOfflineKicker}</div>
                   <h3>{syncOfflineTitle}</h3>
-                  <p>{listingError}</p>
+                  <p>Check your API connection and confirm listings are published in the admin panel.</p>
               </div>
           ) : products.length === 0 ? (
               <div className="ugm-listing-state" role="status">
@@ -181,12 +179,12 @@ export default function Page() {
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>
                           <div className="ugm-listing-body">
-                              <div className="ugm-mono">MEGA_ID_{product.id}</div>
+                              <div className="ugm-mono">{'Listing'}</div>
                               <h3>{product.title}</h3>
-                              <p>{product.description || 'Verified marketplace record synchronized into the Mega Grid exchange.'}</p>
+                              <p>{product.description || 'Browse this listing for full details and pricing.'}</p>
                               <div className="ugm-listing-meta">
                                   <span>{formatPrice(product)}</span>
-                                  <span>Inspect Node</span>
+                                  <span>View Details</span>
                               </div>
                           </div>
                       </a>
@@ -227,7 +225,7 @@ export default function Page() {
                       <img src={midSectionImage} alt="Heavyweight Corporate Logistics Hub" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }} />
                   </div>
                   <div className="ugm-floating-reinforced-badge" id="ugm-badge-reinforced">
-                      REINFORCED
+                      Certified
                   </div>
               </div>
           </div>
@@ -247,7 +245,7 @@ export default function Page() {
               <p style={{ fontSize: '1.5rem', color: '#666', lineHeight: 1.8, marginBottom: '6rem' }}>
                 {ctaDescription}
               </p>
-              <button className="mega-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.4rem' }} id="ugm-btn-cta-handshake" onClick={() => router.push(themeLink('/explore'))}>{ctaButtonLabel}</button>
+              <a href={themeLink('/explore')} className="mega-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.4rem', textDecoration: 'none' }} id="ugm-btn-cta-handshake">{ctaButtonLabel}</a>
           </div>
       </section>
     </div>

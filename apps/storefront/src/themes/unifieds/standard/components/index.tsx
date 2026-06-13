@@ -4,15 +4,17 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export const ScaleHeader = () => {
+  const themeLink = useUnifiedThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="usp-header">
-      <div className="usp-logo">
+      <a href={themeLink('/')} className="usp-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         SCALE<span>PROTOCOL</span>
-      </div>
+      </a>
       
       <button 
           className={`usp-hamburger ${isOpen ? 'usp-hamburger-open' : ''}`} 
@@ -71,12 +73,12 @@ const ProtocolCard = ({ tag, title, description }: ProtocolCardProps) => (
 
 export const ProtocolGrid = () => {
     const protocols = [
-        { tag: "DATA_LAYER", title: "Standardized Mapping", description: "Universal schema translation across all 50 vertical storefronts." },
-        { tag: "SYNC_ENGINE", title: "Atomic Distribution", description: "Real-time asset synchronization with institutional-grade redundancy." },
-        { tag: "UI_PROTOCOL", title: "Geometric Precision", description: "High-fidelity modular components optimized for multi-vertical scale." },
-        { tag: "NODE_LOGIC", title: "Isolated Resilience", description: "Sovereign architectural silos ensuring zero-dependency performance." },
-        { tag: "AUTH_LAYER", title: "Institutional Security", description: "AES-256 encrypted distribution nodes for verified asset handling." },
-        { tag: "CORE_API", title: "Unified Endpoint", description: "A single, robust entry point for global high-fidelity commerce." },
+        { tag: "Data Layer", title: "Standardized Data", description: "Universal schema across all 50 marketplace verticals for clean, consistent listings." },
+        { tag: "Sync Engine", title: "Real-Time Updates", description: "Product records update in real time so buyers always see the latest inventory." },
+        { tag: "UI Design", title: "Modular Components", description: "Clean, responsive components optimized for multi-vertical marketplace scale." },
+        { tag: "Performance", title: "Reliable Uptime", description: "Isolated architecture ensures fast, stable performance under any traffic volume." },
+        { tag: "Security", title: "Secure Transactions", description: "AES-256 encryption and verified seller handling for every transaction." },
+        { tag: "API", title: "Unified Endpoint", description: "A single, robust API entry point for all marketplace categories." },
     ];
 
     return (
@@ -90,21 +92,23 @@ export const ProtocolGrid = () => {
 
 export const EfficiencyBar = () => (
     <div className="usp-efficiency-bar">
-        <span>★ PROFESSIONAL STANDARDIZATION // 100% RELIABILITY RATING ACTIVATED</span>
+        <span>★ PLATFORM STATUS: ONLINE // 100% RELIABILITY</span>
         <span className="usp-bar-separator">//</span>
-        <span>LATENCY TARGET: &lt;6ms SYNC PIPELINES</span>
+        <span>FAST RESPONSE &lt;6ms AVERAGE</span>
         <span className="usp-bar-separator">//</span>
-        <span>SECURE HIGH CAPACITY SCALE ENGINE</span>
+        <span>SECURE HIGH-CAPACITY MARKETPLACE</span>
     </div>
 );
 
-export const StandardFooter = () => (
+export const StandardFooter = () => {
+  const themeLink = useUnifiedThemeLink();
+  return (
     <footer className="usp-footer">
         <div className="usp-footer-grid">
             <div>
-                <div className="usp-logo" style={{ fontSize: '1.5rem', marginBottom: '3rem' }}>SCALEPROTOCOL</div>
+                <a href={themeLink('/')} className="usp-logo" style={{ fontSize: '1.5rem', marginBottom: '3rem', textDecoration: 'none', color: 'inherit' }}>SCALEPROTOCOL</a>
                 <p style={{ opacity: 0.5, lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px', color: 'var(--usp-gray)' }}>
-                    The advanced heavyweight standard distribution node. Engineered for real-time professional multi-category operations.
+                    A professional multi-category marketplace platform built for real-time listing delivery and reliable seller operations.
                 </p>
             </div>
             <FooterMenuColumn
@@ -127,7 +131,7 @@ export const StandardFooter = () => (
             />
         </div>
         <div className="usp-footer-bottom">
-            <div className="usp-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_SCALEPROTOCOL_OS // STANDARDS_ACTIVE</div>
+            <div className="usp-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
             <div className="usp-footer-socials">
                 <MenuNav
                     location="social_footer"
@@ -142,4 +146,5 @@ export const StandardFooter = () => (
             </div>
         </div>
     </footer>
-);
+  );
+};

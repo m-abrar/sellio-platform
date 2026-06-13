@@ -189,7 +189,7 @@ export const ModernFooter = () => {
   );
   const footerCopyright = useThemeContent(
     'footer.copyright',
-    '2026 Modern Autos, Inc. All rights reserved.',
+    '2026 Sellio. All rights reserved.',
   );
 
   return (

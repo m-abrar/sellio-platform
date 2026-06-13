@@ -4,13 +4,15 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 export const GrowthHeader = () => {
-  const brandLabel = useThemeContent('header.brand_label', 'GROWTH_NODE.');
+  const themeLink = useJobsThemeLink();
+  const brandLabel = useThemeContent('header.brand_label', 'Venture Hub.');
 
   return (
     <header className="growth-header">
-        <div className="growth-logo">
+        <div className="growth-logo" onClick={() => { window.location.href = themeLink('/'); }} style={{ cursor: 'pointer' }}>
             <div style={{ width: '24px', height: '24px', background: 'var(--growth-neon)', borderRadius: '4px', transform: 'rotate(45deg)' }}></div>
             {brandLabel.endsWith('.') ? brandLabel.slice(0, -1) : brandLabel}<span>.</span>
         </div>

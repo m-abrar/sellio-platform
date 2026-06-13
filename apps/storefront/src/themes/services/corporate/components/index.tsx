@@ -131,7 +131,7 @@ export const CorporateFooter = () => (
             </div>
         </div>
         <div style={{ borderTop: '1px solid #444', paddingTop: '2rem', textAlign: 'center', color: '#888', fontSize: '0.9rem' }}>
-            &copy; 2026 Corporate Services. All rights reserved.
+            &copy; 2026 Sellio. All rights reserved.
         </div>
     </footer>
 );

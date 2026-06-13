@@ -4,14 +4,17 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 
 interface HeaderProps {
   onPostClick: () => void;
 }
 
-export const PremiumHeader = ({ onPostClick }: HeaderProps) => (
+export const PremiumHeader = ({ onPostClick }: HeaderProps) => {
+  const themeLink = useClassifiedsThemeLink();
+  return (
   <header className="elite-header">
-    <a href="#" className="elite-logo" onClick={(e) => { e.preventDefault(); window.location.reload(); }}>
+    <a href={themeLink('/')} className="elite-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
       SELLIO<span>_ELITE</span>
     </a>
     
@@ -31,7 +34,8 @@ export const PremiumHeader = ({ onPostClick }: HeaderProps) => (
       />
     </div>
   </header>
-);
+  );
+};
 
 interface PremiumCardProps {
   title: string;
@@ -80,13 +84,15 @@ export const PremiumCard = ({
   );
 };
 
-export const PremiumFooter = () => (
+export const PremiumFooter = () => {
+  const themeLink = useClassifiedsThemeLink();
+  return (
   <footer className="diamond-footer">
     <div className="footer-row">
       <div className="footer-col">
-        <div className="elite-logo" style={{ marginBottom: '1.5rem' }}>SELLIO<span>_ELITE</span></div>
+        <a href={themeLink('/')} className="elite-logo" style={{ marginBottom: '1.5rem', textDecoration: 'none', color: 'inherit' }}>SELLIO<span>_ELITE</span></a>
         <p style={{ fontSize: '0.85rem', color: 'var(--prem-muted)', lineHeight: 1.8 }}>
-          The world's most exclusive boutique marketplace for high-value curated assets. Appraised by global experts, authenticated by certified vaults.
+          A boutique marketplace for high-value curated assets, verified by expert appraisers and trusted by collectors worldwide.
         </p>
       </div>
       
@@ -117,11 +123,12 @@ export const PremiumFooter = () => (
     </div>
     
     <div className="footer-bottom">
-      <span>© 2026 SELLIO_ELITE_HOLDINGS LTD. ALL RIGHTS RESERVED. SECURED NODE.</span>
-      <span>🔒 ENCRYPTED VAULT NETWORK &bull; PRIVACY VETTED PASS</span>
+      <span>© 2026 Sellio. All rights reserved.</span>
+      <span>🔒 Secure &amp; Verified Marketplace</span>
     </div>
   </footer>
-);
+  );
+};
 
 // Obsolete compatibility placeholders
 export const CuratedListingCard = () => null;

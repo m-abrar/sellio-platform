@@ -6,19 +6,17 @@ type CatalogSyncAlertProps = {
   error: string;
 };
 
-export function CatalogSyncAlert({ error }: CatalogSyncAlertProps) {
+export function CatalogSyncAlert(_props: CatalogSyncAlertProps) {
   return (
     <div className="pv-catalog-alert pv-catalog-alert--prod" role="status">
       <div className="pv-catalog-alert__badge">
         <span className="pv-catalog-alert__dot" aria-hidden="true" />
         <span className="pv-mono">Connection error</span>
       </div>
-      <h3 className="pv-catalog-alert__title">Unable to load vacation retreats</h3>
+      <h3 className="pv-catalog-alert__title">Properties unavailable</h3>
       <p className="pv-catalog-alert__copy">
-        Listings are hidden because the storefront could not reach your Sellio API. Check your API
-        URL, run migrations and seeders, and publish rental or vacation properties.
+        Properties could not be loaded. Check your API connection and make sure listings are published in the admin.
       </p>
-      <pre className="pv-catalog-alert__diag">Error details: {error}</pre>
     </div>
   );
 }

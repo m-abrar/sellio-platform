@@ -74,8 +74,6 @@ function ExploreContent() {
 
     const [loading, setLoading] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
-    const [useFallback, setUseFallback] = useState(false);
-    const [apiError, setApiError] = useState<string | null>(null);
 
     const [searchQuery, setSearchQuery] = useState(initialSearch);
     const [selectedLocation, setSelectedLocation] = useState<string | number>(initialLoc);
@@ -153,14 +151,10 @@ function ExploreContent() {
                     setCurrentPage(response.meta.current_page);
                     setLastPage(response.meta.last_page);
                 }
-                setUseFallback(false);
-                setApiError(null);
             } else {
-                setApiError("Database returned no listings. Ensure seeders have run.");
                 triggerFallback(isLoadMore);
             }
-        } catch (error: any) {
-            setApiError(error instanceof Error ? error.message : String(error));
+        } catch {
             triggerFallback(isLoadMore);
         } finally {
             setLoading(false);
@@ -169,7 +163,6 @@ function ExploreContent() {
     };
 
     const triggerFallback = (isLoadMore: boolean) => {
-        setUseFallback(true);
         setCategories(FALLBACK_CATEGORIES);
         setLocations(FALLBACK_LOCATIONS);
 
@@ -222,54 +215,18 @@ function ExploreContent() {
         <div className="luxury-premium-wrapper" style={{ padding: '8rem 5% 15rem 5%' }}>
             {/* Elegant Header */}
             <div style={{ marginBottom: '6rem', borderBottom: '1px solid var(--luxury-border)', paddingBottom: '3rem' }}>
-                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--luxury-gold)', letterSpacing: '5px' }}>PORTFOLIO_DIRECTORY</span>
-                <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '5rem', fontWeight: 900, marginTop: '1rem', marginBottom: '1.5rem', letterSpacing: '-2px' }}>The Exploration Ledger.</h1>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--luxury-gold)', letterSpacing: '5px' }}>Portfolio Directory</span>
+                <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '5rem', fontWeight: 900, marginTop: '1rem', marginBottom: '1.5rem', letterSpacing: '-2px' }}>The Collection.</h1>
                 <p style={{ fontSize: '1.1rem', color: '#666', maxWidth: '600px', lineHeight: '1.8' }}>
-                    Surgically filter and acquire premier assets from our high-fidelity, verified database network.
+                    Browse and filter premier estates from our verified global portfolio.
                 </p>
             </div>
-
-            {/* Offline Diagnostic Banner */}
-            {useFallback && apiError && (
-                <div style={{
-                    padding: '1.5rem',
-                    background: 'rgba(212, 175, 55, 0.05)',
-                    border: '1px solid var(--luxury-gold)',
-                    borderRadius: '4px',
-                    marginBottom: '4rem',
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '0.85rem',
-                    color: 'var(--luxury-charcoal)',
-                    lineHeight: '1.6',
-                }}>
-                    <span style={{ fontWeight: 800, color: 'var(--luxury-gold)', display: 'block', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '0.5rem' }}>
-                        System Connection Diagnostic Warning
-                    </span>
-                    <p style={{ margin: 0, color: '#666' }}>
-                        The explore page is running in <strong>Offline Fallback Mode</strong> due to API or seeder unavailability.
-                    </p>
-                    <div style={{ 
-                        marginTop: '1rem', 
-                        padding: '1rem', 
-                        background: 'rgba(0,0,0,0.03)', 
-                        borderLeft: '3px solid var(--luxury-gold)', 
-                        fontFamily: 'monospace', 
-                        fontSize: '0.75rem', 
-                        color: '#888',
-                        overflowX: 'auto',
-                        whiteSpace: 'pre-wrap',
-                        wordBreak: 'break-all'
-                    }}>
-                        {apiError}
-                    </div>
-                </div>
-            )}
 
             {/* Scoped Minimalist Horizontal Filter Suite */}
             <div className="luxury-filter-bar">
                 <input
                     type="text"
-                    placeholder="SEARCH_ASSETS..."
+                    placeholder="Search estates..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="luxury-filter-input"
@@ -280,9 +237,9 @@ function ExploreContent() {
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     className="luxury-filter-select"
                 >
-                    <option value="">ALL_CATEGORIES</option>
+                    <option value="">All Categories</option>
                     {categories.map((c) => (
-                        <option key={c.id} value={c.id}>{c.title.toUpperCase()}</option>
+                        <option key={c.id} value={c.id}>{c.title}</option>
                     ))}
                 </select>
 
@@ -291,9 +248,9 @@ function ExploreContent() {
                     onChange={(e) => setSelectedLocation(e.target.value)}
                     className="luxury-filter-select"
                 >
-                    <option value="">ALL_LOCATIONS</option>
+                    <option value="">All Locations</option>
                     {locations.map((l) => (
-                        <option key={l.id} value={l.id}>{l.title.toUpperCase()}</option>
+                        <option key={l.id} value={l.id}>{l.title}</option>
                     ))}
                 </select>
 
@@ -302,11 +259,11 @@ function ExploreContent() {
                     onChange={(e) => setSelectedBedrooms(e.target.value)}
                     className="luxury-filter-select"
                 >
-                    <option value="">MIN_BEDROOMS</option>
-                    <option value="2">2+ BEDS</option>
-                    <option value="4">4+ BEDS</option>
-                    <option value="6">6+ BEDS</option>
-                    <option value="8">8+ BEDS</option>
+                    <option value="">Min. Bedrooms</option>
+                    <option value="2">2+ Beds</option>
+                    <option value="4">4+ Beds</option>
+                    <option value="6">6+ Beds</option>
+                    <option value="8">8+ Beds</option>
                 </select>
 
                 <select
@@ -314,9 +271,9 @@ function ExploreContent() {
                     onChange={(e) => setSelectedPriceRange(e.target.value)}
                     className="luxury-filter-select"
                 >
-                    <option value="">PRICE_RANGE</option>
-                    <option value="1m-5m">$1M - $5M</option>
-                    <option value="5m-10m">$5M - $10M</option>
+                    <option value="">Price Range</option>
+                    <option value="1m-5m">$1M – $5M</option>
+                    <option value="5m-10m">$5M – $10M</option>
                     <option value="10m-plus">$10M+</option>
                 </select>
             </div>
@@ -341,8 +298,8 @@ function ExploreContent() {
             ) : estates.length === 0 ? (
                 <div style={{ padding: '8rem 0', textAlign: 'center', border: '1px solid var(--luxury-border)', borderRadius: '4px', marginTop: '4rem' }}>
                     <span style={{ fontSize: '2rem', color: 'var(--luxury-gold)', display: 'block', marginBottom: '2rem' }}>✦</span>
-                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', fontWeight: 700, marginBottom: '1rem' }}>No asset signatures found.</h3>
-                    <p style={{ color: '#888', fontSize: '0.9rem' }}>Try adjusting your surgical parameters or reset the filters.</p>
+                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', fontWeight: 700, marginBottom: '1rem' }}>No properties found.</h3>
+                    <p style={{ color: '#888', fontSize: '0.9rem' }}>Try adjusting your filters or clearing your search.</p>
                 </div>
             ) : (
                 <>
@@ -397,7 +354,7 @@ function ExploreContent() {
                                     e.currentTarget.style.color = 'var(--luxury-charcoal)';
                                 }}
                             >
-                                {loadingMore ? 'LOADING_ASSETS...' : 'LOAD_MORE_ASSETS'}
+                                {loadingMore ? 'Loading...' : 'Load More'}
                             </button>
                         </div>
                     )}

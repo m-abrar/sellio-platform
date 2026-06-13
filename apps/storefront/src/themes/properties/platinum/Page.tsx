@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { ShowcaseCard, StatisticsNode } from './components';
@@ -37,7 +36,6 @@ function mapPropertyToShowcase(property: Property, index: number) {
 }
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = usePropertyThemeLink();
   const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
@@ -80,7 +78,7 @@ export default function Page() {
   return (
     <div className="pl-page">
       <section className="pl-hero" id="pl-hero-section">
-        <div className="pl-hero-kicker pl-mono">{useThemeContent('hero.kicker', 'ARCHITECTURAL_SUBLIMITY_V8')}</div>
+        <div className="pl-hero-kicker pl-mono">{useThemeContent('hero.kicker', 'Platinum Estates')}</div>
         <h1 className="pl-heading-xl">
           {useThemeContent('hero.title', 'Structural \nRefinement.').split('\n').map((line, i, arr) => (
             <React.Fragment key={i}>
@@ -116,22 +114,22 @@ export default function Page() {
               ))}
             </h2>
             <p>
-              {useThemeContent('protocol.description', 'We do not merely list properties. We validate the architectural integrity, historical significance, and future appreciation of every node in our network. Each acquisition is handled via our private concierge protocol.')}
+              {useThemeContent('protocol.description', 'We do not merely list properties. We validate the architectural integrity, historical significance, and future appreciation of every property in our portfolio. Each acquisition is handled via our private concierge protocol.')}
             </p>
           </div>
           <div className="pl-protocol-stats">
-            <StatisticsNode label={useThemeContent('protocol.stat_1_label', 'OFF_MARKET_NODES')} value={useThemeContent('protocol.stat_1_value', '92%')} />
-            <StatisticsNode label={useThemeContent('protocol.stat_2_label', 'ASSETS_UNDER_SYNC')} value={useThemeContent('protocol.stat_2_value', '$4.2B')} />
-            <StatisticsNode label={useThemeContent('protocol.stat_3_label', 'GLOBAL_CONCIERGE')} value={useThemeContent('protocol.stat_3_value', '24/7')} />
+            <StatisticsNode label={useThemeContent('protocol.stat_1_label', 'Off-Market')} value={useThemeContent('protocol.stat_1_value', '92%')} />
+            <StatisticsNode label={useThemeContent('protocol.stat_2_label', 'Assets Under Management')} value={useThemeContent('protocol.stat_2_value', '$4.2B')} />
+            <StatisticsNode label={useThemeContent('protocol.stat_3_label', 'Global Concierge')} value={useThemeContent('protocol.stat_3_value', '24/7')} />
           </div>
         </div>
       </section>
 
       <section className="pl-section pl-showcase-section" id="pl-showcase-section">
         <div className="pl-showcase-header">
-          <div className="pl-mono">{useThemeContent('showcase.kicker', 'CINEMATIC_SHOWCASE')}</div>
+          <div className="pl-mono">{useThemeContent('showcase.kicker', 'Property Showcase')}</div>
           <div className="pl-showcase-filter">
-            {useThemeContent('showcase.filter_label', 'FILTER: LUXURY_TIER == "PLATINUM"')} · {loadingProperties ? '...' : properties.length} {useThemeContent('showcase.nodes_suffix', 'NODES')}
+            {useThemeContent('showcase.filter_label', 'Platinum Collection')} · {loadingProperties ? '...' : properties.length} {useThemeContent('showcase.nodes_suffix', 'Properties')}
           </div>
         </div>
 
@@ -146,15 +144,15 @@ export default function Page() {
             ))
           ) : propertyError ? (
             <div className="prop-listing-state pl-listing-state">
-              <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Property Sync Offline')}</div>
+              <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Connection Error')}</div>
               <h3>{useThemeContent('offline.title', 'Cinematic showcase could not be loaded.')}</h3>
-              <p>{propertyError}</p>
+              <p>Check your API connection and confirm properties are published in the admin panel.</p>
             </div>
           ) : properties.length === 0 ? (
             <div className="prop-listing-state pl-listing-state">
-              <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'Empty Property Registry')}</div>
+              <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'No Properties Yet')}</div>
               <h3>{useThemeContent('empty.title', 'No live properties are published yet.')}</h3>
-              <p>{useThemeContent('empty.description', 'Add property records in the backend and this platinum grid will hydrate automatically.')}</p>
+              <p>{useThemeContent('empty.description', 'Add property records in the admin panel and they will appear here.')}</p>
             </div>
           ) : (
             properties.slice(0, 6).map((property, index) => {
@@ -175,7 +173,7 @@ export default function Page() {
 
       <section className="pl-cta-section" id="pl-cta-section">
         <div className="pl-cta-inner">
-          <div className="pl-mono pl-cta-kicker">{useThemeContent('cta.kicker', 'PRIVATE_CONSULTATION')}</div>
+          <div className="pl-mono pl-cta-kicker">{useThemeContent('cta.kicker', 'Private Consultation')}</div>
           <h2>
             {useThemeContent('cta.title', 'Acquire Your \nLegacy.').split('\n').map((line, i, arr) => (
               <React.Fragment key={i}>
@@ -189,7 +187,7 @@ export default function Page() {
             className="pl-cta-btn"
             onClick={() => scrollToSection('pl-showcase-section')}
           >
-            {useThemeContent('cta.button_label', 'REQUEST_INVITATION')}
+            {useThemeContent('cta.button_label', 'Request an Invitation')}
           </button>
         </div>
       </section>

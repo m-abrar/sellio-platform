@@ -6,14 +6,16 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 export const TechHeader = () => {
+  const themeLink = useJobsThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'dev_jobs_');
   const brandPrefix = useThemeContent('header.brand_prefix', '>');
 
   return (
     <header className="jt-header">
-        <a href="#" className="jt-logo">
+        <a href={themeLink('/')} className="jt-logo">
             <span className="jt-text-accent">{brandPrefix}</span>{brandLabel}
         </a>
         <MenuNav
@@ -76,16 +78,17 @@ export const TechJobCard = ({ title, company, location, type, salary, time, logo
 );
 
 export const TechFooter = () => {
+  const themeLink = useJobsThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'dev_jobs_');
   const brandPrefix = useThemeContent('header.brand_prefix', '>');
   const description = useThemeContent('footer.description', 'The #1 job board for software engineers, product managers, and data scientists.');
-  const copyright = useThemeContent('footer.copyright', '© 2026 DevJobs. All rights reserved.');
+  const copyright = useThemeContent('footer.copyright', '© 2026 Sellio. All rights reserved.');
 
   return (
     <footer className="jt-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <a href="#" className="jt-logo" style={{ marginBottom: '1rem', display: 'block' }}>
+                <a href={themeLink('/')} className="jt-logo" style={{ marginBottom: '1rem', display: 'block' }}>
                     <span className="jt-text-accent">{brandPrefix}</span>{brandLabel}
                 </a>
                 <p style={{ color: 'var(--jt-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>{description}</p>

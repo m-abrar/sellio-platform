@@ -8,7 +8,7 @@ import { useThemeContent } from '@/components/theme-content/ThemeContentProvider
 export const RunwayHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const brandLabel = useThemeContent('header.brand_label', 'ATELIERRunway');
-  const seasonLabel = useThemeContent('header.season_label', 'AUTUMN_WINTER_26');
+  const seasonLabel = useThemeContent('header.season_label', 'AUTUMN / WINTER 26');
   const runwayIndex = brandLabel.toLowerCase().indexOf('runway');
   const brandPrimary = runwayIndex >= 0 ? brandLabel.slice(0, runwayIndex) : brandLabel;
   const brandSecondary = runwayIndex >= 0 ? brandLabel.slice(runwayIndex) : '';
@@ -120,7 +120,7 @@ export const AtelierFooter = () => {
             />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div className="ef-mono" style={{ opacity: 0.2, fontSize: '0.6rem' }}>© 2026 SELLIO_ATELIER_NODE // SILHOUETTE_STABLE</div>
+            <div className="ef-mono" style={{ opacity: 0.2, fontSize: '0.6rem' }}>© 2026 Sellio Atelier. All rights reserved.</div>
             <MenuNav
                 location="social_footer"
                 flat

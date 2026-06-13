@@ -47,11 +47,11 @@ export default function Page() {
   const safetyStep3Title = useThemeContent('safety.step_3_title', '24/7 Support');
   const safetyStep3Desc = useThemeContent('safety.step_3_description', 'Help is always just a call or click away, day or night.');
 
-  const emptyKicker = useThemeContent('empty.kicker', 'Empty Service Registry');
+  const emptyKicker = useThemeContent('empty.kicker', 'No Services Yet');
   const emptyTitle = useThemeContent('empty.title', 'No live services are published yet.');
   const emptyDescription = useThemeContent(
     'empty.description',
-    'Add service records in the backend and this local services grid will hydrate automatically.',
+    'Add service records in the admin panel to populate this grid.',
   );
 
   const [services, setServices] = useState<ServiceListing[]>([]);

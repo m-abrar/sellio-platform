@@ -4,9 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useModernThemeLink } from '../hooks/useModernThemeLink';
 
 export const UrbanHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const themeLink = useModernThemeLink();
 
     useEffect(() => {
         document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -17,7 +19,7 @@ export const UrbanHeader = () => {
 
     return (
         <header className="urban-header">
-            <div className="urban-logo">URBAN<span>.</span></div>
+            <a href={themeLink('/')} className="urban-logo">URBAN<span>.</span></a>
 
             {isOpen && (
                 <button

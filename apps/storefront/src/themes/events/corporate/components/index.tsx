@@ -92,7 +92,7 @@ export const Footer = () => {
   );
   const email = useThemeContent('footer.email', 'support@forum26.com');
   const location = useThemeContent('footer.location', 'San Francisco, CA');
-  const copyright = useThemeContent('footer.copyright', '© 2026 SELLIO_EVENTS_GRP');
+  const copyright = useThemeContent('footer.copyright', '© 2026 Sellio. All rights reserved.');
 
   return (
   <footer className="ecc-footer">

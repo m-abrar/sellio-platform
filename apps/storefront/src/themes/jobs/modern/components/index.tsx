@@ -3,14 +3,16 @@ import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 export const ModernHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useJobsThemeLink();
 
   return (
     <div className="jm-header-container">
       <header className="jm-header jm-glass">
-        <a href="#" className="jm-logo">
+        <a href={themeLink('/')} className="jm-logo">
           Nex<span className="jm-text-gradient">Role</span>
         </a>
 
@@ -93,15 +95,17 @@ export const ModernJobCard = ({ title, company, location, type, level, salary, l
     </div>
 );
 
-export const ModernFooter = () => (
+export const ModernFooter = () => {
+    const themeLink = useJobsThemeLink();
+    return (
     <footer className="jm-footer">
         <div className="jm-glass" style={{ borderRadius: '32px', padding: '4rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '4rem', background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1))' }}>
             <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '1rem' }}>Ready for your next big move?</h2>
             <p style={{ color: 'var(--jm-text-muted)', fontSize: '1.2rem', marginBottom: '2rem', maxWidth: '500px' }}>Join over 2 million professionals advancing their careers on NexRole.</p>
-            <button className="jm-btn jm-btn-primary" style={{ padding: '1rem 3rem', fontSize: '1.1rem' }}>Create Your Profile</button>
+            <a href={themeLink('/explore')} className="jm-btn jm-btn-primary" style={{ padding: '1rem 3rem', fontSize: '1.1rem', display: 'inline-block', textDecoration: 'none' }}>Browse Open Roles</a>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
-            <a href="#" className="jm-logo">
+            <a href={themeLink('/')} className="jm-logo">
                 Nex<span className="jm-text-gradient">Role</span>
             </a>
             <MenuNav
@@ -111,8 +115,9 @@ export const ModernFooter = () => (
               linkClassName="jm-nav-link"
             />
             <div style={{ color: 'var(--jm-text-muted)', fontSize: '0.9rem' }}>
-                &copy; 2026 NexRole Inc.
+                &copy; 2026 Sellio. All rights reserved.
             </div>
         </div>
     </footer>
-);
+    );
+};

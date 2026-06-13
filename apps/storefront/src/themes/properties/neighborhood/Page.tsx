@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { NeighborPropertyCard, LocalInsightHUD } from './components';
@@ -27,7 +26,7 @@ function getPropertyPrice(property: Property) {
 }
 
 function getPropertyLocation(property: Property) {
-  return property.location?.title || property.city || property.address || 'Neighborhood Node';
+  return property.location?.title || property.city || property.address || 'Neighborhood';
 }
 
 function mapPropertyToHome(property: Property, index: number) {
@@ -42,7 +41,6 @@ function mapPropertyToHome(property: Property, index: number) {
 }
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = usePropertyThemeLink();
   const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
@@ -87,7 +85,7 @@ export default function Page() {
       {/* Community Hero */}
       <section className="pn-hero">
         <div>
-          <div className="pn-mono" style={{ marginBottom: '2.5rem' }}>{useThemeContent('hero.kicker', 'COMMUNITY_RESIDENTIAL_PROTOCOL_V8')}</div>
+          <div className="pn-mono" style={{ marginBottom: '2.5rem' }}>{useThemeContent('hero.kicker', 'Community Residential')}</div>
           <h1 className="pn-heading-xl">
             {useThemeContent('hero.title', 'Find Your \nPlace in the \nCommunity.').split('\n').map((line, i, arr) => {
               const highlight = useThemeContent('hero.highlight', 'Community.');
@@ -112,22 +110,22 @@ export default function Page() {
             })}
           </h1>
           <p style={{ marginTop: '4rem', fontSize: '1.25rem', color: 'var(--pn-text-muted)', lineHeight: 1.8, maxWidth: '550px' }}>
-            {useThemeContent('hero.description', 'A warm, neighborly approach to property distribution. Verified family homes in high-trust neighborhood nodes with integrated local insights.')}
+            {useThemeContent('hero.description', 'A warm, neighborly approach to finding a home. Verified family homes in trusted neighborhoods with integrated local community insights.')}
           </p>
           <div style={{ marginTop: '6rem', display: 'flex', gap: '2.5rem' }}>
-            <button className="pn-btn-primary">{useThemeContent('hero.primary_cta_label', 'Search_Homes')}</button>
-            <button style={{
+            <a href={themeLink('/explore')} className="pn-btn-primary" style={{ textDecoration: 'none' }}>{useThemeContent('hero.primary_cta_label', 'Search Homes')}</a>
+            <a href={themeLink('/explore')} style={{
                 background: 'transparent',
                 border: '2px solid var(--pn-forest)',
                 color: 'var(--pn-forest)',
                 padding: '1.25rem 3.5rem',
                 borderRadius: '100px',
                 fontWeight: 800,
-                cursor: 'pointer',
-                fontFamily: 'var(--pn-font-heading)'
+                fontFamily: 'var(--pn-font-heading)',
+                textDecoration: 'none'
             }}>
-                {useThemeContent('hero.secondary_cta_label', 'Local_Guides')}
-            </button>
+                {useThemeContent('hero.secondary_cta_label', 'Local Guides')}
+            </a>
           </div>
         </div>
         <div className="pn-hero-img-wrapper">
@@ -136,7 +134,7 @@ export default function Page() {
           <div style={{ position: 'absolute', bottom: '2rem', right: '2rem', background: 'white', padding: '2rem', borderRadius: '32px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid var(--pn-border)' }}>
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                   <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#22c55e' }}></div>
-                  <div className="pn-mono" style={{ fontSize: '0.65rem' }}>{useThemeContent('hero.safety_label', 'NEIGHBORHOOD_SAFETY_INDEX')}: {useThemeContent('hero.safety_value', '98%')}</div>
+                  <div className="pn-mono" style={{ fontSize: '0.65rem' }}>{useThemeContent('hero.safety_label', 'Safety Index')}: {useThemeContent('hero.safety_value', '98%')}</div>
               </div>
           </div>
         </div>
@@ -144,12 +142,12 @@ export default function Page() {
 
       {/* Local Insight HUD Bar */}
       <div style={{ padding: '4rem', background: 'white', borderRadius: '100px', border: '1px solid var(--pn-border)', display: 'flex', justifyContent: 'center', margin: '8rem 0' }}>
-          <LocalInsightHUD label={useThemeContent('hud.school_rating_label', 'SCHOOL_NODE_RATING')} value={useThemeContent('hud.school_rating_value', 'A+ SUPERIOR')} />
-          <LocalInsightHUD label={useThemeContent('hud.top_schools_label', 'TOP_RATED_SCHOOLS')} value={useThemeContent('hud.top_schools_value', '12')} />
-          <LocalInsightHUD label={useThemeContent('hud.avg_commute_label', 'AVG_COMMUTE')} value={useThemeContent('hud.avg_commute_value', '18 MIN')} />
+          <LocalInsightHUD label={useThemeContent('hud.school_rating_label', 'School Rating')} value={useThemeContent('hud.school_rating_value', 'A+')} />
+          <LocalInsightHUD label={useThemeContent('hud.top_schools_label', 'Top Schools')} value={useThemeContent('hud.top_schools_value', '12')} />
+          <LocalInsightHUD label={useThemeContent('hud.avg_commute_label', 'Avg Commute')} value={useThemeContent('hud.avg_commute_value', '18 min')} />
           <div style={{ padding: '0 3rem', textAlign: 'center' }}>
-              <div className="pn-mono" style={{ marginBottom: '0.75rem', fontSize: '0.65rem' }}>{useThemeContent('hud.events_label', 'COMMUNITY_EVENTS')}</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--pn-forest)' }}>{useThemeContent('hud.events_value', '42 ACTIVE')}</div>
+              <div className="pn-mono" style={{ marginBottom: '0.75rem', fontSize: '0.65rem' }}>{useThemeContent('hud.events_label', 'Community Events')}</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--pn-forest)' }}>{useThemeContent('hud.events_value', '42 Active')}</div>
           </div>
       </div>
 
@@ -157,7 +155,7 @@ export default function Page() {
       <section>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
               <div>
-                  <div className="pn-mono" style={{ marginBottom: '1.5rem' }}>{useThemeContent('grid.kicker', 'RESIDENTIAL_INVENTORY')}</div>
+                  <div className="pn-mono" style={{ marginBottom: '1.5rem' }}>{useThemeContent('grid.kicker', 'Residential Inventory')}</div>
                   <h2 style={{ fontFamily: 'var(--pn-font-heading)', fontSize: '4.5rem', fontWeight: 800, letterSpacing: '-2px' }}>
                     {useThemeContent('grid.title', 'Neighborly \nHomes.').split('\n').map((line, i, arr) => (
                       <React.Fragment key={i}>
@@ -168,7 +166,7 @@ export default function Page() {
                   </h2>
               </div>
               <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--pn-text-muted)', lineHeight: 1.8 }}>
-                  {useThemeContent('grid.description', 'Our neighborhood protocol ensures every family home is verified and synchronized with local lifestyle metadata.')}
+                  {useThemeContent('grid.description', 'Every family home in this collection is verified and includes local lifestyle insights to help you find the right fit.')}
               </div>
           </div>
 
@@ -183,15 +181,15 @@ export default function Page() {
               ))
             ) : propertyError ? (
               <div className="prop-listing-state">
-                <div className="prop-listing-kicker">Property Sync Offline</div>
+                <div className="prop-listing-kicker">Connection Error</div>
                 <h3>Neighborly homes could not be loaded.</h3>
-                <p>{propertyError}</p>
+                <p>Check your API connection and confirm properties are published in the admin panel.</p>
               </div>
             ) : properties.length === 0 ? (
               <div className="prop-listing-state">
-                <div className="prop-listing-kicker">Empty Property Registry</div>
+                <div className="prop-listing-kicker">No Properties Yet</div>
                 <h3>No live properties are published yet.</h3>
-                <p>Add property records in the backend and this neighborhood grid will hydrate automatically.</p>
+                <p>Add property records in the admin panel and they will appear here.</p>
               </div>
             ) : (
               properties.slice(0, 6).map((property, index) => {
@@ -218,23 +216,23 @@ export default function Page() {
                 ))}
               </h2>
               <p style={{ fontSize: '1.25rem', color: 'var(--pn-text-muted)', lineHeight: 2, marginBottom: '6rem' }}>
-                  {useThemeContent('philosophy.description', 'Our neighborhood vertical is designed to help you find more than just a house. We help you find a community that synchronizes with your lifestyle.')}
+                  {useThemeContent('philosophy.description', 'Our neighborhood platform is designed to help you find more than just a house. We help you find a community that fits your lifestyle.')}
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6rem' }}>
                   <div>
                       <div style={{ fontSize: '3.5rem', fontFamily: 'var(--pn-font-heading)', fontWeight: 800, color: 'var(--pn-sage)' }}>{useThemeContent('philosophy.metric_1_value', '100%')}</div>
-                      <div className="pn-mono" style={{ fontSize: '0.6rem' }}>{useThemeContent('philosophy.metric_1_label', 'VERIFIED_LISTINGS')}</div>
+                      <div className="pn-mono" style={{ fontSize: '0.6rem' }}>{useThemeContent('philosophy.metric_1_label', 'Verified Listings')}</div>
                   </div>
                   <div>
                       <div style={{ fontSize: '3.5rem', fontFamily: 'var(--pn-font-heading)', fontWeight: 800, color: 'var(--pn-sage)' }}>{useThemeContent('philosophy.metric_2_value', '24/7')}</div>
-                      <div className="pn-mono" style={{ fontSize: '0.6rem' }}>{useThemeContent('philosophy.metric_2_label', 'HOOD_SUPPORT')}</div>
+                      <div className="pn-mono" style={{ fontSize: '0.6rem' }}>{useThemeContent('philosophy.metric_2_label', 'Resident Support')}</div>
                   </div>
               </div>
           </div>
           <div style={{ padding: '6rem', background: 'var(--pn-cream)', borderRadius: '48px', border: '1px solid var(--pn-border)' }}>
-              <div className="pn-mono" style={{ marginBottom: '2.5rem' }}>{useThemeContent('join.kicker', 'JOIN_THE_NEIGHBORHOOD')}</div>
+              <div className="pn-mono" style={{ marginBottom: '2.5rem' }}>{useThemeContent('join.kicker', 'Join the Neighborhood')}</div>
               <h3 style={{ fontFamily: 'var(--pn-font-heading)', fontSize: '2rem', fontWeight: 800, marginBottom: '2.5rem' }}>
-                {useThemeContent('join.title', 'Synchronize with \nYour Community.').split('\n').map((line, i, arr) => (
+                {useThemeContent('join.title', 'Connect with \nYour Community.').split('\n').map((line, i, arr) => (
                   <React.Fragment key={i}>
                     {line}
                     {i < arr.length - 1 && <br />}
@@ -242,10 +240,10 @@ export default function Page() {
                 ))}
               </h3>
               <p style={{ color: 'var(--pn-text-muted)', lineHeight: 2, marginBottom: '5rem' }}>
-                  {useThemeContent('join.description', 'Receive local alerts, school updates, and community event news directly through your Sellio Hood node.')}
+                  {useThemeContent('join.description', 'Receive local alerts, school updates, and community event news directly through your Sellio account.')}
               </p>
               <button className="pn-btn-primary" style={{ width: '100%', padding: '2rem', fontSize: '1.1rem', background: 'var(--pn-forest)' }}>
-                  {useThemeContent('join.button_label', 'CREATE_COMMUNITY_PROFILE')}
+                  {useThemeContent('join.button_label', 'Create Your Profile')}
               </button>
           </div>
       </section>

@@ -4,16 +4,18 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 export const CommunityHeader = () => {
+  const themeLink = usePropertyThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="pn-header">
-      <div className="pn-logo">
+      <a href={themeLink('/')} className="pn-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         <span style={{ fontSize: '1.75rem' }}>🏡</span>
-        HOOD<span style={{ color: 'var(--pn-ochre)' }}>Node</span>
-      </div>
+        HOOD<span style={{ color: 'var(--pn-ochre)' }}>Finder</span>
+      </a>
       
       <button 
           className={`pn-hamburger ${isOpen ? 'pn-hamburger-open' : ''}`} 
@@ -70,7 +72,7 @@ export const NeighborPropertyCard = ({ title, price, location, status, image }: 
         
         <div style={{ display: 'flex', gap: '2rem', borderTop: '1px solid var(--pn-border)', paddingTop: '2rem', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', fontWeight: 700, color: 'var(--pn-sage)' }}>
-                <span>✓</span> VERIFIED_NODE
+                <span>✓</span> Verified
             </div>
             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--pn-ochre)' }}>DETAILS →</div>
         </div>
@@ -85,13 +87,15 @@ export const LocalInsightHUD = ({ label, value }: { label: string, value: string
     </div>
 );
 
-export const HoodFooter = () => (
+export const HoodFooter = () => {
+  const themeLink = usePropertyThemeLink();
+  return (
     <footer className="pn-footer">
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '8rem' }}>
             <div>
-                <div className="pn-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem' }}>HOODNODE</div>
+                <a href={themeLink('/')} className="pn-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem', textDecoration: 'none' }}>HOODFINDER</a>
                 <p style={{ opacity: 0.6, lineHeight: 2, fontSize: '1rem', maxWidth: '400px' }}>
-                    A high-fidelity neighborhood registry designed for families and high-trust communities. Synchronizing local insights with global residential nodes.
+                    A neighborhood property platform designed for families seeking trusted, community-first homes.
                 </p>
             </div>
             <FooterMenuColumn
@@ -111,7 +115,7 @@ export const HoodFooter = () => (
             />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div className="pn-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_NEIGHBORHOOD_OS // TRUST_STABLE</div>
+            <div className="pn-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
             <div style={{ display: 'flex', gap: '4rem' }}>
                 <MenuNav
                     location="social_footer"
@@ -126,4 +130,5 @@ export const HoodFooter = () => (
             </div>
         </div>
     </footer>
-);
+  );
+};

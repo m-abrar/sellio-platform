@@ -33,7 +33,7 @@ export default function Page() {
   const locationTitle = useThemeContent('filters.location_title', 'Location');
   const collectionCountLabel = useThemeContent('collection.count_label', 'developer opportunities');
   const emptyTitle = useThemeContent('empty.title', 'No Developer Jobs Found');
-  const emptyDescription = useThemeContent('empty.description', 'Adjust your grep filters or tags to search alternative developer channels.');
+  const emptyDescription = useThemeContent('empty.description', 'Try different filters or search terms to find relevant roles.');
   const exploreAllLabel = useThemeContent('collection.refresh_label', 'Browse all roles');
 
   const [jobs, setJobs] = useState<TechJob[]>([]);

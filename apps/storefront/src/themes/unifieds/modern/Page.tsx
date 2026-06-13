@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { NexusBentoGrid, NexusPricing } from './components';
@@ -8,41 +7,40 @@ import { useThemeContent, useThemeMedia } from '@/components/theme-content/Theme
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useUnifiedThemeLink();
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
 
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'CORE_V4_PROTOCOL');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Modern Marketplace');
   const heroTitle = useThemeContent('hero.title', 'Beyond\nStandard.');
   const heroHighlight = useThemeContent('hero.highlight', 'Standard.');
-  const heroDescription = useThemeContent('hero.description', 'The high-fidelity distribution node for multi-vertical commerce. Standardize your presence across 50 industries with a single, unified engine.');
-  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'INITIALIZE NODE');
-  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'VIEW ARCHITECTURE');
+  const heroDescription = useThemeContent('hero.description', 'A powerful multi-vertical marketplace platform. Browse products, properties, services, and more — all in one modern storefront.');
+  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'Browse the catalog');
+  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'Explore listings');
 
-  const trustMetric1 = useThemeContent('trust.metric_1', '1.4M_NODES_ACTIVE');
-  const trustMetric2 = useThemeContent('trust.metric_2', 'LATENCY: 8ms');
-  const trustMetric3 = useThemeContent('trust.metric_3', 'DISTRIBUTION_READY: TRUE');
-  const trustMetric4 = useThemeContent('trust.metric_4', 'ENCRYPTION: AES_256');
+  const trustMetric1 = useThemeContent('trust.metric_1', '1.4M+ Active listings');
+  const trustMetric2 = useThemeContent('trust.metric_2', 'Free shipping available');
+  const trustMetric3 = useThemeContent('trust.metric_3', 'Verified sellers');
+  const trustMetric4 = useThemeContent('trust.metric_4', 'Secure checkout');
 
-  const collectionEyebrow = useThemeContent('collection.eyebrow', 'LIVE_NEXUS_FEED');
-  const collectionTitle = useThemeContent('collection.title', 'Synchronized Listings.');
-  const collectionDescription = useThemeContent('collection.description', 'Live product records streamed into the Nexus Prime catalog layer for high-fidelity marketplace discovery.');
+  const collectionEyebrow = useThemeContent('collection.eyebrow', 'Live Catalog');
+  const collectionTitle = useThemeContent('collection.title', 'Featured Listings.');
+  const collectionDescription = useThemeContent('collection.description', 'Browse live listings from the Sellio catalog, updated in real time.');
 
-  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'NEXUS_OFFLINE');
-  const syncOfflineTitle = useThemeContent('sync.offline_title', 'Listings could not be synchronized.');
-  const emptyKicker = useThemeContent('empty.kicker', 'EMPTY_NEXUS_FEED');
+  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'Connection error');
+  const syncOfflineTitle = useThemeContent('sync.offline_title', 'Listings could not be loaded.');
+  const emptyKicker = useThemeContent('empty.kicker', 'No listings yet');
   const emptyTitle = useThemeContent('empty.title', 'No live listings are available yet.');
-  const emptyDescription = useThemeContent('empty.description', 'Add product records in the backend and this nexus feed will hydrate automatically.');
+  const emptyDescription = useThemeContent('empty.description', 'Add product records in the admin panel and they will appear here automatically.');
 
-  const midSectionTitle = useThemeContent('mid_section.title', 'The Power\nof Fifty.');
-  const midSectionDescription = useThemeContent('mid_section.description', 'Why build fifty themes when you can deploy one engine? Our vertical-specific DNA ensures that every storefront feels bespoke, while sharing the robust high-fidelity logic of the Nexus Prime core.');
+  const midSectionTitle = useThemeContent('mid_section.title', 'The Power\nof One.');
+  const midSectionDescription = useThemeContent('mid_section.description', 'One platform powering storefronts across every vertical — products, properties, jobs, services, autos, events, and classifieds. Each one tailored, all sharing the same reliable core.');
   const midSectionImage = useThemeMedia('mid_section.image', '/themes/unifieds/modern/1.webp');
 
-  const ctaTitle = useThemeContent('cta.title', 'Ready to\nsynchronize?');
-  const ctaDescription = useThemeContent('cta.description', "Initialize your high-fidelity storefront node and join the world's most advanced distribution network.");
-  const ctaButtonLabel = useThemeContent('cta.button_label', 'CONNECT CORE NODE');
+  const ctaTitle = useThemeContent('cta.title', 'Ready to\nget started?');
+  const ctaDescription = useThemeContent('cta.description', 'Discover products, properties, services, and more across all categories in one unified marketplace.');
+  const ctaButtonLabel = useThemeContent('cta.button_label', 'Browse the catalog');
 
   const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%230a0a0a'/><g transform='translate(328,214)' stroke='%2306b6d4' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='6'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='11' letter-spacing='2' fill='%23525252'>NEXUS RECORD</text></svg>";
 
@@ -84,7 +82,7 @@ export default function Page() {
   );
 
   const formatPrice = (product: Product) => (
-    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Sync quote')
+    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Price on request')
   );
 
   return (
@@ -114,12 +112,12 @@ export default function Page() {
             {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }} className="unp-hero-buttons">
-              <button className="nexus-btn-primary" id="unp-btn-explore" onClick={() => router.push(themeLink('/explore'))}>
+              <a href={themeLink('/explore')} className="nexus-btn-primary" id="unp-btn-explore">
                 {heroPrimaryCtaLabel}
-              </button>
-              <button className="nexus-btn-outline" id="unp-btn-spec" onClick={() => router.push(themeLink('/explore'))}>
+              </a>
+              <a href={themeLink('/explore')} className="nexus-btn-outline" id="unp-btn-spec">
                 {heroSecondaryCtaLabel}
-              </button>
+              </a>
           </div>
       </section>
 
@@ -175,12 +173,12 @@ export default function Page() {
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>
                           <div className="unp-listing-body">
-                              <div className="unp-mono">NEXUS_{product.id}</div>
+                              <div className="unp-mono">#{product.id}</div>
                               <h3>{product.title}</h3>
-                              <p>{product.description || 'Verified marketplace listing synchronized into the Nexus Prime catalog.'}</p>
+                              <p>{product.description || 'Browse this listing for full details and pricing.'}</p>
                               <div className="unp-listing-meta">
                                   <span>{formatPrice(product)}</span>
-                                  <span>Open Sync</span>
+                                  <span>View listing</span>
                               </div>
                           </div>
                       </a>
@@ -205,7 +203,7 @@ export default function Page() {
                     {midSectionDescription}
                   </p>
                   <ul style={{ listStyle: 'none', padding: 0 }}>
-                      {['Dynamic Schema Mapping', 'Real-time Global Sync', 'High-Fidelity UI DNA', 'Institutional Security Nodes'].map(item => (
+                      {['Multi-Vertical Platform', 'Real-Time Catalog Updates', 'Mobile-First Design', 'Secure Transactions'].map(item => (
                           <li key={item} style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', fontWeight: 700, color: 'var(--unp-cyan)' }}>
                               <div style={{ width: '8px', height: '8px', background: 'var(--unp-cyan)' }}></div> {item.toUpperCase()}
                           </li>
@@ -238,7 +236,7 @@ export default function Page() {
           <p style={{ maxWidth: '600px', margin: '0 auto 5rem', fontSize: '1.25rem', color: 'var(--unp-dim)', fontWeight: 300 }}>
             {ctaDescription}
           </p>
-          <button className="nexus-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.1rem' }} id="unp-btn-cta-handshake" onClick={() => router.push(themeLink('/explore'))}>{ctaButtonLabel}</button>
+          <a href={themeLink('/explore')} className="nexus-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.1rem', display: 'inline-block' }} id="unp-btn-cta-handshake">{ctaButtonLabel}</a>
       </section>
     </div>
   );

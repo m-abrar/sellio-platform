@@ -91,11 +91,13 @@ export const BlueCollarJobCard = ({ title, company, location, type, wage, time }
     </div>
 );
 
-export const BlueCollarFooter = () => (
+export const BlueCollarFooter = () => {
+  const themeLink = useJobsThemeLink();
+  return (
     <footer className="jbc-footer">
         <div className="jbc-footer-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <a href="#" className="jbc-logo" style={{ marginBottom: '1.5rem', display: 'block' }}>
+                <a href={themeLink('/')} className="jbc-logo" style={{ marginBottom: '1.5rem', display: 'block' }}>
                     Trades<span>Work</span>
                 </a>
                 <p style={{ color: 'var(--jbc-text-muted)', fontWeight: 500, lineHeight: 1.6 }}>Connecting skilled tradespeople with top employers in construction, manufacturing, and logistics.</p>
@@ -118,7 +120,8 @@ export const BlueCollarFooter = () => (
             />
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1.5rem', color: '#757575', fontSize: '0.85rem', textAlign: 'center', fontWeight: 500 }}>
-            &copy; 2026 TradesWork Platform. All Rights Reserved.
+            © 2026 TradesWork. All rights reserved.
         </div>
     </footer>
-);
+  );
+};

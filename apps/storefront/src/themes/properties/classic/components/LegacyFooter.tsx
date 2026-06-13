@@ -13,18 +13,18 @@ function FooterColumnLabel({ children }: { children: string }) {
 export const Footer = () => {
     const themeLink = useClassicThemeLink();
     const brandLabel = useThemeContent('header.brand_label', 'ESTATE & HERITAGE');
-    const footerEyebrow = useThemeContent('footer.eyebrow', 'Global Registry // Footer');
+    const footerEyebrow = useThemeContent('footer.eyebrow', 'Heritage Collection');
     const footerDescription = useThemeContent(
         'footer.description',
-        "A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and legacy value.",
+        "A curated collection of the world's most distinguished historic properties, verified for architectural provenance and heritage value.",
     );
     const subscribeText = useThemeContent(
         'footer.subscribe_text',
-        'Subscribe to our global heritage distribution protocol.',
+        'Subscribe to receive updates on the latest heritage property listings.',
     );
     const copyright = useThemeContent(
         'footer.copyright',
-        '© 2026 ESTATE & HERITAGE // GLOBAL REGISTRY',
+        '© 2026 Sellio. All rights reserved.',
     );
     const [email, setEmail] = useState('');
     const [brandPrimary, brandSecondary] = brandLabel.split('&').map((part) => part.trim());

@@ -136,7 +136,7 @@ export const CorporateFooter = () => {
   const subscribeDescription = useThemeContent('footer.subscribe_description', 'Get daily job alerts.');
   const emailPlaceholder = useThemeContent('footer.email_placeholder', 'Email');
   const subscribeButtonLabel = useThemeContent('footer.subscribe_button_label', 'Subscribe');
-  const copyright = useThemeContent('footer.copyright', '© 2026 TalentCorp Inc. All rights reserved.');
+  const copyright = useThemeContent('footer.copyright', '© 2026 Sellio. All rights reserved.');
 
   return (
     <footer className="jc-footer">

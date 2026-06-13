@@ -4,16 +4,18 @@ import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 export const PlatinumHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const themeLink = usePropertyThemeLink();
 
     return (
         <header className="platinum-header">
-            <div className="platinum-logo">PLATINUM_ESTATE</div>
-            
-            <button 
-                className={`luxury-hamburger ${isOpen ? 'luxury-hamburger-open' : ''}`} 
+            <a href={themeLink('/')} className="platinum-logo">PLATINUM.</a>
+
+            <button
+                className={`luxury-hamburger ${isOpen ? 'luxury-hamburger-open' : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="Toggle Navigation"
             >
@@ -31,15 +33,15 @@ export const PlatinumHeader = () => {
                     onNavigate={() => setIsOpen(false)}
                     renderItem={defaultNavItemRenderer}
                 />
-                
+
                 <MenuActionButtons
                     as="button"
                     buttonClassName="luxury-mobile-inquire-btn"
                     onNavigate={() => setIsOpen(false)}
                     renderItem={(item, { className, onNavigate }) => (
-                        <button type="button" className={className} style={{ 
-                            background: 'none', 
-                            border: '1px solid #000', 
+                        <button type="button" className={className} style={{
+                            background: 'none',
+                            border: '1px solid #000',
                             padding: '0.8rem 2.5rem',
                             fontFamily: 'var(--font-serif)',
                             fontSize: '0.8rem',
@@ -50,14 +52,14 @@ export const PlatinumHeader = () => {
                     )}
                 />
             </div>
-            
+
             <MenuActionButtons
                 as="button"
                 buttonClassName="luxury-desktop-inquire-btn"
                 renderItem={(item, { className, onNavigate }) => (
-                    <button type="button" className={className} style={{ 
-                        background: 'none', 
-                        border: '1px solid #000', 
+                    <button type="button" className={className} style={{
+                        background: 'none',
+                        border: '1px solid #000',
                         padding: '0.8rem 2.5rem',
                         fontFamily: 'var(--font-serif)',
                         fontSize: '0.8rem',

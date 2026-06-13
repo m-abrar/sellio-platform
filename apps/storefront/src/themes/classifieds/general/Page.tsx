@@ -35,7 +35,7 @@ export default function Page() {
   const emptyDescription = useThemeContent('empty.description', "We couldn't find items that match your current sidebar filters or search tags.");
   const emptyButtonLabel = useThemeContent('empty.button_label', 'Reset Settings');
   const loadMoreLabel = useThemeContent('collection.load_more_label', 'Load More Listings');
-  const loadingMoreLabel = useThemeContent('collection.loading_more_label', 'Syncing Classifieds...');
+  const loadingMoreLabel = useThemeContent('collection.loading_more_label', 'Loading more...');
   const chatPlaceholder = useThemeContent('chat.placeholder', 'Type your offer or ask questions...');
 
   const getThemeLink = themeLink;

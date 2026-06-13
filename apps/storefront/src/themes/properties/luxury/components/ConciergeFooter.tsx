@@ -28,9 +28,8 @@ export const ConciergeFooter = () => (
                 linkClassName="footer-link"
             />
         </div>
-        <div style={{ marginTop: '8rem', paddingTop: '4rem', borderTop: '1px solid var(--luxury-border)', display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#aaa', fontWeight: 600, letterSpacing: '2px' }}>
-            <span>© 2026 PLATINUM_ESTATE_GROUP. ALL_ASSETS_VERIFIED.</span>
-            <span>v.1.0_LUXURY_ELITE</span>
+        <div style={{ marginTop: '8rem', paddingTop: '4rem', borderTop: '1px solid var(--luxury-border)', fontSize: '0.8rem', color: '#aaa', fontWeight: 600, letterSpacing: '2px' }}>
+            <span>© 2026 Platinum Estate Group. All rights reserved.</span>
         </div>
     </footer>
 );

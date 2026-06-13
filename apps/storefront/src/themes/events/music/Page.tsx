@@ -30,26 +30,26 @@ function mapEventToHeadliner(event: EventListing, index: number) {
 export default function Page() {
   const themeLink = useEventsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'PULSE // LIVE TRANSMISSION');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Featured Events');
   const heroTitle = useThemeContent('hero.title', 'FEEL THE\nMUSIC LIVE.');
   const heroDescription = useThemeContent(
     'hero.description',
-    'Discover elite concerts and underground music festivals across the global sonic network. High-fidelity experiences for the modern listener.',
+    'Discover elite concerts and underground music festivals worldwide. Unforgettable experiences for the modern listener.',
   );
   const heroImage = useThemeMedia('hero.image', '/themes/events/music/10.webp');
   const primaryCtaLabel = useThemeContent('hero.primary_cta_label', 'Get Your Tickets');
   const secondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'Explore Lineup');
-  const metricsLeftText = useThemeContent('metrics.left_text', 'SYSTEM: OPTIMIZED | AUDIO: 120DB LIMIT | SYNC: VERIFIED');
-  const metricsRightText = useThemeContent('metrics.right_text', 'BPM TRACKER: 128 (HOUSE)');
+  const metricsLeftText = useThemeContent('metrics.left_text', 'Live Events | Premium Sound | Verified Lineup');
+  const metricsRightText = useThemeContent('metrics.right_text', '128 BPM');
   const lineupEyebrow = useThemeContent('lineup.eyebrow', 'Elite Headliners');
   const lineupTitle = useThemeContent('lineup.title', 'The Core Lineup.');
-  const supportEyebrow = useThemeContent('support.eyebrow', 'Underground Nodes');
+  const supportEyebrow = useThemeContent('support.eyebrow', 'Supporting Acts');
   const supportTitle = useThemeContent('support.title', 'Sonic Support.');
   const galleryTitle = useThemeContent('gallery.title', 'Sonic Recaps.');
   const ctaTitle = useThemeContent('cta.title', 'Join the\nPulse.');
   const ctaDescription = useThemeContent(
     'cta.description',
-    "Initialize your access for the world's most immersive music distribution network. High-fidelity experiences, verified by the PULSE sonic registry.",
+    "Secure your spot at the world's most immersive music events. Premium experiences, curated by the PULSE community.",
   );
   const ctaButtonLabel = useThemeContent('cta.button_label', 'Reserve Access');
   const [events, setEvents] = useState<EventListing[]>([]);
@@ -157,9 +157,9 @@ export default function Page() {
                 ))
               ) : events.length === 0 ? (
                 <div className="evm-listing-state">
-                  <div className="evm-listing-kicker">Empty Event Registry</div>
+                  <div className="evm-listing-kicker">No Events Yet</div>
                   <h3>No live events are published yet.</h3>
-                  <p>Add event records in the backend and this lineup grid will hydrate automatically.</p>
+                  <p>Add event records in the admin panel to populate this lineup grid.</p>
                 </div>
               ) : (
                 events.slice(0, 6).map((event, index) => {

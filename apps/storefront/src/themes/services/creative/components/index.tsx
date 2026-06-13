@@ -16,7 +16,7 @@ export const CrtvHeader = () => {
 
   return (
     <header className="crtv-header">
-      <a href={themeLink('')} className="crtv-logo gradient-text">CRTV</a>
+      <a href={themeLink('/')} className="crtv-logo gradient-text">CRTV</a>
       
       <button 
         className={`crtv-hamburger ${isOpen ? 'crtv-hamburger-open' : ''}`}
@@ -96,11 +96,13 @@ export const CrtvPortfolioItem = ({ title, category, image }: { title: string; c
     </div>
 );
 
-export const CrtvFooter = () => (
+export const CrtvFooter = () => {
+  const themeLink = useServicesThemeLink();
+  return (
     <footer className="crtv-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <a href="#" className="crtv-logo" style={{ color: 'white' }}>CRTV</a>
+                <a href={themeLink('/')} className="crtv-logo" style={{ color: 'white' }}>CRTV</a>
                 <p style={{ marginTop: '1rem', fontSize: '0.9rem', lineHeight: 1.6 }}>Connecting visionary clients with the world&apos;s finest creative talent.</p>
             </div>
             <FooterMenuColumn
@@ -123,7 +125,8 @@ export const CrtvFooter = () => (
             />
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem', textAlign: 'center', opacity: 0.6 }}>
-            &copy; 2026 CRTV Creative Network. All rights reserved.
+            © 2026 CRTV. All rights reserved.
         </div>
     </footer>
-);
+  );
+};

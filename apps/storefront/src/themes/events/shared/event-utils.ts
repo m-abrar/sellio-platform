@@ -89,11 +89,11 @@ export function formatEventDateShort(event: EventListing): string {
 
 export function formatEventDateUnderscore(dateStr?: string | null): string {
   if (!dateStr) {
-    return 'DATE_TBA';
+    return 'Date TBA';
   }
 
   const date = new Date(dateStr);
-  return `${months[date.getMonth()]}_${String(date.getDate()).padStart(2, '0')}_${date.getFullYear()}`;
+  return `${months[date.getMonth()]} ${String(date.getDate()).padStart(2, '0')} ${date.getFullYear()}`;
 }
 
 export function getEventLocationLabel(event: EventListing): string {

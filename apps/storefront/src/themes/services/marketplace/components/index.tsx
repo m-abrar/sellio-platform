@@ -221,7 +221,7 @@ export const MarketplaceFooter = () => {
             />
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1.5rem', textAlign: 'center', color: 'var(--sm-text-muted)', fontSize: '0.9rem' }}>
-            &copy; 2026 ServiceConnect. All rights reserved.
+            &copy; 2026 Sellio. All rights reserved.
         </div>
     </footer>
     );

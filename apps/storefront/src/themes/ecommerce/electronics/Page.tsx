@@ -6,7 +6,7 @@ import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
 import { fetchProductsCatalog, resolveProductsFailure } from '@/themes/ecommerce/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
-import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 const FALLBACK_TRENDING_PRODUCTS = [
   { title: "NVIDIA RTX 5090 Ti Founders Edition", category: "Graphics Cards", price: "$1,999.00", image: "/themes/ecommerce/electronics/21.webp", badge: "IN STOCK", slug: "nvidia-rtx-5090-ti" },
@@ -22,23 +22,25 @@ const FALLBACK_PERIPHERAL_PRODUCTS = [
   { title: "Elgato Stream Deck +", category: "Streaming", price: "$199.99", image: "/themes/ecommerce/electronics/28.webp", slug: "elgato-stream-deck" },
 ];
 
+const CATEGORY_LABELS = ["Graphics Cards", "Processors", "Memory", "Monitors", "Mice", "Keyboards", "Audio", "Streaming"];
+
 export default function Page() {
   const themeLink = useEcommerceThemeLink();
   const allowDemo = useDemoFallbackAllowed();
-  const heroBadge = useThemeContent('hero.badge', 'NEXT GEN RELEASE');
-  const heroTitle = useThemeContent('hero.title', 'QUANTUM\nPERFORMANCE');
-  const heroDescription = useThemeContent('hero.description', 'Experience untethered speed with the all-new line of RTX 50-Series Architecture. Built for the creators of tomorrow.');
-  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Shop Now');
-  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'View Specs');
-  const heroImage = useThemeContent('hero.image', '/themes/ecommerce/electronics/29.webp');
-  const diagnosticsTitle = useThemeContent('diagnostics.title', 'DATABASE CONNECTION WARNING');
-  const diagnosticsDescription = useThemeContent('diagnostics.description', 'The dynamic Laravel API database is currently offline. Activating premium local node resilience fallback.');
-  const trendingTitle = useThemeContent('trending.title', 'TRENDING HARDWARE');
-  const promoTitle = useThemeContent('promo.title', 'BUILD YOUR DREAM PC');
-  const promoDescription = useThemeContent('promo.description', 'Use our interactive 3D configurator to ensure 100% compatibility and visualize your custom rig before you buy.');
-  const promoCta = useThemeContent('promo.cta_label', 'Launch Configurator');
-  const promoImage = useThemeContent('promo.image', '/themes/ecommerce/electronics/30.webp');
-  const peripheralsTitle = useThemeContent('peripherals.title', 'PRO PERIPHERALS');
+
+  const heroBadge        = useThemeContent('hero.badge',              'NEXT GEN RELEASE');
+  const heroTitle        = useThemeContent('hero.title',              'QUANTUM\nPERFORMANCE');
+  const heroDescription  = useThemeContent('hero.description',        'Experience untethered speed with the all-new RTX 50-Series architecture. Built for creators and gamers who demand the best.');
+  const heroPrimaryCta   = useThemeContent('hero.primary_cta_label',  'Shop Now');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label','View Specs');
+  const heroImage        = useThemeMedia('hero.image',                '/themes/ecommerce/electronics/29.webp');
+  const trendingTitle    = useThemeContent('trending.title',          'TRENDING HARDWARE');
+  const promoTitle       = useThemeContent('promo.title',             'BUILD YOUR DREAM PC');
+  const promoDescription = useThemeContent('promo.description',       'Browse our full catalog of components and find everything you need to build or upgrade your rig.');
+  const promoCta         = useThemeContent('promo.cta_label',         'Shop Components');
+  const promoImage       = useThemeMedia('promo.image',               '/themes/ecommerce/electronics/30.webp');
+  const peripheralsTitle = useThemeContent('peripherals.title',       'PRO PERIPHERALS');
+
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [useFallback, setUseFallback] = useState(false);
@@ -74,47 +76,25 @@ export default function Page() {
 
     loadData();
 
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, [allowDemo]);
 
   const getProductImage = (product: Product, index: number) => {
-    if (product.media?.featured_image) {
-      return product.media.featured_image;
-    }
-    if (product.image_url) {
-      return product.image_url;
-    }
-    // High-fidelity fallback based on index
+    if (product.media?.featured_image) return product.media.featured_image;
+    if (product.image_url) return product.image_url;
     return `/themes/ecommerce/electronics/${21 + (index % 8)}.webp`;
   };
 
-  const getThemeLink = (path: string) => themeLink(path);
-
   const mapApiProductToFrontend = (p: Product, index: number) => {
     const priceStr = p.pricing?.formatted || `$${Number(p.price).toFixed(2)}`;
-    
-    let oldPriceStr = undefined;
-    if (p.pricing && p.pricing.base_price > p.pricing.sale_price) {
-      oldPriceStr = `$${Number(p.pricing.base_price).toFixed(2)}`;
-    }
-    
-    // Scoped category based on list index to maintain Envato aesthetics
-    const fallbackCategories = [
-      "Graphics Cards", "Processors", "Memory", "Monitors",
-      "Mice", "Keyboards", "Audio", "Streaming"
-    ];
-    const categoryStr = fallbackCategories[index % fallbackCategories.length];
-    
-    let badgeStr = undefined;
-    if (p.pricing && p.pricing.base_price > p.pricing.sale_price) {
-      badgeStr = "SALE";
-    } else if (index % 4 === 0) {
-      badgeStr = "IN STOCK";
-    } else if (index % 4 === 3) {
-      badgeStr = "NEW";
-    }
+    const oldPriceStr = (p.pricing && p.pricing.base_price > p.pricing.sale_price)
+      ? `$${Number(p.pricing.base_price).toFixed(2)}`
+      : undefined;
+    const categoryStr = CATEGORY_LABELS[index % CATEGORY_LABELS.length];
+    const badgeStr = oldPriceStr ? "SALE"
+      : index % 4 === 0 ? "IN STOCK"
+      : index % 4 === 3 ? "NEW"
+      : undefined;
 
     return {
       title: p.title,
@@ -124,19 +104,13 @@ export default function Page() {
       image: getProductImage(p, index),
       badge: badgeStr,
       slug: p.slug,
-      onClick: () => {
-        if (typeof window !== 'undefined') {
-          window.location.href = getThemeLink(`/product/${p.slug}`);
-        }
-      }
+      onClick: () => { window.location.href = themeLink(`/product/${p.slug}`); },
     };
   };
 
   const mapFallbackProduct = (p: typeof FALLBACK_TRENDING_PRODUCTS[number]) => ({
     ...p,
-    onClick: () => {
-      window.location.href = getThemeLink(`/product/${p.slug}`);
-    },
+    onClick: () => { window.location.href = themeLink(`/product/${p.slug}`); },
   });
 
   const trendingProductsList = products.length > 0
@@ -161,69 +135,39 @@ export default function Page() {
           50% { opacity: 0.6; }
           100% { opacity: 0.3; }
         }
-        .el-pulse {
-          animation: elPulse 1.5s ease-in-out infinite;
-        }
-        .el-diagnostics-card {
-          background-color: var(--el-bg-card);
-          border: 1px solid var(--el-secondary);
-          border-radius: 8px;
-          padding: 2rem;
-          margin: 2rem 5%;
-          box-shadow: 0 0 20px rgba(255, 0, 85, 0.15);
-        }
-        .el-diagnostics-header {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          color: var(--el-secondary);
-          font-family: var(--el-font-tech);
-          font-size: 1.2rem;
-          font-weight: 700;
-          margin-bottom: 1rem;
-          letter-spacing: 1px;
-        }
-        .el-diagnostics-trace {
-          background-color: #0f1115;
-          border: 1px solid var(--el-border);
-          padding: 1.5rem;
-          border-radius: 6px;
-          font-family: monospace;
-          font-size: 0.85rem;
-          color: #ff88a8;
-          overflow-x: auto;
-          margin-top: 1rem;
-          white-space: pre-wrap;
-          line-height: 1.5;
-        }
+        .el-pulse { animation: elPulse 1.5s ease-in-out infinite; }
       `}</style>
 
       <ElectronicsHeader />
 
       {/* Hero */}
       <section className="el-hero">
-        <div className="el-hero-bg"></div>
+        <div className="el-hero-bg" />
         <div className="el-hero-content">
-            <div className="el-badge" style={{ position: 'relative', top: 0, left: 0, display: 'inline-block', marginBottom: '1.5rem' }}>{heroBadge}</div>
-            <h1 className="el-hero-title">{heroTitle.split('\n').map((line, index, lines) => <React.Fragment key={`${line}-${index}`}>{line}{index < lines.length - 1 ? <br /> : null}</React.Fragment>)}</h1>
-            <p style={{ fontSize: '1.25rem', color: 'var(--el-text-muted)', marginBottom: '2rem', lineHeight: 1.6 }}>
-                {heroDescription}
-            </p>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-                <a href={themeLink('/explore')} className="el-btn el-btn-primary">{heroPrimaryCta}</a>
-                <a href={themeLink('/explore')} className="el-btn el-btn-outline">{heroSecondaryCta}</a>
-            </div>
+          <div className="el-badge" style={{ position: 'relative', top: 0, left: 0, display: 'inline-block', marginBottom: '1.5rem' }}>{heroBadge}</div>
+          <h1 className="el-hero-title">
+            {heroTitle.split('\n').map((line, index, lines) => (
+              <React.Fragment key={`${line}-${index}`}>
+                {line}{index < lines.length - 1 ? <br /> : null}
+              </React.Fragment>
+            ))}
+          </h1>
+          <p className="el-hero-description">{heroDescription}</p>
+          <div className="el-hero-cta-row">
+            <a href={themeLink('/explore')} className="el-btn el-btn-primary">{heroPrimaryCta}</a>
+            <a href={themeLink('/explore')} className="el-btn el-btn-outline">{heroSecondaryCta}</a>
+          </div>
         </div>
-        <div style={{ position: 'absolute', right: '5%', top: '50%', transform: 'translateY(-50%)', zIndex: 2, width: '45%' }}>
-            <img src={heroImage} alt="Hero GPU" style={{ width: '100%', filter: 'drop-shadow(0 0 30px rgba(0, 229, 255, 0.3))' }} />
+        <div className="el-hero-image">
+          <img src={heroImage} alt="Featured product" style={{ width: '100%', filter: 'drop-shadow(0 0 30px rgba(0, 229, 255, 0.3))' }} />
         </div>
       </section>
 
       {/* Features Row */}
       <div className="el-spec-row" id="specs">
-          <SpecFeature icon="⚡" title="Overclocked Out-of-Box" desc="Every component is stress-tested and pre-tuned for maximum stable performance." />
-          <SpecFeature icon="🛡️" title="3-Year Warranty Plus" desc="Extended coverage on all premium hardware, including accidental damage protection." />
-          <SpecFeature icon="🚀" title="Same-Day Dispatch" desc="Order by 4 PM EST for guaranteed same-day shipping via overnight couriers." />
+        <SpecFeature icon="⚡" title="Overclocked Out-of-Box" desc="Every component is stress-tested and pre-tuned for maximum stable performance." />
+        <SpecFeature icon="🛡️" title="3-Year Warranty Plus" desc="Extended coverage on all premium hardware, including accidental damage protection." />
+        <SpecFeature icon="🚀" title="Same-Day Dispatch" desc="Order by 4 PM EST for guaranteed same-day shipping via overnight couriers." />
       </div>
 
       {apiError && useFallback && (
@@ -239,61 +183,61 @@ export default function Page() {
 
       {/* Trending Products */}
       <section className="el-section" id="components">
-          <h2 className="el-section-title">{trendingTitle}</h2>
-          <div className="el-grid">
-              {loading ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="el-product-card el-pulse">
-                    <div style={{ height: '200px', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '1.5rem' }}></div>
-                    <div style={{ height: '12px', width: '40%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '0.5rem' }}></div>
-                    <div style={{ height: '20px', width: '80%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '1rem' }}></div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-                      <div style={{ height: '24px', width: '30%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px' }}></div>
-                      <div style={{ height: '40px', width: '40px', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px' }}></div>
-                    </div>
-                  </div>
-                ))
-              ) : trendingProductsList.length > 0 ? (
-                trendingProductsList.map((p, i) => <ProductCard key={i} {...p} />)
-              ) : (
-                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '4rem 2rem', border: '1px solid var(--el-border)', borderRadius: '8px' }}>
-                  <p style={{ color: 'var(--el-text-muted)' }}>No live products available. Publish inventory or browse explore.</p>
-                  <a href={themeLink('/explore')} className="el-btn el-btn-primary" style={{ display: 'inline-block', marginTop: '1.5rem' }}>Browse catalog</a>
+        <h2 className="el-section-title">{trendingTitle}</h2>
+        <div className="el-grid">
+          {loading ? (
+            Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="el-product-card el-pulse">
+                <div style={{ height: '200px', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '1.5rem' }} />
+                <div style={{ height: '12px', width: '40%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '0.5rem' }} />
+                <div style={{ height: '20px', width: '80%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '1rem' }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
+                  <div style={{ height: '24px', width: '30%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px' }} />
+                  <div style={{ height: '40px', width: '40px', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px' }} />
                 </div>
-              )}
-          </div>
+              </div>
+            ))
+          ) : trendingProductsList.length > 0 ? (
+            trendingProductsList.map((p, i) => <ProductCard key={i} {...p} />)
+          ) : (
+            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '4rem 2rem', border: '1px solid var(--el-border)', borderRadius: '8px' }}>
+              <p style={{ color: 'var(--el-text-muted)' }}>No products available yet. Publish inventory in the admin.</p>
+              <a href={themeLink('/explore')} className="el-btn el-btn-primary" style={{ display: 'inline-block', marginTop: '1.5rem' }}>Browse catalog</a>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* Promo Banner */}
-      <section style={{ margin: '2rem 5%', background: 'linear-gradient(90deg, #1a1d24, #0f1115)', border: '1px solid var(--el-primary)', borderRadius: '8px', padding: '3rem', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'relative', zIndex: 2, maxWidth: '500px' }}>
-              <h2 className="el-tech-font" style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'white' }}>{promoTitle}</h2>
-              <p style={{ color: 'var(--el-text-muted)', marginBottom: '2rem', fontSize: '1.1rem' }}>{promoDescription}</p>
-              <button className="el-btn el-btn-primary">{promoCta}</button>
-          </div>
-          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%', background: `url(${promoImage}) center/cover`, opacity: 0.4, maskImage: 'linear-gradient(to left, black, transparent)', WebkitMaskImage: 'linear-gradient(to left, black, transparent)' }}></div>
+      <section className="el-promo-section">
+        <div className="el-promo-content">
+          <h2 className="el-promo-title el-tech-font">{promoTitle}</h2>
+          <p className="el-promo-description">{promoDescription}</p>
+          <a href={themeLink('/explore')} className="el-btn el-btn-primary">{promoCta}</a>
+        </div>
+        <div className="el-promo-bg" style={{ backgroundImage: `url(${promoImage})` }} />
       </section>
 
       {/* Peripherals */}
       <section className="el-section" id="peripherals">
-          <h2 className="el-section-title">{peripheralsTitle}</h2>
-          <div className="el-grid">
-              {loading ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="el-product-card el-pulse">
-                    <div style={{ height: '200px', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '1.5rem' }}></div>
-                    <div style={{ height: '12px', width: '40%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '0.5rem' }}></div>
-                    <div style={{ height: '20px', width: '80%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '1rem' }}></div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-                      <div style={{ height: '24px', width: '30%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px' }}></div>
-                      <div style={{ height: '40px', width: '40px', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px' }}></div>
-                    </div>
-                  </div>
-                ))
-              ) : peripheralProductsList.length > 0 ? (
-                peripheralProductsList.map((p, i) => <ProductCard key={i} {...p} />)
-              ) : null}
-          </div>
+        <h2 className="el-section-title">{peripheralsTitle}</h2>
+        <div className="el-grid">
+          {loading ? (
+            Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="el-product-card el-pulse">
+                <div style={{ height: '200px', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '1.5rem' }} />
+                <div style={{ height: '12px', width: '40%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '0.5rem' }} />
+                <div style={{ height: '20px', width: '80%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px', marginBottom: '1rem' }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
+                  <div style={{ height: '24px', width: '30%', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px' }} />
+                  <div style={{ height: '40px', width: '40px', backgroundColor: 'var(--el-border)', opacity: 0.3, borderRadius: '4px' }} />
+                </div>
+              </div>
+            ))
+          ) : peripheralProductsList.length > 0 ? (
+            peripheralProductsList.map((p, i) => <ProductCard key={i} {...p} />)
+          ) : null}
+        </div>
       </section>
 
       <ElectronicsFooter />

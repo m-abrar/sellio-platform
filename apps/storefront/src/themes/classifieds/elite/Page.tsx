@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { ClassifiedListing } from '@sellio/types';
 import {
   getClassifiedCategoryKey,
@@ -20,10 +19,9 @@ import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallb
 const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
-  const heroSubtitle = useThemeContent('hero.subtitle', 'Vetted Global Advisory Node');
+  const heroSubtitle = useThemeContent('hero.subtitle', 'Elite Curated Classifieds');
   const heroTitle = useThemeContent('hero.title', 'Curating high-value vaults for serious collectors.');
   const heroSearchPlaceholder = useThemeContent('hero.search_placeholder', 'Search by collection title, artist, country origin...');
   const heroSearchButton = useThemeContent('hero.search_button', 'Search');
@@ -34,8 +32,8 @@ export default function Page() {
   const emptyTitle = useThemeContent('empty.title', 'No Curated Assets Match Search');
   const emptyDescription = useThemeContent('empty.description', 'Try clearing keywords or switching filter pills to display our private listings feed.');
   const emptyButton = useThemeContent('empty.clear_button', 'Clear Refinements');
-  const prospectusButton = useThemeContent('quickview.prospectus_button', 'Request Prospectus memorandum');
-  const inquiryButton = useThemeContent('quickview.inquiry_button', 'Inquire Concierge Vault');
+  const prospectusButton = useThemeContent('quickview.prospectus_button', 'View Listing Details');
+  const inquiryButton = useThemeContent('quickview.inquiry_button', 'Submit Inquiry');
 
   // Stateful client bindings
   const [items, setItems] = useState<ClassifiedListing[]>([]);
@@ -190,7 +188,7 @@ export default function Page() {
   };
 
   const getAssetVaultId = (item: ClassifiedListing): string => {
-    return item.item_specs?.dimensions || `VAULT_${(item.location?.city || 'GENEVA').toUpperCase()}_${item.id}`;
+    return item.item_specs?.dimensions || `#${item.id}`;
   };
 
   const getAssetGrade = (item: ClassifiedListing): string => {
@@ -320,7 +318,7 @@ export default function Page() {
           </div>
           
           <div style={{ color: 'var(--prem-muted)', fontSize: '0.85rem', fontWeight: 600 }}>
-            {loading ? 'Evaluating ledger...' : `Showing ${filteredAssets.length} ultra-curated assets`}
+            {loading ? 'Loading listings...' : `Showing ${filteredAssets.length} listings`}
           </div>
         </div>
 
@@ -359,7 +357,7 @@ export default function Page() {
                 onQuickView={() => setQuickViewAsset(asset)}
                 onToggleFavorite={() => toggleFavoriteAsset(asset.id)}
                 onShare={() => handleShareClick(asset.title, 'clipboard')}
-                onClick={() => router.push(themeLink(`/product/${asset.slug}`))}
+                onClick={() => { window.location.href = themeLink(`/product/${asset.slug}`); }}
               />
             ))}
           </div>
@@ -389,7 +387,7 @@ export default function Page() {
                 <span>{getAssetLocation(quickViewAsset).split(',')[0]}</span>
               </div>
               <div className="elite-stat-item">
-                Vault ID
+                Listing ID
                 <span style={{ fontSize: '0.85rem' }}>{getAssetVaultId(quickViewAsset)}</span>
               </div>
               <div className="elite-stat-item">
@@ -402,7 +400,7 @@ export default function Page() {
             <div className="elite-modal-socials">
               <button className="elite-social-icon" onClick={() => handleShareClick(quickViewAsset.title, 'Encrypted Mail')} title="Send Encrypted Prospectus">✉️</button>
               <button className="elite-social-icon" onClick={() => handleShareClick(quickViewAsset.title, 'Wholesale Brokerage')} title="Broker Invitation">💼</button>
-              <button className="elite-social-icon" onClick={() => handleShareClick(quickViewAsset.title, 'Private Terminal')} title="Interactive Terminal node">🖥️</button>
+              <button className="elite-social-icon" onClick={() => handleShareClick(quickViewAsset.title, 'Share')} title="Share listing">🖥️</button>
             </div>
 
             <button 

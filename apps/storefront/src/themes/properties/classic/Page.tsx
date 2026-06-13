@@ -22,14 +22,14 @@ export default function Page() {
   const heroTitle = useThemeContent('hero.title', 'The Heritage\nRegistry.');
   const heroDescription = useThemeContent(
     'hero.description',
-    "A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and manorial integrity.",
+    "A curated collection of the world's most distinguished historic properties. Every estate is verified for architectural provenance and heritage integrity.",
   );
   const heroImage = useThemeMedia('hero.image', '/themes/properties/classic/7.webp');
   const heroCtaLabel = useThemeContent('hero.primary_cta_label', 'DISCOVER');
   const collectionHeading = useThemeContent('collection.heading', 'The Collection.');
   const collectionDescription = useThemeContent(
     'collection.description',
-    'Current distribution includes verified manorial rights and significant historical provenance.',
+    'The collection includes historic estates with verified architectural provenance and heritage significance.',
   );
   const testimonialsEyebrow = useThemeContent('testimonials.eyebrow', 'Patron Feedback');
   const testimonialsTitle = useThemeContent('testimonials.title', 'Voices of Trust.');
@@ -219,7 +219,7 @@ export default function Page() {
             <div className="pc-section-header">
                 <div>
                     <div className="pc-caps pc-section-eyebrow" style={{ color: 'var(--pc-teal)', opacity: 0.4 }}>
-                      {useFallback ? 'Demo Catalogue // Preview' : 'Collection Node // 01'}
+                      {useFallback ? 'Sample Properties // Preview' : 'The Collection // 01'}
                     </div>
                     <h2 className="pc-serif pc-section-title" style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}>
                         {collectionHeading}
@@ -270,8 +270,8 @@ export default function Page() {
               </div>
             ) : (
               <div className="pc-empty-state" style={{ border: '1px dashed var(--pc-border)', background: 'var(--pc-white)' }}>
-                <h4 className="pc-serif" style={{ fontSize: '1.8rem', color: 'var(--pc-teal)' }}>No Listings Registered</h4>
-                <p style={{ color: 'var(--pc-text-muted)', fontSize: '0.95rem' }}>No heritage estates match the requested refine criteria. Try adjusting your parameters.</p>
+                <h4 className="pc-serif" style={{ fontSize: '1.8rem', color: 'var(--pc-teal)' }}>No Properties Found</h4>
+                <p style={{ color: 'var(--pc-text-muted)', fontSize: '0.95rem' }}>No heritage estates match the current filters. Try adjusting your search criteria.</p>
               </div>
             )}
             
@@ -283,7 +283,7 @@ export default function Page() {
                     onClick={handleLoadMore}
                     disabled={loadingMore}
                   >
-                      {loadingMore ? 'VERIFYING PROVENANCE...' : 'LOAD MORE PROVENANCE'}
+                      {loadingMore ? 'Loading...' : 'LOAD MORE ESTATES'}
                   </button>
               </div>
             )}

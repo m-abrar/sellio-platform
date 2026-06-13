@@ -27,20 +27,20 @@ export default function Page() {
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'SYNTHETIC_CULTURE_EXCHANGE // 2026');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Creative Events 2026');
   const heroTitle = useThemeContent('hero.title', 'Creative\nPulses.');
-  const heroDescription = useThemeContent('hero.description', 'A curated decentralized architecture for experimental audio-visual modules and algorithmic community assemblies.');
-  const heroCta = useThemeContent('hero.primary_cta_label', 'Launch Labs');
-  const registryEyebrow = useThemeContent('collection.eyebrow', 'EXPERIMENTAL_EVENT_REGISTRY');
+  const heroDescription = useThemeContent('hero.description', 'A curated platform for experimental audio-visual events and creative community gatherings.');
+  const heroCta = useThemeContent('hero.primary_cta_label', 'Explore Events');
+  const registryEyebrow = useThemeContent('collection.eyebrow', 'Event Registry');
   const registryTitle = useThemeContent('collection.title', 'Registry.');
-  const registryDescription = useThemeContent('collection.description', "Our unified decentralized distribution node synchronizes experimental availability from the world's most vibrant hubs.");
-  const labEyebrow = useThemeContent('lab.eyebrow', 'LABORATORY_MANIFESTO');
-  const labTitle = useThemeContent('lab.title', 'Synthetic\nArtistry.');
-  const labDescription = useThemeContent('lab.description', 'We operate on the boundary of bio-digital synthesis. Elevating community interactions through raw algorithmic installations and real-time auditory sync.');
-  const labCapabilities = useThemeContent('lab.capabilities', 'Synthetizers|Generators|Decentralizers|Transmitters').split('|').map((item) => item.trim()).filter(Boolean);
-  const syncTitle = useThemeContent('sync.title', 'Node Sync Request');
-  const syncDescription = useThemeContent('sync.description', 'Transmission pathways are currently active for the autumn cluster. Submit your digital signature for synchronized resonance.');
-  const syncCta = useThemeContent('sync.cta_label', 'Initiate Synchronous Wave');
+  const registryDescription = useThemeContent('collection.description', "Discover experimental events from the world's most vibrant creative hubs.");
+  const labEyebrow = useThemeContent('lab.eyebrow', 'Our Manifesto');
+  const labTitle = useThemeContent('lab.title', 'Creative\nArtistry.');
+  const labDescription = useThemeContent('lab.description', 'We exist at the intersection of art and technology. Elevating community interactions through raw creative installations and immersive experiences.');
+  const labCapabilities = useThemeContent('lab.capabilities', 'Performances|Installations|Exhibitions|Workshops').split('|').map((item) => item.trim()).filter(Boolean);
+  const syncTitle = useThemeContent('sync.title', 'Get in Touch');
+  const syncDescription = useThemeContent('sync.description', 'Our autumn season is live. Submit your details to access exclusive events and early-bird offers.');
+  const syncCta = useThemeContent('sync.cta_label', 'Explore Events');
 
   useEffect(() => {
     async function loadEvents() {
@@ -95,9 +95,9 @@ export default function Page() {
 
       {/* Pulse HUD Grid */}
       <section className="evc-section evc-hud-section" aria-label="Pulse Monitoring Dashboard">
-          <PulseHUD label="ACTIVE_RESONANCE_NODES" value="84" />
-          <PulseHUD label="TOTAL_MUTED_SATELLITES" value="1,240" />
-          <PulseHUD label="FABRICATION_STABILITY" value="99.98%" />
+          <PulseHUD label="Active Events" value="84" />
+          <PulseHUD label="Community Members" value="1,240" />
+          <PulseHUD label="Satisfaction Rate" value="99.98%" />
       </section>
 
       {/* Artisan Registry Section */}
@@ -133,9 +133,9 @@ export default function Page() {
               ))
             ) : events.length === 0 ? (
               <div className="evc-listing-state">
-                <div className="evc-listing-kicker">Empty Event Registry</div>
+                <div className="evc-listing-kicker">No Events Yet</div>
                 <h3>No live events are published yet.</h3>
-                <p>Add event records in the backend and this registry grid will hydrate automatically.</p>
+                <p>Add event records in the admin panel to populate this registry grid.</p>
               </div>
             ) : (
               events.slice(0, 6).map((event) => {

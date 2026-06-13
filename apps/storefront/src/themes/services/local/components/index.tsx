@@ -15,7 +15,7 @@ export const LocalHeader = ({ onBookService }: { onBookService?: () => void }) =
 
   return (
     <header className="local-header">
-      <a href={themeLink('')} className="local-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <a href={themeLink('/')} className="local-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         <span style={{ fontSize: '1.25rem' }}>🔧</span> HomeFix
       </a>
 
@@ -111,11 +111,13 @@ export const ProviderCard = ({
     </div>
 );
 
-export const LocalFooter = () => (
+export const LocalFooter = () => {
+  const themeLink = useServicesThemeLink();
+  return (
     <footer className="local-footer">
         <div className="local-footer-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <div className="local-logo" style={{ marginBottom: '1rem' }}>🔧 HomeFix</div>
+                <a href={themeLink('/')} className="local-logo" style={{ marginBottom: '1rem', display: 'block', textDecoration: 'none', color: 'inherit' }}>🔧 HomeFix</a>
                 <p style={{ color: 'var(--local-text-muted)', lineHeight: 1.6, fontSize: '0.95rem' }}>
                     Connecting you with trusted local service professionals quickly and safely.
                 </p>
@@ -140,7 +142,8 @@ export const LocalFooter = () => (
             </div>
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem', textAlign: 'center', color: 'var(--local-text-muted)', fontSize: '0.9rem' }}>
-            &copy; 2026 HomeFix Local Services. All rights reserved.
+            © 2026 HomeFix. All rights reserved.
         </div>
     </footer>
-);
+  );
+};

@@ -89,11 +89,11 @@ export default function Page() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>{useThemeContent('sidebar.title', 'Registry Nodes')}</h2>
                 <span className="pm-marker" style={{ position: 'relative', top: 0, left: 0, padding: '0.25rem 0.75rem', fontSize: '0.65rem' }}>
-                  {loadingProperties ? '...' : `${listings.length} ${useThemeContent('sidebar.units_suffix', 'UNITS')}`}
+                  {loadingProperties ? '...' : `${listings.length} ${useThemeContent('sidebar.units_suffix', 'listings')}`}
                 </span>
             </div>
             <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.5rem' }}>
-                {useThemeContent('sidebar.filters', 'FILTER|PRICE|TYPE').split('|').map(btn => (
+                {useThemeContent('sidebar.filters', 'Filter|Price|Type').split('|').map(btn => (
                     <button key={btn} style={{
                         flex: 1,
                         background: 'rgba(255,255,255,0.05)',
@@ -122,9 +122,9 @@ export default function Page() {
             ))
           ) : propertyError ? (
             <div className="prop-listing-state pm-listing-state">
-              <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Property Sync Offline')}</div>
-              <h3>{useThemeContent('offline.title', 'Registry nodes could not be loaded.')}</h3>
-              <p>{propertyError}</p>
+              <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Connection error')}</div>
+              <h3>{useThemeContent('offline.title', 'Properties could not be loaded.')}</h3>
+              <p>Check your API connection and make sure properties are published in the admin.</p>
             </div>
           ) : listings.length === 0 ? (
             <div className="prop-listing-state pm-listing-state">
@@ -142,7 +142,7 @@ export default function Page() {
           {!loadingProperties && !propertyError && listings.length > 0 && (
             <div style={{ textAlign: 'center', padding: '4rem 0', opacity: 0.2 }}>
                 <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⌬</div>
-                <div className="pm-hud-label">{useThemeContent('sidebar.end_label', 'END_OF_REGISTRY')}</div>
+                <div className="pm-hud-label">{useThemeContent('sidebar.end_label', 'End of results')}</div>
             </div>
           )}
         </div>

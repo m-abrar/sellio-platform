@@ -3,19 +3,21 @@ import React from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
 
 export const VoltageFooter = () => {
+    const themeLink = useEventsThemeLink();
     const brandLabel = useThemeContent('header.brand_label', 'PULSE');
     const footerDescription = useThemeContent(
       'footer.description',
-      "The heartbeat of live music. Access the world's most immersive sonic distribution network. Verified high-fidelity experiences.",
+      "The heartbeat of live music. Discover and book the best events in your city and beyond.",
     );
 
     return (
     <footer className="voltage-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '6rem' }}>
             <div>
-                <div className="sonic-logo" style={{ fontSize: '3rem', marginBottom: '3rem' }}>{brandLabel}</div>
+                <a href={themeLink('/')} className="sonic-logo" style={{ fontSize: '3rem', marginBottom: '3rem', display: 'block', textDecoration: 'none', color: 'inherit' }}>{brandLabel}</a>
                 <p style={{ color: '#666', lineHeight: 2, fontSize: '0.95rem' }}>
                     {footerDescription}
                 </p>
@@ -46,7 +48,7 @@ export const VoltageFooter = () => {
             />
         </div>
         <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid var(--sonic-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '3rem' }}>
-            <div style={{ fontSize: '0.7rem', color: '#444', fontWeight: 900, letterSpacing: '2px' }}>© 2026 PULSE EVENTS // SONIC_REGISTRY_V2</div>
+            <div style={{ fontSize: '0.7rem', color: '#444', fontWeight: 900, letterSpacing: '2px' }}>© 2026 PULSE. All rights reserved.</div>
             <MenuNav
               location="social_footer"
               flat

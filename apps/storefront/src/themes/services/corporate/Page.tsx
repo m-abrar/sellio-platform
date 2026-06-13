@@ -140,9 +140,9 @@ export default function Page() {
             ))
           ) : services.length === 0 ? (
             <div className="sc-service-state">
-              <div className="sc-service-kicker">Empty Service Registry</div>
+              <div className="sc-service-kicker">No services yet</div>
               <h3>No live services are published yet.</h3>
-              <p>Add service records in the backend and this corporate grid will hydrate automatically.</p>
+              <p>Add service records in the admin panel and they will appear here automatically.</p>
             </div>
           ) : (
             services.slice(0, 6).map((service, index) => (
@@ -150,7 +150,7 @@ export default function Page() {
                 <div className="icon">{serviceIcons[index % serviceIcons.length]}</div>
                 <h4 style={{ fontFamily: 'var(--sc-font-heading)', fontWeight: 600, color: 'var(--sc-dark)', marginBottom: '1rem', fontSize: '1.25rem' }}>{service.title}</h4>
                 <p style={{ color: 'var(--sc-text-dim)', lineHeight: 1.6, fontSize: '0.95rem' }}>
-                  {service.short_description || service.description || 'A live service record synchronized from the Sellio service catalog.'}
+                  {service.short_description || service.description || 'Browse this service for full details and pricing.'}
                 </p>
                 <div className="sc-service-price">{getServicePriceLabel(service)}</div>
                 <div style={{ fontSize: '0.8rem', color: 'var(--sc-text-dim)', marginTop: '0.75rem' }}>

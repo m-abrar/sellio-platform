@@ -8,15 +8,17 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useRentalThemeLink } from '../hooks/useRentalThemeLink';
 
 export const RentalHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useRentalThemeLink();
 
   return (
     <header className="pr-header">
-      <div className="pr-logo" aria-label="RentEase home">
+      <a href={themeLink('/')} className="pr-logo" aria-label="RentEase home">
         Rent<span className="pr-logo__mark">Ease</span>
-      </div>
+      </a>
 
       <button
         className={`pr-hamburger ${isOpen ? 'pr-hamburger-open' : ''}`}
@@ -165,13 +167,15 @@ export const TrustMetrics = ({ value, label }: { value: string; label: string })
   </div>
 );
 
-export const TenantFooter = () => (
+export const TenantFooter = () => {
+  const themeLink = useRentalThemeLink();
+  return (
   <footer className="pr-footer">
     <div className="pr-footer-grid">
       <div>
-        <div className="pr-logo pr-logo--footer">
+        <a href={themeLink('/')} className="pr-logo pr-logo--footer">
           Rent<span className="pr-logo__mark">Ease</span>
-        </div>
+        </a>
         <p className="pr-footer__tagline">
           Monthly rentals made simple — verified listings, transparent pricing, and digital lease
           tools built for tenants and landlords who lease month to month.
@@ -209,4 +213,5 @@ export const TenantFooter = () => (
       </div>
     </div>
   </footer>
-);
+  );
+};

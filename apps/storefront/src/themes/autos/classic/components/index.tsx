@@ -5,16 +5,18 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 
 export const ClassicHeader = () => {
     const [isOpen, setIsOpen] = React.useState(false);
+    const themeLink = useAutosThemeLink();
     const brandLabel = useThemeContent('header.brand_label', 'CLASSIC MOTORS');
     const [brandPrimary, ...brandRest] = brandLabel.split(' ');
     const brandSecondary = brandRest.join(' ');
 
     return (
         <header className="ac-header">
-            <a href="#" className="ac-logo">
+            <a href={themeLink('/')} className="ac-logo">
                 <span style={{ color: 'var(--ac-primary)' }}>{brandPrimary}</span> <span style={{ color: 'var(--ac-dark)' }}>{brandSecondary}</span>
             </a>
             
@@ -78,7 +80,9 @@ interface AuctionCardProps {
     image: string;
 }
 
-export const AuctionCard = ({ title, desc, currentBid, timeRemaining, image }: AuctionCardProps) => (
+export const AuctionCard = ({ title, desc, currentBid, timeRemaining, image }: AuctionCardProps) => {
+    const themeLink = useAutosThemeLink();
+    return (
     <div className="ac-auction-card">
         <img src={image} className="ac-car-img" alt={title} style={{ height: '300px' }} />
         <div style={{ padding: '2rem' }}>
@@ -86,12 +90,14 @@ export const AuctionCard = ({ title, desc, currentBid, timeRemaining, image }: A
             <p style={{ textTransform: 'uppercase', marginBottom: '1rem', opacity: 0.8 }}>{desc}</p>
             <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Current Bid: <span style={{ color: '#ffc107', fontWeight: 600 }}>{currentBid}</span></p>
             <div className="ac-countdown">{timeRemaining}</div>
-            <a href="#" className="ac-btn ac-btn-gold" style={{ width: '75%', marginTop: '1rem' }}>Place Bid Now</a>
+            <a href={themeLink('/explore')} className="ac-btn ac-btn-gold" style={{ width: '75%', marginTop: '1rem' }}>Place Bid Now</a>
         </div>
     </div>
-);
+    );
+};
 
 export const ClassicFooter = () => {
+    const themeLink = useAutosThemeLink();
     const brandLabel = useThemeContent('header.brand_label', 'CLASSIC MOTORS');
     const footerDescription = useThemeContent(
         'footer.description',
@@ -107,7 +113,7 @@ export const ClassicFooter = () => {
     <footer className="ac-footer">
         <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <a className="ac-logo" href="#" style={{ display: 'block', marginBottom: '1.5rem' }}>
+                <a className="ac-logo" href={themeLink('/')} style={{ display: 'block', marginBottom: '1.5rem' }}>
                     <span style={{ color: 'var(--ac-secondary)' }}>{brandPrimary}</span> <span style={{ color: 'var(--ac-light)' }}>{brandSecondary}</span>
                 </a>
                 <p style={{ fontSize: '0.9rem', lineHeight: 1.6, opacity: 0.8 }}>{footerDescription}</p>

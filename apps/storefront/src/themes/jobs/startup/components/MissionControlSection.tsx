@@ -4,16 +4,16 @@ import React from 'react';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 export const MissionControlSection = () => {
-    const eyebrow = useThemeContent('mission.eyebrow', 'MISSION_CONTROL');
+    const eyebrow = useThemeContent('mission.eyebrow', 'Our Mission');
     const title = useThemeContent('mission.title', 'Operational\nExcellence.');
     const description = useThemeContent(
       'mission.description',
-      'Every startup node in our network is verified for mission-readiness. We track real-time funding status, equity structures, and team logic to ensure you join only the highest-fidelity high-growth opportunities.'
+      'Every startup in our network is vetted for growth potential. We surface funding status, equity structures, and team culture so you can confidently choose your next opportunity.'
     );
     const metricOneValue = useThemeContent('mission.metric_1_value', '$4.2B');
-    const metricOneLabel = useThemeContent('mission.metric_1_label', 'TOTAL_VC_LIQUIDITY');
+    const metricOneLabel = useThemeContent('mission.metric_1_label', 'VC Funding Tracked');
     const metricTwoValue = useThemeContent('mission.metric_2_value', '12.4%');
-    const metricTwoLabel = useThemeContent('mission.metric_2_label', 'AVG_EQUITY_POOL');
+    const metricTwoLabel = useThemeContent('mission.metric_2_label', 'Avg. Equity Offered');
     const image = useThemeMedia('mission.image', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072');
 
     return (

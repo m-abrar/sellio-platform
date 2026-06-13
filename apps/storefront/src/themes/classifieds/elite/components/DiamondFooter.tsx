@@ -2,14 +2,17 @@
 'use client';
 import React from 'react';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 
-export const DiamondFooter = () => (
+export const DiamondFooter = () => {
+    const themeLink = useClassifiedsThemeLink();
+    return (
     <footer className="diamond-footer">
         <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4rem' }}>
             <div>
-                <div className="elite-logo" style={{ marginBottom: '2rem' }}>SELLIO_ELITE</div>
+                <a href={themeLink('/')} className="elite-logo" style={{ marginBottom: '2rem', textDecoration: 'none', color: 'inherit' }}>SELLIO<span>_ELITE</span></a>
                 <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: 1.8 }}>
-                    The world's most exclusive marketplace for high-value assets. Curated by experts, trusted by collectors.
+                    A boutique marketplace for high-value curated assets, verified by expert appraisers and trusted by collectors worldwide.
                 </p>
             </div>
             <FooterMenuColumn
@@ -38,8 +41,9 @@ export const DiamondFooter = () => (
             />
         </div>
         <div style={{ maxWidth: '1400px', margin: '8rem auto 0 auto', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#333' }}>
-            <span>© 2026 SELLIO_ELITE_HOLDINGS. ALL RIGHTS RESERVED.</span>
-            <span>PRIVACY_PROTECTED_NODE</span>
+            <span>© 2026 Sellio. All rights reserved.</span>
+            <span>🔒 Secure & Verified Marketplace</span>
         </div>
     </footer>
-);
+    );
+};

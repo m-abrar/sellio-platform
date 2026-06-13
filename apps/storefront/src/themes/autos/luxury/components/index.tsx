@@ -86,6 +86,7 @@ export const LuxuryCarCard = ({ title, specs, price, image, slug }: LuxuryCarCar
 };
 
 export const LuxuryFooter = () => {
+  const themeLink = useAutosThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'Velvet Wheels');
   const footerDescription = useThemeContent(
     'footer.description',
@@ -103,9 +104,9 @@ export const LuxuryFooter = () => {
         }}
       >
         <div>
-          <h4 className="lx-logo" style={{ marginBottom: '1rem', display: 'block' }}>
+          <a href={themeLink('/')} className="lx-logo" style={{ marginBottom: '1rem', display: 'block', textDecoration: 'none', color: 'inherit' }}>
             {brandLabel}
-          </h4>
+          </a>
           <p style={{ color: 'var(--lx-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>
             {footerDescription}
           </p>
@@ -138,7 +139,7 @@ export const LuxuryFooter = () => {
           fontSize: '0.85rem',
         }}
       >
-        &copy; 2026 Velvet Wheels. All Rights Reserved.
+        © 2026 Velvet Wheels. All rights reserved.
       </div>
     </footer>
   );

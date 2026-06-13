@@ -29,9 +29,9 @@ export default function Page() {
   const sortRecentLabel = useThemeContent('collection.sort_recent_label', 'Sort by: Most Recent');
   const sortSalaryLabel = useThemeContent('collection.sort_salary_label', 'Sort by: Salary (High to Low)');
   const loadMoreLabel = useThemeContent('collection.load_more_label', 'Load More Results');
-  const emptyKicker = useThemeContent('empty.kicker', 'Empty Job Registry');
+  const emptyKicker = useThemeContent('empty.kicker', 'No roles yet');
   const emptyTitle = useThemeContent('empty.title', 'No live jobs are published yet.');
-  const emptyDescription = useThemeContent('empty.description', 'Add job records in the backend and this corporate listing will hydrate automatically.');
+  const emptyDescription = useThemeContent('empty.description', 'Add job records in the admin panel and they will appear here automatically.');
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
   const [useFallback, setUseFallback] = useState(false);

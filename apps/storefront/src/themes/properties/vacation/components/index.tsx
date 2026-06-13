@@ -4,15 +4,17 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 export const VacationHeader = () => {
+  const themeLink = usePropertyThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="pv-header">
-      <div className="pv-logo">
+      <a href={themeLink('/')} className="pv-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         ESCAPE<span style={{ color: 'var(--pv-coral)' }}>Node</span>
-      </div>
+      </a>
       
       <button 
           className={`pv-hamburger ${isOpen ? 'pv-hamburger-open' : ''}`} 
@@ -64,13 +66,13 @@ export const RetreatBentoCard = ({ title, location, price, rating, image, onClic
       </div>
     </div>
     <div style={{ padding: '3rem' }}>
-        <div className="pv-mono" style={{ marginBottom: '1rem', color: 'var(--pv-sand)' }}>AUTHENTICATED RETREAT</div>
+        <div className="pv-mono" style={{ marginBottom: '1rem', color: 'var(--pv-sand)' }}>Verified Retreat</div>
         <h3 style={{ fontFamily: 'var(--pv-font-serif)', fontSize: '2rem', fontWeight: 900, marginBottom: '0.5rem', lineHeight: 1.2 }}>{title}</h3>
         <div style={{ fontSize: '0.9rem', color: 'var(--pv-text-muted)', marginBottom: '3rem' }}>{location}</div>
         
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--pv-border)', paddingTop: '2.5rem' }}>
             <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--pv-azure)' }}>{price}<span style={{ fontSize: '0.9rem', color: 'var(--pv-text-muted)', fontWeight: 600 }}>/night</span></div>
-            <div style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '2px', color: 'var(--pv-coral)' }} className="pv-card-cta">SECURE BOOKING →</div>
+            <div style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '2px', color: 'var(--pv-coral)' }} className="pv-card-cta">Book Now →</div>
         </div>
     </div>
   </div>
@@ -84,13 +86,15 @@ export const ExperienceStats = ({ value, label }: { value: string, label: string
     </div>
 );
 
-export const EscapeFooter = () => (
+export const EscapeFooter = () => {
+  const themeLink = usePropertyThemeLink();
+  return (
     <footer className="pv-footer">
         <div className="pv-footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '8rem' }}>
             <div>
-                <div className="pv-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem' }}>ESCAPENODE</div>
+                <a href={themeLink('/')} className="pv-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem', textDecoration: 'none' }}>ESCAPENODE</a>
                 <p style={{ opacity: 0.5, lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px' }}>
-                    A high-fidelity vacation registry designed for the global traveler. Synchronizing authentic retreats with local expertise.
+                    Discover the world's finest vacation retreats, verified by local experts and curated for discerning travelers.
                 </p>
             </div>
             <FooterMenuColumn
@@ -113,7 +117,7 @@ export const EscapeFooter = () => (
             />
         </div>
         <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="pv-footer-bottom">
-            <div className="pv-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_VACATION_OS // HORIZON_SYNC_STABLE</div>
+            <div className="pv-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
             <div style={{ display: 'flex', gap: '4rem' }} className="pv-footer-socials">
                 <MenuNav
                     location="social_footer"
@@ -128,4 +132,5 @@ export const EscapeFooter = () => (
             </div>
         </div>
     </footer>
-);
+  );
+};

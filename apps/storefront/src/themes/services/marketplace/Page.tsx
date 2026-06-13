@@ -376,7 +376,7 @@ export default function Page() {
           ) : (
             <div className="sm-empty-state" role="status">
               <h3>No categories published yet.</h3>
-              <p>Category filters will appear once services are synced from the backend.</p>
+              <p>Category filters will appear once services are added in the admin panel.</p>
             </div>
           )}
         </div>

@@ -4,15 +4,17 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export const LegacyHeader = () => {
+  const themeLink = useUnifiedThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="uc-header">
-      <div className="uc-logo">
+      <a href={themeLink('/')} className="uc-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         THE<span style={{ color: 'var(--uc-gold)' }}>LEGACY</span>NODE
-      </div>
+      </a>
       
       <button 
           className={`uc-hamburger ${isOpen ? 'uc-hamburger-open' : ''}`} 
@@ -71,15 +73,15 @@ const HeritageCard = ({ num, title, description }: HeritageCardProps) => (
 
 export const HeritageGrid = () => {
     const records = [
-        { num: "01", title: "Institutional Legacy", description: "A high-fidelity foundation established through decades of multi-vertical distribution excellence." },
-        { num: "02", title: "Verifiable Provenance", description: "Every asset in the legacy registry is verified for its historical integrity and functional legacy." },
-        { num: "03", title: "Global Authority", description: "Synchronizing global commerce nodes through the world's most trusted structural protocol." },
+        { num: "01", title: "Trusted Foundation", description: "A marketplace built through decades of multi-vertical commerce experience and proven reliability." },
+        { num: "02", title: "Verified Listings", description: "Every product in this catalog is verified for accuracy, quality, and seller legitimacy." },
+        { num: "03", title: "Global Reach", description: "Serving buyers and sellers worldwide through a trusted, consistently reliable marketplace platform." },
     ];
 
     return (
         <section className="uc-heritage-grid" id="uc-heritage-registry">
             <div style={{ textAlign: 'center', marginBottom: '8rem' }} className="uc-grid-header">
-                <span className="uc-mono" style={{ color: 'var(--uc-gold)' }}>ESTABLISHED_1996</span>
+                <span className="uc-mono" style={{ color: 'var(--uc-gold)' }}>Established 1996</span>
                 <h2 style={{ fontFamily: 'var(--uc-font-heading)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', fontWeight: 900, color: 'var(--uc-burgundy)', marginTop: '2rem' }}>The Registry of <br/>Excellence.</h2>
             </div>
             <div className="uc-heritage-grid-container">
@@ -91,21 +93,23 @@ export const HeritageGrid = () => {
 
 export const ChronicleBar = () => (
     <div className="uc-chronicle-bar">
-        <span>★ CORE LEGACY HANDSHAKE PROTOCOL ENFORCED // SECURE STABLE</span>
+        <span>★ PLATFORM STATUS: ONLINE // SECURE &amp; STABLE</span>
         <span className="uc-chronicle-separator">{'//'}</span>
-        <span>PROVENANCE TRUST METRIC: 100% SECURE INTEGRATION</span>
+        <span>VERIFIED LISTINGS: 100% QUALITY CHECKED</span>
         <span className="uc-chronicle-separator">{'//'}</span>
-        <span>VERIFIABLE ARCHIVE STABILITY: v8.4.1</span>
+        <span>FAST LOAD TIMES &lt;8ms RESPONSE</span>
     </div>
 );
 
-export const AncestralFooter = () => (
+export const AncestralFooter = () => {
+    const themeLink = useUnifiedThemeLink();
+    return (
     <footer className="uc-ancestral-footer">
         <div className="uc-footer-grid">
             <div>
-                <div className="uc-logo" style={{ color: 'white', fontSize: '2.2rem', marginBottom: '3rem' }}>THELEGACYNODE</div>
+                <a href={themeLink('/')} className="uc-logo" style={{ color: 'white', fontSize: '2.2rem', marginBottom: '3rem', textDecoration: 'none' }}>THELEGACYNODE</a>
                 <p style={{ opacity: 0.5, lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px' }}>
-                    A high-fidelity foundational registry for global commerce. Blending traditional authority with modern secure protocols.
+                    A trusted multi-category marketplace platform built on decades of commerce experience and global reliability.
                 </p>
             </div>
             <FooterMenuColumn
@@ -128,7 +132,7 @@ export const AncestralFooter = () => (
             />
         </div>
         <div className="uc-footer-bottom">
-            <div className="uc-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_LEGACY_OS // HORIZON_SYNC_STABLE</div>
+            <div className="uc-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
             <div className="uc-footer-socials">
                 <MenuNav
                     location="social_footer"
@@ -143,4 +147,5 @@ export const AncestralFooter = () => (
             </div>
         </div>
     </footer>
-);
+    );
+};

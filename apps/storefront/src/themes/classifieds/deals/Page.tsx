@@ -1,6 +1,5 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { ClassifiedListing } from '@sellio/types';
 import { DealsHeader, DealCard, DealsFooter, CountdownTimer } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
@@ -36,7 +35,6 @@ const DealCardSkeleton = () => (
 );
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
   const trendingTagLabel = useThemeContent('trending.tag_label', 'Trending Deal Highlight');
@@ -204,7 +202,7 @@ export default function Page() {
   };
 
   const handleCardClick = (slug: string) => {
-    router.push(themeLink(`/product/${slug}`));
+    window.location.href = themeLink(`/product/${slug}`);
   };
 
   const scrollToDealsGrid = () => {
@@ -269,19 +267,13 @@ export default function Page() {
                     </div>
                   </div>
 
-                  <button 
-                    className="cd-btn-post" 
-                    style={{ padding: '0.9rem 2.5rem', fontSize: '1.05rem', boxShadow: '0 8px 24px rgba(231, 29, 54, 0.3)' }}
-                    onClick={() => {
-                      // Navigate to corresponding item details page
-                      const matchingSlug = slide.category === 'electronics' 
-                        ? (slide.title.includes('MacBook') ? 'apple-watch-series-8-gps-41mm' : 'sony-wh-1000xm5-headphones')
-                        : 'sony-wh-1000xm5-headphones';
-                      router.push(themeLink(`/product/${matchingSlug}`));
-                    }}
+                  <a
+                    href={themeLink('/explore')}
+                    className="cd-btn-post"
+                    style={{ padding: '0.9rem 2.5rem', fontSize: '1.05rem', boxShadow: '0 8px 24px rgba(231, 29, 54, 0.3)', textDecoration: 'none', display: 'inline-block' }}
                   >
                     {slide.buttonLabel}
-                  </button>
+                  </a>
                 </div>
 
                 <div className="cd-hero-image-wrap d-none d-lg-flex">

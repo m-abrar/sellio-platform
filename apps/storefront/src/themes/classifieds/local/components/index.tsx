@@ -4,6 +4,7 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 
 interface HeaderProps {
   onPostClick: () => void;
@@ -89,11 +90,13 @@ export const LocalCard = ({ title, price, distance, neighborhood, image, sellerI
   </div>
 );
 
-export const LocalFooter = () => (
+export const LocalFooter = () => {
+  const themeLink = useClassifiedsThemeLink();
+  return (
   <footer className="cl-footer">
     <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem', marginBottom: '2rem' }}>
       <div style={{ maxWidth: '320px' }}>
-        <a href="#" className="cl-logo" style={{ marginBottom: '1rem' }} onClick={(e) => e.preventDefault()}>
+        <a href={themeLink('/')} className="cl-logo" style={{ marginBottom: '1rem' }}>
           <span className="cl-logo-icon">🌿</span> NeighborHood
         </a>
         <p style={{ color: 'var(--cl-text-muted)', fontSize: '0.85rem', fontWeight: 500, lineHeight: 1.6 }}>
@@ -118,7 +121,8 @@ export const LocalFooter = () => (
       </div>
     </div>
     <div style={{ borderTop: '2px dashed var(--cl-border)', paddingTop: '1.5rem', textAlign: 'center', fontWeight: 700, fontSize: '0.8rem', color: 'var(--cl-text-muted)' }}>
-      &copy; 2026 NeighborHood Network. Built for Envato Elite Standards.
+      &copy; 2026 Sellio. All rights reserved.
     </div>
   </footer>
-);
+  );
+};

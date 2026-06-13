@@ -148,9 +148,9 @@ export default function Page() {
                 ))
               ) : jobs.length === 0 ? (
                 <div className="jm-listing-state">
-                  <div className="jm-listing-kicker">Empty Job Registry</div>
+                  <div className="jm-listing-kicker">No roles yet</div>
                   <h3>No live jobs are published yet.</h3>
-                  <p>Browse the explore page or add job records in the backend to hydrate this grid.</p>
+                  <p>Browse the explore page or add job records in the admin panel and they will appear here automatically.</p>
                   <a href={themeLink('/explore')} className="jm-btn jm-btn-primary" style={{ marginTop: '1.5rem', display: 'inline-block', textDecoration: 'none' }}>Explore roles</a>
                 </div>
               ) : (

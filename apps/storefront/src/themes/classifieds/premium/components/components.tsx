@@ -5,6 +5,7 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 
 interface HeaderProps {
   homeHref?: string;
@@ -78,25 +79,27 @@ export const PremiumCard = ({ title, price, description, location, image, isVeri
         </div>
         
         <button className="cp-btn-details" onClick={onViewDetails}>
-          View Memorandum & Details
+          View Details
         </button>
       </div>
     </div>
   );
 };
 
-export const PremiumFooter = () => (
+export const PremiumFooter = () => {
+  const themeLink = useClassifiedsThemeLink();
+  return (
   <footer className="cp-footer">
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
       <div>
-        <a href="#" className="cp-logo" style={{ color: 'var(--cp-navy)', marginBottom: '1.25rem' }} onClick={(e) => e.preventDefault()}>
+        <a href={themeLink('/')} className="cp-logo" style={{ color: 'var(--cp-navy)', marginBottom: '1.25rem' }}>
           Sellio<span>Premium</span>
         </a>
         <p style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: 1.6 }}>
-          The premier boutique marketplace connecting serious, high-net-worth investors with established business acquisitions, franchises, and digital SaaS properties.
+          A premium classified marketplace for high-value listings including established businesses, commercial properties, and curated items.
         </p>
       </div>
-      
+
       <FooterMenuColumn
         location="footer_column_1"
         titleTag="h4"
@@ -119,13 +122,13 @@ export const PremiumFooter = () => (
         linkClassName="cp-footer-link"
       />
     </div>
-    
-    <div style={{ borderTop: '1.5px solid var(--cp-border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 500 }}>
-      <span>&copy; 2026 Sellio Premium Holdings Ltd. Vetted Network. All rights reserved.</span>
-      <span>🔒 Escrow Secured Node &bull; Elite Sovereign Standards</span>
+
+    <div style={{ borderTop: '1.5px solid var(--cp-border)', paddingTop: '1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 500 }}>
+      <span>&copy; 2026 Sellio. All rights reserved.</span>
     </div>
   </footer>
-);
+  );
+};
 
 // Obsolete compatibility placeholders
 export const CuratedListingCard = () => null;

@@ -5,8 +5,10 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 export const Header = () => {
+  const themeLink = usePropertyThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -18,9 +20,9 @@ export const Header = () => {
 
   return (
     <header className="pl-header">
-      <div className="pl-logo">
+      <a href={themeLink('/')} className="pl-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         PLATINUM<span style={{ color: 'var(--pl-gold)' }}>Registry</span>
-      </div>
+      </a>
 
       {isOpen && (
         <button
@@ -79,7 +81,7 @@ export const ShowcaseCard = ({ title, price, image }: {
       <div className="pl-bento-overlay-row">
         <div className="pl-bento-overlay-copy">
           <h3>{title}</h3>
-          <div className="pl-mono pl-bento-tag">CERTIFIED_ACQUISITION</div>
+          <div className="pl-mono pl-bento-tag">Verified</div>
         </div>
         <div className="pl-bento-price">{price}</div>
       </div>
@@ -94,13 +96,15 @@ export const StatisticsNode = ({ label, value }: { label: string; value: string 
   </div>
 );
 
-export const Footer = () => (
+export const Footer = () => {
+  const themeLink = usePropertyThemeLink();
+  return (
   <footer className="pl-footer">
     <div className="pl-footer-grid">
       <div>
-        <div className="pl-logo pl-footer-logo">PLATINUM</div>
+        <a href={themeLink('/')} className="pl-logo pl-footer-logo" style={{ textDecoration: 'none', color: 'inherit' }}>PLATINUM</a>
         <p className="pl-footer-copy">
-          The world's most exclusive distribution network for ultra-high-fidelity private estates.
+          The world's most exclusive collection of private estates, verified for architectural excellence.
         </p>
       </div>
       <FooterMenuColumn
@@ -123,7 +127,7 @@ export const Footer = () => (
       />
     </div>
     <div className="pl-footer-bottom">
-      <div className="pl-mono pl-footer-copyright">© 2026 SELLIO_PLATINUM_GRP // NODE_STABLE</div>
+      <div className="pl-mono pl-footer-copyright">© 2026 Sellio. All rights reserved.</div>
       <MenuNav
         location="social_footer"
         flat
@@ -137,4 +141,5 @@ export const Footer = () => (
       />
     </div>
   </footer>
-);
+  );
+};

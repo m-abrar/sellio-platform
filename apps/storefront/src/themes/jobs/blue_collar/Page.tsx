@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import type { JobListing } from '@sellio/types';
 import { BlueCollarHeader, BlueCollarJobCard, BlueCollarFooter } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
@@ -12,7 +11,6 @@ import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllo
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useJobsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
@@ -59,11 +57,6 @@ export default function Page() {
     loadJobs();
   }, [allowDemo]);
 
-  const goToExplore = (query?: string) => {
-    const path = query ? `/explore?q=${encodeURIComponent(query)}` : '/explore';
-    router.push(themeLink(path));
-  };
-
   return (
     <div className="jobs-blue-collar-wrapper">
       <BlueCollarHeader />
@@ -82,10 +75,10 @@ export default function Page() {
             <p className="jbc-hero-subtitle">{heroDescription}</p>
 
             <div className="jbc-search-box" aria-label="Search Filter Bar">
-                <input type="text" className="jbc-search-input" placeholder="Job Title or Trade (e.g., Welder)" aria-label="Trade Search Input" readOnly onFocus={() => goToExplore()} />
+                <input type="text" className="jbc-search-input" placeholder="Job Title or Trade (e.g., Welder)" aria-label="Trade Search Input" readOnly onFocus={() => { window.location.href = themeLink('/explore'); }} />
                 <div className="jbc-search-divider"></div>
-                <input type="text" className="jbc-search-input" placeholder="City or ZIP Code" aria-label="City Search Input" readOnly onFocus={() => goToExplore()} />
-                <button type="button" className="jbc-btn jbc-btn-primary" style={{ border: 'none', margin: '4px' }} onClick={() => goToExplore()}>Search</button>
+                <input type="text" className="jbc-search-input" placeholder="City or ZIP Code" aria-label="City Search Input" readOnly onFocus={() => { window.location.href = themeLink('/explore'); }} />
+                <a href={themeLink('/explore')} className="jbc-btn jbc-btn-primary" style={{ border: 'none', margin: '4px', textDecoration: 'none' }}>Search</a>
             </div>
         </div>
       </section>
@@ -102,7 +95,7 @@ export default function Page() {
       <section className="jbc-section" id="jobs" aria-labelledby="jbc-jobs-title">
           <div className="jbc-jobs-header">
               <h2 className="jbc-section-title" id="jbc-jobs-title" style={{ marginBottom: 0 }}>{jobsTitle}</h2>
-              <select className="jbc-sort-select" aria-label="Sort Jobs Select" defaultValue="recent" onChange={() => goToExplore()}>
+              <select className="jbc-sort-select" aria-label="Sort Jobs Select" defaultValue="recent" onChange={() => { window.location.href = themeLink('/explore'); }}>
                   <option value="recent">Most Recent</option>
                   <option value="wage">Highest Wage</option>
                   <option value="closest">Closest to Me</option>
@@ -131,10 +124,10 @@ export default function Page() {
                 ))
               ) : jobs.length === 0 ? (
                 <div className="jbc-listing-state">
-                  <div className="jbc-listing-kicker">Empty Job Registry</div>
+                  <div className="jbc-listing-kicker">No Jobs Yet</div>
                   <h3>No live jobs are published yet.</h3>
-                  <p>Browse the explore page or add job records in the backend to hydrate this grid.</p>
-                  <button type="button" className="jbc-btn jbc-btn-primary" style={{ marginTop: '1.5rem' }} onClick={() => goToExplore()}>Explore jobs</button>
+                  <p>Browse the explore page or add job records in the admin panel to populate this grid.</p>
+                  <a href={themeLink('/explore')} className="jbc-btn jbc-btn-primary" style={{ marginTop: '1.5rem', textDecoration: 'none', display: 'inline-block' }}>Explore jobs</a>
                 </div>
               ) : (
                 jobs.slice(0, 6).map((job) => {
@@ -149,14 +142,14 @@ export default function Page() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-              <button type="button" className="jbc-btn jbc-btn-secondary" onClick={() => goToExplore()}>{jobsLoadMore}</button>
+              <a href={themeLink('/explore')} className="jbc-btn jbc-btn-secondary" style={{ textDecoration: 'none' }}>{jobsLoadMore}</a>
           </div>
       </section>
 
       <section className="jbc-cta" id="jbc-employers-section">
           <h2>{ctaTitle}</h2>
           <p style={{ fontSize: '1.2rem', marginBottom: '2rem', fontWeight: 500 }}>{ctaDescription}</p>
-          <button type="button" className="jbc-btn jbc-btn-primary" style={{ fontSize: '1.25rem', padding: '1rem 3rem' }} onClick={() => goToExplore()}>{ctaButton}</button>
+          <a href={themeLink('/explore')} className="jbc-btn jbc-btn-primary" style={{ fontSize: '1.25rem', padding: '1rem 3rem', textDecoration: 'none' }}>{ctaButton}</a>
       </section>
 
       <BlueCollarFooter />

@@ -8,7 +8,7 @@ type CatalogRegistryAlertProps = {
 };
 
 export function CatalogRegistryAlert({ variant, error }: CatalogRegistryAlertProps) {
-  const isDemo = variant === 'demo';
+  if (variant === 'demo') return null;
 
   return (
     <div
@@ -16,7 +16,7 @@ export function CatalogRegistryAlert({ variant, error }: CatalogRegistryAlertPro
       style={{
         background: 'var(--pc-white)',
         border: '1px solid var(--pc-border)',
-        borderLeft: `4px solid ${isDemo ? 'var(--pc-accent)' : 'var(--pc-teal)'}`,
+        borderLeft: '4px solid var(--pc-teal)',
         boxShadow: '0 20px 40px rgba(var(--pc-teal-rgb), 0.02)',
         display: 'flex',
         flexDirection: 'column',
@@ -29,22 +29,20 @@ export function CatalogRegistryAlert({ variant, error }: CatalogRegistryAlertPro
             width: '8px',
             height: '8px',
             borderRadius: '50%',
-            background: isDemo ? 'var(--pc-accent)' : 'var(--pc-teal)',
+            background: 'var(--pc-teal)',
             display: 'inline-block',
           }}
         />
-        <span className="pc-caps" style={{ color: isDemo ? 'var(--pc-accent)' : 'var(--pc-teal)', fontSize: '0.7rem' }}>
-          {isDemo ? 'Demo Catalogue // Preview Mode' : 'Registry Unavailable // Production'}
+        <span className="pc-caps" style={{ color: 'var(--pc-teal)', fontSize: '0.7rem' }}>
+          Unable to Load Properties
         </span>
       </div>
       <div>
         <h3 className="pc-serif" style={{ fontSize: '1.5rem', color: 'var(--pc-teal)', margin: '0 0 0.5rem 0', fontWeight: 700 }}>
-          {isDemo ? 'Showing Sample Heritage Listings' : 'Unable to Load Listings from Registry'}
+          Properties Could Not Be Loaded
         </h3>
         <p style={{ color: 'var(--pc-text-muted)', fontSize: '0.9rem', margin: 0, lineHeight: 1.7 }}>
-          {isDemo
-            ? 'The live property API is unavailable. Sample estates from the theme demo pack are shown so preview and local setup still work.'
-            : 'Listings are not shown because the storefront could not reach your Sellio database. Run migrations and seeders, confirm the API URL, and publish properties in the admin.'}
+          The storefront could not reach your Sellio database. Run migrations and seeders, confirm the API URL, and publish properties in the admin panel.
         </p>
       </div>
       <div
@@ -59,7 +57,7 @@ export function CatalogRegistryAlert({ variant, error }: CatalogRegistryAlertPro
           whiteSpace: 'pre-wrap',
         }}
       >
-        System Diagnostic: {error}
+        {error}
       </div>
     </div>
   );

@@ -12,12 +12,12 @@ import { useThemeContent, useThemeMedia } from '@/components/theme-content/Theme
 const HERO_IMAGE = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80';
  
 const FALLBACK_ASSETS = [
-  { id: 'ASSET-9921', rawId: 1, title: 'One Skyline Plaza', type: 'PRIME_OFFICE', area: '142,000 SQFT', status: 'AVAILABLE', slug: 'one-skyline-plaza', location: 'New York, NY', description: 'Authoritative architectural node in the Downtown Core. Features premium steel framing, high-density server vaults, and private rooftop logistics helipads.' },
-  { id: 'ASSET-4412', rawId: 2, title: 'TechPark Hub', type: 'MIXED_USE', area: '85,000 SQFT', status: 'LEASING', slug: 'techpark-hub', location: 'San Francisco, CA', description: 'Bespoke engineering incubator configured with modular open floors, advanced fiber optical routing hubs, and collaborative courtyard specifications.' },
-  { id: 'ASSET-1022', rawId: 3, title: 'Portside Logistics Center', type: 'INDUSTRIAL', area: '250,000 SQFT', status: 'AVAILABLE', slug: 'portside-logistics-center', location: 'Houston, TX', description: 'Premium class-A global distribution hub boasting automated bay entries, 36-foot clearance ceilings, and robust intermodal transport routing protocols.' },
-  { id: 'ASSET-3381', rawId: 4, title: 'The Atrium HQ', type: 'OFFICE_CAMPUS', area: '110,000 SQFT', status: 'OCCUPIED', slug: 'the-atrium-hq', location: 'Seattle, WA', description: 'High-yield suburban business headquarters enveloped by triple-pane energy glass facades, custom botanical atrium lungs, and subterranean EV storage clusters.' },
-  { id: 'ASSET-7756', rawId: 5, title: 'Westside Retail Mall', type: 'RETAIL_CENTER', area: '200,000 SQFT', status: 'AVAILABLE', slug: 'westside-retail-mall', location: 'Los Angeles, CA', description: 'Premier lifestyle center with high foot-traffic indices, state-of-the-art visual staging arenas, and versatile commercial zoning permits.' },
-  { id: 'ASSET-8821', rawId: 6, title: 'DataVault Station', type: 'DATA_CENTER', area: '45,000 SQFT', status: 'PRIVATE_SALE', slug: 'datavault-station', location: 'Ashburn, VA', description: 'Tier-IV mission-critical secure vault node configured with modular cooling towers, secondary generator backups, and biometric security boundaries.' },
+  { id: 'ASSET-9921', rawId: 1, title: 'One Skyline Plaza', type: 'PRIME_OFFICE', area: '142,000 SQFT', status: 'AVAILABLE', slug: 'one-skyline-plaza', location: 'New York, NY', description: 'Class-A office tower in the Downtown Core. Features premium steel framing, high-density networking infrastructure, and private rooftop access.' },
+  { id: 'ASSET-4412', rawId: 2, title: 'TechPark Hub', type: 'MIXED_USE', area: '85,000 SQFT', status: 'LEASING', slug: 'techpark-hub', location: 'San Francisco, CA', description: 'Modern engineering campus with modular open floors, advanced connectivity infrastructure, and collaborative courtyard spaces.' },
+  { id: 'ASSET-1022', rawId: 3, title: 'Portside Logistics Center', type: 'INDUSTRIAL', area: '250,000 SQFT', status: 'AVAILABLE', slug: 'portside-logistics-center', location: 'Houston, TX', description: 'Premium class-A logistics facility with automated bay entries, 36-foot clearance ceilings, and robust transport access.' },
+  { id: 'ASSET-3381', rawId: 4, title: 'The Atrium HQ', type: 'OFFICE_CAMPUS', area: '110,000 SQFT', status: 'OCCUPIED', slug: 'the-atrium-hq', location: 'Seattle, WA', description: 'Suburban business headquarters with triple-pane energy glass facades, a botanical atrium, and underground EV charging facilities.' },
+  { id: 'ASSET-7756', rawId: 5, title: 'Westside Retail Mall', type: 'RETAIL_CENTER', area: '200,000 SQFT', status: 'AVAILABLE', slug: 'westside-retail-mall', location: 'Los Angeles, CA', description: 'Premier lifestyle center with high foot traffic, state-of-the-art visual merchandising areas, and versatile commercial zoning.' },
+  { id: 'ASSET-8821', rawId: 6, title: 'DataVault Station', type: 'DATA_CENTER', area: '45,000 SQFT', status: 'PRIVATE_SALE', slug: 'datavault-station', location: 'Ashburn, VA', description: 'Tier-IV mission-critical data center with modular cooling towers, redundant generator systems, and biometric security.' },
 ];
  
 export default function Page() {
@@ -115,7 +115,7 @@ export default function Page() {
       area,
       status,
       image: img,
-      description: p.description || p.short_description || 'High-fidelity institutional-grade commercial asset with state-of-the-art HVAC systems and zoning compliance.',
+      description: p.description || p.short_description || 'Commercial property with state-of-the-art systems and full zoning compliance.',
     };
   };
  
@@ -196,7 +196,7 @@ export default function Page() {
     <div className="pc-page">
       <section className="pc-hero" id="pc-hero-section">
         <div className="pc-hero-copy">
-          <div className="pc-mono pc-hero-kicker">{useThemeContent('hero.kicker', 'COMMERCIAL_REGISTRY_V8_DISTRIBUTION')}</div>
+          <div className="pc-mono pc-hero-kicker">{useThemeContent('hero.kicker', 'Commercial Real Estate')}</div>
           <h1 className="pc-heading-xl">
             {useThemeContent('hero.title', 'Market \nTransparency \nEngineered.').split('\n').map((line, i, arr) => {
               const highlight = useThemeContent('hero.highlight', 'Engineered.');
@@ -221,20 +221,20 @@ export default function Page() {
             })}
           </h1>
           <p className="pc-hero-description">
-            {useThemeContent('hero.description', 'The authoritative commercial registry providing verified yield data and direct access to institutional-grade real estate assets globally.')}
+            {useThemeContent('hero.description', 'Browse verified commercial real estate assets including office, retail, industrial, and mixed-use properties available globally.')}
           </p>
  
           <div className="pc-hero-stats">
             <div className="pc-hero-stat-value">{useThemeContent('hero.stat_value', '$1.4B')}</div>
-            <div className="pc-mono pc-hero-stat-label">{useThemeContent('hero.stat_label', 'QUARTERLY_TURNOVER')}</div>
+            <div className="pc-mono pc-hero-stat-label">{useThemeContent('hero.stat_label', 'Quarterly Turnover')}</div>
           </div>
  
           <div className="pc-hero-actions">
             <button type="button" className="pc-btn-primary" onClick={() => scrollToSection('pc-inventory-section')}>
-              {useThemeContent('hero.primary_cta_label', 'Explore_Inventory')}
+              {useThemeContent('hero.primary_cta_label', 'Explore Listings')}
             </button>
             <button type="button" className="pc-btn-secondary" onClick={() => scrollToSection('pc-cta-section')}>
-              {useThemeContent('hero.secondary_cta_label', 'Request_Appraisal')}
+              {useThemeContent('hero.secondary_cta_label', 'Request Appraisal')}
             </button>
           </div>
         </div>
@@ -258,13 +258,13 @@ export default function Page() {
               ))}
             </h2>
             <p>
-              {useThemeContent('intelligence.description', 'Every asset in our registry undergoes a multi-point verification protocol, including structural audits, zoning compliance checks, and high-fidelity market yield analysis.')}
+              {useThemeContent('intelligence.description', 'Every asset undergoes multi-point verification including structural audits, zoning compliance checks, and market yield analysis.')}
             </p>
           </div>
           <div className="pc-intelligence-stats">
-            <IntelligenceHUD label={useThemeContent('hud.due_diligence_label', 'DUE_DILIGENCE_SPEED')} value={useThemeContent('hud.due_diligence_value', '48h')} />
-            <IntelligenceHUD label={useThemeContent('hud.avg_yield_label', 'AVG_YIELD_v2026')} value={useThemeContent('hud.avg_yield_value', '12%')} />
-            <IntelligenceHUD label={useThemeContent('hud.global_nodes_label', 'GLOBAL_NODES')} value={loading ? '...' : String(assets.length || 142)} />
+            <IntelligenceHUD label={useThemeContent('hud.due_diligence_label', 'Due Diligence')} value={useThemeContent('hud.due_diligence_value', '48h')} />
+            <IntelligenceHUD label={useThemeContent('hud.avg_yield_label', 'Average Yield')} value={useThemeContent('hud.avg_yield_value', '12%')} />
+            <IntelligenceHUD label={useThemeContent('hud.global_nodes_label', 'Active Listings')} value={loading ? '...' : String(assets.length || 142)} />
           </div>
         </section>
  
@@ -272,22 +272,18 @@ export default function Page() {
           <div className="pc-offline-panel">
             <div className="pc-offline-header">
               <span className="pc-offline-dot" />
-              <span className="pc-mono">{useThemeContent('diagnostics.kicker', 'CONNECTION_OFFLINE_DIAGNOSTICS')}</span>
+              <span className="pc-mono">Demo Preview</span>
             </div>
-            <p>
-              {useThemeContent('diagnostics.text_before', 'The live Commercial registry API node threw a ')}
-              <code>{apiError}</code>
-              {useThemeContent('diagnostics.text_after', '. Successfully initialized high-fidelity mock blueprints.')}
-            </p>
+            <p>Showing sample properties — live API unavailable. Add properties in the admin panel to display live listings.</p>
           </div>
         )}
  
         <section className="pc-inventory-section" id="pc-inventory-section">
           <div className="pc-inventory-header">
             <div>
-              <div className="pc-mono pc-inventory-kicker">{useThemeContent('inventory.kicker', 'INSTITUTIONAL_INVENTORY')}</div>
+              <div className="pc-mono pc-inventory-kicker">{useThemeContent('inventory.kicker', 'Commercial Inventory')}</div>
               <h2>
-                {useThemeContent('inventory.title', 'Asset \nRegistry.').split('\n').map((line, i, arr) => (
+                {useThemeContent('inventory.title', 'Asset \nDirectory.').split('\n').map((line, i, arr) => (
                   <React.Fragment key={i}>
                     {line}
                     {i < arr.length - 1 && <br />}
@@ -296,13 +292,13 @@ export default function Page() {
               </h2>
             </div>
             <p className="pc-inventory-intro">
-              {useThemeContent('inventory.description', 'Our unified protocol synchronizes performance data from prime office, industrial, and retail assets into a single authoritative node.')}
+              {useThemeContent('inventory.description', 'Browse prime office, industrial, retail, and mixed-use assets available for acquisition or lease.')}
             </p>
           </div>
  
           <div className="pc-filter-panel">
             <div>
-              <label className="pc-mono pc-filter-label" htmlFor="pc-search">{useThemeContent('filters.search_label', 'SEARCH_QUERY')}</label>
+              <label className="pc-mono pc-filter-label" htmlFor="pc-search">{useThemeContent('filters.search_label', 'Search')}</label>
               <input
                 id="pc-search"
                 type="text"
@@ -313,25 +309,25 @@ export default function Page() {
               />
             </div>
             <div>
-              <label className="pc-mono pc-filter-label" htmlFor="pc-type">{useThemeContent('filters.type_label', 'ASSET_CLASSIFICATION')}</label>
+              <label className="pc-mono pc-filter-label" htmlFor="pc-type">{useThemeContent('filters.type_label', 'Asset Type')}</label>
               <select id="pc-type" className="pc-search-input pc-select" value={activeType} onChange={handleTypeChange}>
-                <option value="ALL">ALL_CLASSIFICATIONS</option>
-                <option value="PRIME_OFFICE">PRIME_OFFICE</option>
-                <option value="MIXED_USE">MIXED_USE</option>
-                <option value="INDUSTRIAL">INDUSTRIAL</option>
-                <option value="OFFICE_CAMPUS">OFFICE_CAMPUS</option>
-                <option value="RETAIL_CENTER">RETAIL_CENTER</option>
-                <option value="DATA_CENTER">DATA_CENTER</option>
+                <option value="ALL">All Types</option>
+                <option value="PRIME_OFFICE">Prime Office</option>
+                <option value="MIXED_USE">Mixed Use</option>
+                <option value="INDUSTRIAL">Industrial</option>
+                <option value="OFFICE_CAMPUS">Office Campus</option>
+                <option value="RETAIL_CENTER">Retail Center</option>
+                <option value="DATA_CENTER">Data Center</option>
               </select>
             </div>
             <div>
-              <label className="pc-mono pc-filter-label" htmlFor="pc-status">{useThemeContent('filters.status_label', 'ACQUISITION_STATUS')}</label>
+              <label className="pc-mono pc-filter-label" htmlFor="pc-status">{useThemeContent('filters.status_label', 'Status')}</label>
               <select id="pc-status" className="pc-search-input pc-select" value={activeStatus} onChange={handleStatusChange}>
-                <option value="ALL">ALL_STATUSES</option>
-                <option value="AVAILABLE">AVAILABLE</option>
-                <option value="LEASING">LEASING</option>
-                <option value="OCCUPIED">OCCUPIED</option>
-                <option value="PRIVATE_SALE">PRIVATE_SALE</option>
+                <option value="ALL">All Statuses</option>
+                <option value="AVAILABLE">Available</option>
+                <option value="LEASING">Leasing</option>
+                <option value="OCCUPIED">Occupied</option>
+                <option value="PRIVATE_SALE">Private Sale</option>
               </select>
             </div>
           </div>
@@ -354,22 +350,22 @@ export default function Page() {
             </div>
           ) : (
             <div className="pc-empty-state">
-              <div className="pc-mono pc-empty-kicker">{useThemeContent('empty.kicker', 'REGISTRY_RESOLVE_NULL')}</div>
-              <h4>{useThemeContent('empty.title', 'No Assets Resolved')}</h4>
-              <p>{useThemeContent('empty.description', 'Adjust your classification or acquisition status to recheck active ledger items.')}</p>
+              <div className="pc-mono pc-empty-kicker">{useThemeContent('empty.kicker', 'No Results')}</div>
+              <h4>{useThemeContent('empty.title', 'No Properties Found')}</h4>
+              <p>{useThemeContent('empty.description', 'Try different filters to find matching properties.')}</p>
             </div>
           )}
         </section>
  
         <div className="pc-trust-bar">
-          <span className="pc-mono pc-trust-label">{useThemeContent('trust.label', 'AS_FEATURED_IN:')}</span>
-          {['FINANCIAL_TIMES', 'BLOOMBERG', 'RE_JOURNAL', 'WALL_STREET_POST'].map((brand) => (
+          <span className="pc-mono pc-trust-label">{useThemeContent('trust.label', 'As Featured In')}</span>
+          {['Financial Times', 'Bloomberg', 'RE Journal', 'Wall Street Post'].map((brand) => (
             <span key={brand} className="pc-mono pc-trust-brand">{brand}</span>
           ))}
         </div>
  
         <section className="pc-cta-section" id="pc-cta-section">
-          <div className="pc-mono pc-cta-kicker">{useThemeContent('cta.kicker', 'INSTITUTIONAL_ACQUISITION')}</div>
+          <div className="pc-mono pc-cta-kicker">{useThemeContent('cta.kicker', 'Get Started')}</div>
           <h2>
             {useThemeContent('cta.title', 'Scale Your \nPortfolio.').split('\n').map((line, i, arr) => (
               <React.Fragment key={i}>
@@ -382,7 +378,7 @@ export default function Page() {
             {useThemeContent('cta.description', 'Join over 12,000 institutional investors and family offices currently acquiring on the Sellio Commercial Network.')}
           </p>
           <button type="button" className="pc-btn-primary pc-cta-btn" onClick={() => scrollToSection('pc-inventory-section')}>
-            {useThemeContent('cta.button_label', 'Request_Institutional_Access')}
+            {useThemeContent('cta.button_label', 'Request Access')}
           </button>
         </section>
       </div>

@@ -14,21 +14,21 @@ export default function Page() {
   const themeLink = useServicesThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
-  const heroKicker = useThemeContent('hero.kicker', 'VITALITY PROTOCOL');
+  const heroKicker = useThemeContent('hero.kicker', 'Precision Healthcare');
   const heroTitle = useThemeContent('hero.title', 'Precision \nMedicine, \nDelivered.');
   const heroDescription = useThemeContent('hero.description', 'Connect with an elite network of specialists and diagnosticians. We engineer personalized physiological protocols for peak human performance.');
-  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'INITIALIZE CONSULTATION');
-  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'VIEW CLINICIANS');
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Book a Consultation');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'View Clinicians');
   const hudPractitionersLabel = useThemeContent('hud.practitioners_label', 'PRACTITIONERS');
   const hudPractitionersSub = useThemeContent('hud.practitioners_sub', 'Vetted specialists active across our global clinical network.');
   const hudAccuracyLabel = useThemeContent('hud.accuracy_label', 'ACCURACY');
-  const hudAccuracySub = useThemeContent('hud.accuracy_sub', 'High-fidelity data synchronization for real-time monitoring.');
+  const hudAccuracySub = useThemeContent('hud.accuracy_sub', 'Precision monitoring with real-time clinical data.');
   const hudResponseLabel = useThemeContent('hud.response_label', 'RESPONSE RATE');
-  const hudResponseSub = useThemeContent('hud.response_sub', 'Instant consultation availability for critical wellness nodes.');
-  const registryKicker = useThemeContent('registry.kicker', 'OFFICIAL REGISTRY');
+  const hudResponseSub = useThemeContent('hud.response_sub', 'Fast consultation response across our care network.');
+  const registryKicker = useThemeContent('registry.kicker', 'Our Specialists');
   const registryTitle = useThemeContent('registry.title', 'Top Rated \nPractitioners.');
-  const registryDescription = useThemeContent('registry.description', 'Our unified protocol vetting process ensures that every specialist on the node meets our high-fidelity clinical standards.');
-  const protocolsKicker = useThemeContent('protocols.kicker', 'CLINICAL TIERS');
+  const registryDescription = useThemeContent('registry.description', 'Our rigorous vetting process ensures every specialist meets our highest clinical standards.');
+  const protocolsKicker = useThemeContent('protocols.kicker', 'Care Plans');
   const protocolsTitle = useThemeContent('protocols.title', 'Optimized \nPhysiology.');
   const protocolsDescription = useThemeContent('protocols.description', 'Move beyond reactive care. Our elite protocols integrate preventive diagnostics, continuous biomarker tracking, and personalized nutritional algorithms.');
 
@@ -80,7 +80,7 @@ export default function Page() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '3rem' }}>
               <div style={{ padding: '0.5rem 1.5rem', background: 'var(--sh-teal-light)', color: 'var(--sh-teal)', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px' }}>{heroKicker}</div>
-              <div className="sh-mono" style={{ fontSize: '0.65rem', opacity: 0.6 }}>CLINICAL GRADE V2</div>
+              <div className="sh-mono" style={{ fontSize: '0.65rem', opacity: 0.6 }}>Platform Verified</div>
           </div>
           <h1 className="sh-heading-xl" id="sh-hero-title">
             {heroTitle.split('\n').map((line, index) => (
@@ -161,9 +161,9 @@ export default function Page() {
               ))
             ) : services.length === 0 ? (
               <div className="sh-listing-state">
-                <div className="sh-listing-kicker">Empty Clinical Registry</div>
+                <div className="sh-listing-kicker">No Practitioners Yet</div>
                 <h3>No live services are published yet.</h3>
-                <p>Add service records in the backend and this practitioner grid will hydrate automatically.</p>
+                <p>Add service records in the admin panel to populate this grid.</p>
               </div>
             ) : (
               services.slice(0, 6).map((service, index) => {
@@ -214,7 +214,7 @@ export default function Page() {
                       <div className="sh-mono" style={{ marginBottom: '0.5rem', color: 'white' }}>VITALITY PRO</div>
                       <div style={{ fontSize: '2rem', fontWeight: 800 }}>$149<span style={{ fontSize: '1rem', opacity: 0.7 }}>/mo</span></div>
                   </div>
-                  <button type="button" className="sh-plan-btn-pro" onClick={scrollToRegistry}>INITIALIZE</button>
+                  <button type="button" className="sh-plan-btn-pro" onClick={scrollToRegistry}>Get Started</button>
               </div>
           </div>
       </section>

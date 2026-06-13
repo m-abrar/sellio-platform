@@ -5,6 +5,7 @@ import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 
 // Custom reusable Countdown Timer component that ticks in real-time
 export const CountdownTimer = ({ hours: initialHours = 4, seconds: initialSeconds = 0 }: { hours?: number; seconds?: number }) => {
@@ -62,6 +63,7 @@ const secondaryCategoryMap: Record<string, string> = {
 };
 
 export const DealsHeader = ({ onSearch, onSelectCategory, selectedCategory }: HeaderProps) => {
+  const themeLink = useClassifiedsThemeLink();
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -90,7 +92,7 @@ export const DealsHeader = ({ onSearch, onSelectCategory, selectedCategory }: He
       </div>
 
       <header className="cd-header-main">
-        <a href="#" className="cd-logo" onClick={() => { onSelectCategory('all'); setSearchTerm(''); onSearch(''); }}>
+        <a href={themeLink('/')} className="cd-logo" onClick={() => { onSelectCategory('all'); setSearchTerm(''); onSearch(''); }}>
           <span className="cd-logo-highlight">Deal</span>
           <span className="cd-logo-text-yellow">Finder</span>
         </a>
@@ -243,6 +245,7 @@ export const DealCard = ({ title, currentPrice, originalPrice, discount, image, 
 };
 
 export const DealsFooter = () => {
+  const themeLink = useClassifiedsThemeLink();
   const [subscribed, setSubscribed] = useState(false);
   const [email, setEmail] = useState('');
 
@@ -258,10 +261,10 @@ export const DealsFooter = () => {
     <footer className="cd-footer">
       <div className="cd-footer-grid">
         <div className="cd-footer-logo-desc">
-          <a href="#" className="cd-footer-logo">
+          <a href={themeLink('/')} className="cd-footer-logo">
             <span className="cd-logo-highlight" style={{ padding: '2px 8px' }}>Deal</span>Dash
           </a>
-          <p className="cd-footer-desc">Your ultimate high-velocity destination for daily community bargains, premium flash sales, and hidden discount gems.</p>
+          <p className="cd-footer-desc">Your destination for daily community bargains, flash sales, and hidden discount gems.</p>
         </div>
         <FooterMenuColumn
           location="footer_column_1"
@@ -301,7 +304,7 @@ export const DealsFooter = () => {
       </div>
       <div className="cd-footer-bottom">
         <div>
-          &copy; 2026 DealDash Marketplace. All rights reserved. Engineered for Envato Elite Performance.
+          &copy; 2026 DealDash Marketplace. All rights reserved.
         </div>
         <MenuNav
           location="social_footer"

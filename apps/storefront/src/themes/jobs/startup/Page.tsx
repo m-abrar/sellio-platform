@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import type { JobListing } from '@sellio/types';
 import { OpportunityGrid, MissionControlSection } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
@@ -11,36 +10,35 @@ import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllo
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useJobsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'SYNCHRONIZE_TALENT_V5');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Startup Jobs');
   const heroTitle = useThemeContent('hero.title', 'Join the\nHypergrowth.');
   const heroDescription = useThemeContent(
     'hero.description',
-    "The high-fidelity distribution node for venture-backed talent. Connect your career node to the world's most innovative startup network."
+    "Connect with the world's most innovative startups. Discover venture-backed opportunities, equity roles, and mission-driven careers."
   );
-  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'EXPLORE_VENTURES');
-  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'VENTURE_CAPITAL_ACCESS');
-  const trustLeft = useThemeContent('trust.left_text', 'VENTURE_FUNDING_SYNC: ACTIVE');
-  const trustRight = useThemeContent('trust.right_text', 'EQUITY_VERIFIED: TRUE');
-  const trustNetwork = useThemeContent('trust.network_text', 'NETWORK_NODE: 5.0_ELITE');
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Browse Jobs');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'View Opportunities');
+  const trustLeft = useThemeContent('trust.left_text', 'Funded Startups');
+  const trustRight = useThemeContent('trust.right_text', 'Equity Verified');
+  const trustNetwork = useThemeContent('trust.network_text', 'Top-Rated Network');
   const statsStartupsValue = useThemeContent('stats.startups_value', '450+');
-  const statsStartupsLabel = useThemeContent('stats.startups_label', 'VERIFIED_STARTUPS');
+  const statsStartupsLabel = useThemeContent('stats.startups_label', 'Verified Startups');
   const statsEquityValue = useThemeContent('stats.equity_value', '$1.2B+');
-  const statsEquityLabel = useThemeContent('stats.equity_label', 'TOTAL_EQUITY_VALUE');
+  const statsEquityLabel = useThemeContent('stats.equity_label', 'Total Equity');
   const statsConnectionsValue = useThemeContent('stats.connections_value', '12k+');
-  const statsConnectionsLabel = useThemeContent('stats.connections_label', 'NODAL_CONNECTIONS');
+  const statsConnectionsLabel = useThemeContent('stats.connections_label', 'Connections Made');
   const ctaTitle = useThemeContent('cta.title', 'Accelerate\nYour Future.');
   const ctaDescription = useThemeContent(
     'cta.description',
-    'Initialize your professional growth node and gain access to high-fidelity equity structures and mission-critical roles.'
+    'Explore venture-backed roles, equity opportunities, and mission-driven careers across top startups.'
   );
-  const ctaButtonLabel = useThemeContent('cta.button_label', 'INITIALIZE_GROWTH_NODE');
+  const ctaButtonLabel = useThemeContent('cta.button_label', 'Browse Opportunities');
 
   useEffect(() => {
     async function loadJobs() {
@@ -71,10 +69,6 @@ export default function Page() {
     loadJobs();
   }, [allowDemo]);
 
-  const goToExplore = () => {
-    router.push(themeLink('/explore'));
-  };
-
   return (
     <div>
       <section className="growth-hero">
@@ -92,18 +86,18 @@ export default function Page() {
               {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '2rem' }}>
-              <button type="button" className="growth-btn-primary" onClick={goToExplore}>
+              <a href={themeLink('/explore')} className="growth-btn-primary" style={{ textDecoration: 'none' }}>
                 {heroPrimaryCta}
-              </button>
-              <button type="button" className="growth-btn-outline" onClick={goToExplore}>
+              </a>
+              <a href={themeLink('/explore')} className="growth-btn-outline" style={{ textDecoration: 'none' }}>
                 {heroSecondaryCta}
-              </button>
+              </a>
           </div>
       </section>
 
       <section style={{ padding: '4rem 6%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(15, 23, 42, 0.5)', borderTop: '1px solid var(--growth-border)', borderBottom: '1px solid var(--growth-border)', color: 'var(--growth-dim)', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '3px' }}>
           <span>{trustLeft}</span>
-          <span>LATENCY: {loading ? '...' : apiError && !useFallback ? 'TIMEOUT' : '14ms'}</span>
+          <span>New Roles Daily</span>
           <span>{trustRight}</span>
           <span>{trustNetwork}</span>
       </section>
@@ -151,9 +145,9 @@ export default function Page() {
           <p style={{ maxWidth: '600px', margin: '0 auto 5rem', fontSize: '1.25rem', color: 'var(--growth-dim)' }}>
               {ctaDescription}
           </p>
-          <button type="button" className="growth-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.1rem' }} onClick={goToExplore}>
+          <a href={themeLink('/explore')} className="growth-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.1rem', textDecoration: 'none', display: 'inline-block' }}>
             {ctaButtonLabel}
-          </button>
+          </a>
       </section>
     </div>
   );

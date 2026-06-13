@@ -3,15 +3,17 @@ import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 export const InvestmentHeader = () => {
+  const themeLink = usePropertyThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="pi-header">
-      <div className="pi-logo">
+      <a href={themeLink('/')} className="pi-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         YIELD<span style={{ color: 'var(--pi-emerald)' }}>Node</span>
-      </div>
+      </a>
       
       <button 
           className={`pi-hamburger ${isOpen ? 'pi-hamburger-open' : ''}`} 
@@ -34,12 +36,12 @@ export const InvestmentHeader = () => {
           />
           
           <div className="pi-mono pi-mobile-auth-btn" style={{ fontSize: '0.6rem', color: 'var(--pi-emerald)', marginTop: '2rem' }}>
-            NETWORK_STABLE_V8
+            Sellio Platform
           </div>
       </div>
 
       <div className="pi-mono pi-desktop-auth-btn" style={{ fontSize: '0.6rem', color: 'var(--pi-emerald)' }}>
-        NETWORK_STABLE_V8
+        Sellio Platform
       </div>
     </header>
   );
@@ -56,7 +58,7 @@ export const PortfolioAssetCard = ({ title, yield: yieldVal, price, type, status
     
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--pi-border)', paddingTop: '2rem' }}>
         <div style={{ fontSize: '1.1rem', fontWeight: 800 }}>{price}</div>
-        <div className="pi-mono" style={{ fontSize: '0.65rem', color: 'var(--pi-emerald)', cursor: 'pointer' }}>EXECUTE →</div>
+        <div className="pi-mono" style={{ fontSize: '0.65rem', color: 'var(--pi-emerald)', cursor: 'pointer' }}>View →</div>
     </div>
   </div>
 );
@@ -68,13 +70,15 @@ export const YieldAnalyticsHUD = ({ label, value, color }: { label: string, valu
     </div>
 );
 
-export const InstitutionalFooter = () => (
+export const InstitutionalFooter = () => {
+  const themeLink = usePropertyThemeLink();
+  return (
     <footer className="pi-footer">
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '8rem' }}>
             <div>
-                <div className="pi-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem' }}>YIELDNODE</div>
+                <a href={themeLink('/')} className="pi-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem', textDecoration: 'none' }}>YIELDNODE</a>
                 <p style={{ opacity: 0.5, lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px' }}>
-                    The global high-fidelity terminal for institutional real estate investment. Synchronizing capital distribution with verified asset nodes.
+                    Discover verified real estate investment opportunities with data-driven yield analysis and global portfolio coverage.
                 </p>
             </div>
             <FooterMenuColumn
@@ -98,7 +102,7 @@ export const InstitutionalFooter = () => (
             />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div className="pi-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 SELLIO_CAPITAL_GRP // SYNC_STABLE</div>
+            <div className="pi-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
             <MenuNav
                 location="social_footer"
                 flat
@@ -112,4 +116,5 @@ export const InstitutionalFooter = () => (
             />
         </div>
     </footer>
-);
+  );
+};

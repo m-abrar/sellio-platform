@@ -26,27 +26,27 @@ export default function Page() {
   const heroCta = useThemeContent('hero.primary_cta_label', 'Explore Repertoire');
   const trustItems = useThemeContent(
     'trust.items',
-    'AUTHENTIC_INSTITUTIONAL_NODES|CURATED_ARTISTIC_PROTOCOL|GLOBAL_CULTURAL_EXCHANGE|PATRON_PRIVACY_SECURED'
+    'Authentic Venues|Curated Experiences|Global Events|Secure Booking'
   ).split('|').map((item) => item.trim()).filter(Boolean);
-  const registryEyebrow = useThemeContent('collection.eyebrow', 'OFFICIAL_CULTURAL_REGISTRY');
+  const registryEyebrow = useThemeContent('collection.eyebrow', 'Event Catalog');
   const registryTitle = useThemeContent('collection.title', 'The\nRepertoire.');
   const registryDescription = useThemeContent(
     'collection.description',
-    "Our unified protocol synchronizes performance availability from the world's most significant institutional nodes."
+    "Discover curated performances and experiences from celebrated cultural institutions around the world."
   );
-  const patronEyebrow = useThemeContent('patron.eyebrow', 'PATRON_CIRCLE_PROTOCOL');
+  const patronEyebrow = useThemeContent('patron.eyebrow', 'Membership Circle');
   const patronTitle = useThemeContent('patron.title', "The Patron's\nCircle.");
   const patronDescription = useThemeContent(
     'patron.description',
-    'Join an exclusive network of cultural institutions and patrons. Support the arts through the Sellio Legacy protocol and gain early access to premieres.'
+    'Join an exclusive community of art patrons and cultural enthusiasts. Support the arts and gain early access to premieres and exclusive events.'
   );
-  const patronPerks = useThemeContent('patron.perks', 'Priority_Box|Private_Galas|Voting_Rights|Archive_Access').split('|').map((item) => item.trim()).filter(Boolean);
+  const patronPerks = useThemeContent('patron.perks', 'Priority Seating|Private Galas|Voting Rights|Archive Access').split('|').map((item) => item.trim()).filter(Boolean);
   const patronCardTitle = useThemeContent('patron.card_title', 'Become a Patron.');
   const patronCardDescription = useThemeContent(
     'patron.card_description',
-    'Institutional inquiry nodes are currently active for the 2026/27 cycle. Submit your credentials for evaluation.'
+    'Applications are open for the 2026/27 season. Register your interest to receive early access and exclusive member benefits.'
   );
-  const patronCardCta = useThemeContent('patron.card_cta_label', 'Request Institutional Access');
+  const patronCardCta = useThemeContent('patron.card_cta_label', 'Request Membership Access');
 
   useEffect(() => {
     let isMounted = true;
@@ -112,10 +112,10 @@ export default function Page() {
       </section>
 
       <section className="ecl-section ecl-hud-section" aria-label="Live Statistics Dashboard">
-          <BookingHUD label="VERIFIED_VENUES" value="42" />
-          <BookingHUD label="INSTITUTIONAL_NODES" value="156" />
-          <BookingHUD label="PATRON_SYNC_SPEED" value="0.01s" />
-          <BookingHUD label="ARCHIVE_STABILITY" value="100%" />
+          <BookingHUD label="Verified Venues" value="42" />
+          <BookingHUD label="Partner Venues" value="156" />
+          <BookingHUD label="Response Time" value="0.01s" />
+          <BookingHUD label="Uptime" value="100%" />
       </section>
 
       <section className="ecl-section" id="ecl-exchange-section" aria-labelledby="ecl-repertoire-title">
@@ -158,9 +158,9 @@ export default function Page() {
               ))
             ) : events.length === 0 ? (
               <div className="ecl-empty-state" role="status">
-                <div className="ecl-listing-kicker">Empty Event Registry</div>
+                <div className="ecl-listing-kicker">No events yet</div>
                 <h3>No live events are published yet.</h3>
-                <p>Add event records in the backend and this repertoire grid will hydrate automatically.</p>
+                <p>Add event records in the admin panel and they will appear here automatically.</p>
               </div>
             ) : (
               events.slice(0, 6).map((event) => {

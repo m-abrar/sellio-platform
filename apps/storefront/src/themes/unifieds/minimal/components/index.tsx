@@ -200,12 +200,12 @@ export const SilentHeader = () => {
                   </svg>
                 </div>
                 <h3 style={{ fontFamily: 'var(--usm-font-heading)', fontSize: '1.8rem', fontWeight: 600, color: 'var(--usm-ink)', marginBottom: '0.5rem' }}>Listing Published</h3>
-                <p style={{ color: '#666', fontWeight: 300, fontSize: '0.95rem' }}>Your item was successfully added to the catalog registry.</p>
+                <p style={{ color: '#666', fontWeight: 300, fontSize: '0.95rem' }}>Your listing has been submitted successfully.</p>
               </div>
             ) : (
               <form onSubmit={handlePostSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 <div>
-                  <span className="usm-mono" style={{ color: 'var(--usm-primary)', display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>SELLER CONSOLE</span>
+                  <span className="usm-mono" style={{ color: 'var(--usm-primary)', display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Sell on Sellio</span>
                   <h2 style={{ fontFamily: 'var(--usm-font-heading)', fontSize: '1.75rem', fontWeight: 600, color: 'var(--usm-ink)', margin: 0 }}>Create a Listing</h2>
                 </div>
 
@@ -333,15 +333,17 @@ export const SilentHeader = () => {
   );
 };
 
-export const ZenFooter = () => (
+export const ZenFooter = () => {
+    const themeLink = useUnifiedThemeLink();
+    return (
     <footer className="usm-zen-footer" style={{ borderTop: '1px solid var(--usm-border)' }}>
         <div className="usm-footer-grid">
             <div>
-                <div className="usm-logo" style={{ color: 'black', textTransform: 'none', letterSpacing: 'normal', fontSize: '1.4rem', fontWeight: 700, marginBottom: '2rem' }}>
+                <a href={themeLink('/')} className="usm-logo" style={{ color: 'black', textTransform: 'none', letterSpacing: 'normal', fontSize: '1.4rem', fontWeight: 700, marginBottom: '2rem', textDecoration: 'none' }}>
                   Universal<span style={{ color: 'var(--usm-primary)' }}>.</span>
-                </div>
+                </a>
                 <p style={{ opacity: 0.6, lineHeight: 1.8, fontSize: '0.9rem', maxWidth: '300px', fontWeight: 300 }}>
-                    The luxury standard in marketplace design. Simple, precise, elegant and timeless.
+                    A minimal, elegant marketplace platform. Simple, precise, and designed with purpose.
                 </p>
             </div>
             <FooterMenuColumn
@@ -364,7 +366,7 @@ export const ZenFooter = () => (
             />
         </div>
         <div className="usm-footer-bottom" style={{ marginTop: '6rem', paddingTop: '2rem', borderTop: '1px solid var(--usm-border)' }}>
-            <div style={{ opacity: 0.6, fontSize: '0.85rem', fontWeight: 300 }}>© 2026 Universal Marketplace. All rights reserved.</div>
+            <div style={{ opacity: 0.6, fontSize: '0.85rem', fontWeight: 300 }}>© 2026 Sellio. All rights reserved.</div>
             <div className="usm-footer-socials" style={{ display: 'flex', gap: '2rem' }}>
                 <MenuNav
                     location="social_footer"
@@ -378,4 +380,5 @@ export const ZenFooter = () => (
             </div>
         </div>
     </footer>
-);
+    );
+};

@@ -126,7 +126,7 @@ export default function Page() {
                 <a href={themeLink('/explore')} className="lx-btn lx-btn-gold">
                   {heroPrimaryCta}
                 </a>
-                <a href="#contact" className="lx-btn lx-btn-outline">{heroSecondaryCta}</a>
+                <a href={themeLink('/explore')} className="lx-btn lx-btn-outline">{heroSecondaryCta}</a>
             </div>
         </div>
       </section>

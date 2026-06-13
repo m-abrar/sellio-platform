@@ -3,23 +3,25 @@ import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 export const MapHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = usePropertyThemeLink();
 
   return (
-    <header className="pm-header" style={{ 
-      height: '80px', 
-      background: 'var(--pm-obsidian)', 
-      borderBottom: '1px solid var(--pm-border)', 
-      display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center', 
-      padding: '0 2rem' 
+    <header className="pm-header" style={{
+      height: '80px',
+      background: 'var(--pm-obsidian)',
+      borderBottom: '1px solid var(--pm-border)',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '0 2rem'
     }}>
-      <div style={{ fontFamily: 'var(--pm-font-heading)', fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-1px', zIndex: 1100 }}>
+      <a href={themeLink('/')} style={{ fontFamily: 'var(--pm-font-heading)', fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-1px', zIndex: 1100, textDecoration: 'none', color: 'inherit' }}>
         MAP<span style={{ color: 'var(--pm-gold)' }}>NEXUS</span>
-      </div>
+      </a>
       
       <button 
           className={`pm-hamburger ${isOpen ? 'pm-hamburger-open' : ''}`} 
@@ -106,10 +108,10 @@ export const MapPriceMarker = ({ price, top, left }: any) => (
 
 export const MapHUD = () => (
     <div className="pm-map-hud">
-        <div className="pm-hud-label">SPATIAL_COORDINATES</div>
+        <div className="pm-hud-label">Location</div>
         <div style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1.5rem' }}>40.7128° N, 74.0060° W</div>
-        
-        <div className="pm-hud-label">DISTRICT_INTEGRITY</div>
+
+        <div className="pm-hud-label">Coverage</div>
         <div style={{ display: 'flex', gap: '4px', height: '4px' }}>
             {[1,2,3,4,5,6,7,8,9,10].map(i => (
                 <div key={i} style={{ flex: 1, background: i < 8 ? 'var(--pm-gold)' : 'rgba(255,255,255,0.1)' }}></div>

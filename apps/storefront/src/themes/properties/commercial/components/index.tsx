@@ -5,8 +5,10 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 export const CommercialHeader = () => {
+  const themeLink = usePropertyThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -18,9 +20,9 @@ export const CommercialHeader = () => {
 
   return (
     <header className="pc-header">
-      <div className="pc-logo">
+      <a href={themeLink('/')} className="pc-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         CORP<span style={{ color: 'var(--pc-blue)' }}>Portfolio</span>
-      </div>
+      </a>
 
       {isOpen && (
         <button
@@ -88,18 +90,18 @@ export const AssetRegistryCard = ({ title, type, area, status, id, image, onClic
 
     <div className="pc-asset-meta">
       <div>
-        <div className="pc-mono pc-asset-meta-label">TOTAL_AREA</div>
+        <div className="pc-mono pc-asset-meta-label">Total Area</div>
         <div className="pc-asset-meta-value">{area}</div>
       </div>
       <div>
-        <div className="pc-mono pc-asset-meta-label">STATUS</div>
+        <div className="pc-mono pc-asset-meta-label">Status</div>
         <div className={`pc-asset-meta-value ${status === 'AVAILABLE' ? 'pc-status-available' : ''}`}>{status}</div>
       </div>
     </div>
 
     <div className="pc-asset-footer">
-      <span>REQUEST_AUDIT</span>
-      <span className="pc-asset-cta">VIEW_YIELD →</span>
+      <span>Request Info</span>
+      <span className="pc-asset-cta">View Details →</span>
     </div>
   </div>
 );
@@ -111,13 +113,15 @@ export const IntelligenceHUD = ({ label, value }: { label: string; value: string
   </div>
 );
 
-export const InstitutionalFooter = () => (
+export const InstitutionalFooter = () => {
+  const themeLink = usePropertyThemeLink();
+  return (
   <footer className="pc-footer">
     <div className="pc-footer-grid">
       <div>
-        <div className="pc-logo pc-footer-logo">CORP</div>
+        <a href={themeLink('/')} className="pc-logo pc-footer-logo" style={{ textDecoration: 'none', color: 'inherit' }}>CORP</a>
         <p className="pc-footer-copy">
-          The global authoritative registry for institutional-grade commercial assets. Synchronizing yield and structural metadata.
+          Your destination for verified commercial real estate assets — office, industrial, retail, and mixed-use properties available globally.
         </p>
       </div>
       <FooterMenuColumn
@@ -140,7 +144,7 @@ export const InstitutionalFooter = () => (
       />
     </div>
     <div className="pc-footer-bottom">
-      <div className="pc-mono pc-footer-copyright">© 2026 SELLIO_COMMERCIAL_GRP // NODE_STABLE</div>
+      <div className="pc-mono pc-footer-copyright">© 2026 Sellio. All rights reserved.</div>
       <MenuNav
         location="social_footer"
         flat
@@ -154,4 +158,5 @@ export const InstitutionalFooter = () => (
       />
     </div>
   </footer>
-);
+  );
+};

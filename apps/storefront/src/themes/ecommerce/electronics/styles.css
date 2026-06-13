@@ -399,6 +399,71 @@
     margin-top: 4rem;
 }
 
+/* Hero image */
+.el-hero-image {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 45%;
+}
+
+.el-hero-description {
+  font-size: 1.25rem;
+  color: var(--el-text-muted);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.el-hero-cta-row {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Promo section */
+.el-promo-section {
+  margin: 2rem 5%;
+  background: linear-gradient(90deg, #1a1d24, #0f1115);
+  border: 1px solid var(--el-primary);
+  border-radius: 8px;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.el-promo-content {
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+}
+
+.el-promo-title {
+  font-family: var(--el-font-tech);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.el-promo-description {
+  color: var(--el-text-muted);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.el-promo-bg {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.4;
+  mask-image: linear-gradient(to left, black, transparent);
+  -webkit-mask-image: linear-gradient(to left, black, transparent);
+}
+
 /* Premium Elite Cyberpunk Overclocking glows & responsive navigation drawer */
 .el-desktop-search {
     display: flex;
@@ -532,12 +597,12 @@
         font-size: 1.1rem !important;
     }
 
-    /* Target the absolute hero GPU image wrapper */
-    .el-hero > div:nth-child(3) {
-        position: static !important;
-        width: 80% !important;
-        margin: 3rem auto 0 !important;
-        transform: none !important;
+    /* Hero GPU image wrapper */
+    .el-hero-image {
+        position: static;
+        width: 80%;
+        margin: 3rem auto 0;
+        transform: none;
     }
 
     /* Spec feature row */
@@ -566,30 +631,28 @@
         font-size: 1.2rem !important;
     }
 
-    /* Promo Configurator banner row */
-    section[style*="background: 'linear-gradient(90deg, #1a1d24, #0f1115)'"] {
-        padding: 2rem !important;
-        margin: 2rem 5% !important;
-        text-align: center !important;
+    /* Promo section */
+    .el-promo-section {
+        padding: 2rem;
+        text-align: center;
     }
 
-    section[style*="background: 'linear-gradient(90deg, #1a1d24, #0f1115)'"] > div:nth-child(1) {
-        max-width: 100% !important;
+    .el-promo-content {
+        max-width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    section[style*="background: 'linear-gradient(90deg, #1a1d24, #0f1115)'"] h2 {
-        font-size: 1.8rem !important;
+    .el-promo-title {
+        font-size: 1.8rem;
     }
 
-    section[style*="background: 'linear-gradient(90deg, #1a1d24, #0f1115)'"] button {
-        width: 100% !important;
+    .el-promo-section .el-btn {
+        width: 100%;
     }
 
-    /* Hide configuration banner background absolute cover to prevent overlapping on mobile */
-    section[style*="background: 'linear-gradient(90deg, #1a1d24, #0f1115)'"] > div:nth-child(2) {
-        display: none !important;
+    .el-promo-bg {
+        display: none;
     }
 }

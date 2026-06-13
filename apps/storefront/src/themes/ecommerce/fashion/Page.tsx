@@ -10,136 +10,94 @@ import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbac
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
-// Curated high-fidelity mock capsule collection fallbacks
 const FALLBACK_COLLECTION: Product[] = [
   {
     id: 101,
     title: "Silk Drape Blazer",
     slug: "silk-drape-blazer",
-    description: "Architected with double-breasted closure and refined peak lapels, this blazer is tailored from pure double-faced organic silk drape. Features raw structural silhouette curves and invisible slip pockets.",
+    description: "Tailored from pure double-faced organic silk with a double-breasted closure and refined peak lapels. Features raw structural silhouette curves and invisible slip pockets.",
     price: 1250.00,
     category_id: 1,
-    pricing: {
-      base_price: 1250.00,
-      sale_price: 1250.00,
-      current_price: 1250.00,
-      formatted: "$1,250.00",
-      currency_symbol: "$"
-    },
+    pricing: { base_price: 1250.00, sale_price: 1250.00, current_price: 1250.00, formatted: "$1,250.00", currency_symbol: "$" },
     image_url: "/themes/ecommerce/fashion/11.webp"
   },
   {
     id: 102,
     title: "Monolith Chelsea Boots",
     slug: "monolith-chelsea-boots",
-    description: "Crafted from brushed full-grain box calfskin leather, these monolithic boots highlight a bold thick lugged rubber sole and elasticated side gussets. A structural statement for any silhouette.",
+    description: "Crafted from brushed full-grain box calfskin leather with a bold thick lugged rubber sole and elasticated side gussets. A structural statement for any silhouette.",
     price: 850.00,
     category_id: 1,
-    pricing: {
-      base_price: 850.00,
-      sale_price: 850.00,
-      current_price: 850.00,
-      formatted: "$850.00",
-      currency_symbol: "$"
-    },
+    pricing: { base_price: 850.00, sale_price: 850.00, current_price: 850.00, formatted: "$850.00", currency_symbol: "$" },
     image_url: "/themes/ecommerce/fashion/12.webp"
   },
   {
     id: 103,
     title: "Satin Evening Gown",
     slug: "satin-evening-gown",
-    description: "A breathtaking floor-length satin evening gown cut on the bias to hug body contours beautifully. Elegant cowl neckline, delicate criss-cross back straps, and subtle side slit details.",
+    description: "A floor-length satin evening gown cut on the bias with an elegant cowl neckline, criss-cross back straps, and subtle side slit details.",
     price: 2400.00,
     category_id: 1,
-    pricing: {
-      base_price: 2400.00,
-      sale_price: 2400.00,
-      current_price: 2400.00,
-      formatted: "$2,400.00",
-      currency_symbol: "$"
-    },
+    pricing: { base_price: 2400.00, sale_price: 2400.00, current_price: 2400.00, formatted: "$2,400.00", currency_symbol: "$" },
     image_url: "/themes/ecommerce/fashion/13.webp"
   },
   {
     id: 104,
     title: "Oversized Cashmere Coat",
     slug: "oversized-cashmere-coat",
-    description: "Woven in Italy from unmatched brushed pure cashmere fibers. Generous oversized proportions, broad dropped shoulders, deep patch pockets, and premium horn buttons.",
+    description: "Woven in Italy from brushed pure cashmere. Generous oversized proportions, dropped shoulders, deep patch pockets, and premium horn buttons.",
     price: 3200.00,
     category_id: 1,
-    pricing: {
-      base_price: 3200.00,
-      sale_price: 3200.00,
-      current_price: 3200.00,
-      formatted: "$3,200.00",
-      currency_symbol: "$"
-    },
+    pricing: { base_price: 3200.00, sale_price: 3200.00, current_price: 3200.00, formatted: "$3,200.00", currency_symbol: "$" },
     image_url: "/themes/ecommerce/fashion/14.webp"
   },
   {
     id: 105,
     title: "Textured Knit Sweater",
     slug: "textured-knit-sweater",
-    description: "A heavy-gauge organic cotton and linen ribbed blend. Styled with a raised mock collar, extended rib knit sleeve cuffs, and distinct high-low structural drop side slits.",
+    description: "Heavy-gauge organic cotton and linen ribbed blend with a raised mock collar, extended rib knit cuffs, and a high-low structural drop hem.",
     price: 450.00,
     category_id: 1,
-    pricing: {
-      base_price: 450.00,
-      sale_price: 450.00,
-      current_price: 450.00,
-      formatted: "$450.00",
-      currency_symbol: "$"
-    },
+    pricing: { base_price: 450.00, sale_price: 450.00, current_price: 450.00, formatted: "$450.00", currency_symbol: "$" },
     image_url: "/themes/ecommerce/fashion/15.webp"
   },
   {
     id: 106,
     title: "Pleated Architecture Skirt",
     slug: "pleated-architecture-skirt",
-    description: "Architectural structured box pleats engineered from a crisp wool-blend twill fabric. Designed with an asymmetric draped silhouette edge and a concealed side zipper.",
+    description: "Structured box pleats engineered from crisp wool-blend twill. Asymmetric draped silhouette edge with a concealed side zipper.",
     price: 980.00,
     category_id: 1,
-    pricing: {
-      base_price: 980.00,
-      sale_price: 980.00,
-      current_price: 980.00,
-      formatted: "$980.00",
-      currency_symbol: "$"
-    },
+    pricing: { base_price: 980.00, sale_price: 980.00, current_price: 980.00, formatted: "$980.00", currency_symbol: "$" },
     image_url: "/themes/ecommerce/fashion/16.webp"
   }
 ];
 
 type FashionProduct = Product & {
-  media?: {
-    featured_image?: string | null;
-  } | null;
+  media?: { featured_image?: string | null } | null;
 };
 
 export default function Page() {
   const router = useRouter();
   const themeLink = useEcommerceThemeLink();
   const allowDemo = useDemoFallbackAllowed();
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'FALL_WINTER_2026_COLLECTION');
-  const heroTitle = useThemeContent('hero.title', 'Silent\nLuxury.');
-  const heroCtaLabel = useThemeContent('hero.primary_cta_label', 'Explore Editorial');
-  const heroImage = useThemeMedia('hero.image', '/themes/ecommerce/fashion/17.webp');
-  const sideImageOne = useThemeMedia('hero.side_image_1', '/themes/ecommerce/fashion/18.webp');
-  const sideImageOneLabel = useThemeContent('hero.side_image_1_label', 'ACCESSORIES_01');
-  const sideImageTwo = useThemeMedia('hero.side_image_2', '/themes/ecommerce/fashion/19.webp');
-  const sideImageTwoLabel = useThemeContent('hero.side_image_2_label', 'READY_TO_WEAR_04');
-  const collectionEyebrow = useThemeContent('collection.eyebrow', 'THE_AUTUMN_CAPSULE_V8');
-  const collectionTitle = useThemeContent('collection.title', 'Lookbook 26.');
-  const diagnosticsTitle = useThemeContent('diagnostics.title', 'Atelier Node Connection Alert');
-  const diagnosticsDescription = useThemeContent(
-    'diagnostics.description',
-    'The dynamic Laravel API database is currently offline. Activating premium local node resilience fallback. Loading high-fidelity local catalog backups...',
-  );
-  const philosophyQuote = useThemeContent(
+
+  const heroEyebrow        = useThemeContent('hero.eyebrow',            'Fall / Winter 2026');
+  const heroTitle          = useThemeContent('hero.title',              'Silent\nLuxury.');
+  const heroCtaLabel       = useThemeContent('hero.primary_cta_label',  'Explore Editorial');
+  const heroImage          = useThemeMedia('hero.image',                '/themes/ecommerce/fashion/17.webp');
+  const sideImageOne       = useThemeMedia('hero.side_image_1',         '/themes/ecommerce/fashion/18.webp');
+  const sideImageOneLabel  = useThemeContent('hero.side_image_1_label', 'Accessories 01');
+  const sideImageTwo       = useThemeMedia('hero.side_image_2',         '/themes/ecommerce/fashion/19.webp');
+  const sideImageTwoLabel  = useThemeContent('hero.side_image_2_label', 'Ready to Wear 04');
+  const collectionEyebrow  = useThemeContent('collection.eyebrow',      'The Autumn Capsule');
+  const collectionTitle    = useThemeContent('collection.title',        'Lookbook 26.');
+  const philosophyQuote    = useThemeContent(
     'philosophy.quote',
     'We do not build garments. We architect confidence through the precision of silhouette and the purity of material.',
   );
-  const philosophyEyebrow = useThemeContent('philosophy.eyebrow', 'ATELIER_PHILOSOPHY_SYNC');
+  const philosophyEyebrow  = useThemeContent('philosophy.eyebrow',     'ATELIER PHILOSOPHY');
+
   const [products, setProducts] = useState<FashionProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [useFallback, setUseFallback] = useState(false);
@@ -175,9 +133,7 @@ export default function Page() {
 
     loadData();
 
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, [allowDemo]);
 
   const handleCardClick = (slug: string) => {
@@ -202,43 +158,45 @@ export default function Page() {
       <section className="ef-hero">
         <div className="ef-hero-main">
           <img src={heroImage} alt="" className="ef-hero-img" />
-          <div style={{ position: 'absolute', bottom: '4rem', left: '4rem', color: 'white' }}>
-              <div className="ef-mono" style={{ marginBottom: '1.5rem', color: 'white' }}>{heroEyebrow}</div>
-              <h1 className="ef-heading-xl" style={{ color: 'white' }}>
-                {heroTitle.split('\n').map((line, index) => (
-                  <React.Fragment key={`${line}-${index}`}>
-                    {index > 0 && <br/>}
-                    {index > 0 ? <span className="ef-italic">{line}</span> : line}
-                  </React.Fragment>
-                ))}
-              </h1>
-              <div style={{ marginTop: '4rem' }}>
-                  <a href={themeLink('/explore')} className="ef-btn-primary" style={{ background: 'white', color: 'black', textDecoration: 'none', display: 'inline-block' }}>{heroCtaLabel}</a>
-              </div>
+          <div className="ef-hero-caption">
+            <div className="ef-mono">{heroEyebrow}</div>
+            <h1 className="ef-heading-xl" style={{ color: 'white' }}>
+              {heroTitle.split('\n').map((line, index) => (
+                <React.Fragment key={`${line}-${index}`}>
+                  {index > 0 && <br />}
+                  {index > 0 ? <span className="ef-italic">{line}</span> : line}
+                </React.Fragment>
+              ))}
+            </h1>
+            <div className="ef-hero-cta">
+              <a href={themeLink('/explore')} className="ef-btn-primary" style={{ background: 'white', color: 'black', textDecoration: 'none', display: 'inline-block' }}>
+                {heroCtaLabel}
+              </a>
+            </div>
           </div>
         </div>
         <div className="ef-hero-side">
-            <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-                <img src={sideImageOne} alt="" className="ef-hero-img" />
-                <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', color: 'white' }}>
-                    <div className="ef-mono" style={{ fontSize: '0.55rem', color: 'white' }}>{sideImageOneLabel}</div>
-                </div>
+          <div className="ef-hero-side-panel">
+            <img src={sideImageOne} alt="" className="ef-hero-img" />
+            <div className="ef-hero-side-caption">
+              <div className="ef-mono" style={{ fontSize: '0.55rem', color: 'white' }}>{sideImageOneLabel}</div>
             </div>
-            <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-                <img src={sideImageTwo} alt="" className="ef-hero-img" />
-                <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', color: 'white' }}>
-                    <div className="ef-mono" style={{ fontSize: '0.55rem', color: 'white' }}>{sideImageTwoLabel}</div>
-                </div>
+          </div>
+          <div className="ef-hero-side-panel">
+            <img src={sideImageTwo} alt="" className="ef-hero-img" />
+            <div className="ef-hero-side-caption">
+              <div className="ef-mono" style={{ fontSize: '0.55rem', color: 'white' }}>{sideImageTwoLabel}</div>
             </div>
+          </div>
         </div>
       </section>
 
-      {/* Trend HUD Section */}
-      <section style={{ padding: '10rem 0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6rem', borderBottom: '1px solid var(--ef-border)', marginBottom: '8rem' }}>
-          <TrendHUD label="ACTIVE_CURATIONS" value={products.length ? `0${products.length}` : "00"} />
-          <TrendHUD label="ATELIER_NODES" value="08" />
-          <TrendHUD label="SILHOUETTE_PRECISION" value="100%" />
-          <TrendHUD label="GLOBAL_SYNC" value={useFallback ? "OFFLINE" : "STABLE"} />
+      {/* Store metrics strip */}
+      <section className="ef-metrics-grid">
+        <TrendHUD label="PIECES" value={products.length ? products.length.toString().padStart(2, '0') : '—'} />
+        <TrendHUD label="DESIGN HOUSES" value="6" />
+        <TrendHUD label="FREE RETURNS" value="ALWAYS" />
+        <TrendHUD label="WORLDWIDE SHIPPING" value="EXPRESS" />
       </section>
 
       {apiError && useFallback && (
@@ -252,70 +210,64 @@ export default function Page() {
         </div>
       )}
 
-      {/* Lookbook Registry Section */}
+      {/* Lookbook collection */}
       <section>
-          <div style={{ textAlign: 'center', marginBottom: '10rem' }}>
-              <div className="ef-mono" style={{ marginBottom: '2rem' }}>{collectionEyebrow}</div>
-              <h2 className="ef-heading-xl" style={{ fontSize: '6rem' }}>{collectionTitle}</h2>
-          </div>
-          
-          <div className="ef-lookbook-grid">
-            {loading ? (
-              // Sleek luxurious shimmer skeletons matching card grid
-              Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="ef-look-card" style={{ cursor: 'default' }}>
-                  <div className="ef-img-frame ef-shimmer-card" style={{ border: 'none' }} />
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-                    <div className="ef-shimmer-card" style={{ width: '40%', height: '8px' }} />
-                    <div className="ef-shimmer-card" style={{ width: '70%', height: '14px' }} />
-                    <div className="ef-shimmer-card" style={{ width: '25%', height: '10px' }} />
-                  </div>
+        <div className="ef-lookbook-header">
+          <div className="ef-mono" style={{ marginBottom: '2rem' }}>{collectionEyebrow}</div>
+          <h2 className="ef-heading-xl">{collectionTitle}</h2>
+        </div>
+
+        <div className="ef-lookbook-grid">
+          {loading ? (
+            Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="ef-look-card" style={{ cursor: 'default' }}>
+                <div className="ef-img-frame ef-shimmer-card" style={{ border: 'none' }} />
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                  <div className="ef-shimmer-card" style={{ width: '40%', height: '8px' }} />
+                  <div className="ef-shimmer-card" style={{ width: '70%', height: '14px' }} />
+                  <div className="ef-shimmer-card" style={{ width: '25%', height: '10px' }} />
                 </div>
-              ))
-            ) : products.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '6rem 2rem', border: '1px solid var(--ef-border)' }}>
-                <div className="ef-mono" style={{ marginBottom: '1rem' }}>EMPTY_LOOKBOOK</div>
-                <h3 style={{ fontFamily: 'var(--ef-serif)', fontSize: '2rem' }}>No live products available.</h3>
-                <p style={{ opacity: 0.6, marginTop: '1rem' }}>Publish products in the admin or browse the full collection.</p>
-                <a href={themeLink('/explore')} className="ef-btn-primary" style={{ display: 'inline-block', marginTop: '2rem', textDecoration: 'none' }}>
-                  Explore catalog
-                </a>
               </div>
-            ) : (
-              products.map((item, i: number) => {
-                // Safely extract price, mapping fallback correctly
-                const priceFormatted = item.pricing?.formatted || 
-                  (typeof item.price === 'number' ? `$${item.price.toLocaleString()}` : item.price);
-                
-                // Set active image, mapping dynamic and static fallbacks gracefully
-                const activeImage = item.image_url || item.media?.featured_image || `/themes/ecommerce/fashion/${(i % 6) + 11}.webp`;
+            ))
+          ) : products.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '6rem 2rem', border: '1px solid var(--ef-border)' }}>
+              <div className="ef-mono" style={{ marginBottom: '1rem' }}>EMPTY COLLECTION</div>
+              <h3 style={{ fontFamily: 'var(--ef-serif)', fontSize: '2rem' }}>No products available yet.</h3>
+              <p style={{ opacity: 0.6, marginTop: '1rem' }}>Publish products in the admin and they will appear here.</p>
+              <a href={themeLink('/explore')} className="ef-btn-primary" style={{ display: 'inline-block', marginTop: '2rem', textDecoration: 'none' }}>
+                Browse collection
+              </a>
+            </div>
+          ) : (
+            products.map((item, i: number) => {
+              const priceFormatted = item.pricing?.formatted ||
+                (typeof item.price === 'number' ? `$${item.price.toLocaleString()}` : item.price);
+              const activeImage = item.image_url || item.media?.featured_image || `/themes/ecommerce/fashion/${(i % 6) + 11}.webp`;
 
-                return (
-                  <div key={item.slug || i} onClick={() => handleCardClick(item.slug)}>
-                    <EditorialLookCard 
-                      name={item.title} 
-                      price={priceFormatted} 
-                      image={activeImage}
-                      lookNumber={`LOOK_0${i + 1}`}
-                    />
-                  </div>
-                );
-              })
-            )}
-          </div>
+              return (
+                <div key={item.slug || i} onClick={() => handleCardClick(item.slug)}>
+                  <EditorialLookCard
+                    name={item.title}
+                    price={priceFormatted}
+                    image={activeImage}
+                    lookNumber={`LOOK ${(i + 1).toString().padStart(2, '0')}`}
+                  />
+                </div>
+              );
+            })
+          )}
+        </div>
       </section>
 
-      {/* Philosophy Section */}
-      <section style={{ marginTop: '20rem', padding: '15rem 10%', background: 'var(--ef-oyster)', textAlign: 'center' }}>
-          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-              <h2 style={{ fontFamily: 'var(--ef-serif)', fontSize: '3.5rem', fontWeight: 900, lineHeight: 1.3, marginBottom: '4rem' }}>
-                  &quot;{philosophyQuote}&quot;
-              </h2>
-              <div style={{ width: '80px', height: '1px', background: 'var(--ef-champagne)', margin: '0 auto 4rem' }}></div>
-              <div className="ef-mono" style={{ opacity: 0.5 }}>{philosophyEyebrow}</div>
-          </div>
+      {/* Philosophy */}
+      <section className="ef-philosophy-section">
+        <div className="ef-philosophy-inner">
+          <h2>&quot;{philosophyQuote}&quot;</h2>
+          <div className="ef-philosophy-divider" />
+          <div className="ef-mono" style={{ opacity: 0.5 }}>{philosophyEyebrow}</div>
+        </div>
       </section>
-      
+
       <div style={{ height: '15rem' }}></div>
     </div>
   );

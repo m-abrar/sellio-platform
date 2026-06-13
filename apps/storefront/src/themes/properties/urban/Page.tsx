@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { BrutalistUnitCard, StructuralStat } from './components';
@@ -25,7 +24,7 @@ function getPropertyPrice(property: Property) {
 }
 
 function getPropertyLocation(property: Property) {
-  return property.location?.title || [property.city, property.state].filter(Boolean).join(', ') || property.address || 'Urban Node';
+  return property.location?.title || [property.city, property.state].filter(Boolean).join(', ') || property.address || 'Urban Location';
 }
 
 function mapPropertyToUnit(property: Property, index: number) {
@@ -44,7 +43,6 @@ function mapPropertyToUnit(property: Property, index: number) {
 }
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = usePropertyThemeLink();
   const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
@@ -89,7 +87,7 @@ export default function Page() {
       {/* Brutalist Hero */}
       <section className="pu-hero" aria-labelledby="pu-hero-title">
         <div>
-          <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>{useThemeContent('hero.kicker', 'URBAN_LIVING_V8_DISTRIBUTION')}</div>
+          <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>{useThemeContent('hero.kicker', 'Urban Living')}</div>
           <h1 className="pu-heading-xl" id="pu-hero-title">
             {useThemeContent('hero.title', 'Skyline \nRegistry.').split('\n').map((line, i, arr) => (
               <React.Fragment key={i}>
@@ -99,7 +97,7 @@ export default function Page() {
             ))}
           </h1>
           <p style={{ marginTop: '3rem', fontSize: '1.25rem', color: 'var(--pu-text-muted)', lineHeight: 2, maxWidth: '500px' }}>
-            {useThemeContent('hero.description', 'Modern sanctuaries in the heart of the high-fidelity city. Discover curated lofts, penthouses, and studios engineered for the vertical lifestyle.')}
+            {useThemeContent('hero.description', 'Modern sanctuaries in the heart of the city. Discover curated lofts, penthouses, and studios designed for the vertical lifestyle.')}
           </p>
           <div style={{ marginTop: '4rem', display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
             <button className="pu-btn-primary" id="pu-btn-explore" onClick={() => document.getElementById('pu-registry-grid')?.scrollIntoView({ behavior: 'smooth' })}>
@@ -137,14 +135,14 @@ export default function Page() {
                     ))}
                   </h2>
                   <p style={{ color: 'var(--pu-text-muted)', lineHeight: 1.8, fontSize: '1.1rem' }}>
-                      {useThemeContent('intel.description', 'Our urban nodes are equipped with high-fidelity smart-grid technologies, ensuring absolute connectivity and architectural precision for the modern dweller.')}
+                      {useThemeContent('intel.description', 'Our urban properties are equipped with smart-grid technologies, ensuring connectivity and architectural precision for the modern dweller.')}
                   </p>
               </div>
               <div className="pu-stats-grid">
-                  <StructuralStat value={useThemeContent('intel.stat_1_value', '10Gb')} label={useThemeContent('intel.stat_1_label', 'STANDARD_FIBER')} />
-                  <StructuralStat value={useThemeContent('intel.stat_2_value', 'A+')} label={useThemeContent('intel.stat_2_label', 'ENERGY_RATING')} />
-                  <StructuralStat value={useThemeContent('intel.stat_3_value', '24h')} label={useThemeContent('intel.stat_3_label', 'CONCIERGE_NODE')} />
-                  <StructuralStat value={useThemeContent('intel.stat_4_value', 'EV')} label={useThemeContent('intel.stat_4_label', 'CHARGING_SYNC')} />
+                  <StructuralStat value={useThemeContent('intel.stat_1_value', '10Gb')} label={useThemeContent('intel.stat_1_label', 'Standard Fiber')} />
+                  <StructuralStat value={useThemeContent('intel.stat_2_value', 'A+')} label={useThemeContent('intel.stat_2_label', 'Energy Rating')} />
+                  <StructuralStat value={useThemeContent('intel.stat_3_value', '24h')} label={useThemeContent('intel.stat_3_label', 'Concierge')} />
+                  <StructuralStat value={useThemeContent('intel.stat_4_value', 'EV')} label={useThemeContent('intel.stat_4_label', 'EV Charging')} />
               </div>
           </div>
       </section>
@@ -153,11 +151,11 @@ export default function Page() {
       <section id="pu-registry-grid" aria-labelledby="pu-grid-title">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem', flexWrap: 'wrap', gap: '2rem' }}>
               <div>
-                <div className="pu-mono" style={{ marginBottom: '1rem' }}>{useThemeContent('grid.kicker', 'REGISTRY_COLLECTION // 2026')}</div>
-                <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, textTransform: 'uppercase', margin: 0 }} id="pu-grid-title">{useThemeContent('grid.title', 'Registry Node Units')}</h2>
+                <div className="pu-mono" style={{ marginBottom: '1rem' }}>{useThemeContent('grid.kicker', 'Urban Collection // 2026')}</div>
+                <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, textTransform: 'uppercase', margin: 0 }} id="pu-grid-title">{useThemeContent('grid.title', 'Available Properties')}</h2>
               </div>
               <div style={{ maxWidth: '400px', fontSize: '0.95rem', color: 'var(--pu-text-muted)', lineHeight: 1.8 }}>
-                  {useThemeContent('grid.description', 'Every architectural unit is synchronized with our global registry node, ensuring 100% data integrity and availability status.')}
+                  {useThemeContent('grid.description', 'Browse verified urban properties — lofts, penthouses, and studios — listed with full availability and pricing details.')}
               </div>
           </div>
 
@@ -172,15 +170,15 @@ export default function Page() {
               ))
             ) : propertyError ? (
               <div className="prop-listing-state">
-                <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Property Sync Offline')}</div>
+                <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Connection Error')}</div>
                 <h3>{useThemeContent('offline.title', 'Registry units could not be loaded.')}</h3>
-                <p>{propertyError}</p>
+                <p>Check your API connection and confirm properties are published in the admin panel.</p>
               </div>
             ) : properties.length === 0 ? (
               <div className="prop-listing-state">
-                <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'Empty Property Registry')}</div>
+                <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'No Properties Yet')}</div>
                 <h3>{useThemeContent('empty.title', 'No live properties are published yet.')}</h3>
-                <p>{useThemeContent('empty.description', 'Add property records in the backend and this urban grid will hydrate automatically.')}</p>
+                <p>{useThemeContent('empty.description', 'Add property records in the admin panel and they will appear here.')}</p>
               </div>
             ) : (
               properties.slice(0, 6).map((property, index) => {
@@ -197,7 +195,7 @@ export default function Page() {
 
       {/* Neighborhood CTA */}
       <section style={{ marginTop: '10rem', padding: '10rem 10%', background: 'var(--pu-steel)', color: 'white', textAlign: 'center' }} className="pu-cta-box" aria-labelledby="pu-cta-title">
-          <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>{useThemeContent('cta.kicker', 'CITY_PULSE_PROTOCOL')}</div>
+          <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>{useThemeContent('cta.kicker', 'City Pulse')}</div>
           <h2 style={{ fontSize: 'clamp(3rem, 8vw, 5.5rem)', fontWeight: 700, letterSpacing: '-3px', textTransform: 'uppercase', marginBottom: '4rem', lineHeight: 1 }} id="pu-cta-title">
             {useThemeContent('cta.title', 'Live in the \nPulse of the City.').split('\n').map((line, i, arr) => (
               <React.Fragment key={i}>
@@ -207,11 +205,11 @@ export default function Page() {
             ))}
           </h2>
           <p style={{ maxWidth: '700px', margin: '0 auto 6rem', opacity: 0.6, fontSize: '1.25rem', lineHeight: 1.8 }}>
-              {useThemeContent('cta.description', 'From the industrial lofts of the Arts District to the high-energy penthouses of the Financial Center, find the urban node that matches your frequency.')}
+              {useThemeContent('cta.description', 'From industrial lofts in the Arts District to penthouses in the Financial Center, find the urban property that fits your lifestyle.')}
           </p>
-          <button className="pu-btn-primary" style={{ padding: '2.5rem 8rem', fontSize: '1.2rem' }} id="pu-btn-cta-auth" onClick={() => router.push(themeLink('/'))}>
-              {useThemeContent('cta.button_label', 'Authorize District Sync')}
-          </button>
+          <a href={themeLink('/explore')} className="pu-btn-primary" style={{ padding: '2.5rem 8rem', fontSize: '1.2rem', textDecoration: 'none' }} id="pu-btn-cta-auth">
+              {useThemeContent('cta.button_label', 'Explore Properties')}
+          </a>
       </section>
     </div>
   );

@@ -5,6 +5,7 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
 
 const patronPortalStyle = {
   fontSize: '0.65rem',
@@ -14,6 +15,7 @@ const patronPortalStyle = {
 } as const;
 
 export const VenueHeader = () => {
+  const themeLink = useEventsThemeLink();
   const [isOpen, setIsOpen] = useState(false);
   const brandLabel = useThemeContent('header.brand_label', 'LEGACYArts');
   const brandPrimary = brandLabel.slice(0, Math.ceil(brandLabel.length / 2));
@@ -21,9 +23,9 @@ export const VenueHeader = () => {
 
   return (
     <header className="ecl-header">
-      <div className="ecl-logo">
+      <a href={themeLink('/')} className="ecl-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         {brandPrimary}<span style={{ color: 'var(--ecl-gold)', fontWeight: 400, fontStyle: 'italic' }}>{brandSecondary}</span>
-      </div>
+      </a>
       
       <button 
           className={`ecl-hamburger ${isOpen ? 'ecl-hamburger-open' : ''}`} 
@@ -61,7 +63,7 @@ export const VenueHeader = () => {
             }}
             id="ecl-btn-patron-portal-mobile"
           >
-            {item.title.toUpperCase()} ACTIVE
+            {item.title.toUpperCase()}
           </div>
         )}
       />
@@ -81,7 +83,7 @@ export const VenueHeader = () => {
             }}
             id="ecl-btn-patron-portal"
           >
-            {item.title.toUpperCase()} ACTIVE
+            {item.title.toUpperCase()}
           </div>
         )}
       />
@@ -103,7 +105,7 @@ export const OccasionCard = ({ title, location, date, category }: OccasionCardPr
     <div style={{ fontStyle: 'italic', color: 'var(--ecl-gold)', fontSize: '1.1rem', marginBottom: '3.5rem', fontFamily: 'var(--ecl-serif)' }}>{location}</div>
     
     <div style={{ display: 'flex', justifyContent: 'center', borderTop: '1px solid var(--ecl-stone)', paddingTop: '2.5rem' }} className="ecl-rsvp-arrow">
-        <div style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--ecl-burgundy)', letterSpacing: '3px' }}>REQUEST PATRON PASS -&gt;</div>
+        <div style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--ecl-burgundy)', letterSpacing: '3px' }}>VIEW EVENT →</div>
     </div>
   </div>
 );
@@ -120,9 +122,9 @@ export const LegacyFooter = () => {
     const footerBrand = useThemeContent('footer.brand_label', brandLabel);
     const footerDescription = useThemeContent(
       'footer.description',
-      "The world's most significant archive of cultural repertoire. Synchronizing institutional archives with global patron nodes."
+      "Your destination for the world's most celebrated cultural events and performances."
     );
-    const footerCopyright = useThemeContent('footer.copyright', '(c) 2026 SELLIO_LEGACY_ARTS // ARCHIVE_STABLE');
+    const footerCopyright = useThemeContent('footer.copyright', '© 2026 Sellio. All rights reserved.');
 
     return (
         <footer className="ecl-footer">

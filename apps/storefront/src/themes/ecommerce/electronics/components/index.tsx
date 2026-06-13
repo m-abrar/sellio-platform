@@ -5,9 +5,11 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 
 export const ElectronicsHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const themeLink = useEcommerceThemeLink();
     const brandLabel = useThemeContent('header.brand_label', 'NEURALGEAR');
     const brandHighlight = useThemeContent('header.brand_highlight', 'GEAR');
     const searchPlaceholder = useThemeContent('header.search_placeholder', 'Search components, devices...');
@@ -15,7 +17,7 @@ export const ElectronicsHeader = () => {
 
     return (
         <header className="el-header">
-            <a href="#" className="el-logo">
+            <a href={themeLink('/')} className="el-logo">
                 {brandPrefix}<span className="el-text-cyan">{brandHighlight}</span>
             </a>
             <div className="el-search-bar el-desktop-search">
@@ -54,10 +56,9 @@ export const ElectronicsHeader = () => {
                     renderItem={(item, { href, className, onNavigate }) => {
                         if (item.title === 'CART') {
                             return (
-                                <div className="el-cart-icon" onClick={onNavigate}>
+                                <a href={href} className="el-cart-icon" onClick={onNavigate}>
                                     🛒
-                                    <span className="el-cart-badge">3</span>
-                                </div>
+                                </a>
                             );
                         }
                         return (
@@ -125,6 +126,7 @@ export const SpecFeature = ({ icon, title, desc }: SpecFeatureProps) => (
 );
 
 export const ElectronicsFooter = () => {
+    const themeLink = useEcommerceThemeLink();
     const brandLabel = useThemeContent('header.brand_label', 'NEURALGEAR');
     const brandHighlight = useThemeContent('header.brand_highlight', 'GEAR');
     const brandPrefix = brandLabel.endsWith(brandHighlight) ? brandLabel.slice(0, -brandHighlight.length) : brandLabel;
@@ -139,7 +141,7 @@ export const ElectronicsFooter = () => {
     <footer className="el-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <a href="#" className="el-logo" style={{ marginBottom: '1rem', display: 'inline-block' }}>
+                <a href={themeLink('/')} className="el-logo" style={{ marginBottom: '1rem', display: 'inline-block' }}>
                     {brandPrefix}<span className="el-text-cyan">{brandHighlight}</span>
                 </a>
                 <p style={{ color: 'var(--el-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>{description}</p>

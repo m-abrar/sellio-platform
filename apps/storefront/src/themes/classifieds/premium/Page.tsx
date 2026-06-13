@@ -54,7 +54,7 @@ export default function Page() {
   const featuredHeaderTitle = useThemeContent('featured_header.title', '💎 Featured Investment Opportunities');
   const featuredHeaderEmpty = useThemeContent('featured_header.empty', 'No featured opportunities match your refinements.');
   const membershipTitle = useThemeContent('membership.title', 'UNLOCK PREMIUM PRIVATE OPPORTUNITIES');
-  const membershipSubtitle = useThemeContent('membership.subtitle', 'Gain verified access to institutional-grade M&A prospectuses, audit-vetted tax returns, and coordinate direct negotiations with certified investment brokers.');
+  const membershipSubtitle = useThemeContent('membership.subtitle', 'Browse premium listings including established businesses, commercial properties, and high-value items — all with verified seller profiles.');
   const membershipButtonLabel = useThemeContent('membership.button_label', 'Explore Membership Tiers');
   const toolbarTitleLabel = useThemeContent('toolbar.title_label', 'Available Listings');
   const toolbarOpportunitiesSuffix = useThemeContent('toolbar.opportunities_suffix', 'opportunities');

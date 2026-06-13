@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { EfficiencyBar, ProtocolGrid } from './components';
@@ -8,43 +7,42 @@ import { useThemeContent, useThemeMedia } from '@/components/theme-content/Theme
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useUnifiedThemeLink();
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
 
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'MODULAR_DISTRIBUTION_V1');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Standard Marketplace');
   const heroTitle = useThemeContent('hero.title', 'The Scale\nProtocol.');
   const heroHighlight = useThemeContent('hero.highlight', 'Scale');
-  const heroDescription = useThemeContent('hero.description', "The world's most efficient high-fidelity distribution node. Modular, precise, and engineered for global multi-vertical commerce.");
-  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'INITIALIZE NODE');
-  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'VIEW DOCUMENTATION');
+  const heroDescription = useThemeContent('hero.description', "A modular, reliable marketplace platform engineered for multi-vertical commerce. Clean data, fast delivery, and global reach.");
+  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'Browse Listings');
+  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'View Catalog');
 
-  const layersTitle = useThemeContent('layers.title', 'Universal Logic Layers.');
+  const layersTitle = useThemeContent('layers.title', 'Platform Features.');
 
-  const collectionEyebrow = useThemeContent('collection.eyebrow', 'LIVE_EXCHANGE');
+  const collectionEyebrow = useThemeContent('collection.eyebrow', 'Live Listings');
   const collectionTitle = useThemeContent('collection.title', 'Standard Listings Exchange.');
-  const collectionDescription = useThemeContent('collection.description', 'Live product records synchronized into the Scale Protocol for clean, modular marketplace discovery.');
+  const collectionDescription = useThemeContent('collection.description', 'Browse live product listings from verified sellers across all marketplace categories.');
 
-  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'PROTOCOL_OFFLINE');
+  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'Connection Error');
   const syncOfflineTitle = useThemeContent('sync.offline_title', 'Listings could not be synchronized.');
-  const emptyKicker = useThemeContent('empty.kicker', 'EMPTY_PROTOCOL_EXCHANGE');
+  const emptyKicker = useThemeContent('empty.kicker', 'No Listings Yet');
   const emptyTitle = useThemeContent('empty.title', 'No live listings are available yet.');
-  const emptyDescription = useThemeContent('empty.description', 'Add product records in the backend and this protocol feed will hydrate automatically.');
+  const emptyDescription = useThemeContent('empty.description', 'Add product records in the admin panel and they will appear here.');
 
-  const midSectionEyebrow = useThemeContent('mid_section.eyebrow', 'GEOMETRIC_PRECISION');
+  const midSectionEyebrow = useThemeContent('mid_section.eyebrow', 'Built for Efficiency');
   const midSectionTitle = useThemeContent('mid_section.title', 'Modular\nEfficiency.');
-  const midSectionDescription = useThemeContent('mid_section.description', 'Every node in the Scale Protocol is designed for maximum efficiency. By isolating architectural layers and standardizing data mapping, we achieve a distribution latency that is unmatched in the multi-vertical market.');
+  const midSectionDescription = useThemeContent('mid_section.description', 'Every part of this marketplace is designed for maximum efficiency. Fast data delivery, standardized listing formats, and a platform that stays reliable under any volume of traffic.');
   const midSectionMetric1Value = useThemeContent('mid_section.metric_1_value', '6ms');
-  const midSectionMetric1Label = useThemeContent('mid_section.metric_1_label', 'AVERAGE_SYNC');
+  const midSectionMetric1Label = useThemeContent('mid_section.metric_1_label', 'Avg Response');
   const midSectionMetric2Value = useThemeContent('mid_section.metric_2_value', '100%');
-  const midSectionMetric2Label = useThemeContent('mid_section.metric_2_label', 'ISO_COMPLIANCE');
+  const midSectionMetric2Label = useThemeContent('mid_section.metric_2_label', 'Compliance');
   const midSectionImage = useThemeMedia('mid_section.image', '/themes/unifieds/standard/1.webp');
 
-  const ctaTitle = useThemeContent('cta.title', 'Initialize the\nStandard.');
-  const ctaDescription = useThemeContent('cta.description', "Connect your professional node to the Scale Protocol and gain access to the world's most efficient high-fidelity distribution network.");
-  const ctaButtonLabel = useThemeContent('cta.button_label', 'CONNECT SCALE NODE');
+  const ctaTitle = useThemeContent('cta.title', 'Start Selling\nToday.');
+  const ctaDescription = useThemeContent('cta.description', "List your products on a fast, reliable marketplace platform and reach buyers across all categories. Start with Sellio.");
+  const ctaButtonLabel = useThemeContent('cta.button_label', 'Get Started');
 
   const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%23f4f4f5'/><g transform='translate(328,214)' stroke='%2318181b' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='4'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='%23a1a1aa'>SCALE RECORD</text></svg>";
 
@@ -86,7 +84,7 @@ export default function Page() {
   );
 
   const formatPrice = (product: Product) => (
-    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Scale quote')
+    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Price on request')
   );
 
   return (
@@ -116,12 +114,12 @@ export default function Page() {
                 {heroDescription}
               </p>
               <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap' }} className="usp-hero-buttons">
-                  <button className="scale-btn-primary" id="usp-btn-explore" onClick={() => router.push(themeLink('/explore'))}>
+                  <a href={themeLink('/explore')} className="scale-btn-primary" id="usp-btn-explore" style={{ textDecoration: 'none' }}>
                     {heroPrimaryCtaLabel}
-                  </button>
-                  <button style={{ background: 'transparent', border: '1px solid #ddd', padding: '1.5rem 4rem', borderRadius: '6px', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', color: 'var(--usp-navy)' }} id="usp-btn-doc" onClick={() => router.push(themeLink('/explore'))}>
+                  </a>
+                  <a href={themeLink('/explore')} style={{ background: 'transparent', border: '1px solid #ddd', padding: '1.5rem 4rem', borderRadius: '6px', fontWeight: 700, fontSize: '0.9rem', color: 'var(--usp-navy)', textDecoration: 'none' }} id="usp-btn-doc">
                     {heroSecondaryCtaLabel}
-                  </button>
+                  </a>
               </div>
           </div>
       </section>
@@ -160,7 +158,7 @@ export default function Page() {
               <div className="usp-listing-state" role="status">
                   <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '1rem' }}>{syncOfflineKicker}</div>
                   <h3>{syncOfflineTitle}</h3>
-                  <p>{listingError}</p>
+                  <p>Check your API connection and confirm listings are published in the admin panel.</p>
               </div>
           ) : products.length === 0 ? (
               <div className="usp-listing-state" role="status">
@@ -176,12 +174,12 @@ export default function Page() {
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>
                           <div className="usp-listing-body">
-                              <div className="usp-mono">SCALE_{product.id}</div>
+                              <div className="usp-mono">{'Listing'}</div>
                               <h3>{product.title}</h3>
-                              <p>{product.description || 'Verified marketplace listing synchronized into the Scale Protocol.'}</p>
+                              <p>{product.description || 'Browse this listing for full details and pricing.'}</p>
                               <div className="usp-listing-meta">
                                   <span>{formatPrice(product)}</span>
-                                  <span>Open Node</span>
+                                  <span>View Details</span>
                               </div>
                           </div>
                       </a>
@@ -239,7 +237,7 @@ export default function Page() {
           <p style={{ maxWidth: '600px', margin: '0 auto 6rem', fontSize: '1.25rem', color: 'var(--usp-gray)', fontWeight: 300 }}>
             {ctaDescription}
           </p>
-          <button className="scale-btn-primary" id="usp-btn-cta-handshake" onClick={() => router.push(themeLink('/explore'))}>{ctaButtonLabel}</button>
+          <a href={themeLink('/explore')} className="scale-btn-primary" id="usp-btn-cta-handshake" style={{ textDecoration: 'none' }}>{ctaButtonLabel}</a>
       </section>
     </div>
   );

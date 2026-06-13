@@ -10,37 +10,32 @@ type CatalogSyncAlertProps = {
 
 export function CatalogSyncAlert({
   variant,
-  error,
   classPrefix = 'md',
 }: CatalogSyncAlertProps) {
+  if (variant === 'demo') return null;
+
   const prefix = classPrefix;
 
   const copy = {
-    demo: {
-      badge: 'Preview mode',
-      title: 'Showing sample vehicles',
-      message:
-        'The live vehicle API is unavailable. Sample listings are shown so you can preview the theme during local setup.',
-    },
     'preview-sample': {
       badge: 'Theme sample',
-      title: 'Preview listing (not in your database)',
+      title: 'Preview listing',
       message:
-        'This URL uses a theme demo slug. Browse live inventory from Explore or pick a vehicle from the homepage to test the full API flow.',
+        'This is a demo vehicle. Browse live inventory from Explore or pick a vehicle from the homepage.',
     },
     'not-found': {
       badge: 'Not found',
-      title: 'Vehicle not in inventory',
+      title: 'Vehicle not found',
       message:
-        'That slug is not published in your Sellio database. Use Explore to open a live listing, or publish vehicles in admin.',
+        'This vehicle is not available in the current inventory. Use Explore to browse live listings.',
     },
     production: {
       badge: 'Connection error',
-      title: 'Unable to load inventory',
+      title: 'Inventory unavailable',
       message:
-        'Listings are hidden because the storefront could not reach your Sellio API. Check your API URL, run migrations and seeders, and publish vehicles.',
+        'Vehicles could not be loaded. Check your API connection and make sure listings are published in the admin.',
     },
-  }[variant];
+  }[variant as 'preview-sample' | 'not-found' | 'production'];
 
   return (
     <div
@@ -53,7 +48,6 @@ export function CatalogSyncAlert({
       </div>
       <h3 className={`${prefix}-catalog-alert__title`}>{copy.title}</h3>
       <p className={`${prefix}-catalog-alert__copy`}>{copy.message}</p>
-      {error ? <pre className={`${prefix}-catalog-alert__diag`}>Error details: {error}</pre> : null}
     </div>
   );
 }

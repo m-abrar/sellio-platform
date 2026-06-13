@@ -6,6 +6,7 @@ import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import type { MenuItem } from '@sellio/types';
 import type { MenuItemRenderProps } from '@/components/menu/menu-renderers';
+import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 
 function freelanceUtilityRenderer(variant: 'mobile' | 'desktop') {
   return (item: MenuItem, { href, onNavigate }: MenuItemRenderProps) => {
@@ -29,11 +30,12 @@ function freelanceUtilityRenderer(variant: 'mobile' | 'desktop') {
 }
 
 export const FreelanceHeader = () => {
+  const themeLink = useJobsThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="jf-header">
-      <a href="#" className="jf-logo">
+      <a href={themeLink('/')} className="jf-logo">
         Gig<span className="jf-text-emerald">Hive</span>
       </a>
 
@@ -97,11 +99,13 @@ export const GigCard = ({ title, name, avatar, image, rating, reviews, price }: 
     </div>
 );
 
-export const FreelanceFooter = () => (
+export const FreelanceFooter = () => {
+  const themeLink = useJobsThemeLink();
+  return (
     <footer className="jf-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <a href="#" className="jf-logo" style={{ marginBottom: '1rem', display: 'block' }}>
+                <a href={themeLink('/')} className="jf-logo" style={{ marginBottom: '1rem', display: 'block' }}>
                     Gig<span className="jf-text-emerald">Hive</span>
                 </a>
                 <p style={{ color: 'var(--jf-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>Find the perfect freelance services for your business. Fast, secure, and professional.</p>
@@ -129,11 +133,12 @@ export const FreelanceFooter = () => (
             />
         </div>
         <div style={{ borderTop: '1px solid var(--jf-border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', color: 'var(--jf-text-muted)', fontSize: '0.85rem' }}>
-            <span>&copy; 2026 GigHive International Ltd.</span>
+            <span>© 2026 GigHive. All rights reserved.</span>
             <div style={{ display: 'flex', gap: '1rem' }}>
                 <span>🌐 English</span>
                 <span>$ USD</span>
             </div>
         </div>
     </footer>
-);
+  );
+};

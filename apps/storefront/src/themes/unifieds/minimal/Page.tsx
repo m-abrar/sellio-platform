@@ -17,7 +17,7 @@ export default function Page() {
   const { isPreview } = useMenuContext();
   const allowDemoFallback = isDemoFallbackAllowed(isPreview);
 
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'UNIVERSAL MINIMALISM');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Minimal Marketplace');
   const heroTitle = useThemeContent('hero.title', 'Discover the Art\nof Simplicity.');
   const heroHighlight = useThemeContent('hero.highlight', 'Simplicity.');
   const heroDescription = useThemeContent('hero.description', 'Your marketplace, meticulously curated and thoughtfully designed for elegance, clarity, and focus.');
@@ -213,8 +213,8 @@ export default function Page() {
             ))
           ) : listingError ? (
             <div className="usm-listing-state" role="status">
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 500, marginBottom: '0.5rem' }}>Listings could not be synchronized.</h3>
-              <p style={{ color: '#888', fontWeight: 300 }}>{listingError}</p>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 500, marginBottom: '0.5rem' }}>Listings could not be loaded.</h3>
+              <p style={{ color: '#888', fontWeight: 300 }}>Check your API connection and confirm listings are published in the admin panel.</p>
             </div>
           ) : products.length > 0 ? (
             products.slice(0, 6).map((product, i) => (
@@ -249,7 +249,7 @@ export default function Page() {
           ) : (
             <div className="usm-listing-state" role="status">
               <h3 style={{ fontSize: '1.25rem', fontWeight: 500, marginBottom: '0.5rem' }}>No live listings are available yet.</h3>
-              <p style={{ color: '#888', fontWeight: 300 }}>Add product records in the backend and this feed will hydrate automatically.</p>
+              <p style={{ color: '#888', fontWeight: 300 }}>Add product records in the admin panel and they will appear here.</p>
             </div>
           )}
         </div>
@@ -279,7 +279,7 @@ export default function Page() {
             ))
           ) : (
             <div className="usm-listing-state" role="status" style={{ gridColumn: '1 / -1' }}>
-              <p style={{ color: '#888', fontWeight: 300 }}>Categories will appear once the catalog registry is populated.</p>
+              <p style={{ color: '#888', fontWeight: 300 }}>Categories will appear once the catalog is populated.</p>
             </div>
           )}
         </div>

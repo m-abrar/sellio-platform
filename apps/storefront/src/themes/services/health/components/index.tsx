@@ -4,6 +4,7 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 type ServiceTaxonomyRef =
   | string
@@ -44,12 +45,13 @@ export function getServiceTaxonomyLabel(
 
 export const WellnessHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useServicesThemeLink();
 
   return (
     <header className="sh-header">
-      <div className="sh-logo">
+      <a href={themeLink('/')} className="sh-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         VITALITY<span style={{ color: 'var(--sh-blue)', fontWeight: 300 }}>Labs</span>
-      </div>
+      </a>
       
       {/* Mobile Hamburger Trigger */}
       <button 
@@ -116,13 +118,15 @@ export const VitalityHUD = ({ label, value, sub }: { label: string, value: strin
     </div>
 );
 
-export const ClinicFooter = () => (
+export const ClinicFooter = () => {
+  const themeLink = useServicesThemeLink();
+  return (
     <footer className="sh-footer">
         <div className="sh-footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '8rem' }}>
             <div>
-                <div className="sh-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem' }}>VITALITY<span style={{ fontWeight: 300 }}>Labs</span></div>
+                <a href={themeLink('/')} className="sh-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem', display: 'block', textDecoration: 'none' }}>VITALITY<span style={{ fontWeight: 300 }}>Labs</span></a>
                 <p style={{ opacity: 0.5, lineHeight: 2, fontSize: '1.05rem', maxWidth: '400px', fontWeight: 300 }}>
-                    The world's most trusted distribution node for high-fidelity clinical care. Synchronizing personal telemetry with global medical protocols.
+                    A trusted platform connecting patients with vetted clinical specialists for personalized, high-quality care.
                 </p>
             </div>
             <FooterMenuColumn
@@ -151,7 +155,7 @@ export const ClinicFooter = () => (
             />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
-            <div className="sh-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 VITALITY LABS // CLINICAL GRADE NODE</div>
+            <div className="sh-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 VitalityLabs. All rights reserved.</div>
             <div style={{ display: 'flex', gap: '6rem', flexWrap: 'wrap' }}>
                 <MenuNav
                     location="social_footer"
@@ -166,4 +170,5 @@ export const ClinicFooter = () => (
             </div>
         </div>
     </footer>
-);
+  );
+};

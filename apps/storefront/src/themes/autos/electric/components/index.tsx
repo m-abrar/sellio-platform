@@ -5,14 +5,16 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useAutosThemeLink } from '../../shared/useAutosThemeLink';
 
 export const ElectricHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const themeLink = useAutosThemeLink();
     const brandLabel = useThemeContent('header.brand_label', 'EVOLVE');
     const brandHighlight = useThemeContent('header.brand_highlight', 'OLVE');
     return (
         <header className="ev-header">
-            <a href="#" className="ev-logo text-neon-green">
+            <a href={themeLink('/')} className="ev-logo text-neon-green">
                 {brandLabel.split(brandHighlight)[0]}<span className="ev-text-blue">{brandHighlight}</span>
             </a>
             
@@ -86,6 +88,7 @@ export const IconBox = ({ icon, title, desc }: { icon: string; title: string; de
 );
 
 export const ElectricFooter = () => {
+    const themeLink = useAutosThemeLink();
     const brandLabel = useThemeContent('header.brand_label', 'EVOLVE');
     const brandHighlight = useThemeContent('header.brand_highlight', 'OLVE');
     const footerDescription = useThemeContent('footer.description', 'Driving the future of sustainable mobility, one electric vehicle at a time.');
@@ -95,7 +98,7 @@ export const ElectricFooter = () => {
     <footer className="ev-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <a className="ev-logo text-neon-green" href="#" style={{ display: 'block', marginBottom: '1rem' }}>
+                <a className="ev-logo text-neon-green" href={themeLink('/')} style={{ display: 'block', marginBottom: '1rem' }}>
                     {brandLabel.split(brandHighlight)[0]}<span className="ev-text-blue">{brandHighlight}</span>
                 </a>
                 <p style={{ fontSize: '0.9rem', opacity: 0.75, marginBottom: '1.5rem' }}>{footerDescription}</p>

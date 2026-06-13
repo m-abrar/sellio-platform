@@ -7,10 +7,10 @@ export const PulseExperience = () => {
     const title = useThemeContent('experience.title', 'Absolute\nSound.');
     const description = useThemeContent(
         'experience.description',
-        "PULSE is the definitive destination for high-velocity music culture. We don't just sell tickets; we provide verified access to the most immersive audio experiences on the planet.",
+        "PULSE is the definitive destination for live music culture. We don't just sell tickets; we connect you with the most unforgettable music events on the planet.",
     );
     const image = useThemeMedia('experience.image', '/themes/events/music/15.webp');
-    const callout = useThemeContent('experience.callout', 'NEXT_UP: IBIZA_MESH');
+    const callout = useThemeContent('experience.callout', 'Next Up: Ibiza');
     const [firstTitleLine, ...restTitleLines] = title.split('\n');
 
     return (
@@ -27,11 +27,11 @@ export const PulseExperience = () => {
                 <div style={{ display: 'flex', gap: '4rem', flexWrap: 'wrap' }}>
                     <div>
                         <div style={{ fontSize: '3rem', fontFamily: 'var(--font-heading)', color: 'white' }}>100%</div>
-                        <div style={{ fontSize: '0.65rem', color: 'var(--neon-lime)', fontWeight: 900, letterSpacing: '2px' }}>VERIFIED_ACCESS</div>
+                        <div style={{ fontSize: '0.65rem', color: 'var(--neon-lime)', fontWeight: 900, letterSpacing: '2px' }}>Verified Access</div>
                     </div>
                     <div>
                         <div style={{ fontSize: '3rem', fontFamily: 'var(--font-heading)', color: 'white' }}>Global</div>
-                        <div style={{ fontSize: '0.65rem', color: 'var(--neon-blue)', fontWeight: 900, letterSpacing: '2px' }}>EVENT_NETWORK</div>
+                        <div style={{ fontSize: '0.65rem', color: 'var(--neon-blue)', fontWeight: 900, letterSpacing: '2px' }}>Event Network</div>
                     </div>
                 </div>
             </div>

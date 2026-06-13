@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { ChronicleBar, HeritageGrid } from './components';
@@ -8,41 +7,40 @@ import { useThemeContent, useThemeMedia } from '@/components/theme-content/Theme
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useUnifiedThemeLink();
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
 
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'TRADITION_OF_EXCELLENCE');
-  const heroTitle = useThemeContent('hero.title', 'The Heritage of\nDistribution.');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Classic Marketplace');
+  const heroTitle = useThemeContent('hero.title', 'The Heritage of\nCommerce.');
   const heroHighlight = useThemeContent('hero.highlight', 'Heritage');
-  const heroDescription = useThemeContent('hero.description', 'A high-fidelity foundational node for multi-vertical commerce. Established on the principles of structural integrity and global reliability.');
-  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'ENTER THE ARCHIVE');
-  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'READ THE CHRONICLES');
+  const heroDescription = useThemeContent('hero.description', 'A trusted marketplace platform built on the principles of structural integrity and global reliability. Serving multi-vertical commerce with consistency.');
+  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'Browse Catalog');
+  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'View Listings');
 
-  const collectionEyebrow = useThemeContent('collection.eyebrow', 'LIVE_HERITAGE_REGISTRY');
+  const collectionEyebrow = useThemeContent('collection.eyebrow', 'Live Catalog');
   const collectionTitle = useThemeContent('collection.title', 'The Catalog Archive.');
-  const collectionDescription = useThemeContent('collection.description', 'Live product records preserved inside the Legacy Registry for dignified marketplace discovery.');
+  const collectionDescription = useThemeContent('collection.description', 'Browse live product listings from verified sellers across all marketplace categories.');
 
-  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'ARCHIVE_OFFLINE');
+  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'Connection Error');
   const syncOfflineTitle = useThemeContent('sync.offline_title', 'Listings could not be synchronized.');
-  const emptyKicker = useThemeContent('empty.kicker', 'EMPTY_ARCHIVE');
+  const emptyKicker = useThemeContent('empty.kicker', 'No Listings Yet');
   const emptyTitle = useThemeContent('empty.title', 'No live listings are available yet.');
-  const emptyDescription = useThemeContent('empty.description', 'Add product records in the backend and this archive will hydrate automatically.');
+  const emptyDescription = useThemeContent('empty.description', 'Add product records in the admin panel and they will appear here.');
 
   const midSectionImage = useThemeMedia('mid_section.image', '/themes/unifieds/classic/1.webp');
-  const midSectionEyebrow = useThemeContent('mid_section.eyebrow', 'TIME_HONORED_PRECISION');
+  const midSectionEyebrow = useThemeContent('mid_section.eyebrow', 'Time-Honored Quality');
   const midSectionTitle = useThemeContent('mid_section.title', 'Structural\nElegance.');
-  const midSectionDescription = useThemeContent('mid_section.description', 'The Legacy Node protocol is built on a foundation of reliability. By blending traditional structural integrity with modern distribution logic, we ensure that your high-fidelity assets remain secure and accessible across the global network.');
+  const midSectionDescription = useThemeContent('mid_section.description', 'This marketplace is built on a foundation of reliability. Traditional values meet modern commerce infrastructure — keeping listings secure, accessible, and consistently delivered to buyers worldwide.');
   const midSectionMetric1Value = useThemeContent('mid_section.metric_1_value', '30yr+');
-  const midSectionMetric1Label = useThemeContent('mid_section.metric_1_label', 'CORE_LOGIC_AGE');
+  const midSectionMetric1Label = useThemeContent('mid_section.metric_1_label', 'Years of Excellence');
   const midSectionMetric2Value = useThemeContent('mid_section.metric_2_value', '100%');
-  const midSectionMetric2Label = useThemeContent('mid_section.metric_2_label', 'ASSET_PROVENANCE');
+  const midSectionMetric2Label = useThemeContent('mid_section.metric_2_label', 'Verified Listings');
 
   const ctaTitle = useThemeContent('cta.title', 'Establish Your\nLegacy.');
-  const ctaDescription = useThemeContent('cta.description', "Connect your core node to the Legacy Registry and join the world's most trusted high-fidelity distribution network. Institutional authority, guaranteed.");
-  const ctaButtonLabel = useThemeContent('cta.button_label', 'CONNECT LEGACY NODE');
+  const ctaDescription = useThemeContent('cta.description', "List your products on a trusted, time-honored marketplace platform. Reach buyers across all categories and build a lasting presence with Sellio.");
+  const ctaButtonLabel = useThemeContent('cta.button_label', 'Get Started');
 
   const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%23fbfbfb'/><g transform='translate(328,214)' stroke='%23d1d5db' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='8'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='Georgia, serif' font-size='13' font-weight='700' letter-spacing='2' fill='%239ca3af'>LEGACY RECORD</text></svg>";
 
@@ -84,7 +82,7 @@ export default function Page() {
   );
 
   const formatPrice = (product: Product) => (
-    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Inquire for legacy rate')
+    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Price on request')
   );
 
   return (
@@ -114,22 +112,22 @@ export default function Page() {
                 {heroDescription}
               </p>
               <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center', flexWrap: 'wrap' }} className="uc-hero-buttons">
-                  <button className="legacy-btn-primary" id="uc-btn-explore" onClick={() => router.push(themeLink('/explore'))}>
+                  <a href={themeLink('/explore')} className="legacy-btn-primary" id="uc-btn-explore" style={{ textDecoration: 'none' }}>
                     {heroPrimaryCtaLabel}
-                  </button>
-                  <button style={{ 
-                      background: 'transparent', 
-                      border: '2px solid var(--uc-burgundy)', 
-                      padding: '1.5rem 5rem', 
-                      fontFamily: 'var(--uc-font-heading)', 
-                      fontWeight: 700, 
-                      fontSize: '1.1rem', 
-                      cursor: 'pointer',
+                  </a>
+                  <a href={themeLink('/explore')} style={{
+                      background: 'transparent',
+                      border: '2px solid var(--uc-burgundy)',
+                      padding: '1.5rem 5rem',
+                      fontFamily: 'var(--uc-font-heading)',
+                      fontWeight: 700,
+                      fontSize: '1.1rem',
                       color: 'var(--uc-burgundy)',
-                      transition: 'all 0.3s ease'
-                  }} id="uc-btn-chronicles" onClick={() => router.push(themeLink('/explore'))}>
+                      transition: 'all 0.3s ease',
+                      textDecoration: 'none'
+                  }} id="uc-btn-chronicles">
                       {heroSecondaryCtaLabel}
-                  </button>
+                  </a>
               </div>
           </div>
       </section>
@@ -165,7 +163,7 @@ export default function Page() {
               <div className="uc-listing-state" role="status">
                   <div className="uc-mono" style={{ color: 'var(--uc-gold)', marginBottom: '1rem' }}>{syncOfflineKicker}</div>
                   <h3>{syncOfflineTitle}</h3>
-                  <p>{listingError}</p>
+                  <p>Check your API connection and confirm listings are published in the admin panel.</p>
               </div>
           ) : products.length === 0 ? (
               <div className="uc-listing-state" role="status">
@@ -181,12 +179,12 @@ export default function Page() {
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>
                           <div className="uc-listing-body">
-                              <div className="uc-mono">ARCHIVE_{product.id}</div>
+                              <div className="uc-mono">{'Listing'}</div>
                               <h3>{product.title}</h3>
-                              <p>{product.description || 'Verified marketplace record preserved inside the Legacy Registry.'}</p>
+                              <p>{product.description || 'Browse this listing for full details and pricing.'}</p>
                               <div className="uc-listing-meta">
                                   <span>{formatPrice(product)}</span>
-                                  <span>View Provenance</span>
+                                  <span>View Details</span>
                               </div>
                           </div>
                       </a>
@@ -243,7 +241,7 @@ export default function Page() {
               <p style={{ fontSize: '1.4rem', color: '#666', lineHeight: 1.8, marginBottom: '6rem' }}>
                 {ctaDescription}
               </p>
-              <button className="legacy-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.35rem' }} id="uc-btn-cta-handshake" onClick={() => router.push(themeLink('/explore'))}>{ctaButtonLabel}</button>
+              <a href={themeLink('/explore')} className="legacy-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.35rem', textDecoration: 'none' }} id="uc-btn-cta-handshake">{ctaButtonLabel}</a>
           </div>
       </section>
     </div>

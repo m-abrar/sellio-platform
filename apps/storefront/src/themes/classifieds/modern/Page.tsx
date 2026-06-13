@@ -202,7 +202,7 @@ export default function Page() {
   const getListingLocation = (item: ClassifiedListing): string => {
     const city = item.location?.city || '';
     const state = item.location?.state || '';
-    return city && state ? `${city}, ${state}` : city || state || 'Classified Network';
+    return city && state ? `${city}, ${state}` : city || state || 'Location not specified';
   };
 
   const getListingTime = (item: ClassifiedListing): string => {

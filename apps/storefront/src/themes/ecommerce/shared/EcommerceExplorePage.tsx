@@ -131,10 +131,10 @@ export default function EcommerceExplorePage({
           Back to shop
         </a>
         <div className={monoClass} style={{ marginBottom: '1.5rem' }}>
-          PRODUCT_DIRECTORY
+          COLLECTION
         </div>
         <h1>Explore the Collection</h1>
-        <p>Search, filter, and shop live products synchronized from your Sellio catalog.</p>
+        <p>Browse and shop our complete product catalog with search, filters, and sorting.</p>
       </header>
 
       {apiError && useFallback && (

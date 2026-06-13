@@ -24,9 +24,9 @@ export const CreativeHeader = () => {
   return (
     <header className="evc-header">
       <div className="evc-header-container">
-        <div className="evc-logo">
+        <a href={themeLink('/')} className="evc-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
           {brandLabel.slice(0, midpoint)}<span>{brandLabel.slice(midpoint)}</span>
-        </div>
+        </a>
         
         <button 
             className={`evc-hamburger ${isOpen ? 'evc-hamburger-open' : ''}`} 
@@ -59,7 +59,7 @@ export const CreativeHeader = () => {
                 className={className}
                 style={{ ...experimentModeStyle, padding: '1rem 2rem', textAlign: 'center', marginTop: '2rem', width: '100%' }}
               >
-                {item.title.toUpperCase()}: ACTIVE
+                {item.title}
               </div>
             </Link>
           )}
@@ -76,7 +76,7 @@ export const CreativeHeader = () => {
                 style={{ ...experimentModeStyle, padding: '0.5rem 1.5rem' }}
                 id="evc-btn-experiment-status"
               >
-                {item.title.toUpperCase()}: ACTIVE
+                {item.title}
               </div>
             </Link>
           )}
@@ -100,7 +100,7 @@ export const ArtisanEventCard = ({ title, location, date, status }: ArtisanEvent
     <h3 style={{ fontSize: '2.25rem', fontWeight: 900, marginBottom: '3.5rem', lineHeight: 1.1, letterSpacing: '-1.5px', color: 'white' }}>{title}</h3>
     
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--evc-zinc)', paddingTop: '2.5rem' }} className="evc-card-footer">
-        <div style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--evc-lime)', letterSpacing: '2px' }} className="evc-card-arrow">SYNC_NODE -&gt;</div>
+        <div style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--evc-lime)', letterSpacing: '2px' }} className="evc-card-arrow">Get Tickets →</div>
         <div style={{ fontSize: '1.5rem', opacity: 0.3 }} className="evc-card-asterisk">*</div>
     </div>
   </div>
@@ -114,18 +114,19 @@ export const PulseHUD = ({ label, value }: { label: string, value: string }) => 
 );
 
 export const VibrantFooter = () => {
+    const themeLink = useEventsThemeLink();
     const brandLabel = useThemeContent('footer.brand_label', 'CREATIVE');
     const footerDescription = useThemeContent(
       'footer.description',
-      "The world's most vibrant distribution node for experimental event modules. Synchronizing creative pulses with global community nodes."
+      "The home of creative events. Discover and book experimental art, music, and culture experiences near you."
     );
-    const footerCopyright = useThemeContent('footer.copyright', '(c) 2026 SELLIO_CREATIVE_NODE // PULSE_STABLE');
+    const footerCopyright = useThemeContent('footer.copyright', '© 2026 CREATIVENode. All rights reserved.');
 
     return (
         <footer className="evc-footer">
             <div className="evc-footer-grid">
                 <div>
-                    <div className="evc-logo" style={{ fontSize: '3rem', marginBottom: '3.5rem' }}>{brandLabel}</div>
+                    <a href={themeLink('/')} className="evc-logo" style={{ fontSize: '3rem', marginBottom: '3.5rem', display: 'block', textDecoration: 'none', color: 'inherit' }}>{brandLabel}</a>
                     <p style={{ color: 'var(--evc-grey)', lineHeight: 2, fontSize: '1.1rem', maxWidth: '400px' }}>
                         {footerDescription}
                     </p>

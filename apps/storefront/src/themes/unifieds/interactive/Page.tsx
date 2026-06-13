@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { InteractionCanvas, FluidLogicBar } from './components';
@@ -8,36 +7,35 @@ import { useThemeContent, useThemeMedia } from '@/components/theme-content/Theme
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useUnifiedThemeLink();
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
 
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'KINETIC_TRANSMISSION_V4');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Interactive Marketplace');
   const heroTitle = useThemeContent('hero.title', 'Fluid\nDynamics.');
   const heroHighlight = useThemeContent('hero.highlight', 'Dynamics.');
-  const heroDescription = useThemeContent('hero.description', 'The high-fidelity interaction node for multi-vertical commerce. Synchronize your digital distribution through fluid logic and kinetic transitions.');
-  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'INITIALIZE SYNC');
-  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'READ THE DYNAMICS');
+  const heroDescription = useThemeContent('hero.description', 'A fast, responsive marketplace platform built for smooth browsing across multiple product categories. Discover listings with speed and clarity.');
+  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'Browse Listings');
+  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'View Catalog');
 
-  const collectionEyebrow = useThemeContent('collection.eyebrow', 'LIVE_MOTION_FEED');
+  const collectionEyebrow = useThemeContent('collection.eyebrow', 'Live Listings');
   const collectionTitle = useThemeContent('collection.title', 'Kinetic Listings.');
-  const collectionDescription = useThemeContent('collection.description', 'Live product records synchronized into the Motion Node catalog for fast, fluid marketplace discovery.');
+  const collectionDescription = useThemeContent('collection.description', 'Browse live product listings from verified sellers across all marketplace categories.');
 
-  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'MOTION_OFFLINE');
-  const syncOfflineTitle = useThemeContent('sync.offline_title', 'Listings could not be synchronized.');
-  const emptyKicker = useThemeContent('empty.kicker', 'EMPTY_MOTION_FEED');
+  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'Connection Error');
+  const syncOfflineTitle = useThemeContent('sync.offline_title', 'Listings could not be loaded.');
+  const emptyKicker = useThemeContent('empty.kicker', 'No Listings Yet');
   const emptyTitle = useThemeContent('empty.title', 'No live listings are available yet.');
-  const emptyDescription = useThemeContent('empty.description', 'Add product records in the backend and this motion feed will hydrate automatically.');
+  const emptyDescription = useThemeContent('empty.description', 'Add product records in the admin panel and they will appear here.');
 
   const midSectionTitle = useThemeContent('mid_section.title', 'The Speed\nof Logic.');
-  const midSectionDescription = useThemeContent('mid_section.description', 'Every interaction is a node. Every motion is a transition. Our high-fidelity protocol ensures that your digital distribution is as fluid as it is performant.');
+  const midSectionDescription = useThemeContent('mid_section.description', 'Every page load is fast. Every transition is smooth. This platform is built for performance — delivering listings to buyers quickly, reliably, and at scale.');
   const midSectionImage = useThemeMedia('mid_section.image', '/themes/unifieds/interactive/1.webp');
 
-  const ctaTitle = useThemeContent('cta.title', 'Ready to\nTransition?');
-  const ctaDescription = useThemeContent('cta.description', "Connect your interaction node to the world's most advanced high-fidelity distribution network. Precision motion, guaranteed.");
-  const ctaButtonLabel = useThemeContent('cta.button_label', 'CONNECT MOTION NODE');
+  const ctaTitle = useThemeContent('cta.title', 'Ready to\nGet Started?');
+  const ctaDescription = useThemeContent('cta.description', "List your products on a fast, responsive marketplace. Reach buyers across all categories and grow your presence with Sellio.");
+  const ctaButtonLabel = useThemeContent('cta.button_label', 'Get Started');
 
   const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%23000000'/><g transform='translate(328,214)' stroke='%23fbbf24' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='10'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='13' font-weight='800' letter-spacing='2' fill='%236366f1'>MOTION RECORD</text></svg>";
 
@@ -79,7 +77,7 @@ export default function Page() {
   );
 
   const formatPrice = (product: Product) => (
-    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Sync quote')
+    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Price on request')
   );
 
   return (
@@ -109,22 +107,22 @@ export default function Page() {
             {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '2.5rem', justifyContent: 'center', flexWrap: 'wrap' }} className="ui-hero-buttons">
-              <button className="motion-btn-primary" id="ui-btn-explore" onClick={() => router.push(themeLink('/explore'))}>
+              <a href={themeLink('/explore')} className="motion-btn-primary" id="ui-btn-explore" style={{ textDecoration: 'none' }}>
                 {heroPrimaryCtaLabel}
-              </button>
-              <button style={{ 
-                  padding: '1.5rem 4rem', 
-                  background: 'transparent', 
-                  color: 'white', 
-                  border: '2px solid #333', 
-                  fontFamily: 'var(--ui-font-heading)', 
-                  fontWeight: 800, 
-                  fontSize: '0.85rem', 
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease'
-              }} id="ui-btn-dynamics" onClick={() => router.push(themeLink('/explore'))}>
+              </a>
+              <a href={themeLink('/explore')} style={{
+                  padding: '1.5rem 4rem',
+                  background: 'transparent',
+                  color: 'white',
+                  border: '2px solid #333',
+                  fontFamily: 'var(--ui-font-heading)',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                  transition: 'all 0.3s ease',
+                  textDecoration: 'none'
+              }} id="ui-btn-dynamics">
                   {heroSecondaryCtaLabel}
-              </button>
+              </a>
           </div>
       </section>
 
@@ -159,7 +157,7 @@ export default function Page() {
               <div className="ui-listing-state" role="status">
                   <div className="ui-mono" style={{ color: 'var(--ui-yellow)', marginBottom: '1rem' }}>{syncOfflineKicker}</div>
                   <h3>{syncOfflineTitle}</h3>
-                  <p>{listingError}</p>
+                  <p>Check your API connection and confirm listings are published in the admin panel.</p>
               </div>
           ) : products.length === 0 ? (
               <div className="ui-listing-state" role="status">
@@ -175,12 +173,12 @@ export default function Page() {
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>
                           <div className="ui-listing-body">
-                              <div className="ui-mono">MOTION_ID_{product.id}</div>
+                              <div className="ui-mono">{'Listing'}</div>
                               <h3>{product.title}</h3>
-                              <p>{product.description || 'Verified marketplace record synchronized into the Motion Node catalog.'}</p>
+                              <p>{product.description || 'Browse this listing for full details and pricing.'}</p>
                               <div className="ui-listing-meta">
                                   <span>{formatPrice(product)}</span>
-                                  <span>Open Motion</span>
+                                  <span>View Details</span>
                               </div>
                           </div>
                       </a>
@@ -205,7 +203,7 @@ export default function Page() {
                     {midSectionDescription}
                   </p>
                   <ul style={{ listStyle: 'none', padding: 0 }}>
-                      {['Real-time Interaction Sync', 'Low-Latency Transitions', 'Dynamic Schema Fluids', 'Kinetic Asset Mapping'].map(item => (
+                      {['Real-Time Listing Updates', 'Low-Latency Page Loads', 'Dynamic Product Categories', 'Fast Asset Delivery'].map(item => (
                           <li key={item} style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', fontWeight: 800, color: 'var(--ui-indigo)', letterSpacing: '2px' }}>
                               <div style={{ width: '10px', height: '10px', background: 'var(--ui-indigo)' }}></div> {item.toUpperCase()}
                           </li>
@@ -235,7 +233,7 @@ export default function Page() {
           <p style={{ maxWidth: '700px', margin: '0 auto 6rem', fontSize: '1.25rem', color: '#888', lineHeight: 1.8 }}>
             {ctaDescription}
           </p>
-          <button className="motion-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.2rem' }} id="ui-btn-cta-handshake" onClick={() => router.push(themeLink('/explore'))}>{ctaButtonLabel}</button>
+          <a href={themeLink('/explore')} className="motion-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.2rem', textDecoration: 'none' }} id="ui-btn-cta-handshake">{ctaButtonLabel}</a>
       </section>
     </div>
   );

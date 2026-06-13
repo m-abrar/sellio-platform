@@ -54,28 +54,28 @@ export default function Page() {
   const router = useRouter();
   const themeLink = usePropertyThemeLink();
 
-  const heroKicker = useThemeContent('hero.kicker', 'GLOBAL_ESCAPE_REGISTRY_V8');
+  const heroKicker = useThemeContent('hero.kicker', 'Global Vacation Retreats');
   const heroTitle = useThemeContent('hero.title', 'Find Your \nInfinite \nHorizon.');
   const heroHighlight = useThemeContent('hero.highlight', 'Horizon.');
   const heroDescription = useThemeContent(
     'hero.description',
-    "A curated collection of the world's most significant vacation retreats. Authenticated by our local nodes, enjoyed by global travelers.",
+    "A curated collection of the world's most significant vacation retreats. Verified by local experts and enjoyed by travelers worldwide.",
   );
 
-  const gridKicker = useThemeContent('grid.kicker', 'CURATED_COLLECTION');
+  const gridKicker = useThemeContent('grid.kicker', 'Curated Collection');
   const gridTitle = useThemeContent('grid.title', 'The \nRetreats.');
   const gridHighlight = useThemeContent('grid.highlight', 'Retreats.');
   const gridDescription = useThemeContent(
     'grid.description',
-    'Every property in our vacation vertical is manually verified by a local node expert to validate the vibe and view.',
+    'Every property in our vacation collection is handpicked and verified to ensure an exceptional stay.',
   );
 
-  const philosophyKicker = useThemeContent('philosophy.kicker', 'THE_GETAWAY_PROTOCOL');
+  const philosophyKicker = useThemeContent('philosophy.kicker', 'The Getaway Philosophy');
   const philosophyTitle = useThemeContent('philosophy.title', 'The Art of \nthe \nEscape.');
   const philosophyHighlight = useThemeContent('philosophy.highlight', 'Escape.');
   const philosophyDescription = useThemeContent(
     'philosophy.description',
-    'We do not just check the amenities; we validate the architectural integrity and local significance of every vacation node.',
+    'We do not just check the amenities; we validate the character and local significance of every retreat.',
   );
   const philosophyImage = useThemeMedia('philosophy.image', '/themes/properties/rental/7.webp');
   const philosophyBadge = useThemeContent('philosophy.badge_label', 'AUTHENTICATED LOCAL RETREAT');
@@ -86,7 +86,7 @@ export default function Page() {
 
   const trustItems = useThemeContent(
     'trust.items',
-    '100%_AUTHENTICATED|NO_PROTOCOL_FEES|LOCAL_NODE_SUPPORT|CRYPTO_SYNC_ENABLED',
+    '100% Verified|No Hidden Fees|Local Expert Support|Secure Booking',
   ).split('|');
 
   const [retreats, setRetreats] = useState<VacationRetreatCard[]>([]);
@@ -311,8 +311,8 @@ export default function Page() {
           </h2>
           <p className="pv-philosophy-copy">{philosophyDescription}</p>
           <div className="pv-stats-grid">
-            <ExperienceStats value={String(liveStats.retreats)} label="LIVE RETREATS" />
-            <ExperienceStats value={String(liveStats.locations)} label="UNIQUE LOCATIONS" />
+            <ExperienceStats value={String(liveStats.retreats)} label="Live Retreats" />
+            <ExperienceStats value={String(liveStats.locations)} label="Unique Locations" />
           </div>
         </div>
         <div className="pv-phil-img-wrapper">

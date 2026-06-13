@@ -4,6 +4,7 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 
 interface HeaderProps {
   onPostClick: () => void;
@@ -13,9 +14,11 @@ interface HeaderProps {
 
 const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
 
-export const ModernHeader = ({ onPostClick, searchTerm, onSearchChange }: HeaderProps) => (
+export const ModernHeader = ({ onPostClick, searchTerm, onSearchChange }: HeaderProps) => {
+  const themeLink = useClassifiedsThemeLink();
+  return (
   <header className="cm-header">
-    <a href="#" className="cm-logo" onClick={(e) => { e.preventDefault(); window.location.reload(); }}>
+    <a href={themeLink('/')} className="cm-logo">
       Classifieds<span>.</span>
     </a>
     
@@ -46,7 +49,8 @@ export const ModernHeader = ({ onPostClick, searchTerm, onSearchChange }: Header
       />
     </div>
   </header>
-);
+  );
+};
 
 interface ModernCardProps {
   title: string;
@@ -116,10 +120,12 @@ export const ModernCard = ({
   );
 };
 
-export const ModernFooter = () => (
+export const ModernFooter = () => {
+  const themeLink = useClassifiedsThemeLink();
+  return (
   <footer className="cm-footer">
     <div className="cm-footer-row">
-      <a href="#" className="cm-logo" onClick={(e) => e.preventDefault()}>
+      <a href={themeLink('/')} className="cm-logo">
         Classifieds<span>.</span>
       </a>
       <MenuNav
@@ -130,8 +136,9 @@ export const ModernFooter = () => (
         renderItem={defaultNavItemRenderer}
       />
       <div style={{ color: 'var(--cm-text-muted)', fontWeight: 600, fontSize: '0.8rem' }}>
-        &copy; 2026 Modern ClassiGroup. All rights reserved. Envato Elite Standard.
+        &copy; 2026 Sellio. All rights reserved.
       </div>
     </div>
   </footer>
-);
+  );
+};

@@ -24,9 +24,9 @@ export const FestivalHeader = () => {
   return (
     <header className="eff-header">
       <div className="eff-header-container">
-        <div className="eff-logo">
+        <a href={themeLink('/')} className="eff-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
           {brandLabel.slice(0, midpoint)}<span>{brandLabel.slice(midpoint)}</span>
-        </div>
+        </a>
         
         <button 
             className={`eff-hamburger ${isOpen ? 'eff-hamburger-open' : ''}`} 
@@ -59,7 +59,7 @@ export const FestivalHeader = () => {
                 className={className}
                 style={{ ...vibeSyncStyle, padding: '1rem 2rem', textAlign: 'center', marginTop: '2rem', width: '100%' }}
               >
-                {item.title.toUpperCase()}_ACTIVE
+                {item.title}
               </div>
             </Link>
           )}
@@ -76,7 +76,7 @@ export const FestivalHeader = () => {
                 style={{ ...vibeSyncStyle, padding: '0.5rem 2rem' }}
                 id="eff-btn-vibe-status"
               >
-                {item.title.toUpperCase()}_ACTIVE
+                {item.title}
               </div>
             </Link>
           )}
@@ -101,7 +101,7 @@ export const StageLineupCard = ({ title, location, date, image }: StageLineupCar
         <h3 style={{ fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.1, letterSpacing: '-2px', color: 'white' }}>{title}</h3>
         
         <div style={{ marginTop: '3rem', display: 'flex', gap: '2rem', alignItems: 'center' }} className="eff-card-action">
-            <div style={{ fontSize: '0.8rem', fontWeight: 900, letterSpacing: '2px', color: 'white' }} className="eff-action-text">SECURE_PASS -&gt;</div>
+            <div style={{ fontSize: '0.8rem', fontWeight: 900, letterSpacing: '2px', color: 'white' }} className="eff-action-text">Get Tickets →</div>
             <div style={{ width: '40px', height: '1px', background: 'rgba(255,255,255,0.3)' }} className="eff-action-line"></div>
         </div>
     </div>
@@ -116,18 +116,19 @@ export const AtmosphereHUD = ({ label, value, color }: { label: string, value: s
 );
 
 export const NexusFooter = () => {
+    const themeLink = useEventsThemeLink();
     const brandLabel = useThemeContent('footer.brand_label', 'NEON');
     const footerDescription = useThemeContent(
       'footer.description',
-      "The world's most immersive distribution node for high-vibe environments. Synchronizing collective pulses with global neon nodes."
+      "The heartbeat of live festival culture. Discover and book the world's most vibrant events in one place."
     );
-    const footerCopyright = useThemeContent('footer.copyright', '(c) 2026 SELLIO_NEON_NODE // VIBE_STABLE');
+    const footerCopyright = useThemeContent('footer.copyright', '© 2026 NEONPulse. All rights reserved.');
 
     return (
         <footer className="eff-footer">
             <div className="eff-footer-grid">
                 <div>
-                    <div className="eff-logo" style={{ fontSize: '3.5rem', marginBottom: '3.5rem' }}>{brandLabel}</div>
+                    <a href={themeLink('/')} className="eff-logo" style={{ fontSize: '3.5rem', marginBottom: '3.5rem', display: 'block', textDecoration: 'none', color: 'inherit' }}>{brandLabel}</a>
                     <p style={{ color: 'var(--eff-grey)', lineHeight: 2, fontSize: '1.1rem', maxWidth: '400px' }}>
                         {footerDescription}
                     </p>

@@ -10,19 +10,19 @@ import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';
 
 export default function Page() {
   const themeLink = useEventsThemeLink();
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'WORLD_ENGINEERING SUMMIT // 2026');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'WORLD ENGINEERING SUMMIT // 2026');
   const heroTitle = useThemeContent('hero.title', 'The Future of\nStructural Excellence.');
   const heroHighlight = useThemeContent('hero.highlight', 'Structural');
   const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'GET DELEGATE PASS');
   const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'VIEW FULL SCHEDULE');
-  const catalogEyebrow = useThemeContent('catalog.eyebrow', 'CONVENTIONS_CATALOG // DIRECTORY');
+  const catalogEyebrow = useThemeContent('catalog.eyebrow', 'EVENT CATALOG // DIRECTORY');
   const catalogTitle = useThemeContent('catalog.title', 'Active Summits & Expos');
-  const speakersEyebrow = useThemeContent('speakers.eyebrow', 'FACULTY_SYNC // 2026');
+  const speakersEyebrow = useThemeContent('speakers.eyebrow', 'FEATURED SPEAKERS // 2026');
   const speakersTitle = useThemeContent('speakers.title', 'Distinguished Speakers');
-  const agendaEyebrow = useThemeContent('agenda.eyebrow', 'CURATED_SCHEDULE // DAY_01');
+  const agendaEyebrow = useThemeContent('agenda.eyebrow', 'CURATED SCHEDULE // DAY 01');
   const agendaTitle = useThemeContent('agenda.title', 'The Agenda');
   const agendaDescription = useThemeContent('agenda.description', 'Four tracks of intense technical exploration, ranging from core infrastructure to product design philosophy.');
-  const agendaCta = useThemeContent('agenda.cta_label', 'DOWNLOAD FULL PROGRAM PDF');
+  const agendaCta = useThemeContent('agenda.cta_label', 'BROWSE FULL CATALOG');
   const ctaTitle = useThemeContent('cta.title', 'Secure Your\nSeat in History.');
   const ctaHighlight = useThemeContent('cta.highlight', 'Seat in History.');
   const ctaDescription = useThemeContent('cta.description', 'Registration closes September 30. Join 5,000+ industry leaders for the most influential engineering event of the year.');

@@ -3,15 +3,17 @@ import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 export const SkylineHeader = () => {
+  const themeLink = usePropertyThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="pu-header">
-      <div style={{ fontWeight: 700, fontSize: '1.5rem', letterSpacing: '-1px' }}>
+      <a href={themeLink('/')} style={{ fontWeight: 700, fontSize: '1.5rem', letterSpacing: '-1px', textDecoration: 'none', color: 'inherit' }}>
         SKYLINE<span style={{ color: 'var(--pu-cobalt)' }}>Registry</span>
-      </div>
+      </a>
       
       <button 
           className={`pu-hamburger ${isOpen ? 'pu-hamburger-open' : ''}`} 
@@ -34,12 +36,12 @@ export const SkylineHeader = () => {
             renderItem={defaultNavItemRenderer}
           />
           <div className="pu-mono pu-mobile-status" style={{ padding: '0.5rem 1.5rem', background: 'var(--pu-steel)', color: 'white', marginTop: '2rem', textAlign: 'center' }}>
-            SYNC_ACTIVE
+            Sellio Platform
           </div>
       </div>
 
       <div className="pu-mono pu-desktop-status" style={{ padding: '0.5rem 1.5rem', background: 'var(--pu-steel)', color: 'white' }}>
-        SYNC_ACTIVE
+        Sellio Platform
       </div>
     </header>
   );
@@ -60,7 +62,7 @@ export const BrutalistUnitCard = ({ title, price, location, beds, sqft, image }:
     <div style={{ display: 'flex', gap: '2rem', borderTop: '1px solid currentColor', paddingTop: '1.5rem' }} className="pu-unit-meta">
         <div className="pu-mono">{beds} BD</div>
         <div className="pu-mono">{sqft} SQFT</div>
-        <div className="pu-mono">V8_NODE</div>
+        <div className="pu-mono">Verified</div>
     </div>
   </div>
 );
@@ -72,13 +74,15 @@ export const StructuralStat = ({ value, label }: { value: string, label: string 
   </div>
 );
 
-export const CityPulseFooter = () => (
+export const CityPulseFooter = () => {
+  const themeLink = usePropertyThemeLink();
+  return (
     <footer className="pu-footer" style={{ background: 'var(--pu-steel)', color: 'white', padding: '10rem 6% 4rem' }}>
         <div className="pu-footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '6rem' }}>
             <div>
-                <div style={{ fontWeight: 700, fontSize: '2.5rem', marginBottom: '3rem' }}>SKYLINE</div>
+                <a href={themeLink('/')} style={{ fontWeight: 700, fontSize: '2.5rem', marginBottom: '3rem', textDecoration: 'none', color: 'inherit' }}>SKYLINE</a>
                 <p style={{ opacity: 0.5, lineHeight: 1.8, maxWidth: '400px', fontSize: '0.95rem' }}>
-                    The world's most advanced high-fidelity urban distribution network. Engineering the future of vertical living.
+                    Discover modern urban properties — lofts, penthouses, and studios — designed for city living.
                 </p>
             </div>
             <FooterMenuColumn
@@ -101,7 +105,7 @@ export const CityPulseFooter = () => (
             />
         </div>
         <div style={{ marginTop: '10rem', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="pu-footer-bottom">
-            <div className="pu-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 SELLIO_SKYLINE_OS // VERTICAL_SYNC_STABLE</div>
+            <div className="pu-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
             <div style={{ display: 'flex', gap: '3rem' }} className="pu-footer-socials">
                 <MenuNav
                     location="social_footer"
@@ -116,4 +120,5 @@ export const CityPulseFooter = () => (
             </div>
         </div>
     </footer>
-);
+  );
+};

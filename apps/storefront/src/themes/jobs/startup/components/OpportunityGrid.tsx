@@ -83,7 +83,7 @@ export const OpportunityGrid = ({ jobs = [], loading }: OpportunityGridProps) =>
     return (
       <section className="gr-empty-state" role="status">
         <h3>No venture roles published yet.</h3>
-        <p>Add jobs in the backend or enable demo fallback during local preview setup.</p>
+        <p>Add jobs in the admin panel or enable demo fallback during local preview setup.</p>
       </section>
     );
   }

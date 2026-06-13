@@ -22,13 +22,13 @@ export default function Page() {
     'collection.description',
     'Exquisite craftsmanship meets timeless design',
   );
-  const offlineKicker = useThemeContent('sync.offline_kicker', 'Collection Sync Offline');
+  const offlineKicker = useThemeContent('sync.offline_kicker', 'Collection Unavailable');
   const offlineTitle = useThemeContent('sync.offline_title', 'Signature creations could not be loaded.');
   const emptyKicker = useThemeContent('empty.kicker', 'Private Catalog');
   const emptyTitle = useThemeContent('empty.title', 'No live masterpieces are published yet.');
   const emptyDescription = useThemeContent(
     'empty.description',
-    'Add product records in the backend and this showcase will hydrate automatically.',
+    'Add product records in the admin panel and they will appear here.',
   );
   const productCta = useThemeContent('collection.product_cta_label', 'View Piece');
   const viewAllCta = useThemeContent('collection.view_all_label', 'View All Masterpieces');
@@ -139,7 +139,7 @@ export default function Page() {
             <div className="ecl-product-state">
               <div className="ecl-product-kicker">{offlineKicker}</div>
               <h3>{offlineTitle}</h3>
-              <p>{apiError}</p>
+              <p>Check your API connection and confirm products are published in the admin panel.</p>
             </div>
           ) : products.length === 0 ? (
             <div className="ecl-product-state">

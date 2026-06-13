@@ -3,15 +3,17 @@ import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 export const UniversalHeader = () => {
+  const themeLink = usePropertyThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="uh-header">
-      <div className="uh-logo">
+      <a href={themeLink('/')} className="uh-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         UNIFIED<span style={{ color: 'var(--uh-blue)' }}>Hub</span>
-      </div>
+      </a>
       
       <button 
           className={`uh-hamburger ${isOpen ? 'uh-hamburger-open' : ''}`} 
@@ -34,12 +36,12 @@ export const UniversalHeader = () => {
             renderItem={defaultNavItemRenderer}
           />
           <div className="uh-mono uh-mobile-status" style={{ fontSize: '0.65rem', border: '1px solid var(--uh-border)', padding: '0.5rem 1.5rem', marginTop: '2rem', textAlign: 'center', borderRadius: '4px' }}>
-            SYNC_STABLE
+            Sellio Platform
           </div>
       </div>
 
       <div className="uh-mono uh-desktop-status" style={{ padding: '0.6rem 1.5rem', border: '1px solid var(--uh-border)', borderRadius: '4px', fontSize: '0.65rem' }}>
-        SYNC_STABLE
+        Sellio Platform
       </div>
     </header>
   );
@@ -78,10 +80,10 @@ export const UnifiedPropCard = ({ title, price, location, type, image }: any) =>
 export const MarketMetricsHUD = () => (
     <div className="uh-metrics-bar">
         {[
-            { label: 'ASSETS_MANAGED', value: '$12.5B' },
-            { label: 'NODAL_SYNC', value: 'ACTIVE' },
-            { label: 'VALUATION_ACCURACY', value: '99.8%' },
-            { label: 'COMPLIANCE', value: 'VERIFIED' }
+            { label: 'Assets Managed', value: '$12.5B' },
+            { label: 'Platform Status', value: 'Active' },
+            { label: 'Listing Accuracy', value: '99.8%' },
+            { label: 'Compliance', value: 'Verified' }
         ].map(metric => (
             <div key={metric.label} className="uh-metric-item">
                 <div className="uh-mono" style={{ fontSize: '0.65rem', color: 'var(--uh-slate)', marginBottom: '0.5rem' }}>{metric.label}</div>
@@ -91,13 +93,15 @@ export const MarketMetricsHUD = () => (
     </div>
 );
 
-export const GlobalFooter = () => (
+export const GlobalFooter = () => {
+  const themeLink = usePropertyThemeLink();
+  return (
     <footer className="uh-footer">
         <div className="uh-footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '8rem' }}>
             <div>
-                <div className="uh-logo" style={{ fontSize: '2.5rem', marginBottom: '3.5rem' }}>UNIFIED</div>
+                <a href={themeLink('/')} className="uh-logo" style={{ fontSize: '2.5rem', marginBottom: '3.5rem', textDecoration: 'none', color: 'inherit' }}>UNIFIED</a>
                 <p style={{ color: 'var(--uh-slate)', lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px' }}>
-                    The world's most robust universal property protocol. Synchronizing residential, commercial, and industrial nodes with institutional precision.
+                    A complete property platform for residential, commercial, and investment listings — all in one place.
                 </p>
             </div>
             <FooterMenuColumn
@@ -117,7 +121,7 @@ export const GlobalFooter = () => (
             />
         </div>
         <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid var(--uh-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="uh-footer-bottom">
-            <div className="uh-mono" style={{ color: 'var(--uh-slate)', fontSize: '0.65rem' }}>© 2026 SELLIO_UNIFIED_PROTOCOL // GLOBAL_SYNC_STABLE</div>
+            <div className="uh-mono" style={{ color: 'var(--uh-slate)', fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
             <div style={{ display: 'flex', gap: '4rem' }} className="uh-footer-socials">
                 <MenuNav
                     location="social_footer"
@@ -132,4 +136,5 @@ export const GlobalFooter = () => (
             </div>
         </div>
     </footer>
-);
+  );
+};

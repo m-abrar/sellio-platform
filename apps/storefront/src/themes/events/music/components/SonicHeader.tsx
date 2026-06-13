@@ -14,7 +14,7 @@ export const SonicHeader = () => {
 
   return (
     <header className="sonic-header">
-      <div className="sonic-logo">{brandLabel}</div>
+      <a href={themeLink('/')} className="sonic-logo" style={{ textDecoration: 'none', color: 'inherit' }}>{brandLabel}</a>
       
       <button 
         className={`sonic-hamburger ${isOpen ? 'sonic-hamburger-open' : ''}`} 

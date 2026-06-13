@@ -4,15 +4,17 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 
 export const MegaHeader = () => {
+  const themeLink = useUnifiedThemeLink();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="ugm-header">
-      <div className="ugm-logo">
+      <a href={themeLink('/')} className="ugm-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
         MEGA<span>GRID</span>
-      </div>
+      </a>
       
       <button 
           className={`ugm-hamburger ${isOpen ? 'ugm-hamburger-open' : ''}`} 
@@ -71,16 +73,16 @@ const MegaItem = ({ title, value, label }: MegaItemProps) => (
 
 export const HeavyweightGrid = () => {
     const items = [
-        { title: "GLOBAL_THROUGHPUT", value: "840TB", label: "Monthly Data Sync" },
-        { title: "NODAL_CAPACITY", value: "12k+", label: "Active Distribution Nodes" },
-        { title: "REGISTRY_VOLUME", value: "1.4M", label: "Verified Assets" },
-        { title: "SYSTEM_UPTIME", value: "99.9", label: "Core Reliability" },
+        { title: "Global Throughput", value: "840TB", label: "Monthly Data Volume" },
+        { title: "Active Capacity", value: "12k+", label: "Active Seller Accounts" },
+        { title: "Verified Listings", value: "1.4M", label: "Verified Product Records" },
+        { title: "System Uptime", value: "99.9", label: "Core Reliability" },
     ];
 
     return (
         <section className="ugm-heavyweight-grid" id="ugm-exchange-section">
             <div style={{ marginBottom: '8rem' }} className="ugm-grid-header">
-                <span className="ugm-mono" style={{ color: 'var(--ugm-orange)' }}>HEAVYWEIGHT_LOGIC</span>
+                <span className="ugm-mono" style={{ color: 'var(--ugm-orange)' }}>Platform Capacity</span>
                 <h2 style={{ fontFamily: 'var(--ugm-font-heading)', fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: 900, marginTop: '2rem', letterSpacing: '-3px', color: '#171717', lineHeight: 1.1 }}>Unrivaled <br/>Capacity.</h2>
             </div>
             <div className="ugm-grid">
@@ -92,21 +94,23 @@ export const HeavyweightGrid = () => {
 
 export const MassiveSyncBar = () => (
     <div className="ugm-massive-sync-bar">
-        <span>★ INFRASTRUCTURE SYNC: ONLINE // 99.99% SYSTEM CAPABILITY ACTIVATED</span>
+        <span>★ PLATFORM STATUS: ONLINE // 99.99% UPTIME</span>
         <span className="ugm-bar-separator">//</span>
-        <span>LATENCY TARGET: &lt;8ms NODAL PIPELINES</span>
+        <span>FAST LOAD TIMES &lt;8ms RESPONSE</span>
         <span className="ugm-bar-separator">//</span>
-        <span>SECURE HIGH VOLUME HEAVYWEIGHT PROTOCOL</span>
+        <span>SECURE HIGH-VOLUME MARKETPLACE</span>
     </div>
 );
 
-export const AuthorityFooter = () => (
+export const AuthorityFooter = () => {
+  const themeLink = useUnifiedThemeLink();
+  return (
     <footer className="ugm-authority-footer">
         <div className="ugm-footer-grid">
             <div>
-                <div className="ugm-logo" style={{ color: 'white', fontSize: '2.2rem', marginBottom: '3rem' }}>MEGAGRID</div>
+                <a href={themeLink('/')} className="ugm-logo" style={{ color: 'white', fontSize: '2.2rem', marginBottom: '3rem', textDecoration: 'none' }}>MEGAGRID</a>
                 <p style={{ opacity: 0.5, lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px' }}>
-                    The advanced heavyweight multi-category distribution node. Engineered for maximum scaling capacity and transactional authority.
+                    A large-scale multi-category marketplace built for high-volume listings and seamless seller and buyer experiences.
                 </p>
             </div>
             <FooterMenuColumn
@@ -129,7 +133,7 @@ export const AuthorityFooter = () => (
             />
         </div>
         <div className="ugm-footer-bottom">
-            <div className="ugm-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_MEGAGRID_OS // SYNC_STABLE</div>
+            <div className="ugm-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
             <div className="ugm-footer-socials">
                 <MenuNav
                     location="social_footer"
@@ -144,4 +148,5 @@ export const AuthorityFooter = () => (
             </div>
         </div>
     </footer>
-);
+  );
+};

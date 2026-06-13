@@ -5,6 +5,7 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 
 const SplitBrand = ({ label }: { label: string }) => {
     const midpoint = Math.max(1, Math.ceil(label.length / 2));
@@ -12,12 +13,13 @@ const SplitBrand = ({ label }: { label: string }) => {
 };
 
 export const UsedHeader = () => {
+    const themeLink = useAutosThemeLink();
     const [isOpen, setIsOpen] = useState(false);
     const brandLabel = useThemeContent('header.brand_label', 'DriveHub');
 
     return (
         <header className="us-header">
-            <a href="#" className="us-logo">
+            <a href={themeLink('/')} className="us-logo">
                 <SplitBrand label={brandLabel} />
             </a>
             
@@ -105,7 +107,7 @@ export const UsedFooter = () => {
     const brandLabel = useThemeContent('header.brand_label', 'DriveHub');
     const footerDescription = useThemeContent('footer.description', 'Your trusted marketplace for quality used vehicles.');
     const footerEmail = useThemeContent('footer.email', 'info@drivehub.com');
-    const footerCopyright = useThemeContent('footer.copyright', '2026 DriveHub Marketplace. All rights reserved.');
+    const footerCopyright = useThemeContent('footer.copyright', '2026 Sellio. All rights reserved.');
 
     return (
         <footer className="us-footer">

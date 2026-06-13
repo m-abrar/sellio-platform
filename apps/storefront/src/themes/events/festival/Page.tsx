@@ -27,14 +27,14 @@ function formatEventDateShort(dateStr?: string | null) {
   }
 
   const date = new Date(dateStr);
-  return `${months[date.getMonth()]}_${String(date.getDate()).padStart(2, '0')}_${date.getFullYear()}`;
+  return `${months[date.getMonth()]} ${String(date.getDate()).padStart(2, '0')} ${date.getFullYear()}`;
 }
 
 function mapEventToStage(event: EventListing, index: number) {
   const location = event.location?.city
     || event.location?.map_title
     || [event.location?.state, event.location?.country].filter(Boolean).join(' ')
-    || 'Global Node';
+    || 'Global';
 
   return {
     title: event.title,
@@ -53,18 +53,18 @@ export default function Page() {
   const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const heroImage = useThemeMedia('hero.image', '/themes/events/festival/10.webp');
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'THE_GLOBAL_COLLECTIVE_V8');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Global Festival Lineup');
   const heroTitle = useThemeContent('hero.title', 'Neon\nPulse.');
-  const heroDescription = useThemeContent('hero.description', 'The most immersive festival experiences on the planet. Curated, authenticated, and distributed via the Sellio Neon network.');
+  const heroDescription = useThemeContent('hero.description', 'The most immersive festival experiences on the planet. Curated and authenticated for the discerning attendee.');
   const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Explore Lineup');
-  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'Join_The_Pulse');
-  const registryEyebrow = useThemeContent('collection.eyebrow', 'OFFICIAL_FESTIVAL_REGISTRY');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'Join the Pulse');
+  const registryEyebrow = useThemeContent('collection.eyebrow', 'Festival Lineup');
   const registryTitle = useThemeContent('collection.title', 'Neon\nStages.');
-  const registryDescription = useThemeContent('collection.description', "Our unified protocol synchronizes high-vibe environments across the world's most significant neon nodes.");
-  const ctaEyebrow = useThemeContent('cta.eyebrow', 'READY_TO_LOSE_CONTROL');
+  const registryDescription = useThemeContent('collection.description', "Curated events from the world's most vibrant festival destinations.");
+  const ctaEyebrow = useThemeContent('cta.eyebrow', 'Ready to Attend');
   const ctaTitle = useThemeContent('cta.title', 'The Season is Live.');
   const ctaHighlight = useThemeContent('cta.highlight', 'Season');
-  const ctaDescription = useThemeContent('cta.description', "The 2026/27 season is officially live. Secure your access to the world's most exclusive high-vibe environments before the node capacity is reached.");
+  const ctaDescription = useThemeContent('cta.description', "The 2026/27 season is officially live. Secure your tickets to the world's most exclusive festivals before they sell out.");
   const ctaButton = useThemeContent('cta.button_label', 'Secure Tickets Now');
 
   useEffect(() => {
@@ -138,9 +138,9 @@ export default function Page() {
 
       {/* Atmosphere HUD Section */}
       <section className="eff-section eff-hud-section" aria-label="Atmosphere Monitoring Dashboard">
-          <AtmosphereHUD label="GLOBAL_ATTENDEES" value="500K+" color="var(--eff-magenta)" />
-          <AtmosphereHUD label="FESTIVAL_NODES" value="142" color="var(--eff-purple)" />
-          <AtmosphereHUD label="VIBE_RATING" value="99%" color="var(--eff-blue)" />
+          <AtmosphereHUD label="Global Attendees" value="500K+" color="var(--eff-magenta)" />
+          <AtmosphereHUD label="Festival Stages" value="142" color="var(--eff-purple)" />
+          <AtmosphereHUD label="Satisfaction Rate" value="99%" color="var(--eff-blue)" />
       </section>
 
       {/* Stage Registry Section */}
@@ -183,9 +183,9 @@ export default function Page() {
               ))
             ) : events.length === 0 ? (
               <div className="evf-listing-state">
-                <div className="evf-listing-kicker">Empty Event Registry</div>
+                <div className="evf-listing-kicker">No Events Yet</div>
                 <h3>No live events are published yet.</h3>
-                <p>Add event records in the backend and this festival grid will hydrate automatically.</p>
+                <p>Add event records in the admin panel to populate this festival grid.</p>
               </div>
             ) : (
               events.slice(0, 6).map((event, index) => {

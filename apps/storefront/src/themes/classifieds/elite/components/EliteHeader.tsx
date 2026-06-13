@@ -4,14 +4,17 @@ import React from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 
 const scrollToCatalog = () => {
     document.getElementById('ce-catalog')?.scrollIntoView({ behavior: 'smooth' });
 };
 
-export const EliteHeader = () => (
+export const EliteHeader = () => {
+    const themeLink = useClassifiedsThemeLink();
+    return (
     <header className="elite-header">
-        <div className="elite-logo">SELLIO_ELITE</div>
+        <a href={themeLink('/')} className="elite-logo" style={{ textDecoration: 'none', color: 'inherit' }}>SELLIO<span>_ELITE</span></a>
         <div className="elite-nav-panel">
             <MenuNav
                 location="main_header"
@@ -27,4 +30,5 @@ export const EliteHeader = () => (
             />
         </div>
     </header>
-);
+    );
+};

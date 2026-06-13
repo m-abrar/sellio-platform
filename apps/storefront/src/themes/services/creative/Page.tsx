@@ -160,9 +160,9 @@ export default function Page() {
             ))
           ) : services.length === 0 ? (
             <div className="crtv-listing-state">
-              <div className="crtv-listing-kicker">Empty Creative Registry</div>
+              <div className="crtv-listing-kicker">No Creatives Yet</div>
               <h3>No live services are published yet.</h3>
-              <p>Add service records in the backend and this creative grid will hydrate automatically.</p>
+              <p>Add service records in the admin panel to populate this grid.</p>
             </div>
           ) : (
             services.slice(0, 6).map((service, index) => {
