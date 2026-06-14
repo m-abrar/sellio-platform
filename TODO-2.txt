@@ -1,0 +1,45 @@
+write Sellio same version everywhere, documentation, error screen, loading, screen, installer, etc
+
+blade frontend, 
+Browse Popular Services
+Find trusted professionals for any project.
+show 4 categories here or increase the size of columns if you want to show 3. so it should not have empty space on the right side
+
+
+the blade frontend, footer is not perfectly designed. it is not balanced including the newsletter subscription. fix it
+
+
+http://127.0.0.1:3000/preview/unifieds_marketplace
+there are 1 big 2 small cards in the hero, description should be hidden, so picture should be visible. apply some design for price in the card to look more perfect.
+
+the features below the hero, can we add icons and some other attraction too in the design?
+
+the section: Start with a category.
+are the images dynamic and relevant to category? fix them.
+are the numbers real?
+
+next section: Explore top categories
+are the card designs final shape? fix the poor UIUX and errors.
+are the numbers real?
+
+
+
+section: Trending items
+can we move the label "featured" to somewhere else and/or polish the desing of the card?
+
+
+section: Top-rated sellers
+are the content real? and dynamic? can we improve the content here?
+
+section: featured listings (CTA)
+the section design feels incomplete.
+
+
+footer: is the footer final? polish it.
+are the menus dynamic from backend?
+
+is the company name dynamic and editable?
+
+--------------------
+
+abc

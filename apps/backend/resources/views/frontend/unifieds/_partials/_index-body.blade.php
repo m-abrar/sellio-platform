@@ -197,10 +197,14 @@
             <p class="lead text-muted">{{ __('Find trusted professionals for any project.') }}</p>
         </div>
 
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            @isset($serviceCategories)
+        @isset($serviceCategories)
+        @php
+            $svcCount = $serviceCategories->count();
+            $svcLgCol = $svcCount >= 4 ? 3 : ($svcCount === 3 ? 4 : ($svcCount === 2 ? 6 : 12));
+        @endphp
+        <div class="row g-4">
                 @forelse($serviceCategories as $category)
-                    <div class="col" data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 }}">
+                    <div class="col-12 col-md-6 col-lg-{{ $svcLgCol }}" data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 }}">
                         <a href="{{ route('services.index', ['category' => $category->slug]) }}" class="text-decoration-none">
                             <div class="card glass-surface text-center h-100 border-0 rounded-5 p-3 hover-lift transition-all">
                                 <div class="card-body">
@@ -223,8 +227,8 @@
                         'label' => __('Browse Services')
                     ])
                 @endforelse
-            @endisset
         </div>
+        @endisset
     </div>
 </section>
 @endif
