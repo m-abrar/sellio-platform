@@ -1036,6 +1036,8 @@ const UNIFIEDS_MARKETPLACE_HOME: ThemeContentResponse = {
   theme_key: 'unifieds_marketplace',
   page: 'home',
   content: {
+    'site_name': 'MarketHub',
+    'footer.brand_description': 'The all-in-one marketplace for properties, vehicles, services, jobs, events, and classifieds.',
     'hero.eyebrow': 'Marketplace hub',
     'hero.title': 'Browse every marketplace in one place.',
     'hero.highlight': 'marketplace.',

@@ -71,6 +71,7 @@ const marketplaceVerticals: MarketplaceVertical[] = [
 ];
 
 const EXPLORE_BATCH_SIZE = 12;
+const EXPLORE_REMOTE_PAGE_SIZE = 4;
 
 function normalize(value: unknown): string {
   return plainText(value, '').toLowerCase();
@@ -312,6 +313,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
   const [listings, setListings] = useState<ExploreListing[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [inventoryTotal, setInventoryTotal] = useState<number | null>(null);
+  const [verticalTotals, setVerticalTotals] = useState<Record<string, number>>({});
   const [lastPage, setLastPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -350,7 +352,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
         setLoadingMore(true);
       }
 
-      const query: Record<string, unknown> = { page, per_page: 12 };
+      const query: Record<string, unknown> = { page, per_page: EXPLORE_REMOTE_PAGE_SIZE };
       if (searchQuery) query.search = searchQuery;
       if (selectedCategorySlug) query.category = selectedCategorySlug;
 
@@ -378,6 +380,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
 
       const loadedCategories: Category[] = [];
       const loadedListings: ExploreListing[] = [];
+      const loadedTotals: Record<string, number> = {};
       const errors: string[] = [];
       let total = 0;
       let highestLastPage = 1;
@@ -385,7 +388,8 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       if (productsResult.status === 'fulfilled') {
         loadedCategories.push(...(productsResult.value.sidebar?.categories ?? []));
         loadedListings.push(...productsResult.value.data.map((product) => productToExploreListing(product, productsResult.value.sidebar?.categories ?? [])));
-        total += productsResult.value.meta?.total ?? productsResult.value.data.length;
+        loadedTotals.products = productsResult.value.meta?.total ?? productsResult.value.data.length;
+        total += loadedTotals.products;
         highestLastPage = Math.max(highestLastPage, productsResult.value.meta?.last_page ?? 1);
       } else {
         errors.push('products');
@@ -394,7 +398,8 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       if (propertiesResult.status === 'fulfilled') {
         loadedCategories.push(...(propertiesResult.value.sidebar?.categories ?? []));
         loadedListings.push(...propertiesResult.value.data.map(propertyToExploreListing));
-        total += propertiesResult.value.meta?.total ?? propertiesResult.value.data.length;
+        loadedTotals.properties = propertiesResult.value.meta?.total ?? propertiesResult.value.data.length;
+        total += loadedTotals.properties;
         highestLastPage = Math.max(highestLastPage, propertiesResult.value.meta?.last_page ?? 1);
       } else {
         errors.push('properties');
@@ -403,7 +408,8 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       if (vehiclesResult.status === 'fulfilled') {
         loadedCategories.push(...(vehiclesResult.value.sidebar?.categories ?? []));
         loadedListings.push(...vehiclesResult.value.data.map(vehicleToExploreListing));
-        total += vehiclesResult.value.meta?.total ?? vehiclesResult.value.data.length;
+        loadedTotals.autos = vehiclesResult.value.meta?.total ?? vehiclesResult.value.data.length;
+        total += loadedTotals.autos;
         highestLastPage = Math.max(highestLastPage, vehiclesResult.value.meta?.last_page ?? 1);
       } else {
         errors.push('autos');
@@ -412,7 +418,8 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       if (jobsResult.status === 'fulfilled') {
         loadedCategories.push(...(jobsResult.value.sidebar?.categories ?? []));
         loadedListings.push(...jobsResult.value.data.map(jobToExploreListing));
-        total += jobsResult.value.meta?.total ?? jobsResult.value.data.length;
+        loadedTotals.jobs = jobsResult.value.meta?.total ?? jobsResult.value.data.length;
+        total += loadedTotals.jobs;
         highestLastPage = Math.max(highestLastPage, jobsResult.value.meta?.last_page ?? 1);
       } else {
         errors.push('jobs');
@@ -421,7 +428,8 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       if (servicesResult.status === 'fulfilled') {
         loadedCategories.push(...(servicesResult.value.sidebar?.categories ?? []));
         loadedListings.push(...servicesResult.value.data.map(serviceToExploreListing));
-        total += servicesResult.value.meta?.total ?? servicesResult.value.data.length;
+        loadedTotals.services = servicesResult.value.meta?.total ?? servicesResult.value.data.length;
+        total += loadedTotals.services;
         highestLastPage = Math.max(highestLastPage, servicesResult.value.meta?.last_page ?? 1);
       } else {
         errors.push('services');
@@ -430,7 +438,8 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       if (eventsResult.status === 'fulfilled') {
         loadedCategories.push(...(eventsResult.value.sidebar?.categories ?? []));
         loadedListings.push(...eventsResult.value.data.map(eventToExploreListing));
-        total += eventsResult.value.meta?.total ?? eventsResult.value.data.length;
+        loadedTotals.events = eventsResult.value.meta?.total ?? eventsResult.value.data.length;
+        total += loadedTotals.events;
         highestLastPage = Math.max(highestLastPage, eventsResult.value.meta?.last_page ?? 1);
       } else {
         errors.push('events');
@@ -439,7 +448,8 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       if (classifiedsResult.status === 'fulfilled') {
         loadedCategories.push(...(classifiedsResult.value.sidebar?.categories ?? []));
         loadedListings.push(...classifiedsResult.value.data.map(classifiedToExploreListing));
-        total += classifiedsResult.value.meta?.total ?? classifiedsResult.value.data.length;
+        loadedTotals.classifieds = classifiedsResult.value.meta?.total ?? classifiedsResult.value.data.length;
+        total += loadedTotals.classifieds;
         highestLastPage = Math.max(highestLastPage, classifiedsResult.value.meta?.last_page ?? 1);
       } else {
         errors.push('classifieds');
@@ -466,6 +476,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
         return Array.from(bySlug.values());
       });
       setInventoryTotal(total || loadedListings.length);
+      setVerticalTotals((previous) => (isFirstPage ? loadedTotals : { ...previous, ...loadedTotals }));
       setLastPage(highestLastPage);
       setListingError(
         errors.length > 0 && loadedListings.length === 0
@@ -476,6 +487,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       if (isFirstPage && loadedListings.length === 0 && errors.length > 0) {
         setListings([]);
         setInventoryTotal(null);
+        setVerticalTotals({});
         setLastPage(1);
       }
 
@@ -492,13 +504,12 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
 
   const verticalCounts = useMemo(() => {
     return marketplaceVerticals.reduce<Record<string, number>>((counts, vertical) => {
-      counts[vertical.key] =
-        vertical.key === 'all'
-          ? listings.length
-          : listings.filter((listing) => listing.vertical === vertical.key).length;
+      counts[vertical.key] = vertical.key === 'all'
+        ? inventoryTotal ?? listings.length
+        : verticalTotals[vertical.key] ?? listings.filter((listing) => listing.vertical === vertical.key).length;
       return counts;
     }, {});
-  }, [listings]);
+  }, [inventoryTotal, listings, verticalTotals]);
 
   const visibleCategories = useMemo(() => {
     return categories
@@ -541,6 +552,9 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
   const hasLoadedHiddenListings = visibleCount < filteredProducts.length;
   const hasRemoteListings = page < lastPage;
   const canLoadMoreListings = hasLoadedHiddenListings || hasRemoteListings;
+  const resultTotal = selectedVertical.key === 'all'
+    ? inventoryTotal ?? filteredProducts.length
+    : verticalTotals[selectedVertical.key] ?? filteredProducts.length;
 
   const resultLabel = inventoryTotal === null
     ? 'Live marketplace'
@@ -563,21 +577,21 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
     <main className="um-explore-page">
       <section className="um-explore-hero" aria-labelledby="um-explore-title">
         <div className="um-explore-hero-copy">
-          <span className="um-section-kicker">Marketplace Directory</span>
-          <h1 id="um-explore-title">Explore every vertical from one polished marketplace.</h1>
+          <span className="um-section-kicker">Marketplace directory</span>
+          <h1 id="um-explore-title">Find what you need across Sellio.</h1>
           <p>
-            Search live Sellio listings across properties, autos, services, jobs, events,
-            classifieds, and products with a single premium discovery flow.
+            Browse homes, vehicles, services, jobs, events, products, and local listings
+            from one simple search page.
           </p>
         </div>
 
         <div className="um-explore-hero-panel" aria-label="Explore summary">
           <div>
-            <span>Inventory</span>
+            <span>Available now</span>
             <strong>{resultLabel}</strong>
           </div>
           <div>
-            <span>Vertical</span>
+            <span>Browsing</span>
             <strong>{selectedVertical.label}</strong>
           </div>
           <div>
@@ -669,8 +683,8 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
 
       {listingError ? (
         <div className="um-explore-alert" role="status">
-          <strong>Partial catalog sync.</strong>
-          <span>{listingError} Showing the real listings that are currently available from the API.</span>
+          <strong>Some results are unavailable.</strong>
+          <span>{listingError} Showing the listings that are available right now.</span>
         </div>
       ) : null}
 
@@ -681,7 +695,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
             <h2 id="um-explore-results-title">
               {loading
                 ? 'Loading marketplace listings'
-                : `${visibleProducts.length} of ${filteredProducts.length} curated matches`}
+                : `${visibleProducts.length} of ${resultTotal.toLocaleString()} listings shown`}
             </h2>
           </div>
           <a href={themeLink('/cart')} className="um-btn-secondary">View cart</a>
@@ -725,7 +739,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
                       <h3>{listing.title}</h3>
                       <p>{listing.description}</p>
                       <div className="um-explore-card-footer">
-                        <span>API listing</span>
+                        <span>Verified listing</span>
                         <strong>{listing.actionLabel}</strong>
                       </div>
                     </div>
@@ -745,7 +759,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
                   {loadingMore ? 'Loading listings...' : `Load ${EXPLORE_BATCH_SIZE} more`}
                 </button>
                 <span>
-                  Showing {visibleProducts.length} of {inventoryTotal?.toLocaleString() ?? filteredProducts.length.toLocaleString()} live listings
+                  Showing {visibleProducts.length} of {resultTotal.toLocaleString()} available listings
                 </span>
               </div>
             ) : null}

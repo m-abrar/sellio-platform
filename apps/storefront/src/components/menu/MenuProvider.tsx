@@ -37,7 +37,8 @@ export function useMenuContext(): MenuContextValue {
 
 export function useMenu(location: MenuLocationKey): MenuItem[] {
   const { menus, themeKey } = useMenuContext();
-  return menus[location]?.items ?? getDefaultMenu(location, themeKey).items;
+  const items = menus[location]?.items;
+  return items && items.length > 0 ? items : getDefaultMenu(location, themeKey).items;
 }
 
 export function useMenuTitle(location: MenuLocationKey): string {

@@ -91,6 +91,16 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
       ));
     }
 
+    if (themeKey === 'unifieds_marketplace') {
+      return footerMenu(location, 'Main Header Menu', links(
+        ['Browse All', '/explore'],
+        ['Properties', '/explore?vertical=properties'],
+        ['Autos', '/explore?vertical=autos'],
+        ['Services', '/explore?vertical=services'],
+        ['Jobs', '/explore?vertical=jobs'],
+      ));
+    }
+
     return footerMenu(location, 'Main Header Menu', fallbackHeaderItems(themeKey));
   }
 

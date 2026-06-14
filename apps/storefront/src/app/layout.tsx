@@ -27,10 +27,23 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const { theme, layout, databaseOffline, errorDetails } = await getActiveTheme();
-  const [{ menus }, themeContent] = await Promise.all([
+  const [{ menus }, rawThemeContent] = await Promise.all([
     getMenus(MENU_LOCATIONS, theme.theme_key),
     getThemeContent('home', theme.theme_key),
   ]);
+
+  const themeContent = {
+    ...rawThemeContent,
+    content: {
+      ...(theme.app_settings?.site_name ? { site_name: theme.app_settings.site_name } : {}),
+      ...(theme.app_settings?.hide_site_name ? { hide_site_name: theme.app_settings.hide_site_name } : {}),
+      ...rawThemeContent.content,
+    },
+    media: {
+      ...(theme.app_settings?.site_logo ? { site_logo: theme.app_settings.site_logo } : {}),
+      ...rawThemeContent.media,
+    },
+  };
   const headerList = await headers();
   const pathname = headerList.get('x-pathname') ?? '';
   const isPreview = headerList.get('x-preview-mode') === '1' || pathname.startsWith('/preview/');

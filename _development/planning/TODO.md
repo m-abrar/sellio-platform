@@ -429,20 +429,19 @@ this page and others like this need to be applied custom design
 
 ------------------------------
 
-http://127.0.0.1:3000/preview/ecommerce_default
-in the home hero section, you have some of the irrelevant statistic
 
-------------------------------
 
-http://127.0.0.1:3000/preview/ecommerce_default/product/[slug]
-fix, this page has unwanted cards
 
-------------------------------
+write Sellio same version everywhere, documentation, error screen, loading, screen, installer, etc
 
-http://127.0.0.1:3000/preview/ecommerce_default
-fix the footer design, it is crashed.
+blade frontend, 
+Browse Popular Services
+Find trusted professionals for any project.
+show 4 categories here or increase the size of columns if you want to show 3. so it should not have empty space on the right side
 
-------------------------------
 
-Need polishing it.
-http://127.0.0.1:3000/preview/ecommerce_electronics/checkout
+the blade frontend, footer is not perfectly designed. it is not balanced including the newsletter subscription. fix it
+
+
+login / register and other auth pages have UIUX bugs, kindly refine it.
+

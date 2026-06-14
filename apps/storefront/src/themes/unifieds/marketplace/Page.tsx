@@ -91,7 +91,8 @@ export default function Page() {
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [categoryHighlights, setCategoryHighlights] = useState<CategoryHighlight[]>(categoryFallbacks);
+  const [categoryHighlights, setCategoryHighlights] = useState<CategoryHighlight[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
   const [totalListings, setTotalListings] = useState<number | null>(null);
   const [activeVerticals, setActiveVerticals] = useState<number>(0);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -170,14 +171,16 @@ export default function Page() {
         };
       }
 
-      setCategoryHighlights([
+      const resolvedHighlights = [
         { ...categoryFallbacks[0], ...resolve(props,       (p) => p.featured_image || p.thumbnail_image || p.primary_image_url,  categoryFallbacks[0]) },
         { ...categoryFallbacks[1], ...resolve(events,      (e) => e.media?.poster || e.media?.preview,                           categoryFallbacks[1]) },
         { ...categoryFallbacks[2], ...resolve(autos,       (v) => v.featured_image,                                              categoryFallbacks[2]) },
         { ...categoryFallbacks[3], ...resolve(services,    (s) => s.media?.main_photo,                                           categoryFallbacks[3]) },
         { ...categoryFallbacks[4], ...resolve(jobs,        (j) => j.company?.logo || j.company?.photos?.[0]?.url,                categoryFallbacks[4]) },
         { ...categoryFallbacks[5], ...resolve(classifieds, (c) => c.media?.main_photo || c.media?.thumbnail,                     categoryFallbacks[5]) },
-      ]);
+      ];
+
+      setCategoryHighlights(resolvedHighlights);
 
       const rawTotals = [props, events, autos, services, jobs, classifieds].reduce<number[]>((totals, result) => {
         if (result.status === 'fulfilled' && result.value.meta?.total != null) {
@@ -191,6 +194,7 @@ export default function Page() {
         setTotalListings(rawTotals.reduce((a, b) => a + b, 0));
         setActiveVerticals(rawTotals.length);
       }
+      setLoadingCategories(false);
     });
 
     return () => { alive = false; };
@@ -346,7 +350,19 @@ export default function Page() {
           <a href={themeLink('/explore')} className="um-text-link">View marketplace</a>
         </div>
         <div className="um-category-highlight-grid">
-          {categoryHighlights.map((category) => (
+          {loadingCategories ? (
+            categoryFallbacks.map((category) => (
+              <div className="um-category-highlight um-category-highlight-loading" key={category.title}>
+                <div aria-hidden="true" />
+                <div>
+                  <span />
+                  <strong />
+                  <h3 />
+                  <p />
+                </div>
+              </div>
+            ))
+          ) : categoryHighlights.map((category) => (
             <a href={themeLink(`/explore?category=${encodeURIComponent(category.title.toLowerCase())}`)} className="um-category-highlight" key={category.title}>
               <img src={category.image} alt={category.sample} />
               <div>

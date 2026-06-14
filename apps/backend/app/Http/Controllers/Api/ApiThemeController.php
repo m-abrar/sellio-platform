@@ -7,6 +7,7 @@ use App\Models\Setting;
 use App\Models\Theme;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ApiThemeController extends Controller
 {
@@ -37,6 +38,11 @@ class ApiThemeController extends Controller
         }
 
         $settings = Setting::whereIn('key', ['site_name', 'site_logo', 'hide_site_name'])->pluck('value', 'key');
+
+        $logoPath = $settings->get('site_logo');
+        if ($logoPath) {
+            $settings['site_logo'] = url(Storage::url($logoPath));
+        }
 
         return response()->json([
             'success' => true,
