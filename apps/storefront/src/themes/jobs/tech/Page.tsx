@@ -148,7 +148,6 @@ export default function Page() {
     }
 
     loadJobs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allowDemo]);
 
   const goToExplore = (query?: string) => {

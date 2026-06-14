@@ -118,9 +118,7 @@ export default function Page() {
 
   // Initial load
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchServicesData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle direct category badge clicks
@@ -136,9 +134,7 @@ export default function Page() {
 
   // Re-run search query whenever selection categories change
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchServicesData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
 
   // Submit booking

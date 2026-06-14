@@ -220,7 +220,6 @@ export default function ExplorePage({ initialCategorySlug }: ExplorePageProps) {
     }, delay);
 
     return () => window.clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     clientReady,
     searchQuery,

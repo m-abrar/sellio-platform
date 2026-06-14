@@ -121,9 +121,7 @@ export default function Page() {
 
   // Perform initial search
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProperties(1, false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRefineSearch = () => {

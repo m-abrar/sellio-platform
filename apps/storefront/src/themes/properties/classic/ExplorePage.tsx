@@ -151,7 +151,6 @@ export default function ExplorePage({ initialCategorySlug }: ExplorePageProps) {
       selectedBedrooms,
       selectedPriceRange,
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedLocation, selectedCategory, selectedBedrooms, selectedPriceRange]);
 
   const handleRefineSearch = () => {

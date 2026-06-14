@@ -70,6 +70,8 @@ const marketplaceVerticals: MarketplaceVertical[] = [
   { key: 'classifieds', label: 'Classifieds', cue: 'Local finds', matcher: ['classified', 'classifieds', 'deal', 'used'] },
 ];
 
+const EXPLORE_BATCH_SIZE = 12;
+
 function normalize(value: unknown): string {
   return plainText(value, '').toLowerCase();
 }
@@ -314,6 +316,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [listingError, setListingError] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(EXPLORE_BATCH_SIZE);
 
   const page = Math.max(1, Number(searchParams.get('page') || 1));
   const searchQuery = searchParams.get('search') || searchParams.get('q') || initialSearch;
@@ -329,6 +332,11 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
     (category) => category.slug.toLowerCase() === selectedCategorySlug.toLowerCase(),
   );
   const searchKey = searchParams.toString();
+  const filterKey = [searchQuery, selectedCategorySlug, selectedVerticalKey, sortBy].join('|');
+
+  useEffect(() => {
+    setVisibleCount(EXPLORE_BATCH_SIZE);
+  }, [filterKey]);
 
   useEffect(() => {
     let isMounted = true;
@@ -525,6 +533,15 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       });
   }, [listings, searchQuery, selectedCategory, selectedVertical, sortBy]);
 
+  const visibleProducts = useMemo(
+    () => filteredProducts.slice(0, visibleCount),
+    [filteredProducts, visibleCount],
+  );
+
+  const hasLoadedHiddenListings = visibleCount < filteredProducts.length;
+  const hasRemoteListings = page < lastPage;
+  const canLoadMoreListings = hasLoadedHiddenListings || hasRemoteListings;
+
   const resultLabel = inventoryTotal === null
     ? 'Live marketplace'
     : `${inventoryTotal.toLocaleString()} live listings`;
@@ -532,6 +549,14 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
 
   const handleFilterUpdate = (updates: Record<string, string>) => {
     updateUrlSearch(router, themeLink, searchParams, updates);
+  };
+
+  const handleLoadMore = () => {
+    setVisibleCount((current) => current + EXPLORE_BATCH_SIZE);
+
+    if (!hasLoadedHiddenListings && hasRemoteListings) {
+      handleFilterUpdate({ page: String(page + 1) });
+    }
   };
 
   return (
@@ -654,7 +679,9 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
           <div>
             <span className="um-section-kicker">Results</span>
             <h2 id="um-explore-results-title">
-              {loading ? 'Loading marketplace listings' : `${filteredProducts.length} curated matches`}
+              {loading
+                ? 'Loading marketplace listings'
+                : `${visibleProducts.length} of ${filteredProducts.length} curated matches`}
             </h2>
           </div>
           <a href={themeLink('/cart')} className="um-btn-secondary">View cart</a>
@@ -677,7 +704,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
         ) : filteredProducts.length > 0 ? (
           <>
             <div className="um-explore-grid">
-              {filteredProducts.map((listing) => {
+              {visibleProducts.map((listing) => {
                 const vertical = marketplaceVerticals.find((item) => item.key === listing.vertical);
 
                 return (
@@ -707,16 +734,19 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
               })}
             </div>
 
-            {page < lastPage ? (
+            {canLoadMoreListings ? (
               <div className="um-explore-load-more">
                 <button
                   type="button"
                   className="um-btn-primary"
                   disabled={loadingMore}
-                  onClick={() => handleFilterUpdate({ page: String(page + 1) })}
+                  onClick={handleLoadMore}
                 >
-                  {loadingMore ? 'Loading listings...' : 'Load more listings'}
+                  {loadingMore ? 'Loading listings...' : `Load ${EXPLORE_BATCH_SIZE} more`}
                 </button>
+                <span>
+                  Showing {visibleProducts.length} of {inventoryTotal?.toLocaleString() ?? filteredProducts.length.toLocaleString()} live listings
+                </span>
               </div>
             ) : null}
           </>

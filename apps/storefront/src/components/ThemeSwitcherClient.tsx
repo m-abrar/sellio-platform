@@ -8,12 +8,21 @@ interface ThemeSwitcherClientProps {
   activeThemeKey: string;
 }
 
+const DEFAULT_SWITCHER_POSITION = { x: 20, y: 200 };
+
 export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes, activeThemeKey }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [pos, setPos] = useState({ x: 20, y: typeof window !== 'undefined' ? Math.round(window.innerHeight * 0.25) : 200 });
+  const [pos, setPos] = useState(DEFAULT_SWITCHER_POSITION);
   const dragging = useRef(false);
   const dragOffset = useRef({ x: 0, y: 0 });
   const didDrag = useRef(false);
+
+  useEffect(() => {
+    setPos({
+      x: DEFAULT_SWITCHER_POSITION.x,
+      y: Math.round(window.innerHeight * 0.25),
+    });
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

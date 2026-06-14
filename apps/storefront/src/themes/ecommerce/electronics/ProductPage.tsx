@@ -748,12 +748,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 oldPrice={getOldPriceStr(p)}
                 image={getProductImage(p, p.id || i + 3)}
                 badge={getOldPriceStr(p) ? 'SALE' : undefined}
-                // Custom routing redirect
-                onClick={() => {
-                  if (typeof window !== 'undefined') {
-                    window.location.href = getThemeLink(`/product/${p.slug}`);
-                  }
-                }}
+                href={getThemeLink(`/product/${p.slug}`)}
               />
             ))}
           </div>
