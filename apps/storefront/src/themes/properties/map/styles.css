@@ -371,3 +371,105 @@
   font-weight: 600;
   margin: 0.5rem 0;
 }
+
+/* ============================================================
+   ANIMATIONS, TRANSITIONS & HOVER EFFECTS
+   ============================================================ */
+
+@keyframes pm-fade-in-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pm-scale-in {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes pm-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes pm-map-drop {
+  0%   { transform: translateY(-20px) scale(0.8); opacity: 0; }
+  70%  { transform: translateY(3px) scale(1.05); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes pm-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* Map pins */
+.pm-marker {
+  animation: pm-map-drop 400ms ease-out both;
+}
+.pm-marker:hover {
+  transform: scale(1.2);
+  z-index: 10;
+  transition: transform 150ms ease;
+}
+
+/* Listing cards */
+.pm-list-card {
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+  will-change: transform;
+}
+.pm-list-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+}
+
+/* Card images */
+.pm-card-image { overflow: hidden; }
+.pm-card-image img { transition: transform 300ms ease-out; }
+.pm-list-card:hover .pm-card-image img { transform: scale(1.06); }
+
+/* Price badges */
+.pm-price { transition: transform 200ms ease; }
+.pm-list-card:hover .pm-price { transform: scale(1.05); }
+
+/* Buttons */
+.pm-detail-btn {
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 200ms ease;
+  will-change: transform;
+}
+.pm-detail-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(0,0,0,0.14); }
+.pm-detail-btn:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Shimmer */
+.pm-shimmer, .pm-skeleton, .pm-loading-block {
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+  background-size: 200% 100%;
+  animation: pm-shimmer 1.6s ease-in-out infinite;
+}
+
+/* Page entry */
+.map-page-wrapper {
+  animation: pm-fade-in-up 320ms ease-out both;
+}
+
+/* Empty state float */
+.pm-listing-state svg,
+.pm-empty-icon {
+  animation: pm-float 3s ease-in-out infinite;
+}
+
+/* Results list stagger */
+.pm-results-list > *:nth-child(1) { animation: pm-scale-in 300ms  30ms ease-out both; }
+.pm-results-list > *:nth-child(2) { animation: pm-scale-in 300ms  80ms ease-out both; }
+.pm-results-list > *:nth-child(3) { animation: pm-scale-in 300ms 130ms ease-out both; }
+.pm-results-list > *:nth-child(4) { animation: pm-scale-in 300ms 180ms ease-out both; }
+.pm-results-list > *:nth-child(5) { animation: pm-scale-in 300ms 230ms ease-out both; }
+.pm-results-list > *:nth-child(6) { animation: pm-scale-in 300ms 280ms ease-out both; }
+.pm-results-list > *:nth-child(7) { animation: pm-scale-in 300ms 330ms ease-out both; }
+.pm-results-list > *:nth-child(8) { animation: pm-scale-in 300ms 380ms ease-out both; }
+
+/* Nav links */
+.pm-nav-link { position: relative; transition: color 200ms ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

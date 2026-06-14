@@ -760,3 +760,73 @@
     padding: 2rem;
   }
 }
+
+/* ==========================================================================
+   Services Corporate — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes sc-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes sc-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes sc-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.services-corporate-theme {
+  animation: sc-fade-in-up 300ms ease-out both;
+}
+
+/* Services grid stagger */
+.sc-services-grid > *:nth-child(1) { animation: sc-scale-in 300ms  30ms ease-out both; }
+.sc-services-grid > *:nth-child(2) { animation: sc-scale-in 300ms  80ms ease-out both; }
+.sc-services-grid > *:nth-child(3) { animation: sc-scale-in 300ms 130ms ease-out both; }
+.sc-services-grid > *:nth-child(4) { animation: sc-scale-in 300ms 180ms ease-out both; }
+.sc-services-grid > *:nth-child(5) { animation: sc-scale-in 300ms 230ms ease-out both; }
+.sc-services-grid > *:nth-child(6) { animation: sc-scale-in 300ms 280ms ease-out both; }
+.sc-services-grid > *:nth-child(7) { animation: sc-scale-in 300ms 330ms ease-out both; }
+.sc-services-grid > *:nth-child(8) { animation: sc-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.sc-service-card { will-change: transform; }
+
+/* Button active press */
+.services-corporate-theme .sc-btn-primary { will-change: transform; }
+.services-corporate-theme .sc-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Nav link underline sweep */
+.sc-nav-link { position: relative; }
+.sc-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: currentColor;
+  transition: left 220ms ease, right 220ms ease;
+}
+.sc-nav-link:hover::after { left: 0; right: 0; }
+
+/* Skeleton shimmer */
+.sc-shimmer {
+  background: linear-gradient(90deg, #f0f2f5 25%, #e8eaed 50%, #f0f2f5 75%);
+  background-size: 200% 100%;
+  animation: sc-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

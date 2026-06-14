@@ -1154,4 +1154,56 @@
     font-family: var(--cp-font-heading);
 }
 
+/* ==========================================================================
+   Classifieds Premium — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes cp-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cp-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes cp-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.classifieds-premium-wrapper {
+  animation: cp-fade-in-up 300ms ease-out both;
+}
+
+/* Grid stagger */
+.cp-grid-featured > *:nth-child(1) { animation: cp-scale-in 300ms  30ms ease-out both; }
+.cp-grid-featured > *:nth-child(2) { animation: cp-scale-in 300ms  80ms ease-out both; }
+.cp-grid-featured > *:nth-child(3) { animation: cp-scale-in 300ms 130ms ease-out both; }
+.cp-grid-featured > *:nth-child(4) { animation: cp-scale-in 300ms 180ms ease-out both; }
+.cp-grid-featured > *:nth-child(5) { animation: cp-scale-in 300ms 230ms ease-out both; }
+.cp-grid-featured > *:nth-child(6) { animation: cp-scale-in 300ms 280ms ease-out both; }
+.cp-grid-featured > *:nth-child(7) { animation: cp-scale-in 300ms 330ms ease-out both; }
+.cp-grid-featured > *:nth-child(8) { animation: cp-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.cp-card { will-change: transform; }
+
+/* Skeleton shimmer */
+.cp-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: cp-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 

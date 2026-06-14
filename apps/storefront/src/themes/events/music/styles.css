@@ -476,3 +476,73 @@
     }
 }
 
+/* ==========================================================================
+   Events Music — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes sonic-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes sonic-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes sonic-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.sonic-pulse-wrapper {
+  animation: sonic-fade-in-up 300ms ease-out both;
+}
+
+/* Lineup grid stagger */
+.lineup-grid > *:nth-child(1) { animation: sonic-scale-in 300ms  30ms ease-out both; }
+.lineup-grid > *:nth-child(2) { animation: sonic-scale-in 300ms  80ms ease-out both; }
+.lineup-grid > *:nth-child(3) { animation: sonic-scale-in 300ms 130ms ease-out both; }
+.lineup-grid > *:nth-child(4) { animation: sonic-scale-in 300ms 180ms ease-out both; }
+.lineup-grid > *:nth-child(5) { animation: sonic-scale-in 300ms 230ms ease-out both; }
+.lineup-grid > *:nth-child(6) { animation: sonic-scale-in 300ms 280ms ease-out both; }
+.lineup-grid > *:nth-child(7) { animation: sonic-scale-in 300ms 330ms ease-out both; }
+.lineup-grid > *:nth-child(8) { animation: sonic-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.artist-card-premium { will-change: transform; }
+
+/* Button active press */
+.sonic-pulse-wrapper .sonic-btn-primary { will-change: transform; }
+.sonic-pulse-wrapper .sonic-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Nav link underline sweep */
+.sonic-nav-link { position: relative; }
+.sonic-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: var(--neon-pink, #ff2d78);
+  transition: left 220ms ease, right 220ms ease;
+}
+.sonic-nav-link:hover::after { left: 0; right: 0; }
+
+/* Skeleton shimmer */
+.sonic-shimmer {
+  background: linear-gradient(90deg, #0a0a0a 25%, #111111 50%, #0a0a0a 75%);
+  background-size: 200% 100%;
+  animation: sonic-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

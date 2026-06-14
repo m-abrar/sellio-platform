@@ -581,3 +581,59 @@
     gap: 2rem !important;
   }
 }
+
+/* ==========================================================================
+   Events Creative — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes evc-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes evc-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes evc-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.events-creative-theme {
+  animation: evc-fade-in-up 300ms ease-out both;
+}
+
+/* Artisan grid stagger */
+.evc-artisan-grid > *:nth-child(1) { animation: evc-scale-in 300ms  30ms ease-out both; }
+.evc-artisan-grid > *:nth-child(2) { animation: evc-scale-in 300ms  80ms ease-out both; }
+.evc-artisan-grid > *:nth-child(3) { animation: evc-scale-in 300ms 130ms ease-out both; }
+.evc-artisan-grid > *:nth-child(4) { animation: evc-scale-in 300ms 180ms ease-out both; }
+.evc-artisan-grid > *:nth-child(5) { animation: evc-scale-in 300ms 230ms ease-out both; }
+.evc-artisan-grid > *:nth-child(6) { animation: evc-scale-in 300ms 280ms ease-out both; }
+.evc-artisan-grid > *:nth-child(7) { animation: evc-scale-in 300ms 330ms ease-out both; }
+.evc-artisan-grid > *:nth-child(8) { animation: evc-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.evc-artisan-card { will-change: transform; }
+
+/* Button active press */
+.events-creative-theme .ev-btn-primary { will-change: transform; }
+.events-creative-theme .ev-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Skeleton shimmer */
+.evc-shimmer {
+  background: linear-gradient(90deg, #111 25%, #1a1a1a 50%, #111 75%);
+  background-size: 200% 100%;
+  animation: evc-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -555,3 +555,73 @@
 .cm-footer-link:hover {
     color: var(--cm-primary-orange);
 }
+
+/* ==========================================================================
+   Classifieds Modern — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes cm-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cm-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes cm-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.classifieds-modern-wrapper {
+  animation: cm-fade-in-up 300ms ease-out both;
+}
+
+/* Card grid stagger */
+.cm-grid > *:nth-child(1) { animation: cm-scale-in 300ms  30ms ease-out both; }
+.cm-grid > *:nth-child(2) { animation: cm-scale-in 300ms  80ms ease-out both; }
+.cm-grid > *:nth-child(3) { animation: cm-scale-in 300ms 130ms ease-out both; }
+.cm-grid > *:nth-child(4) { animation: cm-scale-in 300ms 180ms ease-out both; }
+.cm-grid > *:nth-child(5) { animation: cm-scale-in 300ms 230ms ease-out both; }
+.cm-grid > *:nth-child(6) { animation: cm-scale-in 300ms 280ms ease-out both; }
+.cm-grid > *:nth-child(7) { animation: cm-scale-in 300ms 330ms ease-out both; }
+.cm-grid > *:nth-child(8) { animation: cm-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.cm-card { will-change: transform; }
+
+/* Button active press */
+.classifieds-modern-wrapper .cm-btn-primary { will-change: transform; }
+.classifieds-modern-wrapper .cm-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Nav link underline sweep */
+.cm-nav-link { position: relative; }
+.cm-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: var(--cm-primary-orange);
+  transition: left 220ms ease, right 220ms ease;
+}
+.cm-nav-link:hover::after { left: 0; right: 0; }
+
+/* Skeleton shimmer */
+.cm-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: cm-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

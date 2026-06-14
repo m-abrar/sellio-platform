@@ -1140,3 +1140,55 @@
     color: var(--prem-accent);
     font-family: var(--prem-serif);
 }
+
+/* ==========================================================================
+   Classifieds Elite — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes elite-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes elite-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes elite-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.classifieds-premium-wrapper {
+  animation: elite-fade-in-up 300ms ease-out both;
+}
+
+/* Elite grid stagger */
+.elite-grid > *:nth-child(1) { animation: elite-scale-in 300ms  30ms ease-out both; }
+.elite-grid > *:nth-child(2) { animation: elite-scale-in 300ms  80ms ease-out both; }
+.elite-grid > *:nth-child(3) { animation: elite-scale-in 300ms 130ms ease-out both; }
+.elite-grid > *:nth-child(4) { animation: elite-scale-in 300ms 180ms ease-out both; }
+.elite-grid > *:nth-child(5) { animation: elite-scale-in 300ms 230ms ease-out both; }
+.elite-grid > *:nth-child(6) { animation: elite-scale-in 300ms 280ms ease-out both; }
+.elite-grid > *:nth-child(7) { animation: elite-scale-in 300ms 330ms ease-out both; }
+.elite-grid > *:nth-child(8) { animation: elite-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.elite-card { will-change: transform; }
+
+/* Skeleton shimmer */
+.elite-shimmer {
+  background: linear-gradient(90deg, #111 25%, #1a1a1a 50%, #111 75%);
+  background-size: 200% 100%;
+  animation: elite-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

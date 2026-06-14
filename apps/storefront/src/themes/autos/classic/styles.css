@@ -446,3 +446,119 @@
     }
 }
 
+/* ============================================================
+   ANIMATIONS, TRANSITIONS & HOVER EFFECTS
+   ============================================================ */
+
+@keyframes ac-fade-in-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ac-scale-in {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes ac-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes ac-ken-burns {
+  0%   { transform: scale(1)    translateX(0)    translateY(0); }
+  100% { transform: scale(1.06) translateX(-1%) translateY(-1%); }
+}
+
+/* Buttons */
+.ac-btn-cta,
+.ac-btn-gold {
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 200ms ease;
+  will-change: transform;
+}
+.ac-btn-cta:hover,
+.ac-btn-gold:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+.ac-btn-cta:active,
+.ac-btn-gold:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Vehicle cards */
+.ac-car-card {
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+  will-change: transform;
+}
+
+/* Card thumbnail — scale on hover */
+.ac-car-card { overflow: hidden; }
+.ac-car-img { transition: transform 300ms ease-out; }
+.ac-car-card:hover .ac-car-img { transform: scale(1.06); }
+
+/* Hero main photo — Ken Burns */
+.ac-hero {
+  animation: ac-ken-burns 8s ease-out alternate infinite;
+}
+
+/* Form inputs */
+.ac-select {
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.ac-select:focus {
+  outline: none;
+  border-color: var(--ac-secondary);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
+}
+
+/* Shimmer / skeleton loaders */
+.ac-shimmer,
+.ac-shimmer-pulse {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: ac-shimmer 1.6s ease-in-out infinite;
+}
+
+/* Page entry */
+.autos-classic-wrapper {
+  animation: ac-fade-in-up 320ms ease-out both;
+}
+
+/* Grid stagger */
+.ac-grid > *:nth-child(1)  { animation: ac-scale-in 300ms  30ms ease-out both; }
+.ac-grid > *:nth-child(2)  { animation: ac-scale-in 300ms  80ms ease-out both; }
+.ac-grid > *:nth-child(3)  { animation: ac-scale-in 300ms 130ms ease-out both; }
+.ac-grid > *:nth-child(4)  { animation: ac-scale-in 300ms 180ms ease-out both; }
+.ac-grid > *:nth-child(5)  { animation: ac-scale-in 300ms 230ms ease-out both; }
+.ac-grid > *:nth-child(6)  { animation: ac-scale-in 300ms 280ms ease-out both; }
+.ac-grid > *:nth-child(7)  { animation: ac-scale-in 300ms 330ms ease-out both; }
+.ac-grid > *:nth-child(8)  { animation: ac-scale-in 300ms 380ms ease-out both; }
+
+/* Nav links underline sweep */
+.ac-nav-link { position: relative; }
+.ac-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: currentColor;
+  transition: left 220ms ease, right 220ms ease;
+}
+.ac-nav-link:hover::after { left: 0; right: 0; }
+
+/* Auction card hover */
+.ac-auction-card {
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+}
+.ac-auction-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(212, 175, 55, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

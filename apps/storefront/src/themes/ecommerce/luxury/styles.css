@@ -927,3 +927,79 @@ a.ecl-product-card {
         color: var(--ecl-bg-dark) !important;
     }
 }
+
+/* ==========================================================================
+   Ecommerce Luxury — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes ecl-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ecl-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes ecl-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.ecommerce-luxury-wrapper {
+  animation: ecl-fade-in-up 300ms ease-out both;
+}
+
+/* Nav underline sweep */
+.ecommerce-luxury-wrapper .ecl-nav-link {
+  position: relative;
+}
+.ecommerce-luxury-wrapper .ecl-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: var(--ecl-gold, #c9a84c);
+  transition: left 220ms ease, right 220ms ease;
+}
+.ecommerce-luxury-wrapper .ecl-nav-link:hover::after,
+.ecommerce-luxury-wrapper .ecl-nav-link[aria-current="page"]::after {
+  left: 0;
+  right: 0;
+}
+
+/* Product grid stagger */
+.ecl-grid > *:nth-child(1) { animation: ecl-scale-in 300ms  30ms ease-out both; }
+.ecl-grid > *:nth-child(2) { animation: ecl-scale-in 300ms  80ms ease-out both; }
+.ecl-grid > *:nth-child(3) { animation: ecl-scale-in 300ms 130ms ease-out both; }
+.ecl-grid > *:nth-child(4) { animation: ecl-scale-in 300ms 180ms ease-out both; }
+.ecl-grid > *:nth-child(5) { animation: ecl-scale-in 300ms 230ms ease-out both; }
+.ecl-grid > *:nth-child(6) { animation: ecl-scale-in 300ms 280ms ease-out both; }
+.ecl-grid > *:nth-child(7) { animation: ecl-scale-in 300ms 330ms ease-out both; }
+.ecl-grid > *:nth-child(8) { animation: ecl-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.ecl-product-card { will-change: transform; }
+
+/* Button active press */
+.ecommerce-luxury-wrapper .ecl-btn-gold { will-change: transform; }
+.ecommerce-luxury-wrapper .ecl-btn-gold:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Skeleton shimmer */
+.ecl-shimmer {
+  background: linear-gradient(90deg, #1a1209 25%, #241a0e 50%, #1a1209 75%);
+  background-size: 200% 100%;
+  animation: ecl-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

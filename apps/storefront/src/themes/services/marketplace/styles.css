@@ -1183,3 +1183,73 @@
     }
 }
 
+/* ==========================================================================
+   Services Marketplace — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes sm-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes sm-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes sm-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.services-marketplace-theme {
+  animation: sm-fade-in-up 300ms ease-out both;
+}
+
+/* Provider grid stagger */
+.sm-provider-grid > *:nth-child(1) { animation: sm-scale-in 300ms  30ms ease-out both; }
+.sm-provider-grid > *:nth-child(2) { animation: sm-scale-in 300ms  80ms ease-out both; }
+.sm-provider-grid > *:nth-child(3) { animation: sm-scale-in 300ms 130ms ease-out both; }
+.sm-provider-grid > *:nth-child(4) { animation: sm-scale-in 300ms 180ms ease-out both; }
+.sm-provider-grid > *:nth-child(5) { animation: sm-scale-in 300ms 230ms ease-out both; }
+.sm-provider-grid > *:nth-child(6) { animation: sm-scale-in 300ms 280ms ease-out both; }
+.sm-provider-grid > *:nth-child(7) { animation: sm-scale-in 300ms 330ms ease-out both; }
+.sm-provider-grid > *:nth-child(8) { animation: sm-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.sm-provider-card { will-change: transform; }
+
+/* Button active press */
+.services-marketplace-theme .sm-btn-primary { will-change: transform; }
+.services-marketplace-theme .sm-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Nav link underline sweep */
+.sm-nav-link { position: relative; }
+.sm-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: currentColor;
+  transition: left 220ms ease, right 220ms ease;
+}
+.sm-nav-link:hover::after { left: 0; right: 0; }
+
+/* Skeleton shimmer */
+.sm-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: sm-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

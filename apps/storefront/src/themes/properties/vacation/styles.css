@@ -1062,3 +1062,59 @@
   100% { transform: rotate(360deg); }
 }
 
+/* ==========================================================================
+   Properties Vacation — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes pv-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pv-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes pv-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.properties-vacation-theme {
+  animation: pv-fade-in-up 300ms ease-out both;
+}
+
+/* Retreat grid stagger */
+.pv-retreat-grid > *:nth-child(1) { animation: pv-scale-in 300ms  30ms ease-out both; }
+.pv-retreat-grid > *:nth-child(2) { animation: pv-scale-in 300ms  80ms ease-out both; }
+.pv-retreat-grid > *:nth-child(3) { animation: pv-scale-in 300ms 130ms ease-out both; }
+.pv-retreat-grid > *:nth-child(4) { animation: pv-scale-in 300ms 180ms ease-out both; }
+.pv-retreat-grid > *:nth-child(5) { animation: pv-scale-in 300ms 230ms ease-out both; }
+.pv-retreat-grid > *:nth-child(6) { animation: pv-scale-in 300ms 280ms ease-out both; }
+.pv-retreat-grid > *:nth-child(7) { animation: pv-scale-in 300ms 330ms ease-out both; }
+.pv-retreat-grid > *:nth-child(8) { animation: pv-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.pv-retreat-card { will-change: transform; }
+
+/* Button active press */
+.properties-vacation-theme .pv-btn-primary { will-change: transform; }
+.properties-vacation-theme .pv-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Skeleton shimmer */
+.pv-shimmer {
+  background: linear-gradient(90deg, #e8f4ff 25%, #d6ecff 50%, #e8f4ff 75%);
+  background-size: 200% 100%;
+  animation: pv-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

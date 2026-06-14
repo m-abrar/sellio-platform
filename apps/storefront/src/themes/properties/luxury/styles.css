@@ -535,3 +535,111 @@
 .luxury-gallery-img-wrapper:hover img {
     transform: scale(1.05);
 }
+
+/* ============================================================
+   ANIMATIONS, TRANSITIONS & HOVER EFFECTS
+   ============================================================ */
+
+@keyframes luxury-fade-in-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes luxury-scale-in {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes luxury-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes luxury-map-drop {
+  0%   { transform: translateY(-20px) scale(0.8); opacity: 0; }
+  70%  { transform: translateY(3px) scale(1.05); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes luxury-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* Property cards */
+.estate-card-premium {
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+  will-change: transform;
+}
+.estate-card-premium:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Property card images */
+.estate-card-img { transition: transform 300ms ease-out; }
+
+/* Price badges */
+.luxury-btn-primary {
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 200ms ease;
+  will-change: transform;
+}
+.luxury-btn-primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(0,0,0,0.14); }
+.luxury-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Inputs */
+.luxury-filter-input,
+.luxury-filter-select {
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.luxury-filter-input:focus,
+.luxury-filter-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+}
+
+/* Shimmer */
+.luxury-shimmer, .luxury-skeleton, .luxury-loading-block {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: luxury-shimmer 1.6s ease-in-out infinite;
+}
+
+/* Page entry */
+.estate-showcase {
+  animation: luxury-fade-in-up 320ms ease-out both;
+}
+
+/* Empty state float */
+.luxury-empty-state svg,
+.luxury-empty-icon {
+  animation: luxury-float 3s ease-in-out infinite;
+}
+
+/* Grid stagger */
+.showcase-grid > *:nth-child(1) { animation: luxury-scale-in 300ms  30ms ease-out both; }
+.showcase-grid > *:nth-child(2) { animation: luxury-scale-in 300ms  80ms ease-out both; }
+.showcase-grid > *:nth-child(3) { animation: luxury-scale-in 300ms 130ms ease-out both; }
+.showcase-grid > *:nth-child(4) { animation: luxury-scale-in 300ms 180ms ease-out both; }
+.showcase-grid > *:nth-child(5) { animation: luxury-scale-in 300ms 230ms ease-out both; }
+.showcase-grid > *:nth-child(6) { animation: luxury-scale-in 300ms 280ms ease-out both; }
+.showcase-grid > *:nth-child(7) { animation: luxury-scale-in 300ms 330ms ease-out both; }
+.showcase-grid > *:nth-child(8) { animation: luxury-scale-in 300ms 380ms ease-out both; }
+
+/* Nav links */
+.platinum-nav-link { position: relative; transition: color 200ms ease; }
+.platinum-nav-link::after { content: ''; position: absolute; bottom: -2px; left: 50%; right: 50%; height: 2px; background: currentColor; transition: left 220ms ease, right 220ms ease; }
+.platinum-nav-link:hover::after { left: 0; right: 0; }
+
+/* Gallery hover */
+.luxury-gallery-img-wrapper img { transition: transform 300ms ease-out; }
+.luxury-gallery-img-wrapper:hover img { transform: scale(1.06); }
+
+/* Spec tiles */
+.luxury-spec-tile {
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1863,3 +1863,79 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   Unifieds Marketplace (Market Hub) — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes um-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes um-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes um-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.market-hub-wrapper {
+  animation: um-fade-in-up 300ms ease-out both;
+}
+
+/* Nav underline sweep */
+.market-hub-wrapper .um-nav-link {
+  position: relative;
+}
+.market-hub-wrapper .um-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: currentColor;
+  transition: left 220ms ease, right 220ms ease;
+}
+.market-hub-wrapper .um-nav-link:hover::after,
+.market-hub-wrapper .um-nav-link[aria-current="page"]::after {
+  left: 0;
+  right: 0;
+}
+
+/* Listing card stagger (nth-child on card since no named grid) */
+.um-listing-card:nth-child(1) { animation: um-scale-in 300ms  30ms ease-out both; }
+.um-listing-card:nth-child(2) { animation: um-scale-in 300ms  80ms ease-out both; }
+.um-listing-card:nth-child(3) { animation: um-scale-in 300ms 130ms ease-out both; }
+.um-listing-card:nth-child(4) { animation: um-scale-in 300ms 180ms ease-out both; }
+.um-listing-card:nth-child(5) { animation: um-scale-in 300ms 230ms ease-out both; }
+.um-listing-card:nth-child(6) { animation: um-scale-in 300ms 280ms ease-out both; }
+.um-listing-card:nth-child(7) { animation: um-scale-in 300ms 330ms ease-out both; }
+.um-listing-card:nth-child(8) { animation: um-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.um-listing-card { will-change: transform; }
+
+/* Button active press */
+.market-hub-wrapper .um-btn-primary { will-change: transform; }
+.market-hub-wrapper .um-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Skeleton shimmer */
+.um-shimmer {
+  background: linear-gradient(90deg, #f5f7fa 25%, #ebeef3 50%, #f5f7fa 75%);
+  background-size: 200% 100%;
+  animation: um-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

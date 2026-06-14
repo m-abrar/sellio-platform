@@ -860,3 +860,128 @@
     color: var(--ev-accent-blue);
 }
 
+/* ============================================================
+   ANIMATIONS, TRANSITIONS & HOVER EFFECTS
+   ============================================================ */
+
+@keyframes ev-fade-in-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ev-scale-in {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes ev-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes ev-ken-burns {
+  0%   { transform: scale(1)    translateX(0)    translateY(0); }
+  100% { transform: scale(1.06) translateX(-1%) translateY(-1%); }
+}
+
+/* Buttons */
+.ev-btn-green,
+.ev-btn-blue,
+.ev-product-btn-reserve {
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 200ms ease;
+  will-change: transform;
+}
+.ev-btn-green:active,
+.ev-btn-blue:active,
+.ev-product-btn-reserve:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Vehicle cards */
+.ev-card,
+.ev-related-card {
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+  will-change: transform;
+}
+
+/* Card thumbnail — scale on hover */
+.ev-related-img-wrap { overflow: hidden; }
+.ev-related-img { transition: transform 300ms ease-out; }
+.ev-related-card:hover .ev-related-img { transform: scale(1.06); }
+
+.ev-card-img { transition: transform 300ms ease-out; }
+.ev-card:hover .ev-card-img { transform: scale(1.06); }
+
+/* Hero main photo — Ken Burns */
+.ev-product-main-img {
+  animation: ev-ken-burns 8s ease-out alternate infinite;
+}
+
+/* Spec rows — highlight on hover */
+.ev-spec,
+.ev-product-spec-item {
+  transition: background-color 150ms ease;
+}
+.ev-spec:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Form inputs */
+.ev-booking-input,
+.ev-select {
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+/* Filter chips / badges */
+.ev-product-badge {
+  transition: transform 150ms ease, background-color 200ms ease;
+}
+.ev-product-badge:hover { transform: scale(1.06); }
+
+/* Shimmer / skeleton loaders */
+.ev-shimmer,
+.ev-skeleton {
+  background: linear-gradient(90deg, #1e293b 25%, #263348 50%, #1e293b 75%);
+  background-size: 200% 100%;
+  animation: ev-shimmer 1.6s ease-in-out infinite;
+}
+
+/* Page entry */
+.ev-product-wrapper {
+  animation: ev-fade-in-up 320ms ease-out both;
+}
+
+/* Grid stagger */
+.ev-grid > *:nth-child(1)  { animation: ev-scale-in 300ms  30ms ease-out both; }
+.ev-grid > *:nth-child(2)  { animation: ev-scale-in 300ms  80ms ease-out both; }
+.ev-grid > *:nth-child(3)  { animation: ev-scale-in 300ms 130ms ease-out both; }
+.ev-grid > *:nth-child(4)  { animation: ev-scale-in 300ms 180ms ease-out both; }
+.ev-grid > *:nth-child(5)  { animation: ev-scale-in 300ms 230ms ease-out both; }
+.ev-grid > *:nth-child(6)  { animation: ev-scale-in 300ms 280ms ease-out both; }
+.ev-grid > *:nth-child(7)  { animation: ev-scale-in 300ms 330ms ease-out both; }
+.ev-grid > *:nth-child(8)  { animation: ev-scale-in 300ms 380ms ease-out both; }
+
+.ev-related-grid > *:nth-child(1)  { animation: ev-scale-in 300ms  30ms ease-out both; }
+.ev-related-grid > *:nth-child(2)  { animation: ev-scale-in 300ms  80ms ease-out both; }
+.ev-related-grid > *:nth-child(3)  { animation: ev-scale-in 300ms 130ms ease-out both; }
+.ev-related-grid > *:nth-child(4)  { animation: ev-scale-in 300ms 180ms ease-out both; }
+
+/* Nav links underline sweep */
+.ev-nav-link { position: relative; }
+.ev-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: var(--ev-accent-blue);
+  transition: left 220ms ease, right 220ms ease;
+}
+.ev-nav-link:hover::after { left: 0; right: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

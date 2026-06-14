@@ -716,3 +716,73 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   Services Health — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes sh-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes sh-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes sh-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.services-health-theme {
+  animation: sh-fade-in-up 300ms ease-out both;
+}
+
+/* Specialist grid stagger */
+.sh-specialist-grid > *:nth-child(1) { animation: sh-scale-in 300ms  30ms ease-out both; }
+.sh-specialist-grid > *:nth-child(2) { animation: sh-scale-in 300ms  80ms ease-out both; }
+.sh-specialist-grid > *:nth-child(3) { animation: sh-scale-in 300ms 130ms ease-out both; }
+.sh-specialist-grid > *:nth-child(4) { animation: sh-scale-in 300ms 180ms ease-out both; }
+.sh-specialist-grid > *:nth-child(5) { animation: sh-scale-in 300ms 230ms ease-out both; }
+.sh-specialist-grid > *:nth-child(6) { animation: sh-scale-in 300ms 280ms ease-out both; }
+.sh-specialist-grid > *:nth-child(7) { animation: sh-scale-in 300ms 330ms ease-out both; }
+.sh-specialist-grid > *:nth-child(8) { animation: sh-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.sh-specialist-card { will-change: transform; }
+
+/* Button active press */
+.services-health-theme .sh-btn-primary { will-change: transform; }
+.services-health-theme .sh-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Nav link underline sweep */
+.sh-nav-link { position: relative; }
+.sh-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: currentColor;
+  transition: left 220ms ease, right 220ms ease;
+}
+.sh-nav-link:hover::after { left: 0; right: 0; }
+
+/* Skeleton shimmer */
+.sh-shimmer {
+  background: linear-gradient(90deg, #f0f4f8 25%, #e8edf4 50%, #f0f4f8 75%);
+  background-size: 200% 100%;
+  animation: sh-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

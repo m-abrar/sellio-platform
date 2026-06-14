@@ -332,3 +332,73 @@
   gap: 1rem;
 }
 
+/* ==========================================================================
+   Jobs Tech — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes jt-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes jt-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes jt-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.jobs-tech-wrapper {
+  animation: jt-fade-in-up 300ms ease-out both;
+}
+
+/* Job list stagger */
+.jt-job-list > *:nth-child(1) { animation: jt-scale-in 300ms  30ms ease-out both; }
+.jt-job-list > *:nth-child(2) { animation: jt-scale-in 300ms  80ms ease-out both; }
+.jt-job-list > *:nth-child(3) { animation: jt-scale-in 300ms 130ms ease-out both; }
+.jt-job-list > *:nth-child(4) { animation: jt-scale-in 300ms 180ms ease-out both; }
+.jt-job-list > *:nth-child(5) { animation: jt-scale-in 300ms 230ms ease-out both; }
+.jt-job-list > *:nth-child(6) { animation: jt-scale-in 300ms 280ms ease-out both; }
+.jt-job-list > *:nth-child(7) { animation: jt-scale-in 300ms 330ms ease-out both; }
+.jt-job-list > *:nth-child(8) { animation: jt-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.jt-job-card { will-change: transform; }
+
+/* Button active press */
+.jobs-tech-wrapper .jt-btn-primary { will-change: transform; }
+.jobs-tech-wrapper .jt-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Nav link underline sweep */
+.jt-nav-link { position: relative; }
+.jt-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: var(--jt-primary);
+  transition: left 220ms ease, right 220ms ease;
+}
+.jt-nav-link:hover::after { left: 0; right: 0; }
+
+/* Skeleton shimmer */
+.jt-shimmer {
+  background: linear-gradient(90deg, #0d1117 25%, #161b22 50%, #0d1117 75%);
+  background-size: 200% 100%;
+  animation: jt-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

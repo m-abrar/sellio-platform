@@ -676,3 +676,73 @@
     font-weight: 600;
     margin: 0.5rem 0;
 }
+
+/* ==========================================================================
+   Jobs Corporate — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes jc-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes jc-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes jc-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.jobs-corporate-wrapper {
+  animation: jc-fade-in-up 300ms ease-out both;
+}
+
+/* Job list stagger */
+.jc-job-list > *:nth-child(1) { animation: jc-scale-in 300ms  30ms ease-out both; }
+.jc-job-list > *:nth-child(2) { animation: jc-scale-in 300ms  80ms ease-out both; }
+.jc-job-list > *:nth-child(3) { animation: jc-scale-in 300ms 130ms ease-out both; }
+.jc-job-list > *:nth-child(4) { animation: jc-scale-in 300ms 180ms ease-out both; }
+.jc-job-list > *:nth-child(5) { animation: jc-scale-in 300ms 230ms ease-out both; }
+.jc-job-list > *:nth-child(6) { animation: jc-scale-in 300ms 280ms ease-out both; }
+.jc-job-list > *:nth-child(7) { animation: jc-scale-in 300ms 330ms ease-out both; }
+.jc-job-list > *:nth-child(8) { animation: jc-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.jc-job-card { will-change: transform; }
+
+/* Button active press */
+.jobs-corporate-wrapper .jc-btn-navy { will-change: transform; }
+.jobs-corporate-wrapper .jc-btn-navy:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Nav link underline sweep */
+.jc-nav-link { position: relative; }
+.jc-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: currentColor;
+  transition: left 220ms ease, right 220ms ease;
+}
+.jc-nav-link:hover::after { left: 0; right: 0; }
+
+/* Skeleton shimmer */
+.jc-shimmer {
+  background: linear-gradient(90deg, #f0f2f5 25%, #e8ebf0 50%, #f0f2f5 75%);
+  background-size: 200% 100%;
+  animation: jc-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

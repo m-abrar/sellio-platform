@@ -511,3 +511,59 @@
   font-weight: 600;
   margin: 0.5rem 0;
 }
+
+/* ==========================================================================
+   Properties Unified — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes uh-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes uh-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes uh-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.properties-unified-theme {
+  animation: uh-fade-in-up 300ms ease-out both;
+}
+
+/* Property grid stagger */
+.uh-prop-grid > *:nth-child(1) { animation: uh-scale-in 300ms  30ms ease-out both; }
+.uh-prop-grid > *:nth-child(2) { animation: uh-scale-in 300ms  80ms ease-out both; }
+.uh-prop-grid > *:nth-child(3) { animation: uh-scale-in 300ms 130ms ease-out both; }
+.uh-prop-grid > *:nth-child(4) { animation: uh-scale-in 300ms 180ms ease-out both; }
+.uh-prop-grid > *:nth-child(5) { animation: uh-scale-in 300ms 230ms ease-out both; }
+.uh-prop-grid > *:nth-child(6) { animation: uh-scale-in 300ms 280ms ease-out both; }
+.uh-prop-grid > *:nth-child(7) { animation: uh-scale-in 300ms 330ms ease-out both; }
+.uh-prop-grid > *:nth-child(8) { animation: uh-scale-in 300ms 380ms ease-out both; }
+
+/* Card will-change */
+.uh-prop-card { will-change: transform; }
+
+/* Button active press */
+.properties-unified-theme .uh-btn-primary { will-change: transform; }
+.properties-unified-theme .uh-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+
+/* Skeleton shimmer */
+.uh-shimmer {
+  background: linear-gradient(90deg, #f0f2f5 25%, #e8ebf0 50%, #f0f2f5 75%);
+  background-size: 200% 100%;
+  animation: uh-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

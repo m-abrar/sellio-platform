@@ -2133,3 +2133,77 @@ body.has-admin-bar .properties-classic-theme .pc-inquiry-panel {
     gap: var(--pc-space-xl);
   }
 }
+
+/* ==========================================================================
+   Properties Classic — Animations & Micro-interactions
+   ========================================================================== */
+
+@keyframes pc-fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pc-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes pc-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Page entry */
+.properties-classic-theme {
+  animation: pc-fade-in-up 300ms ease-out both;
+}
+
+/* Hero card entry */
+.pc-hero-card {
+  animation: pc-scale-in 350ms 80ms ease-out both;
+}
+
+/* Estate grid stagger */
+.pc-estate-grid > *:nth-child(1) { animation: pc-scale-in 300ms  30ms ease-out both; }
+.pc-estate-grid > *:nth-child(2) { animation: pc-scale-in 300ms  80ms ease-out both; }
+.pc-estate-grid > *:nth-child(3) { animation: pc-scale-in 300ms 130ms ease-out both; }
+.pc-estate-grid > *:nth-child(4) { animation: pc-scale-in 300ms 180ms ease-out both; }
+.pc-estate-grid > *:nth-child(5) { animation: pc-scale-in 300ms 230ms ease-out both; }
+.pc-estate-grid > *:nth-child(6) { animation: pc-scale-in 300ms 280ms ease-out both; }
+.pc-estate-grid > *:nth-child(7) { animation: pc-scale-in 300ms 330ms ease-out both; }
+.pc-estate-grid > *:nth-child(8) { animation: pc-scale-in 300ms 380ms ease-out both; }
+
+/* Button will-change + active press */
+.properties-classic-theme .pc-btn-primary,
+.properties-classic-theme .pc-btn-outline {
+  will-change: transform;
+}
+.properties-classic-theme .pc-btn-primary:active,
+.properties-classic-theme .pc-btn-outline:active {
+  transform: scale(0.97);
+  transition-duration: 80ms;
+}
+
+/* Input focus glow */
+.pc-filter-input:focus,
+.pc-filter-input:focus-visible {
+  box-shadow: 0 0 0 3px rgba(30, 77, 78, 0.14);
+}
+
+/* Skeleton shimmer */
+.pc-shimmer {
+  background: linear-gradient(90deg, #f0eeea 25%, #e8e6df 50%, #f0eeea 75%);
+  background-size: 200% 100%;
+  animation: pc-shimmer 1.6s ease-in-out infinite;
+}
+
+/* Estate card will-change */
+.pc-estate-card { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
