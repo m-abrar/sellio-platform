@@ -1,38 +1,38 @@
-.events-corporate-theme .ecc-booking-page {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-page {
   margin: 0 auto;
   max-width: 1100px;
   min-height: 70vh;
   padding: 8rem 8% 5rem;
 }
 
-.events-corporate-theme .ecc-booking-header {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-header {
   margin-bottom: 2rem;
 }
 
-.events-corporate-theme .ecc-booking-header h1 {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-header h1 {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   margin: 0.5rem 0;
 }
 
-.events-corporate-theme .ecc-booking-form,
-.events-corporate-theme .ecc-booking-layout {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-form,
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-layout {
   display: grid;
   gap: 1.5rem;
 }
 
-.events-corporate-theme .ecc-booking-layout {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-layout {
   grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
 }
 
-.events-corporate-theme .ecc-booking-form label,
-.events-corporate-theme .ecc-booking-panel label {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-form label,
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-panel label {
   display: grid;
   gap: 0.4rem;
 }
 
-.events-corporate-theme .ecc-booking-form input,
-.events-corporate-theme .ecc-booking-panel input,
-.events-corporate-theme .ecc-booking-panel select {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-form input,
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-panel input,
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-panel select {
   border: 1.5px solid var(--ecc-border);
   border-radius: 12px;
   font: inherit;
@@ -40,19 +40,19 @@
   width: 100%;
 }
 
-.events-corporate-theme .ecc-booking-auth-toggle {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-auth-toggle {
   display: flex;
   gap: 0.75rem;
 }
 
-.events-corporate-theme .ecc-booking-panel,
-.events-corporate-theme .ecc-booking-summary {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-panel,
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-summary {
   border: 1.5px solid var(--ecc-border);
   border-radius: 16px;
   padding: 1.25rem;
 }
 
-.events-corporate-theme .ecc-booking-summary-total {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-summary-total {
   align-items: center;
   display: flex;
   font-size: 1.1rem;
@@ -60,27 +60,27 @@
   margin: 1rem 0 1.25rem;
 }
 
-.events-corporate-theme .ecc-booking-error {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-error {
   color: #dc2626;
   margin: 0.5rem 0 0;
 }
 
 @media (max-width: 768px) {
-  .events-corporate-theme .ecc-booking-layout {
+  :is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-layout {
     grid-template-columns: 1fr;
   }
 
-  .events-corporate-theme .ecc-booking-page {
+  :is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-page {
     padding: 7rem 4% 4rem;
   }
 
-  .events-corporate-theme .ecc-booking-confirm-layout {
+  :is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-layout {
     grid-template-columns: 1fr;
   }
 }
 
 /* Booking confirmation — delegate pass receipt */
-.events-corporate-theme .ecc-booking-confirm {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm {
   animation: ecc-booking-confirm-in 0.55s ease;
   display: grid;
   gap: 2rem;
@@ -98,7 +98,7 @@
   }
 }
 
-.events-corporate-theme .ecc-booking-state {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-state {
   background: white;
   border: 1.5px solid var(--ecc-border);
   border-radius: var(--ecc-radius-md);
@@ -108,7 +108,7 @@
   text-align: center;
 }
 
-.events-corporate-theme .ecc-booking-state h1 {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-state h1 {
   color: var(--ecc-obsidian);
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 900;
@@ -117,7 +117,7 @@
   margin: 0.75rem 0;
 }
 
-.events-corporate-theme .ecc-booking-confirm-hero {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-hero {
   background:
     radial-gradient(circle at top right, rgba(0, 113, 227, 0.1), transparent 42%),
     linear-gradient(180deg, #ffffff 0%, var(--ecc-bone) 100%);
@@ -128,11 +128,11 @@
   text-align: center;
 }
 
-.events-corporate-theme .ecc-booking-confirm-hero--loading {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-hero--loading {
   min-height: 280px;
 }
 
-.events-corporate-theme .ecc-booking-confirm-icon {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-icon {
   align-items: center;
   background: white;
   border: 1.5px solid var(--ecc-border);
@@ -146,18 +146,18 @@
   width: 4.75rem;
 }
 
-.events-corporate-theme .ecc-booking-confirm-icon--success {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-icon--success {
   background: rgba(0, 113, 227, 0.08);
   border-color: rgba(0, 113, 227, 0.22);
   box-shadow: 0 0 0 8px rgba(0, 113, 227, 0.08);
   color: #0369a1;
 }
 
-.events-corporate-theme .ecc-booking-confirm-icon--pending {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-icon--pending {
   color: #b45309;
 }
 
-.events-corporate-theme .ecc-booking-confirm-hero h1 {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-hero h1 {
   color: var(--ecc-obsidian);
   font-size: clamp(2rem, 4vw, 2.85rem);
   font-weight: 900;
@@ -166,7 +166,7 @@
   margin: 0.5rem 0 0.85rem;
 }
 
-.events-corporate-theme .ecc-booking-confirm-lead {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-lead {
   color: var(--ecc-text-muted);
   font-size: 1.05rem;
   font-weight: 400;
@@ -175,7 +175,7 @@
   max-width: 36rem;
 }
 
-.events-corporate-theme .ecc-booking-confirm-ref {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-ref {
   align-items: center;
   background: white;
   border: 1.5px dashed rgba(0, 113, 227, 0.28);
@@ -187,28 +187,28 @@
   padding: 0.6rem 1.15rem 0.6rem 1.25rem;
 }
 
-.events-corporate-theme .ecc-booking-confirm-ref span {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-ref span {
   color: var(--ecc-text-muted);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
-.events-corporate-theme .ecc-booking-confirm-ref strong {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-ref strong {
   color: var(--ecc-blue);
   font-size: 0.95rem;
   font-weight: 900;
 }
 
-.events-corporate-theme .ecc-booking-confirm-layout {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-layout {
   align-items: start;
   display: grid;
   gap: 1.5rem;
   grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.75fr);
 }
 
-.events-corporate-theme .ecc-booking-confirm-summary,
-.events-corporate-theme .ecc-booking-confirm-actions {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-summary,
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-actions {
   background: white;
   border: 1.5px solid var(--ecc-border);
   border-radius: var(--ecc-radius-md);
@@ -216,11 +216,11 @@
   padding: clamp(1.5rem, 3vw, 2rem);
 }
 
-.events-corporate-theme .ecc-booking-confirm-panel--loading {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-panel--loading {
   min-height: 280px;
 }
 
-.events-corporate-theme .ecc-booking-confirm-summary-head {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-summary-head {
   align-items: center;
   display: flex;
   gap: 0.75rem;
@@ -228,8 +228,8 @@
   margin-bottom: 1.25rem;
 }
 
-.events-corporate-theme .ecc-booking-confirm-summary-head h2,
-.events-corporate-theme .ecc-booking-confirm-actions h2 {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-summary-head h2,
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-actions h2 {
   color: var(--ecc-obsidian);
   font-size: 0.72rem;
   font-weight: 800;
@@ -238,7 +238,7 @@
   text-transform: uppercase;
 }
 
-.events-corporate-theme .ecc-booking-confirm-status {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-status {
   background: #fef3c7;
   border-radius: 999px;
   color: #b45309;
@@ -249,12 +249,12 @@
   text-transform: uppercase;
 }
 
-.events-corporate-theme .ecc-booking-confirm-status--confirmed {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-status--confirmed {
   background: #ecfdf5;
   color: #047857;
 }
 
-.events-corporate-theme .ecc-booking-confirm-event {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-event {
   align-items: center;
   background: var(--ecc-bone);
   border: 1.5px solid var(--ecc-border);
@@ -267,7 +267,7 @@
   padding: 0.85rem;
 }
 
-.events-corporate-theme .ecc-booking-confirm-event img {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-event img {
   border-radius: 12px;
   display: block;
   height: 72px;
@@ -275,8 +275,8 @@
   width: 96px;
 }
 
-.events-corporate-theme .ecc-booking-confirm-event strong,
-.events-corporate-theme .ecc-booking-confirm-event-title strong {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-event strong,
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-event-title strong {
   color: var(--ecc-obsidian);
   display: block;
   font-size: 1.15rem;
@@ -286,18 +286,18 @@
   margin-top: 0.35rem;
 }
 
-.events-corporate-theme .ecc-booking-confirm-event-title {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-event-title {
   margin-bottom: 1.25rem;
 }
 
-.events-corporate-theme .ecc-booking-confirm-receipt {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-receipt {
   display: flex;
   flex-direction: column;
   gap: 0;
   margin: 0;
 }
 
-.events-corporate-theme .ecc-booking-confirm-receipt div {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-receipt div {
   border-bottom: 1px solid var(--ecc-border);
   display: flex;
   font-size: 0.92rem;
@@ -306,26 +306,26 @@
   padding: 0.95rem 0;
 }
 
-.events-corporate-theme .ecc-booking-confirm-receipt dt {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-receipt dt {
   color: var(--ecc-text-muted);
   font-weight: 600;
 }
 
-.events-corporate-theme .ecc-booking-confirm-receipt dd {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-receipt dd {
   color: var(--ecc-obsidian);
   font-weight: 700;
   margin: 0;
   text-align: right;
 }
 
-.events-corporate-theme .ecc-booking-confirm-receipt-total {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-receipt-total {
   border-bottom: 0;
   border-top: 2px solid var(--ecc-border);
   margin-top: 0.35rem;
   padding-top: 1.15rem;
 }
 
-.events-corporate-theme .ecc-booking-confirm-receipt-total dt {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-receipt-total dt {
   color: var(--ecc-obsidian);
   font-size: 0.75rem;
   font-weight: 800;
@@ -333,19 +333,19 @@
   text-transform: uppercase;
 }
 
-.events-corporate-theme .ecc-booking-confirm-receipt-total dd {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-receipt-total dd {
   color: var(--ecc-blue);
   font-size: 1.35rem;
   font-weight: 900;
 }
 
-.events-corporate-theme .ecc-booking-confirm-actions p {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-actions p {
   color: var(--ecc-text-muted);
   line-height: 1.7;
   margin: 0.85rem 0 1.25rem;
 }
 
-.events-corporate-theme .ecc-booking-confirm-cta {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-cta {
   display: flex;
   margin-top: 0.75rem;
   text-align: center;
@@ -353,7 +353,7 @@
   width: 100%;
 }
 
-.events-corporate-theme .ecc-booking-confirm-loading {
+:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-booking-confirm-loading {
   color: var(--ecc-text-muted);
   margin: 0;
 }

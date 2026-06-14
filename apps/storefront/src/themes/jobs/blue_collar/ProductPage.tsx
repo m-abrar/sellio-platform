@@ -7,6 +7,10 @@ import { fetchJobDetail, resolveJobFailure } from '@/themes/jobs/shared/catalog'
 import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
 import { useJobApplyFlow } from '@/themes/jobs/shared/useJobApplyFlow';
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
+import {
+  saveJobApplicationSnapshot,
+  redirectToJobApplicationConfirmation,
+} from '@/themes/jobs/shared/job-application-confirmation';
 
 interface ProductPageProps {
   slug: string;
@@ -29,12 +33,23 @@ export default function ProductPage({ slug }: ProductPageProps) {
     setAuthPassword,
     authBusy,
     isSubmitting,
-    applicationId,
-    isSubmitted,
     formError,
     handleAuthSubmit,
     handleApplySubmit,
-  } = useJobApplyFlow(slug);
+  } = useJobApplyFlow(slug, {
+    onSuccess: (appId) => {
+      saveJobApplicationSnapshot({
+        id: appId,
+        jobId: job?.id ?? 0,
+        jobTitle: job?.title ?? 'Job Application',
+        jobSlug: job?.slug,
+        applicantName: form.name,
+        applicantEmail: form.email,
+        status: 'pending',
+      });
+      redirectToJobApplicationConfirmation(themeLink, appId);
+    },
+  });
 
   useEffect(() => {
     async function loadJob() {
@@ -164,11 +179,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="jbc-detail-salary">{job.compensation?.range_full || job.compensation?.range_compact || 'Competitive'}</div>
           <div className="jbc-detail-apply">
             <h3>Apply for this job</h3>
-            {isSubmitted ? (
-              <div className="jbc-detail-success" role="status">
-                {useFallback ? 'Application saved.' : `Application #${applicationId ?? '—'} submitted.`}
-              </div>
-            ) : !useFallback && !user ? (
+            {!useFallback && !user ? (
               <form onSubmit={(e) => { e.preventDefault(); void handleAuthSubmit({ name: form.name, email: form.email, portfolio: '', note: '' }); }}>
                 <p>Sign in to apply for this job.</p>
                 {formError && <div className="jbc-detail-error" role="alert">{formError}</div>}

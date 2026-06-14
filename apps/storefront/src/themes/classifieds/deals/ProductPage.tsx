@@ -10,6 +10,10 @@ import {
   getRelatedFromApi,
   resolveClassifiedFailure,
 } from '@/themes/classifieds/shared/catalog';
+import {
+  saveClassifiedInquirySnapshot,
+  redirectToClassifiedInquiryConfirmation,
+} from '@/themes/classifieds/shared/classified-inquiry-confirmation';
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
@@ -36,7 +40,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [phone, setPhone] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [buyerNotes, setBuyerNotes] = useState('');
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -165,7 +168,18 @@ export default function ProductPage({ slug }: ProductPageProps) {
       return;
     }
 
-    setFormSubmitted(true);
+    saveClassifiedInquirySnapshot({
+      id: result.inquiryId,
+      listingId: deal.id,
+      listingTitle: deal.title,
+      listingSlug: deal.slug,
+      contactName: fullName,
+      contactEmail: email,
+      offerPrice: String(priceEach * quantity),
+      message: inquiryMessage || undefined,
+      status: 'pending',
+    });
+    redirectToClassifiedInquiryConfirmation(themeLink, result.inquiryId);
   };
 
   if (loading) {
@@ -431,27 +445,15 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </div>
 
               {/* "Snag This Deal" Checkout Form */}
-              {formSubmitted ? (
-                <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                  <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🎉</div>
-                  <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--cd-secondary-yellow)', marginBottom: '0.5rem' }}>DEAL RESERVED!</h3>
-                  <p style={{ fontSize: '0.85rem', color: '#e5e7eb', lineHeight: '1.5', marginBottom: '1.5rem' }}>
-                    Your flash reservation has been locked in locally! The order has been written to the LocalStorage checkout registry under <code>sellio_classifieds_deals_orders</code>.
-                  </p>
-                  <button onClick={() => setFormSubmitted(false)} className="cd-search-btn" style={{ width: '100%', borderRadius: '8px' }}>
-                    Resnag This Deal
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSnagDealSubmit}>
+              <form onSubmit={handleSnagDealSubmit}>
                   {formError && <div className="cd-form-error">{formError}</div>}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
-                    
+
                     <div>
                       <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'var(--cd-text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>Full Name *</label>
-                      <input 
-                        type="text" 
-                        required 
+                      <input
+                        type="text"
+                        required
                         placeholder="e.g. John Doe"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
@@ -461,9 +463,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
                     <div>
                       <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'var(--cd-text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>Email Address *</label>
-                      <input 
-                        type="email" 
-                        required 
+                      <input
+                        type="email"
+                        required
                         placeholder="e.g. john@example.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -473,9 +475,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
                     <div>
                       <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'var(--cd-text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>Phone Number *</label>
-                      <input 
-                        type="tel" 
-                        required 
+                      <input
+                        type="tel"
+                        required
                         placeholder="e.g. +1 555 123 4567"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
@@ -486,10 +488,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                       <div style={{ width: '80px' }}>
                         <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'var(--cd-text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>Qty *</label>
-                        <input 
-                          type="number" 
-                          required 
-                          min={1} 
+                        <input
+                          type="number"
+                          required
+                          min={1}
                           max={deal.item_specs?.quantity || 5}
                           value={quantity}
                           onChange={(e) => setQuantity(Number(e.target.value))}
@@ -506,7 +508,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
                     <div>
                       <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'var(--cd-text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>Inquiry Notes</label>
-                      <textarea 
+                      <textarea
                         placeholder="Any special notes for delivery or negotiation..."
                         rows={2}
                         value={buyerNotes}
@@ -521,7 +523,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     Snag This Deal ⚡
                   </button>
                 </form>
-              )}
 
             </div>
 

@@ -7,6 +7,10 @@ import { fetchJobDetail, resolveJobFailure } from '@/themes/jobs/shared/catalog'
 import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
 import { useJobApplyFlow } from '@/themes/jobs/shared/useJobApplyFlow';
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
+import {
+  saveJobApplicationSnapshot,
+  redirectToJobApplicationConfirmation,
+} from '@/themes/jobs/shared/job-application-confirmation';
 
 interface ProductPageProps {
   slug: string;
@@ -29,12 +33,23 @@ export default function ProductPage({ slug }: ProductPageProps) {
     setAuthPassword,
     authBusy,
     isSubmitting,
-    applicationId,
-    isSubmitted,
     formError,
     handleAuthSubmit,
     handleApplySubmit,
-  } = useJobApplyFlow(slug);
+  } = useJobApplyFlow(slug, {
+    onSuccess: (appId) => {
+      saveJobApplicationSnapshot({
+        id: appId,
+        jobId: job?.id ?? 0,
+        jobTitle: job?.title ?? 'Job Application',
+        jobSlug: job?.slug,
+        applicantName: form.name,
+        applicantEmail: form.email,
+        status: 'pending',
+      });
+      redirectToJobApplicationConfirmation(themeLink, appId);
+    },
+  });
 
   useEffect(() => {
     async function loadJob() {
@@ -161,11 +176,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="jm-detail-salary">{job.compensation?.range_full || job.compensation?.range_compact || 'Competitive'}</div>
           <div className="jm-detail-apply">
             <h3>Apply for this role</h3>
-            {isSubmitted ? (
-              <div className="jm-detail-success" role="status">
-                {useFallback ? 'Application saved.' : `Application #${applicationId ?? '—'} submitted.`}
-              </div>
-            ) : !useFallback && !user ? (
+            {!useFallback && !user ? (
               <form onSubmit={(e) => { e.preventDefault(); void handleAuthSubmit(form); }}>
                 <p>Sign in to apply for this role.</p>
                 {formError && <div className="jm-detail-error" role="alert">{formError}</div>}

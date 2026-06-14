@@ -1,6 +1,7 @@
 import React from 'react';
 import { Header, Footer } from './components';
 import './styles.css';
+import '@/themes/properties/shared/subpages.css';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

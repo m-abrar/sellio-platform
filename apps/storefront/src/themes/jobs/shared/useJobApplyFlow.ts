@@ -11,7 +11,7 @@ type ApplyForm = {
   note?: string;
 };
 
-export function useJobApplyFlow(slug: string) {
+export function useJobApplyFlow(slug: string, hookOptions?: { onSuccess?: (applicationId: number | string) => void }) {
   const { user, login, register } = useAuth();
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [authPassword, setAuthPassword] = useState('');
@@ -94,6 +94,7 @@ export function useJobApplyFlow(slug: string) {
 
     setApplicationId(result.applicationId);
     setIsSubmitted(true);
+    hookOptions?.onSuccess?.(result.applicationId);
     return result;
   };
 

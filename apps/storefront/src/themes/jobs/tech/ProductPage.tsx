@@ -10,6 +10,10 @@ import {
 import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
 import { useJobApplyFlow } from '@/themes/jobs/shared/useJobApplyFlow';
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
+import {
+  saveJobApplicationSnapshot,
+  redirectToJobApplicationConfirmation,
+} from '@/themes/jobs/shared/job-application-confirmation';
 
 type TechJob = TechJobCardData;
 
@@ -98,6 +102,18 @@ export default function ProductPage({ slug }: { slug: string }) {
     );
 
     if (result?.ok) {
+      if (!useFallback) {
+        saveJobApplicationSnapshot({
+          id: result.applicationId,
+          jobId: Number(job.id),
+          jobTitle: job.title,
+          applicantName: name,
+          applicantEmail: email,
+          status: 'pending',
+        });
+        redirectToJobApplicationConfirmation(themeLink, result.applicationId);
+        return;
+      }
       setApplicationReceipt({
         applicationId: String(result.applicationId),
         timestamp: new Date().toLocaleString(),

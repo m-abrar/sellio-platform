@@ -8,6 +8,10 @@ import { fetchVehicleDetail, resolveVehicleFailure } from '@/themes/autos/shared
 import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
 import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
+import {
+  saveVehicleInquirySnapshot,
+  redirectToVehicleInquiryConfirmation,
+} from '@/themes/autos/shared/vehicle-inquiry-confirmation';
 
 interface UsedCarItem {
   id: number;
@@ -131,8 +135,6 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [financingNeeded, setFinancingNeeded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const [bookingSuccess, setBookingSuccess] = useState(false);
-  const [receiptCode, setReceiptCode] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -221,8 +223,18 @@ export default function ProductPage({ slug }: { slug: string }) {
       return;
     }
 
-    setReceiptCode(String(result.inquiryId));
-    setBookingSuccess(true);
+    saveVehicleInquirySnapshot({
+      id: result.inquiryId,
+      vehicleId: car.id,
+      vehicleTitle: car.title,
+      vehicleSlug: car.slug,
+      contactName: clientName,
+      contactEmail: clientEmail,
+      contactPhone: clientPhone,
+      message: inquiryMessage,
+      status: 'pending',
+    });
+    redirectToVehicleInquiryConfirmation(themeLink, result.inquiryId);
   };
 
   if (loading) {
@@ -358,124 +370,83 @@ export default function ProductPage({ slug }: { slug: string }) {
 
           {/* Stateful Test-Drive Booking Drawer desk */}
           <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '2rem', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
-            {!bookingSuccess ? (
-              <form onSubmit={handleTestDriveBooking}>
-                <h4 className="us-text-blue us-fw-bold" style={{ fontSize: '1.3rem', margin: '0 0 0.5rem 0' }}>Schedule a Test Drive</h4>
-                <p style={{ color: '#666', fontSize: '0.85rem', margin: '0 0 1.5rem 0' }}>Submit a request to book a test drive directly at the dealership lobby.</p>
+            <form onSubmit={handleTestDriveBooking}>
+              <h4 className="us-text-blue us-fw-bold" style={{ fontSize: '1.3rem', margin: '0 0 0.5rem 0' }}>Schedule a Test Drive</h4>
+              <p style={{ color: '#666', fontSize: '0.85rem', margin: '0 0 1.5rem 0' }}>Submit a request to book a test drive directly at the dealership lobby.</p>
 
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#4a5568', display: 'block', marginBottom: '0.4rem' }}>Your Full Name *</label>
-                  <input 
-                    type="text" 
-                    required 
-                    value={clientName} 
-                    onChange={(e) => setClientName(e.target.value)} 
-                    placeholder="John Doe" 
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e0', outline: 'none' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#4a5568', display: 'block', marginBottom: '0.4rem' }}>Email Address *</label>
-                  <input 
-                    type="email" 
-                    required 
-                    value={clientEmail} 
-                    onChange={(e) => setClientEmail(e.target.value)} 
-                    placeholder="john@example.com" 
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e0', outline: 'none' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#4a5568', display: 'block', marginBottom: '0.4rem' }}>Phone Number (Optional)</label>
-                  <input 
-                    type="tel" 
-                    value={clientPhone} 
-                    onChange={(e) => setClientPhone(e.target.value)} 
-                    placeholder="(555) 000-0000" 
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e0', outline: 'none' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1.25rem' }}>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#4a5568', display: 'block', marginBottom: '0.4rem' }}>Preferred Date *</label>
-                  <input 
-                    type="date" 
-                    required 
-                    value={bookingDate} 
-                    onChange={(e) => setBookingDate(e.target.value)} 
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e0', outline: 'none', fontFamily: 'inherit' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <input 
-                    type="checkbox" 
-                    id="financing" 
-                    checked={financingNeeded} 
-                    onChange={(e) => setFinancingNeeded(e.target.checked)} 
-                    style={{ width: '16px', height: '16px', cursor: 'pointer' }}
-                  />
-                  <label htmlFor="financing" style={{ fontSize: '0.85rem', fontWeight: 600, color: '#4a5568', cursor: 'pointer' }}>
-                    I am interested in dealership financing
-                  </label>
-                </div>
-
-                <button 
-                  type="submit" 
-                  disabled={isSubmitting} 
-                  className="us-btn us-btn-orange" 
-                  style={{ width: '100%', padding: '0.9rem', borderRadius: '8px', fontSize: '1rem' }}
-                >
-                  {isSubmitting ? 'Submitting Reservation...' : 'Request Booking Appointment'}
-                </button>
-                {formError && (
-                  <p style={{ color: '#c53030', fontSize: '0.85rem', marginTop: '0.75rem', textAlign: 'center' }}>
-                    {formError}
-                  </p>
-                )}
-              </form>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-                <span style={{ fontSize: '3rem' }}>🎉</span>
-                <h4 style={{ color: 'var(--us-blue)', fontWeight: 800, marginTop: '1rem', marginBottom: '0.5rem', fontSize: '1.4rem' }}>Test Drive Booked!</h4>
-                <p style={{ color: '#555', fontSize: '0.9rem', margin: '0 0 1.5rem 0', lineHeight: 1.5 }}>
-                  Excellent! Your appointment with <strong>{car.dealer}</strong> has been dynamically locked inside client-side records.
-                </p>
-
-                {/* SHA-256 Receipt layout */}
-                <div style={{ border: '1px dashed #cbd5e0', padding: '1rem', borderRadius: '8px', backgroundColor: 'var(--us-light-gray)', textAlign: 'left', marginBottom: '1.5rem' }}>
-                  <h6 style={{ margin: '0 0 0.5rem 0', fontSize: '0.75rem', color: '#777', textTransform: 'uppercase', fontWeight: 700 }}>Verification Code</h6>
-                  <code style={{ display: 'block', wordBreak: 'break-all', fontSize: '0.85rem', color: 'var(--us-orange)', fontFamily: 'monospace', fontWeight: 700 }}>
-                    {receiptCode}
-                  </code>
-                  
-                  <hr style={{ border: 0, borderTop: '1px solid #e2e8f0', margin: '0.75rem 0' }} />
-                  
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#555', marginBottom: '0.25rem' }}>
-                    <span>Customer:</span>
-                    <strong>{clientName}</strong>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#555', marginBottom: '0.25rem' }}>
-                    <span>Date Requested:</span>
-                    <strong>{bookingDate}</strong>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#555' }}>
-                    <span>Financing Assistance:</span>
-                    <strong>{financingNeeded ? 'Yes' : 'No'}</strong>
-                  </div>
-                </div>
-
-                <button 
-                  onClick={() => setBookingSuccess(false)} 
-                  className="us-btn us-btn-outline" 
-                  style={{ width: '100%', borderRadius: '8px', padding: '0.75rem' }}
-                >
-                  Schedule Another Appointment
-                </button>
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#4a5568', display: 'block', marginBottom: '0.4rem' }}>Your Full Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={clientName}
+                  onChange={(e) => setClientName(e.target.value)}
+                  placeholder="John Doe"
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e0', outline: 'none' }}
+                />
               </div>
-            )}
+
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#4a5568', display: 'block', marginBottom: '0.4rem' }}>Email Address *</label>
+                <input
+                  type="email"
+                  required
+                  value={clientEmail}
+                  onChange={(e) => setClientEmail(e.target.value)}
+                  placeholder="john@example.com"
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e0', outline: 'none' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#4a5568', display: 'block', marginBottom: '0.4rem' }}>Phone Number (Optional)</label>
+                <input
+                  type="tel"
+                  value={clientPhone}
+                  onChange={(e) => setClientPhone(e.target.value)}
+                  placeholder="(555) 000-0000"
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e0', outline: 'none' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '1.25rem' }}>
+                <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#4a5568', display: 'block', marginBottom: '0.4rem' }}>Preferred Date *</label>
+                <input
+                  type="date"
+                  required
+                  value={bookingDate}
+                  onChange={(e) => setBookingDate(e.target.value)}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e0', outline: 'none', fontFamily: 'inherit' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <input
+                  type="checkbox"
+                  id="financing"
+                  checked={financingNeeded}
+                  onChange={(e) => setFinancingNeeded(e.target.checked)}
+                  style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                />
+                <label htmlFor="financing" style={{ fontSize: '0.85rem', fontWeight: 600, color: '#4a5568', cursor: 'pointer' }}>
+                  I am interested in dealership financing
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="us-btn us-btn-orange"
+                style={{ width: '100%', padding: '0.9rem', borderRadius: '8px', fontSize: '1rem' }}
+              >
+                {isSubmitting ? 'Submitting Reservation...' : 'Request Booking Appointment'}
+              </button>
+              {formError && (
+                <p style={{ color: '#c53030', fontSize: '0.85rem', marginTop: '0.75rem', textAlign: 'center' }}>
+                  {formError}
+                </p>
+              )}
+            </form>
           </div>
         </div>
       </div>

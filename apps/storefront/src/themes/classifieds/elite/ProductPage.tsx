@@ -9,6 +9,10 @@ import {
   getRelatedFromApi,
   resolveClassifiedFailure,
 } from '@/themes/classifieds/shared/catalog';
+import {
+  saveClassifiedInquirySnapshot,
+  redirectToClassifiedInquiryConfirmation,
+} from '@/themes/classifieds/shared/classified-inquiry-confirmation';
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
@@ -54,8 +58,6 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [buyerEmail, setBuyerEmail] = useState('');
   const [buyerOffer, setBuyerOffer] = useState('');
   const [buyerNotes, setBuyerNotes] = useState('');
-  const [orderSuccess, setOrderSuccess] = useState(false);
-  const [orderSuccessData, setOrderSuccessData] = useState<any>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -161,11 +163,18 @@ export default function ProductPage({ slug }: { slug: string }) {
       return;
     }
 
-    setOrderSuccess(true);
-    setOrderSuccessData({
-      ...result.summary,
-      offerPrice: buyerOffer || assetPrice,
+    saveClassifiedInquirySnapshot({
+      id: result.inquiryId,
+      listingId: item.id,
+      listingTitle: item.title,
+      listingSlug: item.slug,
+      contactName: buyerName,
+      contactEmail: buyerEmail,
+      offerPrice: buyerOffer.trim() || assetPrice,
+      message: buyerNotes.trim() || undefined,
+      status: 'pending',
     });
+    redirectToClassifiedInquiryConfirmation(themeLink, result.inquiryId);
   };
 
   if (loading) {
@@ -300,33 +309,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                 Provide your professional details to establish encrypted communication with the key vault custodian at <span style={{ fontFamily: 'monospace', color: 'var(--prem-accent)' }}>{getAssetVaultId(item)}</span>.
               </div>
 
-              {orderSuccess && orderSuccessData ? (
-                <div className="elite-booking-receipt">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--prem-accent)', fontWeight: 900, fontSize: '0.95rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                    <span>✓</span> <span>Prospectus Requested!</span>
-                  </div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--prem-muted)', fontWeight: 600, borderBottom: '1px dashed var(--prem-accent)', paddingBottom: '0.5rem', lineHeight: '1.5' }}>
-                    Advisory invitation pending brokerage handshake. An encrypted communications node will launch shortly.
-                  </div>
-                  <div className="elite-receipt-row">
-                    <span>Prospectus ID:</span>
-                    <span style={{ fontFamily: 'monospace', color: '#ffffff' }}>{orderSuccessData.orderId}</span>
-                  </div>
-                  <div className="elite-receipt-row">
-                    <span>Broker Account:</span>
-                    <span style={{ color: '#ffffff' }}>{orderSuccessData.buyerName}</span>
-                  </div>
-                  <div className="elite-receipt-row">
-                    <span>Target Capital Offer:</span>
-                    <span style={{ color: 'var(--prem-accent)' }}>{orderSuccessData.offerPrice}</span>
-                  </div>
-                  <div className="elite-receipt-row" style={{ fontWeight: 800 }}>
-                    <span>Status:</span>
-                    <span>Security Screening</span>
-                  </div>
-                </div>
-              ) : (
-                <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {formError && <div className="ce-form-error">{formError}</div>}
                   <div className="elite-booking-form-group">
                     <label className="elite-booking-label">Broker / Investor Name *</label>
@@ -375,7 +358,6 @@ export default function ProductPage({ slug }: { slug: string }) {
                     Submit Member Prospectus Request
                   </button>
                 </form>
-              )}
             </div>
           </div>
         </div>

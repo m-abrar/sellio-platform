@@ -13,6 +13,10 @@ import {
 } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
 import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';
+import {
+  saveServiceConsultationSnapshot,
+  redirectToServiceConsultationConfirmation,
+} from '@/themes/services/shared/service-consultation-confirmation';
 import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 
 interface ProductPageProps {
@@ -38,7 +42,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [apiError, setApiError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [leadForm, setLeadForm] = useState({ contactName: '', contactInfo: '', brief: '' });
-  const [leadSaved, setLeadSaved] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -112,8 +115,20 @@ export default function ProductPage({ slug }: ProductPageProps) {
       return;
     }
 
-    setLeadSaved(true);
-    setLeadForm({ contactName: '', contactInfo: '', brief: '' });
+    saveServiceConsultationSnapshot({
+      id: result.consultationId,
+      serviceId: service.id,
+      serviceTitle: service.title,
+      serviceSlug: service.slug,
+      contactName: leadForm.contactName,
+      contactInfo: leadForm.contactInfo,
+      requirements: leadForm.brief,
+      topic: `Creative brief: ${service.title}`,
+      status: 'pending',
+      demo: useFallback,
+    });
+
+    redirectToServiceConsultationConfirmation(themeLink, result.consultationId);
   };
 
   if (loading) {
@@ -212,11 +227,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
 
         <form onSubmit={handleLeadSubmit}>
-          {leadSaved && (
-            <div className="crtv-detail-success" role="status">
-              Project brief saved.
-            </div>
-          )}
           <label>
             Full Name
             <input

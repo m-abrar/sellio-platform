@@ -1,6 +1,6 @@
 /* Property booking payment, reserve, and confirmation pages */
 
-.properties-rental-theme .pr-booking-page,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-page,
 .urban-node-wrapper .pm-booking-page {
   margin: 0 auto;
   max-width: var(--pr-detail-max, 960px);
@@ -12,14 +12,14 @@
   max-width: 1180px;
 }
 
-.properties-rental-theme .pr-booking-header,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-header,
 .urban-node-wrapper .pm-booking-header {
   border-bottom: 1px solid var(--pr-border, rgba(0, 0, 0, 0.1));
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
 }
 
-.properties-rental-theme .pr-detail-back {
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-detail-back {
   color: var(--pr-mint-deep);
   display: inline-block;
   font-size: 0.875rem;
@@ -29,11 +29,11 @@
   width: fit-content;
 }
 
-.properties-rental-theme .pr-detail-back:hover {
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-detail-back:hover {
   text-decoration: underline;
 }
 
-.properties-rental-theme .pr-booking-header h1,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-header h1,
 .urban-node-wrapper .pm-booking-header h1 {
   font-family: var(--pr-font-display, inherit);
   font-size: clamp(1.85rem, 3.5vw, 2.5rem);
@@ -43,28 +43,28 @@
   margin: 0.5rem 0 0.75rem;
 }
 
-.properties-rental-theme .pr-booking-header p,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-header p,
 .urban-node-wrapper .pm-booking-header p {
   color: var(--pr-text-muted, #78716c);
   line-height: 1.7;
   margin: 0.35rem 0 0;
 }
 
-.properties-rental-theme .pr-booking-form,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-form,
 .urban-node-wrapper .pm-booking-form,
-.properties-rental-theme .pr-booking-layout,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-layout,
 .urban-node-wrapper .pm-booking-layout {
   display: grid;
   gap: 1.5rem;
 }
 
-.properties-rental-theme .pr-booking-layout,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-layout,
 .urban-node-wrapper .pm-booking-layout {
   align-items: start;
   grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
 }
 
-.properties-rental-theme .pr-booking-form label,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-form label,
 .urban-node-wrapper .pm-booking-form label {
   color: var(--pr-text-muted, #78716c);
   display: grid;
@@ -73,7 +73,7 @@
   gap: 0.4rem;
 }
 
-.properties-rental-theme .pr-booking-form input,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-form input,
 .urban-node-wrapper .pm-booking-form input {
   background: var(--pr-white, #fff);
   border: 1px solid var(--pr-border, rgba(0, 0, 0, 0.12));
@@ -85,21 +85,21 @@
   width: 100%;
 }
 
-.properties-rental-theme .pr-booking-form input:focus,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-form input:focus,
 .urban-node-wrapper .pm-booking-form input:focus {
   border-color: var(--pr-mint-deep);
   box-shadow: 0 0 0 3px var(--pr-mint-glow, rgba(194, 65, 12, 0.18));
   outline: none;
 }
 
-.properties-rental-theme .pr-booking-auth-toggle,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-auth-toggle,
 .urban-node-wrapper .pm-booking-auth-toggle {
   display: flex;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
 }
 
-.properties-rental-theme .pr-booking-summary,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-summary,
 .urban-node-wrapper .pm-booking-summary {
   align-self: start;
   background: var(--pr-white, #fff);
@@ -109,7 +109,7 @@
   padding: clamp(1.5rem, 3vw, 2rem);
 }
 
-.properties-rental-theme .pr-booking-summary h2,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-summary h2,
 .urban-node-wrapper .pm-booking-summary h2 {
   font-size: 0.8rem;
   font-weight: 800;
@@ -118,7 +118,7 @@
   text-transform: uppercase;
 }
 
-.properties-rental-theme .pr-booking-summary-total,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-summary-total,
 .urban-node-wrapper .pm-booking-summary-total {
   align-items: center;
   border-top: 1px solid var(--pr-border, rgba(0, 0, 0, 0.1));
@@ -129,19 +129,19 @@
   padding-top: 1rem;
 }
 
-.properties-rental-theme .pr-booking-summary-total strong,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-summary-total strong,
 .urban-node-wrapper .pm-booking-summary-total strong {
   color: var(--pr-mint-deep);
   font-size: 1.25rem;
 }
 
-.properties-rental-theme .pr-booking-error,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-error,
 .urban-node-wrapper .pm-booking-error {
   color: #b42318;
   margin: 0.5rem 0 0;
 }
 
-.properties-rental-theme .pr-booking-state,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-state,
 .urban-node-wrapper .pm-booking-state {
   background: var(--pr-white, #fff);
   border: 1px solid var(--pr-border, rgba(0, 0, 0, 0.1));
@@ -153,7 +153,7 @@
 }
 
 /* RentEase payment component theme */
-.properties-rental-theme .sellio-checkout-payment {
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .sellio-checkout-payment {
   --sellio-pay-accent: var(--pr-mint-deep);
   --sellio-pay-accent-hover: var(--pr-mint-hover);
   --sellio-pay-accent-ring: var(--pr-mint-glow);
@@ -171,7 +171,7 @@
   --sellio-pay-font: var(--pr-font);
 }
 
-.properties-rental-theme .sellio-checkout-payment__title {
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .sellio-checkout-payment__title {
   font-family: var(--pr-font-display);
   font-size: 1.15rem;
   font-weight: 700;
@@ -179,26 +179,26 @@
   text-transform: none;
 }
 
-.properties-rental-theme .sellio-pay-card-block__heading,
-.properties-rental-theme .sellio-pay-trust__badge {
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .sellio-pay-card-block__heading,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .sellio-pay-trust__badge {
   letter-spacing: 0.08em;
 }
 
-.properties-rental-theme .sellio-pay-gateway.is-selected {
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .sellio-pay-gateway.is-selected {
   background: var(--pr-white);
 }
 
-.properties-rental-theme .sellio-pay-gateway:hover:not(:disabled) {
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .sellio-pay-gateway:hover:not(:disabled) {
   border-color: var(--pr-mint-deep);
 }
 
-.properties-rental-theme .sellio-pay-card-block {
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .sellio-pay-card-block {
   background: var(--pr-mint-soft);
   border-color: var(--pr-border);
 }
 
-.properties-rental-theme .sellio-stripe-card-shell .sellio-stripe-card-mount,
-.properties-rental-theme .sellio-stripe-card-skeleton {
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .sellio-stripe-card-shell .sellio-stripe-card-mount,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .sellio-stripe-card-skeleton {
   border-radius: var(--pr-radius-sm);
 }
 
@@ -222,7 +222,7 @@
 }
 
 /* Booking confirmation — premium receipt layout */
-.properties-rental-theme .pr-booking-confirm,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm,
 .urban-node-wrapper .pm-booking-confirm {
   animation: pr-booking-confirm-in 0.55s ease;
   display: grid;
@@ -241,7 +241,7 @@
   }
 }
 
-.properties-rental-theme .pr-booking-confirm-hero,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-hero,
 .urban-node-wrapper .pm-booking-confirm-hero {
   background:
     radial-gradient(circle at top right, rgba(194, 65, 12, 0.08), transparent 42%),
@@ -253,7 +253,7 @@
   text-align: center;
 }
 
-.properties-rental-theme .pr-booking-confirm-icon,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-icon,
 .urban-node-wrapper .pm-booking-confirm-icon {
   align-items: center;
   background: var(--pr-white, #fff);
@@ -268,19 +268,19 @@
   width: 4.5rem;
 }
 
-.properties-rental-theme .pr-booking-confirm-icon--success,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-icon--success,
 .urban-node-wrapper .pm-booking-confirm-icon--success {
   background: var(--pr-mint-soft, #fff7ed);
   border-color: rgba(154, 52, 18, 0.18);
   box-shadow: 0 0 0 6px var(--pr-mint-glow, rgba(194, 65, 12, 0.18));
 }
 
-.properties-rental-theme .pr-booking-confirm-icon--pending,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-icon--pending,
 .urban-node-wrapper .pm-booking-confirm-icon--pending {
   color: var(--pr-coral, #b45309);
 }
 
-.properties-rental-theme .pr-booking-confirm-hero h1,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-hero h1,
 .urban-node-wrapper .pm-booking-confirm-hero h1 {
   font-family: var(--pr-font-display, Georgia, serif);
   font-size: clamp(2rem, 4vw, 2.75rem);
@@ -290,7 +290,7 @@
   margin: 0.35rem 0 0.75rem;
 }
 
-.properties-rental-theme .pr-booking-confirm-lead,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-lead,
 .urban-node-wrapper .pm-booking-confirm-lead {
   color: var(--pr-text-muted, #78716c);
   font-size: 1.05rem;
@@ -299,7 +299,7 @@
   max-width: 36rem;
 }
 
-.properties-rental-theme .pr-booking-confirm-ref,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-ref,
 .urban-node-wrapper .pm-booking-confirm-ref {
   align-items: center;
   background: var(--pr-white, #fff);
@@ -312,7 +312,7 @@
   padding: 0.55rem 1rem 0.55rem 1.15rem;
 }
 
-.properties-rental-theme .pr-booking-confirm-ref span,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-ref span,
 .urban-node-wrapper .pm-booking-confirm-ref span {
   color: var(--pr-text-muted, #78716c);
   font-weight: 600;
@@ -320,14 +320,14 @@
   text-transform: uppercase;
 }
 
-.properties-rental-theme .pr-booking-confirm-ref strong,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-ref strong,
 .urban-node-wrapper .pm-booking-confirm-ref strong {
   color: var(--pr-mint-deep, #9a3412);
   font-size: 0.95rem;
   font-weight: 800;
 }
 
-.properties-rental-theme .pr-booking-confirm-layout,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-layout,
 .urban-node-wrapper .pm-booking-confirm-layout {
   align-items: start;
   display: grid;
@@ -335,9 +335,9 @@
   grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.75fr);
 }
 
-.properties-rental-theme .pr-booking-confirm-summary,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-summary,
 .urban-node-wrapper .pm-booking-confirm-summary,
-.properties-rental-theme .pr-booking-confirm-actions,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-actions,
 .urban-node-wrapper .pm-booking-confirm-actions {
   background: var(--pr-white, #fff);
   border: 1px solid var(--pr-border, #e7e5e4);
@@ -346,7 +346,7 @@
   padding: clamp(1.5rem, 3vw, 2rem);
 }
 
-.properties-rental-theme .pr-booking-confirm-summary-head,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-summary-head,
 .urban-node-wrapper .pm-booking-confirm-summary-head {
   align-items: center;
   display: flex;
@@ -355,9 +355,9 @@
   margin-bottom: 1.25rem;
 }
 
-.properties-rental-theme .pr-booking-confirm-summary-head h2,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-summary-head h2,
 .urban-node-wrapper .pm-booking-confirm-summary-head h2,
-.properties-rental-theme .pr-booking-confirm-actions h2,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-actions h2,
 .urban-node-wrapper .pm-booking-confirm-actions h2 {
   font-size: 0.8rem;
   font-weight: 800;
@@ -366,7 +366,7 @@
   text-transform: uppercase;
 }
 
-.properties-rental-theme .pr-booking-confirm-status,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-status,
 .urban-node-wrapper .pm-booking-confirm-status {
   background: var(--pr-coral-soft, #fef3c7);
   border-radius: 999px;
@@ -378,13 +378,13 @@
   text-transform: uppercase;
 }
 
-.properties-rental-theme .pr-booking-confirm-status--confirmed,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-status--confirmed,
 .urban-node-wrapper .pm-booking-confirm-status--confirmed {
   background: var(--pr-sage-soft, #f7fee7);
   color: var(--pr-sage, #3f6212);
 }
 
-.properties-rental-theme .pr-booking-confirm-property,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-property,
 .urban-node-wrapper .pm-booking-confirm-property {
   align-items: center;
   background: var(--pr-bg, #faf7f2);
@@ -398,7 +398,7 @@
   padding: 0.85rem;
 }
 
-.properties-rental-theme .pr-booking-confirm-property img,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-property img,
 .urban-node-wrapper .pm-booking-confirm-property img {
   border-radius: var(--pr-radius-sm, 6px);
   display: block;
@@ -407,9 +407,9 @@
   width: 96px;
 }
 
-.properties-rental-theme .pr-booking-confirm-property strong,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-property strong,
 .urban-node-wrapper .pm-booking-confirm-property strong,
-.properties-rental-theme .pr-booking-confirm-property-title strong,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-property-title strong,
 .urban-node-wrapper .pm-booking-confirm-property-title strong {
   color: var(--pr-slate, #1c1917);
   display: block;
@@ -420,12 +420,12 @@
   margin-top: 0.25rem;
 }
 
-.properties-rental-theme .pr-booking-confirm-property-title,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-property-title,
 .urban-node-wrapper .pm-booking-confirm-property-title {
   margin-bottom: 1.25rem;
 }
 
-.properties-rental-theme .pr-booking-confirm-receipt,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-receipt,
 .urban-node-wrapper .pm-booking-confirm-receipt {
   display: flex;
   flex-direction: column;
@@ -433,7 +433,7 @@
   margin: 0;
 }
 
-.properties-rental-theme .pr-booking-confirm-receipt div,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-receipt div,
 .urban-node-wrapper .pm-booking-confirm-receipt div {
   border-bottom: 1px solid var(--pr-border, #e7e5e4);
   display: flex;
@@ -443,13 +443,13 @@
   padding: 0.9rem 0;
 }
 
-.properties-rental-theme .pr-booking-confirm-receipt dt,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-receipt dt,
 .urban-node-wrapper .pm-booking-confirm-receipt dt {
   color: var(--pr-text-muted, #78716c);
   font-weight: 600;
 }
 
-.properties-rental-theme .pr-booking-confirm-receipt dd,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-receipt dd,
 .urban-node-wrapper .pm-booking-confirm-receipt dd {
   color: var(--pr-slate, #1c1917);
   font-weight: 700;
@@ -457,7 +457,7 @@
   text-align: right;
 }
 
-.properties-rental-theme .pr-booking-confirm-receipt-total,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-receipt-total,
 .urban-node-wrapper .pm-booking-confirm-receipt-total {
   border-bottom: 0;
   border-top: 2px solid var(--pr-border, #e7e5e4);
@@ -465,7 +465,7 @@
   padding-top: 1.15rem;
 }
 
-.properties-rental-theme .pr-booking-confirm-receipt-total dt,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-receipt-total dt,
 .urban-node-wrapper .pm-booking-confirm-receipt-total dt {
   color: var(--pr-slate, #1c1917);
   font-size: 0.8rem;
@@ -474,21 +474,21 @@
   text-transform: uppercase;
 }
 
-.properties-rental-theme .pr-booking-confirm-receipt-total dd,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-receipt-total dd,
 .urban-node-wrapper .pm-booking-confirm-receipt-total dd {
   color: var(--pr-mint-deep, #9a3412);
   font-size: 1.35rem;
   font-weight: 900;
 }
 
-.properties-rental-theme .pr-booking-confirm-actions p,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-actions p,
 .urban-node-wrapper .pm-booking-confirm-actions p {
   color: var(--pr-text-muted, #78716c);
   line-height: 1.7;
   margin: 0.85rem 0 1.25rem;
 }
 
-.properties-rental-theme .pr-booking-confirm-actions,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-actions,
 .urban-node-wrapper .pm-booking-confirm-actions {
   display: flex;
   flex-direction: column;
@@ -496,7 +496,7 @@
   top: calc(var(--pr-header-h, 72px) + 1rem);
 }
 
-.properties-rental-theme .pr-booking-confirm-cta,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-cta,
 .urban-node-wrapper .pm-booking-confirm-cta {
   justify-content: center;
   margin-bottom: 0.75rem;
@@ -505,34 +505,34 @@
   width: 100%;
 }
 
-.properties-rental-theme .pr-booking-confirm-loading,
+:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-loading,
 .urban-node-wrapper .pm-booking-confirm-loading {
   color: var(--pr-text-muted, #78716c);
   margin: 0;
 }
 
 @media (max-width: 768px) {
-  .properties-rental-theme .pr-booking-layout,
+  :is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-layout,
   .urban-node-wrapper .pm-booking-layout {
     grid-template-columns: 1fr;
   }
 
-  .properties-rental-theme .pr-booking-confirm-layout,
+  :is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-layout,
   .urban-node-wrapper .pm-booking-confirm-layout {
     grid-template-columns: 1fr;
   }
 
-  .properties-rental-theme .pr-booking-confirm-actions,
+  :is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-actions,
   .urban-node-wrapper .pm-booking-confirm-actions {
     position: static;
   }
 
-  .properties-rental-theme .pr-booking-confirm-property,
+  :is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-property,
   .urban-node-wrapper .pm-booking-confirm-property {
     grid-template-columns: 1fr;
   }
 
-  .properties-rental-theme .pr-booking-confirm-property img,
+  :is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-booking-confirm-property img,
   .urban-node-wrapper .pm-booking-confirm-property img {
     height: 160px;
     width: 100%;

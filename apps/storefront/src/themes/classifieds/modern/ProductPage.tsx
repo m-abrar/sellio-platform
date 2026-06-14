@@ -10,6 +10,10 @@ import {
   getRelatedFromApi,
   resolveClassifiedFailure,
 } from '@/themes/classifieds/shared/catalog';
+import {
+  saveClassifiedInquirySnapshot,
+  redirectToClassifiedInquiryConfirmation,
+} from '@/themes/classifieds/shared/classified-inquiry-confirmation';
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
@@ -35,8 +39,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [formPhone, setFormPhone] = useState('');
   const [formQuantity, setFormQuantity] = useState(1);
   const [formNotes, setFormNotes] = useState('');
-  const [orderComplete, setOrderComplete] = useState(false);
-  const [generatedRef, setGeneratedRef] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -105,7 +107,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
       loadData();
     }
 
-    setOrderComplete(false);
     setIsFavorite(false);
     setFormError(null);
   }, [slug, allowDemo]);
@@ -215,8 +216,18 @@ export default function ProductPage({ slug }: ProductPageProps) {
       return;
     }
 
-    setGeneratedRef(String(result.inquiryId));
-    setOrderComplete(true);
+    saveClassifiedInquirySnapshot({
+      id: result.inquiryId,
+      listingId: listing.id,
+      listingTitle: listing.title,
+      listingSlug: listing.slug,
+      contactName: formName,
+      contactEmail: formEmail,
+      offerPrice: String(salePrice * formQuantity),
+      message: inquiryMessage || undefined,
+      status: 'pending',
+    });
+    redirectToClassifiedInquiryConfirmation(themeLink, result.inquiryId);
   };
 
   return (
@@ -355,6 +366,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     isFavorite={false}
                     onToggleFavorite={() => {}}
                     onShare={() => {}}
+                    onQuickView={() => {}}
                   />
                 </a>
               ))}
@@ -368,27 +380,13 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div style={{ backgroundColor: '#ffffff', width: '100%', maxWidth: '480px', height: '100%', boxShadow: '-10px 0 40px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column' }}>
             <div style={{ padding: '2rem', borderBottom: '1.5px solid var(--cm-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--cm-text-dark)', margin: 0 }}>Secure This Bargain</h3>
-              <button onClick={() => { setDrawerOpen(false); setOrderComplete(false); }} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', fontWeight: 800, color: 'var(--cm-text-muted)' }}>
+              <button onClick={() => { setDrawerOpen(false); }} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', fontWeight: 800, color: 'var(--cm-text-muted)' }}>
                 ✕
               </button>
             </div>
 
             <div style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
-              {orderComplete ? (
-                <div style={{ textAlign: 'center', padding: '2rem 0' }}>
-                  <h4 style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--cm-text-dark)', marginBottom: '0.5rem' }}>Inquiry Registered</h4>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--cm-text-muted)', marginBottom: '1.5rem' }}>
-                    Your request has been saved locally.
-                  </p>
-                  <div style={{ backgroundColor: 'rgba(0, 188, 212, 0.08)', border: '1.5px dashed var(--cm-accent-cyan)', padding: '1.25rem', borderRadius: '12px', marginBottom: '2rem', fontFamily: 'monospace', fontSize: '0.9rem' }}>
-                    <strong>REF ID:</strong> {generatedRef}
-                  </div>
-                  <button onClick={() => { setDrawerOpen(false); setOrderComplete(false); }} style={{ padding: '0.9rem 2.5rem', borderRadius: '50px', backgroundColor: 'var(--cm-accent-cyan)', color: '#ffffff', border: 'none', fontWeight: 800, cursor: 'pointer' }}>
-                    Done
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                   {formError && <p className="cm-form-error" role="alert">{formError}</p>}
                   <input type="text" required placeholder="Full Name" value={formName} onChange={(e) => setFormName(e.target.value)} style={{ padding: '0.8rem 1rem', borderRadius: '8px', border: '1.5px solid var(--cm-border)', fontSize: '0.9rem' }} />
                   <input type="email" required placeholder="Email Address" value={formEmail} onChange={(e) => setFormEmail(e.target.value)} style={{ padding: '0.8rem 1rem', borderRadius: '8px', border: '1.5px solid var(--cm-border)', fontSize: '0.9rem' }} />
@@ -403,7 +401,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     Submit Booking Request
                   </button>
                 </form>
-              )}
             </div>
           </div>
         </div>

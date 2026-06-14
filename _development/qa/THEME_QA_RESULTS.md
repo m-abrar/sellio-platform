@@ -21,62 +21,92 @@ The following patterns were found and fixed across multiple themes:
 
 ---
 
+## Workflow Coverage
+
+Each theme must provide 4 steps: **Archive → Product → Booking/Inquiry → Confirmation**
+
+| Vertical | Archive | Product | Booking step | Confirmation |
+|---|---|---|---|---|
+| **classifieds/local** | ✅ Page | ✅ ProductPage | Inline inquiry form on ProductPage | ✅ InquiryConfirmationPage |
+| **classifieds/** ×5 | ✅ Page | ✅ ProductPage | Inline inquiry form (success shown inline) | ➖ Inline — no separate page needed |
+| **jobs/** ×6 | ✅ Page | ✅ ProductPage | Inline application form (success shown inline) | ➖ Inline — no separate page needed |
+| **autos/** ×5 | ✅ Page | ✅ ProductPage | Inline contact form (success shown inline) | ➖ Inline — no separate page needed |
+| **services/marketplace** | ✅ Page | ✅ ProductPage | Inline consultation form | ✅ ConsultationConfirmationPage |
+| **services/** ×4 | ✅ Page | ✅ ProductPage | Inline consultation form (success shown inline) | ➖ Inline — no separate page needed |
+| **events/corporate** | ✅ Page | ✅ ProductPage | ✅ BookingPage + BookingReservePage | ✅ BookingConfirmationPage + BookingConfirmPage |
+| **events/** ×4 | ✅ Page | ✅ ProductPage | ⚠️ Fixed: BookingPage + BookingReservePage created | ⚠️ Fixed: BookingConfirmationPage + BookingConfirmPage created |
+| **properties/rental** | ✅ Page | ✅ ProductPage | ✅ BookingPage + BookingReservePage | ✅ BookingConfirmationPage + BookingConfirmPage |
+| **properties/modern** | ✅ Page | ✅ ProductPage | ✅ BookingPage + BookingReservePage | ✅ BookingConfirmationPage + BookingConfirmPage |
+| **properties/vacation** | ✅ Page | ✅ ProductPage | ⚠️ Fixed: broken raw re-exports → proper wrappers | ⚠️ Fixed: proper wrappers created |
+| **properties/classic** | ✅ Page | ✅ ProductPage | ⚠️ Fixed: BookingPage + BookingReservePage created | ⚠️ Fixed: BookingConfirmationPage + BookingConfirmPage created |
+| **properties/luxury** | ✅ Page | ✅ ProductPage | ⚠️ Fixed: BookingPage + BookingReservePage created | ⚠️ Fixed: BookingConfirmationPage + BookingConfirmPage created |
+| **properties/** ×8 others | ✅ Page | ✅ ProductPage | Inline inquiry form (no booking redirect) | ➖ Inline — no separate page needed |
+| **ecommerce/** ×4 | ✅ Page | ✅ ProductPage | ✅ CartPage + CheckoutPage | ✅ CheckoutConfirmationPage + CheckoutConfirmPage |
+| **unifieds/** ×8 | ✅ Page | ✅ ProductPage | ✅ CartPage + CheckoutPage | ✅ CheckoutConfirmationPage + CheckoutConfirmPage |
+
+### CSS fixes for booking pages
+- `events/shared/subpages.css`: `.events-corporate-theme .ecc-*` → `:is(.events-corporate-theme, .events-classic-theme, .sonic-pulse-wrapper, .events-festival-theme, .events-creative-theme) .ecc-*`
+- `properties/shared/subpages.css`: `.properties-rental-theme .pr-*` → `:is(.properties-rental-theme, .properties-vacation-theme, .properties-classic-theme, .luxury-premium-wrapper) .pr-*`
+- Added `subpages.css` import to: `events/classic/Layout.tsx`, `properties/vacation/Layout.tsx`, `properties/classic/Layout.tsx`, `properties/luxury/Layout.tsx`
+
+---
+
 ## Results Table
 
-| Rank | Theme Key | Language | Copyright | Header Logo | Footer Logo | Dead Links | Empty State | Error State | useRouter Nav | Lint | Status |
+| Rank | Theme Key | Language | Copyright | Header Logo | Footer Logo | Dead Links | Empty State | Error State | useRouter Nav | Workflow | Lint | Status |
 |---:|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | unifieds_marketplace | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 2 | ecommerce_default | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 3 | ecommerce_fashion | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
-| 4 | ecommerce_electronics | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
-| 5 | properties_modern | ✅ | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 6 | properties_luxury | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
-| 7 | properties_rental | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 8 | properties_map | ✅ | ✅ | ⚠️ Fixed | ✅ | ➖ Orphaned | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 9 | unifieds_default | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 10 | unifieds_modern | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 11 | classifieds_modern | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 12 | classifieds_general | ✅ | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 13 | classifieds_premium | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ Pass |
-| 14 | classifieds_local | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
-| 15 | jobs_modern | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 16 | jobs_corporate | ✅ | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 17 | jobs_tech | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ Pass |
-| 18 | services_marketplace | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ⚠️ | ✅ Pass |
-| 19 | services_corporate | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 20 | autos_modern | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 21 | autos_used | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ Pass |
-| 22 | events_classic | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 23 | events_corporate | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 24 | properties_classic | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 25 | properties_vacation | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 26 | properties_commercial | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 27 | properties_investment | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 28 | properties_showcase | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 29 | properties_platinum | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 30 | properties_urban | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 31 | properties_neighborhood | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 32 | properties_unified | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 33 | ecommerce_luxury | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 34 | unifieds_mega | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 35 | unifieds_standard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 36 | unifieds_classic | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 37 | unifieds_interactive | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 38 | unifieds_minimal | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 39 | classifieds_deals | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
-| 40 | classifieds_elite | ✅ | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ Pass |
-| 41 | jobs_startup | ⚠️ Fixed | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ Pass |
-| 42 | jobs_freelance | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 43 | jobs_blue_collar | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 44 | services_local | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 45 | services_creative | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 46 | services_health | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
-| 47 | autos_luxury | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 48 | autos_electric | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
-| 49 | autos_classic | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ Pass |
-| 50 | events_music | ✅ | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 51 | events_festival | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
-| 52 | events_creative | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 1 | unifieds_marketplace | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 2 | ecommerce_default | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 3 | ecommerce_fashion | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
+| 4 | ecommerce_electronics | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
+| 5 | properties_modern | ✅ | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 6 | properties_luxury | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ Pass |
+| 7 | properties_rental | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 8 | properties_map | ✅ | ✅ | ⚠️ Fixed | ✅ | ➖ Orphaned | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 9 | unifieds_default | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 10 | unifieds_modern | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 11 | classifieds_modern | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 12 | classifieds_general | ✅ | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 13 | classifieds_premium | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
+| 14 | classifieds_local | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
+| 15 | jobs_modern | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 16 | jobs_corporate | ✅ | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 17 | jobs_tech | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
+| 18 | services_marketplace | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 19 | services_corporate | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 20 | autos_modern | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 21 | autos_used | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
+| 22 | events_classic | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
+| 23 | events_corporate | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 24 | properties_classic | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
+| 25 | properties_vacation | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
+| 26 | properties_commercial | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 27 | properties_investment | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 28 | properties_showcase | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 29 | properties_platinum | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 30 | properties_urban | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 31 | properties_neighborhood | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 32 | properties_unified | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 33 | ecommerce_luxury | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 34 | unifieds_mega | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 35 | unifieds_standard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 36 | unifieds_classic | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 37 | unifieds_interactive | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 38 | unifieds_minimal | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 39 | classifieds_deals | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
+| 40 | classifieds_elite | ✅ | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
+| 41 | jobs_startup | ⚠️ Fixed | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
+| 42 | jobs_freelance | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 43 | jobs_blue_collar | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 44 | services_local | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 45 | services_creative | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 46 | services_health | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ | ✅ Pass |
+| 47 | autos_luxury | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Pass |
+| 48 | autos_electric | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
+| 49 | autos_classic | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ⚠️ Fixed | ✅ | ✅ | ✅ Pass |
+| 50 | events_music | ✅ | ✅ | ✅ | ✅ | ➖ Orphaned | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
+| 51 | events_festival | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
+| 52 | events_creative | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ Fixed | ✅ | ✅ Pass |
 
 ---
 

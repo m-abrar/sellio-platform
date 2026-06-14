@@ -14,6 +14,10 @@ import {
   getVehicleSpecLabel,
 } from '@/themes/autos/shared/vehicle-utils';
 import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
+import {
+  saveVehicleInquirySnapshot,
+  redirectToVehicleInquiryConfirmation,
+} from '@/themes/autos/shared/vehicle-inquiry-confirmation';
 
 interface ProductPageProps {
   slug: string;
@@ -37,8 +41,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [customCeramicCoating, setCustomCeramicCoating] = useState(false);
   const [customWinterTires, setCustomWinterTires] = useState(false);
   const [customPerformanceTuning, setCustomPerformanceTuning] = useState(false);
-  const [inquirySuccess, setInquirySuccess] = useState(false);
-  const [inquirySavedOffline, setInquirySavedOffline] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -142,13 +144,19 @@ export default function ProductPage({ slug }: ProductPageProps) {
       return;
     }
 
-    setInquirySuccess(true);
-    setInquirySavedOffline(Boolean(result.savedOffline));
+    saveVehicleInquirySnapshot({
+      id: result.inquiryId,
+      vehicleId: vehicle.id,
+      vehicleTitle: vehicle.title,
+      vehicleSlug: vehicle.slug,
+      contactName: inquiryName,
+      contactEmail: inquiryEmail,
+      contactPhone: inquiryPhone,
+      message: buildInquiryMessage(),
+      status: 'pending',
+    });
     resetInquiryForm();
-    setTimeout(() => {
-      setInquirySuccess(false);
-      setInquirySavedOffline(false);
-    }, 5000);
+    redirectToVehicleInquiryConfirmation(themeLink, result.inquiryId);
   };
 
   if (loading) {
@@ -272,57 +280,48 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </label>
               </div>
 
-              {inquirySuccess ? (
-                <div className="md-success-banner" role="status">
-                  <strong>Inquiry sent!</strong>{' '}
-                  {inquirySavedOffline
-                    ? 'Your quote request was saved locally because the server is unavailable.'
-                    : 'The dealer will contact you shortly with next steps.'}
-                </div>
-              ) : (
-                <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                  {formError && (
-                    <p className="md-form-error" role="alert">
-                      {formError}
-                    </p>
-                  )}
-                  <input
-                    type="text"
-                    className="md-search-input"
-                    placeholder="Your Full Name"
-                    required
-                    value={inquiryName}
-                    onChange={(e) => setInquiryName(e.target.value)}
-                    style={{ width: '100%', boxSizing: 'border-box' }}
-                  />
-                  <input
-                    type="email"
-                    className="md-search-input"
-                    placeholder="Email Address"
-                    required
-                    value={inquiryEmail}
-                    onChange={(e) => setInquiryEmail(e.target.value)}
-                    style={{ width: '100%', boxSizing: 'border-box' }}
-                  />
-                  <input
-                    type="tel"
-                    className="md-search-input"
-                    placeholder="Phone Number"
-                    required
-                    value={inquiryPhone}
-                    onChange={(e) => setInquiryPhone(e.target.value)}
-                    style={{ width: '100%', boxSizing: 'border-box' }}
-                  />
-                  <button
-                    type="submit"
-                    className="md-btn md-btn-cta"
-                    style={{ width: '100%', boxSizing: 'border-box', padding: '0.95rem' }}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Sending inquiry...' : 'Lock In Quote & Secure Ride'}
-                  </button>
-                </form>
-              )}
+              <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                {formError && (
+                  <p className="md-form-error" role="alert">
+                    {formError}
+                  </p>
+                )}
+                <input
+                  type="text"
+                  className="md-search-input"
+                  placeholder="Your Full Name"
+                  required
+                  value={inquiryName}
+                  onChange={(e) => setInquiryName(e.target.value)}
+                  style={{ width: '100%', boxSizing: 'border-box' }}
+                />
+                <input
+                  type="email"
+                  className="md-search-input"
+                  placeholder="Email Address"
+                  required
+                  value={inquiryEmail}
+                  onChange={(e) => setInquiryEmail(e.target.value)}
+                  style={{ width: '100%', boxSizing: 'border-box' }}
+                />
+                <input
+                  type="tel"
+                  className="md-search-input"
+                  placeholder="Phone Number"
+                  required
+                  value={inquiryPhone}
+                  onChange={(e) => setInquiryPhone(e.target.value)}
+                  style={{ width: '100%', boxSizing: 'border-box' }}
+                />
+                <button
+                  type="submit"
+                  className="md-btn md-btn-cta"
+                  style={{ width: '100%', boxSizing: 'border-box', padding: '0.95rem' }}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Sending inquiry...' : 'Lock In Quote & Secure Ride'}
+                </button>
+              </form>
             </div>
 
             <div className="md-form-panel">

@@ -7,6 +7,10 @@ import { fetchJobDetail, resolveJobFailure } from '@/themes/jobs/shared/catalog'
 import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
 import { useJobApplyFlow } from '@/themes/jobs/shared/useJobApplyFlow';
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
+import {
+  saveJobApplicationSnapshot,
+  redirectToJobApplicationConfirmation,
+} from '@/themes/jobs/shared/job-application-confirmation';
 
 interface ProductPageProps {
   slug: string;
@@ -29,15 +33,24 @@ export default function ProductPage({ slug }: ProductPageProps) {
     setAuthPassword,
     authBusy,
     isSubmitting,
-    applicationId,
-    isSubmitted,
-    setIsSubmitted,
-    setApplicationId,
     formError,
     setFormError,
     handleAuthSubmit,
     handleApplySubmit,
-  } = useJobApplyFlow(slug);
+  } = useJobApplyFlow(slug, {
+    onSuccess: (appId) => {
+      saveJobApplicationSnapshot({
+        id: appId,
+        jobId: job?.id ?? 0,
+        jobTitle: job?.title ?? 'Job Application',
+        jobSlug: job?.slug,
+        applicantName: form.name,
+        applicantEmail: form.email,
+        status: 'pending',
+      });
+      redirectToJobApplicationConfirmation(themeLink, appId);
+    },
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -183,13 +196,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             <h3>Apply for this role</h3>
             <p>Submit your application details.</p>
 
-            {isSubmitted ? (
-              <div className="jc-detail-success" role="status">
-                {useFallback
-                  ? 'Application saved in demo mode.'
-                  : `Application #${applicationId ?? '—'} submitted successfully.`}
-              </div>
-            ) : !useFallback && !user ? (
+            {!useFallback && !user ? (
               <form
                 onSubmit={(event) => {
                   event.preventDefault();

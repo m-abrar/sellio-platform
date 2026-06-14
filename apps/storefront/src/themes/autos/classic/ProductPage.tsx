@@ -8,6 +8,10 @@ import { fetchVehicleDetail, resolveVehicleFailure } from '@/themes/autos/shared
 import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
 import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
+import {
+  saveVehicleInquirySnapshot,
+  redirectToVehicleInquiryConfirmation,
+} from '@/themes/autos/shared/vehicle-inquiry-confirmation';
 
 interface ClassicCarItem {
   id: number;
@@ -122,8 +126,6 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [clientNotes, setClientNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const [bookingSuccess, setBookingSuccess] = useState(false);
-  const [receiptCode, setReceiptCode] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -214,8 +216,18 @@ export default function ProductPage({ slug }: { slug: string }) {
       return;
     }
 
-    setReceiptCode(String(result.inquiryId));
-    setBookingSuccess(true);
+    saveVehicleInquirySnapshot({
+      id: result.inquiryId,
+      vehicleId: car.id,
+      vehicleTitle: car.title,
+      vehicleSlug: car.slug,
+      contactName: clientName,
+      contactEmail: clientEmail,
+      contactPhone: clientPhone,
+      message: inquiryMessage,
+      status: 'pending',
+    });
+    redirectToVehicleInquiryConfirmation(themeLink, result.inquiryId);
   };
 
   if (loading) {
@@ -356,123 +368,82 @@ export default function ProductPage({ slug }: { slug: string }) {
 
           {/* Stateful Concierge & Bid Desk Drawer */}
           <div style={{ backgroundColor: '#1d1d1f', color: '#f5f5f7', borderRadius: '8px', padding: '2.5rem', boxShadow: '0 4px 25px rgba(0,0,0,0.15)', border: '1px solid #333' }}>
-            {!bookingSuccess ? (
-              <form onSubmit={handleCollectorInquiry}>
-                <h4 style={{ fontFamily: 'var(--ac-font-heading)', color: '#fff', fontWeight: 700, fontSize: '1.3rem', margin: '0 0 0.5rem 0' }}>Acquisitions Concierge</h4>
-                <p style={{ color: '#b5b5b7', fontSize: '0.85rem', margin: '0 0 1.5rem 0', lineHeight: 1.4 }}>Request an private viewing or submit a certified purchase offer to the broker.</p>
+            <form onSubmit={handleCollectorInquiry}>
+              <h4 style={{ fontFamily: 'var(--ac-font-heading)', color: '#fff', fontWeight: 700, fontSize: '1.3rem', margin: '0 0 0.5rem 0' }}>Acquisitions Concierge</h4>
+              <p style={{ color: '#b5b5b7', fontSize: '0.85rem', margin: '0 0 1.5rem 0', lineHeight: 1.4 }}>Request an private viewing or submit a certified purchase offer to the broker.</p>
 
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e5e5e7', display: 'block', marginBottom: '0.4rem', textTransform: 'uppercase' }}>Collector Name *</label>
-                  <input 
-                    type="text" 
-                    required 
-                    value={clientName} 
-                    onChange={(e) => setClientName(e.target.value)} 
-                    placeholder="Winston Churchill" 
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2d2d2f', color: '#fff', outline: 'none' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e5e5e7', display: 'block', marginBottom: '0.4rem', textTransform: 'uppercase' }}>Secured Email Address *</label>
-                  <input 
-                    type="email" 
-                    required 
-                    value={clientEmail} 
-                    onChange={(e) => setClientEmail(e.target.value)} 
-                    placeholder="winston@concierge.com" 
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2d2d2f', color: '#fff', outline: 'none' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e5e5e7', display: 'block', marginBottom: '0.4rem', textTransform: 'uppercase' }}>Purchase Offer Bid ($) *</label>
-                  <input 
-                    type="text" 
-                    required 
-                    value={offerPrice} 
-                    onChange={(e) => setOfferPrice(e.target.value)} 
-                    placeholder={car.price} 
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2d2d2f', color: '#fff', outline: 'none' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1.25rem' }}>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e5e5e7', display: 'block', marginBottom: '0.4rem', textTransform: 'uppercase' }}>Secure Phone Number (Optional)</label>
-                  <input 
-                    type="tel" 
-                    value={clientPhone} 
-                    onChange={(e) => setClientPhone(e.target.value)} 
-                    placeholder="+1 (555) 123-4567" 
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2d2d2f', color: '#fff', outline: 'none' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e5e5e7', display: 'block', marginBottom: '0.4rem', textTransform: 'uppercase' }}>Special Custodian Requests</label>
-                  <textarea 
-                    value={clientNotes} 
-                    onChange={(e) => setClientNotes(e.target.value)} 
-                    placeholder="E.g., Request shipping transport quotes..." 
-                    rows={3}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2d2d2f', color: '#fff', outline: 'none', fontFamily: 'inherit', resize: 'none' }}
-                  />
-                </div>
-
-                <button 
-                  type="submit" 
-                  disabled={isSubmitting} 
-                  className="ac-btn ac-btn-gold" 
-                  style={{ width: '100%', padding: '0.9rem', borderRadius: '4px', fontSize: '1rem', fontWeight: 700 }}
-                >
-                  {isSubmitting ? 'Authenticating Bid...' : 'Submit Acquisitions Offer'}
-                </button>
-                {formError && (
-                  <p style={{ color: '#fca5a5', fontSize: '0.85rem', marginTop: '0.75rem', textAlign: 'center' }}>
-                    {formError}
-                  </p>
-                )}
-              </form>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-                <span style={{ fontSize: '3rem' }}>📜</span>
-                <h4 style={{ color: 'var(--ac-secondary)', fontWeight: 800, marginTop: '1rem', marginBottom: '0.5rem', fontSize: '1.4rem', fontFamily: 'var(--ac-font-heading)' }}>Offer Submitted!</h4>
-                <p style={{ color: '#b5b5b7', fontSize: '0.9rem', margin: '0 0 1.5rem 0', lineHeight: 1.5 }}>
-                  Bespoke offer registered. The custodian broker at <strong>{car.dealer}</strong> has locked your acquisition file.
-                </p>
-
-                {/* Secure Invoice Receipt */}
-                <div style={{ border: '1px dashed #555', padding: '1rem', borderRadius: '4px', backgroundColor: '#2d2d2f', textAlign: 'left', marginBottom: '1.5rem' }}>
-                  <h6 style={{ margin: '0 0 0.5rem 0', fontSize: '0.75rem', color: '#888', textTransform: 'uppercase', fontWeight: 700 }}>Acquisition Registry Code</h6>
-                  <code style={{ display: 'block', wordBreak: 'break-all', fontSize: '0.85rem', color: 'var(--ac-secondary)', fontFamily: 'monospace', fontWeight: 700 }}>
-                    {receiptCode}
-                  </code>
-                  
-                  <hr style={{ border: 0, borderTop: '1px solid #444', margin: '0.75rem 0' }} />
-                  
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#b5b5b7', marginBottom: '0.25rem' }}>
-                    <span>Vetted Masterpiece:</span>
-                    <strong style={{ color: '#fff' }}>{car.title}</strong>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#b5b5b7', marginBottom: '0.25rem' }}>
-                    <span>Collector:</span>
-                    <strong style={{ color: '#fff' }}>{clientName}</strong>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#b5b5b7' }}>
-                    <span>Locked Bid Offer:</span>
-                    <strong style={{ color: 'var(--ac-secondary)' }}>{offerPrice.startsWith('$') ? offerPrice : `$${Number(offerPrice).toLocaleString()}`}</strong>
-                  </div>
-                </div>
-
-                <button 
-                  onClick={() => setBookingSuccess(false)} 
-                  className="ac-btn ac-btn-gold" 
-                  style={{ width: '100%', borderRadius: '4px', padding: '0.75rem' }}
-                >
-                  Submit Alternative Inquiry
-                </button>
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e5e5e7', display: 'block', marginBottom: '0.4rem', textTransform: 'uppercase' }}>Collector Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={clientName}
+                  onChange={(e) => setClientName(e.target.value)}
+                  placeholder="Winston Churchill"
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2d2d2f', color: '#fff', outline: 'none' }}
+                />
               </div>
-            )}
+
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e5e5e7', display: 'block', marginBottom: '0.4rem', textTransform: 'uppercase' }}>Secured Email Address *</label>
+                <input
+                  type="email"
+                  required
+                  value={clientEmail}
+                  onChange={(e) => setClientEmail(e.target.value)}
+                  placeholder="winston@concierge.com"
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2d2d2f', color: '#fff', outline: 'none' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e5e5e7', display: 'block', marginBottom: '0.4rem', textTransform: 'uppercase' }}>Purchase Offer Bid ($) *</label>
+                <input
+                  type="text"
+                  required
+                  value={offerPrice}
+                  onChange={(e) => setOfferPrice(e.target.value)}
+                  placeholder={car.price}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2d2d2f', color: '#fff', outline: 'none' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '1.25rem' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e5e5e7', display: 'block', marginBottom: '0.4rem', textTransform: 'uppercase' }}>Secure Phone Number (Optional)</label>
+                <input
+                  type="tel"
+                  value={clientPhone}
+                  onChange={(e) => setClientPhone(e.target.value)}
+                  placeholder="+1 (555) 123-4567"
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2d2d2f', color: '#fff', outline: 'none' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e5e5e7', display: 'block', marginBottom: '0.4rem', textTransform: 'uppercase' }}>Special Custodian Requests</label>
+                <textarea
+                  value={clientNotes}
+                  onChange={(e) => setClientNotes(e.target.value)}
+                  placeholder="E.g., Request shipping transport quotes..."
+                  rows={3}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#2d2d2f', color: '#fff', outline: 'none', fontFamily: 'inherit', resize: 'none' }}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="ac-btn ac-btn-gold"
+                style={{ width: '100%', padding: '0.9rem', borderRadius: '4px', fontSize: '1rem', fontWeight: 700 }}
+              >
+                {isSubmitting ? 'Authenticating Bid...' : 'Submit Acquisitions Offer'}
+              </button>
+              {formError && (
+                <p style={{ color: '#fca5a5', fontSize: '0.85rem', marginTop: '0.75rem', textAlign: 'center' }}>
+                  {formError}
+                </p>
+              )}
+            </form>
           </div>
         </div>
       </div>

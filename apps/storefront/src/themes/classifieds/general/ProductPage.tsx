@@ -13,6 +13,10 @@ import {
   mapClassifiedToGeneralCard,
   type GeneralCardItem,
 } from '@/themes/classifieds/shared/listing-utils';
+import {
+  saveClassifiedInquirySnapshot,
+  redirectToClassifiedInquiryConfirmation,
+} from '@/themes/classifieds/shared/classified-inquiry-confirmation';
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
@@ -32,8 +36,6 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [buyerEmail, setBuyerEmail] = useState('');
   const [buyerOffer, setBuyerOffer] = useState('');
   const [buyerMessage, setBuyerMessage] = useState('');
-  const [orderSuccess, setOrderSuccess] = useState(false);
-  const [orderSuccessData, setOrderSuccessData] = useState<Record<string, string> | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -140,11 +142,18 @@ export default function ProductPage({ slug }: { slug: string }) {
       return;
     }
 
-    setOrderSuccess(true);
-    setOrderSuccessData({
-      ...result.summary,
-      offerPrice: buyerOffer || item.price,
+    saveClassifiedInquirySnapshot({
+      id: result.inquiryId,
+      listingId: item.id,
+      listingTitle: item.title,
+      listingSlug: item.slug,
+      contactName: buyerName,
+      contactEmail: buyerEmail,
+      offerPrice: buyerOffer.trim() || item.price,
+      message: buyerMessage.trim() || undefined,
+      status: 'pending',
     });
+    redirectToClassifiedInquiryConfirmation(themeLink, result.inquiryId);
   };
 
   return (
@@ -255,22 +264,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                     Submit an offer or request details. Messages are routed to {item.seller}.
                   </div>
 
-                  {orderSuccess && orderSuccessData ? (
-                    <div className="cg-booking-receipt">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--cg-primary)', fontWeight: 800, fontSize: '0.95rem' }}>
-                        <span>✓</span> <span>Message Securely Dispatched!</span>
-                      </div>
-                      <div className="cg-receipt-row">
-                        <span>Transaction ID:</span>
-                        <span style={{ fontFamily: 'monospace' }}>{orderSuccessData.orderId}</span>
-                      </div>
-                      <div className="cg-receipt-row">
-                        <span>Offered Price:</span>
-                        <span style={{ color: 'var(--cg-primary)' }}>{orderSuccessData.offerPrice}</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                       {formError && <p className="cg-form-error" role="alert">{formError}</p>}
                       <div className="cg-booking-form-group">
                         <label className="cg-booking-label">Your Full Name *</label>
@@ -319,7 +313,6 @@ export default function ProductPage({ slug }: { slug: string }) {
                         {isSubmitting ? 'Sending…' : 'Dispatch Message to Seller'}
                       </button>
                     </form>
-                  )}
                 </div>
               </div>
             </div>

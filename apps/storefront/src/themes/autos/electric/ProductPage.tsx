@@ -8,6 +8,10 @@ import { fetchVehicleDetail, resolveVehicleFailure } from '@/themes/autos/shared
 import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
 import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
+import {
+  saveVehicleInquirySnapshot,
+  redirectToVehicleInquiryConfirmation,
+} from '@/themes/autos/shared/vehicle-inquiry-confirmation';
 
 interface EVItem {
   id: number;
@@ -120,8 +124,6 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [buyerName, setBuyerName] = useState('');
   const [buyerEmail, setBuyerEmail] = useState('');
   const [buyerNotes, setBuyerNotes] = useState('');
-  const [orderSuccess, setOrderSuccess] = useState(false);
-  const [orderSuccessData, setOrderSuccessData] = useState<any>(null);
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -233,11 +235,17 @@ export default function ProductPage({ slug }: { slug: string }) {
       return;
     }
 
-    setOrderSuccess(true);
-    setOrderSuccessData({
-      ...orderData,
-      orderId: String(result.inquiryId),
+    saveVehicleInquirySnapshot({
+      id: result.inquiryId,
+      vehicleId: item.id,
+      vehicleTitle: item.title,
+      vehicleSlug: item.slug,
+      contactName: buyerName,
+      contactEmail: buyerEmail,
+      message: inquiryMessage,
+      status: 'pending',
     });
+    redirectToVehicleInquiryConfirmation(themeLink, result.inquiryId);
   };
 
   return (
@@ -432,76 +440,49 @@ export default function ProductPage({ slug }: { slug: string }) {
                     Reserve your allocation or schedule a secure L2-charged test drive node with verified EV advisory specialists.
                   </div>
 
-                  {orderSuccess && orderSuccessData ? (
-                    <div className="ev-booking-receipt">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--ev-accent-green)', fontWeight: 700, fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                        <span>✓</span> <span>Grid Allocation Locked!</span>
-                      </div>
-                      <div style={{ fontSize: '0.8rem', opacity: 0.7, borderBottom: '1px dashed rgba(255,255,255,0.1)', paddingBottom: '0.5rem', lineHeight: '1.5' }}>
-                        Your sustainable mobility transaction receipt has been secure-registered in the EVOLVE ledger. Receipt details:
-                      </div>
-                      <div className="ev-receipt-row">
-                        <span>Allocation ID:</span>
-                        <span style={{ fontFamily: 'monospace', color: 'var(--ev-accent-blue)' }}>{orderSuccessData.orderId}</span>
-                      </div>
-                      <div className="ev-receipt-row">
-                        <span>Registry Account:</span>
-                        <span>{orderSuccessData.buyerName}</span>
-                      </div>
-                      <div className="ev-receipt-row">
-                        <span>Configured Lease:</span>
-                        <span style={{ color: 'var(--ev-accent-green)', fontWeight: 700 }}>{orderSuccessData.computedMonthlyLease}</span>
-                      </div>
-                      <div className="ev-receipt-row" style={{ fontWeight: 800 }}>
-                        <span>Status:</span>
-                        <span>Node Synced</span>
-                      </div>
+                  <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div className="ev-booking-form-group">
+                      <label className="ev-booking-label">Client Name *</label>
+                      <input
+                        type="text"
+                        required
+                        className="ev-booking-input"
+                        placeholder="e.g. Liam Sterling"
+                        value={buyerName}
+                        onChange={(e) => setBuyerName(e.target.value)}
+                      />
                     </div>
-                  ) : (
-                    <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                      <div className="ev-booking-form-group">
-                        <label className="ev-booking-label">Client Name *</label>
-                        <input 
-                          type="text" 
-                          required 
-                          className="ev-booking-input" 
-                          placeholder="e.g. Liam Sterling" 
-                          value={buyerName}
-                          onChange={(e) => setBuyerName(e.target.value)}
-                        />
-                      </div>
-                      <div className="ev-booking-form-group">
-                        <label className="ev-booking-label">Secure Grid Email *</label>
-                        <input 
-                          type="email" 
-                          required 
-                          className="ev-booking-input" 
-                          placeholder="e.g. liam@sustainable.io" 
-                          value={buyerEmail}
-                          onChange={(e) => setBuyerEmail(e.target.value)}
-                        />
-                      </div>
-                      <div className="ev-booking-form-group">
-                        <label className="ev-booking-label">Configuration & Charging Request Notes (Optional)</label>
-                        <textarea 
-                          rows={2}
-                          className="ev-booking-input" 
-                          style={{ resize: 'none', height: '60px' }}
-                          placeholder="e.g. Vetting standard DC rate maps. Advise if physical charging adapters are supplied..." 
-                          value={buyerNotes}
-                          onChange={(e) => setBuyerNotes(e.target.value)}
-                        />
-                      </div>
-                      <button type="submit" className="ev-product-btn-reserve">
-                        Lock Grid Allocation & Request Test Drive
-                      </button>
-                      {formError && (
-                        <p style={{ color: '#fca5a5', fontSize: '0.85rem', marginTop: '0.75rem', textAlign: 'center' }}>
-                          {formError}
-                        </p>
-                      )}
-                    </form>
-                  )}
+                    <div className="ev-booking-form-group">
+                      <label className="ev-booking-label">Secure Grid Email *</label>
+                      <input
+                        type="email"
+                        required
+                        className="ev-booking-input"
+                        placeholder="e.g. liam@sustainable.io"
+                        value={buyerEmail}
+                        onChange={(e) => setBuyerEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="ev-booking-form-group">
+                      <label className="ev-booking-label">Configuration & Charging Request Notes (Optional)</label>
+                      <textarea
+                        rows={2}
+                        className="ev-booking-input"
+                        style={{ resize: 'none', height: '60px' }}
+                        placeholder="e.g. Vetting standard DC rate maps. Advise if physical charging adapters are supplied..."
+                        value={buyerNotes}
+                        onChange={(e) => setBuyerNotes(e.target.value)}
+                      />
+                    </div>
+                    <button type="submit" className="ev-product-btn-reserve">
+                      Lock Grid Allocation & Request Test Drive
+                    </button>
+                    {formError && (
+                      <p style={{ color: '#fca5a5', fontSize: '0.85rem', marginTop: '0.75rem', textAlign: 'center' }}>
+                        {formError}
+                      </p>
+                    )}
+                  </form>
                 </div>
               </div>
             </div>

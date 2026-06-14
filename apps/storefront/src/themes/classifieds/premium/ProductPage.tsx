@@ -10,6 +10,10 @@ import {
   getRelatedFromApi,
   resolveClassifiedFailure,
 } from '@/themes/classifieds/shared/catalog';
+import {
+  saveClassifiedInquirySnapshot,
+  redirectToClassifiedInquiryConfirmation,
+} from '@/themes/classifieds/shared/classified-inquiry-confirmation';
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
@@ -64,8 +68,6 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [buyerEmail, setBuyerEmail] = useState('');
   const [buyerOffer, setBuyerOffer] = useState('');
   const [buyerNotes, setBuyerNotes] = useState('');
-  const [orderSuccess, setOrderSuccess] = useState(false);
-  const [orderSuccessData, setOrderSuccessData] = useState<Record<string, string> | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -171,12 +173,18 @@ export default function ProductPage({ slug }: { slug: string }) {
       return;
     }
 
-    setOrderSuccess(true);
-    setOrderSuccessData({
-      ...result.summary,
-      title: item.title,
-      offerPrice: buyerOffer || item.price,
+    saveClassifiedInquirySnapshot({
+      id: result.inquiryId,
+      listingId: item.id,
+      listingTitle: item.title,
+      listingSlug: item.slug,
+      contactName: buyerName,
+      contactEmail: buyerEmail,
+      offerPrice: buyerOffer.trim() || item.price,
+      message: buyerNotes.trim() || undefined,
+      status: 'pending',
     });
+    redirectToClassifiedInquiryConfirmation(themeLink, result.inquiryId);
   };
 
   // Generate premium opportunity spec multipliers based on category
@@ -317,33 +325,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                     Coordinate directly with the certified broker assigning this opportunity. Fill in your investor credentials to request the full audit logs and tax schedules.
                   </div>
 
-                  {orderSuccess && orderSuccessData ? (
-                    <div className="cp-booking-receipt">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--cp-teal)', fontWeight: 900, fontSize: '0.95rem' }}>
-                        <span>✓</span> <span>Prospectus Memorandum Requested!</span>
-                      </div>
-                      <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600, borderBottom: '1px dashed var(--cp-teal)', paddingBottom: '0.5rem' }}>
-                        An M&A coordinator will review your professional credentials and deliver the complete data room vault via encrypted transmission. Receipt:
-                      </div>
-                      <div className="cp-receipt-row">
-                        <span>Transaction ID:</span>
-                        <span style={{ fontFamily: 'monospace' }}>{orderSuccessData.orderId}</span>
-                      </div>
-                      <div className="cp-receipt-row">
-                        <span>Acquisition Candidate:</span>
-                        <span>{orderSuccessData.title}</span>
-                      </div>
-                      <div className="cp-receipt-row">
-                        <span>Target Valuation Offer:</span>
-                        <span style={{ color: 'var(--cp-teal)' }}>{orderSuccessData.offerPrice}</span>
-                      </div>
-                      <div className="cp-receipt-row" style={{ fontWeight: 800 }}>
-                        <span>Status:</span>
-                        <span>Credential Screening</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                       {formError && (
                         <p
                           style={{
@@ -363,43 +345,43 @@ export default function ProductPage({ slug }: { slug: string }) {
                       )}
                       <div className="cp-booking-form-group">
                         <label className="cp-booking-label">Broker / Lead Investor Name *</label>
-                        <input 
-                          type="text" 
-                          required 
-                          className="cp-booking-input" 
-                          placeholder="e.g. Richard Hendricks" 
+                        <input
+                          type="text"
+                          required
+                          className="cp-booking-input"
+                          placeholder="e.g. Richard Hendricks"
                           value={buyerName}
                           onChange={(e) => setBuyerName(e.target.value)}
                         />
                       </div>
                       <div className="cp-booking-form-group">
                         <label className="cp-booking-label">Sovereign / Corporate Email *</label>
-                        <input 
-                          type="email" 
-                          required 
-                          className="cp-booking-input" 
-                          placeholder="e.g. richard@piedpiper.com" 
+                        <input
+                          type="email"
+                          required
+                          className="cp-booking-input"
+                          placeholder="e.g. richard@piedpiper.com"
                           value={buyerEmail}
                           onChange={(e) => setBuyerEmail(e.target.value)}
                         />
                       </div>
                       <div className="cp-booking-form-group">
                         <label className="cp-booking-label">Proposed Acquisition Offer Capital (USD)</label>
-                        <input 
-                          type="text" 
-                          className="cp-booking-input" 
-                          placeholder={`Default is ${item.price}`} 
+                        <input
+                          type="text"
+                          className="cp-booking-input"
+                          placeholder={`Default is ${item.price}`}
                           value={buyerOffer}
                           onChange={(e) => setBuyerOffer(e.target.value)}
                         />
                       </div>
                       <div className="cp-booking-form-group">
                         <label className="cp-booking-label">Confidential Investor Notes (Optional)</label>
-                        <textarea 
+                        <textarea
                           rows={2}
-                          className="cp-booking-input" 
+                          className="cp-booking-input"
                           style={{ resize: 'none', height: '60px' }}
-                          placeholder="e.g. Vetting active EBITDA multiples. Requesting audit reports for Q3..." 
+                          placeholder="e.g. Vetting active EBITDA multiples. Requesting audit reports for Q3..."
                           value={buyerNotes}
                           onChange={(e) => setBuyerNotes(e.target.value)}
                         />
@@ -408,7 +390,6 @@ export default function ProductPage({ slug }: { slug: string }) {
                         Submit Confidential Prospectus Request
                       </button>
                     </form>
-                  )}
                 </div>
               </div>
             </div>

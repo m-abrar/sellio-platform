@@ -13,6 +13,10 @@ import {
   getStartupEquityFill,
   getStartupEquityRange,
 } from '@/themes/jobs/shared/job-utils';
+import {
+  saveJobApplicationSnapshot,
+  redirectToJobApplicationConfirmation,
+} from '@/themes/jobs/shared/job-application-confirmation';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { api } from '@/lib/storefront-api';
 
@@ -153,6 +157,16 @@ export default function ProductPage({ slug }: ProductPageProps) {
       });
       setApplicationId(application.id);
       setIsSubmitted(true);
+      saveJobApplicationSnapshot({
+        id: application.id,
+        jobId: job.id,
+        jobTitle: job.title,
+        jobSlug: job.slug,
+        applicantName: form.name,
+        applicantEmail: form.email,
+        status: 'pending',
+      });
+      redirectToJobApplicationConfirmation(themeLink, application.id);
     } catch (error: unknown) {
       const axiosError = error as { response?: { data?: { message?: string } } };
       setFormError(axiosError.response?.data?.message ?? 'Failed to submit application. Please try again.');

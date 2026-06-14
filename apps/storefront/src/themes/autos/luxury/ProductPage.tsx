@@ -12,6 +12,10 @@ import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAll
 import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 import {
+  saveVehicleInquirySnapshot,
+  redirectToVehicleInquiryConfirmation,
+} from '@/themes/autos/shared/vehicle-inquiry-confirmation';
+import {
   formatVehiclePrice,
   getLuxuryVehicleImage,
   getLuxuryVehicleSpecLabel,
@@ -42,7 +46,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [inquiryPhone, setInquiryPhone] = useState('');
   const [inquiryDate, setInquiryDate] = useState('');
   const [inquiryTime, setInquiryTime] = useState('');
-  const [inquirySuccess, setInquirySuccess] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -145,13 +148,17 @@ export default function ProductPage({ slug }: ProductPageProps) {
       return;
     }
 
-    setInquirySuccess(true);
-    setInquiryName('');
-    setInquiryEmail('');
-    setInquiryPhone('');
-    setInquiryDate('');
-    setInquiryTime('');
-    setTimeout(() => setInquirySuccess(false), 5000);
+    saveVehicleInquirySnapshot({
+      id: result.inquiryId,
+      vehicleId: vehicle.id,
+      vehicleTitle: vehicle.title,
+      vehicleSlug: vehicle.slug,
+      contactName: inquiryName,
+      contactEmail: inquiryEmail,
+      contactPhone: inquiryPhone,
+      status: 'pending',
+    });
+    redirectToVehicleInquiryConfirmation(themeLink, result.inquiryId);
   };
 
   if (loading) {
@@ -385,103 +392,85 @@ export default function ProductPage({ slug }: ProductPageProps) {
               Register for a private private viewing of this vehicle asset.
             </p>
 
-            {inquirySuccess ? (
-              <div style={{
-                backgroundColor: 'rgba(195, 161, 109, 0.1)',
-                border: '1px solid var(--lx-gold)',
-                color: '#fff',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                textAlign: 'center',
-                boxShadow: '0 0 10px rgba(195,161,109,0.3)',
-                margin: '1rem 0'
-              }}>
-                <h5 className="lx-text-gold" style={{ margin: '0 0 0.5rem', fontSize: '1.1rem' }}>Acquisition Registered</h5>
-                <p style={{ fontSize: '0.85rem', margin: 0, lineHeight: 1.5 }}>
-                  Your private viewing VIP reservation is synchronized. A private curator will contact you shortly.
+            <form onSubmit={handleVIPInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {formError && (
+                <p className="lx-form-error" role="alert">
+                  {formError}
                 </p>
+              )}
+
+              <div>
+                <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Full Name *</label>
+                <input
+                  type="text"
+                  placeholder="Enter your name"
+                  className="lx-select"
+                  style={{ width: '100%', boxSizing: 'border-box' }}
+                  required
+                  value={inquiryName}
+                  onChange={(e) => setInquiryName(e.target.value)}
+                />
               </div>
-            ) : (
-              <form onSubmit={handleVIPInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {formError && (
-                  <p className="lx-form-error" role="alert">
-                    {formError}
-                  </p>
-                )}
-                
+
+              <div>
+                <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Email Address *</label>
+                <input
+                  type="email"
+                  placeholder="name@luxury.com"
+                  className="lx-select"
+                  style={{ width: '100%', boxSizing: 'border-box' }}
+                  required
+                  value={inquiryEmail}
+                  onChange={(e) => setInquiryEmail(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Phone Contact *</label>
+                <input
+                  type="tel"
+                  placeholder="+1 (555) 000-0000"
+                  className="lx-select"
+                  style={{ width: '100%', boxSizing: 'border-box' }}
+                  required
+                  value={inquiryPhone}
+                  onChange={(e) => setInquiryPhone(e.target.value)}
+                />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                 <div>
-                  <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Full Name *</label>
-                  <input 
-                    type="text" 
-                    placeholder="Enter your name"
+                  <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Viewing Date *</label>
+                  <input
+                    type="date"
                     className="lx-select"
                     style={{ width: '100%', boxSizing: 'border-box' }}
                     required
-                    value={inquiryName}
-                    onChange={(e) => setInquiryName(e.target.value)}
+                    value={inquiryDate}
+                    onChange={(e) => setInquiryDate(e.target.value)}
                   />
                 </div>
-
                 <div>
-                  <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Email Address *</label>
-                  <input 
-                    type="email" 
-                    placeholder="name@luxury.com"
+                  <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Time Preference</label>
+                  <input
+                    type="time"
                     className="lx-select"
                     style={{ width: '100%', boxSizing: 'border-box' }}
-                    required
-                    value={inquiryEmail}
-                    onChange={(e) => setInquiryEmail(e.target.value)}
+                    value={inquiryTime}
+                    onChange={(e) => setInquiryTime(e.target.value)}
                   />
                 </div>
+              </div>
 
-                <div>
-                  <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Phone Contact *</label>
-                  <input 
-                    type="tel" 
-                    placeholder="+1 (555) 000-0000"
-                    className="lx-select"
-                    style={{ width: '100%', boxSizing: 'border-box' }}
-                    required
-                    value={inquiryPhone}
-                    onChange={(e) => setInquiryPhone(e.target.value)}
-                  />
-                </div>
+              <button type="submit" className="lx-btn lx-btn-gold" style={{ width: '100%', padding: '0.8rem', marginTop: '1rem', borderRadius: '4px' }}>
+                Schedule Private Viewing
+              </button>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-                  <div>
-                    <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Viewing Date *</label>
-                    <input 
-                      type="date" 
-                      className="lx-select"
-                      style={{ width: '100%', boxSizing: 'border-box' }}
-                      required
-                      value={inquiryDate}
-                      onChange={(e) => setInquiryDate(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Time Preference</label>
-                    <input 
-                      type="time" 
-                      className="lx-select"
-                      style={{ width: '100%', boxSizing: 'border-box' }}
-                      value={inquiryTime}
-                      onChange={(e) => setInquiryTime(e.target.value)}
-                    />
-                  </div>
-                </div>
+              <p style={{ fontSize: '0.7rem', color: 'var(--lx-text-muted)', margin: 0, textAlign: 'center', lineHeight: 1.4 }}>
+                By scheduling, you agree to our private showroom access codes and credentials guidelines.
+              </p>
 
-                <button type="submit" className="lx-btn lx-btn-gold" style={{ width: '100%', padding: '0.8rem', marginTop: '1rem', borderRadius: '4px' }}>
-                  Schedule Private Viewing
-                </button>
-
-                <p style={{ fontSize: '0.7rem', color: 'var(--lx-text-muted)', margin: 0, textAlign: 'center', lineHeight: 1.4 }}>
-                  By scheduling, you agree to our private showroom access codes and credentials guidelines.
-                </p>
-
-              </form>
-            )}
+            </form>
 
           </div>
 
