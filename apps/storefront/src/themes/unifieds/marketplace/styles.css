@@ -108,7 +108,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   display: inline-block;
-  font-size: clamp(1.05rem, 1.25vw, 1.22rem);
+  font-size: clamp(1.08rem, 1.2vw, 1.22rem);
   font-weight: 800;
   letter-spacing: 0;
   line-height: 1;
@@ -142,6 +142,12 @@
 
 .um-footer-logo .um-logo-img {
   filter: brightness(0) invert(1);
+}
+
+.um-footer-logo .um-logo-name {
+  background: none;
+  color: #fff;
+  -webkit-text-fill-color: currentColor;
 }
 
 /* ── Header search — compact pill style ── */
@@ -733,8 +739,8 @@
 }
 
 .um-feature-card-content {
-  backdrop-filter: blur(10px);
-  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(12px);
+  background: rgba(15, 23, 42, 0.58);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 8px;
   padding: 1rem;
@@ -764,15 +770,16 @@
 
 .um-feature-card-content strong {
   align-self: flex-start;
-  background: var(--um-orange);
-  border-radius: 999px;
-  box-shadow: 0 4px 14px rgba(253, 126, 20, 0.38);
-  color: #fff;
-  font-size: 0.92rem;
+  background: #fff;
+  border: 1px solid rgba(253, 126, 20, 0.42);
+  border-radius: 8px;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+  color: var(--um-orange-dark);
+  font-size: 0.95rem;
   font-weight: 800;
   letter-spacing: 0.01em;
   margin-top: 0.6rem;
-  padding: 0.38rem 0.85rem;
+  padding: 0.44rem 0.75rem;
 }
 
 .um-hero-promo-card {
@@ -879,7 +886,7 @@
 .um-category-highlight-grid {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .um-category-highlight,
@@ -942,8 +949,8 @@
 
 .um-category-highlight {
   display: grid;
-  grid-template-columns: 124px minmax(0, 1fr);
-  min-height: 142px;
+  grid-template-columns: 118px minmax(0, 1fr);
+  min-height: 136px;
 }
 
 .um-category-highlight img {
@@ -1027,7 +1034,7 @@
 .um-market-grid {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .um-market-card-premium {
@@ -1424,7 +1431,7 @@
 
 .um-final-cta {
   background:
-    linear-gradient(135deg, rgba(13, 110, 253, 0.97), rgba(10, 88, 202, 0.97)),
+    linear-gradient(135deg, rgba(13, 110, 253, 0.97), rgba(10, 88, 202, 0.97) 54%, rgba(23, 32, 51, 0.97)),
     var(--um-blue);
   color: #fff;
   overflow: hidden;
@@ -1434,7 +1441,7 @@
 
 .um-final-cta::before {
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 24px;
+  border-radius: 18px;
   content: '';
   inset: 2rem 5%;
   pointer-events: none;
@@ -1500,6 +1507,16 @@
   gap: 0.9rem;
   justify-content: center;
   margin-bottom: 2.25rem;
+}
+
+.um-final-cta .um-btn-primary {
+  background: #fff;
+  color: var(--um-blue);
+}
+
+.um-final-cta .um-btn-primary:hover {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.22);
 }
 
 .um-cta-btn-outline {
@@ -1709,16 +1726,14 @@
 }
 
 .um-explore-hero {
-  align-items: stretch;
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.48fr);
   margin: 0 auto 2rem;
   max-width: 1440px;
 }
 
 .um-explore-hero-copy {
-  background: rgba(255, 255, 255, 0.74);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(247, 251, 255, 0.94)),
+    #fff;
   border: 1px solid rgba(220, 229, 241, 0.88);
   border-radius: 24px;
   box-shadow: var(--um-shadow-soft);
@@ -1743,28 +1758,28 @@
   max-width: 720px;
 }
 
-.um-explore-hero-panel {
-  background: #111827;
-  border-radius: 24px;
-  box-shadow: var(--um-shadow-lift);
-  color: #fff;
+.um-explore-hero-summary {
   display: grid;
+  gap: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 2rem;
   overflow: hidden;
+  border: 1px solid var(--um-border);
+  border-radius: 18px;
+  max-width: 920px;
 }
 
-.um-explore-hero-panel div {
-  background:
-    linear-gradient(135deg, rgba(13, 110, 253, 0.22), transparent 42%),
-    rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1.6rem;
+.um-explore-hero-summary div {
+  background: rgba(255, 255, 255, 0.72);
+  border-left: 1px solid var(--um-border);
+  padding: 1rem 1.2rem;
 }
 
-.um-explore-hero-panel div:last-child {
-  border-bottom: 0;
+.um-explore-hero-summary div:first-child {
+  border-left: 0;
 }
 
-.um-explore-hero-panel span,
+.um-explore-hero-summary span,
 .um-explore-card-footer span,
 .um-explore-card-media span {
   font-size: 0.76rem;
@@ -1773,16 +1788,16 @@
   text-transform: uppercase;
 }
 
-.um-explore-hero-panel span {
-  color: rgba(255, 255, 255, 0.6);
+.um-explore-hero-summary span {
+  color: var(--um-muted);
   display: block;
   margin-bottom: 0.5rem;
 }
 
-.um-explore-hero-panel strong {
-  color: #fff;
+.um-explore-hero-summary strong {
+  color: var(--um-ink);
   display: block;
-  font-size: clamp(1.25rem, 2vw, 1.8rem);
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
   font-weight: 800;
   line-height: 1.15;
 }
@@ -1837,7 +1852,7 @@
 .um-explore-verticals {
   display: grid;
   gap: 0.85rem;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin: 0 auto 1.25rem;
   max-width: 1440px;
 }

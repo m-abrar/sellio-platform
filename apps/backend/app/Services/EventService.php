@@ -74,7 +74,7 @@ class EventService
                 'category', 'location', 'type', 'user', 'tags', 'media',
                 'occurrences' => fn($q) => $q->where('start_date_time', '>=', now())->orderBy('start_date_time')
             ])
-            ->paginate(12);
+            ->paginate(max(1, min(100, (int) ($filters['per_page'] ?? 12))));
     }
 
     /**

@@ -92,7 +92,7 @@ class JobManagementService
                 $q->whereHas('tags', fn($sub) => $sub->whereIn('tags.id', (array) $v));
             })
             ->with(['employer', 'user', 'category', 'location', 'brand', 'tags', 'media'])
-            ->paginate(12);
+            ->paginate(max(1, min(100, (int) ($filters['per_page'] ?? 12))));
     }
 
     /**

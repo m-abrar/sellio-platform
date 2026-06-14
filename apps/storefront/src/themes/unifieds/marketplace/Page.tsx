@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { api } from '@sellio/api-client';
-import type { Product, Testimonial } from '@sellio/types';
+import type { ClassifiedListing, EventListing, JobListing, Product, Property, ServiceListing, Testimonial, Vehicle } from '@sellio/types';
 import { MarketGrid, LiquidSyncBar } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
@@ -15,6 +15,7 @@ type DisplayListing = {
   image: string;
   slug?: string;
   badge: string;
+  href: string;
 };
 
 type CategoryHighlight = {
@@ -27,6 +28,7 @@ type CategoryHighlight = {
 };
 
 const categoryFallbacks: CategoryHighlight[] = [
+  { title: 'Products',    query: 'products',    sample: 'Smart home gear',    detail: 'Retail goods and essentials', image: '/themes/unifieds/marketplace/2.webp',  count: '-' },
   { title: 'Properties',  query: 'properties',  sample: 'Modern apartment',   detail: '$1.2M · Downtown',        image: '/themes/unifieds/marketplace/5.webp',  count: '—' },
   { title: 'Events',      query: 'events',      sample: 'Summer music pass',  detail: 'July 20 · Central Park',   image: '/themes/unifieds/marketplace/18.webp', count: '—' },
   { title: 'Autos',       query: 'autos',       sample: 'Tesla Model 3',      detail: '2024 · verified',           image: '/themes/unifieds/marketplace/10.webp', count: '—' },
@@ -48,6 +50,7 @@ const fallbackListings: DisplayListing[] = [
     price: '$3.5M',
     image: '/themes/unifieds/marketplace/1.webp',
     badge: 'Property',
+    href: '/explore?vertical=properties',
   },
   {
     id: 'fallback-auto',
@@ -56,6 +59,7 @@ const fallbackListings: DisplayListing[] = [
     price: '$55,000',
     image: '/themes/unifieds/marketplace/10.webp',
     badge: 'Auto',
+    href: '/explore?vertical=autos',
   },
   {
     id: 'fallback-service',
@@ -64,30 +68,140 @@ const fallbackListings: DisplayListing[] = [
     price: 'From $299',
     image: '/themes/unifieds/marketplace/14.webp',
     badge: 'Service',
+    href: '/explore?vertical=services',
   },
-];
-
-const heroStats = [
-  { value: '6+', label: 'market categories' },
-  { value: 'Fresh', label: 'listing feed' },
-  { value: 'Secure', label: 'checkout' },
 ];
 
 function productToListing(product: Product): DisplayListing {
   return {
-    id: product.id,
+    id: `product-${product.id}`,
     title: product.title,
-    description: product.description || 'Verified marketplace listing.',
+    description: toPlainText(product.description, 'Verified marketplace listing.'),
     price: product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Contact seller'),
     image: product.media?.featured_image || product.image_url || '/themes/unifieds/marketplace/2.webp',
     slug: product.slug,
-    badge: 'Featured',
+    badge: 'Product',
+    href: product.slug ? `/product/${product.slug}` : '/explore?vertical=products',
   };
+}
+
+function toPlainText(value: unknown, fallback: string): string {
+  if (typeof value === 'string') {
+    const text = value.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    return text || fallback;
+  }
+
+  if (typeof value === 'number') {
+    return value.toLocaleString();
+  }
+
+  return fallback;
+}
+
+function formatCurrency(value: unknown, fallback = 'Contact seller'): string {
+  const amount = Number(value);
+  return Number.isFinite(amount) && amount > 0 ? `$${amount.toLocaleString()}` : fallback;
+}
+
+function propertyToListing(property: Property): DisplayListing {
+  return {
+    id: `property-${property.id}`,
+    title: property.title,
+    description: toPlainText(property.short_description || property.description, 'Published property listing.'),
+    price: property.pricing?.price_formatted || formatCurrency(property.pricing?.active_price ?? property.base_price),
+    image: property.primary_image_url || property.featured_image || property.thumbnail_image || '/themes/unifieds/marketplace/5.webp',
+    slug: property.slug,
+    badge: 'Property',
+    href: property.slug ? `/explore?vertical=properties&search=${encodeURIComponent(property.title)}` : '/explore?vertical=properties',
+  };
+}
+
+function vehicleToListing(vehicle: Vehicle): DisplayListing {
+  return {
+    id: `auto-${vehicle.id}`,
+    title: vehicle.title,
+    description: toPlainText(vehicle.short_description || vehicle.description, 'Published vehicle listing.'),
+    price: vehicle.pricing?.formatted || vehicle.pricing?.formatted_short || formatCurrency(vehicle.pricing?.base_price),
+    image: vehicle.media?.main_photo || vehicle.media?.preview || vehicle.featured_image || '/themes/unifieds/marketplace/10.webp',
+    slug: vehicle.slug,
+    badge: 'Auto',
+    href: vehicle.slug ? `/explore?vertical=autos&search=${encodeURIComponent(vehicle.title)}` : '/explore?vertical=autos',
+  };
+}
+
+function serviceToListing(service: ServiceListing): DisplayListing {
+  return {
+    id: `service-${service.id}`,
+    title: service.title,
+    description: toPlainText(service.short_description || service.description, 'Published service listing.'),
+    price: service.pricing?.formatted || service.pricing?.formatted_short || formatCurrency(service.pricing?.base_price),
+    image: service.media?.main_photo || service.provider?.avatar || '/themes/unifieds/marketplace/14.webp',
+    slug: service.slug,
+    badge: 'Service',
+    href: service.slug ? `/explore?vertical=services&search=${encodeURIComponent(service.title)}` : '/explore?vertical=services',
+  };
+}
+
+function jobToListing(job: JobListing): DisplayListing {
+  return {
+    id: `job-${job.id}`,
+    title: job.title,
+    description: toPlainText(job.description, `${job.company?.name || 'Company'} is hiring.`),
+    price: job.compensation?.range_compact || job.compensation?.range_full || 'Apply now',
+    image: job.company?.logo_card || job.company?.logo || '/themes/unifieds/marketplace/21.webp',
+    slug: job.slug,
+    badge: 'Job',
+    href: job.slug ? `/explore?vertical=jobs&search=${encodeURIComponent(job.title)}` : '/explore?vertical=jobs',
+  };
+}
+
+function eventToListing(event: EventListing): DisplayListing {
+  return {
+    id: `event-${event.id}`,
+    title: event.title,
+    description: toPlainText(event.description, 'Published event listing.'),
+    price: event.ticketing?.price_formatted || event.ticketing?.price_formatted_k || formatCurrency(event.ticketing?.base_price, 'Free'),
+    image: event.media?.poster || event.media?.preview || '/themes/unifieds/marketplace/18.webp',
+    slug: event.slug,
+    badge: 'Event',
+    href: event.slug ? `/explore?vertical=events&search=${encodeURIComponent(event.title)}` : '/explore?vertical=events',
+  };
+}
+
+function classifiedToListing(classified: ClassifiedListing): DisplayListing {
+  return {
+    id: `classified-${classified.id}`,
+    title: classified.title,
+    description: toPlainText(classified.short_description || classified.description, 'Published classified listing.'),
+    price: classified.pricing?.formatted || classified.pricing?.formatted_short || formatCurrency(classified.pricing?.base_price),
+    image: classified.media?.main_photo || classified.media?.thumbnail || '/themes/unifieds/marketplace/24.webp',
+    slug: classified.slug,
+    badge: 'Classified',
+    href: classified.slug ? `/explore?vertical=classifieds&search=${encodeURIComponent(classified.title)}` : '/explore?vertical=classifieds',
+  };
+}
+
+function resolveFirstImage(item: unknown, fallback: string): string {
+  const record = item as Record<string, any> | undefined;
+  return (
+    record?.media?.featured_image ||
+    record?.media?.main_photo ||
+    record?.media?.poster ||
+    record?.media?.preview ||
+    record?.image_url ||
+    record?.primary_image_url ||
+    record?.featured_image ||
+    record?.thumbnail_image ||
+    record?.company?.logo_card ||
+    record?.company?.logo ||
+    record?.company?.photos?.[0]?.url ||
+    fallback
+  );
 }
 
 export default function Page() {
   const themeLink = useUnifiedThemeLink();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [liveListings, setLiveListings] = useState<DisplayListing[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -116,12 +230,40 @@ export default function Page() {
 
     async function loadListings() {
       try {
-        const fetchedProducts = await api.getProducts();
+        const results = await Promise.allSettled([
+          api.getProductsCatalog({ per_page: 3 }),
+          api.getProperties({ per_page: 2 }),
+          api.getVehicles({ per_page: 2 }),
+          api.getServices({ per_page: 2 }),
+          api.getJobs({ per_page: 2 }),
+          api.getEvents({ per_page: 2 }),
+          api.getClassifieds({ per_page: 2 }),
+        ]);
+
         if (!isMounted) {
           return;
         }
 
-        setProducts(Array.isArray(fetchedProducts) ? fetchedProducts : []);
+        const [
+          productsResult,
+          propsResult,
+          autosResult,
+          servicesResult,
+          jobsResult,
+          eventsResult,
+          classifiedsResult,
+        ] = results;
+        const nextListings: DisplayListing[] = [];
+
+        if (productsResult.status === 'fulfilled') nextListings.push(...productsResult.value.data.map(productToListing));
+        if (propsResult.status === 'fulfilled') nextListings.push(...propsResult.value.data.map(propertyToListing));
+        if (autosResult.status === 'fulfilled') nextListings.push(...autosResult.value.data.map(vehicleToListing));
+        if (servicesResult.status === 'fulfilled') nextListings.push(...servicesResult.value.data.map(serviceToListing));
+        if (jobsResult.status === 'fulfilled') nextListings.push(...jobsResult.value.data.map(jobToListing));
+        if (eventsResult.status === 'fulfilled') nextListings.push(...eventsResult.value.data.map(eventToListing));
+        if (classifiedsResult.status === 'fulfilled') nextListings.push(...classifiedsResult.value.data.map(classifiedToListing));
+
+        setLiveListings(nextListings);
         setListingError(null);
       } catch (error: unknown) {
         if (!isMounted) {
@@ -148,13 +290,14 @@ export default function Page() {
     let alive = true;
 
     Promise.allSettled([
+      api.getProductsCatalog({ per_page: 1 }),
       api.getProperties({ per_page: 1 }),
-      api.getEvents({ per_page: 1 }),
       api.getVehicles({ per_page: 1 }),
       api.getServices({ per_page: 1 }),
       api.getJobs({ per_page: 1 }),
+      api.getEvents({ per_page: 1 }),
       api.getClassifieds({ per_page: 1 }),
-    ]).then(([props, events, autos, services, jobs, classifieds]) => {
+    ]).then(([productsResult, props, autos, services, jobs, events, classifieds]) => {
       if (!alive) return;
 
       function resolve(
@@ -172,17 +315,18 @@ export default function Page() {
       }
 
       const resolvedHighlights = [
-        { ...categoryFallbacks[0], ...resolve(props,       (p) => p.featured_image || p.thumbnail_image || p.primary_image_url,  categoryFallbacks[0]) },
-        { ...categoryFallbacks[1], ...resolve(events,      (e) => e.media?.poster || e.media?.preview,                           categoryFallbacks[1]) },
-        { ...categoryFallbacks[2], ...resolve(autos,       (v) => v.featured_image,                                              categoryFallbacks[2]) },
-        { ...categoryFallbacks[3], ...resolve(services,    (s) => s.media?.main_photo,                                           categoryFallbacks[3]) },
-        { ...categoryFallbacks[4], ...resolve(jobs,        (j) => j.company?.logo || j.company?.photos?.[0]?.url,                categoryFallbacks[4]) },
-        { ...categoryFallbacks[5], ...resolve(classifieds, (c) => c.media?.main_photo || c.media?.thumbnail,                     categoryFallbacks[5]) },
+        { ...categoryFallbacks[0], ...resolve(productsResult, (p) => resolveFirstImage(p, categoryFallbacks[0].image), categoryFallbacks[0]) },
+        { ...categoryFallbacks[1], ...resolve(props,          (p) => resolveFirstImage(p, categoryFallbacks[1].image), categoryFallbacks[1]) },
+        { ...categoryFallbacks[2], ...resolve(autos,          (v) => resolveFirstImage(v, categoryFallbacks[2].image), categoryFallbacks[2]) },
+        { ...categoryFallbacks[3], ...resolve(services,       (s) => resolveFirstImage(s, categoryFallbacks[3].image), categoryFallbacks[3]) },
+        { ...categoryFallbacks[4], ...resolve(jobs,           (j) => resolveFirstImage(j, categoryFallbacks[4].image), categoryFallbacks[4]) },
+        { ...categoryFallbacks[5], ...resolve(events,         (e) => resolveFirstImage(e, categoryFallbacks[5].image), categoryFallbacks[5]) },
+        { ...categoryFallbacks[6], ...resolve(classifieds,    (c) => resolveFirstImage(c, categoryFallbacks[6].image), categoryFallbacks[6]) },
       ];
 
       setCategoryHighlights(resolvedHighlights);
 
-      const rawTotals = [props, events, autos, services, jobs, classifieds].reduce<number[]>((totals, result) => {
+      const rawTotals = [productsResult, props, autos, services, jobs, events, classifieds].reduce<number[]>((totals, result) => {
         if (result.status === 'fulfilled' && result.value.meta?.total != null) {
           totals.push(result.value.meta.total);
         }
@@ -222,8 +366,8 @@ export default function Page() {
       return fallbackListings;
     }
 
-    return products.length > 0 ? products.slice(0, 6).map(productToListing) : fallbackListings;
-  }, [loadingListings, products]);
+    return liveListings.length > 0 ? liveListings.slice(0, 6) : fallbackListings;
+  }, [loadingListings, liveListings]);
 
   const submitSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -255,6 +399,7 @@ export default function Page() {
                 defaultValue=""
               >
                 <option value="">All</option>
+                <option value="products">Products</option>
                 <option value="properties">Properties</option>
                 <option value="autos">Autos</option>
                 <option value="services">Services</option>
@@ -287,7 +432,7 @@ export default function Page() {
           </div>
 
           <nav className="um-hero-quick-cats" aria-label="Browse by category">
-            {(['Properties', 'Autos', 'Services', 'Jobs', 'Events', 'Classifieds'] as const).map((cat) => (
+            {(['Products', 'Properties', 'Autos', 'Services', 'Jobs', 'Events', 'Classifieds'] as const).map((cat) => (
               <a key={cat} href={themeLink(`/explore?category=${cat.toLowerCase()}`)} className="um-hero-cat-link">
                 {cat}
               </a>
@@ -304,7 +449,7 @@ export default function Page() {
             </span>
             <span className="um-hero-meta-dot" aria-hidden="true" />
             <span>
-              <strong>{avgRating ?? '4.9'}★</strong> avg rating
+              <strong>{avgRating ?? '4.9'} stars</strong> avg rating
             </span>
           </div>
         </div>
@@ -316,7 +461,7 @@ export default function Page() {
           </div>
           {displayListings.slice(0, 3).map((listing, index) => (
             <a
-              href={listing.slug ? themeLink(`/product/${listing.slug}`) : themeLink('/explore')}
+              href={themeLink(listing.href)}
               className={`um-feature-card ${index === 0 ? 'um-feature-card-primary' : ''}`}
               key={listing.id}
             >
@@ -363,7 +508,7 @@ export default function Page() {
               </div>
             ))
           ) : categoryHighlights.map((category) => (
-            <a href={themeLink(`/explore?category=${encodeURIComponent(category.title.toLowerCase())}`)} className="um-category-highlight" key={category.title}>
+            <a href={themeLink(`/explore?category=${encodeURIComponent(category.query)}`)} className="um-category-highlight" key={category.title}>
               <img src={category.image} alt={category.sample} />
               <div>
                 <span>{category.title}</span>
@@ -398,7 +543,7 @@ export default function Page() {
               </div>
             ))}
           </div>
-        ) : listingError && products.length === 0 ? (
+        ) : listingError && liveListings.length === 0 ? (
           <div className="um-listing-state" role="status">
             <h3>Live listings could not be loaded.</h3>
             <p>Check the API connection or refresh the page.</p>
@@ -406,7 +551,7 @@ export default function Page() {
         ) : (
           <div className="um-listings-grid">
             {displayListings.map((listing) => (
-              <a href={listing.slug ? themeLink(`/product/${listing.slug}`) : themeLink('/explore')} className="um-listing-card" key={listing.id}>
+              <a href={themeLink(listing.href)} className="um-listing-card" key={listing.id}>
                 <div className="um-listing-image-wrap">
                   <img src={listing.image} alt={listing.title} />
                   <span className="um-listing-badge">{listing.badge}</span>
@@ -464,7 +609,7 @@ export default function Page() {
               <div className="um-testimonial-card" key={t.id}>
                 <div className="um-testimonial-stars" aria-label={`${t.rating ?? 5} out of 5 stars`}>
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <span key={i} className={i < (t.rating ?? 5) ? 'um-star-on' : 'um-star-off'}>★</span>
+                    <span key={i} className={i < (t.rating ?? 5) ? 'um-star-on' : 'um-star-off'}>*</span>
                   ))}
                 </div>
                 <p className="um-testimonial-quote">"{t.quote}"</p>

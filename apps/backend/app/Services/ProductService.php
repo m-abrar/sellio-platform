@@ -23,8 +23,9 @@ class ProductService
         $ttl = 3600; // 1 hour
         $rawMaxPrice = Product::max(DB::raw('COALESCE(sale_price, base_price)'));
 
+        $perPage = max(1, min(100, (int) ($filters['per_page'] ?? 120)));
         $query = Product::query()->visibleTo($user)->with(['media', 'brand', 'category', 'type', 'tags']);
-        $products = $this->applyFilters($query, $filters)->paginate(120)->withQueryString();
+        $products = $this->applyFilters($query, $filters)->paginate($perPage)->withQueryString();
 
         return [
             'products'        => $products,

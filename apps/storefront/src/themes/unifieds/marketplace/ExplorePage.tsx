@@ -62,6 +62,7 @@ interface ExplorePageProps {
 
 const marketplaceVerticals: MarketplaceVertical[] = [
   { key: 'all', label: 'All', cue: 'Unified inventory', matcher: [] },
+  { key: 'products', label: 'Products', cue: 'Goods and retail', matcher: ['product', 'products', 'shop', 'store', 'electronics', 'smart', 'gadget', 'furniture'] },
   { key: 'properties', label: 'Properties', cue: 'Homes and rentals', matcher: ['property', 'properties', 'real estate', 'rental', 'home', 'apartment'] },
   { key: 'autos', label: 'Autos', cue: 'Verified vehicles', matcher: ['auto', 'autos', 'vehicle', 'vehicles', 'car', 'cars'] },
   { key: 'services', label: 'Services', cue: 'Bookable providers', matcher: ['service', 'services', 'provider', 'studio'] },
@@ -70,8 +71,7 @@ const marketplaceVerticals: MarketplaceVertical[] = [
   { key: 'classifieds', label: 'Classifieds', cue: 'Local finds', matcher: ['classified', 'classifieds', 'deal', 'used'] },
 ];
 
-const EXPLORE_BATCH_SIZE = 12;
-const EXPLORE_REMOTE_PAGE_SIZE = 4;
+const EXPLORE_REMOTE_PAGE_SIZE = 2;
 
 function normalize(value: unknown): string {
   return plainText(value, '').toLowerCase();
@@ -82,13 +82,22 @@ function resolveProductVertical(product: Product, categories: Category[]): strin
   const category = categories.find((item) => item.id === product.category_id);
   const haystack = [label, category?.slug, product.title, product.description].map(normalize).join(' ');
 
-  return marketplaceVerticals.find((vertical) =>
-    vertical.key !== 'all' && vertical.matcher.some((token) => haystack.includes(token)),
-  )?.key ?? 'classifieds';
+  if (/\b(job|career|hiring|event|ticket|vehicle|auto|car|service|provider|classified)\b/.test(haystack)) {
+    return marketplaceVerticals.find((vertical) =>
+      !['all', 'products', 'properties'].includes(vertical.key) &&
+      vertical.matcher.some((token) => haystack.includes(token)),
+    )?.key ?? 'products';
+  }
+
+  return 'products';
 }
 
 function categoryMatchesVertical(category: Category, vertical: MarketplaceVertical): boolean {
   if (vertical.key === 'all') {
+    return true;
+  }
+
+  if (vertical.key === 'products') {
     return true;
   }
 
@@ -318,7 +327,6 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [listingError, setListingError] = useState<string | null>(null);
-  const [visibleCount, setVisibleCount] = useState(EXPLORE_BATCH_SIZE);
 
   const page = Math.max(1, Number(searchParams.get('page') || 1));
   const searchQuery = searchParams.get('search') || searchParams.get('q') || initialSearch;
@@ -334,12 +342,6 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
     (category) => category.slug.toLowerCase() === selectedCategorySlug.toLowerCase(),
   );
   const searchKey = searchParams.toString();
-  const filterKey = [searchQuery, selectedCategorySlug, selectedVerticalKey, sortBy].join('|');
-
-  useEffect(() => {
-    setVisibleCount(EXPLORE_BATCH_SIZE);
-  }, [filterKey]);
-
   useEffect(() => {
     let isMounted = true;
 
@@ -544,14 +546,8 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       });
   }, [listings, searchQuery, selectedCategory, selectedVertical, sortBy]);
 
-  const visibleProducts = useMemo(
-    () => filteredProducts.slice(0, visibleCount),
-    [filteredProducts, visibleCount],
-  );
-
-  const hasLoadedHiddenListings = visibleCount < filteredProducts.length;
   const hasRemoteListings = page < lastPage;
-  const canLoadMoreListings = hasLoadedHiddenListings || hasRemoteListings;
+  const canLoadMoreListings = hasRemoteListings;
   const resultTotal = selectedVertical.key === 'all'
     ? inventoryTotal ?? filteredProducts.length
     : verticalTotals[selectedVertical.key] ?? filteredProducts.length;
@@ -566,9 +562,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
   };
 
   const handleLoadMore = () => {
-    setVisibleCount((current) => current + EXPLORE_BATCH_SIZE);
-
-    if (!hasLoadedHiddenListings && hasRemoteListings) {
+    if (hasRemoteListings) {
       handleFilterUpdate({ page: String(page + 1) });
     }
   };
@@ -583,20 +577,20 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
             Browse homes, vehicles, services, jobs, events, products, and local listings
             from one simple search page.
           </p>
-        </div>
 
-        <div className="um-explore-hero-panel" aria-label="Explore summary">
-          <div>
-            <span>Available now</span>
-            <strong>{resultLabel}</strong>
-          </div>
-          <div>
-            <span>Browsing</span>
-            <strong>{selectedVertical.label}</strong>
-          </div>
-          <div>
-            <span>Category</span>
-            <strong>{selectedCategoryLabel}</strong>
+          <div className="um-explore-hero-summary" aria-label="Explore summary">
+            <div>
+              <span>Available now</span>
+              <strong>{resultLabel}</strong>
+            </div>
+            <div>
+              <span>Browsing</span>
+              <strong>{selectedVertical.label}</strong>
+            </div>
+            <div>
+              <span>Category</span>
+              <strong>{selectedCategoryLabel}</strong>
+            </div>
           </div>
         </div>
       </section>
@@ -695,7 +689,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
             <h2 id="um-explore-results-title">
               {loading
                 ? 'Loading marketplace listings'
-                : `${visibleProducts.length} of ${resultTotal.toLocaleString()} listings shown`}
+                : `${filteredProducts.length} of ${resultTotal.toLocaleString()} listings shown`}
             </h2>
           </div>
           <a href={themeLink('/cart')} className="um-btn-secondary">View cart</a>
@@ -718,7 +712,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
         ) : filteredProducts.length > 0 ? (
           <>
             <div className="um-explore-grid">
-              {visibleProducts.map((listing) => {
+              {filteredProducts.map((listing) => {
                 const vertical = marketplaceVerticals.find((item) => item.key === listing.vertical);
 
                 return (
@@ -756,10 +750,10 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
                   disabled={loadingMore}
                   onClick={handleLoadMore}
                 >
-                  {loadingMore ? 'Loading listings...' : `Load ${EXPLORE_BATCH_SIZE} more`}
+                  {loadingMore ? 'Loading listings...' : 'Load more listings'}
                 </button>
                 <span>
-                  Showing {visibleProducts.length} of {resultTotal.toLocaleString()} available listings
+                  Showing {filteredProducts.length} of {resultTotal.toLocaleString()} available listings
                 </span>
               </div>
             ) : null}

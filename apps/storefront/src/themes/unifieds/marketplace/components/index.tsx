@@ -21,6 +21,18 @@ type MarketCategory = {
 
 const marketCategories: MarketCategory[] = [
   {
+    title: 'Products',
+    detail: 'Retail goods, gear & everyday essentials',
+    query: 'products',
+    color: '#0d6efd',
+    bg: 'rgba(13,110,253,0.1)',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14.75c.75 0 1.41-.41 1.75-1.03h7.45c.75 0 1.41-.41 1.75-1.03L22 5H6.21l-.94-2H2v2h2l3.6 7.59-1.35 2.44C5.52 16.37 6.48 18 8 18h12v-2H8l1.1-2h8.1c.75 0 1.41-.41 1.75-1.03L22 7H7.42l-.25-.5H6l1.17 8.25z" />
+      </svg>
+    ),
+  },
+  {
     title: 'Properties',
     detail: 'Homes, rentals & commercial spaces',
     query: 'properties',
@@ -194,13 +206,14 @@ export const MarketGrid = () => {
     let alive = true;
 
     Promise.allSettled([
+      api.getProductsCatalog({ per_page: 1 }),
       api.getProperties({ per_page: 1 }),
       api.getEvents({ per_page: 1 }),
       api.getVehicles({ per_page: 1 }),
       api.getServices({ per_page: 1 }),
       api.getJobs({ per_page: 1 }),
       api.getClassifieds({ per_page: 1 }),
-    ]).then(([props, events, autos, services, jobs, classifieds]) => {
+    ]).then(([products, props, events, autos, services, jobs, classifieds]) => {
       if (!alive) return;
 
       const pick = (r: PromiseSettledResult<{ meta?: { total?: number } }>) =>
@@ -209,6 +222,7 @@ export const MarketGrid = () => {
           : '';
 
       setCounts({
+        products:    pick(products),
         properties:  pick(props),
         events:      pick(events),
         autos:       pick(autos),
@@ -317,7 +331,7 @@ export const LiquidSyncBar = () => (
   </div>
 );
 
-const footerVerticals = ['Properties', 'Autos', 'Services', 'Jobs', 'Events', 'Classifieds'];
+const footerVerticals = ['Products', 'Properties', 'Autos', 'Services', 'Jobs', 'Events', 'Classifieds'];
 
 export const MarketplaceFooter = () => {
   const themeLink = useUnifiedThemeLink();
@@ -348,7 +362,7 @@ export const MarketplaceFooter = () => {
             ) : (
               <span className="um-logo-mark">{siteName.charAt(0).toUpperCase()}</span>
             )}
-            {hideSiteName !== '1' && <span>{siteName}</span>}
+            {hideSiteName !== '1' && <span className="um-logo-name">{siteName}</span>}
           </a>
           <p>{brandDescription}</p>
           <div className="um-footer-cats" aria-label="Browse marketplace categories">
@@ -385,7 +399,7 @@ export const MarketplaceFooter = () => {
       </div>
 
       <div className="um-footer-bottom">
-        <span>© {currentYear} {siteName}. All rights reserved.</span>
+        <span>(c) {currentYear} {siteName}. All rights reserved.</span>
         <div className="um-footer-bottom-right">
           <MenuNav
             location="social_footer"

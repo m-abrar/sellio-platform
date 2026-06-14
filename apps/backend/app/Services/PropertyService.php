@@ -59,7 +59,8 @@ class PropertyService
             $query = $this->applyFilters(Property::query()->whereKey($curatedIds), $filters, $checkIn, $checkOut, $user);
         }
 
-        $properties = $query->paginate(12);
+        $perPage = max(1, min(100, (int) ($filters['per_page'] ?? 12)));
+        $properties = $query->paginate($perPage);
 
         $numberOfNights = ($checkIn && $checkOut && $checkIn->lt($checkOut)) 
             ? $checkIn->diffInDays($checkOut) 
