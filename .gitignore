@@ -24,6 +24,9 @@ Homestead.yaml
 Thumbs.db
 *.zip
 
+# Claude Code agent data
+/.claude/
+
 # Development workspace scratch files
 /_development/temp/
 

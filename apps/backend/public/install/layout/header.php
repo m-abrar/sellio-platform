@@ -41,7 +41,7 @@ $installerLogoUrl = installer_logo_url();
                 <div class="installer-brand-name">Sellio</div>
                 <div class="installer-brand-tag">Installation Wizard</div>
             </div>
-            <div class="installer-version">v2.4</div>
+            <div class="installer-version">v2.4.0</div>
         </div>
 
         <div class="installer-progress-wrap">

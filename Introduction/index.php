@@ -18,7 +18,7 @@
         <div class="container position-relative z-1">
             <div class="row align-items-center">
                 <div class="col-lg-6 py-5">
-                    <div class="badge bg-sellio-solid rounded-pill px-3 py-2 mb-4 animate__animated animate__fadeInDown shadow-sm">PRODUCTION READY v2.4</div>
+                    <div class="badge bg-sellio-solid rounded-pill px-3 py-2 mb-4 animate__animated animate__fadeInDown shadow-sm">PRODUCTION READY v2.4.0</div>
                     <h1 class="display-3 fw-800">Deploy <span id="typewriter" class="text-sellio"></span> <br>Experiences</h1>
                     <p class="lead mb-5 opacity-75">Launch, manage, and grow high-performance marketplaces. A self-hosted solution that eliminates recurring fees while ensuring full data ownership.</p>
                     <div class="d-flex gap-3 animate__animated animate__fadeInUp">

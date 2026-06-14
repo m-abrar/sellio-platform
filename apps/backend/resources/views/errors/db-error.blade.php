@@ -79,7 +79,7 @@
                 Diagnostic Code: <span class="code">ERR_DB_CON_REFUSED</span>
             </div>
         </div>
-        <p class="brand">Powered by <strong>Sellio Core 12.0</strong></p>
+        <p class="brand">Powered by <strong>Sellio v2.4.0</strong></p>
     </div>
 </body>
 </html>
