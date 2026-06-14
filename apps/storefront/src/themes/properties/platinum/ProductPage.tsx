@@ -111,7 +111,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="pl-detail-kicker">Showcase Unavailable</div>
           <h1>Property could not be loaded.</h1>
           <p>{errorMessage}</p>
-          <a href={themeLink('')} className="pl-detail-btn">Return to Showcase</a>
+          <a href={themeLink('/')} className="pl-detail-btn">Return to Showcase</a>
         </section>
       </main>
     );
@@ -119,7 +119,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="pl-detail-page">
-      <a href={themeLink('')} className="pl-detail-back">&larr; Back to Bento Showcase</a>
+      <a href={themeLink('/')} className="pl-detail-back">&larr; Back to Bento Showcase</a>
       <header className="pl-detail-hero">
         <img src={getPropertyImage(property)} alt={property.title} />
         <div className="pl-detail-hero-overlay">

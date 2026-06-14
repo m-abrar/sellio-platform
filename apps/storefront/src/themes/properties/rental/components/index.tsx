@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 export { PageNav } from './PageNav';
 export type { PageNavCrumb } from './PageNav';
@@ -133,7 +133,7 @@ export const LeaseUnitCard = ({
       <img src={image} alt={title} className="pr-card-img" loading="lazy" />
       <span className="pr-card-type-badge">{type}</span>
       {scarcityLabel && <span className="pr-scarcity-badge">{scarcityLabel}</span>}
-      <span className="pr-card-rating-pill">{rating.toFixed(1)} ★</span>
+      <span className="pr-card-rating-pill">{rating.toFixed(1)} â˜…</span>
     </div>
     <div className="pr-rent-card__body">
       <div className="pr-rent-card__top">
@@ -177,7 +177,7 @@ export const TenantFooter = () => {
           Rent<span className="pr-logo__mark">Ease</span>
         </a>
         <p className="pr-footer__tagline">
-          Monthly rentals made simple — verified listings, transparent pricing, and digital lease
+          Monthly rentals made simple â€” verified listings, transparent pricing, and digital lease
           tools built for tenants and landlords who lease month to month.
         </p>
       </div>
@@ -198,7 +198,7 @@ export const TenantFooter = () => {
       />
     </div>
     <div className="pr-footer-bottom">
-      <div className="pr-footer__copyright">© {new Date().getFullYear()} RentEase · Powered by Sellio</div>
+      <div className="pr-footer__copyright">© 2026 Sellio. All rights reserved.</div>
       <div className="pr-footer-social">
         <MenuNav
           location="social_footer"

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import type { ClassifiedListing } from '@sellio/types';
 import { LocalHeader, LocalCard, LocalFooter } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
@@ -21,7 +20,6 @@ import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifi
 const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
   const panelTitle = useThemeContent('panel.title', 'Nearby Classifieds');
   const alertsTitle = useThemeContent('alerts.title', 'Neighborhood Highlights');
@@ -141,7 +139,7 @@ export default function Page() {
         locationName={`${areaLabel} (within ${radiuses[radiusIndex]})`}
         onLocationClick={handleLocationClick}
         onPostClick={() => window.open(adminCreateClassifiedUrl, '_blank', 'noopener,noreferrer')}
-        homeHref={themeLink('')}
+        homeHref={themeLink('/')}
       />
 
       <div className="cl-main-layout">
@@ -237,7 +235,7 @@ export default function Page() {
                   conditionLabel={item.conditionLabel}
                   isFocused={focusedItemId === item.id}
                   onClick={() => setFocusedItemId(item.id)}
-                  onMessageClick={() => router.push(getThemeLink(`/product/${item.slug}`))}
+                  onMessageClick={() => { location.href = getThemeLink(`/product/${item.slug}`); }}
                 />
               ))
             )}
@@ -323,20 +321,20 @@ export default function Page() {
               </div>
 
               <div className="cl-popup-actions">
-                <button
-                  type="button"
+                <a
                   className="cl-popup-btn cl-popup-btn-message"
-                  onClick={() => router.push(getThemeLink(`/product/${activeFocusedItem.slug}`))}
+                  href={getThemeLink(`/product/${activeFocusedItem.slug}`)}
+                  style={{ textDecoration: 'none' }}
                 >
                   Message
-                </button>
-                <button
-                  type="button"
+                </a>
+                <a
                   className="cl-popup-btn cl-popup-btn-details"
-                  onClick={() => router.push(getThemeLink(`/product/${activeFocusedItem.slug}`))}
+                  href={getThemeLink(`/product/${activeFocusedItem.slug}`)}
+                  style={{ textDecoration: 'none' }}
                 >
                   View Details
-                </button>
+                </a>
               </div>
             </div>
           )}

@@ -2,12 +2,16 @@
 
 import React from 'react';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { useModernThemeLink } from '../hooks/useModernThemeLink';
 
-export const CivicFooter = () => (
+export const CivicFooter = () => {
+    const themeLink = useModernThemeLink();
+
+    return (
     <footer className="civic-footer">
         <div className="civic-footer-grid">
             <div>
-                <div className="urban-logo civic-footer-logo">URBAN.</div>
+                <a className="urban-logo civic-footer-logo" href={themeLink('/')}>URBAN.</a>
                 <p className="civic-footer-copy">
                     Discover premium homes, apartments, and commercial spaces in cities worldwide. Browse listings, compare amenities, and contact agents or hosts directly.
                 </p>
@@ -32,7 +36,8 @@ export const CivicFooter = () => (
             />
         </div>
         <div className="civic-footer-bottom">
-            <span>© 2026 Urban Properties. All rights reserved.</span>
+            <span>© 2026 Sellio. All rights reserved.</span>
         </div>
     </footer>
-);
+    );
+};

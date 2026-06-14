@@ -30,7 +30,7 @@ const RelatedCard = ({ title, price, location, tag, image, slug }: RelatedCardPr
   const themeLink = usePropertyThemeLink();
 
   return (
-    <div className="estate-card-premium" style={{ cursor: 'pointer' }} onClick={() => { window.location.href = themeLink(`/product/${slug}`); }}>
+    <a href={themeLink(`/product/${slug}`)} className="estate-card-premium" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
       <div style={{ overflow: 'hidden' }}>
         <img src={image} alt={title} className="estate-card-img" />
       </div>
@@ -42,7 +42,7 @@ const RelatedCard = ({ title, price, location, tag, image, slug }: RelatedCardPr
           <span style={{ fontSize: '0.75rem', color: '#888', fontWeight: 600 }}>{location.toUpperCase()}</span>
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 

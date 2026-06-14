@@ -1,7 +1,6 @@
 'use client';
  
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import { AssetRegistryCard, IntelligenceHUD } from './components';
 import { scrollToSection } from '@/themes/properties/shared/property-utils';
@@ -21,7 +20,6 @@ const FALLBACK_ASSETS = [
 ];
  
 export default function Page() {
-  const router = useRouter();
   const themeLink = usePropertyThemeLink();
   const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [assets, setAssets] = useState<any[]>([]);
@@ -341,11 +339,9 @@ export default function Page() {
           ) : filteredAssets.length > 0 ? (
             <div className="pc-asset-grid">
               {filteredAssets.map((asset) => (
-                <AssetRegistryCard
-                  key={asset.id}
-                  {...asset}
-                  onClick={() => router.push(themeLink(`/product/${asset.slug}`))}
-                />
+                <a key={asset.id} href={themeLink(`/product/${asset.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                  <AssetRegistryCard {...asset} />
+                </a>
               ))}
             </div>
           ) : (

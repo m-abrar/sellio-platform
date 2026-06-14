@@ -53,34 +53,34 @@ interface PremiumCardProps {
   location: string;
   image: string;
   isVerified?: boolean;
-  onViewDetails: () => void;
+  viewDetailsHref: string;
 }
 
-export const PremiumCard = ({ title, price, description, location, image, isVerified, onViewDetails }: PremiumCardProps) => {
+export const PremiumCard = ({ title, price, description, location, image, isVerified, viewDetailsHref }: PremiumCardProps) => {
   return (
     <div className="cp-card">
       <div className="cp-card-img-wrap">
         <img src={image} className="cp-card-img" alt={title} />
       </div>
-      
+
       <div className="cp-card-body">
         {isVerified && (
           <span className="cp-badge-verified">
             🛡️ Verified Opportunity
           </span>
         )}
-        
+
         <h5 className="cp-card-title">{title}</h5>
         <p className="cp-card-text">{description}</p>
-        
+
         <div className="cp-card-footer">
           <span className="cp-card-location">📍 {location}</span>
           <span className="cp-card-price">{price}</span>
         </div>
-        
-        <button className="cp-btn-details" onClick={onViewDetails}>
+
+        <a href={viewDetailsHref} className="cp-btn-details" style={{ textDecoration: 'none' }}>
           View Details
-        </button>
+        </a>
       </div>
     </div>
   );

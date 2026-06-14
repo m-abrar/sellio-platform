@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { Vehicle } from '@sellio/types';
 import { ElectricHeader, ElectricFooter } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
@@ -102,7 +101,6 @@ const translateVehicleToEV = (car: Vehicle): EVItem => {
 };
 
 export default function ProductPage({ slug }: { slug: string }) {
-  const router = useRouter();
   const themeLink = useAutosThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
@@ -242,18 +240,13 @@ export default function ProductPage({ slug }: { slug: string }) {
     });
   };
 
-  const handleBackNavigation = (e: React.MouseEvent) => {
-    e.preventDefault();
-    router.push(themeLink('/'));
-  };
-
   return (
     <div className="ev-product-wrapper">
       <ElectricHeader />
 
       <div className="ev-product-container">
         <div>
-          <a href="#" className="ev-product-back-link" onClick={handleBackNavigation}>
+          <a href={themeLink('/')} className="ev-product-back-link">
             &larr; Back to EV Catalog Showcase
           </a>
         </div>
@@ -519,10 +512,11 @@ export default function ProductPage({ slug }: { slug: string }) {
                 <h3 className="ev-related-title">⚡ Other High-Power EV Models</h3>
                 <div className="ev-related-grid">
                   {related.map((relItem) => (
-                    <div 
-                      key={relItem.id} 
+                    <a
+                      key={relItem.id}
+                      href={themeLink(`/product/${relItem.slug}`)}
                       className="ev-related-card"
-                      onClick={() => router.push(themeLink(`/product/${relItem.slug}`))}
+                      style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                     >
                       <div className="ev-related-img-wrap">
                         <img src={relItem.image} className="ev-related-img" alt={relItem.title} />
@@ -537,7 +531,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                           <span style={{ fontSize: '0.75rem', opacity: 0.7, fontWeight: 600 }}>⚡ {relItem.range.split(' ')[0]} mi</span>
                         </div>
                       </div>
-                    </div>
+                    </a>
                   ))}
                 </div>
               </div>

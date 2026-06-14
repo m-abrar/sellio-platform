@@ -255,7 +255,7 @@ function ExploreDirectory() {
               <button type="button" className="ec-btn-outline" onClick={resetFilters}>
                 RESET FILTERS
               </button>
-              <Link href={themeLink('')} className="ec-btn-primary" style={{ textDecoration: 'none' }}>
+              <Link href={themeLink('/')} className="ec-btn-primary" style={{ textDecoration: 'none' }}>
                 BACK TO HOME
               </Link>
             </div>

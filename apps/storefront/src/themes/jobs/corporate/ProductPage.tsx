@@ -114,7 +114,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="jc-detail-kicker">Listing Unavailable</div>
           <h1>Job could not be loaded.</h1>
           <p>{apiError || 'The requested job does not exist or has been removed.'}</p>
-          <a href={themeLink('')} className="jc-btn jc-btn-navy">Return to Jobs</a>
+          <a href={themeLink('/')} className="jc-btn jc-btn-navy">Return to Jobs</a>
         </section>
       </main>
     );
@@ -122,7 +122,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="jc-detail-page">
-      <a href={themeLink('')} className="jc-detail-back">
+      <a href={themeLink('/')} className="jc-detail-back">
         <span aria-hidden="true">&larr;</span>
         Back to Job Board
       </a>

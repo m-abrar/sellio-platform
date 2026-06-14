@@ -1,6 +1,5 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { ClassifiedListing } from '@sellio/types';
 import { ModernHeader, ModernCard, ModernFooter } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
@@ -46,7 +45,6 @@ const ClassifiedShimmerGrid = () => (
 );
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
   const heroTitle = useThemeContent('hero.title', 'Discover the best things to buy, sell, and trade.');
@@ -76,11 +74,7 @@ export default function Page() {
     });
   };
 
-  const handleCardClick = (targetSlug: string) => {
-    router.push(themeLink(`/product/${targetSlug}`));
-  };
-
-  const [items, setItems] = useState<ClassifiedListing[]>([]);
+const [items, setItems] = useState<ClassifiedListing[]>([]);
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([
     { id: "all", name: "Everything" }
   ]);
@@ -384,22 +378,22 @@ export default function Page() {
         ) : (
           <div className="cm-grid">
             {filteredItems.slice(0, visibleCount).map((item) => (
-              <ModernCard 
-                key={item.id}
-                title={item.title}
-                price={getListingPrice(item)}
-                location={getListingLocation(item)}
-                time={getListingTime(item)}
-                image={getListingImage(item)}
-                isFeatured={item.status?.is_featured}
-                isRecent={item.status?.is_new_listing}
-                isSale={item.pricing?.is_on_sale}
-                isFavorite={favorites.includes(item.id)}
-                onQuickView={() => setQuickViewItem(item)}
-                onToggleFavorite={() => toggleFavoriteItem(item.id)}
-                onShare={() => handleShareClick(item, 'clipboard')}
-                onCardClick={() => handleCardClick(item.slug)}
-              />
+              <a key={item.id} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                <ModernCard
+                  title={item.title}
+                  price={getListingPrice(item)}
+                  location={getListingLocation(item)}
+                  time={getListingTime(item)}
+                  image={getListingImage(item)}
+                  isFeatured={item.status?.is_featured}
+                  isRecent={item.status?.is_new_listing}
+                  isSale={item.pricing?.is_on_sale}
+                  isFavorite={favorites.includes(item.id)}
+                  onQuickView={() => setQuickViewItem(item)}
+                  onToggleFavorite={() => toggleFavoriteItem(item.id)}
+                  onShare={() => handleShareClick(item, 'clipboard')}
+                />
+              </a>
             ))}
           </div>
         )}
@@ -456,13 +450,13 @@ export default function Page() {
               >
                 {messageSellerLabel}
               </button>
-              <button 
-                className="cm-btn cm-btn-primary" 
-                style={{ fontSize: '0.8rem' }}
-                onClick={() => router.push(themeLink(`/product/${quickViewItem.slug}`))}
+              <a
+                className="cm-btn cm-btn-primary"
+                href={themeLink(`/product/${quickViewItem.slug}`)}
+                style={{ fontSize: '0.8rem', textDecoration: 'none' }}
               >
                 {viewDetailsLabel}
-              </button>
+              </a>
             </div>
 
           </div>

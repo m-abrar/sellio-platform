@@ -255,7 +255,7 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
             style={{ width: '100%', padding: '1rem', fontSize: '0.8rem', fontWeight: 700 }}
             onClick={() => router.push(themeLink('/explore'))}
           >
-            RESET_CONSOLE
+            Reset Filters
           </button>
         </aside>
 
@@ -286,10 +286,10 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
             </div>
           ) : (
             <div className="gr-empty-state" role="status">
-              <h3>No active nodes matching query.</h3>
-              <p>Try resetting or modifying console filters to sync alternate positions.</p>
+              <h3>No positions match your search.</h3>
+              <p>Try adjusting your filters or search terms.</p>
               <button type="button" className="growth-btn-outline" style={{ marginTop: '2rem' }} onClick={() => router.push(themeLink('/explore'))}>
-                RESET_CONSOLE
+                Reset Filters
               </button>
             </div>
           )}

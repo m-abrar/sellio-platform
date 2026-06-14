@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+
 import type { Vehicle } from '@sellio/types';
 import { ElectricHeader, EVCard, ElectricFooter } from './components';
 import AutosExplorePage from '@/themes/autos/shared/AutosExplorePage';
@@ -21,7 +21,6 @@ function getEvSpecs(car: Vehicle) {
 }
 
 function ElectricExploreCards() {
-  const router = useRouter();
   const themeLink = useAutosThemeLink();
 
   return (
@@ -46,16 +45,16 @@ function ElectricExploreCards() {
       renderVehicleCard={(car: Vehicle) => {
         const specs = getEvSpecs(car);
         return (
-          <EVCard
-            key={car.id}
-            title={car.title}
-            price={formatVehiclePrice(car)}
-            range={specs.range}
-            battery={specs.battery}
-            charge={specs.charge}
-            image={getVehicleImage(car, car.media?.main_photo || '/themes/autos/electric/tesla_y.png')}
-            onClick={() => router.push(themeLink(`/product/${car.slug}`))}
-          />
+          <a key={car.id} href={themeLink(`/product/${car.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+            <EVCard
+              title={car.title}
+              price={formatVehiclePrice(car)}
+              range={specs.range}
+              battery={specs.battery}
+              charge={specs.charge}
+              image={getVehicleImage(car, car.media?.main_photo || '/themes/autos/electric/tesla_y.png')}
+            />
+          </a>
         );
       }}
     />

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { Product } from '@sellio/types';
 import { EditorialLookCard } from './components';
 import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
@@ -119,7 +118,6 @@ const SUGGESTED_LOOKS = [
 ];
 
 export default function ProductPage({ slug }: ProductPageProps) {
-  const router = useRouter();
   const themeLink = useEcommerceThemeLink();
   const allowDemo = useDemoFallbackAllowed();
   const [product, setProduct] = useState<any | null>(null);
@@ -236,9 +234,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
     setAddingToCart(false);
   };
 
-  const handleSuggestedClick = (suggestedSlug: string) => {
-    router.push(themeLink(`/product/${suggestedSlug}`));
-  };
 
   if (loading) {
     return (
@@ -294,25 +289,23 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
       {/* Back to Atelier Catalog Navigation */}
       <div style={{ padding: '4rem 6% 1rem', maxWidth: '1800px', margin: '0 auto' }}>
-        <button 
-          onClick={() => router.push(themeLink('/'))}
+        <a
+          href={themeLink('/')}
           style={{
-            background: 'none',
-            border: 'none',
             fontFamily: 'var(--ef-sans)',
             fontWeight: 800,
             fontSize: '0.65rem',
             letterSpacing: '3px',
             textTransform: 'uppercase',
-            cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             gap: '1rem',
-            color: 'var(--ef-ebony)'
+            color: 'var(--ef-ebony)',
+            textDecoration: 'none',
           }}
         >
-          <span>&larr;</span> Back to lookbook catalog
-        </button>
+          <span>&larr;</span> Back to catalog
+        </a>
       </div>
 
       {/* Product Detail Layout */}
@@ -629,14 +622,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4rem' }}>
           {SUGGESTED_LOOKS.map((item, idx) => (
-            <div key={item.slug} onClick={() => handleSuggestedClick(item.slug)}>
-              <EditorialLookCard 
-                name={item.title} 
-                price={item.price} 
-                image={item.image} 
+            <a key={item.slug} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+              <EditorialLookCard
+                name={item.title}
+                price={item.price}
+                image={item.image}
                 lookNumber={`LOOK_0${idx + 7}`}
               />
-            </div>
+            </a>
           ))}
         </div>
       </section>

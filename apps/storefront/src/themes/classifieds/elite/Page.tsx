@@ -347,18 +347,18 @@ export default function Page() {
         ) : (
           <div className="elite-grid">
             {filteredAssets.map((asset) => (
-              <PremiumCard 
-                key={asset.id}
-                title={asset.title}
-                price={getAssetPrice(asset)}
-                category={getAssetCategoryLabel(asset)}
-                image={asset.media?.thumbnail || asset.media?.main_photo || "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=400"}
-                isFavorite={favorites.includes(asset.id)}
-                onQuickView={() => setQuickViewAsset(asset)}
-                onToggleFavorite={() => toggleFavoriteAsset(asset.id)}
-                onShare={() => handleShareClick(asset.title, 'clipboard')}
-                onClick={() => { window.location.href = themeLink(`/product/${asset.slug}`); }}
-              />
+              <a key={asset.id} href={themeLink(`/product/${asset.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                <PremiumCard
+                  title={asset.title}
+                  price={getAssetPrice(asset)}
+                  category={getAssetCategoryLabel(asset)}
+                  image={asset.media?.thumbnail || asset.media?.main_photo || "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=400"}
+                  isFavorite={favorites.includes(asset.id)}
+                  onQuickView={() => setQuickViewAsset(asset)}
+                  onToggleFavorite={() => toggleFavoriteAsset(asset.id)}
+                  onShare={() => handleShareClick(asset.title, 'clipboard')}
+                />
+              </a>
             ))}
           </div>
         )}

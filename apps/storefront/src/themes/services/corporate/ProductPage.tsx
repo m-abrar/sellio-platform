@@ -146,7 +146,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="sc-service-kicker">Service Unavailable</div>
           <h1>Service could not be loaded.</h1>
           <p>{apiError || 'The requested service does not exist or has been removed.'}</p>
-          <a href={themeLink('')} className="sc-btn sc-btn-primary">Return to Services</a>
+          <a href={themeLink('/')} className="sc-btn sc-btn-primary">Return to Services</a>
         </section>
       </main>
     );
@@ -154,7 +154,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="sc-detail-page">
-      <a href={themeLink('')} className="sc-detail-back">
+      <a href={themeLink('/')} className="sc-detail-back">
         <span aria-hidden="true">&larr;</span>
         Back to Services
       </a>

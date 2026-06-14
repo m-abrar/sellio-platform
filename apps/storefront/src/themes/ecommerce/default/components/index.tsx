@@ -7,6 +7,7 @@ import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 import {
   formatProductPrice,
   getProductCategoryLabel,
@@ -16,6 +17,7 @@ import {
 
 export const ShopHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useEcommerceThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'SELLIOShop');
   const brandHighlight = useThemeContent('header.brand_highlight', 'Shop');
   const brandPrefix = brandLabel.endsWith(brandHighlight)
@@ -24,10 +26,10 @@ export const ShopHeader = () => {
 
   return (
     <header className="ed-header">
-      <div className="ed-logo">
+      <a className="ed-logo" href={themeLink('/')}>
         {brandPrefix}
         <span style={{ color: 'var(--ed-blue)' }}>{brandHighlight}</span>
-      </div>
+      </a>
 
       <button
         className={`ed-hamburger ${isOpen ? 'ed-hamburger-open' : ''}`}
@@ -147,6 +149,7 @@ export const CategoryRibbon = ({
 );
 
 export const TransactionFooter = () => {
+  const themeLink = useEcommerceThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'SELLIOShop');
   const footerBrand = useThemeContent('footer.brand_label', 'SELLIO');
   const description = useThemeContent(
@@ -155,14 +158,14 @@ export const TransactionFooter = () => {
   );
   const copyright = useThemeContent(
     'footer.copyright',
-    '(c) 2026 Sellio Shop. All rights reserved.',
+    '© 2026 Sellio Shop. All rights reserved.',
   );
 
   return (
     <footer className="ed-footer">
       <div className="ed-footer-grid">
         <div>
-          <div className="ed-logo ed-footer-logo">{footerBrand || brandLabel}</div>
+          <a className="ed-logo ed-footer-logo" href={themeLink('/')}>{footerBrand || brandLabel}</a>
           <p className="ed-footer-description">{description}</p>
         </div>
         <FooterMenuColumn

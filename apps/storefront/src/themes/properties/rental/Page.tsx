@@ -169,14 +169,13 @@ export default function Page() {
           <p className="pr-lead">{heroDescription}</p>
 
           <div className="pr-hero-actions">
-            <button
-              type="button"
+            <a
               className="pr-btn-primary"
               id="pr-btn-discover"
-              onClick={() => router.push(themeLink('/explore'))}
+              href={themeLink('/explore')}
             >
               {heroPrimaryCta}
-            </button>
+            </a>
             <a
               href={adminListPropertyUrl}
               className="pr-btn-secondary"
@@ -316,13 +315,13 @@ export default function Page() {
         ) : rentals.length > 0 ? (
           <div className="pr-rent-grid">
             {rentals.map((rental) => (
-              <LeaseUnitCard
-                key={rental.slug}
-                {...rental}
-                rating={4.5 + (rental.id % 5) * 0.1}
-                reviews={20 + (rental.id % 12) * 11}
-                onClick={() => router.push(themeLink(`/product/${rental.slug}`))}
-              />
+              <a key={rental.slug} href={themeLink(`/product/${rental.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                <LeaseUnitCard
+                  {...rental}
+                  rating={4.5 + (rental.id % 5) * 0.1}
+                  reviews={20 + (rental.id % 12) * 11}
+                />
+              </a>
             ))}
           </div>
         ) : (
@@ -335,13 +334,9 @@ export default function Page() {
         )}
 
         <div className="pr-grid-section__actions">
-          <button
-            type="button"
-            className="pr-btn-primary"
-            onClick={() => router.push(themeLink('/explore'))}
-          >
+          <a className="pr-btn-primary" href={themeLink('/explore')}>
             View all rentals
-          </button>
+          </a>
         </div>
       </section>
 
@@ -354,14 +349,13 @@ export default function Page() {
             {renderMultilineTitle(ctaTitle, ctaHighlight)}
           </h2>
           <p className="pr-cta-panel__lead">{ctaDescription}</p>
-          <button
-            type="button"
+          <a
             className="pr-btn-primary pr-btn-primary--lg"
             id="pr-btn-cta-auth"
-            onClick={() => router.push(themeLink('/explore'))}
+            href={themeLink('/explore')}
           >
             {ctaButtonLabel}
-          </button>
+          </a>
         </div>
       </section>
     </div>

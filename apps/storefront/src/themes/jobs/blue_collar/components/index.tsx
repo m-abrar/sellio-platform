@@ -120,7 +120,7 @@ export const BlueCollarFooter = () => {
             />
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1.5rem', color: '#757575', fontSize: '0.85rem', textAlign: 'center', fontWeight: 500 }}>
-            © 2026 TradesWork. All rights reserved.
+            © 2026 Sellio. All rights reserved.
         </div>
     </footer>
   );

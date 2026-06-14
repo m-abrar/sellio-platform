@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@/lib/storefront-api';
 import { RetreatBentoCard } from './components';
 import { CatalogSyncAlert } from './components/CatalogSyncAlert';
@@ -14,7 +13,6 @@ import {
 } from './vacation-utils';
 
 export default function ProductPage({ slug }: { slug: string }) {
-  const router = useRouter();
   const themeLink = usePropertyThemeLink();
 
   const [retreat, setRetreat] = useState<VacationRetreatCard | null>(null);
@@ -154,9 +152,7 @@ export default function ProductPage({ slug }: { slug: string }) {
         <span className="pv-empty-icon">⚠️</span>
         <h3>Retreat not found</h3>
         <p>{apiError || 'We could not locate the requested vacation retreat.'}</p>
-        <button type="button" className="pv-btn-primary" onClick={() => router.push(themeLink('/'))}>
-          Back to retreats
-        </button>
+        <a className="pv-btn-primary" href={themeLink('/')}>Back to retreats</a>
       </div>
     );
   }
@@ -164,9 +160,7 @@ export default function ProductPage({ slug }: { slug: string }) {
   return (
     <div className="pv-detail-page">
       <div className="pv-detail-back-wrap">
-        <button type="button" className="pv-detail-back" onClick={() => router.push(themeLink('/'))}>
-          ← Back to retreats
-        </button>
+        <a className="pv-detail-back" href={themeLink('/')}>← Back to retreats</a>
       </div>
 
       {apiError && (
@@ -303,11 +297,9 @@ export default function ProductPage({ slug }: { slug: string }) {
           <h3>Similar getaways nearby</h3>
           <div className="pv-retreat-grid">
             {related.map((item) => (
-              <RetreatBentoCard
-                key={item.id}
-                {...item}
-                onClick={() => router.push(themeLink(`/product/${item.slug}`))}
-              />
+              <a key={item.id} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                <RetreatBentoCard {...item} />
+              </a>
             ))}
           </div>
         </section>

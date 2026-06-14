@@ -42,9 +42,9 @@ export default function Page() {
   const emptyTitle = useThemeContent('empty.title', 'No live products are available yet.');
   const emptyDescription = useThemeContent(
     'empty.description',
-    'Add product records in the backend and this collection will hydrate automatically.',
+    'Add product records in the admin panel and they will appear here.',
   );
-  const newsletterEyebrow = useThemeContent('newsletter.eyebrow', 'JOIN_THE_COLLECTIVE');
+  const newsletterEyebrow = useThemeContent('newsletter.eyebrow', 'JOIN THE COLLECTIVE');
   const newsletterTitle = useThemeContent('newsletter.title', 'Stay In\nThe Loop.');
   const newsletterDescription = useThemeContent(
     'newsletter.description',
@@ -203,7 +203,7 @@ export default function Page() {
             <div className="ed-product-state">
               <div className="ed-mono ed-state-kicker">{offlineKicker}</div>
               <h3>{offlineTitle}</h3>
-              <p>{apiError}</p>
+              <p>Check the API connection or refresh the page.</p>
             </div>
           ) : products.length === 0 ? (
             <div className="ed-product-state">

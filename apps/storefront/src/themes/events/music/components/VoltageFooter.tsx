@@ -48,7 +48,7 @@ export const VoltageFooter = () => {
             />
         </div>
         <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid var(--sonic-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '3rem' }}>
-            <div style={{ fontSize: '0.7rem', color: '#444', fontWeight: 900, letterSpacing: '2px' }}>© 2026 PULSE. All rights reserved.</div>
+            <div style={{ fontSize: '0.7rem', color: '#444', fontWeight: 900, letterSpacing: '2px' }}>© 2026 Sellio. All rights reserved.</div>
             <MenuNav
               location="social_footer"
               flat

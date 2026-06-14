@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import type { ClassifiedListing } from '@sellio/types';
 import { GeneralHeader, ListingCard, GeneralFooter } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
@@ -19,7 +18,6 @@ import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifi
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
   const sidebarCategoriesTitle = useThemeContent('sidebar.categories_title', 'Explore Categories');
@@ -233,14 +231,14 @@ export default function Page() {
             <div className="cg-sidebar-title">{sidebarCategoriesTitle}</div>
             <div className="cg-category-list">
               {categories.map((cat) => (
-                <a 
-                  key={cat.id} 
-                  href="#" 
+                <button
+                  key={cat.id}
+                  type="button"
                   className={`cg-category-link ${selectedCategory === cat.id ? 'cg-active' : ''}`}
-                  onClick={(e) => { e.preventDefault(); setSelectedCategory(cat.id); }}
+                  onClick={() => setSelectedCategory(cat.id)}
                 >
                   <span>{cat.icon}</span> {cat.name}
-                </a>
+                </button>
               ))}
             </div>
 
@@ -368,18 +366,18 @@ export default function Page() {
           ) : (
             <div className="cg-grid">
               {filteredListings.slice(0, visibleCount).map((item) => (
-                <ListingCard 
-                  key={item.id} 
-                  title={item.title}
-                  price={item.price}
-                  image={item.image}
-                  seller={item.seller}
-                  isSaved={item.isSaved}
-                  category={item.category}
-                  onMessageClick={() => initiateChat(item)}
-                  onToggleSave={() => toggleSaveItem(item.id)}
-                  onClick={() => router.push(getThemeLink(`/product/${item.slug}`))}
-                />
+                <a key={item.id} href={getThemeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                  <ListingCard
+                    title={item.title}
+                    price={item.price}
+                    image={item.image}
+                    seller={item.seller}
+                    isSaved={item.isSaved}
+                    category={item.category}
+                    onMessageClick={() => initiateChat(item)}
+                    onToggleSave={() => toggleSaveItem(item.id)}
+                  />
+                </a>
               ))}
             </div>
           )}

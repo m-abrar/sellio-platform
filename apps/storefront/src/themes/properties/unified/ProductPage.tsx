@@ -111,7 +111,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="uh-detail-kicker">Record Unavailable</div>
           <h1>Property could not be loaded.</h1>
           <p>{errorMessage}</p>
-          <a href={themeLink('')} className="uh-btn uh-btn-primary">Return to Inventory</a>
+          <a href={themeLink('/')} className="uh-btn uh-btn-primary">Return to Inventory</a>
         </section>
       </main>
     );
@@ -119,7 +119,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="uh-detail-page">
-      <a href={themeLink('')} className="uh-detail-back">&larr; Back to Inventory</a>
+      <a href={themeLink('/')} className="uh-detail-back">&larr; Back to Inventory</a>
       <section className="uh-detail-grid">
         <div className="uh-detail-media"><img src={getPropertyImage(property)} alt={property.title} /></div>
         <article className="uh-detail-panel">

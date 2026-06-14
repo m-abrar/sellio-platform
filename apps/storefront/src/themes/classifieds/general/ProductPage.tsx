@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { GeneralHeader, GeneralFooter } from './components';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
 import {
@@ -19,7 +18,6 @@ import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifi
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
 
 export default function ProductPage({ slug }: { slug: string }) {
-  const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
@@ -149,22 +147,17 @@ export default function ProductPage({ slug }: { slug: string }) {
     });
   };
 
-  const handleBackNavigation = (e: React.MouseEvent) => {
-    e.preventDefault();
-    router.push(themeLink(''));
-  };
-
   return (
     <div className="cg-product-wrapper">
       <GeneralHeader
         searchTerm=""
         onSearchChange={() => {}}
-        onReset={() => router.push(themeLink(''))}
+        onReset={() => {}}
       />
 
       <div className="cg-product-container">
         <div>
-          <a href={themeLink('')} className="cg-product-back-link" onClick={handleBackNavigation}>
+          <a href={themeLink('/')} className="cg-product-back-link">
             &larr; Back to Catalog Listings
           </a>
         </div>
@@ -196,7 +189,7 @@ export default function ProductPage({ slug }: { slug: string }) {
           <div className="cg-empty-state">
             <h3>Listing not found</h3>
             <p>This catalog listing is unavailable or may have been removed.</p>
-            <a href={themeLink('')} className="cg-btn cg-btn-primary" style={{ display: 'inline-flex', marginTop: '1rem' }}>
+            <a href={themeLink('/')} className="cg-btn cg-btn-primary" style={{ display: 'inline-flex', marginTop: '1rem' }}>
               Back to listings
             </a>
           </div>
@@ -336,10 +329,11 @@ export default function ProductPage({ slug }: { slug: string }) {
                 <h3 className="cg-related-title">📦 Other Bargains You Might Like</h3>
                 <div className="cg-related-grid">
                   {related.map((relItem) => (
-                    <div
+                    <a
                       key={relItem.id}
+                      href={themeLink(`/product/${relItem.slug}`)}
                       className="cg-related-card"
-                      onClick={() => router.push(themeLink(`/product/${relItem.slug}`))}
+                      style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                     >
                       <div className="cg-related-img-wrap">
                         <img src={relItem.image} className="cg-related-img" alt={relItem.title} />
@@ -351,7 +345,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                           <span style={{ fontSize: '0.75rem', color: 'var(--cg-text-muted)', fontWeight: 600 }}>👤 {relItem.seller}</span>
                         </div>
                       </div>
-                    </div>
+                    </a>
                   ))}
                 </div>
               </div>

@@ -111,7 +111,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="pn-detail-kicker">Home Unavailable</div>
           <h1>Listing could not be loaded.</h1>
           <p>{errorMessage}</p>
-          <a href={themeLink('')} className="pn-btn pn-btn-primary">Return to Homes</a>
+          <a href={themeLink('/')} className="pn-btn pn-btn-primary">Return to Homes</a>
         </section>
       </main>
     );
@@ -119,7 +119,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="pn-detail-page">
-      <a href={themeLink('')} className="pn-detail-back">&larr; Back to Neighborly Homes</a>
+      <a href={themeLink('/')} className="pn-detail-back">&larr; Back to Neighborly Homes</a>
       <section className="pn-detail-grid">
         <div className="pn-detail-media"><img src={getPropertyImage(property)} alt={property.title} /></div>
         <article className="pn-detail-panel">

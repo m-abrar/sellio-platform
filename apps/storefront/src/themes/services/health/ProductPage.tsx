@@ -140,7 +140,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="sh-detail-kicker">Practitioner Unavailable</div>
           <h1>Record could not be loaded.</h1>
           <p>{apiError || 'The requested practitioner does not exist or has been removed.'}</p>
-          <a href={themeLink('')} className="sh-btn-primary">Return to Registry</a>
+          <a href={themeLink('/')} className="sh-btn-primary">Return to Registry</a>
         </section>
       </main>
     );
@@ -148,7 +148,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="sh-detail-page">
-      <a href={themeLink('')} className="sh-detail-back">
+      <a href={themeLink('/')} className="sh-detail-back">
         <span aria-hidden="true">&larr;</span>
         Back to Practitioner Registry
       </a>

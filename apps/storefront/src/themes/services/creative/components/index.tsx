@@ -125,7 +125,7 @@ export const CrtvFooter = () => {
             />
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem', textAlign: 'center', opacity: 0.6 }}>
-            © 2026 CRTV. All rights reserved.
+            © 2026 Sellio. All rights reserved.
         </div>
     </footer>
   );

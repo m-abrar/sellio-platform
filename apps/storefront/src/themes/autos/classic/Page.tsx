@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useMemo, useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { Vehicle } from '@sellio/types';
 import { ClassicCarCard, AuctionCard } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
@@ -99,7 +98,6 @@ const ShimmerCard = () => (
 );
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useAutosThemeLink();
   const allowDemo = useDemoFallbackAllowed();
   const heroEyebrow = useThemeContent('hero.eyebrow', "The Collector's Choice");
@@ -358,11 +356,9 @@ export default function Page() {
         ) : (
           <div className="ac-grid">
               {filteredCars.map((car) => (
-                  <ClassicCarCard 
-                    key={car.id} 
-                    {...car} 
-                    onClick={() => router.push(themeLink(`/product/${car.slug}`))}
-                  />
+                <a key={car.id} href={themeLink(`/product/${car.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                  <ClassicCarCard {...car} />
+                </a>
               ))}
           </div>
         )}

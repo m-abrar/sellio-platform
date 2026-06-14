@@ -353,11 +353,9 @@ export default function Page() {
               ) : filteredJobs.length > 0 ? (
                 <div className="jt-job-list">
                     {filteredJobs.map((job) => (
-                        <TechJobCard 
-                          key={job.slug} 
-                          {...job} 
-                          onClick={() => router.push(themeLink(`/product/${job.slug}`))}
-                        />
+                      <a key={job.slug} href={themeLink(`/product/${job.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                        <TechJobCard {...job} />
+                      </a>
                     ))}
                 </div>
               ) : (

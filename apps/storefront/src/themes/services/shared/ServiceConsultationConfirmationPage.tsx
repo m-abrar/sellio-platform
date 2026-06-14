@@ -175,7 +175,7 @@ export default function ServiceConsultationConfirmationPage({
               </a>
             )}
 
-            <a href={themeLink('')} className={`sm-btn sm-btn-outline ${cls(prefix, 'consultation-confirm-cta')}`}>
+            <a href={themeLink('/')} className={`sm-btn sm-btn-outline ${cls(prefix, 'consultation-confirm-cta')}`}>
               Return to marketplace
             </a>
           </aside>

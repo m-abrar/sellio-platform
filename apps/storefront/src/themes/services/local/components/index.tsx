@@ -142,7 +142,7 @@ export const LocalFooter = () => {
             </div>
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem', textAlign: 'center', color: 'var(--local-text-muted)', fontSize: '0.9rem' }}>
-            © 2026 HomeFix. All rights reserved.
+            © 2026 Sellio. All rights reserved.
         </div>
     </footer>
   );

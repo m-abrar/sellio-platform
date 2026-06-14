@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { Vehicle } from '@sellio/types';
 import { UsedCarCard, DealerLogo, StepCard } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
@@ -99,7 +98,6 @@ const ShimmerCard = () => (
 );
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useAutosThemeLink();
   const allowDemo = useDemoFallbackAllowed();
   const heroTitle = useThemeContent('hero.title', 'Find Your Perfect Used Car Today');
@@ -338,11 +336,9 @@ export default function Page() {
         ) : (
           <div className="us-grid">
               {filteredCars.map((car) => (
-                  <UsedCarCard 
-                    key={car.id} 
-                    {...car} 
-                    onClick={() => router.push(themeLink(`/product/${car.slug}`))}
-                  />
+                <a key={car.id} href={themeLink(`/product/${car.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                  <UsedCarCard {...car} />
+                </a>
               ))}
           </div>
         )}

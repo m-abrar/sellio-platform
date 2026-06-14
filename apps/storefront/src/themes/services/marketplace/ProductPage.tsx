@@ -171,7 +171,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="sm-detail-kicker">Provider Unavailable</div>
           <h1>Service provider could not be loaded.</h1>
           <p>{apiError || 'The requested provider does not exist or has been removed.'}</p>
-          <a href={themeLink('')} className="sm-btn sm-btn-primary">Return to Marketplace</a>
+          <a href={themeLink('/')} className="sm-btn sm-btn-primary">Return to Marketplace</a>
         </section>
       </main>
     );
@@ -179,7 +179,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="sm-detail-page">
-      <a href={themeLink('')} className="sm-detail-back">
+      <a href={themeLink('/')} className="sm-detail-back">
         <span aria-hidden="true">&larr;</span>
         Back to ServiceConnect
       </a>

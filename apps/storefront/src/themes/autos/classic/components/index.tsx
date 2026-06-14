@@ -105,7 +105,7 @@ export const ClassicFooter = () => {
     );
     const footerEmail = useThemeContent('footer.email', 'info@classicmotors.com');
     const footerPhone = useThemeContent('footer.phone', '+1 (555) CLASSIC');
-    const footerCopyright = useThemeContent('footer.copyright', '2026 Classic Motors. All rights reserved.');
+    const footerCopyright = useThemeContent('footer.copyright', '2026 Sellio. All rights reserved.');
     const [brandPrimary, ...brandRest] = brandLabel.split(' ');
     const brandSecondary = brandRest.join(' ');
 

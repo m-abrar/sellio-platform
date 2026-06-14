@@ -146,7 +146,7 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
         locationName="Explore neighborhood listings"
         onPostClick={() => window.open(adminCreateClassifiedUrl, '_blank', 'noopener,noreferrer')}
         onLocationClick={() => undefined}
-        homeHref={themeLink('')}
+        homeHref={themeLink('/')}
       />
 
       <div className="cl-product-container cl-explore-container">
@@ -219,25 +219,26 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
             <div className="cl-empty-state">
               <h3>No listings match your filters</h3>
               <p>Try another category or broaden your search.</p>
-              <a href={themeLink('')} className="cl-btn-post cl-empty-cta">
+              <a href={themeLink('/')} className="cl-btn-post cl-empty-cta">
                 Back to map view
               </a>
             </div>
           ) : (
             filteredItems.map((item) => (
-              <LocalCard
-                key={item.id}
-                title={item.title}
-                price={item.price}
-                distance={item.distance}
-                neighborhood={item.neighborhood}
-                image={item.image}
-                sellerInitials={item.sellerInitials}
-                conditionLabel={item.conditionLabel}
-                isFocused={false}
-                onClick={() => router.push(themeLink(`/product/${item.slug}`))}
-                onMessageClick={() => router.push(themeLink(`/product/${item.slug}`))}
-              />
+              <a key={item.id} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                <LocalCard
+                  title={item.title}
+                  price={item.price}
+                  distance={item.distance}
+                  neighborhood={item.neighborhood}
+                  image={item.image}
+                  sellerInitials={item.sellerInitials}
+                  conditionLabel={item.conditionLabel}
+                  isFocused={false}
+                  onClick={() => {}}
+                  onMessageClick={() => {}}
+                />
+              </a>
             ))
           )}
         </div>

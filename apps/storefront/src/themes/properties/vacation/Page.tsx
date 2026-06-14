@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import type { Category } from '@sellio/types';
 import { RetreatBentoCard, ExperienceStats } from './components';
 import { CatalogSyncAlert } from './components/CatalogSyncAlert';
@@ -51,7 +50,6 @@ function renderMultilineTitle(text: string, highlight: string, highlightClassNam
 }
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = usePropertyThemeLink();
 
   const heroKicker = useThemeContent('hero.kicker', 'Global Vacation Retreats');
@@ -293,11 +291,9 @@ export default function Page() {
         ) : (
           <div className="pv-retreat-grid">
             {filteredRetreats.map((retreat) => (
-              <RetreatBentoCard
-                key={retreat.id}
-                {...retreat}
-                onClick={() => router.push(themeLink(`/product/${retreat.slug}`))}
-              />
+              <a key={retreat.id} href={themeLink(`/product/${retreat.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                <RetreatBentoCard {...retreat} />
+              </a>
             ))}
           </div>
         )}

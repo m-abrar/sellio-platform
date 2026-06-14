@@ -122,7 +122,7 @@ export default function ProductPage() {
           <Link href={themeLink('/explore')} className="ec-btn-primary" style={{ textDecoration: 'none' }}>
             Browse Conventions
           </Link>
-          <Link href={themeLink('')} className="ec-btn-outline" style={{ textDecoration: 'none' }}>
+          <Link href={themeLink('/')} className="ec-btn-outline" style={{ textDecoration: 'none' }}>
             Back to Home
           </Link>
         </div>

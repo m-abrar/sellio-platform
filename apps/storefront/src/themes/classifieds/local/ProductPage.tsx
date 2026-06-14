@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { LocalHeader, LocalFooter } from './components';
 import { getAdminBaseUrl } from '@/lib/admin-urls';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
@@ -21,7 +21,6 @@ import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifi
 const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
 
 export default function ProductPage({ slug }: { slug: string }) {
-  const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
 
   const [item, setItem] = useState<LocalCardItem | null>(null);
@@ -114,23 +113,18 @@ export default function ProductPage({ slug }: { slug: string }) {
     redirectToClassifiedInquiryConfirmation(themeLink, result.inquiryId);
   };
 
-  const handleBackNavigation = (e: React.MouseEvent) => {
-    e.preventDefault();
-    router.push(themeLink(''));
-  };
-
   return (
     <div className="cl-product-wrapper">
       <LocalHeader
         onPostClick={() => window.open(adminCreateClassifiedUrl, '_blank', 'noopener,noreferrer')}
-        onLocationClick={() => router.push(themeLink(''))}
+        onLocationClick={() => { location.href = themeLink('/'); }}
         locationName={item?.neighborhood || 'Nearby'}
-        homeHref={themeLink('')}
+        homeHref={themeLink('/')}
       />
 
       <div className="cl-product-container">
         <div>
-          <a href={themeLink('')} className="cl-product-back-link" onClick={handleBackNavigation}>
+          <a href={themeLink('/')} className="cl-product-back-link">
             &larr; Back to Neighborhood Listings
           </a>
         </div>
@@ -156,7 +150,7 @@ export default function ProductPage({ slug }: { slug: string }) {
           <div className="cl-empty-state">
             <h3>Listing not found</h3>
             <p>This neighborhood listing is unavailable or may have been removed.</p>
-            <a href={themeLink('')} className="cl-btn-post cl-empty-cta">
+            <a href={themeLink('/')} className="cl-btn-post cl-empty-cta">
               Back to listings
             </a>
           </div>
@@ -296,10 +290,11 @@ export default function ProductPage({ slug }: { slug: string }) {
                 <h3 className="cl-related-title">🌿 Other Neighborhood Offers</h3>
                 <div className="cl-related-grid">
                   {related.map((relItem) => (
-                    <div
+                    <a
                       key={relItem.id}
+                      href={themeLink(`/product/${relItem.slug}`)}
                       className="cl-related-card"
-                      onClick={() => router.push(themeLink(`/product/${relItem.slug}`))}
+                      style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                     >
                       <div className="cl-related-img-wrap">
                         <img src={relItem.image} className="cl-related-img" alt={relItem.title} />
@@ -311,7 +306,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                           <span className="cl-related-distance">📍 {relItem.distance} mi</span>
                         </div>
                       </div>
-                    </div>
+                    </a>
                   ))}
                 </div>
               </div>

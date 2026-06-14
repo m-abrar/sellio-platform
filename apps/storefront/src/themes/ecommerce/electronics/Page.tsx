@@ -104,13 +104,13 @@ export default function Page() {
       image: getProductImage(p, index),
       badge: badgeStr,
       slug: p.slug,
-      onClick: () => { window.location.href = themeLink(`/product/${p.slug}`); },
+      href: themeLink(`/product/${p.slug}`),
     };
   };
 
   const mapFallbackProduct = (p: typeof FALLBACK_TRENDING_PRODUCTS[number]) => ({
     ...p,
-    onClick: () => { window.location.href = themeLink(`/product/${p.slug}`); },
+    href: themeLink(`/product/${p.slug}`),
   });
 
   const trendingProductsList = products.length > 0

@@ -110,7 +110,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="pi-detail-kicker">Asset Unavailable</div>
           <h1>Portfolio asset could not be loaded.</h1>
           <p>{errorMessage}</p>
-          <a href={themeLink('')} className="pi-btn pi-btn-primary">Return to Portfolio</a>
+          <a href={themeLink('/')} className="pi-btn pi-btn-primary">Return to Portfolio</a>
         </section>
       </main>
     );
@@ -118,7 +118,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="pi-detail-page">
-      <a href={themeLink('')} className="pi-detail-back">&larr; Back to Asset Performance</a>
+      <a href={themeLink('/')} className="pi-detail-back">&larr; Back to Asset Performance</a>
       <section className="pi-detail-grid">
         <div className="pi-detail-media"><img src={getPropertyImage(property)} alt={property.title} /></div>
         <article className="pi-detail-panel">

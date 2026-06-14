@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+
 import type { Vehicle } from '@sellio/types';
 import { UsedCarCard } from './components';
 import AutosExplorePage from '@/themes/autos/shared/AutosExplorePage';
@@ -9,7 +9,6 @@ import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
 import { formatVehiclePrice, getVehicleImage } from '@/themes/autos/shared/vehicle-utils';
 
 function UsedExploreCards() {
-  const router = useRouter();
   const themeLink = useAutosThemeLink();
 
   return (
@@ -35,16 +34,16 @@ function UsedExploreCards() {
         const location = raw.city || car.location?.city || car.location?.state || 'Available nationwide';
         const dealer = raw.dealer?.name || raw.dealer_name || raw.company?.title || 'Verified Dealer';
         return (
-          <UsedCarCard
-            key={car.id}
-            title={car.title}
-            price={formatVehiclePrice(car)}
-            mileage={mileage.includes('mile') ? mileage : `${mileage} miles`}
-            location={location}
-            dealer={dealer}
-            image={getVehicleImage(car)}
-            onClick={() => router.push(themeLink(`/product/${car.slug}`))}
-          />
+          <a key={car.id} href={themeLink(`/product/${car.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+            <UsedCarCard
+              title={car.title}
+              price={formatVehiclePrice(car)}
+              mileage={mileage.includes('mile') ? mileage : `${mileage} miles`}
+              location={location}
+              dealer={dealer}
+              image={getVehicleImage(car)}
+            />
+          </a>
         );
       }}
     />

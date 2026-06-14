@@ -27,7 +27,7 @@ export const Header = () => {
   return (
     <header className="ecc-header">
       <div className="ecc-header-container">
-        <Link href={themeLink('')} style={{ textDecoration: 'none' }}>
+        <Link href={themeLink('/')} style={{ textDecoration: 'none' }}>
           <div className="ecc-logo">
             {brandPrefix}<span>{brandHighlight}</span>
           </div>

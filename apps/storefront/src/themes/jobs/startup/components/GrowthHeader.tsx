@@ -12,10 +12,10 @@ export const GrowthHeader = () => {
 
   return (
     <header className="growth-header">
-        <div className="growth-logo" onClick={() => { window.location.href = themeLink('/'); }} style={{ cursor: 'pointer' }}>
+        <a href={themeLink('/')} className="growth-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
             <div style={{ width: '24px', height: '24px', background: 'var(--growth-neon)', borderRadius: '4px', transform: 'rotate(45deg)' }}></div>
             {brandLabel.endsWith('.') ? brandLabel.slice(0, -1) : brandLabel}<span>.</span>
-        </div>
+        </a>
         <MenuNav
           location="main_header"
           flat

@@ -148,7 +148,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="local-detail-kicker">Service Unavailable</div>
           <h1>Service could not be loaded.</h1>
           <p>{apiError || 'The requested local service does not exist or has been removed.'}</p>
-          <a href={themeLink('')} className="local-btn local-btn-primary">Return to Services</a>
+          <a href={themeLink('/')} className="local-btn local-btn-primary">Return to Services</a>
         </section>
       </main>
     );
@@ -156,7 +156,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="local-detail-page">
-      <a href={themeLink('')} className="local-detail-back">
+      <a href={themeLink('/')} className="local-detail-back">
         <span aria-hidden="true">&larr;</span>
         Back to Local Services
       </a>

@@ -4,9 +4,11 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 
 export const RunwayHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeLink = useEcommerceThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'ATELIERRunway');
   const seasonLabel = useThemeContent('header.season_label', 'AUTUMN / WINTER 26');
   const runwayIndex = brandLabel.toLowerCase().indexOf('runway');
@@ -15,9 +17,9 @@ export const RunwayHeader = () => {
 
   return (
     <header className="ef-header">
-      <div className="ef-logo">
+      <a className="ef-logo" href={themeLink('/')}>
         {brandPrimary}<span style={{ fontWeight: 400, fontStyle: 'italic' }}>{brandSecondary}</span>
-      </div>
+      </a>
       
       <button 
         className={`ef-hamburger ${isOpen ? 'ef-hamburger-open' : ''}`} 
@@ -68,7 +70,7 @@ export const EditorialLookCard = ({ name, price, image, lookNumber = "LOOK_07", 
       </div>
     </div>
     <div style={{ textAlign: 'center' }}>
-        <div className="ef-mono" style={{ marginBottom: '1rem', fontSize: '0.55rem', opacity: 0.4 }}>READY_TO_WEAR</div>
+        <div className="ef-mono" style={{ marginBottom: '1rem', fontSize: '0.55rem', opacity: 0.4 }}>Ready to Wear</div>
         <h3 style={{ fontFamily: 'var(--ef-serif)', fontSize: '1.75rem', fontWeight: 700, marginBottom: '0.75rem' }}>{name}</h3>
         <div style={{ fontSize: '0.9rem', color: 'var(--ef-champagne)', fontWeight: 700 }}>{price}</div>
     </div>
@@ -83,6 +85,7 @@ export const TrendHUD = ({ label, value }: { label: string, value: string }) => 
 );
 
 export const AtelierFooter = () => {
+    const themeLink = useEcommerceThemeLink();
     const brandLabel = useThemeContent('footer.brand_label', 'ATELIER');
     const footerDescription = useThemeContent(
         'footer.description',
@@ -91,7 +94,7 @@ export const AtelierFooter = () => {
 
     return (
     <footer className="ef-footer">
-        <div className="ef-logo" style={{ fontSize: '4rem', marginBottom: '6rem' }}>{brandLabel}</div>
+        <a className="ef-logo" href={themeLink('/')} style={{ fontSize: '4rem', marginBottom: '6rem', display: 'block', textDecoration: 'none' }}>{brandLabel}</a>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6rem', maxWidth: '1200px', margin: '0 auto', textAlign: 'left' }}>
             <div>
                 <div className="ef-mono" style={{ color: 'var(--ef-champagne)', marginBottom: '3.5rem' }}>PHILOSOPHY</div>

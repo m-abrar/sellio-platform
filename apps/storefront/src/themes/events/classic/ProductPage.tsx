@@ -140,7 +140,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="ecl-detail-kicker">Event Unavailable</div>
           <h1 className="ecl-serif">Performance could not be loaded.</h1>
           <p>{apiError || 'The requested event does not exist or has been removed.'}</p>
-          <a href={themeLink('')} className="ecl-btn-primary">Return to Repertoire</a>
+          <a href={themeLink('/')} className="ecl-btn-primary">Return to Repertoire</a>
         </section>
       </main>
     );
@@ -148,7 +148,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="ecl-detail-page">
-      <a href={themeLink('')} className="ecl-detail-back">&larr; Back to Repertoire</a>
+      <a href={themeLink('/')} className="ecl-detail-back">&larr; Back to Repertoire</a>
 
       {apiError && useFallback && (
         <div className="ecl-alert-slot">

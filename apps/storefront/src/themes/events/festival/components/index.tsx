@@ -122,7 +122,7 @@ export const NexusFooter = () => {
       'footer.description',
       "The heartbeat of live festival culture. Discover and book the world's most vibrant events in one place."
     );
-    const footerCopyright = useThemeContent('footer.copyright', '© 2026 NEONPulse. All rights reserved.');
+    const footerCopyright = useThemeContent('footer.copyright', '© 2026 Sellio. All rights reserved.');
 
     return (
         <footer className="eff-footer">

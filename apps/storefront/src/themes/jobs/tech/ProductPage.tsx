@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { TechJobCard } from './components';
 import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
 import { fetchJobDetail, resolveJobFailure } from '@/themes/jobs/shared/catalog';
@@ -15,7 +14,6 @@ import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 type TechJob = TechJobCardData;
 
 export default function ProductPage({ slug }: { slug: string }) {
-  const router = useRouter();
   const themeLink = useJobsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
   const [job, setJob] = useState<TechJob | null>(null);
@@ -149,7 +147,7 @@ export default function ProductPage({ slug }: { slug: string }) {
       <div className="jt-layout-base text-center" style={{ padding: '8rem 2rem', color: 'var(--jt-text-main)' }}>
         <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Developer Node Not Resolved</h2>
         <p style={{ color: 'var(--jt-text-muted)', margin: '2rem 0 4rem' }}>{apiError || 'The requested engineering opportunity could not be recovered from DevJobs registries.'}</p>
-        <button type="button" className="jt-btn jt-btn-primary" onClick={() => router.push(themeLink('/'))}>Back to Console</button>
+        <a href={themeLink('/')} className="jt-btn jt-btn-primary" style={{ textDecoration: 'none' }}>Back to Listings</a>
       </div>
     );
   }
@@ -162,27 +160,21 @@ export default function ProductPage({ slug }: { slug: string }) {
     <div className="jt-layout-base" style={{ padding: '0 6% 8rem', maxWidth: '1400px', margin: '0 auto' }}>
       
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3rem 0 4rem' }}>
-        <button 
-          type="button"
-          onClick={() => router.push(themeLink('/'))}
+        <a
+          href={themeLink('/')}
           style={{
-            background: 'transparent',
-            border: 'none',
             color: 'var(--jt-text-main)',
             fontWeight: 800,
             fontSize: '0.9rem',
-            cursor: 'pointer',
             fontFamily: 'var(--jt-font-mono)',
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
+            textDecoration: 'none',
           }}
         >
-          {`<-`} BACK_TO_CONSOLE
-        </button>
-        <div className="jt-mono" style={{ fontSize: '0.75rem', fontFamily: 'var(--jt-font-mono)', color: 'var(--jt-purple)', fontWeight: 800 }}>
-          OPPORTUNITY NODE // {job.slug.toUpperCase()}
-        </div>
+          ← Back to Listings
+        </a>
       </div>
 
       {apiError && useFallback && (
@@ -416,18 +408,9 @@ export default function ProductPage({ slug }: { slug: string }) {
         
         <div className="jt-job-list">
           {related.map((r, i) => (
-            <TechJobCard 
-              key={i} 
-              {...r} 
-              onClick={() => {
-                setApplicationReceipt(null);
-                setName('');
-                setEmail('');
-                setGithubUrl('');
-                setCoverNote('');
-                router.push(themeLink(`/product/${r.slug}`));
-              }}
-            />
+            <a key={i} href={themeLink(`/product/${r.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+              <TechJobCard {...r} />
+            </a>
           ))}
         </div>
       </section>

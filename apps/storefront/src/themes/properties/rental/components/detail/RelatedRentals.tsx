@@ -1,7 +1,6 @@
 'use client';
 
 import type { Property } from '@sellio/types';
-import { useRouter } from 'next/navigation';
 import { LeaseUnitCard } from '../index';
 import { useRentalThemeLink } from '../../hooks/useRentalThemeLink';
 import { mapPropertyToLeaseCard } from '../../property-utils';
@@ -12,7 +11,6 @@ interface RelatedRentalsProps {
 }
 
 export function RelatedRentals({ properties, onNavigate }: RelatedRentalsProps) {
-  const router = useRouter();
   const themeLink = useRentalThemeLink();
 
   if (!properties.length) return null;
@@ -25,16 +23,13 @@ export function RelatedRentals({ properties, onNavigate }: RelatedRentalsProps) 
         {properties.map((property, index) => {
           const card = mapPropertyToLeaseCard(property, index);
           return (
-            <LeaseUnitCard
-              key={card.slug}
-              {...card}
-              rating={4.5 + (property.id % 5) * 0.1}
-              reviews={20 + (property.id % 12) * 11}
-              onClick={() => {
-                onNavigate?.();
-                router.push(themeLink(`/product/${card.slug}`));
-              }}
-            />
+            <a key={card.slug} href={themeLink(`/product/${card.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }} onClick={onNavigate}>
+              <LeaseUnitCard
+                {...card}
+                rating={4.5 + (property.id % 5) * 0.1}
+                reviews={20 + (property.id % 12) * 11}
+              />
+            </a>
           );
         })}
       </div>

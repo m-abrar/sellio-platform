@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { Product } from '@sellio/types';
 import { EditorialLookCard, TrendHUD } from './components';
 import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
@@ -78,7 +77,6 @@ type FashionProduct = Product & {
 };
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useEcommerceThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
@@ -135,10 +133,6 @@ export default function Page() {
 
     return () => { isMounted = false; };
   }, [allowDemo]);
-
-  const handleCardClick = (slug: string) => {
-    router.push(themeLink(`/product/${slug}`));
-  };
 
   return (
     <div className="ef-section">
@@ -245,14 +239,14 @@ export default function Page() {
               const activeImage = item.image_url || item.media?.featured_image || `/themes/ecommerce/fashion/${(i % 6) + 11}.webp`;
 
               return (
-                <div key={item.slug || i} onClick={() => handleCardClick(item.slug)}>
+                <a key={item.slug || i} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
                   <EditorialLookCard
                     name={item.title}
                     price={priceFormatted}
                     image={activeImage}
                     lookNumber={`LOOK ${(i + 1).toString().padStart(2, '0')}`}
                   />
-                </div>
+                </a>
               );
             })
           )}

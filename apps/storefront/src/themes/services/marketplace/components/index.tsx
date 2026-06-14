@@ -27,7 +27,7 @@ export const MarketplaceHeader = () => {
   return (
     <header className="sm-header">
       <div className="sm-logo">
-        <a href={themeLink('')} style={{ color: 'inherit', textDecoration: 'none' }}>
+        <a href={themeLink('/')} style={{ color: 'inherit', textDecoration: 'none' }}>
           {brandPrimary}<span>{brandSecondary}</span>
         </a>
       </div>

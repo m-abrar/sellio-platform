@@ -80,7 +80,7 @@ export default function ClassifiedInquiryConfirmationPage({
         locationName="Inquiry sent"
         onLocationClick={() => undefined}
         onPostClick={() => window.open(adminCreateClassifiedUrl, '_blank', 'noopener,noreferrer')}
-        homeHref={themeLink('')}
+        homeHref={themeLink('/')}
       />
 
       <main className="cl-inquiry-page">
@@ -169,7 +169,7 @@ export default function ClassifiedInquiryConfirmationPage({
                       Back to listing
                     </a>
                   )}
-                  <a href={themeLink('')} className="cl-product-back-link">
+                  <a href={themeLink('/')} className="cl-product-back-link">
                     Browse neighborhood map
                   </a>
                   <a href={themeLink('/explore')} className="cl-product-back-link">

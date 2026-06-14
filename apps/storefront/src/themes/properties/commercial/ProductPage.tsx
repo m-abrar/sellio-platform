@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import { AssetRegistryCard } from './components';
 import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
@@ -17,7 +16,6 @@ const FALLBACK_ASSETS = [
 ];
 
 export default function ProductPage({ slug }: { slug: string }) {
-  const router = useRouter();
   const themeLink = usePropertyThemeLink();
   const [asset, setAsset] = useState<any>(null);
   const [related, setRelated] = useState<any[]>([]);
@@ -286,10 +284,9 @@ export default function ProductPage({ slug }: { slug: string }) {
   if (!asset) {
     return (
       <div className="pc-section text-center" style={{ padding: '12rem 2rem', color: 'var(--pc-carbon)' }}>
-        <div className="pc-mono" style={{ marginBottom: '1.5rem' }}>RESOLVE_NODE_NULL</div>
-        <h2 style={{ fontSize: '3rem', fontWeight: 900, textTransform: 'uppercase' }}>Asset Blueprints Unresolved</h2>
-        <p style={{ color: 'var(--pc-slate)', margin: '2rem 0 5rem', fontSize: '1.1rem' }}>The institutional real estate coordinates could not be recovered from the Sellio Ledger.</p>
-        <button className="pc-btn-primary" onClick={() => router.push(themeLink('/'))}>RETURN_TO_REGISTRY</button>
+        <h2 style={{ fontSize: '3rem', fontWeight: 900, textTransform: 'uppercase' }}>Property Not Found</h2>
+        <p style={{ color: 'var(--pc-slate)', margin: '2rem 0 5rem', fontSize: '1.1rem' }}>We could not locate this property listing. It may have been removed or the link may be incorrect.</p>
+        <a className="pc-btn-primary" href={themeLink('/')}>Back to Listings</a>
       </div>
     );
   }
@@ -299,27 +296,23 @@ export default function ProductPage({ slug }: { slug: string }) {
       
       {/* Return Navigation */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6rem', marginTop: '2rem' }}>
-        <button 
-          onClick={() => router.push(themeLink('/'))}
+        <a
+          href={themeLink('/')}
           style={{
             background: 'transparent',
-            border: 'none',
             color: 'var(--pc-carbon)',
             fontWeight: 800,
             fontSize: '0.8rem',
-            cursor: 'pointer',
             fontFamily: 'var(--pc-font)',
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            letterSpacing: '2px'
+            letterSpacing: '2px',
+            textDecoration: 'none'
           }}
         >
-          {`←`} RETURN_TO_REGISTRY
-        </button>
-        <div className="pc-mono" style={{ fontSize: '0.65rem' }}>
-          ASSET_LEDGER_NODE // {asset.id}
-        </div>
+          ← Back to Listings
+        </a>
       </div>
 
       {/* Diagnostics exception panel */}
@@ -562,23 +555,13 @@ export default function ProductPage({ slug }: { slug: string }) {
         <section style={{ marginTop: '12rem' }}>
           <div className="pc-mono" style={{ marginBottom: '1.5rem' }}>ALTERNATIVE_ブルー_PRINTS</div>
           <h2 style={{ fontSize: '3.5rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '1.5rem', letterSpacing: '-2px' }}>Suggested Assets</h2>
-          <p style={{ color: 'var(--pc-slate)', marginBottom: '5rem', fontSize: '1.1rem' }}>Alternative prime opportunities matching current classification ledger tags.</p>
+          <p style={{ color: 'var(--pc-slate)', marginBottom: '5rem', fontSize: '1.1rem' }}>Other commercial properties you may be interested in.</p>
           
           <div className="pc-asset-grid">
             {related.map((item, idx) => (
-              <AssetRegistryCard 
-                key={idx} 
-                {...item} 
-                onClick={() => {
-                  setAuditReceipt(null);
-                  setRepName('');
-                  setCorpEmail('');
-                  setCorpFirm('');
-                  setPreferredDate('');
-                  setTargetBudget('');
-                  router.push(themeLink(`/product/${item.slug}`));
-                }}
-              />
+              <a key={idx} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                <AssetRegistryCard {...item} />
+              </a>
             ))}
           </div>
         </section>

@@ -19,7 +19,7 @@ export const CorporateHeader = () => {
 
   return (
     <header className="jc-header">
-      <a href={themeLink('')} className="jc-logo">
+      <a href={themeLink('/')} className="jc-logo">
         <span style={{ color: 'var(--jc-blue-accent)' }}>{brandHighlight}</span>{brandRest}
       </a>
 
@@ -142,7 +142,7 @@ export const CorporateFooter = () => {
     <footer className="jc-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <a href={themeLink('')} className="jc-logo" style={{ marginBottom: '1rem' }}>
+                <a href={themeLink('/')} className="jc-logo" style={{ marginBottom: '1rem' }}>
                     <span style={{ color: 'var(--jc-blue-accent)' }}>{brandHighlight}</span>{brandRest}
                 </a>
                 <p style={{ color: 'var(--jc-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>{description}</p>

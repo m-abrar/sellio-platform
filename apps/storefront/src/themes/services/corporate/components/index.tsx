@@ -17,7 +17,7 @@ export const CorporateHeader = () => {
   return (
     <header className="sc-header">
       <div className="sc-logo">
-        <a href={themeLink('')} style={{ color: 'inherit', textDecoration: 'none' }}>
+        <a href={themeLink('/')} style={{ color: 'inherit', textDecoration: 'none' }}>
           <span className="text-primary">Corporate</span>{' '}
           <span style={{ color: 'var(--sc-text-dim)' }}>Services</span>
         </a>

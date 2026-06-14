@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { ClassifiedListing } from '@sellio/types';
 import { PremiumHeader, PremiumCard, PremiumFooter } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
@@ -48,7 +47,6 @@ const translateOpportunity = (item: ClassifiedListing): OpportunityItem => {
 const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
   const featuredHeaderTitle = useThemeContent('featured_header.title', '💎 Featured Investment Opportunities');
@@ -218,7 +216,7 @@ export default function Page() {
     <div className="classifieds-premium-wrapper">
       {/* High-Fidelity Premium Navbar Header */}
       <PremiumHeader 
-        homeHref={themeLink('')}
+        homeHref={themeLink('/')}
       />
 
       {/* Corporate Search Bar Banner */}
@@ -354,7 +352,7 @@ export default function Page() {
                   location={item.location}
                   image={item.image}
                   isVerified={item.isVerified}
-                  onViewDetails={() => router.push(themeLink(`/product/${item.slug}`))}
+                  viewDetailsHref={themeLink(`/product/${item.slug}`)}
                 />
               ))}
             </div>
@@ -432,7 +430,7 @@ export default function Page() {
                   location={item.location}
                   image={item.image}
                   isVerified={item.isVerified}
-                  onViewDetails={() => router.push(themeLink(`/product/${item.slug}`))}
+                  viewDetailsHref={themeLink(`/product/${item.slug}`)}
                 />
               ))}
             </div>

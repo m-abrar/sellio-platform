@@ -174,10 +174,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
   if (notFound || !job) {
     return (
       <div className="p-20 text-center" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <h2 style={{ fontFamily: 'var(--font-heading)', color: 'white' }}>Node Registry Error</h2>
-        <p style={{ color: 'var(--growth-dim)' }}>Job listing with slug {slug} could not be synchronized.</p>
+        <h2 style={{ fontFamily: 'var(--font-heading)', color: 'white' }}>Job Not Found</h2>
+        <p style={{ color: 'var(--growth-dim)' }}>This job listing could not be found or may have been removed.</p>
         <Link href={themeLink('/explore')} className="growth-btn-outline" style={{ display: 'inline-block', margin: '2rem auto', textDecoration: 'none' }}>
-          &larr; BACK_TO_CONSOLE
+          &larr; Back to Jobs
         </Link>
       </div>
     );
@@ -203,7 +203,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
               href={themeLink('/explore')}
               style={{ color: 'var(--growth-neon)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '2px' }}
             >
-              &larr; BACK_TO_CONSOLE
+              &larr; Back to Jobs
             </Link>
             <span style={{ color: 'var(--growth-dim)' }}>/</span>
             <span style={{ fontSize: '0.8rem', color: 'var(--growth-dim)', letterSpacing: '2px', fontWeight: 600 }}>

@@ -141,7 +141,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="crtv-detail-kicker">Creative Unavailable</div>
           <h1>Profile could not be loaded.</h1>
           <p>{apiError || 'The requested creative does not exist or has been removed.'}</p>
-          <a href={themeLink('')} className="crtv-btn crtv-btn-gradient">Return to Creatives</a>
+          <a href={themeLink('/')} className="crtv-btn crtv-btn-gradient">Return to Creatives</a>
         </section>
       </main>
     );
@@ -149,7 +149,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="crtv-detail-page">
-      <a href={themeLink('')} className="crtv-detail-back">
+      <a href={themeLink('/')} className="crtv-detail-back">
         <span aria-hidden="true">&larr;</span>
         Back to Creatives
       </a>

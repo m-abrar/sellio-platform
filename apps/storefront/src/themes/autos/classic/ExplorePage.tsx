@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+
 import type { Vehicle } from '@sellio/types';
 import { ClassicCarCard } from './components';
 import AutosExplorePage from '@/themes/autos/shared/AutosExplorePage';
@@ -13,7 +13,6 @@ import {
 } from '@/themes/autos/shared/vehicle-utils';
 
 function ClassicExploreCards() {
-  const router = useRouter();
   const themeLink = useAutosThemeLink();
 
   return (
@@ -29,14 +28,14 @@ function ClassicExploreCards() {
       primaryBtnClass="ac-btn ac-btn-cta"
       outlineBtnClass="ac-btn ac-btn-gold"
       renderVehicleCard={(car: Vehicle) => (
-        <ClassicCarCard
-          key={car.id}
-          title={car.title}
-          desc={getVehicleSpecLabel(car)}
-          price={formatVehiclePrice(car)}
-          image={getVehicleImage(car)}
-          onClick={() => router.push(themeLink(`/product/${car.slug}`))}
-        />
+        <a key={car.id} href={themeLink(`/product/${car.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+          <ClassicCarCard
+            title={car.title}
+            desc={getVehicleSpecLabel(car)}
+            price={formatVehiclePrice(car)}
+            image={getVehicleImage(car)}
+          />
+        </a>
       )}
     />
   );

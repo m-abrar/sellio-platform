@@ -104,10 +104,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }
   }, [slug, allowDemo]);
 
-  const handleCardClick = (targetSlug: string) => {
-    router.push(themeLink(`/product/${targetSlug}`));
-  };
-
   const scrollToInquiryForm = () => {
     document.getElementById('cd-deal-inquiry')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -203,9 +199,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <p style={{ color: 'var(--cd-text-muted)', marginBottom: '3rem' }}>
             {notFound
               ? 'The requested bargain listing is either expired or offline.'
-              : 'Connect your Sellio API or enable demo fallback to preview this theme.'}
+              : 'Check the API connection or refresh the page.'}
           </p>
-          <button onClick={() => router.push(themeLink('/'))} className="cd-btn-post">Return to Flash Feed</button>
+          <a href={themeLink('/')} className="cd-btn-post" style={{ textDecoration: 'none' }}>Return to Listings</a>
         </div>
         <DealsFooter />
       </div>
@@ -256,7 +252,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       <main style={{ padding: '0 5%', marginTop: '2rem' }}>
         {/* Breadcrumbs */}
         <div style={{ display: 'flex', gap: '8px', fontSize: '0.85rem', color: 'var(--cd-text-muted)', marginBottom: '1.5rem', fontWeight: 600 }}>
-          <span style={{ cursor: 'pointer' }} onClick={() => router.push(themeLink('/'))}>Feed</span>
+          <a href={themeLink('/')} style={{ color: 'inherit', textDecoration: 'none' }}>Feed</a>
           <span>&gt;</span>
           <span style={{ color: 'var(--cd-primary-red)', textTransform: 'capitalize' }}>{deal.taxonomy?.category || 'Bargains'}</span>
           <span>&gt;</span>
@@ -610,20 +606,20 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   : '0');
                 
                 return (
-                  <DealCard 
-                    key={idx}
-                    title={item.title}
-                    currentPrice={item.pricing?.formatted || `$${item.pricing?.sale_price || item.pricing?.base_price}`}
-                    originalPrice={`$${item.pricing?.base_price}`}
-                    discount={disc}
-                    image={item.media?.main_photo || ''}
-                    seller={item.seller?.name || 'DealDash'}
-                    isTopSeller={true}
-                    category={item.taxonomy?.category || 'all'}
-                    slug={item.slug}
-                    onClick={handleCardClick}
-                    isHotBargain={Number(disc) >= 42}
-                  />
+                  <a key={idx} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                    <DealCard
+                      title={item.title}
+                      currentPrice={item.pricing?.formatted || `$${item.pricing?.sale_price || item.pricing?.base_price}`}
+                      originalPrice={`$${item.pricing?.base_price}`}
+                      discount={disc}
+                      image={item.media?.main_photo || ''}
+                      seller={item.seller?.name || 'DealDash'}
+                      isTopSeller={true}
+                      category={item.taxonomy?.category || 'all'}
+                      slug={item.slug}
+                      isHotBargain={Number(disc) >= 42}
+                    />
+                  </a>
                 );
               })}
             </div>

@@ -118,6 +118,7 @@ export const BookingHUD = ({ label, value }: { label: string, value: string }) =
 );
 
 export const LegacyFooter = () => {
+    const themeLink = useEventsThemeLink();
     const brandLabel = useThemeContent('header.brand_label', 'LEGACYArts');
     const footerBrand = useThemeContent('footer.brand_label', brandLabel);
     const footerDescription = useThemeContent(
@@ -130,7 +131,7 @@ export const LegacyFooter = () => {
         <footer className="ecl-footer">
             <div className="ecl-footer-grid">
                 <div>
-                    <div className="ecl-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem' }}>{footerBrand}</div>
+                    <a className="ecl-logo" href={themeLink('/')} style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem', display: 'block', textDecoration: 'none' }}>{footerBrand}</a>
                     <p style={{ opacity: 0.3, lineHeight: 2, fontSize: '1rem', maxWidth: '400px', color: 'white' }}>
                         {footerDescription}
                     </p>

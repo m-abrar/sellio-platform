@@ -139,7 +139,7 @@ export const LuxuryFooter = () => {
           fontSize: '0.85rem',
         }}
       >
-        © 2026 Velvet Wheels. All rights reserved.
+        © 2026 Sellio. All rights reserved.
       </div>
     </footer>
   );

@@ -120,7 +120,7 @@ export const VibrantFooter = () => {
       'footer.description',
       "The home of creative events. Discover and book experimental art, music, and culture experiences near you."
     );
-    const footerCopyright = useThemeContent('footer.copyright', '© 2026 CREATIVENode. All rights reserved.');
+    const footerCopyright = useThemeContent('footer.copyright', '© 2026 Sellio. All rights reserved.');
 
     return (
         <footer className="evc-footer">

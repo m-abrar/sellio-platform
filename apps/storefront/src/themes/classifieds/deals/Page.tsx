@@ -201,11 +201,7 @@ export default function Page() {
     }, 600);
   };
 
-  const handleCardClick = (slug: string) => {
-    window.location.href = themeLink(`/product/${slug}`);
-  };
-
-  const scrollToDealsGrid = () => {
+const scrollToDealsGrid = () => {
     document.getElementById('cd-limited-deals')?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -337,20 +333,20 @@ export default function Page() {
                 </div>
               ) : (
                 hotBargainsList.map((item, idx) => (
-                  <DealCard 
-                    key={idx} 
-                    title={item.title}
-                    currentPrice={item.pricing?.formatted || `$${item.pricing?.sale_price || item.pricing?.base_price}`}
-                    originalPrice={`$${item.pricing?.base_price}`}
-                    discount={item.pricing?.discount || getDisc(item).toString()}
-                    image={item.media?.main_photo || ''}
-                    seller={item.seller?.name || 'GadgetPro'}
-                    isTopSeller={true}
-                    category={item.taxonomy?.category || 'all'}
-                    slug={item.slug}
-                    onClick={handleCardClick}
-                    isHotBargain={true}
-                  />
+                  <a key={idx} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                    <DealCard
+                      title={item.title}
+                      currentPrice={item.pricing?.formatted || `$${item.pricing?.sale_price || item.pricing?.base_price}`}
+                      originalPrice={`$${item.pricing?.base_price}`}
+                      discount={item.pricing?.discount || getDisc(item).toString()}
+                      image={item.media?.main_photo || ''}
+                      seller={item.seller?.name || 'GadgetPro'}
+                      isTopSeller={true}
+                      category={item.taxonomy?.category || 'all'}
+                      slug={item.slug}
+                      isHotBargain={true}
+                    />
+                  </a>
                 ))
               )}
             </div>
@@ -400,19 +396,19 @@ export default function Page() {
             ) : (
               <div className="cd-deals-grid">
                 {filteredDeals.slice(0, visibleCount).map((deal, idx) => (
-                  <DealCard 
-                    key={idx} 
-                    title={deal.title}
-                    currentPrice={deal.pricing?.formatted || `$${deal.pricing?.sale_price || deal.pricing?.base_price}`}
-                    originalPrice={`$${deal.pricing?.base_price}`}
-                    discount={deal.pricing?.discount || getDisc(deal).toString()}
-                    image={deal.media?.main_photo || ''}
-                    seller={deal.seller?.name || 'GadgetPro'}
-                    isTopSeller={true}
-                    category={deal.taxonomy?.category || 'all'}
-                    slug={deal.slug}
-                    onClick={handleCardClick}
-                  />
+                  <a key={idx} href={themeLink(`/product/${deal.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                    <DealCard
+                      title={deal.title}
+                      currentPrice={deal.pricing?.formatted || `$${deal.pricing?.sale_price || deal.pricing?.base_price}`}
+                      originalPrice={`$${deal.pricing?.base_price}`}
+                      discount={deal.pricing?.discount || getDisc(deal).toString()}
+                      image={deal.media?.main_photo || ''}
+                      seller={deal.seller?.name || 'GadgetPro'}
+                      isTopSeller={true}
+                      category={deal.taxonomy?.category || 'all'}
+                      slug={deal.slug}
+                    />
+                  </a>
                 ))}
               </div>
             )}

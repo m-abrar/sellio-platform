@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { Vehicle } from '@sellio/types';
 import { ElectricHeader, EVCard, IconBox, ElectricFooter } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
@@ -79,7 +78,6 @@ const translateVehicleToEV = (car: Vehicle): EVItem => {
 };
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useAutosThemeLink();
   const allowDemo = useDemoFallbackAllowed();
   const heroTitle = useThemeContent('hero.title', 'The Future is Electric');
@@ -178,10 +176,6 @@ export default function Page() {
   const compareList = filteredEvs.slice(0, 3).length > 0 
     ? filteredEvs.slice(0, 3) 
     : vehicles.slice(0, 3);
-
-  const handleCardClick = (slug: string) => {
-    router.push(themeLink(`/product/${slug}`));
-  };
 
   return (
     <div className="autos-electric-wrapper">
@@ -298,11 +292,9 @@ export default function Page() {
         ) : (
           <div className="ev-grid">
             {filteredEvs.map((ev) => (
-              <EVCard 
-                key={ev.id} 
-                {...ev} 
-                onClick={() => handleCardClick(ev.slug)}
-              />
+              <a key={ev.id} href={themeLink(`/product/${ev.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                <EVCard {...ev} />
+              </a>
             ))}
           </div>
         )}
@@ -335,9 +327,9 @@ export default function Page() {
                 className="ev-compare-col" 
                 style={{ borderRight: index === compareList.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.1)' }}
               >
-                <div className="ev-compare-header" style={{ cursor: 'pointer' }} onClick={() => handleCardClick(ev.slug)}>
+                <a href={themeLink(`/product/${ev.slug}`)} className="ev-compare-header" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
                   {ev.title.replace(/^\d{4}\s/, '')}
-                </div>
+                </a>
                 <div className="ev-compare-cell">{ev.price.split(' ')[0]}</div>
                 <div className="ev-compare-cell">{ev.range.toLowerCase()}</div>
                 <div className="ev-compare-cell">{ev.battery}</div>

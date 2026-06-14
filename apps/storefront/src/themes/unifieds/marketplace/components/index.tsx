@@ -163,7 +163,7 @@ export const MarketplaceFooter = () => {
       />
     </div>
     <div className="um-footer-bottom">
-      <span>Copyright 2026 Sellio MarketHub. All rights reserved.</span>
+      <span>© 2026 Sellio MarketHub. All rights reserved.</span>
       <MenuNav
         location="social_footer"
         flat

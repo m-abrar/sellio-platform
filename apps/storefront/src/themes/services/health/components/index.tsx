@@ -155,7 +155,7 @@ export const ClinicFooter = () => {
             />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
-            <div className="sh-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 VitalityLabs. All rights reserved.</div>
+            <div className="sh-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
             <div style={{ display: 'flex', gap: '6rem', flexWrap: 'wrap' }}>
                 <MenuNav
                     location="social_footer"

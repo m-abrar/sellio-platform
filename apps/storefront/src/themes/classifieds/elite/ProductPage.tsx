@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import type { ClassifiedListing } from '@sellio/types';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
 import {
@@ -41,7 +40,6 @@ const getAssetGrade = (item: ClassifiedListing): string => {
 };
 
 export default function ProductPage({ slug }: { slug: string }) {
-  const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
@@ -170,11 +168,6 @@ export default function ProductPage({ slug }: { slug: string }) {
     });
   };
 
-  const handleBackNavigation = (e: React.MouseEvent) => {
-    e.preventDefault();
-    router.push(themeLink(''));
-  };
-
   if (loading) {
     return (
       <div className="elite-product-wrapper">
@@ -210,13 +203,13 @@ export default function ProductPage({ slug }: { slug: string }) {
           <h3 style={{ fontFamily: 'var(--prem-serif)', color: '#ffffff' }}>
             {notFound ? 'Asset not found in private registry.' : 'Unable to load private vault listing.'}
           </h3>
-          <button
+          <a
+            href={themeLink('/')}
             className="elite-modal-cta"
-            style={{ marginTop: '1.25rem' }}
-            onClick={() => router.push(themeLink(''))}
+            style={{ marginTop: '1.25rem', textDecoration: 'none', display: 'inline-block' }}
           >
-            Return to Private Vault Catalog
-          </button>
+            Return to Catalog
+          </a>
         </div>
       </div>
     );
@@ -226,8 +219,8 @@ export default function ProductPage({ slug }: { slug: string }) {
     <div className="elite-product-wrapper">
       <div className="elite-product-container">
         <div>
-          <a href="#" className="elite-product-back-link" onClick={handleBackNavigation}>
-            &larr; Return to Private Vault Catalog
+          <a href={themeLink('/')} className="elite-product-back-link">
+            &larr; Return to Catalog
           </a>
         </div>
 
@@ -392,10 +385,11 @@ export default function ProductPage({ slug }: { slug: string }) {
             <h3 className="elite-related-title">🏺 Other High-Value Vaults</h3>
             <div className="elite-related-grid">
               {related.map((relItem) => (
-                <div
+                <a
                   key={relItem.id}
+                  href={themeLink(`/product/${relItem.slug}`)}
                   className="elite-related-card"
-                  onClick={() => router.push(themeLink(`/product/${relItem.slug}`))}
+                  style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                 >
                   <div className="elite-related-img-wrap">
                     <img src={relItem.media?.thumbnail || relItem.media?.main_photo || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=400'} className="elite-related-img" alt={relItem.title} />
@@ -410,7 +404,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                       <span style={{ fontSize: '0.7rem', color: 'var(--prem-muted)', fontWeight: 800 }}>📍 {getAssetLocation(relItem).split(',')[0]}</span>
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>

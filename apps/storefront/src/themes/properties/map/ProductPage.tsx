@@ -112,7 +112,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="pm-detail-kicker">Node Unavailable</div>
           <h1>Registry node could not be loaded.</h1>
           <p>{errorMessage}</p>
-          <a href={themeLink('')} className="pm-detail-btn">Return to Map Registry</a>
+          <a href={themeLink('/')} className="pm-detail-btn">Return to Map Registry</a>
         </section>
       </main>
     );
@@ -120,7 +120,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="pm-detail-page">
-      <a href={themeLink('')} className="pm-detail-back">&larr; Back to Spatial Registry</a>
+      <a href={themeLink('/')} className="pm-detail-back">&larr; Back to Spatial Registry</a>
       <section className="pm-detail-grid">
         <div className="pm-detail-media"><img src={getPropertyImage(property)} alt={property.title} /></div>
         <article className="pm-detail-panel">

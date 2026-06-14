@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { MarketGrid, LiquidSyncBar } from './components';
@@ -73,7 +72,6 @@ function productToListing(product: Product): DisplayListing {
 }
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = useUnifiedThemeLink();
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
@@ -165,12 +163,12 @@ export default function Page() {
           </form>
 
           <div className="um-hero-actions">
-            <button type="button" className="um-btn-primary" onClick={() => router.push(themeLink('/explore'))}>
+            <a className="um-btn-primary" href={themeLink('/explore')}>
               {heroPrimaryCtaLabel}
-            </button>
-            <button type="button" className="um-btn-secondary" onClick={() => router.push(themeLink('/explore#categories'))}>
+            </a>
+            <a className="um-btn-secondary" href={themeLink('/explore#categories')}>
               {heroSecondaryCtaLabel}
-            </button>
+            </a>
           </div>
 
           <div className="um-hero-stats" aria-label="Marketplace snapshot">
@@ -264,9 +262,8 @@ export default function Page() {
           </div>
         ) : listingError && products.length === 0 ? (
           <div className="um-listing-state" role="status">
-            <div className="um-section-kicker">Demo fallback active</div>
             <h3>Live listings could not be loaded.</h3>
-            <p>{listingError}</p>
+            <p>Check the API connection or refresh the page.</p>
           </div>
         ) : (
           <div className="um-listings-grid">
@@ -325,9 +322,9 @@ export default function Page() {
       <section className="um-final-cta" aria-labelledby="um-final-cta-title">
         <h2 id="um-final-cta-title">{featuredTitle}</h2>
         <p>{featuredDescription}</p>
-        <button type="button" className="um-btn-primary" onClick={() => router.push(themeLink('/explore'))}>
+        <a className="um-btn-primary" href={themeLink('/explore')}>
           Browse the marketplace
-        </button>
+        </a>
       </section>
     </div>
   );

@@ -92,7 +92,7 @@ export const ElectricFooter = () => {
     const brandLabel = useThemeContent('header.brand_label', 'EVOLVE');
     const brandHighlight = useThemeContent('header.brand_highlight', 'OLVE');
     const footerDescription = useThemeContent('footer.description', 'Driving the future of sustainable mobility, one electric vehicle at a time.');
-    const footerCopyright = useThemeContent('footer.copyright', '2026 EVOLVE Marketplace. All rights reserved. Powering the electric revolution.');
+    const footerCopyright = useThemeContent('footer.copyright', '2026 Sellio. All rights reserved.');
 
     return (
     <footer className="ev-footer">

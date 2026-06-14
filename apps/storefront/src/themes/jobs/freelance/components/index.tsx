@@ -133,7 +133,7 @@ export const FreelanceFooter = () => {
             />
         </div>
         <div style={{ borderTop: '1px solid var(--jf-border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', color: 'var(--jf-text-muted)', fontSize: '0.85rem' }}>
-            <span>© 2026 GigHive. All rights reserved.</span>
+            <span>© 2026 Sellio. All rights reserved.</span>
             <div style={{ display: 'flex', gap: '1rem' }}>
                 <span>🌐 English</span>
                 <span>$ USD</span>

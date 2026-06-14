@@ -18,12 +18,8 @@ interface EstateCardProps {
 const EstateCard = ({ title, price, location, tag, image, slug }: EstateCardProps) => {
     const themeLink = usePropertyThemeLink();
 
-    const handleClick = () => {
-        window.location.href = themeLink(`/product/${slug}`);
-    };
-
     return (
-        <div className="estate-card-premium" onClick={handleClick}>
+        <a href={themeLink(`/product/${slug}`)} className="estate-card-premium" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
             <div style={{ overflow: 'hidden' }}>
                 <img src={image} alt={title} className="estate-card-img" />
             </div>
@@ -35,7 +31,7 @@ const EstateCard = ({ title, price, location, tag, image, slug }: EstateCardProp
                     <span style={{ fontSize: '0.8rem', color: '#888', fontWeight: 600 }}>{location.toUpperCase()}</span>
                 </div>
             </div>
-        </div>
+        </a>
     );
 };
 

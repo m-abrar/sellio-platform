@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { ClassifiedListing } from '@sellio/types';
 import { PremiumHeader, PremiumFooter } from './components';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
@@ -49,7 +48,6 @@ const translateOpportunity = (item: ClassifiedListing): OpportunityItem => {
 };
 
 export default function ProductPage({ slug }: { slug: string }) {
-  const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
@@ -181,11 +179,6 @@ export default function ProductPage({ slug }: { slug: string }) {
     });
   };
 
-  const handleBackNavigation = (e: React.MouseEvent) => {
-    e.preventDefault();
-    router.push(themeLink(''));
-  };
-
   // Generate premium opportunity spec multipliers based on category
   const getEbitdaMultiple = (cat: string) => {
     if (cat === 'tech') return '6.8x Multiple';
@@ -211,14 +204,14 @@ export default function ProductPage({ slug }: { slug: string }) {
 
   return (
     <div className="cp-product-wrapper">
-      <PremiumHeader 
-        homeHref={themeLink('')}
+      <PremiumHeader
+        homeHref={themeLink('/')}
       />
 
       <div className="cp-product-container">
         <div>
-          <a href={themeLink('')} className="cp-product-back-link" onClick={handleBackNavigation}>
-            &larr; Return to M&A Investment Catalog
+          <a href={themeLink('/')} className="cp-product-back-link">
+            &larr; Return to Catalog
           </a>
         </div>
 
@@ -426,10 +419,11 @@ export default function ProductPage({ slug }: { slug: string }) {
                 <h3 className="cp-related-title">💼 Related Acquisition Prospects</h3>
                 <div className="cp-related-grid">
                   {related.map((relItem) => (
-                    <div 
-                      key={relItem.id} 
+                    <a
+                      key={relItem.id}
+                      href={themeLink(`/product/${relItem.slug}`)}
                       className="cp-related-card"
-                      onClick={() => router.push(themeLink(`/product/${relItem.slug}`))}
+                      style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                     >
                       <div className="cp-related-img-wrap">
                         <img src={relItem.image} className="cp-related-img" alt={relItem.title} />
@@ -444,7 +438,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                           <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>📍 {relItem.location.split(',')[0]}</span>
                         </div>
                       </div>
-                    </div>
+                    </a>
                   ))}
                 </div>
               </div>

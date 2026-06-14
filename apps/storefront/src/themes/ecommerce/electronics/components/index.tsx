@@ -80,11 +80,11 @@ type ProductCardProps = {
     oldPrice?: string;
     image: string;
     badge?: string;
-    onClick?: () => void;
+    href?: string;
 };
 
-export const ProductCard = ({ title, category, price, oldPrice, image, badge, onClick }: ProductCardProps) => (
-    <div className="el-product-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
+export const ProductCard = ({ title, category, price, oldPrice, image, badge, href }: ProductCardProps) => (
+    <a href={href} className="el-product-card" style={{ cursor: href ? 'pointer' : 'default', textDecoration: 'none', color: 'inherit', display: 'block' }}>
         {badge && <span className="el-badge">{badge}</span>}
         <div className="el-product-img-wrap">
             <img src={image} className="el-product-img" alt={title} />
@@ -96,19 +96,15 @@ export const ProductCard = ({ title, category, price, oldPrice, image, badge, on
                 <span className="el-price">{price}</span>
                 {oldPrice && <span className="el-price-old">{oldPrice}</span>}
             </div>
-            <button 
-                className="el-add-cart" 
+            <button
+                className="el-add-cart"
                 title="Add to Cart"
-                onClick={(e) => {
-                    if (onClick) {
-                        e.stopPropagation();
-                    }
-                }}
+                onClick={(e) => e.stopPropagation()}
             >
                 +
             </button>
         </div>
-    </div>
+    </a>
 );
 
 type SpecFeatureProps = {
@@ -135,7 +131,7 @@ export const ElectronicsFooter = () => {
     const newsletterDescription = useThemeContent('footer.newsletter_description', 'Get updates on latest drops and tech news.');
     const emailPlaceholder = useThemeContent('footer.email_placeholder', 'Email Address');
     const subscribeLabel = useThemeContent('footer.subscribe_label', '→');
-    const copyright = useThemeContent('footer.copyright', '© 2026 NeuralGear Electronics. All rights reserved.');
+    const copyright = useThemeContent('footer.copyright', '© 2026 Sellio. All rights reserved.');
 
     return (
     <footer className="el-footer">

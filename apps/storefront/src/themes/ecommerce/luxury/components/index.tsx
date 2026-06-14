@@ -90,11 +90,12 @@ export const LuxuryProduct = ({ title, price, image }: LuxuryProductProps) => {
 };
 
 export const LuxuryFooter = () => {
+    const themeLink = useEcommerceThemeLink();
     const brandLabel = useThemeContent('header.brand_label', 'AURELIA');
     const description = useThemeContent('footer.description', 'Subscribe to receive updates on exclusive collections, private events, and our latest creations.');
     const emailPlaceholder = useThemeContent('footer.email_placeholder', 'Email Address');
     const subscribeLabel = useThemeContent('footer.subscribe_label', 'Subscribe');
-    const copyright = useThemeContent('footer.copyright', '© 2026 Aurelia Maison. All Rights Reserved.');
+    const copyright = useThemeContent('footer.copyright', '© 2026 Sellio. All rights reserved.');
 
     return (
     <footer className="ecl-footer">
@@ -107,7 +108,7 @@ export const LuxuryFooter = () => {
                 linkClassName=""
             />
             <div>
-                <h2 className="ecl-logo" style={{ color: 'var(--ecl-bg-dark)', marginBottom: '1.5rem', display: 'block' }}>{brandLabel}</h2>
+                <a className="ecl-logo" href={themeLink('/')} style={{ color: 'var(--ecl-bg-dark)', marginBottom: '1.5rem', display: 'block', textDecoration: 'none' }}>{brandLabel}</a>
                 <p style={{ color: 'var(--ecl-text-muted)', fontSize: '0.9rem', lineHeight: 1.8, marginBottom: '2rem' }}>{description}</p>
                 <div style={{ borderBottom: '1px solid var(--ecl-border)', display: 'flex', paddingBottom: '0.5rem' }}>
                     <input type="email" placeholder={emailPlaceholder} style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.9rem' }} />

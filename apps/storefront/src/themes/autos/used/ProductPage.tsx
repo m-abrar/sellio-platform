@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import type { Vehicle } from '@sellio/types';
 import { UsedCarCard } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
@@ -114,7 +113,6 @@ const translateVehicle = (rawItem: Vehicle): UsedCarItem => {
 };
 
 export default function ProductPage({ slug }: { slug: string }) {
-  const router = useRouter();
   const themeLink = useAutosThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
@@ -248,7 +246,7 @@ export default function ProductPage({ slug }: { slug: string }) {
         <span style={{ fontSize: '3rem' }}>⚠️</span>
         <h3 style={{ color: 'var(--us-blue)', fontWeight: 700, marginTop: '1rem' }}>Vehicle Not Found</h3>
         <p style={{ color: '#666' }}>We couldn't locate the specified vehicle listing.</p>
-        <button onClick={() => router.push(themeLink('/'))} className="us-btn us-btn-orange">Return to Showroom</button>
+        <a href={themeLink('/')} className="us-btn us-btn-orange" style={{ textDecoration: 'none', display: 'inline-block' }}>Return to Showroom</a>
       </div>
     );
   }
@@ -257,12 +255,12 @@ export default function ProductPage({ slug }: { slug: string }) {
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 5%' }}>
       {/* Back to Catalog Breadcrumb */}
       <div style={{ marginBottom: '2rem' }}>
-        <button 
-          onClick={() => router.push(themeLink('/'))} 
-          style={{ background: 'none', border: 'none', color: 'var(--us-blue)', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem', padding: 0 }}
+        <a
+          href={themeLink('/')}
+          style={{ color: 'var(--us-blue)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem', textDecoration: 'none' }}
         >
-          ← Back to Used Showroom
-        </button>
+          ← Back to Showroom
+        </a>
       </div>
 
       {useFallback && apiError && (
@@ -488,11 +486,9 @@ export default function ProductPage({ slug }: { slug: string }) {
           <h3 className="us-text-blue us-fw-bold" style={{ fontSize: '1.8rem', marginBottom: '2rem' }}>Related Vehicles You Might Like</h3>
           <div className="us-grid">
             {related.map(item => (
-              <UsedCarCard 
-                key={item.id} 
-                {...item} 
-                onClick={() => router.push(themeLink(`/product/${item.slug}`))}
-              />
+              <a key={item.id} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                <UsedCarCard {...item} />
+              </a>
             ))}
           </div>
         </section>

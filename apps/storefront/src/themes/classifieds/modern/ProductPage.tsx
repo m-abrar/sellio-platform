@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import type { ClassifiedListing } from '@sellio/types';
 import { ModernHeader, ModernCard, ModernFooter } from './components';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
@@ -20,7 +19,6 @@ interface ProductPageProps {
 }
 
 export default function ProductPage({ slug }: ProductPageProps) {
-  const router = useRouter();
   const themeLink = useClassifiedsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
   const [listing, setListing] = useState<ClassifiedListing | null>(null);
@@ -144,9 +142,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
         <p style={{ color: 'var(--cm-text-muted)', marginBottom: '2rem' }}>
           {notFound
             ? 'The requested listing was not found.'
-            : 'Connect your Sellio API or enable demo fallback to preview this theme.'}
+            : 'Check the API connection or refresh the page.'}
         </p>
-        <button className="cm-btn cm-btn-primary" onClick={() => router.push(themeLink('/'))}>Back to Catalog</button>
+        <a className="cm-btn cm-btn-primary" href={themeLink('/')}>Back to Catalog</a>
         <ModernFooter />
       </div>
     );
@@ -235,7 +233,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
       <main style={{ padding: '3rem 6%', maxWidth: '1400px', margin: '0 auto' }}>
         <div style={{ display: 'flex', gap: '8px', fontSize: '0.85rem', fontWeight: 600, color: '#8892b0', marginBottom: '2.5rem', textTransform: 'capitalize' }}>
-          <span style={{ cursor: 'pointer' }} onClick={() => router.push(themeLink('/'))}>Catalog Home</span>
+          <a href={themeLink('/')} style={{ color: 'inherit', textDecoration: 'none' }}>Catalog Home</a>
           <span>/</span>
           <span style={{ color: 'var(--cm-accent-cyan)' }}>{listing.taxonomy?.category || 'Bargains'}</span>
           <span>/</span>
@@ -344,7 +342,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
               {relatedListings.map((item) => (
-                <div key={item.id} style={{ cursor: 'pointer' }} onClick={() => router.push(themeLink(`/product/${item.slug}`))}>
+                <a key={item.id} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
                   <ModernCard
                     title={item.title}
                     price={item.pricing?.formatted_short || item.pricing?.formatted || `$${item.pricing?.sale_price || item.pricing?.base_price}`}
@@ -355,11 +353,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     isRecent={item.status?.is_new_listing}
                     isSale={item.pricing?.is_on_sale}
                     isFavorite={false}
-                    onQuickView={() => router.push(themeLink(`/product/${item.slug}`))}
                     onToggleFavorite={() => {}}
                     onShare={() => {}}
                   />
-                </div>
+                </a>
               ))}
             </div>
           </section>
