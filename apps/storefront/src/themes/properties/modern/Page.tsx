@@ -143,6 +143,20 @@ export default function Page() {
 
       <SkylineSyncBar nodeCount={nodeCount || structureItems.length} />
 
+      <section className="urban-feature-band" aria-label="Property search advantages">
+        {[
+          ['Verified pricing', 'Compare rent, sale price, and key listing terms before opening a detail page.'],
+          ['Useful shortlists', 'Start with a curated homepage edit, then move into the full archive when ready.'],
+          ['Agent-ready details', 'Each property detail page is built around inquiry, booking, and next-step context.'],
+        ].map(([title, description]) => (
+          <article className="urban-feature-card" key={title}>
+            <span className="urban-feature-card__mark" aria-hidden="true" />
+            <h3>{title}</h3>
+            <p>{description}</p>
+          </article>
+        ))}
+      </section>
+
       {apiError && useFallback && (
         <div className="pm-home-alert-slot">
           <CatalogRegistryAlert variant="demo" error={apiError} />
@@ -234,6 +248,9 @@ export default function Page() {
           </p>
           <a href={themeLink('/explore')} className="urban-btn-primary urban-final-cta-btn urban-hero-cta-link">
             {useThemeContent('cta.button_label', 'Search properties')}
+          </a>
+          <a href={themeLink('/explore?mode=rental')} className="urban-final-cta-secondary">
+            View rentals
           </a>
         </div>
       </section>
