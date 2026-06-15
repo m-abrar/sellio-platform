@@ -52,7 +52,7 @@ class ContentController extends Controller
         $bladeScope = config('content.blade_scope', 'laravel_blade');
         $contentScopes = array_unique(array_merge(
             [$bladeScope],
-            ['properties_classic', 'events_music', 'ecommerce_fashion', 'services_marketplace', 'autos_luxury', 'jobs_startup', 'classifieds_general', 'events_classic', 'autos_classic', 'autos_modern', 'autos_used', 'events_creative', 'events_festival', 'autos_electric', 'events_corporate', 'jobs_tech', 'jobs_corporate', 'ecommerce_default', 'ecommerce_electronics', 'ecommerce_luxury']
+            ['properties_classic', 'events_music', 'ecommerce_fashion', 'services_marketplace', 'autos_luxury', 'jobs_startup', 'classifieds_general', 'events_classic', 'autos_classic', 'autos_modern', 'autos_used', 'events_creative', 'events_festival', 'autos_electric', 'events_corporate', 'jobs_tech', 'jobs_corporate', 'ecommerce_default', 'ecommerce_b2b', 'ecommerce_electronics', 'ecommerce_luxury']
         ));
 
         foreach ($contentScopes as $contentScope) {
@@ -643,6 +643,25 @@ class ContentController extends Controller
                 ['section' => 'footer', 'content_key' => 'brand_label', 'input_type' => 'text', 'value' => 'SELLIO'],
                 ['section' => 'footer', 'content_key' => 'description', 'input_type' => 'textarea', 'value' => 'A flexible ecommerce storefront for curated products, fast checkout, seller-managed inventory, and polished customer discovery.'],
                 ['section' => 'footer', 'content_key' => 'copyright', 'input_type' => 'text', 'value' => '(c) 2026 Sellio Shop. All rights reserved.'],
+            ],
+            'ecommerce_b2b' => [
+                ['section' => 'header', 'content_key' => 'brand_label', 'input_type' => 'text', 'value' => 'SupplyDesk'],
+                ['section' => 'hero', 'content_key' => 'eyebrow', 'input_type' => 'text', 'value' => 'B2B catalog and procurement'],
+                ['section' => 'hero', 'content_key' => 'title', 'input_type' => 'textarea', 'value' => "Wholesale catalog\nbuilt for RFQs."],
+                ['section' => 'hero', 'content_key' => 'description', 'input_type' => 'textarea', 'value' => 'A catalog-first storefront for distributors, manufacturers, and wholesale suppliers where buyers request quotes instead of checking out instantly.'],
+                ['section' => 'hero', 'content_key' => 'primary_cta_label', 'input_type' => 'text', 'value' => 'Browse catalog'],
+                ['section' => 'hero', 'content_key' => 'secondary_cta_label', 'input_type' => 'text', 'value' => 'Create RFQ'],
+                ['section' => 'collection', 'content_key' => 'title', 'input_type' => 'text', 'value' => 'Featured catalog'],
+                ['section' => 'collection', 'content_key' => 'description', 'input_type' => 'textarea', 'value' => 'Products stay easy to scan, compare, and qualify before a buyer starts a quote request.'],
+                ['section' => 'sync', 'content_key' => 'offline_kicker', 'input_type' => 'text', 'value' => 'Catalog unavailable'],
+                ['section' => 'sync', 'content_key' => 'offline_title', 'input_type' => 'text', 'value' => 'Products could not be loaded.'],
+                ['section' => 'empty', 'content_key' => 'title', 'input_type' => 'text', 'value' => 'No catalog products are published yet.'],
+                ['section' => 'empty', 'content_key' => 'description', 'input_type' => 'textarea', 'value' => 'Add product records in the admin panel and they will appear here.'],
+                ['section' => 'rfq', 'content_key' => 'title', 'input_type' => 'text', 'value' => 'RFQ intake for serious buyers'],
+                ['section' => 'rfq', 'content_key' => 'description', 'input_type' => 'textarea', 'value' => 'Capture company profile, requested quantities, destination, timeline, files, and internal notes before routing the request to the seller.'],
+                ['section' => 'footer', 'content_key' => 'brand_label', 'input_type' => 'text', 'value' => 'SupplyDesk'],
+                ['section' => 'footer', 'content_key' => 'description', 'input_type' => 'textarea', 'value' => 'A B2B catalog storefront for wholesale buyers, procurement teams, quote requests, and specification-led product discovery.'],
+                ['section' => 'footer', 'content_key' => 'copyright', 'input_type' => 'text', 'value' => '(c) 2026 SupplyDesk. All rights reserved.'],
             ],
             'ecommerce_electronics' => [
                 ['section' => 'header', 'content_key' => 'brand_label', 'input_type' => 'text', 'value' => 'NEURALGEAR'],

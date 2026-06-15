@@ -119,6 +119,15 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
       ));
     }
 
+    if (themeKey === 'ecommerce_b2b') {
+      return footerMenu(location, 'Main Header Menu', links(
+        ['Catalog', '/explore'],
+        ['Industries', '/explore'],
+        ['RFQ Flow', '/#b2b-rfq'],
+        ['Procurement', '/explore'],
+      ));
+    }
+
     if (themeKey === 'ecommerce_fashion') {
       return footerMenu(location, 'Main Header Menu', links(
         ['New Arrivals', '/explore?sort=latest'],
@@ -136,6 +145,10 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
       return footerMenu(location, 'Utility Header', links(['Track Order', '/cart'], ['Support', '/explore']));
     }
 
+    if (themeKey === 'ecommerce_b2b') {
+      return footerMenu(location, 'Utility Header', links(['Request Quote', '/#b2b-rfq'], ['Supplier Login', '#']));
+    }
+
     if (themeKey === 'ecommerce_fashion') {
       return footerMenu(location, 'Utility Header', links(['Fitting Guide', '/explore'], ['Client Care', '/cart']));
     }
@@ -146,6 +159,10 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
   if (location === 'action_buttons') {
     if (themeKey === 'ecommerce_default') {
       return footerMenu(location, 'Header Actions', links(['View Cart', '/cart']));
+    }
+
+    if (themeKey === 'ecommerce_b2b') {
+      return footerMenu(location, 'Header Actions', links(['Create RFQ', '/#b2b-rfq']));
     }
 
     if (themeKey === 'ecommerce_fashion') {
@@ -170,6 +187,18 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
       }
 
       return footerMenu(location, 'Storefront', links(['Featured Products', '/explore?featured=1'], ['Sale Items', '/explore?sort=price_asc'], ['Account Help', '/cart']));
+    }
+
+    if (themeKey === 'ecommerce_b2b') {
+      if (location === 'footer_column_1') {
+        return footerMenu(location, 'Catalog', links(['All Products', '/explore'], ['Technical Specs', '/explore'], ['Bulk Pricing', '/explore']));
+      }
+
+      if (location === 'footer_column_2') {
+        return footerMenu(location, 'Procurement', links(['RFQ Requests', '/#b2b-rfq'], ['Lead Times', '/explore'], ['Buyer Support', '/explore']));
+      }
+
+      return footerMenu(location, 'Suppliers', links(['Vendor Portal', '#'], ['Compliance', '/explore'], ['Private Catalogs', '/explore']));
     }
 
     if (themeKey === 'ecommerce_fashion') {
@@ -206,6 +235,10 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
   if (location === 'social_footer') {
     if (themeKey === 'ecommerce_default') {
       return footerMenu(location, 'Social', links(['Instagram', '/explore'], ['TikTok', '/explore'], ['Pinterest', '/explore']));
+    }
+
+    if (themeKey === 'ecommerce_b2b') {
+      return footerMenu(location, 'Social', links(['LinkedIn', '#'], ['Trade Shows', '#'], ['Support', '#']));
     }
 
     if (themeKey === 'ecommerce_fashion') {

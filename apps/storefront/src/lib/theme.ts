@@ -17,6 +17,25 @@ export interface ResolvedTheme {
   };
 }
 
+function titleFromThemeKey(themeKey: string): string {
+  return themeKey
+    .split('_')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function makePreviewFallbackTheme(themeKey: string, sourceTheme?: Theme): Theme {
+  return {
+    id: sourceTheme?.id ?? 0,
+    theme_key: themeKey,
+    vertical: themeKey.split('_')[0] || sourceTheme?.vertical || 'unifieds',
+    title: titleFromThemeKey(themeKey),
+    is_active: true,
+    variables: sourceTheme?.variables ?? {},
+    app_settings: sourceTheme?.app_settings ?? { site_name: 'Sellio', site_logo: '', hide_site_name: '0' },
+  };
+}
+
 /**
  * Resolves a database theme key and vertical to a specific Industry Layout path.
  */
@@ -36,10 +55,13 @@ export const getActiveTheme = cache(async function getActiveTheme(): Promise<Res
 
   try {
     const theme = await api.getActiveTheme(themeOverride);
+    const resolvedTheme = themeOverride && theme.theme_key !== themeOverride
+      ? makePreviewFallbackTheme(themeOverride, theme)
+      : theme;
 
     return {
-      theme,
-      layout: resolveIndustryLayout(theme),
+      theme: resolvedTheme,
+      layout: resolveIndustryLayout(resolvedTheme),
       databaseOffline: false
     };
   } catch (error: unknown) {
@@ -64,21 +86,9 @@ export const getActiveTheme = cache(async function getActiveTheme(): Promise<Res
       : apiError.response?.data?.message || "Database service is currently unavailable. Please try again later.";
 
     const fallbackThemeKey = themeOverride || 'unifieds_default';
-    const fallbackTitle = fallbackThemeKey
-      .split('_')
-      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-      .join(' ');
     
     return {
-      theme: {
-        id: 0,
-        theme_key: fallbackThemeKey,
-        vertical: fallbackThemeKey.split('_')[0] || 'unifieds',
-        title: fallbackTitle,
-        is_active: true,
-        variables: {},
-        app_settings: { site_name: 'Sellio', site_logo: '', hide_site_name: '0' }
-      },
+      theme: makePreviewFallbackTheme(fallbackThemeKey),
       layout: fallbackThemeKey.toLowerCase().replace('_', '/'),
       databaseOffline: true,
       errorDetails: {

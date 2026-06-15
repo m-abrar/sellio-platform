@@ -34,6 +34,42 @@ return [
         ])),
     ],
 
+    'ecommerce_b2b' => [
+        tm_menu('main_header', 'Main Header Menu', tm_links([
+            ['Catalog', '/explore'],
+            ['Industries', '/explore'],
+            ['RFQ Flow', '/#b2b-rfq'],
+            ['Procurement', '/explore'],
+        ])),
+        tm_menu('utility_header', 'Utility Header', tm_links([
+            ['Request Quote', '/#b2b-rfq'],
+            ['Supplier Login', '#'],
+        ])),
+        tm_menu('action_buttons', 'Header Actions', tm_links([
+            ['Create RFQ', '/#b2b-rfq'],
+        ])),
+        tm_menu('footer_column_1', 'Catalog', tm_links([
+            ['All Products', '/explore'],
+            ['Technical Specs', '/explore'],
+            ['Bulk Pricing', '/explore'],
+        ])),
+        tm_menu('footer_column_2', 'Procurement', tm_links([
+            ['RFQ Requests', '/#b2b-rfq'],
+            ['Lead Times', '/explore'],
+            ['Buyer Support', '/explore'],
+        ])),
+        tm_menu('footer_column_3', 'Suppliers', tm_links([
+            ['Vendor Portal', '#'],
+            ['Compliance', '/explore'],
+            ['Private Catalogs', '/explore'],
+        ])),
+        tm_menu('social_footer', 'Social', tm_links([
+            ['LinkedIn', '#'],
+            ['Trade Shows', '#'],
+            ['Support', '#'],
+        ])),
+    ],
+
     'ecommerce_fashion' => [
         tm_menu('main_header', 'Main Header Menu', tm_links([
             'Collection',

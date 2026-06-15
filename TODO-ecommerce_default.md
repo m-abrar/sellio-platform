@@ -12,4 +12,4 @@
 
 ## Still pending
 
-- [ ] Review the product detail page in browser once Playwright or a manual preview is available.
+- [x] Review the product detail page in browser once Playwright or a manual preview is available.

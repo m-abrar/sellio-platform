@@ -9,4 +9,4 @@
 
 ## Still pending
 
-- [ ] Review the fashion product detail page in browser for final visual QA.
+- [x] Review the fashion product detail page in browser for final visual QA.

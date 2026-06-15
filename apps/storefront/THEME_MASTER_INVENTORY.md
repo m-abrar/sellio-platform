@@ -123,6 +123,7 @@ Theme overrides are supported through `/preview/{theme_key}/...`, `?theme={theme
 | Theme Key | Folder | Frontend Folder | API Backed |
 | :--- | :--- | :---: | :---: |
 | `ecommerce_default` | `ecommerce/default` | Yes | Yes |
+| `ecommerce_b2b` | `ecommerce/b2b` | Yes | Yes |
 | `ecommerce_luxury` | `ecommerce/luxury` | Yes | Yes |
 | `ecommerce_fashion` | `ecommerce/fashion` | Yes | Yes |
 | `ecommerce_electronics` | `ecommerce/electronics` | Yes | Yes |

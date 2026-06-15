@@ -17,4 +17,4 @@
 
 ## Still pending
 
-- [ ] Review `/preview/properties_modern`, `/preview/properties_modern/explore`, and a single property detail page in browser for final visual QA.
+- [x] Review `/preview/properties_modern`, `/preview/properties_modern/explore`, and a single property detail page in browser for final visual QA.

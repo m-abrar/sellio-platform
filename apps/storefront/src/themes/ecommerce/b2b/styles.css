@@ -1,0 +1,789 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+.ecommerce-b2b-theme {
+  --b2b-bg: #08111f;
+  --b2b-panel: #101c2d;
+  --b2b-panel-strong: #152438;
+  --b2b-text: #edf4ff;
+  --b2b-muted: #9fb0c8;
+  --b2b-line: rgba(171, 190, 219, 0.18);
+  --b2b-accent: #2dd4bf;
+  --b2b-accent-strong: #14b8a6;
+  --b2b-warm: #f59e0b;
+  --b2b-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  background: var(--b2b-bg);
+  color: var(--b2b-text);
+  font-family: Inter, sans-serif;
+  min-height: 100vh;
+}
+
+:root[data-b2b-catalog-mode='light'] .ecommerce-b2b-theme {
+  --b2b-bg: #f6f8fb;
+  --b2b-panel: #ffffff;
+  --b2b-panel-strong: #edf4f8;
+  --b2b-text: #102033;
+  --b2b-muted: #617086;
+  --b2b-line: rgba(16, 32, 51, 0.12);
+  --b2b-shadow: 0 24px 70px rgba(16, 32, 51, 0.12);
+}
+
+.b2b-header {
+  align-items: center;
+  background: color-mix(in srgb, var(--b2b-bg) 90%, transparent);
+  border-bottom: 1px solid var(--b2b-line);
+  backdrop-filter: blur(18px);
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+  min-height: 76px;
+  padding: 0.9rem 5%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.b2b-logo {
+  color: var(--b2b-text);
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-decoration: none;
+}
+
+.b2b-logo::after {
+  color: var(--b2b-accent);
+  content: ' B2B';
+}
+
+.b2b-nav-panel,
+.b2b-nav,
+.b2b-header-actions,
+.b2b-utility {
+  align-items: center;
+  display: flex;
+}
+
+.b2b-nav,
+.b2b-utility {
+  gap: 0.55rem;
+}
+
+.b2b-nav-link,
+.b2b-utility a,
+.b2b-footer a {
+  color: var(--b2b-muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.b2b-nav-link {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.55rem 0.85rem;
+}
+
+.b2b-nav-link:hover,
+.b2b-footer a:hover {
+  color: var(--b2b-accent);
+}
+
+.b2b-header-actions {
+  gap: 0.8rem;
+}
+
+.b2b-mode-toggle,
+.b2b-menu-toggle {
+  background: var(--b2b-panel);
+  border: 1px solid var(--b2b-line);
+  color: var(--b2b-text);
+  cursor: pointer;
+}
+
+.b2b-mode-toggle {
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 900;
+  padding: 0.68rem 0.95rem;
+}
+
+.b2b-menu-toggle {
+  border-radius: 10px;
+  display: none;
+  height: 42px;
+  padding: 0.65rem;
+  width: 42px;
+}
+
+.b2b-menu-toggle span {
+  background: var(--b2b-text);
+  border-radius: 999px;
+  display: block;
+  height: 2px;
+  margin: 4px 0;
+}
+
+.b2b-page,
+.b2b-detail-page {
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: 4rem 5% 7rem;
+}
+
+.b2b-hero {
+  align-items: stretch;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+}
+
+.b2b-hero-copy,
+.b2b-hero-panel,
+.b2b-capability-grid article,
+.b2b-rfq,
+.b2b-product-card,
+.b2b-state,
+.b2b-detail-panel,
+.b2b-detail-media {
+  background: var(--b2b-panel);
+  border: 1px solid var(--b2b-line);
+  box-shadow: var(--b2b-shadow);
+}
+
+.b2b-hero-copy {
+  border-radius: 28px;
+  min-height: 560px;
+  padding: clamp(2.2rem, 6vw, 5rem);
+}
+
+.b2b-kicker {
+  color: var(--b2b-accent);
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+  margin-bottom: 1.4rem;
+  text-transform: uppercase;
+}
+
+.b2b-hero h1,
+.b2b-section-heading h2,
+.b2b-rfq h2,
+.b2b-detail-panel h1 {
+  color: var(--b2b-text);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.98;
+  margin: 0;
+}
+
+.b2b-hero h1 {
+  font-size: clamp(3.2rem, 7vw, 7rem);
+  max-width: 880px;
+}
+
+.b2b-hero p,
+.b2b-section-heading p,
+.b2b-rfq p,
+.b2b-product-card p,
+.b2b-detail-panel p,
+.b2b-state p,
+.b2b-footer p {
+  color: var(--b2b-muted);
+  line-height: 1.75;
+}
+
+.b2b-hero-copy > p {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0;
+  max-width: 690px;
+}
+
+.b2b-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 2.2rem;
+}
+
+.b2b-btn {
+  align-items: center;
+  border-radius: 10px;
+  display: inline-flex;
+  font-weight: 900;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0.95rem 1.25rem;
+  text-decoration: none;
+}
+
+.b2b-btn-primary {
+  background: var(--b2b-accent);
+  border: 1px solid var(--b2b-accent);
+  color: #06201d;
+}
+
+.b2b-btn-secondary {
+  background: transparent;
+  border: 1px solid var(--b2b-line);
+  color: var(--b2b-text);
+}
+
+.b2b-hero-panel {
+  border-radius: 28px;
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.b2b-hero-panel div {
+  background: var(--b2b-panel-strong);
+  border: 1px solid var(--b2b-line);
+  border-radius: 18px;
+  padding: 1.25rem;
+}
+
+.b2b-hero-panel span,
+.b2b-detail-specs span,
+.b2b-product-meta {
+  color: var(--b2b-muted);
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.b2b-hero-panel strong {
+  display: block;
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  margin-top: 0.4rem;
+}
+
+.b2b-hero-panel .b2b-panel-note {
+  color: var(--b2b-muted);
+  line-height: 1.7;
+}
+
+.b2b-capability-grid,
+.b2b-product-grid,
+.b2b-process,
+.b2b-detail-specs {
+  display: grid;
+  gap: 1rem;
+}
+
+.b2b-capability-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 1.25rem;
+}
+
+.b2b-capability-grid article {
+  border-radius: 20px;
+  padding: 1.4rem;
+}
+
+.b2b-capability-grid h2 {
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+}
+
+.b2b-collection {
+  margin-top: 6rem;
+}
+
+.b2b-section-heading {
+  align-items: end;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 0.8fr) minmax(280px, 0.45fr);
+  margin-bottom: 2rem;
+}
+
+.b2b-section-heading .b2b-kicker {
+  grid-column: 1 / -1;
+  margin-bottom: -0.75rem;
+}
+
+.b2b-section-heading h2,
+.b2b-rfq h2 {
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+}
+
+.b2b-product-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.b2b-product-card {
+  border-radius: 18px;
+  color: inherit;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.b2b-product-card:hover {
+  border-color: color-mix(in srgb, var(--b2b-accent) 55%, var(--b2b-line));
+  transform: translateY(-4px);
+}
+
+.b2b-product-media {
+  aspect-ratio: 1 / 1;
+  background: var(--b2b-panel-strong);
+  overflow: hidden;
+  position: relative;
+}
+
+.b2b-product-media img,
+.b2b-detail-media img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.b2b-card-badge {
+  background: var(--b2b-warm);
+  border-radius: 999px;
+  color: #201204;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.45rem 0.65rem;
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  text-transform: uppercase;
+}
+
+.b2b-product-body {
+  padding: 1.15rem;
+}
+
+.b2b-product-meta,
+.b2b-product-footer {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.b2b-product-card h3 {
+  font-size: 1rem;
+  line-height: 1.35;
+  margin: 0.85rem 0 0.6rem;
+}
+
+.b2b-product-footer {
+  border-top: 1px solid var(--b2b-line);
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.b2b-product-footer strong {
+  color: var(--b2b-text);
+}
+
+.b2b-product-footer span {
+  color: var(--b2b-accent);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.b2b-rfq {
+  align-items: start;
+  border-radius: 28px;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 0.8fr) minmax(320px, 1fr);
+  margin-top: 6rem;
+  padding: clamp(2rem, 5vw, 4rem);
+}
+
+.b2b-process {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.b2b-process article {
+  background: var(--b2b-panel-strong);
+  border: 1px solid var(--b2b-line);
+  border-radius: 18px;
+  padding: 1.25rem;
+}
+
+.b2b-process article > span {
+  color: var(--b2b-accent);
+  font-weight: 900;
+}
+
+.b2b-state {
+  border-radius: 22px;
+  grid-column: 1 / -1;
+  padding: 3rem;
+  text-align: center;
+}
+
+.b2b-skeleton {
+  min-height: 360px;
+  opacity: 0.5;
+}
+
+.b2b-detail-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1fr);
+}
+
+.b2b-back-link {
+  color: var(--b2b-muted);
+  display: inline-block;
+  font-weight: 900;
+  margin-bottom: 2rem;
+  text-decoration: none;
+}
+
+.b2b-detail-media {
+  aspect-ratio: 4 / 5;
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.b2b-detail-panel {
+  border-radius: 28px;
+  padding: clamp(2rem, 5vw, 3.5rem);
+}
+
+.b2b-detail-panel h1 {
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+}
+
+.b2b-detail-price {
+  color: var(--b2b-accent);
+  font-size: 1.7rem;
+  font-weight: 900;
+  margin: 1.5rem 0;
+}
+
+.b2b-detail-specs {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 2rem 0;
+}
+
+.b2b-detail-specs div {
+  background: var(--b2b-panel-strong);
+  border: 1px solid var(--b2b-line);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.b2b-detail-specs strong {
+  display: block;
+  margin-top: 0.4rem;
+}
+
+.b2b-detail-action {
+  border: 0;
+  cursor: pointer;
+  width: 100%;
+}
+
+.b2b-notice {
+  color: var(--b2b-accent) !important;
+  font-weight: 800;
+}
+
+.ef-explore-page {
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: 4rem 5% 7rem;
+}
+
+.ef-explore-header {
+  margin-bottom: 2rem;
+}
+
+.ef-explore-header h1 {
+  color: var(--b2b-text);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  margin: 0 0 1rem;
+}
+
+.ef-explore-header p {
+  color: var(--b2b-muted);
+  line-height: 1.75;
+  max-width: 680px;
+}
+
+.ef-detail-back {
+  color: var(--b2b-muted);
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 900;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ef-mono {
+  color: var(--b2b-accent);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.ef-explore-controls {
+  background: var(--b2b-panel);
+  border: 1px solid var(--b2b-line);
+  border-radius: 18px;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.ef-explore-controls label {
+  color: var(--b2b-muted);
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 900;
+  margin-bottom: 0.55rem;
+  text-transform: uppercase;
+}
+
+.ef-explore-controls input,
+.ef-explore-controls select {
+  background: var(--b2b-bg);
+  border: 1px solid var(--b2b-line);
+  border-radius: 12px;
+  color: var(--b2b-text);
+  font: inherit;
+  min-height: 48px;
+  padding: 0.8rem 1rem;
+  width: 100%;
+}
+
+.ef-explore-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.ef-product-card {
+  background: var(--b2b-panel);
+  border: 1px solid var(--b2b-line);
+  border-radius: 18px;
+  color: var(--b2b-text);
+  overflow: hidden;
+  padding: 1rem;
+  text-decoration: none;
+}
+
+.ef-product-card img {
+  border-radius: 12px;
+}
+
+.ef-product-card h3 {
+  color: var(--b2b-text);
+  font-size: 1rem;
+  line-height: 1.35;
+  margin: 0 0 0.7rem;
+}
+
+.ef-product-price {
+  color: var(--b2b-accent);
+  font-weight: 900;
+}
+
+.ef-product-state {
+  background: var(--b2b-panel);
+  border: 1px dashed var(--b2b-accent);
+  border-radius: 22px;
+  padding: 3rem;
+  text-align: center;
+}
+
+.ef-btn-primary {
+  background: var(--b2b-accent);
+  border-radius: 10px;
+  color: #06201d;
+  font-weight: 900;
+  padding: 0.95rem 1.25rem;
+}
+
+.b2b-catalog-alert {
+  background: var(--b2b-panel);
+  border: 1px solid var(--b2b-line);
+  border-left: 4px solid var(--b2b-accent);
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+}
+
+.b2b-catalog-alert__badge {
+  align-items: center;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.b2b-catalog-alert__dot {
+  background: var(--b2b-accent);
+  border-radius: 999px;
+  height: 8px;
+  width: 8px;
+}
+
+.b2b-catalog-alert__title {
+  color: var(--b2b-text);
+  font-weight: 900;
+  margin: 0.75rem 0;
+}
+
+.b2b-catalog-alert__copy,
+.b2b-catalog-alert__diag {
+  color: var(--b2b-muted);
+}
+
+.ef-catalog-alert {
+  background: var(--b2b-panel);
+  border: 1px solid var(--b2b-line);
+  border-left: 4px solid var(--b2b-accent);
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+}
+
+.ef-catalog-alert__badge {
+  align-items: center;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.ef-catalog-alert__dot {
+  background: var(--b2b-accent);
+  border-radius: 999px;
+  height: 8px;
+  width: 8px;
+}
+
+.ef-catalog-alert__title {
+  color: var(--b2b-text);
+  font-weight: 900;
+  margin: 0.75rem 0;
+}
+
+.ef-catalog-alert__copy,
+.ef-catalog-alert__diag {
+  color: var(--b2b-muted);
+}
+
+.b2b-footer {
+  border-top: 1px solid var(--b2b-line);
+  padding: 4rem 5%;
+}
+
+.b2b-footer-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(260px, 1.4fr) repeat(3, minmax(160px, 1fr));
+  margin: 0 auto;
+  max-width: 1440px;
+}
+
+.b2b-footer h3 {
+  color: var(--b2b-text);
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+}
+
+.b2b-footer a,
+.b2b-footer-links {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.b2b-mobile-utility {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  .b2b-hero,
+  .b2b-section-heading,
+  .b2b-rfq,
+  .b2b-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .b2b-capability-grid,
+  .b2b-product-grid,
+  .b2b-process {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .b2b-menu-toggle {
+    display: block;
+  }
+
+  .b2b-nav-panel {
+    align-items: stretch;
+    background: var(--b2b-bg);
+    border-left: 1px solid var(--b2b-line);
+    bottom: 0;
+    box-shadow: var(--b2b-shadow);
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+    position: fixed;
+    right: -300px;
+    top: 0;
+    transition: right 180ms ease;
+    width: 280px;
+  }
+
+  .b2b-nav-panel-open {
+    right: 0;
+  }
+
+  .b2b-nav,
+  .b2b-mobile-utility {
+    align-items: stretch;
+    display: grid;
+  }
+
+  .b2b-desktop-utility {
+    display: none;
+  }
+
+  .b2b-page,
+  .b2b-detail-page {
+    padding: 2rem 4% 5rem;
+  }
+
+  .b2b-hero-copy {
+    min-height: 0;
+  }
+
+  .b2b-hero h1 {
+    font-size: 3.1rem;
+  }
+
+  .b2b-actions,
+  .b2b-btn {
+    width: 100%;
+  }
+
+  .b2b-capability-grid,
+  .b2b-product-grid,
+  .b2b-process,
+  .b2b-detail-specs,
+  .b2b-footer-grid {
+    grid-template-columns: 1fr;
+  }
+}

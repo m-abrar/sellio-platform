@@ -124,6 +124,20 @@ function detailChips(values: unknown[]): string[] {
 }
 
 function productToDetail(product: Product): MarketplaceDetail {
+  const ext = product as Product & {
+    sku?: string;
+    taxonomy?: {
+      category?: { id?: number; title?: string };
+      brand?: { id?: number; title?: string };
+      tags?: string[];
+    };
+  };
+
+  const categoryTitle = ext.taxonomy?.category?.title || 'Products';
+  const brandTitle = ext.taxonomy?.brand?.title || null;
+  const sku = ext.sku || null;
+  const tags = ext.taxonomy?.tags || [];
+
   return {
     id: product.id,
     title: product.title,
@@ -133,17 +147,17 @@ function productToDetail(product: Product): MarketplaceDetail {
     kicker: 'Retail listing',
     price: formatProductPrice(product),
     image: getProductImage(product, PRODUCT_DETAIL_PLACEHOLDER),
-    category: product.category_id ? `Category #${product.category_id}` : 'Products',
+    category: categoryTitle,
     description: product.description || 'Verified marketplace product synchronized from Sellio.',
-    ownerLabel: 'Marketplace seller',
+    ownerLabel: brandTitle || 'Marketplace seller',
     actionLabel: 'Add to cart',
     actionHref: '/cart',
     meta: [
-      { label: 'Category', value: product.category_id ? `#${product.category_id}` : 'General' },
-      { label: 'Record', value: product.slug },
-      { label: 'Status', value: 'Live product' },
+      { label: 'Category', value: categoryTitle },
+      { label: 'Brand', value: brandTitle || 'Marketplace brand' },
+      { label: 'SKU', value: sku || 'In catalog' },
     ],
-    chips: detailChips(['Checkout ready', product.pricing?.formatted ? 'Live pricing' : 'Catalog price']),
+    chips: detailChips(['Checkout ready', product.pricing?.formatted ? 'Live pricing' : 'Catalog price', ...tags]),
     product,
   };
 }

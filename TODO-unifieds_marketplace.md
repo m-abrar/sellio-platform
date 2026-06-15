@@ -28,5 +28,5 @@
 
 ### Unified marketplace
 
-- [ ] Review the new marketplace detail URLs in browser for final visual QA:
+- [x] Review the new marketplace detail URLs in browser for final visual QA:
   `/preview/unifieds_marketplace/products/{slug}`, `/properties/{slug}`, `/autos/{slug}`, `/services/{slug}`, `/jobs/{slug}`, `/events/{slug}`, and `/classifieds/{slug}`.

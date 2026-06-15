@@ -716,6 +716,32 @@ const ECOMMERCE_DEFAULT_HOME: ThemeContentResponse = {
   config: {},
 };
 
+const ECOMMERCE_B2B_HOME: ThemeContentResponse = {
+  theme_key: 'ecommerce_b2b',
+  page: 'home',
+  content: {
+    'header.brand_label': 'SupplyDesk',
+    'hero.eyebrow': 'B2B catalog and procurement',
+    'hero.title': 'Wholesale catalog\nbuilt for RFQs.',
+    'hero.description': 'A catalog-first storefront for distributors, manufacturers, and wholesale suppliers where buyers request quotes instead of checking out instantly.',
+    'hero.primary_cta_label': 'Browse catalog',
+    'hero.secondary_cta_label': 'Create RFQ',
+    'collection.title': 'Featured catalog',
+    'collection.description': 'Products stay easy to scan, compare, and qualify before a buyer starts a quote request.',
+    'sync.offline_kicker': 'Catalog unavailable',
+    'sync.offline_title': 'Products could not be loaded.',
+    'empty.title': 'No catalog products are published yet.',
+    'empty.description': 'Add product records in the admin panel and they will appear here.',
+    'rfq.title': 'RFQ intake for serious buyers',
+    'rfq.description': 'Capture company profile, requested quantities, destination, timeline, files, and internal notes before routing the request to the seller.',
+    'footer.brand_label': 'SupplyDesk',
+    'footer.description': 'A B2B catalog storefront for wholesale buyers, procurement teams, quote requests, and specification-led product discovery.',
+    'footer.copyright': '(c) 2026 SupplyDesk. All rights reserved.',
+  },
+  media: {},
+  config: {},
+};
+
 const ECOMMERCE_ELECTRONICS_HOME: ThemeContentResponse = {
   theme_key: 'ecommerce_electronics',
   page: 'home',
@@ -1798,6 +1824,10 @@ export function getThemeContentDefaults(themeKey?: string, page = 'home'): Theme
 
   if (themeKey === 'ecommerce_default' && page === 'home') {
     return ECOMMERCE_DEFAULT_HOME;
+  }
+
+  if (themeKey === 'ecommerce_b2b' && page === 'home') {
+    return ECOMMERCE_B2B_HOME;
   }
 
   if (themeKey === 'ecommerce_electronics' && page === 'home') {

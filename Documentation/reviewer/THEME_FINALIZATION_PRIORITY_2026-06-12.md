@@ -71,6 +71,12 @@ The order is based on expected marketplace selling impact, not literal theme-by-
 | 51 | `events_festival` | Events | P3 | **Polished 2026-06-13.** Cleaned `heroEyebrow` `'THE_GLOBAL_COLLECTIVE_V8'`→`'Global Festival Lineup'`; hero description, secondary CTA `'Join_The_Pulse'`→`'Join the Pulse'`; `registryEyebrow` `'OFFICIAL_FESTIVAL_REGISTRY'`→`'Festival Lineup'`; registry description; `ctaEyebrow` `'READY_TO_LOSE_CONTROL'`→`'Ready to Attend'`; CTA description; empty state. HUD labels de-protocolled. Date format `JAN_05_2026`→`JAN 05 2026`; `'Global Node'`→`'Global'`. FestivalHeader logo `<div>`→`<a href={themeLink('/')}>`, button text `_ACTIVE` suffix removed. StageLineupCard `'SECURE_PASS ->'`→`'Get Tickets →'`. NexusFooter: added `useEventsThemeLink`, logo linked, description and copyright `'SELLIO_NEON_NODE // VIBE_STABLE'`→clean. ThemeSeeder updated. Lint 0 errors, HTTP 200. |
 | 52 | `events_creative` | Events | P3 | **Polished 2026-06-13.** Cleaned `heroEyebrow` `'SYNTHETIC_CULTURE_EXCHANGE // 2026'`→`'Creative Events 2026'`; hero/registry/lab/sync descriptions and labels cleaned of "decentralized"/"node"/"synthetic"/"bio-digital"/"algorithmic" language; HUD labels de-protocolled; empty state fixed; capabilities `'Synthetizers|Generators|Decentralizers|Transmitters'`→real event types. `formatEventDateUnderscore` shared utility fixed: `'DATE_TBA'`→`'Date TBA'`, underscores→spaces (also fixes events_classic date display). CreativeHeader logo `<div>`→`<a href={themeLink('/')}>`, button `: ACTIVE` suffix removed. ArtisanEventCard `'SYNC_NODE ->'`→`'Get Tickets →'`. VibrantFooter: added `useEventsThemeLink`, logo linked, description and copyright `'SELLIO_CREATIVE_NODE // PULSE_STABLE'`→clean. ThemeSeeder updated. Lint 0 errors, HTTP 200. |
 
+## Additional Theme Added
+
+| Theme Key | Vertical | Priority | Reason |
+| --- | --- | --- | --- |
+| `ecommerce_b2b` | Ecommerce | P0 | New B2B catalog/RFQ theme for wholesale, distributor, manufacturer, and procurement demos. It should be polished before submission screenshots if Sellio is positioned as both B2C ecommerce and B2B inquiry commerce. |
+
 ## Recommended Workflow
 
 Finalize in batches:

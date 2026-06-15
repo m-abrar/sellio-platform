@@ -107,7 +107,7 @@ export const ElectronicsHeader = () => {
           <aside className="el-mini-cart" role="dialog" aria-modal="true" aria-label="Mini cart">
             <div className="el-mini-cart-header">
               <div>
-                <div className="el-tech-font">CART_SYNC</div>
+                <div className="el-tech-font">YOUR CART</div>
                 <h2>{itemCount ? `${itemCount} item${itemCount === 1 ? '' : 's'}` : 'Cart is empty'}</h2>
               </div>
               <button type="button" className="el-mini-cart-close" onClick={() => setCartOpen(false)}>

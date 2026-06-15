@@ -13,4 +13,4 @@
 
 ## Still pending
 
-- [ ] Review the electronics cart drawer in browser for final visual QA.
+- [x] Review the electronics cart drawer in browser for final visual QA.
