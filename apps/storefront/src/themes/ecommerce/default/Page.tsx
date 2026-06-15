@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { Product } from '@sellio/types';
 import { CategoryRibbon, EcommerceProductCard } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
@@ -10,9 +10,21 @@ import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbac
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 
 const shopAdvantages = [
-  { title: 'Verified products', detail: 'Seller-managed inventory with live product records.' },
-  { title: 'Fast checkout', detail: 'Cart, order, and payment flow ready for buyers.' },
-  { title: 'Responsive storefront', detail: 'Clean buying experience across mobile and desktop.' },
+  {
+    title: 'Verified products',
+    detail: 'Live catalog records with clear price, stock, and product detail states.',
+    icon: 'M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z',
+  },
+  {
+    title: 'Fast checkout',
+    detail: 'Cart, order review, and payment handoff are ready for buyer flow testing.',
+    icon: 'M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14.75h9.9c.75 0 1.41-.41 1.75-1.03L22 7H6.21L5.27 5H2V3h4.54l1.2 2.55L10.1 11h6.45l1.1-2H9.1L7.17 14.75z',
+  },
+  {
+    title: 'Responsive storefront',
+    detail: 'A cleaner shopping surface across desktop, tablet, and mobile breakpoints.',
+    icon: 'M4 6h16v10H4V6zm0-2c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h5v2H7v2h10v-2h-2v-2h5c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4z',
+  },
 ];
 
 export default function Page() {
@@ -57,6 +69,13 @@ export default function Page() {
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const productCountLabel = useMemo(() => {
+    if (loadingProducts) {
+      return 'Syncing';
+    }
+
+    return products.length > 0 ? products.length.toLocaleString() : 'Ready';
+  }, [loadingProducts, products.length]);
 
   useEffect(() => {
     let isMounted = true;
@@ -119,16 +138,16 @@ export default function Page() {
 
           <div className="ed-hero-stats" aria-label="Storefront snapshot">
             <div>
-              <strong>{products.length > 0 ? products.length : 'Live'}</strong>
-              <span>catalog items</span>
+              <strong>{productCountLabel}</strong>
+              <span>live products</span>
             </div>
             <div>
-              <strong>Secure</strong>
-              <span>checkout flow</span>
+              <strong>Cart</strong>
+              <span>buyer ready</span>
             </div>
             <div>
-              <strong>Fresh</strong>
-              <span>stock signals</span>
+              <strong>Stock</strong>
+              <span>inventory signals</span>
             </div>
           </div>
         </div>
@@ -145,6 +164,11 @@ export default function Page() {
       <section className="ed-service-band" aria-label="Store services">
         {shopAdvantages.map((item) => (
           <div key={item.title}>
+            <span className="ed-service-icon" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+                <path d={item.icon} />
+              </svg>
+            </span>
             <strong>{item.title}</strong>
             <span>{item.detail}</span>
           </div>
@@ -152,10 +176,10 @@ export default function Page() {
       </section>
 
       <section className="ed-category-strip">
-        <CategoryRibbon label="New Arrivals" count="124" href={themeLink('/explore')} />
-        <CategoryRibbon label="Essentials" count="86" href={themeLink('/explore')} />
-        <CategoryRibbon label="Outerwear" count="42" href={themeLink('/explore')} />
-        <CategoryRibbon label="Accessories" count="156" href={themeLink('/explore')} />
+        <CategoryRibbon label="New Arrivals" count="Latest drops" href={themeLink('/explore')} />
+        <CategoryRibbon label="Essentials" count="Everyday edit" href={themeLink('/explore')} />
+        <CategoryRibbon label="Outerwear" count="Layering pieces" href={themeLink('/explore')} />
+        <CategoryRibbon label="Accessories" count="Finishing touches" href={themeLink('/explore')} />
       </section>
 
       <section className="ed-collection-section">

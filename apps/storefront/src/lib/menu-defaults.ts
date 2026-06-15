@@ -101,18 +101,76 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
       ));
     }
 
+    if (themeKey === 'ecommerce_default') {
+      return footerMenu(location, 'Main Header Menu', links(
+        ['Shop', '/explore'],
+        ['New Arrivals', '/explore?sort=latest'],
+        ['Essentials', '/explore?category=essentials'],
+        ['Cart', '/cart'],
+      ));
+    }
+
+    if (themeKey === 'ecommerce_fashion') {
+      return footerMenu(location, 'Main Header Menu', links(
+        ['New Arrivals', '/explore?sort=latest'],
+        ['Ready to Wear', '/explore'],
+        ['Accessories', '/explore?category=accessories'],
+        ['Cart', '/cart'],
+      ));
+    }
+
     return footerMenu(location, 'Main Header Menu', fallbackHeaderItems(themeKey));
   }
 
   if (location === 'utility_header') {
+    if (themeKey === 'ecommerce_default') {
+      return footerMenu(location, 'Utility Header', links(['Track Order', '/cart'], ['Support', '/explore']));
+    }
+
+    if (themeKey === 'ecommerce_fashion') {
+      return footerMenu(location, 'Utility Header', links(['Fitting Guide', '/explore'], ['Client Care', '/cart']));
+    }
+
     return footerMenu(location, 'Utility Header', links(['Login', '#']));
   }
 
   if (location === 'action_buttons') {
+    if (themeKey === 'ecommerce_default') {
+      return footerMenu(location, 'Header Actions', links(['View Cart', '/cart']));
+    }
+
+    if (themeKey === 'ecommerce_fashion') {
+      return footerMenu(location, 'Header Actions', links(['View Cart', '/cart']));
+    }
+
     return footerMenu(location, 'Header Actions', links(['Inquire', '/cart']));
   }
 
   if (location.startsWith('footer_column_')) {
+    if (themeKey === 'ecommerce_default') {
+      if (location === 'footer_column_1') {
+        return footerMenu(location, 'Shop', links(['All Products', '/explore'], ['New Arrivals', '/explore?sort=latest'], ['Cart', '/cart']));
+      }
+
+      if (location === 'footer_column_2') {
+        return footerMenu(location, 'Customer Care', links(['Checkout', '/checkout'], ['Order Review', '/checkout/confirm'], ['Support', '/explore']));
+      }
+
+      return footerMenu(location, 'Storefront', links(['Featured Products', '/explore?featured=1'], ['Sale Items', '/explore?sort=price_asc'], ['Account Help', '/cart']));
+    }
+
+    if (themeKey === 'ecommerce_fashion') {
+      if (location === 'footer_column_1') {
+        return footerMenu(location, 'Collections', links(['New Arrivals', '/explore?sort=latest'], ['Ready to Wear', '/explore'], ['Accessories', '/explore?category=accessories']));
+      }
+
+      if (location === 'footer_column_2') {
+        return footerMenu(location, 'Atelier', links(['Fitting Guide', '/explore'], ['Cart', '/cart'], ['Checkout', '/checkout']));
+      }
+
+      return footerMenu(location, 'Client Care', links(['Shipping', '/checkout'], ['Returns', '/cart'], ['Order Review', '/checkout/confirm']));
+    }
+
     return footerMenu(location, 'Footer', links(['About', '#'], ['Contact', '#']));
   }
 
@@ -121,6 +179,14 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
   }
 
   if (location === 'social_footer') {
+    if (themeKey === 'ecommerce_default') {
+      return footerMenu(location, 'Social', links(['Instagram', '/explore'], ['TikTok', '/explore'], ['Pinterest', '/explore']));
+    }
+
+    if (themeKey === 'ecommerce_fashion') {
+      return footerMenu(location, 'Social', links(['Instagram', '/explore'], ['Pinterest', '/explore'], ['Lookbook', '/explore']));
+    }
+
     return footerMenu(location, 'Social', links(['Instagram', '#'], ['LinkedIn', '#'], ['X', '#']));
   }
 

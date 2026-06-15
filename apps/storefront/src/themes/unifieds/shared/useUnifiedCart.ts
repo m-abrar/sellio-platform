@@ -49,6 +49,13 @@ export function useUnifiedCart() {
     }
 
     const nextQuantity = Math.max(1, currentItem.quantity + delta);
+    const optimisticItems = items.map((item) => (
+      item.product.id === productId
+        ? { ...item, quantity: nextQuantity }
+        : item
+    ));
+
+    setItems(optimisticItems);
 
     if (usingApi && currentItem.cartItemId) {
       try {

@@ -1,254 +1,500 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
 
 .ecommerce-fashion-theme {
-  /* Runway Node Palette */
-  --ef-ebony: #1a1a1a;
-  --ef-oyster: #f8f8f8;
-  --ef-champagne: #c5a059;
+  --ef-ebony: #181512;
+  --ef-ink-soft: #4d4540;
+  --ef-oyster: #f7f4ef;
+  --ef-porcelain: #fffdf9;
+  --ef-champagne: #b58b4a;
+  --ef-clay: #8d574d;
+  --ef-mist: #d8d0c5;
   --ef-white: #ffffff;
-  --ef-border: rgba(26, 26, 26, 0.08);
-  
-  /* Typography */
-  --ef-serif: 'Playfair Display', serif;
-  --ef-sans: 'Montserrat', sans-serif;
-  
-  /* Transitions */
-  --ef-transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.ecommerce-fashion-theme {
-  background-color: var(--ef-white);
+  --ef-border: rgba(24, 21, 18, 0.11);
+  --ef-shadow: 0 24px 70px rgba(24, 21, 18, 0.12);
+  --ef-serif: 'Playfair Display', Georgia, serif;
+  --ef-sans: 'Montserrat', Arial, sans-serif;
+  --ef-transition: 220ms ease;
+  background: var(--ef-porcelain);
   color: var(--ef-ebony);
   font-family: var(--ef-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Typography Utilities */
+.ecommerce-fashion-theme *,
+.ecommerce-fashion-theme *::before,
+.ecommerce-fashion-theme *::after {
+  box-sizing: border-box;
+}
+
 .ef-serif { font-family: var(--ef-serif); }
 .ef-italic { font-style: italic; }
 
 .ef-heading-xl {
-  font-family: var(--ef-serif);
-  font-size: clamp(4rem, 10vw, 10rem);
-  font-weight: 900;
-  line-height: 0.85;
-  letter-spacing: -0.04em;
+  margin: 0;
   color: var(--ef-ebony);
+  font-family: var(--ef-serif);
+  font-size: 6.5rem;
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: 0;
 }
 
 .ef-mono {
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 5px;
-  text-transform: uppercase;
   color: var(--ef-champagne);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
-/* Layout */
 .ef-section {
-  padding: 10rem 6%;
-  max-width: 1800px;
+  width: min(100%, 1800px);
   margin: 0 auto;
+  padding: 4rem 6% 8rem;
 }
 
-/* Runway Header */
 .ef-header {
-  padding: 2.5rem 6%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px);
   position: sticky;
   top: 0;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 78px;
+  padding: 1rem 6%;
+  background: rgba(255, 253, 249, 0.88);
   border-bottom: 1px solid var(--ef-border);
+  backdrop-filter: blur(18px);
 }
 
 .ef-logo {
+  color: var(--ef-ebony);
   font-family: var(--ef-serif);
+  font-size: 1.8rem;
   font-weight: 900;
-  font-size: 2rem;
-  letter-spacing: -1px;
+  letter-spacing: 0;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ef-logo span {
+  font-weight: 400;
+  font-style: italic;
+}
+
+.ef-nav-panel,
+.ef-nav {
+  display: flex;
+  align-items: center;
 }
 
 .ef-nav-panel {
-  display: flex;
-  align-items: center;
-    gap: 2rem;
+  gap: 2rem;
 }
 
 .ef-nav {
-  display: flex;
-  gap: 4.5rem;
+  gap: 2.4rem;
 }
 
 .ef-nav-link {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: rgba(26, 26, 26, 0.4);
+  position: relative;
+  color: rgba(24, 21, 18, 0.58);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
   text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  transition: var(--ef-transition);
+  transition: color var(--ef-transition);
 }
 
-.ef-nav-link:hover {
+.ef-nav-link::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -0.45rem;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  opacity: 0;
+  transform: scaleX(0.6);
+  transition: opacity var(--ef-transition), transform var(--ef-transition);
+}
+
+.ef-nav-link:hover,
+.ef-nav-link[aria-current='page'] {
   color: var(--ef-ebony);
 }
 
-/* Editorial Hero */
+.ef-nav-link:hover::after,
+.ef-nav-link[aria-current='page']::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.ef-desktop-header-meta,
+.ef-mobile-header-meta {
+  border: 1px solid var(--ef-border);
+  padding: 0.55rem 1rem;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.ef-mobile-header-meta,
+.ef-hamburger {
+  display: none;
+}
+
 .ef-hero {
-  height: 90vh;
-  display: flex;
-  gap: 2rem;
-  padding: 2rem 6%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.42fr);
+  gap: 1.4rem;
+  min-height: 680px;
+  margin-bottom: 2rem;
 }
 
 .ef-hero-main {
-  flex: 2;
   position: relative;
+  min-height: 680px;
   overflow: hidden;
   background: var(--ef-oyster);
-}
-
-.ef-hero-side {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  box-shadow: var(--ef-shadow);
 }
 
 .ef-hero-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: var(--ef-transition);
+  object-position: center 32%;
+  transition: transform 700ms ease;
 }
 
 .ef-hero-main:hover .ef-hero-img {
-  transform: scale(1.05);
+  transform: scale(1.025);
 }
 
-/* Editorial Look Card */
+.ef-hero-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.58));
+}
+
+.ef-hero-caption {
+  position: absolute;
+  right: 4rem;
+  bottom: 4rem;
+  left: 4rem;
+  max-width: 720px;
+  color: var(--ef-white);
+}
+
+.ef-hero-caption .ef-mono,
+.ef-hero-title {
+  color: var(--ef-white);
+}
+
+.ef-hero-caption .ef-mono {
+  margin-bottom: 1.3rem;
+}
+
+.ef-hero-title {
+  text-shadow: 0 18px 48px rgba(0, 0, 0, 0.24);
+}
+
+.ef-hero-cta {
+  margin-top: 2.2rem;
+}
+
+.ef-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0.95rem 2.2rem;
+  border: 1px solid var(--ef-ebony);
+  background: var(--ef-ebony);
+  color: var(--ef-white);
+  cursor: pointer;
+  font-family: var(--ef-sans);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: transform var(--ef-transition), background var(--ef-transition), border-color var(--ef-transition);
+}
+
+.ef-btn-primary:hover {
+  background: var(--ef-champagne);
+  border-color: var(--ef-champagne);
+  transform: translateY(-2px);
+}
+
+.ef-btn-primary:active {
+  transform: translateY(0);
+}
+
+.ef-btn-light {
+  background: var(--ef-white);
+  border-color: var(--ef-white);
+  color: var(--ef-ebony);
+}
+
+.ef-hero-editorial {
+  display: flex;
+  min-height: 680px;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.4rem;
+  border: 1px solid var(--ef-border);
+  background:
+    linear-gradient(140deg, rgba(181, 139, 74, 0.18), transparent 44%),
+    var(--ef-oyster);
+}
+
+.ef-hero-editorial p {
+  margin: 1.4rem 0 0;
+  color: var(--ef-ink-soft);
+  font-family: var(--ef-serif);
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.16;
+}
+
+.ef-hero-editorial-row {
+  display: grid;
+  gap: 0.45rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--ef-border);
+}
+
+.ef-hero-editorial-row span {
+  color: var(--ef-champagne);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ef-hero-editorial-row strong {
+  color: var(--ef-ebony);
+  font-family: var(--ef-serif);
+  font-size: 1.45rem;
+  line-height: 1.1;
+}
+
+.ef-hero-text-link {
+  color: var(--ef-ebony);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 0.45rem;
+  text-transform: uppercase;
+}
+
+.ef-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0 0 7rem;
+}
+
+.ef-trend-hud {
+  min-height: 150px;
+  padding: 1.8rem;
+  border: 1px solid var(--ef-border);
+  background: rgba(255, 255, 255, 0.62);
+  text-align: left;
+}
+
+.ef-trend-hud > div:first-child {
+  margin-bottom: 2.4rem;
+  color: var(--ef-ebony);
+  font-family: var(--ef-serif);
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.ef-trend-hud .ef-mono {
+  color: rgba(24, 21, 18, 0.52);
+  font-size: 0.62rem;
+}
+
+.ef-alert-wrap {
+  max-width: 1200px;
+  margin: 0 auto 5rem;
+}
+
+.ef-lookbook-section {
+  padding-top: 1rem;
+}
+
+.ef-lookbook-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.2rem;
+  max-width: 940px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ef-lookbook-header h2 {
+  font-size: 4.4rem;
+  line-height: 0.98;
+}
+
+.ef-lookbook-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 1120px;
+  margin: 2.2rem auto 3.4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--ef-border);
+}
+
+.ef-lookbook-intro p {
+  max-width: 640px;
+  margin: 0;
+  color: var(--ef-ink-soft);
+  font-size: 0.98rem;
+  line-height: 1.8;
+}
+
+.ef-lookbook-intro a {
+  color: var(--ef-ebony);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .ef-lookbook-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4rem;
-  margin-top: 6rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+
+.ef-look-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
 }
 
 .ef-look-card {
-  transition: var(--ef-transition);
-  cursor: pointer;
+  height: 100%;
+  transition: transform var(--ef-transition);
 }
 
-.ef-look-card:nth-child(even) {
-  margin-top: 10rem;
+.ef-look-card:hover {
+  transform: translateY(-4px);
 }
 
 .ef-img-frame {
-  width: 100%;
-  aspect-ratio: 3/4;
-  background: var(--ef-oyster);
-  overflow: hidden;
-  margin-bottom: 3rem;
   position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  margin-bottom: 1.3rem;
+  overflow: hidden;
+  border: 1px solid var(--ef-border);
+  background: var(--ef-oyster);
 }
 
 .ef-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: var(--ef-transition);
+  object-position: center 28%;
+  transition: transform 560ms ease;
 }
 
 .ef-look-card:hover .ef-img {
-  transform: scale(1.1);
+  transform: scale(1.045);
 }
 
-/* Buttons */
-.ef-btn-primary {
-  background: var(--ef-ebony);
-  color: white;
-  border: none;
-  padding: 1.5rem 4rem;
-  font-family: var(--ef-sans);
-  font-weight: 800;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  cursor: pointer;
-  transition: var(--ef-transition);
-}
-
-.ef-btn-primary:hover {
-  background: var(--ef-champagne);
-  transform: translateY(-5px);
-}
-
-/* Footer */
-.ef-footer {
-  background: #000;
-  color: white;
-  padding: 15rem 6% 6rem;
-  text-align: center;
-}
-
-/* Hero layout helpers */
-.ef-hero-caption {
+.ef-look-badge {
   position: absolute;
-  bottom: 4rem;
-  left: 4rem;
-  color: white;
+  right: 1rem;
+  bottom: 1rem;
+  padding: 0.45rem 0.75rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ef-ebony);
+  font-size: 0.62rem;
+  font-weight: 900;
 }
 
-.ef-hero-caption .ef-mono {
-  color: white;
-  margin-bottom: 1.5rem;
-}
-
-.ef-hero-cta {
-  margin-top: 4rem;
-}
-
-.ef-hero-side-panel {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-}
-
-.ef-hero-side-caption {
-  position: absolute;
-  bottom: 2rem;
-  left: 2rem;
-  color: white;
-}
-
-/* Metrics strip */
-.ef-metrics-grid {
-  padding: 10rem 0;
+.ef-look-card-body {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6rem;
-  border-bottom: 1px solid var(--ef-border);
-  margin-bottom: 8rem;
-}
-
-/* Lookbook section header */
-.ef-lookbook-header {
+  gap: 0.55rem;
   text-align: center;
-  margin-bottom: 10rem;
 }
 
-.ef-lookbook-header h2 {
-  font-size: 6rem;
+.ef-look-card-body .ef-mono {
+  color: rgba(24, 21, 18, 0.44);
+  font-size: 0.6rem;
 }
 
-/* Philosophy section */
+.ef-look-card-body h3 {
+  margin: 0;
+  color: var(--ef-ebony);
+  font-family: var(--ef-serif);
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.ef-look-card-body > div:last-child {
+  color: var(--ef-champagne);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.ef-look-card-loading {
+  cursor: default;
+}
+
+.ef-card-lines {
+  display: grid;
+  justify-items: center;
+  gap: 0.8rem;
+}
+
+.ef-card-lines .ef-shimmer-card {
+  height: 10px;
+}
+
+.ef-card-lines .ef-shimmer-card:nth-child(1) { width: 36%; }
+.ef-card-lines .ef-shimmer-card:nth-child(2) { width: 68%; }
+.ef-card-lines .ef-shimmer-card:nth-child(3) { width: 24%; }
+
+.ef-shimmer-card {
+  border: 0;
+  background: linear-gradient(90deg, #f1ece5 25%, #faf8f4 50%, #f1ece5 75%);
+  background-size: 200% 100%;
+  animation: ef-shimmer 1.5s ease-in-out infinite;
+}
+
+.ef-empty-collection {
+  grid-column: 1 / -1;
+  padding: 4rem 2rem;
+  border: 1px solid var(--ef-border);
+  background: var(--ef-white);
+  text-align: center;
+}
+
+.ef-empty-collection h3 {
+  margin: 1rem 0 0;
+  font-family: var(--ef-serif);
+  font-size: 2rem;
+}
+
+.ef-empty-collection p {
+  margin: 1rem 0 2rem;
+  color: var(--ef-ink-soft);
+}
+
 .ef-philosophy-section {
-  margin-top: 20rem;
-  padding: 15rem 10%;
+  margin-top: 8rem;
+  padding: 7rem 8%;
   background: var(--ef-oyster);
   text-align: center;
 }
@@ -259,59 +505,190 @@
 }
 
 .ef-philosophy-inner h2 {
+  margin: 0 0 3rem;
   font-family: var(--ef-serif);
-  font-size: 3.5rem;
+  font-size: 3.2rem;
   font-weight: 900;
-  line-height: 1.3;
-  margin-bottom: 4rem;
+  line-height: 1.22;
 }
 
 .ef-philosophy-divider {
   width: 80px;
   height: 1px;
+  margin: 0 auto 2.6rem;
   background: var(--ef-champagne);
-  margin: 0 auto 4rem;
 }
 
-/* Premium Elite Editorial Micro-Interactions & Navigation Drawer */
-.ef-mobile-header-meta {
-  display: none;
+.ef-footer {
+  background: #0f0e0d;
+  color: var(--ef-white);
+  padding: 5rem 6% 3rem;
 }
 
-.ef-desktop-header-meta {
-  display: block;
+.ef-footer-inner {
+  width: min(100%, 1320px);
+  margin: 0 auto;
 }
 
-.ef-hamburger {
-  display: none;
+.ef-footer-brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ef-footer-logo {
+  color: var(--ef-white);
+  font-size: 3.2rem;
+}
+
+.ef-footer-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: var(--ef-white);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ef-footer-grid {
+  display: grid;
+  grid-template-columns: 1.35fr repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+  padding: 3rem 0;
+  text-align: left;
+}
+
+.ef-footer-about p {
+  max-width: 360px;
+  margin: 1.2rem 0 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+.ef-footer-links {
+  display: grid;
+  gap: 0.85rem;
+  align-content: start;
+}
+
+.ef-footer-links .ef-mono,
+.ef-footer-about .ef-mono {
+  margin-bottom: 0.4rem;
+  color: var(--ef-champagne);
+}
+
+.ef-footer-links a,
+.ef-footer-social a {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: color var(--ef-transition);
+}
+
+.ef-footer-links a:hover,
+.ef-footer-social a:hover {
+  color: var(--ef-white);
+}
+
+.ef-footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ef-footer-bottom .ef-mono {
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.62rem;
+}
+
+.ef-footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+@keyframes ef-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@media (max-width: 1100px) {
+  .ef-heading-xl {
+    font-size: 4.6rem;
+  }
+
+  .ef-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .ef-hero-main,
+  .ef-hero-editorial {
+    min-height: 560px;
+  }
+
+  .ef-hero-editorial {
+    min-height: 0;
+    gap: 2rem;
+  }
+
+  .ef-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ef-lookbook-grid,
+  .ef-footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
+  .ef-section {
+    padding: 2rem 4% 5rem;
+  }
+
+  .ef-header {
+    min-height: 66px;
+    padding: 0.9rem 4%;
+  }
+
+  .ef-logo {
+    font-size: 1.45rem;
+  }
+
   .ef-hamburger {
+    z-index: 1040;
     display: flex;
+    width: 28px;
+    height: 20px;
     flex-direction: column;
     justify-content: space-between;
-    width: 26px;
-    height: 18px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
     padding: 0;
-    z-index: 1040;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
   }
 
   .ef-hamburger-bar {
     width: 100%;
     height: 2px;
-    background-color: var(--ef-ebony);
-    border-radius: 4px;
-    transition: var(--ef-transition);
+    background: var(--ef-ebony);
+    transition: transform var(--ef-transition), opacity var(--ef-transition);
   }
 
-  /* Animate Hamburger to 'X' */
   .ef-hamburger-open .ef-hamburger-bar:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-    background-color: var(--ef-champagne);
+    transform: translateY(9px) rotate(45deg);
   }
 
   .ef-hamburger-open .ef-hamburger-bar:nth-child(2) {
@@ -319,259 +696,107 @@
   }
 
   .ef-hamburger-open .ef-hamburger-bar:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-    background-color: var(--ef-champagne);
+    transform: translateY(-9px) rotate(-45deg);
   }
 
   .ef-nav-panel {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 280px;
+    width: min(86vw, 320px);
     height: 100vh;
-    background-color: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    border-left: 1px solid var(--ef-border);
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
-    display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    gap: 2.5rem;
     padding: 3rem 2rem;
-    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 1035;
-  }
-
-  .ef-nav-panel .ef-nav {
-    flex-direction: column;
-    gap: 2.5rem;
-    align-items: center;
+    background: rgba(255, 253, 249, 0.98);
+    border-left: 1px solid var(--ef-border);
+    box-shadow: -20px 0 50px rgba(24, 21, 18, 0.12);
+    transition: right 260ms ease;
   }
 
   .ef-nav-open {
     right: 0;
   }
 
+  .ef-nav {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
   .ef-nav-link {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: rgba(26, 26, 26, 0.6);
+    font-size: 1rem;
   }
 
   .ef-mobile-header-meta {
     display: block;
+    margin-top: 1rem;
   }
 
   .ef-desktop-header-meta {
     display: none;
   }
 
-  /* Layout and Hero refolding */
-  .ef-section {
-    padding: 4rem 4% !important;
-  }
-
-  .ef-hero {
-    height: auto !important;
-    flex-direction: column !important;
-    gap: 1.5rem !important;
-    padding: 2rem 4% !important;
+  .ef-heading-xl,
+  .ef-lookbook-header h2 {
+    font-size: 3.15rem;
+    line-height: 0.96;
   }
 
   .ef-hero-main {
-    aspect-ratio: 4/5 !important;
+    min-height: 540px;
   }
 
-  .ef-hero-main div[style*="position: 'absolute'"] {
-    left: 2rem !important;
-    bottom: 2rem !important;
-    right: 2rem !important;
-    text-align: center !important;
+  .ef-hero-caption {
+    right: 1.4rem;
+    bottom: 1.6rem;
+    left: 1.4rem;
   }
 
-  .ef-hero-main div[style*="position: 'absolute'"] h1 {
-    font-size: 3rem !important;
+  .ef-hero-editorial {
+    padding: 1.5rem;
   }
 
-  .ef-hero-main div[style*="position: 'absolute'"] div[style*="marginTop: '4rem'"] {
-    margin-top: 2rem !important;
+  .ef-hero-editorial p {
+    font-size: 1.45rem;
   }
 
-  .ef-hero-main button {
-    width: 100% !important;
+  .ef-metrics-grid,
+  .ef-lookbook-grid,
+  .ef-footer-grid {
+    grid-template-columns: 1fr;
   }
 
-  .ef-hero-side {
-    flex-direction: row !important;
-    gap: 1rem !important;
-    aspect-ratio: 4/3 !important;
+  .ef-trend-hud {
+    min-height: 120px;
   }
 
-  /* Metrics strip */
-  .ef-metrics-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
-    padding: 4rem 0;
-    margin-bottom: 5rem;
+  .ef-lookbook-intro,
+  .ef-footer-brand-row,
+  .ef-footer-bottom {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
-  /* Lookbook section */
-  .ef-lookbook-header {
-    margin-bottom: 4rem;
+  .ef-lookbook-intro a {
+    white-space: normal;
   }
 
-  .ef-lookbook-header h2 {
-    font-size: 3rem !important;
-  }
-
-  .ef-lookbook-grid {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 1.5rem !important;
-    margin-top: 3rem !important;
-  }
-
-  .ef-look-card:nth-child(even) {
-    margin-top: 3rem !important; /* Flatten offsets slightly for better mobile rhythm */
-  }
-
-  .ef-img-frame {
-    margin-bottom: 1.5rem !important;
-  }
-
-  .ef-img-frame div[style*="position: 'absolute'"] {
-    bottom: 1rem !important;
-    right: 1rem !important;
-    padding: 0.35rem 0.75rem !important;
-  }
-
-  .ef-look-card h3 {
-    font-size: 1.3rem !important;
-  }
-
-  /* Philosophy section */
   .ef-philosophy-section {
-    margin-top: 8rem;
-    padding: 6rem 5%;
+    margin-top: 5rem;
+    padding: 4.5rem 6%;
   }
 
   .ef-philosophy-inner h2 {
-    font-size: 2rem !important;
-    line-height: 1.4 !important;
-    margin-bottom: 2rem !important;
+    font-size: 2rem;
   }
 
-  /* Hero caption */
-  .ef-hero-caption {
-    bottom: 2rem;
-    left: 2rem;
-    right: 2rem;
-    text-align: center;
-  }
-
-  .ef-hero-caption h1 {
-    font-size: 3rem !important;
-  }
-
-  .ef-hero-cta {
-    margin-top: 2rem !important;
-  }
-
-  /* Footer */
   .ef-footer {
-    padding: 6rem 4% 4rem !important;
+    padding: 4rem 4% 2.5rem;
   }
 
-  .ef-footer div[style*="fontSize: '4rem'"] {
-    font-size: 2.5rem !important;
-    margin-bottom: 3rem !important;
+  .ef-footer-logo {
+    font-size: 2.35rem;
   }
-
-  .ef-footer > div:nth-child(2) {
-    grid-template-columns: 1fr !important;
-    gap: 3rem !important;
-  }
-
-  .ef-footer div[style*="marginBottom: '3.5rem'"] {
-    margin-bottom: 1.5rem !important;
-  }
-
-  .ef-footer div[style*="marginTop: '12rem'"] {
-    margin-top: 4rem !important;
-    flex-direction: column !important;
-    gap: 2rem !important;
-    text-align: center !important;
-  }
-
-  .ef-footer div[style*="gap: '5rem'"] {
-    gap: 2rem !important;
-  }
-}
-
-/* ==========================================================================
-   Ecommerce Fashion — Animations & Micro-interactions
-   ========================================================================== */
-
-@keyframes ef-fade-in-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes ef-scale-in {
-  from { opacity: 0; transform: scale(0.94); }
-  to   { opacity: 1; transform: scale(1); }
-}
-@keyframes ef-shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position:  200% 0; }
-}
-
-/* Page entry */
-.ecommerce-fashion-theme {
-  animation: ef-fade-in-up 300ms ease-out both;
-}
-
-/* Nav underline sweep */
-.ecommerce-fashion-theme .ef-nav-link {
-  position: relative;
-}
-.ecommerce-fashion-theme .ef-nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  right: 50%;
-  height: 2px;
-  background: currentColor;
-  transition: left 220ms ease, right 220ms ease;
-}
-.ecommerce-fashion-theme .ef-nav-link:hover::after,
-.ecommerce-fashion-theme .ef-nav-link[aria-current="page"]::after {
-  left: 0;
-  right: 0;
-}
-
-/* Look card stagger (nth-child since no named grid) */
-.ef-look-card:nth-child(1) { animation: ef-scale-in 300ms  30ms ease-out both; }
-.ef-look-card:nth-child(2) { animation: ef-scale-in 300ms  80ms ease-out both; }
-.ef-look-card:nth-child(3) { animation: ef-scale-in 300ms 130ms ease-out both; }
-.ef-look-card:nth-child(4) { animation: ef-scale-in 300ms 180ms ease-out both; }
-.ef-look-card:nth-child(5) { animation: ef-scale-in 300ms 230ms ease-out both; }
-.ef-look-card:nth-child(6) { animation: ef-scale-in 300ms 280ms ease-out both; }
-.ef-look-card:nth-child(7) { animation: ef-scale-in 300ms 330ms ease-out both; }
-.ef-look-card:nth-child(8) { animation: ef-scale-in 300ms 380ms ease-out both; }
-
-/* Card will-change */
-.ef-look-card { will-change: transform; }
-
-/* Button active press */
-.ecommerce-fashion-theme .ef-btn-primary { will-change: transform; }
-.ecommerce-fashion-theme .ef-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
-
-/* Skeleton shimmer */
-.ef-shimmer {
-  background: linear-gradient(90deg, #faf8f5 25%, #f2eeea 50%, #faf8f5 75%);
-  background-size: 200% 100%;
-  animation: ef-shimmer 1.6s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

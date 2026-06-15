@@ -19,6 +19,7 @@ function cls(prefix: string, suffix: string) {
 export default function EcommerceCartPage({ classPrefix: prefix, shell }: CartPageProps) {
   const { items, loading, updateQuantity, removeItem } = useUnifiedCart();
   const [submittingOrder, setSubmittingOrder] = useState(false);
+  const [updatingProductId, setUpdatingProductId] = useState<number | null>(null);
   const themeLink = useEcommerceThemeLink();
 
   const monoClass = prefix === 'el'
@@ -35,6 +36,17 @@ export default function EcommerceCartPage({ classPrefix: prefix, shell }: CartPa
   const handleCheckout = () => {
     setSubmittingOrder(true);
     window.location.assign(themeLink('/checkout'));
+  };
+
+  const handleQuantityChange = async (productId: number, delta: number) => {
+    setUpdatingProductId(productId);
+    try {
+      await updateQuantity(productId, delta);
+    } finally {
+      setTimeout(() => {
+        setUpdatingProductId((current) => (current === productId ? null : current));
+      }, 180);
+    }
   };
 
   const { subtotal, shipping, tax, total } = calculateCartTotals(items);
@@ -79,16 +91,20 @@ export default function EcommerceCartPage({ classPrefix: prefix, shell }: CartPa
                 <div className={cls(prefix, 'cart-qty')}>
                   <button
                     type="button"
-                    onClick={() => updateQuantity(item.product.id, -1)}
+                    onClick={() => handleQuantityChange(item.product.id, -1)}
                     aria-label="Decrease quantity"
+                    disabled={updatingProductId === item.product.id}
                   >
                     -
                   </button>
-                  <span>{item.quantity}</span>
+                  <span className={updatingProductId === item.product.id ? cls(prefix, 'cart-qty-pending') : undefined}>
+                    {item.quantity}
+                  </span>
                   <button
                     type="button"
-                    onClick={() => updateQuantity(item.product.id, 1)}
+                    onClick={() => handleQuantityChange(item.product.id, 1)}
                     aria-label="Increase quantity"
+                    disabled={updatingProductId === item.product.id}
                   >
                     +
                   </button>

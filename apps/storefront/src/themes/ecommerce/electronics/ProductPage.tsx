@@ -139,6 +139,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [apiError, setApiError] = useState<string | null>(null);
   const [addingToCart, setAddingToCart] = useState(false);
   const [cartNotice, setCartNotice] = useState(false);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   // Form states
   const [form, setForm] = useState<SpecOrderForm>({ name: '', email: '', tuningRequests: '' });
@@ -204,6 +206,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
     };
   }, [slug, allowDemo]);
 
+  useEffect(() => {
+    setActiveImage(null);
+    setLightboxOpen(false);
+  }, [slug]);
+
   const getProductImage = (p: any, index: number) => {
     if (p.media?.featured_image) {
       return p.media.featured_image;
@@ -212,6 +219,26 @@ export default function ProductPage({ slug }: ProductPageProps) {
       return p.image_url;
     }
     return `/themes/ecommerce/electronics/${21 + (index % 8)}.webp`;
+  };
+
+  const getProductGallery = (p: any) => {
+    if (!p) return [];
+
+    const mediaImages = Array.isArray(p.media?.images)
+      ? p.media.images.map((image: any) => (
+        typeof image === 'string' ? image : image?.url || image?.path || image?.image_url
+      ))
+      : [];
+
+    return Array.from(new Set([
+      p.image_url,
+      p.media?.featured_image,
+      ...mediaImages,
+      '/themes/ecommerce/electronics/21.webp',
+      '/themes/ecommerce/electronics/22.webp',
+      '/themes/ecommerce/electronics/23.webp',
+      '/themes/ecommerce/electronics/24.webp',
+    ].filter(Boolean))).slice(0, 5) as string[];
   };
 
   const getPriceStr = (p: any) => {
@@ -279,6 +306,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
     addProductToCart(product as Product);
     setCartNotice(true);
     setAddingToCart(false);
+    window.setTimeout(() => setCartNotice(false), 4200);
   };
 
   if (!loading && !product) {
@@ -396,6 +424,60 @@ export default function ProductPage({ slug }: ProductPageProps) {
           object-fit: contain;
           z-index: 2;
           filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.15));
+          cursor: zoom-in;
+        }
+        .el-gallery-strip {
+          display: grid;
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 0.75rem;
+          margin-top: 1rem;
+        }
+        .el-gallery-thumb {
+          height: 84px;
+          border: 1px solid var(--el-border);
+          border-radius: 6px;
+          background: var(--el-bg-card);
+          cursor: pointer;
+          padding: 0.4rem;
+          transition: var(--el-transition);
+        }
+        .el-gallery-thumb img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+        .el-gallery-thumb-active,
+        .el-gallery-thumb:hover {
+          border-color: var(--el-primary);
+          box-shadow: 0 0 16px rgba(0, 229, 255, 0.22);
+        }
+        .el-cart-toast {
+          border: 1px solid rgba(0, 229, 255, 0.35);
+          border-radius: 8px;
+          background: rgba(0, 229, 255, 0.08);
+          padding: 1rem;
+          color: var(--el-text-main);
+          margin-bottom: 2rem;
+        }
+        .el-lightbox {
+          position: fixed;
+          inset: 0;
+          z-index: 2000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem;
+          background: rgba(0, 0, 0, 0.82);
+        }
+        .el-lightbox button {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+        }
+        .el-lightbox img {
+          max-width: min(960px, 92vw);
+          max-height: 86vh;
+          object-fit: contain;
         }
         .el-inquiry-box {
           background-color: var(--el-bg-card);
@@ -529,6 +611,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
           .el-scanned-image-wrap {
             height: 350px !important;
           }
+          .el-gallery-strip {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
         }
       `}</style>
 
@@ -569,10 +654,27 @@ export default function ProductPage({ slug }: ProductPageProps) {
               <div className="el-scanned-reticle"></div>
               <div className="el-image-scanline"></div>
               <img 
-                src={getProductImage(product, product.id)} 
+                src={activeImage || getProductGallery(product)[0] || getProductImage(product, product.id)}
                 alt={product.title} 
                 className="el-detail-img" 
+                onClick={() => setLightboxOpen(true)}
               />
+            </div>
+            <div className="el-gallery-strip" aria-label="Product image gallery">
+              {getProductGallery(product).map((image) => {
+                const isActive = (activeImage || getProductGallery(product)[0]) === image;
+                return (
+                  <button
+                    key={image}
+                    type="button"
+                    className={`el-gallery-thumb ${isActive ? 'el-gallery-thumb-active' : ''}`}
+                    onClick={() => setActiveImage(image)}
+                    aria-label={`View ${product.title} image`}
+                  >
+                    <img src={image} alt="" />
+                  </button>
+                );
+              })}
             </div>
             
             {/* Spec Table */}
@@ -628,10 +730,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
               {addingToCart ? 'Adding...' : 'Add to cart'}
             </button>
             {cartNotice && (
-              <p role="status" style={{ color: 'var(--el-text-muted)', marginBottom: '2rem' }}>
-                Added to cart.{' '}
+              <div role="status" className="el-cart-toast">
+                Added to cart. The cart badge has been updated.{' '}
                 <a href={themeLink('/cart')} style={{ color: 'var(--el-primary)' }}>View cart</a>
-              </p>
+              </div>
             )}
 
             {/* Order inquiry Console */}
@@ -753,6 +855,15 @@ export default function ProductPage({ slug }: ProductPageProps) {
             ))}
           </div>
         </section>
+      )}
+
+      {lightboxOpen && !loading && product && (
+        <div className="el-lightbox" role="dialog" aria-modal="true" aria-label={`${product.title} enlarged image`}>
+          <button type="button" className="el-btn el-btn-outline" onClick={() => setLightboxOpen(false)}>
+            Close
+          </button>
+          <img src={activeImage || getProductGallery(product)[0] || getProductImage(product, product.id)} alt={product.title} />
+        </div>
       )}
 
       <ElectronicsFooter />

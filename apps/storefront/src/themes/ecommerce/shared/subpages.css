@@ -392,6 +392,22 @@
   cursor: pointer;
   height: 32px;
   width: 32px;
+  transition: transform 120ms ease, opacity 120ms ease, border-color 120ms ease;
+}
+
+.ecommerce-electronics-wrapper .el-cart-qty button:active {
+  transform: scale(0.92);
+}
+
+.ecommerce-electronics-wrapper .el-cart-qty button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.ecommerce-fashion-theme .ef-cart-qty-pending,
+.ecommerce-electronics-wrapper .el-cart-qty-pending,
+.ecommerce-luxury-theme .ecl-cart-qty-pending {
+  opacity: 0.55;
 }
 
 .ecommerce-electronics-wrapper .el-cart-remove {
@@ -439,6 +455,108 @@
   margin: 0 auto;
   max-width: 1400px;
   padding: 4rem 6% 6rem;
+}
+
+.ecommerce-fashion-theme .ef-checkout-auth-shell,
+.ecommerce-electronics-wrapper .el-checkout-auth-shell,
+.ecommerce-luxury-theme .ecl-checkout-auth-shell {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.7fr);
+  align-items: stretch;
+}
+
+.ecommerce-fashion-theme .ef-checkout-auth-copy,
+.ecommerce-electronics-wrapper .el-checkout-auth-copy,
+.ecommerce-luxury-theme .ecl-checkout-auth-copy {
+  border: 1px solid var(--ef-border, #e2e8f0);
+  padding: 2rem;
+}
+
+.ecommerce-electronics-wrapper .el-checkout-auth-copy {
+  background:
+    linear-gradient(135deg, rgba(0, 229, 255, 0.08), transparent 40%),
+    var(--el-bg-card);
+  border-color: var(--el-border);
+}
+
+.ecommerce-fashion-theme .ef-checkout-auth-copy h1,
+.ecommerce-electronics-wrapper .el-checkout-auth-copy h1,
+.ecommerce-luxury-theme .ecl-checkout-auth-copy h1 {
+  margin: 1rem 0;
+}
+
+.ecommerce-fashion-theme .ef-checkout-auth-copy p,
+.ecommerce-electronics-wrapper .el-checkout-auth-copy p,
+.ecommerce-luxury-theme .ecl-checkout-auth-copy p {
+  max-width: 620px;
+  line-height: 1.75;
+  opacity: 0.72;
+}
+
+.ecommerce-fashion-theme .ef-checkout-auth-copy ul,
+.ecommerce-electronics-wrapper .el-checkout-auth-copy ul,
+.ecommerce-luxury-theme .ecl-checkout-auth-copy ul {
+  display: grid;
+  gap: 0.85rem;
+  margin: 2rem 0;
+  padding-left: 1.1rem;
+}
+
+.ecommerce-electronics-wrapper .el-checkout-auth-copy li {
+  color: var(--el-text-muted);
+}
+
+.ecommerce-fashion-theme .ef-checkout-auth-tabs,
+.ecommerce-electronics-wrapper .el-checkout-auth-tabs,
+.ecommerce-luxury-theme .ecl-checkout-auth-tabs {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1.5rem;
+}
+
+.ecommerce-fashion-theme .ef-checkout-auth-tabs button,
+.ecommerce-electronics-wrapper .el-checkout-auth-tabs button,
+.ecommerce-luxury-theme .ecl-checkout-auth-tabs button {
+  border: 1px solid var(--ef-border, #e2e8f0);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  padding: 0.85rem 1rem;
+}
+
+.ecommerce-electronics-wrapper .el-checkout-auth-tabs button {
+  border-color: var(--el-border);
+  color: var(--el-text-muted);
+  font-family: var(--el-font-tech);
+}
+
+.ecommerce-fashion-theme .ef-checkout-auth-tab-active,
+.ecommerce-electronics-wrapper .el-checkout-auth-tab-active,
+.ecommerce-luxury-theme .ecl-checkout-auth-tab-active {
+  background: var(--ef-ebony, #111827) !important;
+  color: white !important;
+}
+
+.ecommerce-electronics-wrapper .el-checkout-auth-tab-active {
+  background: rgba(0, 229, 255, 0.14) !important;
+  border-color: var(--el-primary) !important;
+  color: var(--el-primary) !important;
+}
+
+.ecommerce-fashion-theme .ef-checkout-auth-form-heading,
+.ecommerce-electronics-wrapper .el-checkout-auth-form-heading,
+.ecommerce-luxury-theme .ecl-checkout-auth-form-heading {
+  margin-bottom: 1.5rem;
+}
+
+.ecommerce-fashion-theme .ef-checkout-auth-form-heading h2,
+.ecommerce-electronics-wrapper .el-checkout-auth-form-heading h2,
+.ecommerce-luxury-theme .ecl-checkout-auth-form-heading h2 {
+  margin: 0.5rem 0 0;
 }
 
 .ecommerce-fashion-theme .ef-checkout-layout,
@@ -511,6 +629,9 @@
   .ecommerce-fashion-theme .ef-checkout-layout,
   .ecommerce-electronics-wrapper .el-checkout-layout,
   .ecommerce-luxury-theme .ecl-checkout-layout,
+  .ecommerce-fashion-theme .ef-checkout-auth-shell,
+  .ecommerce-electronics-wrapper .el-checkout-auth-shell,
+  .ecommerce-luxury-theme .ecl-checkout-auth-shell,
   .ecommerce-fashion-theme .ef-checkout-grid,
   .ecommerce-electronics-wrapper .el-checkout-grid,
   .ecommerce-luxury-theme .ecl-checkout-grid {

@@ -39,45 +39,71 @@ export default function EcommerceCheckoutPage({ classPrefix: prefix, shell }: Ec
   if (!checkout.user) {
     const authView = (
       <main className={cls(prefix, 'checkout-page')}>
-        <header className={cls(prefix, 'checkout-header')}>
-          <div className={monoClass}>AUTH_REQUIRED</div>
-          <h1>Sign in to checkout</h1>
-          <p>Complete your purchase with a secure account session.</p>
-        </header>
-
-        <form className={cls(prefix, 'checkout-form')} onSubmit={checkout.handleAuthSubmit}>
-          <div className={cls(prefix, 'checkout-auth-toggle')}>
-            <button type="button" className={primaryBtnClass} onClick={() => checkout.setAuthMode('login')} disabled={checkout.authMode === 'login'}>
-              Login
-            </button>
-            <button type="button" className={primaryBtnClass} onClick={() => checkout.setAuthMode('register')} disabled={checkout.authMode === 'register'}>
-              Register
-            </button>
+        <section className={cls(prefix, 'checkout-auth-shell')}>
+          <div className={cls(prefix, 'checkout-auth-copy')}>
+            <div className={monoClass}>SECURE_ACCOUNT_CHECKOUT</div>
+            <h1>Continue to checkout</h1>
+            <p>
+              Sign in or create an account to sync your cart, save order history, and continue to shipping and payment.
+            </p>
+            <ul>
+              <li>Cart items are preserved after authentication.</li>
+              <li>Shipping and payment unlock after login.</li>
+              <li>Guest checkout is not enabled for this storefront.</li>
+            </ul>
+            <a href={themeLink('/cart')} className={cls(prefix, 'detail-back')}>
+              <span aria-hidden="true">Back</span>
+              Return to cart
+            </a>
           </div>
 
-          {checkout.authMode === 'register' && (
+          <form className={cls(prefix, 'checkout-form')} onSubmit={checkout.handleAuthSubmit}>
+            <div className={cls(prefix, 'checkout-auth-tabs')} role="tablist" aria-label="Checkout authentication mode">
+              <button
+                type="button"
+                className={checkout.authMode === 'login' ? cls(prefix, 'checkout-auth-tab-active') : undefined}
+                onClick={() => checkout.setAuthMode('login')}
+              >
+                Login
+              </button>
+              <button
+                type="button"
+                className={checkout.authMode === 'register' ? cls(prefix, 'checkout-auth-tab-active') : undefined}
+                onClick={() => checkout.setAuthMode('register')}
+              >
+                Create account
+              </button>
+            </div>
+
+            <div className={cls(prefix, 'checkout-auth-form-heading')}>
+              <div className={monoClass}>{checkout.authMode === 'login' ? 'WELCOME_BACK' : 'NEW_CUSTOMER'}</div>
+              <h2>{checkout.authMode === 'login' ? 'Sign in securely' : 'Create your checkout account'}</h2>
+            </div>
+
+            {checkout.authMode === 'register' && (
+              <label>
+                Full name
+                <input value={checkout.authName} onChange={(e) => checkout.setAuthName(e.target.value)} required />
+              </label>
+            )}
+
             <label>
-              Full name
-              <input value={checkout.authName} onChange={(e) => checkout.setAuthName(e.target.value)} required />
+              Email
+              <input type="email" value={checkout.authEmail} onChange={(e) => checkout.setAuthEmail(e.target.value)} required />
             </label>
-          )}
 
-          <label>
-            Email
-            <input type="email" value={checkout.authEmail} onChange={(e) => checkout.setAuthEmail(e.target.value)} required />
-          </label>
+            <label>
+              Password
+              <input type="password" value={checkout.authPassword} onChange={(e) => checkout.setAuthPassword(e.target.value)} required />
+            </label>
 
-          <label>
-            Password
-            <input type="password" value={checkout.authPassword} onChange={(e) => checkout.setAuthPassword(e.target.value)} required />
-          </label>
+            {checkout.error && <p role="alert" className={cls(prefix, 'checkout-error')}>{checkout.error}</p>}
 
-          {checkout.error && <p role="alert" className={cls(prefix, 'checkout-error')}>{checkout.error}</p>}
-
-          <button type="submit" className={primaryBtnClass} disabled={checkout.authBusy}>
-            {checkout.authBusy ? 'Please wait...' : checkout.authMode === 'login' ? 'Sign in' : 'Create account'}
-          </button>
-        </form>
+            <button type="submit" className={primaryBtnClass} disabled={checkout.authBusy}>
+              {checkout.authBusy ? 'Please wait...' : checkout.authMode === 'login' ? 'Sign in and continue' : 'Create account and continue'}
+            </button>
+          </form>
+        </section>
       </main>
     );
     return shell ? shell(authView) : authView;

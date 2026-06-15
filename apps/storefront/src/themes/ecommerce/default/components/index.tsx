@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import type { Category, Product } from '@sellio/types';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
-import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
@@ -14,6 +13,33 @@ import {
   getProductImage,
   isProductInStock,
 } from '@/themes/unifieds/shared/product-utils';
+
+const footerGroups = [
+  {
+    title: 'Shop',
+    links: [
+      ['All Products', '/explore'],
+      ['New Arrivals', '/explore?sort=latest'],
+      ['Cart', '/cart'],
+    ],
+  },
+  {
+    title: 'Customer Care',
+    links: [
+      ['Checkout', '/checkout'],
+      ['Order Review', '/checkout/confirm'],
+      ['Support', '/explore'],
+    ],
+  },
+  {
+    title: 'Storefront',
+    links: [
+      ['Featured Products', '/explore?featured=1'],
+      ['Sale Items', '/explore?sort=price_asc'],
+      ['Account Help', '/cart'],
+    ],
+  },
+] as const;
 
 export const ShopHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -144,7 +170,7 @@ export const CategoryRibbon = ({
 }) => (
   <a href={href} className="ed-category-ribbon category-item-hover">
     <div>{label}</div>
-    <span className="ed-mono">{count} items</span>
+    <span className="ed-mono">{count}</span>
   </a>
 );
 
@@ -161,6 +187,8 @@ export const TransactionFooter = () => {
     '© 2026 Sellio Shop. All rights reserved.',
   );
 
+  const footerCopyright = copyright.replace(/\u00C2?\u00A9/g, '(c)');
+
   return (
     <footer className="ed-footer">
       <div className="ed-footer-grid">
@@ -168,28 +196,26 @@ export const TransactionFooter = () => {
           <a className="ed-logo ed-footer-logo" href={themeLink('/')}>{footerBrand || brandLabel}</a>
           <p className="ed-footer-description">{description}</p>
         </div>
-        <FooterMenuColumn
-          location="footer_column_1"
-          renderTitle={(title) => <div className="ed-mono ed-footer-title">{title}</div>}
-          listClassName=""
-          linkClassName=""
-        />
-        <FooterMenuColumn
-          location="footer_column_2"
-          renderTitle={(title) => <div className="ed-mono ed-footer-title">{title}</div>}
-        />
-        <FooterMenuColumn
-          location="footer_column_3"
-          renderTitle={(title) => <div className="ed-mono ed-footer-title">{title}</div>}
-        />
+        {footerGroups.map((group) => (
+          <div key={group.title}>
+            <div className="ed-mono ed-footer-title">{group.title}</div>
+            <nav className="ed-footer-links" aria-label={group.title}>
+              {group.links.map(([label, href]) => (
+                <a className="ed-footer-link" href={themeLink(href)} key={label}>
+                  {label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        ))}
       </div>
       <div className="ed-footer-bottom">
-        <div className="ed-mono ed-footer-copyright">{copyright}</div>
+        <div className="ed-mono ed-footer-copyright">{footerCopyright}</div>
         <MenuNav
           location="social_footer"
           flat
           className="ed-footer-social"
-          linkClassName="ed-mono"
+          linkClassName="ed-mono ed-footer-social-link"
           renderItem={(item, { href, className, onNavigate }) => (
             <a href={href} className={className} onClick={onNavigate}>
               {item.title}
