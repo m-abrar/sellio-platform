@@ -12,6 +12,9 @@ interface StructureItemProps {
     image?: string;
     price?: string;
     location?: string;
+    listingLabel?: string;
+    beds?: string;
+    baths?: string;
 }
 
 const StructureItem = ({
@@ -23,6 +26,9 @@ const StructureItem = ({
     image,
     price,
     location,
+    listingLabel,
+    beds,
+    baths,
     themeLink,
 }: StructureItemProps & { themeLink: (path: string) => string }) => {
     const content = (
@@ -33,6 +39,7 @@ const StructureItem = ({
                 ) : (
                     <div className="structure-card-image-fallback" aria-hidden="true">{icon}</div>
                 )}
+                {listingLabel && <span className="structure-card-badge">{listingLabel}</span>}
             </div>
             <div className="structure-card-body">
                 <h3>{title}</h3>
@@ -40,8 +47,12 @@ const StructureItem = ({
                 {price && <div className="structure-card-price">{price}</div>}
                 <div className="structure-card-meta">
                     <div>
-                        <div className="structure-card-meta-label">Units</div>
-                        <div className="structure-card-meta-value">{units}</div>
+                        <div className="structure-card-meta-label">Beds</div>
+                        <div className="structure-card-meta-value">{beds || units}</div>
+                    </div>
+                    <div>
+                        <div className="structure-card-meta-label">Baths</div>
+                        <div className="structure-card-meta-value">{baths || 'TBA'}</div>
                     </div>
                     <div>
                         <div className="structure-card-meta-label">Floor area</div>

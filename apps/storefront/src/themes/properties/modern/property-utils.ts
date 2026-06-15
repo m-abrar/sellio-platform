@@ -142,6 +142,9 @@ export function mapPropertyToExploreCard(
 }
 
 export function mapPropertyToStructure(property: Property, index = 0) {
+  const listingMode = getPropertyListingMode(property);
+  const beds = property.specs?.bedrooms ?? property.number_of_bedrooms;
+  const baths = property.specs?.bathrooms ?? property.number_of_bathrooms;
   const area =
     property.specs?.area_formatted ||
     (property.area_sq_ft
@@ -162,6 +165,9 @@ export function mapPropertyToStructure(property: Property, index = 0) {
     image: collectPropertyImages(property, index)[0],
     price: getPropertyPrice(property),
     location: getPropertyLocation(property),
+    listingLabel: getListingModeLabel(listingMode),
+    beds: beds ? String(beds) : 'TBA',
+    baths: baths ? String(baths) : 'TBA',
   };
 }
 

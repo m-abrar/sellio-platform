@@ -2,6 +2,7 @@
 
 import { AmenityGrid } from './AmenityGrid';
 import { FeatureList } from './FeatureList';
+import { GalleryGrid } from './GalleryGrid';
 import { MediaLinks } from './MediaLinks';
 import { NeighborhoodList } from './NeighborhoodList';
 import { PriceBreakdownTable } from './PriceBreakdownTable';
@@ -20,6 +21,8 @@ interface ProductDetailMainProps {
   features: PropertyDetail['features'];
   scores: PropertyDetail['scores'];
   neighborhoods: PropertyDetail['neighborhoods'];
+  galleryImages: string[];
+  title: string;
 }
 
 function DescriptionBlock({
@@ -50,6 +53,8 @@ export function ProductDetailMain({
   features,
   scores,
   neighborhoods,
+  galleryImages,
+  title,
 }: ProductDetailMainProps) {
   const amenityList = amenities || [];
   const featureList = features || [];
@@ -60,6 +65,7 @@ export function ProductDetailMain({
     return (
       <div className="pm-detail-main pm-detail-main--rental">
         <DescriptionBlock description={description} shortDescription={shortDescription} />
+        <GalleryGrid images={galleryImages} title={title} />
         <RulesAndPolicies rules={detail.rules} policies={detail.policies} />
         <AmenityGrid amenities={amenityList} />
         <FeatureList features={featureList} />
@@ -75,6 +81,7 @@ export function ProductDetailMain({
   return (
     <div className="pm-detail-main pm-detail-main--sale">
       <DescriptionBlock description={description} shortDescription={shortDescription} />
+      <GalleryGrid images={galleryImages} title={title} />
       <PriceBreakdownTable property={detail} />
       <FeatureList features={featureList} />
       <AmenityGrid amenities={amenityList} />

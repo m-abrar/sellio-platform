@@ -7,82 +7,175 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
+import { calculateCartTotals } from '@/themes/unifieds/shared/cart';
+import { CART_THUMB_PLACEHOLDER, getProductImage } from '@/themes/unifieds/shared/product-utils';
 import { useUnifiedCart } from '@/themes/unifieds/shared/useUnifiedCart';
 
 export const ElectronicsHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { itemCount } = useUnifiedCart();
+  const [cartOpen, setCartOpen] = useState(false);
+  const { items, itemCount, removeItem } = useUnifiedCart();
   const themeLink = useEcommerceThemeLink();
   const brandLabel = useThemeContent('header.brand_label', 'NEURALGEAR');
   const brandHighlight = useThemeContent('header.brand_highlight', 'GEAR');
   const searchPlaceholder = useThemeContent('header.search_placeholder', 'Search components, devices...');
   const brandPrefix = brandLabel.endsWith(brandHighlight) ? brandLabel.slice(0, -brandHighlight.length) : brandLabel;
+  const totals = calculateCartTotals(items);
+  const previewItems = items.slice(0, 3);
+  const formatUnitPrice = (price: unknown) => `$${Number(price || 0).toLocaleString()}`;
 
   return (
-    <header className="el-header">
-      <a href={themeLink('/')} className="el-logo">
-        {brandPrefix}
-        <span className="el-text-cyan">{brandHighlight}</span>
-      </a>
-      <div className="el-search-bar el-desktop-search">
-        <span aria-hidden="true">Search</span>
-        <input type="text" className="el-search-input" placeholder={searchPlaceholder} />
-      </div>
-
-      <button
-        className={`el-hamburger ${isOpen ? 'el-hamburger-open' : ''}`}
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle Navigation"
-        type="button"
-      >
-        <span className="el-hamburger-bar" />
-        <span className="el-hamburger-bar" />
-        <span className="el-hamburger-bar" />
-      </button>
-
-      <div className={`el-nav-panel ${isOpen ? 'el-nav-open' : ''}`}>
-        <div className="el-search-bar el-mobile-search">
+    <>
+      <header className="el-header">
+        <a href={themeLink('/')} className="el-logo">
+          {brandPrefix}
+          <span className="el-text-cyan">{brandHighlight}</span>
+        </a>
+        <div className="el-search-bar el-desktop-search">
           <span aria-hidden="true">Search</span>
           <input type="text" className="el-search-input" placeholder={searchPlaceholder} />
         </div>
-        <MenuNav
-          location="main_header"
-          flat
-          className="el-nav"
-          linkClassName="el-nav-link"
-          onNavigate={() => setIsOpen(false)}
-          renderItem={hashAwareNavItemRenderer}
-        />
-        <MenuActionButtons
-          className="el-header-actions"
-          linkClassName="el-nav-link"
-          onNavigate={() => setIsOpen(false)}
-          renderItem={(item, { href, className, onNavigate }) => {
-            if (item.title === 'CART') {
+
+        <button
+          className={`el-hamburger ${isOpen ? 'el-hamburger-open' : ''}`}
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle Navigation"
+          type="button"
+        >
+          <span className="el-hamburger-bar" />
+          <span className="el-hamburger-bar" />
+          <span className="el-hamburger-bar" />
+        </button>
+
+        <div className={`el-nav-panel ${isOpen ? 'el-nav-open' : ''}`}>
+          <div className="el-search-bar el-mobile-search">
+            <span aria-hidden="true">Search</span>
+            <input type="text" className="el-search-input" placeholder={searchPlaceholder} />
+          </div>
+          <MenuNav
+            location="main_header"
+            flat
+            className="el-nav"
+            linkClassName="el-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={hashAwareNavItemRenderer}
+          />
+          <MenuActionButtons
+            className="el-header-actions"
+            linkClassName="el-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={(item, { href, className, onNavigate }) => {
+              if (item.title === 'CART') {
+                return (
+                  <button
+                    type="button"
+                    className="el-cart-icon"
+                    onClick={() => {
+                      setCartOpen(true);
+                      setIsOpen(false);
+                      onNavigate?.();
+                    }}
+                    aria-label={`Cart${itemCount ? ` with ${itemCount} items` : ''}`}
+                    aria-expanded={cartOpen}
+                  >
+                    <span aria-hidden="true">Cart</span>
+                    {itemCount > 0 && (
+                      <span className="el-cart-badge">{itemCount > 99 ? '99+' : itemCount}</span>
+                    )}
+                  </button>
+                );
+              }
+
               return (
-                <a
-                  href={themeLink('/cart')}
-                  className="el-cart-icon"
-                  onClick={onNavigate}
-                  aria-label={`Cart${itemCount ? ` with ${itemCount} items` : ''}`}
-                >
-                  <span aria-hidden="true">Cart</span>
-                  {itemCount > 0 && (
-                    <span className="el-cart-badge">{itemCount > 99 ? '99+' : itemCount}</span>
-                  )}
+                <a href={href} className={`${className} el-header-search-link`} onClick={onNavigate}>
+                  {item.title}
                 </a>
               );
-            }
+            }}
+          />
+        </div>
+      </header>
 
-            return (
-              <a href={href} className={`${className} el-header-search-link`} onClick={onNavigate}>
-                {item.title}
+      {cartOpen && (
+        <div className="el-mini-cart-layer" role="presentation">
+          <button
+            type="button"
+            className="el-mini-cart-backdrop"
+            aria-label="Close mini cart"
+            onClick={() => setCartOpen(false)}
+          />
+          <aside className="el-mini-cart" role="dialog" aria-modal="true" aria-label="Mini cart">
+            <div className="el-mini-cart-header">
+              <div>
+                <div className="el-tech-font">CART_SYNC</div>
+                <h2>{itemCount ? `${itemCount} item${itemCount === 1 ? '' : 's'}` : 'Cart is empty'}</h2>
+              </div>
+              <button type="button" className="el-mini-cart-close" onClick={() => setCartOpen(false)}>
+                Close
+              </button>
+            </div>
+
+            {previewItems.length > 0 ? (
+              <div className="el-mini-cart-list">
+                {previewItems.map((item) => (
+                  <article className="el-mini-cart-item" key={item.product.id}>
+                    <img
+                      src={getProductImage(item.product, CART_THUMB_PLACEHOLDER)}
+                      alt={item.product.title}
+                    />
+                    <div>
+                      <h3>{item.product.title}</h3>
+                      <p>
+                        {item.quantity} x {formatUnitPrice(item.unitPrice ?? item.product.price)}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeItem(item.product.id)}
+                      aria-label={`Remove ${item.product.title}`}
+                    >
+                      Remove
+                    </button>
+                  </article>
+                ))}
+                {items.length > previewItems.length && (
+                  <p className="el-mini-cart-more">
+                    +{items.length - previewItems.length} more item{items.length - previewItems.length === 1 ? '' : 's'} in cart
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="el-mini-cart-empty">
+                <p>Add hardware from the product detail page, then return here to review your cart.</p>
+                <a href={themeLink('/explore')} onClick={() => setCartOpen(false)}>
+                  Browse hardware
+                </a>
+              </div>
+            )}
+
+            <div className="el-mini-cart-summary">
+              <div>
+                <span>Subtotal</span>
+                <strong>${totals.subtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+              </div>
+              <div>
+                <span>Est. total</span>
+                <strong>${totals.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+              </div>
+            </div>
+
+            <div className="el-mini-cart-actions">
+              <a href={themeLink('/cart')} className="el-btn el-btn-outline" onClick={() => setCartOpen(false)}>
+                View cart
               </a>
-            );
-          }}
-        />
-      </div>
-    </header>
+              <a href={themeLink('/checkout')} className="el-btn el-btn-primary" onClick={() => setCartOpen(false)}>
+                Checkout
+              </a>
+            </div>
+          </aside>
+        </div>
+      )}
+    </>
   );
 };
 

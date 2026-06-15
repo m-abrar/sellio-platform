@@ -126,6 +126,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [apiError, setApiError] = useState<string | null>(null);
   const [addingToCart, setAddingToCart] = useState(false);
   const [cartNotice, setCartNotice] = useState(false);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'details' | 'reviews' | 'care'>('details');
 
   // Bespoke form states
   const [selectedSize, setSelectedSize] = useState<string>("M");
@@ -179,6 +181,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
       isMounted = false;
     };
   }, [slug, allowDemo]);
+
+  useEffect(() => {
+    setActiveImage(null);
+    setActiveTab('details');
+  }, [slug]);
 
   // Sync selected standard size to form
   const handleSizeSelect = (size: string) => {
@@ -234,6 +241,25 @@ export default function ProductPage({ slug }: ProductPageProps) {
     setAddingToCart(false);
   };
 
+  const getGalleryImages = (item: any) => {
+    if (!item) return [];
+
+    const mediaImages = Array.isArray(item.media?.images)
+      ? item.media.images.map((image: any) => (
+        typeof image === 'string' ? image : image?.url || image?.path || image?.image_url
+      ))
+      : [];
+
+    return Array.from(new Set([
+      item.image_url,
+      item.media?.featured_image,
+      ...mediaImages,
+      '/themes/ecommerce/fashion/11.webp',
+      '/themes/ecommerce/fashion/12.webp',
+      '/themes/ecommerce/fashion/13.webp',
+    ].filter(Boolean))) as string[];
+  };
+
 
   if (loading) {
     return (
@@ -277,6 +303,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
     origin: "Atelier Florence, Italy",
     care: "Dry clean only"
   };
+  const galleryImages = getGalleryImages(product);
+  const selectedImage = activeImage || galleryImages[0] || '/themes/ecommerce/fashion/11.webp';
 
   return (
     <div style={{ background: '#ffffff', minHeight: '100vh', padding: '0 0 10rem 0' }}>
@@ -321,8 +349,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
             border: '1px solid var(--ef-border)',
             position: 'relative'
           }}>
-            <img 
-              src={product?.image_url || product?.media?.featured_image || `/themes/ecommerce/fashion/11.webp`} 
+            <img
+              src={selectedImage}
               alt={product?.title} 
               style={{
                 width: '100%',
@@ -333,6 +361,19 @@ export default function ProductPage({ slug }: ProductPageProps) {
             <div className="ef-mono" style={{ position: 'absolute', bottom: '2rem', left: '2rem', background: '#ffffff', padding: '0.5rem 1.5rem', fontSize: '0.6rem' }}>
               ATELIER_NO_0{product?.id || 101}
             </div>
+          </div>
+          <div className="ef-detail-gallery" aria-label="Product image gallery">
+            {galleryImages.map((image) => (
+              <button
+                key={image}
+                type="button"
+                className={image === selectedImage ? 'ef-detail-thumb ef-detail-thumb-active' : 'ef-detail-thumb'}
+                onClick={() => setActiveImage(image)}
+                aria-label={`View ${product?.title} image`}
+              >
+                <img src={image} alt="" />
+              </button>
+            ))}
           </div>
           
           {/* Garment Specifications Details Grid */}
@@ -386,7 +427,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </div>
 
             {/* Description */}
-            <p style={{
+            <p className="ef-detail-summary" style={{
               fontSize: '0.95rem',
               lineHeight: 1.9,
               opacity: 0.7,
@@ -608,6 +649,52 @@ export default function ProductPage({ slug }: ProductPageProps) {
           </div>
         </div>
 
+      </section>
+
+      <section className="ef-detail-tabs-section">
+        <div className="ef-detail-tabs" role="tablist" aria-label="Product information">
+          {[
+            ['details', 'Details'],
+            ['reviews', 'Reviews'],
+            ['care', 'Care'],
+          ].map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === key}
+              className={activeTab === key ? 'ef-detail-tab-active' : undefined}
+              onClick={() => setActiveTab(key as typeof activeTab)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <div className="ef-detail-tab-panel">
+          {activeTab === 'details' && (
+            <>
+              <h2>Garment details</h2>
+              <p>{product?.description}</p>
+              <dl>
+                <div><dt>Material</dt><dd>{specs.material}</dd></div>
+                <div><dt>Structure</dt><dd>{specs.weight}</dd></div>
+                <div><dt>Origin</dt><dd>{specs.origin}</dd></div>
+              </dl>
+            </>
+          )}
+          {activeTab === 'reviews' && (
+            <>
+              <h2>Reviews</h2>
+              <p>Review integration is ready for the storefront review system. This product currently uses verified catalog and checkout data.</p>
+            </>
+          )}
+          {activeTab === 'care' && (
+            <>
+              <h2>Care and fitting</h2>
+              <p>{specs.care}. Use the bespoke fitting request to share measurements or adjustment notes before purchase.</p>
+            </>
+          )}
+        </div>
       </section>
 
       {/* Suggested Looks Carousel */}

@@ -8,6 +8,7 @@
 - [x] Replaced unnecessary product-detail cards like `slug` and `status` with more useful buyer information.
 - [x] Moved long product-detail content into a separate tabbed section for description, reviews, and shipping.
 - [x] Added multiple product images on the product detail page with selectable thumbnails.
+- [x] Verified the current storefront changes with `npm.cmd run lint` and `npm.cmd run build`.
 
 ## Still pending
 

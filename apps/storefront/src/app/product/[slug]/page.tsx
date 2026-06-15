@@ -19,5 +19,5 @@ export default async function ProductDetailsPage({ params }: PageProps) {
     return <ThemeSubpageUnavailable layout={layout} pageName="Listing Details" />;
   }
 
-  return <ProductPage slug={slug} />;
+  return <ProductPage slug={slug} vertical="products" />;
 }

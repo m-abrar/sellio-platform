@@ -69,7 +69,11 @@ export default function Page() {
 
   return (
     <div>
-      <section className="urban-hero" id="urban-hero-section">
+      <section
+        className="urban-hero urban-hero--immersive"
+        id="urban-hero-section"
+        style={{ '--urban-hero-bg': `url(${heroImage})` } as React.CSSProperties}
+      >
         <div className="urban-hero-copy">
           <div className="urban-hero-kicker">
             {useThemeContent('hero.kicker', 'Premium urban properties')}
@@ -126,10 +130,8 @@ export default function Page() {
             </button>
           </div>
         </div>
-        <div className="urban-hero-visual">
-          <div className="urban-hero-image-frame">
-            <img src={heroImage} alt="High-rise building skyline" className="urban-hero-image" />
-          </div>
+        <div className="urban-hero-market-panel">
+          <div className="urban-hero-panel-kicker">Live market snapshot</div>
           <div className="urban-hero-stat-card">
             <div className="urban-hero-stat-value">
               {loadingProperties ? '...' : nodeCount || structureItems.length}
@@ -138,6 +140,19 @@ export default function Page() {
               {useThemeContent('hero.stat_label', 'Properties listed')}
             </div>
           </div>
+          <div className="urban-hero-panel-grid">
+            <div>
+              <span>Archive</span>
+              <strong>Sale + rent</strong>
+            </div>
+            <div>
+              <span>Details</span>
+              <strong>Photos, map, specs</strong>
+            </div>
+          </div>
+          <a href={themeLink('/explore?mode=sale')} className="urban-hero-panel-link">
+            Browse homes for sale
+          </a>
         </div>
       </section>
 

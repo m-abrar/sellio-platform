@@ -19,10 +19,14 @@
 - [x] Confirmed company name and logo are driven by editable theme content (`site_name`, `site_logo`, `hide_site_name`).
 - [x] Normalized the header and footer company-name sizing.
 - [x] Changed explore listing loading to true API chunks: the page now renders the first fetched chunk, and `Load more listings` requests the next API page instead of revealing preloaded hidden cards.
+- [x] Added dedicated marketplace detail URLs for products, properties, autos, services, jobs, events, and classifieds.
+- [x] Updated marketplace home and explore cards so every vertical opens its own detail URL instead of falling back to filtered Explore searches.
+- [x] Reworked the unified marketplace detail page to fetch and present vertical-specific data, metadata, owner/provider context, and product-only cart actions.
+- [x] Verified the current storefront changes with `npm.cmd run lint` and `npm.cmd run build`.
 
 ## Still pending
 
 ### Unified marketplace
 
-- [ ] Create dedicated detail-page designs and suitable independent URLs for each vertical:
-  products, properties, autos, services, jobs, events, and classifieds.
+- [ ] Review the new marketplace detail URLs in browser for final visual QA:
+  `/preview/unifieds_marketplace/products/{slug}`, `/properties/{slug}`, `/autos/{slug}`, `/services/{slug}`, `/jobs/{slug}`, `/events/{slug}`, and `/classifieds/{slug}`.

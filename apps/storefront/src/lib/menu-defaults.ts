@@ -75,6 +75,15 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
       ));
     }
 
+    if (themeKey === 'properties_modern') {
+      return footerMenu(location, 'Main Header Menu', links(
+        ['Buy', '/explore?mode=sale'],
+        ['Rent', '/explore?mode=rental'],
+        ['Featured', '/#urban-structure-grid'],
+        ['Contact', '/#urban-final-cta'],
+      ));
+    }
+
     if (themeKey === 'unifieds_default') {
       return footerMenu(location, 'Main Header Menu', links(
         ['Registry', '/'],
@@ -143,6 +152,10 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
       return footerMenu(location, 'Header Actions', links(['View Cart', '/cart']));
     }
 
+    if (themeKey === 'properties_modern') {
+      return footerMenu(location, 'Header Actions', links(['Browse listings', '/explore']));
+    }
+
     return footerMenu(location, 'Header Actions', links(['Inquire', '/cart']));
   }
 
@@ -169,6 +182,18 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
       }
 
       return footerMenu(location, 'Client Care', links(['Shipping', '/checkout'], ['Returns', '/cart'], ['Order Review', '/checkout/confirm']));
+    }
+
+    if (themeKey === 'properties_modern') {
+      if (location === 'footer_column_1') {
+        return footerMenu(location, 'Explore', links(['Homes for sale', '/explore?mode=sale'], ['Apartments for rent', '/explore?mode=rental'], ['All listings', '/explore']));
+      }
+
+      if (location === 'footer_column_2') {
+        return footerMenu(location, 'Property Tools', links(['Featured homes', '/#urban-structure-grid'], ['Compare details', '/explore'], ['Inquire with agents', '/explore']));
+      }
+
+      return footerMenu(location, 'Support', links(['How it works', '/#urban-precision-section'], ['Start search', '/explore'], ['Contact', '/#urban-final-cta']));
     }
 
     return footerMenu(location, 'Footer', links(['About', '#'], ['Contact', '#']));

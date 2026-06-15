@@ -8,7 +8,9 @@
 - [x] Updated the cart badge immediately after add-to-cart by using the shared cart update event flow.
 - [x] Redesigned the checkout Login/Register section with clearer hierarchy, tabs, trust cues, and explicit account requirements.
 - [x] Added an electronics product detail image gallery with thumbnails and a lightbox/enlarge view.
+- [x] Added a mini-cart drawer from the electronics header with item previews, totals, remove actions, and cart/checkout links.
+- [x] Verified the current storefront changes with `npm.cmd run lint` and `npm.cmd run build`.
 
 ## Still pending
 
-- [ ] Consider a mini-cart drawer or fly-to-cart animation if the theme needs a more animated cart experience later.
+- [ ] Review the electronics cart drawer in browser for final visual QA.

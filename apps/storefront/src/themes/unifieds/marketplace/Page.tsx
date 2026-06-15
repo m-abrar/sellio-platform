@@ -81,7 +81,7 @@ function productToListing(product: Product): DisplayListing {
     image: product.media?.featured_image || product.image_url || '/themes/unifieds/marketplace/2.webp',
     slug: product.slug,
     badge: 'Product',
-    href: product.slug ? `/product/${product.slug}` : '/explore?vertical=products',
+    href: product.slug ? `/products/${product.slug}` : '/explore?vertical=products',
   };
 }
 
@@ -112,7 +112,7 @@ function propertyToListing(property: Property): DisplayListing {
     image: property.primary_image_url || property.featured_image || property.thumbnail_image || '/themes/unifieds/marketplace/5.webp',
     slug: property.slug,
     badge: 'Property',
-    href: property.slug ? `/explore?vertical=properties&search=${encodeURIComponent(property.title)}` : '/explore?vertical=properties',
+    href: property.slug ? `/properties/${property.slug}` : '/explore?vertical=properties',
   };
 }
 
@@ -125,7 +125,7 @@ function vehicleToListing(vehicle: Vehicle): DisplayListing {
     image: vehicle.media?.main_photo || vehicle.media?.preview || vehicle.featured_image || '/themes/unifieds/marketplace/10.webp',
     slug: vehicle.slug,
     badge: 'Auto',
-    href: vehicle.slug ? `/explore?vertical=autos&search=${encodeURIComponent(vehicle.title)}` : '/explore?vertical=autos',
+    href: vehicle.slug ? `/autos/${vehicle.slug}` : '/explore?vertical=autos',
   };
 }
 
@@ -138,7 +138,7 @@ function serviceToListing(service: ServiceListing): DisplayListing {
     image: service.media?.main_photo || service.provider?.avatar || '/themes/unifieds/marketplace/14.webp',
     slug: service.slug,
     badge: 'Service',
-    href: service.slug ? `/explore?vertical=services&search=${encodeURIComponent(service.title)}` : '/explore?vertical=services',
+    href: service.slug ? `/services/${service.slug}` : '/explore?vertical=services',
   };
 }
 
@@ -151,7 +151,7 @@ function jobToListing(job: JobListing): DisplayListing {
     image: job.company?.logo_card || job.company?.logo || '/themes/unifieds/marketplace/21.webp',
     slug: job.slug,
     badge: 'Job',
-    href: job.slug ? `/explore?vertical=jobs&search=${encodeURIComponent(job.title)}` : '/explore?vertical=jobs',
+    href: job.slug ? `/jobs/${job.slug}` : '/explore?vertical=jobs',
   };
 }
 
@@ -164,7 +164,7 @@ function eventToListing(event: EventListing): DisplayListing {
     image: event.media?.poster || event.media?.preview || '/themes/unifieds/marketplace/18.webp',
     slug: event.slug,
     badge: 'Event',
-    href: event.slug ? `/explore?vertical=events&search=${encodeURIComponent(event.title)}` : '/explore?vertical=events',
+    href: event.slug ? `/events/${event.slug}` : '/explore?vertical=events',
   };
 }
 
@@ -177,7 +177,7 @@ function classifiedToListing(classified: ClassifiedListing): DisplayListing {
     image: classified.media?.main_photo || classified.media?.thumbnail || '/themes/unifieds/marketplace/24.webp',
     slug: classified.slug,
     badge: 'Classified',
-    href: classified.slug ? `/explore?vertical=classifieds&search=${encodeURIComponent(classified.title)}` : '/explore?vertical=classifieds',
+    href: classified.slug ? `/classifieds/${classified.slug}` : '/explore?vertical=classifieds',
   };
 }
 

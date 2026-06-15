@@ -115,7 +115,7 @@ function productToExploreListing(product: Product, categories: Category[]): Expl
     image: getProductImage(product, PRODUCT_CARD_PLACEHOLDER),
     category: getProductCategoryLabel(product, categories),
     vertical: resolveProductVertical(product, categories),
-    href: `/product/${product.slug}`,
+    href: `/products/${product.slug}`,
     actionLabel: 'View details',
   };
 }
@@ -165,7 +165,7 @@ function propertyToExploreListing(property: Property): ExploreListing {
     image: property.primary_image_url || property.featured_image || property.thumbnail_image || PRODUCT_CARD_PLACEHOLDER,
     category: plainText(property.category?.title || property.specs?.category, 'Properties'),
     vertical: 'properties',
-    href: `/explore?vertical=properties`,
+    href: `/properties/${property.slug}`,
     actionLabel: 'View property',
   };
 }
@@ -180,7 +180,7 @@ function vehicleToExploreListing(vehicle: Vehicle): ExploreListing {
     image: vehicle.media?.main_photo || vehicle.media?.preview || vehicle.featured_image || PRODUCT_CARD_PLACEHOLDER,
     category: plainText(vehicle.taxonomy?.category, 'Autos'),
     vertical: 'autos',
-    href: `/explore?vertical=autos`,
+    href: `/autos/${vehicle.slug}`,
     actionLabel: 'View vehicle',
   };
 }
@@ -195,7 +195,7 @@ function jobToExploreListing(job: JobListing): ExploreListing {
     image: job.company?.logo_card || job.company?.logo || PRODUCT_CARD_PLACEHOLDER,
     category: plainText(job.taxonomy?.category, 'Jobs'),
     vertical: 'jobs',
-    href: `/explore?vertical=jobs`,
+    href: `/jobs/${job.slug}`,
     actionLabel: 'View role',
   };
 }
@@ -210,7 +210,7 @@ function serviceToExploreListing(service: ServiceListing): ExploreListing {
     image: service.media?.main_photo || service.provider?.avatar || PRODUCT_CARD_PLACEHOLDER,
     category: categoryName(service.professional?.category, 'Services'),
     vertical: 'services',
-    href: `/explore?vertical=services`,
+    href: `/services/${service.slug}`,
     actionLabel: 'View service',
   };
 }
@@ -225,7 +225,7 @@ function eventToExploreListing(event: EventListing): ExploreListing {
     image: event.media?.poster || event.media?.preview || PRODUCT_CARD_PLACEHOLDER,
     category: plainText(event.specs?.category || event.specs?.event_genre, 'Events'),
     vertical: 'events',
-    href: `/explore?vertical=events`,
+    href: `/events/${event.slug}`,
     actionLabel: 'View event',
   };
 }
@@ -240,7 +240,7 @@ function classifiedToExploreListing(classified: ClassifiedListing): ExploreListi
     image: classified.media?.main_photo || classified.media?.thumbnail || PRODUCT_CARD_PLACEHOLDER,
     category: plainText(classified.taxonomy?.category, 'Classifieds'),
     vertical: 'classifieds',
-    href: `/explore?vertical=classifieds`,
+    href: `/classifieds/${classified.slug}`,
     actionLabel: 'View classified',
   };
 }

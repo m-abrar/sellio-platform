@@ -55,13 +55,21 @@ export const UrbanHeader = () => {
                 <MenuActionButtons
                     linkClassName="urban-btn-primary urban-mobile-auth-btn"
                     onNavigate={() => setIsOpen(false)}
-                    renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false })}
+                    renderItem={(item, { className, onNavigate }) => (
+                        <a href={themeLink('/explore')} className={className} onClick={onNavigate}>
+                            {item.title || 'Browse listings'}
+                        </a>
+                    )}
                 />
             </div>
 
             <MenuActionButtons
                 linkClassName="urban-btn-primary urban-desktop-auth-btn"
-                renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false })}
+                renderItem={(item, { className, onNavigate }) => (
+                    <a href={themeLink('/explore')} className={className} onClick={onNavigate}>
+                        {item.title || 'Browse listings'}
+                    </a>
+                )}
             />
         </header>
     );

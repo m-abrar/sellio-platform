@@ -7,7 +7,18 @@ interface NeighborhoodListProps {
 }
 
 export function NeighborhoodList({ neighborhoods }: NeighborhoodListProps) {
-  if (!neighborhoods.length) return null;
+  if (!neighborhoods.length) {
+    return (
+      <section className="pm-detail-block pm-neighborhood-empty">
+        <span className="structure-grid-kicker">Neighborhood</span>
+        <h2 className="pm-detail-block__title">Nearby places</h2>
+        <p className="pm-detail-block__copy">
+          Neighborhood data is loaded from the property record. Add nearby places in the backend
+          to show distances and local context here.
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section className="pm-detail-block">

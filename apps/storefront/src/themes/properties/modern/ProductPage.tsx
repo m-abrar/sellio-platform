@@ -320,12 +320,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
         <ProductDetailMain
           listingMode={listingMode}
           detail={detail}
+          title={property.title}
           description={property.description}
           shortDescription={detail.short_description}
           amenities={detail.amenities}
           features={detail.features}
           scores={detail.scores}
           neighborhoods={detail.neighborhoods}
+          galleryImages={images}
         />
 
         {listingMode === 'rental' ? (
