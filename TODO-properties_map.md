@@ -28,4 +28,10 @@
 
 ## Open
 
+fix text contrast in the section
+Property details
+
+
+the page UIUX is unfinished
+http://127.0.0.1:3000/preview/properties_map/explore
 

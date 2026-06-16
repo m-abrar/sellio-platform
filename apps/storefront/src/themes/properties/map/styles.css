@@ -544,7 +544,6 @@
   color: var(--pm-text-muted);
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--pm-text-muted);
   margin-top: 0.3rem;
 }
 
@@ -604,6 +603,7 @@
   display: block;
   font-size: 0.9rem;
   font-weight: 700;
+  color: var(--pm-text);
 }
 
 /* Inquiry panel */
