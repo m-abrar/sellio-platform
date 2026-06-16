@@ -26,12 +26,8 @@
 - [x] Added auto-rotating gallery with prev/next arrow buttons: images cycle every 4.5 s; left/right arrows let users navigate manually; interval restarts from the correct count when the image set changes on property load.
 - [x] Fixed map initial-load position: changed default center from NYC (zoom 12) to world view (center 20,0 zoom 2) so no specific city flashes before data arrives; added a gold spinner overlay on the map canvas while `loadingProperties` is true; overlay clears the moment `fitBounds` zooms to the real property markers.
 
+- [x] Fixed `.pm-detail-specs strong` — added explicit `color: var(--pm-text)` so value text renders white on dark card backgrounds; also removed duplicate `color` declaration on `.pm-fact-label`.
+- [x] Built `/explore` page for the properties_map theme (`ExplorePage.tsx`): search hero with keyword input + "Map View" CTA, sticky filter bar (price range chips + type chips, same gold design as sidebar), 3-col property card grid with image, price, address, bed/bath specs, hover lift animation, "Load more" pagination, and consistent empty/error states.
+
 ## Open
-
-fix text contrast in the section
-Property details
-
-
-the page UIUX is unfinished
-http://127.0.0.1:3000/preview/properties_map/explore
 
