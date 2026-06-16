@@ -40,7 +40,13 @@
 
 - [x] "How it works" layout crash fixed: process steps used `<div className="b2b-process-step">` but CSS targeted `article` — changed to `<article>` so cards receive background, border, padding, and step-number styles; wrapped the heading + grid in a `<section style={{ marginTop: '6rem' }}>` so this block gets the same spacing as other major sections.
 
-## Open
+- [x] Primary menu updated to: Home, About, Products, Blog, Contact — using static `B2B_NAV_LINKS` fallback; CMS nav still takes priority when configured.
+- [x] Dedicated "Get a Quote" page created (`QuotePage.tsx` + `/quote` route). Header CTA links to `/quote`. RFQ form: contact details, part name/drawing ref, material, quantity, tolerance, certification select, delivery timeline, notes. Right-column sidebar shows "What happens next" steps, certifications held, and response guarantee. Success state shows confirmation with "Submit another" / "Browse catalog" actions.
+- [x] Cart and search removed from header; "Get a Quote" CTA is now the sole primary action in `b2b-header-actions`.
+- [x] Copyright fixed: falls back to `© ${year} ${brandLabel}. All rights reserved.` when no CMS value is set; strips encoding artefacts (`Â©`) from CMS strings.
+- [x] Business features below hero now have styled icon boxes: 52×52 px, teal 10% background, teal border, 14 px border-radius — each `.b2b-capability-icon` renders an inline SVG in accent color.
+
+
 
 
 

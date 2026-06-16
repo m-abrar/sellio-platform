@@ -17,9 +17,10 @@ import {
 type Mode = 'light' | 'dark';
 
 const B2B_NAV_LINKS = [
-  { href: '/explore', label: 'Catalog' },
+  { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
-  { href: '/blog', label: 'Insights' },
+  { href: '/explore', label: 'Products' },
+  { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -91,11 +92,6 @@ export function B2BHeader() {
       </div>
 
       <div className="b2b-header-actions">
-        <a href={themeLink('/explore')} className="b2b-icon-btn" aria-label="Search catalog">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-        </a>
         <MenuUtilityNav className="b2b-utility b2b-desktop-utility" />
         <button
           type="button"
@@ -118,7 +114,7 @@ export function B2BHeader() {
           )}
           <span>{mode === 'dark' ? 'Light' : 'Dark'}</span>
         </button>
-        <a href={themeLink('/explore')} className="b2b-btn b2b-btn-primary b2b-header-cta">
+        <a href={themeLink('/quote')} className="b2b-btn b2b-btn-primary b2b-header-cta">
           Get a Quote
         </a>
       </div>
@@ -196,7 +192,7 @@ export function B2BFooter() {
     'footer.description',
     'We engineer and supply industrial components to businesses across 47 countries. Browse our product catalog, request pricing, and place orders directly — no intermediaries.',
   );
-  const copyright = useThemeContent('footer.copyright', '© 2026 SupplyDesk. All rights reserved.');
+  const copyrightRaw = useThemeContent('footer.copyright', '');
 
   return (
     <footer className="b2b-footer">
@@ -267,7 +263,7 @@ export function B2BFooter() {
       </div>
 
       <div className="b2b-footer-bottom">
-        <p>{copyright.replace(/Â?©/g, '©')}</p>
+        <p>{copyrightRaw ? copyrightRaw.replace(/Â©|Â\?©/g, '©') : `© ${new Date().getFullYear()} ${brandLabel}. All rights reserved.`}</p>
         <div className="b2b-footer-legal">
           <a href={themeLink('/')}>Privacy Policy</a>
           <a href={themeLink('/')}>Terms of Service</a>
