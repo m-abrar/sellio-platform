@@ -28,14 +28,13 @@ export function B2BHeader() {
   const themeLink = useEcommerceThemeLink();
   const cmsNavItems = useMenu('main_header');
   const [isOpen, setIsOpen] = useState(false);
-  const [mode, setMode] = useState<Mode>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('b2b_display_mode') as Mode | null;
-      return saved === 'light' ? 'light' : 'dark';
-    }
-    return 'dark';
-  });
+  const [mode, setMode] = useState<Mode>('dark');
   const brandLabel = useThemeContent('header.brand_label', 'SupplyDesk');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('b2b_display_mode') as Mode | null;
+    if (saved === 'light') setMode('light');
+  }, []);
 
   useEffect(() => {
     if (mode === 'light') {
