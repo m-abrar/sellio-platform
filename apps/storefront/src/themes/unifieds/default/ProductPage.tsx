@@ -9,7 +9,7 @@ import {
   ServiceConsultationForm,
   VehicleInquiryForm,
 } from './InteractionForms';
-import { fetchVerticalDetail, VERTICAL_LABELS, type Vertical, type VerticalDetail } from './multiVertical';
+import { fetchVerticalDetail, VERTICAL_LABELS, type Vertical, type VerticalDetail } from '@/themes/unifieds/shared/multiVertical';
 
 interface ProductPageProps {
   slug: string;

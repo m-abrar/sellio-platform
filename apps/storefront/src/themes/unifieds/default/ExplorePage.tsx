@@ -6,7 +6,7 @@ import type { Category } from '@sellio/types';
 import { CatalogSyncAlert } from '@/themes/unifieds/shared/CatalogSyncAlert';
 import { isExploreSortOption, type ExploreSortOption } from '@/themes/unifieds/shared/product-utils';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
-import { fetchAllVerticals, VERTICALS, type ExploreListing, type Vertical } from './multiVertical';
+import { fetchAllVerticals, VERTICALS, type ExploreListing, type Vertical } from '@/themes/unifieds/shared/multiVertical';
 
 interface ExplorePageProps {
   initialCategorySlug?: string;

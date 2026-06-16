@@ -248,10 +248,13 @@ export const SilentHeader = () => {
                       }}
                     >
                       <option value="">Select category...</option>
+                      <option value="products">Products</option>
                       <option value="properties">Properties</option>
                       <option value="autos">Vehicles</option>
-                      <option value="products">Products</option>
                       <option value="services">Services</option>
+                      <option value="jobs">Jobs</option>
+                      <option value="events">Events</option>
+                      <option value="classifieds">Classifieds</option>
                     </select>
                   </div>
 
@@ -343,7 +346,7 @@ export const ZenFooter = () => {
                   Universal<span style={{ color: 'var(--usm-primary)' }}>.</span>
                 </a>
                 <p style={{ opacity: 0.6, lineHeight: 1.8, fontSize: '0.9rem', maxWidth: '300px', fontWeight: 300 }}>
-                    A minimal, elegant marketplace platform. Simple, precise, and designed with purpose.
+                    Buy, sell, and discover across properties, autos, jobs, services, events, and more — all in one place.
                 </p>
             </div>
             <FooterMenuColumn

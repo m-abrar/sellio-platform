@@ -1,115 +1,86 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { api } from '@sellio/api-client';
-import type { Product, Category } from '@sellio/types';
+import React, { useEffect, useMemo, useState } from 'react';
+import type { Category } from '@sellio/types';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
-import { useMenuContext } from '@/components/menu/MenuProvider';
-import { isDemoFallbackAllowed } from '@/themes/unifieds/shared/demo-fallback';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
-import { formatProductPrice, getProductImage } from '@/themes/unifieds/shared/product-utils';
+import { fetchAllVerticals, VERTICALS, type ExploreListing } from '@/themes/unifieds/shared/multiVertical';
 
 export default function Page() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [listings, setListings] = useState<ExploreListing[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [inventoryTotal, setInventoryTotal] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
   const themeLink = useUnifiedThemeLink();
-  const { isPreview } = useMenuContext();
-  const allowDemoFallback = isDemoFallbackAllowed(isPreview);
 
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'Minimal Marketplace');
-  const heroTitle = useThemeContent('hero.title', 'Discover the Art\nof Simplicity.');
-  const heroHighlight = useThemeContent('hero.highlight', 'Simplicity.');
-  const heroDescription = useThemeContent('hero.description', 'Your marketplace, meticulously curated and thoughtfully designed for elegance, clarity, and focus.');
-  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'Explore Listings');
-  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'Start Exploring');
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'One marketplace, every category');
+  const heroTitle = useThemeContent('hero.title', 'Find it, sell it,\nwithout the clutter.');
+  const heroHighlight = useThemeContent('hero.highlight', 'without the clutter.');
+  const heroDescription = useThemeContent('hero.description', 'Browse properties, autos, jobs, services, events, and classifieds side by side, or list your own in minutes — no noise, no distractions.');
+  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'Browse listings');
+  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'Explore everything');
 
-  const highlight1Title = useThemeContent('highlight.1_title', 'Precision Design');
-  const highlight1Description = useThemeContent('highlight.1_description', 'Every pixel is intentional, ensuring a balanced, distraction-free user journey.');
-  const highlight2Title = useThemeContent('highlight.2_title', 'Visual Clarity');
-  const highlight2Description = useThemeContent('highlight.2_description', 'Superior typography and ample whitespace highlight what truly matters: your content.');
-  const highlight3Title = useThemeContent('highlight.3_title', 'Effortless Flow');
-  const highlight3Description = useThemeContent('highlight.3_description', 'From browsing to posting, the process is streamlined and intuitively structured.');
+  const highlight1Title = useThemeContent('highlight.1_title', 'Search less, find faster');
+  const highlight1Description = useThemeContent('highlight.1_description', 'Every category lives in one searchable feed, so you stop juggling tabs and start finding what you need.');
+  const highlight2Title = useThemeContent('highlight.2_title', 'Clear pricing, no surprises');
+  const highlight2Description = useThemeContent('highlight.2_description', 'Prices, availability, and seller details are front and center on every listing — what you see is what you get.');
+  const highlight3Title = useThemeContent('highlight.3_title', 'List in minutes');
+  const highlight3Description = useThemeContent('highlight.3_description', 'Post a product, property, job, or service in a few steps and reach buyers across the whole marketplace.');
 
-  const collectionTitle = useThemeContent('collection.title', 'Curated Highlights');
-  const collectionDescription = useThemeContent('collection.description', 'A selection of premium listings that embody quality and minimalist elegance.');
+  const collectionTitle = useThemeContent('collection.title', 'Live right now');
+  const collectionDescription = useThemeContent('collection.description', 'A snapshot of what buyers are looking at across the marketplace today.');
 
-  const categoriesTitle = useThemeContent('categories.title', 'Explore with Focus');
-  const categoriesDescription = useThemeContent('categories.description', 'Navigate our marketplace using clear, icon-driven categories.');
+  const categoriesTitle = useThemeContent('categories.title', 'Shop by category');
+  const categoriesDescription = useThemeContent('categories.description', 'Jump straight to the listings that matter to you.');
 
-  const quoteText = useThemeContent('quote.text', '"The marketplace we needed—calm, confident, and focused purely on quality."');
-  const quoteAuthor = useThemeContent('quote.author', '— A Leading Design Journal');
+  const quoteText = useThemeContent('quote.text', '"I listed my apartment and a job opening in the same afternoon — both got responses within a day."');
+  const quoteAuthor = useThemeContent('quote.author', '— Verified seller');
 
-  const ctaTitle = useThemeContent('cta.title', 'Ready for the Universal Experience?');
-  const ctaDescription = useThemeContent('cta.description', 'List your first item or find your next essential.');
-  const ctaButtonLabel = useThemeContent('cta.button_label', 'Get Started Today');
+  const ctaTitle = useThemeContent('cta.title', 'Ready to buy or sell?');
+  const ctaDescription = useThemeContent('cta.description', 'Create your first listing or browse what is already available.');
+  const ctaButtonLabel = useThemeContent('cta.button_label', 'Get started');
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        const [fetchedProducts, fetchedCategories] = await Promise.all([
-          api.getProducts(),
-          api.getCategories()
-        ]);
-        setProducts(fetchedProducts || []);
-        setCategories(fetchedCategories || []);
-        setListingError(null);
-      } catch (err) {
-        console.error('Failed to load unified minimal data:', err);
-        setListingError(err instanceof Error ? err.message : 'Listings are temporarily unavailable.');
-      } finally {
-        setLoading(false);
+    let isMounted = true;
+
+    async function loadListings() {
+      setLoading(true);
+      const result = await fetchAllVerticals({ per_page: 1 });
+
+      if (!isMounted) {
+        return;
       }
+
+      if (result.listings.length > 0 || result.failedVerticals.length < VERTICALS.length) {
+        setListings(result.listings.slice(0, 6));
+        setInventoryTotal(result.total || result.listings.length);
+        setCategories(result.categories);
+        setListingError(null);
+      } else {
+        setListings([]);
+        setCategories([]);
+        setInventoryTotal(null);
+        setListingError('Listings are temporarily unavailable.');
+      }
+
+      setLoading(false);
     }
-    loadData();
+
+    loadListings();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  const defaultListings = [
-    { title: "Symmetrical Oak Dining Table", category: "Furniture", price: "$1,850", image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'><rect width='100%' height='100%' fill='%23fafafa'/><path d='M150 350h300v20H150zm30 20v100h20V370zm220 0v100h20V370z' fill='%23d1d5db'/></svg>" },
-    { title: "Pure Wool Throw - Charcoal", category: "Textiles", price: "$240", image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'><rect width='100%' height='100%' fill='%23f5f5f5'/><rect x='200' y='200' width='200' height='200' rx='8' fill='%23e5e7eb'/></svg>" },
-    { title: "Brushed Brass Wall Sconce", category: "Lighting", price: "$410", image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'><rect width='100%' height='100%' fill='%23fafafa'/><circle cx='300' cy='250' r='60' fill='%23e5e7eb'/><path d='M300 310v100' stroke='%23d1d5db' stroke-width='8'/></svg>" }
-  ];
-
-  const getProductImageForCard = (product: Product, index: number) => {
-    if (product.media?.featured_image || product.image_url) {
-      return getProductImage(product);
-    }
-
-    return defaultListings[index % defaultListings.length].image;
-  };
-
-  const defaultCategories = [
-    { title: "Furniture", slug: "furniture", icon: (
-      <svg className="usm-category-icon" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" width="36" height="36">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M5.25 19.5h13.5m-13.5-15h13.5m-16.5 3h19.5" />
-      </svg>
-    )},
-    { title: "Textiles", slug: "textiles", icon: (
-      <svg className="usm-category-icon" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" width="36" height="36">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 21m0 0l-.813-5.096M9 21h7.5M12 3v13.5m0-13.5L9.813 8.096M12 3l2.188 5.096M12 16.5h.008v.008H12v-.008z" />
-      </svg>
-    )},
-    { title: "Lighting", slug: "lighting", icon: (
-      <svg className="usm-category-icon" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" width="36" height="36">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L7.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-      </svg>
-    )},
-    { title: "Apparel", slug: "apparel", icon: (
-      <svg className="usm-category-icon" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" width="36" height="36">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.125-.504 1.125-1.125V9.75M3.75 16.25a5.978 5.978 0 013.375-1.125h9.75c1.235 0 2.404.372 3.375 1.125m-16.5 0v-4.5c0-.621.504-1.125 1.125-1.125h14.25c.621 0 1.125.504 1.125 1.125v4.5m-15-4.5h15" />
-      </svg>
-    )},
-    { title: "Products", slug: "products", icon: (
-      <svg className="usm-category-icon" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" width="36" height="36">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
-      </svg>
-    )},
-    { title: "Services", slug: "services", icon: (
-      <svg className="usm-category-icon" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" width="36" height="36">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17L17.25 21A1.5 1.5 0 0020 20l-5.83-5.83m0 0a2.25 2.25 0 10-3.18-3.18m3.18 3.18a2.25 2.25 0 002.24-2.24m-3.23 3.23a3 3 0 10-4-4m4 4a3 3 0 00-4-4M10.5 8.5V3m0 0l-2.5 2.5M10.5 3l2.5 2.5M14.5 12h5.5m0 0l-2.5-2.5m2.5 2.5l-2.5 2.5" />
-      </svg>
-    )}
-  ];
+  const liveStats = useMemo(
+    () => ({
+      inventory: inventoryTotal ?? listings.length,
+      categories: categories.length,
+      verticals: VERTICALS.length,
+    }),
+    [categories.length, inventoryTotal, listings.length],
+  );
 
   return (
     <div style={{ animation: 'fadeIn 0.8s ease-out' }}>
@@ -122,7 +93,7 @@ export default function Page() {
               const parts = heroHighlight ? line.split(new RegExp(`(${heroHighlight})`, 'g')) : [line];
               return (
                 <React.Fragment key={`${line}-${index}`}>
-                  {parts.map((part, pIdx) => 
+                  {parts.map((part, pIdx) =>
                     part === heroHighlight ? (
                       <span key={pIdx}>{part}</span>
                     ) : (
@@ -138,8 +109,8 @@ export default function Page() {
             {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
-            <button 
-              className="silent-btn-primary" 
+            <button
+              className="silent-btn-primary"
               onClick={() => document.getElementById('usm-curated-section')?.scrollIntoView({ behavior: 'smooth' })}
             >
               {heroPrimaryCtaLabel}
@@ -155,6 +126,24 @@ export default function Page() {
         </div>
       </header>
 
+      {/* Live marketplace metrics */}
+      <section style={{ padding: '4rem 6% 0' }} aria-label="Catalog metrics">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '2rem', textAlign: 'center' }}>
+          <div>
+            <div style={{ fontFamily: 'var(--usm-font-heading)', fontSize: '2.25rem', fontWeight: 600, color: 'var(--usm-ink)' }}>{liveStats.inventory.toLocaleString()}</div>
+            <div className="usm-mono" style={{ color: '#888' }}>Live listings</div>
+          </div>
+          <div>
+            <div style={{ fontFamily: 'var(--usm-font-heading)', fontSize: '2.25rem', fontWeight: 600, color: 'var(--usm-ink)' }}>{liveStats.categories.toLocaleString()}</div>
+            <div className="usm-mono" style={{ color: '#888' }}>Active categories</div>
+          </div>
+          <div>
+            <div style={{ fontFamily: 'var(--usm-font-heading)', fontSize: '2.25rem', fontWeight: 600, color: 'var(--usm-ink)' }}>{liveStats.verticals.toLocaleString()}</div>
+            <div className="usm-mono" style={{ color: '#888' }}>Marketplace verticals</div>
+          </div>
+        </div>
+      </section>
+
       {/* Trust & Precision Highlights */}
       <section style={{ padding: '6rem 6% 3rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem' }}>
@@ -167,7 +156,7 @@ export default function Page() {
             <h4 style={{ fontFamily: 'var(--usm-font-heading)', fontWeight: 600, fontSize: '1.2rem', marginBottom: '1rem' }}>{highlight1Title}</h4>
             <p style={{ color: '#666', fontWeight: 300, fontSize: '0.95rem', lineHeight: 1.6 }}>{highlight1Description}</p>
           </div>
-          
+
           <div style={{ padding: '2rem', border: '1px solid var(--usm-border)', borderRadius: '12px', background: '#fff' }}>
             <div style={{ marginBottom: '1.5rem' }}>
               <svg fill="none" stroke="var(--usm-primary)" strokeWidth="1.5" viewBox="0 0 24 24" width="30" height="30">
@@ -191,7 +180,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Curated Highlights (Dynamic Products) */}
+      {/* Curated Highlights (Live multi-vertical listings) */}
       <section id="usm-curated-section" style={{ padding: '6rem 6%' }}>
         <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
           <h2 style={{ fontFamily: 'var(--usm-font-heading)', fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 500, color: 'var(--usm-ink)', marginBottom: '1rem' }}>{collectionTitle}</h2>
@@ -216,46 +205,31 @@ export default function Page() {
               <h3 style={{ fontSize: '1.25rem', fontWeight: 500, marginBottom: '0.5rem' }}>Listings could not be loaded.</h3>
               <p style={{ color: '#888', fontWeight: 300 }}>Check your API connection and confirm listings are published in the admin panel.</p>
             </div>
-          ) : products.length > 0 ? (
-            products.slice(0, 6).map((product, i) => (
-              <a href={themeLink(`/product/${product.slug}`)} key={product.id || i} className="usm-listing-card" style={{ textDecoration: 'none', color: 'inherit' }}>
+          ) : listings.length > 0 ? (
+            listings.map((listing) => (
+              <a href={themeLink(listing.href)} key={listing.id} className="usm-listing-card" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="usm-card-img-wrap">
-                  <img src={getProductImageForCard(product, i)} className="usm-card-img" alt={product.title} />
+                  <img src={listing.image} className="usm-card-img" alt={listing.title} />
                 </div>
                 <div className="usm-card-body">
-                  <span className="usm-card-category">
-                    {categories.find(c => c.id === product.category_id)?.title || 'Featured Deal'}
-                  </span>
-                  <h3 className="usm-card-title">{product.title}</h3>
+                  <span className="usm-card-category">{listing.category}</span>
+                  <h3 className="usm-card-title">{listing.title}</h3>
                   <div className="usm-card-price">
-                    {formatProductPrice(product)}
+                    {listing.price}
                   </div>
-                </div>
-              </a>
-            ))
-          ) : allowDemoFallback ? (
-            defaultListings.map((item, i) => (
-              <a href={themeLink('/explore')} key={i} className="usm-listing-card" style={{ textDecoration: 'none', color: 'inherit' }}>
-                <div className="usm-card-img-wrap">
-                  <img src={item.image} className="usm-card-img" alt={item.title} />
-                </div>
-                <div className="usm-card-body">
-                  <span className="usm-card-category">{item.category}</span>
-                  <h3 className="usm-card-title">{item.title}</h3>
-                  <div className="usm-card-price">{item.price}</div>
                 </div>
               </a>
             ))
           ) : (
             <div className="usm-listing-state" role="status">
               <h3 style={{ fontSize: '1.25rem', fontWeight: 500, marginBottom: '0.5rem' }}>No live listings are available yet.</h3>
-              <p style={{ color: '#888', fontWeight: 300 }}>Add product records in the admin panel and they will appear here.</p>
+              <p style={{ color: '#888', fontWeight: 300 }}>Add listings in the admin panel and they will appear here.</p>
             </div>
           )}
         </div>
       </section>
 
-      {/* Explore with Focus (Dynamic Categories) */}
+      {/* Shop by category */}
       <section id="usm-explore-section" style={{ padding: '6rem 6%', background: 'var(--usm-ghost)', borderTop: '1px solid var(--usm-border)', borderBottom: '1px solid var(--usm-border)' }}>
         <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
           <h2 style={{ fontFamily: 'var(--usm-font-heading)', fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 500, color: 'var(--usm-ink)', marginBottom: '1rem' }}>{categoriesTitle}</h2>
@@ -263,29 +237,16 @@ export default function Page() {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2rem', justifyContent: 'center' }}>
-          {categories.length > 0 ? (
-            categories.slice(0, 8).map((cat, i) => (
-              <a href={themeLink(`/explore/${cat.slug.toLowerCase()}`)} key={cat.id || i} className="usm-category-card">
-                {defaultCategories[i % defaultCategories.length].icon}
-                <h5 className="usm-category-title">{cat.title}</h5>
-              </a>
-            ))
-          ) : allowDemoFallback ? (
-            defaultCategories.map((cat, i) => (
-              <a href={themeLink(`/explore/${cat.slug.toLowerCase()}`)} key={i} className="usm-category-card">
-                {cat.icon}
-                <h5 className="usm-category-title">{cat.title}</h5>
-              </a>
-            ))
-          ) : (
-            <div className="usm-listing-state" role="status" style={{ gridColumn: '1 / -1' }}>
-              <p style={{ color: '#888', fontWeight: 300 }}>Categories will appear once the catalog is populated.</p>
-            </div>
-          )}
+          {VERTICALS.map((vertical) => (
+            <a href={themeLink(`/explore?vertical=${vertical.key}`)} key={vertical.key} className="usm-category-card">
+              <h5 className="usm-category-title">{vertical.label}</h5>
+              <p style={{ color: '#888', fontWeight: 300, fontSize: '0.85rem', margin: 0 }}>{vertical.description}</p>
+            </a>
+          ))}
         </div>
       </section>
 
-      {/* Mid-Section Journal Quote */}
+      {/* Mid-Section Testimonial */}
       <section style={{ padding: '10rem 6% 8rem', textAlign: 'center' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <span style={{ fontSize: '3rem', color: 'var(--usm-primary)', opacity: 0.3, display: 'block', lineHeight: 1, fontFamily: 'serif', marginBottom: '2rem' }}>“</span>
@@ -303,14 +264,14 @@ export default function Page() {
 
       {/* Action CTA Panel */}
       <section style={{ padding: '4rem 6% 6rem' }}>
-        <div style={{ 
-          background: '#fff', 
-          border: '1px solid var(--usm-border)', 
-          borderRadius: '16px', 
-          padding: '4rem 5%', 
-          display: 'flex', 
-          flexDirection: 'row', 
-          justifyContent: 'space-between', 
+        <div style={{
+          background: '#fff',
+          border: '1px solid var(--usm-border)',
+          borderRadius: '16px',
+          padding: '4rem 5%',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: '2rem',

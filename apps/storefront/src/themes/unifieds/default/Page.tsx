@@ -6,7 +6,7 @@ import { CoreFeatures, GlobalTrust } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 import { CatalogSyncAlert } from '@/themes/unifieds/shared/CatalogSyncAlert';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
-import { fetchAllVerticals, VERTICALS, type ExploreListing } from './multiVertical';
+import { fetchAllVerticals, VERTICALS, type ExploreListing } from '@/themes/unifieds/shared/multiVertical';
 
 export default function Page() {
   const [listings, setListings] = useState<ExploreListing[]>([]);
