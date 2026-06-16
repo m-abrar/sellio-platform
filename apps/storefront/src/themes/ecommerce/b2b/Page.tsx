@@ -9,6 +9,17 @@ import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbac
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 import { B2BProductCard } from './components';
 
+const RADIAL_LINES = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle) => {
+  const rad = (angle * Math.PI) / 180;
+  return {
+    key: `r-${angle}`,
+    x1: +(200 + Math.cos(rad) * 42).toFixed(4),
+    y1: +(240 + Math.sin(rad) * 42).toFixed(4),
+    x2: +(200 + Math.cos(rad) * 78).toFixed(4),
+    y2: +(240 + Math.sin(rad) * 78).toFixed(4),
+  };
+});
+
 const capabilities = [
   [
     'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
@@ -183,16 +194,11 @@ export default function Page() {
                 <circle cx="200" cy="240" r="40" stroke="rgba(45,212,191,0.3)" strokeWidth="1.5" />
                 <circle cx="200" cy="240" r="15" fill="rgba(45,212,191,0.25)" />
                 {/* Radial lines */}
-                {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle) => {
-                  const rad = (angle * Math.PI) / 180;
-                  return (
-                    <line key={`r-${angle}`}
-                      x1={200 + Math.cos(rad) * 42} y1={240 + Math.sin(rad) * 42}
-                      x2={200 + Math.cos(rad) * 78} y2={240 + Math.sin(rad) * 78}
-                      stroke="rgba(45,212,191,0.35)" strokeWidth="2"
-                    />
-                  );
-                })}
+                {RADIAL_LINES.map(({ key, x1, y1, x2, y2 }) => (
+                  <line key={key} x1={x1} y1={y1} x2={x2} y2={y2}
+                    stroke="rgba(45,212,191,0.35)" strokeWidth="2"
+                  />
+                ))}
                 {/* Corner marks */}
                 <path d="M20 20 L20 50 M20 20 L50 20" stroke="rgba(45,212,191,0.5)" strokeWidth="2" />
                 <path d="M380 20 L380 50 M380 20 L350 20" stroke="rgba(45,212,191,0.5)" strokeWidth="2" />
