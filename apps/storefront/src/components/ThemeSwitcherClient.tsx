@@ -47,9 +47,9 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
     });
   }, []);
 
-  // Appear after 2.5 s so it doesn't crowd the initial page view
+  // Appear after 6 s so it doesn't crowd the initial page view
   useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 2500);
+    const t = setTimeout(() => setVisible(true), 6000);
     return () => clearTimeout(t);
   }, []);
 

@@ -1,12 +1,5 @@
 <?php
 
-$defaultFooterLinks = tm_links([
-    'Registry System',
-    'Features Node',
-    'Analytics Hub',
-    'Secure Protocol',
-]);
-
 $classicFooterLinks = tm_links([
     'Registry',
     'Provenance',
@@ -46,8 +39,22 @@ return [
         tm_menu('action_buttons', 'Header Actions', tm_links([
             'GET STARTED',
         ])),
-        ...tm_footer_node_cols('RESOURCES', 'PRODUCTS', 'COMPANY', $defaultFooterLinks),
-        tm_social_os(),
+        tm_menu('footer_column_1', 'Company', tm_links([
+            ['About', '/about'],
+            ['Blog', '/blog'],
+            ['Contact', '/contact'],
+        ])),
+        tm_menu('footer_column_2', 'Marketplace', tm_links([
+            ['Explore listings', '/explore'],
+            ['Your cart', '/cart'],
+            ['Checkout', '/checkout'],
+        ])),
+        tm_menu('footer_column_3', 'Support', tm_links([
+            'Terms of service',
+            'Privacy policy',
+            'Cookie policy',
+        ])),
+        tm_social_standard(),
     ],
 
     'unifieds_classic' => [

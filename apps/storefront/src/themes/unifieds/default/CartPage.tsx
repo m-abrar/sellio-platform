@@ -29,7 +29,7 @@ export default function CartPage() {
   return (
     <main className="ud-cart-page">
       <div className="ud-cart-header">
-        <div className="ud-mono" style={{ color: 'var(--ud-azure)', marginBottom: '1rem' }}>CORE_CART</div>
+        <div className="ud-mono" style={{ color: 'var(--ud-azure)', marginBottom: '1rem' }}>Your cart</div>
         <h1>Shopping Cart</h1>
       </div>
 
@@ -85,9 +85,9 @@ export default function CartPage() {
         </div>
       ) : (
         <section className="ud-cart-state" role="status">
-          <div className="ud-mono" style={{ color: 'var(--ud-azure)', marginBottom: '1rem' }}>EMPTY_CART</div>
+          <div className="ud-mono" style={{ color: 'var(--ud-azure)', marginBottom: '1rem' }}>Empty cart</div>
           <h1>Your cart is empty</h1>
-          <p>Add catalog records from the explore directory or product detail pages.</p>
+          <p>Browse the catalog directory or a product page to add items to your cart.</p>
           <a href={themeLink('/explore')} className="core-btn-primary">Browse Directory</a>
         </section>
       )}
