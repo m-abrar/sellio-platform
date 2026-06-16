@@ -28,5 +28,8 @@
 - [x] update menus so users can navigate to about, contact, etc. B2BHeader now always shows About Us, Insights, and Contact links. When CMS has items they render first; the hardcoded essential pages are appended for any CMS items that don't already cover those URLs. No CMS items? Falls back to the full B2B_NAV_LINKS list as before.
 
 
+- [x] Simplified primary menu: removed the block that always appended `B2B_NAV_LINKS` to CMS items (was doubling nav entries). When CMS provides items they render alone; static fallback is 4 short labels — Catalog, About, Insights, Contact.
+- [x] Strengthened brochure character across the theme: added "Industries We Serve" section to homepage (6 cards, 3-col grid, each with certification badge — AS9100D, IATF 16949, PED, IATF, ITAR, ATEX); reduced featured product grid to 3 items; updated product section kicker and copy to editorial rather than shop framing; rewrote process steps to match a manufacturing company's inquiry → review → deliver flow; updated ContactPage inquiry types (Custom manufacturing, OEM & contract supply, Technical specifications instead of Enterprise account / Platform support).
+
 ## Open
 

@@ -644,6 +644,49 @@
   margin: 0 0 0.65rem;
 }
 
+/* ─── Industries ─────────────────────────────────── */
+
+.b2b-industries {
+  margin-top: 6rem;
+}
+
+.b2b-industries-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 2.5rem;
+}
+
+.b2b-industry-card {
+  background: var(--b2b-panel);
+  border: 1px solid var(--b2b-line);
+  border-radius: 20px;
+  padding: 1.75rem;
+}
+
+.b2b-industry-cert {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--b2b-accent);
+  margin-bottom: 0.75rem;
+}
+
+.b2b-industry-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+}
+
+.b2b-industry-card p {
+  color: var(--b2b-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* ─── Product collection ─────────────────────────── */
 
 .b2b-collection {
@@ -669,7 +712,7 @@
 }
 
 .b2b-product-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .b2b-product-card {
@@ -2255,7 +2298,8 @@
   .b2b-product-grid,
   .b2b-process,
   .b2b-testimonial-grid,
-  .b2b-banners {
+  .b2b-banners,
+  .b2b-industries-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -2356,6 +2400,7 @@
   .b2b-detail-specs,
   .b2b-testimonial-grid,
   .b2b-banners,
+  .b2b-industries-grid,
   .b2b-footer-inner {
     grid-template-columns: 1fr;
   }

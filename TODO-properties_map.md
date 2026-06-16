@@ -18,11 +18,13 @@
 - [x] Fixed all `var(--pm-accent, #60a5fa)` (blue) → `var(--pm-gold)` across the detail page CSS; background changed from `#0b1220` → `var(--pm-obsidian)` for visual consistency. Added `overflow-y: auto` so the detail page scrolls inside the fixed-height layout wrapper.
 - [x] Verified: `npm.cmd run lint` (0 errors).
 
+- [x] Fixed multiple scrollbars on single property page: removed `min-height: 100vh` from `.pm-detail-page`, added `.pm-detail-inner` centering wrapper so the element stays within the fixed-height layout shell.
+- [x] Fixed address showing "TBA": `mapPropertyToListing` now resolves `property.location?.title` first, then `property.address`, then city/state/country join — falls back to "Location not specified".
+- [x] Map now fits visible markers on load: `placeMarkers()` calls `map.setView` for a single marker (zoom 14) or `map.fitBounds` with 50 px padding for multiple markers so all pins are visible without manual zooming.
+
 ## Open
 
-single property page has multiple vertical scrolbars, fix it.
+fix the property title color and many other headings do not have readiblity color (contrast with background)
 
-address is showing TBA, fix it
-
-the map should load according to coordinates of the available properties, to cover all of them, in respect with left sidebar too.
+add rotating multiple pictures of the property
 

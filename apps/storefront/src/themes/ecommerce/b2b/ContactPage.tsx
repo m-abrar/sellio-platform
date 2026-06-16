@@ -68,10 +68,10 @@ export default function ContactPage() {
                 <span>Inquiry type</span>
                 <select value={form.inquiry} onChange={(e) => setForm({ ...form, inquiry: e.target.value })}>
                   <option value="procurement">Procurement & sourcing</option>
-                  <option value="enterprise">Enterprise account</option>
-                  <option value="supplier">Supplier onboarding</option>
-                  <option value="support">Platform support</option>
-                  <option value="other">Other</option>
+                  <option value="custom">Custom manufacturing</option>
+                  <option value="oem">OEM & contract supply</option>
+                  <option value="technical">Technical specifications</option>
+                  <option value="other">Other enquiry</option>
                 </select>
               </label>
               <label>

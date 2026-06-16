@@ -60,7 +60,10 @@ function mapPropertyToListing(property: Property, index: number) {
 
   return {
     price: getPropertyPrice(property),
-    address: property.address || [property.city, property.state, property.country].filter(Boolean).join(', ') || 'Address TBA',
+    address: property.location?.title
+      || property.address
+      || [property.city, property.state, property.country].filter(Boolean).join(', ')
+      || 'Location not specified',
     beds: property.specs?.bedrooms ?? property.number_of_bedrooms ?? 1,
     baths: property.specs?.bathrooms ?? property.number_of_bathrooms ?? 1,
     sqft: sqft || 'N/A',

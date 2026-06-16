@@ -147,6 +147,15 @@ export function MapCanvas({
 
       markerLayersRef.current.push(marker);
     });
+
+    // Fit map view to show all markers
+    if (markerLayersRef.current.length === 1) {
+      const m = markersRef.current[0];
+      map.setView([m.lat, m.lng], 14);
+    } else if (markerLayersRef.current.length > 1) {
+      const group = L.featureGroup(markerLayersRef.current);
+      map.fitBounds(group.getBounds(), { padding: [50, 50] });
+    }
   }
 
   // Initialise Leaflet once on mount

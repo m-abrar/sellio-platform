@@ -17,8 +17,8 @@ import {
 type Mode = 'light' | 'dark';
 
 const B2B_NAV_LINKS = [
-  { href: '/explore', label: 'Browse Catalog' },
-  { href: '/about', label: 'About Us' },
+  { href: '/explore', label: 'Catalog' },
+  { href: '/about', label: 'About' },
   { href: '/blog', label: 'Insights' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -84,16 +84,6 @@ export function B2BHeader() {
                   {item.label}
                 </a>
               ))}
-          {/* Always visible: About, Insights, Contact */}
-          {cmsNavItems.length > 0 && (
-            <>
-              {B2B_NAV_LINKS.filter((l) => !cmsNavItems.some((c) => c.url === l.href)).map((item) => (
-                <a key={item.href} href={themeLink(item.href)} className="b2b-nav-link" onClick={() => setIsOpen(false)}>
-                  {item.label}
-                </a>
-              ))}
-            </>
-          )}
         </nav>
         <div className="b2b-mobile-utility">
           <MenuUtilityNav className="b2b-utility" onNavigate={() => setIsOpen(false)} />

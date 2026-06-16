@@ -54,9 +54,18 @@ const testimonials = [
 ];
 
 const processSteps = [
-  ['01', 'Browse our catalog', 'Find the part you need by category, material grade, or specification. Download datasheets and 3D models directly from each product page.'],
-  ['02', 'Submit your requirements', 'Tell us your quantity, tolerance, surface finish, and delivery timeline. Our sales engineers review every request personally.'],
-  ['03', 'Confirm your order', 'Receive a detailed quotation, approve terms, and place your order. Track production status and receive shipping documentation from your account.'],
+  ['01', 'Find your part', 'Browse by category, material grade, or specification code. Download datasheets, 3D models, and tolerance sheets directly from each product page.'],
+  ['02', 'Submit your requirements', 'Tell us your quantity, tolerance, material grade, delivery timeline, and certification needs. Our sales engineers review every enquiry personally.'],
+  ['03', 'We manufacture and ship', 'Receive a detailed quotation, approve terms, and track production status in real time. Every shipment includes dimensional inspection reports and material certifications.'],
+];
+
+const industries = [
+  { name: 'Aerospace', cert: 'AS9100D', desc: 'Flight-critical structural and mechanical components for commercial aviation, defense, and space programmes.' },
+  { name: 'Automotive', cert: 'IATF 16949', desc: 'Powertrain, chassis, and transmission components for tier-1 OEMs and tier-2 supplier programmes.' },
+  { name: 'Energy', cert: 'PED 2014/68/EU', desc: 'Pressure-rated and corrosion-resistant parts for oil, gas, nuclear, and renewable energy infrastructure.' },
+  { name: 'Heavy Machinery', cert: 'ISO 3834', desc: 'High-load structural and machined components for construction, mining, and industrial equipment.' },
+  { name: 'Defense', cert: 'ITAR Registered', desc: 'Military-grade tolerances with full material traceability and compliant handling for controlled programmes.' },
+  { name: 'Chemical Processing', cert: 'ATEX Compliant', desc: 'Chemically resistant alloys, specialist coatings, and sealing solutions for aggressive process environments.' },
 ];
 
 export default function Page() {
@@ -71,10 +80,10 @@ export default function Page() {
   );
   const primaryCta = useThemeContent('hero.primary_cta_label', 'View our products');
   const secondaryCta = useThemeContent('hero.secondary_cta_label', 'Request a quote');
-  const collectionTitle = useThemeContent('collection.title', 'Our product catalog');
+  const collectionTitle = useThemeContent('collection.title', 'Product highlights');
   const collectionDescription = useThemeContent(
     'collection.description',
-    'Browse our manufactured product range. Click any item to view full specifications, available grades, and start a quote request.',
+    'A selection of our manufactured parts. Each item ships with full dimensional inspection reports, material certifications, and traceability documentation.',
   );
   const offlineKicker = useThemeContent('sync.offline_kicker', 'Catalog unavailable');
   const offlineTitle = useThemeContent('sync.offline_title', 'Products could not be loaded.');
@@ -321,10 +330,31 @@ export default function Page() {
         ))}
       </section>
 
-      {/* Featured catalog */}
+      {/* Industries We Serve */}
+      <section className="b2b-industries" aria-label="Industries served">
+        <div className="b2b-section-heading">
+          <span className="b2b-kicker">Industry expertise</span>
+          <h2>Who we manufacture for.</h2>
+          <p>
+            Our components are certified and active in six demanding industrial sectors.
+            We hold the accreditations each market requires — and the engineering track record to back them.
+          </p>
+        </div>
+        <div className="b2b-industries-grid">
+          {industries.map((ind) => (
+            <div key={ind.name} className="b2b-industry-card">
+              <span className="b2b-industry-cert">{ind.cert}</span>
+              <h3>{ind.name}</h3>
+              <p>{ind.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Product highlights */}
       <section className="b2b-collection">
         <div className="b2b-section-heading">
-          <span className="b2b-kicker">Direct from manufacturer</span>
+          <span className="b2b-kicker">From the factory floor</span>
           <h2>{collectionTitle}</h2>
           <p>{collectionDescription}</p>
         </div>
@@ -334,7 +364,7 @@ export default function Page() {
 
         <div className="b2b-product-grid">
           {loadingProducts ? (
-            [1, 2, 3, 4].map((item) => <div key={item} className="b2b-product-card b2b-skeleton" />)
+            [1, 2, 3].map((item) => <div key={item} className="b2b-product-card b2b-skeleton" />)
           ) : apiError && !useFallback ? (
             <div className="b2b-state">
               <span className="b2b-kicker">{offlineKicker}</span>
@@ -347,7 +377,7 @@ export default function Page() {
               <p>{emptyDescription}</p>
             </div>
           ) : (
-            products.slice(0, 4).map((product) => (
+            products.slice(0, 3).map((product) => (
               <B2BProductCard
                 key={product.id}
                 product={product}
