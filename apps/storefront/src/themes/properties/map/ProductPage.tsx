@@ -17,7 +17,7 @@ function getPropertyPrice(property: Property) {
 }
 
 function getPropertyLocation(property: Property) {
-  return property.location?.title || [property.city, property.state].filter(Boolean).join(', ') || property.address || 'Coordinates TBA';
+  return property.location?.title || [property.city, property.state].filter(Boolean).join(', ') || property.address || 'Location TBA';
 }
 
 function getPropertyImage(property: Property) {
@@ -40,11 +40,15 @@ export default function ProductPage({ slug }: ProductPageProps) {
       try {
         const response = await api.getPropertyDetails(slug);
         if (!isMounted) return;
-        if (response?.data) { setProperty(response.data); setErrorMessage(null); }
-        else setErrorMessage('Registry node not found.');
+        if (response?.data) {
+          setProperty(response.data);
+          setErrorMessage(null);
+        } else {
+          setErrorMessage('This property could not be found.');
+        }
       } catch (error: unknown) {
         if (!isMounted) return;
-        setErrorMessage(error instanceof Error ? error.message : 'The spatial node could not be synchronized.');
+        setErrorMessage(error instanceof Error ? error.message : 'This property is temporarily unavailable.');
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -94,7 +98,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const area = property?.specs?.area_formatted || (property?.area_sq_ft ? `${Number(property.area_sq_ft).toLocaleString()} sqft` : null);
   const latitude = Number(property?.location?.latitude);
   const longitude = Number(property?.location?.longitude);
-  const hasCoordinates = Number.isFinite(latitude) && Number.isFinite(longitude);
+  const hasCoordinates = Number.isFinite(latitude) && Number.isFinite(longitude) && latitude !== 0;
 
   if (loading) {
     return (
@@ -109,10 +113,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
     return (
       <main className="pm-detail-page">
         <section className="pm-detail-state" role="status">
-          <div className="pm-detail-kicker">Node Unavailable</div>
-          <h1>Registry node could not be loaded.</h1>
+          <div className="pm-detail-kicker">Property Unavailable</div>
+          <h1>This property could not be loaded.</h1>
           <p>{errorMessage}</p>
-          <a href={themeLink('/')} className="pm-detail-btn">Return to Map Registry</a>
+          <a href={themeLink('/')} className="pm-detail-btn">Back to Map Search</a>
         </section>
       </main>
     );
@@ -120,34 +124,52 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="pm-detail-page">
-      <a href={themeLink('/')} className="pm-detail-back">&larr; Back to Spatial Registry</a>
+      <a href={themeLink('/')} className="pm-detail-back">&larr; Back to Map Search</a>
       <section className="pm-detail-grid">
-        <div className="pm-detail-media"><img src={getPropertyImage(property)} alt={property.title} /></div>
+        <div className="pm-detail-media">
+          <img src={getPropertyImage(property)} alt={property.title} />
+        </div>
         <article className="pm-detail-panel">
-          <div className="pm-detail-kicker">{property.specs?.category || 'Spatial Node'}</div>
+          <div className="pm-detail-kicker">{property.specs?.category || 'Property'}</div>
           <h1>{property.title}</h1>
           <div className="pm-detail-price">{getPropertyPrice(property)}</div>
-          <p className="pm-detail-description">{property.description || property.short_description || 'This live registry node is synchronized from the Sellio catalog.'}</p>
+          <p className="pm-detail-description">
+            {property.description || property.short_description || 'Contact us for full details about this property.'}
+          </p>
           <div className="pm-detail-specs">
             <div><span>Location</span><strong>{getPropertyLocation(property)}</strong></div>
             {area && <div><span>Area</span><strong>{area}</strong></div>}
+            {property.specs?.bedrooms && <div><span>Bedrooms</span><strong>{property.specs.bedrooms}</strong></div>}
+            {property.specs?.bathrooms && <div><span>Bathrooms</span><strong>{property.specs.bathrooms}</strong></div>}
             {hasCoordinates && (
-              <div><span>Coordinates</span><strong>{latitude.toFixed(4)}, {longitude.toFixed(4)}</strong></div>
+              <div><span>Coordinates</span><strong>{latitude.toFixed(4)}° N, {Math.abs(longitude).toFixed(4)}° W</strong></div>
             )}
           </div>
         </article>
       </section>
       <section className="pm-detail-inquiry">
-        <h2>Request Site Visit</h2>
+        <h2>Request a Viewing</h2>
         {isSubmitted ? (
-          <div className="pm-detail-success" role="status">Inquiry logged.</div>
+          <div className="pm-detail-success" role="status">
+            Your inquiry has been sent. An agent will be in touch shortly.
+          </div>
         ) : (
           <form onSubmit={handleSubmit}>
-            <label>Name<input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
-            <label>Email<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
-            <label>Notes<textarea rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} /></label>
+            <label>
+              Name
+              <input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            </label>
+            <label>
+              Email
+              <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+            </label>
+            <label>
+              Message
+              <textarea rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="When are you available for a viewing?" />
+            </label>
+            {formError && <p className="prop-form-error">{formError}</p>}
             <button className="pm-detail-btn" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Sending…' : 'Submit Inquiry'}
+              {isSubmitting ? 'Sending…' : 'Send Inquiry'}
             </button>
           </form>
         )}

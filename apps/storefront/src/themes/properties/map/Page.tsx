@@ -1,13 +1,39 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
-import { MapListCard, MapPriceMarker, MapHUD } from './components';
-import { getAdminBaseUrl } from '@/lib/admin-urls';
+import { MapListCard, MapCanvas, type MapMarker } from './components';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+
+// NYC demo coordinates spread across Manhattan for when a property has no real location data
+const NYC_FALLBACK_COORDS: [number, number][] = [
+  [40.758, -73.9855],
+  [40.7282, -73.9942],
+  [40.7614, -73.9776],
+  [40.7489, -73.968],
+  [40.7193, -74.0001],
+  [40.7831, -73.9712],
+  [40.745, -73.999],
+  [40.767, -73.957],
+];
+
+const PRICE_FILTERS = [
+  { label: 'All', value: 'all' },
+  { label: '<$1M', value: 'under1m' },
+  { label: '$1M–$3M', value: '1to3m' },
+  { label: '$3M+', value: 'over3m' },
+] as const;
+
+const TYPE_FILTERS = [
+  { label: 'All Types', value: 'all' },
+  { label: 'Buy', value: 'buy' },
+  { label: 'Rent', value: 'rent' },
+] as const;
+
+type PriceFilter = typeof PRICE_FILTERS[number]['value'];
+type TypeFilter = typeof TYPE_FILTERS[number]['value'];
 
 const fallbackImages = [
   '/themes/properties/map/1.webp',
@@ -28,6 +54,10 @@ function mapPropertyToListing(property: Property, index: number) {
   const sqft = property.specs?.area_formatted?.replace(/[^\d,]/g, '')
     || String(property.area_sq_ft || property.specs?.area_sq_ft || '');
 
+  const rawLat = Number(property.location?.latitude);
+  const rawLng = Number(property.location?.longitude);
+  const [fbLat, fbLng] = NYC_FALLBACK_COORDS[index % NYC_FALLBACK_COORDS.length];
+
   return {
     price: getPropertyPrice(property),
     address: property.address || [property.city, property.state, property.country].filter(Boolean).join(', ') || 'Address TBA',
@@ -36,82 +66,139 @@ function mapPropertyToListing(property: Property, index: number) {
     sqft: sqft || 'N/A',
     image: property.featured_image || property.thumbnail_image || fallbackImages[index % fallbackImages.length],
     slug: property.slug,
+    lat: Number.isFinite(rawLat) && rawLat !== 0 ? rawLat : fbLat,
+    lng: Number.isFinite(rawLng) && rawLng !== 0 ? rawLng : fbLng,
+    listingType: (property as any).listing_type || '',
+    numericPrice: Number(property.base_price) || 0,
   };
 }
 
 export default function Page() {
-  const router = useRouter();
   const themeLink = usePropertyThemeLink();
-  const adminCreatePropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
   const [properties, setProperties] = useState<Property[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [propertyError, setPropertyError] = useState<string | null>(null);
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const [priceFilter, setPriceFilter] = useState<PriceFilter>('all');
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // Hoist all content reads
+  const sidebarTitle = useThemeContent('sidebar.title', 'Map Search');
+  const unitsSuffix = useThemeContent('sidebar.units_suffix', 'listings');
+  const offlineKicker = useThemeContent('offline.kicker', 'Connection error');
+  const offlineTitle = useThemeContent('offline.title', 'Properties could not be loaded.');
+  const emptyKicker = useThemeContent('empty.kicker', 'No listings yet');
+  const emptyTitle = useThemeContent('empty.title', 'No properties are published yet.');
+  const emptyDesc = useThemeContent('empty.description', 'Add property listings in the admin panel and they will appear here automatically.');
+  const endLabel = useThemeContent('sidebar.end_label', 'End of results');
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadProperties() {
       try {
-        const response = await api.getProperties({ per_page: 6 });
-        if (!isMounted) {
-          return;
-        }
-
+        const response = await api.getProperties({ per_page: 20 });
+        if (!isMounted) return;
         setProperties(Array.isArray(response.data) ? response.data : []);
         setPropertyError(null);
       } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
-
+        if (!isMounted) return;
         console.error('Failed to load properties map listings:', error);
         setPropertyError(error instanceof Error ? error.message : 'Properties are temporarily unavailable.');
       } finally {
-        if (isMounted) {
-          setLoadingProperties(false);
-        }
+        if (isMounted) setLoadingProperties(false);
       }
     }
 
     loadProperties();
-
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, []);
 
-  const listings = properties.slice(0, 6).map(mapPropertyToListing);
+  const allListings = useMemo(
+    () => properties.map((p, i) => mapPropertyToListing(p, i)),
+    [properties],
+  );
+
+  const filteredListings = useMemo(() => allListings.filter((item) => {
+    if (priceFilter === 'under1m' && item.numericPrice >= 1_000_000) return false;
+    if (priceFilter === '1to3m' && (item.numericPrice < 1_000_000 || item.numericPrice > 3_000_000)) return false;
+    if (priceFilter === 'over3m' && item.numericPrice <= 3_000_000) return false;
+    if (typeFilter === 'buy' && !['buy', 'sale', 'for_sale'].includes(item.listingType)) return false;
+    if (typeFilter === 'rent' && !['rent', 'for_rent', 'rental'].includes(item.listingType)) return false;
+    return true;
+  }), [allListings, priceFilter, typeFilter]);
+
+  const mapMarkers: MapMarker[] = useMemo(
+    () => filteredListings.map((l) => ({
+      lat: l.lat,
+      lng: l.lng,
+      price: l.price,
+      address: l.address,
+      slug: l.slug,
+    })),
+    [filteredListings],
+  );
+
+  function handleMarkerClick(slug: string) {
+    setSelectedSlug(slug);
+    const card = listRef.current?.querySelector<HTMLElement>(`[data-slug="${slug}"]`);
+    card?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  const hasActiveFilter = priceFilter !== 'all' || typeFilter !== 'all';
 
   return (
     <>
       <aside className="pm-sidebar">
         <div className="pm-sidebar-header">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>{useThemeContent('sidebar.title', 'Registry Nodes')}</h2>
-                <span className="pm-marker" style={{ position: 'relative', top: 0, left: 0, padding: '0.25rem 0.75rem', fontSize: '0.65rem' }}>
-                  {loadingProperties ? '...' : `${listings.length} ${useThemeContent('sidebar.units_suffix', 'listings')}`}
-                </span>
+          <div className="pm-sidebar-title-row">
+            <h2 className="pm-sidebar-title">{sidebarTitle}</h2>
+            {!loadingProperties && (
+              <span className="pm-count-badge">
+                {filteredListings.length} {unitsSuffix}
+              </span>
+            )}
+          </div>
+
+          <div className="pm-filter-section">
+            <div className="pm-filter-row">
+              {PRICE_FILTERS.map((f) => (
+                <button
+                  key={f.value}
+                  type="button"
+                  className={`pm-filter-chip${priceFilter === f.value ? ' pm-filter-chip-active' : ''}`}
+                  onClick={() => setPriceFilter(f.value)}
+                >
+                  {f.label}
+                </button>
+              ))}
             </div>
-            <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.5rem' }}>
-                {useThemeContent('sidebar.filters', 'Filter|Price|Type').split('|').map(btn => (
-                    <button key={btn} style={{
-                        flex: 1,
-                        background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid var(--pm-border)',
-                        color: 'white',
-                        padding: '0.5rem',
-                        fontSize: '0.6rem',
-                        fontWeight: 800,
-                        borderRadius: '4px',
-                        letterSpacing: '1px'
-                    }}>
-                        {btn}
-                    </button>
-                ))}
+            <div className="pm-filter-row">
+              {TYPE_FILTERS.map((f) => (
+                <button
+                  key={f.value}
+                  type="button"
+                  className={`pm-filter-chip${typeFilter === f.value ? ' pm-filter-chip-active' : ''}`}
+                  onClick={() => setTypeFilter(f.value)}
+                >
+                  {f.label}
+                </button>
+              ))}
+              {hasActiveFilter && (
+                <button
+                  type="button"
+                  className="pm-filter-chip pm-filter-clear"
+                  onClick={() => { setPriceFilter('all'); setTypeFilter('all'); }}
+                >
+                  Clear
+                </button>
+              )}
             </div>
+          </div>
         </div>
 
-        <div className="pm-results-list">
+        <div className="pm-results-list" ref={listRef}>
           {loadingProperties ? (
             [1, 2, 3, 4, 5, 6].map((item) => (
               <div className="pm-list-card prop-listing-skeleton" key={item}>
@@ -122,62 +209,64 @@ export default function Page() {
             ))
           ) : propertyError ? (
             <div className="prop-listing-state pm-listing-state">
-              <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Connection error')}</div>
-              <h3>{useThemeContent('offline.title', 'Properties could not be loaded.')}</h3>
-              <p>Check your API connection and make sure properties are published in the admin.</p>
+              <div className="prop-listing-kicker">{offlineKicker}</div>
+              <h3>{offlineTitle}</h3>
+              <p>Check your API connection and make sure properties are published.</p>
             </div>
-          ) : listings.length === 0 ? (
+          ) : filteredListings.length === 0 && allListings.length > 0 ? (
             <div className="prop-listing-state pm-listing-state">
-              <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'Empty Property Registry')}</div>
-              <h3>{useThemeContent('empty.title', 'No live properties are published yet.')}</h3>
-              <p>{useThemeContent('empty.description', 'Add property records in the backend and this map registry will hydrate automatically.')}</p>
+              <div className="prop-listing-kicker">No matches</div>
+              <h3>No properties match your filters.</h3>
+              <p>
+                <button
+                  type="button"
+                  className="pm-inline-link"
+                  onClick={() => { setPriceFilter('all'); setTypeFilter('all'); }}
+                >
+                  Clear filters
+                </button>{' '}to see all available listings.
+              </p>
+            </div>
+          ) : filteredListings.length === 0 ? (
+            <div className="prop-listing-state pm-listing-state">
+              <div className="prop-listing-kicker">{emptyKicker}</div>
+              <h3>{emptyTitle}</h3>
+              <p>{emptyDesc}</p>
             </div>
           ) : (
-            listings.map((item) => (
-              <a className="pm-list-link" href={themeLink(`/product/${item.slug}`)} key={item.slug}>
-                <MapListCard {...item} />
+            filteredListings.map((item) => (
+              <a
+                key={item.slug}
+                className="pm-list-link"
+                href={themeLink(`/product/${item.slug}`)}
+                data-slug={item.slug}
+              >
+                <MapListCard
+                  price={item.price}
+                  address={item.address}
+                  beds={item.beds}
+                  baths={item.baths}
+                  sqft={item.sqft}
+                  image={item.image}
+                  isActive={selectedSlug === item.slug}
+                />
               </a>
             ))
           )}
-          {!loadingProperties && !propertyError && listings.length > 0 && (
-            <div style={{ textAlign: 'center', padding: '4rem 0', opacity: 0.2 }}>
-                <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⌬</div>
-                <div className="pm-hud-label">{useThemeContent('sidebar.end_label', 'End of results')}</div>
+          {!loadingProperties && !propertyError && filteredListings.length > 0 && (
+            <div className="pm-end-label">
+              <div className="pm-hud-label">{endLabel}</div>
             </div>
           )}
         </div>
       </aside>
 
       <main className="pm-map-canvas">
-        <div className="pm-map-mock"></div>
-
-        {/* Simulated Interactive Map with Markers */}
-        <MapPriceMarker price="$1.25M" top="20%" left="30%" />
-        <MapPriceMarker price="$2.8M" top="45%" left="60%" />
-        <MapPriceMarker price="$950K" top="70%" left="40%" />
-        <MapPriceMarker price="$4.5M" top="30%" left="80%" />
-        <MapPriceMarker price="$1.1M" top="65%" left="20%" />
-        <MapPriceMarker price="$1.85M" top="15%" left="75%" />
-
-        <MapHUD />
-
-        {/* Map UI Overlays */}
-        <div style={{ position: 'absolute', top: '2rem', right: '2rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {['+', '−', '⌖'].map(icon => (
-                <button key={icon} style={{
-                    width: '40px',
-                    height: '40px',
-                    background: 'var(--pm-glass)',
-                    border: '1px solid var(--pm-border)',
-                    color: 'white',
-                    borderRadius: '8px',
-                    fontSize: '1.25rem',
-                    cursor: 'pointer'
-                }}>
-                    {icon}
-                </button>
-            ))}
-        </div>
+        <MapCanvas
+          markers={mapMarkers}
+          selectedSlug={selectedSlug}
+          onMarkerClick={handleMarkerClick}
+        />
       </main>
     </>
   );

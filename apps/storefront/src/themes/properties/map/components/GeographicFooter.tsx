@@ -1,38 +1,44 @@
 
 import React from 'react';
+import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
-export const GeographicFooter = () => (
-    <footer className="geographic-footer">
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '6rem' }}>
-            <div>
-                <div className="map-logo" style={{ fontSize: '2.5rem', marginBottom: '2rem' }}>MAP.</div>
-                <p style={{ color: '#64748b', lineHeight: 2, fontSize: '1rem' }}>
-                    The world's most precise high-fidelity geographical distribution node. Mapping the global property registry with spatial logic.
-                </p>
-            </div>
-            <div>
-                <h4>SPATIAL</h4>
-                <a href="#" className="footer-link">Cartography</a>
-                <a href="#" className="footer-link">Spatial Sync</a>
-                <a href="#" className="footer-link">Grid Logic</a>
-                <a href="#" className="footer-link">Registry</a>
-            </div>
-            <div>
-                <h4>SYSTEMS</h4>
-                <a href="#" className="footer-link">Geo Node</a>
-                <a href="#" className="footer-link">Distribution</a>
-                <a href="#" className="footer-link">Global Sync</a>
-            </div>
-            <div>
-                <h4>NETWORK</h4>
-                <a href="#" className="footer-link">Verification</a>
-                <a href="#" className="footer-link">Governance</a>
-                <a href="#" className="footer-link">Contact</a>
-            </div>
+export const GeographicFooter = () => {
+  const themeLink = usePropertyThemeLink();
+
+  return (
+    <footer className="pm-footer">
+      <div className="pm-footer-grid">
+        <div className="pm-footer-brand">
+          <a href={themeLink('/')} className="pm-footer-logo">MAP<span>NEXUS</span></a>
+          <p className="pm-footer-desc">
+            Find your next home with map-first property search. Browse listings by location,
+            price, and property type across every neighbourhood.
+          </p>
         </div>
-        <div style={{ marginTop: '8rem', paddingTop: '4rem', borderTop: '1px solid var(--map-border)', display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 800, letterSpacing: '4px' }}>
-            <span>© 2026 MAP_NODE_SYSTEMS. SPATIAL_INTEGRITY_VERIFIED.</span>
-            <span>v.4.0_CARTOGRAPHIC</span>
+        <div>
+          <h4 className="pm-footer-heading">Search</h4>
+          <a href={themeLink('/explore')} className="pm-footer-link">Browse All</a>
+          <a href={themeLink('/explore')} className="pm-footer-link">Buy</a>
+          <a href={themeLink('/explore')} className="pm-footer-link">Rent</a>
+          <a href={themeLink('/explore')} className="pm-footer-link">New Listings</a>
         </div>
+        <div>
+          <h4 className="pm-footer-heading">Property Types</h4>
+          <a href={themeLink('/explore')} className="pm-footer-link">Houses</a>
+          <a href={themeLink('/explore')} className="pm-footer-link">Apartments</a>
+          <a href={themeLink('/explore')} className="pm-footer-link">Condos</a>
+          <a href={themeLink('/explore')} className="pm-footer-link">Commercial</a>
+        </div>
+        <div>
+          <h4 className="pm-footer-heading">Company</h4>
+          <a href={themeLink('/')} className="pm-footer-link">About</a>
+          <a href={themeLink('/')} className="pm-footer-link">Agents</a>
+          <a href={themeLink('/')} className="pm-footer-link">Contact</a>
+        </div>
+      </div>
+      <div className="pm-footer-bottom">
+        <span>© 2026 Sellio. All rights reserved.</span>
+      </div>
     </footer>
-);
+  );
+};
