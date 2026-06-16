@@ -22,9 +22,10 @@
 - [x] Fixed address showing "TBA": `mapPropertyToListing` now resolves `property.location?.title` first, then `property.address`, then city/state/country join — falls back to "Location not specified".
 - [x] Map now fits visible markers on load: `placeMarkers()` calls `map.setView` for a single marker (zoom 14) or `map.fitBounds` with 50 px padding for multiple markers so all pins are visible without manual zooming.
 
+- [x] Fixed text contrast across the theme: added explicit `color: var(--pm-text)` to `.pm-detail-hero-title`, `.pm-detail-section-title`, `.pm-inquiry-heading`, `.pm-inquiry-price`, `.pm-sidebar-title`, `.pm-nav-link`; added `color: var(--pm-text-muted)` to `.pm-fact-label`; added `text-shadow` to hero overlay title and price so text stays readable against any photo background.
+- [x] Added auto-rotating gallery with prev/next arrow buttons: images cycle every 4.5 s; left/right arrows let users navigate manually; interval restarts from the correct count when the image set changes on property load.
+- [x] Fixed map initial-load position: changed default center from NYC (zoom 12) to world view (center 20,0 zoom 2) so no specific city flashes before data arrives; added a gold spinner overlay on the map canvas while `loadingProperties` is true; overlay clears the moment `fitBounds` zooms to the real property markers.
+
 ## Open
 
-fix the property title color and many other headings do not have readiblity color (contrast with background)
-
-add rotating multiple pictures of the property
 

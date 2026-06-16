@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
@@ -122,6 +122,21 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const images = useMemo(
+    () => property ? collectImages(property) : [],
+    [property],
+  );
+
+  // Auto-rotate gallery every 4.5 s; restarts whenever image count changes
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const count = images.length;
+    const id = setInterval(() => {
+      setActiveImage((cur) => (cur + 1) % count);
+    }, 4500);
+    return () => clearInterval(id);
+  }, [images.length]);
+
   useEffect(() => {
     let isMounted = true;
     async function load() {
@@ -201,7 +216,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
     );
   }
 
-  const images = collectImages(property);
   const price = getPrice(property);
   const location = getLocation(property);
   const beds = property.specs?.bedrooms ?? property.number_of_bedrooms;
@@ -234,6 +248,20 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <h1 className="pm-detail-hero-title">{property.title}</h1>
           <div className="pm-detail-hero-price">{price}</div>
         </div>
+        {images.length > 1 && (
+          <div className="pm-hero-arrows" aria-hidden="true">
+            <button
+              type="button"
+              className="pm-hero-arrow"
+              onClick={() => setActiveImage((i) => (i - 1 + images.length) % images.length)}
+            >‹</button>
+            <button
+              type="button"
+              className="pm-hero-arrow"
+              onClick={() => setActiveImage((i) => (i + 1) % images.length)}
+            >›</button>
+          </div>
+        )}
       </div>
 
       {/* Thumbnail strip */}

@@ -110,10 +110,12 @@ export interface MapMarker {
 export function MapCanvas({
   markers,
   onMarkerClick,
+  loading = false,
 }: {
   markers: MapMarker[];
   selectedSlug: string | null;
   onMarkerClick: (slug: string) => void;
+  loading?: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
@@ -168,8 +170,8 @@ export function MapCanvas({
 
       const map = L.map(mapEl, {
         zoomControl: false,
-        center: [40.758, -73.968],
-        zoom: 12,
+        center: [20, 0],
+        zoom: 2,
       });
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -222,11 +224,18 @@ export function MapCanvas({
   }, [markers]);
 
   return (
-    <div
-      ref={containerRef}
-      className="pm-leaflet-container"
-      aria-label="Property map"
-    />
+    <>
+      <div
+        ref={containerRef}
+        className="pm-leaflet-container"
+        aria-label="Property map"
+      />
+      {loading && (
+        <div className="pm-map-loading" aria-label="Loading properties" aria-live="polite">
+          <div className="pm-map-spinner" aria-hidden="true" />
+        </div>
+      )}
+    </>
   );
 }
 

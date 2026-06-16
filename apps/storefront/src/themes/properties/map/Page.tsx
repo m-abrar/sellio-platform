@@ -269,6 +269,7 @@ export default function Page() {
           markers={mapMarkers}
           selectedSlug={selectedSlug}
           onMarkerClick={handleMarkerClick}
+          loading={loadingProperties}
         />
       </main>
     </>

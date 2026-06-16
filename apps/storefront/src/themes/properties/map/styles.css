@@ -408,20 +408,60 @@
   letter-spacing: 3px;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
 }
 
 .pm-detail-hero-title {
   font-family: var(--pm-font-heading);
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 800;
+  color: #fff;
   margin: 0 0 0.5rem;
   line-height: 1.1;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.9);
 }
 
 .pm-detail-hero-price {
   font-family: var(--pm-font-heading);
   font-size: 1.5rem;
   font-weight: 800;
+  color: var(--pm-gold);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+}
+
+/* Hero navigation arrows */
+.pm-hero-arrows {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  padding: 0 1rem;
+  z-index: 2;
+}
+
+.pm-hero-arrow {
+  pointer-events: auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.pm-hero-arrow:hover {
+  background: rgba(0, 0, 0, 0.82);
+  border-color: var(--pm-gold);
   color: var(--pm-gold);
 }
 
@@ -501,6 +541,7 @@
 .pm-fact-label {
   font-size: 0.6rem;
   font-weight: 700;
+  color: var(--pm-text-muted);
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--pm-text-muted);
@@ -522,6 +563,7 @@
 .pm-detail-section-title {
   font-size: 1rem;
   font-weight: 800;
+  color: var(--pm-text);
   letter-spacing: 0.5px;
   margin: 0 0 1.25rem;
   padding-bottom: 0.75rem;
@@ -578,6 +620,7 @@
   font-family: var(--pm-font-heading);
   font-size: 1.75rem;
   font-weight: 800;
+  color: var(--pm-text);
   color: var(--pm-gold);
   margin-bottom: 0.25rem;
 }
@@ -593,6 +636,7 @@
 .pm-inquiry-heading {
   font-size: 0.95rem;
   font-weight: 800;
+  color: var(--pm-text);
   margin: 0 0 1.25rem;
 }
 
@@ -807,7 +851,7 @@
 .pm-results-list > *:nth-child(8) { animation: pm-scale-in 300ms 380ms ease-out both; }
 
 /* Nav links */
-.pm-nav-link { position: relative; transition: color 200ms ease; }
+.pm-nav-link { position: relative; color: var(--pm-text); transition: color 200ms ease; }
 .pm-nav-link:hover { color: var(--pm-gold); }
 
 /* ============================================================
@@ -824,6 +868,7 @@
 .pm-sidebar-title {
   font-size: 1.15rem;
   font-weight: 800;
+  color: var(--pm-text);
   margin: 0;
 }
 
@@ -1049,6 +1094,31 @@
 }
 
 .leaflet-control-attribution a { color: rgba(255, 255, 255, 0.6) !important; }
+
+/* Map loading overlay */
+.pm-map-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 11, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+.pm-map-spinner {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(212, 175, 55, 0.2);
+  border-top-color: var(--pm-gold);
+  animation: pm-spin 0.7s linear infinite;
+}
+
+@keyframes pm-spin {
+  to { transform: rotate(360deg); }
+}
 
 /* ============================================================
    FOOTER
