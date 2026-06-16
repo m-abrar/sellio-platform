@@ -31,14 +31,18 @@
                         <div class="demo-overlay-v2"></div>
                     </div>
 
-                    <div class="p-3 d-flex justify-content-between align-items-center bg-card-footer border-top">
+                    <div class="p-3 bg-card-footer border-top">
+                        <?php if(!empty($demo['desc'])): ?>
+                            <p class="text-muted small mb-2 text-start"><?php echo $demo['desc']; ?></p>
+                        <?php endif; ?>
+                        <div class="d-flex justify-content-between align-items-center">
                         <div class="text-start">
                             <h5 class="fw-bold mb-0"><?php echo $demo['name']; ?></h5>
                             <small class="text-muted text-uppercase" style="font-size: 10px; letter-spacing: 1px;">
                                 <?php echo str_replace('_', ' ', $demo['slug']); ?>
                             </small>
                         </div>
-                        
+
                         <?php 
                             // Split the slug (e.g., 'unifieds_mega' becomes ['unifieds', 'mega'])
                             $parts = explode('_', $demo['slug']);
@@ -55,6 +59,7 @@
                             </a>
                         <?php endif; ?>
 
+                        </div>
                     </div>
 
                 </div>

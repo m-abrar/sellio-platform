@@ -443,5 +443,8 @@ write Sellio same version everywhere, documentation, error screen, loading, scre
 ---------------------
 
 - [x] The theme switcher should appear after few seconds and somehow also indicate to the user that it is draggable position. (`ThemeSwitcherClient`: widget hidden on mount, slides in from left after 2.5 s with a spring + left/right nudge animation (`ts-enter-nudge`) to hint movement; 2×3 dot drag-handle icon added to button left edge.)
+
+- [x] Increased the theme switcher's appearance delay from 2.5s to 6s in `src/components/ThemeSwitcherClient.tsx`.
+
 - [x] The theme icon should have two cursor changes, one should be for dragging and other should indicate the clicking. (Drag-handle zone: `cursor: grab` / `grabbing` when dragging; button body: `cursor: pointer`. `onMouseDown` moved to the drag-handle span only so the click and drag zones are independent.)
 
