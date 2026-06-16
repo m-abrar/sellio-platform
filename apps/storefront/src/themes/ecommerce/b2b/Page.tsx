@@ -421,20 +421,22 @@ export default function Page() {
       </section>
 
       {/* How to order */}
-      <section className="b2b-section-heading" style={{ marginBottom: '1.25rem' }}>
-        <span className="b2b-kicker">How it works</span>
-        <h2>Order in three steps.</h2>
-        <p>From discovery to confirmed order — our process is designed to be fast, transparent, and fully traceable.</p>
+      <section style={{ marginTop: '6rem' }} aria-label="How to order">
+        <div className="b2b-section-heading">
+          <span className="b2b-kicker">How it works</span>
+          <h2>Order in three steps.</h2>
+          <p>From discovery to confirmed order — our process is designed to be fast, transparent, and fully traceable.</p>
+        </div>
+        <div className="b2b-process">
+          {processSteps.map(([num, step, detail]) => (
+            <article key={num}>
+              <span>{num}</span>
+              <h3>{step}</h3>
+              <p>{detail}</p>
+            </article>
+          ))}
+        </div>
       </section>
-      <div className="b2b-process" aria-label="Order process">
-        {processSteps.map(([num, step, detail]) => (
-          <div key={num} className="b2b-process-step">
-            <span className="b2b-process-num">{num}</span>
-            <h3>{step}</h3>
-            <p>{detail}</p>
-          </div>
-        ))}
-      </div>
 
       {/* RFQ section */}
       <section className="b2b-rfq" id="b2b-rfq" aria-label="Request a quote">

@@ -10,9 +10,32 @@ interface ThemeSwitcherClientProps {
 
 const DEFAULT_SWITCHER_POSITION = { x: 20, y: 200 };
 
+const ANIMATIONS = `
+  @keyframes ts-enter-nudge {
+    0%   { opacity: 0; transform: translateX(-28px); }
+    38%  { opacity: 1; transform: translateX(2px); }
+    50%  { opacity: 1; transform: translateX(0); }
+    62%  { opacity: 1; transform: translateX(11px); }
+    74%  { opacity: 1; transform: translateX(-7px); }
+    84%  { opacity: 1; transform: translateX(5px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .gear-icon { animation: spin 4s linear infinite; }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+`;
+
 export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes, activeThemeKey }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [pos, setPos] = useState(DEFAULT_SWITCHER_POSITION);
+  const [visible, setVisible] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const dragging = useRef(false);
   const dragOffset = useRef({ x: 0, y: 0 });
   const didDrag = useRef(false);
@@ -22,6 +45,12 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
       x: DEFAULT_SWITCHER_POSITION.x,
       y: Math.round(window.innerHeight * 0.25),
     });
+  }, []);
+
+  // Appear after 2.5 s so it doesn't crowd the initial page view
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 2500);
+    return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
@@ -35,11 +64,14 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const onMouseDown = useCallback((e: React.MouseEvent) => {
+  // Drag starts only from the drag-handle zone
+  const onHandleMouseDown = useCallback((e: React.MouseEvent) => {
     dragging.current = true;
     didDrag.current = false;
+    setIsDragging(true);
     dragOffset.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
     e.preventDefault();
+    e.stopPropagation(); // don't bubble to button's onClick
   }, [pos]);
 
   useEffect(() => {
@@ -51,7 +83,10 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
         y: Math.max(0, Math.min(window.innerHeight - 38, e.clientY - dragOffset.current.y)),
       });
     };
-    const onMouseUp = () => { dragging.current = false; };
+    const onMouseUp = () => {
+      dragging.current = false;
+      setIsDragging(false);
+    };
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
     return () => {
@@ -73,6 +108,8 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
     return acc;
   }, {} as Record<string, Theme[]>);
 
+  if (!visible) return null;
+
   return (
     <div style={{
       position: 'fixed',
@@ -81,45 +118,60 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
       zIndex: 1000,
       fontFamily: 'Inter, sans-serif',
       userSelect: 'none',
+      animation: 'ts-enter-nudge 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards',
     }}>
-      {/* Toggle Button */}
+      <style dangerouslySetInnerHTML={{ __html: ANIMATIONS }} />
+
+      {/* Toggle Button — cursor: pointer for the click action */}
       <button
-        onMouseDown={onMouseDown}
         onClick={handleButtonClick}
         style={{
           height: '38px',
-          padding: '0 12px 0 10px',
+          padding: '0 12px 0 8px',
           borderRadius: '19px',
           background: '#1e4d4e',
           color: 'white',
           border: 'none',
-          cursor: 'grab',
+          cursor: 'pointer',
           boxShadow: '0 8px 25px rgba(0,0,0,0.25)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '8px',
+          gap: '7px',
           transition: 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
           transform: isOpen ? 'scale(0.9)' : 'scale(1)',
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
         }}
       >
-        <style dangerouslySetInnerHTML={{ __html: `
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-          .gear-icon {
-            animation: spin 4s linear infinite;
-          }
-        ` }} />
+        {/* Drag handle — cursor: grab/grabbing, starts drag on mousedown */}
+        <span
+          onMouseDown={onHandleMouseDown}
+          title="Drag to reposition"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2.5px',
+            opacity: 0.6,
+            flexShrink: 0,
+            padding: '4px 2px',
+            cursor: isDragging ? 'grabbing' : 'grab',
+          }}
+        >
+          {[0, 1, 2].map(row => (
+            <span key={row} style={{ display: 'flex', gap: '2.5px' }}>
+              {[0, 1].map(col => (
+                <span key={col} style={{ width: '3px', height: '3px', borderRadius: '50%', background: 'currentColor', display: 'block' }} />
+              ))}
+            </span>
+          ))}
+        </span>
 
-        {/* Main Gear */}
+        {/* Spinning gear — click area */}
         <svg
           className="gear-icon"
-          width="20"
-          height="20"
+          width="18"
+          height="18"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -127,8 +179,8 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
           strokeLinecap="round"
           strokeLinejoin="round"
         >
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
         </svg>
 
         <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.03em', whiteSpace: 'nowrap', lineHeight: 1, display: 'flex', alignItems: 'center', gap: '5px' }}>
@@ -154,15 +206,8 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
           maxHeight: '60vh',
           overflowY: 'auto',
           border: '1px solid rgba(0,0,0,0.05)',
-          animation: 'slideDown 0.3s ease-out'
+          animation: 'slideDown 0.3s ease-out',
         }}>
-          <style dangerouslySetInnerHTML={{ __html: `
-            @keyframes slideDown {
-              from { opacity: 0; transform: translateY(-10px); }
-              to { opacity: 1; transform: translateY(0); }
-            }
-          ` }} />
-
           <h3 style={{ margin: '0 0 15px 0', fontSize: '14px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#1e4d4e' }}>
             Theme Engine Preview
           </h3>
@@ -176,7 +221,7 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
                 textTransform: 'uppercase',
                 marginBottom: '8px',
                 borderBottom: '1px solid #eee',
-                paddingBottom: '4px'
+                paddingBottom: '4px',
               }}>
                 {vertical}
               </div>
@@ -200,7 +245,7 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
                         borderRadius: '6px',
                         border: isActive ? '1px solid #1e4d4e' : '1px solid transparent',
                         transition: 'all 0.2s ease',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                       }}
                     >
                       {t.title.replace('Properties ', '').replace('Events ', '').replace('Unified ', '').replace('Universal ', '')}

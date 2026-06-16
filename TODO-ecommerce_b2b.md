@@ -31,5 +31,17 @@
 - [x] Simplified primary menu: removed the block that always appended `B2B_NAV_LINKS` to CMS items (was doubling nav entries). When CMS provides items they render alone; static fallback is 4 short labels — Catalog, About, Insights, Contact.
 - [x] Strengthened brochure character across the theme: added "Industries We Serve" section to homepage (6 cards, 3-col grid, each with certification badge — AS9100D, IATF 16949, PED, IATF, ITAR, ATEX); reduced featured product grid to 3 items; updated product section kicker and copy to editorial rather than shop framing; rewrote process steps to match a manufacturing company's inquiry → review → deliver flow; updated ContactPage inquiry types (Custom manufacturing, OEM & contract supply, Technical specifications instead of Enterprise account / Platform support).
 
+- [x] Pre-footer "Source directly from the manufacturer" section polished: teal gradient background, 2px accent top border, larger heading (`clamp(1.9–2.8rem)`), increased padding (`5.5rem`).
+- [x] Footer trust badges now use accent color (`color: var(--b2b-accent)`, teal border/background) instead of muted grey — clearly visible in the footer brand column.
+- [x] Homepage margins/padding/font-sizes fixed: removed top padding gap above hero (`padding: 0 5% 7rem`); hero h1 scaled down (`clamp(2.8rem, 5.5vw, 5rem)`); section headings scaled down (`clamp(2rem, 4vw, 3.4rem)`); banners margin increased to `4rem`; capability grid margin to `2rem` — consistent section rhythm throughout.
+
+- [x] Sections colliding: restored `padding-top: 2.5rem` on `.b2b-page`; increased `.b2b-who` top margin from `1.25rem` to `3rem` — creates clear visual separation between the sticky header → hero → who-we-are sections.
+- [x] "Browse catalog" button readability: added `.b2b-footer-prefooter .b2b-btn-primary` override (white background, dark-teal text `#0a5248`) so the CTA button pops off the teal-gradient pre-footer background instead of blending into it.
+
+- [x] "How it works" layout crash fixed: process steps used `<div className="b2b-process-step">` but CSS targeted `article` — changed to `<article>` so cards receive background, border, padding, and step-number styles; wrapped the heading + grid in a `<section style={{ marginTop: '6rem' }}>` so this block gets the same spacing as other major sections.
+
 ## Open
+
+
+
 

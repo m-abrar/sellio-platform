@@ -226,7 +226,12 @@
 
 /* ─── Layout ─────────────────────────────────────── */
 
-.b2b-page,
+.b2b-page {
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: 2.5rem 5% 7rem;
+}
+
 .b2b-detail-page {
   margin: 0 auto;
   max-width: 1440px;
@@ -324,10 +329,10 @@
 
 .b2b-hero-corp-h1 {
   color: var(--b2b-text);
-  font-size: clamp(3.4rem, 8vw, 7.5rem);
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
   font-weight: 900;
   letter-spacing: -0.03em;
-  line-height: 0.95;
+  line-height: 0.97;
   margin: 0;
 }
 
@@ -563,7 +568,7 @@
   display: grid;
   gap: 1.25rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 1.25rem;
+  margin-top: 4rem;
 }
 
 .b2b-banner {
@@ -624,7 +629,7 @@
 
 .b2b-capability-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-top: 1.25rem;
+  margin-top: 2rem;
 }
 
 .b2b-capability-grid article {
@@ -708,7 +713,7 @@
 
 .b2b-section-heading h2,
 .b2b-rfq h2 {
-  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  font-size: clamp(2rem, 4vw, 3.4rem);
 }
 
 .b2b-product-grid {
@@ -2122,14 +2127,11 @@
 
 /* ─── Footer ─────────────────────────────────────── */
 
-.b2b-footer {
-  border-top: 1px solid var(--b2b-line);
-}
-
 .b2b-footer-prefooter {
-  background: var(--b2b-panel-strong);
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.08) 0%, var(--b2b-panel-strong) 65%);
+  border-top: 2px solid var(--b2b-accent);
   border-bottom: 1px solid var(--b2b-line);
-  padding: 3.5rem 5%;
+  padding: 5.5rem 5%;
 }
 
 .b2b-footer-prefooter-inner {
@@ -2143,10 +2145,10 @@
 
 .b2b-footer-prefooter-copy h2 {
   color: var(--b2b-text);
-  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-size: clamp(1.9rem, 3.5vw, 2.8rem);
   font-weight: 900;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.5rem;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.7rem;
 }
 
 .b2b-footer-prefooter-copy p {
@@ -2162,6 +2164,12 @@
   display: flex;
   flex-shrink: 0;
   gap: 0.75rem;
+}
+
+.b2b-footer-prefooter .b2b-btn-primary {
+  background: #fff;
+  border-color: #fff;
+  color: #0a5248;
 }
 
 .b2b-footer-main {
@@ -2204,10 +2212,10 @@
 }
 
 .b2b-trust-badge {
-  background: var(--b2b-panel-strong);
-  border: 1px solid var(--b2b-line);
+  background: rgba(45, 212, 191, 0.06);
+  border: 1px solid rgba(45, 212, 191, 0.25);
   border-radius: 999px;
-  color: var(--b2b-muted);
+  color: var(--b2b-accent);
   font-size: 0.7rem;
   font-weight: 700;
   padding: 0.38rem 0.8rem;
@@ -2356,7 +2364,10 @@
     display: none;
   }
 
-  .b2b-page,
+  .b2b-page {
+    padding: 1.5rem 4% 5rem;
+  }
+
   .b2b-detail-page {
     padding: 2rem 4% 5rem;
   }
@@ -2522,7 +2533,7 @@
   background: var(--b2b-panel);
   border-bottom: 1px solid var(--b2b-line);
   border-top: 1px solid var(--b2b-line);
-  margin: 1.25rem -5%;
+  margin: 3rem -5% 1.25rem;
   padding: 5rem 5%;
 }
 

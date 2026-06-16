@@ -440,3 +440,8 @@ write Sellio same version everywhere, documentation, error screen, loading, scre
 
 - [x] login / register and other auth pages have UIUX bugs. Fixed: `is-invalid` class now applied to `password_confirmation` on register and reset-password; removed focus `translateY` layout-jump; cleaned `is-invalid` background-image conflict on pill inputs; social divider badge background uses theme token instead of hardcoded `bg-white`.
 
+---------------------
+
+- [x] The theme switcher should appear after few seconds and somehow also indicate to the user that it is draggable position. (`ThemeSwitcherClient`: widget hidden on mount, slides in from left after 2.5 s with a spring + left/right nudge animation (`ts-enter-nudge`) to hint movement; 2×3 dot drag-handle icon added to button left edge.)
+- [x] The theme icon should have two cursor changes, one should be for dragging and other should indicate the clicking. (Drag-handle zone: `cursor: grab` / `grabbing` when dragging; button body: `cursor: pointer`. `onMouseDown` moved to the drag-handle span only so the click and drag zones are independent.)
+
