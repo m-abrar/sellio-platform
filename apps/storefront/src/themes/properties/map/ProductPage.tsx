@@ -177,9 +177,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
   if (loading) {
     return (
       <main className="pm-detail-page" aria-busy="true">
-        <div className="pm-detail-skeleton pm-detail-hero-skeleton" />
-        <div className="pm-detail-line pm-detail-line-title" />
-        <div className="pm-detail-line" />
+        <div className="pm-detail-inner">
+          <div className="pm-detail-skeleton pm-detail-hero-skeleton" />
+          <div className="pm-detail-line pm-detail-line-title" />
+          <div className="pm-detail-line" />
+        </div>
       </main>
     );
   }
@@ -187,12 +189,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
   if (errorMessage || !property) {
     return (
       <main className="pm-detail-page">
-        <section className="pm-detail-state" role="status">
-          <div className="pm-detail-kicker">Property Unavailable</div>
-          <h1>This property could not be loaded.</h1>
-          <p>{errorMessage}</p>
-          <a href={themeLink('/')} className="pm-detail-btn">Back to Map Search</a>
-        </section>
+        <div className="pm-detail-inner">
+          <section className="pm-detail-state" role="status">
+            <div className="pm-detail-kicker">Property Unavailable</div>
+            <h1>This property could not be loaded.</h1>
+            <p>{errorMessage}</p>
+            <a href={themeLink('/')} className="pm-detail-btn">Back to Map Search</a>
+          </section>
+        </div>
       </main>
     );
   }
@@ -212,6 +216,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <main className="pm-detail-page">
+      <div className="pm-detail-inner">
       {/* Back */}
       <a href={themeLink('/')} className="pm-detail-back">
         ← Back to Map Search
@@ -390,6 +395,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <MiniMap lat={lat} lng={lng} />
         </section>
       )}
+      </div>
     </main>
   );
 }

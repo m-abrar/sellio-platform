@@ -20,3 +20,9 @@
 
 ## Open
 
+single property page has multiple vertical scrolbars, fix it.
+
+address is showing TBA, fix it
+
+the map should load according to coordinates of the available properties, to cover all of them, in respect with left sidebar too.
+
