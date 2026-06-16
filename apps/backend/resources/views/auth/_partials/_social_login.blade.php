@@ -1,6 +1,6 @@
 <div class="position-relative my-4 my-md-5">
     <hr class="text-muted opacity-25">
-    <span class="position-absolute top-50 start-50 translate-middle px-3 py-1 bg-white border rounded-pill shadow-sm small text-muted fw-bold auth-divider-badge">
+    <span class="position-absolute top-50 start-50 translate-middle px-3 py-1 rounded-pill small text-muted fw-bold auth-divider-badge" style="background: var(--bg-body, #f8f9fc); border: 1px solid var(--color-border, #e2e8f0);">
         {{ __('Or continue with') }}
     </span>
 </div>

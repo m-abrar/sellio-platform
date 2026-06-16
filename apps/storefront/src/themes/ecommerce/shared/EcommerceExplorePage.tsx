@@ -20,6 +20,7 @@ interface ExplorePageProps {
   initialCategorySlug?: string;
   initialSearch?: string;
   shell?: (content: React.ReactNode) => React.ReactNode;
+  renderCard?: (product: Product, href: string) => React.ReactNode;
 }
 
 function cls(prefix: string, suffix: string) {
@@ -31,6 +32,7 @@ export default function EcommerceExplorePage({
   initialCategorySlug,
   initialSearch = '',
   shell,
+  renderCard,
 }: ExplorePageProps) {
   const themeLink = useEcommerceThemeLink();
   const allowDemo = useDemoFallbackAllowed();
@@ -43,6 +45,9 @@ export default function EcommerceExplorePage({
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [sortBy, setSortBy] = useState<ExploreSortOption>('default');
+  const [page, setPage] = useState(1);
+
+  const ITEMS_PER_PAGE = 12;
 
   const monoClass = prefix === 'el' ? 'el-tech-font' : `${prefix}-mono`;
   const primaryBtnClass = prefix === 'el' ? 'el-btn el-btn-primary' : `${prefix}-btn-primary`;
@@ -123,6 +128,14 @@ export default function EcommerceExplorePage({
       return 0;
     });
 
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(page, totalPages);
+  const paginatedProducts = filteredProducts.slice((safePage - 1) * ITEMS_PER_PAGE, safePage * ITEMS_PER_PAGE);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, selectedCategory, sortBy]);
+
   const content = (
     <main className={cls(prefix, 'explore-page')}>
       <header className={cls(prefix, 'explore-header')}>
@@ -199,28 +212,69 @@ export default function EcommerceExplorePage({
           ))}
         </div>
       ) : filteredProducts.length > 0 ? (
-        <div className={cls(prefix, 'explore-grid')}>
-          {filteredProducts.map((product) => (
-            <a
-              href={themeLink(`/product/${product.slug}`)}
-              className={cls(prefix, 'product-card')}
-              key={product.id}
-            >
-              <div style={{ overflow: 'hidden', marginBottom: '1rem' }}>
-                <img
-                  src={getProductImage(product)}
-                  alt={product.title}
-                  style={{ width: '100%', aspectRatio: '4/5', objectFit: 'cover' }}
-                />
-              </div>
-              <div className={monoClass} style={{ marginBottom: '0.8rem', fontSize: '0.55rem' }}>
-                PRODUCT_{product.id}
-              </div>
-              <h3>{product.title}</h3>
-              <div className={cls(prefix, 'product-price')}>{formatProductPrice(product)}</div>
-            </a>
-          ))}
-        </div>
+        <>
+          <div className={cls(prefix, 'explore-grid')}>
+            {paginatedProducts.map((product) => {
+              const href = themeLink(`/product/${product.slug}`);
+              if (renderCard) return <React.Fragment key={product.id}>{renderCard(product, href)}</React.Fragment>;
+              return (
+                <a
+                  href={href}
+                  className={cls(prefix, 'product-card')}
+                  key={product.id}
+                >
+                  <div style={{ overflow: 'hidden', marginBottom: '1rem' }}>
+                    <img
+                      src={getProductImage(product)}
+                      alt={product.title}
+                      style={{ width: '100%', aspectRatio: '4/5', objectFit: 'cover' }}
+                    />
+                  </div>
+                  <div className={monoClass} style={{ marginBottom: '0.8rem', fontSize: '0.55rem' }}>
+                    PRODUCT_{product.id}
+                  </div>
+                  <h3>{product.title}</h3>
+                  <div className={cls(prefix, 'product-price')}>{formatProductPrice(product)}</div>
+                </a>
+              );
+            })}
+          </div>
+
+          {totalPages > 1 && (
+            <nav className={cls(prefix, 'pagination')} aria-label="Catalog pages">
+              <button
+                type="button"
+                className={cls(prefix, 'pagination-btn')}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={safePage === 1}
+                aria-label="Previous page"
+              >
+                ←
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  className={`${cls(prefix, 'pagination-btn')}${n === safePage ? ` ${cls(prefix, 'pagination-btn-active')}` : ''}`}
+                  onClick={() => setPage(n)}
+                  aria-label={`Page ${n}`}
+                  aria-current={n === safePage ? 'page' : undefined}
+                >
+                  {n}
+                </button>
+              ))}
+              <button
+                type="button"
+                className={cls(prefix, 'pagination-btn')}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={safePage === totalPages}
+                aria-label="Next page"
+              >
+                →
+              </button>
+            </nav>
+          )}
+        </>
       ) : (
         <div className={cls(prefix, 'product-state')} role="status">
           <div className={monoClass} style={{ marginBottom: '1rem' }}>

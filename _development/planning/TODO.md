@@ -434,14 +434,9 @@ this page and others like this need to be applied custom design
 
 write Sellio same version everywhere, documentation, error screen, loading, screen, installer, etc
 
-blade frontend, 
-Browse Popular Services
-Find trusted professionals for any project.
-show 4 categories here or increase the size of columns if you want to show 3. so it should not have empty space on the right side
+- [x] blade frontend: Browse Popular Services — capped `$serviceCategories->take(4)` and used capped count for dynamic column calc; no empty space in the row.
 
+- [x] the blade frontend, footer is not perfectly designed. it is not balanced including the newsletter subscription. Balanced to 4 equal col-lg-3 columns (brand + 3 link cols); improved newsletter strip alignment and bottom bar with Privacy/Terms links.
 
-the blade frontend, footer is not perfectly designed. it is not balanced including the newsletter subscription. fix it
-
-
-login / register and other auth pages have UIUX bugs, kindly refine it.
+- [x] login / register and other auth pages have UIUX bugs. Fixed: `is-invalid` class now applied to `password_confirmation` on register and reset-password; removed focus `translateY` layout-jump; cleaned `is-invalid` background-image conflict on pill inputs; social divider badge background uses theme token instead of hardcoded `bg-white`.
 

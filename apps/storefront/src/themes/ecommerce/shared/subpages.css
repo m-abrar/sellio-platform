@@ -610,6 +610,91 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+/* Fashion pagination */
+.ecommerce-fashion-theme .ef-pagination {
+  align-items: center;
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.ecommerce-fashion-theme .ef-pagination-btn {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--ef-border);
+  color: var(--ef-ebony);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  height: 40px;
+  justify-content: center;
+  min-width: 40px;
+  padding: 0 0.5rem;
+  transition: border-color 200ms, color 200ms;
+}
+
+.ecommerce-fashion-theme .ef-pagination-btn:hover:not(:disabled) {
+  border-color: var(--ef-champagne);
+  color: var(--ef-champagne);
+}
+
+.ecommerce-fashion-theme .ef-pagination-btn:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.ecommerce-fashion-theme .ef-pagination-btn-active {
+  background: var(--ef-ebony);
+  border-color: var(--ef-ebony);
+  color: white;
+}
+
+/* Electronics pagination */
+.ecommerce-electronics-wrapper .el-pagination {
+  align-items: center;
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.ecommerce-electronics-wrapper .el-pagination-btn {
+  align-items: center;
+  background: var(--el-bg-card);
+  border: 1px solid var(--el-border);
+  border-radius: 4px;
+  color: var(--el-text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--el-font-tech);
+  font-size: 0.82rem;
+  font-weight: 700;
+  height: 40px;
+  justify-content: center;
+  min-width: 40px;
+  padding: 0 0.5rem;
+  transition: border-color 120ms, color 120ms;
+}
+
+.ecommerce-electronics-wrapper .el-pagination-btn:hover:not(:disabled) {
+  border-color: var(--el-primary);
+  color: var(--el-primary);
+}
+
+.ecommerce-electronics-wrapper .el-pagination-btn:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.ecommerce-electronics-wrapper .el-pagination-btn-active {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: var(--el-primary);
+  color: var(--el-primary);
+}
+
 @media (max-width: 900px) {
   .ecommerce-fashion-theme .ef-explore-controls,
   .ecommerce-electronics-wrapper .el-explore-controls {

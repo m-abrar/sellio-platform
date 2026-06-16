@@ -199,11 +199,11 @@
 
         @isset($serviceCategories)
         @php
-            $svcCount = $serviceCategories->count();
+            $svcCount = min($serviceCategories->count(), 4);
             $svcLgCol = $svcCount >= 4 ? 3 : ($svcCount === 3 ? 4 : ($svcCount === 2 ? 6 : 12));
         @endphp
         <div class="row g-4">
-                @forelse($serviceCategories as $category)
+                @forelse($serviceCategories->take(4) as $category)
                     <div class="col-12 col-md-6 col-lg-{{ $svcLgCol }}" data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 }}">
                         <a href="{{ route('services.index', ['category' => $category->slug]) }}" class="text-decoration-none">
                             <div class="card glass-surface text-center h-100 border-0 rounded-5 p-3 hover-lift transition-all">

@@ -43,7 +43,7 @@
     <div class="mb-4">
         <label for="password_confirmation" class="filter-label mb-2">{{ __('Confirm Password') }}</label>
         <div class="form-icon-group">
-            <input type="password" class="form-control rounded-pill" id="password_confirmation" name="password_confirmation" placeholder="{{ __('••••••••') }}" required>
+            <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password_confirmation')]) id="password_confirmation" name="password_confirmation" placeholder="{{ __('••••••••') }}" required autocomplete="new-password">
             <i class="bi bi-shield-check input-icon"></i>
             <i class="bi bi-eye password-toggle"></i>
         </div>
