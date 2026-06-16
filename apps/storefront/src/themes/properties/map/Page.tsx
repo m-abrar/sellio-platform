@@ -214,24 +214,24 @@ export default function Page() {
               <p>Check your API connection and make sure properties are published.</p>
             </div>
           ) : filteredListings.length === 0 && allListings.length > 0 ? (
-            <div className="prop-listing-state pm-listing-state">
-              <div className="prop-listing-kicker">No matches</div>
-              <h3>No properties match your filters.</h3>
-              <p>
-                <button
-                  type="button"
-                  className="pm-inline-link"
-                  onClick={() => { setPriceFilter('all'); setTypeFilter('all'); }}
-                >
-                  Clear filters
-                </button>{' '}to see all available listings.
-              </p>
+            <div className="pm-empty-state">
+              <div className="pm-empty-icon">◎</div>
+              <div className="pm-empty-kicker">No matches</div>
+              <p className="pm-empty-message">No properties match your current filters.</p>
+              <button
+                type="button"
+                className="pm-empty-action"
+                onClick={() => { setPriceFilter('all'); setTypeFilter('all'); }}
+              >
+                Clear filters
+              </button>
             </div>
           ) : filteredListings.length === 0 ? (
-            <div className="prop-listing-state pm-listing-state">
-              <div className="prop-listing-kicker">{emptyKicker}</div>
-              <h3>{emptyTitle}</h3>
-              <p>{emptyDesc}</p>
+            <div className="pm-empty-state">
+              <div className="pm-empty-icon">◎</div>
+              <div className="pm-empty-kicker">{emptyKicker}</div>
+              <p className="pm-empty-message">{emptyTitle}</p>
+              <p className="pm-empty-desc">{emptyDesc}</p>
             </div>
           ) : (
             filteredListings.map((item) => (

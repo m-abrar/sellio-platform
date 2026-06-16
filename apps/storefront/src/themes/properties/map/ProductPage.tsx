@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
@@ -10,57 +10,141 @@ interface ProductPageProps {
   slug: string;
 }
 
-function getPropertyPrice(property: Property) {
-  return property.pricing?.price_formatted || (
-    property.base_price ? `$${Number(property.base_price).toLocaleString()}` : 'Price on request'
-  );
+// ─── Image collection ────────────────────────────────────────────────────────
+
+function extractImageUrl(item: unknown): string | null {
+  if (typeof item === 'string' && item.trim()) return item;
+  if (!item || typeof item !== 'object') return null;
+  const r = item as Record<string, unknown>;
+  for (const k of ['hero', 'url', 'original_url', 'thumbnail', 'preview']) {
+    if (typeof r[k] === 'string' && (r[k] as string).trim()) return r[k] as string;
+  }
+  return null;
 }
 
-function getPropertyLocation(property: Property) {
-  return property.location?.title || [property.city, property.state].filter(Boolean).join(', ') || property.address || 'Location TBA';
+function collectImages(property: Property): string[] {
+  const imgs: string[] = [];
+  const add = (url?: string | null) => { if (url && !imgs.includes(url)) imgs.push(url); };
+
+  if (Array.isArray(property.gallery)) {
+    const sorted = [...property.gallery].sort((a, b) => ((a as any).order ?? 0) - ((b as any).order ?? 0));
+    sorted.forEach((item) => add(extractImageUrl(item)));
+  }
+  add((property as any).primary_image_url);
+  add(property.featured_image);
+  add(property.thumbnail_image);
+  add((property as any).thumbnail_url);
+  if (Array.isArray((property as any).media)) {
+    (property as any).media.forEach((item: unknown) => add(extractImageUrl(item)));
+  }
+
+  const featured = property.featured_image || (property as any).primary_image_url;
+  if (featured && imgs.indexOf(featured) > 0) {
+    imgs.splice(imgs.indexOf(featured), 1);
+    imgs.unshift(featured);
+  }
+
+  if (!imgs.length) imgs.push('/themes/properties/map/1.webp');
+  return imgs;
 }
 
-function getPropertyImage(property: Property) {
-  return property.featured_image || property.thumbnail_image || '/themes/properties/map/1.webp';
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function getPrice(property: Property) {
+  return property.pricing?.price_formatted ||
+    (property.base_price ? `$${Number(property.base_price).toLocaleString()}` : 'Price on request');
 }
+
+function getLocation(property: Property) {
+  return property.location?.title ||
+    [property.city, property.state].filter(Boolean).join(', ') ||
+    property.address || 'Location TBA';
+}
+
+// ─── Mini map ────────────────────────────────────────────────────────────────
+
+function MiniMap({ lat, lng }: { lat: number; lng: number }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const el = containerRef.current;
+
+    function init(L: any) {
+      if (mapRef.current) return;
+      const map = L.map(el, { zoomControl: true, center: [lat, lng], zoom: 15, scrollWheelZoom: false });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+      }).addTo(map);
+      const icon = L.divIcon({ className: '', html: '<div class="pm-pin-bubble pm-pin-detail">This property</div>', iconSize: null, iconAnchor: [55, 18] });
+      L.marker([lat, lng], { icon }).addTo(map);
+      mapRef.current = map;
+    }
+
+    if ((window as any).L) {
+      init((window as any).L);
+    } else {
+      if (!document.getElementById('pm-leaflet-css')) {
+        const link = document.createElement('link');
+        link.id = 'pm-leaflet-css';
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        document.head.appendChild(link);
+      }
+      let script = document.getElementById('pm-leaflet-js') as HTMLScriptElement | null;
+      if (!script) {
+        script = document.createElement('script');
+        script.id = 'pm-leaflet-js';
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        document.head.appendChild(script);
+      }
+      script.addEventListener('load', () => init((window as any).L), { once: true });
+    }
+
+    return () => { if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; } };
+  }, [lat, lng]);
+
+  return <div ref={containerRef} className="pm-mini-map" />;
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ProductPage({ slug }: ProductPageProps) {
   const themeLink = usePropertyThemeLink();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [activeImage, setActiveImage] = useState(0);
+  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
-    async function loadProperty() {
+    async function load() {
       try {
         const response = await api.getPropertyDetails(slug);
         if (!isMounted) return;
-        if (response?.data) {
-          setProperty(response.data);
-          setErrorMessage(null);
-        } else {
-          setErrorMessage('This property could not be found.');
-        }
-      } catch (error: unknown) {
+        if (response?.data) { setProperty(response.data); setErrorMessage(null); }
+        else setErrorMessage('This property could not be found.');
+      } catch (err: unknown) {
         if (!isMounted) return;
-        setErrorMessage(error instanceof Error ? error.message : 'This property is temporarily unavailable.');
+        setErrorMessage(err instanceof Error ? err.message : 'This property is temporarily unavailable.');
       } finally {
         if (isMounted) setLoading(false);
       }
     }
-    loadProperty();
+    load();
     return () => { isMounted = false; };
   }, [slug]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!property || !form.name || !form.email) {
-      setFormError('Please enter your name and email to submit an inquiry.');
+      setFormError('Please enter your name and email.');
       return;
     }
     setFormError(null);
@@ -85,26 +169,17 @@ export default function ProductPage({ slug }: ProductPageProps) {
     });
 
     setIsSubmitting(false);
-
-    if (!result.ok) {
-      setFormError(result.error);
-      return;
-    }
-
+    if (!result.ok) { setFormError(result.error); return; }
     setIsSubmitted(true);
-    setForm({ name: '', email: '', message: '' });
+    setForm({ name: '', email: '', phone: '', message: '' });
   };
-
-  const area = property?.specs?.area_formatted || (property?.area_sq_ft ? `${Number(property.area_sq_ft).toLocaleString()} sqft` : null);
-  const latitude = Number(property?.location?.latitude);
-  const longitude = Number(property?.location?.longitude);
-  const hasCoordinates = Number.isFinite(latitude) && Number.isFinite(longitude) && latitude !== 0;
 
   if (loading) {
     return (
       <main className="pm-detail-page" aria-busy="true">
         <div className="pm-detail-skeleton pm-detail-hero-skeleton" />
         <div className="pm-detail-line pm-detail-line-title" />
+        <div className="pm-detail-line" />
       </main>
     );
   }
@@ -122,58 +197,199 @@ export default function ProductPage({ slug }: ProductPageProps) {
     );
   }
 
+  const images = collectImages(property);
+  const price = getPrice(property);
+  const location = getLocation(property);
+  const beds = property.specs?.bedrooms ?? property.number_of_bedrooms;
+  const baths = property.specs?.bathrooms ?? property.number_of_bathrooms;
+  const area = property.specs?.area_formatted || (property.area_sq_ft ? `${Number(property.area_sq_ft).toLocaleString()} sqft` : null);
+  const category = property.specs?.category || (property as any).category?.title || 'Property';
+  const yearBuilt = property.specs?.year_built ?? (property as any).year_built;
+  const parking = property.specs?.parking_spots ?? (property as any).number_of_parking_spots;
+  const lat = Number(property.location?.latitude);
+  const lng = Number(property.location?.longitude);
+  const hasCoords = Number.isFinite(lat) && Number.isFinite(lng) && lat !== 0;
+
   return (
     <main className="pm-detail-page">
-      <a href={themeLink('/')} className="pm-detail-back">&larr; Back to Map Search</a>
-      <section className="pm-detail-grid">
-        <div className="pm-detail-media">
-          <img src={getPropertyImage(property)} alt={property.title} />
+      {/* Back */}
+      <a href={themeLink('/')} className="pm-detail-back">
+        ← Back to Map Search
+      </a>
+
+      {/* Hero image */}
+      <div className="pm-detail-hero">
+        <img
+          src={images[activeImage]}
+          alt={property.title}
+          className="pm-detail-hero-img"
+        />
+        <div className="pm-detail-hero-overlay">
+          <div className="pm-detail-kicker">{category}</div>
+          <h1 className="pm-detail-hero-title">{property.title}</h1>
+          <div className="pm-detail-hero-price">{price}</div>
         </div>
-        <article className="pm-detail-panel">
-          <div className="pm-detail-kicker">{property.specs?.category || 'Property'}</div>
-          <h1>{property.title}</h1>
-          <div className="pm-detail-price">{getPropertyPrice(property)}</div>
-          <p className="pm-detail-description">
-            {property.description || property.short_description || 'Contact us for full details about this property.'}
-          </p>
-          <div className="pm-detail-specs">
-            <div><span>Location</span><strong>{getPropertyLocation(property)}</strong></div>
-            {area && <div><span>Area</span><strong>{area}</strong></div>}
-            {property.specs?.bedrooms && <div><span>Bedrooms</span><strong>{property.specs.bedrooms}</strong></div>}
-            {property.specs?.bathrooms && <div><span>Bathrooms</span><strong>{property.specs.bathrooms}</strong></div>}
-            {hasCoordinates && (
-              <div><span>Coordinates</span><strong>{latitude.toFixed(4)}° N, {Math.abs(longitude).toFixed(4)}° W</strong></div>
-            )}
-          </div>
-        </article>
-      </section>
-      <section className="pm-detail-inquiry">
-        <h2>Request a Viewing</h2>
-        {isSubmitted ? (
-          <div className="pm-detail-success" role="status">
-            Your inquiry has been sent. An agent will be in touch shortly.
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <label>
-              Name
-              <input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-            </label>
-            <label>
-              Email
-              <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-            </label>
-            <label>
-              Message
-              <textarea rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="When are you available for a viewing?" />
-            </label>
-            {formError && <p className="prop-form-error">{formError}</p>}
-            <button className="pm-detail-btn" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Sending…' : 'Send Inquiry'}
+      </div>
+
+      {/* Thumbnail strip */}
+      {images.length > 1 && (
+        <div className="pm-detail-thumbs">
+          {images.slice(0, 6).map((src, i) => (
+            <button
+              key={src}
+              type="button"
+              className={`pm-detail-thumb${activeImage === i ? ' pm-thumb-active' : ''}`}
+              onClick={() => setActiveImage(i)}
+              aria-label={`View image ${i + 1}`}
+            >
+              <img src={src} alt="" />
             </button>
-          </form>
+          ))}
+        </div>
+      )}
+
+      {/* Key facts strip */}
+      <div className="pm-detail-facts">
+        {beds != null && (
+          <div className="pm-detail-fact">
+            <span className="pm-fact-value">{beds}</span>
+            <span className="pm-fact-label">Bedrooms</span>
+          </div>
         )}
-      </section>
+        {baths != null && (
+          <div className="pm-detail-fact">
+            <span className="pm-fact-value">{baths}</span>
+            <span className="pm-fact-label">Bathrooms</span>
+          </div>
+        )}
+        {area && (
+          <div className="pm-detail-fact">
+            <span className="pm-fact-value">{area}</span>
+            <span className="pm-fact-label">Floor area</span>
+          </div>
+        )}
+        {parking != null && (
+          <div className="pm-detail-fact">
+            <span className="pm-fact-value">{parking}</span>
+            <span className="pm-fact-label">Parking</span>
+          </div>
+        )}
+        {yearBuilt && (
+          <div className="pm-detail-fact">
+            <span className="pm-fact-value">{yearBuilt}</span>
+            <span className="pm-fact-label">Year built</span>
+          </div>
+        )}
+        <div className="pm-detail-fact">
+          <span className="pm-fact-value pm-fact-location">{location}</span>
+          <span className="pm-fact-label">Location</span>
+        </div>
+      </div>
+
+      {/* 2-column: content | inquiry */}
+      <div className="pm-detail-body">
+        {/* Left: description + specs */}
+        <div className="pm-detail-content">
+          {(property.description || property.short_description) && (
+            <section className="pm-detail-section">
+              <h2 className="pm-detail-section-title">About this property</h2>
+              <p className="pm-detail-description">
+                {property.description || property.short_description}
+              </p>
+            </section>
+          )}
+
+          <section className="pm-detail-section">
+            <h2 className="pm-detail-section-title">Property details</h2>
+            <div className="pm-detail-specs">
+              <div><span>Type</span><strong>{category}</strong></div>
+              <div><span>Price</span><strong>{price}</strong></div>
+              <div><span>Location</span><strong>{location}</strong></div>
+              {area && <div><span>Area</span><strong>{area}</strong></div>}
+              {beds != null && <div><span>Bedrooms</span><strong>{beds}</strong></div>}
+              {baths != null && <div><span>Bathrooms</span><strong>{baths}</strong></div>}
+              {parking != null && <div><span>Parking</span><strong>{parking} spot{parking !== 1 ? 's' : ''}</strong></div>}
+              {yearBuilt && <div><span>Year built</span><strong>{yearBuilt}</strong></div>}
+              {hasCoords && <div><span>Coordinates</span><strong>{lat.toFixed(4)}° N, {Math.abs(lng).toFixed(4)}° W</strong></div>}
+            </div>
+          </section>
+        </div>
+
+        {/* Right: inquiry panel */}
+        <aside className="pm-detail-inquiry-panel">
+          <div className="pm-inquiry-price">{price}</div>
+          <div className="pm-inquiry-address">{location}</div>
+
+          <h3 className="pm-inquiry-heading">Request a viewing</h3>
+
+          {isSubmitted ? (
+            <div className="pm-detail-success" role="status">
+              Your inquiry has been sent. An agent will be in touch shortly.
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="pm-inquiry-form">
+              <label className="pm-inquiry-label">
+                Name
+                <input
+                  required
+                  type="text"
+                  className="pm-inquiry-input"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  placeholder="Your full name"
+                />
+              </label>
+              <label className="pm-inquiry-label">
+                Email
+                <input
+                  required
+                  type="email"
+                  className="pm-inquiry-input"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  placeholder="your@email.com"
+                />
+              </label>
+              <label className="pm-inquiry-label">
+                Phone (optional)
+                <input
+                  type="tel"
+                  className="pm-inquiry-input"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  placeholder="+1 555 000 0000"
+                />
+              </label>
+              <label className="pm-inquiry-label">
+                Message
+                <textarea
+                  rows={4}
+                  className="pm-inquiry-input pm-inquiry-textarea"
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  placeholder="When are you available for a viewing?"
+                />
+              </label>
+              {formError && <p className="prop-form-error">{formError}</p>}
+              <button
+                className="pm-detail-btn pm-inquiry-submit"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Sending…' : 'Send inquiry'}
+              </button>
+            </form>
+          )}
+        </aside>
+      </div>
+
+      {/* Mini map */}
+      {hasCoords && (
+        <section className="pm-detail-section pm-detail-map-section">
+          <h2 className="pm-detail-section-title">Location on map</h2>
+          <MiniMap lat={lat} lng={lng} />
+        </section>
+      )}
     </main>
   );
 }

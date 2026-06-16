@@ -13,9 +13,10 @@
 - [x] Fixed `ProductPage.tsx`: removed all internal language ("Registry node", "Spatial Node", "synchronized from the Sellio catalog", "Inquiry logged") → buyer-facing copy; "Request Site Visit" → "Request a Viewing"; improved coordinates display format; added bedrooms/bathrooms to specs panel.
 - [x] Cleaned `GeographicFooter.tsx`: removed "high-fidelity geographical distribution node" and all SPATIAL/SYSTEMS/NETWORK jargon; wired all footer links to `themeLink`; copyright `MAP_NODE_SYSTEMS. SPATIAL_INTEGRITY_VERIFIED` → `© 2026 Sellio. All rights reserved.`
 - [x] Added CSS: `.pm-card-active` (gold highlight when pin clicked), `.pm-filter-chip` / `.pm-filter-chip-active` (functional filter chips), `.pm-pin-bubble` (Leaflet marker style), `.pm-map-tooltip` (dark tooltip), Leaflet control dark-theme overrides, full `.pm-footer-*` styles, `.pm-cta-btn` header button.
+- [x] Fixed sidebar empty state — replaced generic `prop-listing-state`/`prop-listing-kicker` (blue accent) with `pm-empty-state`/`pm-empty-kicker` using `var(--pm-gold)`. Icon, kicker, message, and "Clear filters" action button now match the dark gold theme.
+- [x] Finished single property page: added full image gallery with thumbnail strip, hero image with title/price overlay, key facts strip (beds/baths/area/parking/year), 2-column layout (description + specs | sticky inquiry panel), and mini Leaflet map showing the property's exact location when coordinates are available.
+- [x] Fixed all `var(--pm-accent, #60a5fa)` (blue) → `var(--pm-gold)` across the detail page CSS; background changed from `#0b1220` → `var(--pm-obsidian)` for visual consistency. Added `overflow-y: auto` so the detail page scrolls inside the fixed-height layout wrapper.
 - [x] Verified: `npm.cmd run lint` (0 errors).
 
 ## Open
-
-- [ ] single property page is unfinished
 
