@@ -11,6 +11,7 @@ import {
   buildLocalCategoriesFromListings,
   buildLocalCategoriesFromSidebar,
   mapClassifiedToLocalCard,
+  recomputeLocalCardPositions,
   type CategoryPill,
   type LocalCardItem,
 } from '@/themes/classifieds/shared/listing-utils';
@@ -25,7 +26,7 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
 
   const [items, setItems] = useState<LocalCardItem[]>([]);
   const [categories, setCategories] = useState<CategoryPill[]>([
-    { id: 'all', name: 'All Nearby', icon: '📍' },
+    { id: 'all', name: 'All Nearby', icon: '·' },
   ]);
   const [inventoryTotal, setInventoryTotal] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
@@ -79,7 +80,7 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
 
       if (result.ok && result.response.data) {
         const listings = result.response.data as ClassifiedListing[];
-        const newItems = listings.map(mapClassifiedToLocalCard);
+        const newItems = recomputeLocalCardPositions(listings.map(mapClassifiedToLocalCard));
 
         setItems((prev) => {
           const merged = isFirstPage ? newItems : [...prev, ...newItems];
@@ -233,6 +234,7 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
                   neighborhood={item.neighborhood}
                   image={item.image}
                   sellerInitials={item.sellerInitials}
+                  sellerAvatar={item.sellerAvatar}
                   conditionLabel={item.conditionLabel}
                   isFocused={false}
                   onClick={() => {}}

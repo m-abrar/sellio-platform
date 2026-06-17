@@ -11,6 +11,7 @@ import {
   formatVehiclePrice,
   getVehicleImage,
   getVehicleSpecLabel,
+  getConditionLabel,
 } from '@/themes/autos/shared/vehicle-utils';
 
 function ExplorePageContent() {
@@ -294,7 +295,7 @@ function ExplorePageContent() {
                     image={getVehicleImage(car)}
                     slug={car.slug}
                     year={car.specs?.year}
-                    condition={car.specs?.condition || 'Available'}
+                    condition={getConditionLabel(car.specs?.condition as number | null)}
                     fuelType={car.specs?.engine}
                   />
                 ))

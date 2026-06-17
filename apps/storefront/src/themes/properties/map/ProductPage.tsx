@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import 'leaflet/dist/leaflet.css';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
@@ -83,27 +84,12 @@ function MiniMap({ lat, lng }: { lat: number; lng: number }) {
       mapRef.current = map;
     }
 
-    if ((window as any).L) {
-      init((window as any).L);
-    } else {
-      if (!document.getElementById('pm-leaflet-css')) {
-        const link = document.createElement('link');
-        link.id = 'pm-leaflet-css';
-        link.rel = 'stylesheet';
-        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-        document.head.appendChild(link);
-      }
-      let script = document.getElementById('pm-leaflet-js') as HTMLScriptElement | null;
-      if (!script) {
-        script = document.createElement('script');
-        script.id = 'pm-leaflet-js';
-        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-        document.head.appendChild(script);
-      }
-      script.addEventListener('load', () => init((window as any).L), { once: true });
-    }
+    let cancelled = false;
+    import('leaflet').then(({ default: L }) => {
+      if (!cancelled) init(L);
+    });
 
-    return () => { if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; } };
+    return () => { cancelled = true; if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; } };
   }, [lat, lng]);
 
   return <div ref={containerRef} className="pm-mini-map" />;

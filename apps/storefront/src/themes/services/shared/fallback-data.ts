@@ -64,12 +64,12 @@ function buildService(
 }
 
 export const MARKETPLACE_FALLBACK_CATEGORIES = [
-  { id: 1, title: 'Home Repair', slug: 'home-repair', icon: '🛠️' },
-  { id: 2, title: 'Design', slug: 'design', icon: '🎨' },
-  { id: 3, title: 'Education', slug: 'education', icon: '🎓' },
-  { id: 4, title: 'Health', slug: 'health', icon: '❤️' },
-  { id: 5, title: 'Events', slug: 'events', icon: '📅' },
-  { id: 6, title: 'Tech Support', slug: 'tech-support', icon: '💻' },
+  { id: 1, title: 'Home Repair', slug: 'home-repair', icon: 'M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z' },
+  { id: 2, title: 'Design', slug: 'design', icon: 'M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z' },
+  { id: 3, title: 'Education', slug: 'education', icon: 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z' },
+  { id: 4, title: 'Health', slug: 'health', icon: 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z' },
+  { id: 5, title: 'Events', slug: 'events', icon: 'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z' },
+  { id: 6, title: 'Tech Support', slug: 'tech-support', icon: 'M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM8 9l3 3-3 3M13 15h3' },
 ];
 
 export const MARKETPLACE_FALLBACK_SERVICES: ServiceListing[] = [
@@ -443,5 +443,5 @@ export function getCategoryIcon(slug: string, title: string): string {
     (category) =>
       category.slug === slug || title.toLowerCase().includes(category.title.toLowerCase()),
   );
-  return match?.icon || '💼';
+  return match?.icon || 'M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16';
 }

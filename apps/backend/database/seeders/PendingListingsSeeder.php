@@ -143,6 +143,7 @@ class PendingListingsSeeder extends Seeder
                 'is_published' => true,
                 'approved_at' => now()->subMonths(2),
                 'expires_at' => now()->subDays(3),
+                'status' => 'expired',
                 'title' => $this->sampleListingTitle('EXPIRED'),
             ]);
             $this->command->line('   - Created 2 Pending, 2 Draft & 1 Expired Events');
@@ -221,6 +222,7 @@ class PendingListingsSeeder extends Seeder
                 'is_published' => true,
                 'approved_at' => now()->subMonths(2),
                 'expires_at' => now()->subDays(8),
+                'status' => 'expired',
                 'title' => $this->sampleListingTitle('EXPIRED'),
             ]);
             $this->command->line('   - Created 2 Pending & 1 Expired Classifieds');

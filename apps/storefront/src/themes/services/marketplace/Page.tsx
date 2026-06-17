@@ -49,6 +49,7 @@ export default function Page() {
   const ctaDescription = useThemeContent('cta.description', 'Join our growing community today and connect with thousands of users.');
   const ctaPrimary = useThemeContent('cta.primary_cta_label', 'Find Services');
   const ctaSecondary = useThemeContent('cta.secondary_cta_label', 'Offer Your Services');
+  const heroImageUrl = useThemeContent('hero.background_image', '');
   const allowDemo = useDemoFallbackAllowed();
   const [services, setServices] = useState<ServiceListing[]>([]);
   const [categoriesList, setCategoriesList] = useState<Category[]>([]);
@@ -234,11 +235,20 @@ export default function Page() {
       }));
 
   return (
-    <div className="services-marketplace-theme">
+    <>
       <MarketplaceHeader />
 
       {/* Hero Section */}
-      <section className="sm-hero" id="sm-hero-section" aria-labelledby="sm-hero-title">
+      <section
+        className="sm-hero"
+        id="sm-hero-section"
+        aria-labelledby="sm-hero-title"
+        style={heroImageUrl ? {
+          backgroundImage: `linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(30,58,138,0.88) 45%, rgba(29,78,216,0.82) 100%), url(${heroImageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        } : undefined}
+      >
         <div className="sm-hero-content">
           <h1 id="sm-hero-title">{heroTitle}</h1>
           <p>{heroDescription}</p>
@@ -434,7 +444,12 @@ export default function Page() {
               <div className="sm-modal-body">
                 {bookingSuccess ? (
                   <div style={{ textAlign: 'center', padding: '2rem 0' }}>
-                    <div style={{ fontSize: '3.5rem', color: 'var(--sm-primary)', marginBottom: '1rem' }}>✓</div>
+                    <div style={{ color: 'var(--sm-primary)', marginBottom: '1rem', display: 'flex', justifyContent: 'center' }}>
+                      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="9 12 11.5 14.5 15.5 9.5" />
+                      </svg>
+                    </div>
                     <h4 style={{ fontWeight: 800, color: 'var(--sm-primary)', marginBottom: '0.5rem' }}>Booking Request Sent!</h4>
                     <p style={{ color: 'var(--sm-text-muted)', fontSize: '0.9rem' }}>
                       Your service request for <strong>{bookingService.title}</strong> has been logged.
@@ -528,19 +543,39 @@ export default function Page() {
         <h2 className="sm-section-title" id="sm-how-title">{howTitle}</h2>
         <div className="sm-step-grid">
             <div className="sm-step-card">
-                <div className="sm-step-icon">🔍</div>
+                <div className="sm-step-icon">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                </div>
                 <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.25rem' }}>{stepOneTitle}</h4>
                 <p style={{ color: 'var(--sm-text-muted)', lineHeight: 1.6 }}>{stepOneDescription}</p>
             </div>
-            <div className="sm-step-arrow" style={{ fontSize: '2.5rem', color: 'var(--sm-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>➔</div>
+            <div className="sm-step-arrow" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--sm-border)' }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
             <div className="sm-step-card">
-                <div className="sm-step-icon">👥</div>
+                <div className="sm-step-icon">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                </div>
                 <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.25rem' }}>{stepTwoTitle}</h4>
                 <p style={{ color: 'var(--sm-text-muted)', lineHeight: 1.6 }}>{stepTwoDescription}</p>
             </div>
-            <div className="sm-step-arrow" style={{ fontSize: '2.5rem', color: 'var(--sm-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>➔</div>
+            <div className="sm-step-arrow" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--sm-border)' }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
             <div className="sm-step-card">
-                <div className="sm-step-icon">🔒</div>
+                <div className="sm-step-icon">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </div>
                 <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.25rem' }}>{stepThreeTitle}</h4>
                 <p style={{ color: 'var(--sm-text-muted)', lineHeight: 1.6 }}>{stepThreeDescription}</p>
             </div>
@@ -553,11 +588,34 @@ export default function Page() {
         variant="centered"
         sectionId="sm-testimonials-section"
         sectionClassName="sm-section"
-        sectionStyle={{ background: 'white' }}
+        sectionStyle={{ background: '#f0f4ff' }}
         titleClassName="sm-section-title"
         layoutClassName="sm-testimonials-layout"
         cardClassName="sm-testimonial-card"
         headingId="sm-testimonials-title"
+        fallbackTestimonials={[
+          {
+            id: 'fb-1',
+            quote: 'Found our kitchen remodel team through ServiceConnect in under 10 minutes. They were professional, on time, and the result exceeded our expectations.',
+            author_name: 'Rachel M.',
+            author_title: 'Homeowner',
+            company: 'Austin, TX',
+          },
+          {
+            id: 'fb-2',
+            quote: 'Hired a certified electrician for a panel upgrade and the experience was seamless — clear pricing, great communication, and excellent work.',
+            author_name: 'David K.',
+            author_title: 'Property Manager',
+            company: 'Denver, CO',
+          },
+          {
+            id: 'fb-3',
+            quote: 'As a freelance designer, I found my top clients through this platform. The verification process gives customers real confidence in hiring.',
+            author_name: 'Sofia L.',
+            author_title: 'Graphic Designer',
+            company: 'San Francisco, CA',
+          },
+        ]}
       />
 
       {/* CTA */}
@@ -573,6 +631,6 @@ export default function Page() {
       </section>
 
       <MarketplaceFooter />
-    </div>
+    </>
   );
 }

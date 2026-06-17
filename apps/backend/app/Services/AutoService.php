@@ -107,10 +107,24 @@ class AutoService
         $excludedIds = array_merge($excludedIds, $related->pluck('id')->toArray());
         $needed = $limit - $related->count();
 
-        // 2. Fill with same Category (Random)
+        // 2. Fill with same Category (any make)
         if ($needed > 0) {
             $extra = Auto::active()
                 ->where('category_id', $auto->category_id)
+                ->whereNotIn('id', $excludedIds)
+                ->with(['category', 'location', 'media'])
+                ->inRandomOrder()
+                ->take($needed)
+                ->get();
+
+            $related = $related->merge($extra);
+            $excludedIds = array_merge($excludedIds, $extra->pluck('id')->toArray());
+            $needed = $limit - $related->count();
+        }
+
+        // 3. Fill with any other active autos when category pool is too small
+        if ($needed > 0) {
+            $extra = Auto::active()
                 ->whereNotIn('id', $excludedIds)
                 ->with(['category', 'location', 'media'])
                 ->inRandomOrder()

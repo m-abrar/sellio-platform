@@ -98,7 +98,7 @@
 .pm-list-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--pm-border);
-  border-radius: 20px;
+  border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1.5rem;
   display: flex;
@@ -164,7 +164,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 100;
 }
 
@@ -181,6 +182,9 @@
 .pm-logo span { color: var(--pm-gold); }
 
 .pm-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: var(--pm-gold);
   color: var(--pm-obsidian);
   padding: 0.6rem 1.5rem;
@@ -188,9 +192,11 @@
   border: none;
   font-weight: 800;
   font-size: 0.75rem;
+  line-height: 1.2;
   text-decoration: none;
   white-space: nowrap;
   transition: opacity 0.2s ease;
+  cursor: pointer;
 }
 
 .pm-cta-btn:hover { opacity: 0.85; }
@@ -284,6 +290,11 @@
   .split-view-container { flex-direction: column !important; }
   .pm-sidebar { width: 100% !important; height: 50vh !important; }
   .pm-map-canvas { height: 50vh !important; }
+  /* Compact sidebar header to give more room to the results list */
+  .pm-sidebar-header { padding: 1rem 1.25rem; }
+  /* Prevent filter chips wrapping to multiple lines; scroll horizontally instead */
+  .pm-filter-row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  .pm-filter-row::-webkit-scrollbar { display: none; }
 }
 
 .pm-list-link {
@@ -851,8 +862,28 @@
 .pm-results-list > *:nth-child(8) { animation: pm-scale-in 300ms 380ms ease-out both; }
 
 /* Nav links */
-.pm-nav-link { position: relative; color: var(--pm-text); transition: color 200ms ease; }
-.pm-nav-link:hover { color: var(--pm-gold); }
+.pm-nav-link {
+  position: relative;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  padding: 0.25rem 0;
+  transition: color 200ms ease;
+}
+.pm-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--pm-gold);
+  transition: width 200ms ease;
+}
+.pm-nav-link:hover { color: white; }
+.pm-nav-link:hover::after { width: 100%; }
 
 /* ============================================================
    SIDEBAR — TITLE ROW & FILTERS
@@ -925,6 +956,31 @@
   background: rgba(255, 80, 80, 0.22);
   border-color: rgba(255, 80, 80, 0.5);
   color: #ffaaaa;
+}
+
+.pm-sidebar-search-wrap {
+  margin-bottom: 0.85rem;
+}
+
+.pm-sidebar-search {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--pm-border);
+  border-radius: 8px;
+  color: var(--pm-text);
+  font-size: 0.8rem;
+  padding: 0.5rem 0.75rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.pm-sidebar-search::placeholder {
+  color: var(--pm-text-muted);
+}
+
+.pm-sidebar-search:focus {
+  border-color: rgba(212, 175, 55, 0.5);
 }
 
 /* ============================================================
@@ -1120,13 +1176,154 @@
   to { transform: rotate(360deg); }
 }
 
+/* Active/selected pin bubble */
+.pm-pin-bubble--active {
+  background: var(--pm-cyan);
+  color: var(--pm-obsidian);
+  transform: scale(1.18) translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 229, 255, 0.45);
+  z-index: 1000;
+}
+
+/* Map unavailable fallback */
+.pm-map-error {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--pm-dark);
+  gap: 0.75rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.pm-map-error-icon {
+  color: rgba(212, 175, 55, 0.5);
+  margin-bottom: 0.5rem;
+}
+
+.pm-map-error-title {
+  color: var(--pm-light);
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.pm-map-error-desc {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.85rem;
+  max-width: 280px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Footer styles for explore/detail content pages */
+.pm-footer {
+  background: var(--pm-dark);
+  border-top: 1px solid var(--pm-border);
+  padding: 4rem 5% 2.5rem;
+}
+
+.pm-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+  .pm-footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pm-footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pm-footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pm-footer-logo {
+  font-family: var(--pm-font-heading);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--pm-light);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.pm-footer-logo span {
+  color: var(--pm-gold);
+}
+
+.pm-footer-desc {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.85rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.pm-footer-heading {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+}
+
+.pm-footer-link {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.875rem;
+  margin-bottom: 0.6rem;
+  transition: color 0.2s ease;
+}
+
+.pm-footer-link:hover {
+  color: var(--pm-gold);
+}
+
+.pm-footer-bottom {
+  border-top: 1px solid var(--pm-border);
+  padding-top: 1.5rem;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.8rem;
+}
+
 /* ============================================================
    EXPLORE PAGE
    ============================================================ */
 
+/* Content-mode: explore + product detail pages use natural window scroll
+   instead of the fixed-height map-app shell */
+.properties-map.pm-content-mode {
+  height: auto;
+  overflow: visible;
+}
+.properties-map.pm-content-mode .map-page-wrapper {
+  height: auto;
+  min-height: 100vh;
+}
+.properties-map.pm-content-mode .split-view-container {
+  display: block;
+  flex: none;
+  height: auto;
+  overflow: visible;
+}
+
 .pm-xplore-page {
   flex: 1;
-  overflow-y: auto;
   background: var(--pm-obsidian);
   color: var(--pm-text);
 }
@@ -1182,7 +1379,7 @@
   align-items: center;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--pm-border);
-  border-radius: 10px;
+  border-radius: 100px;
   padding: 0 1.25rem;
   gap: 0.65rem;
   transition: border-color 0.15s ease;
@@ -1201,6 +1398,7 @@
   flex: 1;
   background: none;
   border: none;
+  border-radius: 100px;
   color: var(--pm-text);
   font-size: 0.9rem;
   padding: 0.85rem 0;

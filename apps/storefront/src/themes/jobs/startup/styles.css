@@ -188,9 +188,32 @@
 
 /* Footer */
 .network-footer {
-    padding: 10rem 6%;
+    padding: 8rem 6%;
     background: #020617;
     border-top: 1px solid var(--growth-border);
+}
+
+.network-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+}
+
+@media (max-width: 900px) {
+    .network-footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .network-footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+    .network-footer {
+        padding: 5rem 6%;
+    }
 }
 
 .footer-link {

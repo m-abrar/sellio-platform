@@ -155,7 +155,7 @@ export const CompareItem = ({ title, stats, price, image, highlight, slug }: Com
   );
 };
 
-type BrandOption = { id: number; title: string };
+type BrandOption = { id: number; title: string; logo_url?: string | null };
 
 export const ModernBrandGrid = ({ brands = [] }: { brands?: BrandOption[] }) => {
   const themeLink = useAutosThemeLink();
@@ -172,8 +172,18 @@ export const ModernBrandGrid = ({ brands = [] }: { brands?: BrandOption[] }) => 
           href={themeLink(`/explore?brand=${encodeURIComponent(brand.title)}`)}
           className="md-brand-tile"
         >
-          <span className="md-brand-monogram">{brand.title.slice(0, 2).toUpperCase()}</span>
-          <span className="md-brand-name">{brand.title}</span>
+          {brand.logo_url ? (
+            <img
+              src={brand.logo_url}
+              alt={brand.title}
+              style={{ maxHeight: '42px', maxWidth: '100%', objectFit: 'contain' }}
+            />
+          ) : (
+            <>
+              <span className="md-brand-monogram">{brand.title.slice(0, 2).toUpperCase()}</span>
+              <span className="md-brand-name">{brand.title}</span>
+            </>
+          )}
         </Link>
       ))}
     </div>
@@ -187,9 +197,10 @@ export const ModernFooter = () => {
     'footer.description',
     'The future of mobility is here. Driven by technology, fueled by vision.',
   );
+  const year = new Date().getFullYear();
   const footerCopyright = useThemeContent(
     'footer.copyright',
-    '2026 Sellio. All rights reserved.',
+    `${year} ${brandLabel}. All rights reserved.`,
   );
 
   return (

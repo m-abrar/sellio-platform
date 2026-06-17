@@ -199,6 +199,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   const equityShareRange = getStartupEquityRange(job);
   const percentFill = getStartupEquityFill(job);
+  const cleanSpec = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
     <div>
@@ -221,7 +222,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </Link>
             <span style={{ color: 'var(--growth-dim)' }}>/</span>
             <span style={{ fontSize: '0.8rem', color: 'var(--growth-dim)', letterSpacing: '2px', fontWeight: 600 }}>
-              {job.taxonomy?.category?.toUpperCase() || 'ENGINEERING'}
+              {job.taxonomy?.category?.replace(/_/g, ' ').toUpperCase() || 'ENGINEERING'}
             </span>
           </div>
 
@@ -245,7 +246,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
         <div className="growth-detail-main">
           <div className="growth-panel" style={{ padding: '3rem' }}>
             <h2 style={{ fontFamily: 'var(--font-heading)', color: 'white', fontSize: '1.8rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--growth-border)', paddingBottom: '1rem' }}>
-              MISSION_OBJECTIVE
+              Mission Overview
             </h2>
             <p style={{ color: 'var(--growth-dim)', fontSize: '1.1rem', lineHeight: 1.8, margin: 0 }}>
               {job.description}
@@ -254,24 +255,24 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', color: 'white', fontSize: '1.8rem', marginBottom: '1.5rem' }}>
-              NODE_SPECIFICATIONS
+              Role Specifications
             </h2>
             <div className="growth-spec-grid">
               <div className="growth-spec-card growth-panel">
                 <div className="growth-spec-title">Workplace Model</div>
-                <div className="growth-spec-value">{job.employment?.workplace || 'Remote'}</div>
+                <div className="growth-spec-value">{cleanSpec(job.employment?.workplace || 'Remote')}</div>
               </div>
               <div className="growth-spec-card growth-panel">
                 <div className="growth-spec-title">Employment Arrangement</div>
-                <div className="growth-spec-value">{job.employment?.type || 'Full-time'}</div>
+                <div className="growth-spec-value">{cleanSpec(job.employment?.type || 'Full-time')}</div>
               </div>
               <div className="growth-spec-card growth-panel">
                 <div className="growth-spec-title">Experience Level</div>
-                <div className="growth-spec-value">{job.employment?.experience_level || 'Senior Level'}</div>
+                <div className="growth-spec-value">{cleanSpec(job.employment?.experience_level || 'Senior Level')}</div>
               </div>
               <div className="growth-spec-card growth-panel">
                 <div className="growth-spec-title">Required Education</div>
-                <div className="growth-spec-value">{job.employment?.education || 'Equiv Experience'}</div>
+                <div className="growth-spec-value">{cleanSpec(job.employment?.education || 'Equiv Experience')}</div>
               </div>
             </div>
           </div>
@@ -279,7 +280,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           {job.taxonomy?.tags && job.taxonomy.tags.length > 0 && (
             <div>
               <h2 style={{ fontFamily: 'var(--font-heading)', color: 'white', fontSize: '1.2rem', marginBottom: '1rem', letterSpacing: '1px' }}>
-                TECHNOLOGY_TAGS
+                Tech Stack
               </h2>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 {job.taxonomy.tags.map((tag) => (
@@ -295,7 +296,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                       fontWeight: 600,
                     }}
                   >
-                    #{tag.toUpperCase()}
+                    #{tag.replace(/_/g, ' ').toUpperCase()}
                   </span>
                 ))}
               </div>
@@ -313,12 +314,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 {formatJobCompensation(job)}
               </div>
               <div style={{ fontSize: '0.75rem', color: 'var(--growth-dim)', fontWeight: 600, marginTop: '0.25rem' }}>
-                LIVE_BASE_SALARY ({job.compensation?.frequency?.toUpperCase() || 'YEARLY'})
+                Base Salary ({job.compensation?.frequency || 'Yearly'})
               </div>
             </div>
             <div style={{ borderTop: '1px solid var(--growth-border)', paddingTop: '1.5rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--growth-dim)' }}>EQUITY_SHARE_GAGE</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--growth-dim)' }}>Equity Range</span>
                 <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--growth-neon)' }}>{equityShareRange}</span>
               </div>
               <div style={{ width: '100%', height: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '100px', overflow: 'hidden' }}>
@@ -339,7 +340,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
               <div style={{ textAlign: 'center', padding: '2rem 0' }}>
                 <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎉</div>
                 <h4 style={{ fontFamily: 'var(--font-heading)', color: 'var(--growth-neon)', fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>
-                  TALENT_NODE_SYNCHRONIZED
+                  Application Submitted!
                 </h4>
                 <p style={{ color: 'var(--growth-dim)', fontSize: '0.8rem', marginTop: '0.5rem', lineHeight: 1.5 }}>
                   {useFallback
@@ -347,7 +348,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     : `Application #${applicationId ?? '—'} submitted. The hiring team will follow up by email.`}
                 </p>
                 <button type="button" className="growth-btn-outline" style={{ marginTop: '1.5rem', width: '100%', padding: '0.8rem' }} onClick={() => { setIsSubmitted(false); setApplicationId(null); }}>
-                  SUBMIT_ANOTHER
+                  Submit Another Application
                 </button>
               </div>
             ) : !useFallback && !user ? (
@@ -373,7 +374,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </div>
                 {formError && <p className="gr-form-error" role="alert">{formError}</p>}
                 <button type="submit" className="growth-btn-primary" disabled={authBusy} style={{ width: '100%', padding: '1.25rem', fontSize: '0.9rem', marginTop: '1rem' }}>
-                  {authBusy ? 'PLEASE_WAIT...' : authMode === 'login' ? 'SIGN_IN_TO_APPLY' : 'CREATE_ACCOUNT'}
+                  {authBusy ? 'Please wait...' : authMode === 'login' ? 'Sign In to Apply' : 'Create Account'}
                 </button>
               </form>
             ) : (
@@ -396,7 +397,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </div>
                 {formError && <p className="gr-form-error" role="alert">{formError}</p>}
                 <button type="submit" className="growth-btn-primary" disabled={isSubmitting} style={{ width: '100%', padding: '1.25rem', fontSize: '0.9rem', marginTop: '1rem' }}>
-                  {isSubmitting ? 'INITIALIZING...' : 'INITIALIZE_GROWTH_NODE'}
+                  {isSubmitting ? 'Submitting...' : 'Submit Application'}
                 </button>
               </form>
             )}

@@ -174,7 +174,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
   };
 
   return (
-    <div style={{ animation: 'fadeIn 0.8s ease-out', padding: '8rem 6% 6rem' }}>
+    <div style={{ padding: '8rem 6% 6rem' }}>
       {/* Title & Introduction */}
       <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <span className="usm-mono" style={{ color: 'var(--usm-primary)', marginBottom: '1.5rem', display: 'inline-block', fontWeight: 600 }}>MARKETPLACE DIRECTORY</span>
@@ -313,6 +313,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
               >
                 <div className="usm-card-img-wrap">
                   <img src={listing.image} className="usm-card-img" alt={listing.title} />
+                  <span className="usm-card-vertical-badge">{listing.vertical}</span>
                 </div>
                 <div className="usm-card-body">
                   <span className="usm-card-category">{listing.category}</span>

@@ -207,7 +207,7 @@ class Event extends Model implements HasMedia
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('is_published', true)->whereNotNull('approved_at');
+        return $query->where('is_published', true)->whereIn('status', ['active', 'approved', 'published'])->whereNotNull('approved_at');
     }
 
     /**

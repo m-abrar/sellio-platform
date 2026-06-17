@@ -26,7 +26,7 @@ export default function Page() {
   const ctaTitle = useThemeContent('cta.title', 'Secure Your\nSeat in History.');
   const ctaHighlight = useThemeContent('cta.highlight', 'Seat in History.');
   const ctaDescription = useThemeContent('cta.description', 'Registration closes September 30. Join 5,000+ industry leaders for the most influential engineering event of the year.');
-  const ctaButton = useThemeContent('cta.button_label', 'RESERVE MY FORUM PASS');
+  const ctaButton = useThemeContent('cta.button_label', 'RESERVE YOUR PASS');
 
   const [events, setEvents] = useState<EventListing[]>([]);
   const [inventoryTotal, setInventoryTotal] = useState<number | null>(null);
@@ -103,43 +103,48 @@ export default function Page() {
   return (
     <div>
       <section className="ec-hero" aria-labelledby="ecc-hero-title">
-        <div className="ecc-mono" style={{ marginBottom: '2rem' }}>{heroEyebrow}</div>
-        <h1 className="ecc-heading-xl" id="ecc-hero-title">
-          {heroTitle.split(heroHighlight).map((part, index, parts) => (
-            <React.Fragment key={`${part}-${index}`}>
-              {part}
-              {index < parts.length - 1 && <span style={{ color: 'var(--ecc-blue)' }}>{heroHighlight}</span>}
-            </React.Fragment>
-          ))}
-        </h1>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <div className="ecc-mono" style={{ marginBottom: '2rem' }}>{heroEyebrow}</div>
+          <h1 className="ecc-heading-xl" id="ecc-hero-title" style={{ marginBottom: '2rem' }}>
+            {heroTitle.split(heroHighlight).map((part, index, parts) => (
+              <React.Fragment key={`${part}-${index}`}>
+                {part}
+                {index < parts.length - 1 && <span style={{ color: '#60b3ff' }}>{heroHighlight}</span>}
+              </React.Fragment>
+            ))}
+          </h1>
+          <p style={{ fontSize: 'clamp(1.05rem, 2vw, 1.35rem)', lineHeight: 1.7, maxWidth: '660px', margin: '0 auto 3.5rem' }}>
+            The world&apos;s leading platform for corporate summits, technical conferences, and executive forums. Register, connect, and build the future.
+          </p>
 
-        <div className="ecc-hero-stats">
-          <div className="ecc-hero-stat">
-            <span className="ecc-hero-stat-value">{inventoryCount}</span>
-            <span className="ecc-hero-stat-label">Live Events</span>
+          <div style={{ display: 'flex', gap: '1.25rem', justifyContent: 'center', flexWrap: 'wrap' }} className="ecc-hero-buttons">
+            <Link href={themeLink('/explore')} className="ec-btn-primary" id="ecc-btn-explore" style={{ textDecoration: 'none' }}>
+              {heroPrimaryCta}
+            </Link>
+            <button
+              type="button"
+              className="ec-btn-outline"
+              id="ecc-btn-schedule"
+              onClick={() => document.getElementById('ecc-agenda-section')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              {heroSecondaryCta}
+            </button>
           </div>
-          <div className="ecc-hero-stat">
-            <span className="ecc-hero-stat-value">{categories.length || '—'}</span>
-            <span className="ecc-hero-stat-label">Categories</span>
-          </div>
-          <div className="ecc-hero-stat">
-            <span className="ecc-hero-stat-value">{locations.length || '—'}</span>
-            <span className="ecc-hero-stat-label">Cities</span>
-          </div>
-        </div>
 
-        <div style={{ marginTop: '4rem', display: 'flex', gap: '1.25rem', justifyContent: 'center', flexWrap: 'wrap' }} className="ecc-hero-buttons">
-          <Link href={themeLink('/explore')} className="ec-btn-primary" id="ecc-btn-explore" style={{ textDecoration: 'none' }}>
-            {heroPrimaryCta}
-          </Link>
-          <button
-            type="button"
-            className="ec-btn-outline"
-            id="ecc-btn-schedule"
-            onClick={() => document.getElementById('ecc-agenda-section')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            {heroSecondaryCta}
-          </button>
+          <div className="ecc-hero-stats">
+            <div className="ecc-hero-stat">
+              <span className="ecc-hero-stat-value">{inventoryCount}</span>
+              <span className="ecc-hero-stat-label">Live Events</span>
+            </div>
+            <div className="ecc-hero-stat">
+              <span className="ecc-hero-stat-value">{categories.length || '—'}</span>
+              <span className="ecc-hero-stat-label">Categories</span>
+            </div>
+            <div className="ecc-hero-stat">
+              <span className="ecc-hero-stat-value">{locations.length || '—'}</span>
+              <span className="ecc-hero-stat-label">Cities</span>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -1,21 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    --cl-primary-green: #66BB6A;      /* Friendly Green from blueprint */
-    --cl-primary-blue: #42A5F5;       /* Calming Blue from blueprint */
-    --cl-bg-main: #f8fafc;
+    --cl-brand: #1d4ed8;              /* Rich indigo-blue — brand primary */
+    --cl-accent: #f97316;             /* Vibrant orange — prices, active states */
+    --cl-accent-light: rgba(249, 115, 22, 0.09);
+    --cl-brand-light: rgba(29, 78, 216, 0.08);
+    /* Keep legacy aliases for compatibility */
+    --cl-primary-green: #f97316;
+    --cl-primary-blue: #1d4ed8;
+    --cl-bg-main: #f4f5f7;
     --cl-bg-card: #ffffff;
-    --cl-text-main: #334155;          /* Professional Slate Dark text */
-    --cl-text-muted: #64748b;         /* Neutral slate gray text */
-    --cl-border: #e2e8f0;             /* Soft border */
+    --cl-text-main: #111827;
+    --cl-text-muted: #6b7280;
+    --cl-border: #e5e7eb;
     --cl-font: 'Outfit', sans-serif;
     --cl-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    /* Premium Shadows & Glows */
-    --cl-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-    --cl-shadow-md: 0 6px 20px rgba(66, 187, 106, 0.06);
-    --cl-shadow-hover: 0 12px 30px rgba(66, 187, 106, 0.12);
-    --cl-shadow-pin: 0 4px 12px rgba(66, 165, 245, 0.25);
+
+    /* Premium Shadows */
+    --cl-shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+    --cl-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --cl-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --cl-shadow-pin: 0 4px 12px rgba(249, 115, 22, 0.35);
 }
 
 .classifieds-local-wrapper {
@@ -44,19 +49,21 @@
 /* --- Header / Navbar --- */
 .cl-header {
     background-color: var(--cl-bg-card);
-    padding: 0.85rem 4%;
+    padding: 0.75rem 4%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1.5px solid var(--cl-border);
+    border-bottom: 1px solid var(--cl-border);
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    box-shadow: 0 1px 0 var(--cl-border), 0 4px 16px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
 }
 
 .cl-logo {
-    font-size: 1.6rem;
+    font-size: 1.45rem;
     font-weight: 900;
-    color: var(--cl-primary-blue);
+    color: var(--cl-text-main);
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -65,20 +72,15 @@
 }
 
 .cl-logo-icon {
-    color: var(--cl-primary-green);
-    font-size: 1.5rem;
-    animation: clBounce 2s infinite alternate;
-}
-
-@keyframes clBounce {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-4px); }
+    color: var(--cl-primary-blue);
+    display: flex;
+    align-items: center;
 }
 
 .cl-location-picker {
     display: flex;
     align-items: center;
-    background-color: rgba(66, 165, 245, 0.08);
+    background-color: var(--cl-brand-light);
     color: var(--cl-primary-blue);
     padding: 0.45rem 1.1rem;
     border-radius: 50px;
@@ -132,13 +134,13 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    box-shadow: 0 4px 10px rgba(102, 187, 106, 0.25);
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
 }
 
 .cl-btn-post:hover {
-    background-color: #55a059;
+    background-color: #ea6c00;
     transform: translateY(-1px);
-    box-shadow: 0 6px 14px rgba(102, 187, 106, 0.35);
+    box-shadow: 0 6px 18px rgba(249, 115, 22, 0.4);
 }
 
 /* --- Split Panel Layout --- */
@@ -186,9 +188,10 @@
 }
 
 .cl-panel-title {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 800;
-    color: var(--cl-primary-blue);
+    color: var(--cl-text-main);
+    letter-spacing: -0.3px;
 }
 
 .cl-select {
@@ -239,7 +242,7 @@
 .cl-card-listing:hover, .cl-card-listing.cl-focused {
     transform: translateX(2px);
     box-shadow: var(--cl-shadow-md);
-    border-color: rgba(66, 165, 245, 0.4);
+    border-color: rgba(29, 78, 216, 0.4);
 }
 
 .cl-card-listing:hover::before, .cl-card-listing.cl-focused::before {
@@ -247,9 +250,9 @@
 }
 
 .cl-card-img-wrap {
-    width: 68px;
-    height: 68px;
-    border-radius: 8px;
+    width: 88px;
+    height: 88px;
+    border-radius: 10px;
     overflow: hidden;
     background-color: #f1f5f9;
     flex-shrink: 0;
@@ -293,7 +296,7 @@
 }
 
 .cl-badge {
-    background-color: rgba(102, 187, 106, 0.1);
+    background-color: var(--cl-accent-light);
     color: var(--cl-primary-green);
     font-size: 0.65rem;
     font-weight: 800;
@@ -319,8 +322,8 @@
 }
 
 .cl-alert-card {
-    background-color: #f0fdf4;
-    border-left: 4px solid var(--cl-primary-green);
+    background-color: #fff7ed;
+    border-left: 4px solid var(--cl-accent);
     border-radius: 8px;
     padding: 0.75rem 1rem;
     display: flex;
@@ -332,7 +335,7 @@
 
 .cl-alert-card:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(102, 187, 106, 0.1);
+    box-shadow: 0 4px 10px rgba(249, 115, 22, 0.1);
 }
 
 .cl-alert-icon {
@@ -344,7 +347,7 @@
 .cl-alert-body {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #166534;
+    color: #9a3412;
     line-height: 1.4;
 }
 
@@ -373,7 +376,7 @@
 .cl-cat-btn:hover, .cl-cat-btn.cl-active {
     background-color: var(--cl-primary-blue);
     color: #ffffff;
-    box-shadow: 0 4px 10px rgba(66, 165, 245, 0.25);
+    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.2);
 }
 
 /* --- Right Map Window Container --- */
@@ -381,118 +384,189 @@
     flex: 1;
     position: relative;
     overflow: hidden;
-    background-color: #f1f5f9;
+    background-color: #e8e4dc;
 }
 
-/* Grid Street Blueprint Map Vector Simulation */
-.cl-map-grid-mesh {
+/* Real Leaflet map canvas */
+.cl-leaflet-container {
     position: absolute;
     inset: 0;
-    opacity: 0.85;
-    background-color: #f1f5f9;
-    /* High detail map graphics: parks, highways, water bodies, secondary grids */
-    background-image: 
-        radial-gradient(circle at 10% 20%, #dbeafe 300px, transparent 301px),
-        radial-gradient(circle at 80% 70%, #dcfce7 400px, transparent 401px),
-        linear-gradient(rgba(226, 232, 240, 0.8) 2px, transparent 2px),
-        linear-gradient(90deg, rgba(226, 232, 240, 0.8) 2px, transparent 2px),
-        linear-gradient(rgba(203, 213, 225, 0.4) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(203, 213, 225, 0.4) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 120px 120px, 120px 120px, 20px 20px, 20px 20px;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 100%;
+    height: 100%;
+    z-index: 0;
 }
 
-/* Map Controller Box */
-.cl-map-controls {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-}
-
-.cl-ctrl-btn {
-    background-color: #ffffff;
-    border: none;
-    border-bottom: 1.5px solid var(--cl-border);
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.15rem;
-    font-weight: 700;
+/* Leaflet control styling */
+.cl-leaflet-container .leaflet-control-zoom a {
     color: var(--cl-text-main);
-    transition: var(--cl-transition);
+    font-weight: 700;
 }
-
-.cl-ctrl-btn:last-child {
-    border-bottom: none;
-}
-
-.cl-ctrl-btn:hover {
+.cl-leaflet-container .leaflet-control-zoom a:hover {
     background-color: var(--cl-primary-blue);
     color: #ffffff;
 }
-
-/* --- Map Pins teardrop and icons --- */
-.cl-map-pin {
-    position: absolute;
-    cursor: pointer;
-    z-index: 50;
-    transform: translate(-50%, -100%);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.cl-leaflet-container .leaflet-control-attribution {
+    font-size: 0.65rem;
+    opacity: 0.7;
 }
 
-.cl-pin-body {
-    width: 34px;
-    height: 34px;
-    background-color: var(--cl-primary-green);
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    box-shadow: var(--cl-shadow-pin);
+/* Leaflet divIcon price-bubble pins */
+.cl-leaflet-pin {
+    display: inline-flex;
+    align-items: center;
+    background: var(--cl-primary-green);
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    white-space: nowrap;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+    line-height: 1.2;
+}
+
+.cl-leaflet-pin--active {
+    background: var(--cl-primary-blue);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.5);
+    transform: scale(1.1);
+}
+
+/* Leaflet tooltip */
+.cl-map-tooltip {
+    background: rgba(15, 23, 42, 0.9);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.cl-map-tooltip::before { display: none; }
+
+/* Map loading overlay */
+.cl-map-loading {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #ffffff;
-    transition: var(--cl-transition);
+    background: rgba(232, 228, 220, 0.75);
+    z-index: 200;
 }
 
-.cl-pin-icon {
-    transform: rotate(45deg);
+.cl-map-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--cl-primary-blue);
+    border-radius: 50%;
+    animation: clSpin 0.75s linear infinite;
+}
+
+@keyframes clSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* --- Map view mode toggle (top-left, above OSM tiles) --- */
+.cl-map-mode-toggle {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 400;
+    display: flex;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--cl-border);
+    overflow: hidden;
+}
+
+.cl-mode-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 11px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: #ffffff;
+    border: none;
+    cursor: pointer;
+    color: var(--cl-text-muted);
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+    line-height: 1;
+}
+
+.cl-mode-btn:first-child {
+    border-right: 1px solid var(--cl-border);
+}
+
+.cl-mode-btn:hover:not(:disabled) {
+    background: var(--cl-bg-subtle);
+    color: var(--cl-text-main);
+}
+
+.cl-mode-btn--active,
+.cl-mode-btn--active:hover {
+    background: var(--cl-primary-blue);
     color: #ffffff;
-    font-size: 0.95rem;
 }
 
-/* Focused Pin States */
-.cl-map-pin:hover .cl-pin-body, .cl-map-pin.cl-focused .cl-pin-body {
-    background-color: var(--cl-primary-blue);
-    transform: rotate(-45deg) scale(1.15);
-    box-shadow: 0 6px 16px rgba(66, 165, 245, 0.4);
+.cl-mode-btn:disabled {
+    cursor: default;
+    opacity: 0.75;
 }
 
-/* --- Popup Info Cards --- */
+.cl-mode-spinner {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: clSpin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+/* "You are here" blue pulsing dot */
+.cl-user-location-dot {
+    width: 20px;
+    height: 20px;
+    background: #3b82f6;
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    animation: clLocationPulse 1.8s ease-out infinite;
+}
+
+@keyframes clLocationPulse {
+    0%   { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4); }
+    70%  { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+    100% { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0); }
+}
+
+/* --- Popup Info Cards (bottom-right, clear of toggle and zoom controls) --- */
 .cl-map-popup {
     position: absolute;
+    bottom: 5rem;
+    right: 1rem;
     background-color: var(--cl-bg-card);
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
     padding: 1.2rem;
     width: 260px;
     z-index: 150;
-    transform: translate(-50%, -125%); /* Center above pins coordinates */
-    border-left: 5px solid var(--cl-primary-green);
-    animation: clPopupFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border-left: 4px solid var(--cl-accent);
+    animation: clPopupFade 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes clPopupFade {
-    from { transform: translate(-50%, -115%) scale(0.95); opacity: 0; }
-    to { transform: translate(-50%, -125%) scale(1); opacity: 1; }
+    from { opacity: 0; transform: translateY(6px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .cl-popup-close {
@@ -557,8 +631,8 @@
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    background-color: var(--cl-primary-light);
-    color: var(--cl-primary-blue);
+    background-color: var(--cl-brand-light);
+    color: var(--cl-brand);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -589,7 +663,7 @@
 }
 
 .cl-popup-btn-message:hover {
-    background-color: #55a059;
+    background-color: #ea6c00;
 }
 
 .cl-popup-btn-details {
@@ -599,13 +673,13 @@
 }
 
 .cl-popup-btn-details:hover {
-    background-color: rgba(66, 165, 245, 0.08);
+    background-color: var(--cl-brand-light);
 }
 
 /* --- Resilient Network Fallback Warnings --- */
 .cl-resilience-panel {
     border: 2px dashed var(--cl-primary-blue);
-    background-color: rgba(66, 165, 245, 0.05);
+    background-color: rgba(29, 78, 216, 0.05);
     border-radius: 12px;
     padding: 1.25rem;
     margin-bottom: 1.5rem;
@@ -661,7 +735,7 @@
     width: 68px;
     height: 68px;
     border-radius: 8px;
-    background-color: rgba(66, 165, 245, 0.06);
+    background-color: rgba(29, 78, 216, 0.06);
     flex-shrink: 0;
 }
 
@@ -682,7 +756,7 @@
 .cl-shimmer-price {
     width: 50px;
     height: 18px;
-    background-color: rgba(102, 187, 106, 0.18);
+    background-color: rgba(249, 115, 22, 0.18);
     border-radius: 4px;
 }
 
@@ -816,9 +890,9 @@
 }
 
 .cl-product-badge {
-    background-color: rgba(66, 165, 245, 0.08);
+    background-color: var(--cl-brand-light);
     color: var(--cl-primary-blue);
-    border: 1px solid rgba(66, 165, 245, 0.2);
+    border: 1px solid rgba(29, 78, 216, 0.2);
     padding: 0.35rem 0.85rem;
     border-radius: 50px;
     font-size: 0.8rem;
@@ -827,9 +901,9 @@
 }
 
 .cl-product-badge.cl-badge-excellent {
-    background-color: rgba(102, 187, 106, 0.08);
+    background-color: var(--cl-accent-light);
     color: var(--cl-primary-green);
-    border-color: rgba(102, 187, 106, 0.2);
+    border-color: rgba(249, 115, 22, 0.2);
 }
 
 .cl-product-description-card {
@@ -966,11 +1040,11 @@
 
 .cl-booking-input:focus {
     border-color: var(--cl-primary-blue);
-    box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.1);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
 }
 
 .cl-booking-receipt {
-    background-color: rgba(102, 187, 106, 0.08);
+    background-color: var(--cl-accent-light);
     border: 1.5px dashed var(--cl-primary-green);
     border-radius: 12px;
     padding: 1.25rem;
@@ -1029,7 +1103,7 @@
 .cl-related-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--cl-shadow-md);
-    border-color: rgba(66, 165, 245, 0.3);
+    border-color: rgba(29, 78, 216, 0.3);
 }
 
 .cl-related-img-wrap {
@@ -1249,7 +1323,7 @@
 
 .cl-shimmer-block {
     animation: cl-shimmer-pulse 1.5s infinite;
-    background-color: rgba(66, 165, 245, 0.06);
+    background-color: rgba(29, 78, 216, 0.06);
     border-radius: 12px;
     height: 100%;
     width: 100%;
@@ -1319,7 +1393,7 @@
 }
 
 .cl-inquiry-confirm-hero {
-    background: linear-gradient(135deg, rgba(66, 187, 106, 0.12), rgba(66, 165, 245, 0.1));
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.08), rgba(29, 78, 216, 0.07));
     border: 1.5px solid var(--cl-border);
     border-radius: 20px;
     margin-bottom: 1.5rem;
@@ -1352,7 +1426,7 @@
 }
 
 .cl-inquiry-confirm-icon--success {
-    background: rgba(66, 187, 106, 0.15);
+    background: rgba(249, 115, 22, 0.12);
     color: var(--cl-primary-green);
 }
 
@@ -1416,7 +1490,7 @@
 }
 
 .cl-inquiry-confirm-status {
-    background: rgba(66, 187, 106, 0.12);
+    background: var(--cl-accent-light);
     border-radius: 999px;
     color: var(--cl-primary-green);
     font-size: 0.75rem;
@@ -1556,5 +1630,162 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* --- Seller Avatar Circle --- */
+.cl-avatar {
+    background-color: var(--cl-primary-blue);
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.72rem;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+}
+
+/* --- Reserve / Inquiry Submit Button --- */
+.cl-product-btn-reserve {
+    background-color: var(--cl-primary-blue);
+    color: #ffffff;
+    font-weight: 800;
+    padding: 0.9rem 1.5rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.92rem;
+    font-family: var(--cl-font);
+    transition: var(--cl-transition);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 14px rgba(29, 78, 216, 0.25);
+    letter-spacing: 0.01em;
+}
+
+.cl-product-btn-reserve:hover:not(:disabled) {
+    background-color: #1e3a8a;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(29, 78, 216, 0.35);
+}
+
+.cl-product-btn-reserve:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* --- Panel Search Input --- */
+.cl-panel-search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--cl-bg-main);
+    border: 1.5px solid var(--cl-border);
+    border-radius: 10px;
+    padding: 0 0.4rem 0 0.9rem;
+    transition: var(--cl-transition);
+    color: var(--cl-text-muted);
+}
+
+.cl-panel-search:focus-within {
+    border-color: var(--cl-primary-blue);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.08);
+    background: #ffffff;
+    color: var(--cl-primary-blue);
+}
+
+.cl-panel-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: var(--cl-font);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--cl-text-main);
+    background: transparent;
+    padding: 0.65rem 0;
+    min-width: 0;
+}
+
+.cl-panel-search-input::placeholder {
+    color: var(--cl-text-muted);
+    font-weight: 400;
+}
+
+.cl-panel-search-clear {
+    background: rgba(107, 114, 128, 0.12);
+    border: none;
+    color: var(--cl-text-muted);
+    border-radius: 6px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: var(--cl-transition);
+    padding: 0;
+}
+
+.cl-panel-search-clear:hover {
+    background: rgba(29, 78, 216, 0.1);
+    color: var(--cl-primary-blue);
+}
+
+/* --- Footer --- */
+.cl-footer {
+    background-color: var(--cl-bg-card);
+    border-top: 1.5px solid var(--cl-border);
+    padding: 3rem 4% 2rem;
+}
+
+/* --- Footer Navigation Links --- */
+.cl-footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.cl-footer-link {
+    color: var(--cl-text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: color 0.18s ease;
+}
+
+.cl-footer-link:hover {
+    color: var(--cl-primary-blue);
+}
+
+/* --- Map bottom info chip --- */
+.cl-map-info-chip {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffff;
+    border: 1.5px solid var(--cl-border);
+    border-radius: 50px;
+    padding: 0.45rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--cl-text-main);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    white-space: nowrap;
+    pointer-events: none;
 }
 

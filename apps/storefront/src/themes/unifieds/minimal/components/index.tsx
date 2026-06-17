@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 import { isCartMenuItem } from '@/themes/unifieds/shared/menu-utils';
 import { useUnifiedCartCount } from '@/themes/unifieds/shared/useUnifiedCartCount';
@@ -10,6 +11,7 @@ export const SilentHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const cartCount = useUnifiedCartCount();
   const themeLink = useUnifiedThemeLink();
+  const siteName = useThemeContent('site_name', 'Universal');
 
   // Post Listing Modal States
   const [showModal, setShowModal] = useState(false);
@@ -49,7 +51,7 @@ export const SilentHeader = () => {
     <header className="usm-header">
       <a href={themeLink('/')} style={{ textDecoration: 'none', color: 'inherit' }}>
         <div className="usm-logo" style={{ textTransform: 'none', letterSpacing: 'normal', fontSize: '1.4rem', fontWeight: 700 }}>
-          Universal<span style={{ color: 'var(--usm-primary)' }}>.</span>
+          {siteName}<span style={{ color: 'var(--usm-primary)' }}>.</span>
         </div>
       </a>
       
@@ -205,7 +207,7 @@ export const SilentHeader = () => {
             ) : (
               <form onSubmit={handlePostSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 <div>
-                  <span className="usm-mono" style={{ color: 'var(--usm-primary)', display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Sell on Sellio</span>
+                  <span className="usm-mono" style={{ color: 'var(--usm-primary)', display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Sell on {siteName}</span>
                   <h2 style={{ fontFamily: 'var(--usm-font-heading)', fontSize: '1.75rem', fontWeight: 600, color: 'var(--usm-ink)', margin: 0 }}>Create a Listing</h2>
                 </div>
 
@@ -338,12 +340,14 @@ export const SilentHeader = () => {
 
 export const ZenFooter = () => {
     const themeLink = useUnifiedThemeLink();
+    const siteName = useThemeContent('site_name', 'Universal');
+    const year = new Date().getFullYear();
     return (
     <footer className="usm-zen-footer" style={{ borderTop: '1px solid var(--usm-border)' }}>
         <div className="usm-footer-grid">
             <div>
                 <a href={themeLink('/')} className="usm-logo" style={{ color: 'black', textTransform: 'none', letterSpacing: 'normal', fontSize: '1.4rem', fontWeight: 700, marginBottom: '2rem', textDecoration: 'none' }}>
-                  Universal<span style={{ color: 'var(--usm-primary)' }}>.</span>
+                  {siteName}<span style={{ color: 'var(--usm-primary)' }}>.</span>
                 </a>
                 <p style={{ opacity: 0.6, lineHeight: 1.8, fontSize: '0.9rem', maxWidth: '300px', fontWeight: 300 }}>
                     Buy, sell, and discover across properties, autos, jobs, services, events, and more — all in one place.
@@ -369,7 +373,7 @@ export const ZenFooter = () => {
             />
         </div>
         <div className="usm-footer-bottom" style={{ marginTop: '6rem', paddingTop: '2rem', borderTop: '1px solid var(--usm-border)' }}>
-            <div style={{ opacity: 0.6, fontSize: '0.85rem', fontWeight: 300 }}>© 2026 Sellio. All rights reserved.</div>
+            <div style={{ opacity: 0.6, fontSize: '0.85rem', fontWeight: 300 }}>© {year} {siteName}. All rights reserved.</div>
             <div className="usm-footer-socials" style={{ display: 'flex', gap: '2rem' }}>
                 <MenuNav
                     location="social_footer"

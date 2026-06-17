@@ -1,24 +1,33 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
+import 'leaflet/dist/leaflet.css';
 import { useMenu } from '@/components/menu/MenuProvider';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 
 const MAP_NAV_LINKS = [
-  { href: '/explore', label: 'Browse' },
-  { href: '/explore', label: 'Buy' },
-  { href: '/explore', label: 'Rent' },
-  { href: '/', label: 'New Listings' },
+  { href: '/explore?type=buy', label: 'Buy' },
+  { href: '/explore?type=rent', label: 'Rent' },
+  { href: '/explore?sort=newest', label: 'New Listings' },
+  { href: '/explore?type=commercial', label: 'Commercial' },
+  { href: '/#about', label: 'About' },
 ];
 
 export const MapHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const themeLink = usePropertyThemeLink();
   const cmsNavItems = useMenu('main_header');
+  const brandLabel = useThemeContent('header.brand_label', 'MapNexus');
+  const brandHighlight = useThemeContent('header.brand_highlight', 'Nexus');
+  const brandPrefix = brandLabel.endsWith(brandHighlight)
+    ? brandLabel.slice(0, -brandHighlight.length)
+    : brandLabel;
+  const brandSuffix = brandLabel.endsWith(brandHighlight) ? brandHighlight : '';
 
   return (
     <header className="pm-header">
       <a href={themeLink('/')} className="pm-logo">
-        MAP<span>NEXUS</span>
+        {brandSuffix ? <>{brandPrefix}<span>{brandSuffix}</span></> : brandLabel}
       </a>
 
       <button
@@ -109,6 +118,7 @@ export interface MapMarker {
 
 export function MapCanvas({
   markers,
+  selectedSlug,
   onMarkerClick,
   loading = false,
 }: {
@@ -119,25 +129,28 @@ export function MapCanvas({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
-  const markerLayersRef = useRef<any[]>([]);
+  const slugToMarkerRef = useRef<Map<string, any>>(new Map());
   const onMarkerClickRef = useRef(onMarkerClick);
   const markersRef = useRef(markers);
+  const [mapError, setMapError] = useState(false);
 
   useEffect(() => { onMarkerClickRef.current = onMarkerClick; });
 
+  function buildIcon(L: any, price: string, active: boolean) {
+    return L.divIcon({
+      className: '',
+      html: `<div class="pm-pin-bubble${active ? ' pm-pin-bubble--active' : ''}">${price}</div>`,
+      iconSize: null,
+      iconAnchor: [44, 18],
+    });
+  }
+
   function placeMarkers(L: any, map: any) {
-    markerLayersRef.current.forEach((m) => m.remove());
-    markerLayersRef.current = [];
+    slugToMarkerRef.current.forEach((m) => m.remove());
+    slugToMarkerRef.current = new Map();
 
     markersRef.current.forEach((m) => {
-      const icon = L.divIcon({
-        className: '',
-        html: `<div class="pm-pin-bubble">${m.price}</div>`,
-        iconSize: null,
-        iconAnchor: [44, 18],
-      });
-
-      const marker = L.marker([m.lat, m.lng], { icon })
+      const marker = L.marker([m.lat, m.lng], { icon: buildIcon(L, m.price, false) })
         .addTo(map)
         .on('click', () => onMarkerClickRef.current(m.slug));
 
@@ -147,15 +160,15 @@ export function MapCanvas({
         className: 'pm-map-tooltip',
       });
 
-      markerLayersRef.current.push(marker);
+      slugToMarkerRef.current.set(m.slug, { marker, data: m });
     });
 
-    // Fit map view to show all markers
-    if (markerLayersRef.current.length === 1) {
+    if (slugToMarkerRef.current.size === 1) {
       const m = markersRef.current[0];
       map.setView([m.lat, m.lng], 14);
-    } else if (markerLayersRef.current.length > 1) {
-      const group = L.featureGroup(markerLayersRef.current);
+    } else if (slugToMarkerRef.current.size > 1) {
+      const layers = Array.from(slugToMarkerRef.current.values()).map((e) => e.marker);
+      const group = L.featureGroup(layers);
       map.fitBounds(group.getBounds(), { padding: [50, 50] });
     }
   }
@@ -184,30 +197,15 @@ export function MapCanvas({
       placeMarkers(L, map);
     }
 
-    // Load Leaflet CSS once
-    if (!document.getElementById('pm-leaflet-css')) {
-      const link = document.createElement('link');
-      link.id = 'pm-leaflet-css';
-      link.rel = 'stylesheet';
-      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-      document.head.appendChild(link);
-    }
-
-    const L = (window as any).L;
-    if (L) {
-      initMap(L);
-    } else {
-      let script = document.getElementById('pm-leaflet-js') as HTMLScriptElement | null;
-      if (!script) {
-        script = document.createElement('script');
-        script.id = 'pm-leaflet-js';
-        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-        document.head.appendChild(script);
-      }
-      script.addEventListener('load', () => initMap((window as any).L), { once: true });
-    }
+    let cancelled = false;
+    import('leaflet').then(({ default: L }) => {
+      if (!cancelled) initMap(L);
+    }).catch(() => {
+      if (!cancelled) setMapError(true);
+    });
 
     return () => {
+      cancelled = true;
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
@@ -218,10 +216,41 @@ export function MapCanvas({
   // Re-place markers when listing data changes
   useEffect(() => {
     markersRef.current = markers;
-    const L = (window as any).L;
-    if (!L || !mapRef.current) return;
-    placeMarkers(L, mapRef.current);
+    if (!mapRef.current) return;
+    import('leaflet').then(({ default: L }) => {
+      if (mapRef.current) placeMarkers(L, mapRef.current);
+    });
   }, [markers]);
+
+  // Highlight active marker when selectedSlug changes
+  useEffect(() => {
+    if (!mapRef.current) return;
+    import('leaflet').then(({ default: L }) => {
+      slugToMarkerRef.current.forEach(({ marker, data }, slug) => {
+        marker.setIcon(buildIcon(L, data.price, slug === selectedSlug));
+      });
+      if (selectedSlug) {
+        const entry = slugToMarkerRef.current.get(selectedSlug);
+        if (entry) {
+          mapRef.current.panTo([entry.data.lat, entry.data.lng], { animate: true, duration: 0.4 });
+        }
+      }
+    });
+  }, [selectedSlug]);
+
+  if (mapError) {
+    return (
+      <div className="pm-map-error" role="alert">
+        <div className="pm-map-error-icon">
+          <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+          </svg>
+        </div>
+        <p className="pm-map-error-title">Map unavailable</p>
+        <p className="pm-map-error-desc">The interactive map could not be loaded. Browse listings from the sidebar.</p>
+      </div>
+    );
+  }
 
   return (
     <>

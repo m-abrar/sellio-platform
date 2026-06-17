@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import type { Vehicle } from '@sellio/types';
 import Link from 'next/link';
 import { ModernHeader, ModernCarCard, ModernFooter } from './components';
@@ -8,11 +8,27 @@ import {
   loadVehicleDetailPage,
 } from '@/themes/autos/shared/catalog';
 import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';
+import { useDemoFallbackAllowed } from '@/themes/autos/shared/useDemoFallbackAllowed';
 import {
   formatVehiclePrice,
   getVehicleImage,
   getVehicleSpecLabel,
+  getConditionLabel,
 } from '@/themes/autos/shared/vehicle-utils';
+
+function buildVehicleGallery(vehicle: Vehicle): string[] {
+  const imgs: string[] = [];
+  const add = (url?: string | null) => { if (url && !imgs.includes(url)) imgs.push(url); };
+  add(vehicle.media?.main_photo);
+  add(vehicle.featured_image);
+  if (Array.isArray(vehicle.media?.gallery)) {
+    [...vehicle.media.gallery]
+      .sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
+      .forEach((g) => add(g.url));
+  }
+  if (!imgs.length) imgs.push(getVehicleImage(vehicle));
+  return imgs;
+}
 import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 import {
   saveVehicleInquirySnapshot,
@@ -25,11 +41,15 @@ interface ProductPageProps {
 
 export default function ProductPage({ slug }: ProductPageProps) {
   const themeLink = useAutosThemeLink();
+  const allowDemo = useDemoFallbackAllowed();
 
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [relatedVehicles, setRelatedVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
+
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const gallery = useMemo(() => vehicle ? buildVehicleGallery(vehicle) : [], [vehicle]);
 
   const [downPaymentPercent, setDownPaymentPercent] = useState(15);
   const [interestAPR, setInterestAPR] = useState(4.9);
@@ -47,7 +67,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   useEffect(() => {
     async function loadVehicle() {
       setLoading(true);
-      const result = await loadVehicleDetailPage(slug, 'modern', false);
+      const result = await loadVehicleDetailPage(slug, 'modern', allowDemo);
 
       setVehicle(result.vehicle);
       setRelatedVehicles(result.related);
@@ -56,7 +76,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
     }
 
     loadVehicle();
-  }, [slug]);
+  }, [slug, allowDemo]);
 
   const calculateMonthlyPayment = () => {
     if (!vehicle) return '0.00';
@@ -186,16 +206,21 @@ export default function ProductPage({ slug }: ProductPageProps) {
     );
   }
 
+  const conditionLabel = getConditionLabel(vehicle.specs?.condition as number | null) || vehicle.specs?.condition || 'Premium Spec';
+
   const specFields = [
     { label: 'Make', value: vehicle.specs?.make || 'N/A' },
     { label: 'Model', value: vehicle.specs?.model || 'N/A' },
     { label: 'Year', value: vehicle.specs?.year || '2025' },
-    { label: 'Engine', value: vehicle.specs?.engine || 'Electric' },
+    { label: 'Engine', value: vehicle.specs?.engine || 'N/A' },
     { label: 'Transmission', value: vehicle.specs?.transmission || 'Automatic' },
     { label: 'Mileage', value: vehicle.specs?.mileage || 'Available Now' },
     { label: 'Drivetrain', value: vehicle.specs?.drivetrain || 'AWD' },
+    vehicle.specs?.exterior_color ? { label: 'Color', value: vehicle.specs.exterior_color } : null,
+    vehicle.specs?.fuel_economy ? { label: 'Fuel Economy', value: vehicle.specs.fuel_economy } : null,
     { label: 'Warranty', value: vehicle.specs?.warranty || '48 Months' },
-  ];
+    vehicle.specs?.vin ? { label: 'VIN', value: vehicle.specs.vin } : null,
+  ].filter((f): f is { label: string; value: string | number } => f !== null);
 
   return (
     <>
@@ -212,9 +237,55 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
         <div className="md-detail-grid">
           <div>
-            <div className="md-detail-panel md-detail-panel--hero-img">
-              <img src={getVehicleImage(vehicle)} alt={vehicle.title} />
+            <div className="md-detail-panel md-detail-panel--hero-img" style={{ position: 'relative', padding: '0', overflow: 'hidden' }}>
+              <img
+                src={gallery[galleryIndex] ?? getVehicleImage(vehicle)}
+                alt={`${vehicle.title} — photo ${galleryIndex + 1}`}
+                style={{ width: '100%', display: 'block', borderRadius: 'var(--md-radius-md)', objectFit: 'cover', maxHeight: '460px' }}
+              />
+              {gallery.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    aria-label="Previous photo"
+                    onClick={() => setGalleryIndex((i) => (i - 1 + gallery.length) % gallery.length)}
+                    style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.45)', color: 'white', border: 'none', borderRadius: '50%', width: '40px', height: '40px', cursor: 'pointer', fontSize: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >‹</button>
+                  <button
+                    type="button"
+                    aria-label="Next photo"
+                    onClick={() => setGalleryIndex((i) => (i + 1) % gallery.length)}
+                    style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.45)', color: 'white', border: 'none', borderRadius: '50%', width: '40px', height: '40px', cursor: 'pointer', fontSize: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >›</button>
+                  <div style={{ position: 'absolute', bottom: '0.75rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '0.4rem' }}>
+                    {gallery.map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        aria-label={`Photo ${i + 1}`}
+                        onClick={() => setGalleryIndex(i)}
+                        style={{ width: galleryIndex === i ? '24px' : '8px', height: '8px', borderRadius: '4px', background: galleryIndex === i ? 'var(--md-primary)' : 'rgba(255,255,255,0.6)', border: 'none', cursor: 'pointer', padding: 0, transition: 'width 0.2s' }}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
+            {gallery.length > 1 && (
+              <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', padding: '0.75rem 0', scrollbarWidth: 'none' }}>
+                {gallery.slice(0, 6).map((src, i) => (
+                  <button
+                    key={src}
+                    type="button"
+                    aria-label={`View photo ${i + 1}`}
+                    onClick={() => setGalleryIndex(i)}
+                    style={{ flexShrink: 0, width: '80px', height: '60px', borderRadius: '8px', overflow: 'hidden', border: galleryIndex === i ? '2px solid var(--md-primary)' : '2px solid transparent', cursor: 'pointer', padding: 0 }}
+                  >
+                    <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  </button>
+                ))}
+              </div>
+            )}
 
             <div className="md-detail-panel">
               <h4 style={{ fontWeight: 700, margin: '0 0 0.85rem', fontSize: '1.05rem' }}>Description</h4>
@@ -227,7 +298,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           </div>
 
           <div>
-            <span className="md-condition-badge">{vehicle.specs?.condition || 'Premium Spec'}</span>
+            <span className="md-condition-badge">{conditionLabel}</span>
             <h1 className="md-detail-title">{vehicle.title}</h1>
             <p className="md-detail-price">{formatVehiclePrice(vehicle)}</p>
 
@@ -389,30 +460,32 @@ export default function ProductPage({ slug }: ProductPageProps) {
           </div>
         </div>
 
-        <section className="md-related-section">
-          <div className="md-section-header" style={{ textAlign: 'left', margin: '0 0 2rem' }}>
-            <span className="md-section-eyebrow">You may also like</span>
-            <h2 className="md-section-title" style={{ textAlign: 'left' }}>
-              Related Vehicles
-            </h2>
-          </div>
+        {relatedVehicles.length > 0 && (
+          <section className="md-related-section">
+            <div className="md-section-header" style={{ textAlign: 'left', margin: '0 0 2rem' }}>
+              <span className="md-section-eyebrow">You may also like</span>
+              <h2 className="md-section-title" style={{ textAlign: 'left' }}>
+                Related Vehicles
+              </h2>
+            </div>
 
-          <div className="md-grid">
-            {relatedVehicles.slice(0, 3).map((car) => (
-              <ModernCarCard
-                key={car.id}
-                title={car.title}
-                desc={getVehicleSpecLabel(car)}
-                price={formatVehiclePrice(car)}
-                image={getVehicleImage(car)}
-                slug={car.slug}
-                year={car.specs?.year}
-                condition={car.specs?.condition}
-                fuelType={car.specs?.engine}
-              />
-            ))}
-          </div>
-        </section>
+            <div className="md-grid">
+              {relatedVehicles.slice(0, 3).map((car) => (
+                <ModernCarCard
+                  key={car.id}
+                  title={car.title}
+                  desc={getVehicleSpecLabel(car)}
+                  price={formatVehiclePrice(car)}
+                  image={getVehicleImage(car)}
+                  slug={car.slug}
+                  year={car.specs?.year}
+                  condition={getConditionLabel(car.specs?.condition as number | null)}
+                  fuelType={car.specs?.engine}
+                />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
       <ModernFooter />

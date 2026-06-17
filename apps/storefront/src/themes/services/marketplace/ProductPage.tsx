@@ -18,6 +18,8 @@ import {
   redirectToServiceConsultationConfirmation,
   saveServiceConsultationSnapshot,
 } from '@/themes/services/shared/service-consultation-confirmation';
+import { MarketplaceHeader, MarketplaceFooter } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 interface ProductPageProps {
   slug: string;
@@ -36,6 +38,7 @@ interface MarketplaceLead {
 
 export default function ProductPage({ slug }: ProductPageProps) {
   const themeLink = useServicesThemeLink();
+  const brandLabel = useThemeContent('header.brand_label', 'ServiceConnect');
   const allowDemo = useDemoFallbackAllowed();
   const [service, setService] = useState<ServiceListing | null>(null);
   const [loading, setLoading] = useState(true);
@@ -148,40 +151,50 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   if (loading) {
     return (
-      <main className="sm-detail-page" aria-busy="true">
-        <div className="sm-detail-back-skeleton" />
-        <section className="sm-detail-grid">
-          <div className="sm-detail-media sm-detail-skeleton" />
-          <div className="sm-detail-panel">
-            <div className="sm-detail-line sm-detail-line-small" />
-            <div className="sm-detail-line sm-detail-line-title" />
-            <div className="sm-detail-line sm-detail-line-price" />
-            <div className="sm-detail-line" />
-            <div className="sm-detail-line sm-detail-line-short" />
-          </div>
-        </section>
-      </main>
+      <>
+        <MarketplaceHeader />
+        <main className="sm-detail-page" aria-busy="true">
+          <div className="sm-detail-back-skeleton" />
+          <section className="sm-detail-grid">
+            <div className="sm-detail-media sm-detail-skeleton" />
+            <div className="sm-detail-panel">
+              <div className="sm-detail-line sm-detail-line-small" />
+              <div className="sm-detail-line sm-detail-line-title" />
+              <div className="sm-detail-line sm-detail-line-price" />
+              <div className="sm-detail-line" />
+              <div className="sm-detail-line sm-detail-line-short" />
+            </div>
+          </section>
+        </main>
+        <MarketplaceFooter />
+      </>
     );
   }
 
   if (notFound || !service) {
     return (
-      <main className="sm-detail-page">
-        <section className="sm-detail-state" role="status">
-          <div className="sm-detail-kicker">Provider Unavailable</div>
-          <h1>Service provider could not be loaded.</h1>
-          <p>{apiError || 'The requested provider does not exist or has been removed.'}</p>
-          <a href={themeLink('/')} className="sm-btn sm-btn-primary">Return to Marketplace</a>
-        </section>
-      </main>
+      <>
+        <MarketplaceHeader />
+        <main className="sm-detail-page">
+          <section className="sm-detail-state" role="status">
+            <div className="sm-detail-kicker">Provider Unavailable</div>
+            <h1>Service provider could not be loaded.</h1>
+            <p>{apiError || 'The requested provider does not exist or has been removed.'}</p>
+            <a href={themeLink('/')} className="sm-btn sm-btn-primary">Return to Marketplace</a>
+          </section>
+        </main>
+        <MarketplaceFooter />
+      </>
     );
   }
 
   return (
-    <main className="sm-detail-page">
+    <>
+      <MarketplaceHeader />
+      <main className="sm-detail-page">
       <a href={themeLink('/')} className="sm-detail-back">
         <span aria-hidden="true">&larr;</span>
-        Back to ServiceConnect
+        Back to {brandLabel}
       </a>
 
       {apiError && useFallback && (
@@ -288,6 +301,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
           </button>
         </form>
       </section>
-    </main>
+      </main>
+      <MarketplaceFooter />
+    </>
   );
 }

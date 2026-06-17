@@ -14,6 +14,18 @@ The order is based on expected marketplace selling impact, not literal theme-by-
 - Autos, events, and services add differentiation and demo breadth, but should be finalized after the highest-demand verticals unless a specific theme is already nearly perfect.
 - Unified marketplace themes matter because they communicate Sellio's overall platform value in the first demo impression.
 
+
+
+unifieds_minimal
+ecommerce_default
+properties_rental
+events_corporate
+autos_modern
+jobs_startup
+services_marketplace
+classifieds_local
+
+
 ## Finalization Order
 
 | Rank | Theme Key | Vertical | Priority | Reason |

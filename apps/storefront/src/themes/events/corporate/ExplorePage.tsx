@@ -138,7 +138,7 @@ function ExploreDirectory() {
   return (
     <div style={{ background: 'white', minHeight: '100vh' }}>
       <section className="ecc-detail-header" aria-labelledby="ecc-explore-header-title">
-        <div className="ecc-mono" style={{ marginBottom: '1.5rem' }}>GLOBAL_SUMMITS // CONFERENCES</div>
+        <div className="ecc-mono" style={{ marginBottom: '1.5rem' }}>EVENT CATALOG // DIRECTORY</div>
         <h1
           style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontWeight: 800, color: 'var(--ecc-obsidian)', letterSpacing: '-2px', lineHeight: 1.1 }}
           id="ecc-explore-header-title"

@@ -165,12 +165,32 @@
 
 /* Hero Section */
 .ec-hero {
-  padding: 15rem 8% 10rem;
-  background: var(--ecc-bone);
+  padding: 16rem 8% 10rem;
+  background:
+    linear-gradient(160deg, rgba(0, 10, 30, 0.82) 0%, rgba(0, 50, 120, 0.65) 100%),
+    url('/themes/events/corporate/1.webp') center / cover no-repeat;
   text-align: center;
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid var(--ecc-border);
+  color: white;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ec-hero .ecc-mono { color: rgba(255, 255, 255, 0.65); }
+.ec-hero .ecc-heading-xl { color: white; }
+.ec-hero p { color: rgba(255, 255, 255, 0.75); }
+.ec-hero .ec-btn-outline {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: white;
+}
+.ec-hero .ec-btn-outline:hover {
+  background: white;
+  color: var(--ecc-obsidian);
+  border-color: white;
 }
 
 .ec-hero-meta {
@@ -178,7 +198,7 @@
   justify-content: center;
   gap: 6rem;
   margin-top: 5rem;
-  border-top: 1px solid var(--ecc-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   padding-top: 4rem;
   max-width: 900px;
   margin-left: auto;
@@ -191,7 +211,7 @@
   gap: clamp(2rem, 6vw, 5rem);
   margin-top: 4rem;
   padding-top: 3rem;
-  border-top: 1px solid var(--ecc-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
   max-width: 720px;
   margin-left: auto;
   margin-right: auto;
@@ -208,7 +228,7 @@
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: var(--ecc-obsidian);
+  color: white;
   line-height: 1;
 }
 
@@ -217,7 +237,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--ecc-text-muted);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .ecc-results-meta {

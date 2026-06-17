@@ -144,13 +144,13 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
     <div className="growth-explore-container">
       <div style={{ marginBottom: '4rem' }}>
         <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.8rem', color: 'var(--growth-neon)', letterSpacing: '4px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '1rem' }}>
-          TALENT_DISCOVERY_MATRIX
+          Discover Opportunities
         </div>
         <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '3.5rem', fontWeight: 700, color: 'white', margin: 0, letterSpacing: '-2px' }}>
           Venture Catalog.
         </h1>
         <p style={{ color: 'var(--growth-dim)', fontSize: '1.1rem', marginTop: '1rem', maxWidth: '600px', lineHeight: 1.6 }}>
-          Query, filter, and lock onto elite positions inside our hypergrowth corporate ledger.
+          Search and filter thousands of roles at venture-backed startups and high-growth companies.
         </p>
       </div>
 
@@ -186,64 +186,64 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
           </div>
 
           <div className="growth-filter-group">
-            <label className="growth-filter-label">Venture Category</label>
+            <label className="growth-filter-label">Category</label>
             <div className="growth-select-wrapper">
               <select
                 className="growth-select"
                 value={selectedCategory}
                 onChange={(e) => updateFilter('category', e.target.value)}
               >
-                <option value="">ALL_CATEGORIES</option>
+                <option value="">All Categories</option>
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.slug}>{cat.title.toUpperCase()}</option>
+                  <option key={cat.id} value={cat.slug}>{cat.title}</option>
                 ))}
               </select>
             </div>
           </div>
 
           <div className="growth-filter-group">
-            <label className="growth-filter-label">Global Node Location</label>
+            <label className="growth-filter-label">Location</label>
             <div className="growth-select-wrapper">
               <select
                 className="growth-select"
                 value={selectedLocation}
                 onChange={(e) => updateFilter('location', e.target.value)}
               >
-                <option value="">ALL_LOCATIONS</option>
+                <option value="">All Locations</option>
                 {locations.map((loc) => (
-                  <option key={loc.id} value={loc.slug}>{loc.title.toUpperCase()}</option>
+                  <option key={loc.id} value={loc.slug}>{loc.title}</option>
                 ))}
               </select>
             </div>
           </div>
 
           <div className="growth-filter-group">
-            <label className="growth-filter-label">Workplace Architecture</label>
+            <label className="growth-filter-label">Work Style</label>
             <div className="growth-select-wrapper">
               <select
                 className="growth-select"
                 value={selectedWorkplace}
                 onChange={(e) => updateFilter('workplace', e.target.value)}
               >
-                <option value="">ALL_ARCHITECTURES</option>
+                <option value="">All Workplace Types</option>
                 {workplaceTypes.map((type) => (
-                  <option key={type.id} value={type.id}>{type.label.toUpperCase()}</option>
+                  <option key={type.id} value={type.id}>{type.label}</option>
                 ))}
               </select>
             </div>
           </div>
 
           <div className="growth-filter-group">
-            <label className="growth-filter-label">Experience Tier</label>
+            <label className="growth-filter-label">Experience Level</label>
             <div className="growth-select-wrapper">
               <select
                 className="growth-select"
                 value={selectedExperience}
                 onChange={(e) => updateFilter('experience', e.target.value)}
               >
-                <option value="">ALL_TIERS</option>
+                <option value="">All Experience Levels</option>
                 {experienceLevels.map((lvl) => (
-                  <option key={lvl} value={lvl}>{lvl.toUpperCase()}</option>
+                  <option key={lvl} value={lvl}>{lvl}</option>
                 ))}
               </select>
             </div>
@@ -279,7 +279,7 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
                     onClick={loadMoreJobs}
                     style={{ padding: '1.5rem 4rem', fontSize: '0.9rem' }}
                   >
-                    {loadingMore ? 'SYNCHRONIZING...' : 'SYNC_MORE_NODES'}
+                    {loadingMore ? 'Loading...' : 'Load More Jobs'}
                   </button>
                 </div>
               )}
@@ -303,7 +303,7 @@ export default function ExplorePage({ initialCategorySlug }: { initialCategorySl
   return (
     <Suspense fallback={
       <div className="p-20 text-center" style={{ fontFamily: 'var(--font-heading)', color: 'var(--growth-dim)' }}>
-        Loading Discovery matrix...
+        Loading opportunities...
       </div>
     }>
       <ExplorePageContent initialCategorySlug={initialCategorySlug} />

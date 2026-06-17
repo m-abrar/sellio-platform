@@ -19,7 +19,13 @@ import {
   formatVehiclePrice,
   getVehicleImage,
   getVehicleSpecLabel,
+  getConditionLabel,
 } from '@/themes/autos/shared/vehicle-utils';
+
+const YEAR_OPTIONS = (() => {
+  const y = new Date().getFullYear();
+  return Array.from({ length: y + 1 - 2010 + 1 }, (_, i) => y + 1 - i);
+})();
 
 export default function Page() {
   const router = useRouter();
@@ -42,6 +48,7 @@ export default function Page() {
   const techTwoDescription = useThemeContent('tech.feature_2_description', 'Choose from a selection of the most efficient Electric and Hybrid engines. Maximum performance meets minimal environmental impact.');
   const techTwoSecondary = useThemeContent('tech.feature_2_secondary', 'Innovative battery technology provides faster charging, longer range, and a dynamic driving feel, all backed by comprehensive warranties.');
   const techTwoImage = useThemeMedia('tech.feature_2_image', '/themes/autos/modern/17.webp');
+  const heroBgImage = useThemeMedia('hero.background_image', '');
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -108,7 +115,15 @@ export default function Page() {
     <>
       <ModernHeader />
 
-      <section className="md-hero" id="home">
+      <section
+        className="md-hero"
+        id="home"
+        style={heroBgImage ? {
+          backgroundImage: `linear-gradient(135deg, rgba(10,22,40,0.88) 0%, rgba(10,22,40,0.55) 50%, rgba(0,102,255,0.25) 100%), url(${heroBgImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center',
+        } : undefined}
+      >
         <div className="md-hero-inner">
           <span className="md-hero-eyebrow">Next-Gen Mobility</span>
           <h1 className="md-hero-title">{heroTitle}</h1>
@@ -189,10 +204,9 @@ export default function Page() {
           aria-label="Year"
         >
           <option value="">Year</option>
-          <option value="2025">2025</option>
-          <option value="2024">2024</option>
-          <option value="2023">2023</option>
-          <option value="2022">2022</option>
+          {YEAR_OPTIONS.map((y) => (
+            <option key={y} value={String(y)}>{y}</option>
+          ))}
         </select>
 
         <div className="md-search-group">
@@ -226,13 +240,13 @@ export default function Page() {
         </div>
 
         {loading ? (
-          <div className="md-grid">
+          <div className="md-featured-grid">
             {[1, 2, 3, 4, 5, 6].map((idx) => (
               <CarCardSkeleton key={idx} />
             ))}
           </div>
         ) : vehicles.length > 0 ? (
-          <div className="md-grid">
+          <div className="md-featured-grid">
             {vehicles.slice(0, 6).map((car) => (
               <ModernCarCard
                 key={car.id}
@@ -242,7 +256,7 @@ export default function Page() {
                 image={getVehicleImage(car)}
                 slug={car.slug}
                 year={car.specs?.year}
-                condition={car.specs?.condition || 'Available'}
+                condition={getConditionLabel(car.specs?.condition as number | null)}
                 fuelType={car.specs?.engine}
               />
             ))}

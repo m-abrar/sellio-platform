@@ -16,13 +16,17 @@ export type LocalCardItem = {
   numericDistance: number;
   neighborhood: string;
   image: string;
+  gallery: string[];
   sellerInitials: string;
   sellerName: string;
+  sellerAvatar: string | null;
   category: string;
   categoryIcon: string;
   conditionLabel: string;
   mapTop: number;
   mapLeft: number;
+  lat?: number;
+  lng?: number;
   slug: string;
   description?: string;
 };
@@ -54,14 +58,45 @@ const parseMapCoords = (dimensions: unknown): string[] => {
   return [];
 };
 
+function pseudoDistanceFromCoords(lat?: number, lng?: number, id = 1): number {
+  if (lat !== undefined && lng !== undefined) {
+    const fracLat = Math.abs(lat % 1);
+    const fracLng = Math.abs(lng % 1);
+    const raw = (fracLat * 7.3 + fracLng * 5.9) % 9.5;
+    return Math.round((raw + 0.3) * 10) / 10;
+  }
+  return Math.round(((id * 137) % 950) / 100 + 0.3);
+}
+
+export function recomputeLocalCardPositions(items: LocalCardItem[]): LocalCardItem[] {
+  const geoItems = items.filter((i) => i.lat !== undefined && i.lng !== undefined);
+  if (geoItems.length < 2) return items;
+
+  const lats = geoItems.map((i) => i.lat as number);
+  const lngs = geoItems.map((i) => i.lng as number);
+  const minLat = Math.min(...lats);
+  const maxLat = Math.max(...lats);
+  const minLng = Math.min(...lngs);
+  const maxLng = Math.max(...lngs);
+  const latSpan = maxLat - minLat || 1;
+  const lngSpan = maxLng - minLng || 1;
+
+  return items.map((item) => {
+    if (item.lat === undefined || item.lng === undefined) return item;
+    const mapTop = Math.round(8 + ((maxLat - item.lat) / latSpan) * 78);
+    const mapLeft = Math.round(8 + ((item.lng - minLng) / lngSpan) * 78);
+    return { ...item, mapTop, mapLeft };
+  });
+}
+
 export function getLocalCategoryIcon(category: string): string {
-  if (category === 'bikes') return '🚲';
-  if (category === 'home') return '🏡';
-  if (category === 'kids') return '🧸';
-  if (category === 'pets') return '🐾';
-  if (category === 'garage') return '🏷️';
-  if (category === 'free') return '🆓';
-  return '📍';
+  if (category === 'bikes') return 'B';
+  if (category === 'home') return 'H';
+  if (category === 'kids') return 'K';
+  if (category === 'pets') return 'P';
+  if (category === 'garage') return 'G';
+  if (category === 'free') return 'F';
+  return '·';
 }
 
 export function getLocalCategoryLabel(slug: string): string {
@@ -154,7 +189,6 @@ export function mapClassifiedToLocalCard(item: ClassifiedListing): LocalCardItem
   const coords = parseMapCoords(item.item_specs?.dimensions);
   const mapTop = coords.length === 2 ? parseInt(coords[0], 10) : 20 + ((item.id * 7) % 70);
   const mapLeft = coords.length === 2 ? parseInt(coords[1], 10) : 15 + ((item.id * 9) % 75);
-  const numericDistance = item.id * 0.45;
   const categoryKey = getClassifiedCategoryKey(item.taxonomy?.category) || 'home';
   const seller = item.taxonomy?.brand || item.seller?.name || 'Neighbor';
   const initials =
@@ -170,6 +204,16 @@ export function mapClassifiedToLocalCard(item: ClassifiedListing): LocalCardItem
     : item.pricing?.formatted ||
       `$${(item.pricing?.sale_price || item.pricing?.base_price || 0).toLocaleString()}`;
 
+  const lat = item.location?.latitude ?? undefined;
+  const lng = item.location?.longitude ?? undefined;
+  const numericDistance = pseudoDistanceFromCoords(lat, lng, item.id);
+
+  const mainPhoto = getClassifiedListingImage(item);
+  const galleryPhotos: string[] = Array.isArray(item.media?.gallery)
+    ? item.media.gallery.map((g) => g.url).filter(Boolean)
+    : [];
+  const gallery = [mainPhoto, ...galleryPhotos.filter((u) => u !== mainPhoto)];
+
   return {
     id: item.id,
     title: item.title,
@@ -178,14 +222,18 @@ export function mapClassifiedToLocalCard(item: ClassifiedListing): LocalCardItem
     distance: numericDistance.toFixed(1),
     numericDistance,
     neighborhood: formatListingLocation(item),
-    image: getClassifiedListingImage(item),
+    image: mainPhoto,
+    gallery,
     sellerInitials: initials,
     sellerName: seller,
+    sellerAvatar: item.seller?.avatar || null,
     category: categoryKey,
     categoryIcon: getLocalCategoryIcon(categoryKey),
     conditionLabel: item.item_specs?.condition_label || 'Good',
     mapTop,
     mapLeft,
+    lat,
+    lng,
     slug: generatedSlug,
     description: item.description,
   };
@@ -225,7 +273,7 @@ export function mapClassifiedToGeneralCard(item: ClassifiedListing): GeneralCard
 }
 
 export function buildLocalCategoriesFromSidebar(categories: Category[]): CategoryPill[] {
-  const pills: CategoryPill[] = [{ id: 'all', name: 'All Nearby', icon: '📍' }];
+  const pills: CategoryPill[] = [{ id: 'all', name: 'All Nearby', icon: '·' }];
   categories.forEach((cat) => {
     const id = cat.slug || String(cat.id);
     if (!pills.some((pill) => pill.id === id)) {
@@ -240,7 +288,7 @@ export function buildLocalCategoriesFromSidebar(categories: Category[]): Categor
 }
 
 export function buildLocalCategoriesFromListings(listings: ClassifiedListing[]): CategoryPill[] {
-  const pills: CategoryPill[] = [{ id: 'all', name: 'All Nearby', icon: '📍' }];
+  const pills: CategoryPill[] = [{ id: 'all', name: 'All Nearby', icon: '·' }];
   listings.forEach((item) => {
     const catKey = getClassifiedCategoryKey(item.taxonomy?.category);
     if (catKey && !pills.some((pill) => pill.id === catKey)) {

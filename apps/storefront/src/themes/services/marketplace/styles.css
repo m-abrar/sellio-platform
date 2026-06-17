@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 .services-marketplace-theme .sm-explore-page {
     margin: 0 auto;
@@ -17,18 +17,18 @@
 }
 
 :root {
-    --sm-primary: #198754; /* Green accent */
-    --sm-primary-dark: #157347;
-    --sm-primary-light: rgba(25, 135, 84, 0.1);
-    --sm-secondary: #fd7e14; /* Orange accent */
-    --sm-secondary-dark: #e8710f;
-    --sm-bg: #f8f9fa;
+    --sm-primary: #1d4ed8;
+    --sm-primary-dark: #1e40af;
+    --sm-primary-light: rgba(29, 78, 216, 0.08);
+    --sm-secondary: #f59e0b;
+    --sm-secondary-dark: #d97706;
+    --sm-bg: #f8fafc;
     --sm-surface: #ffffff;
-    --sm-text: #343a40;
-    --sm-text-muted: #6c757d;
-    --sm-border: #dee2e6;
-    --font-base: 'Nunito', sans-serif;
-    --sm-transition: all 0.3s ease;
+    --sm-text: #0f172a;
+    --sm-text-muted: #64748b;
+    --sm-border: #e2e8f0;
+    --font-base: 'Inter', sans-serif;
+    --sm-transition: all 0.25s ease;
 }
 
 .services-marketplace-theme {
@@ -122,15 +122,26 @@
 
 /* Hero */
 .sm-hero {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/themes/services/marketplace/10.webp') center center no-repeat;
-    background-size: cover;
-    height: 60vh;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 45%, #1d4ed8 100%);
+    min-height: 580px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    padding: 0 5%;
+    padding: 6rem 5%;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.sm-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 12% 65%, rgba(245, 158, 11, 0.14) 0%, transparent 52%),
+        radial-gradient(ellipse at 88% 25%, rgba(255, 255, 255, 0.05) 0%, transparent 42%);
+    pointer-events: none;
 }
 
 .sm-hero-content {
@@ -214,14 +225,21 @@
 }
 
 .sm-category-icon {
-    font-size: 3rem;
     color: var(--sm-primary);
-    margin-bottom: 1rem;
+    background: var(--sm-primary-light);
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
     transition: var(--sm-transition);
 }
 
 .sm-category-card:hover .sm-category-icon {
-    color: var(--sm-secondary);
+    background: var(--sm-primary);
+    color: white;
 }
 
 /* Provider Card */
@@ -297,8 +315,7 @@
 
 /* CTA */
 .sm-cta-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/themes/services/marketplace/11.webp') center center no-repeat;
-    background-size: cover;
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 55%, #0f172a 100%);
     padding: 6rem 5%;
     text-align: center;
     color: white;
@@ -308,22 +325,47 @@
 
 /* Footer */
 .sm-footer {
-    background: #111827; /* Dark slate */
+    background: #0c1321;
     color: white;
     padding: 5rem 5% 2rem;
 }
 
 .sm-footer-link {
-    color: var(--sm-text-muted);
+    color: rgba(255, 255, 255, 0.5);
     text-decoration: none;
     display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    transition: var(--sm-transition);
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
 }
 
 .sm-footer-link:hover {
-    color: var(--sm-secondary);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.sm-footer-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.5);
+    transition: background 0.2s ease, color 0.2s ease;
+    text-decoration: none;
+}
+
+.sm-footer-social:hover {
+    background: var(--sm-primary);
+    color: white;
+}
+
+@media (max-width: 900px) {
+    .sm-footer-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+@media (max-width: 560px) {
+    .sm-footer-grid { grid-template-columns: 1fr !important; }
 }
 
 /* Hamburger & Mobile Responsive Controls */
@@ -866,17 +908,41 @@
 
 .sm-testimonials-layout {
     display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
 .sm-testimonial-card {
-    text-align: center;
+    text-align: left;
     background: var(--sm-surface);
-    padding: 4rem;
-    border-radius: 16px;
+    padding: 2rem 2rem 2rem;
+    border-radius: 14px;
     border: 1px solid var(--sm-border);
+    box-shadow: 0 2px 16px rgba(29, 78, 216, 0.04);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.sm-testimonial-card::before {
+    content: '\201C';
+    display: block;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: var(--sm-primary);
+    opacity: 0.18;
+    font-family: Georgia, serif;
+    margin-bottom: -0.5rem;
+}
+
+@media (max-width: 900px) {
+    .sm-testimonials-layout {
+        grid-template-columns: 1fr;
+        max-width: 640px;
+    }
 }
 
 .sm-alert-slot {

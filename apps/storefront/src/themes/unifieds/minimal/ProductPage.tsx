@@ -109,7 +109,7 @@ export default function ProductPage({ slug, vertical = 'products' }: ProductPage
   }
 
   return (
-    <div className="usm-product-details-container" style={{ padding: '8rem 6% 6rem', animation: 'fadeIn 0.8s ease-out' }}>
+    <div className="usm-product-details-container" style={{ padding: '8rem 6% 6rem' }}>
       <div style={{ marginBottom: '3rem' }}>
         <a
           href={themeLink(`/explore?vertical=${detail.vertical}`)}

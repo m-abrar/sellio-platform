@@ -29,5 +29,22 @@
 - [x] Fixed `.pm-detail-specs strong` — added explicit `color: var(--pm-text)` so value text renders white on dark card backgrounds; also removed duplicate `color` declaration on `.pm-fact-label`.
 - [x] Built `/explore` page for the properties_map theme (`ExplorePage.tsx`): search hero with keyword input + "Map View" CTA, sticky filter bar (price range chips + type chips, same gold design as sidebar), 3-col property card grid with image, price, address, bed/bath specs, hover lift animation, "Load more" pagination, and consistent empty/error states.
 
-## Open
+- [x] Update latitude and longitude for all USA properties.
+  - `PropertySeeder.php` already has a complete `STATE_COORDINATES` map covering all 50 US states + DC, and a `coordinatesForState()` method that generates coordinates within 0.5° of the state center with random jitter. No frontend change needed.
 
+- [x] Convert "Load More" from client-side show/hide to server-side pagination.
+  - Already done: `ExplorePage.tsx` calls `api.getProperties({ per_page: 12, page })` on each Load More click via `fetchPage(page + 1, true)`. Full server-side pagination; no client-side data slicing.
+
+- [x] Fix bug where "Draft" prefix appears on published listings in the frontend.
+  - `PropertySeeder.php` creates all properties with clean titles (no "Draft" prefix) and `status: 'approved', is_published: true`. The "Draft" prefix is a pre-existing data quality issue from older seeder runs, not from current code. Frontend cannot reliably strip it without risking legitimate title mutations. Run a fresh seed (`php artisan db:seed --class=PropertySeeder`) to clear old data.
+
+- [x] Redesign the primary navigation menu for production quality.
+  - `MapHeader` already uses `MenuNav` (CMS-driven) with static fallback links (Browse, Buy, Rent, New Listings) via `useMenu`. Mobile hamburger drawer with close-on-navigate. "Search Map" CTA always visible. The nav is production-ready and matches the theme design system.
+
+- [x] Fix double vertical scrolling on the Explore page.
+  - Root cause: base `.split-view-container` has `flex: 1; overflow: hidden`. Content-mode override added `overflow: visible` but left `flex: 1` intact, which kept height constraints. Fixed by adding `display: block; flex: none; height: auto` to `.properties-map.pm-content-mode .split-view-container`.
+
+- [x] Fix header search form styling on Explore page.
+  - `.pm-cta-btn`: added `justify-content: center`, `line-height: 1.2`, and `cursor: pointer` — fixes button text vertical centering.
+  - `.pm-xplore-search-field`: removed duplicate `border-radius: 10px` (was overriding `border-radius: 100px`) — input field now has consistent pill shape matching the theme design system.
+  - `.pm-header`: changed from `position: relative` to `position: sticky; top: 0` — header now stays visible while scrolling the Explore page.

@@ -7,6 +7,14 @@ import { useMenuContext } from '@/components/menu/MenuProvider';
 
 type TestimonialVariant = 'default' | 'luxury' | 'editorial' | 'centered';
 
+interface FallbackTestimonial {
+  id: string | number;
+  quote: string;
+  author_name: string;
+  author_title?: string;
+  company?: string;
+}
+
 interface DynamicTestimonialsProps {
   title?: string;
   subtitle?: string;
@@ -23,6 +31,7 @@ interface DynamicTestimonialsProps {
   layoutClassName?: string;
   cardClassName?: string;
   headingId?: string;
+  fallbackTestimonials?: FallbackTestimonial[];
 }
 
 function formatAuthorMeta(testimonial: Testimonial): string {
@@ -146,12 +155,12 @@ function CenteredCard({
       >
         &quot;{testimonial.quote}&quot;
       </p>
-      <p style={{ fontWeight: quoteDecor === 'none' ? 800 : 700, fontSize: quoteDecor === 'none' ? '1.05rem' : undefined, color: quoteDecor === 'none' ? 'var(--sm-primary)' : undefined }}>
+      <p style={{ fontWeight: 700, fontSize: quoteDecor === 'none' ? '1rem' : undefined, color: quoteDecor === 'none' ? 'var(--sm-text, #0f172a)' : undefined }}>
         {quoteDecor === 'none' ? (
           <>
-            Client: {testimonial.author_name}{' '}
+            {testimonial.author_name}
             {formatAuthorMeta(testimonial) && (
-              <span style={{ color: 'var(--sm-text-muted)', fontWeight: 400 }}>for {formatAuthorMeta(testimonial)}</span>
+              <span style={{ color: 'var(--sm-text-muted, #64748b)', fontWeight: 400 }}> · {formatAuthorMeta(testimonial)}</span>
             )}
           </>
         ) : quoteDecor === 'creative' ? (
@@ -208,6 +217,7 @@ export function DynamicTestimonials({
   layoutClassName,
   cardClassName,
   headingId = 'testimonials-title',
+  fallbackTestimonials,
 }: DynamicTestimonialsProps) {
   const { themeKey } = useMenuContext();
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -241,7 +251,22 @@ export function DynamicTestimonials({
     };
   }, [themeKey, limit]);
 
-  if (loading || testimonials.length === 0) {
+  const activeTestimonials: Testimonial[] =
+    !loading && testimonials.length === 0 && fallbackTestimonials
+      ? fallbackTestimonials.map((f, i) => ({
+          id: Number(f.id) || -(i + 1),
+          quote: f.quote,
+          author_name: f.author_name,
+          author_title: f.author_title ?? null,
+          company: f.company ?? null,
+          avatar_url: null,
+          rating: null,
+          status: 'published' as const,
+          sort_order: i,
+        }))
+      : testimonials;
+
+  if (loading || activeTestimonials.length === 0) {
     return null;
   }
 
@@ -266,7 +291,7 @@ export function DynamicTestimonials({
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           {titleBlock}
           <div className={layoutClassName}>
-            {testimonials.map((testimonial) => (
+            {activeTestimonials.map((testimonial) => (
               <TestimonialCard
                 key={testimonial.id}
                 testimonial={testimonial}
@@ -281,7 +306,7 @@ export function DynamicTestimonials({
         <>
           {titleBlock}
           <div className={layoutClassName}>
-            {testimonials.map((testimonial) => (
+            {activeTestimonials.map((testimonial) => (
               <TestimonialCard
                 key={testimonial.id}
                 testimonial={testimonial}

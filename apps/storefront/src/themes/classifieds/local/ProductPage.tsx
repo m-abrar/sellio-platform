@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
-import { LocalHeader, LocalFooter } from './components';
+import { LocalHeader, LocalFooter, PinIcon, ShieldCheckIcon, MailIcon } from './components';
 import { getAdminBaseUrl } from '@/lib/admin-urls';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
 import { loadClassifiedDetailPage } from '@/themes/classifieds/shared/catalog';
@@ -28,6 +28,9 @@ export default function ProductPage({ slug }: { slug: string }) {
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
+
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const gallery = useMemo(() => item?.gallery ?? (item ? [item.image] : []), [item]);
 
   const [buyerName, setBuyerName] = useState('');
   const [buyerEmail, setBuyerEmail] = useState('');
@@ -159,13 +162,59 @@ export default function ProductPage({ slug }: { slug: string }) {
             <div className="cl-product-main-grid">
               <div className="cl-product-gallery-column">
                 <div className="cl-product-gallery">
-                  <div className="cl-product-main-img-wrap">
-                    <img src={item.image} className="cl-product-main-img" alt={item.title} />
+                  <div className="cl-product-main-img-wrap" style={{ position: 'relative' }}>
+                    <img
+                      src={gallery[galleryIndex] ?? item.image}
+                      className="cl-product-main-img"
+                      alt={`${item.title} — photo ${galleryIndex + 1}`}
+                    />
+                    {gallery.length > 1 && (
+                      <>
+                        <button
+                          type="button"
+                          aria-label="Previous photo"
+                          onClick={() => setGalleryIndex((i) => (i - 1 + gallery.length) % gallery.length)}
+                          style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.4)', color: 'white', border: 'none', borderRadius: '50%', width: '36px', height: '36px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}
+                        >‹</button>
+                        <button
+                          type="button"
+                          aria-label="Next photo"
+                          onClick={() => setGalleryIndex((i) => (i + 1) % gallery.length)}
+                          style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.4)', color: 'white', border: 'none', borderRadius: '50%', width: '36px', height: '36px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}
+                        >›</button>
+                        <div style={{ position: 'absolute', bottom: '0.75rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '0.35rem' }}>
+                          {gallery.map((_, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              aria-label={`Photo ${i + 1}`}
+                              onClick={() => setGalleryIndex(i)}
+                              style={{ width: i === galleryIndex ? '20px' : '7px', height: '7px', borderRadius: '4px', background: i === galleryIndex ? 'var(--cl-accent)' : 'rgba(255,255,255,0.65)', border: 'none', cursor: 'pointer', padding: 0, transition: 'width 0.2s' }}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </div>
+                  {gallery.length > 1 && (
+                    <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', padding: '0.5rem 0', scrollbarWidth: 'none', marginTop: '0.75rem' }}>
+                      {gallery.slice(0, 6).map((src, i) => (
+                        <button
+                          key={src}
+                          type="button"
+                          aria-label={`View photo ${i + 1}`}
+                          onClick={() => setGalleryIndex(i)}
+                          style={{ flexShrink: 0, width: '72px', height: '54px', borderRadius: '8px', overflow: 'hidden', border: i === galleryIndex ? '2.5px solid var(--cl-accent)' : '2px solid var(--cl-border)', cursor: 'pointer', padding: 0, background: 'none' }}
+                        >
+                          <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="cl-product-description-card">
-                  <h4 className="cl-product-card-title">Neighborhood Spec Sheets</h4>
+                  <h4 className="cl-product-card-title">Listing Details</h4>
                   <div className="cl-product-specs-grid">
                     <div className="cl-product-spec-item">
                       <span className="cl-product-spec-label">Condition Level</span>
@@ -173,10 +222,12 @@ export default function ProductPage({ slug }: { slug: string }) {
                     </div>
                     <div className="cl-product-spec-item">
                       <span className="cl-product-spec-label">Proximity</span>
-                      <span className="cl-product-spec-value">📍 {item.distance} miles away</span>
+                      <span className="cl-product-spec-value" style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                        <PinIcon size={13} />{item.distance} miles away
+                      </span>
                     </div>
                     <div className="cl-product-spec-item">
-                      <span className="cl-product-spec-label">Exchange Neighborhood</span>
+                      <span className="cl-product-spec-label">Pickup Area</span>
                       <span className="cl-product-spec-value">{item.neighborhood}</span>
                     </div>
                     <div className="cl-product-spec-item">
@@ -199,7 +250,9 @@ export default function ProductPage({ slug }: { slug: string }) {
                     <div className="cl-product-meta-row">
                       <span className="cl-product-badge">{getLocalCategoryLabel(item.category)}</span>
                       <span className="cl-product-badge cl-badge-excellent">{item.conditionLabel}</span>
-                      <span className="cl-product-badge">📍 {item.neighborhood}</span>
+                      <span className="cl-product-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                        <PinIcon size={11} />{item.neighborhood}
+                      </span>
                     </div>
                   </div>
 
@@ -213,17 +266,23 @@ export default function ProductPage({ slug }: { slug: string }) {
                 </div>
 
                 <div className="cl-product-seller-card">
-                  <div className="cl-product-seller-avatar">{item.sellerInitials}</div>
+                  {item.sellerAvatar ? (
+                    <img src={item.sellerAvatar} alt={item.sellerInitials} className="cl-product-seller-avatar" style={{ objectFit: 'cover' }} />
+                  ) : (
+                    <div className="cl-product-seller-avatar">{item.sellerInitials}</div>
+                  )}
                   <div className="cl-product-seller-info">
                     <h5 className="cl-product-seller-name">{item.sellerName}</h5>
-                    <span className="cl-product-seller-badge">
-                      🛡️ Verified Neighbor &bull; {item.neighborhood}
+                    <span className="cl-product-seller-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <ShieldCheckIcon size={13} /> Verified Seller &bull; {item.neighborhood}
                     </span>
                   </div>
                 </div>
 
                 <div className="cl-product-booking-drawer">
-                  <h4 className="cl-product-card-title cl-booking-drawer-title">✉️ Inquire & Reserve</h4>
+                  <h4 className="cl-product-card-title cl-booking-drawer-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <MailIcon size={16} /> Send a Message
+                  </h4>
                   <p className="cl-booking-drawer-lead">
                     Send a secure community message to {item.sellerName} and request to schedule a local
                     inspection or pickup.
@@ -287,7 +346,7 @@ export default function ProductPage({ slug }: { slug: string }) {
 
             {related.length > 0 && (
               <div className="cl-related-section">
-                <h3 className="cl-related-title">🌿 Other Neighborhood Offers</h3>
+                <h3 className="cl-related-title">More Nearby Listings</h3>
                 <div className="cl-related-grid">
                   {related.map((relItem) => (
                     <a
@@ -303,7 +362,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                         <h4 className="cl-related-card-title">{relItem.title}</h4>
                         <div className="cl-related-price-row">
                           <span className="cl-related-price">{relItem.price}</span>
-                          <span className="cl-related-distance">📍 {relItem.distance} mi</span>
+                          <span className="cl-related-distance" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}><PinIcon size={10} />{relItem.distance} mi</span>
                         </div>
                       </div>
                     </a>

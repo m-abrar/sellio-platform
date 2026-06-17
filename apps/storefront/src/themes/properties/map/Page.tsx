@@ -84,6 +84,7 @@ export default function Page() {
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [priceFilter, setPriceFilter] = useState<PriceFilter>('all');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const listRef = useRef<HTMLDivElement>(null);
 
   // Hoist all content reads
@@ -129,8 +130,9 @@ export default function Page() {
     if (priceFilter === 'over3m' && item.numericPrice <= 3_000_000) return false;
     if (typeFilter === 'buy' && !['buy', 'sale', 'for_sale'].includes(item.listingType)) return false;
     if (typeFilter === 'rent' && !['rent', 'for_rent', 'rental'].includes(item.listingType)) return false;
+    if (searchQuery && !item.address.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
-  }), [allListings, priceFilter, typeFilter]);
+  }), [allListings, priceFilter, typeFilter, searchQuery]);
 
   const mapMarkers: MapMarker[] = useMemo(
     () => filteredListings.map((l) => ({
@@ -149,7 +151,7 @@ export default function Page() {
     card?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
-  const hasActiveFilter = priceFilter !== 'all' || typeFilter !== 'all';
+  const hasActiveFilter = priceFilter !== 'all' || typeFilter !== 'all' || searchQuery !== '';
 
   return (
     <>
@@ -162,6 +164,17 @@ export default function Page() {
                 {filteredListings.length} {unitsSuffix}
               </span>
             )}
+          </div>
+
+          <div className="pm-sidebar-search-wrap">
+            <input
+              type="search"
+              className="pm-sidebar-search"
+              placeholder="Filter by neighborhood, city…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Filter properties by location"
+            />
           </div>
 
           <div className="pm-filter-section">
@@ -192,7 +205,7 @@ export default function Page() {
                 <button
                   type="button"
                   className="pm-filter-chip pm-filter-clear"
-                  onClick={() => { setPriceFilter('all'); setTypeFilter('all'); }}
+                  onClick={() => { setPriceFilter('all'); setTypeFilter('all'); setSearchQuery(''); }}
                 >
                   Clear
                 </button>

@@ -33,6 +33,15 @@ export function getVehicleSpecLabel(vehicle: Vehicle): string {
   return `${year} | ${engine} | ${transmission}`;
 }
 
+export function getConditionLabel(conditionRating: number | null | undefined): string {
+  if (conditionRating == null) return 'Available';
+  if (conditionRating >= 9) return 'Excellent';
+  if (conditionRating >= 7) return 'Very Good';
+  if (conditionRating >= 5) return 'Good';
+  if (conditionRating >= 3) return 'Fair';
+  return 'As-Is';
+}
+
 export function getLuxuryVehicleSpecLabel(vehicle: Vehicle): string {
   const parts = [
     vehicle.specs?.year,

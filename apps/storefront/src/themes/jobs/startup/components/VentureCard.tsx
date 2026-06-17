@@ -14,7 +14,7 @@ export const VentureCard = ({ title, company, equity, location, tags }: VentureC
         <div className="venture-logo">
             <div style={{ color: 'white', fontWeight: 900 }}>{company[0]}</div>
         </div>
-        <span className="venture-tag">{company.toUpperCase()}</span>
+        <span className="venture-tag">{company.replace(/_/g, ' ').toUpperCase()}</span>
         <h3 className="venture-title">{title}</h3>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
             {tags.map((tag, i) => (
@@ -22,20 +22,20 @@ export const VentureCard = ({ title, company, equity, location, tags }: VentureC
             ))}
         </div>
         <div className="venture-meta">
-            <span>📍 {location}</span>
-            <span style={{ color: '#ec4899', fontWeight: 800 }}>💰 {equity} EQUITY</span>
+            <span>{location}</span>
+            <span style={{ color: '#ec4899', fontWeight: 800 }}>{equity} Equity</span>
         </div>
-        <button style={{ 
-            width: '100%', 
-            marginTop: '2rem', 
-            padding: '1rem', 
-            background: 'transparent', 
-            border: '1px solid rgba(255,255,255,0.1)', 
-            color: 'white', 
+        <button style={{
+            width: '100%',
+            marginTop: '2rem',
+            padding: '1rem',
+            background: 'transparent',
+            border: '1px solid rgba(255,255,255,0.1)',
+            color: 'white',
             borderRadius: '12px',
             fontWeight: 800,
             fontSize: '0.8rem',
             cursor: 'pointer'
-        }}>APPLY_NOW</button>
+        }}>Apply Now</button>
     </div>
 );
