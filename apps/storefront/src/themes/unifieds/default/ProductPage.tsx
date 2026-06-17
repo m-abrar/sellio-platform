@@ -11,6 +11,7 @@ import {
   ServiceConsultationForm,
   VehicleInquiryForm,
 } from './InteractionForms';
+import { LiveChatWidget } from './LiveChatWidget';
 import { fetchVerticalDetail, VERTICAL_LABELS, type Vertical, type VerticalDetail } from '@/themes/unifieds/shared/multiVertical';
 
 interface ProductPageProps {
@@ -186,6 +187,17 @@ export default function ProductPage({ slug, vertical = 'products' }: ProductPage
               </a>
             )}
           </div>
+
+          {detail.vertical !== 'products' && (
+            <div className="ud-chat-section">
+              <p className="ud-chat-section-label">Have questions?</p>
+              <LiveChatWidget
+                vertical={detail.vertical}
+                listingId={detail.id}
+                listingTitle={detail.title}
+              />
+            </div>
+          )}
         </article>
       </section>
     </main>

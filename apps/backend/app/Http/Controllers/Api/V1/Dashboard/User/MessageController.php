@@ -8,8 +8,11 @@ use App\Events\UserTyping;
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Models\User;
+use App\Services\ConversationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SendMessageRequest;
 
@@ -103,6 +106,51 @@ class MessageController extends Controller
         return $this->successResponse([
             'message' => $message->load('sender'),
         ], 'Message sent successfully.');
+    }
+
+    /**
+     * Find or create a conversation for a listing and return its messages.
+     * Called from the storefront live-chat widget when a visitor opens the chat panel.
+     */
+    public function start(Request $request): JsonResponse
+    {
+        $user = Auth::user();
+
+        $typeMap = [
+            'products'   => \App\Models\Product::class,
+            'properties' => \App\Models\Property::class,
+            'autos'      => \App\Models\Auto::class,
+            'services'   => \App\Models\Service::class,
+            'jobs'       => \App\Models\JobListing::class,
+            'events'     => \App\Models\Event::class,
+            'classifieds'=> \App\Models\Classified::class,
+        ];
+
+        $vertical  = $request->input('vertical');
+        $listingId = (int) $request->input('listing_id');
+
+        if (!isset($typeMap[$vertical]) || !$listingId) {
+            return $this->errorResponse('Invalid listing reference.', 422);
+        }
+
+        $listing = $typeMap[$vertical]::findOrFail($listingId);
+        $partner = User::findOrFail($listing->user_id);
+
+        $conversation = (new ConversationService())->findOrCreate($partner, $user->id);
+
+        $messages = $conversation->messages()
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return $this->successResponse([
+            'conversation_id' => $conversation->id,
+            'messages'        => $messages,
+            'partner'         => [
+                'id'     => $partner->id,
+                'name'   => $partner->name,
+                'avatar' => $partner->avatar_url ?? null,
+            ],
+        ]);
     }
 
     public function markRead(int $conversationId): JsonResponse

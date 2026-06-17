@@ -69,4 +69,4 @@ Scoping discussion confirmed: implement inquiry/apply for jobs, autos, services,
   - Exported `BookingReservePage` from `unifieds/default/index.ts`.
   - Added `BookingReservePage`, `BookingPage`, `BookingConfirmationPage`, `BookingConfirmPage` to the `unifieds` vertical fallback in `theme-pages.ts`.
   - TypeScript: 0 errors.
-- [ ] Live chat: no frontend UI and no realtime transport (Pusher/Reverb) wired anywhere in the repo, even though the backend has `Conversation`/`Message` models and a `NewMessageSent` broadcast event. Out of scope until that infra exists — see `TODO-firebase_pusher_survey.md`.
+- [x] Live chat: `LiveChatWidget` component added to `unifieds/default` product pages; auth-gated (inline login/register), opens/finds conversation via new `POST /dashboard/user/messages/start` backend endpoint (maps vertical+listing_id to partner user_id via model lookup), loads thread, sends messages, polls every 5 s for updates. Shown below the primary interaction form for all verticals except `products`. CSS classes `ud-chat-*`. Real-time push deferred for storefront (Echo / Next.js runtime not yet wired); polling covers the gap.
