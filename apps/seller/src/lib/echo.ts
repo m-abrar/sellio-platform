@@ -160,6 +160,10 @@ export function subscribeToConversation(conversationId: number): () => void {
   };
 }
 
+export function getSocketId(): string | null {
+  return echo?.connector?.pusher?.connection?.socket_id ?? null;
+}
+
 export function disconnectEcho(): void {
   activeConvoId = null;
   subscribedConvoId = null;

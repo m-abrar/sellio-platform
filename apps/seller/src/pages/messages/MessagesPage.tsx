@@ -98,7 +98,8 @@ export default function MessagesPage() {
       if (msg?.conversation_id === selectedIdRef.current) {
         setThreadMessages((prev) => {
           if (prev.some((m: any) => m.id === msg.id)) return prev;
-          return [...prev, { ...msg, isMine: false, body: msg.body, createdAt: msg.created_at }];
+          const isMine = currentUser?.id != null && Number(msg.sender_id) === Number(currentUser.id);
+          return [...prev, { ...msg, isMine, body: msg.body, createdAt: msg.created_at }];
         });
       }
     };

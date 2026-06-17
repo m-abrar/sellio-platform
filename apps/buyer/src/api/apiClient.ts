@@ -1,4 +1,5 @@
 import { AUTH_API_BASE_URL, BUYER_API_BASE_URL, PUBLIC_API_BASE_URL } from '../config/api';
+import { getSocketId } from '../lib/echo';
 
 const TOKEN_KEY = 'sellio_buyer_access_token';
 
@@ -46,6 +47,11 @@ function buildHeaders(authenticated: boolean, body?: BodyInit | null) {
     }
 
     headers.Authorization = `Bearer ${token}`;
+  }
+
+  const socketId = getSocketId();
+  if (socketId) {
+    headers['X-Socket-ID'] = socketId;
   }
 
   return headers;

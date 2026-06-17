@@ -2,6 +2,7 @@ import axios, { AxiosError, type AxiosResponse, type InternalAxiosRequestConfig 
 import { API_BASE_URL } from '../config/api';
 import { ApiError } from './apiError';
 import { clearAuth, getToken, setToken } from './authStorage';
+import { getSocketId } from './echo';
 import type { LaravelResponse } from '../types/api';
 
 type RetriableRequestConfig = InternalAxiosRequestConfig & { _retry?: boolean };
@@ -72,6 +73,11 @@ apiClient.interceptors.request.use((config) => {
   const token = getToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  const socketId = getSocketId();
+  if (socketId) {
+    config.headers['X-Socket-ID'] = socketId;
   }
 
   if (config.data instanceof FormData) {
