@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext, useParams, useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import {
@@ -11,6 +11,7 @@ import {
 import { getConversations, getConversationThread, sendMessage } from '../../api/messages';
 import { toast } from 'sonner';
 import { getApiErrorMessage } from '../../lib/apiErrorMessage';
+import { subscribeToConversation } from '../../lib/echo';
 
 const getCategoryStyles = (type: string) => {
   switch (type) {
@@ -42,6 +43,7 @@ export default function MessagesPage() {
   const [draft, setDraft] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
+  const selectedIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -82,6 +84,40 @@ export default function MessagesPage() {
     };
 
     fetchThread();
+  }, [selectedId]);
+
+  useEffect(() => {
+    if (!selectedId) return;
+
+    selectedIdRef.current = selectedId;
+    let unsub = subscribeToConversation(selectedId);
+
+    const onNewMessage = (e: Event) => {
+      const msg = (e as CustomEvent<any>).detail;
+      if (msg?.conversation_id === selectedIdRef.current) {
+        setThreadMessages((prev) => {
+          if (prev.some((m: any) => m.id === msg.id)) return prev;
+          return [...prev, { ...msg, isMine: false, body: msg.body, createdAt: msg.created_at }];
+        });
+      }
+    };
+
+    const onEchoReady = () => {
+      unsub();
+      if (selectedIdRef.current) {
+        unsub = subscribeToConversation(selectedIdRef.current);
+      }
+    };
+
+    window.addEventListener('sellio:new-message', onNewMessage);
+    window.addEventListener('sellio:echo-ready', onEchoReady);
+
+    return () => {
+      selectedIdRef.current = null;
+      unsub();
+      window.removeEventListener('sellio:new-message', onNewMessage);
+      window.removeEventListener('sellio:echo-ready', onEchoReady);
+    };
   }, [selectedId]);
 
   const selectedMessage = messages.find((message) => message.id === selectedId);

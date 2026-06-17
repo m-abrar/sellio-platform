@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\Admin\DashboardService;
+use App\Services\Admin\QueueHealthService;
 use Illuminate\View\View;
 
 /**
@@ -19,26 +20,19 @@ class DashboardController extends Controller
      * @var \App\Services\Admin\DashboardService
      */
     protected DashboardService $dashboardService;
+    protected QueueHealthService $queueHealth;
 
-    /**
-     * DashboardController constructor.
-     *
-     * @param  \App\Services\Admin\DashboardService  $dashboardService
-     */
-    public function __construct(DashboardService $dashboardService)
+    public function __construct(DashboardService $dashboardService, QueueHealthService $queueHealth)
     {
         $this->dashboardService = $dashboardService;
+        $this->queueHealth      = $queueHealth;
     }
 
-    /**
-     * Display the global administrative dashboard with high-level marketplace KPIs.
-     *
-     * @return \Illuminate\View\View
-     */
     public function index(): View
     {
-        $metrics = $this->dashboardService->getGlobalMetrics();
-        return view('admin.dashboard.dashboard', compact('metrics'));
+        $metrics     = $this->dashboardService->getGlobalMetrics();
+        $queueHealth = $this->queueHealth->getStatus();
+        return view('admin.dashboard.dashboard', compact('metrics', 'queueHealth'));
     }
 
     /**

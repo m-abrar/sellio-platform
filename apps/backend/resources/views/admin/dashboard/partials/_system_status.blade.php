@@ -28,34 +28,56 @@
                     </div>
                     <div class="col-md-9 mt-4 mt-md-0 pl-md-5">
                         <div class="row text-center text-md-left gy-4">
-                            <div class="col-6 col-md-2">
+                            <div class="col-6 col-md">
                                 <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Environment') }}</span>
                                 <span class="badge badge-primary-soft px-3 py-1 font-weight-bold text-uppercase border-0 shadow-none rounded-pill fs-065">
                                     {{ $metrics['system_health']['environment'] }}
                                 </span>
                             </div>
-                            <div class="col-6 col-md-2 border-left border-light-soft">
+                            <div class="col-6 col-md border-left border-light-soft">
                                 <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Runtime') }}</span>
                                 <span class="font-weight-bold text-dark fs-095 font-outfit">PHP {{ $metrics['system_health']['php_version'] }}</span>
                             </div>
-                            <div class="col-6 col-md-2 border-left border-light-soft">
+                            <div class="col-6 col-md border-left border-light-soft">
                                 <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Registry') }}</span>
                                 <span class="font-weight-bold text-dark fs-095 font-outfit">v{{ $metrics['system_health']['laravel_version'] }}</span>
                             </div>
-                            <div class="col-6 col-md-2 border-left border-light-soft">
+                            <div class="col-6 col-md border-left border-light-soft">
                                 <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Database') }}</span>
                                 <div class="d-flex align-items-center justify-content-center justify-content-md-start">
                                     <div class="bg-success rounded-circle mr-2 pulse-glow-dot"></div>
                                     <span class="text-dark font-weight-bold smallest text-uppercase letter-spacing-1">{{ __('CONNECTED') }}</span>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-2 border-left border-light-soft">
+                            <div class="col-6 col-md border-left border-light-soft">
                                 <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Storage') }}</span>
                                 <span class="text-primary font-weight-bold text-uppercase smallest letter-spacing-1">{{ $metrics['system_health']['cache_status'] }} {{ __('DRIVE') }}</span>
                             </div>
-                            <div class="col-6 col-md-2 border-left border-light-soft">
+                            <div class="col-6 col-md border-left border-light-soft">
                                 <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Network') }}</span>
                                 <span class="text-muted smallest font-weight-bold letter-spacing-1">{{ $metrics['system_health']['server_ip'] }}</span>
+                            </div>
+                            <div class="col-6 col-md border-left border-light-soft">
+                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Queue Worker') }}</span>
+                                @if($queueHealth['worker_up'])
+                                    <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                                        <div class="bg-success rounded-circle mr-2 pulse-glow-dot"></div>
+                                        <span class="text-dark font-weight-bold smallest text-uppercase letter-spacing-1">{{ __('ACTIVE') }}</span>
+                                    </div>
+                                    @if($queueHealth['failed_jobs'] > 0)
+                                        <span class="smallest text-danger d-block mt-1 font-weight-bold">
+                                            {{ $queueHealth['failed_jobs'] }} {{ __('failed') }}
+                                        </span>
+                                    @endif
+                                @else
+                                    <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                                        <div class="bg-warning rounded-circle mr-2" style="width:8px;height:8px;"></div>
+                                        <span class="text-warning font-weight-bold smallest text-uppercase letter-spacing-1">{{ __('DOWN') }}</span>
+                                    </div>
+                                    <span class="smallest text-muted d-block mt-1">
+                                        {{ $queueHealth['stale_jobs'] }} {{ __('pending') }}
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>

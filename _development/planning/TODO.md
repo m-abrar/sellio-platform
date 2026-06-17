@@ -448,3 +448,37 @@ write Sellio same version everywhere, documentation, error screen, loading, scre
 
 - [x] The theme icon should have two cursor changes, one should be for dragging and other should indicate the clicking. (Drag-handle zone: `cursor: grab` / `grabbing` when dragging; button body: `cursor: pointer`. `onMouseDown` moved to the drag-handle span only so the click and drag zones are independent.)
 
+
+
+---------------------------------------------------
+This is for buyer panel
+the main loading is not a finished design, make it attractive
+Loading buyer panel...
+
+------------------------------------------------------
+
+
+This is for buyer panel
+
+http://localhost:3003/messages
+the inbox for a couple of seconds show nothing or zero, the user feels he has zero messages, but after few seconds the messages load. This create confusion.
+
+---------------------------------------
+
+in the laravel admin dashboard, can we show a warning if the que worker is running or not?
+
+---------------------------------------
+i sent message from buyer panel to seller
+then seller replied
+but i expect the new message to show to buyer panel automatically without refreshing the browser
+and vice versa
+
+------------------
+
+When enter is pressed the message should be immediately moved to chat window and type input field should be empty.
+
+Also fix the bug why the user has to manually move the scrollbar for new messages or for first load of page.
+
+This is for both the seller and buyer panels.
+
+------------------------

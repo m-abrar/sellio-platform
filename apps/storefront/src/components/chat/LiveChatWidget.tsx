@@ -9,6 +9,7 @@ import {
   type ChatMessage,
   type StartChatResult,
 } from '@/lib/storefront-api';
+import './chat.css';
 
 export interface LiveChatWidgetProps {
   vertical: string;
@@ -55,7 +56,6 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
     void openConversation();
   };
 
-  // Poll for new messages while chat is open
   useEffect(() => {
     if (phase.phase !== 'open') return;
     const id = setInterval(async () => {
@@ -68,7 +68,6 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
     return () => clearInterval(id);
   }, [phase.phase]);
 
-  // Scroll to bottom on new message
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -108,8 +107,8 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
 
   if (phase.phase === 'idle') {
     return (
-      <div className="ud-chat-trigger">
-        <button type="button" className="ud-chat-open-btn" onClick={handleOpenClick}>
+      <div className="sl-chat-trigger">
+        <button type="button" className="sl-chat-open-btn" onClick={handleOpenClick}>
           <span aria-hidden="true">💬</span> Chat with seller
         </button>
       </div>
@@ -118,11 +117,11 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
 
   if (phase.phase === 'auth') {
     return (
-      <form className="ud-inquiry-form" onSubmit={(e) => { void handleAuthSubmit(e); }}>
-        <p className="ud-inquiry-form-hint">
+      <form className="sl-chat-auth-form" onSubmit={(e) => { void handleAuthSubmit(e); }}>
+        <p className="sl-chat-auth-hint">
           Sign in to chat about <strong>{listingTitle}</strong>.
         </p>
-        {authError && <div className="ud-inquiry-form-error" role="alert">{authError}</div>}
+        {authError && <div className="sl-chat-auth-error" role="alert">{authError}</div>}
         {authMode === 'register' && (
           <label>Full name
             <input required type="text" autoComplete="name" value={authForm.name}
@@ -137,14 +136,14 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
           <input required type="password" autoComplete="current-password" value={authForm.password}
             onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })} />
         </label>
-        <div className="ud-inquiry-form-toggle">
+        <div className="sl-chat-auth-toggle">
           <button type="button" className={authMode === 'login' ? 'is-active' : ''} onClick={() => setAuthMode('login')}>Log in</button>
           <button type="button" className={authMode === 'register' ? 'is-active' : ''} onClick={() => setAuthMode('register')}>Register</button>
         </div>
-        <button type="submit" className="core-btn-primary ud-detail-action" disabled={authBusy}>
+        <button type="submit" className="sl-chat-submit-btn" disabled={authBusy}>
           {authBusy ? 'Please wait…' : authMode === 'login' ? 'Sign in & chat' : 'Create account & chat'}
         </button>
-        <button type="button" className="ud-chat-cancel-btn" onClick={() => setPhase({ phase: 'idle' })}>
+        <button type="button" className="sl-chat-cancel-btn" onClick={() => setPhase({ phase: 'idle' })}>
           Cancel
         </button>
       </form>
@@ -152,14 +151,14 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
   }
 
   if (phase.phase === 'loading') {
-    return <div className="ud-chat-loading" role="status">Opening conversation…</div>;
+    return <div className="sl-chat-loading" role="status">Opening conversation…</div>;
   }
 
   if (phase.phase === 'error') {
     return (
-      <div className="ud-chat-trigger">
-        <p className="ud-inquiry-form-error" role="alert">{phase.message}</p>
-        <button type="button" className="ud-chat-open-btn" onClick={() => setPhase({ phase: 'idle' })}>Dismiss</button>
+      <div className="sl-chat-trigger">
+        <p className="sl-chat-auth-error" role="alert">{phase.message}</p>
+        <button type="button" className="sl-chat-open-btn" onClick={() => setPhase({ phase: 'idle' })}>Dismiss</button>
       </div>
     );
   }
@@ -167,24 +166,24 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
   const myId = user?.id;
 
   return (
-    <div className="ud-chat-panel">
-      <div className="ud-chat-header">
-        <span className="ud-chat-header-name">{phase.partnerName}</span>
-        <button type="button" className="ud-chat-close" aria-label="Close chat"
+    <div className="sl-chat-panel">
+      <div className="sl-chat-header">
+        <span className="sl-chat-header-name">{phase.partnerName}</span>
+        <button type="button" className="sl-chat-close" aria-label="Close chat"
           onClick={() => setPhase({ phase: 'idle' })}>✕</button>
       </div>
 
-      <div className="ud-chat-thread" role="log" aria-live="polite">
+      <div className="sl-chat-thread" role="log" aria-live="polite">
         {messages.length === 0 && (
-          <p className="ud-chat-empty">No messages yet. Say hello!</p>
+          <p className="sl-chat-empty">No messages yet. Say hello!</p>
         )}
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={`ud-chat-bubble${msg.sender_id === myId ? ' ud-chat-bubble--mine' : ''}`}
+            className={`sl-chat-bubble${msg.sender_id === myId ? ' sl-chat-bubble--mine' : ''}`}
           >
-            <span className="ud-chat-bubble-body">{msg.body}</span>
-            <time className="ud-chat-time" dateTime={msg.created_at}>
+            <span className="sl-chat-bubble-body">{msg.body}</span>
+            <time className="sl-chat-time" dateTime={msg.created_at}>
               {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </time>
           </div>
@@ -192,10 +191,10 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
         <div ref={bottomRef} />
       </div>
 
-      <form className="ud-chat-composer" onSubmit={(e) => { void handleSend(e); }}>
+      <form className="sl-chat-composer" onSubmit={(e) => { void handleSend(e); }}>
         <input
           type="text"
-          className="ud-chat-input"
+          className="sl-chat-input"
           placeholder="Type a message…"
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -204,7 +203,7 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
         />
         <button
           type="submit"
-          className="ud-chat-send-btn"
+          className="sl-chat-send-btn"
           disabled={sending || !input.trim()}
           aria-label="Send message"
         >

@@ -480,11 +480,44 @@ function AppContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#f7f8f5]">
+      <div className="min-h-screen bg-[var(--bg-body)] flex flex-col">
         <SetupReminderBanner />
-        <div className="flex min-h-[calc(100vh-1px)] items-center justify-center text-sm font-bold text-zinc-500">
-          Loading buyer panel...
+        <div className="flex flex-1 items-center justify-center">
+          <div className="flex flex-col items-center gap-8 select-none">
+            {/* Logo mark */}
+            <div className="relative w-16 h-16">
+              <div className="absolute inset-0 rounded-2xl bg-[var(--primary-color)] opacity-15 animate-ping" style={{ animationDuration: '1.8s' }} />
+              <div className="relative w-16 h-16 rounded-2xl bg-[var(--primary-color)] flex items-center justify-center shadow-lg shadow-[var(--primary-color)]/30">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <polyline points="9 22 9 12 15 12 15 22" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Animated bar */}
+            <div className="w-48 h-1 rounded-full bg-zinc-200 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-[var(--primary-color)]"
+                style={{
+                  animation: 'buyer-load-bar 1.6s ease-in-out infinite',
+                }}
+              />
+            </div>
+
+            <p className="text-xs font-bold tracking-widest uppercase text-zinc-400">
+              Loading your dashboard
+            </p>
+          </div>
         </div>
+
+        <style>{`
+          @keyframes buyer-load-bar {
+            0%   { width: 0%;   margin-left: 0%; }
+            50%  { width: 60%;  margin-left: 20%; }
+            100% { width: 0%;   margin-left: 100%; }
+          }
+        `}</style>
       </div>
     );
   }

@@ -20,6 +20,7 @@ import { fetchMessages, sendMessage, fetchConversations } from '../api/messageAp
 import { useUser } from '../context/UserContext';
 import { API_BASE_URL } from '../config/api';
 import { Button } from '../components/Button';
+import { subscribeToConversation } from '../lib/echo';
 
 const apiOrigin = (() => {
   try {
@@ -59,8 +60,10 @@ export default function MessagesView() {
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const [messagesLoading, setMessagesLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
+  const activeConvoIdRef = useRef<number | null>(null);
 
   // Hidden File input ref
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -131,10 +134,39 @@ export default function MessagesView() {
   useEffect(() => {
     if (!activeConvo) return;
 
+    activeConvoIdRef.current = activeConvo.id;
     loadMessages(activeConvo.id);
-    const interval = window.setInterval(() => loadMessages(activeConvo.id), 5000);
 
-    return () => window.clearInterval(interval);
+    let unsub = subscribeToConversation(activeConvo.id);
+
+    const onNewMessage = (e: Event) => {
+      const msg = (e as CustomEvent<any>).detail;
+      if (msg?.conversation_id === activeConvoIdRef.current) {
+        setMessages((prev) => {
+          if (prev.some((m) => m.id === msg.id)) return prev;
+          return [...prev, msg];
+        });
+      }
+    };
+
+    // Echo may connect after this effect runs (parent effect fires later).
+    // Re-subscribe once it's ready so the channel isn't missed.
+    const onEchoReady = () => {
+      unsub();
+      if (activeConvoIdRef.current) {
+        unsub = subscribeToConversation(activeConvoIdRef.current);
+      }
+    };
+
+    window.addEventListener('sellio:new-message', onNewMessage);
+    window.addEventListener('sellio:echo-ready', onEchoReady);
+
+    return () => {
+      activeConvoIdRef.current = null;
+      unsub();
+      window.removeEventListener('sellio:new-message', onNewMessage);
+      window.removeEventListener('sellio:echo-ready', onEchoReady);
+    };
   }, [activeConvo?.id]);
 
   const loadInitialData = async () => {
@@ -171,11 +203,14 @@ export default function MessagesView() {
   const loadMessages = async (conversationId = activeConvo?.id) => {
     if (!conversationId) return;
 
+    setMessagesLoading(true);
     try {
       const data = await fetchMessages(conversationId);
       setMessages(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setMessagesLoading(false);
     }
   };
 
@@ -253,9 +288,13 @@ export default function MessagesView() {
           <h2 className="font-extrabold text-base bg-gradient-to-r from-[var(--primary-color)] to-[var(--primary-dark)] bg-clip-text text-transparent">
             Inbox
           </h2>
-          <span className="px-2 py-0.5 text-[10px] font-bold bg-[var(--primary-light)] text-[var(--primary-color)] rounded-full">
-            {conversations.length} Active
-          </span>
+          {loading ? (
+            <div className="w-14 h-4 rounded-full bg-zinc-100 animate-pulse" />
+          ) : (
+            <span className="px-2 py-0.5 text-[10px] font-bold bg-[var(--primary-light)] text-[var(--primary-color)] rounded-full">
+              {conversations.length} Active
+            </span>
+          )}
         </div>
 
         {/* Search */}
@@ -274,7 +313,19 @@ export default function MessagesView() {
 
         {/* Conversations Scrollbox */}
         <div className="flex-1 overflow-y-auto divide-y divide-zinc-100/50">
-          {filteredConversations.map((convo) => (
+          {loading && Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="px-5 py-4 flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-full bg-zinc-100 animate-pulse shrink-0" />
+              <div className="flex-1 min-w-0 space-y-2">
+                <div className="flex justify-between items-center">
+                  <div className="h-3 w-24 rounded-full bg-zinc-100 animate-pulse" />
+                  <div className="h-2.5 w-8 rounded-full bg-zinc-100 animate-pulse" />
+                </div>
+                <div className="h-2.5 w-40 rounded-full bg-zinc-100 animate-pulse" />
+              </div>
+            </div>
+          ))}
+          {!loading && filteredConversations.map((convo) => (
             <motion.button
               key={convo.id}
               whileHover={{ scale: 1.005, x: 2 }}
@@ -423,7 +474,16 @@ export default function MessagesView() {
               <div className="flex-1 flex flex-col min-w-0 h-full bg-zinc-50/10">
                 {/* Messages Area */}
                 <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4">
-                  {currentMessages.map((msg) => {
+                  {messagesLoading && (
+                    <div className="space-y-4 pt-2">
+                      {[{ w: 'w-48', mine: false }, { w: 'w-36', mine: true }, { w: 'w-56', mine: false }, { w: 'w-32', mine: true }, { w: 'w-44', mine: false }].map((s, i) => (
+                        <div key={i} className={`flex ${s.mine ? 'justify-end' : 'justify-start'}`}>
+                          <div className={`h-9 ${s.w} rounded-2xl bg-zinc-100 animate-pulse`} />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {!messagesLoading && currentMessages.map((msg) => {
                     const msgDateStr = getMessageDateString(msg.created_at);
                     const showDateDivider = msgDateStr !== lastDateStr;
                     lastDateStr = msgDateStr;
@@ -466,7 +526,7 @@ export default function MessagesView() {
                     );
                   })}
 
-                  {currentMessages.length === 0 && !loading && (
+                  {currentMessages.length === 0 && !loading && !messagesLoading && (
                     <div className="flex-grow flex flex-col items-center justify-center p-8 text-center max-w-xs mx-auto py-16">
                       <div className="w-14 h-14 bg-[var(--primary-light)] text-[var(--primary-color)] rounded-2xl flex items-center justify-center mb-4 shadow-2xs animate-pulse">
                         <Sparkles size={24} />

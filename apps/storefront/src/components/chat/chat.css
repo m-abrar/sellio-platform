@@ -1,0 +1,301 @@
+/* =========================================================
+   Shared live-chat widget — sl-chat-* namespace
+   CSS variables fall back to neutral values so the widget
+   works in any theme, but theme-defined --ud-* / --pm-* /
+   etc. vars are picked up automatically when present.
+   ========================================================= */
+
+/* Section wrapper (rendered by the host page/detail view) */
+.sl-chat-section {
+    border-top: 1px solid var(--ud-border, #e2e8f0);
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+}
+
+.sl-chat-section-label {
+    color: var(--ud-slate, #64748b);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+}
+
+/* ---- Idle / error trigger ---- */
+
+.sl-chat-trigger {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sl-chat-open-btn {
+    align-items: center;
+    background: transparent;
+    border: 2px solid var(--ud-azure, #2563eb);
+    border-radius: 12px;
+    color: var(--ud-azure, #2563eb);
+    cursor: pointer;
+    display: flex;
+    font-size: 0.95rem;
+    font-weight: 700;
+    gap: 0.5rem;
+    justify-content: center;
+    padding: 0.85rem 1.25rem;
+    transition: var(--ud-transition, background 0.2s ease, color 0.2s ease);
+    width: 100%;
+}
+
+.sl-chat-open-btn:hover {
+    background: var(--ud-azure, #2563eb);
+    color: #fff;
+}
+
+/* ---- Loading ---- */
+
+.sl-chat-loading {
+    color: var(--ud-slate, #64748b);
+    font-size: 0.9rem;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+/* ---- Auth form ---- */
+
+.sl-chat-auth-form {
+    background: var(--ud-card, #ffffff);
+    border: 1px solid var(--ud-border, #e2e8f0);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.75rem;
+}
+
+.sl-chat-auth-form label {
+    color: #1e293b;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+    font-weight: 700;
+    gap: 0.5rem;
+}
+
+.sl-chat-auth-form input {
+    background: var(--ud-bg, #f8fafc);
+    border: 1px solid var(--ud-border, #e2e8f0);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 400;
+    outline: none;
+    padding: 0.85rem 1rem;
+}
+
+.sl-chat-auth-form input:focus {
+    border-color: var(--ud-azure, #2563eb);
+}
+
+.sl-chat-auth-hint {
+    color: var(--ud-slate, #64748b);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.sl-chat-auth-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    color: #b91c1c;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+}
+
+.sl-chat-auth-toggle {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.sl-chat-auth-toggle button {
+    background: var(--ud-bg, #f8fafc);
+    border: 1px solid var(--ud-border, #e2e8f0);
+    border-radius: 10px;
+    color: var(--ud-slate, #64748b);
+    cursor: pointer;
+    flex: 1;
+    font-weight: 700;
+    padding: 0.6rem;
+    transition: var(--ud-transition, background 0.2s ease, color 0.2s ease);
+}
+
+.sl-chat-auth-toggle button.is-active {
+    background: var(--ud-azure, #2563eb);
+    border-color: var(--ud-azure, #2563eb);
+    color: #fff;
+}
+
+.sl-chat-submit-btn {
+    background: var(--ud-azure, #2563eb);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.9rem 1.25rem;
+    transition: var(--ud-transition, opacity 0.2s ease);
+    width: 100%;
+}
+
+.sl-chat-submit-btn:hover:not(:disabled) {
+    opacity: 0.88;
+}
+
+.sl-chat-submit-btn:disabled {
+    cursor: progress;
+    opacity: 0.55;
+}
+
+.sl-chat-cancel-btn {
+    background: transparent;
+    border: none;
+    color: var(--ud-slate, #64748b);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.25rem 0;
+    text-align: center;
+    text-decoration: underline;
+    width: 100%;
+}
+
+/* ---- Open panel ---- */
+
+.sl-chat-panel {
+    background: var(--ud-card, #ffffff);
+    border: 1px solid var(--ud-border, #e2e8f0);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sl-chat-header {
+    align-items: center;
+    background: var(--ud-azure, #2563eb);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.85rem 1rem;
+}
+
+.sl-chat-header-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.sl-chat-close {
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    opacity: 0.8;
+    padding: 0.25rem;
+    transition: opacity 0.15s;
+}
+
+.sl-chat-close:hover {
+    opacity: 1;
+}
+
+.sl-chat-thread {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 280px;
+    overflow-y: auto;
+    padding: 1rem;
+    scroll-behavior: smooth;
+}
+
+.sl-chat-empty {
+    color: var(--ud-slate, #64748b);
+    font-size: 0.9rem;
+    margin: auto;
+    text-align: center;
+}
+
+.sl-chat-bubble {
+    align-self: flex-start;
+    background: var(--ud-bg, #f8fafc);
+    border: 1px solid var(--ud-border, #e2e8f0);
+    border-radius: 14px 14px 14px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    max-width: 80%;
+    padding: 0.6rem 0.85rem;
+}
+
+.sl-chat-bubble--mine {
+    align-self: flex-end;
+    background: var(--ud-azure, #2563eb);
+    border-color: var(--ud-azure, #2563eb);
+    border-radius: 14px 14px 4px 14px;
+    color: #fff;
+}
+
+.sl-chat-bubble-body {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.sl-chat-time {
+    font-size: 0.7rem;
+    opacity: 0.6;
+    text-align: right;
+}
+
+.sl-chat-composer {
+    border-top: 1px solid var(--ud-border, #e2e8f0);
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.75rem;
+}
+
+.sl-chat-input {
+    background: var(--ud-bg, #f8fafc);
+    border: 1px solid var(--ud-border, #e2e8f0);
+    border-radius: 10px;
+    flex: 1;
+    font-size: 0.9rem;
+    outline: none;
+    padding: 0.65rem 0.85rem;
+    transition: border-color 0.15s;
+}
+
+.sl-chat-input:focus {
+    border-color: var(--ud-azure, #2563eb);
+}
+
+.sl-chat-send-btn {
+    background: var(--ud-azure, #2563eb);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.65rem 0.9rem;
+    transition: opacity 0.15s;
+}
+
+.sl-chat-send-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.sl-chat-send-btn:not(:disabled):hover {
+    opacity: 0.85;
+}

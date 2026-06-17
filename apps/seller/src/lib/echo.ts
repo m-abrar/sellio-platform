@@ -37,6 +37,8 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
     },
   });
 
+  window.dispatchEvent(new Event('sellio:echo-ready'));
+
   echo.private(`App.Models.User.${userId}`)
     .notification((n: Record<string, unknown>) => {
       dispatch('sellio:notification', {

@@ -35,6 +35,7 @@
 
 @section('content')
 <div class="container-fluid pb-5">
+
     {{-- Quick Actions Row --}}
     <div class="row mb-4">
         <!-- Add Listing Dropdown -->
