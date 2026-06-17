@@ -137,7 +137,7 @@ export default function MessagesView() {
     activeConvoIdRef.current = activeConvo.id;
     loadMessages(activeConvo.id);
 
-    let unsub = subscribeToConversation(activeConvo.id);
+    const unsub = subscribeToConversation(activeConvo.id);
 
     const onNewMessage = (e: Event) => {
       const msg = (e as CustomEvent<any>).detail;
@@ -149,23 +149,12 @@ export default function MessagesView() {
       }
     };
 
-    // Echo may connect after this effect runs (parent effect fires later).
-    // Re-subscribe once it's ready so the channel isn't missed.
-    const onEchoReady = () => {
-      unsub();
-      if (activeConvoIdRef.current) {
-        unsub = subscribeToConversation(activeConvoIdRef.current);
-      }
-    };
-
     window.addEventListener('sellio:new-message', onNewMessage);
-    window.addEventListener('sellio:echo-ready', onEchoReady);
 
     return () => {
       activeConvoIdRef.current = null;
       unsub();
       window.removeEventListener('sellio:new-message', onNewMessage);
-      window.removeEventListener('sellio:echo-ready', onEchoReady);
     };
   }, [activeConvo?.id]);
 
@@ -213,7 +202,7 @@ export default function MessagesView() {
           return incoming.length > 0 ? [...prev, ...incoming] : prev;
         });
       } catch { /* ignore polling errors */ }
-    }, 1500);
+    }, 3000);
     return () => clearInterval(interval);
   }, [activeConvo?.id]);
 

@@ -7,12 +7,39 @@ declare global {
 
 let echo: Echo<'pusher'> | null = null;
 
+// Conversation the component wants to watch.  echo.ts re-subscribes on every
+// connect/reconnect so the component never needs to handle timing itself.
+let activeConvoId: number | null = null;
+// Tracks which conversation channel is currently subscribed to prevent duplicate listeners.
+let subscribedConvoId: number | null = null;
+
 function authEndpoint(apiBase: string): string {
   return apiBase.replace(/\/$/, '') + '/broadcasting/auth';
 }
 
 function dispatch(name: string, detail: unknown): void {
   window.dispatchEvent(new CustomEvent(name, { detail }));
+}
+
+function doSubscribeConvo(conversationId: number): void {
+  if (!echo || subscribedConvoId === conversationId) return;
+  subscribedConvoId = conversationId;
+  const channel = echo.private(`chat.${conversationId}`);
+
+  (channel as any).subscribed(() => {
+    console.log(`[Echo] ✓ Subscribed to private-chat.${conversationId}`);
+  });
+  (channel as any).error((status: unknown) => {
+    console.error(`[Echo] ✗ Auth failed for private-chat.${conversationId}`, status);
+  });
+
+  channel
+    .listen('.NewMessageSent', (e: unknown) => {
+      console.log('[Echo] NewMessageSent on chat.' + conversationId, e);
+      dispatch('sellio:new-message', e);
+    })
+    .listen('.MessageRead', (e: unknown) => dispatch('sellio:message-read', e))
+    .listen('.UserTyping', (e: unknown) => dispatch('sellio:typing', e));
 }
 
 export function connectEcho(userId: number, token: string, apiBase: string): void {
@@ -25,7 +52,7 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
   }
 
   window.Pusher = Pusher;
-  Pusher.logToConsole = true;
+  Pusher.logToConsole = import.meta.env.DEV;
 
   echo = new Echo({
     broadcaster: 'pusher',
@@ -41,11 +68,13 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
     },
   });
 
-  // Fire sellio:echo-ready only after the WebSocket is actually connected,
-  // not immediately after new Echo() — this ensures subscriptions don't race auth.
   echo.connector.pusher.connection.bind('connected', () => {
     console.log('[Echo] Pusher connected ✓');
-    window.dispatchEvent(new Event('sellio:echo-ready'));
+    // Restore any pending conversation subscription on every connect / reconnect.
+    if (activeConvoId !== null) {
+      console.log(`[Echo] Re-subscribing to chat.${activeConvoId}`);
+      doSubscribeConvo(activeConvoId);
+    }
   });
 
   echo.connector.pusher.connection.bind('error', (err: unknown) => {
@@ -68,30 +97,27 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
 }
 
 export function subscribeToConversation(conversationId: number): () => void {
-  if (!echo) return () => {};
+  const state = echo?.connector?.pusher?.connection?.state ?? 'no-echo';
+  console.log(`[Echo] subscribeToConversation(${conversationId}) state=${state}`);
 
-  const channel = echo.private(`chat.${conversationId}`);
+  activeConvoId = conversationId;
 
-  // Subscription lifecycle — look for these in console after Pusher connects
-  (channel as any).subscribed(() => {
-    console.log(`[Echo] ✓ Subscribed to private-chat.${conversationId}`);
-  });
-  (channel as any).error((status: unknown) => {
-    console.error(`[Echo] ✗ Failed to subscribe to private-chat.${conversationId}`, status);
-  });
+  if (state === 'connected') {
+    // Already connected — subscribe immediately.
+    doSubscribeConvo(conversationId);
+  }
+  // Otherwise the 'connected' handler above subscribes once the WS is ready.
 
-  channel
-    .listen('.NewMessageSent', (e: unknown) => {
-      console.log('[Echo] NewMessageSent received on chat.' + conversationId, e);
-      dispatch('sellio:new-message', e);
-    })
-    .listen('.MessageRead', (e: unknown) => dispatch('sellio:message-read', e))
-    .listen('.UserTyping', (e: unknown) => dispatch('sellio:typing', e));
-
-  return () => { echo?.leave(`chat.${conversationId}`); };
+  return () => {
+    if (activeConvoId === conversationId) activeConvoId = null;
+    if (subscribedConvoId === conversationId) subscribedConvoId = null;
+    echo?.leave(`chat.${conversationId}`);
+  };
 }
 
 export function disconnectEcho(): void {
+  activeConvoId = null;
+  subscribedConvoId = null;
   echo?.disconnect();
   echo = null;
 }

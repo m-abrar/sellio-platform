@@ -91,7 +91,7 @@ export default function MessagesPage() {
     if (!selectedId) return;
 
     selectedIdRef.current = selectedId;
-    let unsub = subscribeToConversation(selectedId);
+    const unsub = subscribeToConversation(selectedId);
 
     const onNewMessage = (e: Event) => {
       const msg = (e as CustomEvent<any>).detail;
@@ -103,21 +103,12 @@ export default function MessagesPage() {
       }
     };
 
-    const onEchoReady = () => {
-      unsub();
-      if (selectedIdRef.current) {
-        unsub = subscribeToConversation(selectedIdRef.current);
-      }
-    };
-
     window.addEventListener('sellio:new-message', onNewMessage);
-    window.addEventListener('sellio:echo-ready', onEchoReady);
 
     return () => {
       selectedIdRef.current = null;
       unsub();
       window.removeEventListener('sellio:new-message', onNewMessage);
-      window.removeEventListener('sellio:echo-ready', onEchoReady);
     };
   }, [selectedId]);
 
@@ -145,7 +136,7 @@ export default function MessagesPage() {
           return [...response.data.messages, ...temps];
         });
       } catch { /* ignore polling errors */ }
-    }, 1500);
+    }, 3000);
     return () => clearInterval(interval);
   }, [selectedId]);
 
