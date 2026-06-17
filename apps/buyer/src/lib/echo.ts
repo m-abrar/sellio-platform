@@ -19,9 +19,13 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
   if (echo) disconnectEcho();
 
   const key = import.meta.env.VITE_PUSHER_APP_KEY;
-  if (!key) return;
+  if (!key) {
+    console.warn('[Echo] VITE_PUSHER_APP_KEY is not set — real-time disabled');
+    return;
+  }
 
   window.Pusher = Pusher;
+  Pusher.logToConsole = true;
 
   echo = new Echo({
     broadcaster: 'pusher',
@@ -37,7 +41,20 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
     },
   });
 
-  window.dispatchEvent(new Event('sellio:echo-ready'));
+  // Fire sellio:echo-ready only after the WebSocket is actually connected,
+  // not immediately after new Echo() — this ensures subscriptions don't race auth.
+  echo.connector.pusher.connection.bind('connected', () => {
+    console.log('[Echo] Pusher connected ✓');
+    window.dispatchEvent(new Event('sellio:echo-ready'));
+  });
+
+  echo.connector.pusher.connection.bind('error', (err: unknown) => {
+    console.error('[Echo] Pusher connection error:', err);
+  });
+
+  echo.connector.pusher.connection.bind('failed', () => {
+    console.error('[Echo] Pusher connection failed — check key/cluster');
+  });
 
   echo.private(`App.Models.User.${userId}`)
     .notification((n: Record<string, unknown>) => {
@@ -53,8 +70,21 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
 export function subscribeToConversation(conversationId: number): () => void {
   if (!echo) return () => {};
 
-  echo.private(`chat.${conversationId}`)
-    .listen('.NewMessageSent', (e: unknown) => dispatch('sellio:new-message', e))
+  const channel = echo.private(`chat.${conversationId}`);
+
+  // Subscription lifecycle — look for these in console after Pusher connects
+  (channel as any).subscribed(() => {
+    console.log(`[Echo] ✓ Subscribed to private-chat.${conversationId}`);
+  });
+  (channel as any).error((status: unknown) => {
+    console.error(`[Echo] ✗ Failed to subscribe to private-chat.${conversationId}`, status);
+  });
+
+  channel
+    .listen('.NewMessageSent', (e: unknown) => {
+      console.log('[Echo] NewMessageSent received on chat.' + conversationId, e);
+      dispatch('sellio:new-message', e);
+    })
     .listen('.MessageRead', (e: unknown) => dispatch('sellio:message-read', e))
     .listen('.UserTyping', (e: unknown) => dispatch('sellio:typing', e));
 

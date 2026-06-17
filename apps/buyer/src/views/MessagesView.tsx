@@ -213,7 +213,7 @@ export default function MessagesView() {
           return incoming.length > 0 ? [...prev, ...incoming] : prev;
         });
       } catch { /* ignore polling errors */ }
-    }, 3000);
+    }, 1500);
     return () => clearInterval(interval);
   }, [activeConvo?.id]);
 

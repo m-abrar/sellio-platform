@@ -145,7 +145,7 @@ export default function MessagesPage() {
           return [...response.data.messages, ...temps];
         });
       } catch { /* ignore polling errors */ }
-    }, 3000);
+    }, 1500);
     return () => clearInterval(interval);
   }, [selectedId]);
 
