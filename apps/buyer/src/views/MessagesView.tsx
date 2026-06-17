@@ -22,6 +22,22 @@ import { API_BASE_URL } from '../config/api';
 import { Button } from '../components/Button';
 import { subscribeToConversation } from '../lib/echo';
 
+const POLL_INTERVAL_MS = 2000;
+
+const mergeBuyerThread = (prev: any[], serverMessages: any[]): any[] => {
+  const temps = prev.filter((m) => String(m.id).startsWith('temp-'));
+  const real = prev.filter((m) => !String(m.id).startsWith('temp-'));
+  if (
+    real.length === serverMessages.length &&
+    real.every((m, i) => String(m.id) === String(serverMessages[i]?.id))
+  ) {
+    return prev;
+  }
+  const serverContents = new Set(serverMessages.map((m) => m.content));
+  const pendingTemps = temps.filter((t) => !serverContents.has(t.content));
+  return [...serverMessages, ...pendingTemps];
+};
+
 const apiOrigin = (() => {
   try {
     return new URL(API_BASE_URL).origin;
@@ -118,6 +134,15 @@ export default function MessagesView() {
 
   useEffect(() => {
     loadInitialData();
+
+    const interval = setInterval(async () => {
+      try {
+        const convos = await fetchConversations();
+        setConversations(convos);
+      } catch { /* polling fallback */ }
+    }, POLL_INTERVAL_MS * 2);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -141,12 +166,12 @@ export default function MessagesView() {
 
     const onNewMessage = (e: Event) => {
       const msg = (e as CustomEvent<any>).detail;
-      if (msg?.conversation_id === activeConvoIdRef.current) {
-        setMessages((prev) => {
-          if (prev.some((m) => m.id === msg.id)) return prev;
-          return [...prev, { ...msg, content: msg.content ?? msg.body }];
-        });
-      }
+      if (Number(msg?.conversation_id) !== Number(activeConvoIdRef.current)) return;
+
+      setMessages((prev) => {
+        if (prev.some((m) => String(m.id) === String(msg.id))) return prev;
+        return [...prev, { ...msg, content: msg.content ?? msg.body }];
+      });
     };
 
     window.addEventListener('sellio:new-message', onNewMessage);
@@ -189,21 +214,26 @@ export default function MessagesView() {
     requestAnimationFrame(() => { el.scrollTop = el.scrollHeight; });
   }, [messages]);
 
-  // Polling fallback — catches messages if WebSocket auth fails
+  // Polling fallback — keeps thread in sync when WebSocket is unavailable
   useEffect(() => {
     if (!activeConvo?.id) return;
     const convoId = activeConvo.id;
-    const interval = setInterval(async () => {
+    let cancelled = false;
+
+    const pollThread = async () => {
       try {
         const fresh = await fetchMessages(convoId);
-        setMessages((prev) => {
-          const existingIds = new Set(prev.map((m) => String(m.id)));
-          const incoming = fresh.filter((m) => !existingIds.has(String(m.id)));
-          return incoming.length > 0 ? [...prev, ...incoming] : prev;
-        });
-      } catch { /* ignore polling errors */ }
-    }, 3000);
-    return () => clearInterval(interval);
+        if (cancelled) return;
+        setMessages((prev) => mergeBuyerThread(prev, fresh));
+      } catch { /* polling fallback */ }
+    };
+
+    void pollThread();
+    const interval = setInterval(pollThread, POLL_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
   }, [activeConvo?.id]);
 
   const loadMessages = async (conversationId = activeConvo?.id) => {

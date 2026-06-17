@@ -12,6 +12,21 @@ import { getConversations, getConversationThread, sendMessage } from '../../api/
 import { toast } from 'sonner';
 import { getApiErrorMessage } from '../../lib/apiErrorMessage';
 import { subscribeToConversation } from '../../lib/echo';
+import { normalizeThreadMessage } from '../../lib/messageAdapter';
+
+const POLL_INTERVAL_MS = 2000;
+
+const mergeSellerThread = (prev: any[], serverMessages: any[]): any[] => {
+  const temps = prev.filter((m) => String(m.id).startsWith('temp-'));
+  const real = prev.filter((m) => !String(m.id).startsWith('temp-'));
+  if (
+    real.length === serverMessages.length &&
+    real.every((m, i) => String(m.id) === String(serverMessages[i]?.id))
+  ) {
+    return prev;
+  }
+  return [...serverMessages, ...temps];
+};
 
 const getCategoryStyles = (type: string) => {
   switch (type) {
@@ -60,6 +75,15 @@ export default function MessagesPage() {
       }
     };
     fetchMessages();
+
+    const interval = setInterval(async () => {
+      try {
+        const response = await getConversations();
+        setMessages(response.data.data);
+      } catch { /* polling fallback */ }
+    }, POLL_INTERVAL_MS * 2);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -69,14 +93,17 @@ export default function MessagesPage() {
   }, [messages, id]);
 
   useEffect(() => {
-    const fetchThread = async () => {
-      if (!selectedId) {
-        setThreadMessages([]);
-        return;
-      }
+    if (!selectedId) {
+      setThreadMessages([]);
+      return;
+    }
 
+    let activeRequestId = selectedId;
+
+    const fetchThread = async () => {
       try {
         const response = await getConversationThread(selectedId);
+        if (activeRequestId !== selectedId) return;
         setThreadMessages(response.data.messages);
         setPartnerId(response.data.partnerId ?? partnerId);
       } catch (error) {
@@ -85,6 +112,10 @@ export default function MessagesPage() {
     };
 
     fetchThread();
+
+    return () => {
+      activeRequestId = -1;
+    };
   }, [selectedId]);
 
   useEffect(() => {
@@ -95,13 +126,18 @@ export default function MessagesPage() {
 
     const onNewMessage = (e: Event) => {
       const msg = (e as CustomEvent<any>).detail;
-      if (msg?.conversation_id === selectedIdRef.current) {
-        setThreadMessages((prev) => {
-          if (prev.some((m: any) => m.id === msg.id)) return prev;
-          const isMine = currentUser?.id != null && Number(msg.sender_id) === Number(currentUser.id);
-          return [...prev, { ...msg, isMine, body: msg.body, createdAt: msg.created_at }];
-        });
-      }
+      if (Number(msg?.conversation_id) !== Number(selectedIdRef.current)) return;
+
+      setThreadMessages((prev) => {
+        if (prev.some((m: any) => String(m.id) === String(msg.id))) return prev;
+        const isMine = currentUser?.id != null && Number(msg.sender_id) === Number(currentUser.id);
+        return [...prev, {
+          ...msg,
+          isMine,
+          body: msg.body,
+          createdAt: msg.created_at,
+        }];
+      });
     };
 
     window.addEventListener('sellio:new-message', onNewMessage);
@@ -111,7 +147,7 @@ export default function MessagesPage() {
       unsub();
       window.removeEventListener('sellio:new-message', onNewMessage);
     };
-  }, [selectedId]);
+  }, [selectedId, currentUser?.id]);
 
   useEffect(() => {
     if (!threadScrollRef.current) return;
@@ -119,26 +155,26 @@ export default function MessagesPage() {
     requestAnimationFrame(() => { el.scrollTop = el.scrollHeight; });
   }, [threadMessages]);
 
-  // Polling fallback — catches messages if WebSocket auth fails
+  // Polling fallback — keeps thread in sync when WebSocket is unavailable
   useEffect(() => {
     if (!selectedId) return;
-    const id = selectedId;
-    const interval = setInterval(async () => {
+    const conversationId = selectedId;
+    let cancelled = false;
+
+    const pollThread = async () => {
       try {
-        const response = await getConversationThread(id);
-        setThreadMessages((prev: any[]) => {
-          const prevRealIds = new Set(
-            prev.filter((m: any) => !String(m.id).startsWith('temp-')).map((m: any) => m.id)
-          );
-          const hasNew = response.data.messages.some((m: any) => !prevRealIds.has(m.id));
-          if (!hasNew) return prev;
-          // Replace with fresh server state; re-append any still-pending temp messages
-          const temps = prev.filter((m: any) => String(m.id).startsWith('temp-'));
-          return [...response.data.messages, ...temps];
-        });
-      } catch { /* ignore polling errors */ }
-    }, 3000);
-    return () => clearInterval(interval);
+        const response = await getConversationThread(conversationId);
+        if (cancelled) return;
+        setThreadMessages((prev) => mergeSellerThread(prev, response.data.messages));
+      } catch { /* polling fallback */ }
+    };
+
+    void pollThread();
+    const interval = setInterval(pollThread, POLL_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
   }, [selectedId]);
 
   const selectedMessage = messages.find((message) => message.id === selectedId);
@@ -154,9 +190,16 @@ export default function MessagesPage() {
 
     setIsSending(true);
     try {
-      await sendMessage(selectedId, content);
-      // Remove temp — polling will bring in the real message within 3 s
-      setThreadMessages((prev) => prev.filter((m: any) => m.id !== tempId));
+      const response = await sendMessage(selectedId, content);
+      const sent = normalizeThreadMessage(
+        response.data as Record<string, unknown>,
+        Number(currentUser?.id ?? partnerId),
+      );
+      setThreadMessages((prev) => {
+        const withoutTemp = prev.filter((m: any) => m.id !== tempId);
+        if (withoutTemp.some((m: any) => String(m.id) === String(sent.id))) return withoutTemp;
+        return [...withoutTemp, sent];
+      });
     } catch (error) {
       console.error('Failed to send message', error);
       toast.error('Failed to send message.');

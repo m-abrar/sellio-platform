@@ -22,7 +22,13 @@ function dispatch(name: string, detail: unknown): void {
 }
 
 function doSubscribeConvo(conversationId: number): void {
-  if (!echo || subscribedConvoId === conversationId) return;
+  if (!echo) return;
+
+  if (subscribedConvoId !== null && subscribedConvoId !== conversationId) {
+    echo.leave(`chat.${subscribedConvoId}`);
+  }
+
+  echo.leave(`chat.${conversationId}`);
   subscribedConvoId = conversationId;
   const channel = echo.private(`chat.${conversationId}`);
 
@@ -70,7 +76,8 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
 
   echo.connector.pusher.connection.bind('connected', () => {
     console.log('[Echo] Pusher connected ✓');
-    // Restore any pending conversation subscription on every connect / reconnect.
+    // Force a fresh subscription after connect / reconnect (listeners are lost on disconnect).
+    subscribedConvoId = null;
     if (activeConvoId !== null) {
       console.log(`[Echo] Re-subscribing to chat.${activeConvoId}`);
       doSubscribeConvo(activeConvoId);
