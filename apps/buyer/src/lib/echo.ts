@@ -8,7 +8,7 @@ declare global {
 let echo: Echo<'pusher'> | null = null;
 
 function authEndpoint(apiBase: string): string {
-  return apiBase.replace(/\/api\/?$/, '') + '/broadcasting/auth';
+  return apiBase.replace(/\/$/, '') + '/broadcasting/auth';
 }
 
 function dispatch(name: string, detail: unknown): void {

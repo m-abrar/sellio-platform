@@ -93,7 +93,6 @@ class MessageController extends Controller
         // 3. Handle real-time broadcasting
         $recipient = $conversation->partner;
         if ($recipient) {
-            event(new NewMessageSent($message, $recipient));
             broadcast(new NewMessageSent($message, $recipient))->toOthers();
         }
 

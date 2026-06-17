@@ -482,3 +482,12 @@ Also fix the bug why the user has to manually move the scrollbar for new message
 This is for both the seller and buyer panels.
 
 ------------------------
+
+on the buyer dashboard, unless the messages sidebar is loaded, show loading for inbox as well.
+
+------------------
+
+in the seller panel
+messages inbox divides too much space with the relevant listing, can you solve this UIUX issue?
+
+-----------------------

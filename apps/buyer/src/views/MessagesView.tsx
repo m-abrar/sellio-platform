@@ -144,7 +144,7 @@ export default function MessagesView() {
       if (msg?.conversation_id === activeConvoIdRef.current) {
         setMessages((prev) => {
           if (prev.some((m) => m.id === msg.id)) return prev;
-          return [...prev, msg];
+          return [...prev, { ...msg, content: msg.content ?? msg.body }];
         });
       }
     };
@@ -195,10 +195,27 @@ export default function MessagesView() {
   };
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    if (!scrollRef.current) return;
+    const el = scrollRef.current;
+    requestAnimationFrame(() => { el.scrollTop = el.scrollHeight; });
   }, [messages]);
+
+  // Polling fallback — catches messages if WebSocket auth fails
+  useEffect(() => {
+    if (!activeConvo?.id) return;
+    const convoId = activeConvo.id;
+    const interval = setInterval(async () => {
+      try {
+        const fresh = await fetchMessages(convoId);
+        setMessages((prev) => {
+          const existingIds = new Set(prev.map((m) => String(m.id)));
+          const incoming = fresh.filter((m) => !existingIds.has(String(m.id)));
+          return incoming.length > 0 ? [...prev, ...incoming] : prev;
+        });
+      } catch { /* ignore polling errors */ }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [activeConvo?.id]);
 
   const loadMessages = async (conversationId = activeConvo?.id) => {
     if (!conversationId) return;
@@ -221,11 +238,16 @@ export default function MessagesView() {
     const content = newMessage;
     setNewMessage('');
 
+    const tempId = `temp-${Date.now()}`;
+    setMessages((cur) => [...cur, { id: tempId, sender_id: user?.id, content, created_at: new Date().toISOString() }]);
+
     try {
       const sent = await sendMessage(content, activeConvo.id);
-      setMessages((current) => [...current, sent]);
+      setMessages((cur) => cur.map((m) => m.id === tempId ? sent : m));
     } catch (error) {
       console.error(error);
+      setNewMessage(content);
+      setMessages((cur) => cur.filter((m) => m.id !== tempId));
     }
   };
 
@@ -592,11 +614,12 @@ export default function MessagesView() {
                       </AnimatePresence>
                     </div>
 
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
-                      placeholder="Type a premium message..."
+                      onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void handleSend(e); } }}
+                      placeholder="Type a message…"
                       className="flex-1 bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]/20 focus:border-[var(--primary-color)] transition-all shadow-2xs placeholder-zinc-400"
                     />
                     

@@ -100,9 +100,8 @@ class MessageController extends Controller
 
         $conversation->touch(); 
 
-        $recipient = $conversation->user; 
+        $recipient = $conversation->user;
         if ($recipient) {
-            event(new NewMessageSent($message, $recipient));
             broadcast(new NewMessageSent($message, $recipient))->toOthers();
         }
 

@@ -44,6 +44,7 @@ export default function MessagesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const selectedIdRef = useRef<number | null>(null);
+  const threadScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -120,25 +121,64 @@ export default function MessagesPage() {
     };
   }, [selectedId]);
 
+  useEffect(() => {
+    if (!threadScrollRef.current) return;
+    const el = threadScrollRef.current;
+    requestAnimationFrame(() => { el.scrollTop = el.scrollHeight; });
+  }, [threadMessages]);
+
+  // Polling fallback — catches messages if WebSocket auth fails
+  useEffect(() => {
+    if (!selectedId) return;
+    const id = selectedId;
+    const interval = setInterval(async () => {
+      try {
+        const response = await getConversationThread(id);
+        setThreadMessages((prev: any[]) => {
+          const prevRealIds = new Set(
+            prev.filter((m: any) => !String(m.id).startsWith('temp-')).map((m: any) => m.id)
+          );
+          const hasNew = response.data.messages.some((m: any) => !prevRealIds.has(m.id));
+          if (!hasNew) return prev;
+          // Replace with fresh server state; re-append any still-pending temp messages
+          const temps = prev.filter((m: any) => String(m.id).startsWith('temp-'));
+          return [...response.data.messages, ...temps];
+        });
+      } catch { /* ignore polling errors */ }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [selectedId]);
+
   const selectedMessage = messages.find((message) => message.id === selectedId);
 
   const handleSend = async () => {
-    if (!selectedId || !draft.trim()) {
-      return;
-    }
+    if (!selectedId || !draft.trim()) return;
+
+    const content = draft.trim();
+    setDraft('');
+
+    const tempId = `temp-${Date.now()}`;
+    setThreadMessages((prev) => [...prev, { id: tempId, isMine: true, body: content, createdAt: new Date().toISOString() }]);
 
     setIsSending(true);
     try {
-      await sendMessage(selectedId, draft.trim());
-      setDraft('');
-      const response = await getConversationThread(selectedId);
-      setThreadMessages(response.data.messages);
-      toast.success('Message sent.');
+      await sendMessage(selectedId, content);
+      // Remove temp — polling will bring in the real message within 3 s
+      setThreadMessages((prev) => prev.filter((m: any) => m.id !== tempId));
     } catch (error) {
       console.error('Failed to send message', error);
       toast.error('Failed to send message.');
+      setDraft(content);
+      setThreadMessages((prev) => prev.filter((m: any) => m.id !== tempId));
     } finally {
       setIsSending(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      void handleSend();
     }
   };
 
@@ -229,7 +269,7 @@ export default function MessagesPage() {
                     </button>
                   </div>
 
-                  <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+                  <div ref={threadScrollRef} className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
                     {threadMessages.length === 0 ? (
                       <div className="flex flex-col items-center justify-center h-full text-slate-400 text-sm font-bold">
                         No messages in this thread yet.
@@ -280,14 +320,15 @@ export default function MessagesPage() {
                   <div className="p-6 bg-white border-t border-slate-50">
                     <div className="relative">
                       <textarea
-                        placeholder="Type your message here..."
+                        placeholder="Type your message here… (Enter to send, Shift+Enter for new line)"
                         rows={1}
                         value={draft}
                         onChange={(event) => setDraft(event.target.value)}
+                        onKeyDown={handleKeyDown}
                         className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 pr-16 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#6610f2]/20 transition-all resize-none"
                       />
                       <button
-                        onClick={handleSend}
+                        onClick={() => void handleSend()}
                         disabled={isSending || !draft.trim()}
                         className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#6610f2] text-white rounded-xl flex items-center justify-center shadow-lg shadow-purple-200 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
                       >
