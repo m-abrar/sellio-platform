@@ -149,6 +149,8 @@ Route::prefix('messages')->group(function () {
     Route::get('/', [MessageController::class, 'index']);
     Route::get('{conversationId}', [MessageController::class, 'show']);
     Route::post('{conversationId}', [MessageController::class, 'sendMessage']);
+    Route::patch('{conversationId}/read', [MessageController::class, 'markRead']);
+    Route::post('{conversationId}/typing', [MessageController::class, 'typing']);
 });
 
 // Media (Spatie Integration)

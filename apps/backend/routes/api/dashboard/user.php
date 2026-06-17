@@ -83,6 +83,8 @@ Route::group([], function () {
     Route::prefix('messages')->name('messages.')->group(function () {
         Route::get('{conversationId?}', [MessageController::class, 'index'])->name('index');
         Route::post('{conversationId}', [MessageController::class, 'sendMessage'])->name('send');
+        Route::patch('{conversationId}/read', [MessageController::class, 'markRead'])->name('read');
+        Route::post('{conversationId}/typing', [MessageController::class, 'typing'])->name('typing');
     });
 
     /**

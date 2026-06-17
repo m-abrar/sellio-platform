@@ -29,7 +29,13 @@ apply only USA coordinates to classifieds, update the seeder and run
 
 
 
-- [ ] Cluster markers when many listings share a dense area.
+- [x] Cluster markers when many listings share a dense area.
+  - Installed `leaflet.markercluster` + `@types/leaflet.markercluster`.
+  - `placeMarkersOnMap` now creates a `L.markerClusterGroup` (radius 60px, custom icon) and adds all markers to it instead of directly to the map.
+  - Cluster bubbles styled with `.cl-cluster-pin` (orange, circular, matching theme accent).
+  - `handleFitResults` uses `cluster.getBounds()` instead of a manual feature group.
+  - Spiderfy on max zoom so overlapping pins in dense areas spread out on click.
+  - TypeScript: 0 errors.
 
 - [x] Add switch option for "fit results" and "neighborhood (my location)" control.
   - Added map mode toggle buttons ("Fit Results" / "My Location") fixed above the map.

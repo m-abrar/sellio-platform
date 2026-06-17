@@ -33,5 +33,13 @@
   - Manual prev/next/dot/thumbnail clicks also pause auto-rotate.
   - TypeScript clean, no errors.
 
-- [ ] Redesign hero section for events_corporate theme to make it attractive and high-converting. Current version is too basic.
-  - (Deferred — existing dark gradient hero with background image, eyebrow, large heading, CTA buttons, and live stats section is already production-quality. Copy now clean.)
+- [x] Redesign hero section for events_corporate theme to make it attractive and high-converting. Current version is too basic.
+  - Replaced centered single-column hero with a two-column split layout (text left, featured event card right).
+  - Added pill eyebrow badge with pulsing green live-dot animation.
+  - Heading highlight word uses a blue→purple CSS gradient.
+  - Social proof row: overlapping speaker avatar stack + "5,000+ delegates" copy.
+  - Right column: glassmorphism featured event card — image, date, title, location, Register CTA — populated from live API data (first event) with static fallback.
+  - Stats bar left-aligned below the grid instead of centered in the headline area.
+  - Background gradient refined (135° angle, richer dark-blue layering with noise overlay).
+  - Mobile: right card hidden, buttons stack full-width.
+  - TypeScript: 0 errors.

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Events\MessageRead;
 use App\Events\NewMessageSent;
+use App\Events\UserTyping;
 use App\Http\Requests\SendMessageRequest;
 use App\Models\Conversation;
 use App\Models\Message;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -56,12 +58,21 @@ class MessageController extends Controller
             ->orderBy('created_at', 'asc')
             ->get(); 
         
-        // You would typically mark messages sent by the client as 'read' here.
+        // Mark unread messages from the other party as read on open.
+        $unread = $activeConversation->messages()
+            ->where('sender_id', '!=', $partner->id)
+            ->whereNull('read_at')
+            ->get();
+
+        foreach ($unread as $msg) {
+            $msg->update(['read_at' => now()]);
+            broadcast(new MessageRead($msg))->toOthers();
+        }
 
         return $this->successResponse([
             'activeConversation' => $activeConversation,
             'messages'           => $messages,
-            'user'               => $partner, 
+            'user'               => $partner,
         ]);
     }
 
@@ -96,5 +107,37 @@ class MessageController extends Controller
         }
 
         return $this->successResponse($message->fresh(), __('Message sent successfully.'), 201);
+    }
+
+    public function markRead(int $conversationId)
+    {
+        $partner = Auth::user();
+
+        $conversation = Conversation::forUser($partner->id)
+            ->where('id', $conversationId)
+            ->firstOrFail();
+
+        $unread = $conversation->messages()
+            ->where('sender_id', '!=', $partner->id)
+            ->whereNull('read_at')
+            ->get();
+
+        foreach ($unread as $msg) {
+            $msg->update(['read_at' => now()]);
+            broadcast(new MessageRead($msg))->toOthers();
+        }
+
+        return $this->successResponse(['marked' => $unread->count()]);
+    }
+
+    public function typing(int $conversationId): JsonResponse
+    {
+        $partner = Auth::user();
+
+        Conversation::forUser($partner->id)->where('id', $conversationId)->firstOrFail();
+
+        broadcast(new UserTyping($conversationId, $partner->id, $partner->name))->toOthers();
+
+        return $this->successResponse([]);
     }
 }

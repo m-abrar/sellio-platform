@@ -382,10 +382,12 @@ export type VerticalDetail = {
   actionLabel: string;
   actionHref: string;
   product?: Product;
+  property?: Property;
   vehicle?: Vehicle;
   job?: JobListing;
   service?: ServiceListing;
   classified?: ClassifiedListing;
+  event?: EventListing;
 };
 
 export const VERTICAL_LABELS: Record<Vertical, string> = {
@@ -450,6 +452,7 @@ function propertyToDetail(property: Property): VerticalDetail {
     ],
     actionLabel: 'Browse properties',
     actionHref: '/explore?vertical=properties',
+    property,
   };
 }
 
@@ -549,6 +552,7 @@ function eventToDetail(event: EventListing): VerticalDetail {
     ],
     actionLabel: 'Browse events',
     actionHref: '/explore?vertical=events',
+    event,
   };
 }
 

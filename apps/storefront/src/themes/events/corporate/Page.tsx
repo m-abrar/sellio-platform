@@ -103,47 +103,99 @@ export default function Page() {
   return (
     <div>
       <section className="ec-hero" aria-labelledby="ecc-hero-title">
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <div className="ecc-mono" style={{ marginBottom: '2rem' }}>{heroEyebrow}</div>
-          <h1 className="ecc-heading-xl" id="ecc-hero-title" style={{ marginBottom: '2rem' }}>
-            {heroTitle.split(heroHighlight).map((part, index, parts) => (
-              <React.Fragment key={`${part}-${index}`}>
-                {part}
-                {index < parts.length - 1 && <span style={{ color: '#60b3ff' }}>{heroHighlight}</span>}
-              </React.Fragment>
-            ))}
-          </h1>
-          <p style={{ fontSize: 'clamp(1.05rem, 2vw, 1.35rem)', lineHeight: 1.7, maxWidth: '660px', margin: '0 auto 3.5rem' }}>
-            The world&apos;s leading platform for corporate summits, technical conferences, and executive forums. Register, connect, and build the future.
-          </p>
-
-          <div style={{ display: 'flex', gap: '1.25rem', justifyContent: 'center', flexWrap: 'wrap' }} className="ecc-hero-buttons">
-            <Link href={themeLink('/explore')} className="ec-btn-primary" id="ecc-btn-explore" style={{ textDecoration: 'none' }}>
-              {heroPrimaryCta}
-            </Link>
-            <button
-              type="button"
-              className="ec-btn-outline"
-              id="ecc-btn-schedule"
-              onClick={() => document.getElementById('ecc-agenda-section')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              {heroSecondaryCta}
-            </button>
+        <div className="ecc-hero-inner">
+          {/* Left: headline + CTAs + social proof */}
+          <div className="ecc-hero-left">
+            <div className="ecc-eyebrow-badge">
+              <span className="ecc-eyebrow-dot" aria-hidden="true" />
+              {heroEyebrow}
+            </div>
+            <h1 className="ecc-heading-xl" id="ecc-hero-title">
+              {heroTitle.split(heroHighlight).map((part, index, parts) => (
+                <React.Fragment key={`${part}-${index}`}>
+                  {part}
+                  {index < parts.length - 1 && <span className="ecc-hero-highlight">{heroHighlight}</span>}
+                </React.Fragment>
+              ))}
+            </h1>
+            <p className="ecc-hero-desc">
+              The world&apos;s leading platform for corporate summits, technical conferences, and executive forums. Register, connect, and build the future.
+            </p>
+            <div className="ecc-hero-buttons">
+              <Link href={themeLink('/explore')} className="ec-btn-primary" id="ecc-btn-explore" style={{ textDecoration: 'none' }}>
+                {heroPrimaryCta}
+              </Link>
+              <button
+                type="button"
+                className="ec-btn-outline"
+                id="ecc-btn-schedule"
+                onClick={() => document.getElementById('ecc-agenda-section')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                {heroSecondaryCta}
+              </button>
+            </div>
+            <div className="ecc-hero-social-proof">
+              <div className="ecc-avatar-stack" aria-hidden="true">
+                {speakers.map((s, i) => (
+                  <img key={s.name} src={s.image} alt="" className="ecc-avatar-stack-img" style={{ zIndex: speakers.length - i }} />
+                ))}
+              </div>
+              <span className="ecc-social-proof-label">
+                <strong>5,000+</strong> delegates registered this season
+              </span>
+            </div>
           </div>
 
-          <div className="ecc-hero-stats">
-            <div className="ecc-hero-stat">
-              <span className="ecc-hero-stat-value">{inventoryCount}</span>
-              <span className="ecc-hero-stat-label">Live Events</span>
+          {/* Right: featured event card */}
+          <div className="ecc-hero-right" aria-hidden={events.length === 0 ? 'true' : undefined}>
+            <div className="ecc-featured-card">
+              <div className="ecc-featured-badge">FEATURED EVENT</div>
+              <div className="ecc-featured-img-wrap">
+                <img
+                  src={events[0]?.media?.poster || '/themes/events/corporate/2.webp'}
+                  alt={events[0]?.title || 'Featured event'}
+                  className="ecc-featured-img"
+                />
+              </div>
+              <div className="ecc-featured-body">
+                <div className="ecc-featured-date">
+                  {events[0]?.schedule?.start_at
+                    ? new Date(events[0].schedule.start_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                    : 'Sep 15–17, 2026'}
+                </div>
+                <h3 className="ecc-featured-title">
+                  {events[0]?.title || 'Global Engineering Summit'}
+                </h3>
+                <p className="ecc-featured-location">
+                  {events[0]?.location?.city
+                    ? `${events[0].location.city}${events[0].location.country ? `, ${events[0].location.country}` : ''}`
+                    : 'San Francisco, CA'}
+                </p>
+                <Link
+                  href={events[0]?.slug ? themeLink(`/product/${events[0].slug}`) : themeLink('/explore')}
+                  className="ecc-featured-cta"
+                  style={{ textDecoration: 'none' }}
+                >
+                  Register Now →
+                </Link>
+              </div>
             </div>
-            <div className="ecc-hero-stat">
-              <span className="ecc-hero-stat-value">{categories.length || '—'}</span>
-              <span className="ecc-hero-stat-label">Categories</span>
-            </div>
-            <div className="ecc-hero-stat">
-              <span className="ecc-hero-stat-value">{locations.length || '—'}</span>
-              <span className="ecc-hero-stat-label">Cities</span>
-            </div>
+          </div>
+        </div>
+
+        {/* Stats bar */}
+        <div className="ecc-hero-stats">
+          <div className="ecc-hero-stat">
+            <span className="ecc-hero-stat-value">{inventoryCount}</span>
+            <span className="ecc-hero-stat-label">Live Events</span>
+          </div>
+          <div className="ecc-hero-stat">
+            <span className="ecc-hero-stat-value">{categories.length || '—'}</span>
+            <span className="ecc-hero-stat-label">Categories</span>
+          </div>
+          <div className="ecc-hero-stat">
+            <span className="ecc-hero-stat-value">{locations.length || '—'}</span>
+            <span className="ecc-hero-stat-label">Cities</span>
           </div>
         </div>
       </section>

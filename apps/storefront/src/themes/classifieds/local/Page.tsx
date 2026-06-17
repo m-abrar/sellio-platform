@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
 import type { ClassifiedListing } from '@sellio/types';
 import { LocalHeader, LocalCard, PinIcon } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
@@ -43,38 +44,61 @@ function buildMarkerIcon(L: any, item: LocalCardItem, active: boolean) {
 
 type MarkerEntry = { marker: any; item: LocalCardItem };
 
-function placeMarkersOnMap(
+async function placeMarkersOnMap(
   L: any,
   map: any,
   items: LocalCardItem[],
   idToMarkerRef: React.MutableRefObject<Map<number, MarkerEntry>>,
+  clusterGroupRef: React.MutableRefObject<any>,
   onPinClickRef: React.MutableRefObject<(id: number) => void>,
   fitBounds = true,
 ) {
-  idToMarkerRef.current.forEach(({ marker }) => marker.remove());
+  // Remove existing cluster group; individual markers live inside it so no need to remove separately
+  if (clusterGroupRef.current) {
+    clusterGroupRef.current.remove();
+    clusterGroupRef.current = null;
+  }
   idToMarkerRef.current = new Map();
+
+  await import('leaflet.markercluster');
+
+  const cluster = (L as any).markerClusterGroup({
+    maxClusterRadius: 60,
+    showCoverageOnHover: false,
+    spiderfyOnMaxZoom: true,
+    iconCreateFunction: (c: any) => {
+      const count = c.getChildCount();
+      return L.divIcon({
+        className: '',
+        html: `<div class="cl-cluster-pin">${count}</div>`,
+        iconSize: null,
+        iconAnchor: [20, 20],
+      });
+    },
+  });
 
   const withCoords = items.filter((i) => i.lat != null && i.lng != null);
 
   withCoords.forEach((item) => {
     const marker = L.marker([item.lat!, item.lng!], { icon: buildMarkerIcon(L, item, false) })
-      .addTo(map)
       .on('click', () => onPinClickRef.current(item.id));
     marker.bindTooltip(item.title, {
       direction: 'top',
       offset: [0, -22],
       className: 'cl-map-tooltip',
     });
+    cluster.addLayer(marker);
     idToMarkerRef.current.set(item.id, { marker, item });
   });
 
-  if (fitBounds) {
+  cluster.addTo(map);
+  clusterGroupRef.current = cluster;
+
+  if (fitBounds && withCoords.length > 0) {
     if (withCoords.length === 1) {
       map.setView([withCoords[0].lat!, withCoords[0].lng!], 13);
-    } else if (withCoords.length > 1) {
-      const layers = Array.from(idToMarkerRef.current.values()).map((e) => e.marker);
-      const group = L.featureGroup(layers);
-      map.fitBounds(group.getBounds(), { padding: [50, 50] });
+    } else {
+      map.fitBounds(cluster.getBounds(), { padding: [50, 50] });
     }
   }
 }
@@ -122,6 +146,7 @@ export default function Page() {
   // Leaflet refs
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
+  const clusterGroupRef = useRef<any>(null);
   const idToMarkerRef = useRef<Map<number, MarkerEntry>>(new Map());
   const userMarkerRef = useRef<any>(null);
   const filteredItemsRef = useRef<LocalCardItem[]>([]);
@@ -219,14 +244,10 @@ export default function Page() {
     geoActiveRef.current = false; // cancel any in-flight geo request
     setLocating(false);
     setMapMode('fit');
-    if (!mapRef.current) return;
-    import('leaflet').then(({ default: L }) => {
-      const map = mapRef.current;
-      if (!map || idToMarkerRef.current.size === 0) return;
-      const layers = Array.from(idToMarkerRef.current.values()).map((e) => e.marker);
-      const group = L.featureGroup(layers);
-      map.fitBounds(group.getBounds(), { padding: [50, 50] });
-    });
+    const map = mapRef.current;
+    const cluster = clusterGroupRef.current;
+    if (!map || !cluster) return;
+    map.fitBounds(cluster.getBounds(), { padding: [50, 50] });
   };
 
   const handleMyLocation = () => {
@@ -288,7 +309,7 @@ export default function Page() {
     const el = mapContainerRef.current;
     let cancelled = false;
 
-    import('leaflet').then(({ default: L }) => {
+    import('leaflet').then(async ({ default: L }) => {
       if (cancelled || mapRef.current) return;
       const map = L.map(el, { zoomControl: false, center: [20, 0], zoom: 2 });
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -297,12 +318,13 @@ export default function Page() {
       }).addTo(map);
       L.control.zoom({ position: 'topright' }).addTo(map);
       mapRef.current = map;
-      placeMarkersOnMap(L, map, filteredItemsRef.current, idToMarkerRef, onPinClickRef, true);
+      await placeMarkersOnMap(L, map, filteredItemsRef.current, idToMarkerRef, clusterGroupRef, onPinClickRef, true);
     });
 
     return () => {
       cancelled = true;
       if (userMarkerRef.current) { userMarkerRef.current.remove(); userMarkerRef.current = null; }
+      if (clusterGroupRef.current) { clusterGroupRef.current.remove(); clusterGroupRef.current = null; }
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -310,9 +332,9 @@ export default function Page() {
   // Re-place markers when filtered set changes; only re-fit if in 'fit' mode
   useEffect(() => {
     if (!mapRef.current) return;
-    import('leaflet').then(({ default: L }) => {
+    import('leaflet').then(async ({ default: L }) => {
       if (mapRef.current) {
-        placeMarkersOnMap(L, mapRef.current, filteredItems, idToMarkerRef, onPinClickRef, mapModeRef.current === 'fit');
+        await placeMarkersOnMap(L, mapRef.current, filteredItems, idToMarkerRef, clusterGroupRef, onPinClickRef, mapModeRef.current === 'fit');
       }
     });
   }, [filteredItems]);

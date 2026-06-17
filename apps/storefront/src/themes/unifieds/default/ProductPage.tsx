@@ -5,7 +5,9 @@ import { addProductToCart } from '@/themes/unifieds/shared/cart';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 import {
   ClassifiedInquiryForm,
+  EventBookingForm,
   JobApplyForm,
+  PropertyBookingForm,
   ServiceConsultationForm,
   VehicleInquiryForm,
 } from './InteractionForms';
@@ -166,6 +168,8 @@ export default function ProductPage({ slug, vertical = 'products' }: ProductPage
                   </p>
                 ) : null}
               </>
+            ) : detail.property ? (
+              <PropertyBookingForm property={detail.property} themeLink={themeLink} />
             ) : detail.job ? (
               <JobApplyForm job={detail.job} themeLink={themeLink} />
             ) : detail.vehicle ? (
@@ -174,6 +178,8 @@ export default function ProductPage({ slug, vertical = 'products' }: ProductPage
               <ServiceConsultationForm service={detail.service} themeLink={themeLink} />
             ) : detail.classified ? (
               <ClassifiedInquiryForm classified={detail.classified} themeLink={themeLink} />
+            ) : detail.event ? (
+              <EventBookingForm event={detail.event} themeLink={themeLink} />
             ) : (
               <a href={themeLink(detail.actionHref)} className="core-btn-primary ud-detail-action">
                 {detail.actionLabel}

@@ -6,38 +6,37 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\Payment;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PaymentFailed
+class PaymentFailed implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    
-    public $user;
-    public $plan;
-    public $payment;
-    public $errorMessage;
 
-    /**
-     * Create a new event instance.
-     */
-    public function __construct(User $user, Plan $plan, ?Payment $payment = null, ?string $errorMessage = null)
-    {
-        $this->user = $user;
-        $this->plan = $plan;
-        $this->payment = $payment;
-        $this->errorMessage = $errorMessage;
-    }
+    public function __construct(
+        public User $user,
+        public Plan $plan,
+        public ?Payment $payment = null,
+        public ?string $errorMessage = null,
+    ) {}
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
     public function broadcastOn(): array
     {
+        return [new PrivateChannel('App.Models.User.' . $this->user->id)];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'PaymentFailed';
+    }
+
+    public function broadcastWith(): array
+    {
         return [
-            //
+            'plan'          => $this->plan->name ?? null,
+            'error_message' => $this->errorMessage,
         ];
     }
 }

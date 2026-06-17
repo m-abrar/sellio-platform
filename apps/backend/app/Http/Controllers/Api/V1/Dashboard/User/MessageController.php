@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api\V1\Dashboard\User;
 
+use App\Events\MessageRead;
 use App\Events\NewMessageSent;
+use App\Events\UserTyping;
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SendMessageRequest;
-use Illuminate\View\View;
 
 /**
  * Class MessageController
@@ -103,5 +103,37 @@ class MessageController extends Controller
         return $this->successResponse([
             'message' => $message->load('sender'),
         ], 'Message sent successfully.');
+    }
+
+    public function markRead(int $conversationId): JsonResponse
+    {
+        $user = Auth::user();
+
+        $conversation = Conversation::forUser($user->id)
+            ->where('id', $conversationId)
+            ->firstOrFail();
+
+        $unread = $conversation->messages()
+            ->where('sender_id', '!=', $user->id)
+            ->whereNull('read_at')
+            ->get();
+
+        foreach ($unread as $msg) {
+            $msg->update(['read_at' => now()]);
+            broadcast(new MessageRead($msg))->toOthers();
+        }
+
+        return $this->successResponse(['marked' => $unread->count()]);
+    }
+
+    public function typing(int $conversationId): JsonResponse
+    {
+        $user = Auth::user();
+
+        Conversation::forUser($user->id)->where('id', $conversationId)->firstOrFail();
+
+        broadcast(new UserTyping($conversationId, $user->id, $user->name))->toOthers();
+
+        return $this->successResponse([]);
     }
 }

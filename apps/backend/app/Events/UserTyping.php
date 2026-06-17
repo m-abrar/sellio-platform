@@ -7,33 +7,33 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Database\Eloquent\Model;
 
-class ListingApproved implements ShouldBroadcast
+class UserTyping implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public Model $listing) {}
+    public function __construct(
+        public readonly int $conversationId,
+        public readonly int $userId,
+        public readonly string $userName,
+    ) {}
 
     public function broadcastOn(): array
     {
-        $ownerId = $this->listing->user_id ?? null;
-        if (!$ownerId) {
-            return [];
-        }
-        return [new PrivateChannel('App.Models.User.' . $ownerId)];
+        return [new PrivateChannel('chat.' . $this->conversationId)];
     }
 
     public function broadcastAs(): string
     {
-        return 'ListingApproved';
+        return 'UserTyping';
     }
 
     public function broadcastWith(): array
     {
         return [
-            'listing_id'    => $this->listing->id,
-            'listing_title' => $this->listing->title ?? null,
+            'conversation_id' => $this->conversationId,
+            'user_id'         => $this->userId,
+            'user_name'       => $this->userName,
         ];
     }
 }

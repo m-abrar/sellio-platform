@@ -68,6 +68,10 @@ const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, st
     CheckoutPage: 'unifieds/minimal',
     CheckoutConfirmationPage: 'unifieds/minimal',
     CheckoutConfirmPage: 'unifieds/minimal',
+    BookingReservePage: 'unifieds/default',
+    BookingPage: 'unifieds/default',
+    BookingConfirmationPage: 'unifieds/minimal',
+    BookingConfirmPage: 'unifieds/minimal',
   },
 };
 

@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Events;
+
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+use App\Models\Message;
+
+class MessageRead implements ShouldBroadcast
+{
+    use Dispatchable, SerializesModels;
+
+    public function __construct(public readonly Message $message) {}
+
+    public function broadcastOn(): array
+    {
+        return [
+            new PrivateChannel('chat.' . $this->message->conversation_id),
+        ];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'MessageRead';
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'id'              => $this->message->id,
+            'conversation_id' => $this->message->conversation_id,
+            'read_at'         => $this->message->read_at,
+        ];
+    }
+}

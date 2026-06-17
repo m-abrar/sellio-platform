@@ -434,6 +434,29 @@
     transform: scale(1.1);
 }
 
+/* Cluster bubble — groups nearby pins when zoomed out */
+.cl-cluster-pin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--cl-accent);
+    color: #ffffff;
+    font-family: var(--cl-font);
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 3px solid #ffffff;
+    box-shadow: 0 2px 10px rgba(249, 115, 22, 0.4);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.cl-cluster-pin:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(249, 115, 22, 0.55);
+}
+
 /* Leaflet tooltip */
 .cl-map-tooltip {
     background: rgba(15, 23, 42, 0.9);

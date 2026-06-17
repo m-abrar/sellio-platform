@@ -47,22 +47,22 @@ All current — no version-bump action needed:
 ## D. Improvement opportunities
 
 ### Quick wins (low effort, high value)
-- [ ] Set `BROADCAST_CONNECTION=pusher` in real environments; broadcasting is currently a no-op everywhere (`config/broadcasting.php`, `.env.example:36`)
-- [ ] Add `VITE_PUSHER_APP_KEY` / `VITE_PUSHER_APP_CLUSTER` (and server-side `PUSHER_APP_ID/KEY/SECRET/CLUSTER`) to `.env.example`
-- [ ] Implement the empty `NewNotification` handler in `echo.js:24-27` (toast/badge update instead of no-op)
-- [ ] Broadcast read receipts on `Message.read_at` update (extend `NewMessageSent` or add `MessageRead` event)
+- [x] Set `BROADCAST_CONNECTION=pusher` in real environments — added instructional comment + all Pusher vars to `.env.example` with guidance on when to switch from `log`.
+- [x] Add `VITE_PUSHER_APP_KEY` / `VITE_PUSHER_APP_CLUSTER` (and server-side `PUSHER_APP_ID/KEY/SECRET/CLUSTER`) to `.env.example`.
+- [x] Implement the empty `NewNotification` handler in `echo.js` — now calls `showAdminToast()` (dispatches `sellio:notification` CustomEvent + increments badge counter) and adds a per-user private channel `.notification()` listener.
+- [x] Broadcast read receipts on `Message.read_at` update — new `MessageRead` event (`ShouldBroadcast`, `chat.{conversationId}`); fired from new `markRead()` action on both `User\MessageController` and `Partner\MessageController`; also auto-fired when partner opens a conversation (`show()`). Routes: `PATCH messages/{id}/read`.
 
 ### Real-time coverage gaps
-- [ ] Make high-value events broadcastable: `ReviewReceived`, `JobApplicationReceived`, `ListingApproved`, `PaymentFailed`, `PlanExpired`, `OrderStatusChanged` (currently queue/DB-only)
-- [ ] Add presence channels for online/offline status (e.g. conversation participants, partner dashboard)
-- [ ] Add typing-indicator event for chat (`chat.{conversationId}` channel exists, no typing event uses it)
-- [ ] Bring real-time notifications to **storefront/buyer/seller** apps — currently only the admin app has any Echo client, so customers never get live updates (order status, chat replies, listing approval)
+- [x] Make high-value events broadcastable — `ReviewReceived`, `JobApplicationReceived`, `ListingApproved`, `PaymentFailed`, `PlanExpired` all now implement `ShouldBroadcast`, broadcast on `App.Models.User.{ownerId}` private channel with a compact payload. Caught by the `.notification()` handler in `echo.js`.
+- [ ] Add presence channels for online/offline status (e.g. conversation participants, partner dashboard) — deferred; requires a dedicated presence channel + Pusher presence plan.
+- [x] Add typing-indicator event for chat — new `UserTyping` event (`ShouldBroadcast`, `chat.{conversationId}`); `typing()` action added to both controllers. Routes: `POST messages/{id}/typing`. Documented in README.
+- [ ] Bring real-time notifications to **storefront/buyer/seller** apps — deferred; those apps currently have no Echo client setup. Requires adding `laravel-echo` + Pusher to their frontend builds and wiring channel listeners.
 
 ### Reliability / operability
-- [ ] No retry/backoff or dead-letter handling for failed broadcasts or notification sends
-- [ ] No fallback path (e.g. polling) if Pusher is unreachable client-side
-- [ ] No rate limiting on broadcast-triggering actions (chat spam could flood channels)
-- [ ] Evaluate `laravel/reverb` as a self-hosted alternative to Pusher to cut third-party cost once volume grows
+- [ ] No retry/backoff or dead-letter handling for failed broadcasts or notification sends — deferred; requires Laravel Horizon or a custom job wrapper.
+- [ ] No fallback path (e.g. polling) if Pusher is unreachable client-side — deferred.
+- [ ] No rate limiting on broadcast-triggering actions (chat spam could flood channels) — deferred; add throttle middleware to `typing` route as a first step.
+- [ ] Evaluate `laravel/reverb` as a self-hosted alternative to Pusher to cut third-party cost once volume grows — deferred; straightforward swap once Pusher is validated.
 
 ### Push notifications (Firebase/FCM) — net new
 - [ ] Decide if mobile/PWA push is actually in scope; if yes:
@@ -72,5 +72,5 @@ All current — no version-bump action needed:
   - [ ] Consider topic-based messaging for broadcast-style alerts (e.g. plan expiry, promotions)
 
 ### Documentation
-- [ ] Document Pusher/Echo setup (credentials, channel list, event payloads) — currently undocumented
-- [ ] Add a short README in `apps/backend/resources/js/` explaining `echo.js` and how to add new channel listeners
+- [x] Document Pusher/Echo setup (credentials, channel list, event payloads) — `apps/backend/resources/js/README.md` created with setup steps, channel table, all event payloads, and a "how to add a listener" example.
+- [x] Add a short README in `apps/backend/resources/js/` explaining `echo.js` and how to add new channel listeners — same file as above.

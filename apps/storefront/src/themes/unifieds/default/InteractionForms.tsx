@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { ClassifiedListing, JobListing, ServiceListing, Vehicle } from '@sellio/types';
+import type { ClassifiedListing, EventListing, JobListing, Property, ServiceListing, Vehicle } from '@sellio/types';
+import { redirectToPropertyBookingReserve } from '@/themes/properties/shared/property-booking-utils';
+import { redirectToEventBookingReserve } from '@/themes/events/shared/event-booking-utils';
 import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';
@@ -204,6 +206,111 @@ export function ServiceConsultationForm({ service, themeLink }: ServiceConsultat
       <label>What do you need? (optional)<textarea rows={3} value={form.requirements} onChange={(e) => setForm({ ...form, requirements: e.target.value })} /></label>
       <button type="submit" className="core-btn-primary ud-detail-action" disabled={submitting}>
         {submitting ? 'Sending...' : 'Request consultation'}
+      </button>
+    </form>
+  );
+}
+
+interface PropertyBookingFormProps {
+  property: Property;
+  themeLink: ThemeLink;
+}
+
+export function PropertyBookingForm({ property, themeLink }: PropertyBookingFormProps) {
+  const today = new Date().toISOString().split('T')[0];
+  const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+  const [form, setForm] = useState({ name: '', email: '', checkIn: today, checkOut: tomorrow, guests: '2' });
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!form.name || !form.email || !form.checkIn || !form.checkOut) {
+      setError('Please fill in all required fields.');
+      return;
+    }
+    if (form.checkOut <= form.checkIn) {
+      setError('Check-out must be after check-in.');
+      return;
+    }
+    setError(null);
+    redirectToPropertyBookingReserve(themeLink, {
+      propertyId: property.id,
+      checkIn: form.checkIn,
+      checkOut: form.checkOut,
+      guests: Number(form.guests) || 2,
+      fullName: form.name,
+      email: form.email,
+    });
+  };
+
+  return (
+    <form className="ud-inquiry-form" onSubmit={handleSubmit}>
+      {error && <div className="ud-inquiry-form-error" role="alert">{error}</div>}
+      <label>Full name<input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
+      <label>Email<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
+      <label>Check-in<input required type="date" min={today} value={form.checkIn} onChange={(e) => setForm({ ...form, checkIn: e.target.value })} /></label>
+      <label>Check-out<input required type="date" min={form.checkIn || today} value={form.checkOut} onChange={(e) => setForm({ ...form, checkOut: e.target.value })} /></label>
+      <label>Guests<input required type="number" min="1" max="20" value={form.guests} onChange={(e) => setForm({ ...form, guests: e.target.value })} /></label>
+      <button type="submit" className="core-btn-primary ud-detail-action">
+        Reserve now
+      </button>
+    </form>
+  );
+}
+
+interface EventBookingFormProps {
+  event: EventListing;
+  themeLink: ThemeLink;
+}
+
+export function EventBookingForm({ event, themeLink }: EventBookingFormProps) {
+  const ticketData = event.ticket_data;
+  const firstEntry = ticketData ? Object.entries(ticketData)[0] : null;
+  const firstOccurrenceId = firstEntry ? Number(firstEntry[0]) : null;
+  const firstOccurrence = firstEntry ? firstEntry[1] : null;
+  const firstTicketType = firstOccurrence?.inventory?.[0] ?? null;
+
+  const [form, setForm] = useState({ name: '', email: '', quantity: '1' });
+  const [error, setError] = useState<string | null>(null);
+
+  if (!firstOccurrenceId || !firstTicketType) {
+    return (
+      <a href={themeLink('/explore?vertical=events')} className="core-btn-primary ud-detail-action">
+        Browse events
+      </a>
+    );
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!form.name || !form.email) {
+      setError('Please fill in your name and email.');
+      return;
+    }
+    setError(null);
+    redirectToEventBookingReserve(themeLink, {
+      eventId: event.id,
+      occurrenceId: firstOccurrenceId,
+      ticketTypeId: firstTicketType.id,
+      quantity: Number(form.quantity) || 1,
+      fullName: form.name,
+      email: form.email,
+    });
+  };
+
+  return (
+    <form className="ud-inquiry-form" onSubmit={handleSubmit}>
+      {error && <div className="ud-inquiry-form-error" role="alert">{error}</div>}
+      {firstOccurrence?.start_date_formatted && (
+        <p className="ud-inquiry-form-hint">{firstOccurrence.start_date_formatted}</p>
+      )}
+      <label>Full name<input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
+      <label>Email<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
+      <label>Tickets
+        <input required type="number" min="1" max={firstTicketType.available ?? 10} value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} />
+      </label>
+      <button type="submit" className="core-btn-primary ud-detail-action">
+        Reserve tickets
       </button>
     </form>
   );

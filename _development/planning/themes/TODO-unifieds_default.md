@@ -60,5 +60,13 @@ Scoping discussion confirmed: implement inquiry/apply for jobs, autos, services,
 
 ## Open
 
-- [ ] Properties/events booking: needs a new `BookingReservePage` subpage (date/time picker, payment confirmation) since `unifieds_default` doesn't have one — `buildPropertyBookingReserveUrl`/`buildEventBookingReserveUrl` (in `themes/properties/shared` / `themes/events/shared`) can build the redirect link, but the reserve page itself must still be built per-theme.
+- [x] Properties/events booking: needs a new `BookingReservePage` subpage (date/time picker, payment confirmation).
+  - Added `property?: Property` and `event?: EventListing` fields to `VerticalDetail` in `multiVertical.ts`; `propertyToDetail()` and `eventToDetail()` now populate them.
+  - Added `PropertyBookingForm` to `InteractionForms.tsx`: check-in/check-out date inputs + guests + name/email, redirects to `/booking/reserve?property_id=...`.
+  - Added `EventBookingForm` to `InteractionForms.tsx`: reads `event.ticket_data` for first occurrence + ticket type, shows quantity + name/email, redirects to `/booking/reserve?event_id=...`. Falls back to "Browse events" link when no ticket data is available.
+  - `ProductPage.tsx` now renders `PropertyBookingForm` / `EventBookingForm` instead of the generic "Browse" link for those verticals.
+  - Created `unifieds/default/BookingReservePage.tsx`: detects `event_id` param to delegate to `EventBookingReservePage`, otherwise delegates to `PropertyBookingReservePage`.
+  - Exported `BookingReservePage` from `unifieds/default/index.ts`.
+  - Added `BookingReservePage`, `BookingPage`, `BookingConfirmationPage`, `BookingConfirmPage` to the `unifieds` vertical fallback in `theme-pages.ts`.
+  - TypeScript: 0 errors.
 - [ ] Live chat: no frontend UI and no realtime transport (Pusher/Reverb) wired anywhere in the repo, even though the backend has `Conversation`/`Message` models and a `NewMessageSent` broadcast event. Out of scope until that infra exists — see `TODO-firebase_pusher_survey.md`.
