@@ -5,6 +5,8 @@
 
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { useEchoClient } from './hooks/useEchoClient';
 import DashboardLayout from './components/layout/DashboardLayout';
 import { LayoutProvider } from './context/LayoutContext';
 import PropertiesPage from './pages/properties/PropertiesPage';
@@ -54,6 +56,21 @@ import { resolvePortalBasePath } from './config/portalBase';
 const PORTAL_BASE_PATH = resolvePortalBasePath();
 
 function App() {
+  useEchoClient();
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { title, message, type } = (e as CustomEvent).detail ?? {};
+      const fn = type === 'success' ? toast.success
+               : type === 'error'   ? toast.error
+               : type === 'warning' ? toast.warning
+               : toast.info;
+      fn(title ?? 'Notification', { description: message });
+    };
+    window.addEventListener('sellio:notification', handler);
+    return () => window.removeEventListener('sellio:notification', handler);
+  }, []);
+
   useEffect(() => {
     const loadBrandSettings = async () => {
       try {

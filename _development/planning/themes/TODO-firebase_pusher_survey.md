@@ -56,7 +56,7 @@ All current — no version-bump action needed:
 - [x] Make high-value events broadcastable — `ReviewReceived`, `JobApplicationReceived`, `ListingApproved`, `PaymentFailed`, `PlanExpired` all now implement `ShouldBroadcast`, broadcast on `App.Models.User.{ownerId}` private channel with a compact payload. Caught by the `.notification()` handler in `echo.js`.
 - [ ] Add presence channels for online/offline status (e.g. conversation participants, partner dashboard) — deferred; requires a dedicated presence channel + Pusher presence plan.
 - [x] Add typing-indicator event for chat — new `UserTyping` event (`ShouldBroadcast`, `chat.{conversationId}`); `typing()` action added to both controllers. Routes: `POST messages/{id}/typing`. Documented in README.
-- [ ] Bring real-time notifications to **storefront/buyer/seller** apps — deferred; those apps currently have no Echo client setup. Requires adding `laravel-echo` + Pusher to their frontend builds and wiring channel listeners.
+- [x] Bring real-time notifications to **buyer/seller** apps — `laravel-echo` + `pusher-js` installed in both; `src/lib/echo.ts` singleton + `src/hooks/useEchoClient.ts` hook created in each; wired into `App.tsx`; per-user private channel + chat conversation channels covered; `sellio:notification` / `sellio:new-message` / `sellio:message-read` / `sellio:typing` custom DOM events dispatched; toasts via sonner; `VITE_PUSHER_APP_KEY` / `VITE_PUSHER_APP_CLUSTER` documented in `.env.example`. Storefront (Next.js) deferred — different runtime model.
 
 ### Reliability / operability
 - [ ] No retry/backoff or dead-letter handling for failed broadcasts or notification sends — deferred; requires Laravel Horizon or a custom job wrapper.

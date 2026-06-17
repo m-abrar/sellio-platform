@@ -46,6 +46,8 @@ import NotificationsView from './views/NotificationsView';
 import { fetchNotifications } from './api/notificationApi';
 import { StatsProvider, useStats } from './context/StatsContext';
 import { UserProvider, useUser } from './context/UserContext';
+import { useEchoClient } from './hooks/useEchoClient';
+import { toast } from 'sonner';
 import { getBrandSettings, BrandSettings } from './api/brandApi';
 import { applyBrandToDocumentHead } from './lib/brandHead';
 import SetupReminderBanner from './components/SetupReminderBanner';
@@ -433,6 +435,21 @@ function AppContent() {
   const { isAuthenticated, isLoading } = useUser();
   const { stats, hasLoaded: statsLoaded } = useStats();
   const [brand, setBrand] = useState<BrandSettings | null>(null);
+
+  useEchoClient();
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { title, message, type } = (e as CustomEvent).detail ?? {};
+      const fn = type === 'success' ? toast.success
+               : type === 'error'   ? toast.error
+               : type === 'warning' ? toast.warning
+               : toast.info;
+      fn(title ?? 'Notification', { description: message });
+    };
+    window.addEventListener('sellio:notification', handler);
+    return () => window.removeEventListener('sellio:notification', handler);
+  }, []);
 
   useEffect(() => {
     const loadBrandSettings = async () => {
