@@ -13,10 +13,9 @@ export function useEchoClient(): void {
       return;
     }
 
-    const token = getToken();
-    if (!token) return;
+    if (!getToken()) return;
 
-    connectEcho(user.id, token, API_BASE_URL);
+    connectEcho(user.id, getToken, API_BASE_URL);
 
     return () => { disconnectEcho(); };
   }, [isAuthenticated, user?.id]);

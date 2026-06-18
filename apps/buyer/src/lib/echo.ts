@@ -7,7 +7,6 @@ declare global {
 }
 
 let echo: Echo<'pusher'> | null = null;
-
 let activeConvoId: number | null = null;
 let subscribedConvoId: number | null = null;
 
@@ -19,9 +18,45 @@ function dispatch(name: string, detail: unknown): void {
   window.dispatchEvent(new CustomEvent(name, { detail }));
 }
 
+function buildAuthorizer(getToken: () => string | null, apiBase: string) {
+  return (channel: { name: string }) => ({
+    authorize: (socketId: string, callback: (error: Error | null, authData: { auth: string } | null) => void) => {
+      const token = getToken();
+      if (!token) {
+        callback(new Error('No auth token'), null);
+        return;
+      }
+
+      fetch(authEndpoint(apiBase), {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          socket_id: socketId,
+          channel_name: channel.name,
+        }),
+      })
+        .then(async (response) => {
+          if (!response.ok) {
+            console.error('[Echo] Auth failed', response.status, channel.name);
+            callback(new Error(`Auth HTTP ${response.status}`), null);
+            return;
+          }
+          callback(null, (await response.json()) as { auth: string });
+        })
+        .catch((err) => {
+          console.error('[Echo] Auth network error', channel.name, err);
+          callback(err instanceof Error ? err : new Error('Auth network error'), null);
+        });
+    },
+  });
+}
+
 function doSubscribeConvo(conversationId: number): void {
   if (!echo) return;
-
   if (subscribedConvoId === conversationId) return;
 
   if (subscribedConvoId !== null) {
@@ -35,7 +70,7 @@ function doSubscribeConvo(conversationId: number): void {
     console.log(`[Echo] ✓ Subscribed to private-chat.${conversationId}`);
   });
   (channel as any).error((status: unknown) => {
-    console.error(`[Echo] ✗ Auth failed for private-chat.${conversationId}`, status);
+    console.error(`[Echo] ✗ Channel error private-chat.${conversationId}`, status);
     dispatch('sellio:echo-channel-error', { conversationId, status });
   });
 
@@ -47,7 +82,11 @@ function doSubscribeConvo(conversationId: number): void {
     .listen('.UserTyping', (e: unknown) => dispatch('sellio:typing', e));
 }
 
-export function connectEcho(userId: number, token: string, apiBase: string): void {
+export function connectEcho(
+  userId: number,
+  getToken: () => string | null,
+  apiBase: string,
+): void {
   const pendingConvoId = activeConvoId;
 
   if (echo) {
@@ -60,7 +99,7 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
 
   const key = resolvePusherKey();
   if (!key) {
-    console.warn('[Echo] Pusher app key is not set — real-time disabled. Set VITE_PUSHER_APP_KEY or SELLIO_CONFIG.pusherKey.');
+    console.warn('[Echo] Pusher app key is not set — real-time disabled.');
     return;
   }
 
@@ -72,13 +111,7 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
     key,
     cluster: resolvePusherCluster(),
     forceTLS: true,
-    authEndpoint: authEndpoint(apiBase),
-    auth: {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-      },
-    },
+    authorizer: buildAuthorizer(getToken, apiBase) as Echo<'pusher'>['options']['authorizer'],
   });
 
   echo.connector.pusher.connection.bind('connected', () => {
@@ -112,8 +145,7 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
 export function subscribeToConversation(conversationId: number): () => void {
   activeConvoId = conversationId;
 
-  const state = echo?.connector?.pusher?.connection?.state ?? 'no-echo';
-  if (state === 'connected') {
+  if (echo?.connector?.pusher?.connection?.state === 'connected') {
     doSubscribeConvo(conversationId);
   }
 

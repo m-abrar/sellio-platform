@@ -187,11 +187,21 @@ export default function MessagesPage() {
       } catch { /* polling fallback */ }
     };
 
+    const onEchoError = () => { void pollThread(); };
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') void pollThread();
+    };
+
     void pollThread();
     const interval = setInterval(pollThread, POLL_INTERVAL_MS);
+    window.addEventListener('sellio:echo-channel-error', onEchoError);
+    document.addEventListener('visibilitychange', onVisible);
+
     return () => {
       cancelled = true;
       clearInterval(interval);
+      window.removeEventListener('sellio:echo-channel-error', onEchoError);
+      document.removeEventListener('visibilitychange', onVisible);
     };
   }, [selectedId]);
 

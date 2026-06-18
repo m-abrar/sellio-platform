@@ -41,7 +41,7 @@ class NewMessageSent implements ShouldBroadcastNow
             'conversation_id' => $this->message->conversation_id,
             'sender_id'       => $this->message->sender_id,
             'body'            => $this->message->body,
-            'created_at'      => $this->message->created_at,
+            'created_at'      => $this->message->created_at?->toIso8601String(),
         ];
     }
 }
