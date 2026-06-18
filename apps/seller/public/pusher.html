@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pusher Test — Seller Panel</title>
+  <script src="/config.js"></script>
+  <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #111; color: #eee; }
+    h1 { color: #a78bfa; }
+    label { display: block; margin-top: 12px; font-size: 13px; color: #aaa; }
+    input { width: 100%; max-width: 480px; padding: 6px 8px; background: #222; border: 1px solid #444; color: #eee; border-radius: 4px; margin-top: 4px; box-sizing: border-box; }
+    button { margin-top: 14px; padding: 8px 18px; background: #7c3aed; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    button:hover { background: #6d28d9; }
+    #log { margin-top: 20px; background: #1a1a1a; border: 1px solid #333; border-radius: 6px; padding: 12px; min-height: 160px; max-height: 400px; overflow-y: auto; font-size: 12px; line-height: 1.7; }
+    .ok  { color: #4ade80; }
+    .err { color: #f87171; }
+    .info{ color: #60a5fa; }
+    #status { margin-top: 10px; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <h1>Pusher Test — Seller Panel</h1>
+
+  <label>Pusher Key (from config.js)</label>
+  <input id="pusherKey" readonly />
+
+  <label>Cluster</label>
+  <input id="pusherCluster" readonly />
+
+  <label>API Base (for private-channel auth)</label>
+  <input id="apiBase" />
+
+  <label>Bearer Token (paste your seller JWT)</label>
+  <input id="token" type="password" placeholder="eyJ..." />
+
+  <label>Channel to subscribe (e.g. private-chat.5 or my-channel)</label>
+  <input id="channel" value="my-channel" />
+
+  <label>Event to listen for (e.g. .NewMessageSent or my-event)</label>
+  <input id="event" value="my-event" />
+
+  <button onclick="connect()">Connect &amp; Subscribe</button>
+  <div id="status"></div>
+  <div id="log"></div>
+
+  <script>
+    var config = window.SELLIO_CONFIG || {};
+    document.getElementById('pusherKey').value     = config.pusherKey     || '2ee3bd5fd02d6c400553';
+    document.getElementById('pusherCluster').value = config.pusherCluster || 'ap2';
+    document.getElementById('apiBase').value       = (config.apiUrl || '').replace(/\/api\/?$/, '') || 'http://127.0.0.1:8000';
+
+    function log(msg, cls) {
+      var el = document.getElementById('log');
+      var line = document.createElement('div');
+      if (cls) line.className = cls;
+      line.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    var pusher = null;
+
+    function connect() {
+      if (pusher) { pusher.disconnect(); }
+
+      var key       = document.getElementById('pusherKey').value.trim();
+      var cluster   = document.getElementById('pusherCluster').value.trim();
+      var apiBase   = document.getElementById('apiBase').value.trim().replace(/\/$/, '');
+      var token     = document.getElementById('token').value.trim();
+      var channelId = document.getElementById('channel').value.trim();
+      var eventName = document.getElementById('event').value.trim();
+
+      Pusher.logToConsole = true;
+
+      var options = {
+        cluster: cluster,
+        forceTLS: true,
+      };
+
+      // Only wire up auth when subscribing to a private/presence channel
+      if (channelId.startsWith('private-') || channelId.startsWith('presence-')) {
+        options.authorizer = function(channel) {
+          return {
+            authorize: function(socketId, callback) {
+              if (!token) { log('No token set — auth will fail for private channels.', 'err'); callback(new Error('no token'), null); return; }
+              fetch(apiBase + '/broadcasting/auth', {
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + token,
+                },
+                body: JSON.stringify({ socket_id: socketId, channel_name: channel.name }),
+              })
+              .then(function(r) { return r.ok ? r.json() : Promise.reject(r.status); })
+              .then(function(d) { log('Auth OK for ' + channel.name, 'ok'); callback(null, d); })
+              .catch(function(e) { log('Auth FAILED for ' + channel.name + ': ' + e, 'err'); callback(new Error('auth failed'), null); });
+            }
+          };
+        };
+      }
+
+      pusher = new Pusher(key, options);
+
+      pusher.connection.bind('connecting', function() { log('Connecting…', 'info'); });
+      pusher.connection.bind('connected',  function() { log('Connected ✓ socket_id=' + pusher.connection.socket_id, 'ok'); subscribe(channelId, eventName); });
+      pusher.connection.bind('error',      function(e) { log('Connection error: ' + JSON.stringify(e), 'err'); });
+      pusher.connection.bind('failed',     function()  { log('Connection FAILED — check key/cluster', 'err'); });
+      pusher.connection.bind('disconnected', function(){ log('Disconnected', 'info'); });
+
+      log('Connecting to Pusher with key=' + key + ' cluster=' + cluster + '…', 'info');
+    }
+
+    function subscribe(channelId, eventName) {
+      var ch = pusher.subscribe(channelId);
+
+      ch.bind('pusher:subscription_succeeded', function() { log('Subscribed to ' + channelId + ' ✓', 'ok'); });
+      ch.bind('pusher:subscription_error',     function(e) { log('Subscription error on ' + channelId + ': ' + JSON.stringify(e), 'err'); });
+
+      ch.bind(eventName, function(data) {
+        log('Event [' + eventName + ']: ' + JSON.stringify(data), 'ok');
+      });
+
+      log('Subscribing to channel: ' + channelId + ', event: ' + eventName, 'info');
+    }
+  </script>
+</body>
+</html>

@@ -45,6 +45,7 @@ import ActivityDetailPage from './pages/activity/ActivityDetailPage';
 import DashboardHome from './pages/dashboard/DashboardHome';
 import LiveInteractionsPage from './pages/dashboard/LiveInteractionsPage';
 import NotificationsPage from './pages/notifications/NotificationsPage';
+import PusherDebugPage from './pages/debug/PusherDebugPage';
 import Login from './pages/Login';
 import Error404 from './pages/Error404';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
@@ -146,6 +147,7 @@ function App() {
               <Route path="transactions" element={<TransactionsPage />} />
               <Route path="memberships" element={<MembershipsPage />} />
               <Route path="notifications" element={<NotificationsPage />} />
+              <Route path="debug/pusher" element={<PusherDebugPage />} />
               <Route path=":module/:type" element={<ActivityPage />} />
               <Route path=":module/:type/:id" element={<ActivityDetailPage />} />
             </Route>
