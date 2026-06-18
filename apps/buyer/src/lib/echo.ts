@@ -7,8 +7,8 @@ declare global {
 }
 
 let echo: Echo<'pusher'> | null = null;
-let activeConvoId: number | null = null;
-let subscribedConvoId: number | null = null;
+const desiredConvoIds = new Map<number, number>();
+const subscribedConvoIds = new Set<number>();
 
 function authEndpoint(apiBase: string): string {
   return apiBase.replace(/\/$/, '') + '/broadcasting/auth';
@@ -57,13 +57,9 @@ function buildAuthorizer(getToken: () => string | null, apiBase: string) {
 
 function doSubscribeConvo(conversationId: number): void {
   if (!echo) return;
-  if (subscribedConvoId === conversationId) return;
+  if (subscribedConvoIds.has(conversationId)) return;
 
-  if (subscribedConvoId !== null) {
-    echo.leave(`chat.${subscribedConvoId}`);
-  }
-
-  subscribedConvoId = conversationId;
+  subscribedConvoIds.add(conversationId);
   const channel = echo.private(`chat.${conversationId}`);
 
   (channel as any).subscribed(() => {
@@ -87,15 +83,11 @@ export function connectEcho(
   getToken: () => string | null,
   apiBase: string,
 ): void {
-  const pendingConvoId = activeConvoId;
-
   if (echo) {
-    subscribedConvoId = null;
+    subscribedConvoIds.clear();
     echo.disconnect();
     echo = null;
   }
-
-  activeConvoId = pendingConvoId;
 
   const key = resolvePusherKey();
   if (!key) {
@@ -116,10 +108,8 @@ export function connectEcho(
 
   echo.connector.pusher.connection.bind('connected', () => {
     console.log('[Echo] Pusher connected ✓');
-    subscribedConvoId = null;
-    if (activeConvoId !== null) {
-      doSubscribeConvo(activeConvoId);
-    }
+    subscribedConvoIds.clear();
+    desiredConvoIds.forEach((_count, conversationId) => doSubscribeConvo(conversationId));
     dispatch('sellio:echo-connected', { userId });
   });
 
@@ -143,15 +133,21 @@ export function connectEcho(
 }
 
 export function subscribeToConversation(conversationId: number): () => void {
-  activeConvoId = conversationId;
+  desiredConvoIds.set(conversationId, (desiredConvoIds.get(conversationId) ?? 0) + 1);
 
   if (echo?.connector?.pusher?.connection?.state === 'connected') {
     doSubscribeConvo(conversationId);
   }
 
   return () => {
-    if (activeConvoId === conversationId) activeConvoId = null;
-    if (subscribedConvoId === conversationId) subscribedConvoId = null;
+    const nextCount = (desiredConvoIds.get(conversationId) ?? 1) - 1;
+    if (nextCount > 0) {
+      desiredConvoIds.set(conversationId, nextCount);
+      return;
+    }
+
+    desiredConvoIds.delete(conversationId);
+    subscribedConvoIds.delete(conversationId);
     echo?.leave(`chat.${conversationId}`);
   };
 }
@@ -161,8 +157,8 @@ export function getSocketId(): string | null {
 }
 
 export function disconnectEcho(): void {
-  activeConvoId = null;
-  subscribedConvoId = null;
+  desiredConvoIds.clear();
+  subscribedConvoIds.clear();
   echo?.disconnect();
   echo = null;
 }

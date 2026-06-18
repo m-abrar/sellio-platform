@@ -73,6 +73,7 @@ export default function MessagesPage() {
   // Keep refs in sync on every render.
   currentUserIdRef.current = Number(currentUser?.id ?? 0);
   partnerIdRef.current = partnerId;
+  const conversationIdsKey = messages.map((message) => String(message.id)).join('|');
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -150,22 +151,66 @@ export default function MessagesPage() {
       });
     };
 
-    const onEchoConnected = () => {
-      if (selectedIdRef.current != null) {
-        subscribeToConversation(selectedIdRef.current);
-      }
-    };
-
     window.addEventListener('sellio:new-message', onNewMessage);
-    window.addEventListener('sellio:echo-connected', onEchoConnected);
 
     return () => {
       selectedIdRef.current = null;
       unsub();
       window.removeEventListener('sellio:new-message', onNewMessage);
-      window.removeEventListener('sellio:echo-connected', onEchoConnected);
     };
   }, [selectedId]); // Only re-subscribe when the conversation changes, not when user/partner data loads.
+
+  useEffect(() => {
+    const unsubscribers = conversationIdsKey
+      .split('|')
+      .filter(Boolean)
+      .map((conversationId) => subscribeToConversation(Number(conversationId)));
+
+    return () => {
+      unsubscribers.forEach((unsubscribe) => unsubscribe());
+    };
+  }, [conversationIdsKey]);
+
+  useEffect(() => {
+    const onNewMessage = (e: Event) => {
+      const msg = (e as CustomEvent<any>).detail;
+      const conversationId = Number(msg?.conversation_id);
+      if (!conversationId) return;
+
+      setMessages((prev) => {
+        let matched = false;
+        const next = prev.map((conversation) => {
+          if (Number(conversation.id) !== conversationId) return conversation;
+
+          matched = true;
+          const isFromOther =
+            !currentUserIdRef.current ||
+            Number(msg.sender_id) !== Number(currentUserIdRef.current);
+          const isOpen = Number(selectedIdRef.current) === conversationId;
+          const createdAt = msg.created_at ? new Date(String(msg.created_at)) : new Date();
+
+          return {
+            ...conversation,
+            preview: msg.body ?? msg.content ?? conversation.preview,
+            date: Number.isNaN(createdAt.getTime())
+              ? conversation.date
+              : createdAt.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }),
+            unread: isFromOther && !isOpen ? true : conversation.unread,
+          };
+        });
+
+        if (!matched) return prev;
+
+        return next.sort((a, b) => (Number(b.id) === conversationId ? 1 : 0) - (Number(a.id) === conversationId ? 1 : 0));
+      });
+    };
+
+    window.addEventListener('sellio:new-message', onNewMessage);
+
+    return () => {
+      window.removeEventListener('sellio:new-message', onNewMessage);
+    };
+  }, []);
 
   useEffect(() => {
     if (!threadScrollRef.current) return;
@@ -228,6 +273,17 @@ export default function MessagesPage() {
         if (withoutTemp.some((m: any) => String(m.id) === String(sent.id))) return withoutTemp;
         return [...withoutTemp, sent];
       });
+      setMessages((prev) =>
+        prev.map((conversation) =>
+          Number(conversation.id) === Number(selectedId)
+            ? {
+                ...conversation,
+                preview: sent.body || content,
+                date: sent.createdAt || new Date().toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }),
+              }
+            : conversation,
+        ),
+      );
     } catch (error) {
       console.error('Failed to send message', error);
       toast.error('Failed to send message.');

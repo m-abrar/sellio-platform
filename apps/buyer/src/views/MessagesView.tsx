@@ -100,6 +100,7 @@ export default function MessagesView() {
   const activeConvoIdRef = useRef<number | null>(null);
   const currentUserIdRef = useRef<number | null>(null);
   currentUserIdRef.current = user?.id ?? null;
+  const conversationIdsKey = conversations.map((conversation) => String(conversation.id)).join('|');
 
   // Hidden File input ref
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -204,22 +205,63 @@ export default function MessagesView() {
       });
     };
 
-    const onEchoConnected = () => {
-      if (activeConvoIdRef.current != null) {
-        subscribeToConversation(activeConvoIdRef.current);
-      }
-    };
-
     window.addEventListener('sellio:new-message', onNewMessage);
-    window.addEventListener('sellio:echo-connected', onEchoConnected);
 
     return () => {
       activeConvoIdRef.current = null;
       unsub();
       window.removeEventListener('sellio:new-message', onNewMessage);
-      window.removeEventListener('sellio:echo-connected', onEchoConnected);
     };
   }, [activeConvo?.id]);
+
+  useEffect(() => {
+    const unsubscribers = conversationIdsKey
+      .split('|')
+      .filter(Boolean)
+      .map((conversationId) => subscribeToConversation(Number(conversationId)));
+
+    return () => {
+      unsubscribers.forEach((unsubscribe) => unsubscribe());
+    };
+  }, [conversationIdsKey]);
+
+  useEffect(() => {
+    const onNewMessage = (e: Event) => {
+      const msg = (e as CustomEvent<any>).detail;
+      const conversationId = Number(msg?.conversation_id);
+      if (!conversationId) return;
+
+      setConversations((prev) => {
+        let matched = false;
+        const next = prev.map((conversation) => {
+          if (Number(conversation.id) !== conversationId) return conversation;
+
+          matched = true;
+          const isFromOther =
+            currentUserIdRef.current == null ||
+            Number(msg.sender_id) !== Number(currentUserIdRef.current);
+          const isOpen = Number(activeConvoIdRef.current) === conversationId;
+
+          return {
+            ...conversation,
+            lastMessage: msg.content ?? msg.body ?? conversation.lastMessage,
+            time: msg.created_at ?? new Date().toISOString(),
+            unread: isFromOther && !isOpen ? Number(conversation.unread ?? 0) + 1 : conversation.unread,
+          };
+        });
+
+        if (!matched) return prev;
+
+        return next.sort((a, b) => (Number(b.id) === conversationId ? 1 : 0) - (Number(a.id) === conversationId ? 1 : 0));
+      });
+    };
+
+    window.addEventListener('sellio:new-message', onNewMessage);
+
+    return () => {
+      window.removeEventListener('sellio:new-message', onNewMessage);
+    };
+  }, []);
 
   const loadInitialData = async () => {
     try {
@@ -312,6 +354,17 @@ export default function MessagesView() {
       const sent = await sendMessage(content, activeConvo.id);
       setMessages((cur) =>
         finalizeBuyerMessages(cur.map((m) => (m.id === tempId ? sent : m))),
+      );
+      setConversations((prev) =>
+        prev.map((conversation) =>
+          Number(conversation.id) === Number(activeConvo.id)
+            ? {
+                ...conversation,
+                lastMessage: sent.content ?? content,
+                time: sent.created_at ?? new Date().toISOString(),
+              }
+            : conversation,
+        ),
       );
     } catch (error) {
       console.error(error);
@@ -886,4 +939,3 @@ export default function MessagesView() {
     </div>
   );
 }
-
