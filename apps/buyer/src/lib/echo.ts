@@ -1,5 +1,6 @@
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
+import { resolvePusherCluster, resolvePusherKey } from '../config/resolvePusherConfig';
 
 declare global {
   interface Window { Pusher: typeof Pusher; }
@@ -7,10 +8,7 @@ declare global {
 
 let echo: Echo<'pusher'> | null = null;
 
-// Conversation the component wants to watch.  echo.ts re-subscribes on every
-// connect/reconnect so the component never needs to handle timing itself.
 let activeConvoId: number | null = null;
-// Tracks which conversation channel is currently subscribed to prevent duplicate listeners.
 let subscribedConvoId: number | null = null;
 
 function authEndpoint(apiBase: string): string {
@@ -24,11 +22,12 @@ function dispatch(name: string, detail: unknown): void {
 function doSubscribeConvo(conversationId: number): void {
   if (!echo) return;
 
-  if (subscribedConvoId !== null && subscribedConvoId !== conversationId) {
+  if (subscribedConvoId === conversationId) return;
+
+  if (subscribedConvoId !== null) {
     echo.leave(`chat.${subscribedConvoId}`);
   }
 
-  echo.leave(`chat.${conversationId}`);
   subscribedConvoId = conversationId;
   const channel = echo.private(`chat.${conversationId}`);
 
@@ -37,11 +36,11 @@ function doSubscribeConvo(conversationId: number): void {
   });
   (channel as any).error((status: unknown) => {
     console.error(`[Echo] ✗ Auth failed for private-chat.${conversationId}`, status);
+    dispatch('sellio:echo-channel-error', { conversationId, status });
   });
 
   channel
     .listen('.NewMessageSent', (e: unknown) => {
-      console.log('[Echo] NewMessageSent on chat.' + conversationId, e);
       dispatch('sellio:new-message', e);
     })
     .listen('.MessageRead', (e: unknown) => dispatch('sellio:message-read', e))
@@ -59,9 +58,9 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
 
   activeConvoId = pendingConvoId;
 
-  const key = import.meta.env.VITE_PUSHER_APP_KEY;
+  const key = resolvePusherKey();
   if (!key) {
-    console.warn('[Echo] VITE_PUSHER_APP_KEY is not set — real-time disabled');
+    console.warn('[Echo] Pusher app key is not set — real-time disabled. Set VITE_PUSHER_APP_KEY or SELLIO_CONFIG.pusherKey.');
     return;
   }
 
@@ -71,7 +70,7 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
   echo = new Echo({
     broadcaster: 'pusher',
     key,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
+    cluster: resolvePusherCluster(),
     forceTLS: true,
     authEndpoint: authEndpoint(apiBase),
     auth: {
@@ -86,7 +85,6 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
     console.log('[Echo] Pusher connected ✓');
     subscribedConvoId = null;
     if (activeConvoId !== null) {
-      console.log(`[Echo] Re-subscribing to chat.${activeConvoId}`);
       doSubscribeConvo(activeConvoId);
     }
     dispatch('sellio:echo-connected', { userId });
@@ -112,16 +110,12 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
 }
 
 export function subscribeToConversation(conversationId: number): () => void {
-  const state = echo?.connector?.pusher?.connection?.state ?? 'no-echo';
-  console.log(`[Echo] subscribeToConversation(${conversationId}) state=${state}`);
-
   activeConvoId = conversationId;
 
+  const state = echo?.connector?.pusher?.connection?.state ?? 'no-echo';
   if (state === 'connected') {
-    // Already connected — subscribe immediately.
     doSubscribeConvo(conversationId);
   }
-  // Otherwise the 'connected' handler above subscribes once the WS is ready.
 
   return () => {
     if (activeConvoId === conversationId) activeConvoId = null;

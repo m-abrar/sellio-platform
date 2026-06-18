@@ -496,7 +496,15 @@ Buyer sent message to seller but it does not appear
 However the page refresh will load them on both sides.
 
 
+---------------------
+
 on the seller panel, you say
 No messages in this thread yet.
 after few seconds you show message.
 why dont you show loading message instead?
+
+
+
+------------------
+
+Can you figure out why the echo/pusher is not working?

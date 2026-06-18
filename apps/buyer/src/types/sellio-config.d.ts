@@ -6,6 +6,8 @@ declare global {
       apiUrl?: string;
       storefrontUrl?: string;
       basePath?: string;
+      pusherKey?: string;
+      pusherCluster?: string;
     };
     SELLIO_PANEL_LABEL?: string;
   }
