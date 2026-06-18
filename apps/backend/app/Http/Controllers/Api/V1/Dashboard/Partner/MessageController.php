@@ -9,7 +9,9 @@ use App\Events\UserTyping;
 use App\Http\Requests\SendMessageRequest;
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Support\SafeBroadcast;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -36,7 +38,8 @@ class MessageController extends Controller
         return $this->successResponse([
             'conversations' => $conversations,
             'user' => $user,
-        ]);
+        ])->header('Cache-Control', 'no-store, no-cache, must-revalidate')
+          ->header('Pragma', 'no-cache');
     }
 
     /**
@@ -45,7 +48,7 @@ class MessageController extends Controller
      * @param  int  $conversationId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($conversationId)
+    public function show(Request $request, $conversationId)
     {
         $partner = Auth::user();
         
@@ -58,22 +61,25 @@ class MessageController extends Controller
             ->orderBy('created_at', 'asc')
             ->get(); 
         
-        // Mark unread messages from the other party as read on open.
-        $unread = $activeConversation->messages()
-            ->where('sender_id', '!=', $partner->id)
-            ->whereNull('read_at')
-            ->get();
+        // Polling passes skip_read=1 to avoid re-marking on every poll tick.
+        if (!$request->boolean('skip_read')) {
+            $unread = $activeConversation->messages()
+                ->where('sender_id', '!=', $partner->id)
+                ->whereNull('read_at')
+                ->get();
 
-        foreach ($unread as $msg) {
-            $msg->update(['read_at' => now()]);
-            broadcast(new MessageRead($msg))->toOthers();
+            foreach ($unread as $msg) {
+                $msg->update(['read_at' => now()]);
+                SafeBroadcast::toOthers(new MessageRead($msg));
+            }
         }
 
         return $this->successResponse([
             'activeConversation' => $activeConversation,
             'messages'           => $messages,
             'user'               => $partner,
-        ]);
+        ])->header('Cache-Control', 'no-store, no-cache, must-revalidate')
+          ->header('Pragma', 'no-cache');
     }
 
     /**
@@ -100,10 +106,8 @@ class MessageController extends Controller
 
         $conversation->touch(); 
 
-        $recipient = $conversation->user;
-        if ($recipient) {
-            broadcast(new NewMessageSent($message, $recipient))->toOthers();
-        }
+        $recipient = $conversation->otherParticipant($partner->id) ?? $partner;
+        SafeBroadcast::toOthers(new NewMessageSent($message, $recipient));
 
         return $this->successResponse($message->fresh(), __('Message sent successfully.'), 201);
     }
@@ -123,7 +127,7 @@ class MessageController extends Controller
 
         foreach ($unread as $msg) {
             $msg->update(['read_at' => now()]);
-            broadcast(new MessageRead($msg))->toOthers();
+            SafeBroadcast::toOthers(new MessageRead($msg));
         }
 
         return $this->successResponse(['marked' => $unread->count()]);
@@ -135,7 +139,7 @@ class MessageController extends Controller
 
         Conversation::forUser($partner->id)->where('id', $conversationId)->firstOrFail();
 
-        broadcast(new UserTyping($conversationId, $partner->id, $partner->name))->toOthers();
+        SafeBroadcast::toOthers(new UserTyping($conversationId, $partner->id, $partner->name));
 
         return $this->successResponse([]);
     }

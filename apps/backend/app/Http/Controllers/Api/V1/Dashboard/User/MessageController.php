@@ -15,6 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SendMessageRequest;
+use App\Support\SafeBroadcast;
 
 /**
  * Class MessageController
@@ -60,7 +61,8 @@ class MessageController extends Controller
             'activeConversation' => $activeConversation,
             'messages'           => $messages,
             'user'               => $user,
-        ]);
+        ])->header('Cache-Control', 'no-store, no-cache, must-revalidate')
+          ->header('Pragma', 'no-cache');
     }
 
     /**
@@ -91,10 +93,8 @@ class MessageController extends Controller
         $conversation->touch();
 
         // 3. Handle real-time broadcasting
-        $recipient = $conversation->partner;
-        if ($recipient) {
-            broadcast(new NewMessageSent($message, $recipient))->toOthers();
-        }
+        $recipient = $conversation->otherParticipant($user->id) ?? $user;
+        SafeBroadcast::toOthers(new NewMessageSent($message, $recipient));
 
         if ($request->wantsJson()) {
             return $this->successResponse([
@@ -167,7 +167,7 @@ class MessageController extends Controller
 
         foreach ($unread as $msg) {
             $msg->update(['read_at' => now()]);
-            broadcast(new MessageRead($msg))->toOthers();
+            SafeBroadcast::toOthers(new MessageRead($msg));
         }
 
         return $this->successResponse(['marked' => $unread->count()]);
@@ -179,7 +179,7 @@ class MessageController extends Controller
 
         Conversation::forUser($user->id)->where('id', $conversationId)->firstOrFail();
 
-        broadcast(new UserTyping($conversationId, $user->id, $user->name))->toOthers();
+        SafeBroadcast::toOthers(new UserTyping($conversationId, $user->id, $user->name));
 
         return $this->successResponse([]);
     }

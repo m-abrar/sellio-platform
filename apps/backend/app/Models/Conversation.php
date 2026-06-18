@@ -116,6 +116,22 @@ class Conversation extends Model
         });
     }
 
+    /**
+     * Get the other participant in the conversation relative to the sender.
+     */
+    public function otherParticipant(int $senderId): ?User
+    {
+        if ((int) $this->user_id === $senderId) {
+            return $this->partner;
+        }
+
+        if ((int) $this->partner_id === $senderId) {
+            return $this->user;
+        }
+
+        return null;
+    }
+
     // --- Attributes ---
 
 }

@@ -19,13 +19,20 @@ const POLL_INTERVAL_MS = 2000;
 const mergeSellerThread = (prev: any[], serverMessages: any[]): any[] => {
   const temps = prev.filter((m) => String(m.id).startsWith('temp-'));
   const real = prev.filter((m) => !String(m.id).startsWith('temp-'));
+  const serverIds = new Set(serverMessages.map((m) => String(m.id)));
+  const localOnly = real.filter((m) => !serverIds.has(String(m.id)));
+
   if (
+    localOnly.length === 0 &&
     real.length === serverMessages.length &&
     real.every((m, i) => String(m.id) === String(serverMessages[i]?.id))
   ) {
     return prev;
   }
-  return [...serverMessages, ...temps];
+
+  const serverBodies = new Set(serverMessages.map((m) => m.body));
+  const pendingTemps = temps.filter((t) => !serverBodies.has(t.body));
+  return [...serverMessages, ...localOnly, ...pendingTemps];
 };
 
 const getCategoryStyles = (type: string) => {
@@ -60,6 +67,12 @@ export default function MessagesPage() {
   const [isSending, setIsSending] = useState(false);
   const selectedIdRef = useRef<number | null>(null);
   const threadScrollRef = useRef<HTMLDivElement>(null);
+  // Refs so the subscription effect never needs to re-run just because user/partner data loaded.
+  const currentUserIdRef = useRef<number>(0);
+  const partnerIdRef = useRef<number>(0);
+  // Keep refs in sync on every render.
+  currentUserIdRef.current = Number(currentUser?.id ?? 0);
+  partnerIdRef.current = partnerId;
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -78,7 +91,7 @@ export default function MessagesPage() {
 
     const interval = setInterval(async () => {
       try {
-        const response = await getConversations();
+        const response = await getConversations({ bustCache: true });
         setMessages(response.data.data);
       } catch { /* polling fallback */ }
     }, POLL_INTERVAL_MS * 2);
@@ -130,24 +143,29 @@ export default function MessagesPage() {
 
       setThreadMessages((prev) => {
         if (prev.some((m: any) => String(m.id) === String(msg.id))) return prev;
-        const isMine = currentUser?.id != null && Number(msg.sender_id) === Number(currentUser.id);
-        return [...prev, {
-          ...msg,
-          isMine,
-          body: msg.body,
-          createdAt: msg.created_at,
-        }];
+        return [...prev, normalizeThreadMessage(
+          { ...msg, body: msg.body ?? msg.content },
+          currentUserIdRef.current || partnerIdRef.current,
+        )];
       });
     };
 
+    const onEchoConnected = () => {
+      if (selectedIdRef.current != null) {
+        subscribeToConversation(selectedIdRef.current);
+      }
+    };
+
     window.addEventListener('sellio:new-message', onNewMessage);
+    window.addEventListener('sellio:echo-connected', onEchoConnected);
 
     return () => {
       selectedIdRef.current = null;
       unsub();
       window.removeEventListener('sellio:new-message', onNewMessage);
+      window.removeEventListener('sellio:echo-connected', onEchoConnected);
     };
-  }, [selectedId, currentUser?.id]);
+  }, [selectedId]); // Only re-subscribe when the conversation changes, not when user/partner data loads.
 
   useEffect(() => {
     if (!threadScrollRef.current) return;
@@ -163,7 +181,7 @@ export default function MessagesPage() {
 
     const pollThread = async () => {
       try {
-        const response = await getConversationThread(conversationId);
+        const response = await getConversationThread(conversationId, { bustCache: true, skipRead: true });
         if (cancelled) return;
         setThreadMessages((prev) => mergeSellerThread(prev, response.data.messages));
       } catch { /* polling fallback */ }
@@ -193,7 +211,7 @@ export default function MessagesPage() {
       const response = await sendMessage(selectedId, content);
       const sent = normalizeThreadMessage(
         response.data as Record<string, unknown>,
-        Number(currentUser?.id ?? partnerId),
+        currentUserIdRef.current || partnerIdRef.current,
       );
       setThreadMessages((prev) => {
         const withoutTemp = prev.filter((m: any) => m.id !== tempId);

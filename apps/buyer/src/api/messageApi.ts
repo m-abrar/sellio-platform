@@ -12,9 +12,14 @@ function toMessage(message: any) {
   };
 }
 
-export const fetchMessages = async (conversationId?: number | string) => {
+export const fetchMessages = async (
+  conversationId?: number | string,
+  options?: { bustCache?: boolean },
+) => {
+  const cacheSuffix = options?.bustCache && conversationId ? `?_=${Date.now()}` : '';
+  const path = conversationId ? `/messages/${conversationId}${cacheSuffix}` : '/messages';
   const payload = await apiRequest<any>(
-    buyerUrl(conversationId ? `/messages/${conversationId}` : '/messages'),
+    buyerUrl(path),
     { authenticated: true },
   );
 

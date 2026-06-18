@@ -27,15 +27,20 @@ const POLL_INTERVAL_MS = 2000;
 const mergeBuyerThread = (prev: any[], serverMessages: any[]): any[] => {
   const temps = prev.filter((m) => String(m.id).startsWith('temp-'));
   const real = prev.filter((m) => !String(m.id).startsWith('temp-'));
+  const serverIds = new Set(serverMessages.map((m) => String(m.id)));
+  const localOnly = real.filter((m) => !serverIds.has(String(m.id)));
+
   if (
+    localOnly.length === 0 &&
     real.length === serverMessages.length &&
     real.every((m, i) => String(m.id) === String(serverMessages[i]?.id))
   ) {
     return prev;
   }
+
   const serverContents = new Set(serverMessages.map((m) => m.content));
   const pendingTemps = temps.filter((t) => !serverContents.has(t.content));
-  return [...serverMessages, ...pendingTemps];
+  return [...serverMessages, ...localOnly, ...pendingTemps];
 };
 
 const apiOrigin = (() => {
@@ -174,12 +179,20 @@ export default function MessagesView() {
       });
     };
 
+    const onEchoConnected = () => {
+      if (activeConvoIdRef.current != null) {
+        subscribeToConversation(activeConvoIdRef.current);
+      }
+    };
+
     window.addEventListener('sellio:new-message', onNewMessage);
+    window.addEventListener('sellio:echo-connected', onEchoConnected);
 
     return () => {
       activeConvoIdRef.current = null;
       unsub();
       window.removeEventListener('sellio:new-message', onNewMessage);
+      window.removeEventListener('sellio:echo-connected', onEchoConnected);
     };
   }, [activeConvo?.id]);
 
@@ -222,7 +235,7 @@ export default function MessagesView() {
 
     const pollThread = async () => {
       try {
-        const fresh = await fetchMessages(convoId);
+        const fresh = await fetchMessages(convoId, { bustCache: true });
         if (cancelled) return;
         setMessages((prev) => mergeBuyerThread(prev, fresh));
       } catch { /* polling fallback */ }

@@ -49,7 +49,15 @@ function doSubscribeConvo(conversationId: number): void {
 }
 
 export function connectEcho(userId: number, token: string, apiBase: string): void {
-  if (echo) disconnectEcho();
+  const pendingConvoId = activeConvoId;
+
+  if (echo) {
+    subscribedConvoId = null;
+    echo.disconnect();
+    echo = null;
+  }
+
+  activeConvoId = pendingConvoId;
 
   const key = import.meta.env.VITE_PUSHER_APP_KEY;
   if (!key) {
@@ -76,12 +84,12 @@ export function connectEcho(userId: number, token: string, apiBase: string): voi
 
   echo.connector.pusher.connection.bind('connected', () => {
     console.log('[Echo] Pusher connected ✓');
-    // Force a fresh subscription after connect / reconnect (listeners are lost on disconnect).
     subscribedConvoId = null;
     if (activeConvoId !== null) {
       console.log(`[Echo] Re-subscribing to chat.${activeConvoId}`);
       doSubscribeConvo(activeConvoId);
     }
+    dispatch('sellio:echo-connected', { userId });
   });
 
   echo.connector.pusher.connection.bind('error', (err: unknown) => {

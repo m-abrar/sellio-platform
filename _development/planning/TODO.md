@@ -491,3 +491,12 @@ in the seller panel
 messages inbox divides too much space with the relevant listing, can you solve this UIUX issue?
 
 -----------------------
+Seller sent message to buyer and it appeared 
+Buyer sent message to seller but it does not appear
+However the page refresh will load them on both sides.
+
+
+on the seller panel, you say
+No messages in this thread yet.
+after few seconds you show message.
+why dont you show loading message instead?

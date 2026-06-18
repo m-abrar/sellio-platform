@@ -70,8 +70,11 @@ export async function apiRequest<T>(
   options: RequestInit & { authenticated?: boolean } = {},
 ): Promise<T> {
   const { authenticated = false, body, ...requestOptions } = options;
+  const method = (requestOptions.method ?? 'GET').toUpperCase();
   const response = await fetch(url, {
     ...requestOptions,
+    method,
+    cache: method === 'GET' ? 'no-store' : undefined,
     body,
     headers: {
       ...buildHeaders(authenticated, body),

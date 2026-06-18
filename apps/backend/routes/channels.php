@@ -21,5 +21,5 @@ Broadcast::channel('chat.{conversationId}', function ($user, $conversationId) {
     }
 
     // A user is authorized if they are either the client (user_id) OR the partner (partner_id).
-    return $user->id === $conversation->user_id || $user->id === $conversation->partner_id;
+    return (int) $user->id === (int) $conversation->user_id || (int) $user->id === (int) $conversation->partner_id;
 });
