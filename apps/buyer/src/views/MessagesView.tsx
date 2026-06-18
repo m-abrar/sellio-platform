@@ -24,6 +24,19 @@ import { subscribeToConversation } from '../lib/echo';
 
 const POLL_INTERVAL_MS = 2000;
 
+/** Drop duplicate real messages and temps that already have a matching server copy. */
+const finalizeBuyerMessages = (messages: any[]): any[] => {
+  const reals = messages.filter((m) => !String(m.id).startsWith('temp-'));
+  const uniqueReals = [...new Map(reals.map((m) => [String(m.id), m])).values()];
+  const realContents = new Set(uniqueReals.map((m) => m.content));
+  const pendingTemps = messages.filter(
+    (m) => String(m.id).startsWith('temp-') && !realContents.has(m.content),
+  );
+  return [...uniqueReals, ...pendingTemps].sort(
+    (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+  );
+};
+
 const mergeBuyerThread = (prev: any[], serverMessages: any[]): any[] => {
   const temps = prev.filter((m) => String(m.id).startsWith('temp-'));
   const real = prev.filter((m) => !String(m.id).startsWith('temp-'));
@@ -40,7 +53,7 @@ const mergeBuyerThread = (prev: any[], serverMessages: any[]): any[] => {
 
   const serverContents = new Set(serverMessages.map((m) => m.content));
   const pendingTemps = temps.filter((t) => !serverContents.has(t.content));
-  return [...serverMessages, ...localOnly, ...pendingTemps];
+  return finalizeBuyerMessages([...serverMessages, ...localOnly, ...pendingTemps]);
 };
 
 const apiOrigin = (() => {
@@ -85,6 +98,8 @@ export default function MessagesView() {
   const [searchQuery, setSearchQuery] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
   const activeConvoIdRef = useRef<number | null>(null);
+  const currentUserIdRef = useRef<number | null>(null);
+  currentUserIdRef.current = user?.id ?? null;
 
   // Hidden File input ref
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -172,10 +187,20 @@ export default function MessagesView() {
     const onNewMessage = (e: Event) => {
       const msg = (e as CustomEvent<any>).detail;
       if (Number(msg?.conversation_id) !== Number(activeConvoIdRef.current)) return;
+      // Own sends are handled by handleSend — ignore echo to avoid temp+real flash.
+      if (
+        currentUserIdRef.current != null &&
+        Number(msg.sender_id) === Number(currentUserIdRef.current)
+      ) {
+        return;
+      }
 
       setMessages((prev) => {
         if (prev.some((m) => String(m.id) === String(msg.id))) return prev;
-        return [...prev, { ...msg, content: msg.content ?? msg.body }];
+        return finalizeBuyerMessages([
+          ...prev,
+          { ...msg, content: msg.content ?? msg.body },
+        ]);
       });
     };
 
@@ -275,7 +300,9 @@ export default function MessagesView() {
 
     try {
       const sent = await sendMessage(content, activeConvo.id);
-      setMessages((cur) => cur.map((m) => m.id === tempId ? sent : m));
+      setMessages((cur) =>
+        finalizeBuyerMessages(cur.map((m) => (m.id === tempId ? sent : m))),
+      );
     } catch (error) {
       console.error(error);
       setNewMessage(content);
