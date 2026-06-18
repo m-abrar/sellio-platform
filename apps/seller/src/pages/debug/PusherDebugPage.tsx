@@ -111,6 +111,9 @@ export default function PusherDebugPage() {
   }
 
   function subscribe(p: Pusher, channelName: string, eventName: string) {
+    // Strip leading dot — it's a Laravel Echo convention, not a raw Pusher event name.
+    const rawEvent = eventName.startsWith('.') ? eventName.slice(1) : eventName;
+
     const ch = p.subscribe(channelName);
     ch.bind('pusher:subscription_succeeded', () =>
       addLog(`Subscribed to ${channelName} ✓`, 'ok'),
@@ -118,10 +121,10 @@ export default function PusherDebugPage() {
     ch.bind('pusher:subscription_error', (e: unknown) =>
       addLog(`Subscription error on ${channelName}: ${JSON.stringify(e)}`, 'error'),
     );
-    ch.bind(eventName, (data: unknown) =>
-      addLog(`[${eventName}] ${JSON.stringify(data)}`, 'ok'),
+    ch.bind(rawEvent, (data: unknown) =>
+      addLog(`[${rawEvent}] ${JSON.stringify(data)}`, 'ok'),
     );
-    addLog(`Subscribing  channel=${channelName}  event=${eventName}`);
+    addLog(`Subscribing  channel=${channelName}  event=${rawEvent}`);
   }
 
   function disconnect() {
@@ -137,7 +140,7 @@ export default function PusherDebugPage() {
     'block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3';
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-16">
       <PageHeader badge="Developer" title="Pusher" subtitle="Debugger" />
 
       {/* Connection form */}

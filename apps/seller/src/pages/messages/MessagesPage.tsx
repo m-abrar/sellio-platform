@@ -14,7 +14,7 @@ import { getApiErrorMessage } from '../../lib/apiErrorMessage';
 import { subscribeToConversation } from '../../lib/echo';
 import { normalizeThreadMessage } from '../../lib/messageAdapter';
 
-const POLL_INTERVAL_MS = 2000;
+const POLL_INTERVAL_MS = 15000;
 
 const mergeSellerThread = (prev: any[], serverMessages: any[]): any[] => {
   const temps = prev.filter((m) => String(m.id).startsWith('temp-'));

@@ -22,7 +22,7 @@ import { API_BASE_URL } from '../config/api';
 import { Button } from '../components/Button';
 import { subscribeToConversation } from '../lib/echo';
 
-const POLL_INTERVAL_MS = 2000;
+const POLL_INTERVAL_MS = 15000;
 
 /** Drop duplicate real messages and temps that already have a matching server copy. */
 const finalizeBuyerMessages = (messages: any[]): any[] => {
