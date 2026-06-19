@@ -10,6 +10,12 @@ import {
   type ChatMessage,
   type StartChatResult,
 } from '@/lib/storefront-api';
+import {
+  connectEcho,
+  disconnectEcho,
+  getSocketId,
+  subscribeToConversation,
+} from '@/lib/echo';
 import './chat.css';
 
 export interface LiveChatWidgetProps {
@@ -22,10 +28,14 @@ type ChatPhase =
   | { phase: 'idle' }
   | { phase: 'auth' }
   | { phase: 'loading' }
-  | { phase: 'open'; conversationId: number; partnerName: string }
+  | { phase: 'open'; conversationId: number; partnerName: string; partnerAvatar: string | null }
   | { phase: 'error'; message: string };
 
-const POLL_MS = 5000;
+const POLL_MS = 15000;
+
+function resolveApiBase(): string {
+  return (process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000/api').replace(/\/$/, '');
+}
 
 export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWidgetProps) {
   const { user, login, register } = useAuth();
@@ -43,8 +53,35 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
   const convoIdRef = useRef<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Portal requires document — only available after mount
   useEffect(() => { setMounted(true); }, []);
+
+  // Connect Echo when user is authenticated
+  useEffect(() => {
+    if (!user) {
+      disconnectEcho();
+      return;
+    }
+    connectEcho(resolveApiBase());
+    return () => disconnectEcho();
+  }, [user?.id]);
+
+  // Subscribe to the active conversation channel
+  const conversationId = phase.phase === 'open' ? phase.conversationId : null;
+  useEffect(() => {
+    if (!conversationId) return;
+    return subscribeToConversation(conversationId);
+  }, [conversationId]);
+
+  // Receive real-time messages; deduplicate against existing
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const msg = (e as CustomEvent<ChatMessage>).detail;
+      if (!convoIdRef.current || msg.conversation_id !== convoIdRef.current) return;
+      setMessages((prev) => prev.some((m) => m.id === msg.id) ? prev : [...prev, msg]);
+    };
+    window.addEventListener('sellio:new-message', handler);
+    return () => window.removeEventListener('sellio:new-message', handler);
+  }, []);
 
   const openConversation = useCallback(async () => {
     setPhase({ phase: 'loading' });
@@ -52,7 +89,7 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
       const data: StartChatResult = await startOrFindConversation(vertical, listingId);
       convoIdRef.current = data.conversation_id;
       setMessages(data.messages);
-      setPhase({ phase: 'open', conversationId: data.conversation_id, partnerName: data.partner.name });
+      setPhase({ phase: 'open', conversationId: data.conversation_id, partnerName: data.partner.name, partnerAvatar: data.partner.avatar });
     } catch (err) {
       setPhase({ phase: 'error', message: err instanceof Error ? err.message : 'Could not open chat.' });
     }
@@ -66,13 +103,18 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
     }
   };
 
+  // Polling fallback — fires every 15 s in case Echo drops a message
   useEffect(() => {
     if (phase.phase !== 'open') return;
     const id = setInterval(async () => {
       if (!convoIdRef.current) return;
       try {
         const latest = await fetchChatMessages(convoIdRef.current);
-        setMessages(latest);
+        setMessages((prev) => {
+          const ids = new Set(prev.map((m) => m.id));
+          const incoming = latest.filter((m) => !ids.has(m.id));
+          return incoming.length ? [...prev, ...incoming] : prev;
+        });
       } catch { /* silent */ }
     }, POLL_MS);
     return () => clearInterval(id);
@@ -112,7 +154,7 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
     setSending(true);
     setInput('');
     try {
-      const msg = await sendChatMessage(convoIdRef.current, body);
+      const msg = await sendChatMessage(convoIdRef.current, body, getSocketId());
       setMessages((prev) => [...prev, msg]);
     } catch {
       setInput(body);
@@ -123,8 +165,6 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
 
   const myId = user?.id;
 
-  // Panel is portaled to document.body so position:fixed is never trapped
-  // by a parent element's transform/overflow/will-change.
   const panel = (
     <div
       className={`sl-chat-float-panel${isOpen ? ' is-open' : ''}`}
@@ -133,9 +173,18 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
       aria-hidden={!isOpen}
     >
       <div className="sl-chat-header">
-        <span className="sl-chat-header-name">
-          {phase.phase === 'open' ? phase.partnerName : 'Chat with seller'}
-        </span>
+        <div className="sl-chat-header-left">
+          {phase.phase === 'open' && (
+            phase.partnerAvatar
+              ? <img src={phase.partnerAvatar} alt={phase.partnerName} className="sl-chat-avatar" />
+              : <div className="sl-chat-avatar sl-chat-avatar--initials" aria-hidden="true">
+                  {phase.partnerName.charAt(0).toUpperCase()}
+                </div>
+          )}
+          <span className="sl-chat-header-name">
+            {phase.phase === 'open' ? phase.partnerName : 'Chat with seller'}
+          </span>
+        </div>
         <button type="button" className="sl-chat-close" aria-label="Close chat" onClick={() => setIsOpen(false)}>
           ✕
         </button>
@@ -250,7 +299,7 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
         </button>
       </div>
 
-      {/* Floating panel — rendered into document.body via portal */}
+      {/* Floating panel — portaled to document.body */}
       {mounted && createPortal(panel, document.body)}
     </>
   );

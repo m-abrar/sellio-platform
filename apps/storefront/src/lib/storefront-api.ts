@@ -131,11 +131,15 @@ export async function startOrFindConversation(
 export async function sendChatMessage(
   conversationId: number,
   body: string,
+  socketId?: string | null,
 ): Promise<ChatMessage> {
   const res = await fetch(dashboardUserUrl(`/messages/${conversationId}`), {
     method: 'POST',
     credentials: 'include',
-    headers: authHeaders(),
+    headers: {
+      ...authHeaders(),
+      ...(socketId ? { 'X-Socket-ID': socketId } : {}),
+    },
     body: JSON.stringify({ body }),
   });
 
