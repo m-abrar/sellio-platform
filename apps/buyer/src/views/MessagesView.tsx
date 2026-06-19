@@ -16,7 +16,7 @@ import {
   X
 } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { fetchMessages, sendMessage, fetchConversations } from '../api/messageApi';
+import { fetchMessages, sendMessage, fetchConversations, markRead } from '../api/messageApi';
 import { useUser } from '../context/UserContext';
 import { API_BASE_URL } from '../config/api';
 import { Button } from '../components/Button';
@@ -205,12 +205,22 @@ export default function MessagesView() {
       });
     };
 
+    const onMessageRead = (e: Event) => {
+      const { id, conversation_id, read_at } = (e as CustomEvent<any>).detail;
+      if (Number(conversation_id) !== Number(activeConvoIdRef.current)) return;
+      setMessages((prev) =>
+        prev.map((m) => (String(m.id) === String(id) ? { ...m, read_at } : m)),
+      );
+    };
+
     window.addEventListener('sellio:new-message', onNewMessage);
+    window.addEventListener('sellio:message-read', onMessageRead);
 
     return () => {
       activeConvoIdRef.current = null;
       unsub();
       window.removeEventListener('sellio:new-message', onNewMessage);
+      window.removeEventListener('sellio:message-read', onMessageRead);
     };
   }, [activeConvo?.id]);
 
@@ -333,6 +343,7 @@ export default function MessagesView() {
     try {
       const data = await fetchMessages(conversationId);
       setMessages(data);
+      markRead(conversationId).catch(() => { /* non-critical */ });
     } catch (error) {
       console.error(error);
     } finally {
@@ -662,7 +673,9 @@ export default function MessagesView() {
                               {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </span>
                             {msg.sender_id === user?.id && (
-                              <span className="text-[var(--primary-color)] font-extrabold ml-0.5">✓✓</span>
+                              msg.read_at
+                                ? <span className="text-[var(--primary-color)] font-extrabold ml-0.5">✓✓</span>
+                                : <span className="text-zinc-300 font-extrabold ml-0.5">✓</span>
                             )}
                           </div>
                         </div>

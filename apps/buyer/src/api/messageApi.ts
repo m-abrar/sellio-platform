@@ -9,6 +9,7 @@ function toMessage(message: any) {
     receiver_id: message.receiver_id,
     content: message.content || message.body,
     created_at: message.created_at,
+    read_at: message.read_at ?? null,
   };
 }
 
@@ -111,6 +112,13 @@ export const fetchConversations = async () => {
       unread: conversation.unread_count || 0,
       inquiriable: inquiriableData,
     };
+  });
+};
+
+export const markRead = async (conversationId: number | string): Promise<void> => {
+  await apiRequest<any>(buyerUrl(`/messages/${conversationId}/read`), {
+    method: 'PATCH',
+    authenticated: true,
   });
 };
 
