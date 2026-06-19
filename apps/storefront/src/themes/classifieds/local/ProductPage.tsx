@@ -17,6 +17,7 @@ import {
 } from '@/themes/classifieds/shared/listing-utils';
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
+import { LiveChatWidget } from '@/components/chat/LiveChatWidget';
 
 const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
 
@@ -340,6 +341,11 @@ export default function ProductPage({ slug }: { slug: string }) {
                       {isSubmitting ? 'Sending...' : 'Send Message & Request Pickup'}
                     </button>
                   </form>
+                </div>
+
+                <div className="sl-chat-section">
+                  <p className="sl-chat-section-label">Have questions?</p>
+                  <LiveChatWidget vertical="classifieds" listingId={item.id} listingTitle={item.title} />
                 </div>
               </div>
             </div>

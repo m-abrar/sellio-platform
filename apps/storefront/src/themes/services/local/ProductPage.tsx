@@ -13,6 +13,7 @@ import {
 } from '@/themes/services/shared/service-utils';
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
 import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';
+import { LiveChatWidget } from '@/components/chat/LiveChatWidget';
 import {
   saveServiceConsultationSnapshot,
   redirectToServiceConsultationConfirmation,
@@ -267,6 +268,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
           {formError && <p className="local-form-error" role="alert">{formError}</p>}
           <button className="local-btn local-btn-primary" type="submit">Request Service</button>
         </form>
+
+        <div className="sl-chat-section">
+          <p className="sl-chat-section-label">Have questions?</p>
+          <LiveChatWidget vertical="services" listingId={service.id} listingTitle={service.title} />
+        </div>
       </section>
     </main>
   );

@@ -20,6 +20,7 @@ import {
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
+import { LiveChatWidget } from '@/components/chat/LiveChatWidget';
 
 export default function ProductPage({ slug }: { slug: string }) {
   const themeLink = useClassifiedsThemeLink();
@@ -313,6 +314,11 @@ export default function ProductPage({ slug }: { slug: string }) {
                         {isSubmitting ? 'Sending…' : 'Dispatch Message to Seller'}
                       </button>
                     </form>
+                </div>
+
+                <div className="sl-chat-section">
+                  <p className="sl-chat-section-label">Have questions?</p>
+                  <LiveChatWidget vertical="classifieds" listingId={item.id} listingTitle={item.title} />
                 </div>
               </div>
             </div>

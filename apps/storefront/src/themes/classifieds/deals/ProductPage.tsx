@@ -17,6 +17,7 @@ import {
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
+import { LiveChatWidget } from '@/components/chat/LiveChatWidget';
 
 interface ProductPageProps {
   slug: string;
@@ -524,6 +525,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   </button>
                 </form>
 
+            </div>
+
+            <div className="sl-chat-section">
+              <p className="sl-chat-section-label">Have questions?</p>
+              <LiveChatWidget vertical="classifieds" listingId={deal.id} listingTitle={deal.title} />
             </div>
 
             {/* Seller profile card */}

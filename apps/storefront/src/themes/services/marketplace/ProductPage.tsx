@@ -14,6 +14,7 @@ import {
 import { useDemoFallbackAllowed } from '@/themes/services/shared/useDemoFallbackAllowed';
 import { useServicesThemeLink } from '@/themes/services/shared/useServicesThemeLink';
 import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';
+import { LiveChatWidget } from '@/components/chat/LiveChatWidget';
 import {
   redirectToServiceConsultationConfirmation,
   saveServiceConsultationSnapshot,
@@ -300,6 +301,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
             {isSubmitting ? 'Sending...' : 'Send Booking Request'}
           </button>
         </form>
+
+        <div className="sl-chat-section">
+          <p className="sl-chat-section-label">Have questions?</p>
+          <LiveChatWidget vertical="services" listingId={service.id} listingTitle={service.title} />
+        </div>
       </section>
       </main>
       <MarketplaceFooter />

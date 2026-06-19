@@ -20,6 +20,7 @@ import {
   getLuxuryVehicleImage,
   getLuxuryVehicleSpecLabel,
 } from '@/themes/autos/shared/vehicle-utils';
+import { LiveChatWidget } from '@/components/chat/LiveChatWidget';
 
 interface ProductPageProps {
   slug: string;
@@ -472,6 +473,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
             </form>
 
+            <div className="sl-chat-section">
+              <p className="sl-chat-section-label">Have questions?</p>
+              <LiveChatWidget vertical="vehicles" listingId={vehicle.id} listingTitle={vehicle.title} />
+            </div>
           </div>
 
         </div>

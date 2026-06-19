@@ -16,6 +16,7 @@ import {
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
+import { LiveChatWidget } from '@/components/chat/LiveChatWidget';
 
 const getAssetPrice = (item: ClassifiedListing): string => {
   return item.pricing?.formatted || item.pricing?.formatted_short || `$${(item.pricing?.sale_price || item.pricing?.base_price || 0).toLocaleString()}`;
@@ -358,6 +359,11 @@ export default function ProductPage({ slug }: { slug: string }) {
                     Submit Member Prospectus Request
                   </button>
                 </form>
+            </div>
+
+            <div className="sl-chat-section">
+              <p className="sl-chat-section-label">Have questions?</p>
+              <LiveChatWidget vertical="classifieds" listingId={item.id} listingTitle={item.title} />
             </div>
           </div>
         </div>

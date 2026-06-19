@@ -1,15 +1,7 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import type { ClassifiedListing, EventListing, JobListing, Property, ServiceListing, Vehicle } from '@sellio/types';
-import { useAuth } from '@/components/auth/AuthProvider';
-import {
-  fetchChatMessages,
-  sendChatMessage,
-  startOrFindConversation,
-  type ChatMessage,
-  type StartChatResult,
-} from '@/lib/storefront-api';
 import { redirectToPropertyBookingReserve } from '@/themes/properties/shared/property-booking-utils';
 import { redirectToEventBookingReserve } from '@/themes/events/shared/event-booking-utils';
 import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';

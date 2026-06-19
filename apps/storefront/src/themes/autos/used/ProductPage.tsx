@@ -12,6 +12,7 @@ import {
   saveVehicleInquirySnapshot,
   redirectToVehicleInquiryConfirmation,
 } from '@/themes/autos/shared/vehicle-inquiry-confirmation';
+import { LiveChatWidget } from '@/components/chat/LiveChatWidget';
 
 interface UsedCarItem {
   id: number;
@@ -447,6 +448,11 @@ export default function ProductPage({ slug }: { slug: string }) {
                 </p>
               )}
             </form>
+          </div>
+
+          <div className="sl-chat-section">
+            <p className="sl-chat-section-label">Have questions?</p>
+            <LiveChatWidget vertical="vehicles" listingId={car.id} listingTitle={car.title} />
           </div>
         </div>
       </div>
