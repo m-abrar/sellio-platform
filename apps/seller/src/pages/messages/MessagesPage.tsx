@@ -317,7 +317,7 @@ export default function MessagesPage() {
         </div>
       ) : (
         <div className="flex-1 bg-white rounded-[2.5rem] border border-slate-100 shadow-premium overflow-hidden flex">
-          <div className={`w-full lg:w-[400px] border-r border-slate-50 flex flex-col ${selectedId ? 'hidden lg:flex' : 'flex'}`}>
+          <div className={`w-full lg:w-80 border-r border-slate-50 flex flex-col ${selectedId ? 'hidden lg:flex' : 'flex'}`}>
             <div className="p-6 border-b border-slate-50 bg-slate-50/30">
               <input
                 type="text"
@@ -338,7 +338,7 @@ export default function MessagesPage() {
                 <div
                   key={msg.id}
                   onClick={() => navigate(`/dashboard/messages/${msg.id}`)}
-                  className={`p-6 flex items-center gap-4 hover:bg-slate-50 transition-all cursor-pointer border-b border-slate-50 last:border-0 group ${selectedId === msg.id ? 'bg-slate-50 border-l-4 border-l-[#6610f2]' : ''} ${msg.unread ? 'bg-slate-50/30' : ''}`}
+                  className={`p-4 flex items-center gap-3 hover:bg-slate-50 transition-all cursor-pointer border-b border-slate-50 last:border-0 group ${selectedId === msg.id ? 'bg-slate-50 border-l-4 border-l-[#6610f2]' : ''} ${msg.unread ? 'bg-slate-50/30' : ''}`}
                 >
                   {msg.avatarUrl ? (
                     <img 
@@ -477,7 +477,7 @@ export default function MessagesPage() {
                   const item = selectedMessage.inquiriable;
                   const catStyle = getCategoryStyles(item.type);
                   return (
-                    <div className="hidden xl:flex w-[320px] border-l border-slate-100 bg-white flex-col overflow-y-auto custom-scrollbar p-8 space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
+                    <div className="hidden xl:flex w-64 border-l border-slate-100 bg-white flex-col overflow-y-auto custom-scrollbar p-5 space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
                       {/* Sidebar Header */}
                       <div className="space-y-2">
                         <p className="text-[9px] font-black uppercase tracking-[0.25em] text-slate-400">Contextual Asset</p>
@@ -492,13 +492,13 @@ export default function MessagesPage() {
                       {/* Showcase Image or Placeholder */}
                       <div className="relative">
                         {item.image ? (
-                          <img 
-                            src={item.image} 
-                            className="w-full h-44 object-cover rounded-2xl border border-slate-100 shadow-sm transition-transform duration-500 hover:scale-[1.02]" 
-                            alt={item.title} 
+                          <img
+                            src={item.image}
+                            className="w-full h-32 object-cover rounded-2xl border border-slate-100 shadow-sm transition-transform duration-500 hover:scale-[1.02]"
+                            alt={item.title}
                           />
                         ) : (
-                          <div className="w-full h-44 bg-gradient-to-tr from-slate-50 to-slate-100/50 rounded-2xl flex flex-col items-center justify-center border border-slate-100 text-slate-300">
+                          <div className="w-full h-32 bg-gradient-to-tr from-slate-50 to-slate-100/50 rounded-2xl flex flex-col items-center justify-center border border-slate-100 text-slate-300">
                             <span className="text-4xl mb-2">{catStyle.icon}</span>
                             <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Premium Registry Asset</span>
                           </div>
@@ -512,7 +512,7 @@ export default function MessagesPage() {
                         </h3>
 
                         {/* Prominent Pricing HUD */}
-                        <div className="bg-slate-950 p-5 rounded-2xl shadow-xl shadow-slate-900/5 flex items-center justify-between relative overflow-hidden group">
+                        <div className="bg-slate-950 p-4 rounded-2xl shadow-xl shadow-slate-900/5 flex items-center justify-between relative overflow-hidden group">
                           <div className="relative z-10 min-w-0">
                             <p className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-500 mb-1">Pricing Valuation</p>
                             <p className="text-lg font-black italic text-[#6610f2] tracking-tighter truncate" title={item.price}>
@@ -528,7 +528,7 @@ export default function MessagesPage() {
                       {item.details && (
                         <div className="space-y-2">
                           <h5 className="text-[9px] font-black uppercase tracking-widest text-slate-400">Registry Overview</h5>
-                          <p className="text-[11px] text-slate-500 font-bold leading-relaxed bg-slate-50/50 p-5 rounded-2xl border border-slate-100/50 max-h-36 overflow-y-auto custom-scrollbar italic">
+                          <p className="text-[11px] text-slate-500 font-bold leading-relaxed bg-slate-50/50 p-3 rounded-2xl border border-slate-100/50 max-h-28 overflow-y-auto custom-scrollbar italic">
                             "{item.details}"
                           </p>
                         </div>
