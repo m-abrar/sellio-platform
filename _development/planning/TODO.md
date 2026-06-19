@@ -508,3 +508,47 @@ why dont you show loading message instead?
 ------------------
 
 Can you figure out why the echo/pusher is not working?
+
+------------------------------
+
+
+in buyer chat, is the read receipt correct and valid?
+
+------------------------------
+
+
+when seller sends a message, it shows long string of time, and takes few seconds to correct the format, fix this issue
+
+------------------------------
+
+
+unless a message is actually sent to database, can we show some indication? this will help to fix any confusions in case of slow or bad internet service.
+
+------------------------------
+
+
+The storefront does not have a favicon, it shows the default one from nextjs. Check for other similar things too.
+
+------------------------------
+
+
+Verify if the storefront is properly working with SEO settings?
+
+------------------------------
+
+
+
+The login and register screens on laravel are unfinished
+
+------------------------------
+
+We created some test files for pusher+echo
+can we move them to non production folders?
+
+-------------------------
+
+Can we cleanup our files and folders for production?
+move the garbage to some folders
+
+---------------------
+

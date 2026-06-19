@@ -15,8 +15,10 @@ final class SafeBroadcast
         try {
             broadcast($event)->toOthers();
         } catch (\Throwable $e) {
-            Log::warning('Broadcast failed: '.$e->getMessage(), [
-                'event' => $event::class,
+            Log::error('[SafeBroadcast] Broadcasting failed: '.$e->getMessage(), [
+                'event'   => $event::class,
+                'message' => $e->getMessage(),
+                'trace'   => $e->getTraceAsString(),
             ]);
         }
     }
