@@ -447,7 +447,7 @@ export default function MessagesView() {
             <div className="w-14 h-4 rounded-full bg-zinc-100 animate-pulse" />
           ) : (
             <span className="px-2 py-0.5 text-[10px] font-bold bg-[var(--primary-light)] text-[var(--primary-color)] rounded-full">
-              {conversations.length} Active
+              {conversations.length} {conversations.length === 1 ? 'Conversation' : 'Conversations'}
             </span>
           )}
         </div>
@@ -506,7 +506,6 @@ export default function MessagesView() {
                     (e.target as HTMLImageElement).src = fallbackAvatar;
                   }}
                 />
-                <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full shadow-xs" />
               </div>
 
               <div className="flex-1 min-w-0">
@@ -577,18 +576,11 @@ export default function MessagesView() {
                       (e.target as HTMLImageElement).src = fallbackAvatar;
                     }}
                   />
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full" />
                 </div>
-                
+
                 <div>
                   <h3 className="font-extrabold text-sm text-zinc-800 leading-tight">{activeConvo.name}</h3>
-                  <div className="flex items-center gap-1 mt-0.5">
-                    <span className="relative flex h-1.5 w-1.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                    </span>
-                    <span className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Active Now</span>
-                  </div>
+                  <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Seller</span>
                 </div>
               </div>
 
