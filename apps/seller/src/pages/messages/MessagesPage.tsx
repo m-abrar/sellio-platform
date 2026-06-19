@@ -64,6 +64,7 @@ export default function MessagesPage() {
   const [partnerId, setPartnerId] = useState<number>(0);
   const [draft, setDraft] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isThreadLoading, setIsThreadLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const selectedIdRef = useRef<number | null>(null);
   const threadScrollRef = useRef<HTMLDivElement>(null);
@@ -113,6 +114,8 @@ export default function MessagesPage() {
     }
 
     let activeRequestId = selectedId;
+    setThreadMessages([]);
+    setIsThreadLoading(true);
 
     const fetchThread = async () => {
       try {
@@ -122,6 +125,8 @@ export default function MessagesPage() {
         setPartnerId(response.data.partnerId ?? partnerId);
       } catch (error) {
         console.error('Failed to fetch conversation thread', error);
+      } finally {
+        if (activeRequestId === selectedId) setIsThreadLoading(false);
       }
     };
 
@@ -259,7 +264,8 @@ export default function MessagesPage() {
     setDraft('');
 
     const tempId = `temp-${Date.now()}`;
-    setThreadMessages((prev) => [...prev, { id: tempId, isMine: true, body: content, createdAt: new Date().toISOString() }]);
+    const tempTime = new Date().toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+    setThreadMessages((prev) => [...prev, { id: tempId, isMine: true, body: content, createdAt: tempTime }]);
 
     setIsSending(true);
     try {
@@ -389,7 +395,16 @@ export default function MessagesPage() {
                   </div>
 
                   <div ref={threadScrollRef} className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
-                    {threadMessages.length === 0 ? (
+                    {isThreadLoading ? (
+                      <div className="space-y-6 pt-2">
+                        {[{ w: 'w-48', mine: false }, { w: 'w-36', mine: true }, { w: 'w-56', mine: false }, { w: 'w-32', mine: true }, { w: 'w-44', mine: false }].map((s, i) => (
+                          <div key={i} className={`flex gap-4 ${s.mine ? 'flex-row-reverse' : ''}`}>
+                            <div className="w-10 h-10 rounded-xl bg-slate-100 animate-pulse shrink-0" />
+                            <div className={`h-12 ${s.w} rounded-2xl bg-slate-100 animate-pulse`} />
+                          </div>
+                        ))}
+                      </div>
+                    ) : threadMessages.length === 0 ? (
                       <div className="flex flex-col items-center justify-center h-full text-slate-400 text-sm font-bold">
                         No messages in this thread yet.
                       </div>
