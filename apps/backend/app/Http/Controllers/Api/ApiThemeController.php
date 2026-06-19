@@ -37,11 +37,19 @@ class ApiThemeController extends Controller
             ], 404);
         }
 
-        $settings = Setting::whereIn('key', ['site_name', 'site_logo', 'hide_site_name'])->pluck('value', 'key');
+        $settings = Setting::whereIn('key', [
+            'site_name', 'site_logo', 'hide_site_name',
+            'site_favicon', 'meta_title', 'meta_description',
+        ])->pluck('value', 'key');
 
         $logoPath = $settings->get('site_logo');
         if ($logoPath) {
             $settings['site_logo'] = url(Storage::url($logoPath));
+        }
+
+        $faviconPath = $settings->get('site_favicon');
+        if ($faviconPath) {
+            $settings['site_favicon'] = url(Storage::url($faviconPath));
         }
 
         return response()->json([

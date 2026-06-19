@@ -15,9 +15,36 @@ import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { theme } = await getActiveTheme();
+  const s = theme.app_settings;
+  const siteName = s?.site_name || "Sellio";
+  const title = s?.meta_title || siteName;
+  const description = s?.meta_description || "A premium multi-platform storefront engine";
+  const favicon = s?.site_favicon;
+
   return {
-    title: theme.app_settings?.site_name || "Sellio Platform",
-    description: "A premium multi-platform storefront engine",
+    title: {
+      default: title,
+      template: `%s | ${siteName}`,
+    },
+    description,
+    ...(favicon && {
+      icons: {
+        icon: favicon,
+        shortcut: favicon,
+        apple: favicon,
+      },
+    }),
+    openGraph: {
+      title,
+      description,
+      siteName,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 

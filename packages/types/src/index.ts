@@ -8,6 +8,9 @@ export interface AppSettings {
   site_name: string;
   site_logo: string;
   hide_site_name: string;
+  site_favicon?: string;
+  meta_title?: string;
+  meta_description?: string;
 }
 
 export interface Theme {
