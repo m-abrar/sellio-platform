@@ -669,13 +669,22 @@ export default function MessagesView() {
                           </div>
                           
                           <div className="flex items-center gap-1 mt-1 text-[9px] text-zinc-400 font-semibold opacity-70 group-hover:opacity-100 transition-opacity">
-                            <span>
-                              {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </span>
-                            {msg.sender_id === user?.id && (
-                              msg.read_at
-                                ? <span className="text-[var(--primary-color)] font-extrabold ml-0.5">✓✓</span>
-                                : <span className="text-zinc-300 font-extrabold ml-0.5">✓</span>
+                            {String(msg.id).startsWith('temp-') ? (
+                              <span className="flex items-center gap-1 text-zinc-300 italic">
+                                <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 animate-pulse inline-block" />
+                                Sending…
+                              </span>
+                            ) : (
+                              <>
+                                <span>
+                                  {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                                {msg.sender_id === user?.id && (
+                                  msg.read_at
+                                    ? <span className="text-[var(--primary-color)] font-extrabold ml-0.5">✓✓</span>
+                                    : <span className="text-zinc-300 font-extrabold ml-0.5">✓</span>
+                                )}
+                              </>
                             )}
                           </div>
                         </div>

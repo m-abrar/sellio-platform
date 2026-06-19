@@ -444,7 +444,14 @@ export default function MessagesPage() {
                             }`}
                           >
                             <p className={`text-sm font-medium leading-relaxed ${message.isMine ? 'text-white' : 'text-slate-600'}`}>{message.body}</p>
-                            <p className={`text-[9px] font-black uppercase tracking-widest mt-4 ${message.isMine ? 'text-white/50' : 'text-slate-300'}`}>{message.createdAt}</p>
+                            {String(message.id).startsWith('temp-') ? (
+                              <p className="text-[9px] font-black uppercase tracking-widest mt-4 text-white/30 flex items-center gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-white/30 animate-pulse inline-block" />
+                                Sending…
+                              </p>
+                            ) : (
+                              <p className={`text-[9px] font-black uppercase tracking-widest mt-4 ${message.isMine ? 'text-white/50' : 'text-slate-300'}`}>{message.createdAt}</p>
+                            )}
                           </div>
                         </div>
                       ))
