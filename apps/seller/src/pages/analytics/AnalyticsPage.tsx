@@ -152,6 +152,26 @@ export default function AnalyticsPage() {
 
   const activeMeta = VERTICALS[selectedVertical] ?? VERTICALS.All;
 
+  const handleExportCSV = () => {
+    const headers = ['Title', 'Category', 'Views', 'Leads', 'Conversion Rate', 'Revenue'];
+    const rows = filteredListings.map((l) => [
+      `"${l.title.replace(/"/g, '""')}"`,
+      l.type,
+      l.views,
+      l.leads,
+      l.conversion_rate,
+      l.revenue,
+    ]);
+    const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `analytics-${selectedVertical.toLowerCase()}-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -335,8 +355,11 @@ export default function AnalyticsPage() {
                 className="w-full bg-slate-50 border border-slate-100 rounded-full pl-14 pr-8 py-3.5 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#6610f2]/20 shadow-inner"
               />
             </div>
-            {/* Export CSV Button (Sleek placeholder CTA) */}
-            <button className="flex items-center justify-center gap-2 bg-slate-900 text-white hover:bg-slate-800 px-6 py-4.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-slate-900/10 active:scale-95 transition-all">
+            <button
+              onClick={handleExportCSV}
+              disabled={filteredListings.length === 0}
+              className="flex items-center justify-center gap-2 bg-slate-900 text-white hover:bg-slate-800 px-6 py-4.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-slate-900/10 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+            >
               <HiOutlineArrowDownTray className="w-4 h-4 stroke-[3px]" /> Export
             </button>
           </div>
