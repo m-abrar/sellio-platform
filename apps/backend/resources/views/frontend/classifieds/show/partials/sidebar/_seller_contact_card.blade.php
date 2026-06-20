@@ -34,9 +34,15 @@
         <p class="small text-muted mb-3"><i class="bi bi-info-circle me-1"></i>{{ __('No public reviews yet.') }}</p>
     @endif
 
-    <a href="{{ route('conversation.start', $seller) }}" class="btn btn-primary-theme w-100 rounded-pill fw-800 mb-2">
-        <i class="bi bi-chat-dots me-2"></i>{{ __('Send Message') }}
-    </a>
+    @auth
+        <a href="{{ route('conversation.start', $seller) }}" class="btn btn-primary-theme w-100 rounded-pill fw-800 mb-2">
+            <i class="bi bi-chat-dots me-2"></i>{{ __('Send Message') }}
+        </a>
+    @else
+        <a href="{{ route('login') }}" class="btn btn-primary-theme w-100 rounded-pill fw-800 mb-2">
+            <i class="bi bi-chat-dots me-2"></i>{{ __('Sign in to Message') }}
+        </a>
+    @endauth
 
     <a href="{{ route('partner.profile', $seller) }}" class="btn btn-outline-primary-theme w-100 rounded-pill fw-bold">
         {{ __('View Profile') }}

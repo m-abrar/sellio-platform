@@ -470,30 +470,13 @@ https://demo.sellio.vebdez.com/buyer
 
 - [x] Chat window shows two login buttons — root cause was `LiveChatWidget.tsx` auth phase showing a "Log in / Register" tab-toggle row plus a "Sign in & chat" submit button simultaneously. Fixed by removing the tab row; replaced with a plain text link below the submit button ("No account? Register" / "Already have an account? Sign in"). Updated `chat.css`: removed `.sl-chat-auth-toggle` styles, added `.sl-chat-auth-switch`.
 
-unifieds_minimal, in the header, where does the CTA button go to? fix it.
+- [x] Header CTA button: was always linking to `url_partner` regardless of who clicked it. Now auth-aware: partners/admins → seller portal, logged-in buyers → "Become a Seller" → register, guests → "Post Listing" → register. Fixed in `frontend/_partials/_header.blade.php`.
 
+- [x] Footer squeezed (all unifieds_* themes share the same footer): added `py-5` to the `container-xl` wrapper in `frontend/_partials/_footer.blade.php` for vertical breathing room. Applies to all themes including unifieds_minimal and unifieds_mega.
 
-unifieds_minimal, footer UIUX is squeezed, can you give it a perfect appearance?
+- [x] Classifieds single listing chat vs inquiry: no inquiry route exists for classifieds (only autos have one). Classifieds use the conversation/chat flow (`conversation.start`). Added `@auth/@else` guard to the "Send Message" button so guests see "Sign in to Message" (previously silently redirected to login). Same guard applied to the autos `_contact_dealer.blade.php`.
 
-unifieds_minimal, the classifieds single listing should have chat instead of inquiry form, or both? can you recheck our backend logics?
-
-
-unifieds_minimal, the content of this theme looks that it is introducing theme's features, however, we need to give a feeling of finished marketplace to target the end user audience (not the theme buyers)
-
-
-
-unifieds_interactive, the content of this theme looks that it is introducing theme's features, however, we need to give a feeling of finished marketplace to target the end user audience (not the theme buyers)
-
-unifieds_mega, footer UIUX is squeezed, can you give it a perfect appearance?
-
-unifieds_mega, the content of this theme looks that it is introducing theme's features, however, we need to give a feeling of finished marketplace to target the end user audience (not the theme buyers)
-
-unifieds_modern, the content of this theme looks that it is introducing theme's features, however, we need to give a feeling of finished marketplace to target the end user audience (not the theme buyers)
-
-
-unifieds_classic, the content of this theme looks that it is introducing theme's features, however, we need to give a feeling of finished marketplace to target the end user audience (not the theme buyers)
-
-unifieds_standard, this theme looks like very basic structure only, can we make it a finished look?
+- [ ] unifieds_* themes content feels like theme demo — needs seeded demo data to look like a finished marketplace (addresses unifieds_minimal, unifieds_interactive, unifieds_mega, unifieds_modern, unifieds_classic, unifieds_standard, unifieds_standard)
 
 
 404, 403, 419, 500, 503 

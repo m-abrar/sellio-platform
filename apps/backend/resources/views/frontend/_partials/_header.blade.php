@@ -130,10 +130,24 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                 @endif
 
                 {{-- Primary Conversion Button --}}
-                <a href="{{ filled(setting('url_partner')) ? setting('url_partner') : route('register') }}"
-                    class="btn btn-primary rounded-pill fw-bold px-4 shadow-sm hover-lift text-uppercase">
-                    <i class="bi bi-plus-lg me-1"></i> {{ __('Post Listing') }}
-                </a>
+                @auth
+                    @if(auth()->user()->hasRole(['partner', 'admin', 'super-admin']))
+                        <a href="{{ setting('url_partner', route('register')) }}"
+                            class="btn btn-primary rounded-pill fw-bold px-4 shadow-sm hover-lift text-uppercase">
+                            <i class="bi bi-plus-lg me-1"></i> {{ __('Post Listing') }}
+                        </a>
+                    @else
+                        <a href="{{ route('register') }}"
+                            class="btn btn-primary rounded-pill fw-bold px-4 shadow-sm hover-lift text-uppercase">
+                            <i class="bi bi-shop me-1"></i> {{ __('Become a Seller') }}
+                        </a>
+                    @endif
+                @else
+                    <a href="{{ route('register') }}"
+                        class="btn btn-primary rounded-pill fw-bold px-4 shadow-sm hover-lift text-uppercase">
+                        <i class="bi bi-plus-lg me-1"></i> {{ __('Post Listing') }}
+                    </a>
+                @endauth
             </div>
         </div>
     </div>

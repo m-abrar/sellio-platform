@@ -37,11 +37,17 @@
 
     {{-- 1. Internal Message Button (PRIMARY CTA - Moved to top) --}}
     <div class="d-grid mb-3">
-        {{-- ACTION: Replace the href with your actual messaging route/modal trigger --}}
-        <a href="{{ route('conversation.start', $dealer) }}" 
-           class="btn btn-lg fw-bold text-white btn-primary-theme shadow-primary-md">
-            <i class="bi bi-chat-dots-fill me-2"></i>{{ __('Send Message') }}
-        </a>
+        @auth
+            <a href="{{ route('conversation.start', $dealer) }}"
+               class="btn btn-lg fw-bold text-white btn-primary-theme shadow-primary-md">
+                <i class="bi bi-chat-dots-fill me-2"></i>{{ __('Send Message') }}
+            </a>
+        @else
+            <a href="{{ route('login') }}"
+               class="btn btn-lg fw-bold text-white btn-primary-theme shadow-primary-md">
+                <i class="bi bi-chat-dots-fill me-2"></i>{{ __('Sign in to Message') }}
+            </a>
+        @endauth
     </div>
 
     {{-- 2. Call Button (SECONDARY CTA - Moved below) --}}
