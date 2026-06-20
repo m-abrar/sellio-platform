@@ -70,72 +70,15 @@ export default function DashboardHome() {
 
   const { stats, recentListings, healthScore, earningChange, verticalsData, subscriptionLimits } = data || { stats: {}, recentListings: [], verticalsData: null, subscriptionLimits: null };
 
-  const displayActivities = activities.length > 0 
-    ? activities.slice(0, 6).map((item) => ({
-        name: item.user || 'Anon',
-        actionText: item.type || 'Activity',
-        listingName: item.description || item.title || 'Interaction',
-        avatar: item.avatar || PLACEHOLDER_AVATAR,
-        listingImage: item.image || PLACEHOLDER_LISTING,
-        time: item.time || 'just now',
-        route: item.route || '/dashboard'
-      }))
-    : [
-        { 
-          name: 'Julian Vance', 
-          actionText: 'Viewing',
-          listingName: 'Azure Bay Villa', 
-          avatar: PLACEHOLDER_AVATAR,
-          listingImage: PLACEHOLDER_LISTING,
-          time: '2m ago',
-          route: '/dashboard'
-        },
-        { 
-          name: 'Sarah Connor', 
-          actionText: 'Inquired',
-          listingName: 'Tesla Model S Plaid', 
-          avatar: PLACEHOLDER_AVATAR,
-          listingImage: PLACEHOLDER_LISTING,
-          time: '15m ago',
-          route: '/dashboard'
-        },
-        { 
-          name: 'Michael Ross', 
-          actionText: 'Saved',
-          listingName: 'Modern Glass Office Space', 
-          avatar: PLACEHOLDER_AVATAR,
-          listingImage: PLACEHOLDER_LISTING,
-          time: '1h ago',
-          route: '/dashboard'
-        },
-        { 
-          name: 'Emily Watson', 
-          actionText: 'Requested Quote',
-          listingName: 'Enterprise SEO Campaign', 
-          avatar: PLACEHOLDER_AVATAR,
-          listingImage: PLACEHOLDER_LISTING,
-          time: '2h ago',
-          route: '/dashboard'
-        },
-        { 
-          name: 'David Beckham', 
-          actionText: 'Booked Visit',
-          listingName: 'Luxury Downtown Penthouse', 
-          avatar: PLACEHOLDER_AVATAR,
-          listingImage: PLACEHOLDER_LISTING,
-          time: '4h ago',
-          route: '/dashboard'
-        },
-        { 
-          name: 'Jessica Alba', 
-          actionText: 'Submitted Application',
-          listingName: 'Lead Frontend Architect', 
-          avatar: PLACEHOLDER_AVATAR,
-          listingImage: PLACEHOLDER_LISTING,
-          time: '1d ago',
-          route: '/dashboard'
-        }
-      ];
+  const displayActivities = activities.slice(0, 6).map((item) => ({
+    name: item.user || 'Anon',
+    actionText: item.type || 'Activity',
+    listingName: item.description || item.title || 'Interaction',
+    avatar: item.avatar || PLACEHOLDER_AVATAR,
+    listingImage: item.image || PLACEHOLDER_LISTING,
+    time: item.time || 'just now',
+    route: item.route || '/dashboard/live-interactions',
+  }));
 
   return (
     <div className="space-y-10 md:space-y-16 pb-20">
@@ -267,42 +210,45 @@ export default function DashboardHome() {
             </button>
           </div>
           
-          <div className="space-y-4">
-            {displayActivities.map((interaction, i) => (
-              <div 
-                key={i} 
-                onClick={() => navigate(interaction.route)}
-                className="group flex items-center p-5 rounded-[1.8rem] bg-slate-50/50 border border-transparent hover:bg-white hover:border-slate-100 hover:shadow-xl hover:shadow-slate-200/40 transition-all cursor-pointer"
-              >
-                {/* 1. User Avatar */}
-                <img 
-                  src={interaction.avatar} 
-                  className="shrink-0 w-12 h-12 rounded-xl object-cover shadow-xs border border-slate-100" 
-                  alt={interaction.name} 
-                />
-                
-                {/* 2. Interaction Details */}
-                <div className="ms-5 flex-1 min-w-0">
-                  <div className="flex items-baseline gap-2">
-                    <p className="text-sm font-black text-slate-900 leading-none group-hover:text-[#6610f2] transition-colors">{interaction.name}</p>
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{interaction.time}</span>
-                  </div>
-                  <p className="text-[10px] font-bold text-[#6610f2] uppercase tracking-widest mt-1.5 opacity-80 leading-none truncate max-w-lg">
-                    {interaction.actionText}: <span className="text-slate-500 font-medium normal-case font-sans text-xs ml-1">{interaction.listingName}</span>
-                  </p>
-                </div>
-                
-                {/* 3. Listing Thumbnail Preview */}
-                <div className="shrink-0 relative w-16 h-10 rounded-lg overflow-hidden border border-slate-100 shadow-xs mr-4 group-hover:scale-105 transition-transform duration-300">
-                  <img src={interaction.listingImage} className="w-full h-full object-cover" alt="preview" />
-                  <div className="absolute inset-0 bg-black/5" />
-                </div>
-                
-                {/* 4. Action Arrow */}
-                <HiOutlineArrowUpRight className="w-5 h-5 text-slate-300 group-hover:text-[#6610f2] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 shrink-0" />
+          {displayActivities.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center space-y-4">
+              <div className="w-16 h-16 bg-slate-50 border border-slate-100 rounded-3xl flex items-center justify-center text-slate-300 mx-auto">
+                <HiOutlineArrowUpRight className="w-7 h-7" />
               </div>
-            ))}
-          </div>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">No interactions yet</p>
+              <p className="text-xs text-slate-400 font-medium max-w-xs">Buyer activity will appear here once your listings go live.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {displayActivities.map((interaction, i) => (
+                <div
+                  key={i}
+                  onClick={() => navigate(interaction.route)}
+                  className="group flex items-center p-5 rounded-[1.8rem] bg-slate-50/50 border border-transparent hover:bg-white hover:border-slate-100 hover:shadow-xl hover:shadow-slate-200/40 transition-all cursor-pointer"
+                >
+                  <img
+                    src={interaction.avatar}
+                    className="shrink-0 w-12 h-12 rounded-xl object-cover shadow-xs border border-slate-100"
+                    alt={interaction.name}
+                  />
+                  <div className="ms-5 flex-1 min-w-0">
+                    <div className="flex items-baseline gap-2">
+                      <p className="text-sm font-black text-slate-900 leading-none group-hover:text-[#6610f2] transition-colors">{interaction.name}</p>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{interaction.time}</span>
+                    </div>
+                    <p className="text-[10px] font-bold text-[#6610f2] uppercase tracking-widest mt-1.5 opacity-80 leading-none truncate max-w-lg">
+                      {interaction.actionText}: <span className="text-slate-500 font-medium normal-case font-sans text-xs ml-1">{interaction.listingName}</span>
+                    </p>
+                  </div>
+                  <div className="shrink-0 relative w-16 h-10 rounded-lg overflow-hidden border border-slate-100 shadow-xs mr-4 group-hover:scale-105 transition-transform duration-300">
+                    <img src={interaction.listingImage} className="w-full h-full object-cover" alt="preview" />
+                    <div className="absolute inset-0 bg-black/5" />
+                  </div>
+                  <HiOutlineArrowUpRight className="w-5 h-5 text-slate-300 group-hover:text-[#6610f2] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 shrink-0" />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* FINANCIAL HUD */}
