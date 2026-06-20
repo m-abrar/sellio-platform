@@ -275,3 +275,14 @@ Route::prefix('auth')->group(function () {
         ->name('login.social.callback');
 });
 
+// ── Error page previews (LOCAL DEV ONLY — remove before production) ──────────
+if (!app()->environment('production')) {
+    Route::get('/_dev/error/{code}', function (string $code) {
+        $view = "errors.{$code}";
+        if (!view()->exists($view)) {
+            return response("No error view for {$code}", 404);
+        }
+        return response(view($view), (int) $code);
+    });
+}
+
