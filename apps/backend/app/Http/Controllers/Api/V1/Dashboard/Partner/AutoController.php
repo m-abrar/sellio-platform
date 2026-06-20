@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuthorizesOwnership;
 use App\Http\Requests\Partner\AutoRequest;
 use App\Http\Resources\AutoResource;
 use App\Models\Auto;
@@ -14,6 +15,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AutoController extends Controller
 {
+    use AuthorizesOwnership;
+
     protected AutoService $autoService;
 
     public function __construct(AutoService $autoService)
@@ -91,12 +94,6 @@ class AutoController extends Controller
         return $this->successResponse(null, __('Vehicle deleted successfully.'));
     }
 
-    protected function authorizeOwner(Auto $auto): void
-    {
-        if (Auth::id() !== $auto->user_id) {
-            abort(403, __('Unauthorized access to this vehicle.'));
-        }
-    }
 
     protected function handleMedia(Auto $auto, Request $request): void
     {

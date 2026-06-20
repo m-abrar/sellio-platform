@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuthorizesOwnership;
 use App\Http\Requests\Partner\EventRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
@@ -18,6 +19,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class EventController extends Controller
 {
+    use AuthorizesOwnership;
+
     protected EventService $eventService;
 
     public function __construct(EventService $eventService)
@@ -116,13 +119,6 @@ class EventController extends Controller
             'nextOccurrenceIndex'  => $nextOccurrenceIndex,
             'currentTicketsData'   => $currentTicketsData,
         ]);
-    }
-
-    protected function authorizeOwner(Event $event): void
-    {
-        if (Auth::id() !== $event->user_id) {
-            abort(403, __('Unauthorized access to this event.'));
-        }
     }
 
     protected function handleMedia(Event $event, Request $request): void

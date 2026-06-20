@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuthorizesOwnership;
 use App\Http\Requests\Partner\ServiceRequest;
 use App\Http\Resources\ServiceResource;
 use App\Models\Service;
@@ -18,6 +19,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class ServiceController extends Controller
 {
+    use AuthorizesOwnership;
+
     protected ServiceService $serviceService;
 
     public function __construct(ServiceService $serviceService)
@@ -102,13 +105,6 @@ class ServiceController extends Controller
         $this->serviceService->deleteService($service);
 
         return $this->successResponse(null, __('Service deleted successfully.'));
-    }
-
-    protected function authorizeOwner(Service $service): void
-    {
-        if (Auth::id() !== $service->user_id) {
-            abort(403, __('Unauthorized action. You do not own this service.'));
-        }
     }
 
     protected function handleMedia(Service $service, Request $request): void

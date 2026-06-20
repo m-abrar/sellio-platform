@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuthorizesOwnership;
 use App\Http\Requests\Partner\ClassifiedRequest;
 use App\Http\Resources\ClassifiedResource;
 use App\Models\Classified;
@@ -18,6 +19,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class ClassifiedController extends Controller
 {
+    use AuthorizesOwnership;
+
     protected ClassifiedService $classifiedService;
 
     public function __construct(ClassifiedService $classifiedService)
@@ -100,13 +103,6 @@ class ClassifiedController extends Controller
         $this->classifiedService->deleteClassified($classified);
 
         return $this->successResponse(null, __('Classified deleted successfully.'));
-    }
-
-    protected function authorizeOwner(Classified $classified): void
-    {
-        if (Auth::id() !== $classified->user_id) {
-            abort(403, __('Unauthorized action. You do not own this classified.'));
-        }
     }
 
     protected function handleMedia(Classified $classified, Request $request): void

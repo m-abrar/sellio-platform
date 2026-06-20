@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuthorizesOwnership;
 use App\Http\Requests\Partner\JobListingRequest;
 use App\Http\Resources\JobListingResource;
 use App\Models\JobListing;
@@ -18,6 +19,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class JobListingController extends Controller
 {
+    use AuthorizesOwnership;
+
     protected JobListingService $jobService;
 
     public function __construct(JobListingService $jobService)
@@ -101,13 +104,6 @@ class JobListingController extends Controller
         $this->jobService->deleteJob($joblisting);
 
         return $this->successResponse(null, __('Job deleted successfully.'));
-    }
-
-    protected function authorizeOwner(JobListing $job): void
-    {
-        if (Auth::id() !== $job->user_id) {
-            abort(403, __('You do not have permission to modify this job.'));
-        }
     }
 
     protected function handleMedia(JobListing $job, Request $request): void

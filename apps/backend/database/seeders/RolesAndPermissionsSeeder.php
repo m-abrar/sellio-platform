@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use App\Models\User;
 use Spatie\Permission\PermissionRegistrar;
 
 /**
@@ -66,6 +65,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'manage-pages',
             'manage-menus',
             'manage-themes',
+            'manage-marketing',
         ];
 
         foreach ($permissions as $permission) {
@@ -88,11 +88,12 @@ class RolesAndPermissionsSeeder extends Seeder
         // The Admin role typically manages core site operations and high-level content.
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $adminRole->givePermissionTo([
-            'create', 'edit', 'delete', 'view', 
+            'create', 'edit', 'delete', 'view',
             'manage-withdrawals', 'manage-users',
-            'manage-property', 'manage-auto', 'manage-event', 'manage-job', 
-            'manage-service', 'manage-product', 'manage-classified', 
-            'manage-blog', 'manage-pages', 'manage-menus', 'manage-themes'
+            'manage-property', 'manage-auto', 'manage-event', 'manage-job',
+            'manage-service', 'manage-product', 'manage-classified',
+            'manage-blog', 'manage-pages', 'manage-menus', 'manage-themes',
+            'manage-marketing',
         ]);
 
         // C. Moderator Role
@@ -100,9 +101,9 @@ class RolesAndPermissionsSeeder extends Seeder
         $moderatorRole = Role::firstOrCreate(['name' => 'moderator']);
         $moderatorRole->givePermissionTo([
             'edit', 'delete', 'view',
-            'manage-property', 'manage-auto', 'manage-event', 'manage-job', 
-            'manage-service', 'manage-product', 'manage-classified', 
-            'manage-blog'
+            'manage-property', 'manage-auto', 'manage-event', 'manage-job',
+            'manage-service', 'manage-product', 'manage-classified',
+            'manage-blog', 'manage-marketing',
         ]);
 
         // D. Standard Partner Role (Users who offer services/products)
