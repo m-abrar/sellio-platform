@@ -27,6 +27,7 @@ export default function ListingDetailsView() {
     setLoading(true);
     try {
       const endpoints = [
+        { category: 'Products', url: `/v1/products/${slug}` },
         { category: 'Properties', url: `/v1/properties/${slug}` },
         { category: 'Autos', url: `/v1/vehicles/${slug}` },
         { category: 'Events', url: `/v1/events/${slug}` },

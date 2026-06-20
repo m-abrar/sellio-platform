@@ -36,9 +36,8 @@ The existing application already provides:
 The current implementation is still a prototype because:
 
 - The shared API foundation is implemented, but most feature models remain untyped.
-- Discovery falls back to mock records when requests fail.
-- Products are missing from the discovery categories.
-- Listing mapping is broad and does not model each vertical explicitly.
+- Home discovery uses the first API page and does not yet expose search, filters, or pagination controls.
+- Listing details still probe multiple endpoints and retain prototype fallback records.
 - Favorites and messages are placeholder screens.
 - Settings actions are not connected.
 - Some labels contain broken emoji or character encoding.
@@ -83,7 +82,7 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
 
 ### Tasks
 
-- [ ] Support all seven verticals:
+- [x] Support all seven verticals:
   - Products
   - Properties
   - Vehicles
@@ -92,7 +91,7 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
   - Services
   - Classifieds
 - [ ] Build reusable listing-card components with real images and vertical-aware metadata.
-- [ ] Add unified and vertical-specific browsing.
+- [x] Add unified and vertical-specific browsing.
 - [ ] Add search, sorting, filters, pagination, and pull-to-refresh.
 - [ ] Respect enabled/disabled backend modules.
 - [ ] Respect the buyer's selected location where supported.
@@ -205,14 +204,14 @@ The first sprint will deliver the foundation and one complete real-data path.
 
 - [x] Add environment-based API configuration that works on the currently connected physical phone.
 - [x] Create the shared authenticated API client.
-- [ ] Create core listing and pagination types.
+- [x] Create core listing and pagination types.
 - [ ] Remove implicit mock fallback behavior.
 - [ ] Fix broken character encoding.
-- [ ] Add Products to the category list.
-- [ ] Replace the home feed with real API data for all enabled verticals.
-- [ ] Render real listing images and vertical-aware card metadata.
-- [ ] Add visible retry and empty states.
-- [ ] Verify login and discovery against the local Laravel backend.
+- [x] Add Products to the category list.
+- [x] Replace the home feed with real API data for all enabled verticals.
+- [x] Render real listing images and vertical-aware card metadata.
+- [x] Add visible retry and empty states.
+- [x] Verify login and discovery against the local Laravel backend.
 - [x] Run TypeScript and Android bundle verification.
 
 ### Sprint Completion Definition
