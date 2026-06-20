@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PageHeader from '../../components/layout/PageHeader';
-import { HiOutlineShieldCheck, HiOutlineUserCircle, HiOutlineLockClosed, HiOutlineBellAlert } from 'react-icons/hi2';
-import { getProfile, updateProfile } from '../../api/profile';
+import { HiOutlineShieldCheck, HiOutlineLockClosed, HiOutlineBellAlert } from 'react-icons/hi2';
+import { getProfile, updateProfile, changePassword } from '../../api/profile';
 import { toast } from 'sonner';
 import { getApiErrorMessage } from '../../lib/apiErrorMessage';
 
@@ -17,6 +17,9 @@ export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+
+  const [passwordForm, setPasswordForm] = useState({ current_password: '', password: '', password_confirmation: '' });
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -59,11 +62,27 @@ export default function SettingsPage() {
     }
   };
 
-  const sections = [
-    { title: 'Profile Identity', icon: HiOutlineUserCircle, description: 'Manage your avatar, display name, and public bio.' },
-    { title: 'Security & Access', icon: HiOutlineShieldCheck, description: 'Two-factor authentication — coming soon.', comingSoon: true },
-    { title: 'Password Control', icon: HiOutlineLockClosed, description: 'Update your credentials from the Laravel account area — coming soon.', comingSoon: true },
-    { title: 'Alert Preferences', icon: HiOutlineBellAlert, description: 'Configure how you receive system and market alerts — coming soon.', comingSoon: true },
+  const handlePasswordChange = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (passwordForm.password !== passwordForm.password_confirmation) {
+      toast.error('New passwords do not match.');
+      return;
+    }
+    setIsChangingPassword(true);
+    try {
+      const response = await changePassword(passwordForm);
+      toast.success(response.message || 'Password updated successfully.');
+      setPasswordForm({ current_password: '', password: '', password_confirmation: '' });
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Failed to update password.'));
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  const deferredSections = [
+    { title: 'Security & Access', icon: HiOutlineShieldCheck, description: 'Two-factor authentication support is planned for a future release.' },
+    { title: 'Alert Preferences', icon: HiOutlineBellAlert, description: 'Granular notification controls are planned for a future release.' },
   ];
 
   return (
@@ -155,21 +174,74 @@ export default function SettingsPage() {
         )}
       </form>
 
+      {/* Password Change */}
+      <form onSubmit={handlePasswordChange} className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-premium space-y-8">
+        <div className="flex items-start gap-6">
+          <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300 shrink-0">
+            <HiOutlineLockClosed className="w-8 h-8" />
+          </div>
+          <div>
+            <h3 className="text-2xl font-black text-slate-900 italic tracking-tight mb-1">Password Control.</h3>
+            <p className="text-sm text-slate-400 font-medium">Update your login credentials.</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Current Password</label>
+            <input
+              type="password"
+              value={passwordForm.current_password}
+              onChange={(e) => setPasswordForm((prev) => ({ ...prev, current_password: e.target.value }))}
+              required
+              className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#6610f2]/20"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">New Password</label>
+            <input
+              type="password"
+              value={passwordForm.password}
+              onChange={(e) => setPasswordForm((prev) => ({ ...prev, password: e.target.value }))}
+              required
+              minLength={8}
+              className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#6610f2]/20"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Confirm New Password</label>
+            <input
+              type="password"
+              value={passwordForm.password_confirmation}
+              onChange={(e) => setPasswordForm((prev) => ({ ...prev, password_confirmation: e.target.value }))}
+              required
+              minLength={8}
+              className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#6610f2]/20"
+            />
+          </div>
+        </div>
+        <button
+          type="submit"
+          disabled={isChangingPassword}
+          className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] hover:bg-slate-700 transition-all disabled:opacity-60"
+        >
+          {isChangingPassword ? 'Updating...' : 'Update Password'}
+        </button>
+      </form>
+
+      {/* Deferred sections */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {sections.slice(1).map((section) => (
-          <div key={section.title} className="group relative bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-premium overflow-hidden transition-all hover:shadow-2xl hover:shadow-purple-100/20">
+        {deferredSections.map((section) => (
+          <div key={section.title} className="group relative bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-premium overflow-hidden">
             <div className="flex items-start gap-6">
-              <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-purple-50 group-hover:text-[#6610f2] transition-all">
+              <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300">
                 <section.icon className="w-8 h-8" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <h3 className="text-xl font-black text-slate-900 italic tracking-tight">{section.title}</h3>
-                  {'comingSoon' in section && section.comingSoon ? (
-                    <span className="text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-100">
-                      Coming soon
-                    </span>
-                  ) : null}
+                  <span className="text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-100">
+                    Coming soon
+                  </span>
                 </div>
                 <p className="text-sm text-slate-400 font-medium leading-relaxed">{section.description}</p>
               </div>

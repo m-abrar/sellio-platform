@@ -20,6 +20,15 @@ export const getProfile = async () => {
   };
 };
 
+export const changePassword = async (payload: {
+  current_password: string;
+  password: string;
+  password_confirmation: string;
+}) => {
+  const response = await apiClient.put('/v1/auth/profile/password', payload);
+  return { message: response.data.message };
+};
+
 export const updateProfile = async (payload: {
   name: string;
   email: string;
