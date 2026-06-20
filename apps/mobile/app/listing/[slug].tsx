@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native';
-import { API_URL } from '../../src/config/api';
+import { apiRequest } from '../../src/api/client';
 
 const MOCK_REGISTRY: Record<string, any> = {
   'pemberley-manor': { title: 'Penthouse Apartment', category: 'Properties', price: '$2,450,000', location: 'New York, NY', spec: '3 Beds • 4 Baths • 3,200 sqft', desc: 'An exquisite high-rise penthouse overlooking Central Park. Engineered with full smart-home operations, floor-to-ceiling double-insulated glass panes, custom travertine counter structures, and a spacious wrap-around private terrace deck.' },
@@ -27,20 +27,17 @@ export default function ListingDetailsView() {
     setLoading(true);
     try {
       const endpoints = [
-        { category: 'Properties', url: `${API_URL}/v1/properties/${slug}` },
-        { category: 'Autos', url: `${API_URL}/v1/vehicles/${slug}` },
-        { category: 'Events', url: `${API_URL}/v1/events/${slug}` },
-        { category: 'Services', url: `${API_URL}/v1/services/${slug}` },
-        { category: 'Jobs', url: `${API_URL}/v1/jobs/${slug}` },
-        { category: 'Classifieds', url: `${API_URL}/v1/classifieds/${slug}` },
+        { category: 'Properties', url: `/v1/properties/${slug}` },
+        { category: 'Autos', url: `/v1/vehicles/${slug}` },
+        { category: 'Events', url: `/v1/events/${slug}` },
+        { category: 'Services', url: `/v1/services/${slug}` },
+        { category: 'Jobs', url: `/v1/jobs/${slug}` },
+        { category: 'Classifieds', url: `/v1/classifieds/${slug}` },
       ];
 
       const promises = endpoints.map(async (ep) => {
         try {
-          const res = await fetch(ep.url, { headers: { Accept: 'application/json' } });
-          if (res.ok) {
-            const data = await res.json();
-            const record = data.data || data;
+          const record = await apiRequest<any>(ep.url);
             if (record && (record.title || record.name)) {
               return {
                 title: record.title || record.name,
@@ -51,7 +48,6 @@ export default function ListingDetailsView() {
                 desc: record.description || record.short_description || 'Exclusive luxury item on Sellio.',
               };
             }
-          }
         } catch (e) {
           // Silent fail
         }

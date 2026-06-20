@@ -11,7 +11,7 @@ import {
   SafeAreaView
 } from 'react-native';
 import { useAuth } from '../../src/context/AuthContext';
-import { API_URL } from '../../src/config/api';
+import { apiRequest } from '../../src/api/client';
 
 const CATEGORIES = [
   { id: 'properties', title: 'Properties', icon: '🏠' },
@@ -46,12 +46,12 @@ export default function HomeView() {
     setLoading(true);
     try {
       const endpoints: Record<string, string> = {
-        properties: `${API_URL}/v1/properties`,
-        autos: `${API_URL}/v1/vehicles`,
-        events: `${API_URL}/v1/events`,
-        services: `${API_URL}/v1/services`,
-        jobs: `${API_URL}/v1/jobs`,
-        classifieds: `${API_URL}/v1/classifieds`,
+        properties: '/v1/properties',
+        autos: '/v1/vehicles',
+        events: '/v1/events',
+        services: '/v1/services',
+        jobs: '/v1/jobs',
+        classifieds: '/v1/classifieds',
       };
 
       let fetchedItems: any[] = [];
@@ -59,11 +59,9 @@ export default function HomeView() {
       if (selectedCat === 'all') {
         const promises = Object.entries(endpoints).map(async ([key, url]) => {
           try {
-            const res = await fetch(url, { headers: { Accept: 'application/json' } });
-            if (res.ok) {
-              const data = await res.json();
-              const items = data.data || data;
-              return (Array.isArray(items) ? items : []).map((item: any) => ({
+            const data = await apiRequest<any>(url);
+            const items = Array.isArray(data) ? data : data?.data;
+            return (Array.isArray(items) ? items : []).map((item: any) => ({
                 id: String(item.id),
                 title: item.title || item.name || 'Untitled Listing',
                 category: key,
@@ -71,8 +69,7 @@ export default function HomeView() {
                 location: item.location?.title || item.city || 'Remote',
                 details: item.short_description || item.specs?.area_formatted || item.description || 'Exclusive Sellio registry asset.',
                 slug: item.slug || String(item.id),
-              }));
-            }
+            }));
           } catch (e) {
             // Silently fail to support active endpoints
           }
@@ -84,10 +81,8 @@ export default function HomeView() {
       } else {
         const url = endpoints[selectedCat];
         if (url) {
-          const res = await fetch(url, { headers: { Accept: 'application/json' } });
-          if (res.ok) {
-            const data = await res.json();
-            const items = data.data || data;
+          const data = await apiRequest<any>(url);
+          const items = Array.isArray(data) ? data : data?.data;
             fetchedItems = (Array.isArray(items) ? items : []).map((item: any) => ({
               id: String(item.id),
               title: item.title || item.name || 'Untitled Listing',
@@ -97,7 +92,6 @@ export default function HomeView() {
               details: item.short_description || item.specs?.area_formatted || item.description || 'Exclusive Sellio registry asset.',
               slug: item.slug || String(item.id),
             }));
-          }
         }
       }
 

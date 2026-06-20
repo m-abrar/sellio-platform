@@ -1,15 +1,14 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import * as SecureStore from 'expo-secure-store';
-import { API_URL } from '../config/api';
-
-const TOKEN_KEY = 'sellio_auth_token';
-const USER_KEY = 'sellio_auth_user';
+import { apiRequest, setUnauthorizedHandler } from '../api/client';
+import { clearStoredSession, loadStoredSession, storeSession } from '../auth/sessionStorage';
 
 interface User {
   id: number;
   name: string;
-  email: string;
+  email?: string;
   avatar?: string;
+  avatar_url?: string;
+  is_buyer?: boolean;
   is_partner?: boolean;
 }
 
@@ -32,15 +31,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load persisted tokens on mount
     async function loadStorageData() {
       try {
-        const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-        const storedUser = await SecureStore.getItemAsync(USER_KEY);
+        const session = await loadStoredSession<User>();
 
-        if (storedToken && storedUser) {
-          setToken(storedToken);
-          setUser(JSON.parse(storedUser));
+        if (session) {
+          setToken(session.token);
+          setUser(session.user);
         }
       } catch (e) {
         console.warn('Failed to load secure auth credentials', e);
@@ -52,42 +49,44 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadStorageData();
   }, []);
 
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      setToken(null);
+      setUser(null);
+      setError('Your session has expired. Please sign in again.');
+    });
+
+    return () => setUnauthorizedHandler(null);
+  }, []);
+
   const signIn = async (email: string, password: string) => {
     setError(null);
     try {
-      const response = await fetch(`${API_URL}/v1/auth/login`, {
+      const authData = await apiRequest<{
+        access_token?: string;
+        token?: string;
+        user?: User;
+      }>('/v1/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
         body: JSON.stringify({ email, password }),
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Authentication failed');
-      }
-
-      const authData = result.data || result;
       const tokenVal = authData.access_token || authData.token || '';
-      const userVal = authData.user || {};
+      const userVal = authData.user;
 
       if (!tokenVal) {
         throw new Error('Token not found in authentication payload');
       }
 
-      // Save securely
-      await SecureStore.setItemAsync(TOKEN_KEY, tokenVal);
-      await SecureStore.setItemAsync(USER_KEY, JSON.stringify(userVal));
+      if (!userVal) {
+        throw new Error('User not found in authentication payload');
+      }
+
+      await storeSession(tokenVal, userVal);
 
       setToken(tokenVal);
       setUser(userVal);
     } catch (err: any) {
-      const message = err?.message === 'Network request failed'
-        ? `Cannot reach the Sellio API at ${API_URL}. Confirm the phone and development computer are on the same network.`
-        : err?.message || 'Failed to sign in';
+      const message = err?.message || 'Failed to sign in';
 
       setError(message);
       throw new Error(message);
@@ -98,20 +97,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setError(null);
     try {
       if (token) {
-        // Optional: Call logout endpoint silently
-        await fetch(`${API_URL}/v1/auth/logout`, {
+        await apiRequest('/v1/auth/logout', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
+          authenticated: true,
         }).catch(() => {});
       }
     } finally {
-      // Clear local states
-      await SecureStore.deleteItemAsync(TOKEN_KEY);
-      await SecureStore.deleteItemAsync(USER_KEY);
+      await clearStoredSession();
       setToken(null);
       setUser(null);
     }

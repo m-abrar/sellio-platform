@@ -35,7 +35,7 @@ The existing application already provides:
 
 The current implementation is still a prototype because:
 
-- API hosts are hardcoded for simulators.
+- The shared API foundation is implemented, but most feature models remain untyped.
 - Discovery falls back to mock records when requests fail.
 - Products are missing from the discovery categories.
 - Listing mapping is broad and does not model each vertical explicitly.
@@ -52,9 +52,9 @@ Make API communication predictable on Android emulators, iOS simulators, physica
 
 ### Tasks
 
-- [ ] Replace hardcoded API hosts with environment-based configuration.
+- [x] Replace hardcoded API hosts with environment-based configuration.
 - [ ] Document emulator, simulator, physical-device, staging, and production API URLs.
-- [ ] Create a shared mobile API client with:
+- [x] Create a shared mobile API client with:
   - JSON response normalization.
   - Sanctum bearer-token injection.
   - Validation-error extraction.
@@ -203,8 +203,8 @@ The first sprint will deliver the foundation and one complete real-data path.
 
 ### Sprint Tasks
 
-- [ ] Add environment-based API configuration that works on the currently connected physical phone.
-- [ ] Create the shared authenticated API client.
+- [x] Add environment-based API configuration that works on the currently connected physical phone.
+- [x] Create the shared authenticated API client.
 - [ ] Create core listing and pagination types.
 - [ ] Remove implicit mock fallback behavior.
 - [ ] Fix broken character encoding.
@@ -213,7 +213,7 @@ The first sprint will deliver the foundation and one complete real-data path.
 - [ ] Render real listing images and vertical-aware card metadata.
 - [ ] Add visible retry and empty states.
 - [ ] Verify login and discovery against the local Laravel backend.
-- [ ] Run TypeScript and Android bundle verification.
+- [x] Run TypeScript and Android bundle verification.
 
 ### Sprint Completion Definition
 
