@@ -4,15 +4,10 @@ import { toast } from 'sonner';
 import {
   User,
   Lock,
-  Bell,
   Mail,
   Phone,
   Camera,
   Check,
-  Terminal,
-  Server,
-  Database,
-  ExternalLink,
   Loader2,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
@@ -21,7 +16,7 @@ import { Button } from '../components/Button';
 import { LocationPicker } from '../components/LocationPicker';
 import { PageHeader } from '../components/PageHeader';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import { API_BASE_URL, IS_EXTERNAL_BACKEND, STOREFRONT_BASE_URL } from '../config/api';
+import { API_BASE_URL } from '../config/api';
 import { fetchUserProfile, updateUserProfile, updatePassword, uploadUserAvatar, UserProfile } from '../api/userApi';
 
 const API_ORIGIN = (() => {
@@ -35,7 +30,7 @@ const API_ORIGIN = (() => {
 const FALLBACK_AVATAR = `${API_ORIGIN}/images/fallbacks/default-avatar.png`;
 
 export default function SettingsView() {
-  const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'notifications' | 'developer'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'security'>('profile');
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -142,34 +137,9 @@ export default function SettingsView() {
     }
   };
 
-  // Auto-Save Notification settings state
-  const [savingSettings, setSavingSettings] = useState<Record<string, 'saving' | 'saved' | null>>({});
-
-  const handleAutoSaveSettings = async (newSettings: any, settingId: string) => {
-    setSavingSettings(prev => ({ ...prev, [settingId]: 'saving' }));
-    try {
-      const updated = await updateUserProfile({
-        name: profile?.name || '',
-        email: profile?.email || '',
-        phone: profile?.phone,
-        location_id: profile?.location_id,
-        settings: newSettings
-      });
-      setProfile(updated);
-      setSavingSettings(prev => ({ ...prev, [settingId]: 'saved' }));
-      setTimeout(() => {
-        setSavingSettings(prev => ({ ...prev, [settingId]: null }));
-      }, 1500);
-    } catch {
-      setSavingSettings(prev => ({ ...prev, [settingId]: null }));
-    }
-  };
-
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'security', label: 'Security', icon: Lock },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'developer', label: 'Backend', icon: Terminal },
   ];
 
   return (
@@ -384,164 +354,6 @@ export default function SettingsView() {
               </form>
             )}
 
-            {activeTab === 'notifications' && profile && (
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  {[
-                    { id: 'email_notifications', title: 'Email Notifications', desc: 'Receive daily updates and account activity via email.' },
-                    { id: 'push_notifications', title: 'Push Notifications', desc: 'Get real-time alerts on your browser or mobile device.' },
-                    { id: 'booking_reminders', title: 'Booking Reminders', desc: 'Receive alerts 24 hours before your scheduled events.' },
-                    { id: 'marketing_emails', title: 'Marketing Emails', desc: 'Stay updated with our latest features and special offers.' }
-                  ].map((item) => (
-                    <div key={item.id} className="flex items-center justify-between p-4 hover:bg-zinc-50 rounded-2xl transition-colors">
-                      <div>
-                        <p className="text-sm font-bold text-zinc-900">{item.title}</p>
-                        <p className="text-xs text-zinc-500">{item.desc}</p>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <AnimatePresence>
-                          {savingSettings[item.id] === 'saving' && (
-                            <motion.span
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0 }}
-                              className="text-[10px] font-bold text-zinc-400"
-                            >
-                              Saving...
-                            </motion.span>
-                          )}
-                          {savingSettings[item.id] === 'saved' && (
-                            <motion.span
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0 }}
-                              className="text-[10px] font-extrabold text-[var(--primary-color)] bg-[var(--primary-light)] px-2.5 py-0.5 rounded-full"
-                            >
-                              ✓ Saved!
-                            </motion.span>
-                          )}
-                        </AnimatePresence>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input 
-                            type="checkbox" 
-                            className="sr-only peer" 
-                            checked={!!profile.settings?.[item.id]} 
-                            onChange={(e) => {
-                              const newSettings = { ...profile.settings, [item.id]: e.target.checked };
-                              setProfile({ ...profile, settings: newSettings });
-                              handleAutoSaveSettings(newSettings, item.id);
-                            }}
-                          />
-                          <div className="w-11 h-6 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--primary-color)]"></div>
-                        </label>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'developer' && (
-              <div className="space-y-8">
-                <div className="flex flex-col md:flex-row gap-6">
-                  <div className="flex-1 glass-surface bg-zinc-50/50 p-6 border-none">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className={cn(
-                        "p-2 rounded-xl",
-                        IS_EXTERNAL_BACKEND ? "bg-amber-100 text-amber-600" : "bg-emerald-100 text-emerald-600"
-                      )}>
-                        <Server size={20} />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-zinc-900">Current Backend</h4>
-                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-                          {IS_EXTERNAL_BACKEND ? 'External API' : 'Local Node Server'}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-zinc-500">API Base URL:</span>
-                        <code className="bg-white px-2 py-1 rounded border border-zinc-100 font-mono text-[10px]">
-                          {API_BASE_URL}
-                        </code>
-                      </div>
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-zinc-500">Data Source:</span>
-                        <span className="font-bold text-zinc-900">
-                          {IS_EXTERNAL_BACKEND ? 'Laravel API' : 'Local development host'}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-zinc-500">Storefront URL:</span>
-                        <code className="bg-white px-2 py-1 rounded border border-zinc-100 font-mono text-[10px]">
-                          {STOREFRONT_BASE_URL}
-                        </code>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex-1 glass-surface bg-zinc-900 text-white p-6 border-none">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 bg-white/10 rounded-xl text-[var(--primary-color)]">
-                        <Database size={20} />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-bold">Switch Backend</h4>
-                        <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Configuration</p>
-                      </div>
-                    </div>
-                    <p className="text-xs text-zinc-400 mb-4 leading-relaxed">
-                      Production buyers edit <strong>public/config.js</strong> on the server — no rebuild required:
-                    </p>
-                    <div className="bg-black/30 rounded-xl p-3 font-mono text-[10px] space-y-1">
-                      <p className="text-amber-400">// public/config.js</p>
-                      <p className="text-zinc-300">apiUrl: &apos;{API_BASE_URL}&apos;</p>
-                      <p className="text-zinc-300">storefrontUrl: &apos;{STOREFRONT_BASE_URL}&apos;</p>
-                      <p className="text-zinc-300">basePath: &apos;&apos;</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h4 className="text-sm font-bold text-zinc-900 uppercase tracking-wider">Developer Resources</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <a 
-                      href="https://laravel.com/docs" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between p-4 border border-zinc-100 rounded-2xl hover:bg-zinc-50 transition-colors group"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center">
-                          <ExternalLink size={20} />
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-zinc-900">Laravel Docs</p>
-                          <p className="text-[10px] text-zinc-500">API Development Guide</p>
-                        </div>
-                      </div>
-                    </a>
-                    <a 
-                      href="https://expressjs.com/" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between p-4 border border-zinc-100 rounded-2xl hover:bg-zinc-50 transition-colors group"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-zinc-100 text-zinc-900 rounded-xl flex items-center justify-center">
-                          <ExternalLink size={20} />
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-zinc-900">Express Docs</p>
-                          <p className="text-[10px] text-zinc-500">Node.js Server Guide</p>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            )}
           </motion.div>
         )}
       </div>
