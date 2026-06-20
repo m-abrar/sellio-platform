@@ -42,8 +42,11 @@ class HomeDataService
             ->map(fn (array $module) => $this->withModuleStats($module))
             ->values();
 
+        $totalListingsCount = $publicModules->sum('count');
+
         return [
             'publicModules'       => $publicModules,
+            'totalListingsCount'  => $totalListingsCount,
 
             // Featured Sections (Cached individually)
             'propertiesFeatured'  => $this->forModule('properties', fn() => $this->cached('h_feat_prop', fn() => $this->getFeatured(new Property()))),

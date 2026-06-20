@@ -476,7 +476,7 @@ https://demo.sellio.vebdez.com/buyer
 
 - [x] Classifieds single listing chat vs inquiry: no inquiry route exists for classifieds (only autos have one). Classifieds use the conversation/chat flow (`conversation.start`). Added `@auth/@else` guard to the "Send Message" button so guests see "Sign in to Message" (previously silently redirected to login). Same guard applied to the autos `_contact_dealer.blade.php`.
 
-- [ ] unifieds_* themes content feels like theme demo — needs seeded demo data to look like a finished marketplace (addresses unifieds_minimal, unifieds_interactive, unifieds_mega, unifieds_modern, unifieds_classic, unifieds_standard, unifieds_standard)
+- [x] unifieds_* themes content feels like theme demo — needs seeded demo data to look like a finished marketplace. Fixed: (1) created `HomePageContentSeeder` that seeds realistic hero/discovery/footer copy for the `laravel_blade` content scope; (2) replaced hardcoded "1.2k+" CTA metric with a dynamic sum of all active module listing counts from `HomeDataService::$totalListingsCount`; (3) registered seeder in `DatabaseSeeder` before `PageContentMediaSeeder`.
 
 
 404, 403, 419, 500, 503 

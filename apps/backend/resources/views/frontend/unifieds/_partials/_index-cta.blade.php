@@ -39,8 +39,8 @@
                         </div>
                         <hr class="border-light opacity-25">
                         <div class="text-start text-white">
-                            <h4 class="fw-800 mb-0">1.2k+</h4>
-                            <p class="small text-white-50 mb-0">{{ __('Successful listings this week') }}</p>
+                            <h4 class="fw-800 mb-0">{{ ($totalListingsCount ?? 0) > 0 ? number_format($totalListingsCount) . '+' : '100+' }}</h4>
+                            <p class="small text-white-50 mb-0">{{ __('Active listings live') }}</p>
                         </div>
                     </div>
                 </div>
