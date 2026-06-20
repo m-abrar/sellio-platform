@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     externalDir: true,
   },
   devIndicators: false,
+  allowedDevOrigins: ["192.168.10.8"],
 };
 
 export default nextConfig;
