@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  User, 
-  Lock, 
-  Bell, 
-  Shield, 
-  Globe, 
-  Mail, 
-  Phone, 
+import {
+  User,
+  Lock,
+  Bell,
+  Mail,
+  Phone,
   Camera,
   Check,
   Terminal,
@@ -19,10 +17,12 @@ import {
 import { cn } from '../lib/utils';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
+import { LocationPicker } from '../components/LocationPicker';
 import { PageHeader } from '../components/PageHeader';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { API_BASE_URL, IS_EXTERNAL_BACKEND, STOREFRONT_BASE_URL } from '../config/api';
 import { fetchUserProfile, updateUserProfile, updatePassword, uploadUserAvatar, UserProfile } from '../api/userApi';
+import { fetchLocationBySlug } from '../api/locationApi';
 
 const API_ORIGIN = (() => {
   try {
@@ -51,6 +51,8 @@ export default function SettingsView() {
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
+  const [locationDisplay, setLocationDisplay] = useState('');
+
   useEffect(() => {
     loadProfile();
   }, []);
@@ -60,6 +62,13 @@ export default function SettingsView() {
       setIsLoading(true);
       const data = await fetchUserProfile();
       setProfile(data);
+      // Resolve the stored slug to a display title. Falls back to the raw value
+      // (e.g. legacy free-text) if no matching location record is found.
+      if (data.location) {
+        fetchLocationBySlug(data.location)
+          .then(loc => setLocationDisplay(loc ? loc.title : data.location || ''))
+          .catch(() => setLocationDisplay(data.location || ''));
+      }
     } catch (err) {
       setError('Failed to load profile');
     } finally {
@@ -293,15 +302,19 @@ export default function SettingsView() {
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-1">Location</label>
-                      <div className="relative">
-                        <Globe className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
-                        <input 
-                          type="text" 
-                          value={profile.location || ''}
-                          onChange={(e) => setProfile({ ...profile, location: e.target.value })}
-                          className="w-full pl-12 pr-4 py-3 bg-zinc-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-zinc-900 transition-all"
-                        />
-                      </div>
+                      <LocationPicker
+                        displayValue={locationDisplay}
+                        onSelect={(slug, title) => {
+                          setProfile({ ...profile, location: slug });
+                          setLocationDisplay(title);
+                        }}
+                        onClear={() => {
+                          setProfile({ ...profile, location: '' });
+                          setLocationDisplay('');
+                        }}
+                        placeholder="Search your city or region..."
+                      />
+                      <p className="text-[11px] text-zinc-400 px-1">Shown on your public profile and used to surface nearby listings.</p>
                     </div>
                   </div>
 
@@ -319,21 +332,6 @@ export default function SettingsView() {
 
             {activeTab === 'security' && profile && (
               <form onSubmit={handlePasswordUpdate} className="space-y-8">
-                <div className="flex items-start gap-4 p-4 rounded-2xl border bg-amber-50 border-amber-100">
-                  <Shield className="text-amber-500 shrink-0" size={24} />
-                  <div className="flex-1">
-                    <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <p className="text-sm font-bold text-amber-900">
-                        Two-Factor Authentication is Off
-                      </p>
-                      <Badge variant="warning">Coming soon</Badge>
-                    </div>
-                    <p className="text-xs text-amber-700">
-                      Authenticator-based 2FA will be available in a future release. Password changes below are active today.
-                    </p>
-                  </div>
-                </div>
-
                 {passwordSuccess && (
                   <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-600">
                     {passwordSuccess}

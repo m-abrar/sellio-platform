@@ -22,6 +22,7 @@ class PropertyVisitResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'module' => 'properties',
             'user_id' => $this->user_id,
             'property_id' => $this->property_id,
             'full_name' => $this->when($canViewPii, $this->full_name),

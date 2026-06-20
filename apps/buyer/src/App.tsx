@@ -37,6 +37,7 @@ import FavoritesView from './views/FavoritesView';
 import MessagesView from './views/MessagesView';
 import SettingsView from './views/SettingsView';
 import UserActivityView from './views/UserActivityView';
+import ActivityDetailView from './views/ActivityDetailView';
 import PartnerView from './views/PartnerView';
 import ReviewsView from './views/ReviewsView';
 import LoginView from './views/LoginView';
@@ -556,11 +557,17 @@ function AppContent() {
 
                 {/* Activity routes */}
                 <Route path="/bookings" element={<UserActivityView title="My Bookings" />} />
+                <Route path="/bookings/:id" element={<ActivityDetailView />} />
                 <Route path="/applications" element={<UserActivityView module="jobs" title="Job Applications" />} />
+                <Route path="/applications/:id" element={<ActivityDetailView />} />
                 <Route path="/auto-inquiries" element={<UserActivityView module="autos" title="Auto Inquiries" />} />
+                <Route path="/auto-inquiries/:id" element={<ActivityDetailView />} />
                 <Route path="/appointments" element={<UserActivityView module="services" title="Service Appointments" />} />
+                <Route path="/appointments/:id" element={<ActivityDetailView />} />
                 <Route path="/quotes" element={<UserActivityView module="services" title="Service Quotes" type="quote" />} />
+                <Route path="/quotes/:id" element={<ActivityDetailView />} />
                 <Route path="/classifieds-activity" element={<UserActivityView module="classifieds" title="Classified Ads" />} />
+                <Route path="/classifieds-activity/:id" element={<ActivityDetailView />} />
                 <Route path="/reviews" element={<ReviewsView />} />
                 <Route path="/partner" element={<PartnerView />} />
                 <Route path="*" element={<NotFoundView />} />

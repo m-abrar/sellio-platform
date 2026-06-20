@@ -245,10 +245,22 @@ export function toActivity(resource: any, index = 0, fallbackModule = 'products'
     resource?.classified ||
     resource?.listing ||
     {};
+  // Detect module from which nested relation key is present — covers API responses
+  // that don't include an explicit `module` field (e.g. the unified /bookings endpoint).
+  const moduleFromKey =
+    resource?.property != null || resource?.property_id != null ? 'properties' :
+    resource?.event    != null || resource?.event_id    != null ? 'events' :
+    resource?.service  != null || resource?.service_id  != null ? 'services' :
+    resource?.job != null || resource?.job_listing != null ? 'jobs' :
+    resource?.auto != null || resource?.auto_id != null ? 'autos' :
+    resource?.classifiedAd != null || resource?.classifiedad != null || resource?.classified != null ? 'classifieds' :
+    null;
+
   const module = text(
     resource?.module ||
     item?.module ||
-    (resource?.type ? inferModuleFromType(text(resource.type)) : ''),
+    (resource?.type ? inferModuleFromType(text(resource.type)) : '') ||
+    moduleFromKey,
     fallbackModule
   );
 
@@ -272,6 +284,7 @@ export function toActivity(resource: any, index = 0, fallbackModule = 'products'
     item_id: text(item?.slug || item?.id || resource?.item_id || resource?.listing_id || resource?.id),
     reviewable_id: reviewableId ?? null,
     itemTitle: text(resource?.itemTitle || resource?.item_title || item?.title || resource?.title, 'Activity'),
+    itemImage: imageUrl(module as ModuleType, item),
     module,
     status: normalizedStatus,
     booking_date:

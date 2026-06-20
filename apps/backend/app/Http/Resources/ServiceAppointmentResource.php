@@ -16,6 +16,7 @@ class ServiceAppointmentResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'module' => 'services',
             'user_id' => $this->user_id,
             'service_id' => $this->service_id,
             'service_package_id' => $this->service_package_id,

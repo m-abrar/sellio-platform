@@ -489,3 +489,6 @@ should we keep the css inline or external file?
 
 TODO
 Support link and email, are still pending, remind me later
+
+
+in the seeders/migration files, please check the logic that no listings with Draft, expired, pending, etc should be published on the frontend.

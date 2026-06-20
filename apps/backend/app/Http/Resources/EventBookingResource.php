@@ -22,6 +22,7 @@ class EventBookingResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'module' => 'events',
             'user_id' => $this->user_id,
             'event_id' => $this->event_id,
             'event_occurrence_id' => $this->event_occurrence_id,

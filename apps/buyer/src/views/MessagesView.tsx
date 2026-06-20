@@ -1,26 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  Send, 
-  Circle, 
-  Search, 
-  Info, 
-  Smile, 
-  Paperclip, 
-  ChevronLeft, 
-  MessageSquare, 
+import {
+  Send,
+  Search,
+  Smile,
+  ChevronLeft,
+  MessageSquare,
   Sparkles,
   ExternalLink,
-  Shield,
-  X
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { fetchMessages, sendMessage, fetchConversations, markRead } from '../api/messageApi';
 import { useUser } from '../context/UserContext';
 import { useStats } from '../context/StatsContext';
 import { API_BASE_URL } from '../config/api';
-import { Button } from '../components/Button';
 import { subscribeToConversation } from '../lib/echo';
 
 const POLL_INTERVAL_MS = 15000;
@@ -104,55 +98,12 @@ export default function MessagesView() {
   currentUserIdRef.current = user?.id ?? null;
   const conversationIdsKey = conversations.map((conversation) => String(conversation.id)).join('|');
 
-  // Hidden File input ref
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Emoji picker states
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const curatedEmojis = ['👍', '❤️', '😮', '😂', '👏', '🔥', '🚀', '💡', '💬', '🏠', '🚗', '🛠️'];
-
-  // Report modal states
-  const [showReportModal, setShowReportModal] = useState(false);
-  const [reportReason, setReportReason] = useState('');
-  const [isReporting, setIsReporting] = useState(false);
-  const [reportSuccess, setReportSuccess] = useState(false);
-
-  const handleAttachClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      setNewMessage(prev => `${prev}[Attached: ${files[0].name}] `);
-    }
-  };
 
   const handleEmojiSelect = (emoji: string) => {
     setNewMessage(prev => prev + emoji);
     setShowEmojiPicker(false);
-  };
-
-  const handleReportPartner = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!activeConvo || !reportReason.trim()) return;
-
-    setIsReporting(true);
-    try {
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setReportSuccess(true);
-      setTimeout(() => {
-        setShowReportModal(false);
-        setReportReason('');
-        setReportSuccess(false);
-      }, 1500);
-    } catch {
-      alert('Failed to submit report');
-    } finally {
-      setIsReporting(false);
-    }
   };
 
   useEffect(() => {
@@ -595,35 +546,17 @@ export default function MessagesView() {
                 </div>
               </div>
 
-              {/* Decorative actions in header */}
-              <div className="flex items-center gap-1 text-zinc-400">
-                {activeConvo.inquiriable && (
-                  <a 
-                    href={activeConvo.inquiriable.viewUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={`View ${activeConvo.inquiriable.title} on Storefront`}
-                    className="p-2 hover:bg-zinc-100 hover:text-[var(--primary-color)] rounded-xl transition-all cursor-pointer"
-                  >
-                    <ExternalLink size={16} />
-                  </a>
-                )}
-                <button 
-                  type="button" 
-                  onClick={() => setShowReportModal(true)}
-                  title="Report / Block Partner"
-                  className="p-2 hover:bg-zinc-100 hover:text-red-500 rounded-xl transition-all cursor-pointer animate-pulse"
+              {activeConvo.inquiriable && (
+                <a
+                  href={activeConvo.inquiriable.viewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`View ${activeConvo.inquiriable.title} on Storefront`}
+                  className="p-2 text-zinc-400 hover:bg-zinc-100 hover:text-[var(--primary-color)] rounded-xl transition-all cursor-pointer"
                 >
-                  <Shield size={16} />
-                </button>
-                <button 
-                  type="button" 
-                  title="Chat Information"
-                  className="p-2 hover:bg-zinc-100 hover:text-zinc-650 rounded-xl transition-all cursor-pointer"
-                >
-                  <Info size={16} />
-                </button>
-              </div>
+                  <ExternalLink size={16} />
+                </a>
+              )}
             </div>
 
             {/* Split View Wrapper: Messages Stream + Listing Detail Sidebar */}
@@ -711,21 +644,6 @@ export default function MessagesView() {
                 {/* Input Bar */}
                 <div className="p-4 bg-zinc-50/50 border-t border-zinc-150/70">
                   <form onSubmit={handleSend} className="flex gap-2.5 items-center">
-                    <input 
-                      type="file" 
-                      ref={fileInputRef} 
-                      onChange={handleFileChange} 
-                      className="hidden" 
-                    />
-                    <button 
-                      type="button" 
-                      onClick={handleAttachClick}
-                      title="Attach file"
-                      className="p-2.5 bg-white border border-zinc-200 text-zinc-400 hover:text-zinc-650 rounded-xl hover:shadow-2xs transition-all cursor-pointer shrink-0"
-                    >
-                      <Paperclip size={16} />
-                    </button>
-                    
                     <div className="relative shrink-0 hidden sm:block">
                       <button 
                         type="button" 
@@ -894,79 +812,6 @@ export default function MessagesView() {
         )}
       </div>
 
-      {/* Report Partner Modal */}
-      <AnimatePresence>
-        {showReportModal && activeConvo && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative border border-zinc-100 text-left"
-            >
-              <button 
-                type="button"
-                onClick={() => setShowReportModal(false)}
-                className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-zinc-900 rounded-full hover:bg-zinc-100 transition-colors cursor-pointer border-none bg-transparent"
-              >
-                <X size={18} />
-              </button>
-
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-red-50 text-red-500 rounded-xl flex items-center justify-center">
-                  <Shield size={20} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-zinc-900 leading-tight">Report Partner</h3>
-                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Trust & Safety Center</p>
-                </div>
-              </div>
-
-              {reportSuccess ? (
-                <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-6 text-center">
-                  <span className="text-3xl mb-2 inline-block">✓</span>
-                  <p className="text-sm font-bold text-emerald-800">Report Submitted Successfully</p>
-                  <p className="text-xs text-emerald-600 mt-1">Our safety team will review this conversation within 24 hours.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleReportPartner} className="space-y-4">
-                  <div className="space-y-2">
-                    <p className="text-xs text-zinc-500 leading-relaxed">
-                      Please describe the issue with <strong>{activeConvo.name}</strong>. Your feedback is fully confidential.
-                    </p>
-                    <textarea
-                      required
-                      rows={4}
-                      value={reportReason}
-                      onChange={(e) => setReportReason(e.target.value)}
-                      placeholder="Identify offensive behavior, fraud, listing misrepresentation, or other concerns..."
-                      className="w-full bg-zinc-50 border-none rounded-2xl p-4 text-xs focus:ring-2 focus:ring-zinc-955 transition-all placeholder-zinc-400 leading-relaxed"
-                    />
-                  </div>
-
-                  <div className="pt-2 flex justify-end gap-3">
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      onClick={() => setShowReportModal(false)}
-                      disabled={isReporting}
-                    >
-                      Cancel
-                    </Button>
-                    <Button 
-                      type="submit" 
-                      className="bg-red-550 hover:bg-red-600 border-none text-white"
-                      isLoading={isReporting}
-                    >
-                      Submit Report
-                    </Button>
-                  </div>
-                </form>
-              )}
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

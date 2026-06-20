@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { 
-  Calendar, 
-  Clock, 
-  CheckCircle2, 
-  XCircle, 
-  AlertCircle, 
-  ChevronRight, 
+import {
+  Calendar,
+  Clock,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  ChevronRight,
   Search,
   Star,
   X,
@@ -16,16 +17,17 @@ import { fetchBookings, cancelBooking } from '../api/bookingApi';
 import { createReview } from '../api/reviewApi';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 import { EmptyState } from '../components/EmptyState';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { PageHeader } from '../components/PageHeader';
-import { storefrontListingUrl } from '../config/api';
 
 interface ActivityItem {
   id: number;
   item_id: string;
   reviewable_id: number | string | null;
   itemTitle: string;
+  itemImage: string;
   module: string;
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
   booking_date: string;
@@ -40,11 +42,14 @@ interface UserActivityViewProps {
 }
 
 export default function UserActivityView({ module, type = 'booking', title }: UserActivityViewProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed'>('all');
   const [cancellingId, setCancellingId] = useState<number | null>(null);
+  const [pendingCancel, setPendingCancel] = useState<{ id: number; module: string } | null>(null);
 
   // Review Modal States
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -65,13 +70,11 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
   }, [module, type]);
 
   const handleCancel = async (id: number, moduleName: string) => {
-    if (!window.confirm('Are you sure you want to cancel this activity?')) return;
-
     setCancellingId(id);
     try {
       await cancelBooking(id, moduleName, type);
-      // Update state locally
       setActivities(prev => prev.map(act => act.id === id ? { ...act, status: 'cancelled' } : act));
+      setPendingCancel(null);
     } catch (err: any) {
       alert(err?.message || 'Failed to cancel activity');
     } finally {
@@ -220,12 +223,11 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
 
               <div className="flex items-center gap-3">
                 {(activity.status === 'pending' || activity.status === 'confirmed') && (
-                  <Button 
-                    size="sm" 
+                  <Button
+                    size="sm"
                     variant="outline"
                     className="border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600"
-                    isLoading={cancellingId === activity.id}
-                    onClick={() => handleCancel(activity.id, activity.module)}
+                    onClick={() => setPendingCancel({ id: activity.id, module: activity.module })}
                   >
                     Cancel
                   </Button>
@@ -243,7 +245,9 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
                   size="sm"
                   variant="outline"
                   rightIcon={<ChevronRight size={14} />}
-                  onClick={() => window.location.assign(storefrontListingUrl(activity.item_id, activity.module))}
+                  onClick={() => navigate(`${location.pathname}/${activity.id}`, {
+                    state: { activity, activityType: type, parentTitle: title || 'Activity' },
+                  })}
                 >
                   View Details
                 </Button>
@@ -348,6 +352,16 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
           </div>
         )}
       </AnimatePresence>
+
+      <ConfirmDialog
+        isOpen={pendingCancel !== null}
+        title="Cancel Activity"
+        description="Are you sure you want to cancel this activity? This action cannot be undone."
+        confirmLabel="Yes, Cancel It"
+        isLoading={cancellingId !== null}
+        onConfirm={() => pendingCancel && handleCancel(pendingCancel.id, pendingCancel.module)}
+        onCancel={() => setPendingCancel(null)}
+      />
     </div>
   );
 }
