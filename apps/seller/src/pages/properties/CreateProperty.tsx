@@ -151,7 +151,13 @@ export default function CreateProperty() {
           setNeighborhoods(property.neighborhoods ?? []);
           setSeasonalPrices(property.seasonal_prices ?? []);
           setAddons(property.addons ?? []);
-          setFees(property.fees ?? []);
+          const validFeeTypes = new Set(['fixed', 'percentage']);
+          const validChargeTypes = new Set(['per_stay', 'per_night', 'per_guest']);
+          setFees((property.fees ?? []).map((f: any) => ({
+            ...f,
+            type: validFeeTypes.has(f.type) ? f.type : 'fixed',
+            charge_type: validChargeTypes.has(f.charge_type) ? f.charge_type : 'per_stay',
+          })));
           setScores(property.scores ?? []);
 
           const initialMedia: any[] = [];

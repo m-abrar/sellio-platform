@@ -142,7 +142,8 @@ export const normalizeJob = (job: any): NormalizedJob => {
 
 export const parseSalaryRange = (input: string): { min: number; max: number } => {
   const normalized = input.toLowerCase();
-  const numbers = input.match(/[\d.]+/g)?.map((value) => {
+  const stripped = input.replace(/,/g, '');
+  const numbers = stripped.match(/[\d.]+/g)?.map((value) => {
     const parsed = parseFloat(value);
     if (Number.isNaN(parsed)) return 0;
     if (normalized.includes('k') && parsed < 1000) return parsed * 1000;

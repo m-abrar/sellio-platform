@@ -125,6 +125,9 @@ class UpdatePropertyRequest extends FormRequest
             'fees.*.rate'        => ['nullable', 'numeric', 'min:0'],
             'fees.*.charge_type' => ['required_with:fees', 'string', 'in:per_stay,per_night,per_guest'],
 
+            'existing_media_ids'   => ['nullable', 'array'],
+            'existing_media_ids.*' => ['integer'],
+
             // Livability Scores
             'scores'             => ['nullable', 'array'],
             'scores.*.title'     => ['required_with:scores', 'string', 'max:100'],
@@ -132,5 +135,23 @@ class UpdatePropertyRequest extends FormRequest
             'scores.*.units'     => ['nullable', 'string', 'max:20'],
             'scores.*.description' => ['nullable', 'string', 'max:255'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('fees') && is_array($this->input('fees'))) {
+            $validTypes = ['fixed', 'percentage'];
+            $validChargeTypes = ['per_stay', 'per_night', 'per_guest'];
+            $fees = array_map(function ($fee) use ($validTypes, $validChargeTypes) {
+                if (isset($fee['type']) && !in_array($fee['type'], $validTypes, true)) {
+                    $fee['type'] = 'fixed';
+                }
+                if (isset($fee['charge_type']) && !in_array($fee['charge_type'], $validChargeTypes, true)) {
+                    $fee['charge_type'] = 'per_stay';
+                }
+                return $fee;
+            }, $this->input('fees'));
+            $this->merge(['fees' => $fees]);
+        }
     }
 }

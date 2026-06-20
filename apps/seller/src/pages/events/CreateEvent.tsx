@@ -417,6 +417,7 @@ export default function CreateEvent() {
         if (fileObj.isMain) formData.append('main_image', fileObj.file);
         else formData.append('gallery[]', fileObj.file);
       } else if (fileObj.existing) {
+        if (fileObj.id == null) return;
         formData.append('existing_media_ids[]', String(fileObj.id));
       }
     });

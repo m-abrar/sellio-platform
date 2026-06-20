@@ -141,5 +141,20 @@ class StorePropertyRequest extends FormRequest
         if ($this->has('title') && !$this->has('slug')) {
             $this->merge(['slug' => Str::slug($this->title)]);
         }
+
+        if ($this->has('fees') && is_array($this->input('fees'))) {
+            $validTypes = ['fixed', 'percentage'];
+            $validChargeTypes = ['per_stay', 'per_night', 'per_guest'];
+            $fees = array_map(function ($fee) use ($validTypes, $validChargeTypes) {
+                if (isset($fee['type']) && !in_array($fee['type'], $validTypes, true)) {
+                    $fee['type'] = 'fixed';
+                }
+                if (isset($fee['charge_type']) && !in_array($fee['charge_type'], $validChargeTypes, true)) {
+                    $fee['charge_type'] = 'per_stay';
+                }
+                return $fee;
+            }, $this->input('fees'));
+            $this->merge(['fees' => $fees]);
+        }
     }
 }
