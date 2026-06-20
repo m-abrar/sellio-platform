@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Infrastructure Module: System Health Diagnostics
     
     This view provides a comprehensive operational audit of the server 
@@ -135,7 +135,7 @@
             <div class="card border-0 shadow-premium bg-dark mb-4 overflow-hidden rounded-24">
                 <div class="card-body p-4 position-relative z-1">
                     <h5 class="font-weight-bold text-white mb-3 small text-uppercase ls-1-p">
-                        <i class="fas fa-stethoscope mr-2 text-warning"></i> {{ __('Platform Intelligence') }}
+                        <i class="fas fa-stethoscope mr-2 text-warning"></i> {{ __('System Health') }}
                     </h5>
                     <p class="smallest text-light mb-4 font-weight-bold uppercase leading-1-6 opacity-75">
                         {{ __('System health reflects the stability of the underlying architecture. Any "Fail" markers should be addressed immediately with your server administrator.') }}

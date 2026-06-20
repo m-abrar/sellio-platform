@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Identity: Activity Stream (System Heartbeat)
     
     This view provides a chronological audit trail of all administrative and 
@@ -33,7 +33,7 @@
                         <i class="fas fa-filter mr-1"></i> {{ strtoupper(str_replace('_', ' ', $currentFilter)) }}
                     </button>
                     <div class="dropdown-menu dropdown-menu-right shadow-premium border-0" style="border-radius: 16px; padding: 10px;">
-                        <div class="dropdown-header smallest font-weight-bold text-muted text-uppercase">{{ __('Filter Streams') }}</div>
+                        <div class="dropdown-header smallest font-weight-bold text-muted text-uppercase">{{ __('Filter By') }}</div>
                         @foreach ($filters as $key => $filter)
                             <a class="dropdown-item rounded-lg py-2 px-3 mb-1 {{ $key == $currentFilter ? 'bg-primary-soft text-primary active' : '' }}" 
                                href="{{ route('admin.activity-log.index', ['filter' => $key]) }}">

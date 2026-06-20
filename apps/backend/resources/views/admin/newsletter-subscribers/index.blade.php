@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Marketing Module: Audience Acquisition Registry
     
     This view serves as the primary orchestration layer for marketplace 
@@ -23,7 +23,7 @@
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-envelope-open-text mr-2 text-primary opacity-50"></i> {{ __('Newsletter Audience') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Audience registry for multi-channel marketing and prospect engagement.') }}</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('All Subscribers for multi-channel marketing and prospect engagement.') }}</p>
             </div>
             <div class="col-sm-4 d-flex align-items-center justify-content-center justify-content-sm-end">
                 <div class="d-flex justify-content-center justify-content-sm-end align-items-center gap-12 flex-wrap">
@@ -49,7 +49,7 @@
     <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-users mr-2 text-primary opacity-50"></i> Audience Registry
+                <i class="fas fa-users mr-2 text-primary opacity-50"></i> All Subscribers
             </h3>
             <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase ml-auto">
                 {{ $subscribers->total() }} TOTAL SUBSCRIBERS

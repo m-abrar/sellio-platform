@@ -1,5 +1,5 @@
-{{--
-    Ecommerce Intelligence Hub
+﻿{{--
+    Ecommerce Hub
     
     This dashboard specialized overview focuses on the e-commerce vertical,
     aggregating sales performance, inventory logistics, and customer 
@@ -12,7 +12,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Ecommerce Intelligence | Sales Ops')
+@section('title', 'Ecommerce | Sales Ops')
 
 @section('css')
     @include('admin._partials._toggle-card-css')
@@ -26,7 +26,7 @@
             <div>
                 <h1 class="font-weight-bold text-dark mb-0">
                     <i class="fas fa-shopping-cart mr-2 text-primary"></i> 
-                    Ecommerce Intelligence
+                    Ecommerce
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Real-time revenue metrics and inventory intelligence for <span class="text-primary font-weight-bold">{{ now()->format('F d, Y') }}</span>.</p>
             </div>

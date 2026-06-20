@@ -65,7 +65,7 @@
                     <select name="type" id="type" class="form-control custom-select shadow-xs rounded-10">
                         @foreach(['page', 'header', 'footer'] as $type)
                             <option value="{{ $type }}" {{ old('type', $page->type ?? '') == $type ? 'selected' : '' }}>
-                                {{ ucfirst($type) }} Registry
+                                {{ ucfirst($type) }}
                             </option>
                         @endforeach
                     </select>

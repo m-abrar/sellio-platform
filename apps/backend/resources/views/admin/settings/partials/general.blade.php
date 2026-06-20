@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Infrastructure Component: General Identity Registry
     
     This partial orchestrates the foundational site identity and 
@@ -163,7 +163,7 @@
                     data-verify-url="{{ route('admin.settings.verify.platform-url') }}">
                     <div class="col-md-12 mb-3">
                         <h5 class="font-weight-bold text-dark text-uppercase small ls-1"><i class="fas fa-link mr-2 text-primary"></i>
-                            {{ __('Platform Ecosystem URLs') }}</h5>
+                            {{ __('Platform URLs') }}</h5>
                         <p class="text-muted small mb-3">
                             {{ __('Enter the real absolute URLs for your storefront, admin panel, partner portal, and customer app. Test each URL before saving so Sellio can confirm the path exists.') }}
                         </p>

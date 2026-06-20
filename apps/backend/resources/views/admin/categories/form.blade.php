@@ -1,10 +1,10 @@
-{{--
+﻿{{--
     Administrative Taxonomy: Category Configuration
     
     This view serves as the primary interface for managing hierarchical 
     category structures within the platform. It orchestrates 
     parent-child associations, URI identification, visual identity 
-    (thumbnails), and cross-module applicability (blog, products, 
+    (thumbnails), and cross-Available In (blog, products, 
     classifieds), facilitating a multi-dimensional organization 
     system for platform assets.
     
@@ -28,7 +28,7 @@
                     {{ $category->exists ? 'Modify Category' : 'New Category' }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $category->exists ? 'Update hierarchy, labels, and module applicability for this grouping.' : 'Define a new taxonomy level to organize marketplace assets and content.' }}
+                    {{ $category->exists ? 'Update hierarchy, labels, and Available In for this grouping.' : 'Define a new taxonomy level to organize marketplace assets and content.' }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
@@ -111,7 +111,7 @@
                     </div>
                 </div>
 
-                {{-- Module Assignments --}}
+                {{-- Modules --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
                         <h3 class="card-title-main">Feature Applicability</h3>

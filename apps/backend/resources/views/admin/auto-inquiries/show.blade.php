@@ -1,5 +1,5 @@
-{{--
-    Administrative Automotive: Lead Operational Intelligence
+﻿{{--
+    Administrative Automotive: Lead Details
     
     This view provides a comprehensive 360-degree visualization of a 
     specific vehicle purchase inquiry. It aggregates vehicle interest 
@@ -26,7 +26,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.bookings.index') }}" class="btn btn-back shadow-sm rounded-pill px-4">
-                    <i class="fas fa-arrow-left mr-1"></i> BACK TO REGISTRY
+                    <i class="fas fa-arrow-left mr-1"></i> Back to List
                 </a>
             </div>
         </div>
@@ -43,7 +43,7 @@
                 <div class="card border-0 shadow-premium overflow-hidden mb-4 rounded-24">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
                         <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 letter-spacing-1">
-                            <i class="fas fa-search mr-2 text-danger opacity-50"></i> {{ __('Vehicle Interest Intelligence') }}
+                            <i class="fas fa-search mr-2 text-danger opacity-50"></i> {{ __('Vehicle Interest') }}
                         </h3>
                         <span class="badge {{ $inquiry->getStatusBadgeClass() }} px-3 py-2 rounded-pill font-weight-bold smallest">
                             {{ Str::upper($inquiry->status) }}
@@ -84,7 +84,7 @@
                     </div>
                 </div>
 
-                {{-- Operational Intelligence --}}
+                {{-- Details --}}
                 <div class="card border-0 shadow-premium rounded-20">
                     <div class="card-body p-4 d-flex align-items-center">
                         <div class="mr-3 icon-circle bg-danger-soft text-danger shadow-xs icon-box-md">
@@ -123,7 +123,7 @@
                                 <span class="smallest font-weight-bold text-dark">{{ $inquiry->phone ?? __('N/A') }}</span>
                             </div>
                             <div class="d-flex justify-content-between pt-2">
-                                <span class="smallest font-weight-bold text-muted uppercase">{{ __('Registry Date') }}</span>
+                                <span class="smallest font-weight-bold text-muted uppercase">{{ __('Date') }}</span>
                                 <span class="smallest font-weight-bold text-dark">{{ $inquiry->created_at->format('M Y') }}</span>
                             </div>
                         </div>

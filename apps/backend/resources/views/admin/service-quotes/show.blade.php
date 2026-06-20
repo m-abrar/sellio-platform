@@ -1,5 +1,5 @@
-{{--
-    Administrative Services: Lead Operational Intelligence
+﻿{{--
+    Administrative Services: Lead Details
     
     This view provides a comprehensive 360-degree visualization of a 
     specific service quote inquiry. It aggregates service scope 
@@ -26,7 +26,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.bookings.services') }}" class="btn btn-back shadow-sm rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1">
-                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Return to Registry') }}
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to List') }}
                 </a>
             </div>
         </div>
@@ -76,7 +76,7 @@
                             </div>
                             <div class="col-sm-5 text-sm-right border-left pl-md-4">
                                 <div class="mb-3">
-                                    <label class="smallest font-weight-bold text-muted text-uppercase letter-spacing-1 mb-1 d-block">{{ __('Submission Intelligence') }}</label>
+                                    <label class="smallest font-weight-bold text-muted text-uppercase letter-spacing-1 mb-1 d-block">{{ __('Submission Info') }}</label>
                                     <p class="font-weight-bold text-dark mb-0 smallest">{{ $quote->created_at->format('M d, Y @ H:i') }}</p>
                                 </div>
                                 @if($quote->requested_date)
@@ -224,7 +224,7 @@
                             @method('DELETE')
                             <button type="button" class="btn btn-white btn-block rounded-pill border font-weight-bold smallest uppercase text-danger py-2" 
                                     onclick="confirmDelete('delete-quote-form', 'Purge Quote Request?', 'This will permanently remove the inquiry from the registry.', 'Purge')">
-                                <i class="fas fa-trash-alt mr-1"></i> {{ __('Purge Registry Record') }}
+                                <i class="fas fa-trash-alt mr-1"></i> {{ __('Delete Record') }}
                             </button>
                         </form>
                     </div>

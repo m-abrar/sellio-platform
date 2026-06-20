@@ -1,9 +1,9 @@
-{{--
+﻿{{--
     Administrative Infrastructure Module: Settings Master Layout
     
     This view serves as the structural scaffolding for all configuration 
     sub-sections. It orchestrates the vertical navigation between 
-    management streams (General, Modules, SEO, etc.) and provides a 
+    Settings (General, Modules, SEO, etc.) and provides a 
     standardized interaction pattern for foundational system adjustments.
     
     @extends adminlte::page
@@ -40,7 +40,7 @@
         <div class="col-md-3">
             <div class="card border-0 shadow-premium sticky-top sticky-top-100 rounded-24 bg-white-90 backdrop-blur-15">
                 <div class="card-header bg-dark border-0 py-3 px-4 rounded-t-24 border-bottom-4-primary">
-                    <h3 class="card-title font-weight-bold text-white smallest text-uppercase letter-spacing-1 mb-0">{{ __('Management Streams') }}</h3>
+                    <h3 class="card-title font-weight-bold text-white smallest text-uppercase letter-spacing-1 mb-0">{{ __('Settings') }}</h3>
                 </div>
                 <div class="card-body p-3">
                     <ul class="nav nav-pills flex-column settings-nav">

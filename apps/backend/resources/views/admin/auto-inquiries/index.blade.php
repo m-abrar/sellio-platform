@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Automotive: Purchase Inquiry Registry
     
-    This view provides a central command center for tracking vehicle 
+    This view provides a central Dashboard for tracking vehicle 
     purchase leads. It integrates high-fidelity audit trails for lead 
     engagement, lifecycle status tracking (pending, viewed, contacted), 
     and multi-dimensional filtering to optimize sales pipeline conversion.
@@ -50,7 +50,7 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">Leads Registry</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">All Leads</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                         <i class="fas fa-bullseye mr-1"></i> {{ $inquiries->total() }} LEADS FOUND

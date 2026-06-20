@@ -1,10 +1,10 @@
-{{--
+﻿{{--
     Administrative Real Estate: Rental & Stay Registry
     
     This view provides a high-fidelity audit trail of all property 
     reservations. It integrates operational metrics (revenue, duration), 
     lifecycle status tracking, and multi-dimensional filtering, serving 
-    as the command center for short-term rental oversight.
+    as the Dashboard for short-term rental oversight.
     
     @extends adminlte::page
     @context Property Operational Administration
@@ -12,7 +12,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Rentals & Stays | Real Estate Intelligence'))
+@section('title', __('Rentals & Stays | Details'))
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('vendor/npm/flatpickr/flatpickr.min.css') }}">
@@ -72,7 +72,7 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">Reservation Registry</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">All Bookings</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                         <i class="fas fa-chart-line mr-1"></i> {{ $bookings->total() }} RESERVATIONS
@@ -172,7 +172,7 @@
                                 @include('admin._partials._empty-state', [
                                     'colspan' => 7,
                                     'icon' => 'fas fa-calendar-times',
-                                    'title' => 'No Reservation Intelligence Detected',
+                                    'title' => 'No bookings found',
                                     'description' => 'The real-estate booking ledger is currently awaiting synchronized entries.'
                                 ])
                             @endforelse

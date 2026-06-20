@@ -1,7 +1,7 @@
-{{--
-    Administrative Financial Module: Transaction Ledger Registry
+﻿{{--
+    Administrative Financial Module: All Transactions Registry
     
-    This view provides the authoritative command center for the 
+    This view provides the authoritative Dashboard for the 
     platform's financial cashflow. It aggregates transaction records, 
     settlement statuses, gateway protocols, and fiscal values, 
     facilitating efficient auditing and moderation of the 
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Payments & Revenue | Financial Intelligence'))
+@section('title', __('Payments & Revenue'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -21,7 +21,7 @@
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-wallet mr-2 text-primary opacity-50"></i>
-                    {{ $pageTitle ?? __('Financial Registry') }}
+                    {{ $pageTitle ?? __('All Payments') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Monitor marketplace cashflow, transaction history, and gateway settlements.') }}</p>
             </div>
@@ -50,7 +50,7 @@
         <div class="card card-premium shadow-premium border-0 overflow-hidden rounded-24">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                    <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> {{ __('Transaction Ledger') }}
+                    <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> {{ __('All Transactions') }}
                 </h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">

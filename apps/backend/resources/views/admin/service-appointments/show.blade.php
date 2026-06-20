@@ -1,5 +1,5 @@
-{{--
-    Administrative Services: Appointment Operational Intelligence
+﻿{{--
+    Administrative Services: Appointment Details
     
     This view provides a comprehensive 360-degree visualization of a 
     specific service appointment. It aggregates fulfillment 
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Service Appointment') . ' #' . $appointment->id . ' | Service Intelligence')
+@section('title', __('Service Appointment') . ' #' . $appointment->id . ' | Service')
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -27,7 +27,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.service-bookings.index') }}" class="btn-back shadow-sm">
-                    <i class="fas fa-calendar-check mr-2"></i> {{ __('Back to Ledger') }}
+                    <i class="fas fa-calendar-check mr-2"></i> {{ __('Back to List') }}
                 </a>
             </div>
         </div>
@@ -39,12 +39,12 @@
         @include('admin.alert')
 
         <div class="row">
-            {{-- Service Intelligence --}}
+            {{-- Service --}}
             <div class="col-md-8">
                 <div class="card card-premium shadow-sm border-0 overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
                         <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 mb-0">
-                            <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> {{ __('Fulfillment Intelligence') }}
+                            <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> {{ __('Service Details') }}
                         </h3>
                         @php
                             $statusMap = [
@@ -111,7 +111,7 @@
                                 <div class="smallest text-secondary text-uppercase font-weight-bold mb-1 letter-spacing-1">{{ __('Audit Verification') }}</div>
                                 <div class="smallest font-weight-bold text-dark uppercase letter-spacing-1">
                                     <i class="far fa-check-circle mr-1 text-success opacity-75"></i> 
-                                    {{ $appointment->viewed_at ? $appointment->viewed_at->format('M d, Y • H:i') : __('Registry Awaiting Inspection') }}
+                                    {{ $appointment->viewed_at ? $appointment->viewed_at->format('M d, Y • H:i') : __('Not yet viewed') }}
                                 </div>
                             </div>
                         </div>

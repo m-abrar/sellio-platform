@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative E-Commerce: Product Configuration
     
     This view serves as the authoritative interface for managing the 
@@ -326,7 +326,7 @@
                 {{-- Classification --}}
                 <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-side">Taxonomy & Registry</h3>
+                        <h3 class="card-title-side">Category & Tags</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="form-group mb-4">

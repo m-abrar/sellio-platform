@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Operations: Master Booking & Inquiry Registry
     
-    This view serves as the cross-module operational command center. 
+    This view serves as the cross-module operational Dashboard. 
     It aggregates transactional requests from various marketplace verticals 
     (Real Estate, Events, Auto), providing real-time status oversight, 
     lifecycle filtering, and direct management of the operational queue.
@@ -26,7 +26,7 @@
                     <i class="fas fa-file-invoice-dollar mr-2 text-primary opacity-50"></i>
                     {{ Str::title($status) }} {{ __('Operations Queue') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Cross-module operational registry and transaction oversight.') }}</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Cross-module All Bookings and transaction oversight.') }}</p>
             </div>
             <div class="col-sm-5 d-flex flex-column align-items-end justify-content-center">
                 <div class="d-flex align-items-center gap-12">
@@ -76,7 +76,7 @@
                     <div class="card-body d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <span class="form-label-premium mb-0 mr-3">
-                                <i class="fas fa-filter mr-1 text-primary"></i> {{ __('Filter Registry:') }}
+                                <i class="fas fa-filter mr-1 text-primary"></i> {{ __('Filters:') }}
                             </span>
                             <ul class="nav nav-pills nav-pills-premium">
                                 <li class="nav-item">
@@ -119,7 +119,7 @@
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                 <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">
-                    {{ __('Operational Registry') }}
+                    {{ __('All Bookings') }}
                 </h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
@@ -205,7 +205,7 @@
                                             <div class="btn-group btn-group-premium">
                                                 <a href="{{ ($booking->booking_type && $booking->id) ? route('admin.bookings.show', ['type' => $booking->booking_type, 'id' => $booking->id]) : '#' }}" 
                                                    class="btn text-primary {{ (!$booking->booking_type || !$booking->id) ? 'disabled' : '' }}" 
-                                                   data-toggle="tooltip" title="{{ __('View Registry Details') }}">
+                                                   data-toggle="tooltip" title="{{ __('View View Details') }}">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 <form action="{{ ($booking->booking_type && $booking->id) ? route('admin.bookings.destroy', [$booking->booking_type, $booking->id]) : '#' }}" method="POST" class="d-inline">

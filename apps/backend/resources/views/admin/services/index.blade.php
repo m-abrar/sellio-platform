@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Services: Global Inventory Registry
     
-    This view provides the authoritative command center for the 
+    This view provides the authoritative Dashboard for the 
     professional services marketplace. It aggregates service focus 
     areas, vertical classifications, and financial rate configurations 
     for all service assets. It facilitates efficient lifecycle tracking 

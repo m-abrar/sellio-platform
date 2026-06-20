@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Intelligence Module: System Alert Stream
     
     This view serves as the primary real-time notification ledger for 
@@ -13,14 +13,14 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Admin Notifications | Intelligence Pulse')
+@section('title', 'Admin Notifications | Notifications')
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-bell mr-2 text-primary opacity-50"></i> Intelligence Pulse
+                    <i class="fas fa-bell mr-2 text-primary opacity-50"></i> Notifications
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor real-time system alerts, user activities, and marketplace signals.</p>
             </div>
@@ -48,7 +48,7 @@
     <div class="card registry-table-card shadow-premium border-0 overflow-hidden" style="border-radius: 24px;">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-stream mr-2 text-primary opacity-50"></i> Notification Stream
+                <i class="fas fa-stream mr-2 text-primary opacity-50"></i> All Notifications
             </h3>
             <div class="card-tools ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">

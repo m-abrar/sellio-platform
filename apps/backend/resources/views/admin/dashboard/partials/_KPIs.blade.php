@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Dashboard Partial: Primary KPIs & Urgent Actions
     
     This component serves as the executive "Head-Up Display" (HUD).
@@ -28,7 +28,7 @@
                     <span class="badge badge-success-light border-0 mr-2 font-weight-bold px-3 py-2 rounded-pill smallest">
                         <i class="fas fa-arrow-up mr-1"></i> {{ $metrics['system_kpis']['yoy_change'] }} {{ __('YoY') }}
                     </span>
-                    <span class="text-white-50 smallest font-weight-bold uppercase letter-spacing-1">{{ __('Analytics Stream') }}</span>
+                    <span class="text-white-50 smallest font-weight-bold uppercase letter-spacing-1">{{ __('Analytics') }}</span>
                 </div>
                 @endif
                 <div class="mt-4">

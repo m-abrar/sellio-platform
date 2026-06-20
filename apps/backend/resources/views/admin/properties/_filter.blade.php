@@ -1,11 +1,11 @@
-{{--
+﻿{{--
     Administrative Real Estate: Property Filter Protocol
     
     This component provides a high-fidelity filtering interface for the 
-    property registry. It enables multi-dimensional searching across 
+    Property. It enables multi-dimensional searching across 
     titles, geographic locations, and categorical taxonomies.
     
-    @context Property Registry Administration
+    @context Property Administration
     @variables Collection|array $locations List of available locations.
     @variables Collection|array $categories List of available property categories.
 --}}
@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label-premium">{{ __('Location Intelligence') }}</label>
+                    <label class="form-label-premium">{{ __('Location') }}</label>
                     <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-map-marker-alt text-xs"></i></span>

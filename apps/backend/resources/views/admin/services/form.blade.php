@@ -1,10 +1,10 @@
-{{--
+﻿{{--
     Administrative Services: Asset Configuration
     
     This view serves as the authoritative interface for managing 
     professional service listings. It orchestrates complex data entry 
     for service scope, expertise tiers, operating itineraries, and 
-    financial rates. It also integrates operational intelligence 
+    financial rates. It also integrates Details 
     through recent lead/quote metrics and visual identity management.
     
     @extends adminlte::page

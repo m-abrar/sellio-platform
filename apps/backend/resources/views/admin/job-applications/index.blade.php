@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Jobs: Global Application Registry
     
-    This view provides a central command center for tracking candidate 
+    This view provides a central Dashboard for tracking candidate 
     submissions. It integrates high-fidelity audit trails for talent 
     acquisition metrics, pipeline progression, and recruitment engagement. 
     It facilitates efficient candidate triage through multi-dimensional 
@@ -50,7 +50,7 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Talent Registry') }}</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Applications') }}</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                         <i class="fas fa-users mr-1"></i> {{ $applications->total() }} {{ __('APPLICANTS') }}
@@ -67,7 +67,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th class="text-center pl-4 col-media-80">{{ __('Asset') }}</th>
-                                <th>{{ __('Listing Intelligence') }}</th>
+                                <th>{{ __('Listing') }}</th>
                                 <th>{{ __('Candidate Principal') }}</th>
                                 <th>{{ __('Applied At') }}</th>
                                 <th class="text-center">{{ __('Pipeline') }}</th>
@@ -128,7 +128,7 @@
                                     'colspan' => 6,
                                     'icon' => 'fas fa-file-signature',
                                     'title' => __('No Applications Detected'),
-                                    'description' => __('The talent registry is currently awaiting synchronized candidate submissions. These will appear as soon as your listings receive interest.')
+                                    'description' => __('The Applications is currently awaiting synchronized candidate submissions. These will appear as soon as your listings receive interest.')
                                 ])
                             @endforelse
                         </tbody>

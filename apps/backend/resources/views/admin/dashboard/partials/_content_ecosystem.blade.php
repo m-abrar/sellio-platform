@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Dashboard Partial: Content & Partner Ecosystem
     
     This component visualizes the operational health of the platform content.
@@ -44,7 +44,7 @@
         <div class="card border-0 shadow-premium h-100 bg-dark overflow-hidden rounded-xl">
             <div class="card-header border-0 bg-transparent py-4 px-4">
                 <h3 class="card-title font-weight-bold text-white mb-0 smallest text-uppercase letter-spacing-1">
-                    <i class="fas fa-shield-alt mr-2 text-danger opacity-50"></i> {{ __('Intelligence Pulse') }}
+                    <i class="fas fa-shield-alt mr-2 text-danger opacity-50"></i> {{ __('Notifications') }}
                 </h3>
             </div>
             <div class="card-body p-0">
@@ -61,7 +61,7 @@
                 @endforeach
             </div>
             <div class="card-footer border-0 text-center py-3" style="background: rgba(0,0,0,0.2) !important;">
-                <p class="mb-0 smallest text-white-50 font-weight-bold uppercase letter-spacing-1">{{ __('Secured Operational Stream') }}</p>
+                <p class="mb-0 smallest text-white-50 font-weight-bold uppercase letter-spacing-1">{{ __('Activity') }}</p>
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@
         <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
-                    <i class="fas fa-crown mr-2 text-warning opacity-50"></i> {{ __('Ecosystem Leaders') }}
+                    <i class="fas fa-crown mr-2 text-warning opacity-50"></i> {{ __('Top Sellers') }}
                 </h3>
             </div>
             <div class="card-body p-0">

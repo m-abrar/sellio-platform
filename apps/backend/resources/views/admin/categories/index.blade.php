@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Taxonomy: Category Registry
     
-    This view provides the authoritative command center for managing the 
+    This view provides the authoritative Dashboard for managing the 
     platform's hierarchical classification system. It aggregates 
     category identities, parent-child relationships, cross-module 
     applicability, and publication status, facilitating efficient 
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Categories Registry'))
+@section('title', __('Categories'))
 
 @section('plugins.Datatables', true)
 
@@ -76,7 +76,7 @@
     <div class="card registry-table-card border-0 shadow-premium" style="border-radius: 24px; overflow: hidden;">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">
-                <i class="fas fa-database mr-2 text-primary"></i> {{ __('Global Taxonomy Registry') }}
+                <i class="fas fa-database mr-2 text-primary"></i> {{ __('All Categories') }}
             </h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
@@ -93,7 +93,7 @@
                         <tr>
                             <th class="text-center col-media-80 pl-4">{{ __('Icon') }}</th>
                             <th>{{ __('Segment Identity') }}</th>
-                            <th>{{ __('Module Applicability Spectrum') }}</th>
+                            <th>{{ __('Available In Spectrum') }}</th>
                             <th class="text-center">{{ __('Lifecycle') }}</th>
                             <th class="text-right pr-4">{{ __('Operations') }}</th>
                         </tr>

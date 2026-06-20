@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Intelligence: Financial Inflow Analytics
     
     This view provides a comprehensive audit trail for marketplace revenue. 
@@ -124,7 +124,7 @@
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Recent Transactions') }}</h3>
             </div>
             <a href="{{ route('admin.payments.index') }}" class="btn btn-premium-soft btn-premium-soft-primary">
-                {{ __('View Ledger') }} <i class="fas fa-arrow-right ml-2"></i>
+                {{ __('View All') }} <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
         <div class="card-body p-0">
@@ -136,7 +136,7 @@
                             <th>{{ __('Value') }}</th>
                             <th>{{ __('Protocol') }}</th>
                             <th class="text-center">{{ __('Lifecycle') }}</th>
-                            <th>{{ __('Intelligence') }}</th>
+                            <th>{{ __('Details') }}</th>
                             <th class="text-right px-4">{{ __('Temporal Data') }}</th>
                         </tr>
                     </thead>

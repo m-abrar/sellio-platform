@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Marketing Partial: Campaign Control Interface
     
-    This component provides the operational command center for ad campaigns. 
+    This component provides the operational Dashboard for ad campaigns. 
     It orchestrates status toggling (active/inactive), persistent storage 
     actions, and destructive lifecycle management (permanent deletion).
     

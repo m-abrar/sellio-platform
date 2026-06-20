@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Taxonomy: Tag Configuration
     
     This view serves as the primary interface for managing meta tags 
@@ -25,7 +25,7 @@
                     {{ $tag->exists ? __('Modify Tag') : __('New Tag') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $tag->exists ? __('Update classification labels and module applicability for this group.') : __('Define a new taxonomy element to classify marketplace assets and content.') }}
+                    {{ $tag->exists ? __('Update classification labels and Available In for this group.') : __('Define a new taxonomy element to classify marketplace assets and content.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">

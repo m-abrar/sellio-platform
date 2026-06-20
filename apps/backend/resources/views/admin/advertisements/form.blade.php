@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Marketing Module: Ad Configuration Architect
     
     This view serves as the primary interface for creating and modifying 
@@ -28,7 +28,7 @@
         </div>
         <div class="col-sm-4 text-right">
             <a href="{{ route('admin.advertisements.index') }}" class="btn btn-back shadow-sm">
-                <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Ledger') }}
+                <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to List') }}
             </a>
         </div>
     </div>

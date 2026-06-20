@@ -1,7 +1,7 @@
-{{--
-    Administrative Financial Module: Subscription Enrollment Registry
+﻿{{--
+    Administrative Financial Module: Subscription All Subscriptions
     
-    This view provides the authoritative command center for the 
+    This view provides the authoritative Dashboard for the 
     platform's membership ecosystem. It aggregates subscriber 
     identities, service tier associations, access timelines, and 
     lifecycle statuses, facilitating efficient auditing and moderation 
@@ -13,14 +13,14 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Subscriptions Management | Enrollment Ledger'))
+@section('title', __('Subscriptions'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-sync-alt mr-2 text-primary opacity-50"></i> {{ __('Enrollment Registry') }}
+                    <i class="fas fa-sync-alt mr-2 text-primary opacity-50"></i> {{ __('All Subscriptions') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Track platform memberships, trial states, and recurring revenue pipelines.') }}</p>
             </div>
@@ -49,7 +49,7 @@
     <div class="card card-premium overflow-hidden">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-id-badge mr-2 text-primary opacity-50"></i> {{ __('Global Enrollment Ledger') }}
+                <i class="fas fa-id-badge mr-2 text-primary opacity-50"></i> {{ __('All Subscriptions') }}
             </h3>
             <div class="card-tools ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">

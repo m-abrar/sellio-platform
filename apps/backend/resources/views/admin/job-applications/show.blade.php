@@ -1,5 +1,5 @@
-{{--
-    Administrative Jobs: Application Operational Intelligence
+﻿{{--
+    Administrative Jobs: Application Details
     
     This view provides a comprehensive 360-degree visualization of a 
     specific candidate submission. It aggregates the professional 
@@ -26,7 +26,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.bookings.jobs') }}" class="btn btn-back shadow-sm rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1">
-                    <i class="fas fa-arrow-left mr-1"></i> Return to Registry
+                    <i class="fas fa-arrow-left mr-1"></i> Back to List
                 </a>
             </div>
         </div>
@@ -166,7 +166,7 @@
                                     <i class="fas fa-eye fa-xs text-muted"></i>
                                 </div>
                                 <span class="smallest font-weight-bold text-muted uppercase">
-                                    {{ $application->viewed_at ? __('Registry Review') . ': ' . $application->viewed_at->format('M d, H:i') : __('Awaiting Agency Review') }}
+                                    {{ $application->viewed_at ? __('Reviewed on') . ': ' . $application->viewed_at->format('M d, H:i') : __('Awaiting Agency Review') }}
                                 </span>
                             </div>
                         </div>

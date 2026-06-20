@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Navigation Module: Hierarchical Structure Architect
     
     This view provides a high-fidelity visual editor for the platform's 
@@ -67,7 +67,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group mb-0">
-                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2">Related Module</label>
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2">Module</label>
                                 <select id="new_module" class="form-control" style="border-radius: 12px; height: 45px;">
                                     <option value="">{{ __('Always visible') }}</option>
                                     @foreach($moduleOptions as $moduleKey => $moduleLabel)
@@ -117,7 +117,7 @@
                 <div class="card card-premium overflow-hidden shadow-premium mb-4">
                 <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
                     <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
-                        <i class="fas fa-rocket mr-2 text-primary"></i> Protocol & Actions
+                        <i class="fas fa-rocket mr-2 text-primary"></i> Actions
                     </h3>
                 </div>
                 
@@ -144,7 +144,7 @@
 
 
             <div class="bg-primary-soft p-4 rounded-xl border border-primary-soft shadow-xs">
-                <h6 class="font-weight-bold text-primary mb-2 text-uppercase smallest letter-spacing-1">Editor Intelligence</h6>
+                <h6 class="font-weight-bold text-primary mb-2 text-uppercase smallest letter-spacing-1">Tips</h6>
                 <p class="text-muted small mb-0">
                     Drag and drop items to establish parent-child relationships. Hierarchical changes only take effect once you click <strong>Deploy Structure</strong>.
                 </p>
@@ -176,7 +176,7 @@
                         <input type="text" id="edit_url" name="url" class="form-control" required style="border-radius: 12px;">
                     </div>
                     <div class="form-group mb-0 mt-3">
-                        <label class="small font-weight-bold text-secondary text-uppercase mb-2">Related Module</label>
+                        <label class="small font-weight-bold text-secondary text-uppercase mb-2">Module</label>
                         <select id="edit_module" name="module" class="form-control" style="border-radius: 12px;">
                             <option value="">{{ __('Always visible') }}</option>
                             @foreach($moduleOptions as $moduleKey => $moduleLabel)

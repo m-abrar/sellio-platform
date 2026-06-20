@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Communication Module: Automated Notification Registry
     
     This view serves as the primary orchestration layer for system-wide 
@@ -39,7 +39,7 @@
     <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-paper-plane mr-2 text-primary opacity-50"></i> System Notification Registry
+                <i class="fas fa-paper-plane mr-2 text-primary opacity-50"></i> Email Templates
             </h3>
             <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase ml-auto">
                 {{ count($templates) }} ACTIVE BLUEPRINTS
@@ -119,7 +119,7 @@
         </div>
     </div>
 
-    {{-- Intelligence Tip --}}
+    {{-- Tip --}}
     <div class="bg-dark p-4 rounded-xl shadow-premium border border-white border-opacity-10 mt-4">
         <div class="d-flex align-items-center">
             <div class="bg-primary-soft rounded-circle mr-3 d-flex align-items-center justify-content-center shadow-lg icon-box-48">

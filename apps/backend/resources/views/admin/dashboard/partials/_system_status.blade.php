@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Dashboard Partial: System Infrastructure Health
     
     This component provides a real-time diagnostic overview of the platform's 
@@ -39,7 +39,7 @@
                                 <span class="font-weight-bold text-dark fs-095 font-outfit">PHP {{ $metrics['system_health']['php_version'] }}</span>
                             </div>
                             <div class="col-6 col-md border-left border-light-soft">
-                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Registry') }}</span>
+                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('ID') }}</span>
                                 <span class="font-weight-bold text-dark fs-095 font-outfit">v{{ $metrics['system_health']['laravel_version'] }}</span>
                             </div>
                             <div class="col-6 col-md border-left border-light-soft">

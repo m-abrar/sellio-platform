@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Content: High-Fidelity Page Orchestration
     
     This view serves as the primary engine for configuring dynamic 
@@ -104,7 +104,7 @@
                     <div class="card card-premium border-0 shadow-premium overflow-hidden mb-4">
                         <div class="card-header bg-dark py-3 px-4 border-0 d-flex align-items-center" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
                             <h3 class="card-title text-white font-weight-bold text-uppercase smallest mb-0" style="letter-spacing: 1px;">
-                                <i class="fas fa-rocket mr-2 text-primary"></i> Protocol & Actions
+                                <i class="fas fa-rocket mr-2 text-primary"></i> Actions
                             </h3>
                         </div>
                         <div class="card-body bg-white py-4 px-4">

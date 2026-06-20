@@ -1,9 +1,9 @@
-{{--
+﻿{{--
     Administrative Taxonomy: Brand Registry
     
-    This view provides the authoritative command center for manufacturer 
+    This view provides the authoritative Dashboard for manufacturer 
     identities and brand associations. It aggregates brand identities, 
-    cross-module applicability, and publication status, facilitating 
+    cross-Available In, and publication status, facilitating 
     efficient auditing and moderation of the platform's manufacturer 
     taxonomies.
     
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Brands Registry'))
+@section('title', __('Brands'))
 
 @section('plugins.Datatables', true)
 
@@ -95,7 +95,7 @@
                         <tr>
                             <th class="text-center col-media-80 pl-4">{{ __('Logo') }}</th>
                             <th>{{ __('Brand Details') }}</th>
-                            <th>{{ __('Module Applicability') }}</th>
+                            <th>{{ __('Available In') }}</th>
                             <th class="text-center">{{ __('Status') }}</th>
                             <th class="text-right pr-4">{{ __('Operations') }}</th>
                         </tr>

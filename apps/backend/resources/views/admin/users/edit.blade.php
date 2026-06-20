@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Identity Management: Refine Member Credentials
     
     This view facilitates the modification of existing platform accounts. 
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'User Profile Architect | Admin Registry')
+@section('title', 'Edit User')
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -21,7 +21,7 @@
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-user-edit mr-2 text-primary"></i> 
-                    {{ __('Edit Registry User') }}
+                    {{ __('Edit User') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
                     {{ __('Modifying credentials and access levels for') }} <span class="text-primary font-weight-bold">{{ $user->name }}</span>.
@@ -29,7 +29,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.users.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Registry') }}
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to List') }}
                 </a>
             </div>
         </div>

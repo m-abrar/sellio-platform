@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Dashboard Partial: Financial Performance & Analytics
     
-    This component orchestrates the financial intelligence layer, rendering 
+    This component orchestrates the Payment Details layer, rendering 
     real-time transaction streams, revenue trajectory charts, and market 
     segment distribution. It provides immediate insight into the platform's 
     economic health.

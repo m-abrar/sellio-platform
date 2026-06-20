@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Identity Management: Profile Edit
     
     This view facilitates the modification of the authenticated administrator's 
@@ -11,7 +11,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Account Intelligence') . ' | ' . __('Personal Settings'))
+@section('title', __('Account Settings') . ' | ' . __('Personal Settings'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -35,7 +35,7 @@
                     </h1>
                     <p class="text-muted mt-1 small uppercase font-weight-bold letter-spacing-2 mb-0 opacity-75">
                         <i class="fas fa-shield-alt mr-1 text-primary"></i> 
-                        {{ __('Identity Protocol Active') }}
+                        {{ __('Active') }}
                     </p>
                 </div>
             </div>
@@ -122,7 +122,7 @@
                 <div class="card border-0 shadow-premium mt-4 mb-4 overflow-hidden rounded-20">
                     <div class="card-header bg-white py-3 px-4 border-0">
                         <h3 class="card-title-side">
-                             <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> {{ __('Registry Details') }}
+                             <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> {{ __('View Details') }}
                         </h3>
                     </div>
                     <div class="card-body bg-white py-4 px-4">

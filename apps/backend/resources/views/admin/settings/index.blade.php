@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Infrastructure Module: Global Settings Registry
     
     This view serves as the primary gateway for platform-wide 
@@ -35,7 +35,7 @@
 @section('content')
 <div class="container-fluid pb-5">
     {{-- Unified Layout Greeting --}}
-    {{-- Global Registry Greeting --}}
+    {{-- Welcome --}}
     <div class="card border-0 shadow-premium mb-5 overflow-hidden rounded-24">
         <div class="card-body p-0">
             <div class="d-flex align-items-center p-3">
@@ -79,7 +79,7 @@
                             </div>
                         </div>
                         <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between">
-                            <span class="smallest text-muted font-weight-bold uppercase letter-spacing-1">{{ __('Registry') }}: {{ $group['id'] }}</span>
+                            <span class="smallest text-muted font-weight-bold uppercase letter-spacing-1">{{ __('ID') }}: {{ $group['id'] }}</span>
                             <a href="{{ route('admin.settings.group', ['section' => $group['id']]) }}" 
                                class="btn btn-premium-soft btn-premium-soft-primary stretched-link">
                                 {{ __('Configure') }} <i class="fas fa-chevron-right ml-1 small"></i>

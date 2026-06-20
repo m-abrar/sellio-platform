@@ -1,10 +1,10 @@
-{{--
+﻿{{--
     Administrative Taxonomy: Listing Type Configuration
     
     This view serves as the primary interface for managing high-level 
     listing classifications within the platform. It orchestrates 
     labeling, URI identification, visual representation (icons/badges), 
-    and cross-module applicability (properties, products, etc.), 
+    and cross-Available In (properties, products, etc.), 
     ensuring a consistent type taxonomy across all marketplace verticals.
     
     @extends adminlte::page
@@ -24,7 +24,7 @@
                     {{ $type->exists ? __('Modify Listing Type') : __('New Listing Type') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $type->exists ? __('Update classification labels, icons, and module applicability for this group.') : __('Define a new taxonomy grouping to classify marketplace assets and content.') }}
+                    {{ $type->exists ? __('Update classification labels, icons, and Available In for this group.') : __('Define a new taxonomy grouping to classify marketplace assets and content.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">

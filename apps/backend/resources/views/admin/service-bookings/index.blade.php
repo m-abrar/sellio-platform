@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Services: Global Booking Registry
     
-    This view provides a central command center for tracking service 
+    This view provides a central Dashboard for tracking service 
     appointments. It integrates high-fidelity audit trails for service 
     fulfillment, client engagement, and technician dispatch. It 
     facilitates efficient lifecycle tracking and resource allocation 
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Service Appointments | Service Intelligence'))
+@section('title', __('Service Appointments | Service'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -47,7 +47,7 @@
         <div class="card card-premium overflow-hidden">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
-                    <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> {{ __('Appointment Ledger') }}
+                    <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> {{ __('All Appointments') }}
                 </h3>
             </div>
 
@@ -140,7 +140,7 @@
                                         <div class="py-4">
                                             <i class="fas fa-concierge-bell fa-4x text-muted opacity-25 mb-3 d-block"></i>
                                             <h5 class="text-muted font-weight-bold">{{ __('No Service Requests Detected') }}</h5>
-                                            <p class="small text-secondary mb-0">{{ __('The appointment ledger is currently awaiting synchronized entries.') }}</p>
+                                            <p class="small text-secondary mb-0">{{ __('The All Appointments is currently awaiting synchronized entries.') }}</p>
                                         </div>
                                     </td>
                                 </tr>

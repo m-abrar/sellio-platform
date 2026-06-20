@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Localization Module: Locale Configuration Form
     
     This view facilitates the management of language metadata. It 
@@ -27,7 +27,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.languages.index') }}" class="btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-2"></i> {{ __('Back to Registry') }}
+                    <i class="fas fa-arrow-left mr-2"></i> {{ __('Back to List') }}
                 </a>
             </div>
         </div>
@@ -43,7 +43,7 @@
             <div class="card card-premium shadow-premium border-0 rounded-24">
                 <div class="card-header border-0 bg-white py-4 px-4">
                     <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                        <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> {{ __('Identity & Protocol') }}
+                        <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> {{ __('Details') }}
                     </h3>
                 </div>
                 

@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative E-Commerce: Global Inventory Registry
     
-    This view provides the authoritative command center for the 
+    This view provides the authoritative Dashboard for the 
     product marketplace. It aggregates inventory status, retail 
     pricing structures, and lifecycle tracking for all product assets. 
     It facilitates efficient catalog oversight through a responsive 

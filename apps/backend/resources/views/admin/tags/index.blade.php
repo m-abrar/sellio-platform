@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Taxonomy: Tag Registry
     
-    This view provides the authoritative command center for managing 
+    This view provides the authoritative Dashboard for managing 
     platform-wide meta tags. It aggregates tag identities, cross-module 
     applicability, and publication status, facilitating efficient 
     auditing and moderation of the platform's granular taxonomy 
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Tags Registry'))
+@section('title', __('Tags'))
 
 @section('plugins.Datatables', true)
 
@@ -95,7 +95,7 @@
                         <tr>
                             <th class="text-center col-media-70 pl-4">{{ __('Preview') }}</th>
                             <th>{{ __('Tag Details') }}</th>
-                            <th>{{ __('Module Applicability') }}</th>
+                            <th>{{ __('Available In') }}</th>
                             <th class="text-center">{{ __('Status') }}</th>
                             <th class="text-right pr-4">{{ __('Operations') }}</th>
                         </tr>

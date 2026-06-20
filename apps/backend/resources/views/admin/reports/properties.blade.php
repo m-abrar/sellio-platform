@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Intelligence: Asset Utilization Analytics
     
     This view provides real-time visibility into property inventory and 
@@ -131,7 +131,7 @@
             <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs d-flex align-items-center justify-content-center icon-box-40 rounded-10">
                 <i class="fas fa-building"></i>
             </div>
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Property Ledger') }}</h3>
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Properties') }}</h3>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -143,7 +143,7 @@
                             <th>{{ __('Geographic Context') }}</th>
                             <th>{{ __('Resource Capacity') }}</th>
                             <th>{{ __('Utilization Status') }}</th>
-                            <th class="text-right pr-4">{{ __('Intelligence') }}</th>
+                            <th class="text-right pr-4">{{ __('Details') }}</th>
                         </tr>
                     </thead>
                     <tbody>

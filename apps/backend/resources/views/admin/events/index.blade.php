@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Events: Global Inventory Registry
     
-    This view provides the authoritative command center for the event 
+    This view provides the authoritative Dashboard for the event 
     marketplace. It aggregates schedule itineraries, ticketing 
     specifications (paid/complimentary), and attendee capacity metrics 
     for all event assets. It facilitates efficient lifecycle tracking 

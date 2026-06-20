@@ -1,10 +1,10 @@
-{{--
+﻿{{--
     Administrative Real Estate: Property Asset Configuration
     
     This view serves as the authoritative interface for property listing management.
     It orchestrates complex data entry for specifications, pricing (sale/rental), 
     geographic localization, and high-fidelity media galleries. It also 
-    integrates operational intelligence through recent booking/inquiry streams.
+    integrates Details through recent booking/inquiry streams.
     
     @extends adminlte::page
     @context Property Inventory Management

@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Localization Module: Translation Orchestration
     
     This view provides a high-fidelity interface for managing JSON-based 
@@ -22,7 +22,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.languages.index') }}" class="btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-2"></i> {{ __('Back to Registry') }}
+                    <i class="fas fa-arrow-left mr-2"></i> {{ __('Back to List') }}
                 </a>
             </div>
         </div>
@@ -36,7 +36,7 @@
     <div class="card card-premium shadow-premium border-0 overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-search mr-2 text-primary opacity-50"></i> {{ __('String Intelligence Registry') }}
+                <i class="fas fa-search mr-2 text-primary opacity-50"></i> {{ __('All Strings') }}
             </h3>
             <div class="card-tools ml-auto">
                 <div class="input-group input-group-premium" style="width: 300px;">

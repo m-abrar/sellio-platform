@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Jobs: Global Vacancy Registry
     
-    This view provides the authoritative command center for the career 
+    This view provides the authoritative Dashboard for the career 
     marketplace. It aggregates role responsibilities, compensation 
     parameters, and employment engagement types (full-time/contract) 
     for all job listings. It facilitates efficient recruitment oversight 

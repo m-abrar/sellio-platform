@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Security: Authority Architect (Role Creation)
     
     This view facilitates the definition of new administrative roles. 
@@ -26,7 +26,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.roles.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Registry') }}
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to List') }}
                 </a>
             </div>
         </div>

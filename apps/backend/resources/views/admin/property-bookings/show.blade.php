@@ -1,5 +1,5 @@
-{{--
-    Administrative Real Estate: Booking Operational Intelligence
+﻿{{--
+    Administrative Real Estate: Booking Details
     
     This view provides a comprehensive 360-degree visualization of a 
     specific property reservation. It aggregates stay specifications, 
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Booking Details') . ' #' . $booking->id . ' | Real Estate Intelligence')
+@section('title', __('Booking Details') . ' #' . $booking->id . ' | Details')
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -36,7 +36,7 @@
                         </a>
                     @endif
                     <a href="{{ route('admin.property-bookings.index') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-receipt mr-2"></i> {{ __('Back to Ledger') }}
+                        <i class="fas fa-receipt mr-2"></i> {{ __('Back to List') }}
                     </a>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-5 text-sm-right">
-                                <label class="smallest text-uppercase font-weight-bold text-muted mb-2 d-block letter-spacing-1">{{ __('Registry Timestamp') }}</label>
+                                <label class="smallest text-uppercase font-weight-bold text-muted mb-2 d-block letter-spacing-1">{{ __('Date') }}</label>
                                 <p class="text-dark font-weight-bold mb-0 smallest uppercase letter-spacing-1">
                                     <i class="far fa-clock mr-1 text-primary opacity-50"></i> {{ $booking->created_at->format('M d, Y') }} 
                                     <span class="text-muted ml-1 text-monospace">{{ $booking->created_at->format('H:i') }}</span>

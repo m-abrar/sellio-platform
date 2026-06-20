@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Marketing Module: Audience Identity Architect
     
     This view provides the primary interface for managing newsletter 
@@ -30,7 +30,7 @@
                     <i class="fas fa-th-large"></i> Dashboard
                 </a>
                 <a href="{{ route('admin.newsletter-subscribers.index') }}" class="btn-back shadow-sm">
-                    <i class="fas fa-arrow-left"></i> Back to Ledger
+                    <i class="fas fa-arrow-left"></i> Back to List
                 </a>
             </div>
         </div>

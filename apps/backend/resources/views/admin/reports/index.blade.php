@@ -1,5 +1,5 @@
-{{--
-    Administrative Intelligence: Analytical Command Center
+﻿{{--
+    Administrative Intelligence: Analytical Dashboard
     
     This view serves as the primary gateway to the platform's analytical 
     intelligence. It orchestrates access to modular reporting engines 
@@ -11,14 +11,14 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Reports & Intelligence'))
+@section('title', __('Reports & Analytics'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-chart-line mr-2 text-primary"></i> {{ __('Analytical Intelligence') }}
+                    <i class="fas fa-chart-line mr-2 text-primary"></i> {{ __('Overview') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
                     {{ __('Reviewing marketplace performance, revenue streams, and operation metrics.') }}

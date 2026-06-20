@@ -1,10 +1,10 @@
-{{--
+﻿{{--
     Administrative Jobs: Vacancy Asset Configuration
     
     This view serves as the authoritative interface for job listing 
     management. It orchestrates complex data entry for role 
     responsibilities, compensation packages, workspace types (remote/onsite), 
-    and application deadlines. It also integrates operational intelligence 
+    and application deadlines. It also integrates Details 
     through recruitment pipeline metrics and visual identity management.
     
     @extends adminlte::page

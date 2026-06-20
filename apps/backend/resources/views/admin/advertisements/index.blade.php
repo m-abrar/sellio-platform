@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Marketing Module: Ad Campaign Registry
     
     This view serves as the primary orchestration layer for platform-wide 
@@ -47,7 +47,7 @@
     <div class="card card-premium shadow-premium border-0 overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> {{ __('Active Creative Registry') }}
+                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> {{ __('All Ads') }}
             </h3>
             <div class="card-tools ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">

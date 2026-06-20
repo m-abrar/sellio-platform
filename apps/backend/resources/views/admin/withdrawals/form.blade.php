@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Financial Module: Withdrawal Detail & Configuration
     
     This view facilitates the management of partner payout requests.
@@ -26,7 +26,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.withdrawals.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Registry') }}
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to List') }}
                 </a>
             </div>
         </div>
@@ -75,13 +75,13 @@
             {{-- Request Specifics --}}
             <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                 <div class="card-header border-0 bg-white py-4 px-4">
-                    <h3 class="card-title-main">{{ __('Financial Intelligence') }}</h3>
+                    <h3 class="card-title-main">{{ __('Payment Details') }}</h3>
                 </div>
                 <div class="card-body p-4 pt-0">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-4">
-                                <label class="small font-weight-bold text-muted uppercase mb-2 d-block">{{ __('Payout Protocol') }}</label>
+                                <label class="small font-weight-bold text-muted uppercase mb-2 d-block">{{ __('Payment Method') }}</label>
                                 <div class="p-3 bg-light rounded-xl border border-light-soft d-flex align-items-center">
                                     <i class="fas fa-university mr-3 text-primary opacity-50"></i>
                                     <span class="font-weight-bold text-dark">{{ $withdrawal->method ?: 'N/A' }}</span>

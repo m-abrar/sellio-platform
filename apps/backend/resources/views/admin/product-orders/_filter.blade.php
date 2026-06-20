@@ -1,8 +1,8 @@
-{{--
+﻿{{--
     Administrative E-Commerce: Order Filter Protocol
     
     This component provides a streamlined search and filtering interface 
-    for the product order registry. It enables precise auditing across 
+    for the product Pending. It enables precise auditing across 
     tracking numbers, inventory identities, fulfillment lifecycles, 
     and settlement states (payment status), ensuring efficient 
     oversight of marketplace transactions.

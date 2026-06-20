@@ -1,13 +1,13 @@
-@extends('admin.settings.settings-layout')
+﻿@extends('admin.settings.settings-layout')
 
 @section('setting-form-content')
 <form action="{{ route('admin.settings.update.group', ['section' => 'apis']) }}" method="POST">
     @csrf
-    {{-- 1. GOOGLE ECOSYSTEM INTEGRATIONS --}}
+    {{-- 1. Google Integrations --}}
     <div class="card border-0 shadow-premium mb-4 rounded-24">
         <div class="card-header bg-white py-4 px-4 border-0">
             <h5 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
-                <i class="fab fa-google mr-2 text-primary opacity-50"></i> {{ __('Google Ecosystem Integrations') }}
+                <i class="fab fa-google mr-2 text-primary opacity-50"></i> {{ __('Google Integrations') }}
             </h5>
             <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-1">{{ __('Configure mapping engines and intelligent tracking protocols.') }}</p>
         </div>

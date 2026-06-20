@@ -1,11 +1,11 @@
-{{--
+﻿{{--
     Administrative Automotive: Vehicle Asset Configuration
     
     This view serves as the authoritative interface for automotive 
     listing management. It orchestrates complex data entry for technical 
     specifications (engine, transmission, mileage), pricing models 
     (sale/lease), and high-fidelity media galleries. It also integrates 
-    operational intelligence through recent inquiry streams.
+    Details through recent inquiry streams.
     
     @extends adminlte::page
     @context Automotive Inventory Management

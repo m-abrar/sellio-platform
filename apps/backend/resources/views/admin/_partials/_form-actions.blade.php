@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Form Action Sidebar
     
     This partial renders the primary control panel for administrative CRUD forms.
@@ -33,7 +33,7 @@
 <div class="card card-sidebar-premium">
     <div class="card-header d-flex align-items-center border-0">
         <h3 class="card-title-side">
-            <i class="fas fa-rocket mr-2 text-primary"></i> {{ __('Protocol & Actions') }}
+            <i class="fas fa-rocket mr-2 text-primary"></i> {{ __('Actions') }}
         </h3>
     </div>
     

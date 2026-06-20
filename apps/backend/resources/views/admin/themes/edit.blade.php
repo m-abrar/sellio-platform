@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Aesthetic Module: Visual Token Configuration
     
     This view provides a granular interface for modifying a theme's 
@@ -151,7 +151,7 @@
         ])
 
         <div class="bg-primary-soft p-4 rounded-xl border border-primary-soft shadow-xs mt-4">
-            <h6 class="font-weight-bold text-primary mb-2 text-uppercase smallest letter-spacing-1">Designer Intelligence</h6>
+            <h6 class="font-weight-bold text-primary mb-2 text-uppercase smallest letter-spacing-1">Tips</h6>
             <p class="text-muted small mb-0">
                 Modifying these variables will impact the visual aesthetics of the entire frontend platform. Ensure high color contrast for accessibility.
             </p>

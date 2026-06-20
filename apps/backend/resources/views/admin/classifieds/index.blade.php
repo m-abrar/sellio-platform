@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Classifieds: Global Asset Registry
     
-    This view provides the authoritative command center for the 
+    This view provides the authoritative Dashboard for the 
     community marketplace. It aggregates item identities, engagement 
     metrics, financial valuations, and lifecycle tracking for all 
     marketplace assets. It facilitates efficient catalog oversight 

@@ -1,10 +1,10 @@
-{{--
-    Administrative E-Commerce: Order Operational Intelligence
+﻿{{--
+    Administrative E-Commerce: Order Details
     
     This view provides a comprehensive 360-degree visualization of a 
     specific product order. It aggregates fulfillment manifests, 
     fiscal summaries (itemization, logistics, taxes), lifecycle 
-    transition controls, and client intelligence parameters. It 
+    transition controls, and Client Info parameters. It 
     facilitates end-to-end logistics tracking and financial auditing.
     
     @extends adminlte::page
@@ -14,7 +14,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Order Details') . ' #' . $order->order_number . ' | Commerce Intelligence')
+@section('title', __('Order Details') . ' #' . $order->order_number . ' | Order Details')
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -22,14 +22,14 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-shopping-bag mr-2 text-primary opacity-50"></i>
-                    {{ __('Order Protocol') }} <small class="text-muted font-weight-bold opacity-75 text-monospace">#{{ $order->order_number }}</small>
+                    {{ __('Order Details') }} <small class="text-muted font-weight-bold opacity-75 text-monospace">#{{ $order->order_number }}</small>
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Marketplace transaction fulfillment and customer logistics interface.</p>
             </div>
             <div class="col-sm-6 text-right">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.product-orders.index') }}" class="btn-back shadow-sm print-hide">
-                        <i class="fas fa-receipt mr-2"></i> Back to Ledger
+                        <i class="fas fa-receipt mr-2"></i> Back to List
                     </a>
                     <button type="button" class="btn btn-primary shadow-premium rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1 print-hide" data-action="print-invoice">
                         <i class="fas fa-print mr-2"></i> Generate Invoice
@@ -155,7 +155,7 @@
                 </div>
             </div>
 
-            {{-- Right Column: Intelligence & Registry --}}
+            {{-- Right Column: Details --}}
             <div class="col-md-4">
                 {{-- Lifecycle Management --}}
                 <div class="card card-premium shadow-premium overflow-hidden mb-4 print-hide border-0 rounded-24">
@@ -168,7 +168,7 @@
                         <form action="{{ route('admin.product-orders.update-status', $order->id) }}" method="POST">
                             @csrf
                             <div class="form-group mb-4">
-                                <label class="smallest text-uppercase font-weight-bold text-secondary mb-2 letter-spacing-1">Protocol Transition</label>
+                                <label class="smallest text-uppercase font-weight-bold text-secondary mb-2 letter-spacing-1">Update Status</label>
                                 <select name="status" class="form-control select2 shadow-xs" id="statusSelect">
                                     @foreach($statuses as $value => $label)
                                         <option value="{{ $value }}" {{ $order->status === $value ? 'selected' : '' }}>{{ strtoupper($label) }}</option>
@@ -205,11 +205,11 @@
                         <ul class="list-group list-group-flush">
                             @php
                                 $lifecycle = [
-                                    ['id' => 'pending', 'label' => 'Order Registry', 'icon' => 'fa-shopping-cart'],
+                                    ['id' => 'pending', 'label' => 'Pending', 'icon' => 'fa-shopping-cart'],
                                     ['id' => 'processing', 'label' => 'Internal Fulfillment', 'icon' => 'fa-cogs'],
                                     ['id' => 'shipped', 'label' => 'Transit Dispatched', 'icon' => 'fa-shipping-fast'],
                                     ['id' => 'out_for_delivery', 'label' => 'Near Destination', 'icon' => 'fa-map-marker-alt'],
-                                    ['id' => 'delivered', 'label' => 'Registry Closed', 'icon' => 'fa-check-circle'],
+                                    ['id' => 'delivered', 'label' => 'Delivered', 'icon' => 'fa-check-circle'],
                                 ];
                                 
                                 $statusOrder = ['pending', 'processing', 'shipped', 'out_for_delivery', 'delivered'];
@@ -242,11 +242,11 @@
                     </div>
                 </div>
 
-                {{-- Client Registry --}}
+                {{-- Customer Info --}}
                 <div class="card card-premium shadow-premium overflow-hidden border-0 rounded-24">
                     <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0 card-header-premium-dark">
                         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
-                            <i class="fas fa-id-card mr-2 text-primary"></i> Client Intelligence
+                            <i class="fas fa-id-card mr-2 text-primary"></i> Client Info
                         </h3>
                     </div>
                     <div class="card-body p-4">

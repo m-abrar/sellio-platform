@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Financial Module: Payment Provider Configuration
     
-    This view serves as the primary command center for individual payment 
+    This view serves as the primary Dashboard for individual payment 
     gateway management. It orchestrates environment toggling (live/sandbox), 
     activation status, and complex credential persistence across multiple 
     deployment contexts, ensuring secure and reliable financial handshakes 
@@ -126,7 +126,7 @@
                 <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
-                            <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Registry Details
+                            <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> View Details
                         </h3>
                     </div>
                     <div class="card-body p-4">

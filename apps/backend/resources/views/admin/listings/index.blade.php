@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Marketplace: Unified Asset Registry
     
-    This view serves as the authoritative command center for all marketplace 
+    This view serves as the authoritative Dashboard for all marketplace 
     verticals (Properties, Autos, Events, Jobs, Services, Classifieds). It 
     facilitates high-fidelity auditing of submission states, proprietor 
     identifiers, and lifecycle transitions across the platform's distributed 

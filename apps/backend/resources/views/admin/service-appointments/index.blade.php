@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+﻿@extends('adminlte::page')
 
 @section('title', __('Service Appointments'))
 
@@ -28,7 +28,7 @@
 
     <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0">{{ __('Appointment Registry') }}</h3>
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0">{{ __('All Appointments') }}</h3>
             <div class="card-tools ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
                     {{ $appointments->total() }} {{ __('RECORDS') }}

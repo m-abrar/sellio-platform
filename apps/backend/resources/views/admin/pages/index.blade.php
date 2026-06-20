@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Content: Page Registry Manifest
     
-    This view provides the authoritative command center for managing the 
+    This view provides the authoritative Dashboard for managing the 
     platform's informational assets and static content. It aggregates 
     page identities, URI slugs, and visibility status, facilitating 
     efficient auditing of the informational layer through a 
@@ -42,7 +42,7 @@
     {{-- Main Table Card --}}
     <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
-            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Static Content Registry') }}</h3>
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('All Pages') }}</h3>
             <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase ml-auto">
                 <i class="fas fa-database mr-1"></i> {{ count($pages) }} {{ __('ACTIVE PAGES') }}
             </span>

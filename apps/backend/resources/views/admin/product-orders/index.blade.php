@@ -1,7 +1,7 @@
-{{--
-    Administrative E-Commerce: Global Order Registry
+﻿{{--
+    Administrative E-Commerce: Global Pending
     
-    This view provides a central command center for tracking 
+    This view provides a central Dashboard for tracking 
     marketplace transactions. It integrates high-fidelity audit trails 
     for tracking protocols, customer principals, and financial 
     aggregates. It facilitates efficient bulk fulfillment oversight 
@@ -14,7 +14,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Product Orders | Commerce Intelligence'))
+@section('title', __('Product Orders | Order Details'))
 
 @section('plugins.Select2', true)
 @section('plugins.Sweetalert2', true)
@@ -53,7 +53,7 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Commerce Registry') }}</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('All Orders') }}</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                         <i class="fas fa-database mr-1"></i> {{ $orders->total() }} {{ __('TRANSACTIONS') }}

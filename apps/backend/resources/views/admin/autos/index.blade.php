@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Automotive: Global Inventory Registry
     
-    This view provides the authoritative command center for the automotive 
+    This view provides the authoritative Dashboard for the automotive 
     marketplace. It aggregates technical identities, specification summaries, 
     and financial parameters (sale/lease) for all vehicle assets. It 
     facilitates high-fidelity lifecycle tracking and inventory oversight 

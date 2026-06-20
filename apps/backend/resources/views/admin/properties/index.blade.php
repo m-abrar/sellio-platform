@@ -1,5 +1,5 @@
-{{--
-    Administrative Real Estate: Global Property Registry
+﻿{{--
+    Administrative Real Estate: Global Property
     
     This view serves as the authoritative inventory control hub for 
     real estate assets. It integrates multi-dimensional filtering, 

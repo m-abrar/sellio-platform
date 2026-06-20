@@ -1,10 +1,10 @@
-{{--
+﻿{{--
     Administrative Taxonomy: Amenity Configuration
     
     This view serves as the primary interface for managing amenity 
     classifications within the platform. It orchestrates labeling, 
     URI identification, descriptive metadata, visual identity (icons), 
-    and cross-module applicability (properties, products, etc.), 
+    and cross-Available In (properties, products, etc.), 
     ensuring a consistent classification system across all marketplace 
     verticals.
     
@@ -25,7 +25,7 @@
                     {{ $amenity->exists ? 'Modify Amenity' : 'New Amenity' }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $amenity->exists ? 'Update classification labels, icons, and module applicability for this group.' : 'Define a new taxonomy element to classify marketplace assets and content.' }}
+                    {{ $amenity->exists ? 'Update classification labels, icons, and Available In for this group.' : 'Define a new taxonomy element to classify marketplace assets and content.' }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
@@ -89,7 +89,7 @@
                     </div>
                 </div>
 
-                {{-- Module Assignments --}}
+                {{-- Modules --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
                         <h3 class="card-title-main">Feature Applicability</h3>

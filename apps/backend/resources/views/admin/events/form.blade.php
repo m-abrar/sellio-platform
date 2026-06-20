@@ -1,10 +1,10 @@
-{{--
+﻿{{--
     Administrative Events: Inventory Asset Configuration
     
     This view serves as the authoritative interface for event listing 
     management. It orchestrates complex data entry for schedule 
     itineraries, venue specifications, and ticketing pricing models. 
-    It also integrates operational intelligence through recent 
+    It also integrates Details through recent 
     booking manifests and visual identity management.
     
     @extends adminlte::page

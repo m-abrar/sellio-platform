@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Financial Component: Plan Entitlement & Quota Orchestration
     
     This component provides the primary interface for managing resource 
@@ -62,7 +62,7 @@
             <select name="analytics_access" class="form-control custom-select shadow-xs rounded-10">
                 <option value="none" {{ ($plan->analytics_access ?? '') == 'none' ? 'selected' : '' }}>{{ __('Disabled (No Access)') }}</option>
                 <option value="basic" {{ ($plan->analytics_access ?? '') == 'basic' ? 'selected' : '' }}>{{ __('Standard (Basic Metrics)') }}</option>
-                <option value="advanced" {{ ($plan->analytics_access ?? '') == 'advanced' ? 'selected' : '' }}>{{ __('Advanced (Full Intelligence)') }}</option>
+                <option value="advanced" {{ ($plan->analytics_access ?? '') == 'advanced' ? 'selected' : '' }}>{{ __('Advanced (Full Access)') }}</option>
             </select>
         </div>
         

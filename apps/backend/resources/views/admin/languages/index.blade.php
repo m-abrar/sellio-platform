@@ -1,14 +1,14 @@
-{{--
+﻿{{--
     Administrative Localization Module: Global Language Registry
     
-    This view serves as the authoritative command center for platform 
+    This view serves as the authoritative Dashboard for platform 
     localization. It orchestrates multi-language support, allowing admins 
     to manage locales, toggle visibility, and deep-link into translation 
     JSON management.
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Languages | Localization Intelligence'))
+@section('title', __('Languages'))
 
 @section('content_header')
     <div class="container-fluid pt-4">

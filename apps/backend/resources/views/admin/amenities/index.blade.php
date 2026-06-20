@@ -1,9 +1,9 @@
-{{--
+﻿{{--
     Administrative Taxonomy: Amenity Registry
     
-    This view provides the authoritative command center for the 
+    This view provides the authoritative Dashboard for the 
     supplementary features and convenience factors classification. 
-    It aggregates feature identities, cross-module categorizations, 
+    It aggregates feature identities, cross-Categorys, 
     and publication status, facilitating efficient auditing and 
     moderation of the platform's descriptive taxonomies.
     
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Amenities Registry'))
+@section('title', __('Amenities'))
 
 @section('plugins.Datatables', true)
 
@@ -95,7 +95,7 @@
                         <tr>
                             <th class="text-center col-media-80 pl-4">{{ __('Icon') }}</th>
                             <th>{{ __('Feature Name') }}</th>
-                            <th>{{ __('Module Categorization') }}</th>
+                            <th>{{ __('Category') }}</th>
                             <th class="text-center">{{ __('Status') }}</th>
                             <th class="text-right pr-4">{{ __('Operations') }}</th>
                         </tr>

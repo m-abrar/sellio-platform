@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Identity Management: Create Member
     
     This view enables the initialization of new platform accounts. 
@@ -25,7 +25,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.users.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Registry') }}
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to List') }}
                 </a>
             </div>
         </div>

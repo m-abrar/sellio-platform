@@ -1,10 +1,10 @@
-{{--
+﻿{{--
     Administrative Financial Module: Payment Transaction Filter
     
     This component provides a granular query interface for the financial 
     ledger. It orchestrates the filtration of transaction records based 
     on client identity, settlement status (pending, completed, etc.), 
-    and financial protocol (gateways), ensuring efficient auditing 
+    and Payment Method (gateways), ensuring efficient auditing 
     and moderation of the platform's revenue streams.
     
     @context Financial Management - Ledger Auditing
@@ -14,7 +14,7 @@
         <form method="GET" action="{{ route('admin.payments.index') }}">
             <div class="row align-items-end">
                 <div class="col-md-3">
-                    <label class="form-label-premium">Client Intelligence</label>
+                    <label class="form-label-premium">Client Info</label>
                     <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
@@ -38,14 +38,14 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label-premium">Financial Protocol</label>
+                    <label class="form-label-premium">Payment Method</label>
                     <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-network-wired text-xs"></i></span>
                         </div>
                         <select name="method" class="form-control select2">
                             <option value="">All Gateways</option>
-                            <option value="stripe" {{ request('method') == 'stripe' ? 'selected' : '' }}>Stripe Intelligence</option>
+                            <option value="stripe" {{ request('method') == 'stripe' ? 'selected' : '' }}>Stripe</option>
                             <option value="paypal" {{ request('method') == 'paypal' ? 'selected' : '' }}>PayPal Express</option>
                             <option value="manual" {{ request('method') == 'manual' ? 'selected' : '' }}>Manual Settlement</option>
                         </select>

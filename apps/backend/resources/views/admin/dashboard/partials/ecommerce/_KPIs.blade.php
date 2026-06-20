@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Ecommerce Dashboard Partial: Sales KPIs & Logistics Actions
     
     This component serves as the operational HUD for e-commerce.
@@ -28,7 +28,7 @@
                     <span class="badge badge-success-light border-0 mr-2 font-weight-bold px-3 py-2 rounded-pill smallest">
                         <i class="fas fa-arrow-up mr-1"></i> {{ $metrics['system_kpis']['yoy_change'] }} YoY
                     </span>
-                    <span class="text-white-50 smallest font-weight-bold uppercase letter-spacing-1">Sales Stream</span>
+                    <span class="text-white-50 smallest font-weight-bold uppercase letter-spacing-1">Sales</span>
                 </div>
                 @endif
                 <div class="mt-4">

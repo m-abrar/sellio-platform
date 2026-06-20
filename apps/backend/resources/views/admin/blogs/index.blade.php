@@ -1,7 +1,7 @@
-{{--
-    Administrative Content: Article Registry
+﻿{{--
+    Administrative Content: All Posts
     
-    This view provides the authoritative command center for the editorial 
+    This view provides the authoritative Dashboard for the editorial 
     desk. It aggregates article information, category associations, 
     view statistics, and publication status, facilitating efficient 
     content auditing and moderation through a responsive data 
@@ -42,7 +42,7 @@
     {{-- Main Table Card --}}
     <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Article Registry') }}</h3>
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('All Posts') }}</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2 shadow-xs">
                     <i class="fas fa-database mr-1"></i> {{ $blogs->total() }} {{ __('POSTS') }}

@@ -1,5 +1,5 @@
-{{--
-    Administrative Events: Attendance Operational Intelligence
+﻿{{--
+    Administrative Events: Attendance Details
     
     This view provides a comprehensive 360-degree visualization of a 
     specific event registration. It aggregates admission specifications, 
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Event Ticket') . ' #' . $booking->id . ' | Registry Intelligence')
+@section('title', __('Event Ticket') . ' #' . $booking->id . ' | Details')
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -21,14 +21,14 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-ticket-alt mr-2 text-primary opacity-50"></i>
-                    {{ __('Admission Registry') }} <small class="text-muted font-weight-bold opacity-75 text-monospace">#{{ $booking->id }}</small>
+                    {{ __('Booking Details') }} <small class="text-muted font-weight-bold opacity-75 text-monospace">#{{ $booking->id }}</small>
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Managed ticketing registry for marketplace events and participant access.</p>
             </div>
             <div class="col-sm-6 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
                     <a href="{{ route('admin.event-bookings.index') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-receipt mr-2"></i> {{ __('RETURN TO REGISTRY') }}
+                        <i class="fas fa-receipt mr-2"></i> {{ __('Back to List') }}
                     </a>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                 <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
                         <h5 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1">
-                            <i class="fas fa-id-card-alt mr-2 text-primary opacity-50"></i> {{ __('Admission Intelligence') }}
+                            <i class="fas fa-id-card-alt mr-2 text-primary opacity-50"></i> {{ __('Guest Info') }}
                         </h5>
                         @php
                             $statusMap = [
@@ -87,14 +87,14 @@
 
                         <div class="row mt-4">
                             <div class="col-sm-6">
-                                <label class="smallest font-weight-bold text-secondary text-uppercase letter-spacing-1 mb-2 d-block">{{ __('Registry Timeline') }}</label>
+                                <label class="smallest font-weight-bold text-secondary text-uppercase letter-spacing-1 mb-2 d-block">{{ __('Timeline') }}</label>
                                 <p class="text-dark font-weight-bold mb-0 smallest uppercase letter-spacing-1">
                                     <i class="far fa-calendar-check mr-2 text-primary opacity-50"></i> {{ $booking->created_at->format('M d, Y') }}
                                     <span class="text-muted ml-1 text-monospace">{{ $booking->created_at->format('H:i') }}</span>
                                 </p>
                             </div>
                             <div class="col-sm-6 text-sm-right">
-                                <label class="smallest font-weight-bold text-secondary text-uppercase letter-spacing-1 mb-2 d-block">{{ __('Protocol Reference') }}</label>
+                                <label class="smallest font-weight-bold text-secondary text-uppercase letter-spacing-1 mb-2 d-block">{{ __('Reference No.') }}</label>
                                 <span class="badge badge-light border text-muted smallest px-3 py-2 rounded-pill font-weight-bold text-monospace shadow-xs">REG-{{ str_pad($booking->id, 6, '0', STR_PAD_LEFT) }}</span>
                             </div>
                         </div>
@@ -114,7 +114,7 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th class="pl-4 py-3 smallest text-uppercase font-weight-bold letter-spacing-1 text-secondary border-0">{{ __('Payment Reference') }}</th>
-                                        <th class="py-3 smallest text-uppercase font-weight-bold letter-spacing-1 text-secondary border-0">{{ __('Protocol Method') }}</th>
+                                        <th class="py-3 smallest text-uppercase font-weight-bold letter-spacing-1 text-secondary border-0">{{ __('Payment Method') }}</th>
                                         <th class="text-right pr-4 py-3 smallest text-uppercase font-weight-bold letter-spacing-1 text-secondary border-0">{{ __('Settled Amount') }}</th>
                                     </tr>
                                 </thead>
@@ -172,7 +172,7 @@
                         <p class="text-muted smallest font-weight-bold letter-spacing-1 text-monospace mb-4">{{ $booking->user->email ?? $booking->email }}</p>
                         
                         <div class="p-3 rounded-xl bg-light border shadow-xs mb-4">
-                            <label class="smallest text-uppercase font-weight-bold text-secondary mb-2 d-block letter-spacing-1">{{ __('Registry Status') }}</label>
+                            <label class="smallest text-uppercase font-weight-bold text-secondary mb-2 d-block letter-spacing-1">{{ __('Status') }}</label>
                             <span class="smallest font-weight-bold text-dark text-uppercase letter-spacing-1">
                                 {{ $booking->user_id ? 'Synchronized platform account' : 'External direct registration' }}
                             </span>

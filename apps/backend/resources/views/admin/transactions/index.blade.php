@@ -1,5 +1,5 @@
-{{--
-    Administrative Finance: Global Transaction Ledger
+﻿{{--
+    Administrative Finance: Global All Transactions
     
     This view provides a central audit stream for all financial exchanges. 
     It integrates reconciliation data from various booking modules, 
@@ -21,7 +21,7 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-file-invoice-dollar mr-2 text-primary"></i> {{ __('Financial Ledger & Transactions') }}
+                    <i class="fas fa-file-invoice-dollar mr-2 text-primary"></i> {{ __('Transactions') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Audit financial exchanges, verify payment artifacts, and reconcile bookings.') }}</p>
             </div>

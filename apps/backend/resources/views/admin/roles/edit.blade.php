@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Security: Authority Editor (Role Modification)
     
     This view enables the adjustment of existing administrative roles. 
@@ -27,7 +27,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.roles.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Registry') }}
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to List') }}
                 </a>
             </div>
         </div>

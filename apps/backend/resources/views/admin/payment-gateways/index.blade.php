@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Financial Module: Payment Provider Registry
     
-    This view provides the authoritative command center for managing 
+    This view provides the authoritative Dashboard for managing 
     platform-wide financial processors and transaction gateways. It 
     aggregates provider identities, operational environments (live/sandbox), 
     and lifecycle statuses, facilitating secure auditing and moderation 
@@ -56,7 +56,7 @@
     <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h5 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-network-wired mr-2 text-primary opacity-50"></i> Active Integration Ledger
+                <i class="fas fa-network-wired mr-2 text-primary opacity-50"></i> Active Gateways
             </h5>
             <div class="card-tools ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">

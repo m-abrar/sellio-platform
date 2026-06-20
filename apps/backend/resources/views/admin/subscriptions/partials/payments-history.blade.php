@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Financial Component: Subscription Revenue Ledger
     
     This component provides a historical audit trail for all financial 
@@ -13,7 +13,7 @@
 <div class="card card-premium shadow-sm border-0">
     <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-            <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> {{ __('Transaction Ledger') }}
+            <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> {{ __('All Transactions') }}
         </h3>
         <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
             <i class="fas fa-money-bill-wave mr-1 opacity-50"></i> {{ __('Total Yield') }}: {{ setting('currency_symbol', '$') }}{{ number_format($subscription->payments->sum('amount') ?? 0, 2) }}
@@ -81,7 +81,7 @@
     </div>
     @if($subscription->payments && $subscription->payments->count() > 0)
         <div class="card-footer bg-white border-top py-3 px-4">
-            <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Ledger Depth') }}: {{ $subscription->payments->count() }} {{ __('transaction(s) recorded') }}</div>
+            <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Total') }}: {{ $subscription->payments->count() }} {{ __('transaction(s) recorded') }}</div>
         </div>
     @endif
 </div>

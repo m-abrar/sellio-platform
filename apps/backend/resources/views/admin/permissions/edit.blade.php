@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Security: Refine Permission Protocol
     
     This view enables the modification of existing security permissions. 
@@ -24,7 +24,7 @@
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ route('admin.permissions.index') }}" class="btn-back shadow-sm">
-                    <i class="fas fa-arrow-left"></i> Back to Ledger
+                    <i class="fas fa-arrow-left"></i> Back to List
                 </a>
             </div>
         </div>

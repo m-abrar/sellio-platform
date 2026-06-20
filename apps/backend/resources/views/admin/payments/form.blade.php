@@ -1,11 +1,11 @@
-{{--
+﻿{{--
     Administrative Financial Module: Transaction Configuration
     
     This view serves as the primary interface for managing financial 
     ledger entries. It orchestrates principal account linkage, payable 
     entity association, specification of fiscal amounts, gateway 
     reconciliation (transaction IDs), and lifecycle status management, 
-    ensuring precise financial intelligence across all platform 
+    ensuring precise Payment Details across all platform 
     revenue channels.
     
     @extends adminlte::page
@@ -15,7 +15,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', ($payment->exists ? __('Edit Transaction') : __('Record Transaction')) . ' | ' . __('Financial Intelligence'))
+@section('title', ($payment->exists ? __('Edit Transaction') : __('Record Transaction')) . ' | ' . __('Payment Details'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -26,7 +26,7 @@
                     {{ $payment->exists ? __('Modify Transaction') : __('Initialize Transaction') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $payment->exists ? __('Update financial ledger entry, reconcile gateway data, and audit fiscal history.') : __('Record manual settlements, capture offline revenue, and architect financial intelligence.') }}
+                    {{ $payment->exists ? __('Update financial ledger entry, reconcile gateway data, and audit fiscal history.') : __('Record manual settlements, capture offline revenue, and architect Payment Details.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
@@ -84,7 +84,7 @@
                                 </div>
 
                                 <div class="col-md-6 mb-0">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Registry Classification') }}</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Type') }}</label>
                                     <div class="input-group input-group-premium">
                                         <div class="input-group-prepend border-0">
                                             <span class="input-group-text"><i class="fas fa-shapes text-xs"></i></span>
@@ -154,7 +154,7 @@
                                             <span class="input-group-text"><i class="fas fa-credit-card text-xs"></i></span>
                                         </div>
                                         <select name="payment_method" class="form-control" required>
-                                            @php $methods = ['stripe' => __('Stripe Intelligence'), 'paypal' => __('PayPal Express'), 'bank_transfer' => __('Institutional Transfer'), 'manual' => __('Manual Reconciliation')]; @endphp
+                                            @php $methods = ['stripe' => __('Stripe'), 'paypal' => __('PayPal Express'), 'bank_transfer' => __('Institutional Transfer'), 'manual' => __('Manual Reconciliation')]; @endphp
                                             @foreach($methods as $val => $label)
                                                 <option value="{{ $val }}" {{ old('payment_method', $payment->payment_method ?? '') == $val ? 'selected' : '' }}>{{ $label }}</option>
                                             @endforeach
@@ -211,7 +211,7 @@
                     <div class="card border-0 shadow-premium rounded-xl">
                         <div class="card-header border-0 bg-white py-4 px-4">
                             <h5 class="card-title-main">
-                                <i class="fas fa-file-invoice mr-2 text-primary opacity-50"></i> {{ __('Internal Context & Intelligence') }}
+                                <i class="fas fa-file-invoice mr-2 text-primary opacity-50"></i> {{ __('Internal Notes') }}
                             </h5>
                         </div>
                         <div class="card-body p-4 pt-0">
@@ -222,7 +222,7 @@
                             </div>
 
                             <div class="form-group mb-0">
-                                <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Gateway Metadata (JSON Intelligence)') }}</label>
+                                <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Gateway Metadata (JSON)') }}</label>
                                 <textarea name="metadata" class="form-control border shadow-xs bg-white text-monospace smallest p-4 rounded-15 bg-light-fdfdfd leading-1-6" rows="8"
                                      placeholder='{ "gateway_response": "..." }'>{{ old('metadata', $payment->exists ? json_encode($payment->metadata, JSON_PRETTY_PRINT) : '') }}</textarea>
                                 <p class="text-muted smallest mt-3 mb-0 uppercase letter-spacing-1 opacity-75">

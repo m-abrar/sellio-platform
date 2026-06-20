@@ -1,5 +1,5 @@
-{{--
-    Administrative Command Center (Main Dashboard)
+﻿{{--
+    Administrative Dashboard (Main Dashboard)
     
     This is the primary intelligence hub for the Sellio platform.
     It aggregates cross-module KPIs, financial performance, system health,
@@ -11,7 +11,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Command Center | Admin Operations'))
+@section('title', __('Dashboard'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -19,7 +19,7 @@
             <div class="text-center text-md-left mb-3 mb-md-0">
                 <h1 class="font-weight-bold text-dark mb-0">
                     <i class="fas fa-chart-line mr-2 text-primary"></i> 
-                    {{ __('Command Center') }}
+                    {{ __('Dashboard') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Welcome back') }}, {{ auth()->user()->name }}. {{ __('Performance metrics are live for') }} <span class="text-primary font-weight-bold">{{ now()->format('F d, Y') }}</span>.</p>
             </div>

@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Events: Booking Filter Protocol
     
     This component provides a streamlined filtering interface for event 
@@ -21,7 +21,7 @@
                             <span class="input-group-text"><i class="fas fa-ticket-alt text-xs"></i></span>
                         </div>
                         <select name="event_id" class="form-control select2">
-                            <option value="">{{ __('All Events Intelligence') }}</option>
+                            <option value="">{{ __('All Events') }}</option>
                             @foreach($events as $e)
                                 <option value="{{ $e->id }}" {{ request('event_id') == $e->id ? 'selected' : '' }}>{{ $e->title }}</option>
                             @endforeach

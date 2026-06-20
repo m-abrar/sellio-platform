@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Ecommerce Dashboard Partial: Logistics & Order Intelligence
     
     This component provides a high-fidelity view of the real-time order feed,
@@ -15,7 +15,7 @@
                     <i class="fas fa-shipping-fast mr-2 text-primary opacity-50"></i> Real-Time Order Feed & Logistics
                 </h3>
                 <a href="{{ route('admin.product-orders.index') }}" class="ml-auto smallest font-weight-bold text-primary uppercase letter-spacing-1">
-                    Full Order Registry <i class="fas fa-arrow-right ml-1"></i>
+                    All Orders <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
             <div class="card-body p-0">

@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Classifieds: Inquiry Manifest Visualization
     
     This view provides a comprehensive 360-degree visualization of a 
@@ -26,7 +26,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.bookings.classifieds') }}" class="btn btn-back shadow-sm rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1">
-                    <i class="fas fa-arrow-left mr-1"></i> Return to Registry
+                    <i class="fas fa-arrow-left mr-1"></i> Back to List
                 </a>
             </div>
         </div>
@@ -150,7 +150,7 @@
                                     data-action="delete-trigger"
                                     data-confirm-title="Purge Marketplace Inquiry?"
                                     data-confirm-text="This will permanently remove the interaction from the registry.">
-                                <i class="fas fa-trash-alt mr-1"></i> {{ __('Purge Registry Record') }}
+                                <i class="fas fa-trash-alt mr-1"></i> {{ __('Delete Record') }}
                             </button>
                         </form>
                     </div>

@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative E-Commerce: Order Initialization
     
     This view facilitates the manual entry of product orders, 
@@ -30,7 +30,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.product-orders.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Registry') }}
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to List') }}
                 </a>
             </div>
         </div>
@@ -142,7 +142,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mb-4 pb-4 border-bottom">
-                            <span class="small font-weight-bold text-muted uppercase letter-spacing-1">{{ __('Tax Ledger (0%)') }}</span>
+                            <span class="small font-weight-bold text-muted uppercase letter-spacing-1">{{ __('Tax (0%)') }}</span>
                             <span class="small font-weight-bold text-dark">$0.00</span>
                             <input type="hidden" name="tax_amount" value="0">
                         </div>

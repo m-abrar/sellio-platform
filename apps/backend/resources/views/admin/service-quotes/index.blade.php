@@ -1,7 +1,7 @@
-{{--
-    Administrative Services: Global Leads Registry
+﻿{{--
+    Administrative Services: Global All Leads
     
-    This view provides a central command center for tracking service 
+    This view provides a central Dashboard for tracking service 
     quote requests. It integrates high-fidelity audit trails for 
     customer inquiries, scope requests, and estimated revenue across 
     services. It facilitates efficient lead management through 
@@ -15,7 +15,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Service Quotes') . ' | ' . __('Revenue Intelligence'))
+@section('title', __('Service Quotes') . ' | ' . __('Revenue'))
 
 @section('plugins.Select2', true)
 @section('plugins.Sweetalert2', true)
@@ -111,7 +111,7 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Leads Registry') }}</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('All Leads') }}</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                         <i class="fas fa-file-invoice-dollar mr-1"></i> {{ $serviceQuotes->total() }} {{ __('LEADS') }}
@@ -127,7 +127,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th class="text-center pl-4 width-80">{{ __('Asset') }}</th>
-                                <th>{{ __('Service Intelligence') }}</th>
+                                <th>{{ __('Service') }}</th>
                                 <th>{{ __('Customer Principal') }}</th>
                                 <th>{{ __('Scope') }}</th>
                                 <th>{{ __('Engagement') }}</th>

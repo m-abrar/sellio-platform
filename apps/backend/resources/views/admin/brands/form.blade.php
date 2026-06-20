@@ -1,10 +1,10 @@
-{{--
+﻿{{--
     Administrative Taxonomy: Brand Configuration
     
     This view serves as the primary interface for managing brand 
     identities within the platform. It orchestrates labeling, 
     URI identification, descriptive metadata, visual identity (logos), 
-    and cross-module applicability (products, classifieds, etc.), 
+    and cross-Available In (products, classifieds, etc.), 
     ensuring a consistent branding system across all marketplace 
     verticals.
     
@@ -25,7 +25,7 @@
                     {{ $brand->exists ? 'Modify Brand' : 'New Brand' }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $brand->exists ? 'Update classification labels and module applicability for this group.' : 'Define a new taxonomy element to classify marketplace assets and content.' }}
+                    {{ $brand->exists ? 'Update classification labels and Available In for this group.' : 'Define a new taxonomy element to classify marketplace assets and content.' }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">

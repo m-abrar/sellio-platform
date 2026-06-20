@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Financial Module: Payout Management Registry
     
-    This view provides the authoritative command center for processing 
+    This view provides the authoritative Dashboard for processing 
     partner fund withdrawals. It orchestrates the lifecycle of payout 
     requests (pending, approved, rejected), integrates destination bank 
     intelligence, and facilitates secure fiscal settlements with 
@@ -94,7 +94,7 @@
     <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-receipt mr-2 text-primary"></i> {{ __(ucfirst($filter_status)) }} {{ __('Requests Registry') }}
+                <i class="fas fa-receipt mr-2 text-primary"></i> {{ __(ucfirst($filter_status)) }} {{ __('All Requests') }}
             </h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
@@ -117,7 +117,7 @@
                     </colgroup>
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4">{{ __('Partner Intelligence') }}</th>
+                            <th class="pl-4">{{ __('Partner') }}</th>
                             <th class="text-right">{{ __('Settlement Value') }}</th>
                             <th class="text-center">{{ __('Lifecycle') }}</th>
                             <th>{{ __('Date') }}</th>

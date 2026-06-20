@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Security: Define New Permission
     
     This view facilitates the creation of unique security permissions using the 
@@ -23,7 +23,7 @@
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ route('admin.permissions.index') }}" class="btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Ledger
+                    <i class="fas fa-arrow-left mr-1"></i> Back to List
                 </a>
             </div>
         </div>

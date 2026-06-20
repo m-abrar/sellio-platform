@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Taxonomy: Geographical Location Configuration
     
     This view serves as the primary interface for managing geographical 
@@ -128,7 +128,7 @@
                     </div>
                 </div>
 
-                {{-- DRY: Module Applicability Grid --}}
+                {{-- DRY: Available In Grid --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
                         <h3 class="card-title-main">Service Availability</h3>

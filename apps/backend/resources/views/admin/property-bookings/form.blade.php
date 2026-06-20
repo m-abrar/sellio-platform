@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Real Estate: Booking Lifecycle Configuration
     
     This view serves as the authoritative interface for managing property 
@@ -252,7 +252,7 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="small text-muted uppercase letter-spacing-1">{{ __('Source') }}</span>
-                            <span class="small font-weight-bold text-primary">{{ __('Property Registry') }}</span>
+                            <span class="small font-weight-bold text-primary">{{ __('Property') }}</span>
                         </div>
                     </div>
                 </div>

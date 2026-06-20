@@ -1,7 +1,7 @@
-{{--
+﻿{{--
     Administrative Taxonomy: Feature Registry
     
-    This view provides the authoritative command center for managing 
+    This view provides the authoritative Dashboard for managing 
     technical specifications and attribute groupings. It aggregates 
     feature identities, cross-module availability, and publication 
     status, facilitating efficient auditing and moderation of the 
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Listing Features Registry'))
+@section('title', __('Listing Features'))
 
 @section('plugins.Datatables', true)
 
@@ -78,7 +78,7 @@
     <div class="card registry-table-card border-0 shadow-premium" style="border-radius: 24px; overflow: hidden;">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">
-                <i class="fas fa-database mr-2 text-primary"></i> {{ __('Product Features Registry') }}
+                <i class="fas fa-database mr-2 text-primary"></i> {{ __('Listing Features') }}
             </h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">

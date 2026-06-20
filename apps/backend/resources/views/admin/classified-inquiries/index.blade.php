@@ -1,9 +1,9 @@
-{{--
+﻿{{--
     Administrative Classifieds: Marketplace Inquiry Registry
     
-    This view serves as the authoritative command center for monitoring 
+    This view serves as the authoritative Dashboard for monitoring 
     consumer engagement and lead generation performance. It aggregates 
-    ad intelligence, inquirer principals, and engagement timelines, 
+    Listing, inquirer principals, and engagement timelines, 
     facilitating efficient auditing of the marketplace conversion funnel 
     through a responsive data architecture and multi-dimensional filtering.
     
@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Classified Inquiries | Marketplace Intelligence'))
+@section('title', __('Classified Inquiries'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -46,7 +46,7 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Marketplace Registry') }}</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('All Inquiries') }}</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                         <i class="fas fa-bullhorn mr-1"></i> {{ $inquiries->total() }} {{ __('INQUIRIES') }}
@@ -62,7 +62,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th class="text-center pl-4 col-media-80">{{ __('Asset') }}</th>
-                                <th>{{ __('Ad Intelligence') }}</th>
+                                <th>{{ __('Listing') }}</th>
                                 <th>{{ __('Inquirer Principal') }}</th>
                                 <th>{{ __('Engagement Date') }}</th>
                                 <th class="text-center">{{ __('Lifecycle') }}</th>
@@ -159,7 +159,7 @@
                 "dom": 't',
                 "language": {
                     "search": "",
-                    "searchPlaceholder": "{{ __('Search marketplace registry...') }}"
+                    "searchPlaceholder": "{{ __('Search All Inquiries...') }}"
                 }
             });
         }
