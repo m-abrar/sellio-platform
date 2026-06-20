@@ -2,6 +2,8 @@
 
 Captured: 2026-06-20
 
+> **Decision update:** Flutter buyer-first development has been selected. React Native/Expo will be removed from `apps/mobile`. This comparison document is retained for decision history; implementation should follow `FLUTTER_BUYER_APP_DEVELOPMENT_PLAN_2026-06-20.md`.
+
 ## Purpose
 
 This document defines practical options for turning the existing `apps/mobile` Expo prototype into a production mobile product. It supplements the older `mobile_app_plan.md`; it does not replace that historical blueprint.

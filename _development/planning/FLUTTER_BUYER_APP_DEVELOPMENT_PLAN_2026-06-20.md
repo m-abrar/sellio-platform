@@ -36,26 +36,27 @@ Recommended future listing language:
 
 Do not add Flutter to public sales copy until signed release builds and the documented buyer workflows have been verified.
 
-## Relationship to the Existing Expo Prototype
+## React Native Retirement Decision
 
-The existing `apps/mobile` directory is an Expo/React Native prototype. It contains useful workflow research but is not a production release candidate.
+React Native/Expo is no longer part of Sellio's mobile roadmap. The existing prototype under `apps/mobile` will be removed rather than preserved, shipped, archived inside the repository, or maintained in parallel.
 
-Create the Flutter application in a separate directory:
+The Flutter application will use the canonical mobile path:
 
 ```text
-apps/mobile_flutter/
+apps/mobile/
 ```
 
-Keep `apps/mobile` unchanged during the Flutter foundation phase. It can be archived or removed only after the Flutter app passes authentication, discovery, and build gates. This preserves a working reference and avoids a destructive migration.
+Before creating the Flutter project:
 
-Reusable concepts from the Expo prototype:
+- Remove the current Expo application source, assets, `package.json`, `package-lock.json`, Expo configuration, TypeScript configuration, and mobile `node_modules` directory.
+- Remove React Native/Expo references from root scripts, workspace configuration, CI, distribution tooling, documentation, reviewer material, and marketing copy.
+- Remove obsolete development instructions that copy or restore the Expo prototype.
+- Verify that the distribution process does not package JavaScript mobile dependencies or stale Expo assets.
+- Create a fresh Flutter project at `apps/mobile` only after the old directory has been removed and the intended absolute path has been verified.
 
-- Buyer-first navigation.
-- Secure bearer-token authentication.
-- Unified discovery with vertical filters.
-- Favorites, messages, settings, and listing-detail routes.
+The old prototype may be reviewed before deletion to identify useful product concepts, but no React Native source will be copied into the Flutter application. Relevant concepts are buyer-first navigation, secure token authentication, unified discovery, favorites, messaging, settings, and vertical-aware listing details.
 
-Do not port its hardcoded API hosts, mock records, mojibake labels, broad `any` mapping, or seller/partner wording.
+Do not carry over hardcoded API hosts, mock records, mojibake labels, broad dynamic mappings, or inconsistent seller/partner wording.
 
 ## Version-One Scope
 
@@ -155,7 +156,7 @@ All third-party packages must receive license, maintenance, and platform-support
 ## Proposed Project Structure
 
 ```text
-apps/mobile_flutter/
+apps/mobile/
   android/
   ios/
   assets/
@@ -418,12 +419,15 @@ The estimates assume one experienced Flutter developer working full-time with ti
 - [ ] Inventory public and buyer API contracts.
 - [ ] Define checkout and deep-link behavior.
 - [ ] Approve navigation and wireframes.
+- [ ] Remove the React Native/Expo application from `apps/mobile`.
+- [ ] Remove Expo/React Native references from scripts, CI, distribution configuration, documentation, and marketing material.
+- [ ] Verify no old mobile JavaScript dependencies or generated files remain.
 
-**Exit gate:** every screen has a real API contract or a scheduled backend task.
+**Exit gate:** every screen has a real API contract or a scheduled backend task, and the repository contains no active React Native/Expo mobile application or shipping reference.
 
 ### Phase 1 — Flutter foundation: 2 weeks
 
-- [ ] Create `apps/mobile_flutter` on the stable Flutter channel.
+- [ ] Create a fresh Flutter project at `apps/mobile` on the stable Flutter channel.
 - [ ] Configure linting, environments, routing, Riverpod, Dio, model generation, and secure storage.
 - [ ] Implement design tokens and core UI primitives.
 - [ ] Implement authentication, session restoration, logout, and route guards.
@@ -572,6 +576,7 @@ Do not include:
 - Real `google-services.json` or `GoogleService-Info.plist` unless they belong only to a disposable documented demo and redistribution is explicitly safe
 - Build directories, IDE caches, or local absolute paths
 - Production API/payment secrets
+- React Native/Expo source, packages, caches, configuration, or documentation
 
 ## Risks and Controls
 
@@ -585,6 +590,7 @@ Do not include:
 | CodeCanyon buyers struggle to rebrand/build | Test documentation on a clean machine and centralize configuration |
 | Flutter work delays Sellio web launch | Develop mobile after or alongside web release without blocking core submission |
 | App-store policies change | Recheck official policies during Phase 6 rather than freezing old assumptions now |
+| Stale React Native references confuse buyers or build tooling | Remove and scan all workspace, distribution, and documentation references during Phase 0 |
 
 ## Definition of Done
 
@@ -601,6 +607,7 @@ The Flutter buyer application is complete only when:
 - Accessibility and error/offline states have been reviewed.
 - The source package builds on a clean machine using its documentation.
 - No secrets, personal data, debug output, or broken assets ship.
+- No React Native/Expo source, dependency, build instruction, or marketing claim remains in the release package.
 - CodeCanyon marketing claims match the demonstrated application exactly.
 
 ## Recommended Next Action

@@ -1,5 +1,7 @@
 # Sellio Mobile App - Architectural Implementation Plan
 
+> **Superseded:** This Expo/React Native plan is retained for historical context only. React Native/Expo will be removed from `apps/mobile`. Active implementation planning is in `FLUTTER_BUYER_APP_DEVELOPMENT_PLAN_2026-06-20.md`.
+
 This document outlines the detailed architectural blueprint and phase-based plan to scale the existing React Native/Expo prototype in `apps/mobile` into a fully functional, premium cross-platform mobile application synced with the Laravel 12.x backend.
 
 ---
