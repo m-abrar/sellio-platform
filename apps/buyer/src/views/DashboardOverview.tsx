@@ -15,6 +15,7 @@ import {
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { useStats } from '../context/StatsContext';
+import { useUser } from '../context/UserContext';
 import { PageHeader } from '../components/PageHeader';
 import { fetchBookings } from '../api/bookingApi';
 
@@ -51,7 +52,9 @@ function StatsSkeleton() {
 
 export default function DashboardOverview() {
   const { stats, isLoading, hasLoaded } = useStats();
+  const { isLoading: authLoading } = useUser();
   const [nextEvent, setNextEvent] = useState<any>(null);
+  const [nextEventLoading, setNextEventLoading] = useState(true);
 
   useEffect(() => {
     fetchBookings()
@@ -59,7 +62,8 @@ export default function DashboardOverview() {
         const next = items.find((item: any) => item.status === 'confirmed') || items[0] || null;
         setNextEvent(next);
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setNextEventLoading(false));
   }, []);
 
   const statCards = STAT_CARD_DEFS.map((def) => ({
@@ -67,7 +71,7 @@ export default function DashboardOverview() {
     value: stats[def.key],
   }));
 
-  const showSkeleton = isLoading || !hasLoaded;
+  const showSkeleton = authLoading || isLoading || !hasLoaded;
 
   return (
     <div className="space-y-8">
@@ -113,7 +117,12 @@ export default function DashboardOverview() {
                 <CalendarCheck size={48} />
               </div>
               <div>
-                {nextEvent ? (
+                {nextEventLoading ? (
+                  <div className="space-y-2 animate-pulse">
+                    <div className="h-4 w-40 rounded-full bg-zinc-200" />
+                    <div className="h-3 w-28 rounded-full bg-zinc-200" />
+                  </div>
+                ) : nextEvent ? (
                   <>
                     <p className="text-lg font-bold text-zinc-900">{nextEvent.itemTitle}</p>
                     <p className="text-sm text-zinc-500">Scheduled for {new Date(nextEvent.booking_date).toLocaleDateString()}</p>

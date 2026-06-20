@@ -57,7 +57,7 @@ const StatsContext = createContext<StatsContextType | undefined>(undefined);
 export function StatsProvider({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading: authLoading } = useUser();
   const [stats, setStats] = useState<Stats>(INITIAL_STATS);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasLoaded, setHasLoaded] = useState(false);
 
   const refreshStats = useCallback(async () => {
@@ -72,7 +72,8 @@ export function StatsProvider({ children }: { children: React.ReactNode }) {
       setHasLoaded(true);
     } catch (error) {
       console.error('Failed to fetch stats:', error);
-      setHasLoaded(true);
+      // hasLoaded intentionally NOT set here: if this is the first fetch and it
+      // fails, keep the skeleton visible rather than exposing zero placeholders.
     } finally {
       setIsLoading(false);
     }
