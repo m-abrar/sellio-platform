@@ -26,7 +26,7 @@ export default function MediaStudio({ files, setFiles }: any) {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files).map(file => ({
-        id: `new-${Math.random().toString(36).substr(2, 9)}-${Date.now()}`,
+        id: `new-${crypto.randomUUID()}`,
         file,
         preview: URL.createObjectURL(file as any),
         isMain: files.length === 0, 

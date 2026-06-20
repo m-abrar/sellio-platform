@@ -101,7 +101,7 @@ export default function AutosPage() {
                   </div>
                   <div className="min-w-0 flex-1 pt-1">
                     <span className="text-[9px] font-black text-[#6610f2] bg-[#6610f2]/5 px-3 py-1 rounded-full uppercase tracking-widest">{auto.sku}</span>
-                    <h3 className="text-lg font-black text-slate-900 truncate mt-2 italic tracking-tight cursor-pointer hover:text-[#6610f2] transition-colors" onClick={() => navigate(`/dashboard/autos/view/${auto.slug}`)}>
+                    <h3 className="text-lg font-black text-slate-900 truncate pr-1 mt-2 italic tracking-tight cursor-pointer hover:text-[#6610f2] transition-colors" onClick={() => navigate(`/dashboard/autos/view/${auto.slug}`)}>
                       {auto.title}
                     </h3>
                     <p className="text-2xl font-black text-slate-900 mt-1 tracking-tighter">{auto.price || 'N/A'}</p>
@@ -143,7 +143,7 @@ export default function AutosPage() {
                           <img src={auto.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-lg font-black tracking-tighter mb-1 truncate text-slate-900 italic cursor-pointer hover:text-[#6610f2] transition-colors" onClick={() => navigate(`/dashboard/autos/view/${auto.slug}`)}>
+                          <p className="text-lg font-black tracking-tighter mb-1 truncate pr-1 text-slate-900 italic cursor-pointer hover:text-[#6610f2] transition-colors" onClick={() => navigate(`/dashboard/autos/view/${auto.slug}`)}>
                             {auto.title}
                           </p>
                           <span className="text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest bg-[#6610f2]/5 text-[#6610f2] border border-[#6610f2]/10">{auto.sku}</span>

@@ -522,7 +522,7 @@ export default function MessagesPage() {
                         <div className="bg-slate-950 p-4 rounded-2xl shadow-xl shadow-slate-900/5 flex items-center justify-between relative overflow-hidden group">
                           <div className="relative z-10 min-w-0">
                             <p className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-500 mb-1">Pricing Valuation</p>
-                            <p className="text-lg font-black italic text-[#6610f2] tracking-tighter truncate" title={item.price}>
+                            <p className="text-lg font-black italic text-[#6610f2] tracking-tighter truncate pr-1" title={item.price}>
                               {item.price}
                             </p>
                           </div>

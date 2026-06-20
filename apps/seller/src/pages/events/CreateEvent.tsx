@@ -8,7 +8,8 @@ import {
   HiOutlineUserGroup,
   HiOutlineTicket,
   HiOutlineChevronLeft,
-  HiOutlineClock
+  HiOutlineClock,
+  HiOutlineTrash,
 } from 'react-icons/hi2';
 import MediaStudio from '../../components/studio/MediaStudio';
 import PageHeader from '../../components/layout/PageHeader';
@@ -108,7 +109,7 @@ export default function CreateEvent() {
   };
 
   const addTicketType = () => {
-    const newId = `NEW_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const newId = `NEW_${crypto.randomUUID()}`;
     setTicketsList((prev) => [...prev, { id: newId, title: '', base_price: '' }]);
     setOccurrencesList((prev) =>
       prev.map((occ) => ({
@@ -133,7 +134,7 @@ export default function CreateEvent() {
   };
 
   const addOccurrenceSlot = () => {
-    const newId = `NEW_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const newId = `NEW_${crypto.randomUUID()}`;
     const defaultInventory: Record<string, { available_quantity: string; override_price: string }> = {};
     ticketsList.forEach((t) => {
       defaultInventory[t.id] = { available_quantity: '', override_price: '0' };
@@ -753,10 +754,10 @@ export default function CreateEvent() {
                       type="button"
                       disabled={ticketsList.length === 1}
                       onClick={() => removeTicketType(ticket.id)}
-                      className="bg-red-50 text-red-500 hover:bg-red-100 disabled:opacity-30 px-5 py-4 rounded-2xl font-bold text-xs uppercase tracking-wider transition-all w-full text-center"
+                      className="bg-red-50 text-red-500 hover:bg-red-100 disabled:opacity-30 p-3 rounded-2xl transition-all"
                       title="Remove ticket tier"
                     >
-                      Delete
+                      <HiOutlineTrash className="w-5 h-5" />
                     </button>
                   </div>
                 </div>

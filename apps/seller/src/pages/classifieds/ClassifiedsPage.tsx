@@ -122,7 +122,7 @@ export default function ClassifiedsPage() {
                     <div className="min-w-0 flex-1 pt-1">
                       <span className="text-[9px] font-black text-[#6610f2] bg-[#6610f2]/5 px-3 py-1 rounded-full uppercase tracking-widest">{item.sku || 'NO-SKU'}</span>
                       <h3 
-                        className="text-lg font-black text-slate-900 truncate mt-2 italic tracking-tight cursor-pointer hover:text-[#6610f2] transition-colors"
+                        className="text-lg font-black text-slate-900 truncate pr-1 mt-2 italic tracking-tight cursor-pointer hover:text-[#6610f2] transition-colors"
                         onClick={() => navigate(`/dashboard/classifieds/view/${item.slug}`)}
                       >
                         {item.title}
@@ -170,7 +170,7 @@ export default function ClassifiedsPage() {
                         </div>
                         <div className="min-w-0">
                           <p 
-                            className="text-lg font-black tracking-tighter mb-1 truncate text-slate-900 italic cursor-pointer hover:text-[#6610f2] transition-colors"
+                            className="text-lg font-black tracking-tighter mb-1 truncate pr-1 text-slate-900 italic cursor-pointer hover:text-[#6610f2] transition-colors"
                             onClick={() => navigate(`/dashboard/classifieds/view/${item.slug}`)}
                           >
                             {item.title}

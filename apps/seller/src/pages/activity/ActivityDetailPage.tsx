@@ -789,7 +789,7 @@ export default function ActivityDetailPage() {
                   />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-black italic truncate group-hover:text-[#9b51e0] transition-colors">{activity.asset}</p>
+                  <p className="text-sm font-black italic truncate pr-1 group-hover:text-[#9b51e0] transition-colors">{activity.asset}</p>
                   <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">
                     Ref: #ASSET-{(module === 'properties' ? activity.raw.property?.id 
                                   : module === 'events' ? activity.raw.event?.id 

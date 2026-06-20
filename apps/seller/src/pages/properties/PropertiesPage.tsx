@@ -106,7 +106,7 @@ export default function PropertiesPage() {
                 <div className="p-8">
                   <span className="text-[10px] font-black text-[#6610f2] uppercase tracking-widest">{property.location}</span>
                   <h3
-                    className="text-xl font-black text-slate-900 mt-2 italic tracking-tight truncate cursor-pointer hover:text-[#6610f2] transition-colors"
+                    className="text-xl font-black text-slate-900 mt-2 italic tracking-tight truncate pr-1 cursor-pointer hover:text-[#6610f2] transition-colors"
                     onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}
                   >
                     {property.title}
@@ -148,7 +148,7 @@ export default function PropertiesPage() {
                         </div>
                         <div className="min-w-0">
                           <p
-                            className="text-lg font-black tracking-tighter mb-1 truncate text-slate-900 italic cursor-pointer hover:text-[#6610f2] transition-colors"
+                            className="text-lg font-black tracking-tighter mb-1 truncate pr-1 text-slate-900 italic cursor-pointer hover:text-[#6610f2] transition-colors"
                             onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}
                           >
                             {property.title}

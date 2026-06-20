@@ -85,7 +85,8 @@ export const fetchAllLeadRecords = async (): Promise<Record<string, unknown>[]> 
           __module: module,
           __type: type,
         }));
-      } catch {
+      } catch (err) {
+        console.error(`Failed to fetch leads from ${endpoint}:`, err);
         return [];
       }
     }),
