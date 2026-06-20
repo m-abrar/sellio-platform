@@ -139,6 +139,13 @@
             });
         });
 
+        // Navigate Select: data-navigate-select
+        document.querySelectorAll('[data-navigate-select]').forEach(function(el) {
+            el.addEventListener('change', function() {
+                if (this.value) window.location.href = this.value;
+            });
+        });
+
         // Generic Confirm Trigger: data-action="confirm-action"
         document.querySelectorAll('[data-action="confirm-action"]').forEach(function(el) {
             el.addEventListener('click', function(e) {

@@ -127,11 +127,14 @@
                                         </a>
 
                                         @if(!$lang->is_default)
-                                            <form action="{{ route('admin.languages.destroy', $lang) }}" method="POST" class="d-inline">
+                                            <form id="delete-lang-{{ $lang->id }}" action="{{ route('admin.languages.destroy', $lang) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="btn btn-white text-danger py-2 px-3" 
+                                                <button type="button" class="btn btn-white text-danger py-2 px-3"
                                                         data-toggle="tooltip" title="{{ __('Delete Language') }}"
-                                                        onclick="return confirm('{{ __('Permanently remove this language and all translations?') }}')">
+                                                        data-action="delete-trigger"
+                                                        data-form-id="delete-lang-{{ $lang->id }}"
+                                                        data-confirm-title="{{ __('Delete Language?') }}"
+                                                        data-confirm-text="{{ __('Permanently remove this language and all translations?') }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>

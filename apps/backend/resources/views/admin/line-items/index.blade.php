@@ -75,10 +75,14 @@
                             <a href="{{ route('admin.line-items.edit', $item->id) }}" class="btn btn-primary btn-sm">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="{{ route('admin.line-items.destroy', $item->id) }}" method="POST" style="display:inline;">
+                            <form id="delete-item-{{ $item->id }}" action="{{ route('admin.line-items.destroy', $item->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this line item?')">
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        data-action="delete-trigger"
+                                        data-form-id="delete-item-{{ $item->id }}"
+                                        data-confirm-title="{{ __('Delete Line Item?') }}"
+                                        data-confirm-text="{{ __('Are you sure you want to delete this line item?') }}">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>

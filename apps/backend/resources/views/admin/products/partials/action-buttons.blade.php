@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative E-Commerce Partial: Lifecycle Action Interface
     
     This component provides the primary interaction gateway for product 
@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-6 pl-1">
                     @if($product->exists)
-                        <button type="button" class="btn btn-outline-danger btn-block py-2 rounded-lg small font-weight-bold" onclick="triggerDelete()">
+                        <button type="button" class="btn btn-outline-danger btn-block py-2 rounded-lg small font-weight-bold" data-action="delete-trigger" data-form-id="delete-form" data-confirm-title="{{ __('Delete Record?') }}" data-confirm-text="{{ __('This will permanently remove the record from the platform.') }}">
                             <i class="fas fa-trash-alt mr-1"></i> Delete
                         </button>
                     @else

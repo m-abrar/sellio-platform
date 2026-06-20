@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Financial Module: Payout Lifecycle Filter
 
     This component provides the query interface for the payout management
@@ -44,7 +44,7 @@
                     <select id="user-filter"
                             class="form-control border-0 px-0 smallest font-weight-bold text-uppercase letter-spacing-1 text-muted"
                             style="min-width: 200px;"
-                            onchange="window.location.href = this.value">
+                            data-navigate-select>
                         <option value="{{ route('admin.withdrawals.index', array_merge(request()->except('user_id', 'page'), ['status' => $filter_status])) }}">
                             {{ __('All Partners') }}
                         </option>

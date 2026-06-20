@@ -4,13 +4,13 @@
             {{-- Using nl2br to preserve dealer formatting while sanitizing --}}
             {!! nl2br(e($auto->description)) !!}
         </div>
-        
+
         {{-- If the description is very long, we can add a 'Read More' fade --}}
         @if(strlen($auto->description) > 800)
             <div class="mt-3">
-                <button class="btn btn-link text-primary-color fw-bold p-0 text-decoration-none small" 
-                        type="button" 
-                        onclick="toggleDescription()">
+                <button class="btn btn-link text-primary-color fw-bold p-0 text-decoration-none small"
+                        type="button"
+                        data-action="expand-description">
                     {{ __('+ Read Full Dealer Comments') }}
                 </button>
             </div>
@@ -23,13 +23,17 @@
     @endif
 </div>
 
-
+@push('scripts')
 <script>
-    function toggleDescription() {
-        const desc = document.getElementById('descriptionText');
-        if (desc.style.webkitLineClamp) {
-            desc.style.display = 'block';
-            desc.style.webkitLineClamp = 'unset';
-        }
-    }
+    document.querySelectorAll('[data-action="expand-description"]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const desc = document.getElementById('descriptionText');
+            if (desc) {
+                desc.style.display = 'block';
+                desc.style.webkitLineClamp = 'unset';
+                this.style.display = 'none';
+            }
+        });
+    });
 </script>
+@endpush

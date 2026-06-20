@@ -1,10 +1,20 @@
+@push('scripts')
+<script>
+document.querySelectorAll('[data-navigate-select]').forEach(function(el) {
+    el.addEventListener('change', function() {
+        if (this.value) window.location.href = this.value;
+    });
+});
+</script>
+@endpush
+
 <div class="d-flex justify-content-between align-items-center glass-surface p-3 rounded-3 border bg-white shadow-sm">
     <div class="d-flex align-items-center">
         <label class="me-2 text-muted small d-none d-md-block text-nowrap" for="product-sort">{{ __('Sort By:') }}</label>
         <select id="product-sort"
                 class="form-select form-select-sm border-0 bg-light rounded-pill px-3"
                 aria-label="{{ __('Sort products') }}"
-                onchange="window.location.href = this.value">
+                data-navigate-select>
             <option value="{{ request()->fullUrlWithQuery(['sort_by' => 'latest']) }}" @selected(request('sort_by', 'latest') == 'latest')>{{ __('Newest') }}</option>
             <option value="{{ request()->fullUrlWithQuery(['sort_by' => 'price_low']) }}" @selected(request('sort_by') == 'price_low')>{{ __('Price: Low to High') }}</option>
             <option value="{{ request()->fullUrlWithQuery(['sort_by' => 'price_high']) }}" @selected(request('sort_by') == 'price_high')>{{ __('Price: High to Low') }}</option>

@@ -38,10 +38,14 @@
         </button>
 
         @if($advertisement->exists)
-            <form action="{{ route('admin.advertisements.destroy', $advertisement->id) }}" method="POST" onsubmit="return confirm('Delete this ad?');">
+            <form id="delete-form-ad-{{ $advertisement->id }}" action="{{ route('admin.advertisements.destroy', $advertisement->id) }}" method="POST">
                 @csrf @method('DELETE')
-                <button type="submit" class="btn btn-outline-danger btn-sm btn-block">
-                    <i class="fas fa-trash mr-1"></i> Delete Permanent
+                <button type="button" class="btn btn-outline-danger btn-sm btn-block"
+                        data-action="delete-trigger"
+                        data-form-id="delete-form-ad-{{ $advertisement->id }}"
+                        data-confirm-title="{{ __('Delete Ad?') }}"
+                        data-confirm-text="{{ __('This will permanently remove the advertisement.') }}">
+                    <i class="fas fa-trash mr-1"></i> {{ __('Delete Permanent') }}
                 </button>
             </form>
         @endif

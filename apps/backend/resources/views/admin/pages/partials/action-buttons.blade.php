@@ -46,9 +46,13 @@
                     <i class="fas fa-external-link-alt mr-1"></i> Preview Page
                 </a>
                 
-                <form action="{{ route('admin.pages.destroy', $page->id) }}" method="POST" onsubmit="return confirm('Delete this page?');">
+                <form id="delete-form-page-{{ $page->id }}" action="{{ route('admin.pages.destroy', $page->id) }}" method="POST">
                     @csrf @method('DELETE')
-                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-circle shadow-sm icon-box-35">
+                    <button type="button" class="btn btn-outline-danger btn-sm rounded-circle shadow-sm icon-box-35"
+                            data-action="delete-trigger"
+                            data-form-id="delete-form-page-{{ $page->id }}"
+                            data-confirm-title="{{ __('Delete Page?') }}"
+                            data-confirm-text="{{ __('This will permanently remove the page.') }}">
                         <i class="fas fa-trash"></i>
                     </button>
                 </form>

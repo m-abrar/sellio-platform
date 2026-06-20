@@ -65,10 +65,14 @@
                             <a href="{{ route('admin.pages.edit', $page->id) }}" class="btn btn-primary btn-sm">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="{{ route('admin.pages.destroy', $page->id) }}" method="POST" style="display:inline;">
+                            <form id="delete-page-{{ $page->id }}" action="{{ route('admin.pages.destroy', $page->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        data-action="delete-trigger"
+                                        data-form-id="delete-page-{{ $page->id }}"
+                                        data-confirm-title="{{ __('Delete Page?') }}"
+                                        data-confirm-text="{{ __('This will permanently remove the page.') }}">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
