@@ -60,7 +60,7 @@ export default function SettingsPage() {
   };
 
   const sections = [
-    { title: 'Profile Identity', icon: HiOutlineUserCircle, description: 'Manage your studio avatar, display name, and public bio.' },
+    { title: 'Profile Identity', icon: HiOutlineUserCircle, description: 'Manage your avatar, display name, and public bio.' },
     { title: 'Security & Access', icon: HiOutlineShieldCheck, description: 'Two-factor authentication — coming soon.', comingSoon: true },
     { title: 'Password Control', icon: HiOutlineLockClosed, description: 'Update your credentials from the Laravel account area — coming soon.', comingSoon: true },
     { title: 'Alert Preferences', icon: HiOutlineBellAlert, description: 'Configure how you receive system and market alerts — coming soon.', comingSoon: true },
@@ -68,7 +68,7 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <PageHeader badge="Configuration" title="Studio" subtitle="Settings" />
+      <PageHeader badge="Configuration" title="Settings" subtitle="Account Preferences" />
 
       <form onSubmit={handleSubmit} className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-premium space-y-8">
         <div>

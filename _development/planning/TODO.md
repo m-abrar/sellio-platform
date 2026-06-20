@@ -462,14 +462,13 @@ https://demo.sellio.vebdez.com/buyer
 - [x] Buyer panel online indicator — replaced fake "Active" green light; real presence detection via Echo (`fix(buyer-chat): remove fake online presence indicators`).
 
 - [x] Buyer panel `/messages` — duplicate of above; resolved by the same change.
-Partner login screen is missing actual dynamic logo from backend
+- [x] Partner login screen: dynamic logo from backend — logo was already fetched via `getBrandSettings()` and `brand?.site_logo`; confirmed working.
 
-password field lable is security key, which is wrong, it should be password.
+- [x] Password field label was "Security Key" — changed to "Password" in `apps/seller/src/pages/Login.tsx`.
 
-in the seller dashboard, we are using content like "studio" etc, which gives a feeling of work done by AI, can you actually change the labels to normal and regular words that are normally used in the codecanyon projects.
+- [x] Seller dashboard AI/studio labels — replaced all user-visible "Studio" references with normal marketplace copy: "Partner Access" on login, "Sign In" button, sidebar "Seller Portal"/"Seller Account"/"Dashboard", page headers (Wallet, Messages, Settings), "Listing Photos" in MediaStudio, "Photos & Media" section headings across all 7 create forms, loading spinners, and organizer/company placeholders.
 
-in the chat window we show two login buttons
-can you double check?
+- [ ] Chat window shows two login buttons — needs investigation
 
 unifieds_minimal, in the header, where does the CTA button go to? fix it.
 

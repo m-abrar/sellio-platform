@@ -504,7 +504,7 @@ export default function CreateProduct() {
 
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Media Studio.
+              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Photos & Media.
             </h3>
             <div className="mt-4">
               <MediaStudio files={files} setFiles={setFiles} />

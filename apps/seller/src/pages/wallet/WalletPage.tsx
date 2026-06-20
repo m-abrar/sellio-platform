@@ -204,7 +204,7 @@ export default function WalletPage() {
   if (isLoading) {
     return (
       <div className="space-y-10 animate-in fade-in duration-700">
-        <PageHeader badge="Financials" title="Studio" subtitle="Wallet" />
+        <PageHeader badge="Financials" title="Wallet" subtitle="Balance & Payouts" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           {/* BALANCE CARD SKELETON */}
@@ -270,7 +270,7 @@ export default function WalletPage() {
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-1000 ease-out">
-      <PageHeader badge="Financials" title="Studio" subtitle="Wallet" />
+      <PageHeader badge="Financials" title="Wallet" subtitle="Balance & Payouts" />
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* BALANCE CARD */}

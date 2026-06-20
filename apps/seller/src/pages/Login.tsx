@@ -103,7 +103,7 @@ export default function Login() {
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tighter">
             {brand?.site_name || 'Partner'} Portal
           </h1>
-          <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mt-2">Sellio Studio Access</p>
+          <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mt-2">Partner Access</p>
         </div>
 
         <div className="bg-white rounded-[2.5rem] p-8 sm:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-slate-100">
@@ -121,7 +121,7 @@ export default function Login() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-4 tracking-widest">Security Key</label>
+              <label className="text-[10px] font-black uppercase text-slate-400 ml-4 tracking-widest">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -147,7 +147,7 @@ export default function Login() {
             >
               {isLoading ? 'Authenticating...' : (
                 <>
-                  Enter Studio <HiOutlineArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  Sign In <HiOutlineArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>

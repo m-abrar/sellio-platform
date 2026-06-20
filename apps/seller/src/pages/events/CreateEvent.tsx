@@ -461,7 +461,7 @@ export default function CreateEvent() {
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading Event Studio...</span>
+        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading...</span>
       </div>
     );
   }
@@ -599,7 +599,7 @@ export default function CreateEvent() {
                   value={form.organizer}
                   onChange={(e) => updateForm('organizer', e.target.value)}
                   className={inputClass}
-                  placeholder="e.g. Sellio Studio"
+                  placeholder="e.g. Your Organization"
                 />
               </div>
               <div>
@@ -898,7 +898,7 @@ export default function CreateEvent() {
 
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Media Studio.
+              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Photos & Media.
             </h3>
             <MediaStudio files={files} setFiles={setFiles} />
           </div>

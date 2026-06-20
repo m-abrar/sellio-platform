@@ -249,7 +249,7 @@ export default function CreateJob() {
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading Job Studio...</span>
+        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading...</span>
       </div>
     );
   }
@@ -327,7 +327,7 @@ export default function CreateJob() {
                       value={form.company}
                       onChange={(e) => updateForm('company', e.target.value)}
                       className={`${inputClass} pl-14`}
-                      placeholder="e.g. Sellio Studio"
+                      placeholder="e.g. Your Company"
                     />
                   </div>
                 </div>
@@ -528,7 +528,7 @@ export default function CreateJob() {
 
           <div className={containerClass}>
             <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Media Studio.
+              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Photos & Media.
             </h3>
             <p className="text-xs text-slate-400 mb-6 font-bold uppercase tracking-widest">Upload company logo or office culture photos.</p>
             <MediaStudio files={files} setFiles={setFiles} />

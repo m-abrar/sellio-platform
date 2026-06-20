@@ -69,7 +69,7 @@ export default function MediaStudio({ files, setFiles }: any) {
           <div className="w-8 h-8 bg-[#6610f2]/10 rounded-xl flex items-center justify-center">
             <HiOutlinePhoto className="w-4 h-4 text-[#6610f2]" />
           </div>
-          <span className="text-[11px] font-black uppercase tracking-[0.2em] italic">Visual Asset Studio</span>
+          <span className="text-[11px] font-black uppercase tracking-[0.2em] italic">Listing Photos</span>
         </div>
         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{files.length} Files Attached</span>
       </div>
@@ -83,7 +83,7 @@ export default function MediaStudio({ files, setFiles }: any) {
         </div>
         
         <div className="text-center">
-            <p className="text-lg font-black text-slate-900 italic tracking-tight">Deploy Assets.</p>
+            <p className="text-lg font-black text-slate-900 italic tracking-tight">Upload Images.</p>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Drag & Drop or Click to Browse</p>
         </div>
 

@@ -251,7 +251,7 @@ export default function Sidebar({ user }: any) {
               )}
               <div className="flex flex-col ms-3 min-w-0">
                 <span className="text-lg font-black text-slate-900 tracking-tighter leading-none">{brand?.site_name || 'Sellio.'}</span>
-                <span className="text-[8px] font-black text-purple-500 uppercase tracking-[0.2em] mt-1">Studio Partner</span>
+                <span className="text-[8px] font-black text-purple-500 uppercase tracking-[0.2em] mt-1">Seller Account</span>
               </div>
             </div>
             <button onClick={() => setIsMobileOpen(false)} className="w-10 h-10 rounded-xl bg-white shadow-md text-slate-900 flex items-center justify-center border border-slate-100 active:scale-90 transition-transform">
@@ -292,7 +292,7 @@ export default function Sidebar({ user }: any) {
               })}
             </div>
 
-            <NavGroupHeader>Operations & Studio</NavGroupHeader>
+            <NavGroupHeader>Operations</NavGroupHeader>
             <div className="grid grid-cols-1 gap-2">
               {backOfficeLinks.map((item, idx) => (
                 <NavLink key={idx} to={item.to} className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-100 text-slate-600 font-bold text-sm active:bg-slate-50">
@@ -331,15 +331,15 @@ export default function Sidebar({ user }: any) {
             )}
             <div className="flex flex-col ms-4 min-w-0">
               <span className="text-xl font-black text-slate-900 tracking-tighter leading-none">{brand?.site_name || 'Sellio.'}</span>
-              <span className="text-[10px] font-black text-purple-500 uppercase tracking-[0.25em] mt-1.5">Partner Studio</span>
+              <span className="text-[10px] font-black text-purple-500 uppercase tracking-[0.25em] mt-1.5">Seller Portal</span>
             </div>
           </NavLink>
         </div>
 
-        {/* Main Link - Studio Overview */}
+        {/* Main Link - Dashboard Overview */}
         <div className="px-6 pb-4 flex-shrink-0">
           <NavLink to="/dashboard" end className={({ isActive }) => `flex items-center py-4 px-6 rounded-2xl text-[15px] font-black transition-all ${isActive ? 'bg-[#6610f2] text-white shadow-xl shadow-purple-100' : 'text-slate-600 hover:bg-slate-50'}`}>
-            <HiOutlineSquares2X2 className="w-6 h-6 mr-3" /> Studio Overview
+            <HiOutlineSquares2X2 className="w-6 h-6 mr-3" /> Dashboard
           </NavLink>
         </div>
 
@@ -740,7 +740,7 @@ export default function Sidebar({ user }: any) {
                   {user?.name ? user.name.split(' ')[0] : user?.email?.split('@')[0] || 'Seller'}
                 </p>
                 <p className="text-[9px] font-bold text-green-500 uppercase tracking-wider">
-                  {user?.name || 'Studio Partner'}
+                  {user?.name || 'Partner'}
                 </p>
               </div>
             </div>
