@@ -113,6 +113,11 @@ export default function ProductDetailPage() {
               ))}
             </div>
           )}
+
+          <div className={containerClass}>
+            <h3 className="text-xl font-black text-slate-900 italic mb-4">Description</h3>
+            <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">{product.description || 'No description provided.'}</p>
+          </div>
         </div>
 
         <div className="lg:col-span-5 space-y-6">
@@ -142,11 +147,6 @@ export default function ProductDetailPage() {
                 <p className="text-sm font-bold text-slate-800 mt-1">{product.brand?.title || 'N/A'}</p>
               </div>
             </div>
-          </div>
-
-          <div className={containerClass}>
-            <h3 className="text-xl font-black text-slate-900 italic mb-4">Description</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">{product.description || 'No description provided.'}</p>
           </div>
 
           <div className={containerClass}>
