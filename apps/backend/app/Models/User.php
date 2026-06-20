@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Mail\DynamicEmail;
 use App\Traits\HasImageAccess;
 use App\Traits\Models\HasMarketplaceMetrics;
 use App\Traits\Subscribable;
@@ -367,5 +368,23 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
         $plan = $this->getPlan();
         if (!$plan) return 1;
         return (int)($plan->max_listings ?? 999);
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $template = EmailTemplate::fetchByKey('password_reset_link');
+
+        if (!$template) {
+            parent::sendPasswordResetNotification($token);
+            return;
+        }
+
+        $resetUrl = url(route('password.reset', [
+            'token' => $token,
+            'email' => $this->getEmailForPasswordReset(),
+        ], false));
+
+        \Illuminate\Support\Facades\Mail::to($this->email)
+            ->queue(new DynamicEmail($template, ['reset_link' => $resetUrl]));
     }
 }

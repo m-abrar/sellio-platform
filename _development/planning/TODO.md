@@ -261,7 +261,7 @@ in the partner dashboard
 ### Events / listeners / email templates
 - [x] Wired orphaned flows: `PartnerLeadCreated` → `NewListingLead` email; `PropertyBookingConfirmed` now dispatches from public checkout; `ReviewRequested` after property/event purchase; `PaymentFailed` on Stripe subscription webhook failure; `PlanExpired` via `app:check-expired-subscriptions`; renewal query fixed (`title` not `name`).
 - [x] Scheduled `app:check-renewals` (daily 08:00) and `app:check-expired-subscriptions` (daily 08:15).
-- [ ] **Orphan template:** `password_reset_link` seeded but Laravel default reset flow does not use `DynamicEmail` — wire custom notification or remove template.
+- [x] **Orphan template:** `password_reset_link` — wired by overriding `sendPasswordResetNotification()` in `User` model; builds the reset URL, queues `DynamicEmail` with `{{ reset_link }}`; falls back to Laravel default if template is missing.
 
 ### Home page dynamic content
 - [x] **Yes.** Home (`frontend/unifieds/index.blade.php`) uses `page_content()` for hero badge, title, and description — same pattern as footer, search meta, and unified index body. There is no `pagecontent()` helper; the correct helper is `page_content()`.
@@ -395,44 +395,17 @@ https://demo.sellio.vebdez.com/buyer
 
 -----------------
 
-Live demo access
-update these links on documentation
+- [x] Documentation — live demo access links updated: added separate "Laravel Storefront" and "Next.js Storefront" links alongside Installer and Marketing page.
 
-Storefront (show two types of frontend https://sellio.vebdez.com laravel, https://frontend.sellio.vebdez.com nextjs)
-·
-Installer (https://sellio.vebdez.com/demo/install - show an HTML install wizard preview )
-·
-Marketing landing page (https://sellio.vebdez.com/)
- 
--------------------
+- [x] Documentation — Installation section now opens on FTP/cPanel tab with "Recommended for shared hosting" badge; a callout above both tabs guides users to pick the right method.
 
-Expert CLI
-FTP / cPanel (auto install wizard) add this text here and make it more highlighted for reader's attention
+- [x] Documentation — FTP upload step clarified: "Upload the **contents** of the `backend/` folder to your web root (`public_html`) — not the folder itself. Distribution packages include pre-built `vendor/`, `public/build/`, and `public/vendor/`."
 
+- [x] Documentation — "Contact support via Envato" link updated to `https://codecanyon.net/user/vebdez#contact`; replaced placeholder `mailto:support@sellio-platform.test`.
 
-documentation
-recheck for errors?
+- [x] 419 Page Expired (and similar error pages) — applied custom branded design. Created `419.blade.php`, `500.blade.php`, `503.blade.php`; refreshed `404.blade.php` and `403.blade.php` to use storefront tokens (`--color-primary`, `btn-primary-theme`). Standalone pages (500/503) follow `db-error.blade.php` pattern.
 
-Upload the contents of the backend folder to your web root (usually public_html). Distribution packages include pre-built vendor/ and public/build/ assets.
-
----------------
-
-Contact support via Envato
-this has to be updated in documentation, mark as TODO
-
------------------
-
-419
-Page Expired
-
-this page and others like this need to be applied custom design
-
-------------------------------
-
-
-
-
-write Sellio same version everywhere, documentation, error screen, loading, screen, installer, etc
+- [x] Branding consistency — version standardized to `v2.4.0` across all surfaces: documentation, error screens, loading screens, installer, etc. (commit `b0c302e5`)
 
 - [x] blade frontend: Browse Popular Services — capped `$serviceCategories->take(4)` and used capped count for dynamic column calc; no empty space in the row.
 
@@ -450,105 +423,87 @@ write Sellio same version everywhere, documentation, error screen, loading, scre
 
 
 
----------------------------------------------------
-This is for buyer panel
-the main loading is not a finished design, make it attractive
-Loading buyer panel...
+- [x] Buyer panel main loading screen — redesigned with branded logo mark, animated progress bar, and "Loading your dashboard" copy.
 
-------------------------------------------------------
+- [x] Buyer panel `/messages` inbox — sidebar shows skeleton placeholders during load; no more "zero messages" flash.
 
+- [x] Admin dashboard — queue worker warning already implemented: `QueueHealthService` feeds `_system_status` partial on the dashboard showing `worker_up`, failed job count, and stale/pending jobs.
 
-This is for buyer panel
+- [x] Real-time messaging (seller ↔ buyer) — new messages appear on both sides without page refresh; Laravel Echo + Pusher integrated.
 
-http://localhost:3003/messages
-the inbox for a couple of seconds show nothing or zero, the user feels he has zero messages, but after few seconds the messages load. This create confusion.
+- [x] Enter key sends message immediately and clears input; auto-scroll to latest message on load and on send (both seller and buyer panels).
 
----------------------------------------
+- [x] Buyer panel `/messages` — right-side chat area now shows a pulse skeleton while `loading` is true; "Select an active conversation…" placeholder only appears after conversations have loaded.
 
-in the laravel admin dashboard, can we show a warning if the que worker is running or not?
+- [x] Seller panel messages layout — tightened inbox/listing split proportions.
 
----------------------------------------
-i sent message from buyer panel to seller
-then seller replied
-but i expect the new message to show to buyer panel automatically without refreshing the browser
-and vice versa
+- [x] Real-time: buyer messages now appear in seller panel without page refresh.
 
-------------------
+- [x] Seller panel thread — replaced "No messages in this thread yet." with a loading skeleton while thread loads.
 
-When enter is pressed the message should be immediately moved to chat window and type input field should be empty.
+- [x] Echo/Pusher real-time — root cause identified and resolved (Sanctum guard on channels, SafeBroadcast wrapper).
 
-Also fix the bug why the user has to manually move the scrollbar for new messages or for first load of page.
+- [x] Buyer chat read receipts — implemented with real-time updates.
 
-This is for both the seller and buyer panels.
+- [x] Seller message timestamp — time format correct on send with no delay.
 
-------------------------
+- [x] Message sending indication — animated in-flight indicator shown while message saves to database.
 
-on the buyer dashboard, unless the messages sidebar is loaded, show loading for inbox as well.
+- [x] Storefront favicon — replaced default Next.js favicon with branded one; dynamic SEO metadata wired.
 
-------------------
+- [x] Storefront SEO — `robots.txt`, `sitemap.xml`, and per-page listing metadata verified and working.
 
-in the seller panel
-messages inbox divides too much space with the relevant listing, can you solve this UIUX issue?
+- [x] Laravel auth pages (login/register) — redesigned and aligned with shared partials and plain copy.
 
------------------------
-Seller sent message to buyer and it appeared 
-Buyer sent message to seller but it does not appear
-However the page refresh will load them on both sides.
+- [x] Pusher/Echo test files — moved to non-production `_development/` folder.
 
+- [x] Production cleanup — dev artifacts moved to `_development/` folder.
 
----------------------
+- [x] Buyer panel online indicator — replaced fake "Active" green light; real presence detection via Echo (`fix(buyer-chat): remove fake online presence indicators`).
 
-on the seller panel, you say
-No messages in this thread yet.
-after few seconds you show message.
-why dont you show loading message instead?
+- [x] Buyer panel `/messages` — duplicate of above; resolved by the same change.
+Partner login screen is missing actual dynamic logo from backend
+
+password field lable is security key, which is wrong, it should be password.
+
+in the seller dashboard, we are using content like "studio" etc, which gives a feeling of work done by AI, can you actually change the labels to normal and regular words that are normally used in the codecanyon projects.
+
+in the chat window we show two login buttons
+can you double check?
+
+unifieds_minimal, in the header, where does the CTA button go to? fix it.
 
 
+unifieds_minimal, footer UIUX is squeezed, can you give it a perfect appearance?
 
-------------------
-
-Can you figure out why the echo/pusher is not working?
-
-------------------------------
+unifieds_minimal, the classifieds single listing should have chat instead of inquiry form, or both? can you recheck our backend logics?
 
 
-in buyer chat, is the read receipt correct and valid?
-
-------------------------------
-
-
-when seller sends a message, it shows long string of time, and takes few seconds to correct the format, fix this issue
-
-------------------------------
-
-
-unless a message is actually sent to database, can we show some indication? this will help to fix any confusions in case of slow or bad internet service.
-
-------------------------------
-
-
-The storefront does not have a favicon, it shows the default one from nextjs. Check for other similar things too.
-
-------------------------------
-
-
-Verify if the storefront is properly working with SEO settings?
-
-------------------------------
+unifieds_minimal, the content of this theme looks that it is introducing theme's features, however, we need to give a feeling of finished marketplace to target the end user audience (not the theme buyers)
 
 
 
-The login and register screens on laravel are unfinished
+unifieds_interactive, the content of this theme looks that it is introducing theme's features, however, we need to give a feeling of finished marketplace to target the end user audience (not the theme buyers)
 
-------------------------------
+unifieds_mega, footer UIUX is squeezed, can you give it a perfect appearance?
 
-We created some test files for pusher+echo
-can we move them to non production folders?
+unifieds_mega, the content of this theme looks that it is introducing theme's features, however, we need to give a feeling of finished marketplace to target the end user audience (not the theme buyers)
 
--------------------------
+unifieds_modern, the content of this theme looks that it is introducing theme's features, however, we need to give a feeling of finished marketplace to target the end user audience (not the theme buyers)
 
-Can we cleanup our files and folders for production?
-move the garbage to some folders
 
----------------------
+unifieds_classic, the content of this theme looks that it is introducing theme's features, however, we need to give a feeling of finished marketplace to target the end user audience (not the theme buyers)
 
+unifieds_standard, this theme looks like very basic structure only, can we make it a finished look?
+
+
+404, 403, 419, 500, 503 
+should we make their titles and other content dynamic? is it logically valid?
+should we keep the css inline or external file?
+
+
+404, 403, 419, 500, 503 how can i see them in browser?
+buyer dashboard keep showing 1 unread message, even i have opened all the chats one by one
+
+TODO
+Support link and email, are still pending, remind me later

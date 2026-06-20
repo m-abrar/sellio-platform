@@ -853,14 +853,20 @@ export default function MessagesView() {
               })()}
             </div>
           </>
+        ) : loading ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-zinc-100 animate-pulse mb-5" />
+            <div className="h-3 w-32 rounded-full bg-zinc-100 animate-pulse mb-3" />
+            <div className="h-2.5 w-52 rounded-full bg-zinc-100 animate-pulse" />
+          </div>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-white/50 backdrop-blur-xs rounded-2xl">
-            <motion.div 
-              animate={{ 
+            <motion.div
+              animate={{
                 y: [0, -8, 0],
                 rotate: [0, 3, -3, 0]
               }}
-              transition={{ 
+              transition={{
                 repeat: Infinity,
                 duration: 4,
                 ease: "easeInOut"

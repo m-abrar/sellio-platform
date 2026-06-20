@@ -152,11 +152,13 @@
                     </div>
                     <p class="demo-note mb-0">If you used the web installer, the <strong>admin</strong> account is the one you created on the final step (it may replace user ID 1). Partner and buyer demo accounts still exist when demo seeding ran. Rotate or remove all demo passwords before production.</p>
                     <p class="demo-links mb-0 mt-3">
-                        <a href="https://demo.sellio.vebdez.com" target="_blank" rel="noopener">Storefront</a>
+                        <a href="https://demo.sellio.vebdez.com" target="_blank" rel="noopener">Laravel Storefront</a>
+                        <span class="text-muted">·</span>
+                        <a href="https://frontend.sellio.vebdez.com" target="_blank" rel="noopener">Next.js Storefront</a>
                         <span class="text-muted">·</span>
                         <a href="https://demo.sellio.vebdez.com/install" target="_blank" rel="noopener">Installer</a>
                         <span class="text-muted">·</span>
-                        <a href="https://sellio.vebdez.com" target="_blank" rel="noopener">Marketing landing page</a>
+                        <a href="https://sellio.vebdez.com" target="_blank" rel="noopener">Marketing page</a>
                     </p>
                 </div>
             </section>
@@ -201,9 +203,16 @@
 
             <section id="installation" class="doc-section">
                 <h2>Installation Pipeline</h2>
+                <div class="callout callout-info mb-4">
+                    <p class="mb-0"><strong>Choose your install method:</strong> Use <strong>FTP / cPanel</strong> if you are on shared hosting — the guided web installer handles everything in the browser. Use <strong>Expert CLI</strong> if you have SSH access and prefer running Artisan commands directly.</p>
+                </div>
                 <div class="nav-tabs" role="tablist">
-                    <button type="button" class="tab-btn active" role="tab" aria-selected="true" onclick="showTab('cli', this)">Expert CLI</button>
-                    <button type="button" class="tab-btn" role="tab" aria-selected="false" onclick="showTab('web', this)">FTP / cPanel</button>
+                    <button type="button" class="tab-btn" role="tab" aria-selected="false" onclick="showTab('web', this)">
+                        <i class="fas fa-wand-magic-sparkles me-1"></i> FTP / cPanel <span class="tab-badge">Recommended for shared hosting</span>
+                    </button>
+                    <button type="button" class="tab-btn active" role="tab" aria-selected="true" onclick="showTab('cli', this)">
+                        <i class="fas fa-terminal me-1"></i> Expert CLI
+                    </button>
                 </div>
 
                 <div id="cli" class="tab-content active" role="tabpanel" aria-hidden="false">
@@ -241,7 +250,7 @@
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <h4>Payload upload</h4>
-                            <p>Upload the Laravel backend to your main domain document root (<code>public_html</code> or equivalent). CodeCanyon distribution builds include <code>vendor/</code>, <code>public/build/</code>, and <code>public/vendor/</code> so shared hosting can skip Composer when those folders are present.</p>
+                            <p>Upload the <strong>contents</strong> of the <code>backend/</code> folder to your web root (<code>public_html</code> or equivalent) — not the folder itself. Distribution packages include pre-built <code>vendor/</code>, <code>public/build/</code>, and <code>public/vendor/</code> so shared hosting can skip Composer entirely.</p>
                         </div>
                     </div>
                     <div class="step-item">
@@ -610,7 +619,7 @@ MAIL_FROM_ADDRESS=no-reply@yourdomain.com</code></pre>
                 <div class="feature-card mb-4">
                     <h4 class="small fw-bold">Scope of support</h4>
                     <p class="small">Assistance is provided for platform bugs and documented features. Free support does not cover third-party customizations or server-side configuration issues.</p>
-                    <a href="mailto:support@sellio-platform.test" class="btn-text">Contact support <i class="fas fa-envelope"></i></a>
+                    <a href="https://codecanyon.net/user/vebdez#contact" target="_blank" rel="noopener" class="btn-text">Contact support via Envato <i class="fas fa-external-link-alt"></i></a>
                 </div>
 
                 <h3>Release registry</h3>
