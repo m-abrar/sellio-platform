@@ -7,7 +7,8 @@ export interface UserProfile {
   email: string;
   avatar: string;
   phone?: string;
-  location?: string;
+  location_id?: number | null;
+  location_title?: string;
   member_since?: string;
   settings?: any;
   wallet_balance?: number;
@@ -26,7 +27,7 @@ export async function updateUserProfile(data: Partial<UserProfile>): Promise<Use
       name: data.name,
       email: data.email,
       phone: data.phone,
-      location: data.location,
+      location_id: data.location_id ?? null,
       settings: data.settings,
     }),
   });

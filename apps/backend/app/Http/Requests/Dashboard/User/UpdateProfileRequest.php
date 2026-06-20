@@ -20,7 +20,7 @@ class UpdateProfileRequest extends FormRequest
             'name'        => ['required', 'string', 'max:255'],
             'email'       => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'phone'       => ['nullable', 'string', 'max:20'],
-            'location'    => ['nullable', 'string', 'max:120'],
+            'location_id' => ['nullable', 'integer', 'exists:locations,id'],
             'preferences' => ['nullable', 'array'],
             'settings'    => ['nullable', 'array'],
         ];

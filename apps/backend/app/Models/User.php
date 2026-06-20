@@ -14,6 +14,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -137,7 +138,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
         'name',
         'email',
         'phone',
-        'location',
+        'location_id',
         'preferences',
         'username',
         'company',
@@ -300,6 +301,8 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
     // =========================================================================
     // SECTION 4: BUYER DASHBOARD (USER AS CUSTOMER LOGIC)
     // =========================================================================
+
+    public function homeLocation(): BelongsTo     { return $this->belongsTo(Location::class, 'location_id'); }
 
     public function propertyBookings(): HasMany   { return $this->hasMany(PropertyBooking::class); }
     public function eventBookings(): HasMany      { return $this->hasMany(EventBooking::class); }

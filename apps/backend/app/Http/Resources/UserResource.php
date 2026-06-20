@@ -22,8 +22,9 @@ class UserResource extends JsonResource
             // Sensitive fields included only for owner or admin
             'email'      => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->email),
             'phone'      => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->phone),
-            'location'   => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->location),
-            'settings'   => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->preferences ?? []),
+            'location_id'    => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->location_id),
+            'location_title' => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->homeLocation?->title),
+            'settings'       => $this->when($request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']), $this->preferences ?? []),
             'wallet_balance' => $this->when(
                 $request->user()?->id === $this->id || $request->user()?->hasRole(['admin', 'super-admin']),
                 $this->wallet_balance ?? 0,

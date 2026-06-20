@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { toast } from 'sonner';
 import {
   User,
   Lock,
@@ -22,7 +23,6 @@ import { PageHeader } from '../components/PageHeader';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { API_BASE_URL, IS_EXTERNAL_BACKEND, STOREFRONT_BASE_URL } from '../config/api';
 import { fetchUserProfile, updateUserProfile, updatePassword, uploadUserAvatar, UserProfile } from '../api/userApi';
-import { fetchLocationBySlug } from '../api/locationApi';
 
 const API_ORIGIN = (() => {
   try {
@@ -62,13 +62,7 @@ export default function SettingsView() {
       setIsLoading(true);
       const data = await fetchUserProfile();
       setProfile(data);
-      // Resolve the stored slug to a display title. Falls back to the raw value
-      // (e.g. legacy free-text) if no matching location record is found.
-      if (data.location) {
-        fetchLocationBySlug(data.location)
-          .then(loc => setLocationDisplay(loc ? loc.title : data.location || ''))
-          .catch(() => setLocationDisplay(data.location || ''));
-      }
+      setLocationDisplay(data.location_title || '');
     } catch (err) {
       setError('Failed to load profile');
     } finally {
@@ -100,19 +94,21 @@ export default function SettingsView() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile) return;
-    
+
     setIsSaving(true);
     try {
       const updated = await updateUserProfile({
         name: profile.name,
         email: profile.email,
         phone: profile.phone,
-        location: profile.location,
+        location_id: profile.location_id,
         settings: profile.settings
       });
       setProfile(updated);
-    } catch (err) {
-      setError('Failed to update profile');
+      setLocationDisplay(updated.location_title || '');
+      toast.success('Profile updated successfully.');
+    } catch (err: any) {
+      toast.error(err?.message || 'Failed to update profile. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -156,7 +152,7 @@ export default function SettingsView() {
         name: profile?.name || '',
         email: profile?.email || '',
         phone: profile?.phone,
-        location: profile?.location,
+        location_id: profile?.location_id,
         settings: newSettings
       });
       setProfile(updated);
@@ -304,12 +300,12 @@ export default function SettingsView() {
                       <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-1">Location</label>
                       <LocationPicker
                         displayValue={locationDisplay}
-                        onSelect={(slug, title) => {
-                          setProfile({ ...profile, location: slug });
+                        onSelect={(id, title) => {
+                          setProfile({ ...profile, location_id: id });
                           setLocationDisplay(title);
                         }}
                         onClear={() => {
-                          setProfile({ ...profile, location: '' });
+                          setProfile({ ...profile, location_id: null });
                           setLocationDisplay('');
                         }}
                         placeholder="Search your city or region..."
@@ -319,7 +315,7 @@ export default function SettingsView() {
                   </div>
 
                   <div className="pt-4 flex justify-end">
-                    <Button 
+                    <Button
                       type="submit"
                       isLoading={isSaving}
                       leftIcon={!isSaving && <Check size={20} />}
