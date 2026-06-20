@@ -85,7 +85,7 @@
                             </div>
                             <div class="text-right ml-3">
                                 @if(!$note['is_read'])
-                                    <span class="badge badge-primary rounded-circle" style="width: 10px; height: 10px; padding: 0;">&nbsp;</span>
+                                    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--primary);flex-shrink:0;"></span>
                                 @endif
                                 <i class="fas fa-chevron-right text-muted opacity-25 ml-3"></i>
                             </div>

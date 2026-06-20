@@ -44,6 +44,15 @@ h1, h2, h3, h4, .brand-text {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Marketing panel: white → soft indigo-300 gradient reads crisply on dark */
+.auth-split-marketing .text-gradient {
+    background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .fw-800 { font-weight: 800; }
@@ -59,23 +68,27 @@ h1, h2, h3, h4, .brand-text {
 }
 
 .auth-split-marketing {
-    background: var(--dark-navy);
+    background:
+        radial-gradient(ellipse at 15% 15%, rgba(120, 100, 255, 0.28) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 80%, rgba(80, 55, 200, 0.22) 0%, transparent 50%),
+        linear-gradient(155deg, #0f0c29 0%, #15103a 55%, #0c0e1f 100%);
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: clamp(3rem, 7vw, 7rem) !important;
+    justify-content: flex-start;
+    padding: clamp(3rem, 7vw, 5rem) !important;
+    padding-bottom: 5rem !important;
 }
 
 .auth-glow {
     position: absolute;
-    width: 1000px;
-    height: 1000px;
-    background: radial-gradient(circle, rgba(var(--primary-rgb), 0.15) 0%, transparent 70%);
+    width: 900px;
+    height: 900px;
+    background: radial-gradient(circle, rgba(130, 100, 255, 0.35) 0%, transparent 65%);
     border-radius: 50%;
     pointer-events: none;
-    filter: blur(60px);
+    filter: blur(90px);
 }
 
 /* Global Component Overrides */
@@ -114,6 +127,11 @@ h1, h2, h3, h4, .brand-text {
     font-size: 0.95rem !important;
 }
 
+.form-control::placeholder {
+    color: #b0bac7 !important;
+    opacity: 1;
+}
+
 .form-control:focus {
     background-color: var(--surface-white) !important;
     border-color: var(--primary) !important;
@@ -146,17 +164,52 @@ h1, h2, h3, h4, .brand-text {
 }
 
 .auth-marketing-icon {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 5.5rem;
+    height: 5.5rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 1.25rem;
+    padding: .85rem;
+    flex-shrink: 0;
+}
+
+/* Override glass-surface on the dark panel */
+.auth-split-marketing .auth-marketing-icon {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+    backdrop-filter: blur(12px);
+}
+
+.auth-icon-logo {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    filter: brightness(0) invert(1);
+    display: block;
+    object-fit: contain;
 }
 
 .auth-mobile-logo {
     max-height: 42px;
     width: auto;
+}
+
+.auth-panel-logo {
+    max-height: 38px;
+    width: auto;
+    /* keep the logo bright on the dark panel */
+    filter: brightness(0) invert(1);
+}
+
+.auth-panel-wordmark {
+    font-family: var(--font-heading, 'Outfit', sans-serif);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.03em;
 }
 
 .auth-divider-badge {
@@ -181,6 +234,7 @@ h1, h2, h3, h4, .brand-text {
 .social-btn:hover {
     background-color: var(--surface-white) !important;
     border-color: var(--primary) !important;
+    color: var(--primary) !important;
     transform: translateY(-2px);
     box-shadow: var(--shadow-glow) !important;
 }
@@ -253,6 +307,50 @@ h1, h2, h3, h4, .brand-text {
     position: relative;
     z-index: 5;
     max-width: 520px;
+    /* margin: auto 0 perfectly centers the sole in-flow flex item
+       without fighting the absolute-positioned copyright below */
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+/* Icon on dark navy needs to be white, not primary purple */
+.auth-split-marketing .text-primary-color,
+.auth-split-marketing .text-primary {
+    color: #a5b4fc !important;
+}
+
+/* Feature icon boxes — indigo-tinted pill on dark */
+.auth-split-marketing .icon-box-soft {
+    background: rgba(165, 180, 252, 0.12);
+    border: 1px solid rgba(165, 180, 252, 0.2);
+    color: #a5b4fc;
+    border-radius: 12px !important;
+}
+
+/* Description paragraph */
+.auth-split-marketing .lead {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+/* Feature sub-text */
+.auth-split-marketing .opacity-60 {
+    color: rgba(255, 255, 255, 0.5) !important;
+    opacity: 1 !important;
+}
+
+/* Feature title */
+.auth-split-marketing h5 {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.95rem;
+}
+
+/* Copyright */
+.auth-split-marketing .auth-footer-copyright {
+    color: rgba(255, 255, 255, 0.35) !important;
+    opacity: 1 !important;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
 }
 
 /* Decorative Glows */

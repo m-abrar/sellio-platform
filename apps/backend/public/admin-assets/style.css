@@ -293,6 +293,10 @@ body.layout-fixed .wrapper .main-header {
     box-shadow: var(--shadow-xs);
 }
 
+#notifications_menu .nav-link {
+    padding-right: 1.8rem !important;
+}
+
 /* User Profile in Navbar */
 .navbar-nav .user-menu > .nav-link {
     display: inline-flex !important;

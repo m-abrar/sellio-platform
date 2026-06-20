@@ -12,7 +12,13 @@
     <div class="auth-marketing-content">
         <div class="mb-5 d-inline-block">
             <div class="auth-marketing-icon glass-surface border-0 shadow-deep">
-                <i class="bi {{ $icon }} text-primary-color display-5"></i>
+                @if(filled(setting('site_logo')))
+                    <img src="{{ Storage::url(setting('site_logo')) }}"
+                         alt="{{ setting('site_name', config('app.name')) }}"
+                         class="auth-icon-logo">
+                @else
+                    <i class="bi {{ $icon }} text-primary-color display-5"></i>
+                @endif
             </div>
         </div>
 

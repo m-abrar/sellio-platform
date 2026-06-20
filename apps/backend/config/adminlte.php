@@ -327,6 +327,7 @@ return [
         JeroenNoten\LaravelAdminLte\Menu\Filters\LangFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\DataFilter::class,
         App\Menu\Filters\ModuleFilter::class,
+        App\Menu\Filters\NotificationBadgeFilter::class,
     ],
 
     /*
