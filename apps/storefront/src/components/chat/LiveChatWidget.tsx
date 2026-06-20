@@ -222,13 +222,16 @@ export function LiveChatWidget({ vertical, listingId, listingTitle }: LiveChatWi
               <input required type="password" autoComplete="current-password" value={authForm.password}
                 onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })} />
             </label>
-            <div className="sl-chat-auth-toggle">
-              <button type="button" className={authMode === 'login' ? 'is-active' : ''} onClick={() => setAuthMode('login')}>Log in</button>
-              <button type="button" className={authMode === 'register' ? 'is-active' : ''} onClick={() => setAuthMode('register')}>Register</button>
-            </div>
             <button type="submit" className="sl-chat-submit-btn" disabled={authBusy}>
               {authBusy ? 'Please wait…' : authMode === 'login' ? 'Sign in & chat' : 'Create account & chat'}
             </button>
+            <p className="sl-chat-auth-switch">
+              {authMode === 'login' ? (
+                <>No account? <button type="button" onClick={() => setAuthMode('register')}>Register</button></>
+              ) : (
+                <>Already have an account? <button type="button" onClick={() => setAuthMode('login')}>Sign in</button></>
+              )}
+            </p>
           </form>
         )}
 

@@ -468,7 +468,7 @@ https://demo.sellio.vebdez.com/buyer
 
 - [x] Seller dashboard AI/studio labels — replaced all user-visible "Studio" references with normal marketplace copy: "Partner Access" on login, "Sign In" button, sidebar "Seller Portal"/"Seller Account"/"Dashboard", page headers (Wallet, Messages, Settings), "Listing Photos" in MediaStudio, "Photos & Media" section headings across all 7 create forms, loading spinners, and organizer/company placeholders.
 
-- [ ] Chat window shows two login buttons — needs investigation
+- [x] Chat window shows two login buttons — root cause was `LiveChatWidget.tsx` auth phase showing a "Log in / Register" tab-toggle row plus a "Sign in & chat" submit button simultaneously. Fixed by removing the tab row; replaced with a plain text link below the submit button ("No account? Register" / "Already have an account? Sign in"). Updated `chat.css`: removed `.sl-chat-auth-toggle` styles, added `.sl-chat-auth-switch`.
 
 unifieds_minimal, in the header, where does the CTA button go to? fix it.
 
