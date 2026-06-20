@@ -1,4 +1,4 @@
-@extends('frontend._layouts._app')
+﻿@extends('frontend._layouts._app')
 
 @section('title', __('Your Shopping Cart') . ' | ' . __('Step 1 of 3'))
 @section('body_class', 'has-body-glow frontend-page--cart')
@@ -39,7 +39,7 @@
                 @foreach($cart->items as $item)
                     <div class="glass-surface rounded-4 border-0 p-3 p-md-4 mb-3">
                         <div class="d-flex align-items-center gap-3">
-                            <img src="{{ $item->product->primary_image_url }}" width="80" height="80" class="rounded-3" alt="" style="object-fit:cover">
+                            <img src="{{ $item->product->primary_image_url }}" width="80" height="80" class="rounded-3" alt="">
                             <div class="flex-grow-1 min-w-0">
                                 <h6 class="mb-0 fw-bold text-truncate">{{ $item->product->title }}</h6>
                                 <small class="text-muted">{{ $item->unit_price_formatted }}</small>

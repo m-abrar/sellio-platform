@@ -1,4 +1,4 @@
-<div class="filter-sidebar-wrapper w-100"> 
+﻿<div class="filter-sidebar-wrapper w-100"> 
     <div class="glass-surface p-3 p-lg-4 rounded-4 shadow-sm sticky-sidebar"
         x-data="{
             showTags: {{ request('tags') ? 'true' : 'false' }}
@@ -78,7 +78,7 @@
                      @click="showTags = !showTags" 
                      role="button" 
                      :aria-expanded="showTags">
-                    <label class="filter-label mb-0 text-dark" style="cursor: pointer;">{{ __('Condition/Tags') }}</label>
+                    <label class="filter-label mb-0 text-dark">{{ __('Condition/Tags') }}</label>
                     <i class="bi small text-muted" :class="showTags ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                 </div>
                 <div x-show="showTags" x-collapse x-cloak>

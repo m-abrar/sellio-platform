@@ -1,4 +1,4 @@
-@extends('frontend._layouts._app')
+﻿@extends('frontend._layouts._app')
 
 @section('hero')
 {{-- Premium Category Header --}}
@@ -9,7 +9,7 @@
     <div class="container position-relative z-index-1 text-center py-4">
         <div class="avatar-wrapper mb-3" data-aos="zoom-in">
             <img src="{{ $category->primary_image_url }}" class="rounded-circle shadow-lg border border-4 border-white" 
-                 width="120" height="120" alt="{{ $category->title }}" style="object-fit: cover;">
+                 width="120" height="120" alt="{{ $category->title }}" class="object-fit-cover">
         </div>
         
         <h1 class="fw-800 display-5 text-white mb-2" data-aos="fade-up">{{ $category->title }}</h1>
@@ -55,7 +55,7 @@
                                 <a href="{{ route($segment['route'], $item->slug) }}" class="list-group-item list-group-item-action rounded-4 border p-3 hover-lift shadow-sm">
                                     <div class="d-flex align-items-center">
                                         <img src="{{ $item->primary_image_url ?? $item->company_logo_url ?? asset('images/placeholder.png') }}" 
-                                             class="rounded-3 me-3" width="75" height="75" style="object-fit: cover;">
+                                             class="rounded-3 me-3 object-fit-cover" width="75" height="75">
                                         
                                         <div class="flex-grow-1">
                                             <h6 class="fw-800 mb-1 text-dark">{{ $item->title ?? ($item->make . ' ' . $item->model) }}</h6>
@@ -79,7 +79,7 @@
 
         {{-- Right Column: Sidebar --}}
         <div class="col-lg-4">
-            <div class="sticky-top" style="top: 100px;">
+            <div class="sticky-top" sticky-100>
                 
                 {{-- About Card --}}
                 <div class="card glass-surface rounded-5 border-0 shadow-sm p-4 mb-4" data-aos="fade-left">

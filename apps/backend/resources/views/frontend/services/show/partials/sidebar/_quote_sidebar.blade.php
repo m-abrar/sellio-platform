@@ -1,5 +1,5 @@
-{{-- Assumes $service is passed --}}
-<div id="quote-form" class="quotable-sidebar sticky-top" style="top: 20px;">
+﻿{{-- Assumes $service is passed --}}
+<div id="quote-form" class="quotable-sidebar">
     
     {{-- Quote Request Card --}}
     <div class="card glass-surface border-0 shadow-sm p-4 mb-3">

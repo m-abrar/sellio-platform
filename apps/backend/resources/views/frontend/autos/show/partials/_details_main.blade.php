@@ -1,4 +1,4 @@
-<div class="card glass-surface p-0 border-0 shadow-lg overflow-hidden">
+﻿<div class="card glass-surface p-0 border-0 shadow-lg overflow-hidden">
     {{-- Gallery Integration --}}
     @include('frontend.autos.show.partials._gallery')
 
@@ -108,8 +108,7 @@
         <h4 class="fw-bold mt-5 mb-4 text-dark"><i class="bi bi-pin-map-fill me-2 text-primary-color"></i>Find this Vehicle</h4>
         <div class="ratio ratio-21x9 rounded-4 overflow-hidden border shadow-sm">
             <iframe 
-                src="https://maps.google.com/maps?q={{ $auto->latitude }},{{ $auto->longitude }}&z=15&output=embed" 
-                style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                src="https://maps.google.com/maps?q={{ $auto->latitude }},{{ $auto->longitude }}&z=15&output=embed" class="border-0" allowfullscreen="" loading="lazy"></iframe>
         </div>
         <div class="mt-3 p-3 bg-primary-light rounded-3">
             <p class="small text-dark mb-0 fw-500">

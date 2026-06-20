@@ -1,4 +1,4 @@
-<div class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4 position-relative">
+﻿<div class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4 position-relative">
         
         {{-- Link wrapper for the main content --}}
         <a href="{{ route('product.show', $product->slug) }}" class="text-decoration-none text-dark flex-grow-1 d-flex flex-column">
@@ -31,7 +31,7 @@
                         <span class="fw-800">
                             @if($product->on_sale && $product->sale_price > 0)
                                 <span class="text-warning">${{ number_format($product->sale_price, 2) }}</span>
-                                <small class="text-white text-decoration-line-through opacity-50 ms-1" style="font-size: 0.7rem;">
+                                <small class="text-white text-decoration-line-through opacity-50 ms-1 fs-xs">
                                     ${{ number_format($product->base_price, 2) }}
                                 </small>
                             @else
@@ -45,7 +45,7 @@
             <div class="card-body p-3 d-flex flex-column flex-grow-1">
                 <div class="mb-2">
                     <div class="d-flex justify-content-between align-items-start">
-                        <span class="text-primary small fw-bold text-uppercase" style="letter-spacing: 0.5px;">
+                        <span class="text-primary small fw-bold text-uppercase ls-sm">
                             {{ $product->category->title ?? __('Uncategorized') }}
                         </span>
                         @if($product->brand)
@@ -81,15 +81,14 @@
                     
                     @if($product->attributes_count > 0 || $product->addons_count > 0)
                         {{-- If product has options, don't allow direct add --}}
-                        <a href="{{ route('product.show', $product->slug) }}" class="btn btn-outline-primary btn-sm rounded-pill fw-bold" style="font-size: 0.7rem;">
+                        <a href="{{ route('product.show', $product->slug) }}" class="btn btn-outline-primary btn-sm rounded-pill fw-bold fs-xs">
                             <i class="bi bi-eye me-1"></i>{{ __('Options') }}
                         </a>
                     @else
                         <form action="{{ route('cart.add', $product->id) }}" method="POST">
                             @csrf
                             <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="btn btn-primary-light btn-sm rounded-pill fw-bold" 
-                                    style="font-size: 0.7rem;" 
+                            <button type="submit" class="btn btn-primary-light btn-sm rounded-pill fw-bold fs-xs" 
                                     {{ ($product->manage_stock && $product->stock_quantity <= 0) ? 'disabled' : '' }}>
                                 <i class="bi bi-cart-plus me-1"></i>{{ __('Add') }}
                             </button>

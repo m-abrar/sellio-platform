@@ -1,4 +1,4 @@
-<div class="map-wrapper rounded-4 overflow-hidden border border-color-light shadow-sm bg-white">
+﻿<div class="map-wrapper rounded-4 overflow-hidden border border-color-light shadow-sm bg-white">
     {{-- Google Maps Embed logic --}}
     @php
         $latitude = $auto->latitude ?? '40.7128'; 
@@ -10,7 +10,7 @@
         <iframe 
             width="100%" 
             height="100%" 
-            style="border:0; filter: grayscale(0.2) contrast(1.1);" 
+            class="border-0" style="filter: grayscale(0.2) contrast(1.1);" 
             allowfullscreen="" 
             loading="lazy" 
             referrerpolicy="no-referrer-when-downgrade"

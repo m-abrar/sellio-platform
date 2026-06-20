@@ -1,4 +1,4 @@
-<div class="card glass-surface p-0">
+﻿<div class="card glass-surface p-0">
 
     {{-- Photo Gallery / Carousel --}}
     <div id="vehicleGallery" class="carousel slide listing-header-carousel" data-bs-ride="carousel">
@@ -117,7 +117,7 @@
         {{-- Location Map --}}
         <h4 class="fw-bold mt-4 mb-3"><i class="bi bi-pin-map-fill me-2 text-primary-color"></i>Dealership Location</h4>
         <div class="ratio ratio-16x9 mb-3" style="max-height: 400px; border-radius: var(--bs-card-border-radius);">
-            <iframe src="https://maps.google.com/maps?q=140%20Pine%20St,%20City%20Heights,%20CA%2090210&t=&z=14&ie=UTF8&iwloc=&output=embed" frameborder="0" style="border:0; border-radius: var(--bs-card-border-radius);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="https://maps.google.com/maps?q=140%20Pine%20St,%20City%20Heights,%20CA%2090210&t=&z=14&ie=UTF8&iwloc=&output=embed" frameborder="0" style="border-radius: var(--bs-card-border-radius);" class="border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <p class="small text-muted fst-italic">AutoMax Pro, 45 W Commerce St, City, ST 12345</p>
 

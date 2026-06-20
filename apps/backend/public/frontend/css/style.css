@@ -977,6 +977,7 @@ footer{
     text-transform:uppercase;
     color:var(--text-muted);
     letter-spacing: 0.5px;
+    cursor:pointer;
 }
 .metric-value {
     color: var(--text-dark);
@@ -2119,6 +2120,28 @@ footer{
 .smallest,.tiny{
     font-size:.65rem
 }
+.fs-xs{
+    font-size:.7rem
+}
+.fs-xxs{
+    font-size:.6rem
+}
+.ls-sm{
+    letter-spacing:.5px
+}
+.scrollable-list{
+    max-height:180px;
+    overflow-y:auto
+}
+#map-placeholder{
+    height:200px;
+    background-color:#eee;
+    border-radius:8px
+}
+.alert-primary-theme{
+    background-color:var(--primary-light)!important;
+    border-color:var(--primary-color)!important
+}
 .line-height-lg{
     line-height:1.8
 }
@@ -2301,7 +2324,14 @@ footer{
 }
 .apply-sidebar{
     position:sticky;
-    top:76px
+    top:calc(var(--frontend-header-offset, 60px) + 1rem)
+}
+.booking-sidebar,.quotable-sidebar{
+    position:sticky;
+    top:calc(var(--frontend-header-offset, 60px) + 1rem)
+}
+.sticky-100{
+    top:100px
 }
 .border-top{
     border-top:1px solid rgba(255,255,255,.1)!important

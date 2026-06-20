@@ -1,4 +1,4 @@
-<div class="filter-sidebar-wrapper w-100">
+﻿<div class="filter-sidebar-wrapper w-100">
     <div class="glass-surface p-3 p-lg-4 rounded-4 shadow-sm sticky-sidebar"
         x-data="{
             priceType: '{{ request('price') ?: '' }}',
@@ -80,7 +80,7 @@
                     <i class="bi small" :class="showTags ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                 </div>
                 <div x-show="showTags" x-collapse>
-                    <div class="tag-list-scrollable custom-scrollbar px-1" style="max-height: 180px; overflow-y: auto;">
+                    <div class="tag-list-scrollable custom-scrollbar px-1 scrollable-list">
                         @foreach($tags as $tag)
                             <div class="form-check mb-2">
                                 <input class="form-check-input shadow-none" type="checkbox" name="tags[]" value="{{ $tag->id }}" id="tag_{{ $tag->id }}" {{ is_array(request('tags')) && in_array($tag->id, request('tags')) ? 'checked' : '' }}>

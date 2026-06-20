@@ -1,4 +1,4 @@
-<div class="card glass-surface p-4">
+﻿<div class="card glass-surface p-4">
     <h5 class="fw-bold mb-3"><i class="bi bi-pin-map-fill me-2"></i>{{ __('Pickup Location') }}</h5>
     <p class="mb-0 fw-semibold">{{ $classified->city }}, {{ $classified->state ?? $classified->country }}</p>
     <p class="text-muted small mb-3">
@@ -7,7 +7,7 @@
 
     {{-- Map Placeholder (using dynamic coordinates) --}}
     @if ($classified->latitude && $classified->longitude)
-        <div id="map-placeholder" style="height: 200px; background-color: #eee; border-radius: 8px;">
+        <div id="map-placeholder">
 
         </div>
         <p class="small text-end mt-2">{{ __('Coordinates provided by seller') }}</p>

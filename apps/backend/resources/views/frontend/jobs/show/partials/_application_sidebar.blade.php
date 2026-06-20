@@ -1,5 +1,5 @@
-{{-- Assumes $job is passed from the controller --}}
-<div class="apply-sidebar sticky-top" style="top: 20px;">
+﻿{{-- Assumes $job is passed from the controller --}}
+<div class="apply-sidebar">
     
     {{-- Company Trust/Rating Card (Requires reviews/ratings relationship on Employer) --}}
     @php

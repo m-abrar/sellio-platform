@@ -1,4 +1,4 @@
-<a href="{{ route('properties.show', $property->slug) }}"
+﻿<a href="{{ route('properties.show', $property->slug) }}"
    class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column hover-lift shadow-sm rounded-4 overflow-hidden">
         
         {{-- Media Container --}}
@@ -37,15 +37,15 @@
 
             <div class="row g-0 pt-3 border-top mt-auto">
                 <div class="col-4 text-center border-end">
-                    <div class="metric-label opacity-75 small text-uppercase" style="font-size: 0.65rem;">{{ __('Beds') }}</div>
+                    <div class="metric-label opacity-75 small text-uppercase tiny">{{ __('Beds') }}</div>
                     <div class="metric-value fw-800 text-primary">{{ $property->number_of_bedrooms ?? '0' }}</div>
                 </div>
                 <div class="col-4 text-center border-end">
-                    <div class="metric-label opacity-75 small text-uppercase" style="font-size: 0.65rem;">{{ __('Baths') }}</div>
+                    <div class="metric-label opacity-75 small text-uppercase tiny">{{ __('Baths') }}</div>
                     <div class="metric-value fw-800 text-primary">{{ $property->number_of_bathrooms ?? '0' }}</div>
                 </div>
                 <div class="col-4 text-center">
-                    <div class="metric-label opacity-75 small text-uppercase" style="font-size: 0.65rem;">
+                    <div class="metric-label opacity-75 small text-uppercase tiny">
                         {{ !is_null($property->area_sq_m) ? __('SQM') : __('SQFT') }}
                     </div>
                     <div class="metric-value fw-800 text-primary">

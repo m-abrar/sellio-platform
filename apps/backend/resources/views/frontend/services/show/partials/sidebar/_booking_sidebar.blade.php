@@ -1,5 +1,5 @@
-{{-- Assumes $service is passed --}}
-<div class="booking-sidebar sticky-top" style="top: 20px;">
+﻿{{-- Assumes $service is passed --}}
+<div class="booking-sidebar">
     
     {{-- Booking Card (Primary Action) --}}
     <div class="card glass-surface p-4 mb-3 shadow-sm border-0">

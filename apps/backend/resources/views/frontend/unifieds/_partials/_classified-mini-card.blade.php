@@ -1,4 +1,4 @@
-<div>
+﻿<div>
     <a href="{{ route('classifieds.show', $item->slug) }}" class="text-decoration-none group d-block">
         <div class="rounded-4 overflow-hidden mb-2 shadow-sm position-relative hover-lift border border-white border-opacity-50 glass-surface">
             
@@ -20,7 +20,7 @@
             
             {{-- Condition Tag (Optional) --}}
             @if(isset($item->condition_label))
-                <span class="position-absolute top-0 start-0 m-2 badge bg-glass-dark rounded-pill" style="font-size: 0.6rem;">
+                <span class="position-absolute top-0 start-0 m-2 badge bg-glass-dark rounded-pill fs-xxs">
                     {{ strtoupper($item->condition_label) }}
                 </span>
             @endif

@@ -1,4 +1,4 @@
-<div class="card glass-surface p-0 border-0 shadow-deep overflow-hidden">
+﻿<div class="card glass-surface p-0 border-0 shadow-deep overflow-hidden">
     @include('frontend.events.show.partials._gallery')
 
     <div class="px-4 px-lg-5 pb-5 pt-4">
@@ -89,7 +89,7 @@
                     @foreach($event->speakers as $speaker)
                         <div class="col text-center">
                             <div class="speaker-card p-3 glass-surface border-0 shadow-sm h-100">
-                                <img src="{{ $speaker->avatar_url }}" class="rounded-circle mb-3 border border-3 border-white shadow-sm" width="90" height="90" style="object-fit: cover;" alt="{{ $speaker->name }}">
+                                <img src="{{ $speaker->avatar_url }}" class="rounded-circle mb-3 border border-3 border-white shadow-sm object-fit-cover" width="90" height="90" alt="{{ $speaker->name }}">
                                 <h6 class="fw-bold mb-1 text-dark">{{ $speaker->name }}</h6>
                                 <p class="smaller text-muted mb-0">{{ $speaker->designation }}</p>
                             </div>
@@ -124,8 +124,7 @@
                 @if($event->latitude && $event->longitude)
                     <div class="ratio ratio-21x9 rounded-4 overflow-hidden border shadow-sm">
                         <iframe
-                            src="https://maps.google.com/maps?q={{ $event->latitude }},{{ $event->longitude }}&hl=es;z=14&output=embed"
-                            style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            src="https://maps.google.com/maps?q={{ $event->latitude }},{{ $event->longitude }}&hl=es;z=14&output=embed" class="border-0" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 @endif
             </section>

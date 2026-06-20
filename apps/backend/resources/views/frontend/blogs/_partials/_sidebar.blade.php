@@ -1,4 +1,4 @@
-<div class="filter-sidebar-wrapper w-100"> 
+﻿<div class="filter-sidebar-wrapper w-100"> 
     <div class="glass-surface p-3 p-lg-4 rounded-4 shadow-sm sticky-sidebar"
         x-data="{
             showTags: {{ request('tags') ? 'true' : 'false' }}
@@ -68,7 +68,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-2 pointer-cursor" 
                      @click="showTags = !showTags" 
                      role="button">
-                    <label class="filter-label mb-0 text-dark" style="cursor: pointer;">{{ __('Topic Tags') }}</label>
+                    <label class="filter-label mb-0 text-dark">{{ __('Topic Tags') }}</label>
                     <i class="bi small text-muted" :class="showTags ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                 </div>
                 <div x-show="showTags" x-collapse x-cloak>

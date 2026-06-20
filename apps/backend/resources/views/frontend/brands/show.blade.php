@@ -1,4 +1,4 @@
-@extends('frontend._layouts._app')
+﻿@extends('frontend._layouts._app')
 
 @section('hero')
 {{-- Premium Brand Hero Header --}}
@@ -9,7 +9,7 @@
     <div class="container position-relative z-index-1 text-center py-5">
         <div class="avatar-wrapper mb-3" data-aos="zoom-in">
             <img src="{{ $brand->primary_image_url }}" class="rounded-circle shadow-lg border border-4 border-white" 
-                 width="140" height="140" alt="{{ $brand->title }}" style="object-fit: cover;">
+                 width="140" height="140" alt="{{ $brand->title }}" class="object-fit-cover">
         </div>
         
         <h1 class="fw-800 display-4 text-white mb-2" data-aos="fade-up">{{ $brand->title }}</h1>
@@ -76,7 +76,7 @@
                                             @foreach($col['data'] as $item)
                                                 <a href="{{ route($col['route'], $item->slug) }}" class="list-group-item list-group-item-action rounded-4 border p-3 hover-lift shadow-sm">
                                                     <div class="d-flex align-items-center">
-                                                        <img src="{{ $item->primary_image_url ?? asset('images/placeholder.png') }}" class="rounded-3 me-3" width="80" height="80" style="object-fit: cover;">
+                                                        <img src="{{ $item->primary_image_url ?? asset('images/placeholder.png') }}" class="rounded-3 me-3 object-fit-cover" width="80" height="80">
                                                         <div class="flex-grow-1">
                                                             <h6 class="fw-800 mb-1">{{ $item->title }}</h6>
                                                             <div class="text-muted small">
@@ -106,7 +106,7 @@
 
         {{-- Right Column: Brand Sidebar --}}
         <div class="col-lg-4">
-            <div class="sticky-top" style="top: 100px;">
+            <div class="sticky-top" sticky-100>
                 <div class="card glass-surface rounded-5 border-0 shadow-sm p-4 mb-4" data-aos="fade-left">
                     <h5 class="fw-800 mb-4">{{ __('Brand Details') }}</h5>
                     

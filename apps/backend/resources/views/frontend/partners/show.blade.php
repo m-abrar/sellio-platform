@@ -1,4 +1,4 @@
-@extends('frontend._layouts._app')
+﻿@extends('frontend._layouts._app')
 
 @section('hero')
 {{-- Premium Hero Header --}}
@@ -9,7 +9,7 @@
     <div class="container position-relative z-index-1 text-center py-4">
         <div class="avatar-wrapper mb-3" data-aos="zoom-in">
             <img src="{{ $user->avatar_url }}" class="rounded-circle shadow-lg border border-4 border-white" 
-                 width="140" height="140" alt="{{ $user->name }}" style="object-fit: cover;">
+                 width="140" height="140" alt="{{ $user->name }}" class="object-fit-cover">
             @if($user->is_verified)
                 <div class="verified-badge bg-primary text-white shadow-sm">
                     <i class="bi bi-patch-check-fill"></i>
@@ -79,7 +79,7 @@
                                             @foreach($col['data'] as $item)
                                                 <a href="{{ route($col['route'], $item->slug) }}" class="list-group-item list-group-item-action rounded-4 border p-3 hover-lift shadow-sm">
                                                     <div class="d-flex align-items-center">
-                                                        <img src="{{ $item->primary_image_url }}" class="rounded-3 me-3" width="80" height="80" style="object-fit: cover;">
+                                                        <img src="{{ $item->primary_image_url }}" class="rounded-3 me-3 object-fit-cover" width="80" height="80">
                                                         <div class="flex-grow-1">
                                                             <h6 class="fw-800 mb-1">{{ $item->title ?? ($item->make . ' ' . $item->model) }}</h6>
                                                             <div class="text-muted small">
@@ -107,7 +107,7 @@
 
         {{-- Right Column: Sidebar --}}
         <div class="col-lg-4">
-            <div class="sticky-top" style="top: 100px;">
+            <div class="sticky-top" sticky-100>
                 <div class="card glass-surface rounded-5 border-0 shadow-sm p-4 mb-4" data-aos="fade-left">
                     <h5 class="fw-800 mb-4">{{ __('Contact Details') }}</h5>
                     <div class="d-flex align-items-center mb-3">

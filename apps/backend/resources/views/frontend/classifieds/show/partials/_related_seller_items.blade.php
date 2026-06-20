@@ -1,10 +1,10 @@
-<div class="row g-3">
+﻿<div class="row g-3">
     @forelse ($related_items->take(2) as $item)
         <div class="col-md-4 col-6">
             <a href="{{ route('classifieds.show', $item->slug) }}" class="text-decoration-none text-dark">
                 <div class="card glass-surface related-listing-card h-100 transition-up shadow-sm border-0">
                     {{-- Using the primary_image_url accessor we discussed --}}
-                    <img src="{{ $item->primary_image_url }}" class="card-img-top related-img" alt="{{ $item->title }}" style="height: 140px; object-fit: cover;">
+                    <img src="{{ $item->primary_image_url }}" class="card-img-top related-img object-fit-cover" alt="{{ $item->title }}" style="height: 140px;">
                     
                     <div class="card-body p-3">
                         <h6 class="card-title fw-bold small mb-1 text-truncate">{{ $item->title }}</h6>

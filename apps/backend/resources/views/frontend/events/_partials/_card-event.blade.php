@@ -1,4 +1,4 @@
-<div class="col">
+﻿<div class="col">
     <a href="{{ route('events.show', $event) }}" 
        class="evc-card evc-glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4 position-relative {{ $event->is_featured ? 'evc-featured-border' : '' }}">
         
@@ -48,7 +48,7 @@
                 <img src="{{ $event->organizer->avatar_url ?? asset('assets/img/default-avatar.png') }}" 
                      alt="{{ e($event->organizer->name ?? '') }}" 
                      class="rounded-circle border border-3 border-white shadow-sm bg-white"
-                     style="width: 42px; height: 42px; object-fit: cover;"
+                     class="object-fit-cover" style="width: 42px; height: 42px;"
                      data-bs-toggle="tooltip" 
                      title="{{ e($event->organizer->name ?? __('Organizer')) }}">
             </div>

@@ -1,4 +1,4 @@
-<h4 class="fw-bold mt-4 mb-3">Item Description</h4>
+﻿<h4 class="fw-bold mt-4 mb-3">Item Description</h4>
 {{-- The full description is generally one field, use line breaks to separate paragraphs --}}
 <p class="text-muted">{!! nl2br(e($classified->description)) !!}</p>
 
@@ -39,7 +39,7 @@
 <hr>
 
 {{-- Safety Tip Alert --}}
-<div class="alert alert-info small mt-4" role="alert" style="background-color: var(--primary-light); border-color: var(--primary-color);">
-    <i class="bi bi-shield-lock-fill me-2" style="color: var(--primary-color);"></i>
+<div class="alert alert-info small mt-4" alert-primary-theme" role="alert">
+    <i class="bi bi-shield-lock-fill me-2 text-primary-color"></i>
     **Safety Tip:** Always meet in a public location and inspect the item before finalizing the purchase.
 </div>

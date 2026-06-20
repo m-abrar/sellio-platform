@@ -1,4 +1,4 @@
-<div class="listing-card glass-surface h-100 d-flex flex-column transition-all hover-up rounded-4 border-0 shadow-sm overflow-hidden">
+﻿<div class="listing-card glass-surface h-100 d-flex flex-column transition-all hover-up rounded-4 border-0 shadow-sm overflow-hidden">
     
     <div class="position-relative" style="height: 160px; overflow: hidden;">
         <img src="{{ $service->primary_image_url }}" 
@@ -40,7 +40,7 @@
 
         <div class="row g-0 pt-3 border-top mt-auto">
             <div class="col-6 border-end">
-                <span class="metric-label text-uppercase text-muted d-block" style="font-size: 0.65rem;">{{ __('Starting At') }}</span>
+                <span class="metric-label text-uppercase text-muted d-block tiny">{{ __('Starting At') }}</span>
                 <span class="metric-value fw-800 text-success fs-5">
                     @if ($service->sale_price)
                         ${{ number_format($service->sale_price, 0) }}
@@ -52,7 +52,7 @@
                 </span>
             </div>
             <div class="col-6 text-end">
-                <span class="metric-label text-uppercase text-muted d-block" style="font-size: 0.65rem;">{{ __('Location') }}</span>
+                <span class="metric-label text-uppercase text-muted d-block tiny">{{ __('Location') }}</span>
                 <span class="metric-value fw-800 text-dark">
                     @if($service->location_id)
                         <i class="bi bi-geo-alt me-1 text-primary"></i>{{ $service->location->title ?? __('Local') }}

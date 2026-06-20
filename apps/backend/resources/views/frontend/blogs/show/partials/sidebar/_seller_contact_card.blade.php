@@ -1,4 +1,4 @@
-<div class="card glass-surface p-4 mb-4">
+﻿<div class="card glass-surface p-4 mb-4">
     <h5 class="fw-bold mb-3"><i class="bi bi-person-circle me-2"></i>Seller Details</h5>
 
     {{-- Seller Avatar --}}
@@ -6,7 +6,7 @@
         <img src="{{ $seller->avatar_url ?? asset('images/default-avatar.png') }}" 
              alt="{{ $seller->title ?? 'Seller' }} Avatar" 
              class="rounded-circle me-3" 
-             style="width: 60px; height: 60px; object-fit: cover;">
+             class="object-fit-cover" style="width: 60px; height: 60px;">
         <div>
             <p class="fs-4 fw-bold mb-0">{{ $seller->title ?? 'Private Seller' }}</p>
             <p class="text-muted small mb-0">Member Since {{ $seller->created_at->format('F Y') }}</p>

@@ -1,4 +1,4 @@
-@extends('frontend._layouts._app')
+﻿@extends('frontend._layouts._app')
 
 @section('hero')
 {{-- Premium Tag Hero Header --}}
@@ -10,7 +10,7 @@
         <div class="avatar-wrapper mb-3" data-aos="zoom-in">
             <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-lg border border-4 border-white bg-white" 
                  style="width: 140px; height: 140px; overflow: hidden;">
-                <img src="{{ $tag->primary_image_url }}" width="140" height="140" alt="{{ $tag->title }}" style="object-fit: cover;">
+                <img src="{{ $tag->primary_image_url }}" width="140" height="140" alt="{{ $tag->title }}" class="object-fit-cover">
             </div>
             <div class="verified-badge bg-primary text-white shadow-sm">
                 <i class="bi bi-hash"></i>
@@ -82,7 +82,7 @@
                                             @foreach($col['data'] as $item)
                                                 <a href="{{ route($col['route'], $item->slug) }}" class="list-group-item list-group-item-action rounded-4 border p-3 hover-lift shadow-sm">
                                                     <div class="d-flex align-items-center">
-                                                        <img src="{{ $item->primary_image_url ?? $item->company_logo_url ?? asset('images/placeholder.png') }}" class="rounded-3 me-3" width="80" height="80" style="object-fit: cover;">
+                                                        <img src="{{ $item->primary_image_url ?? $item->company_logo_url ?? asset('images/placeholder.png') }}" class="rounded-3 me-3 object-fit-cover" width="80" height="80">
                                                         <div class="flex-grow-1">
                                                             <h6 class="fw-800 mb-1 text-dark">{{ $item->title }}</h6>
                                                             <div class="text-muted small">
@@ -122,7 +122,7 @@
 
         {{-- Right Column: Sidebar --}}
         <div class="col-lg-4">
-            <div class="sticky-top" style="top: 100px;">
+            <div class="sticky-top" sticky-100>
                 {{-- Metadata Sidebar --}}
                 <div class="card glass-surface rounded-5 border-0 shadow-sm p-4 mb-4" data-aos="fade-left">
                     <h5 class="fw-800 mb-4">{{ __('Tag Details') }}</h5>

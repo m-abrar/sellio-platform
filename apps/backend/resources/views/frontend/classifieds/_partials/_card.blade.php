@@ -1,4 +1,4 @@
-<div class="col">
+﻿<div class="col">
     <a href="{{ route('classifieds.show', $classified->slug) }}" class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4">
         
         <div class="img-container position-relative overflow-hidden rounded-top-4">
@@ -35,7 +35,7 @@
 
         <div class="card-body p-3 d-flex flex-column flex-grow-1">
             <div class="mb-2">
-                <span class="text-primary small fw-bold text-uppercase" style="letter-spacing: 0.5px;">{{ $classified->category?->title ?? __('General') }}</span>
+                <span class="text-primary small fw-bold text-uppercase ls-sm">{{ $classified->category?->title ?? __('General') }}</span>
                 <h6 class="property-title fw-800 mb-1 text-dark text-truncate mt-1">
                     {{ $classified->title }}
                 </h6>
@@ -48,7 +48,7 @@
             
             <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-3">
                 <span class="small text-muted"><i class="bi bi-clock me-1"></i>{{ $classified->created_at->diffForHumans(null, true) }}</span>
-                <span class="btn btn-primary-light btn-sm rounded-pill fw-bold" style="font-size: 0.7rem;">{{ __('View Details') }}</span>
+                <span class="btn btn-primary-light btn-sm rounded-pill fw-bold fs-xs">{{ __('View Details') }}</span>
             </div>
         </div>
     </a>

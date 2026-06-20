@@ -1,4 +1,4 @@
-<div class="filter-sidebar-wrapper w-100"> 
+﻿<div class="filter-sidebar-wrapper w-100"> 
     <div class="glass-surface p-3 p-lg-4 rounded-4 shadow-sm sticky-sidebar mobile-flush"
         x-data="{
             showBrands: true,
@@ -113,7 +113,7 @@
                     <i class="bi small text-muted transition-all" :class="showBrands ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                 </div>
                 <div x-show="showBrands" x-collapse>
-                    <div class="pt-1 pb-2 custom-scrollbar" style="max-height: 180px; overflow-y: auto;">
+                    <div class="pt-1 pb-2 custom-scrollbar scrollable-list">
                         @foreach ($brands as $brand)
                             <div class="form-check mb-2 last-child-border-0">
                                 <input class="form-check-input shadow-none pointer-cursor" type="checkbox" name="brand[]" value="{{ $brand->id }}" id="brand-{{ $brand->id }}"

@@ -1,4 +1,4 @@
-<div class="row g-3">
+﻿<div class="row g-3">
     @forelse ($related_products->take(2) as $item)
         <div class="col-md-4 col-6">
             <a href="{{ route('product.show', $item->slug) }}" class="text-decoration-none text-dark">
@@ -10,7 +10,7 @@
                     </div>
 
                     <div class="card-body p-3">
-                        <span class="text-primary-color x-small fw-bold text-uppercase d-block mb-1" style="font-size: 0.65rem;">
+                        <span class="text-primary-color x-small fw-bold text-uppercase d-block mb-1 tiny">
                             {{ $item->brand->title ?? ($item->category->title ?? __('Product')) }}
                         </span>
 
@@ -19,7 +19,7 @@
                         <p class="card-text fw-800 text-dark mb-0">
                             @if($item->on_sale && $item->sale_price > 0)
                                 <span class="text-danger">{{ format_currency($item->sale_price) }}</span>
-                                <small class="text-muted text-decoration-line-through fw-normal ms-1" style="font-size: 0.7rem;">
+                                <small class="text-muted text-decoration-line-through fw-normal ms-1 fs-xs">
                                     {{ format_currency($item->base_price) }}
                                 </small>
                             @else

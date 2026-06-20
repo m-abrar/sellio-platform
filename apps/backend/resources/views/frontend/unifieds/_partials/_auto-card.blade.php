@@ -1,4 +1,4 @@
-@php
+﻿@php
     $isOnSale = $auto->on_sale ?? false;
     $isFeatured = $auto->is_featured ?? false;
     $fuelBadgeLabel = $auto->fuel_badge_label ?? null;
@@ -42,7 +42,7 @@
                     <span class="fw-800 price-font">
                         @if($isOnSale)
                             <span class="text-warning">{{ $auto->sale_price_formatted ?? $auto->price_formatted ?? __('Price on request') }}</span>
-                            <small class="text-white text-decoration-line-through opacity-50 ms-1" style="font-size: 0.7rem;">{{ $auto->base_price_formatted ?? null }}</small>
+                            <small class="text-white text-decoration-line-through opacity-50 ms-1 fs-xs">{{ $auto->base_price_formatted ?? null }}</small>
                         @else
                             {{ $auto->base_price_formatted ?? $auto->price_formatted ?? __('Price on request') }}
                         @endif
@@ -66,15 +66,15 @@
             {{-- Metrics Row --}}
             <div class="row g-0 pt-3 border-top mt-auto align-items-center">
                 <div class="col-4 text-center border-end">
-                    <span class="metric-label d-block opacity-75 small text-uppercase" style="font-size: 0.6rem;">{{ __('Mileage') }}</span>
+                    <span class="metric-label d-block opacity-75 small text-uppercase fs-xxs">{{ __('Mileage') }}</span>
                     <span class="metric-value fw-800 text-primary small">{{ $auto->mileage_formatted ?? __('N/A') }}</span>
                 </div>
                 <div class="col-4 text-center border-end px-1">
-                    <span class="metric-label d-block opacity-75 small text-uppercase" style="font-size: 0.6rem;">{{ __('Gear') }}</span>
+                    <span class="metric-label d-block opacity-75 small text-uppercase fs-xxs">{{ __('Gear') }}</span>
                     <span class="metric-value fw-800 text-primary text-truncate d-block small">{{ $auto->transmission ?? __('N/A') }}</span>
                 </div>
                 <div class="col-4 text-center">
-                    <span class="metric-label d-block opacity-75 small text-uppercase" style="font-size: 0.6rem;">{{ __('Fuel') }}</span>
+                    <span class="metric-label d-block opacity-75 small text-uppercase fs-xxs">{{ __('Fuel') }}</span>
                     <span class="metric-value fw-800 text-primary small">{{ ucfirst($auto->engine_type ?? __('Gas')) }}</span>
                 </div>
             </div>

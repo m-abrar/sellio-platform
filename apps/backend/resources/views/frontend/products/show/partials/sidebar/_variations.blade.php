@@ -1,11 +1,11 @@
-@php
+﻿@php
     // Group variations by name (Size, Color, etc.)
     $variationGroups = $product->attributes->where('is_variation', true)->groupBy('name');
 @endphp
 
 @foreach($variationGroups as $name => $options)
     <div class="mb-4">
-        <label class="filter-label mb-2 small fw-bold text-uppercase" style="letter-spacing: 0.5px;">
+        <label class="filter-label mb-2 small fw-bold text-uppercase ls-sm">
             {{ $name }}
         </label>
         

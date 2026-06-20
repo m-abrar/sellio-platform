@@ -1,4 +1,4 @@
-<p class="text-muted">{!! nl2br(e($classified->description)) !!}</p>
+﻿<p class="text-muted">{!! nl2br(e($classified->description)) !!}</p>
 
 <h4 class="fw-bold mt-5 mb-3">{{ __('Key Details') }}</h4>
 <ul class="list-group list-group-flush small mb-4">
@@ -44,8 +44,8 @@
 <hr>
 
 {{-- Safety Tip Alert --}}
-<div class="alert alert-info small mt-4" role="alert" style="background-color: var(--primary-light); border-color: var(--primary-color);">
-    <i class="bi bi-shield-lock-fill me-2" style="color: var(--primary-color);"></i>
+<div class="alert alert-info small mt-4" alert-primary-theme" role="alert">
+    <i class="bi bi-shield-lock-fill me-2 text-primary-color"></i>
     <strong>{{ __('Safety Tip') }}:</strong> 
     {{ __('Always meet in a public location and inspect the item before finalizing the purchase.') }}
 </div>

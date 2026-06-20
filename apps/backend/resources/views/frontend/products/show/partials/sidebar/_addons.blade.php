@@ -1,4 +1,4 @@
-@php
+﻿@php
     $publishedAddons = ($addons ?? $product->addons)->sortBy('sort_order');
     $hasOptionalAddons = $publishedAddons->contains(fn ($addon) => ! $addon->is_required);
 @endphp
@@ -18,8 +18,7 @@
             @foreach($publishedAddons as $addon)
                 <div class="col-12">
                     <label for="addon_{{ $addon->id }}" class="addon-card position-relative d-block mb-0 @if($addon->is_required) addon-selected @endif"
-                           :class="selectedAddons.includes('{{ $addon->id }}') ? 'addon-selected' : ''"
-                           style="cursor: pointer;">
+                           :class="selectedAddons.includes('{{ $addon->id }}') ? 'addon-selected' : ''">
                         @if($addon->is_required)
                             <div class="addon-check-badge">
                                 <i class="bi bi-check-lg text-white"></i>
