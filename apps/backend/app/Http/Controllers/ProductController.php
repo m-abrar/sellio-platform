@@ -61,6 +61,8 @@ class ProductController extends Controller
     public function show(Request $request, string $slug): View
     {
         $product = Product::where('slug', $slug)
+            ->where('is_published', true)
+            ->whereNotNull('approved_at')
             ->with([
                 'user', 'category', 'brand', 'tags', 'media',
                 'reviews' => fn($q) => $q->latest()->limit(10),

@@ -491,4 +491,7 @@ TODO
 Support link and email, are still pending, remind me later
 
 
-in the seeders/migration files, please check the logic that no listings with Draft, expired, pending, etc should be published on the frontend.
+- [x] in the seeders/migration files, please check the logic that no listings with Draft, expired, pending, etc should be published on the frontend. (All list-page queries go through `scopeActive` / `scopeVisibleTo` — correct. Fixed three detail-page gaps: `EventController::show()` had no guard; `AutoController::show()` only checked `is_published`; `ProductController::show()` had no filter at all. Also fixed `PendingListingsSeeder` pending Events and Classifieds missing explicit `status = 'pending'`.)
+
+
+is the laravel frontend design based on css tokens?

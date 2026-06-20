@@ -122,6 +122,7 @@ class PendingListingsSeeder extends Seeder
                 'type_id' => Type::where('is_event', true)->first()?->id ?? Type::factory()->create(['is_event' => true])->id,
                 'is_published' => true,
                 'approved_at' => null,
+                'status' => 'pending',
                 'title' => $this->sampleListingTitle('PENDING'),
             ]);
 
@@ -211,6 +212,7 @@ class PendingListingsSeeder extends Seeder
                 'brand_id' => Brand::where('is_classified', true)->first()?->id ?? Brand::factory()->create(['is_classified' => true])->id,
                 'is_published' => true,
                 'approved_at' => null,
+                'status' => 'pending',
                 'title' => $this->sampleListingTitle('PENDING'),
             ]);
             Classified::factory()->create([

@@ -6,7 +6,6 @@ use App\Http\Requests\SearchAutoRequest;
 use App\Models\Auto;
 use App\Services\AutoService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 
 /**
  * Class AutoController
@@ -58,7 +57,7 @@ class AutoController extends Controller
      */
     public function show(Auto $auto): View
     {
-        if (!$auto->is_published) {
+        if (!$auto->is_published || !in_array($auto->status, ['active', 'approved', 'published']) || is_null($auto->approved_at)) {
             abort(404);
         }
 

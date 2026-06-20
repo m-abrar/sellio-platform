@@ -64,6 +64,10 @@ class EventController extends Controller
      */
     public function show(Event $event): View
     {
+        if (!$event->is_published || !in_array($event->status, ['active', 'approved', 'published']) || is_null($event->approved_at)) {
+            abort(404);
+        }
+
         $event->load([
             'category', 'location', 'user', 'brand', 'tags', 'ticketTypes', 'media',
             'occurrences' => function ($query) {
