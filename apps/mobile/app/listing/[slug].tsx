@@ -1,9 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, ActivityIndicator, SafeAreaView, Platform } from 'react-native';
-
-const LOCAL_API_HOST = Platform.OS === 'android' ? '10.0.2.2' : '127.0.0.1';
-const API_URL = `http://${LOCAL_API_HOST}:8000/api`;
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native';
+import { API_URL } from '../../src/config/api';
 
 const MOCK_REGISTRY: Record<string, any> = {
   'pemberley-manor': { title: 'Penthouse Apartment', category: 'Properties', price: '$2,450,000', location: 'New York, NY', spec: '3 Beds • 4 Baths • 3,200 sqft', desc: 'An exquisite high-rise penthouse overlooking Central Park. Engineered with full smart-home operations, floor-to-ceiling double-insulated glass panes, custom travertine counter structures, and a spacious wrap-around private terrace deck.' },

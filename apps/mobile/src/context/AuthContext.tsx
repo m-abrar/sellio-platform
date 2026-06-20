@@ -1,13 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { Platform } from 'react-native';
+import { API_URL } from '../config/api';
 
 const TOKEN_KEY = 'sellio_auth_token';
 const USER_KEY = 'sellio_auth_user';
-
-// Resolve host machines dynamically for Android emulator vs iOS simulator
-const LOCAL_API_HOST = Platform.OS === 'android' ? '10.0.2.2' : '127.0.0.1';
-const API_URL = `http://${LOCAL_API_HOST}:8000/api`;
 
 interface User {
   id: number;
@@ -74,8 +70,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error(result.message || 'Authentication failed');
       }
 
-      const tokenVal = result.access_token || result.token || '';
-      const userVal = result.user || {};
+      const authData = result.data || result;
+      const tokenVal = authData.access_token || authData.token || '';
+      const userVal = authData.user || {};
 
       if (!tokenVal) {
         throw new Error('Token not found in authentication payload');
@@ -88,8 +85,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(tokenVal);
       setUser(userVal);
     } catch (err: any) {
-      setError(err?.message || 'Failed to sign in');
-      throw err;
+      const message = err?.message === 'Network request failed'
+        ? `Cannot reach the Sellio API at ${API_URL}. Confirm the phone and development computer are on the same network.`
+        : err?.message || 'Failed to sign in';
+
+      setError(message);
+      throw new Error(message);
     }
   };
 

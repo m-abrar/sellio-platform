@@ -1,108 +1,229 @@
-# Sellio Mobile App - Architectural Implementation Plan
+# Sellio React Native Mobile App Development Plan
 
-> **Superseded:** This Expo/React Native plan is retained for historical context only. React Native/Expo will be removed from `apps/mobile`. Active implementation planning is in `FLUTTER_BUYER_APP_DEVELOPMENT_PLAN_2026-06-20.md`.
+Updated: 2026-06-21
 
-This document outlines the detailed architectural blueprint and phase-based plan to scale the existing React Native/Expo prototype in `apps/mobile` into a fully functional, premium cross-platform mobile application synced with the Laravel 12.x backend.
+## Decision
 
----
+Continue developing the existing Expo/React Native application in `apps/mobile`.
 
-## 🗺️ Architecture Overview
+Flutter development is paused and is not part of the active mobile scope. The existing Expo application must remain runnable throughout development.
 
-The Sellio mobile app is built on **React Native (Expo SDK 54)**. It will consume the existing monorepo dependencies and act as a unified customer application supporting both **Storefront Discovery** and **Buyer Workspace Dashboard** capabilities in one client-side binary.
+## Product Direction
 
-```mermaid
-graph TD
-    A["React Native / Expo Frontend (apps/mobile)"] --> B["Navigation Context (Expo Router)"]
-    B --> C["1. Discover Catalog (Storefront)"]
-    B --> D["2. Dashboard Workspace (Buyer Activity)"]
-    A --> E["Shared API client (@sellio/api-client)"]
-    E --> F["Laravel 12.x Backend REST API"]
-```
+Build a buyer-first mobile application that combines:
 
-### Key Technical Specs:
-*   **Engine:** Expo SDK 54+ (React Native 0.81+)
-*   **Routing/Navigation:** `expo-router` (File-system based routing utilizing tab navigation)
-*   **State Management:** React Context API + Expo SecureStore (for persistent tokens)
-*   **Networking:** Shared Axios `@sellio/api-client` wrapper
-*   **Aesthetics:** Modern, dark-mode luxury aesthetics matching the glassmorphic desktop styling (custom linear-gradients and dark cards).
+- Public marketplace discovery across all seven Sellio verticals.
+- Vertical-aware listing details and customer actions.
+- Secure buyer authentication.
+- Favorites and buyer activity management.
+- Messaging and notifications.
+- Profile and account settings.
+- Web-assisted checkout and booking payment flows.
 
----
+Seller and administrator functionality are excluded from the initial mobile release. Sellers will continue using the responsive seller portal.
 
-## 💎 Phase-by-Phase Execution Plan
+## Current Baseline
 
-We will build the application in 5 sequential phases:
+The existing application already provides:
 
-### Phase 1: Navigation & Routing Shell
-*   **Objective:** Install navigation dependencies and build the tab routing layout.
-*   **Tasks:**
-    - [x] Install Expo Navigation: `npx expo install expo-router react-native-safe-area-context react-native-screens`
-    - [x] Setup File-based routes under `apps/mobile/app/`:
-        - `(tabs)/_layout.tsx`: Configures bottom tab navigator (Home, Favorites, Messages, Settings).
-        - `(tabs)/index.tsx`: Homepage listing grid (Storefront vertical selectors).
-        - `(tabs)/favorites.tsx`: Bookmarked items.
-        - `(tabs)/messages.tsx`: Chat and inbox lists.
-        - `(tabs)/settings.tsx`: Profile identity and theme.
-        - `listing/[slug].tsx`: Dynamic details modal screen for full listing audits.
-        - `login.tsx`: Auth guard panel.
+- Expo SDK 54 and React Native 0.81.
+- Expo Router navigation.
+- Home, favorites, messages, settings, login, and listing-detail screens.
+- Secure token storage with `expo-secure-store`.
+- Laravel Sanctum login and logout integration.
+- An Android bundle that compiles successfully.
 
-### Phase 2: Token Auth & Secure Store Setup
-*   **Objective:** Connect authentication to Laravel Sanctum.
-*   **Tasks:**
-    - [ ] Install Expo SecureStore: `npx expo install expo-secure-store`
-    - [ ] Design Auth Context (`AuthContext.tsx`):
-        - Handle `login(email, password)` calling `POST /api/v1/auth/login`.
-        - Persist Sanctum bearer tokens securely in `SecureStore`.
-        - Inject tokens into all outgoing Axios requests.
-    - [ ] Build high-fidelity login interface with glassmorphic cards and validation error alerts.
+The current implementation is still a prototype because:
 
-### Phase 3: Dynamic Storefront Discovery Grid
-*   **Objective:** Replicate storefront listing feeds.
-*   **Tasks:**
-    - [ ] Wire dynamic horizontal scroll components for **Vertical Badges** (Properties, Autos, Events, Services, Jobs, Classifieds, Products).
-    - [ ] Build dynamic listing grids using `FlatList` with pull-to-refresh mechanics.
-    - [ ] Wire detail view screens (`listing/[slug].tsx`):
-        - Render Spatie main image gallery sliders.
-        - Display structured location tags (integrating native maps or static map widgets).
-        - Integrate direct checkout triggers or direct buyer messaging hooks.
+- API hosts are hardcoded for simulators.
+- Discovery falls back to mock records when requests fail.
+- Products are missing from the discovery categories.
+- Listing mapping is broad and does not model each vertical explicitly.
+- Favorites and messages are placeholder screens.
+- Settings actions are not connected.
+- Some labels contain broken emoji or character encoding.
+- There is no shared typed API client, automated test suite, or release-build configuration.
 
-### Phase 4: Buyer Dashboard & Conversations
-*   **Objective:** Port the Vite `buyer` panel features to native views.
-*   **Tasks:**
-    - [ ] **Bookings list:** Display native scrollable cards for all buyer applications, bookings, service appointments, and quotes.
-    - [ ] **Conversations:** Design real-time chat interface mapping messages (`messageApi.ts`), rendering chat bubble alignments based on sender ID, and supporting text inputs.
-    - [ ] **Native Review Submitter:** Implement star-selection views allowing users to leave reviews directly from native screens.
+## Phase 1: Application Foundation
 
-### Phase 5: Build Automation & Native QA
-*   **Objective:** Optimize performance and prepare for production builds.
-*   **Tasks:**
-    - [ ] Setup Expo Application Services (`eas.json`) for Android/iOS cloud builds.
-    - [ ] Compile production android bundles: `eas build --platform android --profile production`
-    - [ ] Validate responsive layouts on both native iOS and Android emulators.
+### Objectives
 
----
+Make API communication predictable on Android emulators, iOS simulators, physical devices, and production builds.
 
-## 🛠️ Monorepo Shared Assets & Native Performance
+### Tasks
 
-```
-apps/mobile/
-├── app/                  # Expo Router Files
-│   ├── (tabs)/           # Tab Routing Sheets
-│   │   ├── _layout.tsx   # Custom Tab styling
-│   │   └── ...
-│   ├── listing/          # Listing Sub-routes
-│   │   └── [slug].tsx    # Native Detail sheet
-│   └── _layout.tsx       # Global safe-area bounds
-├── assets/               # Local icons & launch-screens
-├── src/
-│   ├── components/       # Custom cards and loaders
-│   └── context/          # Auth context and hooks
-├── App.tsx               # Entry point redirecting to routing
-├── package.json          # Dependency mappings
-└── app.json              # App configuration (EAS/bundle-identifiers)
-```
+- [ ] Replace hardcoded API hosts with environment-based configuration.
+- [ ] Document emulator, simulator, physical-device, staging, and production API URLs.
+- [ ] Create a shared mobile API client with:
+  - JSON response normalization.
+  - Sanctum bearer-token injection.
+  - Validation-error extraction.
+  - Unauthorized-session handling.
+  - Request timeouts and clear network errors.
+- [ ] Introduce typed models for users, listings, pagination, favorites, conversations, and buyer activity.
+- [ ] Add shared loading, empty, offline, and error states.
+- [ ] Add authenticated route guards.
+- [ ] Remove broken encoding and normalize buyer-facing language.
+- [ ] Stop silently replacing failed API requests with mock marketplace data.
+- [ ] Keep development fixtures explicitly separated from live API behavior.
 
-### High-Fidelity UI Toolkit (Standard React Native):
-We will enforce premium, glassmorphic dark-theme aesthetics directly inside native code:
-*   **Gradients:** Use `expo-linear-gradient` for premium backdrop blends.
-*   **Visual Highlights:** Implement slight borders (`borderColor: 'rgba(255,255,255,0.08)'`) on dark background panels (`backgroundColor: 'rgba(255,255,255,0.03)'`) to simulate glass cards.
-*   **Micro-animations:** Utilize React Native's `Animated` library or `moti` (built on Reanimated) for elegant hover or page transitions.
+### Acceptance Criteria
+
+- The app connects to Laravel from an Android emulator and a physical Android phone.
+- Login persists after restarting the application.
+- Expired or invalid sessions return the user to login cleanly.
+- API errors are visible and actionable.
+- TypeScript passes without errors.
+
+## Phase 2: Marketplace Discovery
+
+### Objectives
+
+Replace the prototype home feed with a complete, API-backed marketplace experience.
+
+### Tasks
+
+- [ ] Support all seven verticals:
+  - Products
+  - Properties
+  - Vehicles
+  - Events
+  - Jobs
+  - Services
+  - Classifieds
+- [ ] Build reusable listing-card components with real images and vertical-aware metadata.
+- [ ] Add unified and vertical-specific browsing.
+- [ ] Add search, sorting, filters, pagination, and pull-to-refresh.
+- [ ] Respect enabled/disabled backend modules.
+- [ ] Respect the buyer's selected location where supported.
+- [ ] Add proper image loading, fallback, and retry behavior.
+- [ ] Build vertical-specific detail adapters instead of probing unrelated endpoints.
+- [ ] Add shareable listing links.
+
+### Acceptance Criteria
+
+- Every enabled vertical can be browsed from the mobile home screen.
+- Cards display real API data and images.
+- Empty results and API failures are distinguishable.
+- Listing details render the correct fields and actions for their vertical.
+
+## Phase 3: Authentication and Buyer Account
+
+### Tasks
+
+- [ ] Complete login validation and error presentation.
+- [ ] Add buyer registration.
+- [ ] Add forgot-password and reset-password flows.
+- [ ] Load the authenticated buyer profile on startup.
+- [ ] Add profile editing, avatar upload, and location selection.
+- [ ] Add password management.
+- [ ] Ensure the mobile client consistently uses buyer terminology.
+- [ ] Prevent seller-only accounts from entering unsupported mobile workflows where appropriate.
+
+### Acceptance Criteria
+
+- A buyer can register, log in, restart the app, update their profile, change their password, and log out.
+- Authentication state is consistent across every tab.
+
+## Phase 4: Buyer Workspace
+
+Reuse the established Laravel endpoints under `/api/dashboard/user` and align mobile response adapters with the working buyer web application.
+
+### Tasks
+
+- [ ] Load and manage favorites.
+- [ ] Add favorite/unfavorite actions to listing cards and details.
+- [ ] Add buyer dashboard statistics.
+- [ ] Add orders and property/event bookings.
+- [ ] Add job applications.
+- [ ] Add vehicle inquiries.
+- [ ] Add service appointments and quotes.
+- [ ] Add classified inquiries.
+- [ ] Add record-specific detail screens.
+- [ ] Add buyer reviews.
+
+### Acceptance Criteria
+
+- Buyer activity shown in the mobile app matches the Laravel database and buyer web dashboard.
+- Mutations update the interface immediately and remain correct after refresh.
+
+## Phase 5: Messaging and Notifications
+
+### Tasks
+
+- [ ] Replace the messages placeholder with real conversation data.
+- [ ] Add conversation detail and message sending.
+- [ ] Add read states, unread counts, pagination, and optimistic sending.
+- [ ] Support starting a conversation from relevant listings.
+- [ ] Add notifications with read, read-all, and delete actions.
+- [ ] Integrate the existing Laravel Echo/Pusher-compatible realtime contracts.
+- [ ] Add typing and connection indicators only after the basic message flow is reliable.
+- [ ] Add push-notification delivery after in-app notification behavior is verified.
+
+### Acceptance Criteria
+
+- Messages sent from mobile appear in the buyer/seller web applications and vice versa.
+- Unread counters and notification states remain synchronized.
+
+## Phase 6: Transactions and Customer Actions
+
+### Tasks
+
+- [ ] Add product cart and checkout entry.
+- [ ] Add property inquiry, date selection, pricing, and booking entry.
+- [ ] Add vehicle inquiry.
+- [ ] Add event ticket selection and booking entry.
+- [ ] Add job application submission.
+- [ ] Add service consultation, quote, and appointment entry.
+- [ ] Add classified inquiry.
+- [ ] Implement secure web-assisted Stripe/PayPal checkout handoff and return verification.
+- [ ] Add deep links for listings, authentication returns, and payment returns.
+
+### Acceptance Criteria
+
+- Each vertical exposes only valid customer actions.
+- Payment completion or cancellation returns the buyer to a clear, verified mobile state.
+
+## Phase 7: Quality and Release
+
+### Tasks
+
+- [ ] Add unit tests for adapters, validation, API errors, and auth storage.
+- [ ] Add component tests for important loading, empty, error, and authenticated states.
+- [ ] Add end-to-end tests for login, discovery, favorites, messaging, and transaction handoffs.
+- [ ] Review accessibility, keyboard handling, safe areas, and small-screen layouts.
+- [ ] Add production branding, icons, splash screens, bundle identifiers, and versioning.
+- [ ] Configure EAS development, preview, and production profiles.
+- [ ] Document Android and iOS setup and build commands.
+- [ ] Produce and verify an Android App Bundle and iOS archive before advertising mobile support.
+
+## First Sprint
+
+The first sprint will deliver the foundation and one complete real-data path.
+
+### Sprint Tasks
+
+- [ ] Add environment-based API configuration that works on the currently connected physical phone.
+- [ ] Create the shared authenticated API client.
+- [ ] Create core listing and pagination types.
+- [ ] Remove implicit mock fallback behavior.
+- [ ] Fix broken character encoding.
+- [ ] Add Products to the category list.
+- [ ] Replace the home feed with real API data for all enabled verticals.
+- [ ] Render real listing images and vertical-aware card metadata.
+- [ ] Add visible retry and empty states.
+- [ ] Verify login and discovery against the local Laravel backend.
+- [ ] Run TypeScript and Android bundle verification.
+
+### Sprint Completion Definition
+
+The sprint is complete when the physical Android phone can connect to the local Laravel backend, authenticate, browse real records across every enabled vertical, open a correct listing detail, and receive clear feedback when the backend is unavailable.
+
+## Implementation Principles
+
+- Reuse working Laravel and buyer-dashboard contracts before adding backend endpoints.
+- Keep public marketplace APIs separate from authenticated buyer-dashboard APIs.
+- Use typed vertical adapters rather than broad dynamic field guessing.
+- Never hide genuine API failures behind production mock data.
+- Keep each phase runnable and demonstrable on a physical device.
+- Do not advertise React Native mobile support publicly until signed release builds and core buyer workflows have been verified.

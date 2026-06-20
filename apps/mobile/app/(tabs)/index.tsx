@@ -8,13 +8,10 @@ import {
   TouchableOpacity, 
   ActivityIndicator,
   RefreshControl,
-  SafeAreaView,
-  Platform
+  SafeAreaView
 } from 'react-native';
 import { useAuth } from '../../src/context/AuthContext';
-
-const LOCAL_API_HOST = Platform.OS === 'android' ? '10.0.2.2' : '127.0.0.1';
-const API_URL = `http://${LOCAL_API_HOST}:8000/api`;
+import { API_URL } from '../../src/config/api';
 
 const CATEGORIES = [
   { id: 'properties', title: 'Properties', icon: '🏠' },
