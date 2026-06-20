@@ -485,7 +485,7 @@ should we keep the css inline or external file?
 
 
 404, 403, 419, 500, 503 how can i see them in browser?
-buyer dashboard keep showing 1 unread message, even i have opened all the chats one by one
+- [x] buyer dashboard keep showing 1 unread message, even i have opened all the chats one by one. (Root cause: StatsContext loaded `messagesCount` once on mount and never refreshed after `markRead()`. Fix: `MessagesView` now calls `refreshStats()` after each `markRead()` success, and resets that conversation's local `unread` to 0.)
 
 TODO
 Support link and email, are still pending, remind me later

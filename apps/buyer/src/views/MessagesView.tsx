@@ -18,6 +18,7 @@ import {
 import { cn } from '../lib/utils';
 import { fetchMessages, sendMessage, fetchConversations, markRead } from '../api/messageApi';
 import { useUser } from '../context/UserContext';
+import { useStats } from '../context/StatsContext';
 import { API_BASE_URL } from '../config/api';
 import { Button } from '../components/Button';
 import { subscribeToConversation } from '../lib/echo';
@@ -87,6 +88,7 @@ const getCategoryStyles = (type: string) => {
 
 export default function MessagesView() {
   const { user } = useUser();
+  const { refreshStats } = useStats();
   const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
   const [conversations, setConversations] = useState<any[]>([]);
@@ -343,7 +345,16 @@ export default function MessagesView() {
     try {
       const data = await fetchMessages(conversationId);
       setMessages(data);
-      markRead(conversationId).catch(() => { /* non-critical */ });
+      markRead(conversationId)
+        .then(() => {
+          setConversations((prev) =>
+            prev.map((c) =>
+              Number(c.id) === Number(conversationId) ? { ...c, unread: 0 } : c,
+            ),
+          );
+          refreshStats();
+        })
+        .catch(() => { /* non-critical */ });
     } catch (error) {
       console.error(error);
     } finally {
