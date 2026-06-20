@@ -256,7 +256,7 @@ in the partner dashboard
 ## Open Audit Items — 2026-06-07
 
 ### Translatability (admin + frontend Blade)
-- [ ] **Partial — needs follow-up.** ~65% of Blade files use `__()`, but `lang/en.json` has only ~39 keys. Many partials (filters, sidebars, page-builder widgets, ecommerce dashboard) remain hardcoded English. Frontend CMS uses `page_content()` / `@editable()` on home and several index pages — not a full i18n layer. **Action:** expand `en.json`, wrap remaining partials, split admin/frontend string catalogs.
+- [x] **Frontend i18n pass complete.** `lang/en.json` expanded from 39 → 110+ keys. All customer-facing frontend partials that had hardcoded English now use `__()`: autos gallery/related/dealer-contact, events ticket selection, jobs sidebar/description/back-button/mobile-CTA (also fixed hardcoded demo data in mobile CTA), property amenities + VR summary features, services gallery/reviews/feature-list, classifieds pickup-location card. Also fixed `**bold**` markdown-in-HTML in jobs partials (replaced with `<strong>` tags) and removed `ui-avatars.com` from `_description.blade.php`. Admin panel remains English-only (standard for CodeCanyon). Admin/frontend string catalog split deferred — JSON flat file is sufficient for current buyer scope.
 
 ### Events / listeners / email templates
 - [x] Wired orphaned flows: `PartnerLeadCreated` → `NewListingLead` email; `PropertyBookingConfirmed` now dispatches from public checkout; `ReviewRequested` after property/event purchase; `PaymentFailed` on Stripe subscription webhook failure; `PlanExpired` via `app:check-expired-subscriptions`; renewal query fixed (`title` not `name`).

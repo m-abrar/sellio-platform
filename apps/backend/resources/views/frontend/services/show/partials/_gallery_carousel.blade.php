@@ -34,7 +34,7 @@
                 <div class="ratio ratio-16x9 bg-light d-flex align-items-center justify-content-center">
                     <div class="text-center">
                         <i class="bi bi-image text-muted display-4"></i>
-                        <p class="small text-muted mt-2">No photos available</p>
+                        <p class="small text-muted mt-2">{{ __('No photos available') }}</p>
                     </div>
                 </div>
             </div>

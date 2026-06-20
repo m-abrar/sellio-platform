@@ -1,7 +1,7 @@
 @extends('frontend._layouts._app')
 
 {{-- Define the variables for the parent layout --}}
-@section('title', 'Select Tickets for: ' . $event->title) 
+@section('title', __('Select Tickets for: :title', ['title' => $event->title]))
 @section('body_class', 'has-body-glow')
 
 @section('content')
@@ -17,15 +17,15 @@
             ])
 
             <h1 class="mb-4">
-                <i class="bi bi-ticket-detailed me-2 text-primary-color"></i> 
-                Select Your Tickets
+                <i class="bi bi-ticket-detailed me-2 text-primary-color"></i>
+                {{ __('Select Your Tickets') }}
             </h1>
             
-            <p class="lead text-muted">{{ $event->subtitle ?? 'Choose your preferred ticket type and event date.' }}</p>
+            <p class="lead text-muted">{{ $event->subtitle ?? __('Choose your preferred ticket type and event date.') }}</p>
 
             @if ($event->occurrences->isEmpty() || $ticketTypes->isEmpty())
                 <div class="alert alert-warning text-center mt-5">
-                    No tickets or upcoming dates are currently available for this event.
+                    {{ __('No tickets or upcoming dates are currently available for this event.') }}
                 </div>
             @else
                 {{-- Form starts here, handles submission of selected tickets and quantity --}}
@@ -36,15 +36,15 @@
                     @if ($event->occurrences->count() > 1)
                         <div class="card p-4 shadow-sm mb-4">
                             <h3 class="card-title mb-3 border-bottom pb-2">
-                                <i class="bi bi-calendar me-2"></i> Select Date
+                                <i class="bi bi-calendar me-2"></i> {{ __('Select Date') }}
                             </h3>
                             <select name="occurrence_id" class="form-select form-select-lg" required>
-                                <option value="" disabled selected>Choose an event date...</option>
+                                <option value="" disabled selected>{{ __('Choose an event date...') }}</option>
                                 @foreach ($event->occurrences as $occurrence)
                                     <option value="{{ $occurrence->id }}">
                                         {{ $occurrence->start_date_time->format('F jS, Y') }} - 
                                         {{ $occurrence->start_date_time->format('h:i A') }}
-                                        ({{ $occurrence->is_virtual ? 'Online' : $occurrence->venue_name }})
+                                        ({{ $occurrence->is_virtual ? __('Online') : $occurrence->venue_name }})
                                     </option>
                                 @endforeach
                             </select>
@@ -58,7 +58,7 @@
                     {{-- 2. Ticket Type Selection --}}
                     <div class="card p-4 shadow-sm mb-4">
                         <h3 class="card-title mb-3 border-bottom pb-2">
-                            <i class="bi bi-cash me-2"></i> Choose Ticket Type
+                            <i class="bi bi-cash me-2"></i> {{ __('Choose Ticket Type') }}
                         </h3>
                         
                         @foreach ($ticketTypes as $ticketType)
@@ -68,9 +68,9 @@
                                     <h5 class="mb-1 fw-bold">{{ $ticketType->title }}</h5>
                                     <p class="small text-muted mb-0">{{ $ticketType->description }}</p>
                                     @if ($ticketType->is_free)
-                                        <span class="badge bg-success-theme">FREE</span>
+                                        <span class="badge bg-success-theme">{{ __('FREE') }}</span>
                                     @elseif ($ticketType->sale_ends_at && $ticketType->sale_ends_at->isFuture())
-                                        <span class="badge bg-warning-theme">Sale Ends {{ $ticketType->sale_ends_at->diffForHumans() }}</span>
+                                        <span class="badge bg-warning-theme">{{ __('Sale Ends') }} {{ $ticketType->sale_ends_at->diffForHumans() }}</span>
                                     @endif
                                 </div>
                                 
@@ -79,13 +79,13 @@
                                     <div class="me-3 text-end">
                                         <div class="fs-5 fw-bold text-success-theme">
                                             @if ($ticketType->is_free)
-                                                Free
+                                                {{ __('Free') }}
                                             @else
                                                 ${{ number_format($ticketType->price, 2) }}
                                             @endif
                                         </div>
                                         <div class="small text-muted">
-                                            {{ $ticketType->available_quantity > 0 ? $ticketType->available_quantity . ' left' : 'Sold Out' }}
+                                            {{ $ticketType->available_quantity > 0 ? $ticketType->available_quantity . ' ' . __('left') : __('Sold Out') }}
                                         </div>
                                     </div>
 
@@ -103,13 +103,13 @@
                             </div>
                         @endforeach
                         
-                        @error('tickets')<div class="text-danger small mt-2">Please select at least one ticket.</div>@enderror
+                        @error('tickets')<div class="text-danger small mt-2">{{ __('Please select at least one ticket.') }}</div>@enderror
                     </div>
 
                     {{-- 3. Proceed Button --}}
                     <div class="text-end">
                         <button type="submit" id="proceed-to-checkout" class="btn btn-primary-theme btn-lg px-5" disabled>
-                            Proceed to Checkout 
+                            {{ __('Proceed to Checkout') }}
                             <i class="bi bi-arrow-right-short ms-2"></i>
                         </button>
                     </div>

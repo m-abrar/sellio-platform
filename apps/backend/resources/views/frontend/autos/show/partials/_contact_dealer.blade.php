@@ -14,7 +14,7 @@
 <div class="card glass-surface p-4 mt-4">
     <h4 class="fw-bold mb-3">
         <i class="bi bi-person-lines-fill me-2 text-primary-color "></i>
-        Connect with the Dealer
+        {{ __('Connect with the Dealer') }}
     </h4>
 
     <div class="text-center mb-4 border-bottom pb-3">
@@ -26,12 +26,12 @@
         
         <h5 class="mb-0 fw-bold mt-2">{{ $dealerName }}</h5>
         <p class="small text-muted mb-1">
-            <i class="bi bi-geo-alt-fill me-1"></i> {{ $auto->city ?? 'Local' }} Dealership
+            <i class="bi bi-geo-alt-fill me-1"></i> {{ $auto->city ?? __('Local') }} {{ __('Dealership') }}
         </p>
 
         {{-- 💡 UX Improvement: Display Rating --}}
         <span class="text-warning fw-bold small">
-            <i class="bi bi-star-fill"></i> {{ number_format($dealerRating, 1) }} ({{ $dealerReviewCount }} reviews)
+            <i class="bi bi-star-fill"></i> {{ number_format($dealerRating, 1) }} ({{ $dealerReviewCount }} {{ __('reviews') }})
         </span>
     </div>
 
@@ -40,20 +40,20 @@
         {{-- ACTION: Replace the href with your actual messaging route/modal trigger --}}
         <a href="{{ route('conversation.start', $dealer) }}" 
            class="btn btn-lg fw-bold text-white btn-primary-theme shadow-primary-md">
-            <i class="bi bi-chat-dots-fill me-2"></i>Send Message
+            <i class="bi bi-chat-dots-fill me-2"></i>{{ __('Send Message') }}
         </a>
     </div>
 
     {{-- 2. Call Button (SECONDARY CTA - Moved below) --}}
     <div class="d-grid mb-4">
         <a href="tel:{{ $dealerPhone }}" class="btn btn-lg fw-bold btn-outline-info">
-            <i class="bi bi-telephone-fill me-2"></i>Call {{ $dealerPhone }}
+            <i class="bi bi-telephone-fill me-2"></i>{{ __('Call :phone', ['phone' => $dealerPhone]) }}
         </a>
     </div>
     
     {{-- Hours/Context --}}
     <div class="text-center small text-muted">
-        <p class="mb-0 fw-semibold text-dark">Sales Hours</p>
+        <p class="mb-0 fw-semibold text-dark">{{ __('Sales Hours') }}</p>
         <p class="mb-0">{{ $dealer->hours ?? 'Mon-Sat: 9 AM - 6 PM PST' }}</p>
     </div>
 </div>

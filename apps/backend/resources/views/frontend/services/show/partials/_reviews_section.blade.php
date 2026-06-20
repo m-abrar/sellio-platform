@@ -1,6 +1,6 @@
 <div class="d-flex align-items-baseline mb-3">
     <span class="h1 fw-bold text-warning me-2">{{ $rating ?? '4.8' }}</span>
-    <span class="text-muted fw-semibold">/ 5.0 rating based on {{ $reviewCount ?? '120' }} reviews</span>
+    <span class="text-muted fw-semibold">{{ __('/ 5.0 rating based on :count reviews', ['count' => $reviewCount ?? '120']) }}</span>
 </div>
 
 {{-- Single Review Example --}}
@@ -15,4 +15,4 @@
     </div>
 </div>
 
-<a href="#" class="btn btn-sm btn-link fw-semibold text-primary-color"><i class="bi bi-chat-left-text me-1"></i> View All {{ $reviewCount ?? '0' }} Reviews</a>
+<a href="#" class="btn btn-sm btn-link fw-semibold text-primary-color"><i class="bi bi-chat-left-text me-1"></i> {{ __('View All :count Reviews', ['count' => $reviewCount ?? '0']) }}</a>

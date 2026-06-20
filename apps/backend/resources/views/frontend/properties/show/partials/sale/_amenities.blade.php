@@ -8,5 +8,5 @@
         @endforeach
     </div>
 @else
-    <p class="text-muted">No specific amenities listed.</p>
+    <p class="text-muted">{{ __('No specific amenities listed.') }}</p>
 @endif

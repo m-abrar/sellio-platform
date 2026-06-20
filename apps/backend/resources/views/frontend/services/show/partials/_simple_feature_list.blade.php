@@ -15,7 +15,7 @@
         </div>
     @empty
         <div class="col-12">
-            <p class="text-muted small italic">No specific expertise listed for this service.</p>
+            <p class="text-muted small italic">{{ __('No specific expertise listed for this service.') }}</p>
         </div>
     @endforelse
 </div>
