@@ -58,31 +58,6 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const mainImage = document.getElementById('mainProductImage');
-        const thumbnails = document.querySelectorAll('.product-gallery__thumb-img');
-
-        thumbnails.forEach(thumb => {
-            thumb.addEventListener('click', function() {
-                const newSrc = this.getAttribute('data-full-src');
-                if (!newSrc) return;
-
-                mainImage.style.opacity = '0.3';
-
-                setTimeout(() => {
-                    mainImage.src = newSrc;
-                    mainImage.style.opacity = '1';
-                }, 150);
-
-                thumbnails.forEach(t => {
-                    t.classList.remove('active', 'border-primary', 'border-2');
-                    t.classList.add('opacity-75');
-                });
-
-                this.classList.add('active', 'border-primary', 'border-2');
-                this.classList.remove('opacity-75');
-            });
-        });
-    });
-</script>
+@push('scripts')
+<script src="{{ asset('frontend/js/product-gallery.js') }}"></script>
+@endpush

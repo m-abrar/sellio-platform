@@ -3330,3 +3330,49 @@ body.has-admin-bar .main-header.sticky-top{
 .evc-z-date{
     z-index:2
 }
+
+/* Pagination */
+.custom-page-link {
+    color: var(--primary-color) !important;
+    background: transparent !important;
+}
+.custom-page-link:hover {
+    background: var(--primary-light) !important;
+    transform: translateY(-2px);
+}
+.active-link {
+    background: var(--primary-color) !important;
+    color: #fff !important;
+}
+.page-item.disabled .custom-page-link {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Breadcrumb (product/classifieds listings) */
+.btn-glass-back {
+    background: white;
+    border: 1px solid var(--border-color);
+    color: var(--text-dark);
+}
+.btn-glass-back:hover {
+    background: var(--primary-color);
+    color: white !important;
+    border-color: var(--primary-color);
+    transform: translateX(-3px);
+}
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    font-size: 1.2rem;
+    line-height: 1;
+    vertical-align: middle;
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+.hover-primary:hover { color: var(--primary-color) !important; }
+
+/* Quote sidebar select focus */
+.bg-light-focus:focus {
+    background-color: #f8fafc;
+    border-color: var(--bs-primary);
+}

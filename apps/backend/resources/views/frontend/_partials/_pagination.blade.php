@@ -52,22 +52,3 @@
     </nav>
 </div>
 @endif
-
-<style>
-    .custom-page-link {
-        color: var(--primary-color) !important;
-        background: transparent !important;
-    }
-    .custom-page-link:hover {
-        background: var(--primary-light) !important;
-        transform: translateY(-2px);
-    }
-    .active-link {
-        background: var(--primary-color) !important;
-        color: #fff !important;
-    }
-    .page-item.disabled .custom-page-link {
-        opacity: 0.5;
-        pointer-events: none;
-    }
-</style>

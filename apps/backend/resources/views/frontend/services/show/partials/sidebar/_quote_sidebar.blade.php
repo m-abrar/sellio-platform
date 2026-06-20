@@ -58,14 +58,6 @@
                 </select>
             </div>
 
-            <style>
-                /* Subtle focus effect for the select box */
-                .bg-light-focus:focus {
-                    background-color: #f8fafc;
-                    border-color: var(--bs-primary);
-                }
-            </style>
-            
             <div class="d-grid mb-3">
                 <button type="submit" class="btn btn-lg fw-800 text-white btn-primary shadow-sm rounded-pill">
                     {{ __('Request Proposal') }}

@@ -26,26 +26,7 @@
         </div>
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggles = document.querySelectorAll('.password-toggle');
-            toggles.forEach(toggle => {
-                toggle.addEventListener('click', function() {
-                    const container = this.closest('.form-icon-group');
-                    const input = container.querySelector('input');
-                    if (input.type === 'password') {
-                        input.type = 'text';
-                        this.classList.remove('bi-eye');
-                        this.classList.add('bi-eye-slash');
-                    } else {
-                        input.type = 'password';
-                        this.classList.remove('bi-eye-slash');
-                        this.classList.add('bi-eye');
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="{{ asset('frontend/js/auth.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

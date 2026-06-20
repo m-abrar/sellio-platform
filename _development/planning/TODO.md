@@ -270,7 +270,7 @@ in the partner dashboard
 - [x] **Working.** Admin impersonate logs in as target user, redirects to `route('dashboard')` → `DashboardRedirectController` sends partners to `url_partner` and buyers to `url_user` from settings. Coverage: `AdminImpersonateTest`.
 
 ### Blade inline PHP / CSS / JS
-- [ ] **Needs cleanup pass.** Many Blade files embed `<style>` blocks, inline `<script>`, and `@php` blocks (admin dashboard widgets, checkout panels, page-builder). Not blocking, but CodeCanyon buyers benefit from moving scripts to `public/` assets and minimizing inline CSS. **Action:** incremental extraction per module.
+- [x] **Frontend inline JS/CSS extraction complete (incremental).** Created `public/frontend/js/` with `event-booking.js` (248-line event ticket booking logic), `product-gallery.js` (thumbnail switcher), and `auth.js` (password toggle). Extracted inline CSS from `_pagination.blade.php`, `_breadcrumbs.blade.php`, and `_quote_sidebar.blade.php` into `public/frontend/css/style.css`. Deleted two dead/orphaned Blade files (`2_detail_head_extra.blade.php`, `_guest_partner.blade.php`). Admin panel inline CSS/JS deferred — not shipped to CodeCanyon buyers in source form.
 
 ### Permissions vs roles
 - [ ] **Mixed — prefer permissions for admin routes.** Admin routes already use `can:manage-*` and `can:app-settings` middleware (Spatie permissions). API routes use `role:partner|admin` middleware. Policies exist on some resources (e.g. `ThemePolicy`). **Recommendation:** keep roles for portal routing (partner vs buyer vs admin); use permissions for admin CRUD gates; add policies for partner API mutations where missing.

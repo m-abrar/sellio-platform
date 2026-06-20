@@ -44,27 +44,3 @@
 
     </ol>
 </nav>
-
-<style>
-    /* Premium Nav Styling */
-    .btn-glass-back {
-        background: white;
-        border: 1px solid var(--border-color);
-        color: var(--text-dark);
-    }
-    .btn-glass-back:hover {
-        background: var(--primary-color);
-        color: white !important;
-        border-color: var(--primary-color);
-        transform: translateX(-3px);
-    }
-    .breadcrumb-item + .breadcrumb-item::before {
-        content: "›";
-        font-size: 1.2rem;
-        line-height: 1;
-        vertical-align: middle;
-        color: var(--text-muted);
-        opacity: 0.5;
-    }
-    .hover-primary:hover { color: var(--primary-color) !important; }
-</style>
