@@ -1,4 +1,4 @@
-{{-- Footer --}}
+﻿{{-- Footer --}}
 @php
     // Map social platform names → Bootstrap Icons
     $socialIcons = [
@@ -56,10 +56,10 @@
                         <i class="bi {{ $icon }}"></i>
                     </a>
                 @empty
-                    <a href="#" class="ft-social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="ft-social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="ft-social-icon" aria-label="X / Twitter"><i class="bi bi-twitter-x"></i></a>
-                    <a href="#" class="ft-social-icon" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="ft-social-icon" aria-label="{{ __('Facebook') }}"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="ft-social-icon" aria-label="{{ __('Instagram') }}"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="ft-social-icon" aria-label="{{ __('X / Twitter') }}"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="ft-social-icon" aria-label="{{ __('LinkedIn') }}"><i class="bi bi-linkedin"></i></a>
                 @endforelse
             </div>
         </div>

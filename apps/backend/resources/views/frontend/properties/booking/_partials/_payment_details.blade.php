@@ -1,4 +1,4 @@
-@php
+﻿@php
     $totalFormatted = format_currency($booking->total_price);
     $stripePublishableKey = $stripePublishableKey ?? null;
     $usesStripeElements = filled($stripePublishableKey);
@@ -144,7 +144,7 @@
                         name="mm_yy"
                         class="form-control text-center @error('mm_yy') is-invalid @enderror"
                         value="{{ old('mm_yy') }}"
-                        placeholder="MM/YY"
+                        placeholder="{{ __('MM/YY') }}"
                         inputmode="numeric"
                         autocomplete="cc-exp"
                         maxlength="5"

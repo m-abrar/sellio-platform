@@ -92,7 +92,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
                                         <label class="uppercase small font-weight-bold text-muted mb-2 letter-spacing-1">{{ __('New Secret Password') }}</label>
-                                        <input type="password" name="password" class="form-control form-control-premium" placeholder="••••••••">
+                                        <input type="password" name="password" class="form-control form-control-premium" placeholder="{{ __('••••••••') }}">
                                         <small class="text-muted mt-2 d-block font-italic opacity-75">{{ __('Leave empty to keep current access keys.') }}</small>
                                         @error('password') <span class="text-danger small font-weight-bold mt-1 d-block">{{ $message }}</span> @enderror
                                     </div>
@@ -100,7 +100,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
                                         <label class="uppercase small font-weight-bold text-muted mb-2 letter-spacing-1">{{ __('Confirm New Password') }}</label>
-                                        <input type="password" name="password_confirmation" class="form-control form-control-premium" placeholder="••••••••">
+                                        <input type="password" name="password_confirmation" class="form-control form-control-premium" placeholder="{{ __('••••••••') }}">
                                     </div>
                                 </div>
                             </div>

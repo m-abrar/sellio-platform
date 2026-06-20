@@ -60,7 +60,7 @@
                             <label for="title" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Location Name <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" 
                                    class="form-control form-control-hero" 
-                                   placeholder="e.g. Downtown District"
+                                   placeholder="{{ __('e.g. Downtown District') }}"
                                    value="{{ old('title', $location?->title ?? '') }}" required list="location-title-suggestions">
                             <datalist id="location-title-suggestions">
                                 @foreach($titleSuggestions ?? [] as $title)
@@ -74,7 +74,7 @@
                             <label for="slug" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">URL Slug</label>
                             <input type="text" name="slug" id="slug" 
                                    class="form-control form-control-premium text-monospace small"
-                                   placeholder="automatic-slug-generation"
+                                   placeholder="{{ __('automatic-slug-generation') }}"
                                    value="{{ old('slug', $location?->slug ?? '') }}">
                             @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
@@ -84,13 +84,13 @@
                             <div class="col-md-4 mb-4">
                                 <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">State / Province</label>
                                 <input type="text" name="state" class="form-control form-control-premium"
-                                       value="{{ old('state', $location?->state ?? '') }}" placeholder="California">
+                                       value="{{ old('state', $location?->state ?? '') }}" placeholder="{{ __('California') }}">
                                 @error('state') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-4 mb-4">
                                 <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Country <span class="text-danger">*</span></label>
                                 <input type="text" name="country" class="form-control form-control-premium"
-                                       value="{{ old('country', $location?->country ?? '') }}" placeholder="United States">
+                                       value="{{ old('country', $location?->country ?? '') }}" placeholder="{{ __('United States') }}">
                                 @error('country') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-4 mb-4">
@@ -122,7 +122,7 @@
                             <label for="description" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Location Description</label>
                             <textarea name="description" rows="4" 
                                       class="form-control rounded-xl border-light"
-                                      placeholder="Describe regional highlights or operation details...">{{ old('description', $location?->description ?? '') }}</textarea>
+                                      placeholder="{{ __('Describe regional highlights or operation details...') }}">{{ old('description', $location?->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
                     </div>

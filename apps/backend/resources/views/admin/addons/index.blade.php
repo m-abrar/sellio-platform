@@ -97,7 +97,7 @@
                                          <form action="{{ route('admin.addons.destroy', $addon->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="Remove Module" data-action="delete-trigger">
+                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="{{ __('Remove Module') }}" data-action="delete-trigger">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>

@@ -60,7 +60,7 @@
                             <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Addon Name <span class="text-danger">*</span></label>
                             <input type="text" name="name" id="name" 
                                    class="form-control form-control-hero @error('name') is-invalid @enderror" 
-                                   placeholder="e.g. Premium Insurance"
+                                   placeholder="{{ __('e.g. Premium Insurance') }}"
                                    value="{{ old('name', $addon->name ?? '') }}" required>
                             @error('name') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
@@ -80,7 +80,7 @@
                             <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Service Description <span class="text-danger">*</span></label>
                             <textarea name="description" id="description" rows="5" 
                                       class="form-control rounded-16 border-light @error('description') is-invalid @enderror" 
-                                      placeholder="Describe the benefits and details of this addon..."
+                                      placeholder="{{ __('Describe the benefits and details of this addon...') }}"
                                       required>{{ old('description', $addon->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>

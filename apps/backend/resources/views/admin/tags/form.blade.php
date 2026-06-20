@@ -74,7 +74,7 @@
                             <label for="slug" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('URL Identifier (Slug)') }}</label>
                             <input type="text" name="slug" id="slug" 
                                    class="form-control form-control-premium text-monospace small"
-                                   placeholder="automatic-slug-generation"
+                                   placeholder="{{ __('automatic-slug-generation') }}"
                                    value="{{ old('slug', $tag->slug ?? '') }}">
                             @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>

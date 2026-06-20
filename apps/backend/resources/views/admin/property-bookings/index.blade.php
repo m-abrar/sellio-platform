@@ -158,10 +158,10 @@
                                             <form action="{{ route('admin.property-bookings.destroy', $booking->id) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
                                                  <button type="button" class="btn text-danger" 
-                                                         data-toggle="tooltip" title="Purge Record" 
+                                                         data-toggle="tooltip" title="{{ __('Purge Record') }}" 
                                                          data-action="delete-trigger"
-                                                         data-confirm-title="Purge Record?"
-                                                         data-confirm-text="Are you sure you want to permanently delete this reservation?">
+                                                         data-confirm-title="{{ __('Purge Record?') }}"
+                                                         data-confirm-text="{{ __('Are you sure you want to permanently delete this reservation?') }}">
                                                      <i class="fas fa-trash-alt"></i>
                                                  </button>
                                             </form>

@@ -1,4 +1,4 @@
-@php
+﻿@php
     $agentName = $property->user?->name ?? __('Agent');
     $agentFirstName = Str::before($agentName, ' ');
     $user = Auth::user();
@@ -80,7 +80,7 @@
                     type="email"
                     name="email"
                     class="form-control @error('email') is-invalid @enderror"
-                    placeholder="you@example.com"
+                    placeholder="{{ __('you@example.com') }}"
                     value="{{ old('email', $user->email ?? '') }}"
                     required
                 >
@@ -96,7 +96,7 @@
                     type="tel"
                     name="phone"
                     class="form-control @error('phone') is-invalid @enderror"
-                    placeholder="+1 (555) 000-0000"
+                    placeholder="{{ __('+1 (555) 000-0000') }}"
                     value="{{ old('phone') }}"
                 >
                 @error('phone')

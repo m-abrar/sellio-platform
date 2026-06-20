@@ -1,4 +1,4 @@
-@extends('frontend._layouts._app')
+﻿@extends('frontend._layouts._app')
 
 @section('title', 'Apply for ' . $job->title) 
 @section('body_class', 'has-body-glow')
@@ -53,7 +53,7 @@
                                         <div class="form-floating">
                                             <input type="text" id="full_name" name="full_name" 
                                                 class="form-control glass-input @error('full_name') is-invalid @enderror"
-                                                value="{{ old('full_name', $defaultName) }}" placeholder="Full Name" required>
+                                                value="{{ old('full_name', $defaultName) }}" placeholder="{{ __('Full Name') }}" required>
                                             <label for="full_name">Full Name *</label>
                                             @error('full_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
@@ -63,7 +63,7 @@
                                         <div class="form-floating">
                                             <input type="email" id="email" name="email" 
                                                 class="form-control glass-input @error('email') is-invalid @enderror"
-                                                value="{{ old('email', $defaultEmail) }}" placeholder="Email" required>
+                                                value="{{ old('email', $defaultEmail) }}" placeholder="{{ __('Email') }}" required>
                                             <label for="email">Email Address *</label>
                                             @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
@@ -73,7 +73,7 @@
                                         <div class="form-floating">
                                             <input type="tel" id="phone" name="phone" 
                                                 class="form-control glass-input @error('phone') is-invalid @enderror"
-                                                value="{{ old('phone', $defaultPhone) }}" placeholder="Phone">
+                                                value="{{ old('phone', $defaultPhone) }}" placeholder="{{ __('Phone') }}">
                                             <label for="phone">Phone Number</label>
                                             @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
@@ -91,7 +91,7 @@
                                 <div class="mb-5">
                                     <textarea id="cover_letter" name="cover_letter" 
                                         class="form-control glass-input @error('cover_letter') is-invalid @enderror" 
-                                        rows="6" placeholder="Tell us why you're a great fit for {{ $job->title }}...">{{ old('cover_letter') }}</textarea>
+                                        rows="6" placeholder="{{ __('Tell us why you\'re a great fit for :title...', ['title' => $job->title]) }}">{{ old('cover_letter') }}</textarea>
                                     @error('cover_letter') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                                 

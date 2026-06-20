@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Quick Access Bar (Admin Bar)
     
     This partial renders a floating utility bar at the top of the viewport 
@@ -8,7 +8,7 @@
     @layout resources/views/admin/layout.blade.php
     @context Authenticated Admin
 --}}
-<div id="admin-bar" role="navigation" aria-label="Admin Quick Bar">
+<div id="admin-bar" role="navigation" aria-label="{{ __('Admin Quick Bar') }}">
   <div class="container d-flex justify-content-between align-items-center h-100">
     
     {{-- Left Side: Primary Navigation --}}

@@ -1,4 +1,4 @@
-{{--
+﻿{{--
 | --------------------------------------------------------------------------
 | Schedule a Test Drive Widget
 | --------------------------------------------------------------------------
@@ -26,19 +26,19 @@
         {{-- Contact Information Fields --}}
         <div class="mb-3">
             <label for="td-name" class="form-label small fw-semibold">Your Full Name</label>
-            <input type="text" id="td-name" name="full_name" class="form-control" placeholder="John Doe" 
+            <input type="text" id="td-name" name="full_name" class="form-control" placeholder="{{ __('John Doe') }}" 
                 value="{{ old('full_name') }}" required>
         </div>
         
         <div class="mb-3">
             <label for="td-email" class="form-label small fw-semibold">Email Address</label>
-            <input type="email" id="td-email" name="email" class="form-control" placeholder="john.doe@example.com" 
+            <input type="email" id="td-email" name="email" class="form-control" placeholder="{{ __('john.doe@example.com') }}" 
                 value="{{ old('email') }}" required>
         </div>
         
         <div class="mb-4">
             <label for="td-phone" class="form-label small fw-semibold">Phone Number (Optional)</label>
-            <input type="tel" id="td-phone" name="phone" class="form-control" placeholder="(555) 555-5555"
+            <input type="tel" id="td-phone" name="phone" class="form-control" placeholder="{{ __('(555) 555-5555') }}"
                 value="{{ old('phone') }}">
         </div>
 
@@ -66,7 +66,7 @@
         <div class="mb-4">
             <label for="td-message" class="form-label small fw-semibold">Message/Notes (Optional)</label>
             <textarea id="td-message" name="message" class="form-control" rows="3" 
-                placeholder="I have a few questions about financing.">{{ old('message') }}</textarea>
+                placeholder="{{ __('I have a few questions about financing.') }}">{{ old('message') }}</textarea>
         </div>
         
         {{-- CTA Button --}}

@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Media Module: Global Gallery Registry
     
     This view serves as the primary gateway for platform-wide media assets. 
@@ -69,7 +69,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-search text-xs text-primary"></i></span>
                                 </div>
-                                <input type="text" name="search" class="form-control" placeholder="Filename search..." value="{{ request('search') }}">
+                                <input type="text" name="search" class="form-control" placeholder="{{ __('Filename search...') }}" value="{{ request('search') }}">
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -105,10 +105,10 @@
                                          @csrf
                                          @method('DELETE')
                                          <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm icon-box-38" 
-                                                 title="Delete"
+                                                 title="{{ __('Delete') }}"
                                                  data-action="delete-trigger"
-                                                 data-confirm-title="Delete Asset?"
-                                                 data-confirm-text="This operation is permanent and may break linked listings!">
+                                                 data-confirm-title="{{ __('Delete Asset?') }}"
+                                                 data-confirm-text="{{ __('This operation is permanent and may break linked listings!') }}">
                                              <i class="fas fa-trash text-danger"></i>
                                          </button>
                                      </form>
@@ -140,7 +140,7 @@
                             <div class="modal-content">
                                 <div class="modal-header border-0">
                                     <h5 class="modal-title">Replace Media Asset</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ __('Close') }}">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -203,7 +203,7 @@
             <div class="modal-content">
                 <div class="modal-header border-0">
                     <h5 class="modal-title">New Standalone Asset</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ __('Close') }}">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -223,7 +223,7 @@
                         </div>
                         <div class="form-group mb-0">
                             <label class="small font-weight-bold text-secondary text-uppercase mb-2">Descriptive Title</label>
-                            <input type="text" name="title" class="form-control rounded-10" placeholder="e.g. Hero Banner Winter 2024">
+                            <input type="text" name="title" class="form-control rounded-10" placeholder="{{ __('e.g. Hero Banner Winter 2024') }}">
                         </div>
                     </div>
                     <div class="modal-footer border-0">

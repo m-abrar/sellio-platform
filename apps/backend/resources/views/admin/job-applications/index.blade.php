@@ -113,10 +113,10 @@
                                             <form action="{{ route('admin.job-applications.destroy', $app->id) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
                                                 <button type="button" class="btn text-danger" 
-                                                        data-toggle="tooltip" title="Purge Record" 
+                                                        data-toggle="tooltip" title="{{ __('Purge Record') }}" 
                                                         data-action="delete-trigger"
-                                                        data-confirm-title="Purge Record?"
-                                                        data-confirm-text="Permanently delete application?">
+                                                        data-confirm-title="{{ __('Purge Record?') }}"
+                                                        data-confirm-text="{{ __('Permanently delete application?') }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>

@@ -114,7 +114,7 @@
                                             <span class="input-group-text"><i class="fas fa-hashtag text-xs"></i></span>
                                         </div>
                                         <input type="number" name="payable_id" class="form-control font-weight-bold" required
-                                            value="{{ old('payable_id', $payment->payable_id ?? '') }}" placeholder="e.g. 1042">
+                                            value="{{ old('payable_id', $payment->payable_id ?? '') }}" placeholder="{{ __('e.g. 1042') }}">
                                     </div>
                                     @error('payable_id') <small class="text-danger font-weight-bold mt-1 d-block ml-1">{{ $message }}</small> @enderror
                                 </div>
@@ -171,7 +171,7 @@
                                         </div>
                                         <input type="text" name="transaction_id" class="form-control text-monospace smallest" 
                                             value="{{ old('transaction_id', $payment->transaction_id ?? '') }}" 
-                                            placeholder="Ext. Ref (e.g. pi_3M...)">
+                                            placeholder="{{ __('Ext. Ref (e.g. pi_3M...)') }}">
                                     </div>
                                 </div>
 

@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Feedback Alert System
     
     This partial orchestrates the display of session-based notifications 
@@ -38,7 +38,7 @@
                     @endif
                 </p>
             </div>
-            <button type="button" class="close ml-auto opacity-50" data-dismiss="alert" aria-label="Close">
+            <button type="button" class="close ml-auto opacity-50" data-dismiss="alert" aria-label="{{ __('Close') }}">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -83,7 +83,7 @@
                 <p class="mb-0 text-secondary small font-weight-600">{{ $errors->first() }}</p>
             @endif
         </div>
-        <button type="button" class="close ml-auto opacity-50" data-dismiss="alert" aria-label="Close">
+        <button type="button" class="close ml-auto opacity-50" data-dismiss="alert" aria-label="{{ __('Close') }}">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>

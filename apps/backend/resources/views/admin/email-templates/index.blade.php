@@ -96,7 +96,7 @@
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.email-templates.edit', $template->id) }}" 
                                            class="btn btn-white text-info py-2 px-3 font-weight-bold smallest uppercase d-inline-flex align-items-center" 
-                                           data-toggle="tooltip" title="Configure Template">
+                                           data-toggle="tooltip" title="{{ __('Configure Template') }}">
                                             <i class="fas fa-cog mr-1"></i> CONFIG
                                         </a>
                                     </div>

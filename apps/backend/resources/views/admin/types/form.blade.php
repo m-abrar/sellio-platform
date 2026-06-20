@@ -75,7 +75,7 @@
                                 <label for="slug" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('URL Identifier (Slug)') }}</label>
                                 <input type="text" name="slug" id="slug" 
                                        class="form-control form-control-premium text-monospace small"
-                                       placeholder="automatic-slug-generation"
+                                       placeholder="{{ __('automatic-slug-generation') }}"
                                        value="{{ old('slug', $type?->slug ?? '') }}">
                                 @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                             </div>
@@ -91,7 +91,7 @@
                                     </div>
                                     <input type="text" name="icon" id="icon" 
                                            class="form-control form-control-premium text-monospace rounded-r-xl"
-                                           placeholder="fas fa-tag"
+                                           placeholder="{{ __('fas fa-tag') }}"
                                            value="{{ old('icon', $type?->icon ?? '') }}">
                                 </div>
                                 @error('icon') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror

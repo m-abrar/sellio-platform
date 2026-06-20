@@ -47,7 +47,7 @@
                         @csrf
                         <div class="form-group mb-0">
                             <label class="font-weight-bold text-secondary smallest uppercase mb-2">Unique Permission Name <span class="text-danger">*</span></label>
-                            <input type="text" name="name" class="form-control shadow-xs" placeholder="e.g. property-delete" required>
+                            <input type="text" name="name" class="form-control shadow-xs" placeholder="{{ __('e.g. property-delete') }}" required>
                             <div class="p-4 bg-light rounded-xl border mt-4">
                                 <h6 class="font-weight-bold text-primary text-uppercase mb-2 letter-spacing-1 text-0-95"><i class="fas fa-info-circle mr-2 opacity-75"></i>Naming Convention</h6>
                                 <p class="text-muted mb-0 small font-weight-500">

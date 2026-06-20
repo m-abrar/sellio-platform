@@ -56,13 +56,13 @@
                         <div class="col-md-3">
                             <div class="form-group mb-0">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2">Display Label</label>
-                                <input type="text" id="new_title" class="form-control" placeholder="e.g. Contact Support" style="border-radius: 12px; height: 45px;">
+                                <input type="text" id="new_title" class="form-control" placeholder="{{ __('e.g. Contact Support') }}" style="border-radius: 12px; height: 45px;">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-0">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2">Target URL / Route</label>
-                                <input type="text" id="new_url" class="form-control" placeholder="e.g. /support or https://..." style="border-radius: 12px; height: 45px;">
+                                <input type="text" id="new_url" class="form-control" placeholder="{{ __('e.g. /support or https://...') }}" style="border-radius: 12px; height: 45px;">
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -160,7 +160,7 @@
         <div class="modal-content border-0 shadow-premium" style="border-radius: 24px;">
             <div class="modal-header border-0 pt-4 px-4">
                 <h5 class="modal-title">Edit Component Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ __('Close') }}">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -230,7 +230,7 @@
             const alertHtml = `
                 <div class="alert alert-${type} alert-dismissible fade show rounded-xl shadow-sm border-0 mb-4" role="alert">
                     <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-2"></i> ${message}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="{{ __('Close') }}">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -270,10 +270,10 @@
                                 <span class="ml-3 badge badge-success-light text-success smallest">NEW</span>
                             </div>
                             <div class="dd-actions">
-                                <button type="button" class="btn btn-primary-soft btn-xs edit-item-btn mr-1" title="Edit Component">
+                                <button type="button" class="btn btn-primary-soft btn-xs edit-item-btn mr-1" title="{{ __('Edit Component') }}">
                                     <i class="fas fa-pen"></i>
                                 </button>
-                                <button type="button" class="btn btn-danger-light btn-xs" title="Remove" data-id="${tempId}" data-action="delete">
+                                <button type="button" class="btn btn-danger-light btn-xs" title="{{ __('Remove') }}" data-id="${tempId}" data-action="delete">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>

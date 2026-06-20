@@ -58,13 +58,13 @@
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
                                     <label>{{ __('Display Name') }}</label>
-                                    <input type="text" name="name" class="form-control" value="{{ $user->name }}" required placeholder="e.g. John Doe">
+                                    <input type="text" name="name" class="form-control" value="{{ $user->name }}" required placeholder="{{ __('e.g. John Doe') }}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
                                     <label>{{ __('Primary Email') }}</label>
-                                    <input type="email" name="email" class="form-control" value="{{ $user->email }}" required placeholder="john@example.com">
+                                    <input type="email" name="email" class="form-control" value="{{ $user->email }}" required placeholder="{{ __('john@example.com') }}">
                                 </div>
                             </div>
                         </div>
@@ -75,14 +75,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
                                         <label>{{ __('New Secret Key') }}</label>
-                                        <input type="password" name="password" class="form-control" placeholder="••••••••">
+                                        <input type="password" name="password" class="form-control" placeholder="{{ __('••••••••') }}">
                                         <small class="text-muted mt-1 d-block italic">{{ __('Minimum 8 characters. Leave blank to retain current.') }}</small>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
                                         <label>{{ __('Repeat Key') }}</label>
-                                        <input type="password" name="password_confirmation" class="form-control" placeholder="••••••••">
+                                        <input type="password" name="password_confirmation" class="form-control" placeholder="{{ __('••••••••') }}">
                                     </div>
                                 </div>
                             </div>

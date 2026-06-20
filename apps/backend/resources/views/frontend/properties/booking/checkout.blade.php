@@ -1,4 +1,4 @@
-@extends('frontend._layouts._app')
+﻿@extends('frontend._layouts._app')
 
 @section('title', __('Vacation Booking') . ' | ' . __('Step 1 of 3')) 
 @section('body_class', 'has-body-glow')
@@ -159,7 +159,7 @@
                             <div class="input-group unified-input">
                                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                                 <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror"
-                                    value="{{ old('email', auth()->user()->email ?? '') }}" placeholder="your@email.com" required>
+                                    value="{{ old('email', auth()->user()->email ?? '') }}" placeholder="{{ __('your@email.com') }}" required>
                             </div>
                             @error('email')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -170,7 +170,7 @@
                             <div class="input-group unified-input">
                                 <span class="input-group-text"><i class="bi bi-telephone"></i></span>
                                 <input type="tel" name="phone" id="phone" class="form-control @error('phone') is-invalid @enderror"
-                                    value="{{ old('phone', auth()->user()->phone ?? '') }}" placeholder="+1 (555) 000-0000">
+                                    value="{{ old('phone', auth()->user()->phone ?? '') }}" placeholder="{{ __('+1 (555) 000-0000') }}">
                             </div>
                             @error('phone')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>

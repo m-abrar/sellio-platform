@@ -1,4 +1,4 @@
-{{--
+﻿{{--
 HEADER NAVIGATION
 Description: Smart sticky navbar with transparency toggling and dynamic user controls.
 Features: Responsive menu, auth-aware actions, and cart integration.
@@ -24,7 +24,7 @@ Features: Responsive menu, auth-aware actions, and cart integration.
 
         {{-- Mobile Interface Toggler --}}
         <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 

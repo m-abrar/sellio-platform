@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Taxonomy Partial: Lifecycle Action Interface
     
     This component provides the primary interaction gateway for amenity 
@@ -45,7 +45,7 @@
                         @if(Route::has('admin.amenities.duplicate'))
                             <a href="{{ route('admin.amenities.duplicate', $amenity->id) }}" 
                                class="btn btn-default btn-block btn-flat h-100 d-flex align-items-center justify-content-center text-secondary"
-                               data-toggle="tooltip" title="Duplicate">
+                               data-toggle="tooltip" title="{{ __('Duplicate') }}">
                                 <i class="fas fa-copy"></i>
                             </a>
                         @else
@@ -59,9 +59,9 @@
                                 class="btn btn-default btn-block btn-flat h-100 d-flex align-items-center justify-content-center text-danger"
                                 data-action="delete-trigger"
                                 data-form-id="delete-form"
-                                data-confirm-title="Purge Amenity?"
-                                data-confirm-text="This will permanently remove the segment and its associations."
-                                data-toggle="tooltip" title="Delete">
+                                data-confirm-title="{{ __('Purge Amenity?') }}"
+                                data-confirm-text="{{ __('This will permanently remove the segment and its associations.') }}"
+                                data-toggle="tooltip" title="{{ __('Delete') }}">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>

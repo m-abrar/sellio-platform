@@ -1,4 +1,4 @@
-<div class="card glass-surface p-4 mt-5">
+﻿<div class="card glass-surface p-4 mt-5">
     <h4 class="fw-bold mb-3"><i class="bi bi-envelope-fill me-2 text-primary-color"></i>{{ __('Inquire About This Property') }}</h4>
     <form>
         <div class="mb-3">
@@ -7,11 +7,11 @@
         </div>
         <div class="mb-3">
             <label class="form-label small fw-semibold" for="inline-contact-email">{{ __('Email Address') }}</label>
-            <input id="inline-contact-email" type="email" class="form-control" placeholder="you@example.com" required>
+            <input id="inline-contact-email" type="email" class="form-control" placeholder="{{ __('you@example.com') }}" required>
         </div>
         <div class="mb-3">
             <label class="form-label small fw-semibold" for="inline-contact-phone">{{ __('Phone Number') }} <span class="text-muted fw-normal">({{ __('optional') }})</span></label>
-            <input id="inline-contact-phone" type="tel" class="form-control" placeholder="+1 (555) 000-0000">
+            <input id="inline-contact-phone" type="tel" class="form-control" placeholder="{{ __('+1 (555) 000-0000') }}">
         </div>
         <div class="mb-3">
             <label class="form-label small fw-semibold" for="inline-contact-message">{{ __('Message') }}</label>

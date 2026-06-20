@@ -17,7 +17,7 @@
             id="setting-{{ $item->id }}"
             class="form-control form-control-premium border-light"
             rows="3" 
-            placeholder="Enter content..."
+            placeholder="{{ __('Enter content...') }}"
         >{{ old('values.'.$item->id, $item->value) }}</textarea>
         @break
 
@@ -50,6 +50,6 @@
             value="{{ old('values.'.$item->id, $item->value) }}"
             id="setting-{{ $item->id }}"
             class="form-control form-control-premium border-light"
-            placeholder="Enter value..."
+            placeholder="{{ __('Enter value...') }}"
         >
 @endswitch

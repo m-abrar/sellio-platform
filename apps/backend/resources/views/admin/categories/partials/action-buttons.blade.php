@@ -46,8 +46,8 @@
                     <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-danger border" 
                         data-action="delete-trigger"
                         data-form-id="delete-form"
-                        data-confirm-title="Purge Category?"
-                        data-confirm-text="This will permanently remove the category segment and its associations.">
+                        data-confirm-title="{{ __('Purge Category?') }}"
+                        data-confirm-text="{{ __('This will permanently remove the category segment and its associations.') }}">
                         <i class="fas fa-trash-alt mr-1"></i> {{ __('PURGE') }}
                     </button>
                 </div>

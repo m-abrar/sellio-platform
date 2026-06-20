@@ -112,16 +112,16 @@
                                     <div class="btn-group btn-group-premium shadow-sm border overflow-hidden rounded-pill bg-white">
                                         <a href="{{ route('admin.newsletter-subscribers.edit', $subscriber->id) }}" 
                                            class="btn btn-white btn-sm text-info py-2 px-3" 
-                                           data-toggle="tooltip" title="Edit Detail">
+                                           data-toggle="tooltip" title="{{ __('Edit Detail') }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <form id="delete-form-{{ $subscriber->id }}" action="{{ route('admin.newsletter-subscribers.destroy', $subscriber->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
                                             <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3 border-left" 
-                                                    data-toggle="tooltip" title="Unsubscribe"
+                                                    data-toggle="tooltip" title="{{ __('Unsubscribe') }}"
                                                     data-action="delete-trigger"
-                                                    data-confirm-title="Unsubscribe User?"
-                                                    data-confirm-text="This user will be removed from the registry.">
+                                                    data-confirm-title="{{ __('Unsubscribe User?') }}"
+                                                    data-confirm-text="{{ __('This user will be removed from the list.') }}">
                                                 <i class="fas fa-user-minus"></i>
                                             </button>
                                         </form>

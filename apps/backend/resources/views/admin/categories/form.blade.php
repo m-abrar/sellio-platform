@@ -63,7 +63,7 @@
                             <label for="title" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Category Name <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" 
                                    class="form-control form-control-hero" 
-                                   placeholder="e.g. Residential Apartments"
+                                   placeholder="{{ __('e.g. Residential Apartments') }}"
                                    value="{{ old('title', $category?->title ?? '') }}" required list="category-title-suggestions">
                             <datalist id="category-title-suggestions">
                                 @foreach($titleSuggestions ?? [] as $title)
@@ -77,7 +77,7 @@
                             <label for="slug" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">URL Slug</label>
                             <input type="text" name="slug" id="slug" 
                                    class="form-control form-control-premium text-monospace small"
-                                   placeholder="automatic-slug-generation"
+                                   placeholder="{{ __('automatic-slug-generation') }}"
                                    value="{{ old('slug', $category?->slug ?? '') }}">
                             @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
@@ -105,7 +105,7 @@
                             <label for="description" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Internal Description</label>
                             <textarea name="description" id="description" rows="4" 
                                       class="form-control rounded-xl border-light"
-                                      placeholder="Briefly describe the purpose of this category...">{{ old('description', $category?->description ?? '') }}</textarea>
+                                      placeholder="{{ __('Briefly describe the purpose of this category...') }}">{{ old('description', $category?->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
                     </div>

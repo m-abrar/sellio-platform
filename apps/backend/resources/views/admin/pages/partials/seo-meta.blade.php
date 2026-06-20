@@ -18,7 +18,7 @@
     <div class="card-body p-4">
         <div class="form-group mb-4">
             <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Search Description</label>
-            <textarea name="meta_description" class="form-control shadow-xs rounded-12" rows="3" placeholder="Brief summary for search engine indexing...">{{ old('meta_description', $page->meta_description ?? '') }}</textarea>
+            <textarea name="meta_description" class="form-control shadow-xs rounded-12" rows="3" placeholder="{{ __('Brief summary for search engine indexing...') }}">{{ old('meta_description', $page->meta_description ?? '') }}</textarea>
             <small class="text-muted mt-2 d-block">Recommended density: 150-160 characters for optimal visibility.</small>
         </div>
 
@@ -28,7 +28,7 @@
                 <div class="input-group-prepend border-0">
                     <span class="input-group-text bg-white border-0"><i class="fas fa-key text-primary"></i></span>
                 </div>
-                <input type="text" name="meta_keywords" class="form-control border-0" placeholder="e.g. real estate, marketplace, listings"
+                <input type="text" name="meta_keywords" class="form-control border-0" placeholder="{{ __('e.g. real estate, marketplace, listings') }}"
                        value="{{ old('meta_keywords', $page->meta_keywords ?? '') }}">
             </div>
         </div>

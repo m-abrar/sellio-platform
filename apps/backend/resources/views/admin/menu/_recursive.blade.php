@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Navigation Component: Recursive Node Renderer
     
     This partial facilitates the recursive rendering of hierarchical 
@@ -34,13 +34,13 @@
         <div class="dd-actions">
             {{-- Edit Button (Triggers Modal via JS) --}}
             <button type="button" class="btn btn-info btn-xs edit-item-btn" 
-                    title="Edit Item Details">
+                    title="{{ __('Edit Item Details') }}">
                 <i class="fas fa-pen"></i>
             </button>
             
             {{-- Delete Item Button (Handled by JS to submit the global delete form) --}}
             <button type="button" class="btn btn-danger btn-xs" 
-                    title="Delete Item" 
+                    title="{{ __('Delete Item') }}" 
                     data-id="{{ $item->id }}" 
                     data-action="delete">
                 <i class="fas fa-trash"></i>

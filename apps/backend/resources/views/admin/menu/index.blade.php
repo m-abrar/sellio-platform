@@ -133,7 +133,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-search text-xs text-muted"></i></span>
                 </div>
-                <input type="search" id="menu-search" class="form-control" placeholder="Search current vertical">
+                <input type="search" id="menu-search" class="form-control" placeholder="{{ __('Search current vertical') }}">
             </div>
         </div>
 

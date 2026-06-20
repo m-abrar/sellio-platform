@@ -123,7 +123,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-search text-xs text-muted"></i></span>
                 </div>
-                <input type="search" id="content-search" class="form-control" placeholder="Search theme or page">
+                <input type="search" id="content-search" class="form-control" placeholder="{{ __('Search theme or page') }}">
             </div>
         </div>
 

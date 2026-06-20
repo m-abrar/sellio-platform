@@ -148,8 +148,8 @@
                             @method('DELETE')
                             <button type="button" class="btn btn-white btn-block rounded-pill border font-weight-bold smallest uppercase text-danger py-2" 
                                     data-action="delete-trigger"
-                                    data-confirm-title="Purge Marketplace Inquiry?"
-                                    data-confirm-text="This will permanently remove the interaction from the registry.">
+                                    data-confirm-title="{{ __('Purge Marketplace Inquiry?') }}"
+                                    data-confirm-text="{{ __('This will permanently remove the interaction from the record.') }}">
                                 <i class="fas fa-trash-alt mr-1"></i> {{ __('Delete Record') }}
                             </button>
                         </form>

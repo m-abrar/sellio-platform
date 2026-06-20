@@ -53,14 +53,14 @@
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
                                     <label>{{ __('Display Name') }}</label>
-                                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required placeholder="e.g. John Doe">
+                                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required placeholder="{{ __('e.g. John Doe') }}">
                                     @error('name') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
                                     <label>{{ __('Primary Email') }}</label>
-                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required placeholder="john@example.com">
+                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required placeholder="{{ __('john@example.com') }}">
                                     @error('email') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
                             </div>
@@ -72,14 +72,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
                                         <label>{{ __('Secret Key') }}</label>
-                                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required placeholder="••••••••">
+                                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required placeholder="{{ __('••••••••') }}">
                                         @error('password') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
                                         <label>{{ __('Repeat Key') }}</label>
-                                        <input type="password" name="password_confirmation" class="form-control" required placeholder="••••••••">
+                                        <input type="password" name="password_confirmation" class="form-control" required placeholder="{{ __('••••••••') }}">
                                     </div>
                                 </div>
                             </div>

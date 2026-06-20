@@ -1,9 +1,9 @@
-<div class="modal fade" id="speaker-modal" tabindex="-1" aria-labelledby="speakerModalLabel" aria-hidden="true">
+﻿<div class="modal fade" id="speaker-modal" tabindex="-1" aria-labelledby="speakerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content glass-surface p-4">
             <div class="modal-header border-0 pb-0">
                 <h5 class="modal-title fw-bold" id="speakerModalLabel">All Speakers & Bios</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             </div>
             <div class="modal-body pt-0">
                 <p class="text-muted small">Detailed information for all 50 experts attending the summit.</p>
