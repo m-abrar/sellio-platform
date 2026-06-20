@@ -151,14 +151,21 @@ export default function DashboardOverview() {
                 <Bookmark size={48} />
               </div>
               <div>
-                <p className="text-lg font-bold text-zinc-900">
-                  {showSkeleton ? '…' : stats.favoritesCount} Listings Saved
-                </p>
-                <p className="text-sm text-zinc-500">Quickly revisit the properties, events, or services you love.</p>
+                {showSkeleton ? (
+                  <div className="space-y-2 animate-pulse">
+                    <div className="h-4 w-40 rounded-full bg-zinc-200" />
+                    <div className="h-3 w-28 rounded-full bg-zinc-200" />
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-lg font-bold text-zinc-900">{stats.favoritesCount} Listings Saved</p>
+                    <p className="text-sm text-zinc-500">Quickly revisit the properties, events, or services you love.</p>
+                  </>
+                )}
               </div>
             </div>
-            <Link 
-              to="/favorites" 
+            <Link
+              to="/favorites"
               className="w-full py-3 border-2 border-rose-500 text-rose-500 rounded-full text-center font-bold hover:bg-rose-500 hover:text-white transition-all"
             >
               View Saved Listings
@@ -173,14 +180,21 @@ export default function DashboardOverview() {
                 <MessageCircle size={48} />
               </div>
               <div>
-                <p className="text-lg font-bold text-zinc-900">
-                  {showSkeleton ? '…' : stats.messagesCount} New Messages
-                </p>
-                <p className="text-sm text-zinc-500">Reply to partners about your quotes, applications, or inquiries.</p>
+                {showSkeleton ? (
+                  <div className="space-y-2 animate-pulse">
+                    <div className="h-4 w-40 rounded-full bg-zinc-200" />
+                    <div className="h-3 w-28 rounded-full bg-zinc-200" />
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-lg font-bold text-zinc-900">{stats.messagesCount} New Messages</p>
+                    <p className="text-sm text-zinc-500">Reply to partners about your quotes, applications, or inquiries.</p>
+                  </>
+                )}
               </div>
             </div>
-            <Link 
-              to="/messages" 
+            <Link
+              to="/messages"
               className="w-full py-3 border-2 border-amber-500 text-amber-500 rounded-full text-center font-bold hover:bg-amber-500 hover:text-white transition-all"
             >
               Go to Inbox
@@ -195,10 +209,17 @@ export default function DashboardOverview() {
                 <HelpCircle size={48} />
               </div>
               <div>
-                <p className="text-lg font-bold text-zinc-900">
-                  {showSkeleton ? '…' : stats.appsCount + stats.appointmentsCount + stats.quotesCount} Pending Items
-                </p>
-                <p className="text-sm text-zinc-500">Applications, quotes, or inquiries awaiting a response.</p>
+                {showSkeleton ? (
+                  <div className="space-y-2 animate-pulse">
+                    <div className="h-4 w-40 rounded-full bg-zinc-200" />
+                    <div className="h-3 w-28 rounded-full bg-zinc-200" />
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-lg font-bold text-zinc-900">{stats.appsCount + stats.appointmentsCount + stats.quotesCount} Pending Items</p>
+                    <p className="text-sm text-zinc-500">Applications, quotes, or inquiries awaiting a response.</p>
+                  </>
+                )}
               </div>
             </div>
             <Link 
