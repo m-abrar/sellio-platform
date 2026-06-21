@@ -16,7 +16,7 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                  alt="{{ setting_string('site_name', config('app.name')) }}" style="max-height: 40px;" />
 
             @if(!setting('hide_site_name'))
-                <span class="fw-bold ms-2 d-none d-sm-inline-block text-uppercase">
+                <span class="navbar-brand__text ms-2 d-none d-sm-inline-block">
                     @editable('global.header.brand_text', setting('site_name', config('app.name')))
                 </span>
             @endif
@@ -34,17 +34,17 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                 @foreach(menu_items('main_header') as $menuitem)
                     @if($menuitem->children->isNotEmpty())
                         <li class="nav-item dropdown" data-aos="fade-down" data-aos-delay="{{ $loop->iteration * 100 }}">
-                            <a @class(['nav-link dropdown-toggle fw-semibold text-uppercase', 'active' => $menuitem->is_active])
+                            <a @class(['nav-link nav-link--main dropdown-toggle', 'active' => $menuitem->is_active])
                                 href="{{ $menuitem->url }}"
                                 role="button"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false">
                                 {{ __($menuitem->title) }}
                             </a>
-                            <ul class="dropdown-menu border-0 shadow-sm rounded-3 p-2">
+                            <ul class="dropdown-menu nav-dropdown border-0 rounded-3 p-2">
                                 @foreach($menuitem->children as $child)
                                     <li>
-                                        <a @class(['dropdown-item rounded-2', 'active' => $child->is_active])
+                                        <a @class(['dropdown-item nav-dropdown__item rounded-2', 'active' => $child->is_active])
                                             href="{{ $child->url }}">
                                             {{ __($child->title) }}
                                         </a>
@@ -54,7 +54,7 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                         </li>
                     @else
                         <li class="nav-item" data-aos="fade-down" data-aos-delay="{{ $loop->iteration * 100 }}">
-                            <a @class(['nav-link fw-semibold text-uppercase', 'active' => $menuitem->is_active])
+                            <a @class(['nav-link nav-link--main', 'active' => $menuitem->is_active])
                                 href="{{ $menuitem->url }}">
                                 {{ __($menuitem->title) }}
                             </a>
@@ -74,10 +74,10 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                             <img src="{{ Auth::user()->avatar_url }}" width="35" height="35"
                                 class="rounded-circle border border-primary border-opacity-25" alt="Profile">
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 p-2 rounded-3 scale-up-center">
+                        <ul class="dropdown-menu nav-dropdown dropdown-menu-end border-0 mt-2 p-2 rounded-3 scale-up-center">
                             @if(auth()->user()->hasRole(['admin', 'super-admin', 'moderator']))
                                 <li>
-                                    <a class="dropdown-item rounded-2 text-uppercase" href="{{ route('admin.welcome') }}">
+                                    <a class="dropdown-item nav-dropdown__item rounded-2" href="{{ route('admin.welcome') }}">
                                         <i class="bi bi-shield-lock me-2"></i> {{ __('Admin Panel') }}
                                     </a>
                                 </li>
@@ -85,7 +85,7 @@ Features: Responsive menu, auth-aware actions, and cart integration.
 
                             @if(auth()->user()->hasRole('partner'))
                                 <li>
-                                    <a class="dropdown-item rounded-2 text-uppercase" href="{{ setting('url_partner', '#') }}">
+                                    <a class="dropdown-item nav-dropdown__item rounded-2" href="{{ setting('url_partner', '#') }}">
                                         <i class="bi bi-shop me-2"></i> {{ __('Seller Portal') }}
                                     </a>
                                 </li>
@@ -93,7 +93,7 @@ Features: Responsive menu, auth-aware actions, and cart integration.
 
                             @if(auth()->user()->hasRole('user'))
                                 <li>
-                                    <a class="dropdown-item rounded-2 text-uppercase" href="{{ setting('url_user', '#') }}">
+                                    <a class="dropdown-item nav-dropdown__item rounded-2" href="{{ setting('url_user', '#') }}">
                                         <i class="bi bi-speedometer2 me-2"></i> {{ __('User Dashboard') }}
                                     </a>
                                 </li>
@@ -103,7 +103,7 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a class="dropdown-item text-danger rounded-2 text-uppercase" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frontend-logout-form').submit();">
+                                <a class="dropdown-item nav-dropdown__item text-danger rounded-2" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frontend-logout-form').submit();">
                                     <i class="bi bi-box-arrow-right me-2"></i> {{ __('Logout') }}
                                 </a>
                                 <form id="frontend-logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -115,7 +115,7 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                     </div>
                 @else
                     <a href="{{ route('login') }}"
-                        class="btn btn-link text-decoration-none text-muted fw-semibold text-uppercase">{{ __('Login') }}</a>
+                        class="btn btn-link text-decoration-none navbar-login-link fw-semibold">{{ __('Login') }}</a>
                 @endauth
 
                 {{-- Shopping Cart Badge --}}
@@ -133,19 +133,19 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                 @auth
                     @if(auth()->user()->hasRole(['partner', 'admin', 'super-admin']))
                         <a href="{{ setting('url_partner', route('register')) }}"
-                            class="btn btn-primary rounded-pill fw-bold px-4 shadow-sm hover-lift text-uppercase">
-                            <i class="bi bi-plus-lg me-1"></i> {{ __('Post Listing') }}
+                            class="btn btn-primary btn-header-cta fw-bold">
+                            {{ __('Post Listing') }}<i class="bi bi-arrow-right ms-2"></i>
                         </a>
                     @else
                         <a href="{{ route('register') }}"
-                            class="btn btn-primary rounded-pill fw-bold px-4 shadow-sm hover-lift text-uppercase">
-                            <i class="bi bi-shop me-1"></i> {{ __('Become a Seller') }}
+                            class="btn btn-primary btn-header-cta fw-bold">
+                            {{ __('Become a Seller') }}<i class="bi bi-arrow-right ms-2"></i>
                         </a>
                     @endif
                 @else
                     <a href="{{ route('register') }}"
-                        class="btn btn-primary rounded-pill fw-bold px-4 shadow-sm hover-lift text-uppercase">
-                        <i class="bi bi-plus-lg me-1"></i> {{ __('Post Listing') }}
+                        class="btn btn-primary btn-header-cta fw-bold">
+                        {{ __('Post Listing') }}<i class="bi bi-arrow-right ms-2"></i>
                     </a>
                 @endauth
             </div>

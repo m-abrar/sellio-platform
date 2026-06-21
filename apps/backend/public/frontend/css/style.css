@@ -2803,10 +2803,11 @@ body.has-admin-bar .main-header.sticky-top{
     left:0;
     right:0;
     z-index:1030;
-    background:rgba(255,255,255,.92)!important;
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-    box-shadow:0 10px 30px rgba(15,23,42,.08);
+    background:rgba(255,255,255,.93)!important;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 8px 28px rgba(15,23,42,.07);
+    border-bottom:1.5px solid rgba(var(--primary-color-rgb),.12);
     pointer-events:auto
 }
 .main-header--pinned #mainNav,
@@ -2846,6 +2847,108 @@ body.has-admin-bar .main-header.sticky-top{
         padding-bottom:.55rem
     }
 }
+
+/* ── Brand text: heading font, not bold uppercase ──────────────────────── */
+.navbar-brand__text {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: 1.1rem;
+    letter-spacing: -0.015em;
+}
+
+/* ── Main nav links: natural case, sliding ::before underline ──────────── */
+.nav-link--main {
+    position: relative;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding-bottom: 0.45rem !important;
+    transition: color .2s;
+}
+/* ::before avoids conflict with Bootstrap's dropdown-toggle ::after caret */
+.nav-link--main::before {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    right: 50%;
+    height: 2px;
+    background: var(--primary-color);
+    border-radius: 2px;
+    transition: left .25s ease, right .25s ease;
+    pointer-events: none;
+}
+.nav-link--main:hover::before,
+.nav-link--main.active::before {
+    left: 0.6rem;
+    right: 0.6rem;
+}
+.navbar-light .navbar-nav .nav-link--main.active {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+}
+/* White underline on transparent dark hero */
+.navbar-transparent .nav-link--main::before {
+    background: rgba(255,255,255,.75);
+}
+
+/* ── Dropdown menus: refined shadow, no uppercase ──────────────────────── */
+.nav-dropdown {
+    min-width: 200px;
+    box-shadow: 0 16px 40px rgba(15,23,42,.11), 0 2px 8px rgba(15,23,42,.05) !important;
+    border: 1px solid rgba(15,23,42,.07) !important;
+}
+.nav-dropdown__item {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    padding: 0.45rem 0.8rem !important;
+    transition: background .15s, color .15s;
+}
+.nav-dropdown__item:hover {
+    background: rgba(var(--primary-color-rgb), .06) !important;
+    color: var(--primary-color) !important;
+}
+.nav-dropdown__item.active {
+    background: rgba(var(--primary-color-rgb), .08) !important;
+    color: var(--primary-color) !important;
+    font-weight: 600;
+}
+.nav-dropdown__item.text-danger:hover {
+    background: rgba(220,38,38,.06) !important;
+    color: #dc2626 !important;
+}
+
+/* ── Login link ────────────────────────────────────────────────────────── */
+.navbar-login-link {
+    font-size: 0.875rem;
+    color: #4b5563 !important;
+}
+.main-header--home #mainNav.navbar-transparent .navbar-login-link {
+    color: rgba(255,255,255,.75) !important;
+}
+
+/* ── CTA button: rectangular, arrow slides right on hover ─────────────── */
+.btn-header-cta {
+    border-radius: 10px !important;
+    padding: 0.5rem 1.15rem !important;
+    font-size: 0.875rem !important;
+    letter-spacing: 0.01em;
+    box-shadow: 0 2px 10px rgba(var(--primary-color-rgb), .22) !important;
+    transition: background .2s, transform .15s, box-shadow .2s !important;
+}
+.btn-header-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 22px rgba(var(--primary-color-rgb), .35) !important;
+}
+.btn-header-cta .bi-arrow-right {
+    display: inline-block;
+    transition: transform .2s ease;
+}
+.btn-header-cta:hover .bi-arrow-right {
+    transform: translateX(4px);
+}
+
 .footer-section .social-icon{
     transition:transform .2s ease-in-out,opacity .2s ease-in-out;
     display:inline-block
