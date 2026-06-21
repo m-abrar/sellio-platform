@@ -6,7 +6,7 @@
 <div class="product-detail-header mb-4">
     <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
         @if($product->brand)
-            <span class="badge bg-light-primary text-primary-color rounded-pill px-3 py-2 fw-bold small">
+            <span class="badge bg-light-primary text-primary rounded-2 px-3 py-2 fw-semibold small">
                 {{ $product->brand->title }}
             </span>
         @endif
@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <div class="product-detail-meta glass-surface rounded-4 border-0 p-3 p-md-4">
+    <div class="product-detail-meta bg-white border rounded-4 p-3 p-md-4">
         <div class="d-flex flex-wrap align-items-center gap-3 gap-md-4 small">
             <span class="text-muted">
                 <span class="fw-bold text-dark">{{ __('SKU') }}:</span> {{ $product->sku ?? __('N/A') }}
@@ -40,7 +40,7 @@
             @endif
 
             @if($product->is_digital)
-                <span class="text-info fw-800"><i class="bi bi-cloud-download-fill me-1"></i>{{ __('Instant Delivery') }}</span>
+                <span class="text-primary fw-800"><i class="bi bi-cloud-download-fill me-1"></i>{{ __('Instant delivery') }}</span>
             @else
                 <span class="text-muted"><i class="bi bi-truck me-1"></i>{{ __('Ships Worldwide') }}</span>
             @endif

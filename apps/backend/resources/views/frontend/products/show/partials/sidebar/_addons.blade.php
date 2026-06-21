@@ -7,10 +7,10 @@
     <div class="booking-addons-panel mb-4 pt-2">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="fw-800 tracking-tight text-dark mb-0">
-                <i class="bi bi-stars text-primary-color me-2"></i>{{ __('Enhance Your Order') }}
+                <i class="bi bi-stars text-primary me-2"></i>{{ __('Enhance Your Order') }}
             </h6>
             @if($hasOptionalAddons)
-                <span class="badge bg-light-primary text-primary-color rounded-pill px-3 small">{{ __('Optional') }}</span>
+                <span class="badge bg-light-primary text-primary rounded-2 px-3 small">{{ __('Optional') }}</span>
             @endif
         </div>
 
@@ -33,14 +33,14 @@
 
                         <div class="d-flex align-items-center p-3">
                             <div class="addon-icon-box booking-addon-icon shadow-sm rounded-3 d-flex align-items-center justify-content-center bg-white">
-                                <i class="{{ $addon->icon ?? 'bi-box' }} fs-5 text-primary-color"></i>
+                                <i class="{{ $addon->icon ?? 'bi-box' }} fs-5 text-primary"></i>
                             </div>
 
                             <div class="flex-grow-1 ms-3 min-w-0">
                                 <div class="d-flex align-items-center gap-2 flex-wrap">
                                     <span class="fw-800 text-dark small">{{ $addon->title }}</span>
                                     @if($addon->is_popular)
-                                        <span class="badge booking-addon-popular bg-light-primary text-primary-color">
+                                        <span class="badge booking-addon-popular bg-light-primary text-primary">
                                             <i class="bi bi-fire me-1"></i>{{ __('POPULAR') }}
                                         </span>
                                     @endif
@@ -51,7 +51,7 @@
                                 @if($addon->description)
                                     <p class="small text-muted mb-0 addon-card__meta">{{ $addon->description }}</p>
                                 @endif
-                                <div class="fw-800 text-primary-color small">
+                                <div class="fw-800 text-primary small">
                                     +{{ format_currency($addon->price) }}
                                     @if($addon->pricing_type === 'per_unit')
                                         <span class="text-muted fw-normal">/ {{ __('unit') }}</span>
