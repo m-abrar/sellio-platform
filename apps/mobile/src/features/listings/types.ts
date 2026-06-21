@@ -23,6 +23,16 @@ export interface ListingApiRecord {
   slug?: string | null;
   description?: string | null;
   short_description?: string | null;
+  base_price?: number | string | null;
+  sale_price?: number | string | null;
+  price_formatted?: string | null;
+  salary_min?: number | string | null;
+  salary_max?: number | string | null;
+  salary_range_formatted?: string | null;
+  city?: string | null;
+  state?: string | null;
+  primary_image_url?: string | null;
+  thumbnail_url?: string | null;
   featured_image?: string | null;
   thumbnail_image?: string | null;
   pricing?: Record<string, unknown>;

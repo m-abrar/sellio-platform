@@ -1,51 +1,196 @@
-import React from 'react';
-import { StyleSheet, Text, ScrollView, SafeAreaView } from 'react-native';
 import { useRouter } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  Alert,
+  FlatList,
+  Image,
+  RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { apiRequest } from '../../src/api/client';
 import { AuthenticatedScreen } from '../../src/auth/AuthenticatedScreen';
-import { EmptyState } from '../../src/components/states/AsyncStates';
+import { EmptyState, ErrorState, LoadingState } from '../../src/components/states/AsyncStates';
+import { useAuth } from '../../src/context/AuthContext';
+import { toFavoriteListingCard } from '../../src/features/buyer/adapters';
+import { FavoriteListingCard, FavoriteRecord } from '../../src/features/buyer/types';
+import { LISTING_CATEGORIES } from '../../src/features/listings/catalog';
 
 export default function FavoritesView() {
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
+  const [favorites, setFavorites] = useState<FavoriteListingCard[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<unknown>(null);
+
+  const loadFavorites = useCallback(async (isRefresh = false) => {
+    if (isRefresh) setRefreshing(true);
+    else setLoading(true);
+
+    setError(null);
+
+    try {
+      const records = await apiRequest<FavoriteRecord[]>('/dashboard/user/favorites', {
+        authenticated: true,
+      });
+      setFavorites(records.map(toFavoriteListingCard).filter((item): item is FavoriteListingCard => Boolean(item)));
+    } catch (requestError) {
+      setError(requestError);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadFavorites();
+      return;
+    }
+
+    setFavorites([]);
+    setError(null);
+    setLoading(true);
+  }, [isAuthenticated, loadFavorites]);
+
+  const confirmRemove = useCallback((item: FavoriteListingCard) => {
+    const snapshot = favorites;
+
+    Alert.alert(
+      'Remove favorite?',
+      `${item.title} will be removed from your saved listings.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: async () => {
+            setFavorites(snapshot.filter((favorite) => favorite.favoriteId !== item.favoriteId));
+
+            try {
+              await apiRequest(`/dashboard/user/favorites/${item.favoriteId}`, {
+                method: 'DELETE',
+                authenticated: true,
+              });
+            } catch (requestError) {
+              setFavorites(snapshot);
+              Alert.alert(
+                'Could not remove favorite',
+                requestError instanceof Error
+                  ? requestError.message
+                  : 'The favorite was restored. Please try again.',
+              );
+            }
+          },
+        },
+      ],
+    );
+  }, [favorites]);
 
   return (
     <AuthenticatedScreen returnTo="/favorites">
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.welcomeText}>COLLECTION</Text>
-        <Text style={styles.headerTitle}>FAVORITES.</Text>
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={favorites}
+          keyExtractor={(item) => String(item.favoriteId)}
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => loadFavorites(true)}
+              tintColor="#818cf8"
+              colors={['#6366f1']}
+            />
+          }
+          ListHeaderComponent={(
+            <View style={styles.header}>
+              <Text style={styles.eyebrow}>COLLECTION</Text>
+              <Text style={styles.title}>FAVORITES.</Text>
+            </View>
+          )}
+          ListEmptyComponent={
+            loading ? (
+              <LoadingState message="Loading your favorites..." />
+            ) : error ? (
+              <ErrorState error={error} onRetry={loadFavorites} />
+            ) : (
+              <EmptyState
+                icon="⭐"
+                title="NO FAVORITES SAVED"
+                message="Listings you favorite will appear here."
+                action={{ label: 'EXPLORE MARKETPLACE', onPress: () => router.push('/') }}
+              />
+            )
+          }
+          renderItem={({ item }) => {
+            const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
 
-        <EmptyState
-          icon="⭐"
-          title="NO FAVORITES SAVED"
-          message="Listings you favorite will appear here."
-          action={{ label: 'EXPLORE MARKETPLACE', onPress: () => router.push('/') }}
+            return (
+              <TouchableOpacity
+                style={styles.card}
+                activeOpacity={0.82}
+                onPress={() => router.push({
+                  pathname: '/listing/[slug]',
+                  params: { slug: item.slug, vertical: item.vertical },
+                })}
+              >
+                <View style={styles.imageFrame}>
+                  <Text style={styles.imageFallback}>{category?.icon || '◇'}</Text>
+                  {item.imageUrl && (
+                    <Image
+                      source={{ uri: item.imageUrl }}
+                      style={styles.image}
+                      resizeMode="cover"
+                      accessibilityLabel={`${item.title} image`}
+                    />
+                  )}
+                </View>
+                <View style={styles.cardBody}>
+                  <Text style={styles.category}>{category?.title || item.vertical}</Text>
+                  <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
+                  <Text style={styles.location} numberOfLines={1}>{item.location}</Text>
+                  <View style={styles.cardFooter}>
+                    <Text style={styles.price}>{item.price}</Text>
+                    <TouchableOpacity
+                      style={styles.removeButton}
+                      onPress={() => confirmRemove(item)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Remove ${item.title} from favorites`}
+                    >
+                      <Text style={styles.removeButtonText}>REMOVE</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
         />
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
     </AuthenticatedScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#070708',
-  },
-  scrollContent: {
-    padding: 20,
-  },
-  welcomeText: {
-    color: '#64748b',
-    fontSize: 9,
-    fontWeight: '900',
-    letterSpacing: 2,
-    marginTop: 10,
-  },
-  headerTitle: {
-    color: '#fff',
-    fontSize: 26,
-    fontWeight: '900',
-    letterSpacing: 1.5,
-    marginBottom: 40,
-  },
+  container: { flex: 1, backgroundColor: '#070708' },
+  content: { padding: 20, paddingBottom: 40, gap: 16, flexGrow: 1 },
+  header: { marginTop: 10, marginBottom: 22 },
+  eyebrow: { color: '#64748b', fontSize: 9, fontWeight: '900', letterSpacing: 2 },
+  title: { color: '#fff', fontSize: 26, fontWeight: '900', letterSpacing: 1.5 },
+  card: { flexDirection: 'row', overflow: 'hidden', borderRadius: 24, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)', backgroundColor: '#121214' },
+  imageFrame: { width: 116, minHeight: 132, alignItems: 'center', justifyContent: 'center', backgroundColor: '#0b0b0c' },
+  imageFallback: { fontSize: 32, opacity: 0.5 },
+  image: { ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' },
+  cardBody: { flex: 1, justifyContent: 'center', padding: 16 },
+  category: { marginBottom: 5, color: '#818cf8', fontSize: 8, fontWeight: '900', letterSpacing: 1, textTransform: 'uppercase' },
+  cardTitle: { marginBottom: 7, color: '#fff', fontSize: 15, fontWeight: '800' },
+  location: { marginBottom: 9, color: '#64748b', fontSize: 10, fontWeight: '600' },
+  cardFooter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10 },
+  price: { flex: 1, color: '#a5b4fc', fontSize: 14, fontWeight: '900' },
+  removeButton: { borderRadius: 999, borderWidth: 1, borderColor: 'rgba(239, 68, 68, 0.3)', backgroundColor: 'rgba(239, 68, 68, 0.08)', paddingHorizontal: 10, paddingVertical: 7 },
+  removeButtonText: { color: '#f87171', fontSize: 8, fontWeight: '900', letterSpacing: 0.8 },
 });

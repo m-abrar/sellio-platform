@@ -38,7 +38,7 @@ The current implementation is still a prototype because:
 - The shared API foundation is implemented, but most feature models remain untyped.
 - Home discovery uses the first API page and does not yet expose search, filters, or pagination controls.
 - Listing details use vertical-specific endpoints and show real API failures without mock fallbacks.
-- Favorites and messages are placeholder screens.
+- Favorites load real buyer records; messages remain a placeholder screen.
 - Settings actions are not connected.
 - Buyer-facing language and source encoding have been normalized on the implemented screens.
 - There is no automated test suite or release-build configuration yet.
@@ -130,7 +130,8 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 
 ### Tasks
 
-- [ ] Load and manage favorites.
+- [x] Load favorites.
+- [x] Manage favorites.
 - [ ] Add favorite/unfavorite actions to listing cards and details.
 - [ ] Add buyer dashboard statistics.
 - [ ] Add orders and property/event bookings.

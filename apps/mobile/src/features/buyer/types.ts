@@ -11,6 +11,17 @@ export interface FavoriteRecord {
   updated_at: string;
 }
 
+export interface FavoriteListingCard {
+  favoriteId: number;
+  listingId: string;
+  vertical: import('../listings/types').ListingVertical;
+  title: string;
+  slug: string;
+  price: string;
+  location: string;
+  imageUrl: string | null;
+}
+
 export interface MessageRecord {
   id: number;
   conversation_id: number;
