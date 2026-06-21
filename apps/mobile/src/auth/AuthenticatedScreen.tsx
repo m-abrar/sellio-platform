@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { LoadingState } from '../components/states/AsyncStates';
 import { useAuth } from '../context/AuthContext';
 
-export type ProtectedMobileRoute = '/favorites' | '/messages' | '/settings';
+export type ProtectedMobileRoute = '/favorites' | '/activity' | '/messages' | '/settings';
 
 export function AuthenticatedScreen({
   children,

@@ -52,7 +52,7 @@ export default function LoginModal() {
     setErrorMsg(null);
     try {
       await signIn(email.trim(), password);
-      if (returnTo === '/favorites' || returnTo === '/messages' || returnTo === '/settings') {
+      if (returnTo === '/favorites' || returnTo === '/activity' || returnTo === '/messages' || returnTo === '/settings') {
         router.replace(returnTo);
       } else {
         router.back();

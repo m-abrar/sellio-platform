@@ -137,7 +137,7 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 - [x] Add save-to-favorites action to listing details.
 - [x] Add favorite/unfavorite toggle to listing details.
 - [x] Add favorite/unfavorite toggles to listing cards.
-- [ ] Add buyer dashboard statistics.
+- [x] Add buyer dashboard statistics.
 - [ ] Add orders and property/event bookings.
 - [ ] Add job applications.
 - [ ] Add vehicle inquiries.
