@@ -13,7 +13,7 @@
 @endphp
 
 <a href="{{ route('properties.show', $property->slug) }}"
-   class="listing-card property-listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column hover-lift"
+   class="listing-card property-listing-card h-100 text-decoration-none text-dark d-flex flex-column hover-lift"
    data-aos="fade-up"
    data-aos-delay="{{ $delay }}">
     <div class="img-container property-listing-card__media position-relative overflow-hidden">
@@ -24,7 +24,7 @@
                  loading="lazy">
         </div>
 
-        <span class="badge property-status-badge position-absolute top-0 end-0 rounded-pill shadow-sm fw-800 {{ $property->status_color }}">
+        <span class="badge property-status-badge position-absolute top-0 end-0 rounded-2 fw-semibold {{ $property->status_color }}">
             {{ __($property->status_label) }}
         </span>
 
@@ -43,7 +43,7 @@
         </h6>
 
         <div class="property-location text-muted mb-3 text-truncate small">
-            <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+            <i class="bi bi-geo-alt-fill lc-geo-icon me-1"></i>
             {{ $property->location->title ?? __('Location Private') }}
         </div>
 

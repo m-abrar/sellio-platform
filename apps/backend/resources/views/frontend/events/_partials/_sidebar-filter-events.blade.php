@@ -1,5 +1,5 @@
 ﻿<div class="filter-sidebar-wrapper w-100">
-    <div class="glass-surface p-3 p-lg-4 rounded-4 shadow-sm sticky-sidebar"
+    <div class="filter-sidebar-card p-3 p-lg-4 sticky-sidebar"
         x-data="{
             priceType: '{{ request('price') ?: '' }}',
             showTags: {{ request('tags') ? 'true' : 'false' }}
@@ -92,7 +92,7 @@
             </div>
 
             {{-- Submit Button --}}
-            <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 shadow-sm fw-800 mt-4 border-0">
+            <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 fw-semibold mt-4 border-0">
                 <i class="bi bi-calendar-event me-2"></i>{{ __('Update Results') }}
             </button>
         </form>

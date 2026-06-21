@@ -8,11 +8,11 @@ document.querySelectorAll('[data-navigate-select]').forEach(function(el) {
 </script>
 @endpush
 
-<div class="d-flex justify-content-between align-items-center glass-surface p-3 rounded-3 border bg-white shadow-sm">
+<div class="d-flex justify-content-between align-items-center bg-white border p-3 rounded-3">
     <div class="d-flex align-items-center">
         <label class="me-2 text-muted small d-none d-md-block text-nowrap" for="product-sort">{{ __('Sort By:') }}</label>
         <select id="product-sort"
-                class="form-select form-select-sm border-0 bg-light rounded-pill px-3"
+                class="form-select form-select-sm border-0 bg-light rounded-2 px-3"
                 aria-label="{{ __('Sort products') }}"
                 data-navigate-select>
             <option value="{{ request()->fullUrlWithQuery(['sort_by' => 'latest']) }}" @selected(request('sort_by', 'latest') == 'latest')>{{ __('Newest') }}</option>

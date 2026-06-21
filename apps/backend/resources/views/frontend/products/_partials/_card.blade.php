@@ -1,4 +1,4 @@
-﻿<div class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4 position-relative">
+﻿<div class="listing-card h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4 position-relative">
         
         {{-- Link wrapper for the main content --}}
         <a href="{{ route('product.show', $product->slug) }}" class="text-decoration-none text-dark flex-grow-1 d-flex flex-column">
@@ -13,14 +13,14 @@
                 {{-- Status Badges: Featured or Digital logic --}}
                 <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-1">
                     @if($product->is_featured)
-                        <span class="badge bg-danger text-white rounded-pill px-2 py-1 shadow-sm fw-800 border border-white border-opacity-25">
-                            {{ __('FEATURED') }}
+                        <span class="badge bg-danger text-white rounded-2 px-2 py-1 fw-semibold">
+                            {{ __('Featured') }}
                         </span>
                     @endif
                     
                     @if($product->is_digital)
-                        <span class="badge bg-info text-white rounded-pill px-2 py-1 shadow-sm fw-800 border border-white border-opacity-25 backdrop-blur">
-                            <i class="bi bi-download me-1"></i>{{ __('DIGITAL') }}
+                        <span class="badge bg-info text-white rounded-2 px-2 py-1 fw-semibold">
+                            <i class="bi bi-download me-1"></i>{{ __('Digital') }}
                         </span>
                     @endif
                 </div>
@@ -81,14 +81,14 @@
                     
                     @if($product->attributes_count > 0 || $product->addons_count > 0)
                         {{-- If product has options, don't allow direct add --}}
-                        <a href="{{ route('product.show', $product->slug) }}" class="btn btn-outline-primary btn-sm rounded-pill fw-bold fs-xs">
+                        <a href="{{ route('product.show', $product->slug) }}" class="btn btn-outline-primary btn-sm rounded-2 fw-semibold fs-xs">
                             <i class="bi bi-eye me-1"></i>{{ __('Options') }}
                         </a>
                     @else
                         <form action="{{ route('cart.add', $product->id) }}" method="POST">
                             @csrf
                             <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="btn btn-primary-light btn-sm rounded-pill fw-bold fs-xs" 
+                            <button type="submit" class="btn btn-primary-light btn-sm rounded-2 fw-semibold fs-xs"
                                     {{ ($product->manage_stock && $product->stock_quantity <= 0) ? 'disabled' : '' }}>
                                 <i class="bi bi-cart-plus me-1"></i>{{ __('Add') }}
                             </button>

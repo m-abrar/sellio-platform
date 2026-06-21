@@ -1,5 +1,5 @@
 ﻿<div class="col">
-    <a href="{{ route('classifieds.show', $classified->slug) }}" class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4">
+    <a href="{{ route('classifieds.show', $classified->slug) }}" class="listing-card h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4">
         
         <div class="img-container position-relative overflow-hidden rounded-top-4">
             <div class="listing-card-img aspect-ratio-4-3">
@@ -9,11 +9,11 @@
             {{-- Status Badge Logic: Uses is_featured trigger --}}
             <div class="position-absolute top-0 end-0 m-2">
                 @if($classified->is_featured)
-                    <span class="badge bg-danger text-white rounded-pill px-2 py-1 shadow-sm fw-800 border border-white border-opacity-25">
-                        {{ __('FEATURED') }}
+                    <span class="badge bg-danger text-white rounded-2 px-2 py-1 fw-semibold">
+                        {{ __('Featured') }}
                     </span>
                 @else
-                    <span class="badge bg-dark bg-opacity-50 text-white rounded-pill px-2 py-1 shadow-sm fw-800 border border-white border-opacity-10 backdrop-blur">
+                    <span class="badge bg-dark bg-opacity-50 text-white rounded-2 px-2 py-1 fw-semibold backdrop-blur">
                         {{ $classified->type->title ?? __('AD') }}
                     </span>
                 @endif
@@ -43,12 +43,12 @@
 
             {{-- Location Logic Fixed --}}
             <div class="property-location text-muted small mt-auto">
-                <i class="bi bi-geo-alt-fill text-danger me-1"></i>{{ $classified->location->title ?? __('Local Area') }}
+                <i class="bi bi-geo-alt-fill lc-geo-icon me-1"></i>{{ $classified->location->title ?? __('Local Area') }}
             </div>
             
             <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-3">
                 <span class="small text-muted"><i class="bi bi-clock me-1"></i>{{ $classified->created_at->diffForHumans(null, true) }}</span>
-                <span class="btn btn-primary-light btn-sm rounded-pill fw-bold fs-xs">{{ __('View Details') }}</span>
+                <span class="btn btn-primary-light btn-sm rounded-2 fw-semibold fs-xs">{{ __('View details') }}</span>
             </div>
         </div>
     </a>

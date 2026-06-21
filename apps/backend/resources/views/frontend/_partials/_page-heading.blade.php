@@ -27,7 +27,7 @@
 
         @if($total > 0)
             <div class="results-count">
-                <span class="badge bg-white text-primary border shadow-sm px-4 py-2 rounded-pill fs-6 fw-bold border-opacity-50">
+                <span class="badge bg-white text-primary border px-4 py-2 rounded-2 fs-6 fw-semibold border-opacity-50">
                     <i class="bi {{ $icon }} me-1 text-primary"></i>
                     <span class="d-inline-block">
                         {{ number_format($total) }}

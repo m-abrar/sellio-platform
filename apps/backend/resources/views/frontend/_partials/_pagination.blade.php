@@ -1,7 +1,7 @@
 @if ($paginator->hasPages())
 <div class="d-flex justify-content-center mt-5 mb-4 px-2" role="navigation">
     <nav aria-label="{{ content_display(__('Page navigation'), 'Page navigation') }}">
-        <ul class="pagination shadow-sm glass-surface p-2 rounded-pill border-0 d-flex align-items-center justify-content-center flex-wrap">
+        <ul class="pagination bg-white border p-2 rounded-3 d-flex align-items-center justify-content-center flex-wrap">
 
             {{-- Previous Page Link --}}
             <li class="page-item custom-page-item @unless($paginator->onFirstPage()) enabled @else disabled @endunless">

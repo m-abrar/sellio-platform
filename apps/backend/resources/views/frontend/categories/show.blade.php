@@ -43,11 +43,11 @@
 
             @foreach($segments as $segment)
                 @if($segment['data']->count())
-                    <div class="card glass-surface rounded-5 border-0 shadow-sm p-4 mb-4" data-aos="fade-up">
+                    <div class="card bg-white border rounded-4 p-4 mb-4" data-aos="fade-up">
                         <h4 class="fw-800 mb-4 d-flex align-items-center">
                             <i class="{{ $segment['icon'] }} me-2 text-primary"></i> 
                             {{ $segment['title'] }} {{ __('in') }} {{ $category->title }}
-                            <span class="badge bg-primary-subtle text-primary ms-auto rounded-pill fs-7">{{ $segment['data']->count() }}</span>
+                            <span class="badge bg-primary-subtle text-primary ms-auto rounded-2 fs-7">{{ $segment['data']->count() }}</span>
                         </h4>
                         
                         <div class="list-group list-group-flush gap-3">
@@ -82,7 +82,7 @@
             <div class="sticky-top" sticky-100>
                 
                 {{-- About Card --}}
-                <div class="card glass-surface rounded-5 border-0 shadow-sm p-4 mb-4" data-aos="fade-left">
+                <div class="card bg-white border rounded-4 p-4 mb-4" data-aos="fade-left">
                     <h5 class="fw-800 mb-3">{{ __('About Category') }}</h5>
                     <p class="text-muted lh-lg mb-0">
                         {{ $category->description ?: __('Explore a wide range of listings specifically curated under this category.') }}
@@ -94,7 +94,7 @@
                     <h5 class="fw-800 mb-3 text-primary">{{ __('Get Involved') }}</h5>
                     <p class="small text-white-50 mb-4">{{ __('Have something to share? Post your listing in this category today.') }}</p>
                     
-                    <a href="{{ setting('url_partner', '#') }}?category={{ $category->slug }}" class="btn btn-primary w-100 rounded-pill fw-800 mb-3 shadow-sm py-2">
+                    <a href="{{ setting('url_partner', '#') }}?category={{ $category->slug }}" class="btn btn-primary btn-header-cta w-100 mb-3">
                         <i class="bi bi-plus-circle me-2"></i> {{ __('Submit Listing') }}
                     </a>
 
@@ -109,7 +109,7 @@
                 </div>
 
                 {{-- Metadata Card --}}
-                <div class="card glass-surface rounded-5 border-0 shadow-sm p-4" data-aos="fade-left" data-aos-delay="200">
+                <div class="card bg-white border rounded-4 p-4" data-aos="fade-left" data-aos-delay="200">
                     <div class="d-flex align-items-center mb-2">
                         <i class="bi bi-calendar-check me-3 text-primary fs-5"></i>
                         <div>

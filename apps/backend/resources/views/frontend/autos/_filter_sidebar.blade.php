@@ -10,7 +10,7 @@
 @endphp
 
 <div class="filter-sidebar-wrapper w-100">
-    <div class="glass-surface p-3 p-lg-4 rounded-4 shadow-sm sticky-sidebar"
+    <div class="filter-sidebar-card p-3 p-lg-4 sticky-sidebar"
         x-data="{
             priceMax: {{ request('price_max', $maxAllowedPrice) }}, 
             transmission: '{{ $currentTransmission ?: '' }}', 
@@ -54,7 +54,7 @@
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <label class="filter-label mb-0 text-muted">{{ __('Budget Max') }}</label>
-                    <span class="badge bg-primary rounded-pill shadow-sm">
+                    <span class="badge bg-primary rounded-2">
                         $<span x-text="Number(priceMax).toLocaleString()"></span>
                     </span>
                 </div>
@@ -127,7 +127,7 @@
             </div>
 
             {{-- Submit Button --}}
-            <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 shadow-sm fw-800 mt-4 border-0">
+            <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 fw-semibold mt-4 border-0">
                 <i class="bi bi-search me-2"></i>{{ __('Apply Filters') }}
             </button>
         </form>

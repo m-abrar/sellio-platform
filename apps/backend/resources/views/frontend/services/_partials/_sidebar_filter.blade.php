@@ -1,5 +1,5 @@
 <div class="filter-sidebar-wrapper w-100"> 
-    <div class="glass-surface p-3 p-lg-4 rounded-4 shadow-sm sticky-sidebar"
+    <div class="filter-sidebar-card p-3 p-lg-4 sticky-sidebar"
         x-data="{
             priceMax: {{ request('max_price', 5000) }},
             showCategories: {{ request('category') ? 'true' : 'false' }}, 
@@ -54,7 +54,7 @@
             <div class="mb-4 border-top pt-3">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <label class="filter-label mb-0">{{ __('Max Price') }}</label>
-                    <span class="badge bg-primary text-white rounded-pill px-3 shadow-sm">
+                    <span class="badge bg-primary text-white rounded-2 px-3">
                         $<span x-text="Number(priceMax).toLocaleString()"></span>
                     </span>
                 </div>
@@ -138,7 +138,7 @@
                         @foreach ($tags as $tag)
                             <input type="checkbox" class="btn-check" name="tag[]" value="{{ $tag->id }}" id="tag_{{ $tag->id }}" 
                                 {{ is_array(request('tag')) && in_array($tag->id, request('tag')) ? 'checked' : '' }}>
-                            <label class="btn btn-outline-primary-theme btn-sm rounded-pill px-3 py-1" style="font-size: 0.72rem;" for="tag_{{ $tag->id }}">
+                            <label class="btn btn-outline-secondary btn-sm rounded-2 px-3 py-1" style="font-size: 0.72rem;" for="tag_{{ $tag->id }}">
                                 #{{ $tag->title }}
                             </label>
                         @endforeach
@@ -148,7 +148,7 @@
             @endisset
 
             {{-- Submit --}}
-            <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 shadow-sm fw-800 mt-4 border-0">
+            <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 fw-semibold mt-4 border-0">
                 <i class="bi bi-search me-2"></i>{{ __('Apply Filters') }}
             </button>
         </form>

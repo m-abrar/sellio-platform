@@ -1,4 +1,4 @@
-<a href="{{ route('autos.show', $auto->slug) }}" class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4">
+<a href="{{ route('autos.show', $auto->slug) }}" class="listing-card h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4">
         
         {{-- Media Container --}}
         <div class="img-container position-relative overflow-hidden rounded-top-4">
@@ -12,17 +12,17 @@
             {{-- Badges - Restored Desktop Sizes, Smaller on Mobile --}}
             <div class="position-absolute top-0 end-0 m-2 m-md-3 d-flex flex-column gap-1">
                 @if($auto->on_sale)
-                    <span class="badge bg-danger text-white rounded-pill px-2 px-md-3 py-1 py-md-2 shadow-sm fw-800 border border-white border-opacity-25 auto-badge">
-                        {{ __('SALE') }}
+                    <span class="badge bg-danger text-white rounded-2 px-2 px-md-3 py-1 py-md-2 fw-semibold auto-badge">
+                        {{ __('Sale') }}
                     </span>
                 @elseif($auto->is_featured)
-                    <span class="badge bg-warning text-dark rounded-pill px-2 px-md-3 py-1 py-md-2 shadow-sm fw-800 border border-dark border-opacity-10 auto-badge">
-                        {{ __('FEATURED') }}
+                    <span class="badge bg-warning text-dark rounded-2 px-2 px-md-3 py-1 py-md-2 fw-semibold auto-badge">
+                        {{ __('Featured') }}
                     </span>
                 @endif
 
                 @if($auto->fuel_badge_label)
-                    <span class="badge bg-info text-white rounded-pill px-2 px-md-3 py-1 py-md-2 shadow-sm fw-800 auto-badge">
+                    <span class="badge bg-info text-white rounded-2 px-2 px-md-3 py-1 py-md-2 fw-semibold auto-badge">
                         <i class="bi bi-lightning-fill me-1"></i>{{ __($auto->fuel_badge_label) }}
                     </span>
                 @endif
@@ -49,7 +49,7 @@
                     {{ $auto->year }} {{ $auto->make }} {{ $auto->model }}
                 </h6>
                 <div class="property-location text-muted d-flex align-items-center text-truncate small">
-                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                    <i class="bi bi-geo-alt-fill lc-geo-icon me-1"></i>
                     {{ $auto->location->title ?? __('Global') }}
                 </div>
             </div>

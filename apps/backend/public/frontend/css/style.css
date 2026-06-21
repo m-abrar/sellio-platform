@@ -3654,10 +3654,8 @@ body.has-admin-bar .main-header.sticky-top{
     transform:rotate(-45deg)
 }
 .evc-card.evc-glass-surface{
-    backdrop-filter:blur(10px);
-    background:rgba(255,255,255,.95);
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(0,0,0,.05)
+    background:#fff;
+    border:1.5px solid rgba(15,23,42,.07)
 }
 .evc-featured-border{
     border:2px solid var(--primary-color)!important;
@@ -4869,6 +4867,16 @@ body.has-admin-bar .main-header.sticky-top{
 
 /* Sidebar cards (forms + agent) */
 .detail-sidebar-card {
+    background: #fff !important;
+    border: 1.5px solid rgba(15,23,42,.07) !important;
+    border-radius: 16px !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
+/* Filter sidebar wrapper */
+.filter-sidebar-card {
     background: #fff !important;
     border: 1.5px solid rgba(15,23,42,.07) !important;
     border-radius: 16px !important;

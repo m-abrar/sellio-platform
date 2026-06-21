@@ -1,5 +1,5 @@
 <div class="col">
-    <div class="jbl-listing-card glass-surface h-100 d-flex flex-column transition-all hover-up rounded-4 border-0 shadow-sm position-relative overflow-hidden" 
+    <div class="jbl-listing-card bg-white border h-100 d-flex flex-column transition-all hover-up rounded-4 position-relative overflow-hidden" 
          x-data="{ isFavorite: false }">
         
         {{-- 1. COVER IMAGE SECTION --}}
@@ -11,8 +11,8 @@
             <div class="position-absolute top-0 start-0 w-100 p-3 d-flex justify-content-between jbl-badge-container">
                 <div>
                     @if($job->is_featured)
-                        <span class="badge bg-danger text-white fw-800 px-2 py-1 rounded-2 shadow-sm">
-                            <i class="bi bi-patch-check-fill me-1"></i>{{ __('FEATURED') }}
+                        <span class="badge bg-danger text-white fw-semibold px-2 py-1 rounded-2">
+                            <i class="bi bi-patch-check-fill me-1"></i>{{ __('Featured') }}
                         </span>
                     @endif
                 </div>

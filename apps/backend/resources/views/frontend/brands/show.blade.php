@@ -30,7 +30,7 @@
         {{-- Left Column: Brand Content --}}
         <div class="col-lg-8">
             {{-- About Brand --}}
-            <div class="card glass-surface rounded-5 border-0 shadow-sm p-3 mb-4" data-aos="fade-up">
+            <div class="card bg-white border rounded-4 p-3 mb-4" data-aos="fade-up">
                 <div class="card-body">
                     <h4 class="fw-800 mb-3"><i class="bi bi-info-circle-fill me-2 text-primary"></i> {{ __('About the Brand') }}</h4>
                     <p class="description text-muted lh-lg">
@@ -40,14 +40,14 @@
             </div>
 
             {{-- Tabs for Brand Categories --}}
-            <div class="card glass-surface rounded-5 border-0 shadow-sm p-2" data-aos="fade-up">
+            <div class="card bg-white border rounded-4 p-2" data-aos="fade-up">
                 <div class="card-body">
-                    <ul class="nav nav-pills nav-justified mb-4 gap-2 p-2 bg-light rounded-pill" id="brandTab" role="tablist">
+                    <ul class="nav nav-pills nav-justified mb-4 gap-2 p-2 bg-light rounded-3" id="brandTab" role="tablist">
                         <li class="nav-item">
-                            <button class="nav-link active rounded-pill fw-800" data-bs-toggle="tab" data-bs-target="#tab-inventory">{{ __('Inventory') }}</button>
+                            <button class="nav-link active rounded-2 fw-semibold" data-bs-toggle="tab" data-bs-target="#tab-inventory">{{ __('Inventory') }}</button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link rounded-pill fw-800" data-bs-toggle="tab" data-bs-target="#tab-reviews">{{ __('Reviews') }}</button>
+                            <button class="nav-link rounded-2 fw-semibold" data-bs-toggle="tab" data-bs-target="#tab-reviews">{{ __('Reviews') }}</button>
                         </li>
                     </ul>
 
@@ -70,7 +70,7 @@
                                     <div class="mb-5">
                                         <h5 class="fw-800 mb-3 text-dark d-flex align-items-center">
                                             <i class="{{ $col['icon'] }} me-2 text-primary"></i> {{ $col['title'] }}
-                                            <span class="badge bg-light text-primary ms-2 rounded-pill fs-7">{{ $col['data']->count() }}</span>
+                                            <span class="badge bg-light text-primary ms-2 rounded-2 fs-7">{{ $col['data']->count() }}</span>
                                         </h5>
                                         <div class="list-group list-group-flush gap-3">
                                             @foreach($col['data'] as $item)
@@ -107,7 +107,7 @@
         {{-- Right Column: Brand Sidebar --}}
         <div class="col-lg-4">
             <div class="sticky-top" sticky-100>
-                <div class="card glass-surface rounded-5 border-0 shadow-sm p-4 mb-4" data-aos="fade-left">
+                <div class="card bg-white border rounded-4 p-4 mb-4" data-aos="fade-left">
                     <h5 class="fw-800 mb-4">{{ __('Brand Details') }}</h5>
                     
                     <div class="d-flex align-items-center mb-3">
@@ -120,7 +120,7 @@
                         <div><small class="text-muted d-block">{{ __('Established') }}</small><span class="fw-600">{{ $brand->created_at->format('M Y') }}</span></div>
                     </div>
 
-                    <a href="{{ setting('url_partner', '#') }}?brand={{ $brand->slug }}" class="btn btn-primary btn-lg w-100 rounded-pill fw-800 mb-3 shadow-sm">
+                    <a href="{{ setting('url_partner', '#') }}?brand={{ $brand->slug }}" class="btn btn-primary btn-header-cta w-100 mb-3">
                         <i class="bi bi-plus-circle me-2"></i> {{ __('Post for Brand') }}
                     </a>
                 </div>

@@ -1,4 +1,4 @@
-﻿<div class="listing-card glass-surface h-100 d-flex flex-column transition-all hover-up rounded-4 border-0 shadow-sm overflow-hidden">
+﻿<div class="listing-card h-100 d-flex flex-column transition-all hover-up rounded-4 overflow-hidden">
     
     <div class="position-relative" style="height: 160px; overflow: hidden;">
         <img src="{{ $service->primary_image_url }}" 
@@ -6,8 +6,8 @@
         
         <div class="position-absolute top-0 end-0 p-3 d-flex flex-column gap-2 align-items-end" style="z-index: 5;">
             @if ($service->is_featured)
-                <span class="badge bg-warning text-dark fw-800 shadow-sm rounded-2">
-                    <i class="bi bi-star-fill me-1"></i>{{ __('FEATURED') }}
+                <span class="badge bg-warning text-dark fw-semibold rounded-2">
+                    <i class="bi bi-star-fill me-1"></i>{{ __('Featured') }}
                 </span>
             @endif
 

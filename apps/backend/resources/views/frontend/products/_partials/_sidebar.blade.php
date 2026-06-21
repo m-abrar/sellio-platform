@@ -1,5 +1,5 @@
 ﻿<div class="filter-sidebar-wrapper w-100"> 
-    <div class="glass-surface p-3 p-lg-4 rounded-4 shadow-sm sticky-sidebar mobile-flush"
+    <div class="filter-sidebar-card p-3 p-lg-4 sticky-sidebar mobile-flush"
         x-data="{
             showBrands: true,
             showTags: {{ request('tags') ? 'true' : 'false' }},
@@ -57,7 +57,7 @@
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <label class="filter-label mb-0">{{ __('Price Range') }}</label>
-                    <span class="badge bg-primary rounded-pill px-3 shadow-sm">
+                    <span class="badge bg-primary rounded-2 px-3">
                         {{ setting('currency_symbol', '$') }}<span x-text="Number(minPrice).toLocaleString()"></span> - {{ setting('currency_symbol', '$') }}<span x-text="Number(maxPrice).toLocaleString()"></span>
                     </span>
                 </div>
@@ -138,7 +138,7 @@
                         @foreach ($tags as $tag)
                             <input type="checkbox" class="btn-check" name="tags[]" value="{{ $tag->id }}" id="tag-{{ $tag->id }}"
                                 {{ is_array(request('tags')) && in_array($tag->id, request('tags')) ? 'checked' : '' }}>
-                            <label class="btn btn-outline-primary-theme btn-sm rounded-pill px-3 py-1" style="font-size: 0.72rem;" for="tag-{{ $tag->id }}">
+                            <label class="btn btn-outline-secondary btn-sm rounded-2 px-3 py-1" style="font-size: 0.72rem;" for="tag-{{ $tag->id }}">
                                 {{ $tag->title }}
                             </label>
                         @endforeach
@@ -147,7 +147,7 @@
             </div>
 
             {{-- Action Button --}}
-            <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 shadow-sm fw-800 mt-4 border-0">
+            <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 fw-semibold mt-4 border-0">
                 <i class="bi bi-funnel me-2"></i>{{ __('Apply Changes') }}
             </button>
         </form>

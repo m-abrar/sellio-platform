@@ -38,7 +38,7 @@
         {{-- MAIN CONTENT --}}
         <div class="col-lg-8">
             {{-- About Section --}}
-            <div class="card glass-surface rounded-5 border-0 shadow-sm p-3 mb-4" data-aos="fade-up">
+            <div class="card bg-white border rounded-4 p-3 mb-4" data-aos="fade-up">
                 <div class="card-body">
                     <h4 class="fw-800 mb-3"><i class="bi bi-info-circle-fill me-2 text-primary"></i> {{ __('About') }} {{ $type->title }}</h4>
                     <p class="description text-muted lh-lg">
@@ -48,7 +48,7 @@
             </div>
 
             {{-- Activity / Listing Sections --}}
-            <div class="card glass-surface rounded-5 border-0 shadow-sm p-2" data-aos="fade-up">
+            <div class="card bg-white border rounded-4 p-2" data-aos="fade-up">
                 <div class="card-body">
                     @php
                         $sections = [
@@ -66,7 +66,7 @@
                             <div class="mb-5">
                                 <h5 class="fw-800 mb-4 text-dark d-flex align-items-center">
                                     <i class="{{ $section['icon'] }} me-2 text-primary"></i> {{ $section['title'] }}
-                                    <span class="badge bg-primary-subtle text-primary ms-2 rounded-pill fs-7">{{ $section['data']->count() }}</span>
+                                    <span class="badge bg-primary-subtle text-primary ms-2 rounded-2 fs-7">{{ $section['data']->count() }}</span>
                                 </h5>
                                 
                                 <div class="list-group list-group-flush gap-3">
@@ -112,21 +112,21 @@
             <div class="sticky-top" sticky-100>
                 
                 {{-- Quick Actions Card --}}
-                <div class="card glass-surface rounded-5 border-0 shadow-sm p-4 mb-4" data-aos="fade-left">
+                <div class="card bg-white border rounded-4 p-4 mb-4" data-aos="fade-left">
                     <h5 class="fw-800 mb-4">{{ __('Quick Navigation') }}</h5>
                     
                     <div class="d-grid gap-2 mb-4">
                         @foreach($sections as $section)
                             @if($section['data']->count())
                                 <a href="{{ route(str_replace('.show', '.search', $section['route']), ['type' => $type->id]) }}" 
-                                   class="btn btn-light text-start rounded-pill px-4 fw-600 border-0 shadow-sm py-2">
+                                   class="btn btn-light text-start rounded-2 px-4 fw-semibold border-0 py-2">
                                     <i class="{{ $section['icon'] }} me-2 text-primary"></i> Search {{ $section['title'] }}
                                 </a>
                             @endif
                         @endforeach
                     </div>
 
-                    <a href="{{ setting('url_partner', '#') }}?type={{ $type->slug }}" class="btn btn-primary btn-lg w-100 rounded-pill fw-800 mb-3 shadow-lg">
+                    <a href="{{ setting('url_partner', '#') }}?type={{ $type->slug }}" class="btn btn-primary btn-header-cta w-100 mb-3">
                         <i class="bi bi-plus-circle me-2"></i> {{ __('Post New Listing') }}
                     </a>
                     

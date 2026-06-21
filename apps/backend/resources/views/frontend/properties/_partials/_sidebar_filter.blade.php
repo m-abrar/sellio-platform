@@ -1,5 +1,5 @@
 <div class="filter-sidebar-wrapper w-100">
-    <div class="glass-surface p-3 p-lg-4 rounded-4 shadow-sm sticky-sidebar"
+    <div class="filter-sidebar-card p-3 p-lg-4 sticky-sidebar"
         x-data="{
             maxPrice: {{ request('max_price', $maxAllowedPrice ?? 1000000) }}, 
             propertyType: '{{ request('property_type') ?: '' }}', 
@@ -50,7 +50,7 @@
             <div x-show="propertyType !== 'rental'" x-collapse class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <label class="form-label small fw-bold mb-0 text-muted">{{ __('Max Price') }}</label>
-                    <span class="badge bg-primary rounded-pill">
+                    <span class="badge bg-primary rounded-2">
                         {{ setting_string('currency_symbol', '$') }}<span x-text="Number(maxPrice).toLocaleString()"></span>
                     </span>
                 </div>
@@ -164,7 +164,7 @@
             @endisset
 
             <div class="filter-actions">
-                <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 shadow-sm fw-bold border-0">
+                <button type="submit" class="btn btn-primary w-100 py-3 rounded-4 fw-semibold border-0">
                     <i class="bi bi-search me-2"></i>{{ __('Update Search') }}
                 </button>
                 <a href="{{ route('properties.index') }}" class="btn btn-link w-100 text-muted text-decoration-none fw-bold mt-1">

@@ -57,7 +57,7 @@
 @endphp
 
 @foreach($frontendAlerts as $alert)
-    <div class="frontend-alert frontend-alert--{{ $alert['type'] }} glass-surface" role="alert">
+    <div class="frontend-alert frontend-alert--{{ $alert['type'] }}" role="alert">
         <span class="frontend-alert__icon" aria-hidden="true">
             <i class="bi {{ $alert['icon'] }}"></i>
         </span>

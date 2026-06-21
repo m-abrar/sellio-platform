@@ -5,7 +5,7 @@
         {{-- 1. Featured Ribbon (Top Layer) --}}
         @if($event->is_featured)
             <div class="evc-featured-ribbon">
-                <span><i class="bi bi-star-fill me-1"></i>{{ __('FEATURED') }}</span>
+                <span><i class="bi bi-star-fill me-1"></i>{{ __('Featured') }}</span>
             </div>
         @endif
 
