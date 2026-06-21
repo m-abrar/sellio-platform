@@ -60,6 +60,6 @@
     {{-- Hours/Context --}}
     <div class="text-center small text-muted">
         <p class="mb-0 fw-semibold text-dark">{{ __('Sales Hours') }}</p>
-        <p class="mb-0">{{ $dealer->hours ?? 'Mon-Sat: 9 AM - 6 PM PST' }}</p>
+        <p class="mb-0">{{ $dealer->hours ?? __('Mon-Sat: 9 AM - 6 PM PST') }}</p>
     </div>
 </div>

@@ -77,7 +77,7 @@
                 <div class="col-6">
                     <label class="filter-label mb-1">{{ __('Brand') }}</label>
                     <select name="make" class="form-select filter-input shadow-none">
-                        <option value="">Any</option>
+                        <option value="">{{ __('Any') }}</option>
                         @foreach($brands as $brand)
                             <option value="{{ $brand->title }}" {{ $currentBrand == $brand->title ? 'selected' : '' }}>{{ $brand->title }}</option>
                         @endforeach
@@ -86,7 +86,7 @@
                 <div class="col-6">
                     <label class="filter-label mb-1">{{ __('Category') }}</label>
                     <select name="category" class="form-select filter-input shadow-none">
-                        <option value="">Any</option>
+                        <option value="">{{ __('Any') }}</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" {{ $currentCategory == $cat->id ? 'selected' : '' }}>{{ $cat->title }}</option>
                         @endforeach
