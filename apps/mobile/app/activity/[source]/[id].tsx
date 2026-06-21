@@ -14,12 +14,14 @@ import { apiRequest } from '../../../src/api/client';
 import { AuthenticatedScreen } from '../../../src/auth/AuthenticatedScreen';
 import { ErrorState, LoadingState } from '../../../src/components/states/AsyncStates';
 import {
+  toAutoInquiryActivityCard,
   toBookingActivityCard,
   toJobApplicationActivityCard,
   toOrderActivityCard,
 } from '../../../src/features/buyer/adapters';
 import {
   BuyerActivityCard,
+  BuyerAutoInquiryRecord,
   BuyerBookingKind,
   BuyerBookingsData,
   BuyerJobApplicationRecord,
@@ -44,6 +46,7 @@ function detailLabel(item: BuyerActivityCard) {
     case 'service_appointment': return 'SERVICE APPOINTMENT';
     case 'product_order': return 'PRODUCT ORDER';
     case 'job_application': return 'JOB APPLICATION';
+    case 'vehicle_inquiry': return 'VEHICLE INQUIRY';
   }
 }
 
@@ -74,6 +77,7 @@ export default function ActivityDetailView() {
   const reference = Array.isArray(params.reference) ? params.reference[0] : params.reference;
   const [item, setItem] = useState<BuyerActivityCard | null>(null);
   const [application, setApplication] = useState<BuyerJobApplicationRecord | null>(null);
+  const [autoInquiry, setAutoInquiry] = useState<BuyerAutoInquiryRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
 
@@ -83,10 +87,16 @@ export default function ActivityDetailView() {
     if (
       !Number.isInteger(id)
       || id < 1
-      || (source !== 'booking' && source !== 'order' && source !== 'application')
+      || (
+        source !== 'booking'
+        && source !== 'order'
+        && source !== 'application'
+        && source !== 'auto_inquiry'
+      )
     ) {
       setItem(null);
       setApplication(null);
+      setAutoInquiry(null);
       setError(new Error('This activity link is incomplete. Return to Activity and open it again.'));
       setLoading(false);
       return;
@@ -95,6 +105,7 @@ export default function ActivityDetailView() {
     setLoading(true);
     setError(null);
     setApplication(null);
+    setAutoInquiry(null);
 
     try {
       if (source === 'order') {
@@ -119,7 +130,7 @@ export default function ActivityDetailView() {
 
         if (!booking) throw new Error('This booking could not be found.');
         setItem(booking);
-      } else {
+      } else if (source === 'application') {
         const applications = await apiRequest<BuyerJobApplicationRecord[]>(
           '/dashboard/user/inquiries/applications',
           { authenticated: true },
@@ -129,10 +140,21 @@ export default function ActivityDetailView() {
         if (!selectedApplication) throw new Error('This job application could not be found.');
         setApplication(selectedApplication);
         setItem(toJobApplicationActivityCard(selectedApplication));
+      } else {
+        const inquiries = await apiRequest<BuyerAutoInquiryRecord[]>(
+          '/dashboard/user/inquiries/auto-inquiries',
+          { authenticated: true },
+        );
+        const selectedInquiry = inquiries.find((record) => record.id === id);
+
+        if (!selectedInquiry) throw new Error('This vehicle inquiry could not be found.');
+        setAutoInquiry(selectedInquiry);
+        setItem(toAutoInquiryActivityCard(selectedInquiry));
       }
     } catch (requestError) {
       setItem(null);
       setApplication(null);
+      setAutoInquiry(null);
       setError(requestError);
     } finally {
       setLoading(false);
@@ -212,17 +234,25 @@ export default function ActivityDetailView() {
                 <Text style={styles.infoValue}>{item.dateLabel}</Text>
               </View>
               <View style={styles.infoCard}>
-                <Text style={styles.infoLabel}>{application ? 'SALARY' : 'TOTAL'}</Text>
-                <Text style={styles.amountValue}>{item.amount || 'Not applicable'}</Text>
+                <Text style={styles.infoLabel}>
+                  {autoInquiry ? 'PREFERRED DATE' : application ? 'SALARY' : 'TOTAL'}
+                </Text>
+                <Text style={styles.amountValue}>
+                  {autoInquiry?.preferred_date || item.amount || 'Not applicable'}
+                </Text>
               </View>
               <View style={styles.infoCard}>
                 <Text style={styles.infoLabel}>TYPE</Text>
                 <Text style={styles.infoValue}>{detailLabel(item)}</Text>
               </View>
               <View style={styles.infoCard}>
-                <Text style={styles.infoLabel}>{application ? 'WORKPLACE' : 'PAYMENT'}</Text>
+                <Text style={styles.infoLabel}>
+                  {autoInquiry ? 'PREFERRED TIME' : application ? 'WORKPLACE' : 'PAYMENT'}
+                </Text>
                 <Text style={styles.infoValue}>
-                  {application
+                  {autoInquiry
+                    ? autoInquiry.preferred_time || 'Not specified'
+                    : application
                     ? workplaceLabel(application.job?.workplace_type)
                     : item.secondaryStatus?.toUpperCase() || '—'}
                 </Text>
@@ -255,6 +285,30 @@ export default function ActivityDetailView() {
                     <Text style={styles.secondaryButtonText}>OPEN PORTFOLIO</Text>
                   </TouchableOpacity>
                 )}
+              </View>
+            )}
+
+            {autoInquiry && (
+              <View style={styles.applicationSection}>
+                <Text style={styles.applicationLabel}>MESSAGE</Text>
+                <Text style={styles.applicationText}>
+                  {autoInquiry.message || 'No message was included.'}
+                </Text>
+
+                <View style={styles.contactGrid}>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>NAME</Text>
+                    <Text style={styles.contactValue}>{autoInquiry.full_name || 'Not provided'}</Text>
+                  </View>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>EMAIL</Text>
+                    <Text style={styles.contactValue}>{autoInquiry.email || 'Not provided'}</Text>
+                  </View>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>PHONE</Text>
+                    <Text style={styles.contactValue}>{autoInquiry.phone || 'Not provided'}</Text>
+                  </View>
+                </View>
               </View>
             )}
 
@@ -305,6 +359,10 @@ const styles = StyleSheet.create({
   documentValue: { color: '#e2e8f0', fontSize: 11, fontWeight: '800' },
   secondaryButton: { marginTop: 14, alignItems: 'center', paddingVertical: 14, borderWidth: 1, borderColor: 'rgba(129, 140, 248, 0.35)', borderRadius: 16 },
   secondaryButtonText: { color: '#a5b4fc', fontSize: 9, fontWeight: '900', letterSpacing: 1.1 },
+  contactGrid: { gap: 10, marginTop: 20 },
+  contactRow: { padding: 14, borderRadius: 16, backgroundColor: '#0b0b0c' },
+  contactLabel: { color: '#475569', fontSize: 7, fontWeight: '900', letterSpacing: 0.8, marginBottom: 5 },
+  contactValue: { color: '#e2e8f0', fontSize: 11, fontWeight: '800' },
   listingButton: { marginTop: 20, alignItems: 'center', paddingVertical: 15, borderRadius: 18, backgroundColor: '#6366f1' },
   listingButtonText: { color: '#fff', fontSize: 9, fontWeight: '900', letterSpacing: 1.2 },
 });
