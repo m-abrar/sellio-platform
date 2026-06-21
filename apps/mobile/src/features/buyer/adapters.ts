@@ -4,6 +4,7 @@ import {
   BuyerBookingRecord,
   BuyerJobApplicationRecord,
   BuyerOrderRecord,
+  BuyerServiceQuoteRecord,
   FavoriteListingCard,
   FavoriteRecord,
 } from './types';
@@ -233,6 +234,33 @@ export function toAutoInquiryActivityCard(
       : 'Vehicle inquiry submitted',
     reference: `Inquiry #${record.id}`,
     slug: text(record.auto?.slug),
+    isUpcoming: false,
+    cancellationType: null,
+  };
+}
+
+export function toServiceQuoteActivityCard(
+  record: BuyerServiceQuoteRecord,
+): BuyerActivityCard {
+  const date = record.requested_date || record.created_at;
+  const scope = text(record.scope_size);
+
+  return {
+    key: `service_quote:${record.id}`,
+    id: record.id,
+    source: 'service_quote',
+    kind: 'service_quote',
+    vertical: 'services',
+    title: text(record.service?.title) || 'Service quote',
+    imageUrl: text(record.service?.primary_image_url),
+    status: text(record.status) || 'pending',
+    secondaryStatus: null,
+    amount: activityMoney(record.quoted_price),
+    date,
+    dateLabel: formatDate(date),
+    detail: scope ? `Scope: ${scope}` : 'Quote requested',
+    reference: `Quote #${record.id}`,
+    slug: text(record.service?.slug),
     isUpcoming: false,
     cancellationType: null,
   };
