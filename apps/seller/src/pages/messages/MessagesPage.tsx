@@ -308,7 +308,7 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-120px)] flex flex-col space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+    <div className="h-[calc(100dvh-205px)] md:h-[calc(100dvh-120px)] flex flex-col space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader badge="Communication" title="Messages" subtitle="Inbox" />
 
       {isLoading ? (

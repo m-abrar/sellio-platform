@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import { getActiveTheme } from "@/lib/theme";
 import { getMenus } from "@/lib/menu";
@@ -12,6 +12,13 @@ import { AdminBar } from "@/components/AdminBar";
 import DatabaseOfflineResilience from "@/components/DatabaseOfflineResilience";
 import { MENU_LOCATIONS } from "@sellio/types";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#ffffff',
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const { theme } = await getActiveTheme();

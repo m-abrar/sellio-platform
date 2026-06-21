@@ -1,0 +1,24 @@
+{
+  "name": "Sellio Partner Dashboard",
+  "short_name": "Sellio Partner",
+  "description": "Manage your listings, bookings, and analytics.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#fbfcfd",
+  "theme_color": "#6610f2",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180",
+      "purpose": "any"
+    }
+  ]
+}

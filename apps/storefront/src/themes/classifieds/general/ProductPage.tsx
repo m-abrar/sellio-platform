@@ -209,7 +209,7 @@ export default function ProductPage({ slug }: { slug: string }) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                 <div className="cg-product-gallery">
                   <div className="cg-product-main-img-wrap">
-                    <img src={item.image} className="cg-product-main-img" alt={item.title} />
+                    <img src={item.image} className="cg-product-main-img" alt={item.title} loading="lazy" />
                   </div>
                 </div>
 

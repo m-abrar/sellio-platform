@@ -101,7 +101,7 @@ export default function ServicesPage() {
               <div key={service.id} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-premium relative overflow-hidden group">
                 <div className="flex gap-6">
                   <div className="w-24 h-24 rounded-[2rem] overflow-hidden bg-slate-50 shrink-0 border-4 border-white shadow-md cursor-pointer" onClick={() => navigate(`/dashboard/services/view/${service.slug}`)}>
-                    <img src={service.media[0]?.original_url} className="w-full h-full object-cover" alt={service.title} />
+                    <img src={service.media[0]?.original_url} className="w-full h-full object-cover" alt={service.title} loading="lazy" />
                   </div>
                   <div className="min-w-0 flex-1 pt-1">
                     <span className="text-[9px] font-black text-[#6610f2] bg-[#6610f2]/5 px-3 py-1 rounded-full uppercase tracking-widest">{service.sku}</span>
@@ -151,7 +151,7 @@ export default function ServicesPage() {
                           className="w-20 h-16 rounded-[1.2rem] overflow-hidden bg-slate-100 border-2 border-white shadow-sm shrink-0 cursor-pointer"
                           onClick={() => navigate(`/dashboard/services/view/${service.slug}`)}
                         >
-                          <img src={service.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                          <img src={service.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" loading="lazy" />
                         </div>
                         <div className="min-w-0">
                           <p 

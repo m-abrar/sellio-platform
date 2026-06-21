@@ -97,7 +97,7 @@ export default function AutosPage() {
               <div key={auto.id} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-premium relative overflow-hidden group">
                 <div className="flex gap-6">
                   <div className="w-24 h-24 rounded-[2rem] overflow-hidden bg-slate-50 shrink-0 border-4 border-white shadow-md cursor-pointer" onClick={() => navigate(`/dashboard/autos/view/${auto.slug}`)}>
-                    <img src={auto.media[0]?.original_url} className="w-full h-full object-cover" alt={auto.title} />
+                    <img src={auto.media[0]?.original_url} className="w-full h-full object-cover" alt={auto.title} loading="lazy" />
                   </div>
                   <div className="min-w-0 flex-1 pt-1">
                     <span className="text-[9px] font-black text-[#6610f2] bg-[#6610f2]/5 px-3 py-1 rounded-full uppercase tracking-widest">{auto.sku}</span>
@@ -140,7 +140,7 @@ export default function AutosPage() {
                     <td className="bg-white group-hover:bg-slate-50/50 border-y border-l border-slate-100 group-hover:border-[#6610f2]/20 rounded-l-[2rem] px-10 py-6 transition-all duration-300">
                       <div className="flex items-center gap-6">
                         <div className="w-20 h-16 rounded-[1.2rem] overflow-hidden bg-slate-100 border-2 border-white shadow-sm shrink-0 cursor-pointer" onClick={() => navigate(`/dashboard/autos/view/${auto.slug}`)}>
-                          <img src={auto.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                          <img src={auto.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" loading="lazy" />
                         </div>
                         <div className="min-w-0">
                           <p className="text-lg font-black tracking-tighter mb-1 truncate pr-1 text-slate-900 italic cursor-pointer hover:text-[#6610f2] transition-colors" onClick={() => navigate(`/dashboard/autos/view/${auto.slug}`)}>

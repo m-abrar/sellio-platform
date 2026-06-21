@@ -38,7 +38,7 @@ export function ExplorePropertyGrid({ items, loading = false }: ExplorePropertyG
         <article key={item.slug} className="pr-explore-card">
           <a className="pr-explore-card__link" href={themeLink(`/product/${item.slug}`)}>
             <div className="pr-explore-card__media">
-              <img src={item.image} alt={item.title} loading="lazy" />
+              <img src={item.image} alt={item.title} loading="lazy" /> 
               <span className="pr-explore-card__badge">{item.type}</span>
               {item.scarcityLabel && (
                 <span className="pr-explore-card__scarcity">{item.scarcityLabel}</span>

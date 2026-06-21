@@ -722,7 +722,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
                     key={listing.id}
                   >
                     <div className="um-explore-card-media">
-                      <img src={listing.image} alt={listing.title} />
+                      <img src={listing.image} alt={listing.title} loading="lazy" /> 
                       <span>{vertical?.label ?? 'Listing'}</span>
                     </div>
                     <div className="um-explore-card-body">

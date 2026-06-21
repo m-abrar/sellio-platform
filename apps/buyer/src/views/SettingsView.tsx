@@ -187,7 +187,7 @@ export default function SettingsView() {
               key={activeTab}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="glass-surface p-8"
+              className="glass-surface p-4 sm:p-8"
             >
               {activeTab === 'profile' && profile && (
                 <form onSubmit={handleSave} className="space-y-8">
@@ -284,11 +284,12 @@ export default function SettingsView() {
                     </div>
                   </div>
 
-                  <div className="pt-4 flex justify-end">
+                  <div className="pt-4 flex flex-col sm:flex-row sm:justify-end gap-2">
                     <Button
                       type="submit"
                       isLoading={isSaving}
                       leftIcon={!isSaving && <Check size={20} />}
+                      className="w-full sm:w-auto"
                     >
                       Save Changes
                     </Button>
@@ -348,8 +349,8 @@ export default function SettingsView() {
                   </div>
                 </div>
 
-                <div className="pt-4 flex justify-end">
-                  <Button type="submit" isLoading={isUpdatingPassword}>Update Password</Button>
+                <div className="pt-4 flex flex-col sm:flex-row sm:justify-end gap-2">
+                  <Button type="submit" isLoading={isUpdatingPassword} className="w-full sm:w-auto">Update Password</Button>
                 </div>
               </form>
             )}

@@ -96,7 +96,7 @@ export default function PropertiesPage() {
             {properties.map((property) => (
               <div key={property.id} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-premium overflow-hidden group">
                 <div className="relative h-48 overflow-hidden cursor-pointer" onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}>
-                  <img src={property.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={property.title} />
+                  <img src={property.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={property.title} loading="lazy" />
                   <div className="absolute top-4 right-4">
                     <span className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest ${property.is_active ? 'bg-green-500 text-white' : property.is_published ? 'bg-amber-400 text-white animate-pulse' : 'bg-slate-500 text-white'}`}>
                       {property.is_active ? 'Live' : property.is_published ? 'Pending' : 'Draft'}
@@ -144,7 +144,7 @@ export default function PropertiesPage() {
                           className="w-20 h-16 rounded-[1.2rem] overflow-hidden bg-slate-100 border-2 border-white shadow-sm shrink-0 cursor-pointer"
                           onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}
                         >
-                          <img src={property.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                          <img src={property.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" loading="lazy" />
                         </div>
                         <div className="min-w-0">
                           <p

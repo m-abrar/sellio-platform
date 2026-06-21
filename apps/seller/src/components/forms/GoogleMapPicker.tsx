@@ -84,6 +84,7 @@ export default function GoogleMapPicker({
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: false,
+          gestureHandling: 'cooperative', // prevents map from hijacking page scroll on mobile
         });
 
         const marker = new maps.Marker({

@@ -377,7 +377,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
     {
         $template = EmailTemplate::fetchByKey('password_reset_link');
 
-        if (!$template) {
+        if (!$template || !$template->is_active) {
             parent::sendPasswordResetNotification($token);
             return;
         }

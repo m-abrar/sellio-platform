@@ -259,7 +259,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
             {filteredListings.map((listing) => (
               <a href={themeLink(listing.href)} className="ud-listing-card" key={listing.id}>
                 <div className="ud-listing-image-wrap">
-                  <img src={listing.image} alt={listing.title} />
+                  <img src={listing.image} alt={listing.title} loading="lazy" /> 
                 </div>
                 <div className="ud-listing-body">
                   <div className="ud-mono">{listing.category}</div>

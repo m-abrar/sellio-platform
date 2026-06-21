@@ -32,3 +32,33 @@ body {
 .shadow-elite {
     box-shadow: 0 20px 50px rgba(0,0,0,0.04);
 }
+
+/* Mobile touch improvements */
+button,
+a,
+[role="button"],
+label[for] {
+  touch-action: manipulation;
+}
+
+.overflow-y-auto,
+.overflow-y-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="search"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}

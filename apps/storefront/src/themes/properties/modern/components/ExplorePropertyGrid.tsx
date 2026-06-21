@@ -41,7 +41,7 @@ export function ExplorePropertyGrid({ items, loading = false }: ExplorePropertyG
             href={themeLink(`/product/${item.slug}`)}
           >
             <div className="pm-explore-card__media">
-              <img src={item.image} alt={item.title} loading="lazy" />
+              <img src={item.image} alt={item.title} loading="lazy" /> 
               <span
                 className={`pm-explore-card__badge pm-explore-card__badge--${item.listingMode}`}
               >

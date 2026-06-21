@@ -40,9 +40,10 @@ export const ListingCard = ({
         "relative overflow-hidden",
         viewMode === 'grid' ? "aspect-[4/3]" : "w-full md:w-64 aspect-video md:aspect-square"
       )}>
-        <img 
-          src={item.image} 
+        <img
+          src={item.image}
           alt={item.title}
+          loading="lazy"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           referrerPolicy="no-referrer"
         />

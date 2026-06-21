@@ -395,7 +395,7 @@ export default function MessagesView() {
   let lastDateStr = '';
 
   return (
-    <div className="h-[calc(100vh-140px)] flex gap-6 px-1 md:px-3 overflow-hidden">
+    <div className="h-[calc(100dvh-204px)] md:h-[calc(100dvh-140px)] flex gap-6 px-1 md:px-3 overflow-hidden">
       {/* Conversation List */}
       <div className={cn(
         "w-full md:w-80 lg:w-96 flex-shrink-0 flex flex-col bg-white/90 backdrop-blur-md rounded-2xl border border-zinc-200/40 overflow-hidden shadow-xs transition-all duration-300",
@@ -456,9 +456,10 @@ export default function MessagesView() {
               )}
             >
               <div className="relative flex-shrink-0">
-                <img 
-                  src={convo.avatar || fallbackAvatar} 
-                  alt={convo.name} 
+                <img
+                  src={convo.avatar || fallbackAvatar}
+                  alt={convo.name}
+                  loading="lazy"
                   className={cn(
                     "w-11 h-11 rounded-full object-cover shadow-xs border-2 transition-all",
                     activeConvo?.id === convo.id ? "border-[var(--primary-color)]" : "border-white"
@@ -724,11 +725,12 @@ export default function MessagesView() {
                     {/* Image Showcase */}
                     <div className="relative overflow-hidden rounded-xl group border border-zinc-150 shadow-2xs">
                       {item.image ? (
-                        <motion.img 
-                          src={item.image} 
+                        <motion.img
+                          src={item.image}
                           className="w-full h-36 object-cover transition-transform duration-500"
                           whileHover={{ scale: 1.03 }}
-                          alt={item.title} 
+                          alt={item.title}
+                          loading="lazy"
                         />
                       ) : (
                         <div className="w-full h-36 bg-gradient-to-tr from-zinc-50 to-zinc-100/50 flex flex-col items-center justify-center text-zinc-300">

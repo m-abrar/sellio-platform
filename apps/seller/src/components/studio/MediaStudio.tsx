@@ -76,7 +76,7 @@ export default function MediaStudio({ files, setFiles }: any) {
 
       {/* ELITE DROPZONE */}
       <div className="group relative border-4 border-dashed border-slate-50 rounded-[2.5rem] p-12 transition-all hover:border-[#6610f2]/20 hover:bg-[#6610f2]/5 flex flex-col items-center justify-center cursor-pointer overflow-hidden">
-        <input type="file" multiple onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+        <input type="file" multiple accept="image/*" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
         
         <div className="w-20 h-20 bg-white rounded-[1.8rem] shadow-xl shadow-slate-200/50 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
           <HiOutlineCloudArrowUp className="w-10 h-10 text-[#6610f2]" />

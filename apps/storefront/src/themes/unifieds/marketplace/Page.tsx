@@ -465,7 +465,7 @@ export default function Page() {
               className={`um-feature-card ${index === 0 ? 'um-feature-card-primary' : ''}`}
               key={listing.id}
             >
-              <img src={listing.image} alt={listing.title} />
+              <img src={listing.image} alt={listing.title} loading="lazy" /> 
               <div className="um-feature-card-content">
                 <span>{listing.badge}</span>
                 <h2>{listing.title}</h2>
@@ -553,7 +553,7 @@ export default function Page() {
             {displayListings.map((listing) => (
               <a href={themeLink(listing.href)} className="um-listing-card" key={listing.id}>
                 <div className="um-listing-image-wrap">
-                  <img src={listing.image} alt={listing.title} />
+                  <img src={listing.image} alt={listing.title} loading="lazy" /> 
                   <span className="um-listing-badge">{listing.badge}</span>
                 </div>
                 <div className="um-listing-body">

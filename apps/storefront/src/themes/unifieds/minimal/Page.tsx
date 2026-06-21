@@ -263,7 +263,7 @@ export default function Page() {
             listings.map((listing) => (
               <a href={themeLink(listing.href)} key={listing.id} className="usm-listing-card" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="usm-card-img-wrap">
-                  <img src={listing.image} className="usm-card-img" alt={listing.title} />
+                  <img src={listing.image} className="usm-card-img" alt={listing.title} loading="lazy" />
                   <span className="usm-card-vertical-badge">{listing.vertical}</span>
                 </div>
                 <div className="usm-card-body">

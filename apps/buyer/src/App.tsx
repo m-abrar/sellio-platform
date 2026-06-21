@@ -52,6 +52,7 @@ import { toast } from 'sonner';
 import { getBrandSettings, BrandSettings } from './api/brandApi';
 import { applyBrandToDocumentHead } from './lib/brandHead';
 import SetupReminderBanner from './components/SetupReminderBanner';
+import BottomNav from './components/BottomNav';
 import { Toaster } from 'sonner';
 import { resolvePortalBasePath } from './config/portalBase';
 
@@ -532,11 +533,11 @@ function AppContent() {
       <div className="min-h-screen font-sans selection:bg-[var(--primary-color)] selection:text-white">
         <SetupReminderBanner />
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} stats={stats} statsLoaded={statsLoaded} brand={brand} />
-        
+
         <div className="lg:pl-[280px] flex flex-col min-h-screen">
           <Header setIsSidebarOpen={setIsSidebarOpen} stats={stats} statsLoaded={statsLoaded} brand={brand} />
-          
-          <main className="flex-1 p-4 lg:p-8 max-w-7xl mx-auto w-full">
+
+          <main className="flex-1 p-4 lg:p-8 pb-20 lg:pb-8 max-w-7xl mx-auto w-full">
             <ErrorBoundary>
               <Routes>
                 <Route path="/" element={<DashboardOverview />} />
@@ -575,6 +576,7 @@ function AppContent() {
             </ErrorBoundary>
           </main>
         </div>
+        <BottomNav />
       </div>
     </Router>
   );
