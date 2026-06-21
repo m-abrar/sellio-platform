@@ -17,14 +17,14 @@
 
     <div class="row justify-content-center pb-5">
         <div class="col-lg-8">
-            <div class="glass-surface rounded-4 border-0 p-4 p-lg-5 text-center shadow-deep">
+            <div class="bg-white border rounded-4 p-4 p-lg-5 text-center">
                 <p class="text-muted mb-4">{{ __('We are preparing your order. You will receive updates as it moves along.') }}</p>
 
                 <div class="d-flex flex-wrap justify-content-center gap-3">
-                    <a href="{{ route('products.index') }}" class="btn btn-primary-theme rounded-pill px-4 fw-800">
+                    <a href="{{ route('products.index') }}" class="btn btn-primary px-4">
                         {{ __('Continue Shopping') }}
                     </a>
-                    <a href="{{ route('dashboard') }}" class="btn btn-outline-primary-theme rounded-pill px-4 fw-bold">
+                    <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary px-4">
                         {{ __('Go to Dashboard') }}
                     </a>
                 </div>

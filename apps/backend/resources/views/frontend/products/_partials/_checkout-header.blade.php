@@ -8,7 +8,7 @@
 
 <div class="booking-header page-title-section mb-4 mb-lg-5">
     @if($product && $showContext)
-        <div class="booking-header__context glass-surface mb-4">
+        <div class="booking-header__context bg-white border mb-4">
             <div class="booking-header__property">
                 <img src="{{ $product->primary_image_url }}"
                      class="booking-header__thumb"
@@ -40,7 +40,7 @@
     <div class="text-center">
         <span class="metric-label mx-auto">{{ __('Commerce') }}</span>
         <h1 class="fw-800 mb-2 tracking-tight text-dark display-6">
-            {{ __('Secure Checkout') }}<span class="text-primary-color">: {{ __('Step 2 of 3') }}</span>
+            {{ __('Secure Checkout') }}<span class="text-primary">: {{ __('Step 2 of 3') }}</span>
         </h1>
         <p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">
             {{ __('Review shipping details and complete payment to place your order.') }}

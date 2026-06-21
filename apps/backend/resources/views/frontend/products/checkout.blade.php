@@ -30,9 +30,9 @@
 
         <div class="row g-4 booking-layout">
             <div class="col-lg-7 booking-layout__main">
-                <div class="glass-surface p-4 p-md-5 mb-4 border-0">
+                <div class="bg-white border rounded-4 p-4 p-md-5 mb-4">
                     <h4 class="fw-800 tracking-tight mb-4 text-dark">
-                        <i class="bi bi-truck text-primary-color me-2"></i>{{ __('Shipping Details') }}
+                        <i class="bi bi-truck text-primary me-2"></i>{{ __('Shipping Details') }}
                     </h4>
 
                     <div class="row g-3 g-md-4">
@@ -79,7 +79,7 @@
 
             <div class="col-lg-5 booking-layout__aside">
                 <aside class="sticky-sidebar">
-                    <div class="glass-surface p-4 p-md-5 border-0 shadow-deep position-relative overflow-hidden">
+                    <div class="bg-white border rounded-4 p-4 p-md-5 position-relative overflow-hidden">
                         <div class="price-glow-effect"></div>
 
                         <h4 class="fw-800 tracking-tight mb-4 text-dark">{{ __('Order Summary') }}</h4>
@@ -113,13 +113,13 @@
 
                         <div class="bg-white bg-opacity-50 p-4 rounded-4 text-center border border-primary-light backdrop-blur mb-4">
                             <p class="filter-label mb-1">{{ __('Total Amount Due') }}</p>
-                            <h2 class="price-text-large mb-0 line-height-1 text-primary-color">{{ $totalFormatted }}</h2>
-                            <span class="badge bg-light-primary text-primary-color mt-3 rounded-pill px-3 py-2">
+                            <h2 class="price-text-large mb-0 line-height-1 text-primary">{{ $totalFormatted }}</h2>
+                            <span class="badge bg-light-primary text-primary mt-3 rounded-2 px-3 py-2">
                                 <i class="bi bi-shield-check me-1"></i>{{ __('Secure Stripe checkout') }}
                             </span>
                         </div>
 
-                        <a href="{{ route('cart.index') }}" class="btn btn-outline-primary-theme w-100 rounded-pill fw-bold">
+                        <a href="{{ route('cart.index') }}" class="btn btn-outline-secondary w-100 fw-semibold">
                             <i class="bi bi-arrow-left me-1"></i>{{ __('Back to Cart') }}
                         </a>
                     </div>
@@ -132,7 +132,7 @@
                 <span class="booking-mobile-summary__label">{{ __('Total Due') }}</span>
                 <strong>{{ $totalFormatted }}</strong>
             </div>
-            <button type="submit" class="btn btn-primary-theme text-white fw-800 rounded-pill px-4" data-checkout-payment-submit @disabled(!$usesStripeElements)>
+            <button type="submit" class="btn btn-primary px-4" data-checkout-payment-submit @disabled(!$usesStripeElements)>
                 {{ __('Pay') }} <i class="bi bi-arrow-right-short ms-1"></i>
             </button>
         </div>

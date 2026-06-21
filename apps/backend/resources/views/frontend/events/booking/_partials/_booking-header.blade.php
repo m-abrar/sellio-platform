@@ -11,7 +11,7 @@
 
 <div class="booking-header page-title-section mb-4 mb-lg-5">
     @if($event && $showContext)
-        <div class="booking-header__context glass-surface mb-4">
+        <div class="booking-header__context bg-white border mb-4">
             <div class="booking-header__property">
                 <img src="{{ $event->primary_image_url }}"
                      class="booking-header__thumb"
@@ -21,11 +21,11 @@
                     <span class="metric-label">{{ __('Reserved Event') }}</span>
                     <h2 class="booking-header__property-title">{{ $event->title }}</h2>
                     <p class="booking-header__property-meta mb-0">
-                        <i class="bi bi-calendar-event text-primary-color me-1"></i>
+                        <i class="bi bi-calendar-event text-primary me-1"></i>
                         {{ $event->start_date_time?->format('M j, Y') ?? __('Date TBD') }}
                         @if($event->location?->title)
                             <span class="mx-1">·</span>
-                            <i class="bi bi-geo-alt-fill text-primary-color me-1"></i>{{ $event->location->title }}
+                            <i class="bi bi-geo-alt-fill text-primary me-1"></i>{{ $event->location->title }}
                         @endif
                     </p>
                 </div>
@@ -51,7 +51,7 @@
         <div class="text-center">
             <span class="metric-label mx-auto">{{ $eyebrow }}</span>
             <h1 class="fw-800 mb-2 tracking-tight text-dark display-6">
-                {{ $title }}@if($step !== null)<span class="text-primary-color">: {{ __('Step :step of :total', ['step' => $step, 'total' => $totalSteps]) }}</span>@endif
+                {{ $title }}@if($step !== null)<span class="text-primary">: {{ __('Step :step of :total', ['step' => $step, 'total' => $totalSteps]) }}</span>@endif
             </h1>
 
             @if($subtitle)

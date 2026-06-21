@@ -1,5 +1,5 @@
 {{-- Assumes $job is passed from the controller --}}
-<div class="card glass-surface p-4">
+<div class="card bg-white border p-4">
 
     {{-- Company/Job Header --}}
     <div class="d-flex align-items-center mb-4">
@@ -34,10 +34,10 @@
     {{-- Core Job Tags/Skills --}}
     @if ($job->tags->isNotEmpty())
     <div class="mb-4">
-        <h5 class="fw-bold mb-3"><i class="bi bi-tags-fill me-2 text-primary-color"></i>{{ __('Key Skills & Tech') }}</h5>
+        <h5 class="fw-bold mb-3"><i class="bi bi-tags-fill me-2 text-primary"></i>{{ __('Key Skills & Tech') }}</h5>
         <div class="d-flex flex-wrap gap-2 small">
             @foreach ($job->tags as $tag)
-                <span class="badge rounded-pill bg-primary-light text-primary-color px-3 py-2 fw-semibold">{{ $tag->title }}</span>
+                <span class="badge rounded-2 bg-primary-light text-primary px-3 py-2 fw-semibold">{{ $tag->title }}</span>
             @endforeach
         </div>
     </div>
@@ -51,12 +51,12 @@
     {{-- Key Attributes List (Responsibilities/Qualifications) --}}
     <h4 class="fw-bold mt-4 mb-3">{{ __('Required Education & Experience') }}</h4>
     <ul class="list-group list-group-flush small mb-4">
-        <li class="list-group-item bg-transparent"><i class="bi bi-patch-check me-2 text-primary-color"></i><strong>{{ __('Education:') }}</strong> {{ $job->required_education }}</li>
-        <li class="list-group-item bg-transparent"><i class="bi bi-patch-check me-2 text-primary-color"></i><strong>{{ __('Experience:') }}</strong> {{ Str::title($job->experience_level) }} {{ __('Level') }}</li>
+        <li class="list-group-item bg-transparent"><i class="bi bi-patch-check me-2 text-primary"></i><strong>{{ __('Education:') }}</strong> {{ $job->required_education }}</li>
+        <li class="list-group-item bg-transparent"><i class="bi bi-patch-check me-2 text-primary"></i><strong>{{ __('Experience:') }}</strong> {{ Str::title($job->experience_level) }} {{ __('Level') }}</li>
     </ul>
 
     {{-- Employee Benefits Section --}}
-    <h4 class="fw-bold mt-4 mb-3"><i class="bi bi-heart-fill me-2 text-primary-color"></i>{{ __('Benefits & Perks') }}</h4>
+    <h4 class="fw-bold mt-4 mb-3"><i class="bi bi-heart-fill me-2 text-primary"></i>{{ __('Benefits & Perks') }}</h4>
     <div class="row row-cols-2 g-3 small mb-4">
         <div class="col"><span class="badge bg-success-light text-success"><i class="bi bi-calendar-check me-1"></i> {{ __('PTO') }}</span></div>
         <div class="col"><span class="badge bg-success-light text-success"><i class="bi bi-hospital me-1"></i> {{ __('Health Coverage') }}</span></div>

@@ -29,16 +29,16 @@
 
     <div class="row justify-content-center pb-5 booking-layout">
         <div class="col-xl-11 col-lg-12">
-            <div class="glass-surface p-0 overflow-hidden border-0 shadow-deep">
+            <div class="bg-white border rounded-4 overflow-hidden">
                 <div class="row g-0">
                     <div class="col-md-6 d-flex flex-column justify-content-center text-center p-4 p-lg-5 border-end border-color-light bg-white bg-opacity-50">
                         <div class="d-grid gap-3 px-lg-4">
                             @if ($isPaid)
-                                <a href="{{ $buyerBookingsUrl }}" class="btn btn-lg btn-primary-theme py-3 fw-800 rounded-pill shadow-deep">
+                                <a href="{{ $buyerBookingsUrl }}" class="btn btn-lg btn-primary py-3">
                                     {{ __('View My Itinerary') }} <i class="bi bi-calendar3 ms-2"></i>
                                 </a>
                             @else
-                                <a href="{{ route('property.booking.payment', ['property' => $property->slug, 'booking' => $booking->id]) }}" class="btn btn-lg btn-warning py-3 fw-800 rounded-pill shadow-deep">
+                                <a href="{{ route('property.booking.payment', ['property' => $property->slug, 'booking' => $booking->id]) }}" class="btn btn-lg btn-warning py-3">
                                     {{ __('Complete Payment') }} &mdash; {{ format_currency($booking->total_price) }} <i class="bi bi-credit-card ms-2"></i>
                                 </a>
                             @endif

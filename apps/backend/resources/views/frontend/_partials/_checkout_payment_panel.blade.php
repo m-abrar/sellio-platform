@@ -10,7 +10,7 @@
     $demoMessage = $demoMessage ?? null;
 @endphp
 
-<section class="booking-payment-panel glass-surface border-0 shadow-deep">
+<section class="booking-payment-panel bg-white border">
     <div class="booking-payment-panel__header">
         <div class="booking-payment-panel__secure">
             <span class="booking-payment-panel__secure-icon" aria-hidden="true">
@@ -100,9 +100,9 @@
                             {!! $termsLabel !!}
                         @else
                             {{ __('I authorize the charge of') }}
-                            <strong class="text-primary-color">{{ $totalFormatted }}</strong>
+                            <strong class="text-primary">{{ $totalFormatted }}</strong>
                             {{ __('and agree to the') }}
-                            <a href="#" class="text-primary-color">{{ __('Terms & Conditions') }}</a>.
+                            <a href="#" class="text-primary">{{ __('Terms & Conditions') }}</a>.
                         @endif
                     </label>
                 </div>
@@ -110,7 +110,7 @@
         @endif
 
         <div class="col-12">
-            <button type="submit" class="btn btn-lg btn-primary-theme w-100 py-3 fw-800 rounded-pill shadow-deep booking-payment-form__submit" data-checkout-payment-submit @disabled(!$usesStripeElements)>
+            <button type="submit" class="btn btn-lg btn-primary w-100 py-3 booking-payment-form__submit" data-checkout-payment-submit @disabled(!$usesStripeElements)>
                 <span data-payment-submit-label>{{ $submitLabel }}</span>
                 <span class="booking-payment-form__submit-amount">{{ $totalFormatted }}</span>
                 <i class="bi bi-arrow-right-circle-fill ms-2"></i>
@@ -118,8 +118,8 @@
 
             <ul class="booking-payment-trust list-unstyled mb-0">
                 <li><i class="bi bi-shield-check text-success"></i> {{ __('256-bit SSL encryption') }}</li>
-                <li><i class="bi bi-eye-slash text-primary-color"></i> {{ __('Card details are not stored') }}</li>
-                <li><i class="bi bi-patch-check text-primary-color"></i> {{ __('Instant order confirmation') }}</li>
+                <li><i class="bi bi-eye-slash text-primary"></i> {{ __('Card details are not stored') }}</li>
+                <li><i class="bi bi-patch-check text-primary"></i> {{ __('Instant order confirmation') }}</li>
             </ul>
         </div>
     </div>

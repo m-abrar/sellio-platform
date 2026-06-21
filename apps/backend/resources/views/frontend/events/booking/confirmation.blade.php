@@ -29,14 +29,14 @@
 
     <div class="row justify-content-center pb-5 booking-layout">
         <div class="col-xl-11 col-lg-12">
-            <div class="glass-surface p-0 overflow-hidden border-0 shadow-deep">
+            <div class="bg-white border rounded-4 overflow-hidden">
                 <div class="row g-0">
                     <div class="col-md-6 d-flex flex-column justify-content-center text-center p-4 p-lg-5 border-end border-color-light bg-white bg-opacity-50">
                         <div class="d-flex flex-wrap justify-content-center gap-3 px-lg-3">
-                            <button type="button" onclick="window.print()" class="btn btn-outline-primary-theme rounded-pill px-4 py-2 fw-bold">
+                            <button type="button" onclick="window.print()" class="btn btn-outline-secondary rounded-2 px-4 py-2 fw-bold">
                                 <i class="bi bi-printer me-2"></i>{{ __('Print Receipt') }}
                             </button>
-                            <a href="{{ route('dashboard') }}" class="btn btn-primary-theme rounded-pill px-4 py-2 fw-800">
+                            <a href="{{ route('dashboard') }}" class="btn btn-primary rounded-2 px-4 py-2 fw-800">
                                 <i class="bi bi-grid me-2"></i>{{ __('Go to Dashboard') }}
                             </a>
                         </div>

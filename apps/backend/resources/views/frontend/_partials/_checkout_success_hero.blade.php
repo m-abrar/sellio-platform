@@ -8,7 +8,7 @@
     $referenceLabel = $referenceLabel ?? __('Reference');
 @endphp
 
-<div class="checkout-success-hero glass-surface border-0 shadow-deep overflow-hidden mb-4 mb-lg-5">
+<div class="checkout-success-hero bg-white border overflow-hidden mb-4 mb-lg-5">
     <div class="checkout-success-hero__glow checkout-success-hero__glow--{{ $tone }}"></div>
 
     <div class="checkout-success-hero__content text-center p-4 p-md-5">

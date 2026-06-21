@@ -1,4 +1,4 @@
-<div class="fixed-bottom d-lg-none py-2 bg-glass-surface-dark border-top z-30" id="sticky-apply-bar">
+<div class="fixed-bottom d-lg-none py-2 bg-dark border-top z-30" id="sticky-apply-bar">
     <div class="container d-flex justify-content-between align-items-center">
         <div>
             <span class="h6 fw-bold text-white mb-0 d-block">{{ $job->title }}</span>

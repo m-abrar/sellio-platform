@@ -14,17 +14,17 @@
                 <div class="col-12">
                     @include('frontend._partials._alerts')
                     
-                    <div class="card glass-surface border-0 shadow-lg p-4 p-lg-5 overflow-hidden position-relative">
+                    <div class="card bg-white border p-4 p-lg-5 overflow-hidden position-relative">
                         {{-- Decorative Badge --}}
                         <div class="position-absolute top-0 end-0 m-4 d-none d-md-block">
-                            <span class="badge bg-primary-light text-primary-color px-3 py-2 rounded-pill fw-bold">
+                            <span class="badge bg-primary-light text-primary px-3 py-2 rounded-2 fw-semibold">
                                 <i class="bi bi-clock-history me-1"></i> Quick Apply
                             </span>
                         </div>
 
                         <div class="mb-4">
                             <h2 class="fw-800 text-dark mb-2">Join the Team</h2>
-                            <p class="text-muted lead">Position: <span class="text-primary-color fw-bold">{{ $job->title }}</span></p>
+                            <p class="text-muted lead">Position: <span class="text-primary fw-bold">{{ $job->title }}</span></p>
                         </div>
 
                         @auth
@@ -35,7 +35,7 @@
                                 $defaultPhone = $user->phone ?? ''; 
                             @endphp
 
-                            <div class="alert bg-primary-light border-0 text-primary-color mb-5 d-flex align-items-center rounded-4 p-3">
+                            <div class="alert bg-primary-light border-0 text-primary mb-5 d-flex align-items-center rounded-4 p-3">
                                 <i class="bi bi-person-check-fill fs-3 me-3"></i>
                                 <div class="smaller">
                                     Logged in as <strong>{{ $user->email }}</strong>. <br>
@@ -46,7 +46,7 @@
                             <form action="{{ route('jobs.apply.store', $job->slug) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 
-                                <h5 class="fw-bold mb-4 text-dark"><i class="bi bi-person-lines-fill me-2 text-primary-color"></i>Contact Information</h5>
+                                <h5 class="fw-bold mb-4 text-dark"><i class="bi bi-person-lines-fill me-2 text-primary"></i>Contact Information</h5>
                                 
                                 <div class="row g-4 mb-5">
                                     <div class="col-md-6">
@@ -87,7 +87,7 @@
                                     </div>
                                 </div>
                                 
-                                <h5 class="fw-bold mb-4 text-dark"><i class="bi bi-chat-left-text-fill me-2 text-primary-color"></i>Cover Letter</h5>
+                                <h5 class="fw-bold mb-4 text-dark"><i class="bi bi-chat-left-text-fill me-2 text-primary"></i>Cover Letter</h5>
                                 <div class="mb-5">
                                     <textarea id="cover_letter" name="cover_letter" 
                                         class="form-control glass-input @error('cover_letter') is-invalid @enderror" 
@@ -96,7 +96,7 @@
                                 </div>
                                 
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-lg btn-primary-theme px-5 py-3 fw-800 shadow-primary-md rounded-pill">
+                                    <button type="submit" class="btn btn-lg btn-primary px-5 py-3">
                                         Submit Application <i class="bi bi-arrow-right ms-2"></i>
                                     </button>
                                     <p class="text-muted smaller mt-3">By clicking submit, you agree to our recruitment privacy policy.</p>
@@ -110,8 +110,8 @@
                                 <h4 class="fw-bold">Authentication Required</h4>
                                 <p class="text-muted mb-4">You must be logged in to your account to submit a job application.</p>
                                 <div class="d-flex justify-content-center gap-3">
-                                    <a href="{{ route('login') }}" class="btn btn-primary-theme px-4 py-2 fw-bold rounded-pill">Login Now</a>
-                                    <a href="{{ route('register') }}" class="btn btn-outline-secondary px-4 py-2 fw-bold rounded-pill">Create Account</a>
+                                    <a href="{{ route('login') }}" class="btn btn-primary px-4 py-2">Login Now</a>
+                                    <a href="{{ route('register') }}" class="btn btn-outline-secondary px-4 py-2 fw-semibold">Create Account</a>
                                 </div>
                             </div>
                         @endauth

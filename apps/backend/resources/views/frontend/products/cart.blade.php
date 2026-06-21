@@ -9,7 +9,7 @@
         <div class="text-center">
             <span class="metric-label mx-auto">{{ __('Commerce') }}</span>
             <h1 class="fw-800 mb-2 tracking-tight text-dark display-6">
-                {{ __('Your Shopping Cart') }}<span class="text-primary-color">: {{ __('Step 1 of 3') }}</span>
+                {{ __('Your Shopping Cart') }}<span class="text-primary">: {{ __('Step 1 of 3') }}</span>
             </h1>
             <p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">
                 {{ __('Review your items before continuing to secure checkout.') }}
@@ -37,7 +37,7 @@
         <div class="row g-4 booking-layout">
             <div class="col-lg-8 booking-layout__main">
                 @foreach($cart->items as $item)
-                    <div class="glass-surface rounded-4 border-0 p-3 p-md-4 mb-3">
+                    <div class="bg-white border rounded-4 p-3 p-md-4 mb-3">
                         <div class="d-flex align-items-center gap-3">
                             <img src="{{ $item->product->primary_image_url }}" width="80" height="80" class="rounded-3" alt="">
                             <div class="flex-grow-1 min-w-0">
@@ -58,15 +58,15 @@
 
             <div class="col-lg-4 booking-layout__aside">
                 <aside class="sticky-sidebar">
-                    <div class="glass-surface rounded-4 border-0 p-4 p-md-5 shadow-deep">
+                    <div class="bg-white border rounded-4 p-4 p-md-5">
                         <h4 class="fw-800 tracking-tight mb-4 text-dark">{{ __('Summary') }}</h4>
 
                         <div class="bg-white bg-opacity-50 p-4 rounded-4 text-center border border-primary-light backdrop-blur mb-4">
                             <p class="filter-label mb-1">{{ __('Subtotal') }}</p>
-                            <h2 class="price-text-large mb-0 line-height-1 text-primary-color">{{ format_currency($cartSubtotal) }}</h2>
+                            <h2 class="price-text-large mb-0 line-height-1 text-primary">{{ format_currency($cartSubtotal) }}</h2>
                         </div>
 
-                        <a href="{{ route('checkout.index') }}" class="btn btn-primary-theme w-100 rounded-pill py-3 fw-800 shadow-deep">
+                        <a href="{{ route('checkout.index') }}" class="btn btn-primary w-100 py-3">
                             {{ __('Proceed to Checkout') }} <i class="bi bi-arrow-right-circle-fill ms-2"></i>
                         </a>
                     </div>

@@ -18,14 +18,14 @@
                 'referenceLabel' => __('Application ID'),
             ])
 
-            <div class="card glass-surface border-0 shadow-lg overflow-hidden">
+            <div class="card bg-white border overflow-hidden">
                 {{-- Job Summary Strip --}}
                 <div class="p-4 bg-primary-light border-bottom d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="smaller text-uppercase fw-bold text-primary-color tracking-wider">Position Applied</span>
+                        <span class="smaller text-uppercase fw-bold text-primary tracking-wider">Position Applied</span>
                         <h4 class="fw-bold text-dark mb-0">{{ $job->title }}</h4>
                     </div>
-                    <span class="badge bg-white text-primary-color shadow-sm px-3 py-2 rounded-pill">
+                    <span class="badge bg-white text-primary shadow-sm px-3 py-2 rounded-2">
                         ID: #{{ $application->id }}
                     </span>
                 </div>
@@ -41,7 +41,7 @@
                         <div class="col-sm-6">
                             <label class="smaller text-muted fw-bold text-uppercase mb-1 d-block">Submission Date</label>
                             <p class="text-dark fw-semibold mb-0">
-                                <i class="bi bi-calendar3 me-2 text-primary-color"></i>
+                                <i class="bi bi-calendar3 me-2 text-primary"></i>
                                 {{ $application->created_at->format('M d, Y') }}
                             </p>
                             <small class="text-muted">{{ $application->created_at->format('h:i A') }}</small>
@@ -49,9 +49,9 @@
                         <div class="col-sm-6">
                             <label class="smaller text-muted fw-bold text-uppercase mb-1 d-block">Status</label>
                             <div class="d-flex align-items-center">
-                                <span class="badge bg-info-subtle text-info px-3 py-2 rounded-pill fw-bold">
+                                <span class="badge bg-info-subtle text-info px-3 py-2 rounded-2 fw-semibold">
                                     <span class="spinner-grow spinner-grow-sm me-2" role="status"></span>
-                                    {{ Str::upper($application->status) }}
+                                    {{ Str::title($application->status) }}
                                 </span>
                             </div>
                         </div>
@@ -89,10 +89,10 @@
 
                     {{-- Action Buttons --}}
                     <div class="d-flex flex-column flex-md-row gap-3 justify-content-center">
-                        <a href="{{ setting('url_user', '#') }}" class="btn btn-primary-theme px-5 py-3 rounded-pill fw-800 shadow-primary-md">
+                        <a href="{{ setting('url_user', '#') }}" class="btn btn-primary px-5 py-3">
                             <i class="bi bi-grid-fill me-2"></i> Track in Dashboard
                         </a>
-                        <a href="{{ route('jobs.index') }}" class="btn btn-outline-secondary px-5 py-3 rounded-pill fw-bold">
+                        <a href="{{ route('jobs.index') }}" class="btn btn-outline-secondary px-5 py-3 fw-semibold">
                             <i class="bi bi-search me-2"></i> Keep Browsing
                         </a>
                     </div>

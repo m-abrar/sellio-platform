@@ -9,8 +9,8 @@
         $companyName = $job->employer->name ?? 'Company';
     @endphp
 
-    <div class="card glass-surface p-4 mb-3 text-center">
-        <h5 class="fw-bold mb-3"><i class="bi bi-building-fill me-2 text-primary-color"></i>{{ __('Company Snapshot') }}</h5>
+    <div class="card bg-white border p-4 mb-3 text-center">
+        <h5 class="fw-bold mb-3"><i class="bi bi-building-fill me-2 text-primary"></i>{{ __('Company Snapshot') }}</h5>
         <p class="h2 fw-bolder text-warning mb-1">{{ $averageRating }}<span class="small fw-normal text-muted"> / 5.0</span></p>
         <div class="text-warning mb-2">
             {{-- Simple star generation based on $averageRating --}}
@@ -25,11 +25,11 @@
             @endfor
         </div>
         <p class="small text-muted mb-0">{{ __('Based on :count employee reviews', ['count' => number_format($reviewCount)]) }}</p>
-        <a href="{{ route('partner.profile', $job->employer) }}" class="small text-primary-color text-decoration-none mt-2 fw-semibold">{{ __('View Company Profile') }}</a>
+        <a href="{{ route('partner.profile', $job->employer) }}" class="small text-primary text-decoration-none mt-2 fw-semibold">{{ __('View Company Profile') }}</a>
     </div>
 
     {{-- Apply Card (Primary Action) --}}
-    <div class="card glass-surface p-4 mb-3">
+    <div class="card bg-white border p-4 mb-3">
         <h4 class="fw-bold mb-3">{{ __('Ready to Apply?') }}</h4>
 
         {{-- Deadline --}}
@@ -62,43 +62,43 @@
         <hr>
         <div class="text-center small text-muted">
             <button
-                class="btn btn-link p-0 text-primary-color text-decoration-none fw-semibold"
+                class="btn btn-link p-0 text-primary text-decoration-none fw-semibold"
                 data-action="toggle-favorite"
                 data-job-id="{{ $job->id }}">
                 <i class="bi bi-heart me-1"></i>{{ __('Save This Job') }}
             </button>
             <span class="mx-1">|</span>
-            <a href="{{ route('partner.profile', $job->employer) }}" class="btn btn-link p-0 text-primary-color text-decoration-none fw-semibold">
+            <a href="{{ route('partner.profile', $job->employer) }}" class="btn btn-link p-0 text-primary text-decoration-none fw-semibold">
                 <i class="bi bi-person-add me-1"></i>{{ __('Follow :name', ['name' => $companyName]) }}
             </a>
         </div>
     </div>
 
     {{-- Hiring Process Timeline (Generic) --}}
-    <div class="card glass-surface p-4 mb-3">
-        <h6 class="fw-bold mb-3"><i class="bi bi-fast-forward me-2 text-primary-color"></i>{{ __('Hiring Process') }}</h6>
+    <div class="card bg-white border p-4 mb-3">
+        <h6 class="fw-bold mb-3"><i class="bi bi-fast-forward me-2 text-primary"></i>{{ __('Hiring Process') }}</h6>
         <ul class="list-unstyled small process-timeline">
             <li class="d-flex mb-2">
-                <i class="bi bi-1-circle-fill me-3 flex-shrink-0 text-primary-color fs-5"></i>
+                <i class="bi bi-1-circle-fill me-3 flex-shrink-0 text-primary fs-5"></i>
                 <div><strong>{{ __('Application Review') }}</strong> (1-2 Weeks)</div>
             </li>
             <li class="d-flex mb-2">
-                <i class="bi bi-2-circle-fill me-3 flex-shrink-0 text-primary-color fs-5"></i>
+                <i class="bi bi-2-circle-fill me-3 flex-shrink-0 text-primary fs-5"></i>
                 <div><strong>{{ __('Screening Call') }}</strong> (30 min)</div>
             </li>
             <li class="d-flex mb-2">
-                <i class="bi bi-3-circle-fill me-3 flex-shrink-0 text-primary-color fs-5"></i>
+                <i class="bi bi-3-circle-fill me-3 flex-shrink-0 text-primary fs-5"></i>
                 <div><strong>{{ __('Technical Interview') }}</strong> (1 hr)</div>
             </li>
             <li class="d-flex">
-                <i class="bi bi-4-circle-fill me-3 flex-shrink-0 text-primary-color fs-5"></i>
+                <i class="bi bi-4-circle-fill me-3 flex-shrink-0 text-primary fs-5"></i>
                 <div><strong>{{ __('Final Offer') }}</strong></div>
             </li>
         </ul>
     </div>
 
     {{-- Hiring Manager Contact --}}
-    <div class="card glass-surface p-3 text-center">
+    <div class="card bg-white border p-3 text-center">
         <h6 class="fw-bold mb-2">{{ __('Questions? Contact HR:') }}</h6>
         <p class="small mb-1 text-muted">
             <i class="bi bi-envelope me-2"></i>

@@ -25,12 +25,12 @@
 
     <div class="row g-4 booking-layout">
         <div class="col-lg-7 booking-layout__main">
-            <div class="glass-surface p-4 p-md-5 mb-4 border-0">
+            <div class="bg-white border rounded-4 p-4 p-md-5 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="fw-800 tracking-tight text-dark mb-0">
-                        <i class="bi bi-file-earmark-text text-primary-color me-2"></i>{{ __('Review Booking') }}
+                        <i class="bi bi-file-earmark-text text-primary me-2"></i>{{ __('Review Booking') }}
                     </h4>
-                    <span class="badge bg-light-primary text-primary-color rounded-pill px-3 py-2 fw-600">
+                    <span class="badge bg-light-primary text-primary rounded-2 px-3 py-2 fw-600">
                         {{ $booking->quantity }} {{ __('ticket') }}{{ $booking->quantity > 1 ? 's' : '' }}
                     </span>
                 </div>
@@ -56,9 +56,9 @@
                 </div>
             </div>
 
-            <div class="glass-surface p-4 p-md-5 mb-4 border-0">
+            <div class="bg-white border rounded-4 p-4 p-md-5 mb-4">
                 <h4 class="fw-800 tracking-tight mb-4 text-dark">
-                    <i class="bi bi-person-vcard text-primary-color me-2"></i>{{ __('Attendee Details') }}
+                    <i class="bi bi-person-vcard text-primary me-2"></i>{{ __('Attendee Details') }}
                 </h4>
 
                 @include('frontend.events.booking._partials._attendee_form', ['booking' => $booking])
@@ -72,7 +72,7 @@
 
         <div class="col-lg-5 booking-layout__aside">
             <aside class="sticky-sidebar">
-                <div class="glass-surface p-4 p-md-5 border-0 shadow-deep position-relative overflow-hidden">
+                <div class="bg-white border rounded-4 p-4 p-md-5 position-relative overflow-hidden">
                     <div class="price-glow-effect"></div>
 
                     <h4 class="fw-800 tracking-tight mb-4 text-dark">{{ __('Price Breakdown') }}</h4>
@@ -83,7 +83,7 @@
                             <span class="metric-label">{{ __('Reserved Event') }}</span>
                             <h6 class="fw-800 mb-0 text-truncate text-dark">{{ $event->title }}</h6>
                             <p class="small text-muted mb-0">
-                                <i class="bi bi-calendar-event text-primary-color me-1"></i>
+                                <i class="bi bi-calendar-event text-primary me-1"></i>
                                 {{ $booking->occurrence->start_date_time->format('M j, Y · h:i A') }}
                             </p>
                         </div>
@@ -94,7 +94,7 @@
                     <div class="mt-4">
                         <div class="p-3 bg-light-primary rounded-4 border border-primary-light text-center">
                             <p class="small text-muted mb-0">
-                                <i class="bi bi-info-circle me-1 text-primary-color"></i>
+                                <i class="bi bi-info-circle me-1 text-primary"></i>
                                 {{ __('Your digital tickets will be emailed immediately after payment.') }}
                             </p>
                         </div>

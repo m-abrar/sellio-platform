@@ -11,7 +11,7 @@
 
 <div class="booking-header page-title-section mb-4 mb-lg-5">
     @if($property && $showContext)
-        <div class="booking-header__context glass-surface mb-4">
+        <div class="booking-header__context bg-white border mb-4">
             <div class="booking-header__property">
                 <img src="{{ $property->primary_image_url }}"
                      class="booking-header__thumb"
@@ -21,7 +21,7 @@
                     <span class="metric-label">{{ __('Reserved Property') }}</span>
                     <h2 class="booking-header__property-title">{{ $property->title }}</h2>
                     <p class="booking-header__property-meta mb-0">
-                        <i class="bi bi-geo-alt-fill text-primary-color me-1"></i>
+                        <i class="bi bi-geo-alt-fill text-primary me-1"></i>
                         {{ $property->location->title ?? $property->city ?? __('Location') }}
                     </p>
                 </div>
@@ -47,7 +47,7 @@
         <div class="text-center">
             <span class="metric-label mx-auto">{{ $eyebrow }}</span>
             <h1 class="fw-800 mb-2 tracking-tight text-dark display-6">
-                {{ $title }}@if($step !== null)<span class="text-primary-color">: {{ __('Step :step of 3', ['step' => $step]) }}</span>@endif
+                {{ $title }}@if($step !== null)<span class="text-primary">: {{ __('Step :step of 3', ['step' => $step]) }}</span>@endif
             </h1>
 
             @if($subtitleHtml)

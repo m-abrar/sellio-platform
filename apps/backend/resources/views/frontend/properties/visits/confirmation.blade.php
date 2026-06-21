@@ -27,11 +27,11 @@
 
     <div class="row justify-content-center pb-5 booking-layout">
         <div class="col-xl-11 col-lg-12">
-            <div class="glass-surface p-0 overflow-hidden border-0 shadow-deep">
+            <div class="bg-white border rounded-4 overflow-hidden">
                 <div class="row g-0">
                     <div class="col-md-6 d-flex flex-column justify-content-center text-center p-4 p-lg-5 border-end border-color-light bg-white bg-opacity-50">
                         <div class="d-grid gap-3 px-lg-4">
-                            <a href="{{ route('dashboard.user.bookings.index') }}" class="btn btn-lg btn-primary-theme py-3 fw-800 rounded-pill shadow-deep">
+                            <a href="{{ route('dashboard.user.bookings.index') }}" class="btn btn-lg btn-primary py-3">
                                 {{ __('View Scheduled Visits') }} <i class="bi bi-calendar2-event ms-2"></i>
                             </a>
 
@@ -76,7 +76,7 @@
                                         <p class="small text-muted mb-0">{{ $property->agent_name ?? $property->user->name }}</p>
                                     </div>
                                 </div>
-                                <a href="{{ route('conversation.start', ['user' => $property->user]) }}" class="btn btn-white btn-sm fw-800 shadow-sm w-100 mt-3 border rounded-pill py-2">
+                                <a href="{{ route('conversation.start', ['user' => $property->user]) }}" class="btn btn-outline-secondary btn-sm fw-semibold w-100 mt-3 rounded-2 py-2">
                                     {{ __('Message Agent') }}
                                 </a>
                             </div>
