@@ -4521,7 +4521,7 @@ body.has-admin-bar .main-header.sticky-top{
 
 /* ─── CTA section ───────────────────────────────────────────────────────── */
 .cta-section {
-    background: var(--text-dark);
+    background: var(--text-dark) !important;
     padding: clamp(4rem, 6vw, 6rem) 0;
     position: relative;
     overflow: hidden;
