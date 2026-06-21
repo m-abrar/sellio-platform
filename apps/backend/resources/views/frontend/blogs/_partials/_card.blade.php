@@ -1,4 +1,4 @@
-<a href="{{ route('blogs.show', $blog->slug) }}" class="listing-card glass-surface h-100 text-decoration-none text-dark d-flex flex-column transition-all shadow-hover rounded-4">
+<a href="{{ route('blogs.show', $blog->slug) }}" class="listing-card h-100 text-decoration-none text-dark d-flex flex-column transition-all rounded-4">
         
         <div class="img-container position-relative overflow-hidden rounded-top-4">
             <div class="listing-card-img aspect-ratio-4-3">
