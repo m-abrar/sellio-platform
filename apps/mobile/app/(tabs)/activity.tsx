@@ -1,6 +1,7 @@
 import { useFocusEffect } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
+  Image,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -10,44 +11,163 @@ import {
 } from 'react-native';
 import { apiRequest } from '../../src/api/client';
 import { AuthenticatedScreen } from '../../src/auth/AuthenticatedScreen';
-import { ErrorState, LoadingState } from '../../src/components/states/AsyncStates';
+import { EmptyState, ErrorState, LoadingState } from '../../src/components/states/AsyncStates';
 import { useAuth } from '../../src/context/AuthContext';
-import { BuyerDashboardData } from '../../src/features/buyer/types';
+import { toBookingActivityCard, toOrderActivityCard } from '../../src/features/buyer/adapters';
+import {
+  BuyerActivityCard,
+  BuyerBookingsData,
+  BuyerDashboardData,
+  BuyerOrderRecord,
+} from '../../src/features/buyer/types';
+import { LISTING_CATEGORIES } from '../../src/features/listings/catalog';
+
+function activityTypeLabel(item: BuyerActivityCard) {
+  switch (item.kind) {
+    case 'property_booking': return 'PROPERTY STAY';
+    case 'property_visit': return 'PROPERTY VISIT';
+    case 'event_booking': return 'EVENT BOOKING';
+    case 'service_appointment': return 'SERVICE APPOINTMENT';
+    case 'product_order': return 'PRODUCT ORDER';
+  }
+}
+
+function statusStyle(status: string) {
+  const normalized = status.toLowerCase();
+
+  if (['confirmed', 'completed', 'delivered', 'paid', 'approved'].includes(normalized)) {
+    return styles.statusPositive;
+  }
+
+  if (['cancelled', 'failed', 'rejected', 'refunded'].includes(normalized)) {
+    return styles.statusNegative;
+  }
+
+  return styles.statusPending;
+}
+
+function ActivityRecordCard({ item }: { item: BuyerActivityCard }) {
+  const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
+
+  return (
+    <View style={styles.activityCard}>
+      <View style={styles.activityImageFrame}>
+        <Text style={styles.activityImageFallback}>{category?.icon || '◇'}</Text>
+        {item.imageUrl && (
+          <Image
+            source={{ uri: item.imageUrl }}
+            style={styles.activityImage}
+            resizeMode="cover"
+            accessibilityLabel={`${item.title} image`}
+          />
+        )}
+      </View>
+
+      <View style={styles.activityBody}>
+        <View style={styles.activityTopRow}>
+          <Text style={styles.activityType}>{activityTypeLabel(item)}</Text>
+          <View style={[styles.statusPill, statusStyle(item.status)]}>
+            <Text style={styles.statusText}>{item.status.toUpperCase()}</Text>
+          </View>
+        </View>
+
+        <Text style={styles.activityTitle} numberOfLines={1}>{item.title}</Text>
+        <Text style={styles.activityDetail} numberOfLines={1}>{item.detail}</Text>
+
+        <View style={styles.activityMetaRow}>
+          <View style={styles.activityMetaBlock}>
+            <Text style={styles.activityMetaLabel}>DATE</Text>
+            <Text style={styles.activityMetaValue}>{item.dateLabel}</Text>
+          </View>
+          {item.amount && (
+            <View style={[styles.activityMetaBlock, styles.activityMetaEnd]}>
+              <Text style={styles.activityMetaLabel}>TOTAL</Text>
+              <Text style={styles.activityAmount}>{item.amount}</Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.referenceRow}>
+          <Text style={styles.referenceText}>{item.reference}</Text>
+          {item.secondaryStatus && (
+            <Text style={styles.paymentText}>{item.secondaryStatus.toUpperCase()}</Text>
+          )}
+        </View>
+      </View>
+    </View>
+  );
+}
 
 export default function ActivityView() {
   const { isAuthenticated, user } = useAuth();
   const [dashboard, setDashboard] = useState<BuyerDashboardData | null>(null);
+  const [upcomingActivities, setUpcomingActivities] = useState<BuyerActivityCard[]>([]);
+  const [recentActivities, setRecentActivities] = useState<BuyerActivityCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<unknown>(null);
+  const [activityWarning, setActivityWarning] = useState<string | null>(null);
 
-  const loadDashboard = useCallback(async (isRefresh = false) => {
+  const loadActivity = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
     else setLoading(true);
 
     setError(null);
+    setActivityWarning(null);
 
-    try {
-      const data = await apiRequest<BuyerDashboardData>('/dashboard/user/welcome', {
-        authenticated: true,
-      });
-      setDashboard(data);
-    } catch (requestError) {
-      setError(requestError);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
+    const [dashboardResult, bookingsResult, ordersResult] = await Promise.allSettled([
+      apiRequest<BuyerDashboardData>('/dashboard/user/welcome', { authenticated: true }),
+      apiRequest<BuyerBookingsData>('/dashboard/user/bookings', { authenticated: true }),
+      apiRequest<BuyerOrderRecord[]>('/v1/orders?per_page=15', { authenticated: true }),
+    ]);
+
+    if (dashboardResult.status === 'fulfilled') {
+      setDashboard(dashboardResult.value);
+    } else {
+      setError(dashboardResult.reason);
     }
+
+    const warnings: string[] = [];
+    let upcoming: BuyerActivityCard[] = [];
+    let recent: BuyerActivityCard[] = [];
+
+    if (bookingsResult.status === 'fulfilled') {
+      upcoming = bookingsResult.value.upcomingBookings.map((record) =>
+        toBookingActivityCard(record, true),
+      );
+      recent = bookingsResult.value.pastBookings.map((record) =>
+        toBookingActivityCard(record, false),
+      );
+    } else {
+      warnings.push('bookings');
+    }
+
+    if (ordersResult.status === 'fulfilled') {
+      recent.push(...ordersResult.value.map(toOrderActivityCard));
+    } else {
+      warnings.push('orders');
+    }
+
+    recent.sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime());
+    setUpcomingActivities(upcoming);
+    setRecentActivities(recent);
+
+    if (warnings.length > 0) {
+      setActivityWarning(`Some ${warnings.join(' and ')} could not be loaded. Pull down to try again.`);
+    }
+
+    setLoading(false);
+    setRefreshing(false);
   }, []);
 
   useFocusEffect(
     useCallback(() => {
-      if (isAuthenticated) loadDashboard();
-    }, [isAuthenticated, loadDashboard]),
+      if (isAuthenticated) loadActivity();
+    }, [isAuthenticated, loadActivity]),
   );
 
   const stats = dashboard?.stats;
-  const cards = stats ? [
+  const statisticCards = stats ? [
     { label: 'Favorites', value: stats.favoritesCount },
     { label: 'Bookings', value: stats.bookingsCount },
     { label: 'Messages', value: stats.messagesCount },
@@ -57,6 +177,7 @@ export default function ActivityView() {
     { label: 'Reviews', value: stats.reviewsCount },
     { label: 'Total Activity', value: stats.totalItemsCount },
   ] : [];
+  const hasActivity = upcomingActivities.length > 0 || recentActivities.length > 0;
 
   return (
     <AuthenticatedScreen returnTo="/activity">
@@ -67,7 +188,7 @@ export default function ActivityView() {
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              onRefresh={() => loadDashboard(true)}
+              onRefresh={() => loadActivity(true)}
               tintColor="#818cf8"
               colors={['#6366f1']}
             />
@@ -82,7 +203,7 @@ export default function ActivityView() {
           {loading && !dashboard ? (
             <LoadingState message="Loading your activity..." />
           ) : error && !dashboard ? (
-            <ErrorState error={error} onRetry={loadDashboard} />
+            <ErrorState error={error} onRetry={() => loadActivity()} />
           ) : dashboard ? (
             <>
               <View style={styles.summaryCard}>
@@ -97,7 +218,7 @@ export default function ActivityView() {
               </View>
 
               <View style={styles.grid}>
-                {cards.map((card) => (
+                {statisticCards.map((card) => (
                   <View key={card.label} style={styles.statCard}>
                     <Text style={styles.statValue}>{card.value}</Text>
                     <Text style={styles.statLabel}>{card.label}</Text>
@@ -106,8 +227,43 @@ export default function ActivityView() {
               </View>
 
               {error && (
-                <Text style={styles.refreshWarning}>The latest refresh failed. Pull down to try again.</Text>
+                <Text style={styles.refreshWarning}>The latest dashboard refresh failed. Pull down to try again.</Text>
               )}
+
+              <View style={styles.activitySection}>
+                <View style={styles.sectionHeadingRow}>
+                  <Text style={styles.sectionTitle}>Upcoming</Text>
+                  <Text style={styles.sectionCount}>{upcomingActivities.length}</Text>
+                </View>
+                {upcomingActivities.length > 0 ? (
+                  <View style={styles.activityList}>
+                    {upcomingActivities.map((item) => <ActivityRecordCard key={item.key} item={item} />)}
+                  </View>
+                ) : (
+                  <Text style={styles.sectionEmpty}>No upcoming bookings or appointments.</Text>
+                )}
+              </View>
+
+              <View style={styles.activitySection}>
+                <View style={styles.sectionHeadingRow}>
+                  <Text style={styles.sectionTitle}>Bookings & Orders</Text>
+                  <Text style={styles.sectionCount}>{recentActivities.length}</Text>
+                </View>
+
+                {activityWarning && <Text style={styles.activityWarning}>{activityWarning}</Text>}
+
+                {recentActivities.length > 0 ? (
+                  <View style={styles.activityList}>
+                    {recentActivities.map((item) => <ActivityRecordCard key={item.key} item={item} />)}
+                  </View>
+                ) : !hasActivity && !activityWarning ? (
+                  <EmptyState
+                    icon="◇"
+                    title="NO ACTIVITY YET"
+                    message="Your bookings and product orders will appear here."
+                  />
+                ) : null}
+              </View>
             </>
           ) : null}
         </ScrollView>
@@ -132,4 +288,34 @@ const styles = StyleSheet.create({
   statValue: { marginBottom: 7, color: '#a5b4fc', fontSize: 24, fontWeight: '900' },
   statLabel: { color: '#94a3b8', fontSize: 10, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.7 },
   refreshWarning: { marginTop: 18, color: '#f59e0b', fontSize: 11, lineHeight: 16, textAlign: 'center' },
+  activitySection: { marginTop: 30 },
+  sectionHeadingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 },
+  sectionTitle: { color: '#fff', fontSize: 14, fontWeight: '900', letterSpacing: 1, textTransform: 'uppercase' },
+  sectionCount: { minWidth: 28, paddingHorizontal: 9, paddingVertical: 5, borderRadius: 999, overflow: 'hidden', backgroundColor: 'rgba(99, 102, 241, 0.14)', color: '#a5b4fc', fontSize: 9, fontWeight: '900', textAlign: 'center' },
+  sectionEmpty: { padding: 18, borderRadius: 18, overflow: 'hidden', backgroundColor: '#121214', color: '#64748b', fontSize: 11, lineHeight: 17, textAlign: 'center' },
+  activityWarning: { marginBottom: 14, padding: 12, borderRadius: 14, overflow: 'hidden', backgroundColor: 'rgba(245, 158, 11, 0.08)', color: '#fbbf24', fontSize: 10, lineHeight: 15, textAlign: 'center' },
+  activityList: { gap: 14 },
+  activityCard: { flexDirection: 'row', overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.06)', borderRadius: 22, backgroundColor: '#121214' },
+  activityImageFrame: { width: 94, minHeight: 172, alignItems: 'center', justifyContent: 'center', backgroundColor: '#0b0b0c' },
+  activityImageFallback: { fontSize: 28, opacity: 0.45 },
+  activityImage: { ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' },
+  activityBody: { flex: 1, padding: 14 },
+  activityTopRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 8 },
+  activityType: { flex: 1, color: '#818cf8', fontSize: 7, fontWeight: '900', letterSpacing: 0.8 },
+  statusPill: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 999 },
+  statusPositive: { backgroundColor: 'rgba(34, 197, 94, 0.14)' },
+  statusNegative: { backgroundColor: 'rgba(239, 68, 68, 0.14)' },
+  statusPending: { backgroundColor: 'rgba(245, 158, 11, 0.14)' },
+  statusText: { color: '#fff', fontSize: 7, fontWeight: '900', letterSpacing: 0.5 },
+  activityTitle: { color: '#fff', fontSize: 13, fontWeight: '900', marginBottom: 5 },
+  activityDetail: { color: '#94a3b8', fontSize: 10, lineHeight: 15, marginBottom: 12 },
+  activityMetaRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 8, marginBottom: 12 },
+  activityMetaBlock: { flex: 1 },
+  activityMetaEnd: { alignItems: 'flex-end' },
+  activityMetaLabel: { color: '#475569', fontSize: 7, fontWeight: '900', letterSpacing: 0.7, marginBottom: 3 },
+  activityMetaValue: { color: '#cbd5e1', fontSize: 9, fontWeight: '800' },
+  activityAmount: { color: '#a5b4fc', fontSize: 10, fontWeight: '900' },
+  referenceRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingTop: 9, borderTopWidth: 1, borderTopColor: 'rgba(255, 255, 255, 0.05)' },
+  referenceText: { flex: 1, color: '#64748b', fontSize: 8, fontWeight: '800' },
+  paymentText: { color: '#94a3b8', fontSize: 7, fontWeight: '900', letterSpacing: 0.6 },
 });
