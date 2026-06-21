@@ -4,7 +4,7 @@
 @endphp
 
 <div class="col-12 col-lg-6 d-flex align-items-center justify-content-center py-5 px-3">
-    <div class="auth-card glass-surface border-0 shadow-deep">
+    <div class="auth-card bg-white border shadow-sm">
         <div class="text-center mb-4 mb-md-5">
             <div class="d-lg-none mb-4">
                 @if(filled(setting('site_logo')))
@@ -18,7 +18,7 @@
             </div>
 
             <span class="metric-label d-block mb-2">{{ __('Account') }}</span>
-            <h2 class="fw-800 text-dark mb-2 fs-2">{{ $heading }}</h2>
+            <h2 class="text-dark mb-2 fs-2">{{ $heading }}</h2>
             @if($subheading)
                 <p class="text-muted fw-medium mb-0">{{ $subheading }}</p>
             @endif

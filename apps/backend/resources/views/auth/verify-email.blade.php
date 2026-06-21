@@ -37,7 +37,7 @@
 <div class="vstack gap-3 mt-2">
     <form method="POST" action="{{ route('verification.send') }}" class="d-grid">
         @csrf
-        <button type="submit" class="btn btn-primary-theme btn-lg py-3 fw-800 d-flex align-items-center justify-content-center gap-2">
+        <button type="submit" class="btn btn-primary btn-lg py-3 d-flex align-items-center justify-content-center gap-2">
             <i class="bi bi-send-check"></i>
             {{ __('Resend Verification Email') }}
         </button>
@@ -47,7 +47,7 @@
         @csrf
         <p class="small text-muted fw-medium mb-0">
             {{ __('Using a different account?') }}
-            <button type="submit" class="btn btn-link p-0 small fw-bold text-decoration-none ms-1 text-primary-color">
+            <button type="submit" class="btn btn-link p-0 small fw-bold text-decoration-none ms-1 text-primary">
                 {{ __('Log Out') }}
             </button>
         </p>

@@ -26,19 +26,19 @@
     <div class="mb-4">
         <label for="password" class="filter-label mb-2">{{ __('Password') }}</label>
         <div class="form-icon-group">
-            <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="{{ __('••••••••') }}" required autofocus autocomplete="current-password">
+            <input type="password" @class(['form-control', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="{{ __('••••••••') }}" required autofocus autocomplete="current-password">
             <i class="bi bi-shield-lock input-icon"></i>
             <i class="bi bi-eye password-toggle"></i>
         </div>
     </div>
 
     <div class="d-grid gap-3">
-        <button type="submit" class="btn btn-primary-theme btn-lg py-3 fw-800 d-flex align-items-center justify-content-center gap-2">
+        <button type="submit" class="btn btn-primary btn-lg py-3 d-flex align-items-center justify-content-center gap-2">
             <i class="bi bi-check-circle-fill"></i>
             {{ __('Confirm & Continue') }}
         </button>
 
-        <a href="{{ route('login') }}" class="btn btn-outline-primary-theme btn-lg py-3 fw-bold d-flex align-items-center justify-content-center gap-2">
+        <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-lg py-3 fw-semibold d-flex align-items-center justify-content-center gap-2">
             <i class="bi bi-arrow-left"></i>
             {{ __('Back to Login') }}
         </a>

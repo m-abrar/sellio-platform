@@ -11,7 +11,7 @@
 
     <div class="auth-marketing-content">
         <div class="mb-5 d-inline-block">
-            <div class="auth-marketing-icon glass-surface border-0 shadow-deep">
+            <div class="auth-marketing-icon">
                 @if(filled(setting('site_logo')))
                     <img src="{{ Storage::url(setting('site_logo')) }}"
                          alt="{{ setting('site_name', config('app.name')) }}"
@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <h1 class="display-4 fw-800 mb-4 lh-sm">{!! $titleHtml !!}</h1>
+        <h1 class="display-4 mb-4 lh-sm">{!! $titleHtml !!}</h1>
 
         @if($description)
             <p class="lead opacity-80 mb-5 fs-5 fw-medium">{{ $description }}</p>

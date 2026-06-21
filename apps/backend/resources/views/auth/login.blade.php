@@ -26,7 +26,7 @@
     <div class="mb-4">
         <label for="email" class="filter-label mb-2">{{ __('Email Address') }}</label>
         <div class="form-icon-group">
-            <input type="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email') }}" placeholder="{{ __('you@example.com') }}" required autofocus>
+            <input type="email" @class(['form-control', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email') }}" placeholder="{{ __('you@example.com') }}" required autofocus>
             <i class="bi bi-envelope input-icon"></i>
         </div>
     </div>
@@ -35,11 +35,11 @@
         <div class="d-flex justify-content-between align-items-center mb-2">
             <label for="password" class="filter-label mb-0">{{ __('Password') }}</label>
             @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" class="small fw-bold text-decoration-none text-primary-color">{{ __('Forgot password?') }}</a>
+                <a href="{{ route('password.request') }}" class="small fw-bold text-decoration-none text-primary">{{ __('Forgot password?') }}</a>
             @endif
         </div>
         <div class="form-icon-group">
-            <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="{{ __('••••••••') }}" required autocomplete="current-password">
+            <input type="password" @class(['form-control', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="{{ __('••••••••') }}" required autocomplete="current-password">
             <i class="bi bi-shield-lock input-icon"></i>
             <i class="bi bi-eye password-toggle"></i>
         </div>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="d-grid mb-4">
-        <button type="submit" class="btn btn-primary-theme btn-lg py-3 fw-800">
+        <button type="submit" class="btn btn-primary btn-lg py-3">
             {{ page_content('auth.login.submit_btn', __('Sign In')) }}
         </button>
     </div>
@@ -66,7 +66,7 @@
 <div class="text-center mt-4">
     <p class="mb-0 small text-muted fw-bold">
         {{ page_content('auth.login.footer_text', __("Don't have an account?")) }}
-        <a href="{{ route('register') }}" class="fw-bold text-decoration-none ms-1 text-primary-color">
+        <a href="{{ route('register') }}" class="fw-bold text-decoration-none ms-1 text-primary">
             {{ __('Create account') }}
         </a>
     </p>

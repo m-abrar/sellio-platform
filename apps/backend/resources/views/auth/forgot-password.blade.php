@@ -26,18 +26,18 @@
     <div class="mb-4">
         <label for="email" class="filter-label mb-2">{{ __('Email Address') }}</label>
         <div class="form-icon-group">
-            <input id="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) type="email" name="email" value="{{ old('email') }}" placeholder="{{ __('you@example.com') }}" required autofocus />
+            <input id="email" @class(['form-control', 'is-invalid' => $errors->has('email')]) type="email" name="email" value="{{ old('email') }}" placeholder="{{ __('you@example.com') }}" required autofocus />
             <i class="bi bi-envelope input-icon"></i>
         </div>
     </div>
 
     <div class="d-grid gap-3">
-        <button type="submit" class="btn btn-primary-theme btn-lg py-3 fw-800 d-flex align-items-center justify-content-center gap-2">
+        <button type="submit" class="btn btn-primary btn-lg py-3 d-flex align-items-center justify-content-center gap-2">
             <i class="bi bi-send-check"></i>
             {{ __('Send Recovery Link') }}
         </button>
 
-        <a href="{{ route('login') }}" class="btn btn-outline-primary-theme btn-lg py-3 fw-bold d-flex align-items-center justify-content-center gap-2">
+        <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-lg py-3 fw-semibold d-flex align-items-center justify-content-center gap-2">
             <i class="bi bi-arrow-left"></i>
             {{ __('Back to Login') }}
         </a>

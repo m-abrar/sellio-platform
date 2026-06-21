@@ -26,7 +26,7 @@
     <div class="mb-4">
         <label for="email" class="filter-label mb-2">{{ __('Email Address') }}</label>
         <div class="form-icon-group">
-            <input type="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email', $request->email) }}" required autofocus>
+            <input type="email" @class(['form-control', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email', $request->email) }}" required autofocus>
             <i class="bi bi-envelope input-icon"></i>
         </div>
     </div>
@@ -34,7 +34,7 @@
     <div class="mb-4">
         <label for="password" class="filter-label mb-2">{{ __('New Password') }}</label>
         <div class="form-icon-group">
-            <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="{{ __('••••••••') }}" required autocomplete="new-password">
+            <input type="password" @class(['form-control', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="{{ __('••••••••') }}" required autocomplete="new-password">
             <i class="bi bi-shield-lock input-icon"></i>
             <i class="bi bi-eye password-toggle"></i>
         </div>
@@ -43,18 +43,18 @@
     <div class="mb-4">
         <label for="password_confirmation" class="filter-label mb-2">{{ __('Confirm Password') }}</label>
         <div class="form-icon-group">
-            <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password_confirmation')]) id="password_confirmation" name="password_confirmation" placeholder="{{ __('••••••••') }}" required autocomplete="new-password">
+            <input type="password" @class(['form-control', 'is-invalid' => $errors->has('password_confirmation')]) id="password_confirmation" name="password_confirmation" placeholder="{{ __('••••••••') }}" required autocomplete="new-password">
             <i class="bi bi-shield-check input-icon"></i>
             <i class="bi bi-eye password-toggle"></i>
         </div>
     </div>
 
     <div class="d-grid gap-3">
-        <button type="submit" class="btn btn-primary-theme btn-lg py-3 fw-800">
+        <button type="submit" class="btn btn-primary btn-lg py-3">
             {{ __('Update Password') }}
         </button>
 
-        <a href="{{ route('login') }}" class="btn btn-outline-primary-theme btn-lg py-3 fw-bold d-flex align-items-center justify-content-center gap-2">
+        <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-lg py-3 fw-semibold d-flex align-items-center justify-content-center gap-2">
             <i class="bi bi-arrow-left"></i>
             {{ __('Back to Login') }}
         </a>

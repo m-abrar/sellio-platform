@@ -159,7 +159,7 @@ Listing pages that show cards in a grid with filters.
 
 ---
 
-## Phase 3 — Auth Pages (NEXT)
+## ✅ Phase 3 — Auth Pages (COMPLETE)
 
 Public-facing login/register flows. Currently not following CSS design tokens.
 
@@ -177,7 +177,7 @@ Public-facing login/register flows. Currently not following CSS design tokens.
 
 ---
 
-## Phase 4 — Booking & Checkout Flows
+## Phase 4 — Booking & Checkout Flows (NEXT)
 
 Conversion-critical transaction screens.
 
