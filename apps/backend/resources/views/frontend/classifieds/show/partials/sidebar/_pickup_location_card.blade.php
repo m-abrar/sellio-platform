@@ -1,4 +1,4 @@
-﻿<div class="card glass-surface p-4">
+﻿<div class="card detail-sidebar-card p-4">
     <h5 class="fw-bold mb-3"><i class="bi bi-pin-map-fill me-2"></i>{{ __('Pickup Location') }}</h5>
     <p class="mb-0 fw-semibold">{{ $classified->city }}, {{ $classified->state ?? $classified->country }}</p>
     <p class="text-muted small mb-3">

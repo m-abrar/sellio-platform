@@ -15,11 +15,11 @@
     </x-slot:breadcrumbs>
 
     <x-slot:main>
-        <div class="card glass-surface border-0 overflow-hidden mb-5 shadow-lg">
+        <div class="detail-main-card border-0 overflow-hidden mb-5">
             <div class="gallery-section border-bottom border-color-light position-relative">
                 <div class="position-absolute top-0 start-0 m-3 z-2">
-                    <span class="badge bg-white text-dark shadow-sm border px-3 py-2 rounded-pill fw-bold small">
-                        <i class="bi bi-megaphone-fill text-primary me-1"></i> {{ strtoupper($classified->type?->title ?? __('Listing')) }}
+                    <span class="badge bg-white text-dark border px-3 py-2 rounded-2 fw-semibold small">
+                        <i class="bi bi-megaphone-fill text-primary me-1"></i>{{ $classified->type?->title ?? __('Listing') }}
                     </span>
                 </div>
                 @include('frontend.classifieds.show.partials._listing_gallery')
@@ -32,7 +32,7 @@
 
                 <div class="property-details-content">
                     <section id="listing-description" class="mb-5">
-                        <h2 class="fw-800 text-dark mb-4 section-title">{{ __('Description') }}</h2>
+                        <h2 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Description') }}</h2>
                         <div class="listing-description">
                             @include('frontend.classifieds.show.partials._item_description')
                         </div>
@@ -40,7 +40,7 @@
 
                     @isset($classified->attributes)
                         <section id="item-specs" class="mb-5">
-                            <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Specifications') }}</h4>
+                            <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Specifications') }}</h4>
                             @include('frontend.classifieds.show.partials._item_specs_table')
                         </section>
                     @endisset
@@ -56,8 +56,8 @@
 
         @include('frontend.classifieds.show.partials.sidebar._pickup_location_card')
 
-        <div class="glass-surface border-0 rounded-4 p-4 bg-warning bg-opacity-10">
-            <h6 class="fw-800 text-dark"><i class="bi bi-shield-lock text-primary-color me-2"></i>{{ __('Safety Tips') }}</h6>
+        <div class="detail-sidebar-card p-4 bg-warning bg-opacity-10">
+            <h6 class="fw-800 text-dark"><i class="bi bi-shield-lock text-primary me-2"></i>{{ __('Safety Tips') }}</h6>
             <ul class="small text-muted mb-0 ps-3">
                 <li>{{ __('Meet in a public place') }}</li>
                 <li>{{ __('Check the item before paying') }}</li>
@@ -68,8 +68,8 @@
 
     <x-slot:related>
         <div class="related-wrapper pb-5">
-            <h4 class="fw-800 text-dark mb-4 section-title">
-                <i class="bi bi-tags-fill me-2 text-primary-color"></i>
+            <h4 class="fw-800 text-dark mb-4 detail-section-title">
+                <i class="bi bi-tags-fill me-2 text-primary"></i>
                 {{ __('More from :seller', ['seller' => $classified->user?->name ?? __('this seller')]) }}
             </h4>
             @include('frontend.classifieds.show.partials._related_seller_items', [

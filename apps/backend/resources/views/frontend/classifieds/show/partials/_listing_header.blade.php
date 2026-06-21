@@ -1,10 +1,10 @@
 <div class="classified-detail-header mb-4">
     <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-        <span class="badge bg-light-primary text-primary-color rounded-pill px-3 py-2 fw-bold small">
+        <span class="badge bg-light-primary text-primary rounded-2 px-3 py-2 fw-semibold small">
             {{ $classified->category?->title ?? __('General') }}
         </span>
         @if ($classified->is_featured)
-            <span class="badge bg-danger text-white rounded-pill px-3 py-2 fw-bold small">
+            <span class="badge bg-danger text-white rounded-2 px-3 py-2 fw-semibold small">
                 <i class="bi bi-patch-check-fill me-1"></i>{{ __('Featured') }}
             </span>
         @endif
@@ -15,11 +15,11 @@
 
         <div class="classified-detail-header__price text-lg-end">
             <span class="metric-label d-block">{{ __('Price') }}</span>
-            <span class="price-text-large text-primary-color">{{ $classified->price_formatted }}</span>
+            <span class="price-text-large text-primary">{{ $classified->price_formatted }}</span>
         </div>
     </div>
 
-    <div class="product-detail-meta glass-surface rounded-4 border-0 p-3 p-md-4">
+    <div class="product-detail-meta bg-white border rounded-4 p-3 p-md-4">
         <div class="d-flex flex-wrap align-items-center gap-3 gap-md-4 small">
             <span class="text-muted">
                 <i class="bi bi-clock me-1"></i>{{ __('Posted :time', ['time' => $classified->created_at->diffForHumans()]) }}
