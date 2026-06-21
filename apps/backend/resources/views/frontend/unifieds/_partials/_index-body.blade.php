@@ -2,31 +2,32 @@
 @if(($publicModules ?? collect())->isNotEmpty())
 <section class="py-4 py-lg-5 section-warm">
     <div class="container-xl">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-3">
             <div>
+                <div class="hero-eyebrow mb-3">
+                    <span class="hero-eyebrow__line" aria-hidden="true"></span>
+                    {{ __('Browse Categories') }}
+                </div>
                 <h2 class="fw-800 text-dark h1 mb-1">
-                    @editable('home.discovery.heading', __('Explore the Marketplace'))
+                    @editable('home.discovery.heading', 'Explore the <span class="text-primary">Marketplace</span>')
                 </h2>
-                <p class="lead text-muted mb-0 sub-heading">
+                <p class="text-muted mb-0 sub-heading">
                     @editable('home.discovery.description', __('Start with any category, then filter into the exact listing you need.'))
                 </p>
             </div>
-            <a href="{{ filled(setting('url_partner')) ? setting('url_partner') : route('register') }}" class="btn btn-outline-primary rounded-pill fw-bold px-4">
-                <i class="bi bi-plus-lg me-1"></i> {{ __('Post Listing') }}
+            <a href="{{ filled(setting('url_partner')) ? setting('url_partner') : route('register') }}" class="btn btn-outline-primary btn-header-cta fw-bold flex-shrink-0">
+                {{ __('Post Listing') }}<i class="bi bi-arrow-right ms-2"></i>
             </a>
         </div>
 
         <div class="row row-cols-2 row-cols-md-4 g-3 g-lg-4">
             @foreach($publicModules as $module)
                 <div class="col">
-                    <a href="{{ route($module['route']) }}" class="market-module-card glass-surface d-flex flex-column h-100 text-decoration-none p-3 p-lg-4">
-                        <span class="market-module-icon d-inline-flex align-items-center justify-content-center mb-3">
-                            <i class="bi {{ $module['icon'] }}"></i>
-                        </span>
-                        <span class="fw-800 text-dark">{{ $module['label'] }}</span>
-                        <span class="small text-muted mt-1">
-                            {{ trans_choice(':count active listing|:count active listings', $module['count'], ['count' => number_format($module['count'])]) }}
-                        </span>
+                    <a href="{{ route($module['route']) }}" class="market-module-card d-flex flex-column h-100 text-decoration-none p-4">
+                        <div class="market-module-count">{{ number_format($module['count']) }}</div>
+                        <span class="market-module-label">{{ $module['label'] }}</span>
+                        <span class="market-module-stat">{{ $module['count'] === 1 ? __('active listing') : __('active listings') }}</span>
+                        <i class="bi {{ $module['icon'] }} market-module-bg-icon" aria-hidden="true"></i>
                     </a>
                 </div>
             @endforeach
@@ -46,7 +47,7 @@
             </div>
             <div data-aos="fade-left">
                 <a href="{{ route('properties.index') }}" class="btn btn-link text-primary fw-800 text-decoration-none p-0 hvr-icon-forward">
-                    {{ __('EXPLORE ALL') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
+                    {{ __('Explore all') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
                 </a>
             </div>
         </div>
@@ -83,7 +84,7 @@
             </div>
             <div data-aos="fade-left">
                 <a href="{{ route('autos.index') }}" class="btn btn-link fw-800 text-decoration-none p-0 hvr-icon-forward section-dark-link">
-                    {{ __('EXPLORE ALL') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
+                    {{ __('Explore all') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
                 </a>
             </div>
         </div>
@@ -120,7 +121,7 @@
             </div>
             <div data-aos="fade-left">
                 <a href="{{ route('products.index') }}" class="btn btn-link text-primary fw-800 text-decoration-none p-0 hvr-icon-forward">
-                    {{ __('SHOP ALL') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
+                    {{ __('Shop all') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
                 </a>
             </div>
         </div>
@@ -206,7 +207,7 @@
             </div>
             <div data-aos="fade-left">
                 <a href="{{ route('services.index') }}" class="btn btn-link text-primary fw-800 text-decoration-none p-0 hvr-icon-forward">
-                    {{ __('BROWSE ALL') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
+                    {{ __('Browse all') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
                 </a>
             </div>
         </div>
@@ -258,7 +259,7 @@
             </div>
             <div data-aos="fade-left">
                 <a href="{{ route('events.index') }}" class="btn btn-link text-primary fw-800 text-decoration-none p-0 hvr-icon-forward">
-                    {{ __('ALL EVENTS') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
+                    {{ __('All events') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
                 </a>
             </div>
         </div>
@@ -295,7 +296,7 @@
             </div>
             <div data-aos="fade-left">
                 <a href="{{ route('blogs.index') }}" class="btn btn-link text-primary fw-800 text-decoration-none p-0 hvr-icon-forward">
-                    {{ __('READ ALL') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
+                    {{ __('Read all') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
                 </a>
             </div>
         </div>

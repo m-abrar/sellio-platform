@@ -4430,3 +4430,91 @@ body.has-admin-bar .main-header.sticky-top{
     background:rgba(var(--primary-color-rgb),.08);
     color:var(--primary-color);
 }
+
+/* ─── Section heading system — DM Serif replaces fw-800 bold everywhere ─── */
+.frontend-site section h2.fw-800 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+}
+.frontend-site section h2.fw-800 .text-primary {
+    font-style: italic;
+}
+/* Section view-all links — natural case, refined weight */
+.frontend-site section .hvr-icon-forward {
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em;
+}
+
+/* ─── Discovery: module cards — data-first editorial design ─────────────── */
+.market-module-card {
+    background: #fff !important;
+    border: 1.5px solid rgba(15,23,42,.07) !important;
+    border-radius: 16px !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    position: relative;
+    overflow: hidden;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease !important;
+}
+.market-module-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--primary-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s ease;
+}
+.market-module-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 16px 40px rgba(var(--primary-color-rgb),.11) !important;
+    border-color: rgba(var(--primary-color-rgb),.22) !important;
+}
+.market-module-card:hover::before {
+    transform: scaleX(1);
+}
+.market-module-count {
+    font-family: var(--font-heading);
+    font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+    font-weight: 400;
+    color: var(--text-dark);
+    line-height: 1;
+    margin-bottom: 0.35rem;
+    position: relative;
+    z-index: 1;
+}
+.market-module-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    position: relative;
+    z-index: 1;
+}
+.market-module-stat {
+    font-size: 0.68rem;
+    color: var(--primary-color);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+    position: relative;
+    z-index: 1;
+}
+.market-module-bg-icon {
+    position: absolute;
+    bottom: -0.5rem;
+    right: 0.75rem;
+    font-size: 4.5rem;
+    color: rgba(var(--primary-color-rgb),.06);
+    pointer-events: none;
+    line-height: 1;
+    transition: color .3s ease, transform .3s ease;
+}
+.market-module-card:hover .market-module-bg-icon {
+    color: rgba(var(--primary-color-rgb),.11);
+    transform: scale(1.06) translateY(-3px);
+}
