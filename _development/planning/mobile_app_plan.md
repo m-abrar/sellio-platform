@@ -37,11 +37,11 @@ The current implementation is still a prototype because:
 
 - The shared API foundation is implemented, but most feature models remain untyped.
 - Home discovery uses the first API page and does not yet expose search, filters, or pagination controls.
-- Listing details still probe multiple endpoints and retain prototype fallback records.
+- Listing details use vertical-specific endpoints and show real API failures without mock fallbacks.
 - Favorites and messages are placeholder screens.
 - Settings actions are not connected.
-- Some labels contain broken emoji or character encoding.
-- There is no shared typed API client, automated test suite, or release-build configuration.
+- Buyer-facing language and source encoding have been normalized on the implemented screens.
+- There is no automated test suite or release-build configuration yet.
 
 ## Phase 1: Application Foundation
 
@@ -52,17 +52,17 @@ Make API communication predictable on Android emulators, iOS simulators, physica
 ### Tasks
 
 - [x] Replace hardcoded API hosts with environment-based configuration.
-- [ ] Document emulator, simulator, physical-device, staging, and production API URLs.
+- [x] Document emulator, simulator, physical-device, staging, and production API URLs.
 - [x] Create a shared mobile API client with:
   - JSON response normalization.
   - Sanctum bearer-token injection.
   - Validation-error extraction.
   - Unauthorized-session handling.
   - Request timeouts and clear network errors.
-- [ ] Introduce typed models for users, listings, pagination, favorites, conversations, and buyer activity.
+- [x] Introduce typed models for users, listings, pagination, favorites, conversations, and buyer activity.
 - [ ] Add shared loading, empty, offline, and error states.
-- [ ] Add authenticated route guards.
-- [ ] Remove broken encoding and normalize buyer-facing language.
+- [x] Add authenticated route guards.
+- [x] Remove broken encoding and normalize buyer-facing language.
 - [ ] Stop silently replacing failed API requests with mock marketplace data.
 - [ ] Keep development fixtures explicitly separated from live API behavior.
 
@@ -205,8 +205,8 @@ The first sprint will deliver the foundation and one complete real-data path.
 - [x] Add environment-based API configuration that works on the currently connected physical phone.
 - [x] Create the shared authenticated API client.
 - [x] Create core listing and pagination types.
-- [ ] Remove implicit mock fallback behavior.
-- [ ] Fix broken character encoding.
+- [x] Remove implicit mock fallback behavior.
+- [x] Fix broken character encoding.
 - [x] Add Products to the category list.
 - [x] Replace the home feed with real API data for all enabled verticals.
 - [x] Render real listing images and vertical-aware card metadata.

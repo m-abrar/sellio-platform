@@ -1,17 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import { useAuth } from '../../src/context/AuthContext';
-import { useRouter } from 'expo-router';
+import { AuthenticatedScreen } from '../../src/auth/AuthenticatedScreen';
 
 export default function SettingsView() {
   const { isAuthenticated, user, signOut } = useAuth();
-  const router = useRouter();
 
-  const userInitial = user?.name ? user.name[0].toUpperCase() : 'G';
-  const displayName = user?.name || 'Guest Account';
-  const displayEmail = user?.email || 'Sign in to persist your configurations';
+  const userInitial = user?.name ? user.name[0].toUpperCase() : 'B';
+  const displayName = user?.name || 'Buyer';
+  const displayEmail = user?.email || '';
 
   return (
+    <AuthenticatedScreen returnTo="/settings">
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.welcomeText}>WORKSPACE</Text>
@@ -26,13 +26,9 @@ export default function SettingsView() {
           <Text style={styles.profileName}>{displayName}</Text>
           <Text style={styles.profileEmail}>{displayEmail}</Text>
 
-          {isAuthenticated ? (
+          {isAuthenticated && (
             <TouchableOpacity style={styles.profileLogoutBtn} onPress={signOut}>
-              <Text style={styles.profileLogoutBtnText}>SECURE LOGOUT</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity style={styles.profileLoginBtn} onPress={() => router.push('/login')}>
-              <Text style={styles.profileLoginBtnText}>SIGN IN TO WORKSPACE</Text>
+              <Text style={styles.profileLogoutBtnText}>LOG OUT</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -42,7 +38,7 @@ export default function SettingsView() {
             <Text style={styles.menuIcon}>👤</Text>
             <View style={styles.menuTextContainer}>
               <Text style={styles.menuTitle}>Profile Settings</Text>
-              <Text style={styles.menuDesc}>Display name and avatar updates.</Text>
+              <Text style={styles.menuDesc}>Update your name, avatar, and location.</Text>
             </View>
           </TouchableOpacity>
 
@@ -50,20 +46,21 @@ export default function SettingsView() {
             <Text style={styles.menuIcon}>🔒</Text>
             <View style={styles.menuTextContainer}>
               <Text style={styles.menuTitle}>Security & Passwords</Text>
-              <Text style={styles.menuDesc}>Update credentials and 2FA keys.</Text>
+              <Text style={styles.menuDesc}>Update your password and account security.</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem}>
             <Text style={styles.menuIcon}>🔔</Text>
             <View style={styles.menuTextContainer}>
-              <Text style={styles.menuTitle}>Alert Adjustments</Text>
-              <Text style={styles.menuDesc}>Push notification triggers.</Text>
+              <Text style={styles.menuTitle}>Notifications</Text>
+              <Text style={styles.menuDesc}>Manage buyer notification preferences.</Text>
             </View>
           </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
+    </AuthenticatedScreen>
   );
 }
 

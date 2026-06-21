@@ -1,4 +1,4 @@
-import { ListingApiRecord, ListingCardItem, ListingVertical } from './types';
+import { ListingApiRecord, ListingCardItem, ListingDetailItem, ListingVertical } from './types';
 
 function text(value: unknown) {
   return typeof value === 'string' && value.trim() ? value.trim() : null;
@@ -128,5 +128,17 @@ export function toListingCard(record: ListingApiRecord, vertical: ListingVertica
     location: locationFor(record, vertical),
     details: detailsFor(record, vertical),
     imageUrl: imageFor(record, vertical),
+  };
+}
+
+export function toListingDetail(
+  record: ListingApiRecord,
+  vertical: ListingVertical,
+): ListingDetailItem {
+  return {
+    ...toListingCard(record, vertical),
+    description: text(record.description)
+      || text(record.short_description)
+      || 'No description has been provided for this listing.',
   };
 }

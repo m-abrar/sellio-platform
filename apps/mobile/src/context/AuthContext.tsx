@@ -1,20 +1,11 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { apiRequest, setUnauthorizedHandler } from '../api/client';
 import { clearStoredSession, loadStoredSession, storeSession } from '../auth/sessionStorage';
-
-interface User {
-  id: number;
-  name: string;
-  email?: string;
-  avatar?: string;
-  avatar_url?: string;
-  is_buyer?: boolean;
-  is_partner?: boolean;
-}
+import { AuthResponse, AuthUser } from '../features/auth/types';
 
 interface AuthContextType {
   token: string | null;
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
@@ -26,14 +17,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadStorageData() {
       try {
-        const session = await loadStoredSession<User>();
+        const session = await loadStoredSession<AuthUser>();
 
         if (session) {
           setToken(session.token);
@@ -62,11 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = async (email: string, password: string) => {
     setError(null);
     try {
-      const authData = await apiRequest<{
-        access_token?: string;
-        token?: string;
-        user?: User;
-      }>('/v1/auth/login', {
+      const authData = await apiRequest<AuthResponse>('/v1/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });

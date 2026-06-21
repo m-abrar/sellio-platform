@@ -51,6 +51,10 @@ export interface ListingCardItem {
   imageUrl: string | null;
 }
 
+export interface ListingDetailItem extends ListingCardItem {
+  description: string;
+}
+
 export interface ListingCategoryDefinition {
   id: ListingVertical;
   title: string;

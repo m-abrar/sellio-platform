@@ -2,44 +2,35 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import { useAuth } from '../../src/context/AuthContext';
 import { useRouter } from 'expo-router';
+import { AuthenticatedScreen } from '../../src/auth/AuthenticatedScreen';
 
 export default function MessagesView() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
 
   return (
+    <AuthenticatedScreen returnTo="/messages">
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.welcomeText}>COMMUNICATION</Text>
         <Text style={styles.headerTitle}>INBOX.</Text>
 
-        {!isAuthenticated ? (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyIcon}>💬</Text>
-            <Text style={styles.emptyTitle}>Conversations Protected</Text>
-            <Text style={styles.emptySubtitle}>Log in with your authenticated partner or buyer credentials to access live messages and chat threads.</Text>
-            <TouchableOpacity 
-              style={styles.discoverBtn}
-              onPress={() => router.push('/login')}
-            >
-              <Text style={styles.discoverBtnText}>SIGN IN TO INBOX</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
+        {isAuthenticated && (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyIcon}>💬</Text>
             <Text style={styles.emptyTitle}>No Messages Found</Text>
-            <Text style={styles.emptySubtitle}>You don't have any active inquiry conversations yet. Initiate a transaction on a listing to start a chat thread.</Text>
+            <Text style={styles.emptySubtitle}>You don't have any conversations yet. Contact a seller from a listing to start one.</Text>
             <TouchableOpacity 
               style={styles.discoverBtn}
               onPress={() => router.push('/')}
             >
-              <Text style={styles.discoverBtnText}>DISCOVER BLUEPRINTS</Text>
+              <Text style={styles.discoverBtnText}>EXPLORE MARKETPLACE</Text>
             </TouchableOpacity>
           </View>
         )}
       </ScrollView>
     </SafeAreaView>
+    </AuthenticatedScreen>
   );
 }
 

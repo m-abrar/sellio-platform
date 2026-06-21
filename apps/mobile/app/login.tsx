@@ -1,10 +1,11 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Animated, Easing, StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useAuth } from '../src/context/AuthContext';
 
 export default function LoginModal() {
   const router = useRouter();
+  const { returnTo } = useLocalSearchParams<{ returnTo?: string }>();
   const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -51,7 +52,11 @@ export default function LoginModal() {
     setErrorMsg(null);
     try {
       await signIn(email.trim(), password);
-      router.back();
+      if (returnTo === '/favorites' || returnTo === '/messages' || returnTo === '/settings') {
+        router.replace(returnTo);
+      } else {
+        router.back();
+      }
     } catch (err: any) {
       setErrorMsg(err?.message || 'Authentication failed. Please verify machine connections and credentials.');
     } finally {
@@ -87,7 +92,7 @@ export default function LoginModal() {
           accessibilityLabel="Sellio logo"
         />
         <Text style={styles.headerTitle}>LOG IN.</Text>
-        <Text style={styles.subtitle}>Sign in with your partner or buyer credentials.</Text>
+        <Text style={styles.subtitle}>Sign in with your buyer account.</Text>
 
         <View style={styles.form}>
           {errorMsg && (

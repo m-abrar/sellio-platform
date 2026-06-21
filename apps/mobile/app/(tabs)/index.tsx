@@ -220,7 +220,10 @@ export default function HomeView() {
                   key={`${item.vertical}-${item.id}`}
                   style={styles.productCard}
                   activeOpacity={0.82}
-                  onPress={() => router.push(`/listing/${item.slug}`)}
+                  onPress={() => router.push({
+                    pathname: '/listing/[slug]',
+                    params: { slug: item.slug, vertical: item.vertical },
+                  })}
                 >
                   <View style={styles.productImageContainer}>
                     <Text style={styles.imageFallbackIcon}>{category?.icon || '◇'}</Text>

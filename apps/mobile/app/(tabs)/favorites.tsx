@@ -2,44 +2,35 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import { useAuth } from '../../src/context/AuthContext';
 import { useRouter } from 'expo-router';
+import { AuthenticatedScreen } from '../../src/auth/AuthenticatedScreen';
 
 export default function FavoritesView() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
 
   return (
+    <AuthenticatedScreen returnTo="/favorites">
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.welcomeText}>COLLECTION</Text>
         <Text style={styles.headerTitle}>FAVORITES.</Text>
 
-        {!isAuthenticated ? (
+        {isAuthenticated && (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyIcon}>⭐</Text>
-            <Text style={styles.emptyTitle}>Registry is Protected</Text>
-            <Text style={styles.emptySubtitle}>Log in with your authenticated buyer or partner account to persist and view bookmarked blueprints.</Text>
-            <TouchableOpacity 
-              style={styles.discoverBtn}
-              onPress={() => router.push('/login')}
-            >
-              <Text style={styles.discoverBtnText}>SIGN IN TO REGISTRY</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyIcon}>⭐</Text>
-            <Text style={styles.emptyTitle}>No Bookmarks Saved</Text>
-            <Text style={styles.emptySubtitle}>You haven't bookmarked any premium blueprints yet. Head over to the catalog to begin collecting assets.</Text>
+            <Text style={styles.emptyTitle}>No Favorites Saved</Text>
+            <Text style={styles.emptySubtitle}>Listings you favorite will appear here.</Text>
             <TouchableOpacity 
               style={styles.discoverBtn}
               onPress={() => router.push('/')}
             >
-              <Text style={styles.discoverBtnText}>EXPLORE DISCOVERY</Text>
+              <Text style={styles.discoverBtnText}>EXPLORE MARKETPLACE</Text>
             </TouchableOpacity>
           </View>
         )}
       </ScrollView>
     </SafeAreaView>
+    </AuthenticatedScreen>
   );
 }
 
