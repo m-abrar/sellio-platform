@@ -92,7 +92,7 @@
                                     <p class="small text-muted mb-0">{{ __('Message your host,') }} {{ $property->host_name ?? $property->user->name }}</p>
                                 </div>
                             </div>
-                            <a href="{{ route('conversation.start', ['user' => $property->user]) }}" class="btn btn-white btn-sm fw-800 shadow-sm w-100 mt-3 border rounded-pill py-2">
+                            <a href="{{ route('conversation.start', ['user' => $property->user]) }}" class="btn btn-outline-secondary btn-sm fw-semibold w-100 mt-3 rounded-2 py-2">
                                 {{ __('Contact Host') }}
                             </a>
                         </div>

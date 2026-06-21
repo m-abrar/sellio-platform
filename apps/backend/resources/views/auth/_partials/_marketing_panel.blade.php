@@ -17,7 +17,7 @@
                          alt="{{ setting('site_name', config('app.name')) }}"
                          class="auth-icon-logo">
                 @else
-                    <i class="bi {{ $icon }} text-primary-color display-5"></i>
+                    <i class="bi {{ $icon }} text-primary display-5"></i>
                 @endif
             </div>
         </div>

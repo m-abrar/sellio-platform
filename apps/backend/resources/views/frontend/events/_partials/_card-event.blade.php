@@ -20,7 +20,7 @@
             
             {{-- Price Badge (Top Right) --}}
             <div class="position-absolute top-0 end-0 m-2">
-                <span class="badge {{ $event->is_free ? 'bg-success' : ($event->on_sale ? 'bg-danger' : 'bg-primary') }} text-white rounded-pill px-3 py-2 shadow-sm fw-800 evc-auto-badge border border-white border-opacity-25">
+                <span class="badge {{ $event->is_free ? 'bg-success' : ($event->on_sale ? 'bg-danger' : 'bg-primary') }} text-white rounded-2 px-3 py-2 fw-semibold evc-auto-badge">
                     @if($event->on_sale && !$event->is_free)<i class="bi bi-tag-fill me-1"></i>@endif
                     {{ $event->is_free ? __('FREE') : $event->price_formatted }}
                 </span>

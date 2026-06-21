@@ -72,12 +72,12 @@
     {{-- Form Section --}}
     @auth
         @if(!$reviewable->reviews->where('user_id', auth()->id())->first())
-            <div class="mt-4 p-4 border rounded-5 bg-white shadow-sm">
+            <div class="mt-4 p-4 bg-white border rounded-4">
                 <h6 class="fw-800 mb-3">{{ __('Write a Review') }}</h6>
                 <form action="{{ route('reviews.store', ['type' => $type, 'id' => $reviewable->id]) }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label class="form-label small fw-800 text-muted uppercase tracking-wider">{{ __('Your Rating') }}</label>
+                        <label class="form-label small fw-semibold text-muted">{{ __('Your Rating') }}</label>
                         <div class="star-rating d-flex gap-2 fs-3 text-muted">
                             @for($i=1; $i<=5; $i++)
                                 <input type="radio" name="rating" id="star{{ $i }}" value="{{ $i }}" class="btn-check" required>
@@ -91,7 +91,7 @@
                         <textarea name="comment" class="form-control rounded-4 p-3 border-light bg-light" rows="3" placeholder="{{ __('Describe your experience...') }}" required></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary rounded-pill px-5 fw-800 hover-lift">
+                    <button type="submit" class="btn btn-primary px-5">
                         {{ __('Post Review') }}
                     </button>
                 </form>
@@ -100,7 +100,7 @@
     @else
         <div class="alert bg-light border-1 text-center mt-4">
             <p class="mb-2 small">{{ __('Logged in users can leave verified reviews.') }}</p>
-            <a href="{{ route('login') }}" class="btn btn-sm btn-dark rounded-pill px-4">{{ __('Login Now') }}</a>
+            <a href="{{ route('login') }}" class="btn btn-sm btn-dark px-4">{{ __('Login Now') }}</a>
         </div>
     @endauth
 </div>

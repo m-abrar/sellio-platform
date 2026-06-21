@@ -10,7 +10,7 @@
                 @if(filled(setting('site_logo')))
                     <img src="{{ asset('storage/' . setting('site_logo')) }}" alt="{{ setting('site_name', config('app.name')) }}" class="auth-mobile-logo">
                 @else
-                    <div class="d-inline-flex align-items-center gap-2 text-primary-color fw-bolder fs-2">
+                    <div class="d-inline-flex align-items-center gap-2 text-primary fw-bolder fs-2">
                         <i class="bi bi-shop"></i>
                         <span>{{ setting('site_name', config('app.name')) }}</span>
                     </div>

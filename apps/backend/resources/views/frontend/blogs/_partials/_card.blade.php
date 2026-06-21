@@ -10,7 +10,7 @@
             
             {{-- Category Badge --}}
             <div class="position-absolute top-0 start-0 m-3">
-                <span class="badge bg-white text-primary rounded-pill px-3 py-2 shadow-sm fw-bold border-0 backdrop-blur-sm">
+                <span class="badge bg-white text-primary rounded-2 px-3 py-2 fw-semibold">
                     {{ $blog->category->title ?? __('General') }}
                 </span>
             </div>

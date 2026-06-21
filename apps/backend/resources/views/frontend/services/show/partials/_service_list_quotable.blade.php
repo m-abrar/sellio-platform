@@ -5,7 +5,7 @@
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <h6 class="fw-bold text-dark mb-0">{{ $package->title }}</h6>
                     @if($package->is_popular)
-                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle tiny fw-bold uppercase px-2">
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle tiny fw-semibold px-2">
                             {{ __('Best Value') }}
                         </span>
                     @endif
@@ -27,7 +27,7 @@
                     <span class="fw-900 text-primary fs-5">${{ number_format($package->price, 0) }}</span>
                     <small class="text-muted">/{{ $package->billing_period }}</small>
                 </div>
-                <a href="#quote-form" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
+                <a href="#quote-form" class="btn btn-sm btn-outline-secondary rounded-2 px-3 fw-semibold">
                     {{ __('Request Quote') }}
                 </a>
             </div>
