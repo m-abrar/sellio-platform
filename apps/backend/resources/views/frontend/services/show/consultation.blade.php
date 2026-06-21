@@ -14,15 +14,15 @@
     </x-slot:breadcrumbs>
 
     <x-slot:main>
-            <div class="card glass-surface border-0 overflow-hidden mb-5">
+            <div class="detail-main-card border-0 overflow-hidden mb-5">
                 
                 {{-- 2. HEADER IMAGE / GALLERY --}}
                 <div class="gallery-section border-bottom border-color-light position-relative">
                     {{-- Category Badge Overlay --}}
                     <div class="position-absolute top-0 start-0 m-3 z-2">
-                        <span class="badge bg-white text-primary shadow-sm border px-3 py-2 rounded-pill fw-bold small">
-                            <i class="bi {{ $service->category->icon ?? 'bi-patch-check-fill' }} me-1"></i> 
-                            {{ strtoupper($service->category->title ?? __('Service')) }}
+                        <span class="badge bg-white text-primary border px-3 py-2 rounded-2 fw-semibold small">
+                            <i class="bi {{ $service->category->icon ?? 'bi-patch-check-fill' }} me-1"></i>
+                            {{ $service->category->title ?? __('Service') }}
                         </span>
                     </div>
                     @include('frontend.services.show.partials._gallery_carousel', ['service' => $service]) 
@@ -47,7 +47,7 @@
                     <div class="service-details-content">
                         {{-- DESCRIPTION --}}
                         <section id="overview" class="mb-5">
-                            <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Service Overview') }}</h4>
+                            <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Service Overview') }}</h4>
                             <div class="listing-description">
                                 {!! nl2br(e($service->description)) !!}
                             </div>
@@ -55,13 +55,13 @@
 
                         {{-- OPERATING HOURS --}}
                         <section id="availability" class="mb-5">
-                            <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Availability') }}</h4>
+                            <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Availability') }}</h4>
                             @include('frontend.services.show.partials._operating_hours', ['service' => $service, 'isConsult' => true])
                         </section>
 
                         {{-- EXPERTISE / FEATURES --}}
                         <section id="expertise" class="mb-5">
-                            <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Our Expertise') }}</h4>
+                            <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Our Expertise') }}</h4>
                             @include('frontend.services.show.partials._simple_feature_list', ['features' => $service->features->take(6)])
                         </section>
 
@@ -82,7 +82,7 @@
 
             {{-- RELATED --}}
             <div class="related-wrapper pb-5">
-                <h3 class="fw-bold mt-5 mb-4"><i class="bi bi-bookmark-heart-fill me-2 text-primary-color"></i>{{ __('You Might Also Like') }}</h3>
+                <h3 class="fw-800 mt-5 mb-4"><i class="bi bi-bookmark-heart-fill me-2 text-primary"></i>{{ __('You might also like') }}</h3>
                  @include('frontend.services.show.partials._related_services')
             </div>
     </x-slot:main>

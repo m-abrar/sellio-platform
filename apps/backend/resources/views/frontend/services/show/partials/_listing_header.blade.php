@@ -18,17 +18,17 @@
         </div>
 
         @if($service->is_featured)
-            <span class="badge bg-dark text-white px-3 py-2 rounded-pill fw-bold small">
+            <span class="badge bg-dark text-white px-3 py-2 rounded-2 fw-semibold small">
                 <i class="bi bi-star-fill text-warning me-1"></i> {{ __('Featured') }}
             </span>
         @endif
-        
-        <span class="badge bg-primary-light text-primary-color px-3 py-2 rounded-pill fw-bold small">
+
+        <span class="badge bg-light-primary text-primary px-3 py-2 rounded-2 fw-semibold small">
             <i class="bi bi-award-fill me-1"></i> {{ __('Level') }}: {{ $expertiseMap[$service->expertise_level] ?? $service->expertise_level }}
         </span>
 
         @if($service->is_project_based)
-            <span class="badge bg-info-light text-info px-3 py-2 rounded-pill fw-bold small">
+            <span class="badge bg-light text-primary px-3 py-2 rounded-2 fw-semibold small">
                 <i class="bi bi-briefcase-fill me-1"></i> {{ __('Project') }}
             </span>
         @endif
@@ -44,8 +44,8 @@
                 
                 {{-- Action Buttons --}}
                 <div class="d-flex gap-2 flex-shrink-0 mt-1">
-                    <button class="btn btn-icon-glass shadow-sm" title="{{ __('Save') }}"><i class="bi bi-heart"></i></button>
-                    <button class="btn btn-icon-glass shadow-sm" title="{{ __('Share') }}"><i class="bi bi-share"></i></button>
+                    <button class="btn btn-sm border fw-semibold px-3 rounded-2" title="{{ __('Save') }}"><i class="bi bi-heart me-1"></i>{{ __('Save') }}</button>
+                    <button class="btn btn-sm border fw-semibold px-3 rounded-2" title="{{ __('Share') }}"><i class="bi bi-share me-1"></i>{{ __('Share') }}</button>
                 </div>
             </div>
 

@@ -14,14 +14,14 @@
     </x-slot:breadcrumbs>
 
     <x-slot:main>
-            <div class="card glass-surface border-0 overflow-hidden mb-5">
+            <div class="detail-main-card border-0 overflow-hidden mb-5">
                 
                 {{-- 2. HEADER IMAGE / GALLERY --}}
                 <div class="gallery-section border-bottom border-color-light position-relative">
                     <div class="position-absolute top-0 start-0 m-3 z-2">
-                        <span class="badge bg-white text-primary shadow-sm border px-3 py-2 rounded-pill fw-bold small">
-                            <i class="{{ $service->category->icon ?? 'bi-chat-left-dots-fill' }} text-primary me-1"></i> 
-                            {{ strtoupper($service->category?->title ?? __('Custom Quote')) }}
+                        <span class="badge bg-white text-primary border px-3 py-2 rounded-2 fw-semibold small">
+                            <i class="{{ $service->category->icon ?? 'bi-chat-left-dots-fill' }} text-primary me-1"></i>
+                            {{ $service->category?->title ?? __('Custom quote') }}
                         </span>
                     </div>
                     @include('frontend.services.show.partials._gallery_carousel', ['service' => $service]) 
@@ -45,7 +45,7 @@
                         
                         {{-- DETAILED DESCRIPTION --}}
                         <section id="overview" class="mb-5 pt-4 border-top border-color-light">
-                            <h4 class="fw-800 text-dark mb-4 section-title">{{ __('About this Service') }}</h4>
+                            <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('About this Service') }}</h4>
                             <div class="listing-description">
                                 {!! nl2br(e($service->description)) !!}
                             </div>
@@ -73,19 +73,19 @@
 
                         {{-- QUOTABLE SERVICES / CAPABILITIES --}}
                         <section id="capabilities" class="mb-5">
-                            <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Service Scope & Capabilities') }}</h4>
+                            <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Service Scope & Capabilities') }}</h4>
                             @include('frontend.services.show.partials._service_list_quotable', ['service' => $service])
                         </section>
 
                         <section id="specs" class="mb-5 pt-4 border-top border-color-light">
-                            <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Operating Hours') }}</h4>
+                            <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Operating Hours') }}</h4>
                             @include('frontend.services.show.partials._operating_hours', [
                                 'service' => $service
                             ])
                         </section>
 
                         <section id="specs" class="mb-5 pt-4 border-top border-color-light">
-                            <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Logistics & Service Area') }}</h4>
+                            <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Logistics & Service Area') }}</h4>
                             @include('frontend.services.show.partials._quick_specs', [
                                 'service' => $service,
                                 // Passing these explicitly to ensure alignment with Model Attributes
@@ -96,13 +96,13 @@
 
                         {{-- LOCATION --}}
                         <section id="location" class="mb-5 pt-4 border-top border-color-light">
-                            <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Location & Directions') }}</h4>
+                            <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Location & Directions') }}</h4>
                              @include('frontend.services.show.partials._location_map', ['service' => $service])
                         </section>
 
                         {{-- REVIEWS --}}
                         <section id="reviews" class="pt-4 border-top border-color-light">
-                             <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Client Feedback') }}</h4>
+                             <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Client Feedback') }}</h4>
                              @include('frontend.services.show.partials._reviews_section', [
                                 'rating' => number_format($service->rating_average, 1), 
                                 'reviewCount' => $service->reviews->count(),
@@ -146,7 +146,7 @@
                 @include('frontend.services.show.partials.sidebar._quote_sidebar', ['service' => $service])
                 
                 {{-- 3. TRUST STACK (Fast Turnaround & Transparency) --}}
-                <div class="card glass-surface border-0 shadow-sm mt-4 overflow-hidden">
+                <div class="card detail-sidebar-card mt-4 overflow-hidden">
                     <div class="p-4 bg-white">
                         <div class="d-flex align-items-start mb-3">
                             <div class="icon-circle bg-primary-subtle text-primary me-3">
