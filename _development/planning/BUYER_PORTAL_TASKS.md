@@ -138,3 +138,7 @@ meaningful to an end user:
 The location field in the buyer settings, can we connect to the actual location table? show as dropdown options.
 and therefore, it may be used on the frontend to show matching listings results.
 
+
+
+replace the content copy which gives a feeling of ai generated english
+can we use the simple and regular english words that are already used in codecanyon products?

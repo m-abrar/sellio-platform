@@ -101,3 +101,6 @@ text input when no Google Maps API key is configured.
 Ensure the API key is set in admin settings, or document the setup step clearly.
 
 ---
+
+replace the content copy which gives a feeling of ai generated english
+can we use the simple and regular english words that are already used in codecanyon products?

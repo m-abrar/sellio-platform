@@ -526,3 +526,8 @@ on the login screen the password placeholder color is too dark, fix it.
 
 i wrote the content on admin dashboard (all pages of admin portal) with the help of Ai tool. Now a days all people are using Ai, therefore the content is easily guessed that it is written by Ai. 
 Can we use different english words, that feel like manually chosen and most commonly used on codecanyon dashboards.
+
+
+
+The laravel frontend hero section looks like very common design that Ai Tools generally create.
+Can you suggest something different? Unique UIUX? As well as changing the fonts, colors, spacing throughout all the layout and theme?
