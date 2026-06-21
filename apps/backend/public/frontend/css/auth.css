@@ -76,7 +76,7 @@ h1, h2, h3, h4, .brand-text {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     padding: clamp(3rem, 7vw, 5rem) !important;
     padding-bottom: 5rem !important;
 }
@@ -128,7 +128,7 @@ h1, h2, h3, h4, .brand-text {
 }
 
 .form-control::placeholder {
-    color: #b0bac7 !important;
+    color: #c8d2db !important;
     opacity: 1;
 }
 
@@ -232,11 +232,11 @@ h1, h2, h3, h4, .brand-text {
 }
 
 .social-btn:hover {
-    background-color: var(--surface-white) !important;
+    background: rgba(255, 255, 255, 0.96) !important;
     border-color: var(--primary) !important;
     color: var(--primary) !important;
     transform: translateY(-2px);
-    box-shadow: var(--shadow-glow) !important;
+    box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.16) !important;
 }
 
 /* Icon Boxes */
@@ -307,10 +307,6 @@ h1, h2, h3, h4, .brand-text {
     position: relative;
     z-index: 5;
     max-width: 520px;
-    /* margin: auto 0 perfectly centers the sole in-flow flex item
-       without fighting the absolute-positioned copyright below */
-    margin-top: auto;
-    margin-bottom: auto;
 }
 
 /* Icon on dark navy needs to be white, not primary purple */

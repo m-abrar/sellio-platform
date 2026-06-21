@@ -2867,13 +2867,13 @@ body.has-admin-bar .main-header.sticky-top{
 /* ── Footer v3 ───────────────────────────────────────────────────── */
 
 .ft-wrap{
-    padding-top:3.5rem;
+    padding-top:2.75rem;
     padding-bottom:1.5rem;
 }
 
 /* ── Main grid ── */
 .ft-grid{
-    margin-bottom:2.5rem;
+    margin-bottom:1.75rem;
 }
 
 /* Brand */

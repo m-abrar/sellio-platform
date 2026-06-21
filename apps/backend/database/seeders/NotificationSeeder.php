@@ -56,35 +56,22 @@ class NotificationSeeder extends Seeder
 
         $this->command->line("\n--- 🚨 Seeding Unread Notifications ---");
 
-        // --- 2. Create Sample Notifications (System Alerts and User Reports) ---
-        
-        // High-priority system alert simulating an infrastructure failure.
-        $admin->notify(new ContentFlagged('alert', 'Queue worker failed on service job #456'));
-        $count++;
+        // notifyNow() bypasses ShouldQueue so records land in the DB immediately
+        // without a queue worker (required for demo seeding to work reliably).
+        $items = [
+            ['alert',  'Queue worker failed on service job #456'],
+            ['flag',   'Review flagged for spam'],
+            ['review', 'New partner application pending review'],
+            ['report', 'Broken photos reported on Listing #78'],
+            ['alert',  'Subscription payment failed for user ID 991'],
+            ['new',    'New support ticket opened by Jane Doe'],
+            ['alert',  'External API sync failed at 3:00 AM'],
+        ];
 
-        // Moderation flag indicating user-reported content requiring review.
-        $admin->notify(new ContentFlagged('flag', 'Review flagged for spam'));
-        $count++;
-        
-        // Workflow trigger indicating a task requiring manual approval from an administrator.
-        $admin->notify(new ContentFlagged('review', 'New partner application pending review'));
-        $count++;
-
-        // Broken content report, typically triggered by an automated check or user feedback.
-        $admin->notify(new ContentFlagged('report', 'Broken Listing: Broken photos reported on Listing #78'));
-        $count++;
-
-        // Critical billing/financial issue, often requiring immediate attention.
-        $admin->notify(new ContentFlagged('alert', 'Subscription payment failed for user ID 991.'));
-        $count++;
-
-        // New user interaction, directing the admin to the support area.
-        $admin->notify(new ContentFlagged('new', 'New support ticket opened by Jane Doe.'));
-        $count++;
-
-        // External service integration failure, impacting third-party data sync.
-        $admin->notify(new ContentFlagged('alert', 'External API sync failed at 3:00 AM.'));
-        $count++;
+        foreach ($items as [$type, $message]) {
+            $admin->notifyNow(new ContentFlagged($type, $message));
+            $count++;
+        }
 
         // --- 3. Output Confirmation ---
         $this->command->info("\n--- 🏁 Notification Seeding Complete ---");
