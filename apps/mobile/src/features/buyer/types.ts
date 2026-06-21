@@ -102,7 +102,8 @@ export type BuyerActivitySource =
   | 'order'
   | 'application'
   | 'auto_inquiry'
-  | 'service_quote';
+  | 'service_quote'
+  | 'classified_inquiry';
 export type BuyerBookingKind =
   | 'property_booking'
   | 'property_visit'
@@ -256,6 +257,46 @@ export interface BuyerServiceQuoteRecord {
   } | null;
 }
 
+export interface BuyerClassifiedSummary {
+  id: number;
+  title: string;
+  slug: string;
+  base_price?: number | string | null;
+  sale_price?: number | string | null;
+  price_formatted?: string | null;
+  item_condition?: number | string | null;
+  condition_label?: string | null;
+  item_year_age?: number | string | null;
+  item_quantity?: number | null;
+  primary_image_url?: string | null;
+  brand?: { id: number; name: string } | null;
+}
+
+export interface BuyerClassifiedInquiryRecord {
+  id: number;
+  user_id: number;
+  classified_id: number;
+  full_name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  message?: string | null;
+  status: string;
+  viewed_at?: string | null;
+  created_at: string;
+  updated_at?: string;
+  classified?: BuyerClassifiedSummary | null;
+  classifiedAd?: BuyerClassifiedSummary | null;
+  classifiedad?: BuyerClassifiedSummary | null;
+  classified_ad?: BuyerClassifiedSummary | null;
+}
+
+export interface BuyerClassifiedInquiriesData {
+  inquiries:
+    | BuyerClassifiedInquiryRecord[]
+    | { data: BuyerClassifiedInquiryRecord[] };
+  favorites?: FavoriteRecord[] | { data: FavoriteRecord[] };
+}
+
 export interface BuyerActivityCard {
   key: string;
   id: number;
@@ -265,7 +306,8 @@ export interface BuyerActivityCard {
     | 'product_order'
     | 'job_application'
     | 'vehicle_inquiry'
-    | 'service_quote';
+    | 'service_quote'
+    | 'classified_inquiry';
   vertical: import('../listings/types').ListingVertical;
   title: string;
   imageUrl: string | null;

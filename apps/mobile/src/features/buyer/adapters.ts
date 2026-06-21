@@ -2,6 +2,7 @@ import {
   BuyerActivityCard,
   BuyerAutoInquiryRecord,
   BuyerBookingRecord,
+  BuyerClassifiedInquiryRecord,
   BuyerJobApplicationRecord,
   BuyerOrderRecord,
   BuyerServiceQuoteRecord,
@@ -261,6 +262,41 @@ export function toServiceQuoteActivityCard(
     detail: scope ? `Scope: ${scope}` : 'Quote requested',
     reference: `Quote #${record.id}`,
     slug: text(record.service?.slug),
+    isUpcoming: false,
+    cancellationType: null,
+  };
+}
+
+export function toClassifiedInquiryActivityCard(
+  record: BuyerClassifiedInquiryRecord,
+): BuyerActivityCard {
+  const classified = record.classified
+    || record.classifiedAd
+    || record.classifiedad
+    || record.classified_ad
+    || null;
+  const price = text(classified?.price_formatted)
+    || activityMoney(classified?.sale_price ?? classified?.base_price);
+  const condition = text(classified?.condition_label);
+  const brand = text(classified?.brand?.name);
+  const date = record.created_at;
+
+  return {
+    key: `classified_inquiry:${record.id}`,
+    id: record.id,
+    source: 'classified_inquiry',
+    kind: 'classified_inquiry',
+    vertical: 'classifieds',
+    title: text(classified?.title) || 'Classified inquiry',
+    imageUrl: text(classified?.primary_image_url),
+    status: text(record.status) || 'pending',
+    secondaryStatus: null,
+    amount: price,
+    date,
+    dateLabel: formatDate(date),
+    detail: [condition, brand].filter(Boolean).join(' · ') || 'Classified inquiry submitted',
+    reference: `Inquiry #${record.id}`,
+    slug: text(classified?.slug),
     isUpcoming: false,
     cancellationType: null,
   };
