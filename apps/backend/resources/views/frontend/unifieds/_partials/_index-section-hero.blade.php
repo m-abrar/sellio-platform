@@ -1,30 +1,36 @@
-<section class="hero-section text-center">
+<section class="hero-section hero-section--dark">
     <div class="container-xl">
-        {{-- Text Content --}}
-        <div class="row pt-2 pt-md-5 pb-2 pb-md-4" data-aos="fade-up">
-            <div class="col-12 text-center">
-                <span class="badge bg-primary-light border border-primary border-opacity-25 text-primary rounded-pill px-4 py-2 fw-800 mb-3 tracking-wider">
-                    @editable('home.hero.badge', __('THE ALL-IN-ONE MARKETPLACE'))
-                </span>
+        <div class="row align-items-center g-5">
 
-                <h1 class="fw-800 display-3 mb-3 tracking-tight text-dark">
-                    @editableHtml('home.hero.title', 'Find Everything <span class="text-primary">Extraordinary.</span>')
+            {{-- ── LEFT: Headline + Search ───────────────────────────── --}}
+            <div class="col-lg-6">
+
+                {{-- Badge --}}
+                <div class="mb-4" data-aos="fade-up">
+                    <span class="hero-badge-pill">
+                        <i class="bi bi-stars" aria-hidden="true"></i>
+                        @editable('home.hero.badge', __('The All-In-One Marketplace'))
+                    </span>
+                </div>
+
+                {{-- Headline --}}
+                <h1 class="hero-headline mb-4" data-aos="fade-up" data-aos-delay="100">
+                    @editableHtml('home.hero.title', 'Find Everything <span class="text-primary">You Need.</span>')
                 </h1>
 
-                <p class="fs-5 text-muted mx-auto mb-5 hero-text-max">
-                    @editable('home.hero.description', __('The ultimate destination to buy, sell, and discover premium properties, verified vehicles, and top-tier careers.'))
+                {{-- Subtitle --}}
+                <p class="hero-subtitle mb-5" data-aos="fade-up" data-aos-delay="150">
+                    @editable('home.hero.description', __('Buy, sell, and discover properties, vehicles, events, services, and more — all in one marketplace.'))
                 </p>
-            </div>
-        </div>
 
-        {{-- Search: tabs sit in their own layer above the panel (no overlap blocking clicks) --}}
-        <div class="search-container-wrapper mx-auto hero-search-max" data-hero-search>
-            <div class="hero-search-stack">
-                <div class="hero-search-tabs-wrap">
-                    <ul class="nav nav-pills hero-search-tabs justify-content-center" id="searchTab" role="tablist">
-                        @foreach(($publicModules ?? collect())->take(8) as $tab)
-                            <li class="nav-item" role="presentation">
-                                <div class="pill-group">
+                {{-- Search module --}}
+                <div class="hero-search-module" data-hero-search data-aos="fade-up" data-aos-delay="200">
+
+                    {{-- Horizontal tab strip --}}
+                    <div class="hero-tabs-strip">
+                        <ul class="nav hero-tabs-inline" id="searchTab" role="tablist">
+                            @foreach(($publicModules ?? collect())->take(8) as $tab)
+                                <li class="nav-item" role="presentation">
                                     <button type="button"
                                             class="nav-link @if($loop->first) active @endif"
                                             id="{{ $tab['id'] }}-tab"
@@ -34,21 +40,101 @@
                                             aria-controls="hero-search-{{ $tab['id'] }}"
                                             aria-selected="{{ $loop->first ? 'true' : 'false' }}">
                                         <i class="bi {{ $tab['icon'] }}" aria-hidden="true"></i>
-                                        <span class="visually-hidden">{{ $tab['label'] }}</span>
+                                        <span>{{ $tab['label'] }}</span>
                                     </button>
-                                    <div class="label-text" aria-hidden="true">{{ $tab['label'] }}</div>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
 
-                <div class="glass-hero-panel">
-                    <div class="tab-content" id="searchTabContent">
-                        @include('frontend.unifieds._partials._hero_search_forms')
+                    {{-- White search card --}}
+                    <div class="hero-search-card">
+                        <div class="tab-content" id="searchTabContent">
+                            @include('frontend.unifieds._partials._hero_search_forms')
+                        </div>
+                    </div>
+
+                </div>{{-- /hero-search-module --}}
+
+                {{-- Stats row --}}
+                <div class="hero-stats-row mt-5" data-aos="fade-up" data-aos-delay="250">
+                    @if(($totalListingsCount ?? 0) > 0)
+                    <div class="hero-stat">
+                        <span class="hero-stat__value">{{ number_format($totalListingsCount) }}+</span>
+                        <span class="hero-stat__label">{{ __('Active Listings') }}</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    @endif
+                    @if(($publicModules ?? collect())->count() > 0)
+                    <div class="hero-stat">
+                        <span class="hero-stat__value">{{ ($publicModules ?? collect())->count() }}</span>
+                        <span class="hero-stat__label">{{ __('Categories') }}</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    @endif
+                    <div class="hero-stat">
+                        <span class="hero-stat__value">4.8<span class="hero-stat__unit">★</span></span>
+                        <span class="hero-stat__label">{{ __('Seller Rating') }}</span>
                     </div>
                 </div>
-            </div>
+
+            </div>{{-- /col-lg-6 left --}}
+
+            {{-- ── RIGHT: Image mosaic ──────────────────────────────── --}}
+            <div class="col-lg-6 d-none d-lg-flex justify-content-end" data-aos="fade-left" data-aos-delay="100">
+                @php
+                    $mosaicImages = collect();
+                    foreach (['propertiesFeatured', 'autosFeatured', 'eventsFeatured', 'servicesFeatured', 'classifiedsFeatured', 'jobsFeatured'] as $src) {
+                        if (isset($$src) && $$src instanceof \Illuminate\Support\Collection && $$src->isNotEmpty()) {
+                            $mosaicImages = $mosaicImages->merge(
+                                $$src->filter(fn($i) => !empty($i->primary_image_url))->take(2)
+                            );
+                        }
+                        if ($mosaicImages->count() >= 4) break;
+                    }
+                    $mosaicImages = $mosaicImages->values()->take(4);
+                    $placeholderIcons = ['bi-building', 'bi-car-front-fill', 'bi-calendar-event', 'bi-tools'];
+                @endphp
+
+                <div class="hero-mosaic">
+                    {{-- Column 1 (items 0 + 1) --}}
+                    <div class="hero-mosaic__col">
+                        @foreach([0, 1] as $idx)
+                            <div class="hero-mosaic__item">
+                                @if(!empty($mosaicImages[$idx]->primary_image_url))
+                                    <img src="{{ $mosaicImages[$idx]->primary_image_url }}"
+                                         alt="{{ $mosaicImages[$idx]->title ?? '' }}"
+                                         class="hero-mosaic__img"
+                                         loading="lazy">
+                                @else
+                                    <div class="hero-mosaic__placeholder">
+                                        <i class="bi {{ $placeholderIcons[$idx] ?? 'bi-image' }} hero-mosaic__placeholder-icon" aria-hidden="true"></i>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                    {{-- Column 2 (items 2 + 3, offset down) --}}
+                    <div class="hero-mosaic__col hero-mosaic__col--offset">
+                        @foreach([2, 3] as $idx)
+                            <div class="hero-mosaic__item">
+                                @if(!empty($mosaicImages[$idx]->primary_image_url))
+                                    <img src="{{ $mosaicImages[$idx]->primary_image_url }}"
+                                         alt="{{ $mosaicImages[$idx]->title ?? '' }}"
+                                         class="hero-mosaic__img"
+                                         loading="lazy">
+                                @else
+                                    <div class="hero-mosaic__placeholder">
+                                        <i class="bi {{ $placeholderIcons[$idx] ?? 'bi-image' }} hero-mosaic__placeholder-icon" aria-hidden="true"></i>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+            </div>{{-- /col-lg-6 right --}}
+
         </div>
     </div>
 </section>
@@ -74,41 +160,24 @@
 
                 function initHeroSearchTabs() {
                     var root = document.querySelector('[data-hero-search]');
-                    if (!root) {
-                        return;
-                    }
+                    if (!root) return;
 
                     var tabList = root.querySelector('#searchTab');
-                    if (!tabList) {
-                        return;
-                    }
+                    if (!tabList) return;
 
                     tabList.addEventListener('click', function (event) {
                         var trigger = event.target.closest('[data-hero-tab]');
-                        if (!trigger || !tabList.contains(trigger)) {
-                            return;
-                        }
-
+                        if (!trigger || !tabList.contains(trigger)) return;
                         event.preventDefault();
-
                         var targetId = trigger.getAttribute('data-hero-target');
-                        if (!targetId) {
-                            return;
-                        }
-
+                        if (!targetId) return;
                         activateHeroTab(root, targetId, trigger);
                     });
 
                     tabList.addEventListener('keydown', function (event) {
-                        if (event.key !== 'Enter' && event.key !== ' ') {
-                            return;
-                        }
-
+                        if (event.key !== 'Enter' && event.key !== ' ') return;
                         var trigger = event.target.closest('[data-hero-tab]');
-                        if (!trigger) {
-                            return;
-                        }
-
+                        if (!trigger) return;
                         event.preventDefault();
                         trigger.click();
                     });
