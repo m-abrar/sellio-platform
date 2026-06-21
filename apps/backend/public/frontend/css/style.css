@@ -4792,3 +4792,47 @@ body.has-admin-bar .main-header.sticky-top{
     transition: color .18s;
 }
 .group:hover .classified-mini__title { color: var(--primary-color); }
+
+/* ─── Service category cards ─────────────────────────────────────────────── */
+.svc-card {
+    background: #fff !important;
+    border: 1.5px solid rgba(15,23,42,.07) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+.svc-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(28,25,23,.1);
+}
+.svc-card__title {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+}
+.svc-card__icon-wrap {
+    transition: transform .25s ease;
+}
+.svc-card:hover .svc-card__icon-wrap {
+    transform: scale(1.08);
+}
+
+/* ─── Taxonomy chips ──────────────────────────────────────────────────────── */
+.taxonomy-chip {
+    background: #fff !important;
+    border: 1.5px solid rgba(15,23,42,.07) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.taxonomy-chip:hover {
+    border-color: rgba(var(--primary-color-rgb), .3) !important;
+    box-shadow: 0 6px 18px rgba(28,25,23,.08);
+}
+.taxonomy-chip__label {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+}

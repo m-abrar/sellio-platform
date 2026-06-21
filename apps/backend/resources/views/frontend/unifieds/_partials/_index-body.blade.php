@@ -229,13 +229,13 @@
                 @forelse($serviceCategories->take(4) as $category)
                     <div class="col-12 col-md-6 col-lg-{{ $svcLgCol }}" data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 }}">
                         <a href="{{ route('services.index', ['category' => $category->slug]) }}" class="text-decoration-none">
-                            <div class="card glass-surface text-center h-100 border-0 rounded-5 p-3 hover-lift transition-all">
+                            <div class="card svc-card text-center h-100 border-0 rounded-4 p-3 hover-lift">
                                 <div class="card-body">
-                                    <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow-sm" 
+                                    <div class="svc-card__icon-wrap rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
                                          style="width: 70px; height: 70px; background-color: {{ $category->color_hex ? $category->color_hex . '1A' : 'rgba(93,95,239,0.1)' }}; color: {{ $category->color_hex ?? '#5d5fef' }};">
                                         <i class="{{ $category->icon ?? 'bi bi-gear-fill' }} fs-2"></i>
                                     </div>
-                                    <h5 class="card-title fw-800 text-dark">{{ $category->title }}</h5>
+                                    <h5 class="card-title svc-card__title text-dark">{{ $category->title }}</h5>
                                     <p class="card-text text-muted small">{{ Str::limit($category->description ?? __('Find verified experts.'), 80) }}</p>
                                 </div>
                             </div>
@@ -346,11 +346,11 @@
                     <div class="row row-cols-2 row-cols-md-4 g-3">
                         @foreach($categoriesFeatured as $category)
                             <div class="col">
-                                <a href="{{ route('categories.show', $category->slug) }}" class="taxonomy-chip glass-surface d-flex align-items-center gap-2 p-3 text-decoration-none h-100">
+                                <a href="{{ route('categories.show', $category->slug) }}" class="taxonomy-chip d-flex align-items-center gap-2 p-3 text-decoration-none h-100">
                                     <span class="taxonomy-icon d-inline-flex align-items-center justify-content-center">
                                         <i class="{{ $category->icon ?? 'bi bi-grid-1x2-fill' }}"></i>
                                     </span>
-                                    <span class="small fw-bold text-dark">{{ $category->title }}</span>
+                                    <span class="taxonomy-chip__label text-dark">{{ $category->title }}</span>
                                 </a>
                             </div>
                         @endforeach
