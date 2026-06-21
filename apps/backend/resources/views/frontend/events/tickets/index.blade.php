@@ -121,14 +121,15 @@
     
 @endsection
 
-@section('head_extra')
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('ticket-selection-form');
-    const quantitySelectors = form.querySelectorAll('.ticket-quantity');
+    const quantitySelectors = form ? form.querySelectorAll('.ticket-quantity') : [];
     const checkoutButton = document.getElementById('proceed-to-checkout');
-    
-    // Function to check if any quantity is selected
+
+    if (!form || !checkoutButton) return;
+
     function checkSelection() {
         let totalSelected = 0;
         let selectedTicketId = null;
@@ -143,23 +144,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (totalSelected > 0 && selectedTicketId) {
             checkoutButton.removeAttribute('disabled');
-            // Update the form action URL with the first selected ticket ID for the route binding
-            let actionUrl = form.action.replace(':TICKET_ID', selectedTicketId);
-            form.action = actionUrl;
+            form.action = form.action.replace(':TICKET_ID', selectedTicketId);
         } else {
             checkoutButton.setAttribute('disabled', 'disabled');
-            // Reset the action URL placeholder
-            form.action = form.action.replace(selectedTicketId, ':TICKET_ID'); 
+            if (selectedTicketId) {
+                form.action = form.action.replace(selectedTicketId, ':TICKET_ID');
+            }
         }
     }
 
-    // Attach event listeners to all quantity selectors
     quantitySelectors.forEach(select => {
         select.addEventListener('change', checkSelection);
     });
 
-    // Initial check on page load
     checkSelection();
 });
 </script>
-@endsection
+@endpush
