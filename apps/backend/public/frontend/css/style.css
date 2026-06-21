@@ -4052,3 +4052,68 @@ body.has-admin-bar .main-header.sticky-top{
         border-color: rgba(255,255,255,.3);
     }
 }
+
+/* ─── Section rhythm (Step 3) ──────────────────────────────────────────── */
+
+/* Warm alternating section background */
+.section-warm {
+    background: #F4F0EC;
+}
+
+/* Spacious sections get more vertical breathing room */
+.section-spacious {
+    padding-top: clamp(4rem, 7vw, 6rem);
+    padding-bottom: clamp(4rem, 7vw, 6rem);
+}
+
+/* Dark accent section */
+.section-dark {
+    background: var(--text-dark);
+}
+.section-dark h1,
+.section-dark h2,
+.section-dark h3,
+.section-dark .fw-800 {
+    color: #fff !important;
+}
+.section-dark .text-muted,
+.section-dark .sub-heading,
+.section-dark .lead {
+    color: rgba(255,255,255,.5) !important;
+}
+.section-dark-link {
+    color: rgba(255,255,255,.7) !important;
+}
+.section-dark-link:hover {
+    color: #fff !important;
+}
+/* Cards on dark section pop with stronger shadow */
+.section-dark .glass-surface,
+.section-dark .card {
+    box-shadow: 0 8px 32px rgba(0,0,0,.3) !important;
+}
+/* Listing cards keep their white bg on dark section */
+.section-dark .listing-card,
+.section-dark .auto-card,
+.section-dark .market-module-card {
+    background: #fff !important;
+}
+
+/* Section heading — consistent serif treatment */
+.frontend-page--home h2.display-6,
+.frontend-page--home h2.display-5 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+}
+
+/* Sub-heading text below section titles */
+.sub-heading {
+    max-width: 520px;
+}
+
+/* Section separator: thin warm line between adjacent light sections */
+.section-warm + .section-spacious,
+.section-spacious + .section-warm {
+    border-top: 1px solid rgba(28,25,23,.06);
+}

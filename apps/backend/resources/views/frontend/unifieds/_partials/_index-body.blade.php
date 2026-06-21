@@ -1,6 +1,6 @@
 {{-- PUBLIC DISCOVERY: Module cards --}}
 @if(($publicModules ?? collect())->isNotEmpty())
-<section class="py-5">
+<section class="py-4 py-lg-5 section-warm">
     <div class="container-xl">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3">
             <div>
@@ -37,7 +37,7 @@
 
 {{-- MODULE: Real Estate --}}
 @if(module_enabled('properties'))
-<section class="py-5">
+<section class="section-spacious">
     <div class="container-xl">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-3">
             <div data-aos="fade-right">
@@ -74,11 +74,18 @@
 
 {{-- MODULE: Autos --}}
 @if(module_enabled('autos'))
-<section class="py-5 position-relative overflow-hidden">
-    <div class="container-xl position-relative z-index-1">
-        <div class="text-center mb-5" data-aos="fade-down">
-            <h2 class="fw-800 text-dark display-6 mb-0">{{ __('Latest') }} <span class="text-primary">{{ __('Vehicles') }}</span></h2>
-            <div class="mx-auto bg-primary rounded-pill mt-3 shadow-sm deco-line-sm"></div>
+<section class="section-dark section-spacious">
+    <div class="container-xl">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-3">
+            <div data-aos="fade-right">
+                <h2 class="fw-800 display-6 mb-1">{{ __('Latest') }} <span class="text-primary">{{ __('Vehicles') }}</span></h2>
+                <p class="lead mb-0 sub-heading">{{ __('Verified inventory from trusted sellers.') }}</p>
+            </div>
+            <div data-aos="fade-left">
+                <a href="{{ route('autos.index') }}" class="btn btn-link fw-800 text-decoration-none p-0 hvr-icon-forward section-dark-link">
+                    {{ __('EXPLORE ALL') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
+                </a>
+            </div>
         </div>
         
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
@@ -141,7 +148,7 @@
 
 {{-- MODULE: Careers & Classifieds Split --}}
 @if(module_enabled('jobs') || module_enabled('classifieds'))
-<section class="py-5">
+<section class="py-5 section-warm">
     <div class="container-xl">
         <div class="row g-4 g-xl-5">
             {{-- Careers --}}
@@ -190,11 +197,18 @@
 
 {{-- MODULE: Services --}}
 @if(module_enabled('services'))
-<section class="py-5">
+<section class="section-spacious">
     <div class="container-xl">
-        <div class="text-center mb-5" data-aos="fade-up">
-            <h2 class="fw-800 text-dark display-6 mb-0">{{ __('Browse Popular') }} <span class="text-primary">{{ __('Services') }}</span></h2>
-            <p class="lead text-muted">{{ __('Find trusted professionals for any project.') }}</p>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-3">
+            <div data-aos="fade-right">
+                <h2 class="fw-800 text-dark display-6 mb-1">{{ __('Browse Popular') }} <span class="text-primary">{{ __('Services') }}</span></h2>
+                <p class="lead text-muted mb-0 sub-heading">{{ __('Find trusted professionals for any project.') }}</p>
+            </div>
+            <div data-aos="fade-left">
+                <a href="{{ route('services.index') }}" class="btn btn-link text-primary fw-800 text-decoration-none p-0 hvr-icon-forward">
+                    {{ __('BROWSE ALL') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
+                </a>
+            </div>
         </div>
 
         @isset($serviceCategories)
@@ -235,11 +249,18 @@
 
 {{-- MODULE: Events --}}
 @if(module_enabled('events'))
-<section class="py-5">
+<section class="py-5 section-warm">
     <div class="container-xl">
-        <div class="text-center mb-5" data-aos="fade-down">
-            <h2 class="fw-800 text-dark display-6 mb-0">{{ __('Upcoming') }} <span class="text-primary">{{ __('Events') }}</span></h2>
-            <p class="text-muted">{{ __('Join the community in person or online.') }}</p>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-3">
+            <div data-aos="fade-right">
+                <h2 class="fw-800 text-dark display-6 mb-1">{{ __('Upcoming') }} <span class="text-primary">{{ __('Events') }}</span></h2>
+                <p class="lead text-muted mb-0 sub-heading">{{ __('Join the community in person or online.') }}</p>
+            </div>
+            <div data-aos="fade-left">
+                <a href="{{ route('events.index') }}" class="btn btn-link text-primary fw-800 text-decoration-none p-0 hvr-icon-forward">
+                    {{ __('ALL EVENTS') }} <i class="bi bi-arrow-right ms-2 hvr-icon"></i>
+                </a>
+            </div>
         </div>
         
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
@@ -302,7 +323,7 @@
 
 {{-- PUBLIC DISCOVERY: Taxonomy and locations --}}
 @if(($categoriesFeatured ?? collect())->isNotEmpty() || ($locationsFeatured ?? collect())->isNotEmpty())
-<section class="py-5">
+<section class="py-5 section-warm">
     <div class="container-xl">
         <div class="row g-4 g-xl-5">
             @if(($categoriesFeatured ?? collect())->isNotEmpty())
