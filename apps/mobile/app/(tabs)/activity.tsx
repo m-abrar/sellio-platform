@@ -297,7 +297,7 @@ export default function ActivityView() {
                       <ActivityRecordCard
                         key={item.key}
                         item={item}
-                        onPress={item.source === 'application' ? undefined : () => openActivity(item)}
+                        onPress={() => openActivity(item)}
                       />
                     ))}
                   </View>

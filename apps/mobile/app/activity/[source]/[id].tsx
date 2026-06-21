@@ -2,6 +2,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Image,
+  Linking,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -12,11 +13,16 @@ import {
 import { apiRequest } from '../../../src/api/client';
 import { AuthenticatedScreen } from '../../../src/auth/AuthenticatedScreen';
 import { ErrorState, LoadingState } from '../../../src/components/states/AsyncStates';
-import { toBookingActivityCard, toOrderActivityCard } from '../../../src/features/buyer/adapters';
+import {
+  toBookingActivityCard,
+  toJobApplicationActivityCard,
+  toOrderActivityCard,
+} from '../../../src/features/buyer/adapters';
 import {
   BuyerActivityCard,
   BuyerBookingKind,
   BuyerBookingsData,
+  BuyerJobApplicationRecord,
   BuyerOrderRecord,
 } from '../../../src/features/buyer/types';
 import { LISTING_CATEGORIES } from '../../../src/features/listings/catalog';
@@ -37,7 +43,21 @@ function detailLabel(item: BuyerActivityCard) {
     case 'event_booking': return 'EVENT BOOKING';
     case 'service_appointment': return 'SERVICE APPOINTMENT';
     case 'product_order': return 'PRODUCT ORDER';
+    case 'job_application': return 'JOB APPLICATION';
   }
+}
+
+function workplaceLabel(value: number | string | null | undefined) {
+  switch (Number(value)) {
+    case 1: return 'Remote';
+    case 2: return 'On-site';
+    case 3: return 'Hybrid';
+    default: return 'Not specified';
+  }
+}
+
+function resumeLabel(path: string) {
+  return path.split(/[\\/]/).pop() || path;
 }
 
 export default function ActivityDetailView() {
@@ -53,14 +73,20 @@ export default function ActivityDetailView() {
   const kindParam = Array.isArray(params.kind) ? params.kind[0] : params.kind;
   const reference = Array.isArray(params.reference) ? params.reference[0] : params.reference;
   const [item, setItem] = useState<BuyerActivityCard | null>(null);
+  const [application, setApplication] = useState<BuyerJobApplicationRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
 
   const loadRecord = useCallback(async () => {
     const id = Number(idParam);
 
-    if (!Number.isInteger(id) || id < 1 || (source !== 'booking' && source !== 'order')) {
+    if (
+      !Number.isInteger(id)
+      || id < 1
+      || (source !== 'booking' && source !== 'order' && source !== 'application')
+    ) {
       setItem(null);
+      setApplication(null);
       setError(new Error('This activity link is incomplete. Return to Activity and open it again.'));
       setLoading(false);
       return;
@@ -68,6 +94,7 @@ export default function ActivityDetailView() {
 
     setLoading(true);
     setError(null);
+    setApplication(null);
 
     try {
       if (source === 'order') {
@@ -78,7 +105,7 @@ export default function ActivityDetailView() {
           { authenticated: true },
         );
         setItem(toOrderActivityCard(order));
-      } else {
+      } else if (source === 'booking') {
         if (!isBookingKind(kindParam)) throw new Error('The booking type is missing.');
 
         const bookings = await apiRequest<BuyerBookingsData>('/dashboard/user/bookings', {
@@ -92,9 +119,20 @@ export default function ActivityDetailView() {
 
         if (!booking) throw new Error('This booking could not be found.');
         setItem(booking);
+      } else {
+        const applications = await apiRequest<BuyerJobApplicationRecord[]>(
+          '/dashboard/user/inquiries/applications',
+          { authenticated: true },
+        );
+        const selectedApplication = applications.find((record) => record.id === id);
+
+        if (!selectedApplication) throw new Error('This job application could not be found.');
+        setApplication(selectedApplication);
+        setItem(toJobApplicationActivityCard(selectedApplication));
       }
     } catch (requestError) {
       setItem(null);
+      setApplication(null);
       setError(requestError);
     } finally {
       setLoading(false);
@@ -174,7 +212,7 @@ export default function ActivityDetailView() {
                 <Text style={styles.infoValue}>{item.dateLabel}</Text>
               </View>
               <View style={styles.infoCard}>
-                <Text style={styles.infoLabel}>TOTAL</Text>
+                <Text style={styles.infoLabel}>{application ? 'SALARY' : 'TOTAL'}</Text>
                 <Text style={styles.amountValue}>{item.amount || 'Not applicable'}</Text>
               </View>
               <View style={styles.infoCard}>
@@ -182,10 +220,43 @@ export default function ActivityDetailView() {
                 <Text style={styles.infoValue}>{detailLabel(item)}</Text>
               </View>
               <View style={styles.infoCard}>
-                <Text style={styles.infoLabel}>PAYMENT</Text>
-                <Text style={styles.infoValue}>{item.secondaryStatus?.toUpperCase() || '—'}</Text>
+                <Text style={styles.infoLabel}>{application ? 'WORKPLACE' : 'PAYMENT'}</Text>
+                <Text style={styles.infoValue}>
+                  {application
+                    ? workplaceLabel(application.job?.workplace_type)
+                    : item.secondaryStatus?.toUpperCase() || '—'}
+                </Text>
               </View>
             </View>
+
+            {application && (
+              <View style={styles.applicationSection}>
+                <Text style={styles.applicationLabel}>COVER LETTER</Text>
+                <Text style={styles.applicationText}>
+                  {application.cover_letter || 'No cover letter was included.'}
+                </Text>
+
+                <View style={styles.documentRow}>
+                  <Text style={styles.applicationLabel}>RESUME</Text>
+                  <Text style={styles.documentValue} numberOfLines={1}>
+                    {application.resume_path
+                      ? resumeLabel(application.resume_path)
+                      : 'No resume attached'}
+                  </Text>
+                </View>
+
+                {application.portfolio_url && (
+                  <TouchableOpacity
+                    style={styles.secondaryButton}
+                    onPress={() => Linking.openURL(application.portfolio_url!)}
+                    accessibilityRole="link"
+                    accessibilityLabel="Open portfolio"
+                  >
+                    <Text style={styles.secondaryButtonText}>OPEN PORTFOLIO</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
 
             {item.slug && (
               <TouchableOpacity
@@ -227,6 +298,13 @@ const styles = StyleSheet.create({
   infoLabel: { color: '#475569', fontSize: 7, fontWeight: '900', letterSpacing: 0.8, marginBottom: 6 },
   infoValue: { color: '#cbd5e1', fontSize: 10, fontWeight: '800', lineHeight: 15 },
   amountValue: { color: '#a5b4fc', fontSize: 12, fontWeight: '900' },
+  applicationSection: { marginTop: 20, paddingTop: 20, borderTopWidth: 1, borderTopColor: 'rgba(255, 255, 255, 0.06)' },
+  applicationLabel: { color: '#64748b', fontSize: 8, fontWeight: '900', letterSpacing: 1, marginBottom: 8 },
+  applicationText: { color: '#cbd5e1', fontSize: 12, lineHeight: 20 },
+  documentRow: { marginTop: 20, padding: 14, borderRadius: 16, backgroundColor: '#0b0b0c' },
+  documentValue: { color: '#e2e8f0', fontSize: 11, fontWeight: '800' },
+  secondaryButton: { marginTop: 14, alignItems: 'center', paddingVertical: 14, borderWidth: 1, borderColor: 'rgba(129, 140, 248, 0.35)', borderRadius: 16 },
+  secondaryButtonText: { color: '#a5b4fc', fontSize: 9, fontWeight: '900', letterSpacing: 1.1 },
   listingButton: { marginTop: 20, alignItems: 'center', paddingVertical: 15, borderRadius: 18, backgroundColor: '#6366f1' },
   listingButtonText: { color: '#fff', fontSize: 9, fontWeight: '900', letterSpacing: 1.2 },
 });
