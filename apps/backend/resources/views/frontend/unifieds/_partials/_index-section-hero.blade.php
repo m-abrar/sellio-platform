@@ -5,12 +5,12 @@
             {{-- ── LEFT: Headline + Search ───────────────────────────── --}}
             <div class="col-lg-6">
 
-                {{-- Badge --}}
+                {{-- Eyebrow --}}
                 <div class="mb-4" data-aos="fade-up">
-                    <span class="hero-badge-pill">
-                        <i class="bi bi-stars" aria-hidden="true"></i>
+                    <div class="hero-eyebrow">
+                        <span class="hero-eyebrow__line" aria-hidden="true"></span>
                         @editable('home.hero.badge', __('The All-In-One Marketplace'))
-                    </span>
+                    </div>
                 </div>
 
                 {{-- Headline --}}
@@ -83,51 +83,74 @@
             {{-- ── RIGHT: Image mosaic ──────────────────────────────── --}}
             <div class="col-lg-6 d-none d-lg-flex justify-content-end" data-aos="fade-left" data-aos-delay="100">
                 @php
-                    $mosaicImages = collect();
-                    foreach (['propertiesFeatured', 'autosFeatured', 'eventsFeatured', 'servicesFeatured', 'classifiedsFeatured', 'jobsFeatured'] as $src) {
-                        if (isset($$src) && $$src instanceof \Illuminate\Support\Collection && $$src->isNotEmpty()) {
-                            $mosaicImages = $mosaicImages->merge(
-                                $$src->filter(fn($i) => !empty($i->primary_image_url))->take(2)
-                            );
+                    $mosaicItems = collect();
+                    $mosaicSources = [
+                        'propertiesFeatured'  => ['label' => __('Properties'), 'icon' => 'bi-building'],
+                        'autosFeatured'       => ['label' => __('Vehicles'),   'icon' => 'bi-car-front-fill'],
+                        'eventsFeatured'      => ['label' => __('Events'),     'icon' => 'bi-calendar-event'],
+                        'servicesFeatured'    => ['label' => __('Services'),   'icon' => 'bi-tools'],
+                        'classifiedsFeatured' => ['label' => __('Classifieds'),'icon' => 'bi-tag'],
+                        'jobsFeatured'        => ['label' => __('Jobs'),       'icon' => 'bi-briefcase'],
+                    ];
+                    foreach ($mosaicSources as $src => $meta) {
+                        if (isset($$src) && $$src instanceof \Illuminate\Support\Collection) {
+                            foreach ($$src->filter(fn($i) => !empty($i->primary_image_url))->take(2) as $listing) {
+                                $mosaicItems->push(['listing' => $listing] + $meta);
+                                if ($mosaicItems->count() >= 4) break 2;
+                            }
                         }
-                        if ($mosaicImages->count() >= 4) break;
                     }
-                    $mosaicImages = $mosaicImages->values()->take(4);
-                    $placeholderIcons = ['bi-building', 'bi-car-front-fill', 'bi-calendar-event', 'bi-tools'];
+                    $mosaicItems = $mosaicItems->values();
+                    $mosaicPlaceholders = [
+                        ['label' => __('Properties'), 'icon' => 'bi-building'],
+                        ['label' => __('Vehicles'),   'icon' => 'bi-car-front-fill'],
+                        ['label' => __('Events'),     'icon' => 'bi-calendar-event'],
+                        ['label' => __('Services'),   'icon' => 'bi-tools'],
+                    ];
                 @endphp
 
                 <div class="hero-mosaic">
                     {{-- Column 1 (items 0 + 1) --}}
                     <div class="hero-mosaic__col">
                         @foreach([0, 1] as $idx)
+                            @php $entry = $mosaicItems[$idx] ?? null; $ph = $mosaicPlaceholders[$idx]; @endphp
                             <div class="hero-mosaic__item">
-                                @if(!empty($mosaicImages[$idx]->primary_image_url))
-                                    <img src="{{ $mosaicImages[$idx]->primary_image_url }}"
-                                         alt="{{ $mosaicImages[$idx]->title ?? '' }}"
+                                @if($entry)
+                                    <img src="{{ $entry['listing']->primary_image_url }}"
+                                         alt="{{ $entry['listing']->title ?? '' }}"
                                          class="hero-mosaic__img"
-                                         loading="lazy">
+                                         @if($idx === 0) loading="eager" fetchpriority="high" @else loading="lazy" @endif>
                                 @else
                                     <div class="hero-mosaic__placeholder">
-                                        <i class="bi {{ $placeholderIcons[$idx] ?? 'bi-image' }} hero-mosaic__placeholder-icon" aria-hidden="true"></i>
+                                        <i class="bi {{ $ph['icon'] }} hero-mosaic__placeholder-icon" aria-hidden="true"></i>
                                     </div>
                                 @endif
+                                <div class="hero-mosaic__label">
+                                    <i class="bi {{ $entry ? $entry['icon'] : $ph['icon'] }}" aria-hidden="true"></i>
+                                    {{ $entry ? $entry['label'] : $ph['label'] }}
+                                </div>
                             </div>
                         @endforeach
                     </div>
                     {{-- Column 2 (items 2 + 3, offset down) --}}
                     <div class="hero-mosaic__col hero-mosaic__col--offset">
                         @foreach([2, 3] as $idx)
+                            @php $entry = $mosaicItems[$idx] ?? null; $ph = $mosaicPlaceholders[$idx]; @endphp
                             <div class="hero-mosaic__item">
-                                @if(!empty($mosaicImages[$idx]->primary_image_url))
-                                    <img src="{{ $mosaicImages[$idx]->primary_image_url }}"
-                                         alt="{{ $mosaicImages[$idx]->title ?? '' }}"
+                                @if($entry)
+                                    <img src="{{ $entry['listing']->primary_image_url }}"
+                                         alt="{{ $entry['listing']->title ?? '' }}"
                                          class="hero-mosaic__img"
                                          loading="lazy">
                                 @else
                                     <div class="hero-mosaic__placeholder">
-                                        <i class="bi {{ $placeholderIcons[$idx] ?? 'bi-image' }} hero-mosaic__placeholder-icon" aria-hidden="true"></i>
+                                        <i class="bi {{ $ph['icon'] }} hero-mosaic__placeholder-icon" aria-hidden="true"></i>
                                     </div>
                                 @endif
+                                <div class="hero-mosaic__label">
+                                    <i class="bi {{ $entry ? $entry['icon'] : $ph['icon'] }}" aria-hidden="true"></i>
+                                    {{ $entry ? $entry['label'] : $ph['label'] }}
+                                </div>
                             </div>
                         @endforeach
                     </div>

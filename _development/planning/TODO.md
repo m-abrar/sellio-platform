@@ -531,3 +531,8 @@ Can we use different english words, that feel like manually chosen and most comm
 
 The laravel frontend hero section looks like very common design that Ai Tools generally create.
 Can you suggest something different? Unique UIUX? As well as changing the fonts, colors, spacing throughout all the layout and theme?
+
+
+
+http://192.168.10.7:8000/login
+the login screen is not following the css design tokens, please fix it.

@@ -23,6 +23,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "@fontsource/dm-serif-display": "^5.2.8",
         "@fontsource/inter": "^5.2.8",
         "@fontsource/outfit": "^5.2.8",
         "@fontsource/plus-jakarta-sans": "^5.2.8",
