@@ -193,19 +193,32 @@ Conversion-critical transaction screens.
 
 ---
 
-## Phase 5 — Detail / Show Pages (NEXT)
+## ✅ Phase 5 — Detail / Show Pages (COMPLETE)
 
-High-traffic listing detail views. All `show` partials still contain `glass-surface`.
+High-traffic listing detail views — all `glass-surface` occurrences removed.
 
 | Vertical | Files |
 |---|---|
-| Autos | `autos/show/partials/_details_main.blade.php`, `_finance_calculator.blade.php` |
-| Products | `products/show/partials/_related_products.blade.php` |
-| Properties | `properties/show/partials/sale/_contact_form_inline.blade.php`, `_scores.blade.php`, `_mortgage_calculator.blade.php`, `_tours_and_documents.blade.php`, `_related.blade.php`, `vr/_reviews.blade.php`, `vr/_sidebar.blade.php` |
-| Services | `services/show/partials/_simple_feature_list.blade.php`, `_gallery_carousel.blade.php`, `_related_services.blade.php`, `_service_list_bookable.blade.php`, `_operating_hours.blade.php`, `_location_map.blade.php` |
-| Events | `events/show/partials/_speaker_modal.blade.php` |
-| Classifieds | `classifieds/show/partials/_related_seller_items.blade.php` |
-| Blogs | `blogs/show/partials/_related_seller_items.blade.php` |
+| Autos | `autos/show/partials/_details_main.blade.php`, `_finance_calculator.blade.php`, `1_details_main.blade.php` | ✅ Done |
+| Products | `products/show/partials/_related_products.blade.php` | ✅ Done |
+| Properties | `properties/show/partials/sale/_contact_form_inline.blade.php`, `_scores.blade.php`, `_mortgage_calculator.blade.php`, `_tours_and_documents.blade.php`, `_related.blade.php`, `vr/_reviews.blade.php`, `vr/_sidebar.blade.php` | ✅ Done |
+| Services | `services/show/partials/_simple_feature_list.blade.php`, `_gallery_carousel.blade.php`, `_related_services.blade.php`, `_service_list_bookable.blade.php`, `_operating_hours.blade.php`, `_location_map.blade.php` | ✅ Done |
+| Events | `events/show/partials/_speaker_modal.blade.php` | ✅ Done |
+| Classifieds | `classifieds/show/partials/_related_seller_items.blade.php` | ✅ Done |
+| Blogs | `blogs/show/partials/_related_seller_items.blade.php` | ✅ Done |
+
+**Note:** `events/_partials/_card-event.blade.php` uses `evc-glass-surface` (custom class). Its CSS rule was updated in Phase 2 to use `background: #fff; border: 1.5px solid rgba(15,23,42,.07)` — no markup change needed.
+
+---
+
+## Phase 6 — Final Pass & Polish (NEXT)
+
+Catch any remaining non-glassmorphism issues across public views:
+- `btn-primary-theme` / `btn-outline-primary-theme` in any remaining files
+- `fw-800` on non-heading body text
+- Any remaining `rounded-pill` on badges
+- `text-primary-color` refs in any files not yet touched
+- Verify with Playwright screenshots across all verticals
 
 ---
 
