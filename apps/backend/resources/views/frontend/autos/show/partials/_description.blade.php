@@ -8,7 +8,7 @@
         {{-- If the description is very long, we can add a 'Read More' fade --}}
         @if(strlen($auto->description) > 800)
             <div class="mt-3">
-                <button class="btn btn-link text-primary-color fw-bold p-0 text-decoration-none small"
+                <button class="btn btn-link text-primary fw-bold p-0 text-decoration-none small"
                         type="button"
                         data-action="expand-description">
                     {{ __('+ Read Full Dealer Comments') }}

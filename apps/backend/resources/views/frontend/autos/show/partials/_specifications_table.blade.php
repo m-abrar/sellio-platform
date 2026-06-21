@@ -42,7 +42,7 @@
                 @foreach(array_chunk($specGroups, 2) as $chunk)
                     @foreach($chunk as $spec)
                         <div class="col-md-6 border-bottom border-end border-color-light">
-                            <div class="d-flex align-items-center justify-content-between p-3 h-100 bg-glass-light">
+                            <div class="d-flex align-items-center justify-content-between p-3 h-100 bg-light">
                                 <div class="d-flex align-items-center">
                                     <i class="bi {{ $spec['icon'] }} text-muted me-3 opacity-50"></i>
                                     <span class="text-muted fw-500 small text-uppercase tracking-wider">{{ $spec['label'] }}</span>

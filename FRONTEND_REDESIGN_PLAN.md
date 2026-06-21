@@ -211,14 +211,16 @@ High-traffic listing detail views — all `glass-surface` occurrences removed.
 
 ---
 
-## Phase 6 — Final Pass & Polish (NEXT)
+## ✅ Phase 6 — Final Pass & Polish (COMPLETE)
 
-Catch any remaining non-glassmorphism issues across public views:
-- `btn-primary-theme` / `btn-outline-primary-theme` in any remaining files
-- `fw-800` on non-heading body text
-- Any remaining `rounded-pill` on badges
-- `text-primary-color` refs in any files not yet touched
-- Verify with Playwright screenshots across all verticals
+Caught and fixed all remaining non-glassmorphism issues across public views:
+- `btn-primary-theme` / `btn-outline-primary-theme` → `btn-primary` / `btn-outline-secondary fw-semibold` in 4 files
+- `text-primary-color` → `text-primary` across 25 files (all public view usages)
+- `bg-glass-light` → `bg-light`/`bg-white` in breadcrumbs, feature pills, spec tables, review cards, summary features
+- `glass-input` removed from job application form inputs
+- Badge `rounded-pill` → `rounded-2` in order summary
+
+**Note:** `products/show/partials/_styles_extra.blade.php` retains `.text-primary-color { color: var(--primary-color) }` as a CSS class *definition* — not a usage, intentionally kept.
 
 ---
 

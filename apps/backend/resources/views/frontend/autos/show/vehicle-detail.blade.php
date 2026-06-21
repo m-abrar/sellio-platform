@@ -20,7 +20,7 @@
                 <div class="row align-items-start mb-4">
                     <div class="col-md-8">
                         <div class="d-flex align-items-center gap-2 mb-2">
-                            <span class="badge bg-primary-light text-primary-color px-3 py-1 rounded-2 fw-semibold">
+                            <span class="badge bg-primary-light text-primary px-3 py-1 rounded-2 fw-semibold">
                                 <i class="bi bi-tag-fill me-1"></i>{{ __('For sale') }}
                             </span>
                             @if($auto->is_featured)

@@ -21,7 +21,7 @@
     <div class="row g-4">
         @foreach($property->reviews->take(4) as $review)
             <div class="col-md-6">
-                <div class="p-4 rounded-4 bg-glass-light h-100 border border-color-light">
+                <div class="p-4 rounded-4 bg-light h-100 border border-color-light">
                     <div class="d-flex align-items-center mb-3">
                         <div class="review-avatar avatar-sm me-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold">
                             {{ substr($review->user->name ?? 'G', 0, 1) }}

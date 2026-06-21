@@ -52,7 +52,7 @@
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="text" id="full_name" name="full_name" 
-                                                class="form-control glass-input @error('full_name') is-invalid @enderror"
+                                                class="form-control @error('full_name') is-invalid @enderror"
                                                 value="{{ old('full_name', $defaultName) }}" placeholder="{{ __('Full Name') }}" required>
                                             <label for="full_name">Full Name *</label>
                                             @error('full_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -62,7 +62,7 @@
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="email" id="email" name="email" 
-                                                class="form-control glass-input @error('email') is-invalid @enderror"
+                                                class="form-control @error('email') is-invalid @enderror"
                                                 value="{{ old('email', $defaultEmail) }}" placeholder="{{ __('Email') }}" required>
                                             <label for="email">Email Address *</label>
                                             @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -72,7 +72,7 @@
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="tel" id="phone" name="phone" 
-                                                class="form-control glass-input @error('phone') is-invalid @enderror"
+                                                class="form-control @error('phone') is-invalid @enderror"
                                                 value="{{ old('phone', $defaultPhone) }}" placeholder="{{ __('Phone') }}">
                                             <label for="phone">Phone Number</label>
                                             @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -82,7 +82,7 @@
                                     <div class="col-md-6">
                                         <label for="resume_file" class="form-label smaller fw-bold text-muted mb-1 ps-2">Resume/CV (PDF/DOCX) *</label>
                                         <input type="file" id="resume_file" name="resume_file" 
-                                            class="form-control glass-input py-2 @error('resume_file') is-invalid @enderror" required>
+                                            class="form-control py-2 @error('resume_file') is-invalid @enderror" required>
                                         @error('resume_file') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@
                                 <h5 class="fw-bold mb-4 text-dark"><i class="bi bi-chat-left-text-fill me-2 text-primary"></i>Cover Letter</h5>
                                 <div class="mb-5">
                                     <textarea id="cover_letter" name="cover_letter" 
-                                        class="form-control glass-input @error('cover_letter') is-invalid @enderror" 
+                                        class="form-control @error('cover_letter') is-invalid @enderror" 
                                         rows="6" placeholder="{{ __('Tell us why you\'re a great fit for :title...', ['title' => $job->title]) }}">{{ old('cover_letter') }}</textarea>
                                     @error('cover_letter') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>

@@ -40,6 +40,6 @@
 
 {{-- Safety Tip Alert --}}
 <div class="alert alert-info small mt-4" alert-primary-theme" role="alert">
-    <i class="bi bi-shield-lock-fill me-2 text-primary-color"></i>
+    <i class="bi bi-shield-lock-fill me-2 text-primary"></i>
     **Safety Tip:** Always meet in a public location and inspect the item before finalizing the purchase.
 </div>

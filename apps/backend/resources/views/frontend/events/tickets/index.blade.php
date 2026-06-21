@@ -17,7 +17,7 @@
             ])
 
             <h1 class="mb-4">
-                <i class="bi bi-ticket-detailed me-2 text-primary-color"></i>
+                <i class="bi bi-ticket-detailed me-2 text-primary"></i>
                 {{ __('Select Your Tickets') }}
             </h1>
             
@@ -108,7 +108,7 @@
 
                     {{-- 3. Proceed Button --}}
                     <div class="text-end">
-                        <button type="submit" id="proceed-to-checkout" class="btn btn-primary-theme btn-lg px-5" disabled>
+                        <button type="submit" id="proceed-to-checkout" class="btn btn-primary btn-lg px-5" disabled>
                             {{ __('Proceed to Checkout') }}
                             <i class="bi bi-arrow-right-short ms-2"></i>
                         </button>

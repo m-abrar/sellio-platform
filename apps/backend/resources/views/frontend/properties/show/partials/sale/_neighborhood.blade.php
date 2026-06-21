@@ -1,4 +1,4 @@
-<h6 class="fw-bold mb-4 text-primary-color"><i class="bi bi-pin-map-fill me-2"></i>{{ __('Points of Interest') }}</h6>
+<h6 class="fw-bold mb-4 text-primary"><i class="bi bi-pin-map-fill me-2"></i>{{ __('Points of Interest') }}</h6>
 @php
     $groupedNeighborhoods = $property->neighborhoods->groupBy('category');
     $categoryIcons = ['Commute' => 'bi-train-front', 'Essential' => 'bi-cart-check', 'School' => 'bi-book', 'Recreation' => 'bi-tree'];

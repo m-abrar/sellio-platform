@@ -224,7 +224,7 @@
                             </span>
                         </div>
                         
-                        <button type="submit" class="btn btn-lg btn-primary-theme w-100 py-3 rounded-2 fw-800 shadow-deep">
+                        <button type="submit" class="btn btn-lg btn-primary w-100 py-3 rounded-2 fw-800 shadow-deep">
                             {{ __('Continue to Payment') }} <i class="bi bi-arrow-right-circle-fill ms-2"></i>
                         </button>
                     </div>
@@ -237,7 +237,7 @@
                 <span class="booking-mobile-summary__label">{{ __('Review Total') }}</span>
                 <strong x-text="formatCurrency(finalTotal)"></strong>
             </div>
-            <button type="submit" class="btn btn-primary-theme text-white fw-800 rounded-2 px-4">
+            <button type="submit" class="btn btn-primary text-white fw-800 rounded-2 px-4">
                 {{ __('Payment') }} <i class="bi bi-arrow-right-short ms-1"></i>
             </button>
         </div>

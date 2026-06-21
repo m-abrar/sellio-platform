@@ -15,4 +15,4 @@
     </div>
 </div>
 
-<a href="#" class="btn btn-sm btn-link fw-semibold text-primary-color"><i class="bi bi-chat-left-text me-1"></i> {{ __('View All :count Reviews', ['count' => $reviewCount ?? '0']) }}</a>
+<a href="#" class="btn btn-sm btn-link fw-semibold text-primary"><i class="bi bi-chat-left-text me-1"></i> {{ __('View All :count Reviews', ['count' => $reviewCount ?? '0']) }}</a>

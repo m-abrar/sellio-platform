@@ -45,7 +45,7 @@
         </div>
 
         <div class="col-12 text-end">
-            <button type="submit" class="btn btn-outline-primary-theme rounded-pill px-4 fw-bold">
+            <button type="submit" class="btn btn-outline-secondary rounded-2 px-4 fw-semibold">
                 <i class="bi bi-arrow-repeat me-1"></i>{{ __('Update Details') }}
             </button>
         </div>

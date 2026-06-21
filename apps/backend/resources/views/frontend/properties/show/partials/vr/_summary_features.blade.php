@@ -10,7 +10,7 @@
 
     @foreach($features as $f)
     <div class="col-6 col-md-3">
-        <div class="feature-item d-flex flex-column align-items-center text-center p-3 rounded-4 bg-glass-light border border-color-light">
+        <div class="feature-item d-flex flex-column align-items-center text-center p-3 rounded-4 bg-light border border-color-light">
             <div class="feature-icon-box mb-2">
                 <i class="bi {{ $f['icon'] }}"></i>
             </div>

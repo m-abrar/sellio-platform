@@ -69,7 +69,7 @@
                             <div class="mt-5 p-4 rounded-4 bg-primary-light border border-primary-light">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="visit-agent-avatar host-avatar bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm">
-                                        <i class="bi bi-headset text-primary-color fs-4"></i>
+                                        <i class="bi bi-headset text-primary fs-4"></i>
                                     </div>
                                     <div>
                                         <h6 class="fw-800 mb-0 text-dark">{{ __('Assigned Agent') }}</h6>

@@ -19,11 +19,11 @@
     </div>
 
     {{-- Map Footer: Dealer Address Bar --}}
-    <div class="p-3 bg-glass-light border-top border-color-light">
+    <div class="p-3 bg-light border-top border-color-light">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
             <div class="d-flex align-items-start">
                 <div class="icon-circle-theme me-3" style="width: 40px; height: 40px; min-width: 40px;">
-                    <i class="bi bi-geo-alt-fill text-primary-color"></i>
+                    <i class="bi bi-geo-alt-fill text-primary"></i>
                 </div>
                 <div>
                     <h6 class="fw-800 text-dark mb-0">{{ $auto->user->name ?? __('Premium Dealership') }}</h6>
@@ -34,7 +34,7 @@
             <div class="d-flex gap-2">
                 <a href="https://www.google.com/maps/dir/?api=1&destination={{ $locationQuery }}" 
                    target="_blank" 
-                   class="btn btn-white btn-sm border px-3 rounded-pill fw-bold">
+                   class="btn btn-outline-secondary btn-sm px-3 rounded-2 fw-semibold">
                     <i class="bi bi-signpost-2 me-1"></i> {{ __('Get Directions') }}
                 </a>
             </div>

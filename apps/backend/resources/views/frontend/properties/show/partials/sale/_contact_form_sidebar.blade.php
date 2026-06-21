@@ -12,7 +12,7 @@
 
     <div class="card-body p-4">
         <h6 class="fw-bold mb-3">
-            <i class="bi bi-envelope-paper me-2 text-primary-color"></i>
+            <i class="bi bi-envelope-paper me-2 text-primary"></i>
             {{ __('Visit details') }}
         </h6>
 

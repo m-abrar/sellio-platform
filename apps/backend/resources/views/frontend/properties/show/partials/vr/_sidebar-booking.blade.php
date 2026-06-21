@@ -77,14 +77,14 @@
                 </li>
 
                 <li class="list-group-item d-flex justify-content-between bg-transparent px-0 pt-3 border-top">
-                    <span class="fw-bold h5 mb-0 text-primary-color">{{ __('Lodging Total:') }} <small class="text-muted"> {{ __('estimated') }} </small></span>
-                    <span class="fw-bold h5 text-primary-color mb-0" id="estimated_lodging_total" aria-live="polite">{{ format_currency($estimatedLodgingTotal) }}</span>
+                    <span class="fw-bold h5 mb-0 text-primary">{{ __('Lodging Total:') }} <small class="text-muted"> {{ __('estimated') }} </small></span>
+                    <span class="fw-bold h5 text-primary mb-0" id="estimated_lodging_total" aria-live="polite">{{ format_currency($estimatedLodgingTotal) }}</span>
                 </li>
             </ul>
 
             <div class="booking-widget-trust mb-4">
                 <span><i class="bi bi-shield-check text-success"></i>{{ __('Secure checkout') }}</span>
-                <span><i class="bi bi-receipt text-primary-color"></i>{{ __('Fees shown before payment') }}</span>
+                <span><i class="bi bi-receipt text-primary"></i>{{ __('Fees shown before payment') }}</span>
             </div>
 
             <div class="d-grid">

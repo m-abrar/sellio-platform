@@ -14,7 +14,7 @@
 <div class="card detail-sidebar-card p-4 mb-4">
 
     <h4 class="fw-bold mb-3">
-        <i class="bi bi-calendar-check-fill me-2 text-primary-color"></i>{{ __('Request a Test Drive') }}
+        <i class="bi bi-calendar-check-fill me-2 text-primary"></i>{{ __('Request a Test Drive') }}
     </h4>
 
     {{-- Form action updated to the new dedicated route --}}

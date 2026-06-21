@@ -58,7 +58,7 @@
 
                         <div class="bg-white bg-opacity-50 p-4 rounded-4 text-center border border-primary-light backdrop-blur mb-4">
                             <p class="filter-label mb-1">{{ __('Amount Paid') }}</p>
-                            <h2 class="price-text-large mb-0 line-height-1 text-primary-color">
+                            <h2 class="price-text-large mb-0 line-height-1 text-primary">
                                 {{ format_currency($booking->paid_amount ?? $booking->total_price) }}
                             </h2>
                         </div>

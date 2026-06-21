@@ -7,7 +7,7 @@
     </a>
 
     {{-- Desktop Breadcrumbs --}}
-    <ol class="breadcrumb mb-0 d-none d-md-flex align-items-center bg-glass-light px-3 py-2 rounded-pill border border-color-light shadow-sm">
+    <ol class="breadcrumb mb-0 d-none d-md-flex align-items-center bg-white px-3 py-2 rounded-3 border border-color-light">
         <li class="breadcrumb-item">
             <a href="{{ route('home') }}" class="text-muted hover-primary transition-all">
                 <i class="bi bi-house-door-fill small"></i>

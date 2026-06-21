@@ -19,7 +19,7 @@
         <div class="product-detail-header__price text-lg-end">
             <span class="metric-label d-block">{{ __('Price') }}</span>
             <div class="d-flex align-items-baseline gap-2 justify-content-lg-end">
-                <span class="price-text-large text-primary-color">{{ format_currency($displayPrice) }}</span>
+                <span class="price-text-large text-primary">{{ format_currency($displayPrice) }}</span>
                 @if($comparePrice)
                     <span class="text-muted text-decoration-line-through small">{{ format_currency($comparePrice) }}</span>
                 @endif

@@ -85,7 +85,7 @@
                         <div class="mt-5 p-4 rounded-4 bg-primary-light border border-primary-light">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="booking-help-avatar host-avatar bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm">
-                                    <i class="bi bi-person-fill text-primary-color fs-4"></i>
+                                    <i class="bi bi-person-fill text-primary fs-4"></i>
                                 </div>
                                 <div class="text-start">
                                     <h6 class="fw-800 mb-0 text-dark">{{ __('Need help?') }}</h6>

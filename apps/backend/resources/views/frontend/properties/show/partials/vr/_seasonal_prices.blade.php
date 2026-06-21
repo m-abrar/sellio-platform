@@ -59,7 +59,7 @@
     </div>
 @else
     <div class="seasonal-pricing-empty">
-        <i class="bi bi-calendar-check text-primary-color"></i>
+        <i class="bi bi-calendar-check text-primary"></i>
         <div>
             <strong>{{ __('No seasonal overrides yet') }}</strong>
             <p class="small text-muted mb-0">{{ __('This stay currently uses the standard nightly rate across available dates.') }}</p>
