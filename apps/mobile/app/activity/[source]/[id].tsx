@@ -18,6 +18,7 @@ import {
   toBookingActivityCard,
   toJobApplicationActivityCard,
   toOrderActivityCard,
+  toServiceQuoteActivityCard,
 } from '../../../src/features/buyer/adapters';
 import {
   BuyerActivityCard,
@@ -26,6 +27,7 @@ import {
   BuyerBookingsData,
   BuyerJobApplicationRecord,
   BuyerOrderRecord,
+  BuyerServiceQuoteRecord,
 } from '../../../src/features/buyer/types';
 import { LISTING_CATEGORIES } from '../../../src/features/listings/catalog';
 
@@ -47,6 +49,7 @@ function detailLabel(item: BuyerActivityCard) {
     case 'product_order': return 'PRODUCT ORDER';
     case 'job_application': return 'JOB APPLICATION';
     case 'vehicle_inquiry': return 'VEHICLE INQUIRY';
+    case 'service_quote': return 'SERVICE QUOTE';
   }
 }
 
@@ -78,6 +81,7 @@ export default function ActivityDetailView() {
   const [item, setItem] = useState<BuyerActivityCard | null>(null);
   const [application, setApplication] = useState<BuyerJobApplicationRecord | null>(null);
   const [autoInquiry, setAutoInquiry] = useState<BuyerAutoInquiryRecord | null>(null);
+  const [serviceQuote, setServiceQuote] = useState<BuyerServiceQuoteRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
 
@@ -92,11 +96,13 @@ export default function ActivityDetailView() {
         && source !== 'order'
         && source !== 'application'
         && source !== 'auto_inquiry'
+        && source !== 'service_quote'
       )
     ) {
       setItem(null);
       setApplication(null);
       setAutoInquiry(null);
+      setServiceQuote(null);
       setError(new Error('This activity link is incomplete. Return to Activity and open it again.'));
       setLoading(false);
       return;
@@ -106,6 +112,7 @@ export default function ActivityDetailView() {
     setError(null);
     setApplication(null);
     setAutoInquiry(null);
+    setServiceQuote(null);
 
     try {
       if (source === 'order') {
@@ -140,7 +147,7 @@ export default function ActivityDetailView() {
         if (!selectedApplication) throw new Error('This job application could not be found.');
         setApplication(selectedApplication);
         setItem(toJobApplicationActivityCard(selectedApplication));
-      } else {
+      } else if (source === 'auto_inquiry') {
         const inquiries = await apiRequest<BuyerAutoInquiryRecord[]>(
           '/dashboard/user/inquiries/auto-inquiries',
           { authenticated: true },
@@ -150,11 +157,22 @@ export default function ActivityDetailView() {
         if (!selectedInquiry) throw new Error('This vehicle inquiry could not be found.');
         setAutoInquiry(selectedInquiry);
         setItem(toAutoInquiryActivityCard(selectedInquiry));
+      } else {
+        const quotes = await apiRequest<BuyerServiceQuoteRecord[]>(
+          '/dashboard/user/inquiries/service-quotes',
+          { authenticated: true },
+        );
+        const selectedQuote = quotes.find((record) => record.id === id);
+
+        if (!selectedQuote) throw new Error('This service quote could not be found.');
+        setServiceQuote(selectedQuote);
+        setItem(toServiceQuoteActivityCard(selectedQuote));
       }
     } catch (requestError) {
       setItem(null);
       setApplication(null);
       setAutoInquiry(null);
+      setServiceQuote(null);
       setError(requestError);
     } finally {
       setLoading(false);
@@ -235,7 +253,13 @@ export default function ActivityDetailView() {
               </View>
               <View style={styles.infoCard}>
                 <Text style={styles.infoLabel}>
-                  {autoInquiry ? 'PREFERRED DATE' : application ? 'SALARY' : 'TOTAL'}
+                  {autoInquiry
+                    ? 'PREFERRED DATE'
+                    : serviceQuote
+                      ? 'QUOTED PRICE'
+                      : application
+                        ? 'SALARY'
+                        : 'TOTAL'}
                 </Text>
                 <Text style={styles.amountValue}>
                   {autoInquiry?.preferred_date || item.amount || 'Not applicable'}
@@ -247,14 +271,22 @@ export default function ActivityDetailView() {
               </View>
               <View style={styles.infoCard}>
                 <Text style={styles.infoLabel}>
-                  {autoInquiry ? 'PREFERRED TIME' : application ? 'WORKPLACE' : 'PAYMENT'}
+                  {autoInquiry
+                    ? 'PREFERRED TIME'
+                    : serviceQuote
+                      ? 'SCOPE'
+                      : application
+                        ? 'WORKPLACE'
+                        : 'PAYMENT'}
                 </Text>
                 <Text style={styles.infoValue}>
                   {autoInquiry
                     ? autoInquiry.preferred_time || 'Not specified'
+                    : serviceQuote
+                      ? serviceQuote.scope_size || 'Not specified'
                     : application
-                    ? workplaceLabel(application.job?.workplace_type)
-                    : item.secondaryStatus?.toUpperCase() || '—'}
+                      ? workplaceLabel(application.job?.workplace_type)
+                      : item.secondaryStatus?.toUpperCase() || '—'}
                 </Text>
               </View>
             </View>
@@ -307,6 +339,36 @@ export default function ActivityDetailView() {
                   <View style={styles.contactRow}>
                     <Text style={styles.contactLabel}>PHONE</Text>
                     <Text style={styles.contactValue}>{autoInquiry.phone || 'Not provided'}</Text>
+                  </View>
+                </View>
+              </View>
+            )}
+
+            {serviceQuote && (
+              <View style={styles.applicationSection}>
+                <Text style={styles.applicationLabel}>REQUEST DETAILS</Text>
+                <Text style={styles.applicationText}>
+                  {serviceQuote.details || 'No additional details were included.'}
+                </Text>
+
+                <View style={styles.contactGrid}>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>REQUESTED DATE</Text>
+                    <Text style={styles.contactValue}>
+                      {serviceQuote.requested_date || 'Not specified'}
+                    </Text>
+                  </View>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>NAME</Text>
+                    <Text style={styles.contactValue}>{serviceQuote.full_name || 'Not provided'}</Text>
+                  </View>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>EMAIL</Text>
+                    <Text style={styles.contactValue}>{serviceQuote.email || 'Not provided'}</Text>
+                  </View>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>PHONE</Text>
+                    <Text style={styles.contactValue}>{serviceQuote.phone || 'Not provided'}</Text>
                   </View>
                 </View>
               </View>

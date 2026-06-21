@@ -19,6 +19,7 @@ import {
   toBookingActivityCard,
   toJobApplicationActivityCard,
   toOrderActivityCard,
+  toServiceQuoteActivityCard,
 } from '../../src/features/buyer/adapters';
 import {
   BuyerActivityCard,
@@ -27,6 +28,7 @@ import {
   BuyerDashboardData,
   BuyerJobApplicationRecord,
   BuyerOrderRecord,
+  BuyerServiceQuoteRecord,
 } from '../../src/features/buyer/types';
 import { LISTING_CATEGORIES } from '../../src/features/listings/catalog';
 
@@ -39,6 +41,7 @@ function activityTypeLabel(item: BuyerActivityCard) {
     case 'product_order': return 'PRODUCT ORDER';
     case 'job_application': return 'JOB APPLICATION';
     case 'vehicle_inquiry': return 'VEHICLE INQUIRY';
+    case 'service_quote': return 'SERVICE QUOTE';
   }
 }
 
@@ -141,6 +144,7 @@ export default function ActivityView() {
       ordersResult,
       applicationsResult,
       autoInquiriesResult,
+      serviceQuotesResult,
     ] = await Promise.allSettled([
       apiRequest<BuyerDashboardData>('/dashboard/user/welcome', { authenticated: true }),
       apiRequest<BuyerBookingsData>('/dashboard/user/bookings', { authenticated: true }),
@@ -149,6 +153,9 @@ export default function ActivityView() {
         authenticated: true,
       }),
       apiRequest<BuyerAutoInquiryRecord[]>('/dashboard/user/inquiries/auto-inquiries', {
+        authenticated: true,
+      }),
+      apiRequest<BuyerServiceQuoteRecord[]>('/dashboard/user/inquiries/service-quotes', {
         authenticated: true,
       }),
     ]);
@@ -190,6 +197,12 @@ export default function ActivityView() {
       recent.push(...autoInquiriesResult.value.map(toAutoInquiryActivityCard));
     } else {
       warnings.push('vehicle inquiries');
+    }
+
+    if (serviceQuotesResult.status === 'fulfilled') {
+      recent.push(...serviceQuotesResult.value.map(toServiceQuoteActivityCard));
+    } else {
+      warnings.push('service quotes');
     }
 
     recent.sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime());
