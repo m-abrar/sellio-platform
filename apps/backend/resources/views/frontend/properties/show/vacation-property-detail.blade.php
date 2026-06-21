@@ -15,7 +15,7 @@
     </x-slot:breadcrumbs>
 
     <x-slot:main>
-        <div class="card glass-surface border-0 overflow-hidden mb-4">
+        <div class="detail-main-card border-0 overflow-hidden mb-4">
             <div class="gallery-section">
                 @include('frontend.properties.show.partials._gallery')
             </div>
@@ -26,7 +26,7 @@
                 <hr class="my-5 opacity-10">
 
                 <section id="about" class="mb-5">
-                    <h4 class="fw-800 text-dark mb-4 section-title">{{ __('About this getaway') }}</h4>
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('About this getaway') }}</h4>
                     <div class="text-muted lh-lg">
                         @include('frontend.properties.show.partials._description')
                     </div>
@@ -47,7 +47,7 @@
                 </section>
 
                 <section id="livability" class="mt-5 pt-5 border-top border-color-light property-scores-panel property-scores-panel--expanded">
-                    <h4 class="fw-800 text-dark mb-4 section-title">{{ __('Livability & Accessibility') }}</h4>
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Livability & Accessibility') }}</h4>
                     @include('frontend.properties.show.partials.sale._scores', ['hideHeading' => true])
                 </section>
 

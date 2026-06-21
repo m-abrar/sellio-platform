@@ -11,7 +11,7 @@
     $dealerFirstName = Str::before($dealer->name ?? 'Dealer', ' ');
 @endphp
 
-<div class="card glass-surface p-4 mb-4">
+<div class="card detail-sidebar-card p-4 mb-4">
 
     <h4 class="fw-bold mb-3">
         <i class="bi bi-calendar-check-fill me-2 text-primary-color"></i>{{ __('Request a Test Drive') }}
@@ -71,8 +71,8 @@
 
         {{-- CTA Button --}}
         <div class="d-grid">
-            <button type="submit" class="btn btn-lg fw-bold text-white btn-primary-theme shadow-primary-md">
-                <i class="bi bi-car-front-fill me-2"></i>{{ __('Submit Inquiry') }}
+            <button type="submit" class="btn btn-primary btn-header-cta">
+                <i class="bi bi-car-front-fill me-2"></i>{{ __('Submit inquiry') }}<i class="bi bi-arrow-right ms-2"></i>
             </button>
         </div>
 

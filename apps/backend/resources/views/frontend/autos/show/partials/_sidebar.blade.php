@@ -13,8 +13,8 @@
 
     {{-- Secondary Action (Save to Favorites) --}}
     <div class="text-center mt-3">
-        <button class="btn btn-link text-danger fw-semibold" data-auto-id="{{ $auto->id }}">
-            <i class="bi bi-heart me-1"></i> {{ __('Save to Favorites') }}
+        <button class="btn btn-link text-primary fw-semibold" data-auto-id="{{ $auto->id }}">
+            <i class="bi bi-heart me-1"></i>{{ __('Save to favourites') }}
         </button>
     </div>
 </div>

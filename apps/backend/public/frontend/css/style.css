@@ -4896,3 +4896,14 @@ body.has-admin-bar .main-header.sticky-top{
     font-weight: 400;
     letter-spacing: -0.02em;
 }
+
+/* ─── Auto detail quick-spec items ───────────────────────────────────────── */
+.feature-item {
+    background: #fff;
+    border: 1.5px solid rgba(15,23,42,.07);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+.feature-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(28,25,23,.08);
+}

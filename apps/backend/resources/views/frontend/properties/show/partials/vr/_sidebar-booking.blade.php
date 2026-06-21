@@ -26,7 +26,7 @@
     $bookedDateRangesForPicker = ($bookedDateRanges ?? collect())->values();
 @endphp
 
-<div class="card glass-surface mb-4" id="booking-widget">
+<div class="card detail-sidebar-card mb-4 overflow-hidden" id="booking-widget">
     <div class="card-header bg-primary text-white p-4 border-0">
         <h4 class="fw-800 mb-1"><i class="bi-calendar-check-fill me-2"></i>{{ __('Reserve Your Stay') }}</h4>
         <p class="small text-white-50 mb-0">{{ __('Pick dates, review the quote, then continue to checkout.') }}</p>
@@ -88,8 +88,8 @@
             </div>
 
             <div class="d-grid">
-                <button type="submit" class="btn btn-lg fw-bold text-white btn-primary-theme">
-                    {{ __('Review Booking') }} <i class="bi bi-arrow-right-short ms-2"></i>
+                <button type="submit" class="btn btn-primary btn-header-cta">
+                    {{ __('Review booking') }}<i class="bi bi-arrow-right ms-2"></i>
                 </button>
             </div>
 
@@ -103,17 +103,17 @@
         #booking-widget {
             overflow: hidden;
             border: 0;
-            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+            box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
         }
 
         #booking-widget .card-header {
-            background: linear-gradient(135deg, var(--bs-primary, #0d6efd), #5f55d9) !important;
+            background: var(--primary-color) !important;
         }
 
         #booking-widget .date-selection-container {
-            background: linear-gradient(180deg, rgba(248, 250, 252, 0.95), rgba(255, 255, 255, 0.98));
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 18px;
+            background: #fafaf9;
+            border: 1.5px solid rgba(15, 23, 42, 0.07);
+            border-radius: 12px;
             padding: 14px;
         }
 
@@ -127,7 +127,7 @@
             max-width: 100%;
             box-shadow: none;
             border: 0;
-            border-radius: 16px;
+            border-radius: 10px;
             background: transparent;
         }
 
@@ -161,12 +161,12 @@
 
         #booking-widget .flatpickr-current-month .flatpickr-monthDropdown-months,
         #booking-widget .flatpickr-current-month input.cur-year {
-            font-weight: 800;
-            color: #334155;
+            font-weight: 700;
+            color: #1c1917;
         }
 
         #booking-widget .flatpickr-current-month .flatpickr-monthDropdown-months {
-            border-radius: 999px;
+            border-radius: 8px;
             padding: 4px 24px 4px 10px;
         }
 
@@ -177,42 +177,42 @@
         #booking-widget span.flatpickr-weekday {
             color: #64748b;
             font-size: 0.72rem;
-            font-weight: 800;
+            font-weight: 700;
         }
 
         #booking-widget .flatpickr-day {
             height: 34px;
             line-height: 34px;
             max-width: none;
-            border-radius: 12px;
-            color: #1e293b;
-            font-weight: 700;
+            border-radius: 8px;
+            color: #1c1917;
+            font-weight: 600;
         }
 
         #booking-widget .flatpickr-day.selected,
         #booking-widget .flatpickr-day.startRange,
         #booking-widget .flatpickr-day.endRange {
-            background: linear-gradient(135deg, var(--bs-primary, #0d6efd), #5f55d9);
+            background: var(--primary-color);
             border-color: transparent;
-            box-shadow: 0 10px 22px rgba(13, 110, 253, 0.28);
+            box-shadow: 0 6px 16px rgba(var(--primary-color-rgb), 0.32);
             color: #fff;
         }
 
         #booking-widget .flatpickr-day.inRange {
-            background: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.11);
+            background: rgba(var(--primary-color-rgb), 0.10);
             border-color: transparent;
             box-shadow: none;
-            color: #1d4ed8;
+            color: var(--primary-dark);
         }
 
         #booking-widget .flatpickr-day:hover:not(.selected):not(.startRange):not(.endRange):not(.flatpickr-disabled) {
-            background: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.09);
-            border-color: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.18);
+            background: rgba(var(--primary-color-rgb), 0.08);
+            border-color: rgba(var(--primary-color-rgb), 0.18);
         }
 
         #booking-widget .flatpickr-day.today:not(.selected):not(.startRange):not(.endRange) {
-            border-color: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.45);
-            color: var(--bs-primary, #0d6efd);
+            border-color: rgba(var(--primary-color-rgb), 0.45);
+            color: var(--primary-color);
         }
 
         #booking-widget .flatpickr-day.flatpickr-disabled,
@@ -235,32 +235,16 @@
         #booking-widget .selected-date-range {
             background: #fff;
             border-color: rgba(15, 23, 42, 0.08) !important;
-            color: #334155 !important;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+            color: #1c1917 !important;
         }
 
         #booking-widget .form-select {
-            border-radius: 14px;
+            border-radius: 10px;
             border-color: rgba(15, 23, 42, 0.1);
             min-height: 50px;
         }
 
-        #booking-widget .btn-primary-theme {
-            border: 0;
-            border-radius: 14px;
-            box-shadow: 0 14px 30px rgba(13, 110, 253, 0.28);
-        }
-
-        #booking-widget .list-group-item {
-            color: #1f2937;
-        }
-
         @media (max-width: 575.98px) {
-            #booking-widget {
-                border-radius: 16px;
-                box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
-            }
-
             #booking-widget .card-header {
                 padding: 18px !important;
             }
@@ -274,7 +258,7 @@
             }
 
             #booking-widget .date-selection-container {
-                border-radius: 16px;
+                border-radius: 10px;
                 padding: 10px;
             }
 
@@ -290,10 +274,6 @@
 
             #booking-widget .selected-date-range {
                 font-size: 0.78rem;
-            }
-
-            #booking-widget .btn-primary-theme {
-                min-height: 48px;
             }
         }
     </style>
