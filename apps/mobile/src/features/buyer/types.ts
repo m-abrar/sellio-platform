@@ -97,7 +97,7 @@ export interface PaginatedFavorites {
 }
 
 export type BuyerBookingModule = 'properties' | 'events' | 'services';
-export type BuyerActivitySource = 'booking' | 'order';
+export type BuyerActivitySource = 'booking' | 'order' | 'application';
 export type BuyerBookingKind =
   | 'property_booking'
   | 'property_visit'
@@ -183,11 +183,33 @@ export interface BuyerOrderRecord {
   updated_at?: string;
 }
 
+export interface BuyerJobApplicationRecord {
+  id: number;
+  job_listing_id: number;
+  user_id: number;
+  status: string;
+  cover_letter?: string | null;
+  resume_path?: string | null;
+  portfolio_url?: string | null;
+  viewed_at?: string | null;
+  created_at: string;
+  updated_at?: string;
+  job?: {
+    id: number;
+    title: string;
+    slug: string;
+    salary_min?: number | string | null;
+    salary_max?: number | string | null;
+    workplace_type?: number | string | null;
+    primary_image_url?: string | null;
+  } | null;
+}
+
 export interface BuyerActivityCard {
   key: string;
   id: number;
   source: BuyerActivitySource;
-  kind: BuyerBookingKind | 'product_order';
+  kind: BuyerBookingKind | 'product_order' | 'job_application';
   vertical: import('../listings/types').ListingVertical;
   title: string;
   imageUrl: string | null;

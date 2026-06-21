@@ -1,6 +1,7 @@
 import {
   BuyerActivityCard,
   BuyerBookingRecord,
+  BuyerJobApplicationRecord,
   BuyerOrderRecord,
   FavoriteListingCard,
   FavoriteRecord,
@@ -168,6 +169,37 @@ export function toOrderActivityCard(record: BuyerOrderRecord): BuyerActivityCard
     detail: `${totalQuantity} item${totalQuantity === 1 ? '' : 's'} · ${record.payment_method.toUpperCase()}`,
     reference: record.order_number,
     slug: text(firstItem?.product?.slug),
+    isUpcoming: false,
+    cancellationType: null,
+  };
+}
+
+export function toJobApplicationActivityCard(
+  record: BuyerJobApplicationRecord,
+): BuyerActivityCard {
+  const minimumSalary = activityMoney(record.job?.salary_min);
+  const maximumSalary = activityMoney(record.job?.salary_max);
+  const salary = minimumSalary && maximumSalary
+    ? `${minimumSalary} – ${maximumSalary}`
+    : minimumSalary || maximumSalary;
+  const date = record.created_at;
+
+  return {
+    key: `application:${record.id}`,
+    id: record.id,
+    source: 'application',
+    kind: 'job_application',
+    vertical: 'jobs',
+    title: text(record.job?.title) || 'Job application',
+    imageUrl: text(record.job?.primary_image_url),
+    status: text(record.status) || 'pending',
+    secondaryStatus: null,
+    amount: salary,
+    date,
+    dateLabel: formatDate(date),
+    detail: salary ? `Salary range ${salary}` : 'Application submitted',
+    reference: `Application #${record.id}`,
+    slug: text(record.job?.slug),
     isUpcoming: false,
     cancellationType: null,
   };

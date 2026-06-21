@@ -14,11 +14,16 @@ import { apiRequest } from '../../src/api/client';
 import { AuthenticatedScreen } from '../../src/auth/AuthenticatedScreen';
 import { EmptyState, ErrorState, LoadingState } from '../../src/components/states/AsyncStates';
 import { useAuth } from '../../src/context/AuthContext';
-import { toBookingActivityCard, toOrderActivityCard } from '../../src/features/buyer/adapters';
+import {
+  toBookingActivityCard,
+  toJobApplicationActivityCard,
+  toOrderActivityCard,
+} from '../../src/features/buyer/adapters';
 import {
   BuyerActivityCard,
   BuyerBookingsData,
   BuyerDashboardData,
+  BuyerJobApplicationRecord,
   BuyerOrderRecord,
 } from '../../src/features/buyer/types';
 import { LISTING_CATEGORIES } from '../../src/features/listings/catalog';
@@ -30,6 +35,7 @@ function activityTypeLabel(item: BuyerActivityCard) {
     case 'event_booking': return 'EVENT BOOKING';
     case 'service_appointment': return 'SERVICE APPOINTMENT';
     case 'product_order': return 'PRODUCT ORDER';
+    case 'job_application': return 'JOB APPLICATION';
   }
 }
 
@@ -47,7 +53,7 @@ function statusStyle(status: string) {
   return styles.statusPending;
 }
 
-function ActivityRecordCard({ item, onPress }: { item: BuyerActivityCard; onPress: () => void }) {
+function ActivityRecordCard({ item, onPress }: { item: BuyerActivityCard; onPress?: () => void }) {
   const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
 
   return (
@@ -55,8 +61,9 @@ function ActivityRecordCard({ item, onPress }: { item: BuyerActivityCard; onPres
       style={styles.activityCard}
       activeOpacity={0.82}
       onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={`Open ${item.reference}`}
+      disabled={!onPress}
+      accessibilityRole={onPress ? 'button' : undefined}
+      accessibilityLabel={onPress ? `Open ${item.reference}` : item.reference}
     >
       <View style={styles.activityImageFrame}>
         <Text style={styles.activityImageFallback}>{category?.icon || '◇'}</Text>
@@ -88,7 +95,9 @@ function ActivityRecordCard({ item, onPress }: { item: BuyerActivityCard; onPres
           </View>
           {item.amount && (
             <View style={[styles.activityMetaBlock, styles.activityMetaEnd]}>
-              <Text style={styles.activityMetaLabel}>TOTAL</Text>
+              <Text style={styles.activityMetaLabel}>
+                {item.kind === 'job_application' ? 'SALARY' : 'TOTAL'}
+              </Text>
               <Text style={styles.activityAmount}>{item.amount}</Text>
             </View>
           )}
@@ -123,10 +132,13 @@ export default function ActivityView() {
     setError(null);
     setActivityWarning(null);
 
-    const [dashboardResult, bookingsResult, ordersResult] = await Promise.allSettled([
+    const [dashboardResult, bookingsResult, ordersResult, applicationsResult] = await Promise.allSettled([
       apiRequest<BuyerDashboardData>('/dashboard/user/welcome', { authenticated: true }),
       apiRequest<BuyerBookingsData>('/dashboard/user/bookings', { authenticated: true }),
       apiRequest<BuyerOrderRecord[]>('/v1/orders?per_page=15', { authenticated: true }),
+      apiRequest<BuyerJobApplicationRecord[]>('/dashboard/user/inquiries/applications', {
+        authenticated: true,
+      }),
     ]);
 
     if (dashboardResult.status === 'fulfilled') {
@@ -154,6 +166,12 @@ export default function ActivityView() {
       recent.push(...ordersResult.value.map(toOrderActivityCard));
     } else {
       warnings.push('orders');
+    }
+
+    if (applicationsResult.status === 'fulfilled') {
+      recent.push(...applicationsResult.value.map(toJobApplicationActivityCard));
+    } else {
+      warnings.push('job applications');
     }
 
     recent.sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime());
@@ -267,7 +285,7 @@ export default function ActivityView() {
 
               <View style={styles.activitySection}>
                 <View style={styles.sectionHeadingRow}>
-                  <Text style={styles.sectionTitle}>Bookings & Orders</Text>
+                  <Text style={styles.sectionTitle}>Recent Activity</Text>
                   <Text style={styles.sectionCount}>{recentActivities.length}</Text>
                 </View>
 
@@ -276,14 +294,18 @@ export default function ActivityView() {
                 {recentActivities.length > 0 ? (
                   <View style={styles.activityList}>
                     {recentActivities.map((item) => (
-                      <ActivityRecordCard key={item.key} item={item} onPress={() => openActivity(item)} />
+                      <ActivityRecordCard
+                        key={item.key}
+                        item={item}
+                        onPress={item.source === 'application' ? undefined : () => openActivity(item)}
+                      />
                     ))}
                   </View>
                 ) : !hasActivity && !activityWarning ? (
                   <EmptyState
                     icon="◇"
                     title="NO ACTIVITY YET"
-                    message="Your bookings and product orders will appear here."
+                    message="Your bookings, orders, and job applications will appear here."
                   />
                 ) : null}
               </View>
