@@ -49,7 +49,7 @@
         @yield('content')
     </main>
     
-    <footer class="main-footer bg-dark footer-section" role="contentinfo">
+    <footer class="main-footer footer-section" role="contentinfo">
         @includeIf('frontend._partials._footer')
     </footer>
 

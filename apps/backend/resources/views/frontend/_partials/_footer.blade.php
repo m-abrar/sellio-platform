@@ -22,6 +22,9 @@
     ];
 @endphp
 
+{{-- ── Accent bar ──────────────────────────────────────────────────── --}}
+<div class="ft-accent-bar" aria-hidden="true"></div>
+
 {{-- ── Main grid ──────────────────────────────────────────────────── --}}
 <div class="container-xl ft-wrap">
     <div class="row ft-grid gy-5">
@@ -36,7 +39,7 @@
                 <img src="{{ $footerLogoUrl }}"
                      alt="{{ setting('site_name', config('app.name')) }}"
                      class="ft-logo-img me-2">
-                <span class="ft-brand-name">
+                <span class="ft-brand-name ft-brand-name--serif">
                     {{ page_content_string('global.footer.brand_text', setting_string('site_name', config('app.name'))) }}
                 </span>
             </a>

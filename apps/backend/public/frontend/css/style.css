@@ -2871,8 +2871,19 @@ body.has-admin-bar .main-header.sticky-top{
 
 /* ── Footer v3 ───────────────────────────────────────────────────── */
 
+.main-footer{
+    background-color:var(--text-dark)!important;
+}
+
+/* Warm orange accent bar at top of footer */
+.ft-accent-bar{
+    height:3px;
+    background:linear-gradient(to right, var(--primary-color), var(--primary-dark), transparent);
+    width:100%;
+}
+
 .ft-wrap{
-    padding-top:2.75rem;
+    padding-top:3.25rem;
     padding-bottom:1.5rem;
 }
 
@@ -2890,6 +2901,12 @@ body.has-admin-bar .main-header.sticky-top{
     font-size:1.15rem;
     font-weight:800;
     color:#fff;
+}
+.ft-brand-name--serif{
+    font-family:var(--font-heading);
+    font-weight:400;
+    font-size:1.3rem;
+    letter-spacing:-0.01em;
 }
 .ft-tagline{
     font-size:.875rem;
@@ -2994,8 +3011,8 @@ body.has-admin-bar .main-header.sticky-top{
 .ft-nl-field{
     display:flex;
     align-items:center;
-    background:rgba(255,255,255,.07);
-    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.1);
     border-radius:12px;
     padding:.35rem .35rem .35rem .9rem;
     gap:.4rem;
@@ -4116,4 +4133,63 @@ body.has-admin-bar .main-header.sticky-top{
 .section-warm + .section-spacious,
 .section-spacious + .section-warm {
     border-top: 1px solid rgba(28,25,23,.06);
+}
+
+/* ─── Footer warm bg (Step 4) ──────────────────────────────────────────── */
+
+.ft-accent-bar{
+    height:3px;
+    background:linear-gradient(to right, var(--primary-color), var(--primary-dark), transparent);
+    width:100%;
+}
+.ft-brand-name--serif{
+    font-family:var(--font-heading);
+    font-weight:400;
+    font-size:1.3rem;
+    letter-spacing:-0.01em;
+}
+
+/* ─── Card polish (Step 5) ──────────────────────────────────────────────── */
+
+/* Price overlay — warm dark tint instead of cold Bootstrap bg-dark */
+.listing-card .price-overlay,
+.listing-card .bg-dark.bg-opacity-75{
+    background:rgba(28,25,23,.82)!important;
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+}
+
+/* Fix property-title text-truncate conflicting with webkit line-clamp */
+.property-title.text-truncate{
+    white-space:normal;
+    text-overflow:clip;
+}
+
+/* Warm hover shadow on cards */
+.listing-card:hover{
+    box-shadow:0 16px 40px rgba(28,25,23,.14)!important;
+}
+
+/* Module cards — warm accent border on hover */
+.market-module-card:hover{
+    border-color:rgba(var(--primary-color-rgb),.35)!important;
+    box-shadow:0 8px 24px rgba(var(--primary-color-rgb),.12)!important;
+}
+
+/* Module icon — tighter warm bg */
+.market-module-icon{
+    border-radius:10px;
+}
+
+/* Location pill — warm dark on hover */
+.location-pill:hover{
+    background:var(--text-dark);
+    border-color:var(--text-dark);
+    color:#fff;
+}
+
+/* Taxonomy icon — neutral warm instead of hardcoded teal */
+.taxonomy-icon{
+    background:rgba(var(--primary-color-rgb),.08);
+    color:var(--primary-color);
 }
