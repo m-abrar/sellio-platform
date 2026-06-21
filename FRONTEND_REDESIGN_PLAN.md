@@ -177,16 +177,35 @@ Public-facing login/register flows. Currently not following CSS design tokens.
 
 ---
 
-## Phase 4 — Booking & Checkout Flows (NEXT)
+## ✅ Phase 4 — Booking & Checkout Flows (COMPLETE)
 
 Conversion-critical transaction screens.
 
 | Flow | Files |
 |---|---|
-| Property booking | `properties/booking/checkout.blade.php`, `payment.blade.php`, `confirmation.blade.php`, `_partials/_booking-stepper.blade.php` |
-| Event booking | `events/booking/checkout.blade.php` |
-| Product checkout | `products/checkout.blade.php` |
-| Auto inquiry | `autos/inquiry/confirmation.blade.php` |
+| Property booking | `properties/booking/checkout.blade.php`, `payment.blade.php`, `confirmation.blade.php`, `_partials/_booking-header.blade.php`, `_partials/_payment_details.blade.php` | ✅ Done |
+| Property visit | `properties/visits/confirmation.blade.php` | ✅ Done |
+| Event booking | `events/booking/checkout.blade.php`, `confirmation.blade.php`, `_partials/_booking-header.blade.php` | ✅ Done |
+| Product cart/checkout/success | `products/cart.blade.php`, `checkout.blade.php`, `success.blade.php`, `_partials/_checkout-header.blade.php` | ✅ Done |
+| Auto inquiry | `autos/inquiry/confirmation.blade.php` | ✅ Done |
+| Job application | `jobs/application/show.blade.php`, `confirmation.blade.php`, `partials/_description.blade.php`, `_mobile_cta.blade.php`, `_application_sidebar.blade.php` | ✅ Done |
+| Shared checkout partials | `_partials/_checkout_success_hero.blade.php`, `_checkout_payment_panel.blade.php` | ✅ Done |
+
+---
+
+## Phase 5 — Detail / Show Pages (NEXT)
+
+High-traffic listing detail views. All `show` partials still contain `glass-surface`.
+
+| Vertical | Files |
+|---|---|
+| Autos | `autos/show/partials/_details_main.blade.php`, `_finance_calculator.blade.php` |
+| Products | `products/show/partials/_related_products.blade.php` |
+| Properties | `properties/show/partials/sale/_contact_form_inline.blade.php`, `_scores.blade.php`, `_mortgage_calculator.blade.php`, `_tours_and_documents.blade.php`, `_related.blade.php`, `vr/_reviews.blade.php`, `vr/_sidebar.blade.php` |
+| Services | `services/show/partials/_simple_feature_list.blade.php`, `_gallery_carousel.blade.php`, `_related_services.blade.php`, `_service_list_bookable.blade.php`, `_operating_hours.blade.php`, `_location_map.blade.php` |
+| Events | `events/show/partials/_speaker_modal.blade.php` |
+| Classifieds | `classifieds/show/partials/_related_seller_items.blade.php` |
+| Blogs | `blogs/show/partials/_related_seller_items.blade.php` |
 
 ---
 
