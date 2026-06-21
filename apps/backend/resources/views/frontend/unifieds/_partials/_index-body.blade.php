@@ -155,10 +155,14 @@
             {{-- Careers --}}
             @if(module_enabled('jobs'))
             <div class="col-lg-6" data-aos="fade-right">
-                <div class="card glass-surface rounded-5 p-4 p-md-5 shadow-lg border-0 h-100 overflow-hidden">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h3 class="fw-800 mb-0 text-dark fs-4"><i class="bi bi-briefcase-fill me-2 text-primary"></i> {{ __('Careers') }}</h3>
-                        <a href="{{ route('jobs.index') }}" class="badge bg-primary text-light text-decoration-none px-3 py-2 rounded-pill fw-800">{{ __('Search All') }}</a>
+                <div class="split-panel h-100">
+                    <div class="split-panel__head">
+                        <h3 class="split-panel__title">
+                            <i class="bi bi-briefcase-fill me-2 text-primary"></i>{{ __('Careers') }}
+                        </h3>
+                        <a href="{{ route('jobs.index') }}" class="split-panel__link">
+                            {{ __('Search all') }}<i class="bi bi-arrow-right ms-1"></i>
+                        </a>
                     </div>
                     <div class="list-group list-group-flush bg-transparent">
                         @isset($jobsFeatured)
@@ -174,10 +178,14 @@
             {{-- Top Deals --}}
             @if(module_enabled('classifieds'))
             <div class="col-lg-6" data-aos="fade-left">
-                <div class="card glass-surface rounded-5 p-4 p-md-5 shadow-lg border-0 h-100 overflow-hidden">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h3 class="fw-800 mb-0 text-dark fs-4"><i class="bi bi-tag-fill me-2 text-success"></i> {{ __('Top Deals') }}</h3>
-                        <a href="{{ route('classifieds.index') }}" class="badge bg-success bg-opacity-10 text-success text-decoration-none px-3 py-2 rounded-pill fw-800">{{ __('View Market') }}</a>
+                <div class="split-panel h-100">
+                    <div class="split-panel__head">
+                        <h3 class="split-panel__title">
+                            <i class="bi bi-tag-fill me-2 text-primary"></i>{{ __('Top Deals') }}
+                        </h3>
+                        <a href="{{ route('classifieds.index') }}" class="split-panel__link">
+                            {{ __('Browse all') }}<i class="bi bi-arrow-right ms-1"></i>
+                        </a>
                     </div>
                     <div class="row g-3">
                         @isset($classifiedsFeatured)
