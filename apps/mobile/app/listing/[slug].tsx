@@ -1,7 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView,
@@ -11,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { apiRequest } from '../../src/api/client';
+import { ErrorState, LoadingState } from '../../src/components/states/AsyncStates';
 import { toListingDetail } from '../../src/features/listings/adapters';
 import { LISTING_CATEGORIES } from '../../src/features/listings/catalog';
 import { ListingApiRecord, ListingDetailItem, ListingVertical } from '../../src/features/listings/types';
@@ -27,14 +27,14 @@ export default function ListingDetailsView() {
   const vertical = isListingVertical(verticalParam) ? verticalParam : null;
   const [item, setItem] = useState<ListingDetailItem | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<unknown>(null);
 
   const fetchDetails = useCallback(async () => {
     const category = LISTING_CATEGORIES.find((entry) => entry.id === vertical);
 
     if (!slug || !vertical || !category) {
       setItem(null);
-      setError('This listing link is incomplete. Return to the marketplace and open it again.');
+      setError(new Error('This listing link is incomplete. Return to the marketplace and open it again.'));
       setLoading(false);
       return;
     }
@@ -49,7 +49,7 @@ export default function ListingDetailsView() {
       setItem(toListingDetail(record, vertical));
     } catch (requestError) {
       setItem(null);
-      setError(requestError instanceof Error ? requestError.message : 'Unable to load this listing.');
+      setError(requestError);
     } finally {
       setLoading(false);
     }
@@ -62,10 +62,7 @@ export default function ListingDetailsView() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.centeredState}>
-          <ActivityIndicator size="small" color="#818cf8" />
-          <Text style={styles.stateText}>Loading listing...</Text>
-        </View>
+        <LoadingState message="Loading listing..." fullScreen />
       </SafeAreaView>
     );
   }
@@ -73,16 +70,14 @@ export default function ListingDetailsView() {
   if (!item) {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.centeredState}>
-          <Text style={styles.errorTitle}>LISTING UNAVAILABLE</Text>
-          <Text style={styles.stateText}>{error}</Text>
-          <TouchableOpacity style={styles.actionBtn} onPress={fetchDetails}>
-            <Text style={styles.actionBtnText}>TRY AGAIN</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.secondaryBtn} onPress={() => router.back()}>
-            <Text style={styles.secondaryBtnText}>BACK TO MARKETPLACE</Text>
-          </TouchableOpacity>
-        </View>
+        <ErrorState
+          error={error}
+          title="LISTING UNAVAILABLE"
+          fallbackMessage="Unable to load this listing."
+          onRetry={fetchDetails}
+          secondaryAction={{ label: 'BACK TO MARKETPLACE', onPress: () => router.back() }}
+          fullScreen
+        />
       </SafeAreaView>
     );
   }
@@ -144,9 +139,4 @@ const styles = StyleSheet.create({
   itemDesc: { color: '#94a3b8', fontSize: 13, fontWeight: '500', lineHeight: 20, marginBottom: 40 },
   actionBtn: { backgroundColor: '#6366f1', paddingVertical: 18, paddingHorizontal: 24, borderRadius: 20, alignItems: 'center' },
   actionBtnText: { color: '#fff', fontSize: 10, fontWeight: '900', letterSpacing: 1.5 },
-  secondaryBtn: { paddingVertical: 16, paddingHorizontal: 20 },
-  secondaryBtnText: { color: '#a5b4fc', fontSize: 9, fontWeight: '900', letterSpacing: 1 },
-  centeredState: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32, gap: 16 },
-  errorTitle: { color: '#fff', fontSize: 15, fontWeight: '900', letterSpacing: 1 },
-  stateText: { color: '#94a3b8', fontSize: 12, lineHeight: 18, textAlign: 'center' },
 });

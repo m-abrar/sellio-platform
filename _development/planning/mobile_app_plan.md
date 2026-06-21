@@ -60,7 +60,7 @@ Make API communication predictable on Android emulators, iOS simulators, physica
   - Unauthorized-session handling.
   - Request timeouts and clear network errors.
 - [x] Introduce typed models for users, listings, pagination, favorites, conversations, and buyer activity.
-- [ ] Add shared loading, empty, offline, and error states.
+- [x] Add shared loading, empty, offline, and error states.
 - [x] Add authenticated route guards.
 - [x] Remove broken encoding and normalize buyer-facing language.
 - [ ] Stop silently replacing failed API requests with mock marketplace data.
