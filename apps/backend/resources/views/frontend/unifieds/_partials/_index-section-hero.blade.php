@@ -109,32 +109,32 @@
                     ];
                 @endphp
 
-                <div class="hero-mosaic">
-                    {{-- Column 1 (items 0 + 1) --}}
-                    <div class="hero-mosaic__col">
-                        @foreach([0, 1] as $idx)
-                            @php $entry = $mosaicItems[$idx] ?? null; $ph = $mosaicPlaceholders[$idx]; @endphp
-                            <div class="hero-mosaic__item">
-                                @if($entry)
-                                    <img src="{{ $entry['listing']->primary_image_url }}"
-                                         alt="{{ $entry['listing']->title ?? '' }}"
-                                         class="hero-mosaic__img"
-                                         @if($idx === 0) loading="eager" fetchpriority="high" @else loading="lazy" @endif>
-                                @else
-                                    <div class="hero-mosaic__placeholder">
-                                        <i class="bi {{ $ph['icon'] }} hero-mosaic__placeholder-icon" aria-hidden="true"></i>
-                                    </div>
-                                @endif
-                                <div class="hero-mosaic__label">
-                                    <i class="bi {{ $entry ? $entry['icon'] : $ph['icon'] }}" aria-hidden="true"></i>
-                                    {{ $entry ? $entry['label'] : $ph['label'] }}
+                <div class="hero-mosaic hero-mosaic--3up">
+
+                    {{-- Featured column: one tall image --}}
+                    @php $e0 = $mosaicItems[0] ?? null; $p0 = $mosaicPlaceholders[0]; @endphp
+                    <div class="hero-mosaic__col hero-mosaic__col--featured">
+                        <div class="hero-mosaic__item hero-mosaic__item--tall">
+                            @if($e0)
+                                <img src="{{ $e0['listing']->primary_image_url }}"
+                                     alt="{{ $e0['listing']->title ?? '' }}"
+                                     class="hero-mosaic__img"
+                                     loading="eager" fetchpriority="high">
+                            @else
+                                <div class="hero-mosaic__placeholder">
+                                    <i class="bi {{ $p0['icon'] }} hero-mosaic__placeholder-icon" aria-hidden="true"></i>
                                 </div>
+                            @endif
+                            <div class="hero-mosaic__label">
+                                <i class="bi {{ $e0 ? $e0['icon'] : $p0['icon'] }}" aria-hidden="true"></i>
+                                {{ $e0 ? $e0['label'] : $p0['label'] }}
                             </div>
-                        @endforeach
+                        </div>
                     </div>
-                    {{-- Column 2 (items 2 + 3, offset down) --}}
-                    <div class="hero-mosaic__col hero-mosaic__col--offset">
-                        @foreach([2, 3] as $idx)
+
+                    {{-- Stack column: two images offset down --}}
+                    <div class="hero-mosaic__col hero-mosaic__col--stack">
+                        @foreach([1, 2] as $idx)
                             @php $entry = $mosaicItems[$idx] ?? null; $ph = $mosaicPlaceholders[$idx]; @endphp
                             <div class="hero-mosaic__item">
                                 @if($entry)
@@ -154,6 +154,17 @@
                             </div>
                         @endforeach
                     </div>
+
+                    {{-- Floating live-listings badge --}}
+                    <div class="hero-mosaic-badge">
+                        <span class="hero-mosaic-badge__dot"></span>
+                        @if(($totalListingsCount ?? 0) > 0)
+                            {{ number_format($totalListingsCount) }}+&nbsp;{{ __('Active Listings') }}
+                        @else
+                            {{ __('Live Marketplace') }}
+                        @endif
+                    </div>
+
                 </div>
 
             </div>{{-- /col-lg-6 right --}}
