@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Plan;
+use App\Models\Favorite;
 use App\Models\Property;
 use App\Models\PropertyBooking;
 use App\Models\Review;
@@ -76,6 +77,98 @@ class BuyerDashboardApiTest extends TestCase
             'id' => $booking->id,
             'status' => 'cancelled',
         ]);
+    }
+
+    public function test_buyer_can_idempotently_add_property_to_favorites(): void
+    {
+        $buyer = $this->createBuyer();
+        $property = Property::factory()->create();
+
+        $payload = [
+            'vertical' => 'properties',
+            'listing_id' => $property->id,
+        ];
+
+        $this->actingAs($buyer, 'sanctum')
+            ->postJson('/api/dashboard/user/favorites', $payload)
+            ->assertCreated()
+            ->assertJsonPath('data.favoritable_id', $property->id)
+            ->assertJsonPath('data.favoritable_type', Property::class);
+
+        $this->actingAs($buyer, 'sanctum')
+            ->postJson('/api/dashboard/user/favorites', $payload)
+            ->assertOk()
+            ->assertJsonPath('message', 'Listing is already in favorites.');
+
+        $this->assertSame(1, Favorite::query()
+            ->where('user_id', $buyer->id)
+            ->where('favoritable_type', Property::class)
+            ->where('favoritable_id', $property->id)
+            ->count());
+    }
+
+    public function test_add_favorite_rejects_an_invalid_vertical(): void
+    {
+        $buyer = $this->createBuyer();
+
+        $this->actingAs($buyer, 'sanctum')
+            ->postJson('/api/dashboard/user/favorites', [
+                'vertical' => 'unknown',
+                'listing_id' => 1,
+            ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('vertical');
+    }
+
+    public function test_buyer_can_check_listing_favorite_status(): void
+    {
+        $buyer = $this->createBuyer();
+        $property = Property::factory()->create();
+        $query = http_build_query([
+            'vertical' => 'properties',
+            'listing_id' => $property->id,
+        ]);
+
+        $this->actingAs($buyer, 'sanctum')
+            ->getJson("/api/dashboard/user/favorites/status?{$query}")
+            ->assertOk()
+            ->assertJsonPath('data.is_favorite', false)
+            ->assertJsonPath('data.favorite_id', null);
+
+        $favorite = $buyer->userFavorites()->create([
+            'favoritable_type' => Property::class,
+            'favoritable_id' => $property->id,
+        ]);
+
+        $this->actingAs($buyer, 'sanctum')
+            ->getJson("/api/dashboard/user/favorites/status?{$query}")
+            ->assertOk()
+            ->assertJsonPath('data.is_favorite', true)
+            ->assertJsonPath('data.favorite_id', $favorite->id);
+    }
+
+    public function test_buyer_can_check_favorite_status_for_multiple_listing_cards(): void
+    {
+        $buyer = $this->createBuyer();
+        $savedProperty = Property::factory()->create();
+        $unsavedProperty = Property::factory()->create();
+        $favorite = $buyer->userFavorites()->create([
+            'favoritable_type' => Property::class,
+            'favoritable_id' => $savedProperty->id,
+        ]);
+
+        $this->actingAs($buyer, 'sanctum')
+            ->postJson('/api/dashboard/user/favorites/statuses', [
+                'items' => [
+                    ['vertical' => 'properties', 'listing_id' => $savedProperty->id],
+                    ['vertical' => 'properties', 'listing_id' => $unsavedProperty->id],
+                ],
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.items.0.is_favorite', true)
+            ->assertJsonPath('data.items.0.favorite_id', $favorite->id)
+            ->assertJsonPath('data.items.1.is_favorite', false)
+            ->assertJsonPath('data.items.1.favorite_id', null);
     }
 
     public function test_buyer_can_create_review_for_property_booking(): void

@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView,
@@ -11,6 +12,8 @@ import {
 } from 'react-native';
 import { apiRequest } from '../../src/api/client';
 import { ErrorState, LoadingState } from '../../src/components/states/AsyncStates';
+import { useAuth } from '../../src/context/AuthContext';
+import { FavoriteRecord, FavoriteStatusResponse } from '../../src/features/buyer/types';
 import { toListingDetail } from '../../src/features/listings/adapters';
 import { LISTING_CATEGORIES } from '../../src/features/listings/catalog';
 import { ListingApiRecord, ListingDetailItem, ListingVertical } from '../../src/features/listings/types';
@@ -21,6 +24,7 @@ function isListingVertical(value: string | undefined): value is ListingVertical 
 
 export default function ListingDetailsView() {
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const params = useLocalSearchParams<{ slug?: string; vertical?: string }>();
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
   const verticalParam = Array.isArray(params.vertical) ? params.vertical[0] : params.vertical;
@@ -28,6 +32,9 @@ export default function ListingDetailsView() {
   const [item, setItem] = useState<ListingDetailItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
+  const [favoriteStatus, setFavoriteStatus] = useState<'checking' | 'idle' | 'saving' | 'saved' | 'removing'>('idle');
+  const [favoriteId, setFavoriteId] = useState<number | null>(null);
+  const [favoriteError, setFavoriteError] = useState<string | null>(null);
 
   const fetchDetails = useCallback(async () => {
     const category = LISTING_CATEGORIES.find((entry) => entry.id === vertical);
@@ -58,6 +65,120 @@ export default function ListingDetailsView() {
   useEffect(() => {
     fetchDetails();
   }, [fetchDetails]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function checkFavoriteStatus() {
+      setFavoriteError(null);
+
+      if (!isAuthenticated || !item) {
+        setFavoriteId(null);
+        setFavoriteStatus('idle');
+        return;
+      }
+
+      const listingId = Number(item.id);
+
+      if (!Number.isInteger(listingId) || listingId < 1) {
+        setFavoriteId(null);
+        setFavoriteStatus('idle');
+        return;
+      }
+
+      setFavoriteStatus('checking');
+
+      try {
+        const status = await apiRequest<FavoriteStatusResponse>(
+          `/dashboard/user/favorites/status?vertical=${encodeURIComponent(item.vertical)}&listing_id=${listingId}`,
+          { authenticated: true },
+        );
+
+        if (!active) return;
+
+        setFavoriteId(status.favorite_id);
+        setFavoriteStatus(status.is_favorite ? 'saved' : 'idle');
+      } catch (requestError) {
+        if (!active) return;
+
+        setFavoriteId(null);
+        setFavoriteStatus('idle');
+        setFavoriteError(
+          requestError instanceof Error
+            ? requestError.message
+            : 'Could not check this favorite. Please try again.',
+        );
+      }
+    }
+
+    checkFavoriteStatus();
+
+    return () => {
+      active = false;
+    };
+  }, [isAuthenticated, item]);
+
+  const toggleFavorite = useCallback(async () => {
+    if (!item || favoriteStatus === 'checking' || favoriteStatus === 'saving' || favoriteStatus === 'removing') return;
+
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    const listingId = Number(item.id);
+
+    if (!Number.isInteger(listingId) || listingId < 1) {
+      setFavoriteError('This listing cannot be saved right now.');
+      return;
+    }
+
+    setFavoriteError(null);
+
+    if (favoriteStatus === 'saved' && favoriteId) {
+      setFavoriteStatus('removing');
+
+      try {
+        await apiRequest(`/dashboard/user/favorites/${favoriteId}`, {
+          method: 'DELETE',
+          authenticated: true,
+        });
+        setFavoriteId(null);
+        setFavoriteStatus('idle');
+      } catch (requestError) {
+        setFavoriteStatus('saved');
+        setFavoriteError(
+          requestError instanceof Error
+            ? requestError.message
+            : 'Could not remove this favorite. Please try again.',
+        );
+      }
+
+      return;
+    }
+
+    setFavoriteStatus('saving');
+
+    try {
+      const favorite = await apiRequest<FavoriteRecord>('/dashboard/user/favorites', {
+        method: 'POST',
+        authenticated: true,
+        body: JSON.stringify({
+          vertical: item.vertical,
+          listing_id: listingId,
+        }),
+      });
+      setFavoriteId(favorite.id);
+      setFavoriteStatus('saved');
+    } catch (requestError) {
+      setFavoriteStatus('idle');
+      setFavoriteError(
+        requestError instanceof Error
+          ? requestError.message
+          : 'Could not save this listing. Please try again.',
+      );
+    }
+  }, [favoriteId, favoriteStatus, isAuthenticated, item, router]);
 
   if (loading) {
     return (
@@ -110,6 +231,26 @@ export default function ListingDetailsView() {
           </View>
           <Text style={styles.sectionHeader}>DESCRIPTION</Text>
           <Text style={styles.itemDesc}>{item.description}</Text>
+          <TouchableOpacity
+            style={[styles.favoriteBtn, favoriteStatus === 'saved' && styles.favoriteBtnSaved]}
+            onPress={toggleFavorite}
+            disabled={favoriteStatus === 'checking' || favoriteStatus === 'saving' || favoriteStatus === 'removing'}
+            accessibilityRole="button"
+            accessibilityLabel={favoriteStatus === 'saved' ? 'Remove from favorites' : 'Save to favorites'}
+          >
+            {favoriteStatus === 'checking' || favoriteStatus === 'saving' || favoriteStatus === 'removing' ? (
+              <ActivityIndicator size="small" color="#a5b4fc" />
+            ) : (
+              <Text style={[styles.favoriteBtnText, favoriteStatus === 'saved' && styles.favoriteBtnTextSaved]}>
+                {favoriteStatus === 'saved'
+                  ? '★ REMOVE FROM FAVORITES'
+                  : isAuthenticated
+                    ? '☆ SAVE TO FAVORITES'
+                    : '☆ SIGN IN TO SAVE'}
+              </Text>
+            )}
+          </TouchableOpacity>
+          {favoriteError && <Text style={styles.favoriteError}>{favoriteError}</Text>}
           <TouchableOpacity style={styles.actionBtn} onPress={() => router.push('/login')}>
             <Text style={styles.actionBtnText}>CONTINUE</Text>
           </TouchableOpacity>
@@ -137,6 +278,11 @@ const styles = StyleSheet.create({
   locationText: { color: '#fff', fontSize: 12, fontWeight: '800' },
   sectionHeader: { color: '#64748b', fontSize: 10, fontWeight: '900', letterSpacing: 1.5, marginBottom: 10 },
   itemDesc: { color: '#94a3b8', fontSize: 13, fontWeight: '500', lineHeight: 20, marginBottom: 40 },
+  favoriteBtn: { minHeight: 52, marginBottom: 12, alignItems: 'center', justifyContent: 'center', borderRadius: 20, borderWidth: 1, borderColor: 'rgba(129, 140, 248, 0.35)', backgroundColor: 'rgba(99, 102, 241, 0.08)', paddingHorizontal: 20 },
+  favoriteBtnSaved: { borderColor: 'rgba(239, 68, 68, 0.35)', backgroundColor: 'rgba(239, 68, 68, 0.08)' },
+  favoriteBtnText: { color: '#a5b4fc', fontSize: 10, fontWeight: '900', letterSpacing: 1.2 },
+  favoriteBtnTextSaved: { color: '#f87171' },
+  favoriteError: { marginTop: -2, marginBottom: 14, color: '#f87171', fontSize: 11, lineHeight: 16, textAlign: 'center' },
   actionBtn: { backgroundColor: '#6366f1', paddingVertical: 18, paddingHorizontal: 24, borderRadius: 20, alignItems: 'center' },
   actionBtnText: { color: '#fff', fontSize: 10, fontWeight: '900', letterSpacing: 1.5 },
 });

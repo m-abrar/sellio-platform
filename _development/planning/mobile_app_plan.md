@@ -132,7 +132,11 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 
 - [x] Load favorites.
 - [x] Manage favorites.
-- [ ] Add favorite/unfavorite actions to listing cards and details.
+- [x] Add authenticated favorite creation endpoint.
+- [x] Add authenticated listing favorite-status endpoint.
+- [x] Add save-to-favorites action to listing details.
+- [x] Add favorite/unfavorite toggle to listing details.
+- [x] Add favorite/unfavorite toggles to listing cards.
 - [ ] Add buyer dashboard statistics.
 - [ ] Add orders and property/event bookings.
 - [ ] Add job applications.
@@ -227,3 +231,8 @@ The sprint is complete when the physical Android phone can connect to the local 
 - Never hide genuine API failures behind production mock data.
 - Keep each phase runnable and demonstrable on a physical device.
 - Do not advertise React Native mobile support publicly until signed release builds and core buyer workflows have been verified.
+
+
+when a new item is added into favorites, it should automatically appear in the favorites page, currently, i have to refresh the page to see it.
+
+single item detail page should show add or remove from favorites logically by cross checking if it is already there?

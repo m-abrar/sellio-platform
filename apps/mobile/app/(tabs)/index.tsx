@@ -1,7 +1,8 @@
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   RefreshControl,
   SafeAreaView,
@@ -13,6 +14,7 @@ import {
 } from 'react-native';
 import { apiRequest } from '../../src/api/client';
 import { useAuth } from '../../src/context/AuthContext';
+import { FavoriteBatchStatusResponse, FavoriteRecord } from '../../src/features/buyer/types';
 import { toListingCard } from '../../src/features/listings/adapters';
 import { LISTING_CATEGORIES } from '../../src/features/listings/catalog';
 import {
@@ -22,6 +24,10 @@ import {
   ListingVertical,
 } from '../../src/features/listings/types';
 
+function favoriteKey(vertical: ListingVertical, listingId: string) {
+  return `${vertical}:${listingId}`;
+}
+
 export default function HomeView() {
   const router = useRouter();
   const { isAuthenticated, user, signOut } = useAuth();
@@ -30,6 +36,9 @@ export default function HomeView() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [favoriteIds, setFavoriteIds] = useState<Record<string, number | null>>({});
+  const [pendingFavoriteKeys, setPendingFavoriteKeys] = useState<string[]>([]);
+  const [favoriteError, setFavoriteError] = useState<string | null>(null);
 
   const loadCategory = useCallback(async (vertical: ListingVertical) => {
     const category = LISTING_CATEGORIES.find((item) => item.id === vertical);
@@ -90,6 +99,106 @@ export default function HomeView() {
   useEffect(() => {
     fetchListings();
   }, [fetchListings]);
+
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+
+      async function syncFavoriteStates() {
+        setFavoriteError(null);
+
+        if (!isAuthenticated || listings.length === 0) {
+          setFavoriteIds({});
+          return;
+        }
+
+        const items = listings
+          .map((item) => ({
+            vertical: item.vertical,
+            listing_id: Number(item.id),
+          }))
+          .filter((item) => Number.isInteger(item.listing_id) && item.listing_id > 0);
+
+        if (items.length === 0) return;
+
+        try {
+          const status = await apiRequest<FavoriteBatchStatusResponse>(
+            '/dashboard/user/favorites/statuses',
+            {
+              method: 'POST',
+              authenticated: true,
+              body: JSON.stringify({ items }),
+            },
+          );
+
+          if (!active) return;
+
+          setFavoriteIds(Object.fromEntries(
+            status.items.map((item) => [
+              favoriteKey(item.vertical, String(item.listing_id)),
+              item.favorite_id,
+            ]),
+          ));
+        } catch (requestError) {
+          if (!active) return;
+
+          setFavoriteError(
+            requestError instanceof Error
+              ? requestError.message
+              : 'Could not load favorite status.',
+          );
+        }
+      }
+
+      syncFavoriteStates();
+
+      return () => {
+        active = false;
+      };
+    }, [isAuthenticated, listings]),
+  );
+
+  const toggleCardFavorite = useCallback(async (item: ListingCardItem) => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    const key = favoriteKey(item.vertical, item.id);
+    const currentFavoriteId = favoriteIds[key];
+
+    if (pendingFavoriteKeys.includes(key)) return;
+
+    setPendingFavoriteKeys((current) => [...current, key]);
+    setFavoriteError(null);
+
+    try {
+      if (currentFavoriteId) {
+        await apiRequest(`/dashboard/user/favorites/${currentFavoriteId}`, {
+          method: 'DELETE',
+          authenticated: true,
+        });
+        setFavoriteIds((current) => ({ ...current, [key]: null }));
+      } else {
+        const favorite = await apiRequest<FavoriteRecord>('/dashboard/user/favorites', {
+          method: 'POST',
+          authenticated: true,
+          body: JSON.stringify({
+            vertical: item.vertical,
+            listing_id: Number(item.id),
+          }),
+        });
+        setFavoriteIds((current) => ({ ...current, [key]: favorite.id }));
+      }
+    } catch (requestError) {
+      Alert.alert(
+        'Could not update favorite',
+        requestError instanceof Error ? requestError.message : 'Please try again.',
+      );
+    } finally {
+      setPendingFavoriteKeys((current) => current.filter((pendingKey) => pendingKey !== key));
+    }
+  }, [favoriteIds, isAuthenticated, pendingFavoriteKeys, router]);
 
   const selectedTitle = selectedCategory === 'all'
     ? 'Featured Marketplace'
@@ -182,6 +291,10 @@ export default function HomeView() {
           )}
         </View>
 
+        {favoriteError && isAuthenticated && (
+          <Text style={styles.favoriteWarning}>{favoriteError}</Text>
+        )}
+
         {error && (
           <View style={[styles.feedbackCard, listings.length > 0 && styles.warningCard]}>
             <Text style={styles.feedbackTitle}>
@@ -214,17 +327,23 @@ export default function HomeView() {
           <View style={styles.productGrid}>
             {listings.map((item) => {
               const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
+              const key = favoriteKey(item.vertical, item.id);
+              const isFavorite = Boolean(favoriteIds[key]);
+              const isFavoritePending = pendingFavoriteKeys.includes(key);
 
               return (
-                <TouchableOpacity
+                <View
                   key={`${item.vertical}-${item.id}`}
                   style={styles.productCard}
+                >
+                  <TouchableOpacity
+                  style={styles.productCardLink}
                   activeOpacity={0.82}
                   onPress={() => router.push({
                     pathname: '/listing/[slug]',
                     params: { slug: item.slug, vertical: item.vertical },
                   })}
-                >
+                  >
                   <View style={styles.productImageContainer}>
                     <Text style={styles.imageFallbackIcon}>{category?.icon || '◇'}</Text>
                     {item.imageUrl && (
@@ -245,7 +364,23 @@ export default function HomeView() {
                     <Text style={styles.locationText} numberOfLines={1}>{item.location}</Text>
                     <Text style={styles.productPrice} numberOfLines={1}>{item.price}</Text>
                   </View>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}
+                    onPress={() => toggleCardFavorite(item)}
+                    disabled={isFavoritePending}
+                    accessibilityRole="button"
+                    accessibilityLabel={isFavorite ? `Remove ${item.title} from favorites` : `Save ${item.title} to favorites`}
+                  >
+                    {isFavoritePending ? (
+                      <ActivityIndicator size="small" color="#fff" />
+                    ) : (
+                      <Text style={[styles.favoriteButtonText, isFavorite && styles.favoriteButtonTextActive]}>
+                        {isFavorite ? '★' : '☆'}
+                      </Text>
+                    )}
+                  </TouchableOpacity>
+                </View>
               );
             })}
           </View>
@@ -469,6 +604,42 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.05)',
     borderRadius: 24,
     overflow: 'hidden',
+  },
+  productCardLink: {
+    flex: 1,
+  },
+  favoriteButton: {
+    position: 'absolute',
+    right: 12,
+    top: 12,
+    width: 38,
+    height: 38,
+    zIndex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 19,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.18)',
+    backgroundColor: 'rgba(7, 7, 8, 0.82)',
+  },
+  favoriteButtonActive: {
+    borderColor: 'rgba(129, 140, 248, 0.6)',
+    backgroundColor: 'rgba(99, 102, 241, 0.9)',
+  },
+  favoriteButtonText: {
+    color: '#fff',
+    fontSize: 22,
+    lineHeight: 24,
+  },
+  favoriteButtonTextActive: {
+    color: '#fff',
+  },
+  favoriteWarning: {
+    marginTop: -6,
+    marginBottom: 16,
+    color: '#f59e0b',
+    fontSize: 11,
+    lineHeight: 16,
   },
   productImageContainer: {
     height: 178,

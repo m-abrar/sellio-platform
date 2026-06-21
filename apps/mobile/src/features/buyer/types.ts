@@ -11,6 +11,20 @@ export interface FavoriteRecord {
   updated_at: string;
 }
 
+export interface FavoriteStatusResponse {
+  is_favorite: boolean;
+  favorite_id: number | null;
+}
+
+export interface FavoriteBatchStatusItem extends FavoriteStatusResponse {
+  vertical: import('../listings/types').ListingVertical;
+  listing_id: number;
+}
+
+export interface FavoriteBatchStatusResponse {
+  items: FavoriteBatchStatusItem[];
+}
+
 export interface FavoriteListingCard {
   favoriteId: number;
   listingId: string;

@@ -48,6 +48,9 @@ Route::group([], function () {
     // Favorites Management
     Route::prefix('favorites')->name('favorites.')->group(function () {
         Route::get('/', [FavoriteController::class, 'index'])->name('index');
+        Route::get('status', [FavoriteController::class, 'status'])->name('status');
+        Route::post('statuses', [FavoriteController::class, 'statuses'])->name('statuses');
+        Route::post('/', [FavoriteController::class, 'store'])->name('store');
         Route::delete('{favorite}', [FavoriteController::class, 'remove'])->name('remove'); // Changed to DELETE for REST
     });
 
