@@ -4,10 +4,10 @@
          data-booking-route="{{ route('events.tickets.booking.store', ['event' => $event->slug, 'ticket' => '__TICKET_ID__']) }}"
          hidden></div>
 
-    <div class="glass-surface border-0 rounded-4 shadow-deep p-4 p-md-5 mb-4">
+    <div class="detail-sidebar-card p-4 p-md-5 mb-4">
         <span class="metric-label d-block mb-2">{{ __('Tickets') }}</span>
         <h4 class="fw-800 text-dark mb-4">
-            <i class="bi bi-calendar-event me-2 text-primary-color"></i>{{ __('Select Date') }}
+            <i class="bi bi-calendar-event me-2 text-primary"></i>{{ __('Select Date') }}
         </h4>
 
         @if ($allTicketData->isNotEmpty())
@@ -35,10 +35,10 @@
         @endif
     </div>
 
-    <div class="glass-surface border-0 rounded-4 shadow-deep p-4 p-md-5">
+    <div class="detail-sidebar-card p-4 p-md-5">
         <span class="metric-label d-block mb-2">{{ __('Checkout') }}</span>
         <h4 class="fw-800 text-dark mb-4">
-            <i class="bi bi-ticket-fill me-2 text-primary-color"></i>{{ __('Get Your Tickets') }}
+            <i class="bi bi-ticket-fill me-2 text-primary"></i>{{ __('Get Your Tickets') }}
         </h4>
 
         <div id="countdown-wrapper" class="d-none mb-3">
@@ -58,11 +58,11 @@
             <div class="product-purchase-quote bg-white bg-opacity-50 p-4 rounded-4 border border-primary-light mb-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="fw-bold">{{ __('Total') }}</span>
-                    <span class="fw-800 fs-4 text-primary-color mb-0" id="total-price">{{ setting('currency_symbol', '$') }}0</span>
+                    <span class="fw-800 fs-4 text-primary mb-0" id="total-price">{{ setting('currency_symbol', '$') }}0</span>
                 </div>
             </div>
 
-            <button type="submit" id="checkout-button" class="btn btn-primary-theme btn-lg w-100 rounded-pill fw-800 shadow-deep" disabled>
+            <button type="submit" id="checkout-button" class="btn btn-primary btn-header-cta w-100" disabled>
                 <i class="bi bi-cart-fill me-2"></i>{{ __('Proceed to Checkout') }}
             </button>
         </form>
