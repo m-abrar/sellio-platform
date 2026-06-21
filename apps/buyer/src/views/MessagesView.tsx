@@ -761,7 +761,7 @@ export default function MessagesView() {
                     {/* Details Specs */}
                     {item.details && (
                       <div className="space-y-1.5">
-                        <h5 className="text-[9px] font-bold uppercase tracking-widest text-zinc-400">Registry Overview</h5>
+                        <h5 className="text-[9px] font-bold uppercase tracking-widest text-zinc-400">Details</h5>
                         <p className="text-[11px] text-zinc-500 font-semibold leading-relaxed bg-zinc-50 p-4 rounded-xl border border-zinc-200/50 max-h-28 overflow-y-auto italic">
                           "{item.details}"
                         </p>

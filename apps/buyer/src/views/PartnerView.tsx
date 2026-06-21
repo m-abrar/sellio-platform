@@ -77,7 +77,7 @@ export default function PartnerView() {
             transition={{ delay: 0.2 }}
             className="text-lg text-zinc-400 mb-8"
           >
-            Join thousands of partners who are scaling their services, properties, and products through our unified ecosystem.
+            Join thousands of sellers listing properties, vehicles, events, and services on Sellio.
           </motion.p>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -156,14 +156,14 @@ export default function PartnerView() {
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-zinc-900 leading-tight">Upgrade to Partner Account</h3>
-                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Sellio Partner Studio Onboarding</p>
+                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Partner Account Setup</p>
                 </div>
               </div>
 
               {upgradeStage === 'form' && (
                 <form onSubmit={handleUpgradeSubmit} className="space-y-4">
                   <p className="text-xs text-zinc-500 leading-relaxed mb-2">
-                    Enter your business details below to unlock your Seller Studio and start listing properties, cars, events, or services in one click.
+                    Enter your business details below to activate your seller account and start listing properties, cars, events, or services.
                   </p>
                   
                   <div className="space-y-1.5">
@@ -213,7 +213,7 @@ export default function PartnerView() {
                     <Button 
                       type="submit"
                     >
-                      Upgrade & Launch Studio
+                      Upgrade Account
                     </Button>
                   </div>
                 </form>
@@ -223,11 +223,11 @@ export default function PartnerView() {
                 <div className="py-12 text-center space-y-4">
                   <Loader2 className="w-10 h-10 text-[var(--primary-color)] animate-spin mx-auto" />
                   <div>
-                    <h4 className="font-extrabold text-sm text-zinc-900 mb-0.5">Provisioning Seller Studio...</h4>
-                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Building databases & merchant credentials</p>
+                    <h4 className="font-extrabold text-sm text-zinc-900 mb-0.5">Setting up your account...</h4>
+                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">This may take a moment</p>
                   </div>
                   <p className="text-xs text-zinc-550 max-w-xs mx-auto leading-relaxed">
-                    Setting up your multi-vertical analytics docks, inventory managers, and Spatie asset libraries.
+                    We&apos;re activating your seller account. This usually takes just a few seconds.
                   </p>
                 </div>
               )}
@@ -242,7 +242,7 @@ export default function PartnerView() {
                     <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Welcome to Sellio Partners</p>
                   </div>
                   <p className="text-xs text-zinc-500 max-w-xs mx-auto leading-relaxed">
-                    Redirecting you to your new **Seller Studio Cockpit** now. Start listing your items!
+                    Taking you to your seller dashboard now. Start listing your items!
                   </p>
                 </div>
               )}
