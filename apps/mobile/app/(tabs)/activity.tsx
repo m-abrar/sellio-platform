@@ -1,4 +1,4 @@
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
   Image,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { apiRequest } from '../../src/api/client';
@@ -46,11 +47,17 @@ function statusStyle(status: string) {
   return styles.statusPending;
 }
 
-function ActivityRecordCard({ item }: { item: BuyerActivityCard }) {
+function ActivityRecordCard({ item, onPress }: { item: BuyerActivityCard; onPress: () => void }) {
   const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
 
   return (
-    <View style={styles.activityCard}>
+    <TouchableOpacity
+      style={styles.activityCard}
+      activeOpacity={0.82}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`Open ${item.reference}`}
+    >
       <View style={styles.activityImageFrame}>
         <Text style={styles.activityImageFallback}>{category?.icon || '◇'}</Text>
         {item.imageUrl && (
@@ -94,11 +101,12 @@ function ActivityRecordCard({ item }: { item: BuyerActivityCard }) {
           )}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 export default function ActivityView() {
+  const router = useRouter();
   const { isAuthenticated, user } = useAuth();
   const [dashboard, setDashboard] = useState<BuyerDashboardData | null>(null);
   const [upcomingActivities, setUpcomingActivities] = useState<BuyerActivityCard[]>([]);
@@ -178,6 +186,17 @@ export default function ActivityView() {
     { label: 'Total Activity', value: stats.totalItemsCount },
   ] : [];
   const hasActivity = upcomingActivities.length > 0 || recentActivities.length > 0;
+  const openActivity = useCallback((item: BuyerActivityCard) => {
+    router.push({
+      pathname: '/activity/[source]/[id]',
+      params: {
+        source: item.source,
+        id: String(item.id),
+        kind: item.kind,
+        reference: item.reference,
+      },
+    });
+  }, [router]);
 
   return (
     <AuthenticatedScreen returnTo="/activity">
@@ -237,7 +256,9 @@ export default function ActivityView() {
                 </View>
                 {upcomingActivities.length > 0 ? (
                   <View style={styles.activityList}>
-                    {upcomingActivities.map((item) => <ActivityRecordCard key={item.key} item={item} />)}
+                    {upcomingActivities.map((item) => (
+                      <ActivityRecordCard key={item.key} item={item} onPress={() => openActivity(item)} />
+                    ))}
                   </View>
                 ) : (
                   <Text style={styles.sectionEmpty}>No upcoming bookings or appointments.</Text>
@@ -254,7 +275,9 @@ export default function ActivityView() {
 
                 {recentActivities.length > 0 ? (
                   <View style={styles.activityList}>
-                    {recentActivities.map((item) => <ActivityRecordCard key={item.key} item={item} />)}
+                    {recentActivities.map((item) => (
+                      <ActivityRecordCard key={item.key} item={item} onPress={() => openActivity(item)} />
+                    ))}
                   </View>
                 ) : !hasActivity && !activityWarning ? (
                   <EmptyState

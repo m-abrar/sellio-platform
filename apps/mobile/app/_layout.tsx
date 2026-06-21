@@ -18,6 +18,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="login" options={{ presentation: 'modal' }} />
           <Stack.Screen name="listing/[slug]" options={{ headerShown: false }} />
+          <Stack.Screen name="activity/[source]/[id]" options={{ headerShown: false }} />
         </Stack>
       </SafeAreaProvider>
     </AuthProvider>
