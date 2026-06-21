@@ -1,5 +1,5 @@
 {{-- Assumes $job and $employmentMap are passed from the controller --}}
-<div class="card glass-surface border-0 shadow-lg overflow-hidden mb-4">
+<div class="detail-main-card border-0 overflow-hidden mb-4">
     
     {{-- 1. Premium Header Section --}}
     <div class="p-4 p-lg-5 border-bottom bg-light bg-opacity-50 position-relative">
@@ -24,16 +24,16 @@
                 <div class="d-flex justify-content-between align-items-start">
                     <h1 class="fw-800 text-dark mb-1 fs-2">{{ $job->title }}</h1>
                 </div>
-                <h5 class="text-primary-color fw-bold mb-3">{{ $companyName }}</h5>
+                <h5 class="text-primary fw-semibold mb-3">{{ $companyName }}</h5>
                 
                 {{-- Quick Stats Ribbon --}}
                 <div class="d-flex flex-wrap gap-3 mt-2">
                     <div class="stats-pill">
-                        <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                        <i class="bi bi-geo-alt-fill lc-geo-icon me-1"></i>
                         {{ $job->workplace_type == 3 ? __('Fully Remote') : ($job->city . ', ' . $job->state) }}
                     </div>
                     <div class="stats-pill">
-                        <i class="bi bi-briefcase-fill text-primary-color me-1"></i>
+                        <i class="bi bi-briefcase-fill text-primary me-1"></i>
                         {{ $employmentMap[$job->employment_type] ?? __('Full-Time') }}
                     </div>
                     <div class="stats-pill bg-success-light text-success fw-bold">
@@ -51,7 +51,7 @@
     <div class="px-4 px-lg-5 pt-4">
         <div class="d-flex flex-wrap gap-2">
             @foreach ($job->tags as $tag)
-                <span class="badge rounded-pill bg-white border text-muted px-3 py-2 fw-semibold shadow-sm">
+                <span class="badge rounded-2 bg-white border text-muted px-3 py-2 fw-semibold">
                     #{{ $tag->title }}
                 </span>
             @endforeach
@@ -62,12 +62,12 @@
     {{-- 3. Detailed Body Content --}}
     <div class="p-4 p-lg-5">
         <div class="job-content-area line-height-lg text-muted">
-            <h4 class="fw-bold text-dark mb-3"><i class="bi bi-body-text me-2 text-primary-color"></i>{{ __('Job Description') }}</h4>
+            <h4 class="fw-bold text-dark mb-3"><i class="bi bi-body-text me-2 text-primary"></i>{{ __('Job Description') }}</h4>
             <div class="mb-5 fs-6">
                 {!! nl2br(e($job->description)) !!}
             </div>
 
-            <h4 class="fw-bold text-dark mb-3"><i class="bi bi-mortarboard me-2 text-primary-color"></i>{{ __('Requirements') }}</h4>
+            <h4 class="fw-bold text-dark mb-3"><i class="bi bi-mortarboard me-2 text-primary"></i>{{ __('Requirements') }}</h4>
             <div class="bg-light bg-opacity-50 rounded-4 p-4 mb-5 border border-white">
                 <div class="row g-3">
                     <div class="col-sm-6">
@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <h4 class="fw-bold text-dark mb-4"><i class="bi bi-gift me-2 text-primary-color"></i>{{ __('Benefits & Perks') }}</h4>
+            <h4 class="fw-bold text-dark mb-4"><i class="bi bi-gift me-2 text-primary"></i>{{ __('Benefits & Perks') }}</h4>
             <div class="row row-cols-1 row-cols-md-2 g-3 mb-5">
                 <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> {{ __('Paid Time Off (PTO)') }}</div>
                 <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> {{ __('Comprehensive Health Coverage') }}</div>
@@ -97,8 +97,8 @@
                 <p class="text-muted mb-4 fs-6">
                     {{ Str::limit($job->employer->profile_summary ?? __('This company is a leading player in the :category industry.', ['category' => $job->category->title]), 300) }}
                 </p>
-                <a href="{{ route('partner.profile', $job->employer) }}" class="btn btn-white text-primary-color fw-bold rounded-pill px-4 shadow-sm border-0">
-                    {{ __('Explore Company Profile') }} <i class="bi bi-arrow-up-right ms-2"></i>
+                <a href="{{ route('partner.profile', $job->employer) }}" class="btn btn-primary btn-header-cta px-4">
+                    {{ __('Explore company profile') }}<i class="bi bi-arrow-right ms-2"></i>
                 </a>
             </div>
         </div>

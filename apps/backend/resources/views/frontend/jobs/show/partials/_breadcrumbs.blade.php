@@ -1,11 +1,11 @@
 <nav aria-label="breadcrumb" class="d-flex align-items-center gap-3 py-2">
-    <a href="{{ route('jobs.index') }}" 
-       class="btn btn-sm btn-glass-back d-sm-none d-flex align-items-center px-3 rounded-pill shadow-sm transition-all">
+    <a href="{{ route('jobs.index') }}"
+       class="btn btn-sm border fw-semibold px-3 rounded-2 d-sm-none d-flex align-items-center transition-all">
         <i class="bi bi-arrow-left-short fs-5 me-1"></i>
-        <span class="fw-bold small text-uppercase tracking-wider">{{ __('Jobs Search') }}</span>
+        <span class="small">{{ __('Jobs search') }}</span>
     </a>
 
-    <ol class="breadcrumb mb-0 d-none d-md-flex align-items-center bg-glass-light px-3 py-2 rounded-pill border border-color-light shadow-sm">
+    <ol class="breadcrumb mb-0 d-none d-md-flex align-items-center bg-white px-3 py-2 rounded-4 border border-color-light">
         <li class="breadcrumb-item">
             <a href="{{ route('home') }}" class="text-muted hover-primary transition-all">
                 <i class="bi bi-house-door-fill small"></i>
