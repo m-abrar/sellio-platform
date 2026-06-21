@@ -39,7 +39,7 @@
                         style: {
                             base: {
                                 color: '#111827',
-                                fontFamily: 'Inter, system-ui, sans-serif',
+                                fontFamily: 'Plus Jakarta Sans, system-ui, sans-serif',
                                 fontSize: '16px',
                                 '::placeholder': { color: '#9ca3af' },
                             },

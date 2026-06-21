@@ -1,22 +1,22 @@
 :root{
-    --primary-hue:240;
-    --primary-color:#5a57d9;
-    --primary-color-rgb:90,87,217;
-    --primary-dark:#4a47c5;
-    --primary-light:rgba(90, 87, 217, 0.1);
-    --bg-body:#fcfcfd;
-    --bg-glass:rgba(255, 255, 255, 0.7);
+    --primary-hue:22;
+    --primary-color:#E05F2C;
+    --primary-color-rgb:224,95,44;
+    --primary-dark:#C44E1F;
+    --primary-light:rgba(224, 95, 44, 0.1);
+    --bg-body:#FAFAF8;
+    --bg-glass:rgba(255, 255, 255, 0.72);
     --bg-surface:#ffffff;
-    --bg-glass-heavy:rgba(255, 255, 255, 0.9);
-    --bg-glass-light:rgba(255, 255, 255, 0.5);
-    --text-dark:#1f2937;
-    --text-muted:#6b7280;
-    --border-color:rgba(255, 255, 255, 0.5);
-    --card-radius:15px;
-    --shadow-subtle:0 10px 30px rgba(0, 0, 0, 0.1);
-    --shadow-deep:0 15px 40px rgba(0, 0, 0, 0.15);
-    --font-main:'Inter', sans-serif;
-    --font-heading:'Outfit', sans-serif;
+    --bg-glass-heavy:rgba(255, 255, 255, 0.92);
+    --bg-glass-light:rgba(255, 255, 255, 0.48);
+    --text-dark:#1C1917;
+    --text-muted:#78716C;
+    --border-color:rgba(28, 25, 23, 0.08);
+    --card-radius:14px;
+    --shadow-subtle:0 4px 20px rgba(28, 25, 23, 0.08);
+    --shadow-deep:0 12px 40px rgba(28, 25, 23, 0.14);
+    --font-main:'Plus Jakarta Sans', sans-serif;
+    --font-heading:'DM Serif Display', Georgia, serif;
     --color-primary:var(--primary-color);
     --color-primary-rgb:var(--primary-color-rgb);
     --color-primary-dark:var(--primary-dark);
@@ -323,8 +323,8 @@
     padding:1.35rem 1.25rem 1.1rem;
     border-radius:1.15rem;
     color:#fff;
-    background:linear-gradient(135deg, #4a47c5 0%, #5a57d9 45%, #7c79ef 100%);
-    box-shadow:0 18px 40px rgba(74, 71, 197, .28);
+    background:linear-gradient(135deg, #C44E1F 0%, #E05F2C 50%, #F07848 100%);
+    box-shadow:0 18px 40px rgba(224, 95, 44, .28);
     overflow:hidden
 }
 .booking-payment-card-preview::before{
@@ -616,8 +616,13 @@
     }
 }
 
-body,h1,h2,h3,h4,h5,h6{
-    font-family:Inter,sans-serif
+body,h3,h4,h5,h6{
+    font-family:var(--font-main)
+}
+h1,h2{
+    font-family:var(--font-heading);
+    font-weight:400;
+    letter-spacing:-0.02em
 }
 .card,.glass-surface,.navbar{
     box-shadow:var(--shadow-subtle)

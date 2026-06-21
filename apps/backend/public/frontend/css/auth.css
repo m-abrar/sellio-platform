@@ -1,7 +1,7 @@
 :root {
-    --primary: var(--color-primary, var(--primary-color, #5a57d9));
-    --primary-rgb: var(--color-primary-rgb, var(--primary-color-rgb, 90, 87, 217));
-    --primary-dark: var(--color-primary-dark, #4a47c5);
+    --primary: var(--color-primary, var(--primary-color, #E05F2C));
+    --primary-rgb: var(--color-primary-rgb, var(--primary-color-rgb, 224, 95, 44));
+    --primary-dark: var(--color-primary-dark, #C44E1F);
     --primary-soft: var(--color-primary-soft, rgba(var(--primary-rgb), 0.1));
     --primary-glow: rgba(var(--primary-rgb), 0.25);
     

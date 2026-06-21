@@ -34,8 +34,8 @@
             --dark-navy: #0c1222;
             --surface: #ffffff;
             --border: #e2e8f0;
-            --font-main: 'Inter', sans-serif;
-            --font-heading: 'Outfit', sans-serif;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-heading: 'DM Serif Display', Georgia, serif;
         }
 
         body, html {
