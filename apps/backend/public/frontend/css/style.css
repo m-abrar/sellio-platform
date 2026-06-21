@@ -4836,3 +4836,63 @@ body.has-admin-bar .main-header.sticky-top{
     font-size: 0.875rem;
     letter-spacing: -0.01em;
 }
+
+/* ─── Detail page global heading system ──────────────────────────────────── */
+.frontend-page--detail h1.fw-800,
+.frontend-page--detail h2.fw-800,
+.frontend-page--detail h3.fw-800,
+.frontend-page--detail h4.fw-800 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+}
+
+/* ─── Property sale detail ────────────────────────────────────────────────── */
+.detail-main-card {
+    background: #fff;
+    border: 1.5px solid rgba(15,23,42,.07);
+    border-radius: 16px;
+}
+
+/* Price box */
+.pd-price-box {
+    background: #fff;
+    border: 1.5px solid rgba(15,23,42,.07);
+    border-radius: 16px;
+    min-width: 240px;
+}
+.pd-price-box h2.fw-800 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+}
+
+/* Sidebar cards (forms + agent) */
+.detail-sidebar-card {
+    background: #fff !important;
+    border: 1.5px solid rgba(15,23,42,.07) !important;
+    border-radius: 16px !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
+/* Key feature stat values */
+.feature-card .fw-800 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+}
+
+/* Amenity chips */
+.amenity-chip {
+    background: #fff;
+    border: 1.5px solid rgba(15,23,42,.07);
+    border-radius: 6px;
+}
+
+/* Detail section sub-headings */
+.detail-section-title {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+}

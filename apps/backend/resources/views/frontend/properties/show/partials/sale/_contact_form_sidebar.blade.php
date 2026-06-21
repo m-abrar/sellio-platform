@@ -4,7 +4,7 @@
     $user = Auth::user();
 @endphp
 
-<div class="card glass-surface mb-4">
+<div class="card detail-sidebar-card mb-4 overflow-hidden">
     <div class="card-header bg-primary text-white p-4 border-0">
         <h4 class="fw-800 mb-1"><i class="bi-calendar-check-fill me-2"></i>{{ __('Schedule a Visit') }}</h4>
         <p class="small text-white-50 mb-0">{{ __('Share your preferred time and the agent will confirm availability.') }}</p>
@@ -118,8 +118,8 @@
             </div>
 
             <div class="d-grid">
-                <button type="submit" class="btn btn-lg fw-bold text-white btn-primary-theme shadow-primary-md">
-                    <i class="bi bi-send-fill me-2"></i>{{ __('Request Visit') }}
+                <button type="submit" class="btn btn-primary btn-header-cta">
+                    <i class="bi bi-send-fill me-2"></i>{{ __('Request visit') }}<i class="bi bi-arrow-right ms-2"></i>
                 </button>
             </div>
 

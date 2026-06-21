@@ -5,22 +5,22 @@
 
             <div class="d-flex flex-wrap align-items-center gap-2 mt-3 mb-3">
                 @if($property->is_featured)
-                    <span class="badge bg-primary text-white px-3 py-2 rounded-pill fw-bold shadow-sm">
-                        <i class="bi bi-patch-check-fill me-1"></i> {{ __('Featured') }}
+                    <span class="badge bg-primary text-white px-3 py-1 rounded-2 fw-semibold">
+                        <i class="bi bi-patch-check-fill me-1"></i>{{ __('Featured') }}
                     </span>
                 @endif
 
-                <span class="badge badge-outline-theme px-3 py-2 rounded-pill fw-bold">
-                    <i class="bi bi-house-door me-1"></i> {{ $property->category->title ?? __('Property') }}
+                <span class="badge badge-outline-theme px-3 py-1 rounded-2 fw-semibold">
+                    <i class="bi bi-house-door me-1"></i>{{ $property->category->title ?? __('Property') }}
                 </span>
 
-                <span class="badge badge-outline-dark px-3 py-2 rounded-pill fw-bold">
-                    <i class="bi bi-tag me-1"></i> {{ $property->type->title ?? __('Property') }}
+                <span class="badge badge-outline-dark px-3 py-1 rounded-2 fw-semibold">
+                    <i class="bi bi-tag me-1"></i>{{ $property->type->title ?? __('Property') }}
                 </span>
 
                 @if($property->is_new)
-                    <span class="badge bg-success text-white px-3 py-2 rounded-pill fw-bold shadow-sm">
-                        {{ __('New Listing') }}
+                    <span class="badge bg-success text-white px-3 py-1 rounded-2 fw-semibold">
+                        {{ __('New listing') }}
                     </span>
                 @endif
             </div>
@@ -37,30 +37,27 @@
             </p>
         </div>
 
-        <div class="text-lg-end">
-            <div class="glass-surface p-4 price-container shadow-deep position-relative overflow-hidden">
-                <div class="price-glow-effect"></div>
-                <div class="position-relative z-1">
-                    <span class="metric-label text-uppercase d-block mb-1">
-                        {{ $property->is_sale ? __('Investment Amount') : __('Guide Price') }}
-                    </span>
-                    <h2 class="fw-800 text-primary mb-3 display-6">{{ $property->price_formatted ?? __('Price on request') }}</h2>
+        <div class="text-lg-end flex-shrink-0">
+            <div class="pd-price-box p-4">
+                <span class="metric-label text-uppercase d-block mb-1">
+                    {{ $property->is_sale ? __('Investment Amount') : __('Guide Price') }}
+                </span>
+                <h2 class="fw-800 text-primary mb-3 display-6">{{ $property->price_formatted ?? __('Price on request') }}</h2>
 
-                    <div class="d-flex justify-content-lg-end gap-3 border-top pt-3 mt-2 border-color-light">
-                        <div class="text-center">
-                            <span class="d-block fw-bold text-dark small">{{ $property->number_of_bedrooms ?? 0 }}</span>
-                            <span class="metric-label"><i class="bi bi-house-door me-1"></i>{{ __('Beds') }}</span>
-                        </div>
-                        <div class="vr opacity-10"></div>
-                        <div class="text-center">
-                            <span class="d-block fw-bold text-dark small">{{ $property->number_of_bathrooms ?? 0 }}</span>
-                            <span class="metric-label"><i class="bi bi-droplet me-1"></i>{{ __('Baths') }}</span>
-                        </div>
-                        <div class="vr opacity-10"></div>
-                        <div class="text-center">
-                            <span class="d-block fw-bold text-dark small">{{ $property->area_formatted }}</span>
-                            <span class="metric-label"><i class="bi bi-rulers me-1"></i>{{ __('Size') }}</span>
-                        </div>
+                <div class="d-flex justify-content-lg-end gap-3 border-top pt-3 mt-2 border-color-light">
+                    <div class="text-center">
+                        <span class="d-block fw-bold text-dark small">{{ $property->number_of_bedrooms ?? 0 }}</span>
+                        <span class="metric-label"><i class="bi bi-house-door me-1"></i>{{ __('Beds') }}</span>
+                    </div>
+                    <div class="vr opacity-10"></div>
+                    <div class="text-center">
+                        <span class="d-block fw-bold text-dark small">{{ $property->number_of_bathrooms ?? 0 }}</span>
+                        <span class="metric-label"><i class="bi bi-droplet me-1"></i>{{ __('Baths') }}</span>
+                    </div>
+                    <div class="vr opacity-10"></div>
+                    <div class="text-center">
+                        <span class="d-block fw-bold text-dark small">{{ $property->area_formatted }}</span>
+                        <span class="metric-label"><i class="bi bi-rulers me-1"></i>{{ __('Size') }}</span>
                     </div>
                 </div>
             </div>
