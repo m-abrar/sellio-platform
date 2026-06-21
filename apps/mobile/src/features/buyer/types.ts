@@ -97,7 +97,7 @@ export interface PaginatedFavorites {
 }
 
 export type BuyerBookingModule = 'properties' | 'events' | 'services';
-export type BuyerActivitySource = 'booking' | 'order' | 'application';
+export type BuyerActivitySource = 'booking' | 'order' | 'application' | 'auto_inquiry';
 export type BuyerBookingKind =
   | 'property_booking'
   | 'property_visit'
@@ -205,11 +205,33 @@ export interface BuyerJobApplicationRecord {
   } | null;
 }
 
+export interface BuyerAutoInquiryRecord {
+  id: number;
+  user_id: number;
+  auto_id: number;
+  full_name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  preferred_date?: string | null;
+  preferred_time?: string | null;
+  message?: string | null;
+  status: string;
+  viewed_at?: string | null;
+  created_at: string;
+  updated_at?: string;
+  auto?: {
+    id: number;
+    title: string;
+    slug: string;
+    primary_image_url?: string | null;
+  } | null;
+}
+
 export interface BuyerActivityCard {
   key: string;
   id: number;
   source: BuyerActivitySource;
-  kind: BuyerBookingKind | 'product_order' | 'job_application';
+  kind: BuyerBookingKind | 'product_order' | 'job_application' | 'vehicle_inquiry';
   vertical: import('../listings/types').ListingVertical;
   title: string;
   imageUrl: string | null;

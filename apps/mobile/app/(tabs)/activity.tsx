@@ -15,12 +15,14 @@ import { AuthenticatedScreen } from '../../src/auth/AuthenticatedScreen';
 import { EmptyState, ErrorState, LoadingState } from '../../src/components/states/AsyncStates';
 import { useAuth } from '../../src/context/AuthContext';
 import {
+  toAutoInquiryActivityCard,
   toBookingActivityCard,
   toJobApplicationActivityCard,
   toOrderActivityCard,
 } from '../../src/features/buyer/adapters';
 import {
   BuyerActivityCard,
+  BuyerAutoInquiryRecord,
   BuyerBookingsData,
   BuyerDashboardData,
   BuyerJobApplicationRecord,
@@ -36,6 +38,7 @@ function activityTypeLabel(item: BuyerActivityCard) {
     case 'service_appointment': return 'SERVICE APPOINTMENT';
     case 'product_order': return 'PRODUCT ORDER';
     case 'job_application': return 'JOB APPLICATION';
+    case 'vehicle_inquiry': return 'VEHICLE INQUIRY';
   }
 }
 
@@ -132,11 +135,20 @@ export default function ActivityView() {
     setError(null);
     setActivityWarning(null);
 
-    const [dashboardResult, bookingsResult, ordersResult, applicationsResult] = await Promise.allSettled([
+    const [
+      dashboardResult,
+      bookingsResult,
+      ordersResult,
+      applicationsResult,
+      autoInquiriesResult,
+    ] = await Promise.allSettled([
       apiRequest<BuyerDashboardData>('/dashboard/user/welcome', { authenticated: true }),
       apiRequest<BuyerBookingsData>('/dashboard/user/bookings', { authenticated: true }),
       apiRequest<BuyerOrderRecord[]>('/v1/orders?per_page=15', { authenticated: true }),
       apiRequest<BuyerJobApplicationRecord[]>('/dashboard/user/inquiries/applications', {
+        authenticated: true,
+      }),
+      apiRequest<BuyerAutoInquiryRecord[]>('/dashboard/user/inquiries/auto-inquiries', {
         authenticated: true,
       }),
     ]);
@@ -172,6 +184,12 @@ export default function ActivityView() {
       recent.push(...applicationsResult.value.map(toJobApplicationActivityCard));
     } else {
       warnings.push('job applications');
+    }
+
+    if (autoInquiriesResult.status === 'fulfilled') {
+      recent.push(...autoInquiriesResult.value.map(toAutoInquiryActivityCard));
+    } else {
+      warnings.push('vehicle inquiries');
     }
 
     recent.sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime());
@@ -297,7 +315,7 @@ export default function ActivityView() {
                       <ActivityRecordCard
                         key={item.key}
                         item={item}
-                        onPress={() => openActivity(item)}
+                        onPress={item.source === 'auto_inquiry' ? undefined : () => openActivity(item)}
                       />
                     ))}
                   </View>
@@ -305,7 +323,7 @@ export default function ActivityView() {
                   <EmptyState
                     icon="◇"
                     title="NO ACTIVITY YET"
-                    message="Your bookings, orders, and job applications will appear here."
+                    message="Your bookings, orders, applications, and inquiries will appear here."
                   />
                 ) : null}
               </View>

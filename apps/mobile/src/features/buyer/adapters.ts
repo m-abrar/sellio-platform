@@ -1,5 +1,6 @@
 import {
   BuyerActivityCard,
+  BuyerAutoInquiryRecord,
   BuyerBookingRecord,
   BuyerJobApplicationRecord,
   BuyerOrderRecord,
@@ -200,6 +201,38 @@ export function toJobApplicationActivityCard(
     detail: salary ? `Salary range ${salary}` : 'Application submitted',
     reference: `Application #${record.id}`,
     slug: text(record.job?.slug),
+    isUpcoming: false,
+    cancellationType: null,
+  };
+}
+
+export function toAutoInquiryActivityCard(
+  record: BuyerAutoInquiryRecord,
+): BuyerActivityCard {
+  const preferredSchedule = [
+    text(record.preferred_date),
+    text(record.preferred_time),
+  ].filter(Boolean).join(' · ');
+  const date = record.created_at;
+
+  return {
+    key: `auto_inquiry:${record.id}`,
+    id: record.id,
+    source: 'auto_inquiry',
+    kind: 'vehicle_inquiry',
+    vertical: 'autos',
+    title: text(record.auto?.title) || 'Vehicle inquiry',
+    imageUrl: text(record.auto?.primary_image_url),
+    status: text(record.status) || 'pending',
+    secondaryStatus: null,
+    amount: null,
+    date,
+    dateLabel: formatDate(date),
+    detail: preferredSchedule
+      ? `Preferred visit ${preferredSchedule}`
+      : 'Vehicle inquiry submitted',
+    reference: `Inquiry #${record.id}`,
+    slug: text(record.auto?.slug),
     isUpcoming: false,
     cancellationType: null,
   };
