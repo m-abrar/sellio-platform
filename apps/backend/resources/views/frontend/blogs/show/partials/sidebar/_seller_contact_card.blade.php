@@ -1,4 +1,4 @@
-﻿<div class="card glass-surface p-4 mb-4">
+﻿<div class="card detail-sidebar-card p-4 mb-4">
     <h5 class="fw-bold mb-3"><i class="bi bi-person-circle me-2"></i>Seller Details</h5>
 
     {{-- Seller Avatar --}}

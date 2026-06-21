@@ -15,11 +15,11 @@
     </x-slot:breadcrumbs>
 
     <x-slot:main>
-        <article class="card glass-surface border-0 overflow-hidden mb-5 shadow-lg">
+        <article class="detail-main-card border-0 overflow-hidden mb-5">
             <div class="gallery-section border-bottom border-color-light position-relative">
                 <div class="position-absolute top-0 start-0 m-3 z-2">
-                    <span class="badge bg-white text-dark shadow-sm border px-3 py-2 rounded-pill fw-bold small">
-                        <i class="bi bi-bookmark-fill text-primary me-1"></i> {{ strtoupper($blog->category?->title ?? __('General')) }}
+                    <span class="badge bg-white text-dark border px-3 py-2 rounded-2 fw-semibold small">
+                        <i class="bi bi-bookmark-fill text-primary me-1"></i>{{ $blog->category?->title ?? __('General') }}
                     </span>
                 </div>
 
@@ -58,7 +58,7 @@
                             <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-tags me-2"></i>{{ __('Tags') }}</h6>
                             <div class="d-flex flex-wrap gap-2">
                                 @foreach($blog->tags as $tag)
-                                    <a href="{{ route('blogs.index', ['tag' => $tag->slug]) }}" class="badge bg-light text-primary border text-decoration-none px-3 py-2 rounded-pill">
+                                    <a href="{{ route('blogs.index', ['tag' => $tag->slug]) }}" class="badge bg-light text-primary border text-decoration-none px-3 py-2 rounded-2">
                                         #{{ $tag->title }}
                                     </a>
                                 @endforeach
@@ -71,13 +71,13 @@
     </x-slot:main>
 
     <x-slot:sidebar>
-        <div class="card glass-surface border-0 p-4 rounded-4 shadow-sm">
+        <div class="card detail-sidebar-card p-4">
             <h6 class="fw-800 text-dark mb-4">{{ __('About the Author') }}</h6>
             <div class="text-center">
                 <img src="{{ $blog->user->getFirstMediaUrl('avatar') }}" class="rounded-circle mb-3 border p-1" width="100" height="100">
                 <h5 class="fw-bold mb-1">{{ $blog->user->name }}</h5>
                 <p class="small text-muted mb-3">{{ $blog->user->bio ?? __('Content Creator') }}</p>
-                <a href="#" class="btn btn-primary btn-sm rounded-pill w-100 fw-bold">{{ __('View Profile') }}</a>
+                <a href="#" class="btn btn-primary btn-sm rounded-2 w-100 fw-semibold">{{ __('View profile') }}</a>
             </div>
         </div>
 
@@ -88,7 +88,7 @@
                 @csrf
                 <input type="hidden" name="source" value="blog_sidebar">
                 <input type="email" name="email" class="form-control form-control-sm border-0 mb-2" placeholder="{{ __('Email Address') }}" required>
-                <button type="submit" class="btn btn-dark btn-sm w-100 rounded-pill">{{ __('Subscribe') }}</button>
+                <button type="submit" class="btn btn-dark btn-sm w-100 rounded-2 fw-semibold">{{ __('Subscribe') }}</button>
             </form>
         </div>
 
@@ -104,7 +104,7 @@
 
     <x-slot:related>
         <div class="related-wrapper pb-5">
-            <h4 class="fw-800 text-dark mb-4 section-title">
+            <h4 class="fw-800 text-dark mb-4 detail-section-title">
                 <i class="bi bi-grid-fill me-2 text-primary"></i>
                 {{ __('Recommended Reading') }}
             </h4>
