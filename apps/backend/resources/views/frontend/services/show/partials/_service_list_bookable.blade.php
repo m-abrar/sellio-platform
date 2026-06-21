@@ -2,7 +2,7 @@
 
 <div class="bookable-grid d-flex flex-column gap-3 mb-5">
     @forelse($service->packages->sortBy('sort_order') as $package)
-        <div class="package-selection-card glass-surface border border-color-light p-3 p-md-4 transition-all {{ $package->is_popular ? 'is-popular-glow' : '' }}">
+        <div class="package-selection-card bg-white border border-color-light p-3 p-md-4 transition-all {{ $package->is_popular ? 'is-popular-glow' : '' }}">
             <div class="row align-items-center g-3">
                 
                 {{-- 1. Info Section --}}
@@ -10,7 +10,7 @@
                     <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
                         <h5 class="fw-800 text-dark mb-0">{{ $package->name }}</h5>
                         @if($package->is_popular)
-                            <span class="badge bg-primary text-white rounded-pill px-3 py-1 small fw-bold shadow-sm">
+                            <span class="badge bg-primary text-white rounded-2 px-3 py-1 small fw-semibold">
                                 <i class="bi bi-fire me-1"></i> {{ __('Most Popular') }}
                             </span>
                         @endif
@@ -45,7 +45,7 @@
                     </div>
 
                     <a href="{{ route('services.show', ['service' => $service->slug, 'package' => $package->id]) }}" 
-                       class="btn {{ $package->is_popular ? 'btn-primary' : 'btn-outline-dark' }} w-100 rounded-pill py-2 fw-bold shadow-sm transition-all">
+                       class="btn {{ $package->is_popular ? 'btn-primary' : 'btn-outline-dark' }} w-100 rounded-2 py-2 fw-semibold transition-all">
                         {{ __('Book Now') }}
                     </a>
                 </div>
@@ -53,7 +53,7 @@
             </div>
         </div>
     @empty
-        <div class="glass-surface p-5 text-center rounded-4">
+        <div class="bg-white border p-5 text-center rounded-4">
             <i class="bi bi-calendar-x fs-1 text-muted opacity-25 d-block mb-3"></i>
             <p class="text-muted mb-0">{{ __('No specific packages available at this time.') }}</p>
         </div>

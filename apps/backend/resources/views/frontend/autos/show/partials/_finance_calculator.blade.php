@@ -7,8 +7,8 @@
     $defaultApr = 5.5; // percent
 @endphp
 
-<div class="card glass-surface p-4 mb-4 border border-primary-light shadow-lg">
-    <h4 class="fw-bold mb-3"><i class="bi bi-calculator me-2 text-primary-color"></i>{{ __('Finance Calculator') }}</h4>
+<div class="card bg-white border p-4 mb-4">
+    <h4 class="fw-bold mb-3"><i class="bi bi-calculator me-2 text-primary"></i>{{ __('Finance Calculator') }}</h4>
     <form id="auto-finance-calc">
         <input type="hidden" id="auto-price" value="{{ $price }}">
         
@@ -34,7 +34,7 @@
         {{-- Estimated Payment Result (Will be updated via JavaScript) --}}
         <div class="text-center p-3 rounded bg-primary-light border-primary-light">
             <p class="small text-muted mb-1">{{ __('Estimated Monthly Payment') }}</p>
-            <h3 class="fw-bold mb-0 text-primary-color" id="monthly-payment-result">{{ setting('currency_symbol', '$') }}789<span class="small fw-normal">/{{ __('mo') }}</span></h3>
+            <h3 class="fw-bold mb-0 text-primary" id="monthly-payment-result">{{ setting('currency_symbol', '$') }}789<span class="small fw-normal">/{{ __('mo') }}</span></h3>
         </div>
         <small class="d-block text-center text-muted mt-2">{{ __('Excludes taxes and fees. Subject to credit approval.') }}</small>
     </form>

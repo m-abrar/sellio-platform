@@ -6,7 +6,7 @@
     $hostResponseRate = $host->response_rate ?? '98%';
 @endphp
 
-<div class="card glass-surface p-4">
+<div class="card bg-white border p-4">
     <h4 class="fw-bold mb-3">{{ __('Meet Your Host, :name', ['name' => $hostName]) }}</h4>
 
     <div class="text-center mb-3 border-bottom pb-3">
@@ -23,8 +23,8 @@
         @endif
 
         <div class="d-flex justify-content-center gap-4 mt-3 small fw-semibold">
-            <span class="text-muted"><i class="bi bi-chat-dots me-1 text-primary-color"></i> {{ __(':rate Response Rate', ['rate' => $hostResponseRate]) }}</span>
-            <span class="text-muted"><i class="bi bi-chat-square-text me-1 text-primary-color"></i> {{ trans_choice(':count Review|:count Reviews', $hostReviews, ['count' => $hostReviews]) }}</span>
+            <span class="text-muted"><i class="bi bi-chat-dots me-1 text-primary"></i> {{ __(':rate Response Rate', ['rate' => $hostResponseRate]) }}</span>
+            <span class="text-muted"><i class="bi bi-chat-square-text me-1 text-primary"></i> {{ trans_choice(':count Review|:count Reviews', $hostReviews, ['count' => $hostReviews]) }}</span>
         </div>
     </div>
 
@@ -36,11 +36,11 @@
     </div>
 
     <div class="d-grid gap-2">
-        <a href="{{ route('conversation.start', $host) }}" class="btn btn-lg fw-bold text-white btn-primary-theme">
+        <a href="{{ route('conversation.start', $host) }}" class="btn btn-lg btn-primary">
             <i class="bi bi-envelope-fill me-2"></i>{{ __('Message Host') }}
         </a>
 
-        <a href="{{ route('partner.profile', $host) }}" class="btn btn-lg fw-bold btn-outline-primary-theme">
+        <a href="{{ route('partner.profile', $host) }}" class="btn btn-lg btn-outline-secondary fw-semibold">
             <i class="bi bi-person-badge me-2"></i>{{ __('View Profile') }}
         </a>
     </div>

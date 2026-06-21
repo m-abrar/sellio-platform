@@ -2,7 +2,7 @@
     @forelse ($related_items->take(2) as $item)
         <div class="col-md-4 col-6">
             <a href="{{ route('classifieds.show', $item->slug) }}" class="text-decoration-none text-dark">
-                <div class="card glass-surface related-listing-card h-100 transition-up shadow-sm border-0">
+                <div class="card bg-white border related-listing-card h-100 transition-up shadow-sm border-0">
                     {{-- Using the primary_image_url accessor we discussed --}}
                     <img src="{{ $item->primary_image_url }}" class="card-img-top related-img object-fit-cover" alt="{{ $item->title }}" style="height: 140px;">
                     
@@ -30,7 +30,7 @@
     {{-- View All Link --}}
     @if ($related_items->count() > 2)
     <div class="col-md-4 col-6">
-        <a href="{{ route('partner.profile', $seller) }}" class="card glass-surface related-listing-card h-100 text-center d-flex align-items-center justify-content-center text-decoration-none border-dashed">
+        <a href="{{ route('partner.profile', $seller) }}" class="card bg-white border related-listing-card h-100 text-center d-flex align-items-center justify-content-center text-decoration-none border-dashed">
             <span class="text-primary fw-semibold small p-3">
                 <i class="bi bi-grid-3x3-gap-fill d-block mb-1 fs-5"></i>
                 {{ __('View All Listings') }}<br/>

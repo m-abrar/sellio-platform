@@ -5,7 +5,7 @@
 <div class="row g-4">
     @forelse (($relatedServices ?? collect())->take(3) as $related)
         <div class="col-md-4">
-            <div class="card glass-surface related-service-card h-100">
+            <div class="card bg-white border related-service-card h-100">
                 <img src="{{ $related->primary_image_url ?? $related->thumbnail_url ?? $fallbackImage }}"
                      class="card-img-top related-img"
                      alt="{{ $related->title }}">

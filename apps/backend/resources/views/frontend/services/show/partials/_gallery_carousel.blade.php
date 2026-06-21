@@ -13,7 +13,7 @@
 <div id="serviceGallery" class="carousel slide position-relative shadow-sm" data-bs-ride="carousel">
     @if($totalPhotos > 0)
         <div class="position-absolute bottom-0 end-0 m-3 z-3">
-            <span class="badge glass-surface text-dark px-3 py-2 rounded-pill shadow-sm small fw-bold">
+            <span class="badge bg-white text-dark px-3 py-2 rounded-2 shadow-sm small fw-semibold">
                 <i class="bi bi-camera me-1"></i> 1 / {{ $totalPhotos }}
             </span>
         </div>

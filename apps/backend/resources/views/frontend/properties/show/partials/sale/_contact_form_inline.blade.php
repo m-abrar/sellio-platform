@@ -1,5 +1,5 @@
-﻿<div class="card glass-surface p-4 mt-5">
-    <h4 class="fw-bold mb-3"><i class="bi bi-envelope-fill me-2 text-primary-color"></i>{{ __('Inquire About This Property') }}</h4>
+﻿<div class="card bg-white border p-4 mt-5">
+    <h4 class="fw-bold mb-3"><i class="bi bi-envelope-fill me-2 text-primary"></i>{{ __('Inquire About This Property') }}</h4>
     <form>
         <div class="mb-3">
             <label class="form-label small fw-semibold" for="inline-contact-name">{{ __('Full Name') }}</label>
@@ -17,7 +17,7 @@
             <label class="form-label small fw-semibold" for="inline-contact-message">{{ __('Message') }}</label>
             <textarea id="inline-contact-message" class="form-control" rows="3" placeholder="{{ __('I would like to schedule a viewing or ask a question about this property.') }}" required></textarea>
         </div>
-        <div class="d-grid"><button type="submit" class="btn btn-lg fw-bold text-white btn-primary-theme">{{ __('Send Message') }}</button></div>
+        <div class="d-grid"><button type="submit" class="btn btn-lg btn-primary">{{ __('Send Message') }}</button></div>
         <p class="small text-center text-muted mt-2">{{ __('By submitting this form, you agree to our terms and privacy policy.') }}</p>
     </form>
 </div>

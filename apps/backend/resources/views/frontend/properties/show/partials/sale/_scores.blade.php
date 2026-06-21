@@ -9,14 +9,14 @@
 @endphp
 
 @unless($hideHeading ?? false)
-<h6 class="fw-bold mb-4 text-primary-color">
+<h6 class="fw-bold mb-4 text-primary">
     <i class="bi bi-bicycle me-2"></i>{{ __('Lifestyle & Accessibility') }}
 </h6>
 @endunless
 
 @if ($scoresCount > 0)
     {{-- Featured Total Score Card --}}
-    <div class="livability-score-summary glass-surface p-4 mb-4 border-0 position-relative overflow-hidden shadow-sm">
+    <div class="livability-score-summary bg-primary p-4 mb-4 position-relative overflow-hidden rounded-4">
         
         <div class="row align-items-center position-relative z-1">
             <div class="col-auto">
@@ -64,7 +64,7 @@
                         {{ $score->title }}
                     </p>
                     
-                    <span class="score-card__badge badge rounded-pill {{ $isHigh ? 'bg-success-subtle text-success' : 'bg-primary-subtle text-primary' }} tiny fw-bold">
+                    <span class="score-card__badge badge rounded-2 {{ $isHigh ? 'bg-success-subtle text-success' : 'bg-primary-subtle text-primary' }} tiny fw-semibold">
                         {{ $score->description ?? ($isHigh ? __('Excellent') : __('Good')) }}
                     </span>
                 </div>

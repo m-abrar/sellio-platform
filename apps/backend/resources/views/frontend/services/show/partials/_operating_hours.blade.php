@@ -2,9 +2,9 @@
     {{-- Availability & Status Section --}}
     <div class="col-md-7">
         <h6 class="fw-bold text-dark text-uppercase small tracking-wider mb-3">
-            <i class="bi bi-clock-history me-2 text-primary-color"></i>{{ __('Availability') }}
+            <i class="bi bi-clock-history me-2 text-primary"></i>{{ __('Availability') }}
         </h6>
-        <div class="glass-surface rounded-4 p-3 border-1 bg-light bg-opacity-50">
+        <div class="bg-white border rounded-4 p-3">
             @if($service?->operating_hours && $service?->operating_days_label)
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <span class="small fw-semibold text-capitalize">{{ $service->operating_days_label }}</span>

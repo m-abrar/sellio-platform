@@ -2,7 +2,7 @@
     @forelse ($related_products->take(2) as $item)
         <div class="col-md-4 col-6">
             <a href="{{ route('product.show', $item->slug) }}" class="text-decoration-none text-dark">
-                <div class="card glass-surface related-listing-card h-100 border-0 shadow-sm transition-all shadow-hover">
+                <div class="card bg-white border related-listing-card h-100 border-0 shadow-sm transition-all shadow-hover">
                     <div class="aspect-ratio-1-1 overflow-hidden rounded-top">
                         <img src="{{ $item->primary_image_url }}"
                              class="card-img-top related-img w-100 h-100 object-fit-cover"
@@ -10,7 +10,7 @@
                     </div>
 
                     <div class="card-body p-3">
-                        <span class="text-primary-color x-small fw-bold text-uppercase d-block mb-1 tiny">
+                        <span class="text-primary x-small fw-bold text-uppercase d-block mb-1 tiny">
                             {{ $item->brand->title ?? ($item->category->title ?? __('Product')) }}
                         </span>
 
@@ -40,8 +40,8 @@
     @if ($related_products->count() > 2 && $product->brand_id)
         <div class="col-md-4 col-6 d-none d-md-block">
             <a href="{{ route('products.index', ['brand' => $product->brand_id]) }}"
-               class="card glass-surface related-listing-card h-100 text-center d-flex align-items-center justify-content-center text-decoration-none border-0 shadow-sm shadow-hover">
-                <span class="text-primary-color fw-bold small p-3">
+               class="card bg-white border related-listing-card h-100 text-center d-flex align-items-center justify-content-center text-decoration-none border-0 shadow-sm shadow-hover">
+                <span class="text-primary fw-bold small p-3">
                     <i class="bi bi-shop d-block mb-2 fs-4"></i>
                     {{ __('View Store') }}<br/>
                     <small class="text-muted fw-normal">{{ __('More from this brand') }}</small>

@@ -1,4 +1,4 @@
-<div class="card glass-surface p-0 border-0 shadow-lg overflow-hidden">
+<div class="card bg-white border p-0 overflow-hidden">
     {{-- Gallery Integration --}}
     @include('frontend.autos.show.partials._gallery')
 
@@ -6,7 +6,7 @@
         {{-- Header: Title and Price --}}
         <div class="row align-items-center mb-4">
             <div class="col-md-8">
-                <span class="badge bg-primary-light text-primary-color mb-2 px-3 py-2 rounded-pill fw-bold">
+                <span class="badge bg-primary-light text-primary mb-2 px-3 py-2 rounded-2 fw-semibold">
                     <i class="bi bi-tag-fill me-1"></i> {{ __('For Sale') }}
                 </span>
                 <h1 class="fw-800 display-5 mb-1 text-dark">{{ $auto->year }} {{ $auto->make }} {{ $auto->model }}</h1>
@@ -28,10 +28,10 @@
 
         {{-- Quick Highlights --}}
         <div class="d-flex flex-wrap gap-2 mb-4">
-            <div class="feature-tag"><i class="bi bi-speedometer2 text-primary-color me-2"></i>{{ $auto->mileage_formatted }}</div>
-            <div class="feature-tag"><i class="bi bi-fuel-pump text-primary-color me-2"></i>{{ ucfirst($auto->engine_type) }}</div>
-            <div class="feature-tag"><i class="bi bi-gear-wide-connected text-primary-color me-2"></i>{{ ucfirst($auto->transmission) }}</div>
-            <div class="feature-tag"><i class="bi bi-palette text-primary-color me-2"></i>{{ $auto->exterior_color }}</div>
+            <div class="feature-tag"><i class="bi bi-speedometer2 text-primary me-2"></i>{{ $auto->mileage_formatted }}</div>
+            <div class="feature-tag"><i class="bi bi-fuel-pump text-primary me-2"></i>{{ ucfirst($auto->engine_type) }}</div>
+            <div class="feature-tag"><i class="bi bi-gear-wide-connected text-primary me-2"></i>{{ ucfirst($auto->transmission) }}</div>
+            <div class="feature-tag"><i class="bi bi-palette text-primary me-2"></i>{{ $auto->exterior_color }}</div>
         </div>
 
         <hr class="opacity-10 my-4">
@@ -43,7 +43,7 @@
         </div>
 
         {{-- Tech Specs Table --}}
-        <h4 class="fw-bold mt-5 mb-4 text-dark"><i class="bi bi-info-circle-fill me-2 text-primary-color"></i>{{ __('Technical Specifications') }}</h4>
+        <h4 class="fw-bold mt-5 mb-4 text-dark"><i class="bi bi-info-circle-fill me-2 text-primary"></i>{{ __('Technical Specifications') }}</h4>
         <div class="row g-0">
             <div class="col-12">
                 <table class="table table-borderless spec-table mb-0">
@@ -76,9 +76,9 @@
             </div>
             <div class="col-md-4 text-center">
                 <div class="p-3 bg-light rounded-4 border border-white h-100">
-                    <i class="bi bi-file-earmark-medical text-primary-color fs-2 mb-2 d-block"></i>
+                    <i class="bi bi-file-earmark-medical text-primary fs-2 mb-2 d-block"></i>
                     <span class="fw-bold small d-block">{{ __('CARFAX Report') }}</span>
-                    <a href="#" class="text-primary-color smaller text-decoration-none">{{ __('View History') }}</a>
+                    <a href="#" class="text-primary smaller text-decoration-none">{{ __('View History') }}</a>
                 </div>
             </div>
             <div class="col-md-4 text-center">
@@ -91,12 +91,12 @@
         </div>
 
         {{-- Features Grid --}}
-        <h4 class="fw-bold mt-5 mb-3 text-dark"><i class="bi bi-list-check me-2 text-primary-color"></i>{{ __('Key Options & Features') }}</h4>
+        <h4 class="fw-bold mt-5 mb-3 text-dark"><i class="bi bi-list-check me-2 text-primary"></i>{{ __('Key Options & Features') }}</h4>
         <div class="row g-3">
             @forelse ($auto->features->take(12) as $feature)
                 <div class="col-md-4 col-6">
                     <div class="small text-dark fw-500">
-                        <i class="bi bi-check2-circle me-2 text-primary-color"></i>{{ $feature->title }}
+                        <i class="bi bi-check2-circle me-2 text-primary"></i>{{ $feature->title }}
                     </div>
                 </div>
             @empty
@@ -105,7 +105,7 @@
         </div>
 
         {{-- Map --}}
-        <h4 class="fw-bold mt-5 mb-4 text-dark"><i class="bi bi-pin-map-fill me-2 text-primary-color"></i>{{ __('Find this Vehicle') }}</h4>
+        <h4 class="fw-bold mt-5 mb-4 text-dark"><i class="bi bi-pin-map-fill me-2 text-primary"></i>{{ __('Find this Vehicle') }}</h4>
         <div class="ratio ratio-21x9 rounded-4 overflow-hidden border shadow-sm">
             <iframe
                 src="https://maps.google.com/maps?q={{ $auto->latitude }},{{ $auto->longitude }}&z=15&output=embed" class="border-0" allowfullscreen="" loading="lazy"></iframe>

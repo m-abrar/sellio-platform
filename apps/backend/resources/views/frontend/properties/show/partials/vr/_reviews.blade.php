@@ -3,7 +3,7 @@
     $averageRating = $totalReviews > 0 ? number_format($property->reviews->avg('rating'), 1) : 0;
 @endphp
 
-<div class="card glass-surface p-4 p-lg-5 mt-4 border-0 shadow-sm">
+<div class="card bg-white border p-4 p-lg-5 mt-4">
     <div class="row align-items-center mb-5">
         <div class="col-md-auto text-center border-end border-color-light pe-md-5">
             <div class="review-score-big">{{ $averageRating }}</div>

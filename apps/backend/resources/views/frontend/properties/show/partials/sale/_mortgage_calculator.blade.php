@@ -1,6 +1,6 @@
 {{-- Mortgage Calculator Card --}}
-<div class="card glass-surface p-4 mb-4">
-    <h4 class="fw-bold mb-3"><i class="bi bi-currency-dollar me-2 text-primary-color"></i>{{ __('Mortgage Estimate') }}</h4>
+<div class="card bg-white border p-4 mb-4">
+    <h4 class="fw-bold mb-3"><i class="bi bi-currency-dollar me-2 text-primary"></i>{{ __('Mortgage Estimate') }}</h4>
     <form>
         <div class="mb-3"><label class="form-label small fw-semibold">{{ __('Down Payment') }}</label><input type="number" class="form-control" value="125000" placeholder="{{ __('Down Payment') }}"></div>
         <div class="mb-3"><label class="form-label small fw-semibold">{{ __('Interest Rate (%)') }}</label><input type="number" class="form-control" step="0.01" value="6.5" placeholder="{{ __('Interest Rate') }}"></div>
@@ -10,7 +10,7 @@
         </div>
         <div class="text-center p-3 rounded bg-light-primary border-primary-light">
             <p class="small text-muted mb-1">{{ __('Estimated Monthly Payment') }}</p>
-            <h3 class="fw-bold mb-0 text-primary-color">{{ format_currency(3150, 0) }}<span class="small fw-normal">/{{ __('mo') }}</span></h3>
+            <h3 class="fw-bold mb-0 text-primary">{{ format_currency(3150, 0) }}<span class="small fw-normal">/{{ __('mo') }}</span></h3>
         </div>
         <small class="d-block text-center text-muted mt-2">{{ __('Taxes/Insurance not included.') }}</small>
     </form>

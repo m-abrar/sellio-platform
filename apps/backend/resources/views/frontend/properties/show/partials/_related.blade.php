@@ -4,7 +4,7 @@
     <div class="row g-4">
         @foreach ($relatedProperties->take(3) as $related)
         <div class="col-md-4">
-            <div class="card glass-surface border-0 h-100 shadow-sm hover-up rounded-4 overflow-hidden">
+            <div class="card bg-white border h-100 shadow-sm hover-up rounded-4 overflow-hidden">
                 <div class="position-relative">
                     <img src="{{ $related->thumbnail_url }}" class="related-property-img card-img-top" alt="{{ $related->title }}">
                     <div class="position-absolute bottom-0 start-0 m-2">
