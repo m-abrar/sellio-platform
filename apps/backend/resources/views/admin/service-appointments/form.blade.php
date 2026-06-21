@@ -133,7 +133,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Lifecycle Status') }}</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Status') }}</label>
                                     <select name="status" class="form-control form-control-premium" required>
                                         @foreach(['pending', 'confirmed', 'completed', 'cancelled'] as $st)
                                             <option value="{{ $st }}" {{ old('status', $appointment->status ?? 'pending') == $st ? 'selected' : '' }}>

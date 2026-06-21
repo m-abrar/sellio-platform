@@ -64,7 +64,7 @@
                             <th>{{ __('Service Identity') }}</th>
                             <th>{{ __('Classification') }}</th>
                             <th>{{ __('Financials') }}</th>
-                            <th>{{ __('Lifecycle') }}</th>
+                            <th>{{ __('Status') }}</th>
                             <th class="text-right pr-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>

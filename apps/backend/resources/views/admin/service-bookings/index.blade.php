@@ -61,7 +61,7 @@
                                 <th>{{ __('Service Fulfillment') }}</th>
                                 <th>{{ __('Client Principal') }}</th>
                                 <th>{{ __('Schedule Date') }}</th>
-                                <th class="text-center">{{ __('Lifecycle') }}</th>
+                                <th class="text-center">{{ __('Status') }}</th>
                                 <th class="text-right pr-4">{{ __('Actions') }}</th>
                             </tr>
                         </thead>

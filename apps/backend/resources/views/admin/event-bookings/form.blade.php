@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Events: Attendance Configuration
     
     This view serves as the authoritative interface for managing event 
@@ -26,7 +26,7 @@
                     {{ $booking->exists ? __('Update Booking: #') . $booking->id : __('New Event Registration') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $booking->exists ? __('Managing guest attendance and ticket lifecycle.') : __('Manually logging a new event registration for a guest principal.') }}
+                    {{ $booking->exists ? __('Manage guest attendance and ticket status.') : __('Manually log a new event registration.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
@@ -150,7 +150,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Lifecycle Status') }}</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Status') }}</label>
                                     <select name="status" class="form-control form-control-premium" required>
                                         @foreach(['pending', 'confirmed', 'cancelled'] as $st)
                                             <option value="{{ $st }}" {{ old('status', $booking->status ?? 'pending') == $st ? 'selected' : '' }}>

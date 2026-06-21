@@ -95,7 +95,7 @@
                     <div class="p-5 text-center">
                         <div class="py-5">
                             <i class="fas fa-bell-slash fa-4x text-muted opacity-25 mb-4 d-block"></i>
-                            <h5 class="text-muted font-weight-bold">Zero Pulse Detected</h5>
+                            <h5 class="text-muted font-weight-bold">No notifications yet</h5>
                             <p class="text-secondary small">You've cleared all signals. We'll alert you when something happens.</p>
                         </div>
                     </div>

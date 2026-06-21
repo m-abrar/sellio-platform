@@ -82,7 +82,7 @@
                                     <th>{{ __('Principal') }}</th>
                                     <th>{{ __('Aggregate') }}</th>
                                     <th>{{ __('Settlement') }}</th>
-                                    <th class="text-center">{{ __('Lifecycle') }}</th>
+                                    <th class="text-center">{{ __('Status') }}</th>
                                     <th class="text-right pr-4" data-orderable="false">{{ __('Actions') }}</th>
                                 </tr>
                             </thead>
@@ -143,9 +143,9 @@
                                     @include('admin._partials._empty-state', [
                                         'colspan' => 8,
                                         'icon' => 'fas fa-shopping-bag',
-                                        'title' => 'No Commerce Records Detected',
-                                        'description' => 'The order ledger is currently awaiting synchronized marketplace entries. Initialize your first order manually if required.',
-                                        'button_text' => 'INITIALIZE ORDER',
+                                        'title' => 'No Orders Yet',
+                                        'description' => 'No orders have been placed yet. Create a manual order or wait for customers to check out.',
+                                        'button_text' => 'CREATE ORDER',
                                         'button_link' => route('admin.product-orders.create')
                                     ])
                                 @endforelse
@@ -179,7 +179,7 @@
                                 <i class="fas fa-sync-alt mr-2"></i> {{ __('UPDATE STATUS') }}
                             </button>
                             <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3 rounded-xl">
-                                <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 text-muted mb-2">{{ __('Transition Lifecycle') }}</h6>
+                                <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 text-muted mb-2">{{ __('Change Status') }}</h6>
                                  <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" data-action="bulk-status-trigger" data-status="pending">
                                     <i class="fas fa-clock mr-2 text-warning"></i> {{ __('Set to Pending') }}
                                 </a>

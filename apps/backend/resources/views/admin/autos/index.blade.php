@@ -68,7 +68,7 @@
                             <th>{{ __('Vehicle Identity') }}</th>
                             <th>{{ __('Specifications') }}</th>
                             <th>{{ __('Financials') }}</th>
-                            <th>{{ __('Lifecycle') }}</th>
+                            <th>{{ __('Status') }}</th>
                             <th class="text-right pr-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>

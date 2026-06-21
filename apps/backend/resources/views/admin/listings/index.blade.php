@@ -27,7 +27,7 @@
                     <i class="fas fa-layer-group mr-2 text-primary"></i>
                     {{ __(':type Marketplace', ['type' => ($type !== 'all' ? __(Str::title($type)) : __(Str::title($status ?? 'All')))]) }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Audit marketplace submissions, moderation statuses, and lifecycle states.') }}</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Review listings, moderation statuses, and current states.') }}</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-center justify-content-sm-end gap-12">
                 <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
@@ -120,7 +120,7 @@
                 <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
                     <div class="d-flex flex-column flex-md-row align-items-center">
                         <span class="form-label-premium mb-3 mb-md-0 mr-md-4">
-                            <i class="fas fa-filter mr-2 text-primary"></i> {{ __('Lifecycle State:') }}
+                            <i class="fas fa-filter mr-2 text-primary"></i> {{ __('Status:') }}
                         </span>
                         <ul class="nav nav-pills nav-pills-premium flex-wrap justify-content-center">
                             <li class="nav-item">

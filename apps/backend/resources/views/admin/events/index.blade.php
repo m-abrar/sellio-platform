@@ -64,7 +64,7 @@
                             <th>{{ __('Event Identity') }}</th>
                             <th>{{ __('Schedule') }}</th>
                             <th>{{ __('Ticketing') }}</th>
-                            <th>{{ __('Lifecycle') }}</th>
+                            <th>{{ __('Status') }}</th>
                             <th class="text-right pr-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>

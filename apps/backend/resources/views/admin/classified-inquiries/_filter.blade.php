@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Classifieds: Inquiry Filter Protocol
     
     This component provides a streamlined search and filtering interface 
@@ -50,7 +50,7 @@
                             <span class="input-group-text"><i class="fas fa-filter text-xs"></i></span>
                         </div>
                         <select name="status" class="form-control select2">
-                            <option value="all">All Lifecycle States</option>
+                            <option value="all">All Statuses</option>
                             <option value="pending" {{ (request('status') ?? $status) == 'pending' ? 'selected' : '' }}>Awaiting Review</option>
                             <option value="viewed" {{ (request('status') ?? $status) == 'viewed' ? 'selected' : '' }}>Lead Viewed</option>
                             <option value="contacted" {{ (request('status') ?? $status) == 'contacted' ? 'selected' : '' }}>Contact Established</option>

@@ -27,7 +27,7 @@
                         <tr>
                             <th class="pl-4">{{ __('Reference') }}</th>
                             <th>{{ __('Amount') }}</th>
-                            <th class="text-center">{{ __('Lifecycle') }}</th>
+                            <th class="text-center">{{ __('Status') }}</th>
                             <th>{{ __('Method') }}</th>
                             <th class="pr-4 text-right">{{ __('Timestamp') }}</th>
                         </tr>

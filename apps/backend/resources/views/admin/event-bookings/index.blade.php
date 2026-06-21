@@ -70,7 +70,7 @@
                                 <th>{{ __('Attendee Principal') }}</th>
                                 <th>{{ __('Date') }}</th>
                                 <th class="text-right">{{ __('Settlement') }}</th>
-                                <th class="text-center">{{ __('Lifecycle') }}</th>
+                                <th class="text-center">{{ __('Status') }}</th>
                                 <th class="text-right pr-4">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
@@ -133,7 +133,7 @@
                                         <div class="py-4">
                                             <i class="fas fa-ticket-alt fa-4x text-muted opacity-25 mb-3 d-block"></i>
                                             <h5 class="text-muted font-weight-bold">{{ __('No Ticketing Records Found') }}</h5>
-                                            <p class="small text-secondary mb-0">{{ __('The registration ledger is currently awaiting synchronized entries.') }}</p>
+                                            <p class="small text-secondary mb-0">{{ __('No bookings recorded yet.') }}</p>
                                         </div>
                                     </td>
                                 </tr>

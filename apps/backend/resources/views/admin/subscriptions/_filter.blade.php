@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Financial Module: Subscription Lifecycle Filter
     
     This component provides a granular query interface for the platform's 
@@ -24,13 +24,13 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label-premium">{{ __('Lifecycle Status') }}</label>
+                    <label class="form-label-premium">{{ __('Status') }}</label>
                     <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-filter text-xs"></i></span>
                         </div>
                         <select name="status" class="form-control select2">
-                            <option value="">{{ __('All Lifecycle States') }}</option>
+                            <option value="">{{ __('All Statuses') }}</option>
                             @foreach(['active' => __('Active Access'), 'on_trial' => __('Trial Period'), 'past_due' => __('Payment Due'), 'cancelled' => __('Cancelled'), 'expired' => __('Terminated')] as $val => $label)
                                 <option value="{{ $val }}" {{ request('status') == $val ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach

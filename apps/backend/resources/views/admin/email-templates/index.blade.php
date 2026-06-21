@@ -21,7 +21,7 @@
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-paper-plane mr-2 text-primary opacity-50"></i> Communication Assets
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage automated system triggers and high-fidelity email notification blueprints.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage automated system triggers and email notification templates.</p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">

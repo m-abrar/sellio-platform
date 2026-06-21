@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Real Estate: Booking Filter Protocol
     
     This component provides a sophisticated filtering interface for the 
@@ -36,7 +36,7 @@
                             <span class="input-group-text"><i class="fas fa-traffic-light text-xs"></i></span>
                         </div>
                         <select name="status" class="form-control select2">
-                            <option value="all">All Lifecycle States</option>
+                            <option value="all">All Statuses</option>
                             @foreach (['pending' => 'Pending Review', 'confirmed' => 'Confirmed Stay', 'cancelled' => 'Cancelled'] as $val => $label)
                                 <option value="{{ $val }}" {{ request('status') == $val ? 'selected' : '' }}>
                                     {{ $label }}

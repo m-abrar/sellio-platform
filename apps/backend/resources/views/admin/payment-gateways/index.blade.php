@@ -74,7 +74,7 @@
                             <th class="pl-4">Gateway & Integration</th>
                             <th>Technical Identifier</th>
                             <th class="text-center">Environment</th>
-                            <th class="text-center">Lifecycle</th>
+                            <th class="text-center">Status</th>
                             <th class="text-right pr-4">Operations</th>
                         </tr>
                     </thead>

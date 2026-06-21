@@ -135,7 +135,7 @@
                             <th class="px-4">{{ __('Reference') }}</th>
                             <th>{{ __('Value') }}</th>
                             <th>{{ __('Protocol') }}</th>
-                            <th class="text-center">{{ __('Lifecycle') }}</th>
+                            <th class="text-center">{{ __('Status') }}</th>
                             <th>{{ __('Details') }}</th>
                             <th class="text-right px-4">{{ __('Temporal Data') }}</th>
                         </tr>

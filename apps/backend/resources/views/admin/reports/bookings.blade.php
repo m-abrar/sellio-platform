@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Intelligence: Booking Velocity Analysis
     
     This view provides high-fidelity insights into marketplace reservation 
@@ -207,7 +207,7 @@
                                 <tr>
                                     <th class="pl-4">{{ __('Entity') }}</th>
                                     <th>{{ __('Settlement') }}</th>
-                                    <th class="text-right pr-4">{{ __('Lifecycle') }}</th>
+                                    <th class="text-right pr-4">{{ __('Status') }}</th>
                                 </tr>
                             </thead>
                             <tbody>

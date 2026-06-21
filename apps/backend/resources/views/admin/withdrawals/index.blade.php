@@ -119,7 +119,7 @@
                         <tr>
                             <th class="pl-4">{{ __('Partner') }}</th>
                             <th class="text-right">{{ __('Settlement Value') }}</th>
-                            <th class="text-center">{{ __('Lifecycle') }}</th>
+                            <th class="text-center">{{ __('Status') }}</th>
                             <th>{{ __('Date') }}</th>
                             <th class="text-right pr-4">{{ __('Operations') }}</th>
                             <th>{{ __('Details') }}</th>

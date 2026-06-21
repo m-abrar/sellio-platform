@@ -28,7 +28,7 @@
                     <i class="fas fa-shopping-cart mr-2 text-primary"></i> 
                     Ecommerce
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Real-time revenue metrics and inventory intelligence for <span class="text-primary font-weight-bold">{{ now()->format('F d, Y') }}</span>.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Real-time revenue metrics and inventory data for <span class="text-primary font-weight-bold">{{ now()->format('F d, Y') }}</span>.</p>
             </div>
             <div class="d-none d-md-block text-right">
                 <div class="dashboard-clock-wrapper px-3 py-2 shadow-premium d-inline-block text-center">

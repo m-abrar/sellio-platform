@@ -29,7 +29,7 @@
                             <span class="input-group-text"><i class="fas fa-traffic-light text-xs"></i></span>
                         </div>
                         <select name="status" class="form-control select2">
-                            <option value="">All Lifecycle States</option>
+                            <option value="">All Statuses</option>
                             <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Awaiting Capture</option>
                             <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Settled</option>
                             <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>Terminated</option>

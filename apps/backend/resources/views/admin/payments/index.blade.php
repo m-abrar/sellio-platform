@@ -72,7 +72,7 @@
                                 <div class="py-4">
                                     <i class="fas fa-coins fa-4x text-muted opacity-25 mb-3 d-block"></i>
                                     <h5 class="text-muted font-weight-bold">{{ __('No Financial Data Detected') }}</h5>
-                                    <p class="small text-secondary mb-0">{{ __('The marketplace revenue ledger is currently awaiting synchronized entries.') }}</p>
+                                    <p class="small text-secondary mb-0">{{ __('No payments recorded yet.') }}</p>
                                 </div>
                             </div>
                         </div>

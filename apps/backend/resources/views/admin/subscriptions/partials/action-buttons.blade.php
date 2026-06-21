@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Financial Partial: Enrollment Action Interface
     
     This component provides the primary interaction gateway for 
@@ -20,7 +20,7 @@
     <div class="card-body p-4">
         {{-- Status Selector --}}
         <div class="form-group mb-4">
-            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">{{ __('Lifecycle Status') }}</label>
+            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">{{ __('Status') }}</label>
             <div class="input-group border rounded p-1 shadow-xs bg-white">
                 <div class="input-group-prepend border-0">
                     <span class="input-group-text bg-white border-0"><i class="fas fa-traffic-light text-primary"></i></span>

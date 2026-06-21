@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Administrative Communication Module: Support Manifest Audit
     
     This view provides a high-fidelity interface for auditing and 
@@ -128,7 +128,7 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <span class="smallest font-weight-bold text-muted uppercase">{{ __('Lifecycle State') }}</span>
+                        <span class="smallest font-weight-bold text-muted uppercase">{{ __('Status') }}</span>
                         @php
                             $statusColor = match($ticket->status) {
                                 'open' => 'success',

@@ -14,7 +14,7 @@
 <div class="card card-sidebar-premium mb-4">
     <div class="card-header border-0 d-flex align-items-center">
         <h5 class="card-title-side">
-            <i class="fas fa-cog mr-2 text-primary"></i> {{ __('Lifecycle Management') }}
+            <i class="fas fa-cog mr-2 text-primary"></i> {{ __('Status & Actions') }}
         </h5>
     </div>
 

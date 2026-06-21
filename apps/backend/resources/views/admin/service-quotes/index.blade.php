@@ -86,7 +86,7 @@
                                     <span class="input-group-text"><i class="fas fa-traffic-light text-xs"></i></span>
                                 </div>
                                 <select name="status" class="form-control select2">
-                                    <option value="all">{{ __('All Lifecycle States') }}</option>
+                                    <option value="all">{{ __('All Statuses') }}</option>
                                     @foreach (['pending' => __('Awaiting Review'), 'quoted' => __('Quote Issued'), 'accepted' => __('Accepted Engagement'), 'rejected' => __('Rejected')] as $val => $label)
                                         <option value="{{ $val }}" {{ $status == $val ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
@@ -131,7 +131,7 @@
                                 <th>{{ __('Customer Principal') }}</th>
                                 <th>{{ __('Scope') }}</th>
                                 <th>{{ __('Engagement') }}</th>
-                                <th class="text-center">{{ __('Lifecycle') }}</th>
+                                <th class="text-center">{{ __('Status') }}</th>
                                 <th class="text-right pr-4">{{ __('Actions') }}</th>
                             </tr>
                         </thead>

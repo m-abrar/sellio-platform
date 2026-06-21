@@ -43,13 +43,13 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label-premium">{{ __('Lifecycle Status') }}</label>
+                    <label class="form-label-premium">{{ __('Status') }}</label>
                     <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-filter text-xs"></i></span>
                         </div>
                         <select name="status" class="form-control select2">
-                            <option value="all">{{ __('All Lifecycle States') }}</option>
+                            <option value="all">{{ __('All Statuses') }}</option>
                             <option value="pending" {{ (request('status') ?? $status) == 'pending' ? 'selected' : '' }}>{{ __('Awaiting Confirmation') }}</option>
                             <option value="confirmed" {{ (request('status') ?? $status) == 'confirmed' ? 'selected' : '' }}>{{ __('Confirmed Entry') }}</option>
                             <option value="cancelled" {{ (request('status') ?? $status) == 'cancelled' ? 'selected' : '' }}>{{ __('Cancelled') }}</option>

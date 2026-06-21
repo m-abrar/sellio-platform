@@ -26,7 +26,7 @@
                     {{ $payment->exists ? __('Modify Transaction') : __('Initialize Transaction') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $payment->exists ? __('Update financial ledger entry, reconcile gateway data, and audit fiscal history.') : __('Record manual settlements, capture offline revenue, and architect Payment Details.') }}
+                    {{ $payment->exists ? __('Update payment record, reconcile gateway data, and review transaction history.') : __('Record manual settlements and capture offline revenue.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
@@ -176,7 +176,7 @@
                                 </div>
 
                                 <div class="col-md-6 mb-0">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Lifecycle Status') }}</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Status') }}</label>
                                     <div class="input-group input-group-premium">
                                         <div class="input-group-prepend border-0">
                                             <span class="input-group-text"><i class="fas fa-traffic-light text-xs"></i></span>

@@ -28,7 +28,7 @@
                     <i class="fas fa-boxes mr-2 text-primary opacity-50"></i> {{ $product->exists ? __('Modify Product') : __('Initialize Product') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $product->exists ? __('Update inventory specifications, retail pricing, and logistical parameters.') : __('Define technical specifications, commercial attributes, and inventory intelligence.') }}
+                    {{ $product->exists ? __('Update inventory specifications, retail pricing, and logistical parameters.') : __('Define technical specifications, commercial attributes, and inventory data.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">

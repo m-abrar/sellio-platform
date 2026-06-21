@@ -67,7 +67,7 @@
                             <th class="pl-4">{{ __('Subscriber Identity') }}</th>
                             <th>{{ __('Service Tier') }}</th>
                             <th>{{ __('Access Timeline') }}</th>
-                            <th class="text-center">{{ __('Lifecycle') }}</th>
+                            <th class="text-center">{{ __('Status') }}</th>
                             <th class="text-right pr-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>

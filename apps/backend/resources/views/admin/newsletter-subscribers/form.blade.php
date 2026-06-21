@@ -98,7 +98,7 @@
                 {{-- Status Logic Card --}}
                 <div class="card card-premium shadow-premium mt-4">
                     <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Lifecycle State</h3>
+                        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Status</h3>
                     </div>
                     <div class="card-body p-4">
                         <label class="w-100 cursor-pointer mb-0">

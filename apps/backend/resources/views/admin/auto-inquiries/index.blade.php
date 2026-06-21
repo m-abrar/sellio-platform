@@ -70,7 +70,7 @@
                                 <th>Vehicle Asset</th>
                                 <th>Inquirer Profile</th>
                                 <th>Engagement Date</th>
-                                <th class="text-center">Lifecycle</th>
+                                <th class="text-center">Status</th>
                                 <th class="text-right pr-4">Actions</th>
                             </tr>
                         </thead>

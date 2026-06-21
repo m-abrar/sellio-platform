@@ -94,7 +94,7 @@
                             <th class="text-center col-media-80 pl-4">{{ __('Icon') }}</th>
                             <th>{{ __('Segment Identity') }}</th>
                             <th>{{ __('Available In Spectrum') }}</th>
-                            <th class="text-center">{{ __('Lifecycle') }}</th>
+                            <th class="text-center">{{ __('Status') }}</th>
                             <th class="text-right pr-4">{{ __('Operations') }}</th>
                         </tr>
                     </thead>

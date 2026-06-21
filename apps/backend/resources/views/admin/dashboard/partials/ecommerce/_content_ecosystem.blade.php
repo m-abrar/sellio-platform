@@ -1,9 +1,9 @@
-{{--
+﻿{{--
     Ecommerce Dashboard Partial: Product Performance Ecosystem
     
     This component identifies elite product listings based on sales volume 
     and visualizes categorical distribution. It provides high-level 
-    inventory intelligence specifically for the e-commerce marketplace.
+    inventory data specifically for the e-commerce marketplace.
     
     @param array $metrics Pre-aggregated data including top-selling product statistics.
 --}}
@@ -57,7 +57,7 @@
             </div>
             <div class="card-footer bg-white border-0 text-center py-3">
                 <a href="{{ route('admin.products.index') }}" class="smallest font-weight-bold text-primary uppercase letter-spacing-1">
-                    Analyze Product Lifecycle <i class="fas fa-chevron-right ml-1"></i>
+                    View All Products <i class="fas fa-chevron-right ml-1"></i>
                 </a>
             </div>
         </div>

@@ -64,7 +64,7 @@
                             <th>{{ __('Product Info') }}</th>
                             <th>{{ __('Retail Details') }}</th>
                             <th>{{ __('Inventory') }}</th>
-                            <th class="text-center">{{ __('Lifecycle') }}</th>
+                            <th class="text-center">{{ __('Status') }}</th>
                             <th class="text-right pr-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
