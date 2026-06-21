@@ -134,7 +134,7 @@ export default function ListingAnalyticsPage() {
       <PageHeader 
         badge={`${config.icon} ${config.label} Metrics`} 
         title={data.listing.title} 
-        subtitle={`ID: #${data.listing.id} — Trend Workspace`}
+        subtitle={`ID: #${data.listing.id}`}
       >
         <div className="flex items-center gap-3">
           <button 

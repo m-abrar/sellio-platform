@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
@@ -58,7 +58,7 @@ export default function EventsPage() {
             await deleteEvent(id);
             triggerDeletion();
             setEvents((prev) => prev.filter((e) => e.id !== id));
-            toast.success(`${title} decommissioned successfully.`);
+            toast.success(`${title} deleted successfully.`);
           } catch (err: any) {
             toast.error(err.message || 'Failed to delete event.');
           }
@@ -72,7 +72,7 @@ export default function EventsPage() {
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader 
-        badge="Experiences" 
+        badge="Events" 
         title="Event" 
         subtitle="Calendar"
       >

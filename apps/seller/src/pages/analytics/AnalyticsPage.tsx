@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import {
@@ -186,7 +186,7 @@ export default function AnalyticsPage() {
     <div className="space-y-10 md:space-y-16 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       
       {/* 1. Header Row */}
-      <PageHeader badge="Performance" title="Market" subtitle="Intelligence" />
+      <PageHeader badge="Analytics" title="Performance" subtitle="Overview" />
 
       {/* 2. Responsive Symmetrical Grid Slicer (Zero Horizontal Scroll) */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3.5 w-full bg-slate-50/50 p-3 rounded-[2.5rem] border border-slate-100/75 shadow-xs">

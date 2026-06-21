@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
@@ -74,7 +74,7 @@ export default function ClassifiedsPage() {
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       
       <PageHeader 
-        badge="Community Market" 
+        badge="Classifieds" 
         title="Classified" 
         subtitle="Listings"
       >

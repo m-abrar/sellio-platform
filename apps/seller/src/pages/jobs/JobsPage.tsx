@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
@@ -58,7 +58,7 @@ export default function JobsPage() {
             await deleteJob(id);
             triggerDeletion();
             setJobs((prev) => prev.filter((j) => j.id !== id));
-            toast.success(`${title} decommissioned successfully.`);
+            toast.success(`${title} deleted successfully.`);
           } catch (err: any) {
             toast.error(err.message || 'Failed to delete job.');
           }
@@ -72,7 +72,7 @@ export default function JobsPage() {
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader 
-        badge="Human Capital" 
+        badge="Jobs" 
         title="Job" 
         subtitle="Listings"
       >

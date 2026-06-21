@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   HiOutlineChevronLeft, 
@@ -64,7 +64,7 @@ export default function ServiceDetailPage() {
   return (
     <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       <PageHeader
-        badge="Service Brief"
+        badge="Service"
         title={service.title}
         subtitle="Service Detail"
       >

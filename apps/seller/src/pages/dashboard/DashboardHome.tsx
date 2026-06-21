@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StatCard from './StatCard';
 import { HiOutlinePlus } from 'react-icons/hi2';
@@ -85,7 +85,7 @@ export default function DashboardHome() {
         {/* // highlight={user?.name?.split(' ')[0] || 'Partner'} */}
 
       <PageHeader 
-        badge={subscriptionLimits?.is_limit_exceeded ? "Limit Exceeded ⚠️" : "Partner Ecosystem"} 
+        badge={subscriptionLimits?.is_limit_exceeded ? "Limit Exceeded ⚠️" : "Seller Account"} 
         title="Welcome," 
         subtitle="Partner"
       >

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
@@ -57,9 +57,9 @@ export default function ProductsPage() {
             await deleteProduct(id);
             triggerDeletion();
             setProducts(prev => prev.filter(p => p.id !== id));
-            toast.success(`${title} decommissioned successfully.`);
+            toast.success(`${title} deleted successfully.`);
           } catch (err: any) {
-            toast.error(err.message || "Protocol failed: Asset locked.");
+            toast.error(err.message || "Could not delete. This item may be linked to an existing order.");
           }
         },
       },
@@ -73,7 +73,7 @@ export default function ProductsPage() {
       
       {/* 1. HEADER SECTION - ALWAYS VISIBLE */}
       <PageHeader 
-        badge="Global Catalog" 
+        badge="Products" 
         title="Product" 
         subtitle="Inventory"
       >

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
@@ -58,7 +58,7 @@ export default function PropertiesPage() {
             await deleteProperty(id);
             triggerDeletion();
             setProperties((prev) => prev.filter((p) => p.id !== id));
-            toast.success(`${title} decommissioned successfully.`);
+            toast.success(`${title} deleted successfully.`);
           } catch (err: any) {
             toast.error(err.message || 'Failed to delete property.');
           }

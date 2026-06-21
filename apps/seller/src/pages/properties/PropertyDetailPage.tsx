@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   HiOutlineChevronLeft,
@@ -66,7 +66,7 @@ export default function PropertyDetailPage() {
 
   return (
     <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
-      <PageHeader badge="Property Preview" title={property.title} subtitle="Asset Detail">
+      <PageHeader badge="Property" title={property.title} subtitle="Details">
         <div className="flex gap-4">
           <button
             onClick={() => navigate(-1)}

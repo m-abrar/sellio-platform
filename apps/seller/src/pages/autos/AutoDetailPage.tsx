@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   HiOutlineChevronLeft,
@@ -65,7 +65,7 @@ export default function AutoDetailPage() {
 
   return (
     <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
-      <PageHeader badge="Vehicle Dossier" title={auto.title} subtitle="Auto Detail">
+      <PageHeader badge="Vehicle" title={auto.title} subtitle="Details">
         <div className="flex gap-4">
           <button onClick={() => navigate(-1)} className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center gap-2">
             <HiOutlineChevronLeft className="w-4 h-4" /> Back

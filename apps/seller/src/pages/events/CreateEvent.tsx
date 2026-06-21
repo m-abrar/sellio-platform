@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+﻿import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { triggerCelebration } from '../../utils/animations';
@@ -471,7 +471,7 @@ export default function CreateEvent() {
   if (!isLoading && !isEditMode && limits?.is_limit_exceeded) {
     return (
       <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-        <PageHeader badge="Limit Guard" title="Create" subtitle="Event" />
+        <PageHeader badge="Limit Reached" title="Create" subtitle="Event" />
         <div className="bg-slate-900 rounded-[3rem] p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
           <div className="relative z-10 max-w-md space-y-8">
             <div className="w-20 h-20 rounded-3xl bg-[#6610f2]/20 border border-[#6610f2]/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
@@ -502,8 +502,8 @@ export default function CreateEvent() {
   return (
     <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       <PageHeader
-        badge="Experience Protocol"
-        title={isEditMode ? 'Modify' : 'Create'}
+        badge="Events"
+        title={isEditMode ? 'Edit' : 'Create'}
         subtitle="Event"
       >
         <button

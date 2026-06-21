@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+﻿import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { triggerCelebration } from '../../utils/animations';
@@ -277,7 +277,7 @@ export default function CreateClassified() {
   if (!isLoading && !isEditMode && limits?.is_limit_exceeded) {
     return (
       <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-        <PageHeader badge="Limit Guard" title="Post" subtitle="Classified" />
+        <PageHeader badge="Limit Reached" title="Post" subtitle="Classified" />
         <div className="bg-slate-900 rounded-[3rem] p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
           <div className="relative z-10 max-w-md space-y-8">
             <div className="w-20 h-20 rounded-3xl bg-[#6610f2]/20 border border-[#6610f2]/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
@@ -309,7 +309,7 @@ export default function CreateClassified() {
     <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       <PageHeader
         badge="Community Exchange"
-        title={isEditMode ? 'Modify' : 'Post'}
+        title={isEditMode ? 'Edit' : 'Post'}
         subtitle="Classified"
       >
         <button

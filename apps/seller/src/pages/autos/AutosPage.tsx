@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
@@ -58,7 +58,7 @@ export default function AutosPage() {
             await deleteAuto(id);
             triggerDeletion();
             setAutos((prev) => prev.filter((a) => a.id !== id));
-            toast.success(`${title} decommissioned successfully.`);
+            toast.success(`${title} deleted successfully.`);
           } catch (err: any) {
             toast.error(err.message || 'Failed to delete vehicle.');
           }
@@ -71,7 +71,7 @@ export default function AutosPage() {
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <PageHeader badge="Automotive" title="Vehicle" subtitle="Inventory">
+      <PageHeader badge="Vehicles" title="My" subtitle="Vehicles">
         <button
           onClick={handleCreateClick}
           className="bg-[#6610f2] text-white px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-[#7b2dfd] transition-all active:scale-95 flex items-center gap-2"

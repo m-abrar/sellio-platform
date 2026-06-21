@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlineStar, HiStar, HiOutlineChatBubbleLeftRight } from 'react-icons/hi2';
 import { getReviews, replyToReview, toggleFeaturedReview } from '../../api/reviews';
@@ -137,7 +137,7 @@ export default function ReviewsPage() {
     <div className="space-y-10 md:space-y-16 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       
       {/* Header with Reputation Brand */}
-      <PageHeader badge="Reputation" title="Customer" subtitle="Testimonials" />
+      <PageHeader badge="Reviews" title="Customer" subtitle="Reviews" />
 
       {/* Category Grid Slicer */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3.5 w-full bg-slate-50/50 p-3 rounded-[2.5rem] border border-slate-100/75 shadow-xs">

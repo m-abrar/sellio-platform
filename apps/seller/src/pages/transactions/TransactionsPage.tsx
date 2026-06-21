@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { 
@@ -61,7 +61,7 @@ export default function TransactionsPage() {
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <PageHeader badge="Financial Ledger" title="Master" subtitle="Transactions" />
+      <PageHeader badge="Payments" title="Transactions" subtitle="History" />
 
       {/* FILTER & SEARCH BAR */}
       <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-premium">
