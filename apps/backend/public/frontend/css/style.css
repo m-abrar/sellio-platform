@@ -4518,3 +4518,98 @@ body.has-admin-bar .main-header.sticky-top{
     color: rgba(var(--primary-color-rgb),.11);
     transform: scale(1.06) translateY(-3px);
 }
+
+/* ─── CTA section ───────────────────────────────────────────────────────── */
+.cta-section {
+    background: var(--text-dark);
+    padding: clamp(4rem, 6vw, 6rem) 0;
+    position: relative;
+    overflow: hidden;
+}
+.cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+}
+.cta-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4rem;
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+}
+.cta-content {
+    flex: 1 1 460px;
+}
+.cta-headline {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #fff;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+}
+.cta-headline .text-primary {
+    font-style: italic;
+}
+.cta-sub {
+    color: rgba(255,255,255,.55);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 44ch;
+}
+.cta-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.btn-cta-lg {
+    padding: 0.7rem 1.5rem !important;
+    font-size: 0.95rem !important;
+}
+/* ── Stats column ── */
+.cta-stats {
+    display: flex;
+    gap: 2.5rem;
+    flex-shrink: 0;
+}
+.cta-stat {
+    display: flex;
+    flex-direction: column;
+}
+.cta-stat__value {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    font-weight: 400;
+    color: #fff;
+    line-height: 1;
+}
+.cta-stat__unit {
+    font-size: 0.6em;
+    color: var(--primary-color);
+    vertical-align: middle;
+}
+.cta-stat__label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.38);
+    margin-top: 0.35rem;
+}
+@media (max-width: 767px) {
+    .cta-stats {
+        gap: 2rem;
+    }
+    .cta-section {
+        padding: 3.5rem 0;
+    }
+}
