@@ -1,4 +1,4 @@
-﻿{{-- Footer --}}
+{{-- Footer --}}
 @php
     // Map social platform names → Bootstrap Icons
     $socialIcons = [
@@ -25,6 +25,41 @@
 {{-- ── Accent bar ──────────────────────────────────────────────────── --}}
 <div class="ft-accent-bar" aria-hidden="true"></div>
 
+{{-- ── Newsletter band — full-width, above main columns ───────────── --}}
+@if(filter_var(setting('newsletter_enabled', '1'), FILTER_VALIDATE_BOOLEAN))
+<div class="ft-nl-band">
+    <div class="container-xl">
+        <div class="ft-nl-inner">
+            <div class="ft-nl-copy">
+                <p class="ft-nl-eyebrow">{{ __('Stay updated') }}</p>
+                <h2 class="ft-nl-headline">
+                    {{ page_content_string('global.footer.newsletter_title', __('Stay in the loop')) }}
+                </h2>
+                <p class="ft-nl-sub">
+                    {{ page_content_string('global.footer.newsletter_description', __('New listings, market updates, and seller tips — once a week.')) }}
+                </p>
+            </div>
+            <form action="{{ route('newsletter.subscribe') }}" method="POST" class="ft-nl-form">
+                @csrf
+                <input type="hidden" name="source" value="site_footer">
+                <label for="ft-nl-email" class="visually-hidden">{{ __('Email address') }}</label>
+                <div class="ft-nl-field">
+                    <i class="bi bi-envelope ft-nl-field-icon" aria-hidden="true"></i>
+                    <input id="ft-nl-email" type="email" name="email" class="ft-nl-input"
+                           placeholder="{{ page_content_string('global.footer.newsletter_placeholder', __('Your email address')) }}"
+                           required>
+                    <button type="submit" class="ft-nl-btn">
+                        {{ page_content_string('global.footer.newsletter_button', __('Subscribe')) }}
+                        <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                </div>
+                <p class="ft-nl-privacy">{{ __('No spam. Unsubscribe anytime.') }}</p>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
+
 {{-- ── Main grid ──────────────────────────────────────────────────── --}}
 <div class="container-xl ft-wrap">
     <div class="row ft-grid gy-5">
@@ -45,7 +80,7 @@
             </a>
 
             <p class="ft-tagline">
-                {{ page_content_string('global.footer.paragraph', __('Elevating your experience with innovative solutions.')) }}
+                {{ page_content_string('global.footer.paragraph', __('Buy, sell, and discover properties, vehicles, services, and more — all in one place.')) }}
             </p>
 
             {{-- Social icons --}}
@@ -77,7 +112,7 @@
         @endphp
 
         @foreach($footerMenus as $slug => $defaultName)
-            <div class="col-6 col-sm-4 col-md-2 col-lg-2 offset-lg-{{ $loop->first ? 0 : 0 }}">
+            <div class="col-6 col-sm-4 col-md-2 col-lg-2">
                 <p class="ft-col-label">{{ __(menu_name($slug, $defaultName)) }}</p>
                 <nav>
                     @foreach(menu_items($slug) as $menuitem)
@@ -88,37 +123,6 @@
         @endforeach
 
     </div>
-
-    {{-- ── Newsletter strip ───────────────────────────────────────── --}}
-    @if(filter_var(setting('newsletter_enabled', '1'), FILTER_VALIDATE_BOOLEAN))
-    <div class="ft-nl-strip">
-        <div class="ft-nl-left">
-            <span class="ft-nl-icon"><i class="bi bi-envelope-paper"></i></span>
-            <div>
-                <p class="ft-nl-title">
-                    {{ page_content_string('global.footer.newsletter_title', __('Stay in the loop')) }}
-                </p>
-                <p class="ft-nl-sub">
-                    {{ page_content_string('global.footer.newsletter_description', __('New listings and updates, once a week.')) }}
-                </p>
-            </div>
-        </div>
-        <form action="{{ route('newsletter.subscribe') }}" method="POST" class="ft-nl-form">
-            @csrf
-            <input type="hidden" name="source" value="site_footer">
-            <label for="ft-nl-email" class="visually-hidden">{{ __('Email address') }}</label>
-            <div class="ft-nl-field">
-                <input id="ft-nl-email" type="email" name="email" class="ft-nl-input"
-                       placeholder="{{ page_content_string('global.footer.newsletter_placeholder', __('Your email address')) }}"
-                       required>
-                <button type="submit" class="ft-nl-btn">
-                    {{ page_content_string('global.footer.newsletter_button', __('Subscribe')) }}
-                    <i class="bi bi-arrow-right ms-1"></i>
-                </button>
-            </div>
-        </form>
-    </div>
-    @endif
 
     {{-- ── Bottom bar ─────────────────────────────────────────────── --}}
     <div class="ft-bottom">
