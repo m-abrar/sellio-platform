@@ -1,6 +1,6 @@
 # Frontend Public Views — Redesign Plan
 
-**Status: Phases 0–6 committed. See "Remaining Items" at bottom for outstanding fixes found during verification.**
+**Status: ALL COMPLETE — verified clean as of commit 056c0427.**
 
 Goal: Remove all glassmorphism and establish the editorial design system built on the homepage:
 - **DM Serif Display** weight-400 for headings, titles, numbers
@@ -115,13 +115,13 @@ Partials cleaned: `_header`, `_listing_header`, `_breadcrumbs`, `_quick_specs`, 
 
 ---
 
-## ⚠️ Phase 3 — Auth Pages (INCOMPLETE)
+## ✅ Phase 3 — Auth Pages (COMPLETE)
 
-> **Verified:** Auth templates live at `resources/views/auth/` (not `frontend/auth/`). Grep found 2 remaining `text-primary-color` usages:
-> - `auth/_partials/_marketing_panel.blade.php:20` — icon uses `text-primary-color`
-> - `auth/_partials/_form_card_start.blade.php:13` — logo/brand text uses `text-primary-color`
+> **Verified:** Auth templates live at `resources/views/auth/` (not `frontend/auth/`). Two `text-primary-color` usages were found and fixed:
+> - `auth/_partials/_marketing_panel.blade.php:20` — fixed: `text-primary`
+> - `auth/_partials/_form_card_start.blade.php:13` — fixed: `text-primary`
 >
-> All other auth files appear clean. These 2 need a fix — logged in **Remaining Items**.
+> All other auth files verified clean.
 
 | Page | File |
 |---|---|
@@ -137,10 +137,10 @@ Partials cleaned: `_header`, `_listing_header`, `_breadcrumbs`, `_quick_specs`, 
 
 ---
 
-## ⚠️ Phase 4 — Booking & Checkout Flows (MOSTLY COMPLETE)
+## ✅ Phase 4 — Booking & Checkout Flows (COMPLETE)
 
-> **Verified:** All checkout and confirmation flows are clean except one:
-> - `properties/booking/confirmation.blade.php:95` — "Contact Host" button is `btn btn-white btn-sm fw-800 shadow-sm w-100 mt-3 border rounded-pill py-2` → should be `btn btn-outline-secondary btn-sm fw-semibold w-100 mt-3 rounded-2 py-2`. Logged in **Remaining Items**.
+> **Verified:** All checkout and confirmation flows clean. One missed button was found and fixed:
+> - `properties/booking/confirmation.blade.php:95` — "Contact Host" `btn-white rounded-pill fw-800` → `btn-outline-secondary rounded-2 fw-semibold`
 >
 > All other flows (events, products, jobs, autos, property visit) verified clean.
 
@@ -192,9 +192,9 @@ Partials cleaned: `_header`, `_listing_header`, `_breadcrumbs`, `_quick_specs`, 
 
 ---
 
-## ✅ Remaining Items (found during verification — now fixed)
+## ✅ Verification Fixes (committed after Phase 0–6 review)
 
-All items below were found during the Phase 0–6 verification pass and fixed in a follow-up commit.
+All items below were found during the verification pass and fixed in a follow-up commit (`056c0427`).
 
 | File | Line | Fix applied |
 |---|---|---|
