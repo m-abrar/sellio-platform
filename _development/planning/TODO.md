@@ -497,42 +497,34 @@ Support link and email, are still pending, remind me later
 - [x] is the laravel frontend design based on css tokens? (Yes. `:root` defines `--primary-color`, `--primary-dark`, `--color-*` aliases, `--radius-card`, `--shadow-*` etc. Bootstrap's `btn-primary`, `text-primary`, `bg-primary`, `btn-outline-primary` are all overridden to resolve through those tokens. Custom utility classes `btn-primary-theme`, `filter-label`, `glass-surface`, `card-glass` also use tokens. 271 uses across 46+ blade files. Only minor non-token color: `#eee` on map-placeholder divs in 3 `_pickup_location_card.blade.php` files — negligible.)
 
 
-
+DONE
 in the admin panel, we have notifications showing on top right, they are zero, can you fix them?
 
 
-
+DONE
 in the frontend footer, the newsletter form does not seem fit in this design, please redesign the full footer once again. Also add social icons.
 
-
+DONE
 in the laravel frontend hero, the search form for each tab is too simple, can you make it with some extra options as well.
 
+DONE
 the hero search forms should have their own categories, locations, etc, assigned to specific vertical.
 
 
-the newsletter subscribe section has extra space on top which does not look good.
-
-footer {
-
-    /* padding: 3rem 0 1.5rem; */ 
-}
-
+DONE
 on the login screen, the social login buttons lose readibitliy on hover
 
+DONE
 on the login screen, left side content lose colors / readiblity, and also need to be fixed for vertical center.
 also add logo dynamically.
 
+DONE
 on the login screen the password placeholder color is too dark, fix it.
 
-i wrote the content on admin dashboard (all pages of admin portal) with the help of Ai tool. Now a days all people are using Ai, therefore the content is easily guessed that it is written by Ai. 
-Can we use different english words, that feel like manually chosen and most commonly used on codecanyon dashboards.
 
-
-
+DONE
 The laravel frontend hero section looks like very common design that Ai Tools generally create.
 Can you suggest something different? Unique UIUX? As well as changing the fonts, colors, spacing throughout all the layout and theme?
 
 
 
-http://192.168.10.7:8000/login
-the login screen is not following the css design tokens, please fix it.

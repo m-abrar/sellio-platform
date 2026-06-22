@@ -28,10 +28,23 @@
                 $difference = $baseNightlyRate > 0 ? $seasonRate - $baseNightlyRate : 0;
             @endphp
 
+            @php
+                $t = strtolower($season->title ?? '');
+                $seasonIcon = match(true) {
+                    str_contains($t, 'winter') || str_contains($t, 'snow') => 'bi-snow2',
+                    str_contains($t, 'spring') || str_contains($t, 'bloom') => 'bi-flower2',
+                    str_contains($t, 'summer') || str_contains($t, 'peak') => 'bi-sun-fill',
+                    str_contains($t, 'autumn') || str_contains($t, 'fall') => 'bi-tree-fill',
+                    str_contains($t, 'holiday') || str_contains($t, 'festive') || str_contains($t, 'christmas') => 'bi-gift-fill',
+                    str_contains($t, 'low') || str_contains($t, 'off') => 'bi-moon-stars-fill',
+                    str_contains($t, 'shoulder') => 'bi-cloud-sun-fill',
+                    default => 'bi-calendar-range',
+                };
+            @endphp
             <article class="seasonal-pricing-row">
                 <div class="seasonal-pricing-row__main">
                     <span class="seasonal-pricing-row__icon" aria-hidden="true">
-                        <i class="bi bi-sun"></i>
+                        <i class="bi {{ $seasonIcon }}"></i>
                     </span>
                     <div>
                         <h6 class="mb-1 fw-800 text-dark">{{ $season->title }}</h6>
@@ -117,8 +130,8 @@
             width: 42px;
             height: 42px;
             border-radius: 14px;
-            background: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.1);
-            color: var(--bs-primary, #0d6efd);
+            background: rgba(var(--primary-color-rgb), 0.1);
+            color: var(--primary-color);
             font-size: 1.12rem;
         }
 
@@ -132,7 +145,7 @@
         }
 
         .seasonal-pricing-row__rate strong {
-            color: var(--bs-primary, #0d6efd);
+            color: var(--primary-color);
             font-size: 1.15rem;
             font-weight: 900;
             line-height: 1;

@@ -1,9 +1,9 @@
 @if ($property->amenities->isNotEmpty())
-    <div class="d-flex flex-wrap gap-2">
+    <div class="amenities-grid">
         @foreach($property->amenities as $amenity)
-            <div class="amenity-chip d-flex align-items-center gap-1 px-3 py-2">
-                <i class="{{ $amenity->icon ?? 'bi bi-check2-circle' }} text-primary me-2"></i>
-                <span class="small fw-600 text-dark">{{ $amenity->title }}</span>
+            <div class="amenity-chip">
+                <i class="{{ $amenity->icon ?? 'bi bi-check2-circle' }} amenity-chip__icon" aria-hidden="true"></i>
+                <span class="amenity-chip__label">{{ $amenity->title }}</span>
             </div>
         @endforeach
     </div>

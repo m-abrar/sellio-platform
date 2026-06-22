@@ -21,12 +21,10 @@
     <x-slot:main>
         @include('frontend.properties.show.partials.vr._header')
 
+        @include('frontend.properties.show.partials.vr._summary_features')
+
         <div class="detail-main-card border-0 overflow-hidden mt-4 mb-4">
             <div class="p-4 p-lg-5">
-                @include('frontend.properties.show.partials.vr._summary_features')
-
-                <hr class="my-5 opacity-10">
-
                 <section id="about" class="mb-5">
                     <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('About this getaway') }}</h4>
                     <div class="text-muted lh-lg">

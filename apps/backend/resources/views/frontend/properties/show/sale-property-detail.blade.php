@@ -21,11 +21,11 @@
     <x-slot:main>
         @include('frontend.properties.show.partials.sale._header')
 
+        @include('frontend.properties.show.partials.sale._summary_features')
+
         <div class="detail-main-card border-0 overflow-hidden mt-4 mb-5">
             <div class="p-4 p-lg-5">
-                @include('frontend.properties.show.partials.sale._summary_features')
-
-                <div class="property-details-content mt-5">
+                <div class="property-details-content">
                     <section id="description" class="mb-5">
                         <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('The Space') }}</h4>
                         <div class="text-muted lh-lg fs-6">

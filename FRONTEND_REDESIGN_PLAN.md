@@ -466,15 +466,18 @@ Additional Feedback
 in the hero section, please show 4 cards instead of 3.
 
 
-
+hero section
 the search forms tabs, i think the pills design feel like unfinished. can you double check?
 
+in the hero section, are the 4 cards dynamic?
+
+in the hero do you think the cards design somehow shows AI template? we need to get rid of ai templates
 
 
 property detail page:
 Lifestyle & Accessibility, recheck for readiblity, design crash, use playwright.
 
-
+The sale property on the right column you have a date picker to schedule a visit that is too basic UIUX
 
 Redesign these pages to follow our theme's design:
 
@@ -482,3 +485,8 @@ Agent Profile
 Browse by Category 
 Browse by Tag
 Browse by Location, etc, etc.
+
+
+
+http://192.168.0.112:8000/login
+the login screen is not following the css design tokens, please fix it.

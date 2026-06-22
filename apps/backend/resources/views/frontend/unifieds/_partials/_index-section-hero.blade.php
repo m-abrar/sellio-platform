@@ -27,25 +27,33 @@
                 <div class="hero-search-module" data-hero-search data-aos="fade-up" data-aos-delay="200">
 
                     {{-- Horizontal tab strip --}}
-                    <div class="hero-tabs-strip">
-                        <ul class="nav hero-tabs-inline" id="searchTab" role="tablist">
-                            @foreach(($publicModules ?? collect())->take(8) as $tab)
-                                <li class="nav-item" role="presentation">
-                                    <button type="button"
-                                            class="nav-link @if($loop->first) active @endif"
-                                            id="{{ $tab['id'] }}-tab"
-                                            role="tab"
-                                            data-hero-tab
-                                            data-hero-target="hero-search-{{ $tab['id'] }}"
-                                            aria-controls="hero-search-{{ $tab['id'] }}"
-                                            aria-selected="{{ $loop->first ? 'true' : 'false' }}">
-                                        <i class="bi {{ $tab['icon'] }}" aria-hidden="true"></i>
-                                        <span>{{ $tab['label'] }}</span>
-                                    </button>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
+                    <div class="hero-tabs-scroll-wrap">
+                        <button class="hero-tabs-arrow hero-tabs-arrow--left" aria-label="{{ __('Scroll tabs left') }}" hidden>
+                            <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <div class="hero-tabs-strip">
+                            <ul class="nav hero-tabs-inline" id="searchTab" role="tablist">
+                                @foreach(($publicModules ?? collect())->take(8) as $tab)
+                                    <li class="nav-item" role="presentation">
+                                        <button type="button"
+                                                class="nav-link @if($loop->first) active @endif"
+                                                id="{{ $tab['id'] }}-tab"
+                                                role="tab"
+                                                data-hero-tab
+                                                data-hero-target="hero-search-{{ $tab['id'] }}"
+                                                aria-controls="hero-search-{{ $tab['id'] }}"
+                                                aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                                            <i class="bi {{ $tab['icon'] }}" aria-hidden="true"></i>
+                                            <span>{{ $tab['label'] }}</span>
+                                        </button>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <button class="hero-tabs-arrow hero-tabs-arrow--right" aria-label="{{ __('Scroll tabs right') }}">
+                            <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                        </button>
+                    </div>{{-- /.hero-tabs-scroll-wrap --}}
 
                     {{-- White search card --}}
                     <div class="hero-search-card">
@@ -111,60 +119,38 @@
 
                 <div class="hero-mosaic hero-mosaic--4up">
 
-                    {{-- Column 1: items 0 + 1 --}}
+                    {{-- Column 1: tall card first, short second --}}
                     <div class="hero-mosaic__col">
                         @foreach([0, 1] as $idx)
                             @php $entry = $mosaicItems[$idx] ?? null; $ph = $mosaicPlaceholders[$idx]; @endphp
-                            <div class="hero-mosaic__item">
+                            <div class="hero-mosaic__item {{ $idx === 0 ? 'hero-mosaic__item--lg' : 'hero-mosaic__item--sm' }}">
                                 @if($entry)
                                     <img src="{{ $entry['listing']->primary_image_url }}"
                                          alt="{{ $entry['listing']->title ?? '' }}"
                                          class="hero-mosaic__img"
                                          @if($idx === 0) loading="eager" fetchpriority="high" @else loading="lazy" @endif>
                                 @else
-                                    <div class="hero-mosaic__placeholder">
-                                        <i class="bi {{ $ph['icon'] }} hero-mosaic__placeholder-icon" aria-hidden="true"></i>
-                                    </div>
+                                    <div class="hero-mosaic__placeholder"></div>
                                 @endif
-                                <div class="hero-mosaic__label">
-                                    <i class="bi {{ $entry ? $entry['icon'] : $ph['icon'] }}" aria-hidden="true"></i>
-                                    {{ $entry ? $entry['label'] : $ph['label'] }}
-                                </div>
                             </div>
                         @endforeach
                     </div>
 
-                    {{-- Column 2: items 2 + 3, offset down for stagger --}}
+                    {{-- Column 2: short card first, tall second (mirror of col 1) --}}
                     <div class="hero-mosaic__col hero-mosaic__col--offset">
                         @foreach([2, 3] as $idx)
                             @php $entry = $mosaicItems[$idx] ?? null; $ph = $mosaicPlaceholders[$idx]; @endphp
-                            <div class="hero-mosaic__item">
+                            <div class="hero-mosaic__item {{ $idx === 2 ? 'hero-mosaic__item--sm' : 'hero-mosaic__item--lg' }}">
                                 @if($entry)
                                     <img src="{{ $entry['listing']->primary_image_url }}"
                                          alt="{{ $entry['listing']->title ?? '' }}"
                                          class="hero-mosaic__img"
                                          loading="lazy">
                                 @else
-                                    <div class="hero-mosaic__placeholder">
-                                        <i class="bi {{ $ph['icon'] }} hero-mosaic__placeholder-icon" aria-hidden="true"></i>
-                                    </div>
+                                    <div class="hero-mosaic__placeholder"></div>
                                 @endif
-                                <div class="hero-mosaic__label">
-                                    <i class="bi {{ $entry ? $entry['icon'] : $ph['icon'] }}" aria-hidden="true"></i>
-                                    {{ $entry ? $entry['label'] : $ph['label'] }}
-                                </div>
                             </div>
                         @endforeach
-                    </div>
-
-                    {{-- Floating live-listings badge --}}
-                    <div class="hero-mosaic-badge">
-                        <span class="hero-mosaic-badge__dot"></span>
-                        @if(($totalListingsCount ?? 0) > 0)
-                            {{ number_format($totalListingsCount) }}+&nbsp;{{ __('Active Listings') }}
-                        @else
-                            {{ __('Live Marketplace') }}
-                        @endif
                     </div>
 
                 </div>
@@ -217,6 +203,40 @@
                         event.preventDefault();
                         trigger.click();
                     });
+
+                    // Scroll arrows + edge fades
+                    var strip = root.querySelector('.hero-tabs-strip');
+                    var scrollWrap = strip && strip.parentElement;
+                    var arrowLeft  = scrollWrap && scrollWrap.querySelector('.hero-tabs-arrow--left');
+                    var arrowRight = scrollWrap && scrollWrap.querySelector('.hero-tabs-arrow--right');
+
+                    function updateEdges() {
+                        if (!strip || !scrollWrap) return;
+                        var hasOverflow = strip.scrollWidth > strip.clientWidth + 2;
+                        var atStart = strip.scrollLeft <= 4;
+                        var atEnd   = strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 4;
+                        scrollWrap.classList.toggle('no-overflow',     !hasOverflow);
+                        scrollWrap.classList.toggle('is-scrolled-end', hasOverflow && atEnd);
+                        scrollWrap.classList.toggle('is-scrolled-left', !atStart);
+                        if (arrowLeft)  arrowLeft.hidden  = atStart;
+                        if (arrowRight) arrowRight.hidden = !hasOverflow || atEnd;
+                    }
+
+                    if (arrowLeft) {
+                        arrowLeft.addEventListener('click', function () {
+                            strip.scrollBy({ left: -200, behavior: 'smooth' });
+                        });
+                    }
+                    if (arrowRight) {
+                        arrowRight.addEventListener('click', function () {
+                            strip.scrollBy({ left: 200, behavior: 'smooth' });
+                        });
+                    }
+                    if (strip) {
+                        strip.addEventListener('scroll', updateEdges, { passive: true });
+                        window.addEventListener('resize', updateEdges);
+                        updateEdges();
+                    }
                 }
 
                 if (document.readyState === 'loading') {

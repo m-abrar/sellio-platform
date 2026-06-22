@@ -785,16 +785,6 @@ hr.my-5{
     position:relative;
     padding:.5rem .75rem
 }
-#mainNav .nav-link.active::after{
-    content:"";
-    position:absolute;
-    bottom:0;
-    left:1rem;
-    right:1rem;
-    height:3px;
-    background:var(--primary-color);
-    border-radius:50px
-}
 #mainNav .btn.rounded-pill{
     white-space:nowrap;
     font-size:.85rem
@@ -1335,7 +1325,7 @@ footer{
     height:40px
 }
 .rule-card--warning{
-    border-color:#ffc107!important
+    border-color:var(--primary-color)!important
 }
 .property-status-badge{
     margin:.75rem;
@@ -3923,7 +3913,11 @@ body.has-admin-bar .main-header.sticky-top{
 
 .hsf-price-input {
     flex: 1 1 100px;
+    max-width: 220px;
     -moz-appearance: textfield;
+}
+.hsf-price-range-pair .hsf-price-input {
+    max-width: none;
 }
 .hsf-price-input::-webkit-inner-spin-button,
 .hsf-price-input::-webkit-outer-spin-button {
@@ -4043,42 +4037,114 @@ body.has-admin-bar .main-header.sticky-top{
     max-width: 580px;
 }
 
-/* Horizontal tab strip */
+/* Overflow fade wrapper — edge gradients + scroll arrows */
+.hero-tabs-scroll-wrap {
+    position: relative;
+}
+/* Right fade */
+.hero-tabs-scroll-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 72px;
+    background: linear-gradient(to right, transparent 0%, rgba(28,25,23,.8) 55%, #1C1917 100%);
+    pointer-events: none;
+    z-index: 2;
+    transition: opacity .25s;
+}
+.hero-tabs-scroll-wrap.no-overflow::after,
+.hero-tabs-scroll-wrap.is-scrolled-end::after {
+    opacity: 0;
+}
+/* Left fade — mirror; shown when strip is scrolled right */
+.hero-tabs-scroll-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 72px;
+    background: linear-gradient(to left, transparent 0%, rgba(28,25,23,.8) 55%, #1C1917 100%);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity .25s;
+}
+.hero-tabs-scroll-wrap.is-scrolled-left::before {
+    opacity: 1;
+}
+/* Scroll arrow buttons */
+.hero-tabs-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,.22);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    cursor: pointer;
+    padding: 0;
+    transition: background .2s;
+    line-height: 1;
+}
+.hero-tabs-arrow:hover {
+    background: rgba(255,255,255,.38);
+}
+.hero-tabs-arrow--left {
+    left: 6px;
+}
+.hero-tabs-arrow--right {
+    right: 6px;
+}
+.hero-tabs-arrow[hidden] {
+    display: none;
+}
+
+/* Horizontal tab strip — chip approach: each tab is its own pill */
 .hero-tabs-strip {
     overflow-x: auto;
     scrollbar-width: none;
+    margin-bottom: 0.6rem;
 }
 .hero-tabs-strip::-webkit-scrollbar { display: none; }
 
 .hero-tabs-inline {
     display: flex;
-    gap: 0.25rem;
+    gap: 0.4rem;
     flex-wrap: nowrap;
-    padding: 0.35rem 0.35rem 0;
-    background: rgba(255,255,255,.1);
-    border: 1px solid rgba(255,255,255,.15);
-    border-bottom: none;
-    border-radius: 12px 12px 0 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
 }
 
 .hero-tabs-inline .nav-link {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 0.9rem;
-    font-size: 0.78rem;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    color: rgba(255,255,255,.68);
-    border-radius: 10px;
+    color: rgba(255,255,255,.75);
+    border-radius: 8px;
     border: none;
-    background: transparent;
+    background: rgba(255,255,255,.15);
     white-space: nowrap;
     cursor: pointer;
     transition: color .2s, background .2s;
 }
 .hero-tabs-inline .nav-link:hover {
-    color: rgba(255,255,255,.95);
-    background: rgba(255,255,255,.1);
+    color: #fff;
+    background: rgba(255,255,255,.25);
 }
 .hero-tabs-inline .nav-link.active {
     background: #F8F6F3 !important;
@@ -4087,15 +4153,19 @@ body.has-admin-bar .main-header.sticky-top{
     box-shadow: none !important;
 }
 .hero-tabs-inline .nav-link i {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
+    opacity: 0.85;
+}
+.hero-tabs-inline .nav-link.active i {
+    opacity: 1;
 }
 
-/* Search card — warm off-white, top-left flush with tab strip above */
+/* Search card — fully rounded, separated from tabs above */
 .hero-search-card {
     background: #F8F6F3;
-    border-radius: 0 12px 12px 12px;
+    border-radius: 12px;
     padding: 1.5rem 1.5rem 1rem;
-    box-shadow: 0 24px 64px rgba(0,0,0,.28);
+    box-shadow: 0 20px 56px rgba(0,0,0,.3);
 }
 
 /* Stats row */
@@ -4153,72 +4223,29 @@ body.has-admin-bar .main-header.sticky-top{
     margin-top: 2.75rem;
 }
 .hero-mosaic__item {
-    border-radius: 18px;
+    border-radius: 10px;
     overflow: hidden;
-    flex: 1;
     position: relative;
-}
-/* Bottom gradient so the label is always readable over any image */
-.hero-mosaic__item::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 55%;
-    background: linear-gradient(to top, rgba(10,8,6,.65) 0%, transparent 100%);
-    pointer-events: none;
-    border-radius: 0 0 18px 18px;
 }
 .hero-mosaic__img {
     width: 100%;
-    height: 200px;
+    height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform .5s ease;
+    transition: transform .6s ease;
 }
 .hero-mosaic__item:hover .hero-mosaic__img {
-    transform: scale(1.05);
+    transform: scale(1.04);
 }
 .hero-mosaic__placeholder {
     width: 100%;
-    height: 200px;
-    background: rgba(255,255,255,.06);
-    border: 1px dashed rgba(255,255,255,.12);
-    border-radius: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 100%;
+    background: rgba(255,255,255,.05);
+    border: 1px dashed rgba(255,255,255,.1);
 }
-.hero-mosaic__placeholder-icon {
-    font-size: 2.25rem;
-    color: rgba(255,255,255,.15);
-}
-/* Category label overlay — above the gradient */
-.hero-mosaic__label {
-    position: absolute;
-    bottom: 0.8rem;
-    left: 0.8rem;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    background: rgba(255,255,255,.14);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,.18);
-    color: #fff;
-    font-size: 0.66rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.6rem;
-    border-radius: 999px;
-    transition: background .25s;
-}
-.hero-mosaic__item:hover .hero-mosaic__label {
-    background: rgba(255,255,255,.22);
-}
+/* Varied heights — lg/sm pair per column creates editorial asymmetry */
+.hero-mosaic__item--lg { height: 235px; }
+.hero-mosaic__item--sm { height: 155px; }
 
 /* ─── 3-up asymmetric mosaic ───────────────────────────────────────────── */
 .hero-mosaic--3up {
@@ -4255,10 +4282,6 @@ body.has-admin-bar .main-header.sticky-top{
     position: relative;
     align-items: flex-start;
     max-width: 510px;
-}
-.hero-mosaic--4up .hero-mosaic__img,
-.hero-mosaic--4up .hero-mosaic__placeholder {
-    height: 190px;
 }
 
 /* ── Floating "live listings" badge ────────────────────────────────────── */
@@ -4374,6 +4397,17 @@ body.has-admin-bar .main-header.sticky-top{
 .section-dark .auto-card,
 .section-dark .market-module-card {
     background: #fff !important;
+}
+/* Restore readable text colors inside white cards — undo the dark-section overrides */
+.section-dark .listing-card .property-title,
+.section-dark .listing-card h5,
+.section-dark .listing-card h6,
+.section-dark .listing-card .fw-800 {
+    color: var(--text-dark) !important;
+}
+.section-dark .listing-card .text-muted,
+.section-dark .listing-card .property-location {
+    color: var(--text-muted) !important;
 }
 
 /* Section heading — consistent serif treatment */
@@ -4867,6 +4901,13 @@ body.has-admin-bar .main-header.sticky-top{
 .property-key-facts .key-fact-item:last-child {
     border-right: 0 !important;
 }
+.key-fact-icon {
+    display: block;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    margin-bottom: 0.25rem;
+    opacity: 0.85;
+}
 @media (max-width: 575.98px) {
     .property-key-facts .key-fact-item {
         min-width: 50%;
@@ -4933,10 +4974,36 @@ body.has-admin-bar .main-header.sticky-top{
 }
 
 /* Amenity chips */
+.amenities-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 .amenity-chip {
-    background: #fff;
-    border: 1.5px solid rgba(15,23,42,.07);
-    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    background: rgba(248,246,243,.8);
+    border: 1.5px solid rgba(15,23,42,.08);
+    border-radius: 999px;
+    transition: border-color .15s ease, background .15s ease;
+}
+.amenity-chip:hover {
+    background: rgba(var(--primary-color-rgb),.05);
+    border-color: rgba(var(--primary-color-rgb),.25);
+}
+.amenity-chip__icon {
+    color: var(--primary-color);
+    font-size: .88rem;
+    opacity: .85;
+    flex: 0 0 auto;
+}
+.amenity-chip__label {
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    white-space: nowrap;
 }
 
 /* Detail section sub-headings */

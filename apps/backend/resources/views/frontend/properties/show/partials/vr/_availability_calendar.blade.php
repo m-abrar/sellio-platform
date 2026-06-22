@@ -40,133 +40,139 @@
     }
 @endphp
 
-<div class="availability-heading d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+{{-- Section heading (prev sibling of data-availability-calendar — JS depends on this order) --}}
+<div class="avail-head d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
     <div>
-        <h4 class="fw-800 mb-1"><i class="bi bi-calendar-range me-2"></i>{{ __('Availability') }}</h4>
+        <h4 class="fw-800 text-dark detail-section-title mb-1">{{ __('Availability') }}</h4>
         <p class="small text-muted mb-0">
             {{ __('Booked and pending stays are blocked from new reservations.') }}
         </p>
     </div>
-
-    <div class="availability-toolbar" data-availability-controls>
-        <span class="availability-count">
-            {{ trans_choice(':count blocked stay|:count blocked stays', $displayBookings->count(), ['count' => $displayBookings->count()]) }}
-        </span>
-        <div class="availability-nav" aria-label="{{ __('Calendar navigation') }}">
-            <button type="button" class="availability-nav__btn" data-availability-prev aria-label="{{ __('Previous months') }}">
+    <div class="avail-head__toolbar" data-availability-controls>
+        @if($displayBookings->count() > 0)
+            <span class="avail-blocked-pill">
+                <i class="bi bi-moon-stars-fill me-1" style="font-size:.7rem"></i>
+                {{ trans_choice(':count blocked stay|:count blocked stays', $displayBookings->count(), ['count' => $displayBookings->count()]) }}
+            </span>
+        @endif
+        <div class="avail-nav" aria-label="{{ __('Calendar navigation') }}">
+            <button type="button" class="avail-nav__btn" data-availability-prev aria-label="{{ __('Previous months') }}">
                 <i class="bi bi-chevron-left"></i>
             </button>
-            <button type="button" class="availability-nav__btn" data-availability-next aria-label="{{ __('Next months') }}">
+            <button type="button" class="avail-nav__btn" data-availability-next aria-label="{{ __('Next months') }}">
                 <i class="bi bi-chevron-right"></i>
             </button>
         </div>
     </div>
 </div>
 
-<div class="availability-calendar-panel" data-availability-calendar>
-    <div class="availability-summary">
-        <div>
-            <span class="availability-summary__label">{{ __('Next Available') }}</span>
-            <strong>{{ $nextAvailableDate ? $nextAvailableDate->format('M j, Y') : __('Check back soon') }}</strong>
+{{-- Calendar container (JS targets this with [data-availability-calendar]) --}}
+<div class="avail-panel" data-availability-calendar>
+
+    {{-- Stats strip --}}
+    <div class="avail-stats">
+        <div class="avail-stat">
+            <span class="avail-stat__label">{{ __('Next Available') }}</span>
+            <strong class="avail-stat__value">{{ $nextAvailableDate ? $nextAvailableDate->format('M j, Y') : __('Check back soon') }}</strong>
         </div>
-        <div>
-            <span class="availability-summary__label">{{ __('Blocked Nights') }}</span>
-            <strong>{{ $blockedNightCount }}</strong>
+        <div class="avail-stat">
+            <span class="avail-stat__label">{{ __('Blocked Nights') }}</span>
+            <strong class="avail-stat__value">{{ $blockedNightCount }}</strong>
         </div>
-        <div>
-            <span class="availability-summary__label">{{ __('Minimum Stay') }}</span>
-            <strong>{{ trans_choice(':count night|:count nights', max(1, (int) ($property->minimum_rental_days ?? 1)), ['count' => max(1, (int) ($property->minimum_rental_days ?? 1))]) }}</strong>
+        <div class="avail-stat">
+            <span class="avail-stat__label">{{ __('Min. Stay') }}</span>
+            <strong class="avail-stat__value">{{ trans_choice(':count night|:count nights', max(1, (int) ($property->minimum_rental_days ?? 1)), ['count' => max(1, (int) ($property->minimum_rental_days ?? 1))]) }}</strong>
         </div>
     </div>
 
-    <div class="availability-legend" aria-label="{{ __('Calendar legend') }}">
-        <span class="availability-legend__item">
-            <span class="availability-dot is-available" aria-hidden="true"></span>{{ __('Available') }}
+    {{-- Legend --}}
+    <div class="avail-legend" aria-label="{{ __('Calendar legend') }}">
+        <span class="avail-legend__item">
+            <span class="avail-dot is-available" aria-hidden="true"></span>{{ __('Available') }}
         </span>
         @foreach($statusMeta as $meta)
-            <span class="availability-legend__item">
-                <span class="availability-dot {{ $meta['class'] }}" aria-hidden="true"></span>{{ $meta['label'] }}
+            <span class="avail-legend__item">
+                <span class="avail-dot {{ $meta['class'] }}" aria-hidden="true"></span>{{ $meta['label'] }}
             </span>
         @endforeach
     </div>
 
-    <div class="availability-months" data-availability-months>
+    {{-- Month grid --}}
+    <div class="avail-months" data-availability-months>
         @foreach($availabilityMonths as $monthIndex => $month)
             @php
                 $leadingBlanks = $month->copy()->startOfMonth()->dayOfWeek;
                 $daysInMonth = $month->daysInMonth;
             @endphp
 
-            <section class="availability-month" data-availability-month data-month-index="{{ $monthIndex }}" aria-label="{{ $month->format('F Y') }}">
-                <div class="availability-month__header">
-                    <span>{{ $month->format('F') }}</span>
-                    <strong>{{ $month->format('Y') }}</strong>
+            <section class="avail-month" data-availability-month data-month-index="{{ $monthIndex }}" aria-label="{{ $month->format('F Y') }}">
+                <div class="avail-month__header">
+                    <span class="avail-month__name">{{ $month->format('F') }}</span>
+                    <span class="avail-month__year">{{ $month->format('Y') }}</span>
                 </div>
 
-                <div class="availability-weekdays" aria-hidden="true">
-                    @foreach(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $weekday)
-                        <span>{{ __($weekday) }}</span>
+                <div class="avail-weekdays" aria-hidden="true">
+                    @foreach(['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'] as $wd)
+                        <span>{{ $wd }}</span>
                     @endforeach
                 </div>
 
-                <div class="availability-days">
+                <div class="avail-days">
                     @for($blank = 0; $blank < $leadingBlanks; $blank++)
-                        <span class="availability-day is-empty" aria-hidden="true"></span>
+                        <span class="avail-day is-empty" aria-hidden="true"></span>
                     @endfor
 
                     @for($day = 1; $day <= $daysInMonth; $day++)
                         @php
-                            $date = $month->copy()->day($day);
-                            $dateKey = $date->toDateString();
-                            $status = $blockedDates[$dateKey] ?? null;
-                            $meta = $status ? ($statusMeta[$status] ?? $statusMeta['confirmed']) : null;
-                            $previousStatus = $blockedDates[$date->copy()->subDay()->toDateString()] ?? null;
-                            $nextStatus = $blockedDates[$date->copy()->addDay()->toDateString()] ?? null;
+                            $date      = $month->copy()->day($day);
+                            $dateKey   = $date->toDateString();
+                            $status    = $blockedDates[$dateKey] ?? null;
+                            $meta      = $status ? ($statusMeta[$status] ?? $statusMeta['confirmed']) : null;
+                            $prevSt    = $blockedDates[$date->copy()->subDay()->toDateString()] ?? null;
+                            $nextSt    = $blockedDates[$date->copy()->addDay()->toDateString()] ?? null;
                             $isBlocked = (bool) $status;
-                            $isRangeStart = $isBlocked && $previousStatus !== $status;
-                            $isRangeEnd = $isBlocked && $nextStatus !== $status;
-                            $isRangeMiddle = $isBlocked && !$isRangeStart && !$isRangeEnd;
-                            $isRangeSingle = $isBlocked && $isRangeStart && $isRangeEnd;
-                            $classes = collect([
-                                'availability-day',
+                            $isStart   = $isBlocked && $prevSt !== $status;
+                            $isEnd     = $isBlocked && $nextSt !== $status;
+                            $isMid     = $isBlocked && !$isStart && !$isEnd;
+                            $isSingle  = $isBlocked && $isStart && $isEnd;
+                            $classes   = collect([
+                                'avail-day',
                                 $date->isSameDay($today) ? 'is-today' : null,
-                                $date->lt($today) ? 'is-past' : null,
+                                $date->lt($today)         ? 'is-past'  : null,
                                 $meta['class'] ?? null,
-                                $isRangeStart ? 'is-range-start' : null,
-                                $isRangeMiddle ? 'is-range-middle' : null,
-                                $isRangeEnd ? 'is-range-end' : null,
-                                $isRangeSingle ? 'is-range-single' : null,
+                                $isStart   ? 'is-range-start'  : null,
+                                $isMid     ? 'is-range-middle' : null,
+                                $isEnd     ? 'is-range-end'    : null,
+                                $isSingle  ? 'is-range-single' : null,
                             ])->filter()->implode(' ');
                         @endphp
 
                         <span
                             class="{{ $classes }}"
-                            title="{{ $date->format('M j, Y') }}{{ $meta ? ' - ' . $meta['label'] : ' - ' . __('Available') }}"
-                            aria-label="{{ $date->format('M j, Y') }}{{ $meta ? ' - ' . $meta['label'] : ' - ' . __('Available') }}"
-                        >
-                            <span class="availability-day__number">{{ $day }}</span>
-                        </span>
+                            title="{{ $date->format('M j, Y') }}{{ $meta ? ' – ' . $meta['label'] : ' – ' . __('Available') }}"
+                            aria-label="{{ $date->format('M j, Y') }}{{ $meta ? ' – ' . $meta['label'] : ' – ' . __('Available') }}"
+                        ><span class="avail-day__num">{{ $day }}</span></span>
                     @endfor
                 </div>
             </section>
         @endforeach
     </div>
-</div>
+
+</div>{{-- /avail-panel --}}
 
 @if($displayBookings->isNotEmpty())
-    <div class="availability-ranges mt-3">
+    <div class="avail-ranges mt-3">
         @foreach($displayBookings->take(8) as $booking)
             @php
                 $status = $booking['status'] ?? 'confirmed';
-                $meta = $statusMeta[$status] ?? $statusMeta['confirmed'];
+                $meta   = $statusMeta[$status] ?? $statusMeta['confirmed'];
             @endphp
-
-            <div class="availability-range">
-                <span class="availability-dot {{ $meta['class'] }}" aria-hidden="true"></span>
+            <div class="avail-range">
+                <span class="avail-dot {{ $meta['class'] }}" aria-hidden="true"></span>
                 <strong>{{ $meta['label'] }}</strong>
-                <span>
+                <span class="text-muted">
                     {{ \Carbon\Carbon::parse($booking['start'])->format('M j, Y') }}
-                    -
+                    &ndash;
                     {{ \Carbon\Carbon::parse($booking['end'])->format('M j, Y') }}
                 </span>
             </div>
@@ -179,388 +185,353 @@
 </p>
 
 @push('styles')
-    <style>
-        .availability-heading .fw-800 {
-            font-weight: 800;
-        }
+<style>
+/* ── Availability: heading toolbar ──────────────────────────────── */
+.avail-head__toolbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+}
 
-        .availability-toolbar {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            align-self: flex-start;
-        }
+.avail-blocked-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 7px 14px;
+    background: rgba(var(--primary-color-rgb), 0.08);
+    border: 1.5px solid rgba(var(--primary-color-rgb), 0.2);
+    border-radius: 999px;
+    color: var(--primary-color);
+    font-size: 0.8rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
 
-        .availability-count {
-            display: inline-flex;
-            align-items: center;
-            min-height: 38px;
-            padding: 0 14px;
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 999px;
-            background: rgba(248, 250, 252, 0.9);
-            color: #0f172a;
-            font-size: 0.82rem;
-            font-weight: 900;
-        }
+.avail-nav {
+    display: inline-flex;
+    gap: 6px;
+}
 
-        .availability-nav {
-            display: inline-flex;
-            gap: 6px;
-            padding: 4px;
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 999px;
-            background: rgba(248, 250, 252, 0.9);
-        }
+.avail-nav__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1.5px solid rgba(15, 23, 42, 0.12);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--text-dark);
+    font-size: 0.8rem;
+    transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
 
-        .availability-nav__btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            border: 0;
-            border-radius: 999px;
-            background: transparent;
-            color: #334155;
-            transition: background-color 0.16s ease, color 0.16s ease, opacity 0.16s ease;
-        }
+.avail-nav__btn:hover:not(:disabled) {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+}
 
-        .availability-nav__btn:hover:not(:disabled) {
-            background: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.1);
-            color: var(--bs-primary, #0d6efd);
-        }
+.avail-nav__btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
 
-        .availability-nav__btn:disabled {
-            opacity: 0.35;
-            cursor: not-allowed;
-        }
+/* ── Stats strip ─────────────────────────────────────────────────── */
+.avail-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    background: rgba(248, 246, 243, 0.8);
+    border: 1.5px solid rgba(15, 23, 42, 0.07);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
 
-        .availability-calendar-panel {
-            background: #fff;
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 18px;
-            padding: 18px 0 0;
-        }
+.avail-stat {
+    padding: 16px 20px;
+    border-right: 1.5px solid rgba(15, 23, 42, 0.07);
+}
 
-        .availability-summary {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 0;
-            margin-bottom: 18px;
-            padding: 0 18px 18px;
-            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
-        }
+.avail-stat:last-child {
+    border-right: 0;
+}
 
-        .availability-summary > div {
-            padding: 2px 18px;
-            border-right: 1px solid rgba(15, 23, 42, 0.08);
-        }
+.avail-stat__label {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    margin-bottom: 5px;
+}
 
-        .availability-summary > div:first-child {
-            padding-left: 0;
-        }
+.avail-stat__value {
+    font-size: 0.98rem;
+    font-weight: 800;
+    color: var(--text-dark);
+}
 
-        .availability-summary > div:last-child {
-            border-right: 0;
-            padding-right: 0;
-        }
+/* ── Legend ──────────────────────────────────────────────────────── */
+.avail-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 18px;
+}
 
-        .availability-summary__label {
-            display: block;
-            color: #64748b;
-            font-size: 0.68rem;
-            font-weight: 900;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
+.avail-legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #64748b;
+}
 
-        .availability-summary strong {
-            color: #0f172a;
-            font-size: 0.98rem;
-            font-weight: 900;
-        }
+.avail-dot {
+    flex: 0 0 auto;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+}
 
-        .availability-legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 18px;
-            padding: 0 18px;
-        }
+.avail-dot.is-confirmed {
+    background: #ef4444;
+}
 
-        .availability-legend__item,
-        .availability-range {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #475569;
-            font-size: 0.86rem;
-            font-weight: 800;
-        }
+.avail-dot.is-pending {
+    background: #f59e0b;
+}
 
-        .availability-dot {
-            flex: 0 0 auto;
-            display: inline-block;
-            width: 9px;
-            height: 9px;
-            border-radius: 999px;
-            background: #22c55e;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
-        }
+/* ── Month grid ──────────────────────────────────────────────────── */
+.avail-panel {
+    background: transparent;
+}
 
-        .availability-dot.is-confirmed {
-            background: #ef4444;
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-        }
+.avail-months {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: 1.5px solid rgba(15, 23, 42, 0.07);
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+}
 
-        .availability-dot.is-pending {
-            background: #f59e0b;
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12);
-        }
+.avail-month {
+    display: none;
+    padding: 20px;
+    border-right: 1.5px solid rgba(15, 23, 42, 0.07);
+}
 
-        .availability-months {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 0;
-            border-top: 1px solid rgba(15, 23, 42, 0.08);
-        }
+.avail-month.is-visible {
+    display: block;
+}
 
-        .availability-month {
-            display: none;
-            background: transparent;
-            border-right: 1px solid rgba(15, 23, 42, 0.08);
-            padding: 18px;
-        }
+.avail-month.is-visible-last {
+    border-right: 0;
+}
 
-        .availability-month.is-visible {
-            display: block;
-        }
+.avail-month__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid rgba(15, 23, 42, 0.06);
+}
 
-        .availability-month.is-visible-last {
-            border-right: 0;
-        }
+.avail-month__name {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--text-dark);
+}
 
-        .availability-month__header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #0f172a;
-            font-size: 1.05rem;
-            font-weight: 900;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-        }
+.avail-month__year {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+}
 
-        .availability-weekdays,
-        .availability-days {
-            display: grid;
-            grid-template-columns: repeat(7, minmax(0, 1fr));
-            column-gap: 0;
-            row-gap: 8px;
-        }
+.avail-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    margin-bottom: 8px;
+    text-align: center;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #94a3b8;
+}
 
-        .availability-weekdays {
-            margin-bottom: 10px;
-            color: #64748b;
-            font-size: 0.7rem;
-            font-weight: 900;
-            text-align: center;
-        }
+.avail-days {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    row-gap: 3px;
+}
 
-        .availability-day {
-            position: relative;
-            isolation: isolate;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 34px;
-            aspect-ratio: 1;
-            color: #1e293b;
-            font-size: 0.84rem;
-            font-weight: 850;
-        }
+/* ── Day cells ───────────────────────────────────────────────────── */
+.avail-day {
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    aspect-ratio: 1;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    cursor: default;
+}
 
-        .availability-day::before {
-            content: "";
-            position: absolute;
-            inset: 2px;
-            z-index: -1;
-            border-radius: 999px;
-            background: transparent;
-            transition: background-color 0.16s ease;
-        }
+.avail-day::before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    z-index: -1;
+    border-radius: 50%;
+    background: transparent;
+    transition: background 0.14s ease;
+}
 
-        .availability-day__number {
-            position: relative;
-            z-index: 1;
-        }
+.avail-day__num {
+    position: relative;
+    z-index: 1;
+}
 
-        .availability-day.is-empty::before {
-            background: transparent;
-            border-color: transparent;
-        }
+.avail-day.is-past {
+    color: #d1d5db;
+}
 
-        .availability-day.is-past {
-            color: #cbd5e1;
-        }
+.avail-day.is-today::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid rgba(var(--primary-color-rgb), 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+}
 
-        .availability-day.is-today::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border: 2px solid rgba(var(--bs-primary-rgb, 13, 110, 253), 0.42);
-            border-radius: 999px;
-            pointer-events: none;
-        }
+.avail-day.is-confirmed,
+.avail-day.is-pending {
+    color: #fff;
+}
 
-        .availability-day.is-confirmed,
-        .availability-day.is-pending {
-            color: #fff;
-        }
+.avail-day.is-confirmed::before {
+    background: #ef4444;
+}
 
-        .availability-day.is-confirmed::before {
-            background: #ef4444;
-        }
+.avail-day.is-pending::before {
+    background: #f59e0b;
+}
 
-        .availability-day.is-pending::before {
-            background: #f59e0b;
-        }
+.avail-day.is-range-start:not(.is-range-single)::before {
+    right: -1px;
+    border-radius: 50% 0 0 50%;
+}
 
-        .availability-day.is-range-start:not(.is-range-single)::before {
-            right: -1px;
-            border-radius: 999px 0 0 999px;
-        }
+.avail-day.is-range-middle::before {
+    left: -1px;
+    right: -1px;
+    border-radius: 0;
+}
 
-        .availability-day.is-range-middle::before {
-            left: -1px;
-            right: -1px;
-            border-radius: 0;
-        }
+.avail-day.is-range-end:not(.is-range-single)::before {
+    left: -1px;
+    border-radius: 0 50% 50% 0;
+}
 
-        .availability-day.is-range-end:not(.is-range-single)::before {
-            left: -1px;
-            border-radius: 0 999px 999px 0;
-        }
+.avail-day:not(.is-empty):not(.is-past):not(.is-confirmed):not(.is-pending):hover::before {
+    background: rgba(15, 23, 42, 0.05);
+}
 
-        .availability-day:not(.is-empty):not(.is-past):hover::before {
-            background: rgba(15, 23, 42, 0.06);
-        }
+/* ── Booked range pills ──────────────────────────────────────────── */
+.avail-ranges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
 
-        .availability-ranges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+.avail-range {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(248, 246, 243, 0.9);
+    border: 1.5px solid rgba(15, 23, 42, 0.07);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
 
-        .availability-range {
-            background: rgba(248, 250, 252, 0.9);
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 999px;
-            padding: 9px 12px;
-        }
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 991.98px) {
+    .avail-months {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
 
-        @media (max-width: 991.98px) {
-            .availability-months {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
+@media (max-width: 767.98px) {
+    .avail-head__toolbar {
+        width: 100%;
+        justify-content: space-between;
+    }
 
-        @media (max-width: 767.98px) {
-            .availability-toolbar {
-                width: 100%;
-                justify-content: space-between;
-            }
+    .avail-months {
+        grid-template-columns: 1fr;
+    }
 
-            .availability-months {
-                grid-template-columns: 1fr;
-            }
-        }
+    .avail-month {
+        border-right: 0;
+    }
+}
 
-        @media (max-width: 575.98px) {
-            .availability-heading {
-                margin-bottom: 14px !important;
-            }
+@media (max-width: 575.98px) {
+    .avail-stats {
+        border-radius: 12px;
+    }
 
-            .availability-heading h4 {
-                font-size: 1.12rem;
-            }
+    .avail-stat {
+        padding: 12px 14px;
+    }
 
-            .availability-toolbar {
-                gap: 8px;
-            }
+    .avail-stat__label {
+        font-size: 0.56rem;
+    }
 
-            .availability-count {
-                min-height: 34px;
-                padding: 0 12px;
-                font-size: 0.76rem;
-            }
+    .avail-stat__value {
+        font-size: 0.86rem;
+    }
 
-            .availability-calendar-panel {
-                padding-top: 14px;
-                border-radius: 16px;
-            }
+    .avail-month {
+        padding: 14px;
+    }
 
-            .availability-summary {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 0;
-                padding: 0 14px 14px;
-            }
+    .avail-day {
+        min-height: 30px;
+        font-size: 0.76rem;
+    }
 
-            .availability-summary > div {
-                border-right: 1px solid rgba(15, 23, 42, 0.08);
-                padding: 0 8px;
-            }
+    .avail-ranges {
+        flex-direction: column;
+    }
 
-            .availability-summary > div:first-child {
-                padding-left: 0;
-            }
-
-            .availability-summary > div:last-child {
-                border-right: 0;
-                padding-right: 0;
-            }
-
-            .availability-summary__label {
-                font-size: 0.56rem;
-                line-height: 1.2;
-            }
-
-            .availability-summary strong {
-                display: block;
-                font-size: 0.8rem;
-                line-height: 1.25;
-            }
-
-            .availability-month {
-                padding: 14px;
-                border-right: 0;
-            }
-
-            .availability-weekdays,
-            .availability-days {
-                row-gap: 6px;
-            }
-
-            .availability-day {
-                min-height: 32px;
-                font-size: 0.8rem;
-            }
-
-            .availability-ranges {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .availability-range {
-                width: 100%;
-                justify-content: flex-start;
-                border-radius: 14px;
-                padding: 10px 12px;
-            }
-        }
-    </style>
+    .avail-range {
+        width: 100%;
+        border-radius: 12px;
+    }
+}
+</style>
 @endpush
 
 @push('scripts')
@@ -579,14 +550,8 @@
                 }
 
                 function getPerPage() {
-                    if (window.matchMedia('(max-width: 767.98px)').matches) {
-                        return 1;
-                    }
-
-                    if (window.matchMedia('(max-width: 991.98px)').matches) {
-                        return 2;
-                    }
-
+                    if (window.matchMedia('(max-width: 767.98px)').matches) return 1;
+                    if (window.matchMedia('(max-width: 991.98px)').matches) return 2;
                     return 3;
                 }
 

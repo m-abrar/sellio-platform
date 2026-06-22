@@ -138,12 +138,12 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 - [x] Add favorite/unfavorite toggle to listing details.
 - [x] Add favorite/unfavorite toggles to listing cards.
 - [x] Add buyer dashboard statistics.
-- [ ] Add orders and property/event bookings.
+- [x] Add orders and property/event bookings.
 - [ ] Add job applications.
 - [ ] Add vehicle inquiries.
 - [ ] Add service appointments and quotes.
 - [ ] Add classified inquiries.
-- [ ] Add record-specific detail screens.
+- [x] Add record-specific detail screens.
 - [ ] Add buyer reviews.
 
 ### Acceptance Criteria
