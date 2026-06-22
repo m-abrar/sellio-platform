@@ -60,12 +60,9 @@
 
         @include('frontend.classifieds.show.partials.sidebar._pickup_location_card')
 
-        <div class="card detail-sidebar-card overflow-hidden">
-            <div class="card-header border-0 p-4" style="background:var(--primary-color)">
-                <h4 class="fw-800 mb-0 text-white"><i class="bi bi-shield-lock-fill me-2"></i>{{ __('Safety Tips') }}</h4>
-            </div>
-            <div class="p-4">
-                <ul class="list-unstyled small mb-3">
+        <div class="card detail-sidebar-card p-4">
+            <h4 class="fw-800 mb-4"><i class="bi bi-shield-lock-fill me-2" style="color:var(--primary-color)"></i>{{ __('Safety Tips') }}</h4>
+            <ul class="list-unstyled small mb-3">
                     <li class="d-flex align-items-start gap-3 mb-3">
                         <span class="rounded-2 flex-shrink-0 d-flex align-items-center justify-content-center" style="width:32px;height:32px;background:rgba(var(--primary-color-rgb),.08)">
                             <i class="bi bi-people-fill" style="color:var(--primary-color)"></i>
@@ -84,11 +81,10 @@
                         </span>
                         <div><strong class="text-dark">{{ __('Avoid wire transfers') }}</strong><br><span class="text-muted">{{ __('Never pay in advance via untraceable methods.') }}</span></div>
                     </li>
-                </ul>
-                <div class="p-3 rounded-3 small text-center" style="background:rgba(248,246,243,.9);border:1.5px solid rgba(15,23,42,.07)">
-                    <i class="bi bi-flag me-1" style="color:var(--primary-color)"></i>
-                    {{ __('Something look off?') }} <a href="#" class="fw-semibold text-decoration-none" style="color:var(--primary-color)">{{ __('Report this listing') }}</a>
-                </div>
+            </ul>
+            <div class="p-3 rounded-3 small text-center" style="background:rgba(248,246,243,.9);border:1.5px solid rgba(15,23,42,.07)">
+                <i class="bi bi-flag me-1" style="color:var(--primary-color)"></i>
+                {{ __('Something look off?') }} <a href="#" class="fw-semibold text-decoration-none" style="color:var(--primary-color)">{{ __('Report this listing') }}</a>
             </div>
         </div>
     </x-slot:sidebar>
