@@ -18,12 +18,12 @@
             <div class="gallery-section border-bottom border-color-light position-relative">
                 <div class="position-absolute top-0 start-0 m-3 z-2 d-flex gap-2">
                     @if($product->on_sale)
-                        <span class="badge bg-danger text-white px-3 py-2 rounded-2 fw-semibold small">
+                        <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:var(--primary-color);color:#fff">
                             <i class="bi bi-percent me-1"></i>{{ __('Sale') }}
                         </span>
                     @endif
                     @if($product->is_digital)
-                        <span class="badge bg-primary text-white px-3 py-2 rounded-2 fw-semibold small">
+                        <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:var(--primary-color);color:#fff">
                             <i class="bi bi-cloud-download me-1"></i>{{ __('Digital') }}
                         </span>
                     @endif
@@ -35,7 +35,7 @@
                 @include('frontend.products.show.partials._product_header', ['product' => $product])
 
                 <section id="listing-description" class="mb-5">
-                    <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Product Description') }}</h4>
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-body-text me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Product Description') }}</h4>
                     <div class="listing-description text-muted lh-lg">
                         {!! sanitize_rich_html($product->description) !!}
                     </div>
@@ -43,7 +43,7 @@
 
                 @if(($attributes ?? collect())->flatten()->where('is_variation', false)->count() > 0)
                     <section id="item-specs" class="mb-0">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Specifications') }}</h4>
+                        <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-list-check me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Specifications') }}</h4>
                         @include('frontend.products.show.partials._product_specs_table')
                     </section>
                 @endif
@@ -57,10 +57,10 @@
                 basePrice: {{ $product->on_sale ? $product->sale_price : $product->base_price }},
                 priceUrl: '{{ route('products.calculate-dynamic-price', $product) }}'
              })">
-            <div class="p-4 p-md-5">
-                <span class="metric-label d-block mb-2">{{ __('Purchase') }}</span>
-                <h5 class="fw-800 text-dark mb-4">{{ __('Configure & Buy') }}</h5>
-
+            <div class="card-header border-0 p-4" style="background:var(--primary-color)">
+                <h4 class="fw-800 mb-0 text-white"><i class="bi bi-cart-fill me-2"></i>{{ __('Configure & Buy') }}</h4>
+            </div>
+            <div class="p-4">
                 <form action="{{ route('cart.add', $product->id) }}" method="POST" id="purchase-form">
                     @csrf
 
@@ -76,7 +76,7 @@
                         </div>
                     </div>
 
-                    <div class="product-purchase-quote bg-white bg-opacity-50 p-4 rounded-4 border border-primary-light mb-4">
+                    <div class="p-4 rounded-4 mb-4" style="background:rgba(248,246,243,.9);border:1.5px solid rgba(15,23,42,.08)">
                         <div class="d-flex justify-content-between mb-2">
                             <span class="small text-muted fw-600">{{ __('Unit Price') }}</span>
                             <span class="small fw-800" x-text="formatCurrency(currentPrice)"></span>
@@ -84,7 +84,7 @@
                         <hr class="my-3 border-color-light">
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="fw-bold">{{ __('Total') }}</span>
-                            <span class="fw-800 fs-4 text-primary mb-0" x-text="formatCurrency(totalPrice)"></span>
+                            <span class="fw-800 fs-4 mb-0" style="color:var(--primary-color)" x-text="formatCurrency(totalPrice)"></span>
                         </div>
                     </div>
 
@@ -111,7 +111,7 @@
         @endif
 
         <div class="detail-sidebar-card p-4 mt-4">
-            <h6 class="fw-800 text-dark mb-3"><i class="bi bi-truck me-2 text-primary"></i>{{ __('Shipping info') }}</h6>
+            <h6 class="fw-800 text-dark mb-3"><i class="bi bi-truck me-2" style="color:var(--primary-color)"></i>{{ __('Shipping info') }}</h6>
             <ul class="small text-muted mb-0 ps-3">
                 @if($product->is_digital)
                     <li>{{ __('Instant Digital Delivery') }}</li>
@@ -127,7 +127,7 @@
     <x-slot:related>
         <div class="related-wrapper pb-5">
             <h4 class="fw-800 text-dark mb-4 detail-section-title">
-                <i class="bi bi-grid-3x3-gap-fill me-2 text-primary"></i>
+                <i class="bi bi-grid-3x3-gap-fill me-2" style="color:var(--primary-color)"></i>
                 {{ __('Related Products') }}
             </h4>
             @include('frontend.products.show.partials._related_products')

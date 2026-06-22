@@ -35,7 +35,7 @@
 
                         {{-- Price Surcharge Logic --}}
                         @if($option->additional_price > 0)
-                            <span class="ms-1 x-small text-primary">(+{{ number_format($option->additional_price, 2) }})</span>
+                            <span class="ms-1 x-small" style="color:var(--primary-color)">(+{{ number_format($option->additional_price, 2) }})</span>
                         @endif
                     </label>
                 </div>
@@ -44,7 +44,7 @@
         
         {{-- Out of Stock Warning for Variations --}}
         @if($options->every(fn($opt) => $opt->stock_quantity === 0))
-            <div class="text-danger x-small mt-1"><i class="bi bi-info-circle me-1"></i>{{ __('All options currently out of stock') }}</div>
+            <div class="x-small mt-1" style="color:var(--primary-color)"><i class="bi bi-info-circle me-1"></i>{{ __('All options currently out of stock') }}</div>
         @endif
     </div>
 @endforeach
