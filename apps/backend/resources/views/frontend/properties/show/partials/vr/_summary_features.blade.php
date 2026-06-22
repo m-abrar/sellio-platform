@@ -1,22 +1,18 @@
-<div class="row g-3">
-    @php
-        $features = [
-            ['icon' => 'bi-people', 'label' => __('Sleeps'), 'value' => ($property->booking_guest_capacity ?? $property->maximum_guests ?? 1) . ' ' . __('Guests')],
-            ['icon' => 'bi-door-open', 'label' => __('Bedrooms'), 'value' => $property->number_of_bedrooms ?? 0],
-            ['icon' => 'bi-droplet', 'label' => __('Bathrooms'), 'value' => $property->number_of_bathrooms ?? 0],
-            ['icon' => 'bi-moon-stars', 'label' => __('Min Stay'), 'value' => ($property->minimum_rental_days ?? 1) . ' ' . __('Nights')],
-        ];
-    @endphp
-
-    @foreach($features as $f)
-    <div class="col-6 col-md-3">
-        <div class="feature-item d-flex flex-column align-items-center text-center p-3 rounded-4 bg-light border border-color-light">
-            <div class="feature-icon-box mb-2">
-                <i class="bi {{ $f['icon'] }}"></i>
-            </div>
-            <span class="tiny text-uppercase fw-bold text-muted">{{ $f['label'] }}</span>
-            <span class="fw-800 text-dark">{{ $f['value'] }}</span>
-        </div>
+<div class="property-key-facts d-flex flex-wrap border border-color-light rounded-3 overflow-hidden bg-white">
+    <div class="key-fact-item flex-fill text-center px-4 py-3 border-end border-color-light">
+        <span class="d-block fw-800 text-dark fs-5">{{ $property->booking_guest_capacity ?? $property->maximum_guests ?? 1 }}</span>
+        <span class="small text-muted">{{ __('Sleeps') }}</span>
     </div>
-    @endforeach
+    <div class="key-fact-item flex-fill text-center px-4 py-3 border-end border-color-light">
+        <span class="d-block fw-800 text-dark fs-5">{{ $property->number_of_bedrooms ?? 0 }}</span>
+        <span class="small text-muted">{{ __('Bedrooms') }}</span>
+    </div>
+    <div class="key-fact-item flex-fill text-center px-4 py-3 border-end border-color-light">
+        <span class="d-block fw-800 text-dark fs-5">{{ $property->number_of_bathrooms ?? 0 }}</span>
+        <span class="small text-muted">{{ __('Bathrooms') }}</span>
+    </div>
+    <div class="key-fact-item flex-fill text-center px-4 py-3 border-end border-color-light">
+        <span class="d-block fw-800 text-dark fs-5">{{ $property->minimum_rental_days ?? 1 }}</span>
+        <span class="small text-muted">{{ __('Min. Nights') }}</span>
+    </div>
 </div>

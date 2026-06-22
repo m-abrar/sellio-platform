@@ -15,6 +15,12 @@
             @include('frontend._partials._alerts')
         @endif
 
+        @isset($gallery)
+            <div class="detail-page__gallery rounded-4 overflow-hidden mb-4">
+                {{ $gallery }}
+            </div>
+        @endisset
+
         <div class="detail-page__grid">
             <main class="detail-page__main">
                 {{ $main ?? $slot }}

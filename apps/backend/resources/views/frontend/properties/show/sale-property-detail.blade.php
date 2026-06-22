@@ -1,6 +1,6 @@
 @extends('frontend._layouts._app')
 
-@section('title', $property->meta_title ?: ($property->title . ' ' . __('for Sale in') . ' ' . $property?->city)) 
+@section('title', $property->meta_title ?: ($property->title . ' ' . __('for Sale in') . ' ' . $property?->city))
 
 @section('head_extra')
 <meta name="description" content="{{ $property->meta_description ?: $property->description }}">
@@ -11,15 +11,17 @@
 @section('content')
 <x-frontend.detail-shell variant="property-sale">
     <x-slot:breadcrumbs>
-        @include('frontend.properties.show.partials.sale._header')
+        @include('frontend.properties.show.partials._breadcrumbs')
     </x-slot:breadcrumbs>
 
-    <x-slot:main>
-        <div class="detail-main-card border-0 overflow-hidden mb-5">
-            <div class="gallery-section border-bottom border-color-light">
-                @include('frontend.properties.show.partials._gallery')
-            </div>
+    <x-slot:gallery>
+        @include('frontend.properties.show.partials._gallery')
+    </x-slot:gallery>
 
+    <x-slot:main>
+        @include('frontend.properties.show.partials.sale._header')
+
+        <div class="detail-main-card border-0 overflow-hidden mt-4 mb-5">
             <div class="p-4 p-lg-5">
                 @include('frontend.properties.show.partials.sale._summary_features')
 
@@ -39,13 +41,8 @@
                     <hr class="my-5 border-color-light">
 
                     <section id="location" class="mb-5">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Location Overview') }}</h4>
-                        <div class="mb-4">
-                            @include('frontend.properties.show.partials._map')
-                        </div>
-                        <div class="mb-4">
-                            @include('frontend.properties.show.partials.sale._policies')
-                        </div>
+                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Location') }}</h4>
+                        @include('frontend.properties.show.partials._map')
                     </section>
 
                     <section id="neighbourhood" class="mb-5">
@@ -60,9 +57,14 @@
                         </div>
                     </section>
 
-                    <section id="tours" class="pt-4 border-top border-color-light">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Digital Assets & Tours') }}</h4>
+                    <section id="tours" class="pt-4 border-top border-color-light mb-5">
+                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Virtual Tours & Documents') }}</h4>
                         @include('frontend.properties.show.partials.sale._tours_and_documents')
+                    </section>
+
+                    <section id="disclosures" class="pt-4 border-top border-color-light">
+                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Property Details & Disclosures') }}</h4>
+                        @include('frontend.properties.show.partials.sale._policies')
                     </section>
                 </div>
             </div>

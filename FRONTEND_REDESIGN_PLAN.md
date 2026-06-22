@@ -192,7 +192,220 @@ Partials cleaned: `_header`, `_listing_header`, `_breadcrumbs`, `_quick_specs`, 
 
 ---
 
-## ✅ Verification Fixes (committed after Phase 0–6 review)
+## ✅ Phase 7 — Property Detail Page Layout
+
+### A. Macro Page Layout (DOM Order)
+
+The current DOM order on both pages:
+
+```
+breadcrumbs slot (full-width):
+  [title + badges + location] ←→ [price card]
+
+detail-page__grid:
+  main (~65% wide):                  sidebar (~35% wide):
+    gallery — constrained here   │    contact / booking form
+    summary features grid        │    agent card
+    content sections...          │
+```
+
+**The gallery is inside the main column.** It is never full-width — the sidebar sits alongside it. A property gallery is the most emotionally compelling element on the page; rendering it at 65% of the viewport is the biggest layout mistake on either page.
+
+**Recommended structure** (requires touching `detail-shell.blade.php` and both page files):
+
+```
+detail-page__breadcrumbs:
+  breadcrumb nav only (no title, no price)
+
+gallery slot — NEW, renders full-width before the grid split
+  full-bleed across both columns, edge-to-edge in the card
+
+detail-page__grid:
+  main:                                │ sidebar:
+    title block                        │ contact form (sale)
+      h1 title                         │ booking widget (VR)
+      badges row                       │
+      location line                    │
+      price (inline, not a box)        │
+      key facts bar (1-line strip)     │
+    content sections...                │
+
+detail-page__related
+```
+
+**Why each change:**
+
+- **Gallery full-width:** hero images should span the full card width. The sidebar belongs alongside the *text* content, not alongside the photography.
+- **Title in main column (below gallery):** with the gallery as a full-width hero, the title naturally reads after the visual "wow." This is the Airbnb / Rightmove premium pattern — gallery first, identity row second.
+- **Price inline in the left column:** the right-floated price box currently competes visually with the sidebar contact/booking form. Once those two are in adjacent columns they fight for the eye. Move price to the left column, directly under the title, with a clear typographic hierarchy (`display-5` price, `text-muted small` label). The sidebar form is the *action* — the price is supporting *information*.
+- **Key facts bar replaces feature-card grid:** the current `key-features-grid` of icon boxes is heavy for above-fold placement. Replace with a single horizontal strip: `4 Bedrooms · 3 Bathrooms · 2,400 sq ft · Built 2015`. Reads in one glance, takes one line.
+
+**Files to change:**
+- `components/frontend/detail-shell.blade.php` — add a `$gallery` slot that renders between breadcrumbs and the main/sidebar grid
+- `properties/show/sale-property-detail.blade.php` — move `_gallery` include into the new `<x-slot:gallery>`, move `_header` out of `<x-slot:breadcrumbs>` and into the top of `<x-slot:main>`
+- `properties/show/vacation-property-detail.blade.php` — same gallery slot move; same header move
+- `properties/show/partials/sale/_header.blade.php` — restructure: remove the right-float price box, add price inline below location, keep left column only
+- `properties/show/partials/sale/_summary_features.blade.php` — replace icon-card grid with a key facts horizontal bar
+- `properties/show/partials/vr/_header.blade.php` — same: remove right-float price, add price inline, integrate share/save actions here
+- `properties/show/partials/vr/_summary_features.blade.php` — replace 2×2 tile grid with a key facts horizontal bar
+
+---
+
+### B. Title, Location & Price Area (within-area fixes)
+
+---
+
+#### Sale — `sale/_header.blade.php`
+
+**Issue 1 — Badge row before the `h1` (lines 6–26 before line 28)**
+The featured/category/type/new-listing badges appear *before* the property title. The user reads classification labels before knowing what the property is called. The `h1` is the primary entry point — badges are supporting metadata.
+
+Recommended order inside the left column:
+```
+breadcrumbs → h1 → badge row → location line
+```
+Move the `<div class="d-flex flex-wrap ...gap-2 mt-3 mb-3">` block (lines 6–26) to after the `<h1>` (lines 28–30) and before the `<p>` location line (lines 32–37).
+
+**Issue 2 — Specs duplicated between header and summary features**
+The price box on the right (lines 47–62) shows Beds | Baths | Size as a compact three-stat row. `_summary_features.blade.php` immediately below the gallery shows the same three plus Parking and Year Built as full feature cards. The buyer sees beds/baths/area **twice** within a few hundred pixels.
+
+Fix: Remove the stat row inside the price box entirely (the `<div class="d-flex justify-content-lg-end gap-3 border-top ...">` block, lines 47–62). The price box becomes price-label + price-figure only. `_summary_features.blade.php` is the single spec source.
+
+**Issue 3 — Price label terminology (line 43)**
+`"Investment Amount"` reads like a financial product, not a home. `"Guide Price"` is UK estate-agent jargon. Use `"Asking Price"` — universal, plain language.
+
+**Issue 4 — `icon-circle-theme` on the geo icon (lines 33–35)**
+A circle-background container on a supporting metadata line is decorative noise. The VR header uses a plain icon. Standardise to a plain `bi-geo-alt-fill text-muted` inline with the address text — no wrapper div.
+
+**Issue 5 — `fw-800` on the `h1` (line 28)**
+DM Serif Display has no weight-800 variant. The browser synthesises fake bold or does nothing. The heading weight is set via `--font-heading` in CSS. Remove `fw-800`; weight-400 is the correct editorial weight for a display serif.
+
+---
+
+#### Sale — `sale/_summary_features.blade.php`
+
+**Issue 6 — Wrong icon for bedrooms (line 7)**
+`bi-house-door` is the listing/home icon, not a bedroom. Use `bi-door-open` (closest to a room entry) or another icon that reads as sleeping space rather than the whole building.
+
+---
+
+#### VR — `vr/_header.blade.php`
+
+**Issue 7 — Rating badge is `bg-dark text-white` (lines 19–23)**
+A solid dark chip commands as much visual weight as the price. The rating is a trust signal, not a primary element. Replace with a lightweight inline treatment:
+```html
+<span class="d-flex align-items-center gap-1 text-dark fw-semibold small">
+    <i class="bi bi-star-fill text-warning" style="font-size:.75rem"></i>
+    {{ $averageRating }}
+    <span class="text-muted fw-normal">({{ $reviewCount }})</span>
+</span>
+```
+
+**Issue 8 — [Share] and [Save] in the price column (lines 51–58)**
+On mobile the layout stacks: left column (title/location) then right column (price + share/save). Share and Save appear below the price, detached from the listing they refer to. Move them into the left column after the location/rating row — they act on the *listing*, not the *price*.
+
+**Issue 9 — Geo icon class inconsistency (line 27)**
+Sale header uses `icon-circle-theme` (circle container); VR header uses `lc-geo-icon` (plain custom class). Standardise both to a plain `bi-geo-alt-fill text-muted` with no wrapper (see Issue 4 above).
+
+---
+
+#### VR — `vr/_summary_features.blade.php`
+
+**Issue 10 — `tiny text-uppercase fw-bold` on tile labels (line 17)**
+`text-uppercase` produces ALL CAPS labels, violating the established rule (natural case everywhere). Change to `small fw-semibold text-muted`.
+
+---
+
+### B. Section Layout
+
+The buyer/guest decision journey:
+**"What does it look like?" → "What does it have?" → "Where is it?" → "What's the neighbourhood like?" → "Can I afford / book it?"**
+
+Both pages diverge from this mental model in specific ways.
+
+---
+
+### Sale property (`sale-property-detail.blade.php`)
+
+**Current section order:**
+1. Gallery
+2. Summary features (price, beds, area)
+3. The Space (description)
+4. Amenities
+5. **Location Overview** ← map + policies bundled together ⚠️
+6. Local Neighbourhood & Lifestyle (neighborhood text + scores, 2-col)
+7. Digital Assets & Tours
+
+**Issues:**
+
+**B-1. Policies inside "Location Overview" (lines 41–48)**
+Policies (HOA rules, pet policy, disclosures) have nothing to do with where the property is. The heading "Location Overview" signals geography — then the user reads legal disclosures underneath the map. These belong in a separate section at the bottom.
+
+**B-2. Virtual Tours last**
+A 3D walkthrough or floor-plan video is a *decision* tool, not an appendix. Buyers who want it look for it early. Placing it after all neighbourhood text means many users never reach it.
+
+**Recommended order:**
+1. Gallery
+2. Summary features
+3. The Space (description)
+4. Amenities
+5. **Location** (map only — extract from current "Location Overview")
+6. Local Neighbourhood & Lifestyle (neighborhood text + scores)
+7. **Virtual Tours & Documents** ← promoted from position 7 to before disclosures
+8. **Property Details & Disclosures** ← policies moved here, renamed
+
+**Files to change:**
+- `properties/show/sale-property-detail.blade.php` — reorder the sections inside `<div class="property-details-content mt-5">`
+- Section 5 (line 41): keep only `@include('.._map')`, rename heading to "Location"
+- Extract `@include('..._policies')` into a new section 8 at the bottom
+- Move the `#tours` section (currently line 63) to position 7, before the new disclosures section
+
+---
+
+### Vacation rental (`vacation-property-detail.blade.php`)
+
+**Current section order:**
+1. Gallery
+2. Summary features
+3. About this getaway (description)
+4. Amenities
+5. Seasonal Rates
+6. Availability Calendar
+7. Local Guide (neighbourhood)
+8. Livability & Accessibility (scores)
+9. **Rules + mini-map in 2-col** ← map buried at position 9 of 9 ⚠️
+
+**Issues:**
+
+**B-3. Map buried at the bottom inside the Rules section (lines 54–64)**
+On a rental page, *location* is a top-3 decision factor alongside price and dates. The map is a small widget inside a Rules container at the very end of the page. It should be its own section near the top of the long-content area.
+
+**B-4. Seasonal Rates and Calendar are separate sections (5 and 6)**
+These answer the same question: *"When can I go and what will it cost?"* A guest reads rates and immediately wants to check those dates. They belong under one "Rates & Availability" heading.
+
+**B-5. Livability/Scores stranded between Local Guide and Rules (position 8)**
+Scores (walkability, transit, noise) are neighbourhood context, not a bridge between guide and house rules. They belong attached to the Local Guide section.
+
+**Recommended order:**
+1. Gallery
+2. Summary features
+3. About this getaway (description)
+4. Amenities
+5. **Location** ← map as its own full-width section (extracted from rules)
+6. **Rates & Availability** ← Seasonal Rates + Calendar merged
+7. **Neighbourhood & Livability** ← Local Guide + Scores merged
+8. House Rules ← rules only, map extracted
+
+**Files to change:**
+- `properties/show/vacation-property-detail.blade.php`
+  - Lines 37–43 (seasonal-rates + calendar): wrap in single `<section id="rates">` with heading "Rates & Availability"
+  - Lines 45–52 (local_guide + livability/scores): merge under `<section id="neighbourhood">` heading "Neighbourhood & Livability"
+  - Lines 54–64 (rules section): remove `<div class="col-md-5">` mini-map column; rules become full-width
+  - Add `<section id="location">` above the rates section with full-width `@include('.._map')` (use `map-container-wrapper`, not `map-container-sm`)
+
+---
+
+### ✅ Verification Fixes (committed after Phase 0–6 review)
 
 All items below were found during the verification pass and fixed in a follow-up commit (`056c0427`).
 
@@ -260,3 +473,12 @@ the search forms tabs, i think the pills design feel like unfinished. can you do
 
 property detail page:
 Lifestyle & Accessibility, recheck for readiblity, design crash, use playwright.
+
+
+
+Redesign these pages to follow our theme's design:
+
+Agent Profile
+Browse by Category 
+Browse by Tag
+Browse by Location, etc, etc.

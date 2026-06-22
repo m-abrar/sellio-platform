@@ -4852,7 +4852,37 @@ body.has-admin-bar .main-header.sticky-top{
     border-radius: 16px;
 }
 
-/* Price box */
+/* Key facts bar (replaces pd-price-box) */
+.property-key-facts .key-fact-item:last-child {
+    border-right: 0 !important;
+}
+@media (max-width: 575.98px) {
+    .property-key-facts .key-fact-item {
+        min-width: 50%;
+    }
+    .property-key-facts .key-fact-item:nth-child(even) {
+        border-right: 0 !important;
+    }
+}
+
+/* Property title block */
+.property-title-block h1 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+}
+.property-title-block h2 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+}
+
+/* Detail gallery slot — full-width hero */
+.detail-page__gallery {
+    width: 100%;
+}
+
+/* Price box (legacy — kept for non-property detail pages) */
 .pd-price-box {
     background: #fff;
     border: 1.5px solid rgba(15,23,42,.07);

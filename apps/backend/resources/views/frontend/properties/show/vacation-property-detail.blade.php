@@ -11,15 +11,17 @@
 @section('content')
 <x-frontend.detail-shell variant="property-rental">
     <x-slot:breadcrumbs>
-        @include('frontend.properties.show.partials.vr._header')
+        @include('frontend.properties.show.partials._breadcrumbs')
     </x-slot:breadcrumbs>
 
-    <x-slot:main>
-        <div class="detail-main-card border-0 overflow-hidden mb-4">
-            <div class="gallery-section">
-                @include('frontend.properties.show.partials._gallery')
-            </div>
+    <x-slot:gallery>
+        @include('frontend.properties.show.partials._gallery')
+    </x-slot:gallery>
 
+    <x-slot:main>
+        @include('frontend.properties.show.partials.vr._header')
+
+        <div class="detail-main-card border-0 overflow-hidden mt-4 mb-4">
             <div class="p-4 p-lg-5">
                 @include('frontend.properties.show.partials.vr._summary_features')
 
@@ -34,33 +36,29 @@
 
                 @include('frontend.properties.show.partials.vr._amenities')
 
-                <section id="seasonal-rates" class="mt-5 pt-5 border-top border-color-light">
+                <section id="location" class="mt-5 pt-5 border-top border-color-light">
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Location') }}</h4>
+                    @include('frontend.properties.show.partials._map')
+                </section>
+
+                <section id="rates" class="mt-5 pt-5 border-top border-color-light">
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Rates & Availability') }}</h4>
                     @include('frontend.properties.show.partials.vr._seasonal_prices')
+                    <div class="mt-5 pt-4 border-top border-color-light">
+                        @include('frontend.properties.show.partials.vr._availability_calendar')
+                    </div>
                 </section>
 
-                <section id="calendar" class="mt-5 pt-5 border-top border-color-light">
-                    @include('frontend.properties.show.partials.vr._availability_calendar')
-                </section>
-
-                <section id="neighborhood" class="mt-5 pt-5 border-top border-color-light">
+                <section id="neighbourhood" class="mt-5 pt-5 border-top border-color-light">
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Neighbourhood & Livability') }}</h4>
                     @include('frontend.properties.show.partials.vr._local_guide')
-                </section>
-
-                <section id="livability" class="mt-5 pt-5 border-top border-color-light property-scores-panel property-scores-panel--expanded">
-                    <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Livability & Accessibility') }}</h4>
-                    @include('frontend.properties.show.partials.sale._scores', ['hideHeading' => true])
+                    <div class="mt-5 pt-4 border-top border-color-light property-scores-panel property-scores-panel--expanded">
+                        @include('frontend.properties.show.partials.sale._scores', ['hideHeading' => true])
+                    </div>
                 </section>
 
                 <section id="rules" class="mt-5 pt-5 border-top border-color-light">
-                    <div class="row g-4">
-                        <div class="col-md-7">@include('frontend.properties.show.partials.vr._rules')</div>
-                        <div class="col-md-5">
-                            <h6 class="fw-800 mb-3">{{ __('Location') }}</h6>
-                            <div class="map-container-wrapper shadow-sm map-container-sm">
-                                @include('frontend.properties.show.partials._map')
-                            </div>
-                        </div>
-                    </div>
+                    @include('frontend.properties.show.partials.vr._rules')
                 </section>
             </div>
         </div>
