@@ -28,9 +28,9 @@
             <div class="bg-white border rounded-4 p-4 p-md-5 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="fw-800 tracking-tight text-dark mb-0">
-                        <i class="bi bi-file-earmark-text text-primary me-2"></i>{{ __('Review Booking') }}
+                        <i class="bi bi-file-earmark-text me-2" style="color:var(--primary-color)"></i>{{ __('Review Booking') }}
                     </h4>
-                    <span class="badge bg-light-primary text-primary rounded-2 px-3 py-2 fw-600">
+                    <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
                         {{ $booking->quantity }} {{ __('ticket') }}{{ $booking->quantity > 1 ? 's' : '' }}
                     </span>
                 </div>
@@ -58,7 +58,7 @@
 
             <div class="bg-white border rounded-4 p-4 p-md-5 mb-4">
                 <h4 class="fw-800 tracking-tight mb-4 text-dark">
-                    <i class="bi bi-person-vcard text-primary me-2"></i>{{ __('Attendee Details') }}
+                    <i class="bi bi-person-vcard me-2" style="color:var(--primary-color)"></i>{{ __('Attendee Details') }}
                 </h4>
 
                 @include('frontend.events.booking._partials._attendee_form', ['booking' => $booking])
@@ -83,7 +83,7 @@
                             <span class="metric-label">{{ __('Reserved Event') }}</span>
                             <h6 class="fw-800 mb-0 text-truncate text-dark">{{ $event->title }}</h6>
                             <p class="small text-muted mb-0">
-                                <i class="bi bi-calendar-event text-primary me-1"></i>
+                                <i class="bi bi-calendar-event me-1" style="color:var(--primary-color)"></i>
                                 {{ $booking->occurrence->start_date_time->format('M j, Y · h:i A') }}
                             </p>
                         </div>
@@ -91,13 +91,11 @@
 
                     @include('frontend.events.booking._partials._order_summary', ['booking' => $booking])
 
-                    <div class="mt-4">
-                        <div class="p-3 bg-light-primary rounded-4 border border-primary-light text-center">
-                            <p class="small text-muted mb-0">
-                                <i class="bi bi-info-circle me-1 text-primary"></i>
-                                {{ __('Your digital tickets will be emailed immediately after payment.') }}
-                            </p>
-                        </div>
+                    <div class="mt-4 p-3 rounded-4 text-center" style="background:rgba(var(--primary-color-rgb),.05);border:1.5px solid rgba(var(--primary-color-rgb),.12)">
+                        <p class="small text-muted mb-0">
+                            <i class="bi bi-info-circle me-1" style="color:var(--primary-color)"></i>
+                            {{ __('Your digital tickets will be emailed immediately after payment.') }}
+                        </p>
                     </div>
                 </div>
             </aside>

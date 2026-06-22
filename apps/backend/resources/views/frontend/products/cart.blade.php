@@ -9,7 +9,7 @@
         <div class="text-center">
             <span class="metric-label mx-auto">{{ __('Commerce') }}</span>
             <h1 class="fw-800 mb-2 tracking-tight text-dark display-6">
-                {{ __('Your Shopping Cart') }}<span class="text-primary">: {{ __('Step 1 of 3') }}</span>
+                {{ __('Your Shopping Cart') }}<span style="color:var(--primary-color)">: {{ __('Step 1 of 3') }}</span>
             </h1>
             <p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">
                 {{ __('Review your items before continuing to secure checkout.') }}
@@ -61,9 +61,9 @@
                     <div class="bg-white border rounded-4 p-4 p-md-5">
                         <h4 class="fw-800 tracking-tight mb-4 text-dark">{{ __('Summary') }}</h4>
 
-                        <div class="bg-white bg-opacity-50 p-4 rounded-4 text-center border border-primary-light backdrop-blur mb-4">
+                        <div class="p-4 rounded-4 text-center mb-4" style="background:rgba(248,246,243,.9);border:1.5px solid rgba(15,23,42,.08)">
                             <p class="filter-label mb-1">{{ __('Subtotal') }}</p>
-                            <h2 class="price-text-large mb-0 line-height-1 text-primary">{{ format_currency($cartSubtotal) }}</h2>
+                            <h2 class="price-text-large mb-0 line-height-1" style="color:var(--primary-color)">{{ format_currency($cartSubtotal) }}</h2>
                         </div>
 
                         <a href="{{ route('checkout.index') }}" class="btn btn-primary w-100 py-3">

@@ -32,7 +32,7 @@
             <div class="col-lg-7 booking-layout__main">
                 <div class="bg-white border rounded-4 p-4 p-md-5 mb-4">
                     <h4 class="fw-800 tracking-tight mb-4 text-dark">
-                        <i class="bi bi-truck text-primary me-2"></i>{{ __('Shipping Details') }}
+                        <i class="bi bi-truck me-2" style="color:var(--primary-color)"></i>{{ __('Shipping Details') }}
                     </h4>
 
                     <div class="row g-3 g-md-4">
@@ -111,10 +111,10 @@
 
                         <hr class="my-4 border-color-light">
 
-                        <div class="bg-white bg-opacity-50 p-4 rounded-4 text-center border border-primary-light backdrop-blur mb-4">
+                        <div class="p-4 rounded-4 text-center mb-4" style="background:rgba(248,246,243,.9);border:1.5px solid rgba(15,23,42,.08)">
                             <p class="filter-label mb-1">{{ __('Total Amount Due') }}</p>
-                            <h2 class="price-text-large mb-0 line-height-1 text-primary">{{ $totalFormatted }}</h2>
-                            <span class="badge bg-light-primary text-primary mt-3 rounded-2 px-3 py-2">
+                            <h2 class="price-text-large mb-0 line-height-1" style="color:var(--primary-color)">{{ $totalFormatted }}</h2>
+                            <span class="fw-semibold px-3 py-2 mt-3 d-inline-block rounded-2 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
                                 <i class="bi bi-shield-check me-1"></i>{{ __('Secure Stripe checkout') }}
                             </span>
                         </div>

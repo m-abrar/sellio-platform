@@ -20,37 +20,37 @@
 
             <div class="card bg-white border overflow-hidden">
                 {{-- Job Summary Strip --}}
-                <div class="p-4 bg-primary-light border-bottom d-flex align-items-center justify-content-between">
+                <div class="p-4 border-bottom d-flex align-items-center justify-content-between" style="background:var(--primary-color)">
                     <div>
-                        <span class="smaller text-uppercase fw-bold text-primary tracking-wider">Position Applied</span>
-                        <h4 class="fw-bold text-dark mb-0">{{ $job->title }}</h4>
+                        <span class="small fw-semibold d-block mb-1" style="color:rgba(255,255,255,.7)">{{ __('Position Applied') }}</span>
+                        <h4 class="fw-800 mb-0 text-white">{{ $job->title }}</h4>
                     </div>
-                    <span class="badge bg-white text-primary shadow-sm px-3 py-2 rounded-2">
-                        ID: #{{ $application->id }}
+                    <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:rgba(255,255,255,.2);color:#fff">
+                        #{{ $application->id }}
                     </span>
                 </div>
 
                 <div class="card-body p-4 p-lg-5">
                     @if (session('success'))
-                        <div class="alert alert-success border-0 bg-success bg-opacity-10 text-success rounded-4 mb-4">
-                            <i class="bi bi-balloon-heart-fill me-2"></i> {{ session('success') }}
+                        <div class="p-3 rounded-3 mb-4 d-flex align-items-center" style="background:rgba(var(--primary-color-rgb),.06);border:1.5px solid rgba(var(--primary-color-rgb),.15)">
+                            <i class="bi bi-balloon-heart-fill me-2" style="color:var(--primary-color)"></i> {{ session('success') }}
                         </div>
                     @endif
 
                     <div class="row g-4 mb-5">
                         <div class="col-sm-6">
-                            <label class="smaller text-muted fw-bold text-uppercase mb-1 d-block">Submission Date</label>
+                            <label class="smaller text-muted fw-semibold mb-1 d-block">{{ __('Submission Date') }}</label>
                             <p class="text-dark fw-semibold mb-0">
-                                <i class="bi bi-calendar3 me-2 text-primary"></i>
+                                <i class="bi bi-calendar3 me-2" style="color:var(--primary-color)"></i>
                                 {{ $application->created_at->format('M d, Y') }}
                             </p>
                             <small class="text-muted">{{ $application->created_at->format('h:i A') }}</small>
                         </div>
                         <div class="col-sm-6">
-                            <label class="smaller text-muted fw-bold text-uppercase mb-1 d-block">Status</label>
+                            <label class="smaller text-muted fw-semibold mb-1 d-block">{{ __('Status') }}</label>
                             <div class="d-flex align-items-center">
-                                <span class="badge bg-info-subtle text-info px-3 py-2 rounded-2 fw-semibold">
-                                    <span class="spinner-grow spinner-grow-sm me-2" role="status"></span>
+                                <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
+                                    <span class="spinner-grow spinner-grow-sm me-2" role="status" style="color:var(--primary-color)"></span>
                                     {{ Str::title($application->status) }}
                                 </span>
                             </div>
@@ -59,14 +59,14 @@
 
                     {{-- Cover Letter Preview --}}
                     <div class="mb-5">
-                        <h6 class="fw-bold text-dark mb-3">Cover Letter Snapshot</h6>
-                        <div class="p-4 rounded-4 bg-light border border-dashed text-muted smaller line-height-lg">
+                        <h6 class="fw-bold text-dark mb-3">{{ __('Cover Letter Snapshot') }}</h6>
+                        <div class="p-4 rounded-4 text-muted smaller line-height-lg" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07)">
                             "{{ Str::limit($application->cover_letter, 300) }}..."
                         </div>
                     </div>
 
                     {{-- Next Steps Roadmap --}}
-                    <div class="bg-light rounded-4 p-4 mb-5">
+                    <div class="p-4 mb-5 rounded-4" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07)">
                         <h6 class="fw-bold text-dark mb-3"><i class="bi bi-map me-2"></i> What happens next?</h6>
                         <div class="roadmap">
                             <div class="roadmap-item active">
@@ -89,7 +89,7 @@
 
                     {{-- Action Buttons --}}
                     <div class="d-flex flex-column flex-md-row gap-3 justify-content-center">
-                        <a href="{{ setting('url_user', '#') }}" class="btn btn-primary px-5 py-3">
+                        <a href="{{ setting('url_user', '#') }}" class="btn btn-primary btn-header-cta">
                             <i class="bi bi-grid-fill me-2"></i> Track in Dashboard
                         </a>
                         <a href="{{ route('jobs.index') }}" class="btn btn-outline-secondary px-5 py-3 fw-semibold">

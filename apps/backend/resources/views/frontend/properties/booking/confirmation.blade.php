@@ -38,7 +38,7 @@
                                     {{ __('View My Itinerary') }} <i class="bi bi-calendar3 ms-2"></i>
                                 </a>
                             @else
-                                <a href="{{ route('property.booking.payment', ['property' => $property->slug, 'booking' => $booking->id]) }}" class="btn btn-lg btn-warning py-3">
+                                <a href="{{ route('property.booking.payment', ['property' => $property->slug, 'booking' => $booking->id]) }}" class="btn btn-lg btn-primary btn-header-cta py-3">
                                     {{ __('Complete Payment') }} &mdash; {{ format_currency($booking->total_price) }} <i class="bi bi-credit-card ms-2"></i>
                                 </a>
                             @endif
@@ -77,15 +77,15 @@
                             <div class="receipt-total pt-4 border-top border-2 border-color-light">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="fw-800 text-muted uppercase small tracking-wider">{{ $isPaid ? __('Total Paid') : __('Total Due') }}</span>
-                                    <h2 class="fw-800 {{ $statusColorClass }} mb-0">{{ format_currency($booking->total_price) }}</h2>
+                                    <h2 class="fw-800 mb-0" style="color:var(--primary-color)">{{ format_currency($booking->total_price) }}</h2>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mt-5 p-4 rounded-4 bg-primary-light border border-primary-light">
+                        <div class="mt-5 p-4 rounded-4" style="background:rgba(var(--primary-color-rgb),.05);border:1.5px solid rgba(var(--primary-color-rgb),.12)">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="booking-help-avatar host-avatar bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm">
-                                    <i class="bi bi-person-fill text-primary fs-4"></i>
+                                    <i class="bi bi-person-fill fs-4" style="color:var(--primary-color)"></i>
                                 </div>
                                 <div class="text-start">
                                     <h6 class="fw-800 mb-0 text-dark">{{ __('Need help?') }}</h6>

@@ -40,7 +40,7 @@
     <div class="text-center">
         <span class="metric-label mx-auto">{{ __('Commerce') }}</span>
         <h1 class="fw-800 mb-2 tracking-tight text-dark display-6">
-            {{ __('Secure Checkout') }}<span class="text-primary">: {{ __('Step 2 of 3') }}</span>
+            {{ __('Secure Checkout') }}<span style="color:var(--primary-color)">: {{ __('Step 2 of 3') }}</span>
         </h1>
         <p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">
             {{ __('Review shipping details and complete payment to place your order.') }}

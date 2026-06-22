@@ -199,9 +199,9 @@
                     >
                     <label class="form-check-label" for="termsCheck">
                         {{ __('I authorize the charge of') }}
-                        <strong class="text-primary">{{ $totalFormatted }}</strong>
+                        <strong style="color:var(--primary-color)">{{ $totalFormatted }}</strong>
                         {{ __('and agree to the') }}
-                        <a href="#" class="text-primary">{{ __('House Rules') }}</a>.
+                        <a href="#" style="color:var(--primary-color)">{{ __('House Rules') }}</a>.
                     </label>
                 </div>
                 @error('termsCheck')
@@ -217,9 +217,9 @@
                 </button>
 
                 <ul class="booking-payment-trust list-unstyled mb-0">
-                    <li><i class="bi bi-shield-check text-success"></i> {{ __('256-bit SSL encryption') }}</li>
-                    <li><i class="bi bi-eye-slash text-primary"></i> {{ __('Card details are not stored') }}</li>
-                    <li><i class="bi bi-patch-check text-primary"></i> {{ __('Instant booking confirmation') }}</li>
+                    <li><i class="bi bi-shield-check" style="color:var(--primary-color)"></i> {{ __('256-bit SSL encryption') }}</li>
+                    <li><i class="bi bi-eye-slash" style="color:var(--primary-color)"></i> {{ __('Card details are not stored') }}</li>
+                    <li><i class="bi bi-patch-check" style="color:var(--primary-color)"></i> {{ __('Instant booking confirmation') }}</li>
                 </ul>
             </div>
         </div>

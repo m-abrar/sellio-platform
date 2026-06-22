@@ -42,7 +42,7 @@
                 {{-- Stay Details --}}
                 <div class="bg-white border rounded-4 p-4 p-md-5 mb-4 position-relative">
                     <h4 class="fw-800 tracking-tight mb-4 text-dark">
-                        <i class="bi bi-calendar-range text-primary me-2"></i>{{ __('Stay Details') }}
+                        <i class="bi bi-calendar-range me-2" style="color:var(--primary-color)"></i>{{ __('Stay Details') }}
                     </h4>
                     
                     <div class="row g-4 text-center text-md-start">
@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-md-4 border-start-md ps-md-4 border-color-light">
                             <label for="guests" class="metric-label">{{ __('Guests') }}</label>
-                            <select name="guests" id="guests" x-model="guestCount" class="form-select border-0 bg-light-primary text-primary fw-800 rounded-3 @error('guests') is-invalid @enderror" required>
+                            <select name="guests" id="guests" x-model="guestCount" class="form-select fw-800 rounded-3 @error('guests') is-invalid @enderror" style="background:rgba(var(--primary-color-rgb),.08);color:var(--primary-color);border:1.5px solid rgba(var(--primary-color-rgb),.2)" required>
                                 @for ($i = 1; $i <= $maxGuests; $i++)
                                     <option value="{{ $i }}">{{ $i }}</option>
                                 @endfor
@@ -78,9 +78,9 @@
                 <div class="bg-white border rounded-4 p-4 p-md-5 mb-4 booking-addons-panel">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h4 class="fw-800 tracking-tight text-dark mb-0">
-                            <i class="bi bi-stars text-primary me-2"></i>{{ __('Enhance Your Stay') }}
+                            <i class="bi bi-stars me-2" style="color:var(--primary-color)"></i>{{ __('Enhance Your Stay') }}
                         </h4>
-                        <span class="badge bg-light-primary text-primary rounded-2 px-3">{{ __('Optional') }}</span>
+                        <span class="fw-semibold px-3 py-1 rounded-2 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">{{ __('Optional') }}</span>
                     </div>
                     
                     <div class="row g-3">
@@ -98,30 +98,30 @@
 
                                     <div class="d-flex align-items-center p-3">
                                         <div class="addon-icon-box booking-addon-icon shadow-sm rounded-3 d-flex align-items-center justify-content-center bg-white">
-                                            <i class="bi {{ $addon->icon ?? 'bi-box' }} fs-4 text-primary"></i>
+                                            <i class="bi {{ $addon->icon ?? 'bi-box' }} fs-4" style="color:var(--primary-color)"></i>
                                         </div>
 
                                         <div class="flex-grow-1 ms-md-3 min-w-0">
                                             <div class="d-flex align-items-center gap-2 flex-wrap">
                                                 <h6 class="fw-800 mb-0 text-dark">{{ $addon->title }}</h6>
                                                 @if($addon->is_popular)
-                                                    <span class="badge booking-addon-popular bg-light-primary text-primary">
-                                                        <i class="bi bi-fire me-1"></i>{{ __('POPULAR') }}
+                                                    <span class="badge booking-addon-popular fw-semibold" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
+                                                        <i class="bi bi-fire me-1"></i>{{ __('Popular') }}
                                                     </span>
                                                 @endif
                                             </div>
                                             <p class="small text-muted mb-0 addon-card__meta">{{ $addon->description }}</p>
-                                            <div class="fw-800 text-primary small">
+                                            <div class="fw-800 small" style="color:var(--primary-color)">
                                                 {{ format_currency($addon->price) }}
                                                 <span class="text-muted fw-normal">/ {{ $addon->type === 'per_night' ? __('night') : __('stay') }}</span>
                                             </div>
                                         </div>
 
-                                        <div class="d-flex align-items-center bg-light-primary rounded-2 p-1 addon-card__qty" @click.stop>
+                                        <div class="d-flex align-items-center rounded-2 p-1 addon-card__qty" style="background:rgba(var(--primary-color-rgb),.08)" @click.stop>
                                             <button type="button" class="btn btn-icon-sm rounded-circle bg-white shadow-sm border-0" @click="decrement({{ $addon->id }})">
                                                 <i class="bi bi-dash"></i>
                                             </button>
-                                            <span class="booking-addon-qty-value px-2 fw-800 text-primary" x-text="selectedAddons[{{ $addon->id }}]"></span>
+                                            <span class="booking-addon-qty-value px-2 fw-800" style="color:var(--primary-color)" x-text="selectedAddons[{{ $addon->id }}]"></span>
                                             <button type="button" class="btn btn-icon-sm rounded-circle bg-white shadow-sm border-0" @click="increment({{ $addon->id }}, {{ $addon->max_qty }})">
                                                 <i class="bi bi-plus"></i>
                                             </button>
@@ -139,7 +139,7 @@
                 {{-- Contact Info Section --}}
                 <div class="bg-white border rounded-4 p-4 p-md-5 mb-4">
                     <h4 class="fw-800 tracking-tight mb-4 text-dark">
-                        <i class="bi bi-person-circle text-primary me-2"></i>{{ __('Guest Details') }}
+                        <i class="bi bi-person-circle me-2" style="color:var(--primary-color)"></i>{{ __('Guest Details') }}
                     </h4>
                     
                     <div class="row g-3">
@@ -191,7 +191,7 @@
                             <div class="overflow-hidden">
                                 <span class="metric-label">{{ __('Reserved Property') }}</span>
                                 <h6 class="fw-800 mb-0 text-truncate text-dark">{{ $property->title }}</h6>
-                                <p class="small text-muted mb-0"><i class="bi bi-geo-alt-fill text-primary me-1"></i>{{ $property->location->title ?? 'Location' }}</p>
+                                <p class="small text-muted mb-0"><i class="bi bi-geo-alt-fill me-1" style="color:var(--primary-color)"></i>{{ $property->location->title ?? 'Location' }}</p>
                             </div>
                         </div>
 
@@ -206,20 +206,20 @@
                             <template x-for="addon in activeAddons" :key="addon.id">
                                 <div class="d-flex justify-content-between mb-2 animate__animated animate__fadeIn">
                                     <span class="text-muted small fw-600 d-flex align-items-center">
-                                        <i class="bi bi-plus-circle-fill me-2 text-primary booking-addon-line-icon"></i>
+                                        <i class="bi bi-plus-circle-fill me-2 booking-addon-line-icon" style="color:var(--primary-color)"></i>
                                         <span x-text="addon.title"></span> (x<span x-text="addon.qty"></span>)
                                     </span>
-                                    <span class="fw-800 text-primary small" x-text="formatCurrency(addon.totalPrice)"></span>
+                                    <span class="fw-800 small" style="color:var(--primary-color)" x-text="formatCurrency(addon.totalPrice)"></span>
                                 </div>
                             </template>
                         </div>
 
                         <hr class="my-4 border-color-light">
 
-                        <div class="bg-white bg-opacity-50 p-4 rounded-4 text-center border border-primary-light backdrop-blur mb-4">
+                        <div class="p-4 rounded-4 text-center mb-4" style="background:rgba(248,246,243,.9);border:1.5px solid rgba(15,23,42,.08)">
                             <p class="filter-label mb-1">{{ __('Review Total') }}</p>
-                            <h2 class="price-text-large mb-0 line-height-1 text-primary" x-text="formatCurrency(finalTotal)"></h2>
-                            <span class="badge bg-light-primary text-primary mt-3 rounded-2 px-3 py-2">
+                            <h2 class="price-text-large mb-0 line-height-1" style="color:var(--primary-color)" x-text="formatCurrency(finalTotal)"></h2>
+                            <span class="fw-semibold px-3 py-2 mt-3 d-inline-block rounded-2 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
                                 <i class="bi bi-shield-check me-1"></i> {{ __('No charge until payment step') }}
                             </span>
                         </div>

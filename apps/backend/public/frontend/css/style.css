@@ -1421,8 +1421,11 @@ footer{
     box-shadow:0 0 0 4px var(--primary-light)
 }
 .step.done .step-icon{
-    background-color:#198754;
+    background-color:var(--primary-color);
     color:#fff
+}
+.stepper-label-done,.stepper-label-active{
+    color:var(--primary-color)
 }
 .price-text-large{
     font-size:2.5rem;

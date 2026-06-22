@@ -21,7 +21,7 @@
                 <p class="text-muted mb-4">{{ __('We are preparing your order. You will receive updates as it moves along.') }}</p>
 
                 <div class="d-flex flex-wrap justify-content-center gap-3">
-                    <a href="{{ route('products.index') }}" class="btn btn-primary px-4">
+                    <a href="{{ route('products.index') }}" class="btn btn-primary btn-header-cta">
                         {{ __('Continue Shopping') }}
                     </a>
                     <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary px-4">

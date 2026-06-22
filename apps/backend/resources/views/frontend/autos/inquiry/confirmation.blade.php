@@ -64,7 +64,7 @@
                         </div>
 
                         @if ($auto->user)
-                            <div class="mt-5 p-4 rounded-4 bg-primary-light border border-primary-light">
+                            <div class="mt-5 p-4 rounded-4" style="background:rgba(var(--primary-color-rgb),.05);border:1.5px solid rgba(var(--primary-color-rgb),.12)">
                                 <div class="d-flex align-items-center gap-3">
                                     <img src="{{ $auto->user->avatar_url }}"
                                          class="rounded-circle shadow-sm border border-white object-fit-cover" width="45" height="45" alt="">

@@ -17,14 +17,15 @@
             ])
 
             <h1 class="mb-4">
-                <i class="bi bi-ticket-detailed me-2 text-primary"></i>
+                <i class="bi bi-ticket-detailed me-2" style="color:var(--primary-color)"></i>
                 {{ __('Select Your Tickets') }}
             </h1>
             
             <p class="lead text-muted">{{ $event->subtitle ?? __('Choose your preferred ticket type and event date.') }}</p>
 
             @if ($event->occurrences->isEmpty() || $ticketTypes->isEmpty())
-                <div class="alert alert-warning text-center mt-5">
+                <div class="p-4 rounded-3 text-center mt-5" style="background:rgba(var(--primary-color-rgb),.06);border:1.5px solid rgba(var(--primary-color-rgb),.15);border-left:4px solid var(--primary-color)">
+                    <i class="bi bi-info-circle me-2" style="color:var(--primary-color)"></i>
                     {{ __('No tickets or upcoming dates are currently available for this event.') }}
                 </div>
             @else
@@ -34,9 +35,9 @@
                     
                     {{-- 1. Occurrence Selection (If multiple dates exist) --}}
                     @if ($event->occurrences->count() > 1)
-                        <div class="card p-4 shadow-sm mb-4">
-                            <h3 class="card-title mb-3 border-bottom pb-2">
-                                <i class="bi bi-calendar me-2"></i> {{ __('Select Date') }}
+                        <div class="p-4 mb-4 rounded-4" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07)">
+                            <h3 class="fw-800 text-dark mb-3 pb-3 border-bottom">
+                                <i class="bi bi-calendar me-2" style="color:var(--primary-color)"></i> {{ __('Select Date') }}
                             </h3>
                             <select name="occurrence_id" class="form-select form-select-lg" required>
                                 <option value="" disabled selected>{{ __('Choose an event date...') }}</option>
@@ -56,9 +57,9 @@
                     @endif
 
                     {{-- 2. Ticket Type Selection --}}
-                    <div class="card p-4 shadow-sm mb-4">
-                        <h3 class="card-title mb-3 border-bottom pb-2">
-                            <i class="bi bi-cash me-2"></i> {{ __('Choose Ticket Type') }}
+                    <div class="p-4 mb-4 rounded-4" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07)">
+                        <h3 class="fw-800 text-dark mb-3 pb-3 border-bottom">
+                            <i class="bi bi-cash me-2" style="color:var(--primary-color)"></i> {{ __('Choose Ticket Type') }}
                         </h3>
                         
                         @foreach ($ticketTypes as $ticketType)
@@ -68,16 +69,16 @@
                                     <h5 class="mb-1 fw-bold">{{ $ticketType->title }}</h5>
                                     <p class="small text-muted mb-0">{{ $ticketType->description }}</p>
                                     @if ($ticketType->is_free)
-                                        <span class="badge bg-success-theme">{{ __('FREE') }}</span>
+                                        <span class="fw-semibold px-2 py-1 rounded-2 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">{{ __('FREE') }}</span>
                                     @elseif ($ticketType->sale_ends_at && $ticketType->sale_ends_at->isFuture())
-                                        <span class="badge bg-warning-theme">{{ __('Sale Ends') }} {{ $ticketType->sale_ends_at->diffForHumans() }}</span>
+                                        <span class="fw-semibold px-2 py-1 rounded-2 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">{{ __('Sale Ends') }} {{ $ticketType->sale_ends_at->diffForHumans() }}</span>
                                     @endif
                                 </div>
-                                
+
                                 {{-- Price & Quantity (Right) --}}
                                 <div class="col-md-5 d-flex align-items-center justify-content-end">
                                     <div class="me-3 text-end">
-                                        <div class="fs-5 fw-bold text-success-theme">
+                                        <div class="fs-5 fw-bold" style="color:var(--primary-color)">
                                             @if ($ticketType->is_free)
                                                 {{ __('Free') }}
                                             @else
@@ -108,7 +109,7 @@
 
                     {{-- 3. Proceed Button --}}
                     <div class="text-end">
-                        <button type="submit" id="proceed-to-checkout" class="btn btn-primary btn-lg px-5" disabled>
+                        <button type="submit" id="proceed-to-checkout" class="btn btn-primary btn-header-cta" disabled>
                             {{ __('Proceed to Checkout') }}
                             <i class="bi bi-arrow-right-short ms-2"></i>
                         </button>

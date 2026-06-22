@@ -25,7 +25,7 @@
         'cardholderFieldName' => 'cardholder_name',
         'submitLabel' => __('Complete Order & Pay'),
         'showTerms' => true,
-        'termsLabel' => __('I authorize the charge of') . ' <strong class="text-primary">' . e($totalFormatted) . '</strong> ' . __('and agree to the') . ' <a href="#" class="text-primary">' . __('Terms & Conditions') . '</a> ' . __('and') . ' <a href="#" class="text-primary">' . __('Refund Policy') . '</a>.',
+        'termsLabel' => __('I authorize the charge of') . ' <strong style="color:var(--primary-color)">' . e($totalFormatted) . '</strong> ' . __('and agree to the') . ' <a href="#" style="color:var(--primary-color)">' . __('Terms & Conditions') . '</a> ' . __('and') . ' <a href="#" style="color:var(--primary-color)">' . __('Refund Policy') . '</a>.',
         'demoMessage' => filled($stripePublishableKey)
             ? __('Stripe secure card entry is enabled for this ticket checkout.')
             : null,

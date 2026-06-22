@@ -1,7 +1,7 @@
 @php
     $step = $step ?? 1;
     $confirmIcon = $confirmIcon ?? 'bi-bag-check-fill';
-    $confirmLabelClass = $confirmLabelClass ?? 'text-primary';
+    $confirmLabelClass = $confirmLabelClass ?? 'stepper-label-active';
 
     $steps = [
         1 => __('Cart'),
@@ -17,8 +17,8 @@
             $isActive = $step === $number;
             $stateClass = $isDone ? 'done' : ($isActive ? 'active' : '');
             $labelClass = $isDone
-                ? 'fw-bold text-success'
-                : ($isActive && $number === 3 ? 'fw-800 ' . $confirmLabelClass : ($isActive ? 'fw-800 text-primary' : 'fw-bold text-muted'));
+                ? 'fw-bold stepper-label-done'
+                : ($isActive && $number === 3 ? 'fw-800 ' . $confirmLabelClass : ($isActive ? 'fw-800 stepper-label-active' : 'fw-bold text-muted'));
         @endphp
 
         <li class="step {{ $stateClass }}" @if($isActive) aria-current="step" @endif>
@@ -31,7 +31,7 @@
                     {{ $number }}
                 @endif
             </div>
-            <div class="step-label {{ $labelClass }} uppercase tracking-wider small">{{ $label }}</div>
+            <div class="step-label {{ $labelClass }} tracking-wider small">{{ $label }}</div>
         </li>
     @endforeach
 </ol>

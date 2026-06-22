@@ -56,15 +56,15 @@
                             </div>
                         </div>
 
-                        <div class="bg-white bg-opacity-50 p-4 rounded-4 text-center border border-primary-light backdrop-blur mb-4">
+                        <div class="p-4 rounded-4 text-center mb-4" style="background:rgba(248,246,243,.9);border:1.5px solid rgba(15,23,42,.08)">
                             <p class="filter-label mb-1">{{ __('Amount Paid') }}</p>
-                            <h2 class="price-text-large mb-0 line-height-1 text-primary">
+                            <h2 class="price-text-large mb-0 line-height-1" style="color:var(--primary-color)">
                                 {{ format_currency($booking->paid_amount ?? $booking->total_price) }}
                             </h2>
                         </div>
 
                         @if(filled($booking->transaction_id) || filled($booking->payment_method))
-                            <div class="p-3 bg-light rounded-4 border border-dashed border-secondary border-opacity-25 small text-muted">
+                            <div class="p-3 rounded-4 small text-muted" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07)">
                                 <div class="row g-2">
                                     @if(filled($booking->transaction_id))
                                         <div class="col-12 col-md-6">

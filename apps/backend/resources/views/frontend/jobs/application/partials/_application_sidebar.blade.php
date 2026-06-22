@@ -9,96 +9,97 @@
         $companyName = $job->employer->name ?? 'Company';
     @endphp
 
-    <div class="card bg-white border p-4 mb-3 text-center">
-        <h5 class="fw-bold mb-3"><i class="bi bi-building-fill me-2 text-primary"></i>{{ __('Company Snapshot') }}</h5>
-        <p class="h2 fw-bolder text-warning mb-1">{{ $averageRating }}<span class="small fw-normal text-muted"> / 5.0</span></p>
-        <div class="text-warning mb-2">
-            {{-- Simple star generation based on $averageRating --}}
-            @for ($i = 1; $i <= 5; $i++)
-                @if ($averageRating >= $i)
-                    <i class="bi bi-star-fill"></i>
-                @elseif ($averageRating >= $i - 0.5)
-                    <i class="bi bi-star-half"></i>
-                @else
-                    <i class="bi bi-star"></i>
-                @endif
-            @endfor
+    <div class="detail-sidebar-card mb-3 overflow-hidden">
+        <div class="card-header border-0 p-4" style="background:var(--primary-color)">
+            <h5 class="fw-800 mb-0 text-white"><i class="bi bi-building-fill me-2"></i>{{ __('Company Snapshot') }}</h5>
         </div>
-        <p class="small text-muted mb-0">{{ __('Based on :count employee reviews', ['count' => number_format($reviewCount)]) }}</p>
-        <a href="{{ route('partner.profile', $job->employer) }}" class="small text-primary text-decoration-none mt-2 fw-semibold">{{ __('View Company Profile') }}</a>
+        <div class="p-4 text-center">
+            <p class="h2 fw-bolder mb-1" style="color:var(--primary-color)">{{ $averageRating }}<span class="small fw-normal text-muted"> / 5.0</span></p>
+            <div class="mb-2" style="color:var(--primary-color)">
+                @for ($i = 1; $i <= 5; $i++)
+                    @if ($averageRating >= $i)
+                        <i class="bi bi-star-fill"></i>
+                    @elseif ($averageRating >= $i - 0.5)
+                        <i class="bi bi-star-half"></i>
+                    @else
+                        <i class="bi bi-star"></i>
+                    @endif
+                @endfor
+            </div>
+            <p class="small text-muted mb-3">{{ __('Based on :count employee reviews', ['count' => number_format($reviewCount)]) }}</p>
+            <a href="{{ route('partner.profile', $job->employer) }}" class="small fw-semibold text-decoration-none" style="color:var(--primary-color)">{{ __('View Company Profile →') }}</a>
+        </div>
     </div>
 
     {{-- Apply Card (Primary Action) --}}
-    <div class="card bg-white border p-4 mb-3">
-        <h4 class="fw-bold mb-3">{{ __('Ready to Apply?') }}</h4>
+    <div class="detail-sidebar-card p-4 mb-3">
+        <h4 class="fw-800 mb-3 text-dark">{{ __('Ready to Apply?') }}</h4>
 
         {{-- Deadline --}}
         <div class="mb-4 text-center">
-            <p class="mb-1 fw-semibold">{{ __('Application Deadline:') }}</p>
+            <p class="mb-2 fw-semibold small text-muted text-uppercase" style="letter-spacing:.04em">{{ __('Application Deadline') }}</p>
             @php
                 $deadline = $job->application_deadline;
                 $isExpired = $deadline->isPast();
-                $badgeClass = $isExpired ? 'bg-secondary' : 'bg-danger';
             @endphp
-
-            <span class="badge text-white fw-bold p-2 fs-6 {{ $badgeClass }}">
-                {{ $isExpired ? __('EXPIRED') : $deadline->format('F d, Y') }}
+            <span class="fw-semibold px-3 py-2 rounded-2 small" style="{{ $isExpired ? 'background:rgba(15,23,42,.07);color:#64748b' : 'background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)' }}">
+                {{ $isExpired ? __('Expired') : $deadline->format('F d, Y') }}
             </span>
             @if (!$isExpired)
-                <p class="small text-muted mt-1 mb-0">{{ __('Time remaining:') }} {{ $deadline->diffForHumans(null, true) }}</p>
+                <p class="small text-muted mt-2 mb-0">{{ $deadline->diffForHumans(null, true) }} {{ __('remaining') }}</p>
             @endif
         </div>
 
         {{-- Application Buttons --}}
         <div class="d-grid mb-3">
-            <a href="{{ route('jobs.apply', $job->slug) }}" class="btn btn-lg fw-bold text-white btn-primary {{ $isExpired ? 'disabled' : '' }}">
-                <i class="bi bi-box-arrow-in-right me-2"></i>{{ __('Apply Now') }}
+            <a href="{{ route('jobs.apply', $job->slug) }}" class="btn btn-primary btn-header-cta {{ $isExpired ? 'disabled' : '' }}">
+                <i class="bi bi-box-arrow-in-right me-2"></i>{{ __('Apply Now') }}<i class="bi bi-arrow-right ms-2"></i>
             </a>
         </div>
         <div class="d-grid mb-4">
-            <button class="btn btn-lg btn-outline-secondary fw-bold" {{ $isExpired ? 'disabled' : '' }}><i class="bi bi-linkedin me-2"></i>{{ __('Apply with LinkedIn') }}</button>
+            <button class="btn btn-outline-secondary fw-semibold" {{ $isExpired ? 'disabled' : '' }}><i class="bi bi-linkedin me-2"></i>{{ __('Apply with LinkedIn') }}</button>
         </div>
 
-        <hr>
-        <div class="text-center small text-muted">
+        <hr class="border-color-light">
+        <div class="text-center small text-muted d-flex justify-content-center gap-3">
             <button
-                class="btn btn-link p-0 text-primary text-decoration-none fw-semibold"
+                class="btn btn-link p-0 fw-semibold text-decoration-none"
+                style="color:var(--primary-color)"
                 data-action="toggle-favorite"
                 data-job-id="{{ $job->id }}">
-                <i class="bi bi-heart me-1"></i>{{ __('Save This Job') }}
+                <i class="bi bi-heart me-1"></i>{{ __('Save') }}
             </button>
-            <span class="mx-1">|</span>
-            <a href="{{ route('partner.profile', $job->employer) }}" class="btn btn-link p-0 text-primary text-decoration-none fw-semibold">
-                <i class="bi bi-person-add me-1"></i>{{ __('Follow :name', ['name' => $companyName]) }}
+            <a href="{{ route('partner.profile', $job->employer) }}" class="btn btn-link p-0 fw-semibold text-decoration-none" style="color:var(--primary-color)">
+                <i class="bi bi-person-add me-1"></i>{{ __('Follow') }}
             </a>
         </div>
     </div>
 
-    {{-- Hiring Process Timeline (Generic) --}}
-    <div class="card bg-white border p-4 mb-3">
-        <h6 class="fw-bold mb-3"><i class="bi bi-fast-forward me-2 text-primary"></i>{{ __('Hiring Process') }}</h6>
-        <ul class="list-unstyled small process-timeline">
-            <li class="d-flex mb-2">
-                <i class="bi bi-1-circle-fill me-3 flex-shrink-0 text-primary fs-5"></i>
-                <div><strong>{{ __('Application Review') }}</strong> (1-2 Weeks)</div>
+    {{-- Hiring Process Timeline --}}
+    <div class="detail-sidebar-card p-4 mb-3">
+        <h6 class="fw-800 mb-3 text-dark"><i class="bi bi-fast-forward me-2" style="color:var(--primary-color)"></i>{{ __('Hiring Process') }}</h6>
+        <ul class="list-unstyled small mb-0">
+            <li class="d-flex align-items-center mb-3">
+                <i class="bi bi-1-circle-fill me-3 flex-shrink-0 fs-5" style="color:var(--primary-color)"></i>
+                <div><strong>{{ __('Application Review') }}</strong> <span class="text-muted">(1–2 weeks)</span></div>
             </li>
-            <li class="d-flex mb-2">
-                <i class="bi bi-2-circle-fill me-3 flex-shrink-0 text-primary fs-5"></i>
-                <div><strong>{{ __('Screening Call') }}</strong> (30 min)</div>
+            <li class="d-flex align-items-center mb-3">
+                <i class="bi bi-2-circle-fill me-3 flex-shrink-0 fs-5" style="color:var(--primary-color)"></i>
+                <div><strong>{{ __('Screening Call') }}</strong> <span class="text-muted">(30 min)</span></div>
             </li>
-            <li class="d-flex mb-2">
-                <i class="bi bi-3-circle-fill me-3 flex-shrink-0 text-primary fs-5"></i>
-                <div><strong>{{ __('Technical Interview') }}</strong> (1 hr)</div>
+            <li class="d-flex align-items-center mb-3">
+                <i class="bi bi-3-circle-fill me-3 flex-shrink-0 fs-5" style="color:var(--primary-color)"></i>
+                <div><strong>{{ __('Technical Interview') }}</strong> <span class="text-muted">(1 hr)</span></div>
             </li>
-            <li class="d-flex">
-                <i class="bi bi-4-circle-fill me-3 flex-shrink-0 text-primary fs-5"></i>
+            <li class="d-flex align-items-center">
+                <i class="bi bi-4-circle-fill me-3 flex-shrink-0 fs-5" style="color:var(--primary-color)"></i>
                 <div><strong>{{ __('Final Offer') }}</strong></div>
             </li>
         </ul>
     </div>
 
     {{-- Hiring Manager Contact --}}
-    <div class="card bg-white border p-3 text-center">
+    <div class="detail-sidebar-card p-3 text-center">
         <h6 class="fw-bold mb-2">{{ __('Questions? Contact HR:') }}</h6>
         <p class="small mb-1 text-muted">
             <i class="bi bi-envelope me-2"></i>

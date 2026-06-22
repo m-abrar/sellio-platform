@@ -85,7 +85,8 @@
             </div>
         @else
             <div class="col-12">
-                <div class="alert alert-warning mb-0">
+                <div class="p-3 rounded-3 small" style="background:rgba(var(--primary-color-rgb),.05);border:1.5px solid rgba(var(--primary-color-rgb),.15);border-left:4px solid var(--primary-color)">
+                    <i class="bi bi-exclamation-circle me-2" style="color:var(--primary-color)"></i>
                     {{ __('Stripe must be configured in admin payment settings before checkout can collect payment.') }}
                 </div>
             </div>
@@ -100,9 +101,9 @@
                             {!! $termsLabel !!}
                         @else
                             {{ __('I authorize the charge of') }}
-                            <strong class="text-primary">{{ $totalFormatted }}</strong>
+                            <strong style="color:var(--primary-color)">{{ $totalFormatted }}</strong>
                             {{ __('and agree to the') }}
-                            <a href="#" class="text-primary">{{ __('Terms & Conditions') }}</a>.
+                            <a href="#" style="color:var(--primary-color)">{{ __('Terms & Conditions') }}</a>.
                         @endif
                     </label>
                 </div>
@@ -117,9 +118,9 @@
             </button>
 
             <ul class="booking-payment-trust list-unstyled mb-0">
-                <li><i class="bi bi-shield-check text-success"></i> {{ __('256-bit SSL encryption') }}</li>
-                <li><i class="bi bi-eye-slash text-primary"></i> {{ __('Card details are not stored') }}</li>
-                <li><i class="bi bi-patch-check text-primary"></i> {{ __('Instant order confirmation') }}</li>
+                <li><i class="bi bi-shield-check" style="color:var(--primary-color)"></i> {{ __('256-bit SSL encryption') }}</li>
+                <li><i class="bi bi-eye-slash" style="color:var(--primary-color)"></i> {{ __('Card details are not stored') }}</li>
+                <li><i class="bi bi-patch-check" style="color:var(--primary-color)"></i> {{ __('Instant order confirmation') }}</li>
             </ul>
         </div>
     </div>
