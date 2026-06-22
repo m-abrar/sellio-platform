@@ -1,51 +1,51 @@
-﻿<p class="text-muted">{!! nl2br(e($classified->description)) !!}</p>
+<p class="text-muted lh-lg">{!! nl2br(e($classified->description)) !!}</p>
 
-<h4 class="fw-bold mt-5 mb-3">{{ __('Key Details') }}</h4>
-<ul class="list-group list-group-flush small mb-4">
-    {{-- Condition: Using the new model accessor and badge class --}}
-    <li class="list-group-item bg-transparent">
-        <span class="fw-semibold me-2">{{ __('Condition') }}:</span> 
-        <span class="badge {{ $classified->condition_badge_class }}">
-            {{ $classified->condition_label }}
-        </span>
-        <span class="text-muted ms-1">({{ $classified->item_condition }}/10)</span>
-    </li>
+<h4 class="fw-800 mt-5 mb-3 text-dark detail-section-title"><i class="bi bi-list-check me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Key Details') }}</h4>
+<div style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07);border-radius:14px;overflow:hidden" class="mb-4">
 
-    <li class="list-group-item bg-transparent">
-        <span class="fw-semibold me-2">{{ __('Category') }}:</span> 
-        {{ $classified->category->title ?? __('N/A') }}
-    </li>
+    <div class="d-flex justify-content-between align-items-center px-4 py-3 border-bottom" style="border-color:rgba(15,23,42,.06)!important">
+        <span class="fw-semibold small text-dark">{{ __('Condition') }}</span>
+        <div class="d-flex align-items-center gap-2">
+            <span class="fw-semibold small px-2 py-1 rounded-2" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
+                {{ $classified->condition_label }}
+            </span>
+            <span class="text-muted small">({{ $classified->item_condition }}/10)</span>
+        </div>
+    </div>
 
-    <li class="list-group-item bg-transparent">
-        <span class="fw-semibold me-2">{{ __('Brand') }}:</span> 
-        {{ $classified->brand->title ?? __('Not Specified') }}
-    </li>
+    <div class="d-flex justify-content-between align-items-center px-4 py-3 border-bottom" style="border-color:rgba(15,23,42,.06)!important">
+        <span class="fw-semibold small text-dark">{{ __('Category') }}</span>
+        <span class="small text-muted">{{ $classified->category->title ?? __('N/A') }}</span>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center px-4 py-3 border-bottom" style="border-color:rgba(15,23,42,.06)!important">
+        <span class="fw-semibold small text-dark">{{ __('Brand') }}</span>
+        <span class="small text-muted">{{ $classified->brand->title ?? __('Not Specified') }}</span>
+    </div>
 
     @if ($classified->item_year_age)
-        <li class="list-group-item bg-transparent">
-            <span class="fw-semibold me-2">{{ __('Year/Age') }}:</span> 
-            {{ trans_choice('{1} :count year old|[2,*] :count years old', $classified->item_year_age) }}
-        </li>
+    <div class="d-flex justify-content-between align-items-center px-4 py-3 border-bottom" style="border-color:rgba(15,23,42,.06)!important">
+        <span class="fw-semibold small text-dark">{{ __('Year/Age') }}</span>
+        <span class="small text-muted">{{ trans_choice('{1} :count year old|[2,*] :count years old', $classified->item_year_age) }}</span>
+    </div>
     @endif
 
     @if ($classified->item_quantity > 1)
-        <li class="list-group-item bg-transparent">
-            <span class="fw-semibold me-2">{{ __('Quantity') }}:</span> 
-            {{ $classified->item_quantity }} {{ __('available') }}
-        </li>
+    <div class="d-flex justify-content-between align-items-center px-4 py-3 border-bottom" style="border-color:rgba(15,23,42,.06)!important">
+        <span class="fw-semibold small text-dark">{{ __('Quantity') }}</span>
+        <span class="small text-muted">{{ $classified->item_quantity }} {{ __('available') }}</span>
+    </div>
     @endif
 
-    <li class="list-group-item bg-transparent">
-        <span class="fw-semibold me-2">{{ __('Shipping') }}:</span> 
-        {{ $classified->is_shipping ? __('Available (Inquire for details)') : __('Local Pickup Only') }}
-    </li>
-</ul>
+    <div class="d-flex justify-content-between align-items-center px-4 py-3">
+        <span class="fw-semibold small text-dark">{{ __('Shipping') }}</span>
+        <span class="small text-muted">{{ $classified->is_shipping ? __('Available (Inquire for details)') : __('Local Pickup Only') }}</span>
+    </div>
+</div>
 
-<hr>
-
-{{-- Safety Tip Alert --}}
-<div class="alert alert-info small mt-4" alert-primary-theme" role="alert">
-    <i class="bi bi-shield-lock-fill me-2 text-primary"></i>
-    <strong>{{ __('Safety Tip') }}:</strong> 
+{{-- Safety Tip --}}
+<div class="p-4 rounded-3 small mt-4" style="background:rgba(var(--primary-color-rgb),.05);border:1.5px solid rgba(var(--primary-color-rgb),.15);border-left:4px solid var(--primary-color)">
+    <i class="bi bi-shield-lock-fill me-2" style="color:var(--primary-color)"></i>
+    <strong>{{ __('Safety Tip') }}:</strong>
     {{ __('Always meet in a public location and inspect the item before finalizing the purchase.') }}
 </div>
