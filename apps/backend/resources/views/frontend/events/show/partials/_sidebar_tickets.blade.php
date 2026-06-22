@@ -4,11 +4,11 @@
          data-booking-route="{{ route('events.tickets.booking.store', ['event' => $event->slug, 'ticket' => '__TICKET_ID__']) }}"
          hidden></div>
 
-    <div class="detail-sidebar-card p-4 p-md-5 mb-4">
-        <span class="metric-label d-block mb-2">{{ __('Tickets') }}</span>
-        <h4 class="fw-800 text-dark mb-4">
-            <i class="bi bi-calendar-event me-2 text-primary"></i>{{ __('Select Date') }}
-        </h4>
+    <div class="detail-sidebar-card mb-4 overflow-hidden">
+        <div class="card-header border-0 p-4" style="background:var(--primary-color)">
+            <h4 class="fw-800 mb-0 text-white"><i class="bi bi-calendar-event me-2"></i>{{ __('Select Date') }}</h4>
+        </div>
+        <div class="p-4">
 
         @if ($allTicketData->isNotEmpty())
             <form id="occurrence-selection-form">
@@ -31,15 +31,18 @@
                 @endif
             </form>
         @else
-            <div class="alert alert-info mb-0">{{ __('There are no upcoming dates available for booking.') }}</div>
+            <div class="p-3 rounded-3 small fw-semibold" style="background:rgba(var(--primary-color-rgb),.08);color:var(--primary-color);border:1.5px solid rgba(var(--primary-color-rgb),.15)">
+                <i class="bi bi-info-circle me-2"></i>{{ __('There are no upcoming dates available for booking.') }}
+            </div>
         @endif
+        </div>
     </div>
 
-    <div class="detail-sidebar-card p-4 p-md-5">
-        <span class="metric-label d-block mb-2">{{ __('Checkout') }}</span>
-        <h4 class="fw-800 text-dark mb-4">
-            <i class="bi bi-ticket-fill me-2 text-primary"></i>{{ __('Get Your Tickets') }}
-        </h4>
+    <div class="detail-sidebar-card overflow-hidden">
+        <div class="card-header border-0 p-4" style="background:var(--primary-color)">
+            <h4 class="fw-800 mb-0 text-white"><i class="bi bi-ticket-fill me-2"></i>{{ __('Get Your Tickets') }}</h4>
+        </div>
+        <div class="p-4">
 
         <div id="countdown-wrapper" class="d-none mb-3">
             <div class="event-countdown-banner text-center p-3 rounded-4 small fw-bold">
@@ -55,10 +58,10 @@
             <h6 class="fw-800 mb-3">{{ __('Select Ticket Type and Quantity') }}</h6>
             <div id="ticket-rows-container" class="mb-4"></div>
 
-            <div class="product-purchase-quote bg-white bg-opacity-50 p-4 rounded-4 border border-primary-light mb-4">
+            <div class="p-4 rounded-4 mb-4" style="background:rgba(248,246,243,.9);border:1.5px solid rgba(15,23,42,.08)">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="fw-bold">{{ __('Total') }}</span>
-                    <span class="fw-800 fs-4 text-primary mb-0" id="total-price">{{ setting('currency_symbol', '$') }}0</span>
+                    <span class="fw-800 fs-4 mb-0" style="color:var(--primary-color)" id="total-price">{{ setting('currency_symbol', '$') }}0</span>
                 </div>
             </div>
 
@@ -67,8 +70,10 @@
             </button>
         </form>
 
-        <div id="no-selection-message" class="text-center py-4 px-3 rounded-4 border border-dashed text-muted">
+        <div id="no-selection-message" class="text-center py-4 px-3 rounded-3 text-muted small" style="background:rgba(248,246,243,.8);border:1.5px dashed rgba(15,23,42,.1)">
+            <i class="bi bi-arrow-up-circle me-1" style="color:var(--primary-color)"></i>
             {{ __('Select an event date above to view ticket options.') }}
+        </div>
         </div>
     </div>
 </div>

@@ -4,7 +4,7 @@
     <div class="px-4 px-lg-5 pb-5 pt-4">
         <div class="mb-4">
             @if($event->category)
-                <span class="badge bg-light-primary text-primary mb-2 px-3 py-2 rounded-2 fw-semibold">
+                <span class="fw-semibold mb-2 px-3 py-2 rounded-2 small d-inline-block" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
                     <i class="bi bi-tag-fill me-1"></i>{{ $event->category->title }}
                 </span>
             @endif
@@ -48,7 +48,7 @@
             <div class="col-md-4">
                 <div class="detail-metric-card h-100">
                     <i class="bi bi-ticket-perforated text-primary fs-4 d-block mb-2"></i>
-                    <span class="fw-800 d-block {{ $tickets_left < 10 ? 'text-danger' : 'text-dark' }}">
+                    <span class="fw-800 d-block" style="{{ $tickets_left < 10 ? 'color:var(--primary-color)' : 'color:var(--text-dark)' }}">
                         {{ $tickets_left > 0 ? $tickets_left . ' ' . __('Seats Left') : __('Sold Out!') }}
                     </span>
                     <span class="metric-label mb-0">{{ __('Availability') }}</span>
@@ -57,7 +57,7 @@
         </div>
 
         <section class="mb-5">
-            <h4 class="fw-800 mb-4 text-dark detail-section-title">{{ __('Event Overview') }}</h4>
+            <h4 class="fw-800 mb-4 text-dark detail-section-title"><i class="bi bi-body-text me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Event Overview') }}</h4>
             <div class="event-description text-muted lh-lg">
                 {!! nl2br(e($event->description)) !!}
             </div>
