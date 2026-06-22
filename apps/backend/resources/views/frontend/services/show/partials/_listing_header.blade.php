@@ -18,17 +18,17 @@
         </div>
 
         @if($service->is_featured)
-            <span class="badge bg-dark text-white px-3 py-2 rounded-2 fw-semibold small">
-                <i class="bi bi-star-fill text-warning me-1"></i> {{ __('Featured') }}
+            <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:rgba(15,23,42,.85);color:#fff">
+                <i class="bi bi-star-fill me-1" style="color:var(--primary-color)"></i> {{ __('Featured') }}
             </span>
         @endif
 
-        <span class="badge bg-light-primary text-primary px-3 py-2 rounded-2 fw-semibold small">
+        <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
             <i class="bi bi-award-fill me-1"></i> {{ __('Level') }}: {{ $expertiseMap[$service->expertise_level] ?? $service->expertise_level }}
         </span>
 
         @if($service->is_project_based)
-            <span class="badge bg-light text-primary px-3 py-2 rounded-2 fw-semibold small">
+            <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:rgba(var(--primary-color-rgb),.08);color:var(--primary-color)">
                 <i class="bi bi-briefcase-fill me-1"></i> {{ __('Project') }}
             </span>
         @endif
