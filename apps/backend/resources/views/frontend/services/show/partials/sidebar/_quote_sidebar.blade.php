@@ -2,66 +2,73 @@
 <div id="quote-form" class="quotable-sidebar">
 
     {{-- Quote Request Card --}}
-    <div class="card detail-sidebar-card p-4 mb-3">
-        <h4 class="fw-800 text-dark mb-1">{{ __('Get a custom quote') }}</h4>
-        <p class="text-muted small mb-4">{{ __('Provide details to receive a tailored proposal.') }}</p>
+    <div class="card detail-sidebar-card mb-3 overflow-hidden">
+        <div class="card-header border-0 p-4" style="background:var(--primary-color)">
+            <h4 class="fw-800 mb-1 text-white"><i class="bi bi-file-earmark-text-fill me-2"></i>{{ __('Get a custom quote') }}</h4>
+            <p class="mb-0 text-white opacity-75 small">{{ __('Provide details to receive a tailored proposal.') }}</p>
+        </div>
+        <div class="card-body p-4">
+            <h6 class="fw-800 mb-3 text-primary" style="font-size:.8rem;letter-spacing:.04em;text-transform:uppercase">
+                <i class="bi bi-sliders me-2"></i>{{ __('Project details') }}
+            </h6>
 
-        <form action="{{ route('services.quote.store', $service->slug) }}" method="POST">
-            @csrf
-            <input type="hidden" name="service_id" value="{{ $service->id }}">
+            <form action="{{ route('services.quote.store', $service->slug) }}" method="POST">
+                @csrf
+                <input type="hidden" name="service_id" value="{{ $service->id }}">
 
-            <div class="mb-3">
-                <label class="form-label small fw-semibold text-muted">{{ __('Project scale') }}</label>
-                <div class="input-group border rounded-3 overflow-hidden">
-                    <span class="input-group-text bg-white border-0"><i class="bi bi-layers text-primary"></i></span>
-                    <input type="number" name="scope_size" class="form-control border-0 ps-0"
-                           placeholder="{{ $service->is_project_based ? __('Estimated hours / units') : __('Number of personnel') }}"
-                           min="1" required>
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold text-muted">{{ __('Project scale') }}</label>
+                    <div class="input-group rounded-3 overflow-hidden" style="border:1.5px solid rgba(15,23,42,.12)">
+                        <span class="input-group-text bg-white border-0"><i class="bi bi-layers" style="color:var(--primary-color)"></i></span>
+                        <input type="number" name="scope_size" class="form-control border-0 ps-0 shadow-none"
+                               placeholder="{{ $service->is_project_based ? __('Estimated hours / units') : __('Number of personnel') }}"
+                               min="1" required>
+                    </div>
                 </div>
-            </div>
 
-            <div class="mb-3">
-                <label class="form-label small fw-semibold text-muted">{{ __('Target start date') }}</label>
-                <div class="input-group border rounded-3 overflow-hidden">
-                    <span class="input-group-text bg-white border-0"><i class="bi bi-calendar-event text-primary"></i></span>
-                    <input type="date" name="target_date" class="form-control border-0 ps-0"
-                           min="{{ now()->format('Y-m-d') }}" required>
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold text-muted">{{ __('Target start date') }}</label>
+                    <div class="input-group rounded-3 overflow-hidden" style="border:1.5px solid rgba(15,23,42,.12)">
+                        <span class="input-group-text bg-white border-0"><i class="bi bi-calendar-event" style="color:var(--primary-color)"></i></span>
+                        <input type="date" name="target_date" class="form-control border-0 ps-0 shadow-none"
+                               min="{{ now()->format('Y-m-d') }}" required>
+                    </div>
                 </div>
+
+                <div class="mb-4">
+                    <label class="form-label small fw-semibold text-muted">{{ __('Select package preference') }}</label>
+                    <select name="service_package_id" class="form-select shadow-none rounded-3" style="border:1.5px solid rgba(15,23,42,.12)" required>
+                        <option value="" selected disabled>{{ __('Choose a starting point…') }}</option>
+
+                        @if ($service->packages->isNotEmpty())
+                            @foreach ($service->packages as $package)
+                                <option value="{{ $package->id }}">
+                                    {{ $package->title }}
+                                    — {{ __('Starts at') }} ${{ number_format($package->price, 0) }}
+                                    ({{ $package->billing_period }})
+                                </option>
+                            @endforeach
+                            <option value="custom">{{ __('Custom / not sure (request discussion)') }}</option>
+                        @else
+                            <option value="standard">{{ __('Standard service engagement') }}</option>
+                            <option value="urgent">{{ __('Urgent / priority project') }}</option>
+                            <option value="consultancy">{{ __('General consultancy') }}</option>
+                        @endif
+                    </select>
+                </div>
+
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-primary btn-header-cta">
+                        {{ __('Request proposal') }}<i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center">
+                <span class="small text-muted">
+                    <i class="bi bi-shield-check me-1" style="color:var(--primary-color)"></i> {{ __('Secure & direct request') }}
+                </span>
             </div>
-
-            <div class="mb-4">
-                <label class="form-label small fw-semibold text-muted">{{ __('Select package preference') }}</label>
-                <select name="service_package_id" class="form-select border rounded-3 shadow-none" required>
-                    <option value="" selected disabled>{{ __('Choose a starting point…') }}</option>
-
-                    @if ($service->packages->isNotEmpty())
-                        @foreach ($service->packages as $package)
-                            <option value="{{ $package->id }}">
-                                {{ $package->title }}
-                                — {{ __('Starts at') }} ${{ number_format($package->price, 0) }}
-                                ({{ $package->billing_period }})
-                            </option>
-                        @endforeach
-                        <option value="custom">{{ __('Custom / not sure (request discussion)') }}</option>
-                    @else
-                        <option value="standard">{{ __('Standard service engagement') }}</option>
-                        <option value="urgent">{{ __('Urgent / priority project') }}</option>
-                        <option value="consultancy">{{ __('General consultancy') }}</option>
-                    @endif
-                </select>
-            </div>
-
-            <div class="d-grid mb-3">
-                <button type="submit" class="btn btn-primary btn-header-cta">
-                    {{ __('Request proposal') }}<i class="bi bi-arrow-right ms-2"></i>
-                </button>
-            </div>
-        </form>
-
-        <div class="text-center">
-            <span class="badge bg-light text-muted fw-normal py-2 px-3 rounded-2">
-                <i class="bi bi-shield-check text-success me-1"></i> {{ __('Secure & direct request') }}
-            </span>
         </div>
     </div>
 

@@ -2,9 +2,9 @@
     {{-- Availability & Status Section --}}
     <div class="col-md-7">
         <h6 class="fw-bold text-dark text-uppercase small tracking-wider mb-3">
-            <i class="bi bi-clock-history me-2 text-primary"></i>{{ __('Availability') }}
+            <i class="bi bi-clock-history me-2" style="color:var(--primary-color)"></i>{{ __('Availability') }}
         </h6>
-        <div class="bg-white border rounded-4 p-3">
+        <div class="p-3 rounded-3" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07)">
             @if($service?->operating_hours && $service?->operating_days_label)
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <span class="small fw-semibold text-capitalize">{{ $service->operating_days_label }}</span>
@@ -18,15 +18,14 @@
 
             <div class="d-flex justify-content-between align-items-center border-top pt-2">
                 <span class="small fw-semibold">{{ __('Current Status') }}</span>
-                
-                {{-- Logic tied to the Model Accessor we just built --}}
+
                 @if($service?->is_open)
-                    <span class="badge bg-success-light text-success rounded-pill px-2 py-1 extra-small">
-                        <i class="bi bi-circle-fill me-1 tiny-dot"></i> {{ __('Open Now') }}
+                    <span class="fw-semibold small px-2 py-1 rounded-pill" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
+                        <i class="bi bi-circle-fill me-1" style="font-size:.4rem;vertical-align:middle"></i>{{ __('Open Now') }}
                     </span>
                 @else
-                    <span class="badge bg-secondary-light text-muted rounded-pill px-2 py-1 extra-small">
-                        <i class="bi bi-circle-fill me-1 tiny-dot"></i> {{ __('Currently Closed') }}
+                    <span class="fw-semibold small px-2 py-1 rounded-pill text-muted" style="background:rgba(15,23,42,.06)">
+                        <i class="bi bi-circle-fill me-1" style="font-size:.4rem;vertical-align:middle"></i>{{ __('Currently Closed') }}
                     </span>
                 @endif
             </div>
@@ -37,27 +36,25 @@
     <div class="col-md-5">
         <h6 class="fw-bold text-dark text-uppercase small tracking-wider mb-3">{{ __('Direct Contact') }}</h6>
         <div class="d-flex flex-column gap-2">
-            
-            {{-- Using User Relationship for Phone as requested --}}
+
             @if($service?->user?->phone)
                 <a href="tel:{{ $service->user->phone }}" class="text-decoration-none text-muted small hover-primary d-flex align-items-center transition-all">
                     <div class="icon-box-sm me-2">
-                        <i class="bi bi-telephone text-primary"></i>
+                        <i class="bi bi-telephone" style="color:var(--primary-color)"></i>
                     </div>
                     <span class="fw-500">{{ $service->user->phone }}</span>
                 </a>
             @endif
 
-            {{-- Service Specific Email --}}
             @if($service?->user?->email)
                 <a href="mailto:{{ $service?->user?->email }}" class="text-decoration-none text-muted small hover-primary d-flex align-items-center transition-all">
                     <div class="icon-box-sm me-2">
-                        <i class="bi bi-envelope text-primary"></i>
+                        <i class="bi bi-envelope" style="color:var(--primary-color)"></i>
                     </div>
                     <span class="fw-500">{{ __('Send Email') }}</span>
                 </a>
             @endif
-            
+
             @if(!$service?->user?->phone && !$service?->email)
                  <p class="small text-muted fst-italic mb-0">{{ __('No contact info available') }}</p>
             @endif

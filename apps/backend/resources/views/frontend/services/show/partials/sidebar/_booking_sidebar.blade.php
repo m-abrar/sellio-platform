@@ -2,9 +2,14 @@
 <div class="booking-sidebar">
 
     {{-- Booking Card (Primary Action) --}}
-    <div class="card detail-sidebar-card p-4 mb-3">
-        <h4 class="fw-800 mb-3">{{ __('Book your session') }}</h4>
-
+    <div class="card detail-sidebar-card mb-3 overflow-hidden">
+        <div class="card-header border-0 p-4" style="background:var(--primary-color)">
+            <h4 class="fw-800 mb-1 text-white"><i class="bi bi-calendar-check-fill me-2"></i>{{ __('Book your session') }}</h4>
+        </div>
+        <div class="card-body p-4">
+        <h6 class="fw-800 mb-3 text-primary" style="font-size:.8rem;letter-spacing:.04em;text-transform:uppercase">
+            <i class="bi bi-clock me-2"></i>{{ __('Booking details') }}
+        </h6>
         <form action="{{ route('services.appointment.store', $service->slug) }}" method="POST">
             @csrf
             <input type="hidden" name="service_id" value="{{ $service->id }}">
@@ -12,9 +17,9 @@
             {{-- Date Picker --}}
             <div class="mb-3">
                 <label class="form-label small fw-semibold text-muted">{{ __('Select date') }}</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-white"><i class="bi bi-calendar-event"></i></span>
-                    <input type="date" name="booking_date" class="form-control"
+                <div class="input-group rounded-3 overflow-hidden" style="border:1.5px solid rgba(15,23,42,.12)">
+                    <span class="input-group-text bg-white border-0"><i class="bi bi-calendar-event" style="color:var(--primary-color)"></i></span>
+                    <input type="date" name="booking_date" class="form-control border-0 shadow-none"
                            value="{{ old('booking_date', now()->addDay()->format('Y-m-d')) }}"
                            min="{{ now()->addDay()->format('Y-m-d') }}" required>
                 </div>
@@ -23,9 +28,9 @@
             {{-- Time Slot Selection --}}
             <div class="mb-3">
                 <label class="form-label small fw-semibold text-muted">{{ __('Available time') }}</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-white"><i class="bi bi-clock"></i></span>
-                    <select name="time_slot" class="form-select" required>
+                <div class="input-group rounded-3 overflow-hidden" style="border:1.5px solid rgba(15,23,42,.12)">
+                    <span class="input-group-text bg-white border-0"><i class="bi bi-clock" style="color:var(--primary-color)"></i></span>
+                    <select name="time_slot" class="form-select border-0 shadow-none" required>
                         <option value="" selected disabled>{{ __('Select time slot') }}</option>
                         @isset($availableSlots)
                             @foreach ($availableSlots as $slot)
@@ -45,7 +50,7 @@
             {{-- Service Package Selection --}}
             <div class="mb-4">
                 <label class="form-label small fw-semibold text-muted">{{ __('Select package') }}</label>
-                <select name="service_package_id" class="form-select py-2 @error('service_package_id') is-invalid @enderror" required>
+                <select name="service_package_id" class="form-select py-2 shadow-none rounded-3 @error('service_package_id') is-invalid @enderror" style="border:1.5px solid rgba(15,23,42,.12)" required>
                     <option value="" disabled {{ !request('package') && !old('service_package_id') ? 'selected' : '' }}>
                         {{ __('Choose a tier…') }}
                     </option>
@@ -87,12 +92,13 @@
         <div class="text-center small text-muted">
             {{ __('Need help?') }} <a href="{{ route('conversation.start', $service->user) }}" class="text-primary text-decoration-none fw-semibold">{{ __('Message provider') }}</a>
         </div>
+        </div>
     </div>
 
     {{-- Cancellation Policy Card --}}
-    <div class="card bg-danger bg-opacity-10 border-0 p-3 mb-3 rounded-3">
-        <h6 class="fw-semibold mb-2 text-danger small"><i class="bi bi-shield-exclamation me-2"></i>{{ __('Cancellation policy') }}</h6>
-        <p class="extra-small mb-0 text-danger opacity-75">
+    <div class="card detail-sidebar-card p-3 mb-3" style="border-left:3px solid var(--primary-color)">
+        <h6 class="fw-semibold mb-2 small" style="color:var(--primary-color)"><i class="bi bi-shield-exclamation me-2"></i>{{ __('Cancellation policy') }}</h6>
+        <p class="extra-small mb-0 text-muted">
             {{ $service->cancellation_policy ?? __('Full refund for cancellations made 48 hours prior to the session.') }}
         </p>
     </div>

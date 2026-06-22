@@ -45,7 +45,7 @@
                         
                         {{-- DETAILED DESCRIPTION --}}
                         <section id="overview" class="mb-5 pt-4 border-top border-color-light">
-                            <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('About this Service') }}</h4>
+                            <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-info-circle me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('About this Service') }}</h4>
                             <div class="listing-description">
                                 {!! nl2br(e($service->description)) !!}
                             </div>
@@ -54,17 +54,12 @@
                         {{-- POLYMORPHIC FEATURES --}}
                         @if($service->features->count() > 0)
                         <section id="features" class="mb-5 pt-4 border-top border-color-light">
-                            <h4 class="fw-800 text-dark mb-4">{{ __('Included Features') }}</h4>
-                            <div class="row g-3">
+                            <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-stars me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Included Features') }}</h4>
+                            <div class="amenities-grid">
                                 @foreach($service->features as $feature)
-                                    <div class="col-md-6">
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
-                                            <span class="text-muted">{{ $feature->title }}</span>
-                                            @if($feature->pivot->value)
-                                                <strong class="ms-1">: {{ $feature->pivot->value }}</strong>
-                                            @endif
-                                        </div>
+                                    <div class="amenity-chip">
+                                        <i class="bi bi-check2-circle amenity-chip__icon" aria-hidden="true"></i>
+                                        <span class="amenity-chip__label">{{ $feature->title }}@if($feature->pivot->value): {{ $feature->pivot->value }}@endif</span>
                                     </div>
                                 @endforeach
                             </div>
@@ -147,9 +142,10 @@
                 
                 {{-- 3. TRUST STACK (Fast Turnaround & Transparency) --}}
                 <div class="card detail-sidebar-card mt-4 overflow-hidden">
-                    <div class="p-4 bg-white">
+                    <div class="p-4">
                         <div class="d-flex align-items-start mb-3">
-                            <div class="icon-circle bg-primary-subtle text-primary me-3">
+                            <div class="me-3 d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
+                                 style="width:38px;height:38px;background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
                                 <i class="bi bi-clock-history"></i>
                             </div>
                             <div>
@@ -158,7 +154,8 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-start">
-                            <div class="icon-circle bg-primary-subtle text-primary me-3">
+                            <div class="me-3 d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
+                                 style="width:38px;height:38px;background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
                                 <i class="bi bi-file-earmark-pdf"></i>
                             </div>
                             <div>

@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <div class="text-end">
-                    <span class="fw-800 {{ $service->max_client_slots > 0 ? 'text-success' : 'text-muted' }} fs-6">
+                    <span class="fw-800 fs-6" style="{{ $service->max_client_slots > 0 ? 'color:var(--primary-color)' : 'color:#9ca3af' }}">
                         {{ $service->max_client_slots ?? __('Unlimited') }}
                     </span>
                 </div>
