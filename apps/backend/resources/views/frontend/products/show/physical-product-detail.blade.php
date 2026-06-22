@@ -99,14 +99,26 @@
         </div>
 
         @if($product->brand || $product->user)
+        @php $merchantName = $product->brand?->title ?? $product->user?->name; @endphp
             <div class="detail-sidebar-card p-4 mt-4">
-                <div class="d-flex align-items-center">
-                    <img src="{{ $product->brand?->logo_url ?? $product->user?->avatar_url }}" class="rounded-circle object-fit-cover me-3" width="50" height="50" alt="">
-                    <div>
-                        <h6 class="mb-0 fw-bold">{{ $product->brand?->title ?? $product->user?->name }}</h6>
-                        <span class="small text-muted">{{ __('Official Merchant') }}</span>
-                    </div>
+                <h4 class="fw-800 mb-3">{{ __('Sold by') }} {{ $merchantName }}</h4>
+                <div class="text-center mb-3 border-bottom pb-3" style="border-color:rgba(15,23,42,.07)!important">
+                    <img src="{{ $product->brand?->logo_url ?? $product->user?->avatar_url ?? 'https://ui-avatars.com/api/?name='.urlencode($merchantName).'&background=E05F2C&color=fff&size=80' }}"
+                         class="host-profile-avatar rounded-circle mb-2 shadow-sm"
+                         width="80" height="80" alt="{{ $merchantName }}">
+                    <h5 class="mb-0 fw-semibold text-dark">{{ $merchantName }}</h5>
+                    <span class="small fw-semibold mt-1 d-inline-block rounded-2 px-2 py-1" style="background:rgba(var(--primary-color-rgb),.08);color:var(--primary-color)">
+                        <i class="bi bi-patch-check-fill me-1"></i>{{ __('Official Merchant') }}
+                    </span>
                 </div>
+                @if($product->user)
+                <div class="d-grid">
+                    <a href="{{ route('partner.profile', $product->user) }}" class="btn btn-outline-secondary fw-semibold">
+                        <i class="bi bi-shop me-2"></i>{{ __('View store') }}
+                    </a>
+                </div>
+                <p class="text-center small text-muted mt-3 mb-0">{{ __('We protect your personal information.') }}</p>
+                @endif
             </div>
         @endif
 

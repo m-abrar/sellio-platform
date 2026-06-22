@@ -19,7 +19,7 @@
             <div class="gallery-section border-bottom border-color-light position-relative">
                 <div class="position-absolute top-0 start-0 m-3 z-2">
                     <span class="badge bg-white text-dark border px-3 py-2 rounded-2 fw-semibold small">
-                        <i class="bi bi-bookmark-fill text-primary me-1"></i>{{ $blog->category?->title ?? __('General') }}
+                        <i class="bi bi-bookmark-fill me-1" style="color:var(--primary-color)"></i>{{ $blog->category?->title ?? __('General') }}
                     </span>
                 </div>
 
@@ -58,7 +58,7 @@
                             <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-tags me-2"></i>{{ __('Tags') }}</h6>
                             <div class="d-flex flex-wrap gap-2">
                                 @foreach($blog->tags as $tag)
-                                    <a href="{{ route('blogs.index', ['tag' => $tag->slug]) }}" class="badge bg-light text-primary border text-decoration-none px-3 py-2 rounded-2">
+                                    <a href="{{ route('blogs.index', ['tag' => $tag->slug]) }}" class="badge text-decoration-none px-3 py-2 rounded-2 fw-semibold" style="background:rgba(var(--primary-color-rgb),.08);color:var(--primary-color);border:1.5px solid rgba(var(--primary-color-rgb),.15)">
                                         #{{ $tag->title }}
                                     </a>
                                 @endforeach
@@ -71,29 +71,42 @@
     </x-slot:main>
 
     <x-slot:sidebar>
-        <div class="card detail-sidebar-card p-4">
-            <h6 class="fw-800 text-dark mb-4">{{ __('About the Author') }}</h6>
-            <div class="text-center">
-                <img src="{{ $blog->user->getFirstMediaUrl('avatar') }}" class="rounded-circle mb-3 border p-1" width="100" height="100">
-                <h5 class="fw-bold mb-1">{{ $blog->user->name }}</h5>
-                <p class="small text-muted mb-3">{{ $blog->user->bio ?? __('Content Creator') }}</p>
-                <a href="#" class="btn btn-primary btn-sm rounded-2 w-100 fw-semibold">{{ __('View profile') }}</a>
+        {{-- Author Card --}}
+        <div class="card detail-sidebar-card p-4 mb-4">
+            <h4 class="fw-800 mb-3">{{ __('About the Author') }}</h4>
+            <div class="text-center mb-3 border-bottom pb-3" style="border-color:rgba(15,23,42,.07)!important">
+                <img src="{{ $blog->user->getFirstMediaUrl('avatar') ?: asset('images/default-avatar.png') }}"
+                     class="host-profile-avatar rounded-circle mb-2 shadow-sm"
+                     width="80" height="80" alt="{{ $blog->user->name }}">
+                <h5 class="mb-0 fw-semibold text-dark">{{ $blog->user->name }}</h5>
+                <p class="small text-muted mb-0 mt-1">{{ $blog->user->bio ?? __('Content Creator') }}</p>
+            </div>
+            <div class="d-grid">
+                <a href="{{ route('partner.profile', $blog->user) }}" class="btn btn-outline-secondary fw-semibold">
+                    <i class="bi bi-person-badge me-2"></i>{{ __('View profile') }}
+                </a>
             </div>
         </div>
 
-        <div class="card bg-primary text-white p-4 rounded-4 border-0 shadow-sm">
-            <h5 class="fw-bold mb-2">{{ __('Join our Newsletter') }}</h5>
-            <p class="small opacity-75 mb-3">{{ __('Get the latest stories sent to your inbox.') }}</p>
-            <form action="{{ route('newsletter.subscribe') }}" method="POST" class="mt-2">
-                @csrf
-                <input type="hidden" name="source" value="blog_sidebar">
-                <input type="email" name="email" class="form-control form-control-sm border-0 mb-2" placeholder="{{ __('Email Address') }}" required>
-                <button type="submit" class="btn btn-dark btn-sm w-100 rounded-2 fw-semibold">{{ __('Subscribe') }}</button>
-            </form>
+        {{-- Newsletter Card --}}
+        <div class="card detail-sidebar-card mb-4 overflow-hidden">
+            <div class="card-header border-0 p-4" style="background:var(--primary-color)">
+                <h4 class="fw-800 mb-1 text-white"><i class="bi bi-envelope-fill me-2"></i>{{ __('Join our Newsletter') }}</h4>
+                <p class="small mb-0" style="color:rgba(255,255,255,.7)">{{ __('Get the latest stories sent to your inbox.') }}</p>
+            </div>
+            <div class="card-body p-4">
+                <form action="{{ route('newsletter.subscribe') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="source" value="blog_sidebar">
+                    <input type="email" name="email" class="form-control mb-3" placeholder="{{ __('Email Address') }}" required>
+                    <button type="submit" class="btn btn-primary btn-header-cta w-100">{{ __('Subscribe') }}<i class="bi bi-arrow-right ms-2"></i></button>
+                </form>
+            </div>
         </div>
 
-        <div class="p-4 rounded-4 border border-primary bg-primary bg-opacity-10">
-            <h6 class="fw-bold text-dark"><i class="bi bi-share me-2"></i>{{ __('Share Article') }}</h6>
+        {{-- Share Card --}}
+        <div class="p-4 rounded-4" style="background:rgba(var(--primary-color-rgb),.05);border:1.5px solid rgba(var(--primary-color-rgb),.15)">
+            <h6 class="fw-bold text-dark"><i class="bi bi-share me-2" style="color:var(--primary-color)"></i>{{ __('Share Article') }}</h6>
             <div class="d-flex gap-2 mt-3">
                 <button class="btn btn-light btn-sm rounded-circle border shadow-sm"><i class="bi bi-facebook"></i></button>
                 <button class="btn btn-light btn-sm rounded-circle border shadow-sm"><i class="bi bi-twitter-x"></i></button>

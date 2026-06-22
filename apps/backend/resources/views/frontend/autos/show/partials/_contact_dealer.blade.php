@@ -9,25 +9,27 @@
 @endphp
 
 <div class="card detail-sidebar-card p-4 mt-4">
-    <h4 class="fw-800 mb-3">
-        <i class="bi bi-person-lines-fill me-2 text-primary"></i>{{ __('Connect with the dealer') }}
-    </h4>
+    <h4 class="fw-800 mb-3">{{ __('Meet the Dealer,') }} {{ $dealerName }}</h4>
 
-    <div class="text-center mb-4 border-bottom pb-3">
+    <div class="text-center mb-3 border-bottom pb-3" style="border-color:rgba(15,23,42,.07)!important">
         <img src="{{ $dealerLogo }}"
-             class="rounded-circle mb-2 border border-3 border-primary-theme shadow-sm"
-             style="width: 70px; height: 70px;"
-             alt="{{ __('Dealer: :name', ['name' => $dealerName]) }}">
+             class="host-profile-avatar rounded-circle mb-2 shadow-sm"
+             alt="{{ __('Dealer: :name', ['name' => $dealerName]) }}"
+             width="80" height="80">
 
-        <h5 class="mb-0 fw-semibold mt-2">{{ $dealerName }}</h5>
-        <p class="small text-muted mb-1">
-            <i class="bi bi-geo-alt-fill me-1 lc-geo-icon"></i>{{ $auto->city ?? __('Local') }} {{ __('Dealership') }}
+        <h5 class="mb-0 fw-semibold text-dark">{{ $dealerName }}</h5>
+        <p class="small text-muted mb-2">
+            <i class="bi bi-geo-alt-fill me-1" style="color:var(--primary-color)"></i>{{ $auto->city ?? __('Local') }} {{ __('Dealership') }}
         </p>
 
-        <span class="fw-semibold small" style="color:var(--primary-color)">
-            <i class="bi bi-star-fill"></i> {{ number_format($dealerRating, 1) }}
-            <span class="text-muted fw-normal">({{ trans_choice(':count review|:count reviews', $dealerReviewCount, ['count' => $dealerReviewCount]) }})</span>
-        </span>
+        @if($dealerReviewCount > 0)
+            <div class="d-flex justify-content-center gap-4 mt-1 small fw-semibold">
+                <span class="text-muted">
+                    <i class="bi bi-star-fill me-1" style="color:var(--primary-color)"></i>
+                    {{ number_format($dealerRating, 1) }} ({{ trans_choice(':count review|:count reviews', $dealerReviewCount, ['count' => $dealerReviewCount]) }})
+                </span>
+            </div>
+        @endif
     </div>
 
     <div class="d-grid gap-2">
@@ -46,8 +48,10 @@
         </a>
     </div>
 
-    <div class="text-center small text-muted mt-4">
+    <div class="text-center small text-muted mt-3">
         <p class="mb-0 fw-semibold text-dark">{{ __('Sales Hours') }}</p>
-        <p class="mb-0">{{ $dealer->hours ?? __('Mon-Sat: 9 AM – 6 PM') }}</p>
+        <p class="mb-1">{{ $dealer->hours ?? __('Mon-Sat: 9 AM – 6 PM') }}</p>
     </div>
+
+    <p class="text-center small text-muted mt-2 mb-0">{{ __('We protect your personal information.') }}</p>
 </div>

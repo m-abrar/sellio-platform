@@ -8,7 +8,7 @@
             <p class="mb-0 text-white opacity-75 small">{{ __('Provide details to receive a tailored proposal.') }}</p>
         </div>
         <div class="card-body p-4">
-            <h6 class="fw-800 mb-3 text-primary" style="font-size:.8rem;letter-spacing:.04em;text-transform:uppercase">
+            <h6 class="fw-800 mb-3" style="font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--primary-color)">
                 <i class="bi bi-sliders me-2"></i>{{ __('Project details') }}
             </h6>
 
@@ -73,10 +73,10 @@
     </div>
 
     {{-- Service Area Card --}}
-    <div class="card detail-sidebar-card p-3 mb-3 border-start border-primary border-4">
+    <div class="card detail-sidebar-card p-3 mb-3" style="border-left:4px solid var(--primary-color)">
         <div class="d-flex align-items-center">
-            <div class="icon-box-sm bg-primary-light text-primary me-3">
-                <i class="bi bi-geo-alt-fill"></i>
+            <div class="me-3 rounded-2 d-flex align-items-center justify-content-center" style="width:36px;height:36px;background:rgba(var(--primary-color-rgb),.1)">
+                <i class="bi bi-geo-alt-fill" style="color:var(--primary-color)"></i>
             </div>
             <div>
                 <h6 class="fw-semibold mb-0 text-dark">{{ __('Service area') }}</h6>
@@ -94,12 +94,12 @@
     <div class="card detail-sidebar-card p-3 mb-3">
         <h6 class="fw-semibold mb-3 text-dark small text-uppercase">{{ __('Direct support') }}</h6>
         <div class="d-flex flex-column gap-2">
-            <a href="tel:{{ $service->user->phone }}" class="text-decoration-none d-flex align-items-center text-muted hover-primary">
-                <i class="bi bi-telephone me-2 text-primary"></i>
+            <a href="tel:{{ $service->user->phone }}" class="text-decoration-none d-flex align-items-center text-muted">
+                <i class="bi bi-telephone me-2" style="color:var(--primary-color)"></i>
                 <span class="small fw-semibold">{{ $service->user->phone ?? __('Not available') }}</span>
             </a>
-            <a href="mailto:{{ $service->user->email }}" class="text-decoration-none d-flex align-items-center text-muted hover-primary">
-                <i class="bi bi-envelope me-2 text-primary"></i>
+            <a href="mailto:{{ $service->user->email }}" class="text-decoration-none d-flex align-items-center text-muted">
+                <i class="bi bi-envelope me-2" style="color:var(--primary-color)"></i>
                 <span class="small fw-semibold">{{ $service->user->email }}</span>
             </a>
         </div>

@@ -7,7 +7,7 @@
             <h4 class="fw-800 mb-1 text-white"><i class="bi bi-calendar-check-fill me-2"></i>{{ __('Book your session') }}</h4>
         </div>
         <div class="card-body p-4">
-        <h6 class="fw-800 mb-3 text-primary" style="font-size:.8rem;letter-spacing:.04em;text-transform:uppercase">
+        <h6 class="fw-800 mb-3" style="font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--primary-color)">
             <i class="bi bi-clock me-2"></i>{{ __('Booking details') }}
         </h6>
         <form action="{{ route('services.appointment.store', $service->slug) }}" method="POST">
@@ -90,7 +90,7 @@
         </form>
 
         <div class="text-center small text-muted">
-            {{ __('Need help?') }} <a href="{{ route('conversation.start', $service->user) }}" class="text-primary text-decoration-none fw-semibold">{{ __('Message provider') }}</a>
+            {{ __('Need help?') }} <a href="{{ route('conversation.start', $service->user) }}" class="text-decoration-none fw-semibold" style="color:var(--primary-color)">{{ __('Message provider') }}</a>
         </div>
         </div>
     </div>
@@ -112,7 +112,7 @@
                 <li class="mb-2 pb-2 border-bottom last-child-border-0">
                     <a href="{{ route('services.show', $related->slug) }}" class="text-decoration-none d-flex justify-content-between align-items-center">
                         <span class="small text-dark text-truncate me-2">{{ $related->title }}</span>
-                        <span class="fw-semibold text-primary small">${{ number_format($related->price, 0) }}</span>
+                        <span class="fw-semibold small" style="color:var(--primary-color)">${{ number_format($related->price, 0) }}</span>
                     </a>
                 </li>
             @endforeach
