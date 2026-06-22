@@ -10,7 +10,7 @@
                     <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
                         <h5 class="fw-800 text-dark mb-0">{{ $package->name }}</h5>
                         @if($package->is_popular)
-                            <span class="badge bg-primary text-white rounded-2 px-3 py-1 small fw-semibold">
+                            <span class="fw-semibold px-2 py-1 rounded-2 small" style="background:rgba(var(--primary-color-rgb),.12);color:var(--primary-color)">
                                 <i class="bi bi-fire me-1"></i> {{ __('Most Popular') }}
                             </span>
                         @endif

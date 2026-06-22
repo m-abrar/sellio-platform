@@ -96,8 +96,9 @@
                 @include('frontend.services.show.partials.sidebar._booking_sidebar', ['service' => $service])
                 
                 {{-- Trust / Verification Badge --}}
-                <div class="mt-4 p-3 rounded-4 bg-white border border-color-light d-flex align-items-center shadow-sm">
-                    <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle me-3 d-flex align-items-center justify-content-center icon-size-45">
+                <div class="card detail-sidebar-card mt-4 p-3 d-flex flex-row align-items-center gap-3" style="border-left:3px solid var(--primary-color)">
+                    <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
+                         style="width:42px;height:42px;background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
                         <i class="bi bi-shield-check fs-4"></i>
                     </div>
                     <div>

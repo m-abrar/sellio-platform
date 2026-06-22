@@ -15,7 +15,7 @@
             <div class="position-relative">
                 <img src="{{ $logoUrl }}" class="company-logo-header shadow-sm bg-white p-2 rounded-4 border border-white" 
                      alt="{{ $companyName }} {{ __('Logo') }}" style="width: 100px; height: 100px; object-fit: contain;">
-                <span class="position-absolute bottom-0 end-0 badge rounded-circle bg-success p-2 border border-3 border-white" title="{{ __('Verified Employer') }}">
+                <span class="position-absolute bottom-0 end-0 badge rounded-circle p-2 border border-3 border-white" style="background:var(--primary-color)" title="{{ __('Verified Employer') }}">
                     <i class="bi bi-check-lg text-white"></i>
                 </span>
             </div>
@@ -36,9 +36,9 @@
                         <i class="bi bi-briefcase-fill text-primary me-1"></i>
                         {{ $employmentMap[$job->employment_type] ?? __('Full-Time') }}
                     </div>
-                    <div class="stats-pill bg-success-light text-success fw-bold">
+                    <div class="stats-pill fw-bold" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
                         <i class="bi bi-cash-stack me-1"></i>
-                        {{ setting('currency_symbol', '$') }}{{ number_format($job->salary_min) }} - {{ setting('currency_symbol', '$') }}{{ number_format($job->salary_max) }} 
+                        {{ setting('currency_symbol', '$') }}{{ number_format($job->salary_min) }} - {{ setting('currency_symbol', '$') }}{{ number_format($job->salary_max) }}
                         <span class="smaller fw-normal">/ {{ __(Str::title($job->salary_frequency)) }}</span>
                     </div>
                 </div>
