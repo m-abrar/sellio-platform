@@ -17,6 +17,7 @@ import { useAuth } from '../../src/context/AuthContext';
 import {
   toAutoInquiryActivityCard,
   toBookingActivityCard,
+  toClassifiedInquiryActivityCard,
   toJobApplicationActivityCard,
   toOrderActivityCard,
   toServiceQuoteActivityCard,
@@ -25,6 +26,7 @@ import {
   BuyerActivityCard,
   BuyerAutoInquiryRecord,
   BuyerBookingsData,
+  BuyerClassifiedInquiriesData,
   BuyerDashboardData,
   BuyerJobApplicationRecord,
   BuyerOrderRecord,
@@ -42,6 +44,7 @@ function activityTypeLabel(item: BuyerActivityCard) {
     case 'job_application': return 'JOB APPLICATION';
     case 'vehicle_inquiry': return 'VEHICLE INQUIRY';
     case 'service_quote': return 'SERVICE QUOTE';
+    case 'classified_inquiry': return 'CLASSIFIED INQUIRY';
   }
 }
 
@@ -145,6 +148,7 @@ export default function ActivityView() {
       applicationsResult,
       autoInquiriesResult,
       serviceQuotesResult,
+      classifiedInquiriesResult,
     ] = await Promise.allSettled([
       apiRequest<BuyerDashboardData>('/dashboard/user/welcome', { authenticated: true }),
       apiRequest<BuyerBookingsData>('/dashboard/user/bookings', { authenticated: true }),
@@ -158,6 +162,10 @@ export default function ActivityView() {
       apiRequest<BuyerServiceQuoteRecord[]>('/dashboard/user/inquiries/service-quotes', {
         authenticated: true,
       }),
+      apiRequest<BuyerClassifiedInquiriesData>(
+        '/dashboard/user/inquiries/classified-inquiries',
+        { authenticated: true },
+      ),
     ]);
 
     if (dashboardResult.status === 'fulfilled') {
@@ -203,6 +211,14 @@ export default function ActivityView() {
       recent.push(...serviceQuotesResult.value.map(toServiceQuoteActivityCard));
     } else {
       warnings.push('service quotes');
+    }
+
+    if (classifiedInquiriesResult.status === 'fulfilled') {
+      const collection = classifiedInquiriesResult.value.inquiries;
+      const inquiries = Array.isArray(collection) ? collection : collection.data;
+      recent.push(...inquiries.map(toClassifiedInquiryActivityCard));
+    } else {
+      warnings.push('classified inquiries');
     }
 
     recent.sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime());

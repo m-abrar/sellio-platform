@@ -16,6 +16,7 @@ import { ErrorState, LoadingState } from '../../../src/components/states/AsyncSt
 import {
   toAutoInquiryActivityCard,
   toBookingActivityCard,
+  toClassifiedInquiryActivityCard,
   toJobApplicationActivityCard,
   toOrderActivityCard,
   toServiceQuoteActivityCard,
@@ -25,6 +26,8 @@ import {
   BuyerAutoInquiryRecord,
   BuyerBookingKind,
   BuyerBookingsData,
+  BuyerClassifiedInquiriesData,
+  BuyerClassifiedInquiryRecord,
   BuyerJobApplicationRecord,
   BuyerOrderRecord,
   BuyerServiceQuoteRecord,
@@ -50,6 +53,7 @@ function detailLabel(item: BuyerActivityCard) {
     case 'job_application': return 'JOB APPLICATION';
     case 'vehicle_inquiry': return 'VEHICLE INQUIRY';
     case 'service_quote': return 'SERVICE QUOTE';
+    case 'classified_inquiry': return 'CLASSIFIED INQUIRY';
   }
 }
 
@@ -82,6 +86,7 @@ export default function ActivityDetailView() {
   const [application, setApplication] = useState<BuyerJobApplicationRecord | null>(null);
   const [autoInquiry, setAutoInquiry] = useState<BuyerAutoInquiryRecord | null>(null);
   const [serviceQuote, setServiceQuote] = useState<BuyerServiceQuoteRecord | null>(null);
+  const [classifiedInquiry, setClassifiedInquiry] = useState<BuyerClassifiedInquiryRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
 
@@ -97,12 +102,14 @@ export default function ActivityDetailView() {
         && source !== 'application'
         && source !== 'auto_inquiry'
         && source !== 'service_quote'
+        && source !== 'classified_inquiry'
       )
     ) {
       setItem(null);
       setApplication(null);
       setAutoInquiry(null);
       setServiceQuote(null);
+      setClassifiedInquiry(null);
       setError(new Error('This activity link is incomplete. Return to Activity and open it again.'));
       setLoading(false);
       return;
@@ -113,6 +120,7 @@ export default function ActivityDetailView() {
     setApplication(null);
     setAutoInquiry(null);
     setServiceQuote(null);
+    setClassifiedInquiry(null);
 
     try {
       if (source === 'order') {
@@ -157,7 +165,7 @@ export default function ActivityDetailView() {
         if (!selectedInquiry) throw new Error('This vehicle inquiry could not be found.');
         setAutoInquiry(selectedInquiry);
         setItem(toAutoInquiryActivityCard(selectedInquiry));
-      } else {
+      } else if (source === 'service_quote') {
         const quotes = await apiRequest<BuyerServiceQuoteRecord[]>(
           '/dashboard/user/inquiries/service-quotes',
           { authenticated: true },
@@ -167,12 +175,25 @@ export default function ActivityDetailView() {
         if (!selectedQuote) throw new Error('This service quote could not be found.');
         setServiceQuote(selectedQuote);
         setItem(toServiceQuoteActivityCard(selectedQuote));
+      } else {
+        const payload = await apiRequest<BuyerClassifiedInquiriesData>(
+          '/dashboard/user/inquiries/classified-inquiries',
+          { authenticated: true },
+        );
+        const collection = payload.inquiries;
+        const inquiries = Array.isArray(collection) ? collection : collection.data;
+        const selectedInquiry = inquiries.find((record) => record.id === id);
+
+        if (!selectedInquiry) throw new Error('This classified inquiry could not be found.');
+        setClassifiedInquiry(selectedInquiry);
+        setItem(toClassifiedInquiryActivityCard(selectedInquiry));
       }
     } catch (requestError) {
       setItem(null);
       setApplication(null);
       setAutoInquiry(null);
       setServiceQuote(null);
+      setClassifiedInquiry(null);
       setError(requestError);
     } finally {
       setLoading(false);
@@ -211,6 +232,11 @@ export default function ActivityDetailView() {
   }
 
   const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
+  const classified = classifiedInquiry?.classified
+    || classifiedInquiry?.classifiedAd
+    || classifiedInquiry?.classifiedad
+    || classifiedInquiry?.classified_ad
+    || null;
 
   return (
     <AuthenticatedScreen returnTo="/activity">
@@ -255,6 +281,8 @@ export default function ActivityDetailView() {
                 <Text style={styles.infoLabel}>
                   {autoInquiry
                     ? 'PREFERRED DATE'
+                    : classifiedInquiry
+                      ? 'PRICE'
                     : serviceQuote
                       ? 'QUOTED PRICE'
                       : application
@@ -273,6 +301,8 @@ export default function ActivityDetailView() {
                 <Text style={styles.infoLabel}>
                   {autoInquiry
                     ? 'PREFERRED TIME'
+                    : classifiedInquiry
+                      ? 'CONDITION'
                     : serviceQuote
                       ? 'SCOPE'
                       : application
@@ -282,11 +312,13 @@ export default function ActivityDetailView() {
                 <Text style={styles.infoValue}>
                   {autoInquiry
                     ? autoInquiry.preferred_time || 'Not specified'
+                    : classifiedInquiry
+                      ? classified?.condition_label || 'Not specified'
                     : serviceQuote
                       ? serviceQuote.scope_size || 'Not specified'
-                    : application
-                      ? workplaceLabel(application.job?.workplace_type)
-                      : item.secondaryStatus?.toUpperCase() || '—'}
+                      : application
+                        ? workplaceLabel(application.job?.workplace_type)
+                        : item.secondaryStatus?.toUpperCase() || '—'}
                 </Text>
               </View>
             </View>
@@ -369,6 +401,40 @@ export default function ActivityDetailView() {
                   <View style={styles.contactRow}>
                     <Text style={styles.contactLabel}>PHONE</Text>
                     <Text style={styles.contactValue}>{serviceQuote.phone || 'Not provided'}</Text>
+                  </View>
+                </View>
+              </View>
+            )}
+
+            {classifiedInquiry && (
+              <View style={styles.applicationSection}>
+                <Text style={styles.applicationLabel}>MESSAGE</Text>
+                <Text style={styles.applicationText}>
+                  {classifiedInquiry.message || 'No message was included.'}
+                </Text>
+
+                <View style={styles.contactGrid}>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>BRAND</Text>
+                    <Text style={styles.contactValue}>{classified?.brand?.name || 'Not specified'}</Text>
+                  </View>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>YEAR / AGE</Text>
+                    <Text style={styles.contactValue}>{classified?.item_year_age || 'Not specified'}</Text>
+                  </View>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>NAME</Text>
+                    <Text style={styles.contactValue}>
+                      {classifiedInquiry.full_name || 'Not provided'}
+                    </Text>
+                  </View>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>EMAIL</Text>
+                    <Text style={styles.contactValue}>{classifiedInquiry.email || 'Not provided'}</Text>
+                  </View>
+                  <View style={styles.contactRow}>
+                    <Text style={styles.contactLabel}>PHONE</Text>
+                    <Text style={styles.contactValue}>{classifiedInquiry.phone || 'Not provided'}</Text>
                   </View>
                 </View>
               </View>
