@@ -33,7 +33,7 @@
     </div>
 
     <div class="mb-4">
-        <h6 class="fw-semibold mb-2">{{ __('About :name', ['name' => $hostName]) }}</h6>
+        <h6 class="fw-semibold mb-2 text-primary">{{ __('About :name', ['name' => $hostName]) }}</h6>
         <p class="small text-muted mb-0">
             {{ Str::limit($host?->bio ?? __('The host is dedicated to providing thoughtful stays and local experiences in :city.', ['city' => $property->city]), 150) }}
         </p>
