@@ -31,6 +31,12 @@ Thumbs.db
 /_development/temp/
 /.tmp/
 
+# Screenshot files (Playwright audit/dev screenshots)
+screenshots/
+shot-*.png
+screenshot-*.js
+apps/backend/screenshot_phase*.cjs
+
 # Automated distribution output (scripts/prepare-distribution.mjs)
 /distribution/
 /distribution.zip
