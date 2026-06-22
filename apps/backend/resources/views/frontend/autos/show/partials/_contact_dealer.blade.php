@@ -2,7 +2,7 @@
     $dealer = $auto->user;
     $dealerName = $dealer->name ?? 'AutoMax Pro';
     $dealerPhone = $dealer->phone ?? '(555) 987-6543';
-    $dealerLogo = $dealer->logo_url ?? "https://ui-avatars.com/api/?name=" . urlencode($dealerName) . "&background=6366f1&color=fff&size=80&font-size=0.45&bold=true";
+    $dealerLogo = $dealer->logo_url ?? "https://ui-avatars.com/api/?name=" . urlencode($dealerName) . "&background=E05F2C&color=fff&size=80&font-size=0.45&bold=true";
     $dealerReviews = $dealer?->reviews ?? collect();
     $dealerRating = $dealerReviews->avg('rating') ?: 0;
     $dealerReviewCount = $dealerReviews->count();
@@ -24,8 +24,9 @@
             <i class="bi bi-geo-alt-fill me-1 lc-geo-icon"></i>{{ $auto->city ?? __('Local') }} {{ __('Dealership') }}
         </p>
 
-        <span class="text-warning fw-semibold small">
-            <i class="bi bi-star-fill"></i> {{ number_format($dealerRating, 1) }} ({{ $dealerReviewCount }} {{ __('reviews') }})
+        <span class="fw-semibold small" style="color:var(--primary-color)">
+            <i class="bi bi-star-fill"></i> {{ number_format($dealerRating, 1) }}
+            <span class="text-muted fw-normal">({{ trans_choice(':count review|:count reviews', $dealerReviewCount, ['count' => $dealerReviewCount]) }})</span>
         </span>
     </div>
 
