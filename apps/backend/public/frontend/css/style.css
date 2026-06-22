@@ -4250,6 +4250,17 @@ body.has-admin-bar .main-header.sticky-top{
     height: 186px;
 }
 
+/* ─── 4-up 2×2 staggered mosaic ───────────────────────────────────────── */
+.hero-mosaic--4up {
+    position: relative;
+    align-items: flex-start;
+    max-width: 510px;
+}
+.hero-mosaic--4up .hero-mosaic__img,
+.hero-mosaic--4up .hero-mosaic__placeholder {
+    height: 190px;
+}
+
 /* ── Floating "live listings" badge ────────────────────────────────────── */
 .hero-mosaic-badge {
     position: absolute;
