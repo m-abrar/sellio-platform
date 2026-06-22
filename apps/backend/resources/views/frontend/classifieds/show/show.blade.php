@@ -50,6 +50,10 @@
     </x-slot:main>
 
     <x-slot:sidebar>
+        {{-- Card 1: Price + CTA (orange banner — like property booking widget) --}}
+        @include('frontend.classifieds.show.partials.sidebar._price_contact_card')
+
+        {{-- Card 2: Seller Profile (no orange banner — like property host card) --}}
         @include('frontend.classifieds.show.partials.sidebar._seller_contact_card', [
             'seller' => $classified->user
         ])
