@@ -7,8 +7,8 @@
             
             {{-- Dynamic Company Logo --}}
             @php
-                $logoUrl = $job->employer->getFirstMediaUrl('avatar', 'thumb') 
-                            ?: 'https://ui-avatars.com/api/?name=' . urlencode($job->employer->name) . '&background=059669&color=fff&size=120&font-size=0.45';
+                $logoUrl = $job->employer->getFirstMediaUrl('avatar', 'thumb')
+                            ?: 'https://ui-avatars.com/api/?name=' . urlencode($job->employer->name) . '&background=E05F2C&color=fff&size=120&font-size=0.45';
                 $companyName = $job->employer->name ?? __('N/A');
             @endphp
             
@@ -49,10 +49,11 @@
     {{-- 2. Skills & Tech Tags --}}
     @if ($job->tags->isNotEmpty())
     <div class="px-4 px-lg-5 pt-4">
-        <div class="d-flex flex-wrap gap-2">
+        <div class="amenities-grid">
             @foreach ($job->tags as $tag)
-                <span class="badge rounded-2 bg-white border text-muted px-3 py-2 fw-semibold">
-                    #{{ $tag->title }}
+                <span class="amenity-chip">
+                    <i class="bi bi-hash amenity-chip__icon" aria-hidden="true"></i>
+                    <span class="amenity-chip__label">{{ $tag->title }}</span>
                 </span>
             @endforeach
         </div>
@@ -62,13 +63,13 @@
     {{-- 3. Detailed Body Content --}}
     <div class="p-4 p-lg-5">
         <div class="job-content-area line-height-lg text-muted">
-            <h4 class="fw-bold text-dark mb-3"><i class="bi bi-body-text me-2 text-primary"></i>{{ __('Job Description') }}</h4>
+            <h4 class="fw-800 text-dark mb-3 detail-section-title"><i class="bi bi-body-text me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Job Description') }}</h4>
             <div class="mb-5 fs-6">
                 {!! nl2br(e($job->description)) !!}
             </div>
 
-            <h4 class="fw-bold text-dark mb-3"><i class="bi bi-mortarboard me-2 text-primary"></i>{{ __('Requirements') }}</h4>
-            <div class="bg-light bg-opacity-50 rounded-4 p-4 mb-5 border border-white">
+            <h4 class="fw-800 text-dark mb-3 detail-section-title"><i class="bi bi-mortarboard me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Requirements') }}</h4>
+            <div class="mb-5" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07);border-radius:14px;padding:20px 24px">
                 <div class="row g-3">
                     <div class="col-sm-6">
                         <div class="smaller text-uppercase tracking-wider fw-bold text-muted mb-1">{{ __('Education') }}</div>
@@ -81,12 +82,12 @@
                 </div>
             </div>
 
-            <h4 class="fw-bold text-dark mb-4"><i class="bi bi-gift me-2 text-primary"></i>{{ __('Benefits & Perks') }}</h4>
-            <div class="row row-cols-1 row-cols-md-2 g-3 mb-5">
-                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> {{ __('Paid Time Off (PTO)') }}</div>
-                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> {{ __('Comprehensive Health Coverage') }}</div>
-                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> {{ __('Remote / Hybrid Flexibility') }}</div>
-                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> {{ __('401(k) Retirement Planning') }}</div>
+            <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-gift me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Benefits & Perks') }}</h4>
+            <div class="amenities-grid mb-5">
+                <div class="amenity-chip"><i class="bi bi-check2-circle amenity-chip__icon"></i><span class="amenity-chip__label">{{ __('Paid Time Off (PTO)') }}</span></div>
+                <div class="amenity-chip"><i class="bi bi-check2-circle amenity-chip__icon"></i><span class="amenity-chip__label">{{ __('Comprehensive Health Coverage') }}</span></div>
+                <div class="amenity-chip"><i class="bi bi-check2-circle amenity-chip__icon"></i><span class="amenity-chip__label">{{ __('Remote / Hybrid Flexibility') }}</span></div>
+                <div class="amenity-chip"><i class="bi bi-check2-circle amenity-chip__icon"></i><span class="amenity-chip__label">{{ __('401(k) Retirement Planning') }}</span></div>
             </div>
         </div>
 

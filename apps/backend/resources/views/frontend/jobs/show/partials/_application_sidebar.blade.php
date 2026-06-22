@@ -10,8 +10,8 @@
     {{-- Company Trust/Rating Card --}}
     <div class="card detail-sidebar-card p-4 mb-3 text-center">
         <h5 class="fw-semibold mb-3"><i class="bi bi-building-fill me-2 text-primary"></i>{{ __('Company snapshot') }}</h5>
-        <p class="h2 fw-bolder text-warning mb-1">{{ $averageRating }}<span class="small fw-normal text-muted"> / 5.0</span></p>
-        <div class="text-warning mb-2">
+        <p class="h2 fw-bolder mb-1" style="color:var(--primary-color)">{{ $averageRating }}<span class="small fw-normal text-muted"> / 5.0</span></p>
+        <div class="mb-2" style="color:var(--primary-color)">
             @for ($i = 1; $i <= 5; $i++)
                 @if ($averageRating >= $i)
                     <i class="bi bi-star-fill"></i>
