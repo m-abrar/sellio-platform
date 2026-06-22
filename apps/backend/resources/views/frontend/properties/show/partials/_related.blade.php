@@ -1,6 +1,6 @@
 @if (!empty($relatedProperties) && $relatedProperties->isNotEmpty())
 <div class="mt-5 pb-5">
-    <h3 class="fw-800 mb-4 text-dark">{{ __('Similar Discoveries') }}</h3>
+    <h3 class="fw-800 mb-4 text-dark detail-section-title"><i class="bi bi-houses me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Similar Discoveries') }}</h3>
     <div class="row g-4">
         @foreach ($relatedProperties->take(3) as $related)
         <div class="col-md-4">
@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="card-body p-3">
-                    <h5 class="fw-800 text-primary mb-1">{{ $related->price_formatted_k ?? __('Price on request') }}</h5>
+                    <h5 class="fw-800 mb-1" style="color:var(--primary-color)">{{ $related->price_formatted_k ?? __('Price on request') }}</h5>
                     <p class="text-dark fw-600 small mb-2 text-truncate">{{ $related->title }}</p>
                     <div class="d-flex gap-3 text-muted small">
                         <span><i class="bi bi-house me-1"></i>{{ $related->number_of_bedrooms }}</span>

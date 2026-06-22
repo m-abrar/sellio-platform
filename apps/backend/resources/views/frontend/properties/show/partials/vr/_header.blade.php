@@ -10,7 +10,7 @@
                 $reviewCount = $property->reviews->count();
             @endphp
             <span class="d-flex align-items-center gap-1 fw-semibold small">
-                <i class="bi bi-star-fill text-warning" style="font-size:.75rem"></i>
+                <i class="bi bi-star-fill" style="font-size:.75rem;color:var(--primary-color)"></i>
                 {{ $averageRating }}
                 <span class="text-muted fw-normal">({{ $reviewCount }} {{ __('reviews') }})</span>
             </span>
@@ -23,7 +23,7 @@
         </span>
 
         @if($property->is_featured)
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-2 fw-semibold">
+            <span class="fw-semibold px-3 py-1 rounded-2 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
                 <i class="bi bi-award me-1"></i>{{ __('Guest favourite') }}
             </span>
         @endif
@@ -39,7 +39,7 @@
     </div>
 
     <div class="d-flex align-items-baseline gap-2">
-        <h2 class="fw-800 text-primary mb-0 display-6">
+        <h2 class="fw-800 mb-0 display-6" style="color:var(--primary-color)">
             {{ format_currency($property->price_per_night, 0) }}
         </h2>
         <span class="text-muted fs-5">/{{ __('night') }}</span>

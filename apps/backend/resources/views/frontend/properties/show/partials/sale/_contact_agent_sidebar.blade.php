@@ -2,13 +2,13 @@
     $agent = $property->user;
     $agentName = $agent?->name ?? __('Listing Agent');
     $agentPhone = $agent?->phone ?: setting_string('phone_contact', '');
-    $agentAvatar = $agent?->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($agentName) . '&background=6366f1&color=fff&size=80&font-size=0.45';
+    $agentAvatar = $agent?->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($agentName) . '&background=E05F2C&color=fff&size=80&font-size=0.45';
     $listingsCount = (int) ($agent?->sale_properties_count ?? $agent?->active_properties_count ?? 0);
     $yearsExperience = $agent?->created_at ? max(1, now()->year - $agent->created_at->year) : null;
 @endphp
 
 <div class="card detail-sidebar-card p-4">
-    <h4 class="fw-800 mb-3"><i class="bi bi-person-check-fill me-2 text-primary"></i>{{ __('Your Dedicated Agent') }}</h4>
+    <h4 class="fw-800 mb-3"><i class="bi bi-person-check-fill me-2" style="color:var(--primary-color)"></i>{{ __('Your Dedicated Agent') }}</h4>
 
     <div class="text-center mb-4 border-bottom pb-4">
         <img src="{{ $agentAvatar }}"
@@ -21,12 +21,12 @@
         <div class="d-flex justify-content-center gap-4 mt-3 small fw-semibold">
             @if($yearsExperience)
                 <span class="text-muted" title="{{ __('Years of Experience') }}">
-                    <i class="bi bi-award me-1 text-primary"></i>
+                    <i class="bi bi-award me-1" style="color:var(--primary-color)"></i>
                     {{ trans_choice(':count yr exp|:count yrs exp', $yearsExperience, ['count' => $yearsExperience]) }}
                 </span>
             @endif
             <span class="text-muted" title="{{ __('Active Listings') }}">
-                <i class="bi bi-building me-1 text-primary"></i>
+                <i class="bi bi-building me-1" style="color:var(--primary-color)"></i>
                 {{ trans_choice(':count active listing|:count active listings', $listingsCount, ['count' => $listingsCount]) }}
             </span>
         </div>
@@ -34,7 +34,7 @@
 
     @if ($agent?->bio)
         <div class="mb-4">
-            <h6 class="fw-semibold mb-2 text-primary">{{ __('About :name', ['name' => $agentName]) }}</h6>
+            <h6 class="fw-semibold mb-2" style="color:var(--primary-color)">{{ __('About :name', ['name' => $agentName]) }}</h6>
             <p class="small text-muted mb-0">{{ Str::limit($agent->bio, 150) }}</p>
         </div>
     @endif
@@ -66,7 +66,7 @@
     </div>
 
     <div class="text-center mt-4">
-        <button type="button" class="btn btn-link text-primary fw-semibold" data-property-id="{{ $property->id }}">
+        <button type="button" class="btn btn-link fw-semibold" style="color:var(--primary-color)" data-property-id="{{ $property->id }}">
             <i class="bi bi-heart me-1"></i>{{ __('Save to favourites') }}
         </button>
     </div>

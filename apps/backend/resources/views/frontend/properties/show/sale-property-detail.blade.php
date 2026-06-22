@@ -27,26 +27,26 @@
             <div class="p-4 p-lg-5">
                 <div class="property-details-content">
                     <section id="description" class="mb-5">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('The Space') }}</h4>
+                        <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-house-heart me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('The Space') }}</h4>
                         <div class="text-muted lh-lg fs-6">
                             @include('frontend.properties.show.partials._description')
                         </div>
                     </section>
 
                     <section id="amenities" class="mb-5">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Amenities') }}</h4>
+                        <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-grid-3x3-gap me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Amenities') }}</h4>
                         @include('frontend.properties.show.partials.sale._amenities')
                     </section>
 
                     <hr class="my-5 border-color-light">
 
                     <section id="location" class="mb-5">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Location') }}</h4>
+                        <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-geo-alt-fill me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Location') }}</h4>
                         @include('frontend.properties.show.partials._map')
                     </section>
 
                     <section id="neighbourhood" class="mb-5">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Local Neighbourhood & Lifestyle') }}</h4>
+                        <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-map me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Local Neighbourhood & Lifestyle') }}</h4>
                         <div class="row g-3">
                             <div class="col-md-6">
                                 @include('frontend.properties.show.partials.sale._neighborhood')
@@ -58,12 +58,12 @@
                     </section>
 
                     <section id="tours" class="pt-4 border-top border-color-light mb-5">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Virtual Tours & Documents') }}</h4>
+                        <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-camera-video me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Virtual Tours & Documents') }}</h4>
                         @include('frontend.properties.show.partials.sale._tours_and_documents')
                     </section>
 
                     <section id="disclosures" class="pt-4 border-top border-color-light">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Property Details & Disclosures') }}</h4>
+                        <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-file-text me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Property Details & Disclosures') }}</h4>
                         @include('frontend.properties.show.partials.sale._policies')
                     </section>
                 </div>

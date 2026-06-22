@@ -26,7 +26,7 @@
         <div class="detail-main-card border-0 overflow-hidden mt-4 mb-4">
             <div class="p-4 p-lg-5">
                 <section id="about" class="mb-5">
-                    <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('About this getaway') }}</h4>
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-house-heart me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('About this getaway') }}</h4>
                     <div class="text-muted lh-lg">
                         @include('frontend.properties.show.partials._description')
                     </div>
@@ -35,12 +35,12 @@
                 @include('frontend.properties.show.partials.vr._amenities')
 
                 <section id="location" class="mt-5 pt-5 border-top border-color-light">
-                    <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Location') }}</h4>
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-geo-alt-fill me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Location') }}</h4>
                     @include('frontend.properties.show.partials._map')
                 </section>
 
                 <section id="rates" class="mt-5 pt-5 border-top border-color-light">
-                    <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Rates & Availability') }}</h4>
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-calendar-range me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Rates & Availability') }}</h4>
                     @include('frontend.properties.show.partials.vr._seasonal_prices')
                     <div class="mt-5 pt-4 border-top border-color-light">
                         @include('frontend.properties.show.partials.vr._availability_calendar')
@@ -48,7 +48,7 @@
                 </section>
 
                 <section id="neighbourhood" class="mt-5 pt-5 border-top border-color-light">
-                    <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Neighbourhood & Livability') }}</h4>
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title"><i class="bi bi-map me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Neighbourhood & Livability') }}</h4>
                     @include('frontend.properties.show.partials.vr._local_guide')
                     <div class="mt-5 pt-4 border-top border-color-light property-scores-panel property-scores-panel--expanded">
                         @include('frontend.properties.show.partials.sale._scores', ['hideHeading' => true])

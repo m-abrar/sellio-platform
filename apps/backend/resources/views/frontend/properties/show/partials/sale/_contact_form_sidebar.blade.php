@@ -15,7 +15,7 @@
     </div>
 
     <div class="card-body p-4">
-        <h6 class="fw-800 mb-3 text-primary" style="font-size:.8rem;letter-spacing:.04em;text-transform:uppercase">
+        <h6 class="fw-800 mb-3" style="font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--primary-color)">
             <i class="bi bi-clock me-2" aria-hidden="true"></i>{{ __('Visit details') }}
         </h6>
 

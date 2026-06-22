@@ -5,7 +5,7 @@
 
     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
         @if($property->is_featured)
-            <span class="badge bg-primary text-white px-3 py-1 rounded-2 fw-semibold">
+            <span class="fw-semibold px-3 py-1 rounded-2 small" style="background:var(--primary-color);color:#fff">
                 <i class="bi bi-patch-check-fill me-1"></i>{{ __('Featured') }}
             </span>
         @endif
@@ -19,7 +19,7 @@
         </span>
 
         @if($property->is_new)
-            <span class="badge bg-success text-white px-3 py-1 rounded-2 fw-semibold">
+            <span class="fw-semibold px-3 py-1 rounded-2 small" style="background:var(--primary-color);color:#fff">
                 {{ __('New listing') }}
             </span>
         @endif
@@ -31,7 +31,7 @@
     </p>
 
     <div class="d-flex align-items-baseline gap-2">
-        <h2 class="fw-800 text-primary mb-0 display-6">{{ $property->price_formatted ?? __('Price on request') }}</h2>
+        <h2 class="fw-800 mb-0 display-6" style="color:var(--primary-color)">{{ $property->price_formatted ?? __('Price on request') }}</h2>
         <span class="text-muted small fw-semibold">{{ __('Asking Price') }}</span>
     </div>
 </header>

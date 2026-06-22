@@ -1,7 +1,7 @@
 @php
     $host = $property->user;
     $hostName = $host?->name ?? __('Host');
-    $hostAvatar = $host?->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($hostName) . '&background=00A896&color=fff&size=80&font-size=0.45';
+    $hostAvatar = $host?->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($hostName) . '&background=E05F2C&color=fff&size=80&font-size=0.45';
     $hostListings = (int) ($host?->active_properties_count ?? 0);
     $hostResponseRate = $host?->response_rate ?? null;
 @endphp
@@ -17,7 +17,7 @@
         <h5 class="mb-0 fw-semibold">{{ $hostName }}</h5>
 
         @if ($host?->is_superhost)
-            <span class="badge bg-success-subtle text-success fw-semibold mt-1 rounded-2">
+            <span class="fw-semibold mt-1 rounded-2 px-2 py-1 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
                 <i class="bi bi-patch-check-fill me-1"></i>{{ __('Superhost') }}
             </span>
         @elseif($host?->created_at)
@@ -26,14 +26,14 @@
 
         <div class="d-flex justify-content-center gap-4 mt-3 small fw-semibold">
             @if($hostResponseRate)
-                <span class="text-muted"><i class="bi bi-chat-dots me-1 text-primary"></i>{{ __(':rate response rate', ['rate' => $hostResponseRate]) }}</span>
+                <span class="text-muted"><i class="bi bi-chat-dots me-1" style="color:var(--primary-color)"></i>{{ __(':rate response rate', ['rate' => $hostResponseRate]) }}</span>
             @endif
-            <span class="text-muted"><i class="bi bi-building me-1 text-primary"></i>{{ trans_choice(':count listing|:count listings', $hostListings, ['count' => $hostListings]) }}</span>
+            <span class="text-muted"><i class="bi bi-building me-1" style="color:var(--primary-color)"></i>{{ trans_choice(':count listing|:count listings', $hostListings, ['count' => $hostListings]) }}</span>
         </div>
     </div>
 
     <div class="mb-4">
-        <h6 class="fw-semibold mb-2 text-primary">{{ __('About :name', ['name' => $hostName]) }}</h6>
+        <h6 class="fw-semibold mb-2" style="color:var(--primary-color)">{{ __('About :name', ['name' => $hostName]) }}</h6>
         <p class="small text-muted mb-0">
             {{ Str::limit($host?->bio ?? __('The host is dedicated to providing thoughtful stays and local experiences in :city.', ['city' => $property->city]), 150) }}
         </p>

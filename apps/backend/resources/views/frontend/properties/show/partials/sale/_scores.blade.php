@@ -16,7 +16,7 @@
 
 @if ($scoresCount > 0)
     {{-- Livability summary card --}}
-    <div class="livability-score-summary bg-primary p-4 mb-4 position-relative overflow-hidden rounded-4">
+    <div class="livability-score-summary p-4 mb-4 position-relative overflow-hidden rounded-4" style="background:var(--primary-color)">
         <div class="row align-items-center position-relative z-1">
             <div class="col-auto">
                 <div class="livability-score-ring d-flex align-items-center justify-content-center bg-white rounded-circle shadow-lg">

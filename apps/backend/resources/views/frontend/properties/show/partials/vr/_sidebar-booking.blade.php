@@ -27,7 +27,7 @@
 @endphp
 
 <div class="card detail-sidebar-card mb-4 overflow-hidden" id="booking-widget">
-    <div class="card-header bg-primary text-white p-4 border-0">
+    <div class="card-header border-0 p-4" style="background:var(--primary-color)">
         <h4 class="fw-800 mb-1"><i class="bi-calendar-check-fill me-2"></i>{{ __('Reserve Your Stay') }}</h4>
         <p class="small text-white-50 mb-0">{{ __('Pick dates, review the quote, then continue to checkout.') }}</p>
     </div>
@@ -77,14 +77,14 @@
                 </li>
 
                 <li class="list-group-item d-flex justify-content-between bg-transparent px-0 pt-3 border-top">
-                    <span class="fw-bold h5 mb-0 text-primary">{{ __('Lodging Total:') }} <small class="text-muted"> {{ __('estimated') }} </small></span>
-                    <span class="fw-bold h5 text-primary mb-0" id="estimated_lodging_total" aria-live="polite">{{ format_currency($estimatedLodgingTotal) }}</span>
+                    <span class="fw-bold h5 mb-0" style="color:var(--primary-color)">{{ __('Lodging Total:') }} <small class="text-muted"> {{ __('estimated') }} </small></span>
+                    <span class="fw-bold h5 mb-0" style="color:var(--primary-color)" id="estimated_lodging_total" aria-live="polite">{{ format_currency($estimatedLodgingTotal) }}</span>
                 </li>
             </ul>
 
             <div class="booking-widget-trust mb-4">
-                <span><i class="bi bi-shield-check text-success"></i>{{ __('Secure checkout') }}</span>
-                <span><i class="bi bi-receipt text-primary"></i>{{ __('Fees shown before payment') }}</span>
+                <span><i class="bi bi-shield-check" style="color:var(--primary-color)"></i>{{ __('Secure checkout') }}</span>
+                <span><i class="bi bi-receipt" style="color:var(--primary-color)"></i>{{ __('Fees shown before payment') }}</span>
             </div>
 
             <div class="d-grid">

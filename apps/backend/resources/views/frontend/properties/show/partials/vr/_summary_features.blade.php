@@ -1,4 +1,4 @@
-<div class="property-key-facts d-flex flex-wrap border border-color-light rounded-3 overflow-hidden bg-white">
+<div class="property-key-facts d-flex flex-wrap rounded-3 overflow-hidden" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07)">
     <div class="key-fact-item flex-fill text-center px-4 py-3 border-end border-color-light">
         <i class="bi bi-people-fill key-fact-icon"></i>
         <span class="d-block fw-800 text-dark fs-5">{{ $property->booking_guest_capacity ?? $property->maximum_guests ?? 1 }}</span>
