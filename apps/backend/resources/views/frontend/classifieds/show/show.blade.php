@@ -56,11 +56,13 @@
 
         @include('frontend.classifieds.show.partials.sidebar._pickup_location_card')
 
-        <div class="detail-sidebar-card p-4" style="border-left:3px solid var(--primary-color)">
-            <h6 class="fw-800 text-dark"><i class="bi bi-shield-lock me-2" style="color:var(--primary-color)"></i>{{ __('Safety Tips') }}</h6>
-            <ul class="small text-muted mb-0 ps-3">
-                <li>{{ __('Meet in a public place') }}</li>
-                <li>{{ __('Check the item before paying') }}</li>
+        <div class="detail-sidebar-card overflow-hidden">
+            <div class="card-header border-0 p-4" style="background:var(--primary-color)">
+                <h6 class="fw-800 mb-0 text-white"><i class="bi bi-shield-lock me-2"></i>{{ __('Safety Tips') }}</h6>
+            </div>
+            <ul class="small text-muted mb-0 ps-3 p-4">
+                <li class="mb-1">{{ __('Meet in a public place') }}</li>
+                <li class="mb-1">{{ __('Check the item before paying') }}</li>
                 <li>{{ __('Avoid upfront wire transfers') }}</li>
             </ul>
         </div>
