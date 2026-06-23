@@ -1,7 +1,7 @@
 # Sellio Public Frontend — Design & Polish Plan
 
 > Platform: Laravel 12 / Blade · Design tokens: `--primary-color: #E05F2C`, `--text-dark: #1C1917`, `--font-heading: DM Serif Display`, `--font-main: Plus Jakarta Sans`
-> Last updated: 2026-06-24
+> Last updated: 2026-06-24 (session 2)
 
 ---
 
@@ -10,11 +10,13 @@
 ### Established Pattern Hierarchy
 | Level | Where used | Background | Pattern |
 |---|---|---|---|
-| **1 — Hero** | Homepage hero | `#1C1917` | Dot grid (28px, 38% white) + orange ellipse glow 12% |
-| **2 — Inner page hero** | Contact, FAQ, About, Terms, Privacy | `#1C1917` via `.hero-section--dark` | Full dot grid + glow (same class, less height/content) |
+| **1 — Hero** | Homepage hero | `#1C1917` | Dot grid (28px, 38% white) + orange glow 12% |
+| **2 — Inner page hero** | Contact, FAQ, About, Terms, Privacy | `#1C1917` via `.hero-section--dark` + `.page-hero-strip` or `.about-hero` | Sparser dot grid (44px, 18% white) + glow 7% — subordinate to Level 1 |
 | **3 — Secondary dark** | CTA bands, Auth panels | `#1C1917` via `.dark-brand-panel` | Two faint glows only (7% + 4%), NO dot grid |
 | **4 — Light surface** | Cards, sidebars | `#fff` | None |
 | **5 — Tinted surface** | Listing banners, stat blocks | Warm orange tint ~5% | None |
+
+> **Rule:** Level 1 and Level 2 use the same `.hero-section--dark` class. The sparser dot grid on Level 2 is applied via `.page-hero-strip.hero-section--dark::before` and `.about-hero.hero-section--dark::before` overrides in `style.css`. The homepage hero (no additional class) retains the full 28px/38% grid.
 
 ### Typography Scale (Blade front-end)
 - **Display** — `font-family: DM Serif Display`, `font-weight: 400`, `letter-spacing: -0.03em`
@@ -128,31 +130,34 @@
 **File:** `frontend/pages/about.blade.php`
 **Status: ✅ Complete redesign done**
 
-- Dark cinematic hero (Pexels photo + overlay)
-- Vertical chip grid for 8 verticals
+- Dark hero: `about-hero hero-section--dark` — solid `#1C1917` + sparser dot grid (Level 2). No photo in hero (photo is stock only).
+- Vertical chip grid for 8 verticals (right column, desktop only)
+- Two CTA buttons in hero (Join for Free / Get in Touch)
 - 4-column stats band
 - Mission section with Pexels photo
 - 6 feature cards with coloured top accents
 - Story split section
-- CTA band using `.dark-brand-panel` (Level 3)
+- CTA band: photo background (Pexels team photo, 93%/88% overlay so stock image reads as warm texture only, not identifiable). Replaced `.dark-brand-panel`.
 
 **Remaining:**
-- Pexels images are hotlinked — monitor if CDN blocks referrers; consider self-hosting
+- Pexels images are hotlinked — monitor if CDN blocks referrers; consider self-hosting or replacing with real company photos
 - `page_content_string()` calls allow DB overrides — ensure keys are seeded or documented
 - Stats band numbers (8 verticals, etc.) are hardcoded — make them DB-driven or at least constants
+- CTA band photo: replace with real company photo when available (reduce overlay to ~65% to let it breathe)
 
 ### 4.2 Contact
 **File:** `frontend/pages/contact.blade.php`
 **Status: ✅ Done**
 
-- `hero-section--dark` strip with 3-channel frosted card (Chat / Email / Secure)
+- `page-hero-strip hero-section--dark` strip with 3-channel frosted card (Chat / Email / Secure)
+- Fixed: `bi-shield-check-fill` → `bi-shield-fill-check` (was missing icon)
+- `page-hero-title/accent/subtitle` now from global `style.css` (no longer duplicated in push block)
 - Placeholder text changed from "Configure in Admin" to helpful copy
 - Form + info cards + response time + social links
 
 **Remaining:**
-- Social links block only shows if `setting('social_*')` is set — empty state is just absent. Consider adding a "Follow us" placeholder if no socials are configured
-- Contact form: verify `route('contact.send')` is connected and sends email
-- CSRF token present ✅
+- Social links block only shows if `setting('social_*')` is set — empty state is just absent
+- Contact form route `contact.send` verified wired end-to-end ✅
 
 ### 4.3 FAQ
 **File:** `frontend/pages/faq.blade.php`
@@ -169,27 +174,22 @@
 
 ### 4.4 Terms of Service
 **File:** `frontend/pages/terms.blade.php`
-**Status: ⚠️ Hero strip is plain white — needs dark treatment**
+**Status: ✅ Dark hero done**
 
-- Uses `page-hero-strip page-hero-strip--compact` but this class has NO background colour defined — renders as plain white
-- `page-hero-title` class is used but without `hero-section--dark` on the section, the title is dark text on white
+- `page-hero-strip page-hero-strip--compact hero-section--dark` — compact padding, white title
+- `page-hero-title` size overridden to `clamp(1.75rem, 3.5vw, 2.5rem)` (smaller — appropriate for legal pages)
+- `page-hero-title/subtitle` base styles now from global `style.css` (no longer duplicated in push block)
 
-**Fix required:**
-1. Add `hero-section--dark` to `<section class="page-hero-strip page-hero-strip--compact">` on both Terms and Privacy
-2. Add `.page-hero-strip--compact` CSS to reduce height (less padding than Contact/FAQ)
-3. The right column on Terms could show a table-of-contents panel (anchor links to each legal section)
-
-**Legal content:**
-- 8 sections (Agreement, Accounts, Listings, Payments, IP, Prohibited, Disclaimers, Contact)
-- Content is well-written and properly structured
-- Last updated date is hardcoded as `January 1, 2025` — should be a DB setting or config constant
+**Remaining:**
+- Right column: add anchor-link table of contents panel (P2 #18)
+- Last updated date hardcoded as `January 1, 2025` — make DB/config driven (P2 #19)
 
 ### 4.5 Privacy Policy
 **File:** `frontend/pages/privacy-policy.blade.php`
-**Status: ⚠️ Same hero issue as Terms**
+**Status: ✅ Dark hero done**
 
-- Same fix needed: add `hero-section--dark` to section element
-- Same table-of-contents sidebar improvement applies
+- Same treatment as Terms applied
+- Same remaining items (TOC sidebar P2 #18, date config P2 #19)
 
 ---
 
@@ -474,7 +474,7 @@ Partner auth pages (`login-partner.blade.php`, `register-partner.blade.php`) —
 
 | # | Task | File(s) | Effort |
 |---|---|---|---|
-| 5 | Audit + fix Classifieds listing card | `classifieds/_partials/_card.blade.php` | S |
+| ~~5~~ | ~~Audit + fix Classifieds listing card~~ | ~~`classifieds/_partials/_card.blade.php`~~ | ✅ Done — removed double col wrapper, fixed `btn-primary-light`, added hover transition, fixed timestamp |
 | 6 | Blog post title: apply DM Serif font to `property-title` inside blog card | `blogs/_partials/_card.blade.php` + CSS | XS |
 | 7 | Event card (`evc-card`) visual consistency audit | `events/_partials/_card-event.blade.php` | S |
 | 8 | Job mobile card: salary not visible when right rail hidden at `<md` — show salary in main column on mobile | `jobs/_partials/_job-card.blade.php` | XS |
@@ -528,6 +528,7 @@ Partner auth pages (`login-partner.blade.php`, `register-partner.blade.php`) —
 
 ## 11 · Session Work — Completed Summary
 
+### Session 1
 | Completed | Files changed |
 |---|---|
 | Footer Privacy/Terms links | `_footer.blade.php`, DB cache cleared |
@@ -543,3 +544,16 @@ Partner auth pages (`login-partner.blade.php`, `register-partner.blade.php`) —
 | All listing page banners | `_page-heading.blade.php`, `style.css` |
 | Jobs listing card redesign (horizontal layout) | `jobs/_partials/_job-card.blade.php`, `style.css` |
 | PageSeeder cleanup | `PageSeeder.php` |
+
+### Session 2
+| Completed | Files changed |
+|---|---|
+| About hero: migrated to `hero-section--dark` system (removed parallel CSS) | `pages/about.blade.php` |
+| About CTA band: photo background (high overlay for stock image) | `pages/about.blade.php` |
+| `page-hero-title/accent/subtitle` moved to global `style.css` (was duplicated in 4 pages) | `style.css`, `contact`, `faq`, `terms`, `privacy` |
+| Inner-page hero dot grid subordinated: 44px/18% vs homepage 28px/38% | `style.css` |
+| `hero-section--dark` background `!important` removed (was blocking `.about-hero` override) | `style.css` |
+| Contact hero: `bi-shield-check-fill` → `bi-shield-fill-check` (missing icon fix) | `pages/contact.blade.php` |
+| Classifieds card: removed double `col` wrapper, added `btn-primary-light`, hover transition, timestamp fix | `classifieds/_partials/_card.blade.php`, `style.css` |
+| Partner auth: `.dark-brand-panel` applied, glow class removed | `auth/_marketing_panel.blade.php`, partner auth files |
+| Events orphan partial deleted | `events/_page_header_events.blade.php` |
