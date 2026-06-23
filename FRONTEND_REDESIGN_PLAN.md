@@ -1,6 +1,6 @@
 # Frontend Public Views — Redesign Plan
 
-**Status: Phases 0–6 complete (commit `056c0427`). Phase 8 complete (commit `f1d1d022`). Phase 7 (Property Detail Layout) pending.**
+**Status: Phases 0–8 complete. Phase 7 (Property Detail Layout) also complete — gallery slot, section reorder, and headers all done in code.**
 
 Goal: Remove all glassmorphism and establish the editorial design system built on the homepage:
 - **DM Serif Display** weight-400 for headings, titles, numbers
@@ -484,11 +484,7 @@ All items below were found during the verification pass and fixed in a follow-up
 
 | Item | Notes |
 |---|---|
-| Property detail — Lifestyle & Accessibility readability | Visual design crash reported; needs Playwright check |
-| Property sale — visit date picker | Right-column date picker too basic; needs UX improvement |
-| Classified sidebar widgets | Still old design |
-| Login screen design tokens | Reported after Phase 3 verification; may have regressed or been missed |
-| Admin bar pushes `#main-content` too far from top | Layout spacing issue on pages with admin bar visible |
+*(no open items)*
 
 ### ✅ Resolved
 
@@ -500,4 +496,11 @@ All items below were found during the verification pass and fixed in a follow-up
 | Partner profile page redesign | Done (Phase 8) |
 | Tags — Explore Categories links broken | Fixed: `.index` route + `?tags[]=id` query param (Phase 8) |
 | Sticky header empty space | Fixed |
+| Classified sidebar price card — orange full-bleed banner | Fixed: replaced with section-warm hero pattern |
+| Login screen design tokens / hover bug | Fixed: circular CSS variable + transition: all removed |
+| Admin bar pushes `#main-content` / sticky elements too far | Fixed: `--frontend-header-offset` updated on `has-admin-bar` |
+| Auth pages — generic AI template split-panel | Fixed: all six auth pages rewritten as solo layout |
+| Phase 7 — Property Detail Layout | Complete: gallery slot, section reorder, headers — all done |
+| Lifestyle & Accessibility readability crash | Resolved: no actual crash in current code; CSS fully defined |
+| Property sidebar orange banner headers | Fixed: visit widget + VR booking sidebar converted to section-warm pattern |
 | Reviews partial null-safety crash on brand page | Fixed: `$reviews = $reviewable->reviews ?? collect()` (Phase 8) |

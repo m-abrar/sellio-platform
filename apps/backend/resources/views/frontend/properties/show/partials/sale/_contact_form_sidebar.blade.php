@@ -5,13 +5,12 @@
 @endphp
 
 <div class="card detail-sidebar-card mb-4 overflow-hidden" id="visit-widget">
-    <div class="card-header border-0 p-4" style="background:var(--primary-color)">
-        <h4 class="fw-800 mb-1 text-white">
-            <i class="bi-calendar-check-fill me-2"></i>{{ __('Schedule a Visit') }}
-        </h4>
-        <p class="small mb-0" style="color:rgba(255,255,255,.65)">
-            {{ __('Share your preferred time and the agent will confirm availability.') }}
+    <div class="p-4" style="background:#F4F0EC;border-bottom:1.5px solid rgba(15,23,42,.07)">
+        <p class="small fw-semibold text-uppercase mb-1" style="letter-spacing:.06em;color:var(--primary-color)">
+            <i class="bi bi-calendar-check-fill me-1"></i>{{ __('Schedule a Visit') }}
         </p>
+        <h4 class="fw-800 text-dark mb-1" style="font-family:var(--font-heading)">{{ __('Book a Viewing') }}</h4>
+        <p class="small text-muted mb-0">{{ __('Share your preferred time and the agent will confirm availability.') }}</p>
     </div>
 
     <div class="card-body p-4">

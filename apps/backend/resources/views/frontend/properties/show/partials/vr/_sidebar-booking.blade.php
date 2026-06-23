@@ -27,9 +27,12 @@
 @endphp
 
 <div class="card detail-sidebar-card mb-4 overflow-hidden" id="booking-widget">
-    <div class="card-header border-0 p-4" style="background:var(--primary-color)">
-        <h4 class="fw-800 mb-1"><i class="bi-calendar-check-fill me-2"></i>{{ __('Reserve Your Stay') }}</h4>
-        <p class="small text-white-50 mb-0">{{ __('Pick dates, review the quote, then continue to checkout.') }}</p>
+    <div class="p-4" style="background:#F4F0EC;border-bottom:1.5px solid rgba(15,23,42,.07)">
+        <p class="small fw-semibold text-uppercase mb-1" style="letter-spacing:.06em;color:var(--primary-color)">
+            <i class="bi bi-calendar-check-fill me-1"></i>{{ __('Reserve Your Stay') }}
+        </p>
+        <h4 class="fw-800 text-dark mb-1" style="font-family:var(--font-heading)">{{ __('Check Availability') }}</h4>
+        <p class="small text-muted mb-0">{{ __('Pick dates, review the quote, then continue to checkout.') }}</p>
     </div>
 
     <div class="card-body p-4">

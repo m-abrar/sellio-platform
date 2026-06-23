@@ -5026,3 +5026,5 @@ body.has-admin-bar .main-header.sticky-top{
     transform: translateY(-2px);
     box-shadow: 0 6px 18px rgba(28,25,23,.08);
 }
+body.has-admin-bar{--frontend-header-offset:calc(76px + var(--admin-bar-height,32px))}
+body.has-admin-bar .detail-page section{scroll-margin-top:calc(96px + var(--admin-bar-height,32px))}
