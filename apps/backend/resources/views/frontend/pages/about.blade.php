@@ -197,9 +197,8 @@
     </div>
 
     {{-- ── CTA band ─────────────────────────────────────────────────── --}}
-    <div class="about-cta-band" data-aos="fade-up">
-        <div class="about-cta-band__pattern" aria-hidden="true"></div>
-        <div class="position-relative z-1">
+    <div class="about-cta-band dark-brand-panel" data-aos="fade-up">
+        <div>
             <h2 class="about-cta-title">{{ __('Ready to get started?') }}</h2>
             <p class="about-cta-sub">{{ __('Join thousands of buyers and sellers on the platform today.') }}</p>
             <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
@@ -411,20 +410,10 @@
 
 /* ── CTA band ──────────────────────────────────────────────────── */
 .about-cta-band {
-    background: #1C1917;
     border-radius: 20px;
     padding: 4rem 2rem;
     text-align: center;
     color: #fff;
-    position: relative;
-    overflow: hidden;
-}
-.about-cta-band__pattern {
-    position: absolute; inset: 0;
-    background:
-        radial-gradient(circle at 20% 50%, rgba(224,95,44,.35) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(224,95,44,.2) 0%, transparent 40%),
-        radial-gradient(circle at 60% 90%, rgba(224,95,44,.15) 0%, transparent 35%);
 }
 .about-cta-title {
     font-family: var(--font-heading);

@@ -54,6 +54,69 @@
 .listing-page .page-title-section{
     margin-bottom:1.5rem!important
 }
+
+/* ─── Listing page banner ─────────────────────────────────────────────── */
+.listing-page-banner {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: linear-gradient(135deg, rgba(var(--primary-color-rgb), .055) 0%, transparent 55%);
+    border: 1.5px solid rgba(var(--primary-color-rgb), .12);
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+}
+.listing-page-banner__icon-wrap {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: rgba(var(--primary-color-rgb), .1);
+    color: var(--primary-color);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+}
+.listing-page-banner__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    color: var(--text-dark);
+    line-height: 1.15;
+    font-weight: 400;
+}
+.listing-page-banner__subtitle {
+    font-size: .9rem;
+    color: var(--text-muted);
+}
+.listing-page-banner__count {
+    text-align: center;
+    background: #fff;
+    border: 1.5px solid rgba(var(--primary-color-rgb), .15);
+    border-radius: 14px;
+    padding: .75rem 1.25rem;
+    min-width: 90px;
+}
+.listing-page-banner__count-num {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    line-height: 1;
+}
+.listing-page-banner__count-label {
+    font-size: .65rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    margin-top: .25rem;
+}
+@media (max-width: 767.98px) {
+    .listing-page-banner {
+        padding: 1.25rem;
+        gap: .875rem;
+        border-radius: 14px;
+    }
+    .listing-page-banner__title { font-size: 1.25rem; }
+    .listing-page-banner__icon-wrap { width: 44px; height: 44px; font-size: 1.2rem; border-radius: 10px; }
+}
+
 .listing-page .filter-offcanvas{
     border-radius:12px!important
 }
@@ -3570,33 +3633,79 @@ body.has-admin-bar .main-header.sticky-top{
     z-index:10;
     position:relative
 }
-.jbl-listing-card .jbl-card-image-wrapper{
-    height:120px;
-    overflow:hidden
+/* ─── Job listing card — horizontal layout ────────────────────── */
+.jbl-listing-card {
+    transition: border-color .2s, box-shadow .2s, transform .2s;
 }
-.jbl-listing-card .jbl-card-img-top{
-    filter:brightness(.9)
+.jbl-listing-card:hover {
+    border-color: rgba(var(--primary-color-rgb), .35) !important;
+    box-shadow: 0 6px 24px rgba(var(--primary-color-rgb), .08);
 }
-.jbl-listing-card .jbl-badge-container{
-    z-index:5
+.jbl-company-mark {
+    width: 80px;
+    padding: 1.25rem .75rem 1.25rem 1.25rem;
+    border-right: 1.5px solid var(--color-border, #e5e7eb);
 }
-.jbl-listing-card .jbl-employer-logo-container{
-    width:58px;
-    height:58px;
-    z-index:10;
-    margin-top:-32px
+.jbl-company-logo-wrap {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    border: 1.5px solid var(--color-border, #e5e7eb);
+    background: #fafafa;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
 }
-.jbl-listing-card .jbl-btn-save-job{
-    width:40px;
-    height:40px;
-    z-index:30;
-    right:20px;
-    top:-20px;
-    background:#fff!important
+.jbl-company-logo {
+    width: 44px; height: 44px;
+    object-fit: contain;
+    padding: 4px;
 }
-.jbl-listing-card .jbl-description-text{
-    font-size:.85rem;
-    line-height:1.5
+.jbl-job-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1.25;
+    transition: color .15s;
+}
+.jbl-listing-card:hover .jbl-job-title { color: var(--primary-color); }
+.jbl-company-name {
+    font-size: .82rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+.jbl-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+}
+.jbl-meta-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    font-size: .72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: rgba(var(--primary-color-rgb), .06);
+    border-radius: 50px;
+    padding: .2rem .65rem;
+}
+.jbl-meta-chip i { font-size: .65rem; color: var(--primary-color); }
+.jbl-meta-chip--category {
+    background: rgba(var(--primary-color-rgb), .1);
+    color: var(--primary-color);
+}
+.jbl-card-side {
+    border-left: 1.5px solid var(--color-border, #e5e7eb);
+    min-width: 150px;
+}
+.jbl-salary {
+    font-size: .9rem;
+    font-weight: 700;
+    color: #16a34a;
+}
+.jbl-posted-time {
+    font-size: .72rem;
+    color: var(--text-muted);
 }
 
 
@@ -4025,6 +4134,41 @@ body.has-admin-bar .main-header.sticky-top{
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-style: italic;
+}
+
+/* ─── Shared dark brand panel — CTA bands, auth panels, secondary dark sections ─ */
+/*     Same brand colour/warmth as the hero but subordinate: glow only, no dot grid */
+.dark-brand-panel {
+    background: var(--text-dark, #1C1917);
+    position: relative;
+    overflow: hidden;
+}
+.dark-brand-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(ellipse 70% 70% at 85% 10%, rgba(var(--primary-color-rgb), .07) 0%, transparent 100%),
+        radial-gradient(ellipse 50% 60% at 15% 85%, rgba(var(--primary-color-rgb), .04) 0%, transparent 100%);
+    background-size: 100% 100%, 100% 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+.dark-brand-panel > * { position: relative; z-index: 1; }
+
+/* Headline accent on dark panels — gradient orange→amber, italic */
+.dark-brand-panel .dark-panel-accent {
+    background: linear-gradient(125deg, var(--primary-color) 25%, #fbbf24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: italic;
+}
+
+/* Subtitle on dark panels */
+.dark-brand-panel .dark-panel-sub {
+    color: rgba(255,255,255,.62);
+    line-height: 1.7;
 }
 
 /* Subtitle */

@@ -1,13 +1,66 @@
 @extends('frontend._layouts._guest')
 
 @section('title', page_content('auth.register.seo_title', __('Create Account')))
-@section('body_class', 'auth-page auth-solo')
+@section('body_class', 'auth-page')
 
 @section('content')
 
-<div class="col-12 d-flex flex-column min-vh-100">
+{{-- ── Left: dark marketing panel ──────────────────────────────────── --}}
+<div class="col-lg-5 d-none d-lg-flex auth-split-marketing dark-brand-panel">
 
-    {{-- Top bar --}}
+    <div class="auth-marketing-content d-flex flex-column h-100 w-100">
+
+        {{-- Logo --}}
+        <div class="mb-auto pb-5">
+            <a href="{{ url('/') }}" class="d-flex align-items-center gap-2 text-decoration-none mb-5">
+                @if(filled(setting('site_logo')))
+                    <img src="{{ Storage::url(setting('site_logo')) }}"
+                         alt="{{ setting('site_name', config('app.name')) }}"
+                         class="auth-panel-logo">
+                @endif
+                <span class="auth-panel-wordmark">{{ setting('site_name', config('app.name')) }}</span>
+            </a>
+
+            <h2 class="fw-800 lh-sm mb-3" style="font-size:clamp(1.9rem,3vw,2.6rem);color:#fff">
+                {{ __('Start selling') }}<br>
+                <span class="text-gradient">{{ __('in minutes.') }}</span>
+            </h2>
+            <p class="lead mb-0" style="max-width:380px">
+                {{ __('One free account gives you access to eight verticals — list properties, vehicles, services, jobs and more from a single dashboard.') }}
+            </p>
+        </div>
+
+        {{-- Feature list --}}
+        <div class="d-flex flex-column gap-4 mb-auto">
+            @foreach([
+                ['icon' => 'bi-rocket-takeoff-fill', 'title' => 'Free to Start',        'sub' => 'No credit card required to create a listing'],
+                ['icon' => 'bi-grid-3x3-gap-fill',   'title' => '8 Verticals',          'sub' => 'Properties, vehicles, jobs, services & more'],
+                ['icon' => 'bi-bar-chart-line-fill',  'title' => 'Real-Time Analytics', 'sub' => 'Views, inquiries, and revenue in one report'],
+            ] as $feat)
+            <div class="d-flex align-items-start gap-3">
+                <div class="icon-box-soft flex-shrink-0">
+                    <i class="bi {{ $feat['icon'] }} fs-5"></i>
+                </div>
+                <div>
+                    <h5 class="fw-700 mb-0">{{ __($feat['title']) }}</h5>
+                    <p class="mb-0 small opacity-60">{{ __($feat['sub']) }}</p>
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+        {{-- Footer --}}
+        <div class="mt-5 pt-4" style="border-top:1px solid rgba(255,255,255,.1)">
+            <p class="auth-footer-copyright mb-0">&copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}</p>
+        </div>
+
+    </div>
+</div>
+
+{{-- ── Right: form panel ────────────────────────────────────────────── --}}
+<div class="col-lg-7 d-flex flex-column min-vh-100">
+
+    {{-- Top bar (mobile logo + back link) --}}
     <header class="auth-solo-topbar d-flex align-items-center justify-content-between px-4 px-md-5">
         <a href="{{ url('/') }}" class="d-flex align-items-center gap-2 text-decoration-none">
             @if(filled(setting('site_logo')))
@@ -15,7 +68,7 @@
                      alt="{{ setting('site_name', config('app.name')) }}"
                      class="auth-mobile-logo">
             @else
-                <span class="fw-bolder fs-5 text-dark" style="letter-spacing:-.03em;font-family:var(--font-heading)">
+                <span class="fw-bolder fs-5 text-dark" style="font-family:var(--font-heading)">
                     {{ setting('site_name', config('app.name')) }}
                 </span>
             @endif
@@ -25,8 +78,8 @@
         </a>
     </header>
 
-    {{-- Centered form --}}
-    <div class="flex-grow-1 d-flex align-items-center justify-content-center py-5 px-3">
+    {{-- Form --}}
+    <div class="flex-grow-1 d-flex align-items-center justify-content-center py-5 px-4 px-md-5">
         <div style="width:100%;max-width:480px">
 
             @if (session('status'))
@@ -48,8 +101,10 @@
 
             <div class="mb-5">
                 <p class="small fw-semibold text-uppercase mb-3" style="letter-spacing:.08em;color:var(--primary-color)">{{ __('Account') }}</p>
-                <h1 class="mb-3 lh-sm" style="font-size:clamp(1.9rem,4vw,2.6rem)">{{ page_content('auth.register.form_heading', __('Create Account')) }}</h1>
-                <p class="text-muted fw-medium mb-0 fs-5">{{ page_content('auth.register.form_subheading', __('Start with your name, email, and a secure password.')) }}</p>
+                <h1 class="mb-3 lh-sm" style="font-size:clamp(1.9rem,4vw,2.6rem);font-family:var(--font-heading)">
+                    {{ page_content('auth.register.form_heading', __('Create Account')) }}
+                </h1>
+                <p class="text-muted fw-medium mb-0">{{ page_content('auth.register.form_subheading', __('Start with your name, email, and a secure password.')) }}</p>
             </div>
 
             <form method="POST" action="{{ route('register') }}" class="auth-form">

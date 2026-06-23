@@ -68,27 +68,11 @@ h1, h2, h3, h4, .brand-text {
 }
 
 .auth-split-marketing {
-    background:
-        radial-gradient(ellipse at 15% 15%, rgba(var(--primary-rgb), 0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 80%, rgba(var(--primary-rgb), 0.10) 0%, transparent 50%),
-        var(--text-dark, #1C1917);
-    position: relative;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: clamp(3rem, 7vw, 5rem) !important;
     padding-bottom: 5rem !important;
-}
-
-.auth-glow {
-    position: absolute;
-    width: 900px;
-    height: 900px;
-    background: radial-gradient(circle, rgba(var(--primary-rgb), 0.30) 0%, transparent 65%);
-    border-radius: 50%;
-    pointer-events: none;
-    filter: blur(90px);
 }
 
 /* Global Component Overrides */
@@ -348,12 +332,6 @@ h1, h2, h3, h4, .brand-text {
     letter-spacing: 0;
     font-weight: 400;
 }
-
-/* Decorative Glows */
-.auth-glow-tl { top: -10%; left: -10%; opacity: 0.6; }
-.auth-glow-tr { top: -10%; right: -10%; opacity: 0.4; }
-.auth-glow-br { bottom: -10%; right: -10%; opacity: 0.4; }
-.auth-glow-bl { bottom: -10%; left: -10%; opacity: 0.5; }
 
 /* Divider Badge Protocol */
 .divider-badge {

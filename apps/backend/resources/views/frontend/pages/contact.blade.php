@@ -5,7 +5,7 @@
 @section('body_class', 'has-body-glow bg-light frontend-page--contact')
 
 @section('hero')
-<section class="page-hero-strip">
+<section class="page-hero-strip hero-section--dark">
     <div class="container-xl">
         <div class="row align-items-center g-4">
             <div class="col-lg-7" data-aos="fade-right">
@@ -13,12 +13,26 @@
                     <span class="hero-eyebrow__line" aria-hidden="true"></span>
                     {{ __('Support') }}
                 </div>
-                <h1 class="page-hero-title mb-3">{{ __('Get in') }} <span class="text-primary">{{ __('Touch') }}</span></h1>
+                <h1 class="page-hero-title mb-3">{{ __('Get in') }} <span class="page-hero-accent">{{ __('Touch') }}</span></h1>
                 <p class="page-hero-subtitle mb-0">{{ __('Have a question, a partnership idea, or just want to say hello? Our team is ready to help.') }}</p>
             </div>
-            <div class="col-lg-5 d-none d-lg-flex justify-content-end" data-aos="fade-left">
-                <div class="page-hero-icon-wrap">
-                    <i class="bi bi-chat-dots-fill page-hero-icon" aria-hidden="true"></i>
+            <div class="col-lg-5 d-none d-lg-flex justify-content-end" data-aos="fade-left" data-aos-delay="100">
+                <div class="contact-hero-panel">
+                    @foreach([
+                        ['icon' => 'bi-chat-dots-fill',    'label' => 'Live Chat',   'value' => 'Available now',     'color' => '#E05F2C'],
+                        ['icon' => 'bi-envelope-fill',     'label' => 'Email',        'value' => 'Reply within 24h',  'color' => '#2563eb'],
+                        ['icon' => 'bi-shield-check-fill', 'label' => 'Secure',       'value' => 'Your data is safe', 'color' => '#16a34a'],
+                    ] as $ch)
+                    <div class="contact-hero-channel">
+                        <div class="contact-hero-channel__icon" style="background:{{ $ch['color'] }}22;color:{{ $ch['color'] }}">
+                            <i class="bi {{ $ch['icon'] }}"></i>
+                        </div>
+                        <div>
+                            <div class="contact-hero-channel__label">{{ __($ch['label']) }}</div>
+                            <div class="contact-hero-channel__value">{{ __($ch['value']) }}</div>
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -150,11 +164,11 @@
                 @if(!$contactEmail && !$contactPhone && !$contactAddress)
                 <div class="contact-info-card d-flex align-items-start gap-3 p-4 rounded-4 bg-white" style="border:1.5px solid var(--color-border)">
                     <div class="contact-info-icon flex-shrink-0 d-flex align-items-center justify-content-center rounded-3" style="width:44px;height:44px;background:var(--primary-light);color:var(--primary-color)">
-                        <i class="bi bi-envelope-fill fs-5"></i>
+                        <i class="bi bi-headset fs-5"></i>
                     </div>
                     <div>
-                        <p class="fw-semibold text-dark mb-0 small">{{ __('Email') }}</p>
-                        <span class="text-muted small">{{ __('Configure in Admin › Settings') }}</span>
+                        <p class="fw-semibold text-dark mb-0 small">{{ __('Support') }}</p>
+                        <span class="text-muted small">{{ __('Use the form — we respond within one business day.') }}</span>
                     </div>
                 </div>
                 @endif
@@ -203,46 +217,57 @@
 
 @push('styles')
 <style>
-.page-hero-strip {
-    padding: 4rem 0 3rem;
-    background: var(--color-surface);
-    border-bottom: 1.5px solid var(--color-border);
-}
+/* ── Hero strip ───────────────────────────────────────────────── */
+.page-hero-strip { padding: 4rem 0 3rem; }
+
 .page-hero-title {
     font-family: var(--font-heading);
     font-size: clamp(2rem, 4vw, 3rem);
-    color: var(--text-dark);
+    color: #fff;
     line-height: 1.15;
+}
+.page-hero-accent {
+    background: linear-gradient(125deg, var(--primary-color) 25%, #fbbf24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: italic;
 }
 .page-hero-subtitle {
     font-size: 1.05rem;
-    color: var(--text-muted);
+    color: rgba(255,255,255,.65);
     max-width: 38rem;
 }
-.page-hero-icon-wrap {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: var(--primary-light);
+.page-hero-strip .hero-eyebrow { color: rgba(255,255,255,.55); }
+
+/* ── Contact channel panel (hero right col) ───────────────────── */
+.contact-hero-panel {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 20px;
+    padding: 1.75rem;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 280px;
 }
-.page-hero-icon {
-    font-size: 5rem;
-    color: var(--primary-color);
-    opacity: .7;
+.contact-hero-channel { display: flex; align-items: center; gap: 1rem; }
+.contact-hero-channel__icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
 }
-.contact-info-card {
-    transition: transform .2s ease, box-shadow .2s ease;
+.contact-hero-channel__label {
+    font-size: .7rem; font-weight: 700;
+    color: rgba(255,255,255,.45);
+    text-transform: uppercase; letter-spacing: .07em; margin-bottom: .1rem;
 }
-.contact-info-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-subtle);
-}
-.hover-primary:hover {
-    color: var(--primary-color) !important;
-}
+.contact-hero-channel__value { font-size: .9rem; font-weight: 600; color: #fff; }
+
+/* ── Info cards ──────────────────────────────────────────────── */
+.contact-info-card { transition: transform .2s ease, box-shadow .2s ease; }
+.contact-info-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-subtle); }
+.hover-primary:hover { color: var(--primary-color) !important; }
 </style>
 @endpush
 @endsection

@@ -1,96 +1,68 @@
-<div class="col">
-    <div class="jbl-listing-card bg-white border h-100 d-flex flex-column transition-all hover-up rounded-4 position-relative overflow-hidden" 
-         x-data="{ isFavorite: false }">
-        
-        {{-- 1. COVER IMAGE SECTION --}}
-        <div class="position-relative jbl-card-image-wrapper">
-            <img src="{{ $job->primary_image_url }}" 
-                 class="w-100 h-100 object-fit-cover transition-img jbl-card-img-top" 
-                 alt="{{ $job->title }}">
-            
-            <div class="position-absolute top-0 start-0 w-100 p-3 d-flex justify-content-between jbl-badge-container">
-                <div>
-                    @if($job->is_featured)
-                        <span class="badge bg-danger text-white fw-semibold px-2 py-1 rounded-2">
-                            <i class="bi bi-patch-check-fill me-1"></i>{{ __('Featured') }}
-                        </span>
-                    @endif
-                </div>
-                
-                @isset($job->category)
-                    <span class="badge {{ $job->badge_class }} fw-700 px-2 py-1 rounded-2 shadow-sm">
-                        {{ $job->category->title }}
-                    </span>
-                @endisset
-            </div>
-        </div>
+<article class="jbl-listing-card bg-white border rounded-4 d-flex align-items-stretch overflow-hidden transition-all hover-up">
 
-        {{-- 2. CARD CONTENT --}}
-        <div class="card-body p-4 pt-0 d-flex flex-column position-relative">
-            
-            <div class="d-flex justify-content-between align-items-end mb-3">
-                {{-- Logo Container --}}
-                <div class="bg-white shadow rounded-3 border border-white border-4 d-flex align-items-center justify-content-center jbl-employer-logo-container">
-                    <img src="{{ $job->employer->avatar_url }}" 
-                         alt="{{ $job->employer->name }}" 
-                         class="img-fluid rounded">
-                </div>
-                
-                {{-- Save Button --}}
-                <button type="button" 
-                        @click.prevent="isFavorite = !isFavorite"
-                        class="btn btn-white rounded-circle shadow-sm d-flex align-items-center justify-content-center border-0 position-absolute jbl-btn-save-job">
-                    <i class="bi" :class="isFavorite ? 'bi-bookmark-fill text-primary' : 'bi-bookmark text-muted'"></i>
-                </button>
-            </div>
-
-            {{-- Main Link Area --}}
-            <a href="{{ route('jobs.show', $job->slug) }}" class="text-decoration-none flex-grow-1">
-                <div class="mb-3">
-                    <h6 class="text-primary fw-800 mb-1 small">{{ $job->employer->name }}</h6>
-                    <h5 class="property-title fw-800 mb-2 text-dark line-clamp-1">{{ $job->title }}</h5>
-                    
-                    <div class="d-flex align-items-center gap-3">
-                        <span class="text-muted small">
-                            <i class="bi bi-geo-alt me-1 text-primary"></i>{{ $job->location->title ?? $job->city ?? __('Global') }}
-                        </span>
-                        <span class="text-muted small">
-                            <i class="bi bi-clock-history me-1"></i>{{ $job->created_at->diffForHumans(null, true) }}
-                        </span>
-                    </div>
-                </div>
-
-                <p class="text-muted small mb-4 jbl-description-text">
-                    {{ Str::limit(strip_tags($job->description), 95) }}
-                </p>
-            </a>
-
-            {{-- 3. FOOTER METRICS --}}
-            <div class="row g-0 pt-3 border-top mt-auto align-items-center">
-                <div class="col-4 border-end">
-                    <span class="metric-label text-uppercase">{{ __('Type') }}</span>
-                    <span class="metric-value jbl-metric-value fw-800 text-dark text-truncate d-block pe-1">
-                        {{ $job->type->title ?? __('Full-Time') }}
-                    </span>
-                </div>
-                <div class="col-4 border-end text-center">
-                    <span class="metric-label text-uppercase">{{ __('Salary') }}</span>
-                    <span class="metric-value jbl-metric-value fw-800 text-success">
-                        {{ $job->salary_range_formatted ?? __('Comp.') }}
-                    </span>
-                </div>
-                <div class="col-4 text-end">
-                    <span class="metric-label text-uppercase">{{ __('Model') }}</span>
-                    <span class="metric-value jbl-metric-value fw-800 text-dark">
-                        {{ $job->workplace_label }}
-                    </span>
-                </div>
-            </div>
+    {{-- Company logo mark ------------------------------------------------ --}}
+    <div class="jbl-company-mark flex-shrink-0 d-flex align-items-center justify-content-center">
+        <div class="jbl-company-logo-wrap">
+            <img src="{{ $job->employer->avatar_url }}"
+                 alt="{{ $job->employer->name }}"
+                 class="jbl-company-logo">
         </div>
     </div>
-</div>
 
+    {{-- Main content ----------------------------------------------------- --}}
+    <div class="jbl-card-body flex-grow-1 min-w-0 py-4 pe-3">
+        <div class="d-flex align-items-start gap-2 mb-1">
+            <div class="min-w-0 flex-grow-1">
+                <a href="{{ route('jobs.show', $job->slug) }}"
+                   class="text-decoration-none d-block">
+                    <h5 class="jbl-job-title mb-0 line-clamp-1">{{ $job->title }}</h5>
+                </a>
+                <p class="jbl-company-name mb-0">
+                    <i class="bi bi-building me-1"></i>{{ $job->employer->name }}
+                </p>
+            </div>
+            @if($job->is_featured)
+                <span class="badge bg-danger fw-semibold flex-shrink-0" style="font-size:.7rem;white-space:nowrap">
+                    <i class="bi bi-patch-check-fill me-1"></i>{{ __('Featured') }}
+                </span>
+            @endif
+        </div>
 
+        <div class="jbl-meta-row mt-2">
+            <span class="jbl-meta-chip">
+                <i class="bi bi-geo-alt-fill"></i>
+                {{ $job->location->title ?? $job->city ?? __('Global') }}
+            </span>
+            <span class="jbl-meta-chip">
+                <i class="bi bi-clock-fill"></i>
+                {{ $job->type->title ?? __('Full-Time') }}
+            </span>
+            <span class="jbl-meta-chip">
+                <i class="bi bi-laptop-fill"></i>
+                {{ $job->workplace_label }}
+            </span>
+            @isset($job->category)
+                <span class="jbl-meta-chip jbl-meta-chip--category">
+                    {{ $job->category->title }}
+                </span>
+            @endisset
+        </div>
+    </div>
 
+    {{-- Right rail -------------------------------------------------------- --}}
+    <div class="jbl-card-side flex-shrink-0 d-none d-md-flex flex-column align-items-end justify-content-between py-4 ps-3 pe-4">
+        <div class="text-end">
+            @if($job->salary_range_formatted)
+                <div class="jbl-salary">{{ $job->salary_range_formatted }}</div>
+            @endif
+            <div class="jbl-posted-time mt-1">
+                {{ $job->created_at->diffForHumans(null, true) }} {{ __('ago') }}
+            </div>
+        </div>
+        <a href="{{ route('jobs.show', $job->slug) }}"
+           class="btn btn-sm btn-outline-primary fw-semibold px-3 mt-3">
+            {{ __('View Job') }} <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
 
-
+</article>

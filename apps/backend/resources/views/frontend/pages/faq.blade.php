@@ -5,7 +5,7 @@
 @section('body_class', 'has-body-glow bg-light frontend-page--faq')
 
 @section('hero')
-<section class="page-hero-strip">
+<section class="page-hero-strip hero-section--dark">
     <div class="container-xl">
         <div class="row align-items-center g-4">
             <div class="col-lg-7" data-aos="fade-right">
@@ -13,12 +13,24 @@
                     <span class="hero-eyebrow__line" aria-hidden="true"></span>
                     {{ __('Help Center') }}
                 </div>
-                <h1 class="page-hero-title mb-3">{{ __('Frequently Asked') }} <span class="text-primary">{{ __('Questions') }}</span></h1>
+                <h1 class="page-hero-title mb-3">{{ __('Frequently Asked') }} <span class="page-hero-accent">{{ __('Questions') }}</span></h1>
                 <p class="page-hero-subtitle mb-0">{{ __('Everything you need to know about the marketplace. Can\'t find what you\'re looking for? Reach out to our support team.') }}</p>
             </div>
-            <div class="col-lg-5 d-none d-lg-flex justify-content-end" data-aos="fade-left">
-                <div class="page-hero-icon-wrap">
-                    <i class="bi bi-question-circle-fill page-hero-icon" aria-hidden="true"></i>
+            <div class="col-lg-5 d-none d-lg-flex justify-content-end" data-aos="fade-left" data-aos-delay="100">
+                <div class="faq-hero-stats-panel">
+                    @foreach([
+                        ['num' => '50+', 'label' => 'Answers',    'icon' => 'bi-chat-square-text-fill', 'color' => '#E05F2C'],
+                        ['num' => '5',   'label' => 'Categories',  'icon' => 'bi-grid-fill',              'color' => '#2563eb'],
+                        ['num' => '24h', 'label' => 'Support',     'icon' => 'bi-headset',               'color' => '#16a34a'],
+                    ] as $stat)
+                    <div class="faq-hero-stat">
+                        <div class="faq-hero-stat__icon" style="background:{{ $stat['color'] }}22;color:{{ $stat['color'] }}">
+                            <i class="bi {{ $stat['icon'] }}"></i>
+                        </div>
+                        <div class="faq-hero-stat__num">{{ $stat['num'] }}</div>
+                        <div class="faq-hero-stat__label">{{ __($stat['label']) }}</div>
+                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -364,29 +376,60 @@
 
 @push('styles')
 <style>
-.page-hero-strip {
-    padding: 4rem 0 3rem;
-    background: var(--color-surface);
-    border-bottom: 1.5px solid var(--color-border);
-}
+/* ── Hero strip ───────────────────────────────────────────────── */
+.page-hero-strip { padding: 4rem 0 3rem; }
+
 .page-hero-title {
     font-family: var(--font-heading);
     font-size: clamp(2rem, 4vw, 3rem);
-    color: var(--text-dark);
+    color: #fff;
     line-height: 1.15;
+}
+.page-hero-accent {
+    background: linear-gradient(125deg, var(--primary-color) 25%, #fbbf24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: italic;
 }
 .page-hero-subtitle {
     font-size: 1.05rem;
-    color: var(--text-muted);
+    color: rgba(255,255,255,.65);
     max-width: 40rem;
 }
-.page-hero-icon-wrap {
-    width: 160px; height: 160px;
-    border-radius: 50%;
-    background: var(--primary-light);
-    display: flex; align-items: center; justify-content: center;
+.page-hero-strip .hero-eyebrow { color: rgba(255,255,255,.55); }
+
+/* ── FAQ stat panel (hero right col) ─────────────────────────── */
+.faq-hero-stats-panel {
+    display: flex;
+    gap: 1rem;
 }
-.page-hero-icon { font-size: 5rem; color: var(--primary-color); opacity: .7; }
+.faq-hero-stat {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 16px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+}
+.faq-hero-stat__icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+}
+.faq-hero-stat__num {
+    font-family: var(--font-heading);
+    font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1;
+}
+.faq-hero-stat__label {
+    font-size: .7rem; font-weight: 700;
+    color: rgba(255,255,255,.45);
+    text-transform: uppercase; letter-spacing: .07em;
+}
 
 .faq-group-title {
     font-family: var(--font-heading);
