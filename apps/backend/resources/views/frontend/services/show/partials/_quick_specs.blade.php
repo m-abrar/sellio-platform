@@ -13,7 +13,7 @@
         <div class="col-12 border-bottom border-color-light py-3 px-4">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
-                    <div class="spec-icon-box bg-primary-light text-primary me-3">
+                    <div class="spec-icon-box bg-primary-light me-3" style="color:var(--primary-color)">
                         <i class="bi bi-mortarboard-fill"></i>
                     </div>
                     <div>
@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="text-end">
-                    <span class="badge bg-light text-primary border fw-bold">{{ __('Level') }} {{ $service->expertise_level }}</span>
+                    <span class="badge fw-bold border" style="background:rgba(var(--primary-color-rgb),.08);color:var(--primary-color)">{{ __('Level') }} {{ $service->expertise_level }}</span>
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
         <div class="col-12 border-bottom border-color-light py-3 px-4">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
-                    <div class="spec-icon-box bg-primary-light text-primary me-3">
+                    <div class="spec-icon-box bg-primary-light me-3" style="color:var(--primary-color)">
                         <i class="bi bi-geo-alt-fill"></i>
                     </div>
                     <div>
@@ -55,7 +55,7 @@
         <div class="col-12 border-bottom border-color-light py-3 px-4">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
-                    <div class="spec-icon-box bg-primary-light text-primary me-3">
+                    <div class="spec-icon-box bg-primary-light me-3" style="color:var(--primary-color)">
                         <i class="bi bi-file-earmark-medical-fill"></i>
                     </div>
                     <div>
@@ -72,10 +72,11 @@
         </div>
 
         {{-- 4. Capacity (From Migration) --}}
+        @php $slotsColor = ($service->max_client_slots > 0) ? 'color:var(--primary-color)' : 'color:#9ca3af'; @endphp
         <div class="col-12 py-3 px-4">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
-                    <div class="spec-icon-box bg-primary-light text-primary me-3">
+                    <div class="spec-icon-box bg-primary-light me-3" style="color:var(--primary-color)">
                         <i class="bi bi-people-fill"></i>
                     </div>
                     <div>
@@ -84,7 +85,7 @@
                     </div>
                 </div>
                 <div class="text-end">
-                    <span class="fw-800 fs-6" style="{{ $service->max_client_slots > 0 ? 'color:var(--primary-color)' : 'color:#9ca3af' }}">
+                    <span class="fw-800 fs-6" style="{{ $slotsColor }}">
                         {{ $service->max_client_slots ?? __('Unlimited') }}
                     </span>
                 </div>
