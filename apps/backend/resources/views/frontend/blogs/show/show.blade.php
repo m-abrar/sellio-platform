@@ -126,7 +126,7 @@
             </h4>
             <div class="row row-cols-1 row-cols-md-2 g-4">
                 @foreach($viewData['related_posts'] ?? [] as $related)
-                    @include('frontend.blogs._blog_card', ['blog' => $related])
+                    @include('frontend.blogs._partials._card', ['blog' => $related])
                 @endforeach
             </div>
         </div>

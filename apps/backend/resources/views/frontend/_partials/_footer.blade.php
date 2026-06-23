@@ -131,8 +131,8 @@
             {{ __('All rights reserved.') }}
         </p>
         <div class="ft-legal-links">
-            <a href="{{ page_content_string('global.footer.privacy_url', '#') }}" class="ft-legal-link">{{ __('Privacy') }}</a>
-            <a href="{{ page_content_string('global.footer.terms_url', '#') }}" class="ft-legal-link">{{ __('Terms') }}</a>
+            <a href="{{ page_content_string('global.footer.privacy_url', route('privacy-policy')) }}" class="ft-legal-link">{{ __('Privacy') }}</a>
+            <a href="{{ page_content_string('global.footer.terms_url', route('terms')) }}" class="ft-legal-link">{{ __('Terms') }}</a>
         </div>
     </div>
 
