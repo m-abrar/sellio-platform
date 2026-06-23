@@ -1,6 +1,6 @@
 # Frontend Public Views — Redesign Plan
 
-**Status: ALL COMPLETE — verified clean as of commit 056c0427.**
+**Status: Phases 0–6 complete (commit `056c0427`). Phase 8 complete (commit `f1d1d022`). Phase 7 (Property Detail Layout) pending.**
 
 Goal: Remove all glassmorphism and establish the editorial design system built on the homepage:
 - **DM Serif Display** weight-400 for headings, titles, numbers
@@ -192,7 +192,25 @@ Partials cleaned: `_header`, `_listing_header`, `_breadcrumbs`, `_quick_specs`, 
 
 ---
 
-## ✅ Phase 7 — Property Detail Page Layout
+## ✅ Phase 8 — AI Template Removal: Partner Profile & Taxonomy Pages (commit `f1d1d022`)
+
+> **Completed:** Full redesign of profile and browse pages to remove the `user-profile-header` dark-overlay photo hero, glassmorphism, fake trust-signal cards, and Bootstrap pill tabs. All pages now use the editorial `section-warm` header pattern established on the homepage.
+
+| Page | File | Key changes |
+|---|---|---|
+| Partner profile | `frontend/partners/show.blade.php` | Hero replaced; `has-body-glow` / `mt-n5` removed; underline tab pattern; price/title fallback; `collect()->every()` fix |
+| Category | `frontend/categories/show.blade.php` | Hero replaced; dark "Get Involved" card removed; listing rows → design system |
+| Tag | `frontend/tags/show.blade.php` | Hero replaced; `verified-badge` reuse removed; `nav-pills nav-justified` → underline tabs; "Tag Performance" fake card removed; Explore Categories URLs fixed (`?tags[]=id`) |
+| Type | `frontend/types/show.blade.php` | Hero replaced; "Category Insight" fake card removed; unlocalized strings fixed; bedroom condition made translation-safe |
+| Brand | `frontend/brands/show.blade.php` | Hero replaced; `@ include` space-bug fixed (Reviews tab was broken); inconsistent section titles standardised; "Brand Authority" fake card removed |
+| Reviews partial | `frontend/_partials/_reviews.blade.php` | Null-safe `$reviews` fallback so partial works when relationship is not loaded |
+| Homepage stats | `unifieds/_partials/_index-section-hero.blade.php` | Hardcoded `4.8 ★` stat removed; stats row now conditional on real data |
+| Service category cards | `unifieds/_partials/_index-body.blade.php` | Icon-in-circle centered cards → left-aligned editorial cards |
+| Admin properties | `admin/properties/index.blade.php`, `PropertyController.php` | AI docblock removed; jargon labels cleaned |
+
+---
+
+## ⏳ Phase 7 — Property Detail Page Layout (PENDING)
 
 ### A. Macro Page Layout (DOM Order)
 
@@ -458,61 +476,28 @@ All items below were found during the verification pass and fixed in a follow-up
 
 
 
------------------------
+---
 
-Additional Feedback
+## Remaining Items
 
+### ⏳ Open
 
-in the hero section, please show 4 cards instead of 3.
+| Item | Notes |
+|---|---|
+| Property detail — Lifestyle & Accessibility readability | Visual design crash reported; needs Playwright check |
+| Property sale — visit date picker | Right-column date picker too basic; needs UX improvement |
+| Classified sidebar widgets | Still old design |
+| Login screen design tokens | Reported after Phase 3 verification; may have regressed or been missed |
+| Admin bar pushes `#main-content` too far from top | Layout spacing issue on pages with admin bar visible |
 
+### ✅ Resolved
 
-hero section
-the search forms tabs, i think the pills design feel like unfinished. can you double check?
-
-in the hero section, are the 4 cards dynamic?
-
-in the hero do you think the cards design somehow shows AI template? we need to get rid of ai templates
-
-
-property detail page:
-Lifestyle & Accessibility, recheck for readiblity, design crash, use playwright.
-
-The sale property on the right column you have a date picker to schedule a visit that is too basic UIUX
-
-Redesign these pages to follow our theme's design:
-
-Agent Profile
-Browse by Category 
-Browse by Tag
-Browse by Location, etc, etc.
-
-
-
-http://192.168.0.112:8000/login
-the login screen is not following the css design tokens, please fix it.
-
-
-
-
-I think the classified sidebar widgets are still old design.
-
-
-
-Let's also work on the partner profile page, testimonial category, location, tags, etcetera.
-
-
-
-DONE
-<header>
-remove empty space here
-<nav></nav>
-</header>
-
-
-
-admin bar pushed the following too much far from top.
-<main id="main-content" class="frontend-main min-vh-100" role="main">
-
-
-On tags page, Explore Categories, should send to correct target like this:
-http://192.168.0.112:8000/vehicles/?tags%5B%5D=1
+| Item | Resolution |
+|---|---|
+| Hero section: 4 cards instead of 3 | Done |
+| Hero cards AI template feel | Service category cards replaced with left-aligned editorial cards (Phase 8) |
+| Agent Profile, Browse by Category/Tag/Location/Type/Brand redesign | Done — all taxonomy + partner profile pages redesigned (Phase 8) |
+| Partner profile page redesign | Done (Phase 8) |
+| Tags — Explore Categories links broken | Fixed: `.index` route + `?tags[]=id` query param (Phase 8) |
+| Sticky header empty space | Fixed |
+| Reviews partial null-safety crash on brand page | Fixed: `$reviews = $reviewable->reviews ?? collect()` (Phase 8) |
