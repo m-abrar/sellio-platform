@@ -13,24 +13,26 @@
         ])
     </x-slot:breadcrumbs>
 
+    <x-slot:gallery>
+        <div class="position-relative">
+            <div class="position-absolute top-0 start-0 m-3 z-2 d-flex gap-2">
+                @if($product->on_sale)
+                    <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:var(--primary-color);color:#fff">
+                        <i class="bi bi-percent me-1"></i>{{ __('Sale') }}
+                    </span>
+                @endif
+                @if($product->is_digital)
+                    <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:var(--primary-color);color:#fff">
+                        <i class="bi bi-cloud-download me-1"></i>{{ __('Digital') }}
+                    </span>
+                @endif
+            </div>
+            @include('frontend.products.show.partials._product_gallery')
+        </div>
+    </x-slot:gallery>
+
     <x-slot:main>
         <div class="detail-main-card border-0 overflow-hidden mb-5">
-            <div class="gallery-section border-bottom border-color-light position-relative">
-                <div class="position-absolute top-0 start-0 m-3 z-2 d-flex gap-2">
-                    @if($product->on_sale)
-                        <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:var(--primary-color);color:#fff">
-                            <i class="bi bi-percent me-1"></i>{{ __('Sale') }}
-                        </span>
-                    @endif
-                    @if($product->is_digital)
-                        <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:var(--primary-color);color:#fff">
-                            <i class="bi bi-cloud-download me-1"></i>{{ __('Digital') }}
-                        </span>
-                    @endif
-                </div>
-                @include('frontend.products.show.partials._product_gallery')
-            </div>
-
             <div class="p-4 p-lg-5">
                 @include('frontend.products.show.partials._product_header', ['product' => $product])
 

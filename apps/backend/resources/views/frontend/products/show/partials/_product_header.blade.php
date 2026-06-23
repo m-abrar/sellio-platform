@@ -4,20 +4,17 @@
 @endphp
 
 <div class="product-detail-header mb-4">
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+    <p class="small fw-semibold text-uppercase mb-2" style="letter-spacing:.08em;color:var(--primary-color)">
+        <i class="bi bi-tag me-1"></i>{{ $product->category->title ?? __('Product') }}
         @if($product->brand)
-            <span class="fw-semibold rounded-2 px-3 py-2 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
-                {{ $product->brand->title }}
-            </span>
+            &nbsp;·&nbsp;{{ $product->brand->title }}
         @endif
-        <span class="metric-label mb-0">{{ $product->category->title ?? __('General') }}</span>
-    </div>
+    </p>
 
     <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-start gap-3 mb-3">
-        <h1 class="fw-800 display-6 mb-0 text-dark">{{ $product->title }}</h1>
+        <h1 class="display-6 text-dark mb-0 tracking-tight lh-sm">{{ $product->title }}</h1>
 
-        <div class="product-detail-header__price text-lg-end">
-            <span class="metric-label d-block">{{ __('Price') }}</span>
+        <div class="product-detail-header__price text-lg-end flex-shrink-0">
             <div class="d-flex align-items-baseline gap-2 justify-content-lg-end">
                 <span class="price-text-large" style="color:var(--primary-color)">{{ format_currency($displayPrice) }}</span>
                 @if($comparePrice)
@@ -27,7 +24,7 @@
         </div>
     </div>
 
-    <div class="product-detail-meta p-3 p-md-4 rounded-4" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07)">
+    <div class="product-detail-meta p-3 p-md-4 rounded-3" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07)">
         <div class="d-flex flex-wrap align-items-center gap-3 gap-md-4 small">
             <span class="text-muted">
                 <span class="fw-bold text-dark">{{ __('SKU') }}:</span> {{ $product->sku ?? __('N/A') }}
