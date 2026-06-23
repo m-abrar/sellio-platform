@@ -121,7 +121,7 @@ Route::name('dashboard.admin.')->group(function () {
     Route::resource('service-appointments', ServiceAppointmentController::class);
     Route::resource('classified-inquiries', ClassifiedInquiryController::class);
     
-    Route::resource('transactions', TransactionController::class);
+    Route::middleware('can:manage-withdrawals')->resource('transactions', TransactionController::class);
 
     Route::middleware('can:manage-withdrawals')->prefix('withdrawals')->name('withdrawals.')->group(function () {
         Route::controller(WithdrawalController::class)->group(function () {
@@ -136,17 +136,19 @@ Route::name('dashboard.admin.')->group(function () {
     /**
      * 4. USER & ACCESS CONTROL (RBAC)
      */
-    Route::controller(UserController::class)->group(function () {
-        Route::get('users/buyers', 'buyers')->name('users.buyers');
-        Route::get('users/partners', 'partners')->name('users.partners');
+    Route::middleware('can:manage-users')->group(function () {
+        Route::controller(UserController::class)->group(function () {
+            Route::get('users/buyers', 'buyers')->name('users.buyers');
+            Route::get('users/partners', 'partners')->name('users.partners');
+        });
+
+        Route::resource('users', UserController::class);
     });
 
     Route::controller(ProfileController::class)->group(function () {
         Route::get('profile/edit', 'edit')->name('profile.edit');
         Route::put('profile/update', 'update')->name('profile.update');
     });
-
-    Route::resource('users', UserController::class);
 
     Route::middleware('role:super-admin')->group(function () {
         Route::resource('roles', RoleController::class);
@@ -166,9 +168,11 @@ Route::name('dashboard.admin.')->group(function () {
     Route::get('blogs/pending', [BlogController::class, 'pending'])->name('blogs.pending');
     Route::resource('blogs', BlogController::class);
 
-    // Page Management Routes
-    Route::resource('pages', PageController::class);
-    Route::get('pages/type/{type}', [PageController::class, 'index'])->name('pages.index.type');
+    // Page Management Routes (admin-only — moderators lack manage-pages)
+    Route::middleware('can:manage-pages')->group(function () {
+        Route::resource('pages', PageController::class);
+        Route::get('pages/type/{type}', [PageController::class, 'index'])->name('pages.index.type');
+    });
 
     Route::middleware('role:super-admin')->controller(PageBuilderController::class)->prefix('page-builder')->name('page-builder.')->group(function () {
         Route::get('/{id}', 'edit')->name('edit');
@@ -182,7 +186,7 @@ Route::name('dashboard.admin.')->group(function () {
         Route::post('/update', 'bulkUpdate')->name('bulk_update');
     });
 
-    Route::controller(MenuController::class)->prefix('menu')->name('menu.')->group(function () {
+    Route::middleware('can:manage-menus')->controller(MenuController::class)->prefix('menu')->name('menu.')->group(function () {
         Route::get('/{theme?}', 'index')->name('index');
         Route::get('/{menu}/edit', 'edit')->name('edit');
         Route::post('/{menu}/update', 'updateStructure')->name('update_structure');
@@ -190,37 +194,39 @@ Route::name('dashboard.admin.')->group(function () {
         Route::put('/items/{item}', 'updateItem')->name('update_item');
     });
 
-    Route::resource('email-templates', EmailTemplateController::class)->except(['create', 'store', 'destroy']);
+    Route::middleware('can:manage-users')->resource('email-templates', EmailTemplateController::class)->except(['create', 'store', 'destroy']);
     Route::resource('advertisements', AdvertisementController::class);
     Route::resource('newsletter-subscribers', NewsletterSubscriberController::class);
 
     /**
-     * 6. SUBSCRIPTIONS & GATEWAYS
+     * 6. SUBSCRIPTIONS & GATEWAYS (admin-only — moderators lack manage-withdrawals)
      */
-    Route::get('plans/{plan}/duplicate', [PlanController::class, 'duplicate'])->name('plans.duplicate');
-    Route::resource('plans', PlanController::class);
+    Route::middleware('can:manage-withdrawals')->group(function () {
+        Route::get('plans/{plan}/duplicate', [PlanController::class, 'duplicate'])->name('plans.duplicate');
+        Route::resource('plans', PlanController::class);
 
-    Route::controller(SubscriptionController::class)->prefix('subscriptions')->name('subscriptions.')->group(function () {
-        Route::post('/{subscription}/renew', 'renew')->name('renew');
-        Route::get('/active', 'index')->name('active')->defaults('status', 'active');
-        Route::get('/pending', 'index')->name('pending')->defaults('status', 'pending');
-    });
-    Route::resource('subscriptions', SubscriptionController::class);
+        Route::controller(SubscriptionController::class)->prefix('subscriptions')->name('subscriptions.')->group(function () {
+            Route::post('/{subscription}/renew', 'renew')->name('renew');
+            Route::get('/active', 'index')->name('active')->defaults('status', 'active');
+            Route::get('/pending', 'index')->name('pending')->defaults('status', 'pending');
+        });
+        Route::resource('subscriptions', SubscriptionController::class);
 
-    Route::prefix('payments')->name('payments.')->group(function() {
-        Route::get('/', [PaymentController::class, 'index'])->name('index');
-        Route::get('/failed', [PaymentController::class, 'failed'])->name('failed');
-        Route::get('/duplicate', [PaymentController::class, 'duplicate'])->name('duplicate');
-    });
-    Route::resource('payments', PaymentController::class)->except(['index']);
+        Route::prefix('payments')->name('payments.')->group(function() {
+            Route::get('/', [PaymentController::class, 'index'])->name('index');
+            Route::get('/failed', [PaymentController::class, 'failed'])->name('failed');
+            Route::get('/duplicate', [PaymentController::class, 'duplicate'])->name('duplicate');
+        });
+        Route::resource('payments', PaymentController::class)->except(['index']);
 
-    Route::resource('subscription-quotas', SubscriptionQuotaController::class)->only(['index', 'edit', 'update']);
-    Route::post('subscription-quotas/{subscriptionQuota}/reset', [SubscriptionQuotaController::class, 'reset'])->name('subscription-quotas.reset');
+        Route::resource('subscription-quotas', SubscriptionQuotaController::class)->only(['index', 'edit', 'update']);
+        Route::post('subscription-quotas/{subscriptionQuota}/reset', [SubscriptionQuotaController::class, 'reset'])->name('subscription-quotas.reset');
 
-    Route::controller(PaymentGatewayController::class)->prefix('payment-gateways')->name('payment-gateways.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/{gateway}/edit', 'edit')->name('edit');
-        Route::put('/{gateway}', 'update')->name('update');
+        Route::controller(PaymentGatewayController::class)->prefix('payment-gateways')->name('payment-gateways.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/{gateway}/edit', 'edit')->name('edit');
+            Route::put('/{gateway}', 'update')->name('update');
+        });
     });
 
     /**
@@ -234,7 +240,7 @@ Route::name('dashboard.admin.')->group(function () {
     });
     Route::get('payments-report', [ReportController::class, 'payments'])->name('payments_report');
 
-    Route::controller(ThemeController::class)->prefix('themes')->name('themes.')->group(function () {
+    Route::middleware('can:manage-themes')->controller(ThemeController::class)->prefix('themes')->name('themes.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::post('/{id}/update', 'update')->name('update');

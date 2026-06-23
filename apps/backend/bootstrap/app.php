@@ -34,8 +34,9 @@ return Application::configure(basePath: dirname(__DIR__))
         
         // Register custom API files here
         then: function () {
-            // Admin API Routes
-            Route::middleware(['api', 'auth:sanctum', 'role:admin|super-admin'])
+            // Admin API Routes — admins and super-admins get full access;
+            // moderators get access to content routes only (gated further inside).
+            Route::middleware(['api', 'auth:sanctum', 'role:admin|super-admin|moderator'])
                 ->prefix('api/dashboard/admin')
                 ->name('api.dashboard.admin.')
                 ->group(base_path('routes/api/dashboard/admin.php'));
