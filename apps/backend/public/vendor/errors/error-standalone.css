@@ -63,6 +63,13 @@ body {
     color: #d97706;
 }
 
+/* db-error — red */
+.icon-box--db {
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    color: #dc2626;
+}
+
 .code {
     font-size: 4.5rem;
     font-weight: 900;
