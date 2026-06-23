@@ -1,80 +1,82 @@
 @extends('frontend._layouts._app')
 
-@section('title', $auto->meta_title ?: ($auto->year . ' ' . $auto->make . ' ' . $auto->model . ' ' . __('for Sale in') . ' ' . $auto->city)) 
+@section('title', $auto->meta_title ?: ($auto->year . ' ' . $auto->make . ' ' . $auto->model . ' ' . __('for Sale in') . ' ' . $auto->city))
 
 @section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 @section('content')
 <x-frontend.detail-shell variant="auto">
     <x-slot:breadcrumbs>
-        @include('frontend.autos.show.partials._header')
+        @include('frontend.autos.show.partials._breadcrumbs')
     </x-slot:breadcrumbs>
 
+    <x-slot:gallery>
+        @include('frontend.autos.show.partials._gallery')
+    </x-slot:gallery>
+
     <x-slot:main>
+        {{-- Editorial title block --}}
+        <header class="property-title-block mb-4">
+            <p class="small fw-semibold text-uppercase mb-2" style="letter-spacing:.08em;color:var(--primary-color)">
+                <i class="bi bi-car-front me-1"></i>{{ $auto->category->title ?? __('For Sale') }}
+                @if($auto->is_featured)
+                    &nbsp;·&nbsp;<i class="bi bi-patch-check-fill me-1"></i>{{ __('Featured') }}
+                @endif
+            </p>
+            <h1 class="display-5 text-dark mb-2 tracking-tight lh-sm">{{ $auto->year }} {{ $auto->make }} {{ $auto->model }}</h1>
+            <p class="text-muted mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill text-muted small"></i>
+                {{ collect([$auto->city, $auto->state])->filter()->join(', ') }}
+            </p>
+            @if ($auto->sale_price < $auto->base_price && $auto->sale_price > 0)
+                <div class="d-flex align-items-baseline gap-2">
+                    <h2 class="fw-800 mb-0 display-6" style="color:var(--primary-color)">{{ setting('currency_symbol', '$') }}{{ number_format($auto->sale_price) }}</h2>
+                    <del class="text-muted fs-5">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price) }}</del>
+                </div>
+            @else
+                <div class="d-flex align-items-baseline gap-2">
+                    <h2 class="fw-800 mb-0 display-6" style="color:var(--primary-color)">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price) }}</h2>
+                    <span class="text-muted small fw-semibold">{{ __('Asking Price') }}</span>
+                </div>
+            @endif
+            <p class="text-muted small fw-semibold mt-1 mb-0">{{ __('Excl. taxes & licensing') }}</p>
+        </header>
+
+        {{-- Key specs bar --}}
+        @include('frontend.autos.show.partials._quick_specs')
+
+        {{-- Content sections --}}
         <div class="detail-main-card border-0 overflow-hidden mb-5">
-            <div class="gallery-section border-bottom border-color-light">
-                @include('frontend.autos.show.partials._gallery')
-            </div>
-
             <div class="p-4 p-lg-5">
-                <div class="row align-items-start mb-4">
-                    <div class="col-md-8">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <span class="badge bg-primary-light text-primary px-3 py-1 rounded-2 fw-semibold">
-                                <i class="bi bi-tag-fill me-1"></i>{{ __('For sale') }}
-                            </span>
-                            @if($auto->is_featured)
-                                <span class="badge bg-dark text-white px-3 py-1 rounded-2 fw-semibold">
-                                    <i class="bi bi-star-fill text-warning me-1"></i>{{ __('Featured') }}
-                                </span>
-                            @endif
-                        </div>
-                        <h1 class="fw-800 display-5 mb-1 text-dark">{{ $auto->year }} {{ $auto->make }} {{ $auto->model }}</h1>
-                        <p class="text-muted fs-5 mb-0">
-                            <i class="bi bi-geo-alt-fill lc-geo-icon me-1"></i>{{ $auto->city }}, {{ $auto->state }}
-                        </p>
+                <section id="description" class="mb-5">
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title">
+                        <i class="bi bi-body-text me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Dealer Comments') }}
+                    </h4>
+                    <div class="listing-description text-muted lh-lg">
+                        @include('frontend.autos.show.partials._description')
                     </div>
-                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                        @if ($auto->sale_price < $auto->base_price && $auto->sale_price > 0)
-                            <h2 class="text-primary fw-800 mb-0">{{ setting('currency_symbol', '$') }}{{ number_format($auto->sale_price) }}</h2>
-                            <del class="text-muted small">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price) }}</del>
-                        @else
-                            <div class="pd-price-box p-3 d-inline-block text-start">
-                                <span class="metric-label text-uppercase d-block mb-1">{{ __('Asking price') }}</span>
-                                <h2 class="fw-800 text-primary mb-0">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price) }}</h2>
-                            </div>
-                        @endif
-                        <p class="text-muted small mt-2 mb-0 fw-semibold">{{ __('Excl. taxes & licensing') }}</p>
-                    </div>
-                </div>
+                </section>
 
-                <hr class="opacity-10 my-4">
+                <section id="specifications" class="mb-5 pt-4 border-top border-color-light">
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title">
+                        <i class="bi bi-list-columns-reverse me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Technical Specifications') }}
+                    </h4>
+                    @include('frontend.autos.show.partials._specifications_table')
+                </section>
 
-                @include('frontend.autos.show.partials._quick_specs')
+                <section id="features" class="mb-5 pt-4 border-top border-color-light">
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title">
+                        <i class="bi bi-grid-3x3-gap me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Key Options & Features') }}
+                    </h4>
+                    @include('frontend.autos.show.partials._features')
+                </section>
 
-                <div class="property-details-content mt-5">
-                    <section id="description" class="mb-5">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Dealer Comments') }}</h4>
-                        <div class="listing-description">
-                            @include('frontend.autos.show.partials._description')
-                        </div>
-                    </section>
-
-                    <section id="specifications" class="mb-5">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Technical Specifications') }}</h4>
-                        @include('frontend.autos.show.partials._specifications_table')
-                    </section>
-
-                    <section id="features" class="mb-5">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Key Options & Features') }}</h4>
-                        @include('frontend.autos.show.partials._features')
-                    </section>
-
-                    <section id="location" class="pt-4 border-top border-color-light">
-                        <h4 class="fw-800 text-dark mb-4 detail-section-title">{{ __('Find this Vehicle') }}</h4>
-                        @include('frontend.autos.show.partials._map')
-                    </section>
-                </div>
+                <section id="location" class="pt-4 border-top border-color-light">
+                    <h4 class="fw-800 text-dark mb-4 detail-section-title">
+                        <i class="bi bi-pin-map-fill me-2" style="color:var(--primary-color);font-size:.85em" aria-hidden="true"></i>{{ __('Find this Vehicle') }}
+                    </h4>
+                    @include('frontend.autos.show.partials._map')
+                </section>
             </div>
         </div>
     </x-slot:main>
