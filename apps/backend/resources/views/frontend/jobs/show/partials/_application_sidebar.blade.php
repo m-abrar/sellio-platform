@@ -9,8 +9,11 @@
 
     {{-- Company Trust/Rating Card --}}
     <div class="card detail-sidebar-card mb-3 overflow-hidden">
-        <div class="card-header border-0 p-4" style="background:var(--primary-color)">
-            <h4 class="fw-800 mb-0 text-white"><i class="bi bi-building-fill me-2"></i>{{ __('Company snapshot') }}</h4>
+        <div class="p-4" style="background:#F4F0EC;border-bottom:1.5px solid rgba(15,23,42,.07)">
+            <p class="small fw-semibold text-uppercase mb-1" style="letter-spacing:.06em;color:var(--primary-color)">
+                <i class="bi bi-building-fill me-1"></i>{{ __('Employer') }}
+            </p>
+            <h4 class="fw-800 text-dark mb-0" style="font-family:var(--font-heading)">{{ __('Company Snapshot') }}</h4>
         </div>
         <div class="p-4 text-center">
             <p class="h2 fw-bolder mb-1" style="color:var(--primary-color)">{{ $averageRating }}<span class="small fw-normal text-muted"> / 5.0</span></p>

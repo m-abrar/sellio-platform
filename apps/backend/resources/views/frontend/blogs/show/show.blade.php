@@ -90,9 +90,12 @@
 
         {{-- Newsletter Card --}}
         <div class="card detail-sidebar-card mb-4 overflow-hidden">
-            <div class="card-header border-0 p-4" style="background:var(--primary-color)">
-                <h4 class="fw-800 mb-1 text-white"><i class="bi bi-envelope-fill me-2"></i>{{ __('Join our Newsletter') }}</h4>
-                <p class="small mb-0" style="color:rgba(255,255,255,.7)">{{ __('Get the latest stories sent to your inbox.') }}</p>
+            <div class="p-4" style="background:#F4F0EC;border-bottom:1.5px solid rgba(15,23,42,.07)">
+                <p class="small fw-semibold text-uppercase mb-1" style="letter-spacing:.06em;color:var(--primary-color)">
+                    <i class="bi bi-envelope-fill me-1"></i>{{ __('Newsletter') }}
+                </p>
+                <h4 class="fw-800 text-dark mb-1" style="font-family:var(--font-heading)">{{ __('Stay in the Loop') }}</h4>
+                <p class="small text-muted mb-0">{{ __('Get the latest stories sent to your inbox.') }}</p>
             </div>
             <div class="card-body p-4">
                 <form action="{{ route('newsletter.subscribe') }}" method="POST">

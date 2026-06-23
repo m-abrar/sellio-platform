@@ -1,11 +1,14 @@
 <div class="sticky-top">
     <div class="card detail-sidebar-card mb-4 overflow-hidden">
-        <div class="card-header border-0 p-4" style="background:var(--primary-color)">
-            <h4 class="fw-800 mb-1 text-white"><i class="bi bi-chat-dots-fill me-2"></i>{{ __('Book consultation') }}</h4>
-            <p class="mb-0 text-white opacity-75 small">{{ __('Response time: Usually within 24h') }}</p>
+        <div class="p-4" style="background:#F4F0EC;border-bottom:1.5px solid rgba(15,23,42,.07)">
+            <p class="small fw-semibold text-uppercase mb-1" style="letter-spacing:.06em;color:var(--primary-color)">
+                <i class="bi bi-chat-dots-fill me-1"></i>{{ __('Consultation') }}
+            </p>
+            <h4 class="fw-800 text-dark mb-1" style="font-family:var(--font-heading)">{{ __('Book a Consultation') }}</h4>
+            <p class="small text-muted mb-0">{{ __('Response time: Usually within 24h') }}</p>
         </div>
         <div class="card-body p-4">
-            <h6 class="fw-800 mb-3 text-primary" style="font-size:.8rem;letter-spacing:.04em;text-transform:uppercase">
+            <h6 class="fw-800 mb-3" style="font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--primary-color)">
                 <i class="bi bi-person me-2"></i>{{ __('Your details') }}
             </h6>
 

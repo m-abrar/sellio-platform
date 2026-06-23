@@ -3,9 +3,12 @@
 
     {{-- Quote Request Card --}}
     <div class="card detail-sidebar-card mb-3 overflow-hidden">
-        <div class="card-header border-0 p-4" style="background:var(--primary-color)">
-            <h4 class="fw-800 mb-1 text-white"><i class="bi bi-file-earmark-text-fill me-2"></i>{{ __('Get a custom quote') }}</h4>
-            <p class="mb-0 text-white opacity-75 small">{{ __('Provide details to receive a tailored proposal.') }}</p>
+        <div class="p-4" style="background:#F4F0EC;border-bottom:1.5px solid rgba(15,23,42,.07)">
+            <p class="small fw-semibold text-uppercase mb-1" style="letter-spacing:.06em;color:var(--primary-color)">
+                <i class="bi bi-file-earmark-text-fill me-1"></i>{{ __('Custom Quote') }}
+            </p>
+            <h4 class="fw-800 text-dark mb-1" style="font-family:var(--font-heading)">{{ __('Get a Proposal') }}</h4>
+            <p class="small text-muted mb-0">{{ __('Provide details to receive a tailored proposal.') }}</p>
         </div>
         <div class="card-body p-4">
             <h6 class="fw-800 mb-3" style="font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--primary-color)">
