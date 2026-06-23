@@ -26,7 +26,7 @@ class EmailTemplateSeeder extends Seeder
     public function run(): void
     {
         // 📧 Header Line with Emoji (Yellow Text)
-        $this->command->line('📧 Seeding Email Templates (17 default templates)...');
+        $this->command->line('📧 Seeding Email Templates (19 default templates)...');
 
         // 1. Get the initial count
         $initialCount = EmailTemplate::count();
@@ -193,7 +193,7 @@ class EmailTemplateSeeder extends Seeder
             $this->command->info("   > **$recordsCreated** new email templates created.");
         } else {
             // Use warn if no records were created, but existing ones were confirmed/updated (common for firstOrCreate).
-            $this->command->line("   > No new templates created. **17** existing templates confirmed/updated.");
+            $this->command->line("   > No new templates created. **19** existing templates confirmed/updated.");
         }
         
         // 🎉 Success Footer (Yellow Text with Emoji)
