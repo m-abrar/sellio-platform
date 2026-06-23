@@ -18,9 +18,9 @@ const POSTS: BlogPost[] = [
   {
     slug: 'orthopedic-instrument-steel-grades',
     category: 'Materials',
-    title: '316L, 420, and 410 stainless steel in orthopedic instruments',
-    excerpt: 'A practical guide to common surgical stainless-steel grades, where each one fits, and what buyers should confirm before approving an RFQ.',
-    author: 'Nadia Farooq',
+    title: 'Which stainless steel grade for surgical instruments — and why it matters',
+    excerpt: '316L, 420, and 410 are not interchangeable. Understanding the differences will help you avoid specification errors before production starts.',
+    author: 'Aadab International',
     date: '2026-05-28',
     readTime: '7 min read',
     featured: true,
@@ -28,45 +28,45 @@ const POSTS: BlogPost[] = [
   {
     slug: 'orthopedic-set-rfq-checklist',
     category: 'RFQ Guides',
-    title: 'The export RFQ checklist for orthopedic instrument sets',
-    excerpt: 'Item codes, quantities, finish, marking, tray layout, destination port, certificates, and packing details that help suppliers quote accurately.',
-    author: 'Sameer Malik',
+    title: 'What to include in your first instrument enquiry',
+    excerpt: 'A complete enquiry — item names, quantities, steel grade, finish, tray layout, destination, documents — gets a faster and more accurate quote. Here is what we need.',
+    author: 'Aadab International',
     date: '2026-05-14',
-    readTime: '6 min read',
+    readTime: '5 min read',
   },
   {
     slug: 'passivation-and-finish-basics',
     category: 'Quality',
-    title: 'Passivation, polishing, and finish checks buyers should understand',
-    excerpt: 'Reusable surgical instruments need more than a good shape. This article explains finish expectations, passivation basics, and incoming inspection points.',
-    author: 'Dr. Helena Ward',
+    title: 'Surface finish on reusable surgical instruments: what to check on arrival',
+    excerpt: 'Satin, mirror, sandblast — each finish has a purpose and an expected standard. These are the incoming inspection points your team should know.',
+    author: 'Aadab International',
     date: '2026-04-30',
     readTime: '8 min read',
   },
   {
     slug: 'private-label-orthopedic-instruments',
     category: 'OEM',
-    title: 'Private-label orthopedic instruments: what to decide before production',
-    excerpt: 'Logo marking, catalog codes, pouch labels, tray layouts, artwork files, and sample approval steps for distributors building their own instrument line.',
-    author: 'Nadia Farooq',
+    title: 'Building a private-label surgical instrument line: the decisions that matter',
+    excerpt: 'Logo engraving, catalog codes, tray layout, artwork files, sample approval, and lead times — the choices you need to make before the first unit is produced.',
+    author: 'Aadab International',
     date: '2026-04-15',
     readTime: '5 min read',
   },
   {
     slug: 'export-documents-medical-instruments',
     category: 'Export',
-    title: 'Common export documents for surgical instrument shipments',
-    excerpt: 'Commercial invoices, packing lists, material certificates, inspection reports, and the paperwork importers usually request before shipment release.',
-    author: 'Sameer Malik',
+    title: 'Export paperwork for surgical instrument shipments: a practical overview',
+    excerpt: 'Commercial invoice, packing list, material certificate, inspection report — what each document covers, when it is required, and how to request it before shipment.',
+    author: 'Aadab International',
     date: '2026-03-22',
     readTime: '6 min read',
   },
   {
     slug: 'supplier-audit-questions',
     category: 'Quality',
-    title: 'Questions to ask before qualifying an orthopedic instrument supplier',
-    excerpt: 'A short supplier audit guide for buyers comparing factories, not trading companies: process control, traceability, finishing, packing, and documentation.',
-    author: 'Dr. Helena Ward',
+    title: 'How to tell a manufacturer from a trading company — and why it affects your price',
+    excerpt: 'The questions that separate a factory from a middleman: process control, in-house finishing, packing capability, and who actually signs the material certificate.',
+    author: 'Aadab International',
     date: '2026-03-08',
     readTime: '7 min read',
   },
@@ -93,8 +93,8 @@ export default function BlogPage() {
     <main className="b2b-static-page">
       <section className="b2b-static-hero">
         <span className="b2b-kicker">Resources</span>
-        <h1>Orthopedic instrument sourcing guides.</h1>
-        <p>Practical notes on stainless steel, RFQs, finishing, private label, export documents, and supplier qualification for medical buyers.</p>
+        <h1>Notes from eighty years on the factory floor.</h1>
+        <p>Practical articles on steel grades, finishing standards, export documentation, RFQ best practice, and what separates a good supplier from a convenient one.</p>
       </section>
 
       <div className="b2b-blog-controls">

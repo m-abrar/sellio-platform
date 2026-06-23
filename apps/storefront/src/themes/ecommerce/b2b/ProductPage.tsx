@@ -121,7 +121,7 @@ export default function ProductPage({ slug }: { slug: string }) {
 
   const galleryImages = getGalleryImages(product);
   const selectedImage = activeImage || galleryImages[0] || PRODUCT_DETAIL_PLACEHOLDER;
-  const description = product.description || 'Catalog-ready orthopedic instrument with RFQ review for quantity, steel grade, finish, private label, packing, and export documentation.';
+  const description = product.description || 'Orthopedic instrument available for quotation by quantity, finish, marking, packing, and export document requirement.';
 
   return (
     <main className="b2b-detail-page">
@@ -160,13 +160,13 @@ export default function ProductPage({ slug }: { slug: string }) {
           <div className="b2b-detail-price">{formatProductPrice(product)}</div>
 
           <p className="b2b-detail-summary">
-            {description.length > 160 ? `${description.slice(0, 160).trimEnd()}…` : description}
+            {description.length > 160 ? `${description.slice(0, 160).trimEnd()}...` : description}
           </p>
 
           <div className="b2b-detail-specs">
-            <div><span>MOQ</span><strong>Confirmed with quote</strong></div>
-            <div><span>Lead time</span><strong>Export team confirmed</strong></div>
-            <div><span>Pricing</span><strong>Volume based</strong></div>
+            <div><span>MOQ</span><strong>Quoted by item</strong></div>
+            <div><span>Lead time</span><strong>Confirmed before order</strong></div>
+            <div><span>Pricing</span><strong>Based on quantity</strong></div>
           </div>
 
           <button
@@ -177,12 +177,12 @@ export default function ProductPage({ slug }: { slug: string }) {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" style={{ display: 'inline', marginRight: '0.5rem', verticalAlign: 'middle' }}>
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
             </svg>
-            Add to RFQ list
+            Add to enquiry list
           </button>
 
           {notice && (
             <p className="b2b-notice" role="status">
-              ✓ Added to your RFQ list.{' '}
+              Added to your enquiry list.{' '}
               <a href={themeLink('/cart')} style={{ color: 'inherit', textDecoration: 'underline' }}>
                 View list
               </a>
@@ -194,13 +194,13 @@ export default function ProductPage({ slug }: { slug: string }) {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
-              <span>Private-label terms available</span>
+              <span>Private label can be discussed</span>
             </div>
             <div className="b2b-assurance-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                 <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
               </svg>
-              <span>Factory-direct orthopedic supply</span>
+              <span>Manufacturer and exporter</span>
             </div>
           </div>
         </article>
@@ -212,7 +212,7 @@ export default function ProductPage({ slug }: { slug: string }) {
           {([
             ['description', 'Description'],
             ['specifications', 'Specifications'],
-            ['rfq', 'RFQ Terms'],
+            ['rfq', 'Quote Details'],
           ] as [Tab, string][]).map(([key, label]) => (
             <button
               key={key}
@@ -242,29 +242,29 @@ export default function ProductPage({ slug }: { slug: string }) {
             <>
               <h2>Technical specifications</h2>
               <p>
-                Detailed instrument specifications, steel grades, finish options, packing details, and document support are available upon quote request.
-                Add this product to your RFQ list and specify your export requirements in the submission notes.
+                Detailed size, pattern, steel grade, finish, marking, packing, and document requirements are confirmed during quotation.
+                Add this product to your enquiry list and include any export requirements in the notes.
               </p>
               <div className="b2b-spec-table">
                 <div><dt>Product ID</dt><dd>SKU-{String(product.id).padStart(4, '0')}</dd></div>
-                <div><dt>Minimum Order Quantity</dt><dd>Confirmed with export quote</dd></div>
-                <div><dt>Lead Time</dt><dd>Confirmed at quote stage</dd></div>
-                <div><dt>Pricing Model</dt><dd>Volume-tiered export pricing</dd></div>
-                <div><dt>Payment Terms</dt><dd>Bank transfer / LC / agreed terms</dd></div>
-                <div><dt>Shipping</dt><dd>EXW, FOB, CIF, or air cargo</dd></div>
+                <div><dt>Minimum Order Quantity</dt><dd>Quoted by item and quantity</dd></div>
+                <div><dt>Lead Time</dt><dd>Confirmed before order approval</dd></div>
+                <div><dt>Pricing Model</dt><dd>Based on quantity and specification</dd></div>
+                <div><dt>Payment Terms</dt><dd>Agreed before order confirmation</dd></div>
+                <div><dt>Shipping</dt><dd>Export terms agreed with buyer</dd></div>
               </div>
             </>
           )}
           {activeTab === 'rfq' && (
             <>
-              <h2>RFQ & export terms</h2>
+              <h2>Quotation and export details</h2>
               <p>
-                When you add this instrument to your RFQ list, you can specify quantities, steel grade, finish, branding, destination port,
-                required delivery timeline, and document requirements. Our export team responds with a structured quote within 48 business hours.
+                When you add this instrument to your enquiry list, you can specify quantity, steel grade, finish, branding, destination country,
+                delivery timeline, and document requirements. We review these points before sending a quotation.
               </p>
               <p style={{ marginTop: '1rem' }}>
-                Sample approval, private-label files, material certificates, inspection records, and packing lists can be included when required by your market.
-                Our export desk can help align trade terms, packing, and shipment scheduling before production begins.
+                Sample approval, private label files, material certificates, inspection records, and packing lists can be discussed when required by your market.
+                Packing and shipment terms are agreed before production or dispatch.
               </p>
             </>
           )}

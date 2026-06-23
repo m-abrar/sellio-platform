@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { Product } from '@sellio/types';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
@@ -13,8 +13,7 @@ import {
   getProductImage,
   isProductInStock,
 } from '@/themes/unifieds/shared/product-utils';
-
-type Mode = 'light' | 'dark';
+import aadabLogo from './assets/aadab-logo.webp';
 
 const B2B_NAV_LINKS = [
   { href: '/', label: 'Home' },
@@ -28,31 +27,16 @@ export function B2BHeader() {
   const themeLink = useEcommerceThemeLink();
   const cmsNavItems = useMenu('main_header');
   const [isOpen, setIsOpen] = useState(false);
-  const [mode, setMode] = useState<Mode>('dark');
   const brandLabel = useThemeContent('header.brand_label', 'Aadab International');
-
-  useEffect(() => {
-    const saved = localStorage.getItem('b2b_display_mode') as Mode | null;
-    if (saved === 'light') setMode('light');
-  }, []);
-
-  useEffect(() => {
-    if (mode === 'light') {
-      document.documentElement.dataset.b2bCatalogMode = 'light';
-    } else {
-      delete document.documentElement.dataset.b2bCatalogMode;
-    }
-  }, [mode]);
-
-  const toggleMode = () => {
-    const nextMode: Mode = mode === 'dark' ? 'light' : 'dark';
-    setMode(nextMode);
-    localStorage.setItem('b2b_display_mode', nextMode);
-  };
 
   return (
     <header className="b2b-header">
-      <a className="b2b-logo" href={themeLink('/')}>{brandLabel}</a>
+      <div className="b2b-header-brand">
+        <a className="b2b-logo b2b-logo-image" href={themeLink('/')} aria-label={brandLabel}>
+          <img src={aadabLogo.src} alt={brandLabel} />
+        </a>
+        <span className="b2b-header-meta">Orthopedic instruments Manufacturers <br/> & Exporters</span>
+      </div>
 
       <button
         className="b2b-menu-toggle"
@@ -86,35 +70,17 @@ export function B2BHeader() {
               ))}
         </nav>
         <div className="b2b-mobile-utility">
-          <MenuUtilityNav className="b2b-utility" onNavigate={() => setIsOpen(false)} />
+          <a href={themeLink('/explore')} className="b2b-nav-link" onClick={() => setIsOpen(false)}>Catalog</a>
+          <a href={themeLink('/quote')} className="b2b-nav-link" onClick={() => setIsOpen(false)}>Request Quote</a>
         </div>
       </div>
 
       <div className="b2b-header-actions">
-        <MenuUtilityNav className="b2b-utility b2b-desktop-utility" />
-        <button
-          type="button"
-          className="b2b-mode-toggle"
-          onClick={toggleMode}
-          aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
-        >
-          {mode === 'dark' ? (
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="5" />
-              <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-              <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-            </svg>
-          ) : (
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-            </svg>
-          )}
-          <span>{mode === 'dark' ? 'Light' : 'Dark'}</span>
-        </button>
+        <a href={themeLink('/explore')} className="b2b-header-catalog">
+          Catalog
+        </a>
         <a href={themeLink('/quote')} className="b2b-btn b2b-btn-primary b2b-header-cta">
-          Export Quote
+          Request Quote
         </a>
       </div>
     </header>
@@ -131,23 +97,22 @@ export function B2BProductCard({ product, href, featured = false }: { product: P
         <img src={getProductImage(product)} alt={product.title} loading="lazy" />
         {featured && <span className="b2b-card-badge">Featured</span>}
         <span className={`b2b-stock-badge ${inStock ? 'b2b-stock-in' : 'b2b-stock-out'}`}>
-          {inStock ? '✓ In stock' : 'Quote only'}
+          {inStock ? 'In stock' : 'Quote only'}
         </span>
       </div>
       <div className="b2b-product-body">
         <div className="b2b-product-meta">
-          <span>{category}</span>
-          <span>SKU-{String(product.id).padStart(4, '0')}</span>
+          <span className="b2b-product-category">{category}</span>
+          <code className="b2b-product-sku-code">SKU-{String(product.id).padStart(4, '0')}</code>
         </div>
         <h3>{product.title}</h3>
         <div className="b2b-product-footer">
           <span className="b2b-product-rfq-label">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true" style={{ display: 'inline', marginRight: '0.3rem', verticalAlign: 'middle' }}>
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
             Request quote
           </span>
-          <span className="b2b-product-arrow" aria-hidden="true">→</span>
+          <svg className="b2b-product-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
         </div>
       </div>
     </a>
@@ -160,23 +125,27 @@ export function B2BTopbar() {
     <div className="b2b-topbar" role="banner">
       <div className="b2b-topbar-inner">
         <div className="b2b-topbar-left">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.74a16 16 0 0 0 6.29 6.29l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="b2b-topbar-pin" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
           </svg>
-          <span>+92 52 355 0192</span>
-          <span className="b2b-topbar-sep" aria-hidden="true">|</span>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-            <polyline points="22,6 12,13 2,6" />
-          </svg>
-          <span>export@aadabinternational.com</span>
+          <span>Sialkot, Pakistan</span>
+          <span className="b2b-topbar-dot" aria-hidden="true">·</span>
+          <span>Est. 1942</span>
+          <span className="b2b-topbar-dot" aria-hidden="true">·</span>
+          <span className="b2b-topbar-tagline">Orthopedic instruments manufacturer &amp; exporter</span>
         </div>
         <div className="b2b-topbar-right">
-          <span className="b2b-topbar-badge">ISO 13485 aligned</span>
+          <a href="https://wa.me/923304819191" target="_blank" rel="noopener noreferrer" className="b2b-topbar-whatsapp">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.557 4.118 1.529 5.845L0 24l6.335-1.509A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.932 0-3.742-.523-5.287-1.433l-.378-.225-3.762.896.952-3.666-.248-.388A9.94 9.94 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
+            </svg>
+            +92 330 481 9191
+          </a>
           <span className="b2b-topbar-sep" aria-hidden="true">|</span>
-          <a href={themeLink('/explore')} className="b2b-topbar-link">Browse instruments</a>
+          <a href={themeLink('/explore')} className="b2b-topbar-link">Catalog</a>
           <span className="b2b-topbar-sep" aria-hidden="true">|</span>
-          <MenuUtilityNav className="b2b-topbar-utility" />
+          <a href={themeLink('/quote')} className="b2b-topbar-link b2b-topbar-rfq-pill">Send RFQ</a>
         </div>
       </div>
     </div>
@@ -186,11 +155,8 @@ export function B2BTopbar() {
 export function B2BFooter() {
   const themeLink = useEcommerceThemeLink();
   const brandLabel = useThemeContent('footer.brand_label', 'Aadab International');
-  const tagline = useThemeContent('footer.tagline', 'Manufacturers & Exporters - Sialkot, Pakistan');
-  const description = useThemeContent(
-    'footer.description',
-    'Aadab International is a Sialkot, Pakistan based manufacturer and exporter of reusable orthopedic surgical instruments for hospitals, importers, distributors, and OEM buyers.',
-  );
+  const tagline = useThemeContent('footer.tagline', 'Manufacturers & Exporters of Orthopedic Instruments');
+  const description = 'We focus on meticulous craftsmanship, delivering our products that expertly blend the intricate structures of bones, biomechanical properties, and precision engineering.';
   const copyrightRaw = useThemeContent('footer.copyright', '');
 
   return (
@@ -198,8 +164,8 @@ export function B2BFooter() {
       <div className="b2b-footer-prefooter">
         <div className="b2b-footer-prefooter-inner">
           <div className="b2b-footer-prefooter-copy">
-            <h2>Source orthopedic instruments directly from the manufacturer.</h2>
-            <p>No intermediaries. No guesswork. Consistent stainless-steel instruments backed by 40 years of surgical manufacturing and export experience.</p>
+            <h2>Send your orthopedic instrument list.</h2>
+            <p>We will review the pattern, quantity, finish, marking, packing, and export details before quoting.</p>
           </div>
           <div className="b2b-footer-prefooter-actions">
             <a href={themeLink('/explore')} className="b2b-btn b2b-btn-primary">Browse instruments</a>
@@ -210,13 +176,15 @@ export function B2BFooter() {
       <div className="b2b-footer-main">
       <div className="b2b-footer-inner">
         <div className="b2b-footer-brand">
-          <a className="b2b-logo" href={themeLink('/')}>{brandLabel}</a>
+          <a className="b2b-logo b2b-logo-image" href={themeLink('/')} aria-label={brandLabel}>
+            <img src={aadabLogo.src} alt={brandLabel} />
+          </a>
           <p className="b2b-footer-tagline">{tagline}</p>
           <p className="b2b-footer-desc">{description}</p>
           <div className="b2b-footer-badges">
-            <span className="b2b-trust-badge">ISO 13485 aligned</span>
-            <span className="b2b-trust-badge">CE documentation support</span>
-            <span className="b2b-trust-badge">316L / 420 stainless steel</span>
+            <span className="b2b-trust-badge">Orthopedic instruments</span>
+            <span className="b2b-trust-badge">Private label enquiries</span>
+            <span className="b2b-trust-badge">Reusable stainless steel</span>
           </div>
         </div>
 
@@ -226,7 +194,7 @@ export function B2BFooter() {
             <a href={themeLink('/explore')}>Browse instruments</a>
             <a href={themeLink('/explore')}>Request a quote</a>
             <a href={themeLink('/cart')}>My quote list</a>
-            <a href={themeLink('/explore')}>Surgical specifications</a>
+            <a href={themeLink('/explore')}>Instrument specifications</a>
             <a href={themeLink('/explore')}>Instrument sets</a>
           </div>
         </div>
@@ -237,8 +205,8 @@ export function B2BFooter() {
             <a href={themeLink('/contact')}>OEM instruments</a>
             <a href={themeLink('/contact')}>Private label</a>
             <a href={themeLink('/contact')}>Custom trays</a>
-            <a href={themeLink('/contact')}>Bulk export contracts</a>
-            <a href={themeLink('/explore')}>Quality documentation</a>
+            <a href={themeLink('/contact')}>Export enquiries</a>
+            <a href={themeLink('/explore')}>Packing and documents</a>
           </div>
         </div>
 

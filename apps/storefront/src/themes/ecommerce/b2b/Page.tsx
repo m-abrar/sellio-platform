@@ -3,109 +3,179 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import type { Product } from '@sellio/types';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
-import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
 import { fetchProductsCatalog, resolveProductsFailure } from '@/themes/ecommerce/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
-import { B2BProductCard } from './components';
+import exhibitionBanner from './assets/banner-exhibition.webp';
+import imgInspection from './assets/aadab-international-section-01.webp';
+import imgInstruments from './assets/aadab-international-section-02.webp';
+import imgVideoIntro from './assets/video-introduction.webp';
+import imgClip1 from './assets/video-clip-1.webp';
+import imgClip2 from './assets/video-clip-2.webp';
+import imgClip3 from './assets/video-clip-3.webp';
+import imgClip4 from './assets/video-clip-4.webp';
+import imgClip5 from './assets/video-clip-5.webp';
+import imgSliderCutters from './assets/home-slider-cutters.webp';
+import imgSliderScissors from './assets/home-slider-scissors.webp';
+import imgSliderForceps from './assets/home-slider-forceps.webp';
 
 const aadabImages = {
-  hero: 'https://commons.wikimedia.org/wiki/Special:FilePath/Surgical%20Instruments%2001.jpg',
-  inspection: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ring%20Forceps.jpg',
-  instruments: 'https://commons.wikimedia.org/wiki/Special:FilePath/Surgical%20instruments%2002.JPG',
+  inspection: imgInspection.src,
+  instruments: imgInstruments.src,
 };
 
-const capabilities = [
-  [
-    'ISO 13485 Quality System',
-    'Orthopedic instruments are produced under documented quality controls with material traceability, dimensional inspection, passivation, and batch-level records before dispatch.',
-  ],
-  [
-    'OEM & Private Label Supply',
-    'We manufacture instrument sets to buyer specifications, etch private-label branding, support custom trays, and quote distributor-ready bulk orders.',
-  ],
-  [
-    '48-Hour Export Quote',
-    'Send item codes, drawings, target quantities, and destination port. Our export team replies with pricing, lead time, packing options, and required documents.',
-  ],
-  [
-    'Worldwide Export Logistics',
-    'EXW, FOB, CIF, and air-cargo dispatch are available with export packing, certificate support, commercial invoices, and third-party inspection coordination.',
-  ],
+const exhibitionNews = {
+  title: 'WHX Dubai 2026',
+  body: 'Aadab International will exhibit at the World Health Exhibition, Dubai. Bring your instrument list — we will have samples and factory representatives on site.',
+  cta: 'Register interest',
+};
+
+const legacyFeatures = [
+  { code: 'Since 1942', icon: 'heritage', lineOne: 'Serving', lineTwo: 'the World', lineThree: 'Since 1942' },
+  { code: 'Export House', icon: 'export', lineOne: 'Third', lineTwo: 'Generation', lineThree: 'in Export' },
+  { code: 'Bone Surgery', icon: 'bone', lineOne: 'Specialized', lineTwo: 'in Bone', lineThree: 'Surgery' },
+  { code: 'OEM Ready', icon: 'custom', lineOne: 'Custom', lineTwo: 'Made', lineThree: 'Products' },
+  { code: 'Global Supply', icon: 'globe', lineOne: 'WorldWide', lineTwo: 'Happy', lineThree: 'Customers' },
+  { code: 'QC Checked', icon: 'quality', lineOne: '100%', lineTwo: 'Guaranteed', lineThree: 'Instruments' },
 ];
 
-const testimonials = [
-  {
-    quote: 'Their orthopedic sets arrive consistent, cleanly finished, and properly documented. That reliability matters when you supply hospitals across multiple regions.',
-    name: 'Dr. Elena Morris',
-    role: 'Procurement Director, Northshore Surgical Group',
-    initials: 'EM',
-  },
-  {
-    quote: 'We moved our trauma instrument sourcing to Aadab International because they understand export packing, private labeling, and the documentation importers need.',
-    name: 'Yusuf Khan',
-    role: 'Managing Director, MedGate Imports',
-    initials: 'YK',
-  },
-  {
-    quote: 'The RFQ process is clear and technical. Their team catches details on finish, steel grade, and tray configuration before production starts.',
-    name: 'Fatima Al-Rashid',
-    role: 'Sourcing Lead, Gulf Orthopedic Supply',
-    initials: 'FA',
-  },
+const heroRecords = [
+  { label: 'Factory record', icon: 'heritage', value: 'Est. 1942', detail: 'Reusable surgical instrument manufacturing' },
+  { label: 'Export desk', icon: 'export', value: '40+', detail: 'Destinations served through distributor supply' },
+  { label: 'Catalog file', icon: 'bone', value: 'catalog', detail: 'Orthopedic patterns, sets, and OEM items' },
+  { label: 'Buyer program', icon: 'custom', value: 'OEM', detail: 'Private label, marking, packing, and documents' },
 ];
 
-const processSteps = [
-  ['01', 'Select instruments or sets', 'Browse trauma, spine, joint, retractor, and general orthopedic instruments. Share item codes, drawings, or your current set list.'],
-  ['02', 'Submit export requirements', 'Tell us quantity, steel grade, finish, branding, destination port, certificates, and preferred packing. Our export team reviews every enquiry.'],
-  ['03', 'Approve and ship', 'Receive a detailed quotation, approve samples if needed, and dispatch under EXW, FOB, CIF, or air-cargo terms with required documents.'],
+const heroSliderProducts = [
+  { name: 'T.C. Pin Cutter', image: imgSliderCutters.src },
+  { name: 'Surgical Scissors', image: imgSliderScissors.src },
+  { name: 'Bone Holding Forceps', image: imgSliderForceps.src },
 ];
+
+const heroCapabilities = [
+  ['Orthopedic range', 'Bone surgery, trauma, spine, retractors'],
+  ['OEM export supply', 'Private label marking, packing, documentation'],
+  ['Factory quotation', 'Buyer item lists, drawings, and bulk RFQs'],
+];
+
+function normalizeHeroTitle(value: string) {
+  const legacyTitles = new Set([
+    'Orthopedic Instruments',
+    'Orthopedic instruments\nbuilt for export.',
+    'Bone surgery instruments\nfor export buyers.',
+    'Orthopedic instruments\nfor global distributors.',
+  ]);
+
+  return legacyTitles.has(value) ? 'Bone Surgery Instruments' : value;
+}
+
+const factoryClips = [imgClip1.src, imgClip2.src, imgClip3.src, imgClip4.src, imgClip5.src];
 
 const categories = [
-  { name: 'Trauma Instruments', cert: 'AO Pattern', desc: 'Bone holding forceps, reduction clamps, plate benders, drill guides, depth gauges, and screwdrivers for trauma sets.' },
-  { name: 'Spine Instruments', cert: 'Set Supply', desc: 'Rongeurs, curettes, elevators, distractors, probes, and implant-support instruments for spine procedures.' },
-  { name: 'Joint Instruments', cert: 'OEM Ready', desc: 'Hip, knee, and extremity instruments supplied as loose items or procedure-ready configured sets.' },
-  { name: 'Retractors & Elevators', cert: 'Reusable SS', desc: 'Periosteal elevators, Hohmann retractors, bone levers, and exposure instruments in surgical stainless steel.' },
-  { name: 'Custom Sets', cert: 'Private Label', desc: 'Distributor-specific kits with laser marking, custom tray layouts, and export-ready labeling support.' },
-  { name: 'Hospital Supply', cert: 'Bulk RFQ', desc: 'Repeat supply programs for hospitals, buying groups, tender suppliers, and regional medical distributors.' },
+  { name: 'Wire Twisting Forceps T.C.', count: 7, image: '/aadab/categories/wire-twisting-forceps-t.c.jpg' },
+  { name: 'Wire Cutting Pliers', count: 15, image: '/aadab/categories/wire-cutting-pliers.jpg' },
+  { name: 'Tendon Strippers & Tendon Forceps', count: 16, image: '/aadab/categories/tendon-strippers-tendon-forceps.jpg' },
+  { name: 'Tampers - Osteotomes', count: 76, image: '/aadab/categories/tampers-osteotomes-chisels-gouges.jpg' },
+  { name: 'Raspatories', count: 59, image: '/aadab/categories/raspatories-elevators.jpg' },
+  { name: 'Nail Extracting Forceps', count: 4, image: '/aadab/categories/nail-extracting-forceps-finger-ring-saws.jpg' },
+  { name: 'Meniscus Knives', count: 10, image: '/aadab/categories/meniscus-knives.jpg' },
+  { name: 'Mallets', count: 23, image: '/aadab/categories/mallets.jpg' },
+  { name: 'Knee & Spinal Retractors', count: 4, image: '/aadab/categories/knee-spinal-Retractors.jpg' },
+  { name: 'Instruments For Orthopaedic Implants', count: 24, image: '/aadab/categories/instruments-for-orthopaedic-implants.jpg' },
+  { name: 'Gouges', count: 76, image: null as string | null },
+  { name: 'Flat Nose Pliers', count: 15, image: '/aadab/categories/flat-nose-pliers.jpg' },
+  { name: 'Finger Ring Saws', count: 4, image: null as string | null },
+  { name: 'Extension Bows', count: 14, image: '/aadab/categories/extension-bows.jpg' },
+  { name: 'Elevators', count: 59, image: null as string | null },
+  { name: 'Drilling Chucks', count: 7, image: '/aadab/categories/drilling-chucks.jpg' },
+  { name: 'Chisels', count: 76, image: null as string | null },
+  { name: 'Bone Rongeurs', count: 53, image: '/aadab/categories/bone-rongeurs.jpg' },
+  { name: 'Bone Levers', count: 35, image: '/aadab/categories/bone-levers-bone-retractor.jpg' },
+  { name: 'Bone Holding Forceps', count: 41, image: '/aadab/categories/bone-holding-forceps.jpg' },
+  { name: 'Bone Holding Clamps', count: 8, image: '/aadab/categories/bone-holding-clamps.jpg' },
+  { name: 'Bone Hand Drills', count: 35, image: '/aadab/categories/bone-hand-drills.jpg' },
+  { name: 'Bone Files', count: 14, image: '/aadab/categories/bone-files.jpg' },
+  { name: 'Bone Cutting Forceps', count: 18, image: '/aadab/categories/bone-cutting-forceps.jpg' },
+  { name: 'Bone Curettes & Raspatories', count: 46, image: '/aadab/categories/bone-curettes-raspatories.jpg' },
+  { name: 'Amputation Saws', count: 7, image: '/aadab/categories/Amputation-Saws.jpg' },
+  { name: 'Amputation Retractors', count: 1, image: '/aadab/categories/Amputation-Retractors.jpg' },
 ];
 
-function CapabilityIcon() {
-  return (
-    <span className="b2b-capability-icon" aria-hidden="true">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        <path d="M9 12l2 2 4-4" />
+const featuredProducts = [
+  { sku: '13-844-01', desc: 'Synovcetomy Rongeur, width of jaws 1.2mm, 13 cm', category: 'Bone Rongeurs', image: '/aadab/products/13-844-01.jpg' },
+  { sku: '13-848-14', desc: 'Bone Rongeur, 4 mm, 14 cm', category: 'Bone Rongeurs', image: '/aadab/products/13-848-14.jpg' },
+  { sku: '13-852-17', desc: 'Stellbrink Synovcetomy Rongeur, 2 mm, 17 cm', category: 'Bone Rongeurs', image: '/aadab/products/13-852-17.jpg' },
+  { sku: '13-856-15', desc: 'Luer Bone Rongeur, 4 mm, 15 cm', category: 'Bone Rongeurs', image: '/aadab/products/13-856-15.jpg' },
+  { sku: '13-864-18', desc: 'Jansen Bone Rongeur, 4 mm, Straight, 18 cm', category: 'Bone Rongeurs', image: '/aadab/products/13-864-18.jpg' },
+  { sku: '13-866-18', desc: 'Jansen Bone Rongeur, 5 mm, Curved, 18 cm', category: 'Bone Rongeurs', image: '/aadab/products/13-866-18.jpg' },
+];
+
+function OrthopedicFeatureIcon({ icon }: { icon: string }) {
+  if (icon === 'bone') {
+    return (
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <path d="M23 28c-7-2-11-9-8-15 3-7 12-8 17-2 4-6 13-5 17 1 3 6 0 13-7 16l-14 40c7 3 10 10 7 16-4 7-13 8-18 2-5 6-14 5-17-2-3-6 1-13 8-15l15-41Z" />
+        <path d="M38 30l-13 36" />
       </svg>
-    </span>
+    );
+  }
+
+  if (icon === 'quality') {
+    return (
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <path d="M48 11 78 23v22c0 20-12 33-30 42-18-9-30-22-30-42V23l30-12Z" />
+        <path d="m33 49 10 10 21-24" />
+      </svg>
+    );
+  }
+
+  if (icon === 'globe' || icon === 'export') {
+    return (
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <circle cx="48" cy="48" r="33" />
+        <path d="M15 48h66M48 15c10 10 15 21 15 33S58 71 48 81M48 15C38 25 33 36 33 48s5 23 15 33" />
+        {icon === 'export' ? <path d="M57 29h17v17M74 29 53 50" /> : null}
+      </svg>
+    );
+  }
+
+  if (icon === 'custom') {
+    return (
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <path d="M27 70 66 31l-1-14 14 1-4 13-39 39H27Z" />
+        <path d="m22 74 15-15M52 45l10 10M64 33l10 10" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 96 96" aria-hidden="true">
+      <path d="M25 22h46M25 74h46M34 22c0 16 28 16 28 0M34 74c0-16 28-16 28 0M48 38v20" />
+      <path d="M39 44h18M39 52h18" />
+    </svg>
   );
+}
+
+function HeroRecordIcon({ icon }: { icon: string }) {
+  return <OrthopedicFeatureIcon icon={icon} />;
 }
 
 export default function Page() {
   const themeLink = useEcommerceThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
-  const eyebrow = useThemeContent('hero.eyebrow', 'Manufacturers & Exporters - Sialkot, Pakistan');
-  const title = useThemeContent('hero.title', 'Orthopedic instruments\nfor global distributors.');
+  const eyebrow = useThemeContent('hero.eyebrow', 'Est. 1942 · Surgical Instruments Manufacturer');
+  const title = useThemeContent('hero.title', 'Bone Surgery Instruments');
   const description = useThemeContent(
     'hero.description',
-    'Aadab International manufactures and exports reusable orthopedic surgical instruments from Sialkot, Pakistan for hospitals, distributors, importers, and OEM buyers. Browse the catalog, shortlist items, and request export pricing directly from the factory.',
+    'Reusable bone surgery, trauma, spine, and OEM instrument supply for importers, distributors, and hospital purchasing teams.',
   );
-  const primaryCta = useThemeContent('hero.primary_cta_label', 'Browse instruments');
-  const secondaryCta = useThemeContent('hero.secondary_cta_label', 'Request export quote');
-  const collectionTitle = useThemeContent('collection.title', 'Featured orthopedic instruments');
-  const collectionDescription = useThemeContent(
-    'collection.description',
-    'A selection of orthopedic instruments and procedure sets. Each shipment can include material traceability, packing lists, inspection records, and export documentation.',
-  );
-  const offlineKicker = useThemeContent('sync.offline_kicker', 'Catalog unavailable');
-  const offlineTitle = useThemeContent('sync.offline_title', 'Products could not be loaded.');
-  const emptyTitle = useThemeContent('empty.title', 'No orthopedic instruments are published yet.');
-  const emptyDescription = useThemeContent('empty.description', 'Add product records in the admin panel and they will appear here.');
-  const rfqTitle = useThemeContent('rfq.title', 'Request an orthopedic export quotation');
+  const primaryCta = useThemeContent('hero.primary_cta_label', 'View instrument catalog');
+  const secondaryCta = useThemeContent('hero.secondary_cta_label', 'Request a quote');
+  const rfqTitle = useThemeContent('rfq.title', 'Ready to place an order?');
   const rfqDescription = useThemeContent(
     'rfq.description',
-    'Submit item codes, quantities, stainless-steel grade, finish, private-label needs, destination port, and delivery timeline. Our export team responds within 48 business hours with pricing, lead time, and document options.',
+    'Send your instrument list, quantities, destination country, and any marking, packing, or documentation requirements. Our export team will respond with a complete quotation.',
   );
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -145,15 +215,31 @@ export default function Page() {
     if (loadingProducts) return '-';
     return products.length > 0 ? `${products.length.toLocaleString()}+` : '-';
   }, [loadingProducts, products.length]);
+  const displayTitle = normalizeHeroTitle(title);
 
   return (
     <div className="b2b-page">
+      <section className="b2b-exhibition-banner" aria-label="Exhibition news">
+        <div className="b2b-exhibition-event">
+          <span className="b2b-exhibition-kicker">Exhibiting at</span>
+          <strong className="b2b-exhibition-name">{exhibitionNews.title}</strong>
+        </div>
+        <p className="b2b-exhibition-body">{exhibitionNews.body}</p>
+        <img src={exhibitionBanner.src} alt="WHX Dubai 2026 exhibition" className="b2b-exhibition-image" />
+        <a href={themeLink('/contact')} className="b2b-exhibition-link">
+          {exhibitionNews.cta}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+      </section>
+
       <section className="b2b-hero-corp">
         <div className="b2b-hero-corp-inner">
           <div className="b2b-hero-corp-content">
             <span className="b2b-kicker">{eyebrow}</span>
             <h1 className="b2b-hero-corp-h1">
-              {title.split('\n').map((line, index, lines) => (
+              {displayTitle.split('\n').map((line, index, lines) => (
                 <React.Fragment key={`${line}-${index}`}>
                   {line}
                   {index < lines.length - 1 ? <br /> : null}
@@ -161,215 +247,194 @@ export default function Page() {
               ))}
             </h1>
             <p className="b2b-hero-corp-lead">{description}</p>
-            <div className="b2b-hero-corp-sectors" aria-label="Product groups">
-              {['Trauma', 'Spine', 'Joint', 'Retractors', 'OEM Sets', 'Private Label', 'Export'].map((sector) => (
-                <span key={sector} className="b2b-sector-chip">{sector}</span>
+            <div className="b2b-hero-corp-sectors" aria-label="Buyer capabilities">
+              {heroCapabilities.map(([title, detail]) => (
+                <article key={title} className="b2b-sector-chip">
+                  <strong>{title}</strong>
+                  <span>{detail}</span>
+                </article>
               ))}
             </div>
             <div className="b2b-actions">
               <a href={themeLink('/explore')} className="b2b-btn b2b-btn-primary">{primaryCta}</a>
               <a href={themeLink('/quote')} className="b2b-btn b2b-btn-secondary">{secondaryCta}</a>
             </div>
+            <p className="b2b-hero-spec-line">Laser marking / passivation / export packing / repeat supply programs</p>
           </div>
 
           <div className="b2b-hero-corp-visual">
-            <div className="b2b-hero-corp-img">
-              <img src={aadabImages.hero} alt="Clean medical instrument inspection bench" />
-              <div className="b2b-hero-corp-img-badge b2b-hero-corp-img-badge-tl">
-                <strong>Sialkot</strong>
-                <span>Pakistan</span>
-              </div>
-              <div className="b2b-hero-corp-img-badge b2b-hero-corp-img-badge-br">
-                <strong>{productCountLabel}</strong>
-                <span>Instruments</span>
-              </div>
+            <div className="b2b-hero-corp-img b2b-hero-product-stage" aria-label="Rotating orthopedic instrument showcase">
+              <div className="b2b-hero-stage-grid" aria-hidden="true" />
+              <div className="b2b-hero-stage-ring" aria-hidden="true" />
+              <div className="b2b-hero-stage-shadow" aria-hidden="true" />
+              {heroSliderProducts.map((product) => (
+                <figure
+                  key={product.name}
+                  className="b2b-hero-product-slide"
+                >
+                  <img src={product.image} alt={product.name} />
+                  <figcaption>{product.name}</figcaption>
+                </figure>
+              ))}
             </div>
             <div className="b2b-hero-photo-strip" aria-label="Manufacturing focus">
               <figure>
-                <img src={aadabImages.inspection} alt="Precision inspection in a manufacturing workspace" />
-                <figcaption>In-process inspection</figcaption>
+                <img src={aadabImages.inspection} alt="Aadab International orthopedic instruments" />
+                <figcaption>Final QC bench</figcaption>
               </figure>
               <figure>
-                <img src={aadabImages.instruments} alt="Reusable surgical instrument detail" />
+                <img src={aadabImages.instruments} alt="Aadab International surgical instrument manufacturing" />
                 <figcaption>Reusable stainless steel</figcaption>
               </figure>
             </div>
           </div>
 
-          <div className="b2b-hero-corp-stats" aria-label="Company statistics">
-            <div className="b2b-hero-corp-stat"><strong>40+</strong><span>Years Surgical Manufacturing</span></div>
-            <div className="b2b-hero-corp-stat"><strong>98%</strong><span>On-Time Export Dispatch</span></div>
-            <div className="b2b-hero-corp-stat"><strong>{productCountLabel}</strong><span>Catalog Instruments</span></div>
-            <div className="b2b-hero-corp-stat"><strong>47</strong><span>Export Markets</span></div>
+          <div className="b2b-hero-corp-stats" aria-label="Company highlights">
+            {heroRecords.map((record) => (
+              <article key={record.label} className="b2b-hero-corp-stat">
+                <div className="b2b-hero-record-top">
+                  <span>{record.label}</span>
+                  <HeroRecordIcon icon={record.icon} />
+                </div>
+                <strong>{record.value === 'catalog' ? productCountLabel : record.value}</strong>
+                <p>{record.detail}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="b2b-who" aria-label="About us">
-        <div className="b2b-who-inner">
-          <div className="b2b-who-copy">
-            <span className="b2b-kicker">Who we are</span>
-            <h2>Orthopedic instrument manufacturing with export discipline.</h2>
-            <p>
-              Founded in Sialkot, Pakistan, Aadab International has grown from a specialist surgical workshop into a manufacturer and exporter of reusable orthopedic instruments.
-              Today we supply trauma, spine, joint, retractor, and custom instrument sets for buyers across 47 export markets.
-            </p>
-            <p>
-              Our production teams work with surgical stainless steels, controlled finishing, passivation, laser marking, and batch documentation.
-              Every order is packed for professional medical distribution, not generic commodity resale.
-            </p>
-            <div className="b2b-who-actions">
-              <a href={themeLink('/about')} className="b2b-btn b2b-btn-primary">Our company</a>
-              <a href={themeLink('/contact')} className="b2b-btn b2b-btn-secondary">Get in touch</a>
+      <section className="b2b-legacy-features" aria-label="Company features">
+        {legacyFeatures.map((feature, index) => (
+          <article key={feature.code} className="b2b-legacy-card">
+            <div className="b2b-legacy-icon">
+              <OrthopedicFeatureIcon icon={feature.icon} />
             </div>
-          </div>
-          <div className="b2b-who-visual">
-            <div className="b2b-who-img-wrap">
-              <img src={aadabImages.inspection} alt="Instrument quality inspection and finishing review" />
-              <div className="b2b-who-cert-badge">
-                <span>ISO 13485 aligned</span>
-                <span>CE documentation support</span>
-                <span>316L / 420 stainless steel</span>
-              </div>
+            <div className="b2b-legacy-card-top">
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <em>{feature.code}</em>
             </div>
-            <div className="b2b-who-numbers">
-              <div><strong>3</strong><span>Production Units</span></div>
-              <div><strong>850+</strong><span>Skilled Technicians</span></div>
+            <div className="b2b-legacy-card-copy">
+              <span>{feature.lineOne}</span>
+              <strong>{feature.lineTwo}</strong>
+              <em>{feature.lineThree}</em>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="b2b-banners" aria-label="Company highlights">
-        <article className="b2b-banner b2b-banner-primary">
-          <span className="b2b-kicker">OEM manufacturing</span>
-          <h3>We manufacture orthopedic instruments to your item list, drawings, or private-label program.</h3>
-          <p>Share your catalog codes, required steel grade, finish, logo marking, and tray layout. Our team returns a quotation with tooling, MOQ, samples, and lead time.</p>
-          <a href={themeLink('/quote')} className="b2b-btn b2b-btn-primary" style={{ marginTop: '1.5rem', display: 'inline-flex' }}>
-            Start a project
-          </a>
-        </article>
-        <article className="b2b-banner b2b-banner-secondary">
-          <span className="b2b-kicker">Distributor supply</span>
-          <h3>Stocked orthopedic instruments and repeat export programs for qualified buyers.</h3>
-          <p>Need urgent supply? Common trauma, retractor, elevator, and screwdriver patterns are available for fast quotation and staged shipment.</p>
-          <a href={themeLink('/contact')} className="b2b-btn b2b-btn-secondary" style={{ marginTop: '1.5rem', display: 'inline-flex' }}>
-            Contact export desk
-          </a>
-        </article>
-      </section>
-
-      <section className="b2b-capability-grid" aria-label="Our capabilities">
-        {capabilities.map(([name, detail]) => (
-          <article key={name}>
-            <CapabilityIcon />
-            <h2>{name}</h2>
-            <p>{detail}</p>
           </article>
         ))}
       </section>
 
-      <section className="b2b-industries" aria-label="Product categories">
+      <section className="b2b-category-showcase" aria-label="Product categories">
         <div className="b2b-section-heading">
-          <span className="b2b-kicker">Catalog expertise</span>
-          <h2>What we manufacture.</h2>
-          <p>Our orthopedic line is built for distributors, hospitals, importers, OEM brands, and tender suppliers that need repeatable quality with export-ready paperwork.</p>
+          <span className="b2b-kicker">Product range</span>
+          <h2>Instruments for every discipline.</h2>
+          <p>Pattern, size, steel grade, finish, and marking are confirmed at the quotation stage. Browse to understand our range, then send an RFQ with your specifics.</p>
         </div>
-        <div className="b2b-industries-grid">
+        <div className="b2b-category-grid">
           {categories.map((category) => (
-            <div key={category.name} className="b2b-industry-card">
-              <span className="b2b-industry-cert">{category.cert}</span>
-              <h3>{category.name}</h3>
-              <p>{category.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="b2b-collection">
-        <div className="b2b-section-heading">
-          <span className="b2b-kicker">From the instrument catalog</span>
-          <h2>{collectionTitle}</h2>
-          <p>{collectionDescription}</p>
-        </div>
-
-        {apiError && useFallback && <CatalogSyncAlert variant="demo" error={apiError} classPrefix="ef" />}
-        {apiError && !useFallback && <CatalogSyncAlert variant="production" error={apiError} classPrefix="ef" />}
-
-        <div className="b2b-product-grid">
-          {loadingProducts ? (
-            [1, 2, 3].map((item) => <div key={item} className="b2b-product-card b2b-skeleton" />)
-          ) : apiError && !useFallback ? (
-            <div className="b2b-state">
-              <span className="b2b-kicker">{offlineKicker}</span>
-              <h3>{offlineTitle}</h3>
-              <p>Check the API connection or refresh the page.</p>
-            </div>
-          ) : products.length === 0 ? (
-            <div className="b2b-state">
-              <h3>{emptyTitle}</h3>
-              <p>{emptyDescription}</p>
-            </div>
-          ) : (
-            products.slice(0, 3).map((product) => (
-              <B2BProductCard key={product.id} product={product} href={themeLink(`/product/${product.slug}`)} featured={product.id === products[0]?.id} />
-            ))
-          )}
-        </div>
-
-        {!loadingProducts && products.length > 0 && (
-          <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-            <a href={themeLink('/explore')} className="b2b-btn b2b-btn-secondary">View full catalog</a>
-          </div>
-        )}
-      </section>
-
-      <section className="b2b-testimonials" aria-label="Client reviews">
-        <div className="b2b-section-heading">
-          <span className="b2b-kicker">What buyers say</span>
-          <h2>Trusted by surgical distributors and medical supply teams.</h2>
-        </div>
-        <div className="b2b-testimonial-grid">
-          {testimonials.map((testimonial) => (
-            <blockquote key={testimonial.name} className="b2b-testimonial-card">
-              <div className="b2b-testimonial-stars" aria-label="5 stars">*****</div>
-              <p className="b2b-testimonial-quote">&ldquo;{testimonial.quote}&rdquo;</p>
-              <footer className="b2b-testimonial-author">
-                <span className="b2b-testimonial-avatar" aria-hidden="true">{testimonial.initials}</span>
-                <div>
-                  <strong className="b2b-testimonial-name">{testimonial.name}</strong>
-                  <span className="b2b-testimonial-role">{testimonial.role}</span>
+            <a key={category.name} href={themeLink('/explore')} className="b2b-category-card" aria-label={`View ${category.name} instruments`}>
+              <div className="b2b-category-img">
+                {category.image
+                  ? <img src={category.image} alt={category.name} loading="lazy" />
+                  : <div className="b2b-category-placeholder" aria-hidden="true" />}
+                <div className="b2b-category-img-overlay" aria-hidden="true" />
+              </div>
+              <div className="b2b-category-info">
+                <h3 className="b2b-category-title">{category.name}</h3>
+                <div className="b2b-category-meta">
+                  <span className="b2b-category-count">{category.count} items</span>
+                  <svg className="b2b-category-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
                 </div>
-              </footer>
-            </blockquote>
+              </div>
+            </a>
           ))}
         </div>
       </section>
 
-      <section style={{ marginTop: '6rem' }} aria-label="How to order">
-        <div className="b2b-section-heading">
-          <span className="b2b-kicker">How it works</span>
-          <h2>Export sourcing in three steps.</h2>
-          <p>From catalog selection to shipment, our process is built for transparent medical-device procurement and repeat distributor supply.</p>
+      <section className="b2b-factory-visit" aria-label="Visit our factory">
+        <div className="b2b-factory-copy">
+          <span className="b2b-kicker">Our factory</span>
+          <h2>Visit Our Factory</h2>
+          <p>
+            <strong>Have a virtual tour of</strong><br />
+            our production process and factory tour in the video.
+          </p>
+          <a
+            href="https://www.youtube.com/watch?v=jdYh_CcNDOs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="b2b-btn b2b-btn-primary b2b-factory-cta"
+          >
+            Watch the Video
+          </a>
+          <div className="b2b-factory-filmstrip" aria-hidden="true">
+            <div className="b2b-factory-filmstrip-inner">
+              {[...factoryClips, ...factoryClips].map((src, i) => (
+                <img key={i} src={src} alt="" loading="lazy" />
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="b2b-process">
-          {processSteps.map(([num, step, detail]) => (
-            <article key={num}>
-              <span>{num}</span>
-              <h3>{step}</h3>
-              <p>{detail}</p>
-            </article>
+        <a
+          href="https://www.youtube.com/watch?v=jdYh_CcNDOs"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="b2b-factory-media b2b-factory-video-link"
+          aria-label="Watch the Aadab International factory tour on YouTube"
+        >
+          <img
+            src={imgVideoIntro.src}
+            alt="Aadab International orthopedic instrument factory tour"
+          />
+          <span className="b2b-factory-play-btn" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="52" height="52">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+        </a>
+      </section>
+
+      <section className="b2b-featured-products" aria-label="Featured instruments">
+        <div className="b2b-section-heading">
+          <span className="b2b-kicker">Highlights from the range of our catalog</span>
+          <h2>Featured Articles.</h2>
+          <p>A hand-picked selection from our export catalog. Available in your choice of steel grade, finish, marking, and packing — send an RFQ for exact specifications.</p>
+        </div>
+        <div className="b2b-fp-grid">
+          {featuredProducts.map((product) => (
+            <a key={product.sku} href={themeLink('/explore')} className="b2b-fp-card">
+              <div className="b2b-fp-img">
+                <img src={product.image} alt={product.desc} loading="lazy" />
+              </div>
+              <div className="b2b-fp-body">
+                <span className="b2b-fp-category">{product.category}</span>
+                <code className="b2b-fp-sku">{product.sku}</code>
+                <p className="b2b-fp-desc">{product.desc}</p>
+              </div>
+              <div className="b2b-fp-footer">
+                <span className="b2b-fp-cta">
+                  Enquire
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </div>
+            </a>
           ))}
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+          <a href={themeLink('/explore')} className="b2b-btn b2b-btn-secondary">View full catalog</a>
         </div>
       </section>
 
       <section className="b2b-rfq" id="b2b-rfq" aria-label="Request a quote">
         <div>
-          <span className="b2b-kicker">Get started</span>
+          <span className="b2b-kicker">Export enquiries</span>
           <h2>{rfqTitle}</h2>
           <p>{rfqDescription}</p>
           <div className="b2b-actions">
-            <a href={themeLink('/explore')} className="b2b-btn b2b-btn-primary">Browse instruments</a>
+            <a href={themeLink('/explore')} className="b2b-btn b2b-btn-primary">Browse catalog</a>
             <a href={themeLink('/quote')} className="b2b-btn b2b-btn-secondary">Send RFQ</a>
           </div>
         </div>

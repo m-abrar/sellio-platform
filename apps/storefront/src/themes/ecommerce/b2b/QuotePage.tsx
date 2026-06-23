@@ -37,10 +37,10 @@ export default function QuotePage() {
     <main className="b2b-static-page">
       <section className="b2b-static-hero">
         <span className="b2b-kicker">Request a quotation</span>
-        <h1>Send your orthopedic instrument RFQ.</h1>
+        <h1>Tell us exactly what you need.</h1>
         <p>
-          Share your item codes, quantities, finish, branding, destination, and required documents.
-          Our export team will respond within 48 business hours.
+          The more detail you include — item names, quantities, steel grade, finish, marking, destination, timeline —
+          the faster and more accurately we can respond. There is no minimum order to enquire.
         </p>
       </section>
 
@@ -53,8 +53,8 @@ export default function QuotePage() {
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
                 <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
               </svg>
-              <h3>Quote request received</h3>
-              <p>Our export team will review your instrument list and reply within 48 business hours.</p>
+              <h3>Enquiry received</h3>
+              <p>Our team will review your instrument list and prepare a reply with the next details needed.</p>
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem', flexWrap: 'wrap' }}>
                 <button type="button" className="b2b-btn b2b-btn-secondary" onClick={() => setSubmitted(false)}>
                   Submit another
@@ -70,21 +70,21 @@ export default function QuotePage() {
               <div className="b2b-contact-row">
                 <label>
                   <span>Full name *</span>
-                  <input type="text" required placeholder="Jane Smith" value={form.name} onChange={set('name')} />
+                  <input type="text" required placeholder="Your name" value={form.name} onChange={set('name')} />
                 </label>
                 <label>
                   <span>Company *</span>
-                  <input type="text" required placeholder="MedGate Imports" value={form.company} onChange={set('company')} />
+                  <input type="text" required placeholder="Company name" value={form.company} onChange={set('company')} />
                 </label>
               </div>
               <div className="b2b-contact-row">
                 <label>
                   <span>Work email *</span>
-                  <input type="email" required placeholder="jane@company.com" value={form.email} onChange={set('email')} />
+                  <input type="email" required placeholder="name@company.com" value={form.email} onChange={set('email')} />
                 </label>
                 <label>
                   <span>Phone / WhatsApp</span>
-                  <input type="tel" placeholder="+1 800 555 0192" value={form.phone} onChange={set('phone')} />
+                  <input type="tel" placeholder="+92 ..." value={form.phone} onChange={set('phone')} />
                 </label>
               </div>
 
@@ -96,17 +96,17 @@ export default function QuotePage() {
               <div className="b2b-contact-row">
                 <label>
                   <span>Item codes or drawing references</span>
-                  <input type="text" placeholder="Example: OF-TF-024, customer drawing DRW-42" value={form.itemCodes} onChange={set('itemCodes')} />
+                  <input type="text" placeholder="Example: item code, drawing number, or sample reference" value={form.itemCodes} onChange={set('itemCodes')} />
                 </label>
                 <label>
                   <span>Quantity required *</span>
-                  <input type="text" required placeholder="Example: 250 pcs / 40 complete sets" value={form.quantity} onChange={set('quantity')} />
+                  <input type="text" required placeholder="Example: 250 pcs / 40 sets" value={form.quantity} onChange={set('quantity')} />
                 </label>
               </div>
               <div className="b2b-contact-row">
                 <label>
                   <span>Steel grade</span>
-                  <input type="text" placeholder="Example: 316L, 420, 410, buyer specified" value={form.steelGrade} onChange={set('steelGrade')} />
+                  <input type="text" placeholder="Example: 316L, 420, 410, or buyer specified" value={form.steelGrade} onChange={set('steelGrade')} />
                 </label>
                 <label>
                   <span>Finish / marking</span>
@@ -133,15 +133,15 @@ export default function QuotePage() {
               </div>
               <label>
                 <span>Destination country / port</span>
-                <input type="text" placeholder="Example: Jebel Ali, Dubai / Hamburg, Germany" value={form.destination} onChange={set('destination')} />
+                <input type="text" placeholder="Example: destination country, city, or port" value={form.destination} onChange={set('destination')} />
               </label>
               <label>
                 <span>Additional notes</span>
-                <textarea rows={5} placeholder="Include packing, tray, tender, sample, payment, or inspection requirements." value={form.notes} onChange={set('notes')} />
+                <textarea rows={5} placeholder="Include packing, tray, sample, payment, inspection, or tender requirements." value={form.notes} onChange={set('notes')} />
               </label>
 
               <button type="submit" className="b2b-btn b2b-btn-primary" style={{ width: '100%', marginTop: '0.5rem' }}>
-                Submit export RFQ
+                Submit enquiry
               </button>
             </form>
           )}
@@ -152,12 +152,12 @@ export default function QuotePage() {
             <h3>What happens next</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '0.75rem' }}>
               {[
-                ['01', 'We review the set list', 'A product specialist checks item codes, steel grade, finish, packing, and documentation requirements.'],
-                ['02', 'You receive an export quote', 'Within 48 business hours you get pricing, MOQ, lead time, sample options, and available documents.'],
-                ['03', 'Approve and dispatch', 'Approve the quote and we prepare production, inspection, packing, and shipment under agreed trade terms.'],
+                ['01', 'We review your enquiry', 'Item codes, patterns, quantity, finish, packing requirements, and export documents are checked before any price is issued.'],
+                ['02', 'You receive a quotation', 'Pricing, lead time, minimum quantities, sample options, and document support — confirmed in writing, nothing ambiguous.'],
+                ['03', 'Order and dispatch', 'After order confirmation, production begins. We handle inspection, export packing, and shipment documentation to your port.'],
               ].map(([n, title, body]) => (
                 <div key={n} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                  <span style={{ background: 'rgba(45,212,191,0.1)', border: '1px solid rgba(45,212,191,0.25)', borderRadius: '8px', color: 'var(--b2b-accent)', fontSize: '0.72rem', fontWeight: 900, minWidth: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{n}</span>
+                  <span style={{ background: 'color-mix(in srgb, var(--b2b-accent) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--b2b-accent) 20%, transparent)', borderRadius: '8px', color: 'var(--b2b-accent)', fontSize: '0.72rem', fontWeight: 900, minWidth: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{n}</span>
                   <div>
                     <strong style={{ color: 'var(--b2b-text)', fontSize: '0.9rem', display: 'block', marginBottom: '0.25rem' }}>{title}</strong>
                     <p style={{ color: 'var(--b2b-muted)', fontSize: '0.83rem', lineHeight: 1.6, margin: 0 }}>{body}</p>
@@ -177,9 +177,8 @@ export default function QuotePage() {
           </div>
 
           <div className="b2b-contact-info-block">
-            <h3>Response guarantee</h3>
-            <p>All qualified export quotation requests receive a response within <strong style={{ color: 'var(--b2b-text)' }}>48 business hours</strong>.</p>
-            <p style={{ marginTop: '0.5rem' }}>+92 52 355 0192</p>
+            <h3>Need a quicker answer?</h3>
+            <p>For urgent enquiries, send a short list first. We can confirm whether the items are suitable for quotation before full documents are prepared.</p>
             <a href={themeLink('/contact')} className="b2b-btn b2b-btn-secondary" style={{ marginTop: '1rem', display: 'inline-flex' }}>
               Contact export desk
             </a>
