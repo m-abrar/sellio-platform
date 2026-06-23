@@ -1,18 +1,19 @@
 <div class="card detail-sidebar-card mb-4 overflow-hidden" id="classified-contact-widget">
-    <div class="card-header border-0 p-4" style="background:var(--primary-color)">
-        <h4 class="fw-800 mb-1 text-white">
-            <i class="bi bi-tag-fill me-2"></i>{{ $classified->price_formatted }}
-        </h4>
-        <p class="small mb-0" style="color:rgba(255,255,255,.7)">{{ __('Contact the seller to arrange a viewing or make an offer.') }}</p>
+
+    {{-- Section-warm hero: matches property booking widget pattern --}}
+    <div class="p-4" style="background:#F4F0EC;border-bottom:1.5px solid rgba(15,23,42,.07)">
+        <p class="small fw-semibold text-uppercase mb-1" style="letter-spacing:.06em;color:var(--primary-color)">
+            {{ $classified->is_for_rent ? __('Monthly Rent') : __('Asking Price') }}
+        </p>
+        <h3 class="fw-800 text-dark mb-0" style="font-family:var(--font-heading);font-size:1.9rem;letter-spacing:-.03em">
+            {{ $classified->price_formatted }}
+        </h3>
+        @if($classified->is_for_rent)
+            <p class="small text-muted mt-2 mb-0">{{ __('Ask seller about deposit and terms.') }}</p>
+        @endif
     </div>
 
-    <div class="card-body p-4">
-        @if($classified->is_for_rent)
-            <p class="small text-muted mb-4">
-                <i class="bi bi-house-door me-1" style="color:var(--primary-color)"></i>{{ __('Listed for rent — ask seller about deposit and terms.') }}
-            </p>
-        @endif
-
+    <div class="p-4">
         <div class="booking-widget-trust mb-4">
             <span><i class="bi bi-shield-check" style="color:var(--primary-color)"></i>{{ __('Secure messaging') }}</span>
             <span><i class="bi bi-eye-slash" style="color:var(--primary-color)"></i>{{ __('Info protected') }}</span>
