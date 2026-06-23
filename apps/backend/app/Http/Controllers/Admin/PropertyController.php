@@ -23,11 +23,6 @@ use Illuminate\View\View;
 use App\Traits\ManagesApproval;
 use App\Services\Admin\PropertyManagementService;
 
-/**
- * Class PropertyController
- * Orchestrates the administrative lifecycle of the Real Estate vertical, managing 
- * hierarchical features, neighborhood relationships, and complex seasonal pricing algorithms.
- */
 class PropertyController extends Controller
 {
     use ManagesApproval;

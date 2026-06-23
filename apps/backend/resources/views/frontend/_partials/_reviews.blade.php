@@ -1,17 +1,18 @@
+@php $reviews = $reviewable->reviews ?? collect(); @endphp
 <div class="pt-2" data-aos="fade-up">
     <div class="d-flex align-items-center mb-4">
         <h4 class="fw-800 mb-0">
             <i class="bi bi-chat-square-quote-fill me-2" style="color:var(--primary-color)"></i>{{ __('Community Reviews') }}
         </h4>
-        <span class="ms-3 badge rounded-pill fw-semibold" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
-            {{ $reviewable->reviews->count() }}
+        <span class="ms-3 badge rounded-2 fw-semibold" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
+            {{ $reviews->count() }}
         </span>
     </div>
 
     {{-- Rating Summary --}}
     <div class="row align-items-center mb-5 g-3 p-4 rounded-4" style="background:rgba(248,246,243,.9);border:1.5px solid rgba(15,23,42,.07)">
         <div class="col-md-auto text-center px-4">
-            @php $averageRating = $reviewable->reviews->avg('rating') ?? 0; @endphp
+            @php $averageRating = $reviews->avg('rating') ?? 0; @endphp
             <h2 class="display-4 fw-800 text-dark mb-0">{{ number_format($averageRating, 1) }}</h2>
             <div class="fs-5 my-1" style="color:var(--primary-color)">
                 @for ($i = 1; $i <= 5; $i++)
@@ -23,8 +24,8 @@
         <div class="col-md px-md-4">
             @foreach(range(5, 1) as $stars)
                 @php
-                    $count = $reviewable->reviews->where('rating', $stars)->count();
-                    $percent = $reviewable->reviews->count() > 0 ? ($count / $reviewable->reviews->count()) * 100 : 0;
+                    $count = $reviews->where('rating', $stars)->count();
+                    $percent = $reviews->count() > 0 ? ($count / $reviews->count()) * 100 : 0;
                 @endphp
                 <div class="d-flex align-items-center mb-1">
                     <span class="small fw-semibold text-muted me-2" style="width:20px">{{ $stars }}</span>
@@ -39,7 +40,7 @@
 
     {{-- Review List --}}
     <div class="review-list">
-        @forelse($reviewable->reviews as $review)
+        @forelse($reviews as $review)
             <div class="review-item pb-4 mb-4 {{ !$loop->last ? 'border-bottom' : '' }}" style="border-color:rgba(15,23,42,.07)!important">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div class="d-flex align-items-center">
@@ -72,7 +73,7 @@
 
     {{-- Write a Review Form --}}
     @auth
-        @if(!$reviewable->reviews->where('user_id', auth()->id())->first())
+        @if(!$reviews->where('user_id', auth()->id())->first())
             <div class="p-4 rounded-4 mt-4" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07)">
                 <h6 class="fw-800 mb-4">{{ __('Write a Review') }}</h6>
                 <form action="{{ route('reviews.store', ['type' => $type, 'id' => $reviewable->id]) }}" method="POST">

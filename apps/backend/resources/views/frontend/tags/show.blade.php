@@ -1,163 +1,214 @@
-﻿@extends('frontend._layouts._app')
+@extends('frontend._layouts._app')
 
 @section('hero')
-{{-- Premium Tag Hero Header --}}
-<div class="user-profile-header py-5 mb-5 position-relative overflow-hidden" 
-     style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ $tag->primary_image_url }}') center center / cover no-repeat; min-height: 350px;">
-    <div class="header-overlay"></div>
-    
-    <div class="container position-relative z-index-1 text-center py-4">
-        <div class="avatar-wrapper mb-3" data-aos="zoom-in">
-            <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-lg border border-4 border-white bg-white" 
-                 style="width: 140px; height: 140px; overflow: hidden;">
-                <img src="{{ $tag->primary_image_url }}" width="140" height="140" alt="{{ $tag->title }}" class="object-fit-cover">
-            </div>
-            <div class="verified-badge bg-primary text-white shadow-sm">
-                <i class="bi bi-hash"></i>
-            </div>
-        </div>
-        
-        <h1 class="fw-800 display-5 text-white mb-2" data-aos="fade-up">{{ $tag->title }}</h1>
-        <div class="d-flex justify-content-center gap-3 text-white-50 fw-500" data-aos="fade-up" data-aos-delay="100">
-            <span><i class="bi bi-collection me-1"></i> {{ $tag->listings_count ?? 0 }} {{ __('Items Tagged') }}</span>
-            <span>•</span>
-            <span><i class="bi bi-calendar3 me-1"></i> {{ __('Created') }} {{ $tag->created_at->format('M Y') }}</span>
-        </div>
-    </div>
-</div>
-@endsection
+<section class="py-5 border-bottom" style="background:#F4F0EC;border-color:rgba(15,23,42,.07)!important;">
+    <div class="container">
+        <div class="d-flex flex-column flex-sm-row align-items-start gap-4">
 
-@section('body_class', 'has-body-glow bg-light frontend-page--listing')
+            @if($tag->primary_image_url)
+            <div class="flex-shrink-0">
+                <img src="{{ $tag->primary_image_url }}"
+                     class="rounded-3 object-fit-cover"
+                     style="width:72px;height:72px;border:1.5px solid rgba(15,23,42,.1)"
+                     alt="">
+            </div>
+            @else
+            <div class="flex-shrink-0 rounded-3 d-flex align-items-center justify-content-center"
+                 style="width:72px;height:72px;background:rgba(var(--primary-color-rgb),.08);border:1.5px solid rgba(var(--primary-color-rgb),.15)">
+                <i class="bi bi-hash fs-2" style="color:var(--primary-color)"></i>
+            </div>
+            @endif
 
-@section('content')
-<x-frontend.listing-shell variant="tag" class="mt-n5 position-relative z-index-2">
-    
-    <div class="row g-4">
-        {{-- Left Column: Content --}}
-        <div class="col-lg-8">
-            {{-- About Section --}}
-            <div class="card bg-white border rounded-4 p-3 mb-4" data-aos="fade-up">
-                <div class="card-body">
-                    <h4 class="fw-800 mb-3"><i class="bi bi-info-circle-fill me-2 text-primary"></i> {{ __('Tag Description') }}</h4>
-                    <p class="description text-muted lh-lg">
-                        {{ $tag->description ?: __('Explore a curated collection of listings categorized under the ' . $tag->title . ' tag.') }}
-                    </p>
+            <div class="pt-sm-1">
+                <h1 class="mb-2 lh-1" style="font-family:var(--font-heading);font-size:clamp(1.75rem,3vw,2.25rem);color:var(--text-dark)">#{{ $tag->title }}</h1>
+                <div class="d-flex flex-wrap gap-3 align-items-center small text-muted">
+                    @if(($tag->listings_count ?? 0) > 0)
+                        <span>{{ number_format($tag->listings_count) }} {{ __('listings') }}</span>
+                    @endif
+                    <span>{{ __('Added') }} {{ $tag->created_at->format('M Y') }}</span>
                 </div>
             </div>
 
-            {{-- Dynamic Tabs for Listings --}}
-            <div class="card bg-white border rounded-4 p-2" data-aos="fade-up">
-                <div class="card-body">
-                    <ul class="nav nav-pills nav-justified mb-4 gap-2 p-2 bg-light rounded-3" id="tagTab" role="tablist">
+        </div>
+    </div>
+</section>
+@endsection
+
+@section('body_class', 'bg-light frontend-page--listing')
+
+@section('content')
+<x-frontend.listing-shell variant="tag">
+    <div class="row g-4">
+
+        {{-- Left Column: Content --}}
+        <div class="col-lg-8">
+
+            {{-- Tag Description --}}
+            <div class="card detail-sidebar-card p-4 mb-4" data-aos="fade-up">
+                <h5 class="fw-800 mb-3 text-dark">{{ __('Tag Description') }}</h5>
+                <p class="text-muted lh-base mb-0">
+                    {{ $tag->description ?: __('Explore a curated collection of listings categorized under the #' . $tag->title . ' tag.') }}
+                </p>
+            </div>
+
+            {{-- Tabs --}}
+            @php
+                $collections = [
+                    ['data' => $tag->properties,  'title' => __('Properties'), 'icon' => 'bi-house',          'route' => 'properties.show'],
+                    ['data' => $tag->autos,        'title' => __('Vehicles'),   'icon' => 'bi-car-front',      'route' => 'autos.show'],
+                    ['data' => $tag->jobs,         'title' => __('Jobs'),        'icon' => 'bi-briefcase',      'route' => 'jobs.show'],
+                    ['data' => $tag->services,     'title' => __('Services'),    'icon' => 'bi-tools',          'route' => 'services.show'],
+                    ['data' => $tag->events,       'title' => __('Events'),      'icon' => 'bi-calendar-event', 'route' => 'events.show'],
+                    ['data' => $tag->classifieds,  'title' => __('Classifieds'), 'icon' => 'bi-megaphone',      'route' => 'classifieds.show'],
+                ];
+            @endphp
+
+            <div class="card detail-sidebar-card overflow-hidden" data-aos="fade-up">
+                <div class="px-4 pt-4 pb-0 border-bottom" style="border-color:rgba(15,23,42,.07)!important">
+                    <ul class="nav" id="tagTab" role="tablist">
                         <li class="nav-item">
-                            <button class="nav-link active rounded-2 fw-semibold" data-bs-toggle="tab" data-bs-target="#tab-all">{{ __('Recent Activity') }}</button>
+                            <button class="detail-tab-btn active fw-semibold"
+                                    data-bs-toggle="tab" data-bs-target="#tab-activity">
+                                <i class="bi bi-grid me-2"></i>{{ __('Recent Activity') }}
+                            </button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link rounded-2 fw-semibold" data-bs-toggle="tab" data-bs-target="#tab-explore">{{ __('Explore Categories') }}</button>
+                            <button class="detail-tab-btn fw-semibold"
+                                    data-bs-toggle="tab" data-bs-target="#tab-explore">
+                                <i class="bi bi-compass me-2"></i>{{ __('Explore Categories') }}
+                            </button>
                         </li>
                     </ul>
+                </div>
 
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tab-all">
-                            {{-- Unified Listing Loop --}}
-                            @php
-                                $collections = [
-                                    ['data' => $tag->properties, 'title' => __('Properties'), 'icon' => 'bi-house', 'route' => 'properties.show'],
-                                    ['data' => $tag->autos, 'title' => __('Vehicles'), 'icon' => 'bi-car-front', 'route' => 'autos.show'],
-                                    ['data' => $tag->jobs, 'title' => __('Jobs'), 'icon' => 'bi-briefcase', 'route' => 'jobs.show'],
-                                    ['data' => $tag->services, 'title' => __('Services'), 'icon' => 'bi-tools', 'route' => 'services.show'],
-                                    ['data' => $tag->events, 'title' => __('Events'), 'icon' => 'bi-calendar-event', 'route' => 'events.show'],
-                                    ['data' => $tag->classifieds, 'title' => __('Classifieds'), 'icon' => 'bi-megaphone', 'route' => 'classifieds.show'],
-                                ];
-                            @endphp
+                <div class="tab-content p-4">
 
-                            @foreach($collections as $col)
-                                @if($col['data']->count())
-                                    <div class="mb-5">
-                                        <h5 class="fw-800 mb-3 text-dark d-flex align-items-center">
-                                            <i class="{{ $col['icon'] }} me-2 text-primary"></i> {{ $col['title'] }}
-                                            <span class="badge bg-light text-primary ms-2 rounded-2 fs-7">{{ $col['data']->count() }}</span>
-                                        </h5>
-                                        <div class="list-group list-group-flush gap-3">
-                                            @foreach($col['data'] as $item)
-                                                <a href="{{ route($col['route'], $item->slug) }}" class="list-group-item list-group-item-action rounded-4 border p-3 hover-lift shadow-sm">
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="{{ $item->primary_image_url ?? $item->company_logo_url ?? asset('images/placeholder.png') }}" class="rounded-3 me-3 object-fit-cover" width="80" height="80">
-                                                        <div class="flex-grow-1">
-                                                            <h6 class="fw-800 mb-1 text-dark">{{ $item->title }}</h6>
-                                                            <div class="text-muted small">
-                                                                @if(isset($item->price_formatted)) <span class="text-primary fw-bold me-2">{{ $item->price_formatted }}</span> @endif
-                                                                <i class="bi bi-geo-alt"></i> {{ $item->address ?? $item->location->title ?? __('Location Not Specified') }}
-                                                            </div>
-                                                        </div>
-                                                        <i class="bi bi-chevron-right text-muted"></i>
-                                                    </div>
-                                                </a>
-                                            @endforeach
-                                        </div>
+                    {{-- Recent Activity --}}
+                    <div class="tab-pane fade show active" id="tab-activity">
+                        @foreach($collections as $col)
+                            @if($col['data']->count())
+                                <div class="mb-5">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="bi {{ $col['icon'] }} me-2 fs-5" style="color:var(--primary-color)"></i>
+                                        <h5 class="fw-800 mb-0 text-dark">{{ $col['title'] }}</h5>
+                                        <span class="ms-2 badge rounded-2 fw-semibold small" style="background:rgba(var(--primary-color-rgb),.08);color:var(--primary-color)">{{ $col['data']->count() }}</span>
                                     </div>
-                                @endif
+                                    <div class="d-flex flex-column gap-3">
+                                        @foreach($col['data'] as $item)
+                                            @php
+                                                $displayTitle = $item->title
+                                                    ?: collect([$item->year ?? null, $item->make ?? null, $item->model ?? null])->filter()->implode(' ');
+                                                $displayPrice = $item->price_formatted
+                                                    ?? $item->base_price_formatted
+                                                    ?? null;
+                                            @endphp
+                                            <a href="{{ route($col['route'], $item->slug) }}" class="text-decoration-none">
+                                                <div class="d-flex align-items-center gap-3 p-3 rounded-4 transition-up bg-white" style="border:1.5px solid rgba(15,23,42,.07)">
+                                                    <img src="{{ $item->primary_image_url ?? $item->company_logo_url ?? asset('images/placeholder.png') }}"
+                                                         class="rounded-3 object-fit-cover flex-shrink-0" width="80" height="80" alt="">
+                                                    <div class="flex-grow-1 min-w-0">
+                                                        <h6 class="fw-800 mb-1 text-dark text-truncate">{{ $displayTitle }}</h6>
+                                                        <div class="text-muted small d-flex align-items-center gap-2 flex-wrap">
+                                                            @if($displayPrice)
+                                                                <span class="fw-800" style="color:var(--primary-color)">{{ $displayPrice }}</span>
+                                                                <span>·</span>
+                                                            @endif
+                                                            <span><i class="bi bi-geo-alt me-1"></i>{{ $item->address ?? ($item->location->title ?? __('Location not specified')) }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <i class="bi bi-chevron-right text-muted flex-shrink-0"></i>
+                                                </div>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+
+                        @if(collect($collections)->every(fn($c) => $c['data']->count() === 0))
+                            <div class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox display-4 d-block mb-2" style="color:rgba(var(--primary-color-rgb),.2)"></i>
+                                <p class="mb-0">{{ __('No listings under this tag yet.') }}</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    {{-- Explore Categories --}}
+                    <div class="tab-pane fade" id="tab-explore">
+                        <h5 class="fw-800 mb-2 text-dark">{{ __('Search within') }} #{{ $tag->title }}</h5>
+                        <p class="text-muted small mb-4">{{ __('Filter results by category to find exactly what you need.') }}</p>
+                        <div class="row g-3">
+                            @foreach($collections as $col)
+                                <div class="col-md-6">
+                                    <a href="{{ route(str_replace('.show', '.index', $col['route'])) }}?tags[]={{ $tag->id }}"
+                                       class="d-flex align-items-center gap-3 p-3 rounded-4 text-decoration-none transition-up bg-white"
+                                       style="border:1.5px solid rgba(15,23,42,.07)">
+                                        <i class="bi {{ $col['icon'] }} fs-5 flex-shrink-0" style="color:var(--primary-color)"></i>
+                                        <span class="fw-semibold text-dark small">{{ $col['title'] }}</span>
+                                        <i class="bi bi-chevron-right text-muted ms-auto flex-shrink-0 small"></i>
+                                    </a>
+                                </div>
                             @endforeach
                         </div>
-
-                        <div class="tab-pane fade" id="tab-explore">
-                            <div class="p-4 text-center">
-                                <h5 class="fw-800 mb-3">{{ __('Search within #') }}{{ $tag->title }}</h5>
-                                <p class="text-muted mb-4">{{ __('Filter results by category to find exactly what you need.') }}</p>
-                                <div class="row g-3">
-                                    @foreach($collections as $col)
-                                        <div class="col-md-6">
-                                            <a href="{{ route(explode('.', $col['route'])[0] . '.search', ['tag' => $tag->id]) }}" class="btn btn-light w-100 py-3 rounded-4 border hover-lift">
-                                                <i class="{{ $col['icon'] }} text-primary me-2"></i> {{ __('View all') }} {{ $col['title'] }}
-                                            </a>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
 
         {{-- Right Column: Sidebar --}}
         <div class="col-lg-4">
-            <div class="sticky-top" sticky-100>
-                {{-- Metadata Sidebar --}}
-                <div class="card bg-white border rounded-4 p-4 mb-4" data-aos="fade-left">
-                    <h5 class="fw-800 mb-4">{{ __('Tag Details') }}</h5>
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-sm bg-primary-subtle text-primary me-3 rounded-circle"><i class="bi bi-fingerprint"></i></div>
-                        <div><small class="text-muted d-block">{{ __('Slug') }}</small><span class="fw-600">{{ $tag->slug }}</span></div>
-                    </div>
-                    <div class="d-flex align-items-center mb-4">
-                        <div class="icon-box-sm bg-info-subtle text-info me-3 rounded-circle"><i class="bi bi-calendar-check"></i></div>
-                        <div><small class="text-muted d-block">{{ __('Added On') }}</small><span class="fw-600">{{ $tag->created_at->format('M d, Y') }}</span></div>
-                    </div>
+            <div class="sticky-top" style="top:100px">
 
-                    <a href="{{ setting('url_partner', '#') }}?tag={{ $tag->slug }}" class="btn btn-primary btn-header-cta w-100 mb-3">
-                        <i class="bi bi-plus-circle me-2"></i> {{ __('Submit a Listing') }}
+                {{-- CTA --}}
+                <div class="card detail-sidebar-card p-4 mb-4" data-aos="fade-left">
+                    <a href="{{ setting('url_partner', '#') }}?tag={{ $tag->slug }}"
+                       class="btn btn-primary btn-header-cta w-100 mb-3">
+                        <i class="bi bi-plus-circle me-2"></i>{{ __('Post a listing') }}<i class="bi bi-arrow-right ms-2"></i>
                     </a>
-                    
                     <button class="btn btn-outline-secondary w-100 fw-semibold">
-                        <i class="bi bi-share me-2"></i> {{ __('Share Tag') }}
+                        <i class="bi bi-share me-2"></i>{{ __('Share') }}
                     </button>
                 </div>
 
-                {{-- Status Card --}}
-                <div class="card bg-dark text-white rounded-5 border-0 shadow-lg p-4" data-aos="fade-left" data-aos-delay="100">
-                    <h5 class="fw-800 mb-3 text-primary">{{ __('Tag Performance') }}</h5>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>{{ __('Global Visibility') }}</span>
-                        <i class="bi bi-check-circle-fill text-success"></i>
+                {{-- Metadata --}}
+                <div class="card detail-sidebar-card p-4" data-aos="fade-left" data-aos-delay="100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="small text-muted">{{ __('Slug') }}</span>
+                        <span class="small fw-semibold text-dark">#{{ $tag->slug }}</span>
                     </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>{{ __('Search Popularity') }}</span>
-                        <span class="text-warning">High</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="small text-muted">{{ __('Since') }}</span>
+                        <span class="small fw-semibold text-dark">{{ $tag->created_at->format('M Y') }}</span>
                     </div>
                 </div>
+
             </div>
         </div>
+
     </div>
 </x-frontend.listing-shell>
 @endsection
+
+@push('styles')
+<style>
+.detail-tab-btn {
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    color: #6b7280;
+    font-size: .875rem;
+    cursor: pointer;
+    padding: .75rem 0;
+    margin-right: 2rem;
+    margin-bottom: -1px;
+    transition: color .15s ease, border-color .15s ease;
+}
+.detail-tab-btn:hover { color: var(--text-dark); }
+.detail-tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+</style>
+@endpush

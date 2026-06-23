@@ -1,16 +1,4 @@
-﻿{{--
-    Administrative Real Estate: Global Property
-    
-    This view serves as the authoritative inventory control hub for 
-    real estate assets. It integrates multi-dimensional filtering, 
-    lifecycle status auditing, and direct access to asset configuration 
-    and cloning protocols, ensuring streamlined marketplace oversight.
-    
-    @extends adminlte::page
-    @context Property Inventory Management
-    @variables Paginator $properties Paginated collection of Property models.
---}}
-@extends('adminlte::page')
+﻿@extends('adminlte::page')
 
 @section('title', __('Properties'))
 
@@ -65,10 +53,10 @@
     {{-- Main Table --}}
     <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Property Inventory') }}</h3>
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Properties') }}</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
-                    <i class="fas fa-database mr-1"></i> {{ $properties->total() }} {{ __('ASSETS FOUND') }}
+                    <i class="fas fa-building mr-1"></i> {{ $properties->total() }} {{ __('properties') }}
                 </span>
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                     <i class="fas fa-expand"></i>
@@ -82,9 +70,9 @@
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center pl-4 col-media-70">{{ __('Media') }}</th>
-                            <th>{{ __('Property Identity') }}</th>
-                            <th>{{ __('Classification') }}</th>
-                            <th>{{ __('Financials') }}</th>
+                            <th>{{ __('Property') }}</th>
+                            <th>{{ __('Type / Category') }}</th>
+                            <th>{{ __('Price') }}</th>
                             <th>{{ __('Status') }}</th>
                             <th class="text-right pr-4">{{ __('Actions') }}</th>
                         </tr>
@@ -151,20 +139,20 @@
                                     <div class="btn-group btn-group-premium">
                                         <a href="{{ route('admin.properties.edit', $property->id) }}" 
                                            class="btn text-primary" 
-                                           data-toggle="tooltip" title="{{ __('Modify Asset') }}">
+                                           data-toggle="tooltip" title="{{ __('Edit') }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
-                                        <a href="{{ route('admin.properties.duplicate', $property->id) }}" 
-                                           class="btn text-success" 
-                                           data-toggle="tooltip" title="{{ __('Clone Entry') }}">
+                                        <a href="{{ route('admin.properties.duplicate', $property->id) }}"
+                                           class="btn text-success"
+                                           data-toggle="tooltip" title="{{ __('Duplicate') }}">
                                             <i class="fas fa-copy"></i>
                                         </a>
                                         <form action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn text-danger" 
-                                                    data-toggle="tooltip" title="{{ __('Purge Asset') }}"
+                                            <button type="button" class="btn text-danger"
+                                                    data-toggle="tooltip" title="{{ __('Delete') }}"
                                                     data-action="delete-trigger"
-                                                    data-confirm-title="{{ __('Purge Asset?') }}"
+                                                    data-confirm-title="{{ __('Delete property?') }}"
                                                     data-confirm-text="{{ __('Permanently delete this property listing?') }}">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
@@ -176,9 +164,9 @@
                             @include('admin._partials._empty-state', [
                                 'colspan' => 6,
                                 'icon' => 'fas fa-building',
-                                'title' => __('No real-estate assets detected.'),
-                                'description' => __('Synchronize your inventory or initialize new property entries to populate this registry.'),
-                                'button_text' => __('INITIALIZE PROPERTY'),
+                                'title' => __('No properties yet.'),
+                                'description' => __('Add your first property to get started.'),
+                                'button_text' => __('Add Property'),
                                 'button_link' => route('admin.properties.create')
                             ])
                         @endforelse

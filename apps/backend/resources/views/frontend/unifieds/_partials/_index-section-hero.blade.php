@@ -65,26 +65,25 @@
                 </div>{{-- /hero-search-module --}}
 
                 {{-- Stats row --}}
+                @if(($totalListingsCount ?? 0) > 0 || ($publicModules ?? collect())->count() > 0)
                 <div class="hero-stats-row mt-5" data-aos="fade-up" data-aos-delay="250">
                     @if(($totalListingsCount ?? 0) > 0)
                     <div class="hero-stat">
                         <span class="hero-stat__value">{{ number_format($totalListingsCount) }}+</span>
                         <span class="hero-stat__label">{{ __('Active Listings') }}</span>
                     </div>
+                    @if(($publicModules ?? collect())->count() > 0)
                     <div class="hero-stat-divider"></div>
+                    @endif
                     @endif
                     @if(($publicModules ?? collect())->count() > 0)
                     <div class="hero-stat">
                         <span class="hero-stat__value">{{ ($publicModules ?? collect())->count() }}</span>
                         <span class="hero-stat__label">{{ __('Categories') }}</span>
                     </div>
-                    <div class="hero-stat-divider"></div>
                     @endif
-                    <div class="hero-stat">
-                        <span class="hero-stat__value">4.8<span class="hero-stat__unit">★</span></span>
-                        <span class="hero-stat__label">{{ __('Seller Rating') }}</span>
-                    </div>
                 </div>
+                @endif
 
             </div>{{-- /col-lg-6 left --}}
 

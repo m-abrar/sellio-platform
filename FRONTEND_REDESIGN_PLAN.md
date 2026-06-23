@@ -507,3 +507,12 @@ DONE
 remove empty space here
 <nav></nav>
 </header>
+
+
+
+admin bar pushed the following too much far from top.
+<main id="main-content" class="frontend-main min-vh-100" role="main">
+
+
+On tags page, Explore Categories, should send to correct target like this:
+http://192.168.0.112:8000/vehicles/?tags%5B%5D=1

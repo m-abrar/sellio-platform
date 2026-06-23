@@ -1,147 +1,200 @@
-﻿@extends('frontend._layouts._app')
+@extends('frontend._layouts._app')
 
 @section('hero')
-{{-- Premium Brand Hero Header --}}
-<div class="user-profile-header py-5 mb-5 position-relative overflow-hidden" 
-     style="background: url('{{ $brand->cover_url ?? asset('images/default-brand-cover.jpg') }}') center center / cover no-repeat; min-height: 400px;">
-    <div class="header-overlay" style="background: rgba(0,0,0,0.5); position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
-    
-    <div class="container position-relative z-index-1 text-center py-5">
-        <div class="avatar-wrapper mb-3" data-aos="zoom-in">
-            <img src="{{ $brand->primary_image_url }}" class="rounded-circle shadow-lg border border-4 border-white" 
-                 width="140" height="140" alt="{{ $brand->title }}" class="object-fit-cover">
-        </div>
-        
-        <h1 class="fw-800 display-4 text-white mb-2" data-aos="fade-up">{{ $brand->title }}</h1>
-        <div class="d-flex justify-content-center gap-3 text-white-50 fw-500" data-aos="fade-up" data-aos-delay="100">
-            <span><i class="bi bi-tags me-1"></i> {{ __('Official Brand') }}</span>
-            <span>•</span>
-            <span><i class="bi bi-grid-fill me-1"></i> {{ $brand->listings_count ?? 0 }} {{ __('Total Listings') }}</span>
+<section class="py-5 border-bottom" style="background:#F4F0EC;border-color:rgba(15,23,42,.07)!important;">
+    <div class="container">
+        <div class="d-flex flex-column flex-sm-row align-items-start gap-4">
+
+            @if($brand->primary_image_url)
+            <div class="flex-shrink-0">
+                <img src="{{ $brand->primary_image_url }}"
+                     class="rounded-3 object-fit-cover"
+                     style="width:72px;height:72px;border:1.5px solid rgba(15,23,42,.1)"
+                     alt="{{ $brand->title }}">
+            </div>
+            @else
+            <div class="flex-shrink-0 rounded-3 d-flex align-items-center justify-content-center"
+                 style="width:72px;height:72px;background:rgba(var(--primary-color-rgb),.08);border:1.5px solid rgba(var(--primary-color-rgb),.15)">
+                <i class="bi bi-tags fs-2" style="color:var(--primary-color)"></i>
+            </div>
+            @endif
+
+            <div class="pt-sm-1">
+                <h1 class="mb-2 lh-1" style="font-family:var(--font-heading);font-size:clamp(1.75rem,3vw,2.25rem);color:var(--text-dark)">{{ $brand->title }}</h1>
+                <div class="d-flex flex-wrap gap-3 align-items-center small text-muted">
+                    @if(($brand->listings_count ?? 0) > 0)
+                        <span>{{ number_format($brand->listings_count) }} {{ __('listings') }}</span>
+                    @endif
+                    <span>{{ __('Since') }} {{ $brand->created_at->format('M Y') }}</span>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
+</section>
 @endsection
 
-@section('body_class', 'has-body-glow bg-light frontend-page--listing')
+@section('body_class', 'bg-light frontend-page--listing')
 
 @section('content')
-<x-frontend.listing-shell variant="brand" class="mt-n5 position-relative z-index-2">
+<x-frontend.listing-shell variant="brand">
     <div class="row g-4">
-        {{-- Left Column: Brand Content --}}
-        <div class="col-lg-8">
-            {{-- About Brand --}}
-            <div class="card bg-white border rounded-4 p-3 mb-4" data-aos="fade-up">
-                <div class="card-body">
-                    <h4 class="fw-800 mb-3"><i class="bi bi-info-circle-fill me-2 text-primary"></i> {{ __('About the Brand') }}</h4>
-                    <p class="description text-muted lh-lg">
-                        {!! nl2br(e($brand->description ?? __('No detailed description available for this brand.'))) !!}
-                    </p>
-                </div>
-            </div>
 
-            {{-- Tabs for Brand Categories --}}
-            <div class="card bg-white border rounded-4 p-2" data-aos="fade-up">
-                <div class="card-body">
-                    <ul class="nav nav-pills nav-justified mb-4 gap-2 p-2 bg-light rounded-3" id="brandTab" role="tablist">
+        {{-- Left Column: Content --}}
+        <div class="col-lg-8">
+
+            {{-- About --}}
+            @if($brand->description)
+            <div class="card detail-sidebar-card p-4 mb-4" data-aos="fade-up">
+                <h5 class="fw-800 mb-3 text-dark">{{ __('About') }} {{ $brand->title }}</h5>
+                <p class="text-muted lh-base mb-0">{!! nl2br(e($brand->description)) !!}</p>
+            </div>
+            @endif
+
+            {{-- Tabs --}}
+            @php
+                $collections = [
+                    ['data' => $brand->properties,  'title' => __('Properties'), 'icon' => 'bi-house',          'route' => 'properties.show'],
+                    ['data' => $brand->autos,        'title' => __('Vehicles'),   'icon' => 'bi-car-front',      'route' => 'autos.show'],
+                    ['data' => $brand->jobs,         'title' => __('Jobs'),        'icon' => 'bi-briefcase',      'route' => 'jobs.show'],
+                    ['data' => $brand->services,     'title' => __('Services'),    'icon' => 'bi-tools',          'route' => 'services.show'],
+                    ['data' => $brand->events,       'title' => __('Events'),      'icon' => 'bi-calendar-event', 'route' => 'events.show'],
+                    ['data' => $brand->classifieds,  'title' => __('Classifieds'), 'icon' => 'bi-megaphone',      'route' => 'classifieds.show'],
+                ];
+            @endphp
+
+            <div class="card detail-sidebar-card overflow-hidden" data-aos="fade-up">
+                <div class="px-4 pt-4 pb-0 border-bottom" style="border-color:rgba(15,23,42,.07)!important">
+                    <ul class="nav" id="brandTab" role="tablist">
                         <li class="nav-item">
-                            <button class="nav-link active rounded-2 fw-semibold" data-bs-toggle="tab" data-bs-target="#tab-inventory">{{ __('Inventory') }}</button>
+                            <button class="detail-tab-btn active fw-semibold"
+                                    data-bs-toggle="tab" data-bs-target="#tab-inventory">
+                                <i class="bi bi-grid me-2"></i>{{ __('Inventory') }}
+                            </button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link rounded-2 fw-semibold" data-bs-toggle="tab" data-bs-target="#tab-reviews">{{ __('Reviews') }}</button>
+                            <button class="detail-tab-btn fw-semibold"
+                                    data-bs-toggle="tab" data-bs-target="#tab-reviews">
+                                <i class="bi bi-chat-square-quote me-2"></i>{{ __('Reviews') }}
+                                @if($brand->reviews?->count())
+                                    <span class="ms-1 badge rounded-2 fw-semibold" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color);font-size:.7rem">{{ $brand->reviews->count() }}</span>
+                                @endif
+                            </button>
                         </li>
                     </ul>
+                </div>
 
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tab-inventory">
-                            {{-- Integrated Collection Loop --}}
-                            @php
-                                $collections = [
-                                    ['data' => $brand->properties, 'title' => __('Real Estate'), 'icon' => 'bi-house', 'route' => 'properties.show'],
-                                    ['data' => $brand->autos, 'title' => __('Vehicles'), 'icon' => 'bi-car-front', 'route' => 'autos.show'],
-                                    ['data' => $brand->jobs, 'title' => __('Careers'), 'icon' => 'bi-briefcase', 'route' => 'jobs.show'],
-                                    ['data' => $brand->services, 'title' => __('Our Services'), 'icon' => 'bi-tools', 'route' => 'services.show'],
-                                    ['data' => $brand->events, 'title' => __('Upcoming Events'), 'icon' => 'bi-calendar-event', 'route' => 'events.show'],
-                                    ['data' => $brand->classifieds, 'title' => __('Classifieds'), 'icon' => 'bi-megaphone', 'route' => 'classifieds.show'],
-                                ];
-                            @endphp
+                <div class="tab-content p-4">
 
-                            @foreach($collections as $col)
-                                @if($col['data']->count())
-                                    <div class="mb-5">
-                                        <h5 class="fw-800 mb-3 text-dark d-flex align-items-center">
-                                            <i class="{{ $col['icon'] }} me-2 text-primary"></i> {{ $col['title'] }}
-                                            <span class="badge bg-light text-primary ms-2 rounded-2 fs-7">{{ $col['data']->count() }}</span>
-                                        </h5>
-                                        <div class="list-group list-group-flush gap-3">
-                                            @foreach($col['data'] as $item)
-                                                <a href="{{ route($col['route'], $item->slug) }}" class="list-group-item list-group-item-action rounded-4 border p-3 hover-lift shadow-sm">
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="{{ $item->primary_image_url ?? asset('images/placeholder.png') }}" class="rounded-3 me-3 object-fit-cover" width="80" height="80">
-                                                        <div class="flex-grow-1">
-                                                            <h6 class="fw-800 mb-1">{{ $item->title }}</h6>
-                                                            <div class="text-muted small">
-                                                                @if(isset($item->price_formatted)) 
-                                                                    <span class="text-primary fw-bold me-2">{{ $item->price_formatted }}</span> 
-                                                                @endif
-                                                                <i class="bi bi-geo-alt"></i> {{ $item->address ?? $item->location->title ?? __('Regional') }}
-                                                            </div>
-                                                        </div>
-                                                        <i class="bi bi-arrow-right-short text-muted fs-4"></i>
-                                                    </div>
-                                                </a>
-                                            @endforeach
-                                        </div>
+                    {{-- Inventory --}}
+                    <div class="tab-pane fade show active" id="tab-inventory">
+                        @foreach($collections as $col)
+                            @if($col['data']->count())
+                                <div class="mb-5">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="bi {{ $col['icon'] }} me-2 fs-5" style="color:var(--primary-color)"></i>
+                                        <h5 class="fw-800 mb-0 text-dark">{{ $col['title'] }}</h5>
+                                        <span class="ms-2 badge rounded-2 fw-semibold small" style="background:rgba(var(--primary-color-rgb),.08);color:var(--primary-color)">{{ $col['data']->count() }}</span>
                                     </div>
-                                @endif
-                            @endforeach
-                        </div>
+                                    <div class="d-flex flex-column gap-3">
+                                        @foreach($col['data'] as $item)
+                                            @php
+                                                $displayTitle = $item->title
+                                                    ?: collect([$item->year ?? null, $item->make ?? null, $item->model ?? null])->filter()->implode(' ');
+                                                $displayPrice = $item->price_formatted
+                                                    ?? $item->base_price_formatted
+                                                    ?? null;
+                                            @endphp
+                                            <a href="{{ route($col['route'], $item->slug) }}" class="text-decoration-none">
+                                                <div class="d-flex align-items-center gap-3 p-3 rounded-4 transition-up bg-white" style="border:1.5px solid rgba(15,23,42,.07)">
+                                                    <img src="{{ $item->primary_image_url ?? asset('images/placeholder.png') }}"
+                                                         class="rounded-3 object-fit-cover flex-shrink-0" width="80" height="80" alt="">
+                                                    <div class="flex-grow-1 min-w-0">
+                                                        <h6 class="fw-800 mb-1 text-dark text-truncate">{{ $displayTitle }}</h6>
+                                                        <div class="text-muted small d-flex align-items-center gap-2 flex-wrap">
+                                                            @if($displayPrice)
+                                                                <span class="fw-800" style="color:var(--primary-color)">{{ $displayPrice }}</span>
+                                                                <span>·</span>
+                                                            @endif
+                                                            <span><i class="bi bi-geo-alt me-1"></i>{{ $item->address ?? ($item->location->title ?? __('Multiple Locations')) }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <i class="bi bi-chevron-right text-muted flex-shrink-0"></i>
+                                                </div>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
 
-                        <div class="tab-pane fade" id="tab-reviews">
-                            @ include('frontend._partials._reviews', ['reviewable' => $brand, 'type' => 'brands'])
-                        </div>
+                        @if(collect($collections)->every(fn($c) => $c['data']->count() === 0))
+                            <div class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox display-4 d-block mb-2" style="color:rgba(var(--primary-color-rgb),.25)"></i>
+                                <p class="mb-0">{{ __('No listings for this brand yet.') }}</p>
+                            </div>
+                        @endif
                     </div>
+
+                    {{-- Reviews --}}
+                    <div class="tab-pane fade" id="tab-reviews">
+                        @include('frontend._partials._reviews', ['reviewable' => $brand, 'type' => 'brands'])
+                    </div>
+
                 </div>
             </div>
         </div>
 
-        {{-- Right Column: Brand Sidebar --}}
+        {{-- Right Column: Sidebar --}}
         <div class="col-lg-4">
-            <div class="sticky-top" sticky-100>
-                <div class="card bg-white border rounded-4 p-4 mb-4" data-aos="fade-left">
-                    <h5 class="fw-800 mb-4">{{ __('Brand Details') }}</h5>
-                    
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-sm bg-primary-subtle text-primary me-3 rounded-circle"><i class="bi bi-link-45deg"></i></div>
-                        <div><small class="text-muted d-block">{{ __('Reference') }}</small><span class="fw-600">{{ $brand->slug }}</span></div>
-                    </div>
+            <div class="sticky-top" style="top:100px">
 
-                    <div class="d-flex align-items-center mb-4">
-                        <div class="icon-box-sm bg-success-subtle text-success me-3 rounded-circle"><i class="bi bi-calendar-check"></i></div>
-                        <div><small class="text-muted d-block">{{ __('Established') }}</small><span class="fw-600">{{ $brand->created_at->format('M Y') }}</span></div>
-                    </div>
-
-                    <a href="{{ setting('url_partner', '#') }}?brand={{ $brand->slug }}" class="btn btn-primary btn-header-cta w-100 mb-3">
-                        <i class="bi bi-plus-circle me-2"></i> {{ __('Post for Brand') }}
+                {{-- CTA --}}
+                <div class="card detail-sidebar-card p-4 mb-4" data-aos="fade-left">
+                    <a href="{{ setting('url_partner', '#') }}?brand={{ $brand->slug }}"
+                       class="btn btn-primary btn-header-cta w-100">
+                        <i class="bi bi-plus-circle me-2"></i>{{ __('Post for this brand') }}<i class="bi bi-arrow-right ms-2"></i>
                     </a>
                 </div>
 
-                {{-- Verification & Authority --}}
-                <div class="card bg-dark text-white rounded-5 border-0 shadow-lg p-4" data-aos="fade-left" data-aos-delay="100">
-                    <h5 class="fw-800 mb-3 text-primary">{{ __('Brand Authority') }}</h5>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>{{ __('Verified Portfolio') }}</span>
-                        <i class="bi bi-patch-check-fill text-primary"></i>
+                {{-- Details --}}
+                <div class="card detail-sidebar-card p-4" data-aos="fade-left" data-aos-delay="100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="small text-muted">{{ __('Slug') }}</span>
+                        <span class="small fw-semibold text-dark">/{{ $brand->slug }}</span>
                     </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>{{ __('Direct Support') }}</span>
-                        <i class="bi bi-check-circle-fill text-success"></i>
-                    </div>
-                    <div class="mt-3 p-2 bg-secondary bg-opacity-25 rounded-4 small text-white-50">
-                        {{ __('This is an official brand page. All listings are verified by our editorial team.') }}
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="small text-muted">{{ __('Since') }}</span>
+                        <span class="small fw-semibold text-dark">{{ $brand->created_at->format('M Y') }}</span>
                     </div>
                 </div>
+
             </div>
         </div>
+
     </div>
 </x-frontend.listing-shell>
 @endsection
+
+@push('styles')
+<style>
+.detail-tab-btn {
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    color: #6b7280;
+    font-size: .875rem;
+    cursor: pointer;
+    padding: .75rem 0;
+    margin-right: 2rem;
+    margin-bottom: -1px;
+    transition: color .15s ease, border-color .15s ease;
+}
+.detail-tab-btn:hover { color: var(--text-dark); }
+.detail-tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+</style>
+@endpush
