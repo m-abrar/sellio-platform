@@ -5028,3 +5028,5 @@ body.has-admin-bar .main-header.sticky-top{
 }
 body.has-admin-bar{--frontend-header-offset:calc(76px + var(--admin-bar-height,32px))}
 body.has-admin-bar .detail-page section{scroll-margin-top:calc(96px + var(--admin-bar-height,32px))}
+.form-check-input:checked{background-color:var(--primary-color)!important;border-color:var(--primary-color)!important}
+.form-check-input:focus{border-color:rgba(var(--primary-color-rgb),.5);box-shadow:0 0 0 .25rem rgba(var(--primary-color-rgb),.2)}
