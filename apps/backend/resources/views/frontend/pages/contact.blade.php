@@ -21,7 +21,7 @@
                     @foreach([
                         ['icon' => 'bi-chat-dots-fill',    'label' => 'Live Chat',   'value' => 'Available now',     'color' => '#E05F2C'],
                         ['icon' => 'bi-envelope-fill',     'label' => 'Email',        'value' => 'Reply within 24h',  'color' => '#2563eb'],
-                        ['icon' => 'bi-shield-check-fill', 'label' => 'Secure',       'value' => 'Your data is safe', 'color' => '#16a34a'],
+                        ['icon' => 'bi-shield-fill-check', 'label' => 'Secure',       'value' => 'Your data is safe', 'color' => '#16a34a'],
                     ] as $ch)
                     <div class="contact-hero-channel">
                         <div class="contact-hero-channel__icon" style="background:{{ $ch['color'] }}22;color:{{ $ch['color'] }}">
@@ -217,29 +217,6 @@
 
 @push('styles')
 <style>
-/* ── Hero strip ───────────────────────────────────────────────── */
-.page-hero-strip { padding: 4rem 0 3rem; }
-
-.page-hero-title {
-    font-family: var(--font-heading);
-    font-size: clamp(2rem, 4vw, 3rem);
-    color: #fff;
-    line-height: 1.15;
-}
-.page-hero-accent {
-    background: linear-gradient(125deg, var(--primary-color) 25%, #fbbf24 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-style: italic;
-}
-.page-hero-subtitle {
-    font-size: 1.05rem;
-    color: rgba(255,255,255,.65);
-    max-width: 38rem;
-}
-.page-hero-strip .hero-eyebrow { color: rgba(255,255,255,.55); }
-
 /* ── Contact channel panel (hero right col) ───────────────────── */
 .contact-hero-panel {
     background: rgba(255,255,255,.06);

@@ -5,22 +5,19 @@
 @section('body_class', 'has-body-glow bg-light frontend-page--about')
 
 @section('hero')
-<section class="about-hero">
-    {{-- Background image overlay --}}
-    <div class="about-hero__bg" aria-hidden="true"></div>
-    <div class="about-hero__overlay" aria-hidden="true"></div>
-
-    <div class="container-xl position-relative z-1">
+<section class="about-hero hero-section--dark">
+    <div class="container-xl">
         <div class="row align-items-center g-4 g-lg-5">
             <div class="col-lg-7" data-aos="fade-right">
-                <div class="about-hero-eyebrow mb-3">
-                    <span class="about-hero-eyebrow__pill">{{ __('Company') }}</span>
+                <div class="hero-eyebrow mb-3">
+                    <span class="hero-eyebrow__line" aria-hidden="true"></span>
+                    {{ __('Company') }}
                 </div>
-                <h1 class="about-hero-title mb-3">
+                <h1 class="page-hero-title mb-3">
                     {{ __('One platform.') }}<br>
-                    {{ __('Every') }} <span class="about-hero-title__accent">{{ __('vertical.') }}</span>
+                    {{ __('Every') }} <span class="page-hero-accent">{{ __('vertical.') }}</span>
                 </h1>
-                <p class="about-hero-subtitle mb-4">
+                <p class="page-hero-subtitle mb-4">
                     {{ page_content_string('about.hero.subtitle', __('We connect buyers and sellers across properties, vehicles, products, services, events, jobs, and more — all in one trusted place.')) }}
                 </p>
                 <div class="d-flex gap-3 flex-wrap">
@@ -197,7 +194,7 @@
     </div>
 
     {{-- ── CTA band ─────────────────────────────────────────────────── --}}
-    <div class="about-cta-band dark-brand-panel" data-aos="fade-up">
+    <div class="about-cta-band" data-aos="fade-up">
         <div>
             <h2 class="about-cta-title">{{ __('Ready to get started?') }}</h2>
             <p class="about-cta-sub">{{ __('Join thousands of buyers and sellers on the platform today.') }}</p>
@@ -216,44 +213,14 @@
 
 @push('styles')
 <style>
-/* ── Hero ─────────────────────────────────────────────────────── */
+/* ── Hero — extends hero-section--dark ───────────────────────── */
 .about-hero {
-    position: relative;
     min-height: 520px;
+    padding: 5rem 0 4rem;
     display: flex;
     align-items: center;
-    padding: 5rem 0 4rem;
-    overflow: hidden;
 }
-.about-hero__bg {
-    position: absolute; inset: 0;
-    background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1400');
-    background-size: cover;
-    background-position: center 30%;
-}
-.about-hero__overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(15,23,42,.88) 0%, rgba(28,25,23,.82) 60%, rgba(224,95,44,.35) 100%);
-}
-.about-hero-eyebrow__pill {
-    display: inline-block;
-    background: rgba(255,255,255,.12);
-    border: 1px solid rgba(255,255,255,.2);
-    color: #fff;
-    font-size: .75rem; font-weight: 700; letter-spacing: .12em;
-    text-transform: uppercase;
-    padding: .35rem .9rem;
-    border-radius: 999px;
-}
-.about-hero-title {
-    font-family: var(--font-heading);
-    font-size: clamp(2.4rem, 5vw, 3.6rem);
-    color: #fff;
-    line-height: 1.08;
-    font-weight: 800;
-}
-.about-hero-title__accent { color: #E05F2C; }
-.about-hero-subtitle { color: rgba(255,255,255,.75); font-size: 1.1rem; line-height: 1.7; max-width: 520px; }
+.about-hero .page-hero-title { font-size: clamp(2.4rem, 5vw, 3.6rem); }
 
 /* Vertical chips in hero */
 .about-hero-cards {
@@ -414,6 +381,13 @@
     padding: 4rem 2rem;
     text-align: center;
     color: #fff;
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(135deg, rgba(28,25,23,.93) 0%, rgba(28,25,23,.88) 55%, rgba(224,95,44,.3) 100%),
+        url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1400');
+    background-size: cover;
+    background-position: center 35%;
 }
 .about-cta-title {
     font-family: var(--font-heading);

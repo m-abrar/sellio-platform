@@ -6,7 +6,6 @@
 @section('content')
 @include('auth._partials._marketing_panel', [
     'icon'      => 'bi-person-workspace',
-    'glowClass' => 'auth-glow-tl',
     'titleHtml' => page_content('auth.partner_login.marketing_title', __('Partner <span class="text-gradient">Dashboard</span>')),
     'description' => page_content('auth.partner_login.marketing_desc', __('Sign in to manage your listings, track performance, and grow your business on the platform.')),
     'features'  => [

@@ -1225,7 +1225,8 @@ footer{
     margin-top:1.5rem
 }
 .listing-card{
-    padding:0
+    padding:0;
+    transition:transform .2s ease,box-shadow .2s ease
 }
 .listing-card:hover{
     transform:translateY(-5px);
@@ -1801,6 +1802,21 @@ footer{
 }
 .btn-outline-primary-theme:hover,.btn-outline-primary:hover{
     background-color:var(--primary-color);
+    color:#fff
+}
+.btn-primary-light{
+    display:inline-flex;
+    align-items:center;
+    padding:.25rem .75rem;
+    background:rgba(var(--primary-color-rgb),.09);
+    color:var(--primary-color);
+    border:1.5px solid rgba(var(--primary-color-rgb),.18);
+    border-radius:6px;
+    font-size:.8rem;
+    transition:background .15s,color .15s
+}
+.btn-primary-light:hover{
+    background:var(--primary-color);
     color:#fff
 }
 .social-btn img,.social-btn svg{
@@ -4073,7 +4089,7 @@ body.has-admin-bar .main-header.sticky-top{
 
 /* ─── Dark split hero ─────────────────────────────────────────────────── */
 .hero-section--dark {
-    background: var(--text-dark) !important;
+    background: var(--text-dark);
     padding-bottom: clamp(4rem, 8vw, 6rem);
     min-height: auto;
     position: relative;
@@ -4090,6 +4106,14 @@ body.has-admin-bar .main-header.sticky-top{
     background-size: 100% 100%, 28px 28px;
     pointer-events: none;
     z-index: 0;
+}
+/* Inner-page heroes — same pattern, dialled back: sparser dots, lower opacity */
+.page-hero-strip.hero-section--dark::before,
+.about-hero.hero-section--dark::before {
+    background-image:
+        radial-gradient(ellipse 65% 65% at 90% 8%, rgba(var(--primary-color-rgb), .07) 0%, transparent 100%),
+        radial-gradient(circle, rgba(255,255,255,.18) 1px, transparent 1px);
+    background-size: 100% 100%, 44px 44px;
 }
 .hero-section--dark > .container-xl {
     position: relative;
@@ -4135,6 +4159,28 @@ body.has-admin-bar .main-header.sticky-top{
     background-clip: text;
     font-style: italic;
 }
+
+/* ─── Inner-page hero typography — shared across all dark hero strips ─────────── */
+.page-hero-strip { padding: 4rem 0 3rem; }
+.page-hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #fff;
+    line-height: 1.15;
+}
+.page-hero-accent {
+    background: linear-gradient(125deg, var(--primary-color) 25%, #fbbf24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: italic;
+}
+.page-hero-subtitle {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,.65);
+    max-width: 38rem;
+}
+.hero-section--dark .hero-eyebrow { color: rgba(255,255,255,.55); }
 
 /* ─── Shared dark brand panel — CTA bands, auth panels, secondary dark sections ─ */
 /*     Same brand colour/warmth as the hero but subordinate: glow only, no dot grid */

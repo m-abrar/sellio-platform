@@ -6,7 +6,6 @@
 @section('content')
 @include('auth._partials._marketing_panel', [
     'icon'      => 'bi-rocket-takeoff',
-    'glowClass' => 'auth-glow-tr',
     'titleHtml' => page_content('auth.partner_register.marketing_title', __('Grow with the <span class="text-gradient">Marketplace</span>')),
     'description' => page_content('auth.partner_register.marketing_desc', __('Create a partner account to start listing your products, services, or properties to thousands of buyers.')),
     'features'  => [

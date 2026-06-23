@@ -465,10 +465,10 @@ Partner auth pages (`login-partner.blade.php`, `register-partner.blade.php`) —
 
 | # | Task | File(s) | Effort |
 |---|---|---|---|
-| 1 | Terms + Privacy hero: add `hero-section--dark` | `pages/terms.blade.php`, `pages/privacy-policy.blade.php` | XS |
-| 2 | Verify Events page doesn't render `_page_header_events.blade.php` twice | `events/index.blade.php` | XS |
-| 3 | Partner login/register: upgrade to split layout | `auth/login-partner.blade.php`, `auth/register-partner.blade.php` | S |
-| 4 | Contact form: verify `contact.send` route works end-to-end | Controller + Mail class | S |
+| ~~1~~ | ~~Terms + Privacy hero: add `hero-section--dark`~~ | ~~`pages/terms.blade.php`, `pages/privacy-policy.blade.php`~~ | ✅ Done |
+| ~~2~~ | ~~Verify Events page doesn't render `_page_header_events.blade.php` twice~~ | ~~orphan file deleted~~ | ✅ Done |
+| ~~3~~ | ~~Partner login/register: upgrade to split layout~~ | ~~`auth/_partials/_marketing_panel.blade.php`~~ | ✅ Done |
+| ~~4~~ | ~~Contact form: verify `contact.send` route works end-to-end~~ | ~~Fully wired — route → FormRequest → ContactService → Mail::raw(). Upgrade path: replace Mail::raw() with a styled Mailable.~~ | ✅ Done |
 
 ### 🟠 P1 — Visually weak (important for client impression)
 

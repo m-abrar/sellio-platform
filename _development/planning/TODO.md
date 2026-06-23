@@ -529,3 +529,10 @@ Can you suggest something different? Unique UIUX? As well as changing the fonts,
 
 Can we show 'featured' here?
 http://192.168.0.112:8000/admin/properties
+
+
+
+Can you explain how the 4 cards on home hero are pulled from database? Logic?
+
+On the home page, the CTA is black/dark background and footer too, do you think there should be some additional section like testimonial with light background or any other solution for the problem of continously dark?
+

@@ -376,29 +376,6 @@
 
 @push('styles')
 <style>
-/* ── Hero strip ───────────────────────────────────────────────── */
-.page-hero-strip { padding: 4rem 0 3rem; }
-
-.page-hero-title {
-    font-family: var(--font-heading);
-    font-size: clamp(2rem, 4vw, 3rem);
-    color: #fff;
-    line-height: 1.15;
-}
-.page-hero-accent {
-    background: linear-gradient(125deg, var(--primary-color) 25%, #fbbf24 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-style: italic;
-}
-.page-hero-subtitle {
-    font-size: 1.05rem;
-    color: rgba(255,255,255,.65);
-    max-width: 40rem;
-}
-.page-hero-strip .hero-eyebrow { color: rgba(255,255,255,.55); }
-
 /* ── FAQ stat panel (hero right col) ─────────────────────────── */
 .faq-hero-stats-panel {
     display: flex;

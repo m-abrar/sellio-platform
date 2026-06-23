@@ -5,14 +5,14 @@
 @section('body_class', 'has-body-glow bg-light frontend-page--legal')
 
 @section('hero')
-<section class="page-hero-strip page-hero-strip--compact">
+<section class="page-hero-strip page-hero-strip--compact hero-section--dark">
     <div class="container-xl">
         <div class="hero-eyebrow mb-3">
             <span class="hero-eyebrow__line" aria-hidden="true"></span>
             {{ __('Legal') }}
         </div>
         <h1 class="page-hero-title mb-2">{{ __('Privacy Policy') }}</h1>
-        <p class="text-muted small">{{ __('Last updated: :date', ['date' => 'January 1, 2025']) }}</p>
+        <p class="page-hero-date">{{ __('Last updated: :date', ['date' => 'January 1, 2025']) }}</p>
     </div>
 </section>
 @endsection
@@ -173,18 +173,10 @@
 
 @push('styles')
 <style>
-.page-hero-strip {
-    padding: 3.5rem 0 2.5rem;
-    background: var(--color-surface);
-    border-bottom: 1.5px solid var(--color-border);
-}
+.page-hero-strip { padding: 3.5rem 0 2.5rem; }
 .page-hero-strip--compact { padding: 2.5rem 0 2rem; }
-.page-hero-title {
-    font-family: var(--font-heading);
-    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-    color: var(--text-dark);
-    line-height: 1.15;
-}
+.page-hero-title { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
+.page-hero-date { font-size: .85rem; color: rgba(255,255,255,.45); margin: 0; }
 .legal-doc { line-height: 1.75; }
 .legal-section { margin-bottom: 2.5rem; }
 .legal-section:last-child { margin-bottom: 0; }

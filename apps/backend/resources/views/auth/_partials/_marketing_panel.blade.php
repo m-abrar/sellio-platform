@@ -2,12 +2,10 @@
     $icon = $icon ?? 'bi-rocket-takeoff';
     $titleHtml = $titleHtml ?? '';
     $description = $description ?? '';
-    $glowClass = $glowClass ?? 'auth-glow-tl';
     $features = $features ?? [];
 @endphp
 
-<div class="col-lg-6 d-none d-lg-flex auth-split-marketing text-white">
-    <div class="auth-glow {{ $glowClass }}"></div>
+<div class="col-lg-6 d-none d-lg-flex auth-split-marketing dark-brand-panel text-white">
 
     <div class="auth-marketing-content">
         <div class="mb-5 d-inline-block">
