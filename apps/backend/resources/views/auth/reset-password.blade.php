@@ -1,65 +1,104 @@
 @extends('frontend._layouts._guest')
 
 @section('title', __('Reset Password'))
-@section('body_class', 'has-body-glow auth-page')
+@section('body_class', 'auth-page auth-solo')
 
 @section('content')
-@include('auth._partials._marketing_panel', [
-    'icon' => 'bi-shield-check',
-    'glowClass' => 'auth-glow-tl',
-    'titleHtml' => __('Choose a <span class="text-gradient">New Password</span>'),
-    'description' => __('Set a strong password to finish recovering your account.'),
-    'features' => [
-        ['icon' => 'bi-shield-lock', 'title' => __('Encrypted storage'), 'text' => __('Your password is never stored in plain text.')],
-    ],
-])
 
-@include('auth._partials._form_card_start', [
-    'heading' => __('Reset Password'),
-    'subheading' => __('Enter your new password below.'),
-])
+<div class="col-12 d-flex flex-column min-vh-100">
 
-<form method="POST" action="{{ route('password.store') }}" class="auth-form">
-    @csrf
-    <input type="hidden" name="token" value="{{ $request->route('token') }}">
-
-    <div class="mb-4">
-        <label for="email" class="filter-label mb-2">{{ __('Email Address') }}</label>
-        <div class="form-icon-group">
-            <input type="email" @class(['form-control', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email', $request->email) }}" required autofocus>
-            <i class="bi bi-envelope input-icon"></i>
-        </div>
-    </div>
-
-    <div class="mb-4">
-        <label for="password" class="filter-label mb-2">{{ __('New Password') }}</label>
-        <div class="form-icon-group">
-            <input type="password" @class(['form-control', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="{{ __('••••••••') }}" required autocomplete="new-password">
-            <i class="bi bi-shield-lock input-icon"></i>
-            <i class="bi bi-eye password-toggle"></i>
-        </div>
-    </div>
-
-    <div class="mb-4">
-        <label for="password_confirmation" class="filter-label mb-2">{{ __('Confirm Password') }}</label>
-        <div class="form-icon-group">
-            <input type="password" @class(['form-control', 'is-invalid' => $errors->has('password_confirmation')]) id="password_confirmation" name="password_confirmation" placeholder="{{ __('••••••••') }}" required autocomplete="new-password">
-            <i class="bi bi-shield-check input-icon"></i>
-            <i class="bi bi-eye password-toggle"></i>
-        </div>
-    </div>
-
-    <div class="d-grid gap-3">
-        <button type="submit" class="btn btn-primary btn-lg py-3">
-            {{ __('Update Password') }}
-        </button>
-
-        <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-lg py-3 fw-semibold d-flex align-items-center justify-content-center gap-2">
-            <i class="bi bi-arrow-left"></i>
-            {{ __('Back to Login') }}
+    <header class="auth-solo-topbar d-flex align-items-center justify-content-between px-4 px-md-5">
+        <a href="{{ url('/') }}" class="d-flex align-items-center gap-2 text-decoration-none">
+            @if(filled(setting('site_logo')))
+                <img src="{{ Storage::url(setting('site_logo')) }}"
+                     alt="{{ setting('site_name', config('app.name')) }}"
+                     class="auth-mobile-logo">
+            @else
+                <span class="fw-bolder fs-5 text-dark" style="letter-spacing:-.03em;font-family:var(--font-heading)">
+                    {{ setting('site_name', config('app.name')) }}
+                </span>
+            @endif
         </a>
-    </div>
-</form>
+        <a href="{{ route('login') }}" class="small fw-semibold text-muted text-decoration-none d-flex align-items-center gap-1">
+            <i class="bi bi-arrow-left"></i>&nbsp;{{ __('Back to Login') }}
+        </a>
+    </header>
 
-@include('auth._partials._form_card_end')
+    <div class="flex-grow-1 d-flex align-items-center justify-content-center py-5 px-3">
+        <div style="width:100%;max-width:440px">
+
+            @if ($errors->any())
+                <div class="alert alert-danger border-0 small mb-4 py-3 rounded-4">
+                    <ul class="mb-0 ps-3">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <div class="mb-5">
+                <p class="small fw-semibold text-uppercase mb-3" style="letter-spacing:.08em;color:var(--primary-color)">{{ __('Account') }}</p>
+                <h1 class="mb-3 lh-sm" style="font-size:clamp(1.9rem,4vw,2.6rem)">{{ __('Reset Password') }}</h1>
+                <p class="text-muted fw-medium mb-0 fs-5">{{ __('Choose a strong password to secure your account.') }}</p>
+            </div>
+
+            <form method="POST" action="{{ route('password.store') }}" class="auth-form">
+                @csrf
+                <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+                <div class="mb-4">
+                    <label for="email" class="filter-label mb-2">{{ __('Email Address') }}</label>
+                    <div class="form-icon-group">
+                        <input type="email"
+                               @class(['form-control', 'is-invalid' => $errors->has('email')])
+                               id="email" name="email"
+                               value="{{ old('email', $request->email) }}"
+                               required autofocus>
+                        <i class="bi bi-envelope input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="filter-label mb-2">{{ __('New Password') }}</label>
+                    <div class="form-icon-group">
+                        <input type="password"
+                               @class(['form-control', 'is-invalid' => $errors->has('password')])
+                               id="password" name="password"
+                               placeholder="{{ __('••••••••') }}"
+                               required autocomplete="new-password">
+                        <i class="bi bi-shield-lock input-icon"></i>
+                        <i class="bi bi-eye password-toggle"></i>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password_confirmation" class="filter-label mb-2">{{ __('Confirm Password') }}</label>
+                    <div class="form-icon-group">
+                        <input type="password"
+                               @class(['form-control', 'is-invalid' => $errors->has('password_confirmation')])
+                               id="password_confirmation" name="password_confirmation"
+                               placeholder="{{ __('••••••••') }}"
+                               required autocomplete="new-password">
+                        <i class="bi bi-shield-check input-icon"></i>
+                        <i class="bi bi-eye password-toggle"></i>
+                    </div>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg py-3">
+                        {{ __('Update Password') }}
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="text-center pb-5 pt-2">
+        <p class="auth-footer-copyright mb-0">&copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}</p>
+    </div>
+
+</div>
+
 @endsection

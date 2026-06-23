@@ -409,6 +409,26 @@ h1, h2, h3, h4, .brand-text {
     opacity: 0.6;
 }
 
+/* ── Single-column centered auth layout ──────────────────────────────── */
+.auth-solo .auth-wrapper {
+    background: #F4F0EC;
+    align-items: stretch;
+}
+
+.auth-solo-topbar {
+    height: 72px;
+    border-bottom: 1.5px solid rgba(15,23,42,.06);
+    flex-shrink: 0;
+}
+
+.auth-solo .form-control {
+    background-color: #fff !important;
+}
+
+.auth-solo .auth-divider-badge {
+    background: #F4F0EC !important;
+}
+
 /* Responsive Architecture */
 @media (max-width: 991.98px) {
     .auth-card {
