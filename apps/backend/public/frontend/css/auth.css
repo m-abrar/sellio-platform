@@ -1,7 +1,7 @@
 :root {
     --primary: var(--color-primary, var(--primary-color, #E05F2C));
     --primary-rgb: var(--color-primary-rgb, var(--primary-color-rgb, 224, 95, 44));
-    --primary-dark: var(--color-primary-dark, #C44E1F);
+    --primary-dark: #C44E1F;
     --primary-soft: var(--color-primary-soft, rgba(var(--primary-rgb), 0.1));
     --primary-glow: rgba(var(--primary-rgb), 0.25);
     
@@ -47,9 +47,9 @@ h1, h2, h3, h4, .brand-text {
     background-clip: text;
 }
 
-/* Marketing panel: white → soft indigo-300 gradient reads crisply on dark */
+/* Marketing panel: white → warm orange gradient on dark background */
 .auth-split-marketing .text-gradient {
-    background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+    background: linear-gradient(135deg, #ffffff 0%, rgba(var(--primary-rgb), 0.85) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -69,9 +69,9 @@ h1, h2, h3, h4, .brand-text {
 
 .auth-split-marketing {
     background:
-        radial-gradient(ellipse at 15% 15%, rgba(120, 100, 255, 0.28) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 80%, rgba(80, 55, 200, 0.22) 0%, transparent 50%),
-        linear-gradient(155deg, #0f0c29 0%, #15103a 55%, #0c0e1f 100%);
+        radial-gradient(ellipse at 15% 15%, rgba(var(--primary-rgb), 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 80%, rgba(var(--primary-rgb), 0.10) 0%, transparent 50%),
+        var(--text-dark, #1C1917);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -85,7 +85,7 @@ h1, h2, h3, h4, .brand-text {
     position: absolute;
     width: 900px;
     height: 900px;
-    background: radial-gradient(circle, rgba(130, 100, 255, 0.35) 0%, transparent 65%);
+    background: radial-gradient(circle, rgba(var(--primary-rgb), 0.30) 0%, transparent 65%);
     border-radius: 50%;
     pointer-events: none;
     filter: blur(90px);
@@ -95,9 +95,16 @@ h1, h2, h3, h4, .brand-text {
 .btn {
     border-radius: 10px !important;
     font-weight: 600 !important;
-    transition: var(--transition-smooth) !important;
+    transition: background-color .25s ease, border-color .25s ease, box-shadow .25s ease, transform .25s ease !important;
     padding: 14px 32px !important;
     letter-spacing: -0.01em;
+}
+
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    color: #fff !important;
 }
 
 .auth-page .btn-primary-theme,
@@ -308,17 +315,11 @@ h1, h2, h3, h4, .brand-text {
     max-width: 520px;
 }
 
-/* Icon on dark navy needs to be white, not primary purple */
-.auth-split-marketing .text-primary-color,
-.auth-split-marketing .text-primary {
-    color: #a5b4fc !important;
-}
-
-/* Feature icon boxes — indigo-tinted pill on dark */
+/* Feature icon boxes — warm semi-transparent on dark */
 .auth-split-marketing .icon-box-soft {
-    background: rgba(165, 180, 252, 0.12);
-    border: 1px solid rgba(165, 180, 252, 0.2);
-    color: #a5b4fc;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.9);
     border-radius: 12px !important;
 }
 

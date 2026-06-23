@@ -22,88 +22,95 @@ const RADIAL_LINES = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map
 
 const capabilities = [
   [
-    'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
-    'ISO Certified Quality',
-    'Every product is manufactured to ISO 9001 and IATF 16949 standards. Dimensional inspection, material traceability, and functional testing on every batch before dispatch.',
+    'ISO 13485 Quality System',
+    'Orthopedic instruments are produced under documented quality controls with material traceability, dimensional inspection, passivation, and batch-level records before dispatch.',
   ],
   [
-    'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
-    'Custom & OEM Manufacturing',
-    'We manufacture to your drawings and specifications. Tolerances from ±0.001 mm achievable. MOQ negotiable from prototype quantities through full-volume contracts.',
+    'OEM & Private Label Supply',
+    'We manufacture instrument sets to buyer specifications, etch private-label branding, support custom trays, and quote distributor-ready bulk orders.',
   ],
   [
-    'M13 10V3L4 14h7v7l9-11h-7z',
-    '48-Hour Quote Response',
-    'Submit your technical requirements and our sales engineering team responds within 48 business hours with pricing, lead time, and material certification options.',
+    '48-Hour Export Quote',
+    'Send item codes, drawings, target quantities, and destination port. Our export team replies with pricing, lead time, packing options, and required documents.',
   ],
   [
-    'M3 15a4 4 0 0 0 4 4h9a5 5 0 0 0 1.8-9.7 6 6 0 0 0-11.8-1A4 4 0 0 0 3 15z',
-    'Global Export Logistics',
-    'EXW, FOB, and CIF terms available. We handle export clearance, MSDS documentation, and third-party inspection for all international shipments.',
+    'Worldwide Export Logistics',
+    'EXW, FOB, CIF, and air-cargo dispatch are available with export packing, certificate support, commercial invoices, and third-party inspection coordination.',
   ],
 ];
 
 const testimonials = [
   {
-    quote: 'Their component tolerances are consistent batch after batch. We have been sourcing from them for seven years and they have never failed a quality audit.',
-    name: 'Michael Torres',
-    role: 'Supply Chain Director, AeroFab Systems',
-    initials: 'MT',
+    quote: 'Their orthopedic sets arrive consistent, cleanly finished, and properly documented. That reliability matters when you supply hospitals across multiple regions.',
+    name: 'Dr. Elena Morris',
+    role: 'Procurement Director, Northshore Surgical Group',
+    initials: 'EM',
   },
   {
-    quote: 'Lead times are reliable and the technical support team actually understands our application requirements. That level of engineering depth is rare in a supplier.',
-    name: 'Yuki Sato',
-    role: 'Engineering Manager, Sumitomo Heavy Industries',
-    initials: 'YS',
+    quote: 'We moved our trauma instrument sourcing to OrthoForge because they understand export packing, private labeling, and the documentation importers need.',
+    name: 'Yusuf Khan',
+    role: 'Managing Director, MedGate Imports',
+    initials: 'YK',
   },
   {
-    quote: 'We consolidated from three different suppliers to this single source. The cost savings and quality consistency alone justified the switch.',
+    quote: 'The RFQ process is clear and technical. Their team catches details on finish, steel grade, and tray configuration before production starts.',
     name: 'Fatima Al-Rashid',
-    role: 'Head of Procurement, Gulf Energy Corporation',
+    role: 'Sourcing Lead, Gulf Orthopedic Supply',
     initials: 'FA',
   },
 ];
 
 const processSteps = [
-  ['01', 'Find your part', 'Browse by category, material grade, or specification code. Download datasheets, 3D models, and tolerance sheets directly from each product page.'],
-  ['02', 'Submit your requirements', 'Tell us your quantity, tolerance, material grade, delivery timeline, and certification needs. Our sales engineers review every enquiry personally.'],
-  ['03', 'We manufacture and ship', 'Receive a detailed quotation, approve terms, and track production status in real time. Every shipment includes dimensional inspection reports and material certifications.'],
+  ['01', 'Select instruments or sets', 'Browse trauma, spine, joint, retractor, and general orthopedic instruments. Share item codes, drawings, or your current set list.'],
+  ['02', 'Submit export requirements', 'Tell us quantity, steel grade, finish, branding, destination port, certificates, and preferred packing. Our export team reviews every enquiry.'],
+  ['03', 'Approve and ship', 'Receive a detailed quotation, approve samples if needed, and dispatch under EXW, FOB, CIF, or air-cargo terms with required documents.'],
 ];
 
-const industries = [
-  { name: 'Aerospace', cert: 'AS9100D', desc: 'Flight-critical structural and mechanical components for commercial aviation, defense, and space programmes.' },
-  { name: 'Automotive', cert: 'IATF 16949', desc: 'Powertrain, chassis, and transmission components for tier-1 OEMs and tier-2 supplier programmes.' },
-  { name: 'Energy', cert: 'PED 2014/68/EU', desc: 'Pressure-rated and corrosion-resistant parts for oil, gas, nuclear, and renewable energy infrastructure.' },
-  { name: 'Heavy Machinery', cert: 'ISO 3834', desc: 'High-load structural and machined components for construction, mining, and industrial equipment.' },
-  { name: 'Defense', cert: 'ITAR Registered', desc: 'Military-grade tolerances with full material traceability and compliant handling for controlled programmes.' },
-  { name: 'Chemical Processing', cert: 'ATEX Compliant', desc: 'Chemically resistant alloys, specialist coatings, and sealing solutions for aggressive process environments.' },
+const categories = [
+  { name: 'Trauma Instruments', cert: 'AO Pattern', desc: 'Bone holding forceps, reduction clamps, plate benders, drill guides, depth gauges, and screwdrivers for trauma sets.' },
+  { name: 'Spine Instruments', cert: 'Set Supply', desc: 'Rongeurs, curettes, elevators, distractors, probes, and implant-support instruments for spine procedures.' },
+  { name: 'Joint Instruments', cert: 'OEM Ready', desc: 'Hip, knee, and extremity instruments supplied as loose items or procedure-ready configured sets.' },
+  { name: 'Retractors & Elevators', cert: 'Reusable SS', desc: 'Periosteal elevators, Hohmann retractors, bone levers, and exposure instruments in surgical stainless steel.' },
+  { name: 'Custom Sets', cert: 'Private Label', desc: 'Distributor-specific kits with laser marking, custom tray layouts, and export-ready labeling support.' },
+  { name: 'Hospital Supply', cert: 'Bulk RFQ', desc: 'Repeat supply programs for hospitals, buying groups, tender suppliers, and regional medical distributors.' },
 ];
+
+function CapabilityIcon() {
+  return (
+    <span className="b2b-capability-icon" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        <path d="M9 12l2 2 4-4" />
+      </svg>
+    </span>
+  );
+}
 
 export default function Page() {
   const themeLink = useEcommerceThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
-  const eyebrow = useThemeContent('hero.eyebrow', 'ISO 9001 Certified · Est. 1985');
-  const title = useThemeContent('hero.title', 'Precision Manufacturing\nfor Global Markets.');
+  const eyebrow = useThemeContent('hero.eyebrow', 'ISO 13485-aligned orthopedic instrument manufacturing');
+  const title = useThemeContent('hero.title', 'Orthopedic instruments\nfor global distributors.');
   const description = useThemeContent(
     'hero.description',
-    'We engineer and manufacture industrial components for the aerospace, energy, and automotive sectors. Browse our catalog, get specifications, and request pricing directly from the source.',
+    'We manufacture and export reusable orthopedic surgical instruments for hospitals, distributors, importers, and OEM buyers. Browse the catalog, shortlist items, and request export pricing directly from the factory.',
   );
-  const primaryCta = useThemeContent('hero.primary_cta_label', 'View our products');
-  const secondaryCta = useThemeContent('hero.secondary_cta_label', 'Request a quote');
-  const collectionTitle = useThemeContent('collection.title', 'Product highlights');
+  const primaryCta = useThemeContent('hero.primary_cta_label', 'Browse instruments');
+  const secondaryCta = useThemeContent('hero.secondary_cta_label', 'Request export quote');
+  const collectionTitle = useThemeContent('collection.title', 'Featured orthopedic instruments');
   const collectionDescription = useThemeContent(
     'collection.description',
-    'A selection of our manufactured parts. Each item ships with full dimensional inspection reports, material certifications, and traceability documentation.',
+    'A selection of orthopedic instruments and procedure sets. Each shipment can include material traceability, packing lists, inspection records, and export documentation.',
   );
   const offlineKicker = useThemeContent('sync.offline_kicker', 'Catalog unavailable');
   const offlineTitle = useThemeContent('sync.offline_title', 'Products could not be loaded.');
-  const emptyTitle = useThemeContent('empty.title', 'No catalog products are published yet.');
+  const emptyTitle = useThemeContent('empty.title', 'No orthopedic instruments are published yet.');
   const emptyDescription = useThemeContent('empty.description', 'Add product records in the admin panel and they will appear here.');
-  const rfqTitle = useThemeContent('rfq.title', 'Request a quotation');
+  const rfqTitle = useThemeContent('rfq.title', 'Request an orthopedic export quotation');
   const rfqDescription = useThemeContent(
     'rfq.description',
-    'Submit your part requirements — quantity, tolerance, material grade, and delivery timeline. Our sales engineering team responds within 48 business hours with pricing, lead time, and available certifications.',
+    'Submit item codes, quantities, stainless-steel grade, finish, private-label needs, destination port, and delivery timeline. Our export team responds within 48 business hours with pricing, lead time, and document options.',
   );
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -117,7 +124,6 @@ export default function Page() {
     async function loadProducts() {
       setLoadingProducts(true);
       const result = await fetchProductsCatalog();
-
       if (!isMounted) return;
 
       if (result.ok) {
@@ -135,25 +141,20 @@ export default function Page() {
     }
 
     loadProducts();
-
     return () => {
       isMounted = false;
     };
   }, [allowDemo]);
 
   const productCountLabel = useMemo(() => {
-    if (loadingProducts) return '—';
-    return products.length > 0 ? `${products.length.toLocaleString()}+` : '—';
+    if (loadingProducts) return '-';
+    return products.length > 0 ? `${products.length.toLocaleString()}+` : '-';
   }, [loadingProducts, products.length]);
 
   return (
     <div className="b2b-page">
-
-      {/* Hero — split layout with visual column */}
       <section className="b2b-hero-corp">
         <div className="b2b-hero-corp-inner">
-
-          {/* Text column */}
           <div className="b2b-hero-corp-content">
             <span className="b2b-kicker">{eyebrow}</span>
             <h1 className="b2b-hero-corp-h1">
@@ -165,98 +166,71 @@ export default function Page() {
               ))}
             </h1>
             <p className="b2b-hero-corp-lead">{description}</p>
-            <div className="b2b-hero-corp-sectors" aria-label="Industries served">
-              {['Aerospace', 'Automotive', 'Energy', 'Machinery', 'Defense', 'Chemical', 'Mining'].map((sector) => (
+            <div className="b2b-hero-corp-sectors" aria-label="Product groups">
+              {['Trauma', 'Spine', 'Joint', 'Retractors', 'OEM Sets', 'Private Label', 'Export'].map((sector) => (
                 <span key={sector} className="b2b-sector-chip">{sector}</span>
               ))}
             </div>
             <div className="b2b-actions">
               <a href={themeLink('/explore')} className="b2b-btn b2b-btn-primary">{primaryCta}</a>
-              <a href="#b2b-rfq" className="b2b-btn b2b-btn-secondary">{secondaryCta}</a>
+              <a href={themeLink('/quote')} className="b2b-btn b2b-btn-secondary">{secondaryCta}</a>
             </div>
           </div>
 
-          {/* Visual column — industrial image placeholder */}
           <div className="b2b-hero-corp-visual" aria-hidden="true">
             <div className="b2b-hero-corp-img">
-              {/* Abstract industrial graphic */}
               <svg className="b2b-hero-corp-img-svg" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                {/* Grid lines */}
                 {[0, 50, 100, 150, 200, 250, 300, 350, 400].map((x) => (
                   <line key={`vl-${x}`} x1={x} y1="0" x2={x} y2="500" stroke="rgba(45,212,191,0.06)" strokeWidth="1" />
                 ))}
                 {[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500].map((y) => (
                   <line key={`hl-${y}`} x1="0" y1={y} x2="400" y2={y} stroke="rgba(45,212,191,0.06)" strokeWidth="1" />
                 ))}
-                {/* Central circle — gear/component motif */}
                 <circle cx="200" cy="240" r="110" stroke="rgba(45,212,191,0.15)" strokeWidth="1.5" />
                 <circle cx="200" cy="240" r="80" stroke="rgba(45,212,191,0.2)" strokeWidth="1" />
                 <circle cx="200" cy="240" r="40" stroke="rgba(45,212,191,0.3)" strokeWidth="1.5" />
                 <circle cx="200" cy="240" r="15" fill="rgba(45,212,191,0.25)" />
-                {/* Radial lines */}
                 {RADIAL_LINES.map(({ key, x1, y1, x2, y2 }) => (
-                  <line key={key} x1={x1} y1={y1} x2={x2} y2={y2}
-                    stroke="rgba(45,212,191,0.35)" strokeWidth="2"
-                  />
+                  <line key={key} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(45,212,191,0.35)" strokeWidth="2" />
                 ))}
-                {/* Corner marks */}
+                <path d="M120 150 L280 150 M200 70 L200 320 M145 265 L255 155 M255 265 L145 155" stroke="rgba(45,212,191,0.42)" strokeWidth="2" strokeLinecap="round" />
                 <path d="M20 20 L20 50 M20 20 L50 20" stroke="rgba(45,212,191,0.5)" strokeWidth="2" />
                 <path d="M380 20 L380 50 M380 20 L350 20" stroke="rgba(45,212,191,0.5)" strokeWidth="2" />
                 <path d="M20 480 L20 450 M20 480 L50 480" stroke="rgba(45,212,191,0.5)" strokeWidth="2" />
                 <path d="M380 480 L380 450 M380 480 L350 480" stroke="rgba(45,212,191,0.5)" strokeWidth="2" />
-                {/* Measurement lines */}
-                <line x1="200" y1="100" x2="200" y2="125" stroke="rgba(45,212,191,0.3)" strokeWidth="1" strokeDasharray="4 3" />
-                <line x1="200" y1="355" x2="200" y2="380" stroke="rgba(45,212,191,0.3)" strokeWidth="1" strokeDasharray="4 3" />
-                <line x1="55" y1="240" x2="80" y2="240" stroke="rgba(45,212,191,0.3)" strokeWidth="1" strokeDasharray="4 3" />
-                <line x1="320" y1="240" x2="345" y2="240" stroke="rgba(45,212,191,0.3)" strokeWidth="1" strokeDasharray="4 3" />
               </svg>
-              {/* Badge overlays */}
               <div className="b2b-hero-corp-img-badge b2b-hero-corp-img-badge-tl">
-                <strong>ISO 9001</strong>
-                <span>Certified</span>
+                <strong>ISO 13485</strong>
+                <span>Quality</span>
               </div>
               <div className="b2b-hero-corp-img-badge b2b-hero-corp-img-badge-br">
                 <strong>{productCountLabel}</strong>
-                <span>Products</span>
+                <span>Instruments</span>
               </div>
             </div>
           </div>
 
-          {/* Stats bar — full width */}
           <div className="b2b-hero-corp-stats" aria-label="Company statistics">
-            <div className="b2b-hero-corp-stat">
-              <strong>40+</strong>
-              <span>Years of Manufacturing</span>
-            </div>
-            <div className="b2b-hero-corp-stat">
-              <strong>98%</strong>
-              <span>On-Time Delivery</span>
-            </div>
-            <div className="b2b-hero-corp-stat">
-              <strong>{productCountLabel}</strong>
-              <span>Products Available</span>
-            </div>
-            <div className="b2b-hero-corp-stat">
-              <strong>47</strong>
-              <span>Countries Served</span>
-            </div>
+            <div className="b2b-hero-corp-stat"><strong>40+</strong><span>Years Surgical Manufacturing</span></div>
+            <div className="b2b-hero-corp-stat"><strong>98%</strong><span>On-Time Export Dispatch</span></div>
+            <div className="b2b-hero-corp-stat"><strong>{productCountLabel}</strong><span>Catalog Instruments</span></div>
+            <div className="b2b-hero-corp-stat"><strong>47</strong><span>Export Markets</span></div>
           </div>
         </div>
       </section>
 
-      {/* Who We Are — redesigned */}
       <section className="b2b-who" aria-label="About us">
         <div className="b2b-who-inner">
           <div className="b2b-who-copy">
             <span className="b2b-kicker">Who we are</span>
-            <h2>Four decades of precision engineering.</h2>
+            <h2>Orthopedic instrument manufacturing with export discipline.</h2>
             <p>
-              Founded in 1985, we have grown from a regional machining operation into a global-scale precision components manufacturer.
-              Today we operate three production facilities and export to 47 countries across six continents.
+              Founded in 1985, we have grown from a specialist surgical workshop into a manufacturer and exporter of reusable orthopedic instruments.
+              Today we supply trauma, spine, joint, retractor, and custom instrument sets for buyers across 47 export markets.
             </p>
             <p>
-              Our engineering team specialises in close-tolerance metal and composite components for aerospace, energy, and heavy machinery applications.
-              Every product leaves our facility with full dimensional reports and material certification.
+              Our production teams work with surgical stainless steels, controlled finishing, passivation, laser marking, and batch documentation.
+              Every order is packed for professional medical distribution, not generic commodity resale.
             </p>
             <div className="b2b-who-actions">
               <a href={themeLink('/about')} className="b2b-btn b2b-btn-primary">Our company</a>
@@ -266,101 +240,81 @@ export default function Page() {
           <div className="b2b-who-visual" aria-hidden="true">
             <div className="b2b-who-img-wrap">
               <svg viewBox="0 0 360 280" fill="none" xmlns="http://www.w3.org/2000/svg" className="b2b-who-img-svg" aria-hidden="true">
-                <rect x="0" y="0" width="360" height="280" fill="none" />
-                {/* Blueprint grid */}
-                {[0,40,80,120,160,200,240,280,320,360].map((x) => (
+                {[0, 40, 80, 120, 160, 200, 240, 280, 320, 360].map((x) => (
                   <line key={`x${x}`} x1={x} y1="0" x2={x} y2="280" stroke="rgba(45,212,191,0.07)" strokeWidth="1" />
                 ))}
-                {[0,40,80,120,160,200,240,280].map((y) => (
+                {[0, 40, 80, 120, 160, 200, 240, 280].map((y) => (
                   <line key={`y${y}`} x1="0" y1={y} x2="360" y2={y} stroke="rgba(45,212,191,0.07)" strokeWidth="1" />
                 ))}
-                {/* Component outline — isometric box */}
-                <path d="M180 40 L300 110 L300 210 L180 280 L60 210 L60 110 Z" stroke="rgba(45,212,191,0.25)" strokeWidth="1.5" fill="none" />
-                <path d="M180 40 L180 140 M300 110 L180 140 M60 110 L180 140" stroke="rgba(45,212,191,0.15)" strokeWidth="1" strokeDasharray="5 4" />
-                {/* Inner detail */}
-                <path d="M180 90 L260 135 L260 185 L180 230 L100 185 L100 135 Z" stroke="rgba(45,212,191,0.35)" strokeWidth="1.5" fill="rgba(45,212,191,0.04)" />
-                {/* Circle */}
-                <circle cx="180" cy="160" r="28" stroke="rgba(45,212,191,0.4)" strokeWidth="1.5" fill="none" />
-                <circle cx="180" cy="160" r="10" fill="rgba(45,212,191,0.2)" />
-                {/* Dimension lines */}
-                <line x1="40" y1="110" x2="40" y2="210" stroke="rgba(45,212,191,0.3)" strokeWidth="1" />
-                <line x1="35" y1="110" x2="45" y2="110" stroke="rgba(45,212,191,0.3)" strokeWidth="1" />
-                <line x1="35" y1="210" x2="45" y2="210" stroke="rgba(45,212,191,0.3)" strokeWidth="1" />
+                <path d="M95 180 C125 115 215 95 270 135" stroke="rgba(45,212,191,0.42)" strokeWidth="12" strokeLinecap="round" />
+                <path d="M95 180 C125 115 215 95 270 135" stroke="rgba(45,212,191,0.78)" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="95" cy="180" r="24" stroke="rgba(45,212,191,0.35)" strokeWidth="2" />
+                <circle cx="270" cy="135" r="18" stroke="rgba(45,212,191,0.35)" strokeWidth="2" />
+                <path d="M72 205 L55 225 M287 120 L310 100" stroke="rgba(45,212,191,0.45)" strokeWidth="3" strokeLinecap="round" />
               </svg>
               <div className="b2b-who-cert-badge">
-                <span>✓ IATF 16949</span>
-                <span>✓ AS9100D</span>
-                <span>✓ ISO 14001</span>
+                <span>ISO 13485 aligned</span>
+                <span>CE documentation support</span>
+                <span>316L / 420 stainless steel</span>
               </div>
             </div>
             <div className="b2b-who-numbers">
-              <div><strong>3</strong><span>Production Facilities</span></div>
-              <div><strong>850+</strong><span>Skilled Employees</span></div>
+              <div><strong>3</strong><span>Production Units</span></div>
+              <div><strong>850+</strong><span>Skilled Technicians</span></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Corporate banners */}
       <section className="b2b-banners" aria-label="Company highlights">
         <article className="b2b-banner b2b-banner-primary">
-          <span className="b2b-kicker">Custom manufacturing</span>
-          <h3>We manufacture to your drawings — from prototype to production run.</h3>
-          <p>Submit your technical drawings or CAD files and our engineering team will provide a detailed quotation including tooling cost, lead time, and MOQ.</p>
-          <a href="#b2b-rfq" className="b2b-btn b2b-btn-primary" style={{ marginTop: '1.5rem', display: 'inline-flex' }}>
+          <span className="b2b-kicker">OEM manufacturing</span>
+          <h3>We manufacture orthopedic instruments to your item list, drawings, or private-label program.</h3>
+          <p>Share your catalog codes, required steel grade, finish, logo marking, and tray layout. Our team returns a quotation with tooling, MOQ, samples, and lead time.</p>
+          <a href={themeLink('/quote')} className="b2b-btn b2b-btn-primary" style={{ marginTop: '1.5rem', display: 'inline-flex' }}>
             Start a project
           </a>
         </article>
         <article className="b2b-banner b2b-banner-secondary">
-          <span className="b2b-kicker">Expedited delivery</span>
-          <h3>72-hour dispatch on all stocked items for qualifying orders.</h3>
-          <p>Urgent requirement? Over 800 standard part numbers are held in stock and available for immediate dispatch. Contact our logistics team.</p>
+          <span className="b2b-kicker">Distributor supply</span>
+          <h3>Stocked orthopedic instruments and repeat export programs for qualified buyers.</h3>
+          <p>Need urgent supply? Common trauma, retractor, elevator, and screwdriver patterns are available for fast quotation and staged shipment.</p>
           <a href={themeLink('/contact')} className="b2b-btn b2b-btn-secondary" style={{ marginTop: '1.5rem', display: 'inline-flex' }}>
-            Contact logistics
+            Contact export desk
           </a>
         </article>
       </section>
 
-      {/* Business capabilities */}
       <section className="b2b-capability-grid" aria-label="Our capabilities">
-        {capabilities.map(([iconPath, name, detail]) => (
+        {capabilities.map(([name, detail]) => (
           <article key={name}>
-            <span className="b2b-capability-icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d={iconPath} />
-              </svg>
-            </span>
+            <CapabilityIcon />
             <h2>{name}</h2>
             <p>{detail}</p>
           </article>
         ))}
       </section>
 
-      {/* Industries We Serve */}
-      <section className="b2b-industries" aria-label="Industries served">
+      <section className="b2b-industries" aria-label="Product categories">
         <div className="b2b-section-heading">
-          <span className="b2b-kicker">Industry expertise</span>
-          <h2>Who we manufacture for.</h2>
-          <p>
-            Our components are certified and active in six demanding industrial sectors.
-            We hold the accreditations each market requires — and the engineering track record to back them.
-          </p>
+          <span className="b2b-kicker">Catalog expertise</span>
+          <h2>What we manufacture.</h2>
+          <p>Our orthopedic line is built for distributors, hospitals, importers, OEM brands, and tender suppliers that need repeatable quality with export-ready paperwork.</p>
         </div>
         <div className="b2b-industries-grid">
-          {industries.map((ind) => (
-            <div key={ind.name} className="b2b-industry-card">
-              <span className="b2b-industry-cert">{ind.cert}</span>
-              <h3>{ind.name}</h3>
-              <p>{ind.desc}</p>
+          {categories.map((category) => (
+            <div key={category.name} className="b2b-industry-card">
+              <span className="b2b-industry-cert">{category.cert}</span>
+              <h3>{category.name}</h3>
+              <p>{category.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Product highlights */}
       <section className="b2b-collection">
         <div className="b2b-section-heading">
-          <span className="b2b-kicker">From the factory floor</span>
+          <span className="b2b-kicker">From the instrument catalog</span>
           <h2>{collectionTitle}</h2>
           <p>{collectionDescription}</p>
         </div>
@@ -384,41 +338,33 @@ export default function Page() {
             </div>
           ) : (
             products.slice(0, 3).map((product) => (
-              <B2BProductCard
-                key={product.id}
-                product={product}
-                href={themeLink(`/product/${product.slug}`)}
-                featured={product.id === products[0]?.id}
-              />
+              <B2BProductCard key={product.id} product={product} href={themeLink(`/product/${product.slug}`)} featured={product.id === products[0]?.id} />
             ))
           )}
         </div>
 
         {!loadingProducts && products.length > 0 && (
           <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-            <a href={themeLink('/explore')} className="b2b-btn b2b-btn-secondary">
-              View full catalog →
-            </a>
+            <a href={themeLink('/explore')} className="b2b-btn b2b-btn-secondary">View full catalog</a>
           </div>
         )}
       </section>
 
-      {/* Client testimonials */}
       <section className="b2b-testimonials" aria-label="Client reviews">
         <div className="b2b-section-heading">
-          <span className="b2b-kicker">What our clients say</span>
-          <h2>Trusted by leading industrial companies worldwide.</h2>
+          <span className="b2b-kicker">What buyers say</span>
+          <h2>Trusted by surgical distributors and medical supply teams.</h2>
         </div>
         <div className="b2b-testimonial-grid">
-          {testimonials.map((t) => (
-            <blockquote key={t.name} className="b2b-testimonial-card">
-              <div className="b2b-testimonial-stars" aria-label="5 stars">{'★'.repeat(5)}</div>
-              <p className="b2b-testimonial-quote">&ldquo;{t.quote}&rdquo;</p>
+          {testimonials.map((testimonial) => (
+            <blockquote key={testimonial.name} className="b2b-testimonial-card">
+              <div className="b2b-testimonial-stars" aria-label="5 stars">*****</div>
+              <p className="b2b-testimonial-quote">&ldquo;{testimonial.quote}&rdquo;</p>
               <footer className="b2b-testimonial-author">
-                <span className="b2b-testimonial-avatar" aria-hidden="true">{t.initials}</span>
+                <span className="b2b-testimonial-avatar" aria-hidden="true">{testimonial.initials}</span>
                 <div>
-                  <strong className="b2b-testimonial-name">{t.name}</strong>
-                  <span className="b2b-testimonial-role">{t.role}</span>
+                  <strong className="b2b-testimonial-name">{testimonial.name}</strong>
+                  <span className="b2b-testimonial-role">{testimonial.role}</span>
                 </div>
               </footer>
             </blockquote>
@@ -426,12 +372,11 @@ export default function Page() {
         </div>
       </section>
 
-      {/* How to order */}
       <section style={{ marginTop: '6rem' }} aria-label="How to order">
         <div className="b2b-section-heading">
           <span className="b2b-kicker">How it works</span>
-          <h2>Order in three steps.</h2>
-          <p>From discovery to confirmed order — our process is designed to be fast, transparent, and fully traceable.</p>
+          <h2>Export sourcing in three steps.</h2>
+          <p>From catalog selection to shipment, our process is built for transparent medical-device procurement and repeat distributor supply.</p>
         </div>
         <div className="b2b-process">
           {processSteps.map(([num, step, detail]) => (
@@ -444,19 +389,17 @@ export default function Page() {
         </div>
       </section>
 
-      {/* RFQ section */}
       <section className="b2b-rfq" id="b2b-rfq" aria-label="Request a quote">
         <div>
           <span className="b2b-kicker">Get started</span>
           <h2>{rfqTitle}</h2>
           <p>{rfqDescription}</p>
           <div className="b2b-actions">
-            <a href={themeLink('/explore')} className="b2b-btn b2b-btn-primary">Browse catalog</a>
-            <a href={themeLink('/contact')} className="b2b-btn b2b-btn-secondary">Contact our team</a>
+            <a href={themeLink('/explore')} className="b2b-btn b2b-btn-primary">Browse instruments</a>
+            <a href={themeLink('/quote')} className="b2b-btn b2b-btn-secondary">Send RFQ</a>
           </div>
         </div>
       </section>
-
     </div>
   );
 }

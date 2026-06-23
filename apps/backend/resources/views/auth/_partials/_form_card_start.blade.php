@@ -17,7 +17,7 @@
                 @endif
             </div>
 
-            <span class="metric-label d-block mb-2">{{ __('Account') }}</span>
+            <p class="small fw-semibold text-uppercase mb-2" style="letter-spacing:.08em;color:var(--primary-color)">{{ __('Account') }}</p>
             <h2 class="text-dark mb-2 fs-2">{{ $heading }}</h2>
             @if($subheading)
                 <p class="text-muted fw-medium mb-0">{{ $subheading }}</p>

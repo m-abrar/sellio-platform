@@ -32,11 +32,11 @@
             <div class="vstack gap-4 mt-2">
                 @foreach($features as $feature)
                     <div class="d-flex align-items-center gap-4">
-                        <div class="icon-box-soft bg-white bg-opacity-10 rounded-circle flex-shrink-0">
+                        <div class="icon-box-soft bg-white bg-opacity-10 rounded-3 flex-shrink-0">
                             <i class="bi {{ $feature['icon'] ?? 'bi-check-circle' }} fs-4"></i>
                         </div>
                         <div>
-                            <h5 class="mb-0 fw-bold">{{ $feature['title'] }}</h5>
+                            <h5 class="mb-0 fw-semibold">{{ $feature['title'] }}</h5>
                             @if(!empty($feature['text']))
                                 <p class="small opacity-60 mb-0">{{ $feature['text'] }}</p>
                             @endif

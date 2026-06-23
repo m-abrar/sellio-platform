@@ -19,8 +19,8 @@ type Mode = 'light' | 'dark';
 const B2B_NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
-  { href: '/explore', label: 'Products' },
-  { href: '/blog', label: 'Blog' },
+  { href: '/explore', label: 'Instruments' },
+  { href: '/blog', label: 'Resources' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -29,7 +29,7 @@ export function B2BHeader() {
   const cmsNavItems = useMenu('main_header');
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<Mode>('dark');
-  const brandLabel = useThemeContent('header.brand_label', 'SupplyDesk');
+  const brandLabel = useThemeContent('header.brand_label', 'OrthoForge Instruments');
 
   useEffect(() => {
     const saved = localStorage.getItem('b2b_display_mode') as Mode | null;
@@ -114,7 +114,7 @@ export function B2BHeader() {
           <span>{mode === 'dark' ? 'Light' : 'Dark'}</span>
         </button>
         <a href={themeLink('/quote')} className="b2b-btn b2b-btn-primary b2b-header-cta">
-          Get a Quote
+          Export Quote
         </a>
       </div>
     </header>
@@ -163,18 +163,18 @@ export function B2BTopbar() {
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.74a16 16 0 0 0 6.29 6.29l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
           </svg>
-          <span>+1 (800) 555-0192</span>
+          <span>+92 52 355 0192</span>
           <span className="b2b-topbar-sep" aria-hidden="true">|</span>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
             <polyline points="22,6 12,13 2,6" />
           </svg>
-          <span>procurement@supplydesk.com</span>
+          <span>export@orthoforgeinstruments.com</span>
         </div>
         <div className="b2b-topbar-right">
-          <span className="b2b-topbar-badge">ISO 9001 Certified</span>
+          <span className="b2b-topbar-badge">ISO 13485 aligned</span>
           <span className="b2b-topbar-sep" aria-hidden="true">|</span>
-          <a href={themeLink('/explore')} className="b2b-topbar-link">Browse catalog</a>
+          <a href={themeLink('/explore')} className="b2b-topbar-link">Browse instruments</a>
           <span className="b2b-topbar-sep" aria-hidden="true">|</span>
           <MenuUtilityNav className="b2b-topbar-utility" />
         </div>
@@ -185,11 +185,11 @@ export function B2BTopbar() {
 
 export function B2BFooter() {
   const themeLink = useEcommerceThemeLink();
-  const brandLabel = useThemeContent('footer.brand_label', 'SupplyDesk');
-  const tagline = useThemeContent('footer.tagline', 'Precision manufacturing for global markets.');
+  const brandLabel = useThemeContent('footer.brand_label', 'OrthoForge Instruments');
+  const tagline = useThemeContent('footer.tagline', 'Orthopedic instruments for global distributors.');
   const description = useThemeContent(
     'footer.description',
-    'We engineer and supply industrial components to businesses across 47 countries. Browse our product catalog, request pricing, and place orders directly — no intermediaries.',
+    'We manufacture and export reusable orthopedic surgical instruments for hospitals, importers, distributors, and OEM buyers. Browse the catalog and request pricing directly from the factory.',
   );
   const copyrightRaw = useThemeContent('footer.copyright', '');
 
@@ -198,12 +198,12 @@ export function B2BFooter() {
       <div className="b2b-footer-prefooter">
         <div className="b2b-footer-prefooter-inner">
           <div className="b2b-footer-prefooter-copy">
-            <h2>Source directly from the manufacturer.</h2>
-            <p>No intermediaries. No mark-ups. Consistent quality backed by 40 years of precision engineering and ISO-certified production.</p>
+            <h2>Source orthopedic instruments directly from the manufacturer.</h2>
+            <p>No intermediaries. No guesswork. Consistent stainless-steel instruments backed by 40 years of surgical manufacturing and export experience.</p>
           </div>
           <div className="b2b-footer-prefooter-actions">
-            <a href={themeLink('/explore')} className="b2b-btn b2b-btn-primary">Browse catalog</a>
-            <a href="#b2b-rfq" className="b2b-btn b2b-btn-secondary">Request a quote</a>
+            <a href={themeLink('/explore')} className="b2b-btn b2b-btn-primary">Browse instruments</a>
+            <a href={themeLink('/quote')} className="b2b-btn b2b-btn-secondary">Request a quote</a>
           </div>
         </div>
       </div>
@@ -214,30 +214,30 @@ export function B2BFooter() {
           <p className="b2b-footer-tagline">{tagline}</p>
           <p className="b2b-footer-desc">{description}</p>
           <div className="b2b-footer-badges">
-            <span className="b2b-trust-badge">✓ ISO 9001 Certified</span>
-            <span className="b2b-trust-badge">✓ IATF 16949</span>
-            <span className="b2b-trust-badge">✓ AS9100D</span>
+            <span className="b2b-trust-badge">ISO 13485 aligned</span>
+            <span className="b2b-trust-badge">CE documentation support</span>
+            <span className="b2b-trust-badge">316L / 420 stainless steel</span>
           </div>
         </div>
 
         <div className="b2b-footer-col">
-          <h3>Products</h3>
+          <h3>Instruments</h3>
           <div className="b2b-footer-links">
-            <a href={themeLink('/explore')}>Browse catalog</a>
+            <a href={themeLink('/explore')}>Browse instruments</a>
             <a href={themeLink('/explore')}>Request a quote</a>
             <a href={themeLink('/cart')}>My quote list</a>
-            <a href={themeLink('/explore')}>Product specifications</a>
-            <a href={themeLink('/explore')}>Download datasheets</a>
+            <a href={themeLink('/explore')}>Surgical specifications</a>
+            <a href={themeLink('/explore')}>Instrument sets</a>
           </div>
         </div>
 
         <div className="b2b-footer-col">
           <h3>Manufacturing</h3>
           <div className="b2b-footer-links">
-            <a href={themeLink('/contact')}>Custom manufacturing</a>
-            <a href={themeLink('/contact')}>OEM supply</a>
-            <a href={themeLink('/contact')}>Prototype orders</a>
-            <a href={themeLink('/contact')}>Bulk & long-term contracts</a>
+            <a href={themeLink('/contact')}>OEM instruments</a>
+            <a href={themeLink('/contact')}>Private label</a>
+            <a href={themeLink('/contact')}>Custom trays</a>
+            <a href={themeLink('/contact')}>Bulk export contracts</a>
             <a href={themeLink('/explore')}>Quality documentation</a>
           </div>
         </div>
@@ -262,7 +262,7 @@ export function B2BFooter() {
       </div>
 
       <div className="b2b-footer-bottom">
-        <p>{copyrightRaw ? copyrightRaw.replace(/Â©|Â\?©/g, '©') : `© ${new Date().getFullYear()} ${brandLabel}. All rights reserved.`}</p>
+        <p>{copyrightRaw ? copyrightRaw.replace(/Â©|Â\?©/g, '(c)') : `(c) ${new Date().getFullYear()} ${brandLabel}. All rights reserved.`}</p>
         <div className="b2b-footer-legal">
           <a href={themeLink('/')}>Privacy Policy</a>
           <a href={themeLink('/')}>Terms of Service</a>
