@@ -13,7 +13,7 @@
         </li>
         <li class="breadcrumb-item">
             <a href="{{ route('jobs.index') }}" class="text-muted text-decoration-none small fw-500 hover-primary">
-                {{ __('Inventory') }}
+                {{ __('Jobs') }}
             </a>
         </li>
 
