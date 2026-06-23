@@ -29,7 +29,7 @@ export function B2BHeader() {
   const cmsNavItems = useMenu('main_header');
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<Mode>('dark');
-  const brandLabel = useThemeContent('header.brand_label', 'OrthoForge Instruments');
+  const brandLabel = useThemeContent('header.brand_label', 'Aadab International');
 
   useEffect(() => {
     const saved = localStorage.getItem('b2b_display_mode') as Mode | null;
@@ -169,7 +169,7 @@ export function B2BTopbar() {
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
             <polyline points="22,6 12,13 2,6" />
           </svg>
-          <span>export@orthoforgeinstruments.com</span>
+          <span>export@aadabinternational.com</span>
         </div>
         <div className="b2b-topbar-right">
           <span className="b2b-topbar-badge">ISO 13485 aligned</span>
@@ -185,11 +185,11 @@ export function B2BTopbar() {
 
 export function B2BFooter() {
   const themeLink = useEcommerceThemeLink();
-  const brandLabel = useThemeContent('footer.brand_label', 'OrthoForge Instruments');
-  const tagline = useThemeContent('footer.tagline', 'Orthopedic instruments for global distributors.');
+  const brandLabel = useThemeContent('footer.brand_label', 'Aadab International');
+  const tagline = useThemeContent('footer.tagline', 'Manufacturers & Exporters - Sialkot, Pakistan');
   const description = useThemeContent(
     'footer.description',
-    'We manufacture and export reusable orthopedic surgical instruments for hospitals, importers, distributors, and OEM buyers. Browse the catalog and request pricing directly from the factory.',
+    'Aadab International is a Sialkot, Pakistan based manufacturer and exporter of reusable orthopedic surgical instruments for hospitals, importers, distributors, and OEM buyers.',
   );
   const copyrightRaw = useThemeContent('footer.copyright', '');
 

@@ -36,32 +36,32 @@ return [
 
     'ecommerce_b2b' => [
         tm_menu('main_header', 'Main Header Menu', tm_links([
-            ['Catalog', '/explore'],
-            ['Industries', '/explore'],
-            ['RFQ Flow', '/#b2b-rfq'],
-            ['Procurement', '/explore'],
+            ['Instruments', '/explore'],
+            ['OEM Supply', '/quote'],
+            ['Export RFQ', '/quote'],
+            ['Quality', '/about'],
         ])),
         tm_menu('utility_header', 'Utility Header', tm_links([
-            ['Request Quote', '/#b2b-rfq'],
-            ['Supplier Login', '#'],
+            ['Request Quote', '/quote'],
+            ['Export Support', '/contact'],
         ])),
         tm_menu('action_buttons', 'Header Actions', tm_links([
-            ['Create RFQ', '/#b2b-rfq'],
+            ['Export RFQ', '/quote'],
         ])),
-        tm_menu('footer_column_1', 'Catalog', tm_links([
-            ['All Products', '/explore'],
-            ['Technical Specs', '/explore'],
-            ['Bulk Pricing', '/explore'],
+        tm_menu('footer_column_1', 'Instruments', tm_links([
+            ['All Instruments', '/explore'],
+            ['Trauma Sets', '/explore'],
+            ['Spine Instruments', '/explore'],
         ])),
-        tm_menu('footer_column_2', 'Procurement', tm_links([
-            ['RFQ Requests', '/#b2b-rfq'],
-            ['Lead Times', '/explore'],
-            ['Buyer Support', '/explore'],
+        tm_menu('footer_column_2', 'Export Supply', tm_links([
+            ['Request RFQ', '/quote'],
+            ['Lead Times', '/quote'],
+            ['Distributor Support', '/contact'],
         ])),
-        tm_menu('footer_column_3', 'Suppliers', tm_links([
-            ['Vendor Portal', '#'],
-            ['Compliance', '/explore'],
-            ['Private Catalogs', '/explore'],
+        tm_menu('footer_column_3', 'Manufacturing', tm_links([
+            ['OEM Instruments', '/quote'],
+            ['Private Label', '/contact'],
+            ['Quality Documents', '/about'],
         ])),
         tm_menu('social_footer', 'Social', tm_links([
             ['LinkedIn', '#'],

@@ -9,16 +9,11 @@ import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbac
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 import { B2BProductCard } from './components';
 
-const RADIAL_LINES = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle) => {
-  const rad = (angle * Math.PI) / 180;
-  return {
-    key: `r-${angle}`,
-    x1: +(200 + Math.cos(rad) * 42).toFixed(4),
-    y1: +(240 + Math.sin(rad) * 42).toFixed(4),
-    x2: +(200 + Math.cos(rad) * 78).toFixed(4),
-    y2: +(240 + Math.sin(rad) * 78).toFixed(4),
-  };
-});
+const aadabImages = {
+  hero: 'https://commons.wikimedia.org/wiki/Special:FilePath/Surgical%20Instruments%2001.jpg',
+  inspection: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ring%20Forceps.jpg',
+  instruments: 'https://commons.wikimedia.org/wiki/Special:FilePath/Surgical%20instruments%2002.JPG',
+};
 
 const capabilities = [
   [
@@ -47,7 +42,7 @@ const testimonials = [
     initials: 'EM',
   },
   {
-    quote: 'We moved our trauma instrument sourcing to OrthoForge because they understand export packing, private labeling, and the documentation importers need.',
+    quote: 'We moved our trauma instrument sourcing to Aadab International because they understand export packing, private labeling, and the documentation importers need.',
     name: 'Yusuf Khan',
     role: 'Managing Director, MedGate Imports',
     initials: 'YK',
@@ -90,11 +85,11 @@ export default function Page() {
   const themeLink = useEcommerceThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
-  const eyebrow = useThemeContent('hero.eyebrow', 'ISO 13485-aligned orthopedic instrument manufacturing');
+  const eyebrow = useThemeContent('hero.eyebrow', 'Manufacturers & Exporters - Sialkot, Pakistan');
   const title = useThemeContent('hero.title', 'Orthopedic instruments\nfor global distributors.');
   const description = useThemeContent(
     'hero.description',
-    'We manufacture and export reusable orthopedic surgical instruments for hospitals, distributors, importers, and OEM buyers. Browse the catalog, shortlist items, and request export pricing directly from the factory.',
+    'Aadab International manufactures and exports reusable orthopedic surgical instruments from Sialkot, Pakistan for hospitals, distributors, importers, and OEM buyers. Browse the catalog, shortlist items, and request export pricing directly from the factory.',
   );
   const primaryCta = useThemeContent('hero.primary_cta_label', 'Browse instruments');
   const secondaryCta = useThemeContent('hero.secondary_cta_label', 'Request export quote');
@@ -177,36 +172,27 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="b2b-hero-corp-visual" aria-hidden="true">
+          <div className="b2b-hero-corp-visual">
             <div className="b2b-hero-corp-img">
-              <svg className="b2b-hero-corp-img-svg" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                {[0, 50, 100, 150, 200, 250, 300, 350, 400].map((x) => (
-                  <line key={`vl-${x}`} x1={x} y1="0" x2={x} y2="500" stroke="rgba(45,212,191,0.06)" strokeWidth="1" />
-                ))}
-                {[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500].map((y) => (
-                  <line key={`hl-${y}`} x1="0" y1={y} x2="400" y2={y} stroke="rgba(45,212,191,0.06)" strokeWidth="1" />
-                ))}
-                <circle cx="200" cy="240" r="110" stroke="rgba(45,212,191,0.15)" strokeWidth="1.5" />
-                <circle cx="200" cy="240" r="80" stroke="rgba(45,212,191,0.2)" strokeWidth="1" />
-                <circle cx="200" cy="240" r="40" stroke="rgba(45,212,191,0.3)" strokeWidth="1.5" />
-                <circle cx="200" cy="240" r="15" fill="rgba(45,212,191,0.25)" />
-                {RADIAL_LINES.map(({ key, x1, y1, x2, y2 }) => (
-                  <line key={key} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(45,212,191,0.35)" strokeWidth="2" />
-                ))}
-                <path d="M120 150 L280 150 M200 70 L200 320 M145 265 L255 155 M255 265 L145 155" stroke="rgba(45,212,191,0.42)" strokeWidth="2" strokeLinecap="round" />
-                <path d="M20 20 L20 50 M20 20 L50 20" stroke="rgba(45,212,191,0.5)" strokeWidth="2" />
-                <path d="M380 20 L380 50 M380 20 L350 20" stroke="rgba(45,212,191,0.5)" strokeWidth="2" />
-                <path d="M20 480 L20 450 M20 480 L50 480" stroke="rgba(45,212,191,0.5)" strokeWidth="2" />
-                <path d="M380 480 L380 450 M380 480 L350 480" stroke="rgba(45,212,191,0.5)" strokeWidth="2" />
-              </svg>
+              <img src={aadabImages.hero} alt="Clean medical instrument inspection bench" />
               <div className="b2b-hero-corp-img-badge b2b-hero-corp-img-badge-tl">
-                <strong>ISO 13485</strong>
-                <span>Quality</span>
+                <strong>Sialkot</strong>
+                <span>Pakistan</span>
               </div>
               <div className="b2b-hero-corp-img-badge b2b-hero-corp-img-badge-br">
                 <strong>{productCountLabel}</strong>
                 <span>Instruments</span>
               </div>
+            </div>
+            <div className="b2b-hero-photo-strip" aria-label="Manufacturing focus">
+              <figure>
+                <img src={aadabImages.inspection} alt="Precision inspection in a manufacturing workspace" />
+                <figcaption>In-process inspection</figcaption>
+              </figure>
+              <figure>
+                <img src={aadabImages.instruments} alt="Reusable surgical instrument detail" />
+                <figcaption>Reusable stainless steel</figcaption>
+              </figure>
             </div>
           </div>
 
@@ -225,7 +211,7 @@ export default function Page() {
             <span className="b2b-kicker">Who we are</span>
             <h2>Orthopedic instrument manufacturing with export discipline.</h2>
             <p>
-              Founded in 1985, we have grown from a specialist surgical workshop into a manufacturer and exporter of reusable orthopedic instruments.
+              Founded in Sialkot, Pakistan, Aadab International has grown from a specialist surgical workshop into a manufacturer and exporter of reusable orthopedic instruments.
               Today we supply trauma, spine, joint, retractor, and custom instrument sets for buyers across 47 export markets.
             </p>
             <p>
@@ -237,21 +223,9 @@ export default function Page() {
               <a href={themeLink('/contact')} className="b2b-btn b2b-btn-secondary">Get in touch</a>
             </div>
           </div>
-          <div className="b2b-who-visual" aria-hidden="true">
+          <div className="b2b-who-visual">
             <div className="b2b-who-img-wrap">
-              <svg viewBox="0 0 360 280" fill="none" xmlns="http://www.w3.org/2000/svg" className="b2b-who-img-svg" aria-hidden="true">
-                {[0, 40, 80, 120, 160, 200, 240, 280, 320, 360].map((x) => (
-                  <line key={`x${x}`} x1={x} y1="0" x2={x} y2="280" stroke="rgba(45,212,191,0.07)" strokeWidth="1" />
-                ))}
-                {[0, 40, 80, 120, 160, 200, 240, 280].map((y) => (
-                  <line key={`y${y}`} x1="0" y1={y} x2="360" y2={y} stroke="rgba(45,212,191,0.07)" strokeWidth="1" />
-                ))}
-                <path d="M95 180 C125 115 215 95 270 135" stroke="rgba(45,212,191,0.42)" strokeWidth="12" strokeLinecap="round" />
-                <path d="M95 180 C125 115 215 95 270 135" stroke="rgba(45,212,191,0.78)" strokeWidth="2" strokeLinecap="round" />
-                <circle cx="95" cy="180" r="24" stroke="rgba(45,212,191,0.35)" strokeWidth="2" />
-                <circle cx="270" cy="135" r="18" stroke="rgba(45,212,191,0.35)" strokeWidth="2" />
-                <path d="M72 205 L55 225 M287 120 L310 100" stroke="rgba(45,212,191,0.45)" strokeWidth="3" strokeLinecap="round" />
-              </svg>
+              <img src={aadabImages.inspection} alt="Instrument quality inspection and finishing review" />
               <div className="b2b-who-cert-badge">
                 <span>ISO 13485 aligned</span>
                 <span>CE documentation support</span>

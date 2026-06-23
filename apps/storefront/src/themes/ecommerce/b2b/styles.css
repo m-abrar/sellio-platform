@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 .ecommerce-b2b-theme {
   --b2b-bg: #08111f;
@@ -13,7 +13,7 @@
   --b2b-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
   background: var(--b2b-bg);
   color: var(--b2b-text);
-  font-family: Inter, sans-serif;
+  font-family: Manrope, sans-serif;
   min-height: 100vh;
 }
 
@@ -2662,5 +2662,338 @@
   .b2b-who-inner {
     gap: 2.5rem;
     grid-template-columns: 1fr;
+  }
+}
+
+/* Aadab International manual art direction */
+.ecommerce-b2b-theme {
+  --b2b-bg: #f5f7f8;
+  --b2b-panel: #ffffff;
+  --b2b-panel-strong: #eef4f5;
+  --b2b-text: #16242c;
+  --b2b-muted: #5d6b73;
+  --b2b-line: rgba(33, 55, 66, 0.13);
+  --b2b-accent: #0f766e;
+  --b2b-accent-strong: #0b5f59;
+  --b2b-warm: #b7791f;
+  --b2b-shadow: 0 22px 60px rgba(18, 35, 45, 0.12);
+  background: linear-gradient(180deg, #f9fbfb 0%, #eef3f3 52%, #f8faf9 100%);
+  color: var(--b2b-text);
+}
+
+.b2b-topbar {
+  background: #10212a;
+  border-bottom: 0;
+}
+
+.b2b-topbar-left span,
+.b2b-topbar-left svg,
+.b2b-topbar-right svg,
+.b2b-topbar-link,
+.b2b-topbar-utility a {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.b2b-topbar-badge {
+  background: rgba(221, 244, 240, 0.1);
+  border-color: rgba(221, 244, 240, 0.22);
+  color: #dff8f3;
+}
+
+.b2b-header {
+  background: rgba(251, 252, 251, 0.94);
+  box-shadow: 0 10px 34px rgba(21, 35, 43, 0.06);
+}
+
+.b2b-logo {
+  color: #0f252d;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.22rem;
+  font-weight: 700;
+}
+
+.b2b-logo::after {
+  color: var(--b2b-warm);
+  content: ' / Sialkot';
+  font-family: Manrope, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.b2b-nav-link {
+  border-radius: 6px;
+  color: #40515a;
+  font-size: 0.78rem;
+  letter-spacing: 0.15px;
+}
+
+.b2b-nav-link:hover {
+  background: #edf5f3;
+  color: var(--b2b-accent-strong);
+}
+
+.b2b-btn {
+  border-radius: 6px;
+  letter-spacing: 0.1px;
+}
+
+.b2b-btn-primary {
+  background: #0f766e;
+  box-shadow: 0 12px 24px rgba(15, 118, 110, 0.18);
+  color: #ffffff;
+}
+
+.b2b-btn-secondary {
+  background: #ffffff;
+  border-color: rgba(15, 118, 110, 0.24);
+  color: #12323a;
+}
+
+.b2b-page {
+  max-width: none;
+  padding-top: 0;
+}
+
+.b2b-hero-corp {
+  background:
+    linear-gradient(90deg, rgba(245, 247, 248, 0.98) 0%, rgba(245, 247, 248, 0.88) 48%, rgba(238, 244, 245, 0.72) 100%),
+    radial-gradient(circle at 15% 20%, rgba(15, 118, 110, 0.12), transparent 30%),
+    linear-gradient(180deg, #ffffff, #eef4f5);
+  border-bottom: 1px solid rgba(33, 55, 66, 0.1);
+}
+
+.b2b-hero-corp-inner {
+  gap: 3rem 4rem;
+  grid-template-columns: minmax(0, 0.98fr) minmax(420px, 0.78fr);
+  min-height: calc(100vh - 112px);
+  padding: clamp(3.5rem, 7vw, 6.5rem) 0 0;
+}
+
+.b2b-kicker {
+  color: var(--b2b-accent-strong);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+}
+
+.b2b-hero-corp-h1,
+.b2b-section-heading h2,
+.b2b-who-copy h2,
+.b2b-banner h3,
+.b2b-rfq h2,
+.b2b-static-hero h1 {
+  color: #10212a;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.b2b-hero-corp-h1 {
+  font-size: clamp(3rem, 6vw, 5.8rem);
+  line-height: 1.02;
+}
+
+.b2b-hero-corp-lead {
+  color: #465961;
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  line-height: 1.82;
+}
+
+.b2b-sector-chip {
+  background: #ffffff;
+  border-color: rgba(15, 118, 110, 0.18);
+  border-radius: 4px;
+  color: #24414a;
+  font-size: 0.72rem;
+}
+
+.b2b-hero-corp-img {
+  background: #dfe8e8;
+  border: 1px solid rgba(16, 33, 42, 0.1);
+  border-radius: 0;
+  box-shadow: 0 30px 70px rgba(16, 33, 42, 0.18);
+  height: min(58vh, 560px);
+}
+
+.b2b-hero-corp-img::after {
+  background: linear-gradient(180deg, transparent 48%, rgba(8, 24, 30, 0.58));
+  content: '';
+  inset: 0;
+  position: absolute;
+}
+
+.b2b-hero-corp-img > img,
+.b2b-who-img-wrap > img,
+.b2b-hero-photo-strip img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.b2b-hero-corp-img-badge {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.72);
+  border-radius: 6px;
+  box-shadow: 0 12px 26px rgba(10, 23, 31, 0.16);
+  z-index: 2;
+}
+
+.b2b-hero-corp-img-badge strong {
+  color: #0f766e;
+}
+
+.b2b-hero-corp-img-badge span {
+  color: #526169;
+}
+
+.b2b-hero-photo-strip {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 0.85rem;
+}
+
+.b2b-hero-photo-strip figure {
+  background: #ffffff;
+  border: 1px solid var(--b2b-line);
+  margin: 0;
+  min-height: 148px;
+  overflow: hidden;
+  position: relative;
+}
+
+.b2b-hero-photo-strip figcaption {
+  background: rgba(16, 33, 42, 0.82);
+  bottom: 0;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  left: 0;
+  letter-spacing: 0.7px;
+  padding: 0.55rem 0.7rem;
+  position: absolute;
+  right: 0;
+  text-transform: uppercase;
+}
+
+.b2b-hero-corp-stats {
+  background: #10212a;
+  border: 0;
+  box-shadow: none;
+  margin-top: 2rem;
+}
+
+.b2b-hero-corp-stat {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.b2b-hero-corp-stat strong {
+  color: #f4d19b;
+}
+
+.b2b-hero-corp-stat span {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.b2b-who-img-wrap {
+  aspect-ratio: 1.12;
+  background: #e4eeee;
+  border: 1px solid rgba(16, 33, 42, 0.1);
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.b2b-who-cert-badge {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(16, 33, 42, 0.1);
+  border-radius: 6px;
+  bottom: 1rem;
+  left: 1rem;
+  top: auto;
+}
+
+.b2b-who-cert-badge span {
+  color: #213742;
+}
+
+.b2b-banner {
+  border-radius: 0;
+  box-shadow: var(--b2b-shadow);
+}
+
+.b2b-banner-primary {
+  background: #10212a;
+}
+
+.b2b-banner-secondary {
+  background: #ffffff;
+}
+
+.b2b-capability-grid article,
+.b2b-industry-card,
+.b2b-product-card,
+.b2b-testimonial-card,
+.b2b-process article,
+.b2b-about-value-card,
+.b2b-contact-form-wrap,
+.b2b-contact-info-block,
+.b2b-blog-card,
+.b2b-blog-featured,
+.b2b-detail-panel,
+.b2b-detail-media,
+.b2b-detail-tab-panel {
+  background: #ffffff;
+  border-color: rgba(16, 33, 42, 0.1);
+  border-radius: 0;
+  box-shadow: 0 14px 38px rgba(16, 33, 42, 0.07);
+}
+
+.b2b-product-media {
+  background: #eef4f5;
+}
+
+.b2b-rfq {
+  background:
+    linear-gradient(90deg, rgba(16, 33, 42, 0.92), rgba(16, 33, 42, 0.78)),
+    url('https://commons.wikimedia.org/wiki/Special:FilePath/Surgical%20instruments%2002.JPG') center/cover;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--b2b-shadow);
+}
+
+.b2b-rfq h2,
+.b2b-rfq p {
+  color: #ffffff;
+}
+
+.b2b-rfq .b2b-kicker {
+  color: #f4d19b;
+}
+
+@media (max-width: 980px) {
+  .b2b-hero-corp-inner {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .b2b-hero-corp-img {
+    height: 420px;
+  }
+}
+
+@media (max-width: 640px) {
+  .b2b-logo::after {
+    display: none;
+  }
+
+  .b2b-hero-photo-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .b2b-hero-corp-img {
+    height: 340px;
   }
 }

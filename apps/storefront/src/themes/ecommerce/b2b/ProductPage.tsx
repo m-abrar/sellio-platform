@@ -121,7 +121,7 @@ export default function ProductPage({ slug }: { slug: string }) {
 
   const galleryImages = getGalleryImages(product);
   const selectedImage = activeImage || galleryImages[0] || PRODUCT_DETAIL_PLACEHOLDER;
-  const description = product.description || 'Catalog-ready product with full specification review and RFQ workflow. Contact the supplier for pricing, lead time, and order minimums.';
+  const description = product.description || 'Catalog-ready orthopedic instrument with RFQ review for quantity, steel grade, finish, private label, packing, and export documentation.';
 
   return (
     <main className="b2b-detail-page">
@@ -164,9 +164,9 @@ export default function ProductPage({ slug }: { slug: string }) {
           </p>
 
           <div className="b2b-detail-specs">
-            <div><span>MOQ</span><strong>Request with quote</strong></div>
-            <div><span>Lead time</span><strong>Seller confirmed</strong></div>
-            <div><span>Pricing</span><strong>Negotiated</strong></div>
+            <div><span>MOQ</span><strong>Confirmed with quote</strong></div>
+            <div><span>Lead time</span><strong>Export team confirmed</strong></div>
+            <div><span>Pricing</span><strong>Volume based</strong></div>
           </div>
 
           <button
@@ -194,13 +194,13 @@ export default function ProductPage({ slug }: { slug: string }) {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
-              <span>NDA-ready terms available</span>
+              <span>Private-label terms available</span>
             </div>
             <div className="b2b-assurance-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                 <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
               </svg>
-              <span>Verified supplier</span>
+              <span>Factory-direct orthopedic supply</span>
             </div>
           </div>
         </article>
@@ -242,29 +242,29 @@ export default function ProductPage({ slug }: { slug: string }) {
             <>
               <h2>Technical specifications</h2>
               <p>
-                Detailed technical specifications, certifications, and compliance documents are available from the supplier upon quote request.
-                Add this product to your RFQ list and specify your requirements in the submission notes.
+                Detailed instrument specifications, steel grades, finish options, packing details, and document support are available upon quote request.
+                Add this product to your RFQ list and specify your export requirements in the submission notes.
               </p>
               <div className="b2b-spec-table">
                 <div><dt>Product ID</dt><dd>SKU-{String(product.id).padStart(4, '0')}</dd></div>
-                <div><dt>Minimum Order Quantity</dt><dd>Negotiated with supplier</dd></div>
+                <div><dt>Minimum Order Quantity</dt><dd>Confirmed with export quote</dd></div>
                 <div><dt>Lead Time</dt><dd>Confirmed at quote stage</dd></div>
-                <div><dt>Pricing Model</dt><dd>Volume-tiered, negotiable</dd></div>
-                <div><dt>Payment Terms</dt><dd>Net 30 / LC / Escrow</dd></div>
-                <div><dt>Shipping</dt><dd>EXW, FOB, CIF — seller options</dd></div>
+                <div><dt>Pricing Model</dt><dd>Volume-tiered export pricing</dd></div>
+                <div><dt>Payment Terms</dt><dd>Bank transfer / LC / agreed terms</dd></div>
+                <div><dt>Shipping</dt><dd>EXW, FOB, CIF, or air cargo</dd></div>
               </div>
             </>
           )}
           {activeTab === 'rfq' && (
             <>
-              <h2>RFQ & procurement terms</h2>
+              <h2>RFQ & export terms</h2>
               <p>
-                When you add this product to your RFQ list, you can specify quantities, target pricing, destination port, required delivery timeline,
-                and any certification or compliance requirements. Suppliers respond with a structured quote within 24 business hours.
+                When you add this instrument to your RFQ list, you can specify quantities, steel grade, finish, branding, destination port,
+                required delivery timeline, and document requirements. Our export team responds with a structured quote within 48 business hours.
               </p>
               <p style={{ marginTop: '1rem' }}>
-                All quotes are protected under a mutual NDA by default. Escrow payment options are available for first-time supplier relationships.
-                Our procurement team is available to assist with negotiations and dispute resolution.
+                Sample approval, private-label files, material certificates, inspection records, and packing lists can be included when required by your market.
+                Our export desk can help align trade terms, packing, and shipment scheduling before production begins.
               </p>
             </>
           )}

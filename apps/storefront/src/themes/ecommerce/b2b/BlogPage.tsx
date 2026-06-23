@@ -16,109 +16,107 @@ interface BlogPost {
 
 const POSTS: BlogPost[] = [
   {
-    slug: 'specifying-tight-tolerances-guide',
-    category: 'Engineering',
-    title: 'How to specify tight tolerances without over-constraining your design',
-    excerpt: 'Unnecessarily tight tolerances inflate cost and lead time without improving part performance. Our applications engineers explain how to specify what actually matters — and where looser tolerance is the right choice.',
-    author: 'David Kirchner',
+    slug: 'orthopedic-instrument-steel-grades',
+    category: 'Materials',
+    title: '316L, 420, and 410 stainless steel in orthopedic instruments',
+    excerpt: 'A practical guide to common surgical stainless-steel grades, where each one fits, and what buyers should confirm before approving an RFQ.',
+    author: 'Nadia Farooq',
     date: '2026-05-28',
-    readTime: '8 min read',
+    readTime: '7 min read',
     featured: true,
   },
   {
-    slug: 'material-selection-aerospace',
-    category: 'Materials',
-    title: 'Titanium vs aluminium alloy: choosing the right material for aerospace brackets',
-    excerpt: 'Both materials appear in aerospace structural applications, but their weight, strength, machinability, and cost profiles differ significantly. Here is how we advise clients to choose between them.',
-    author: 'Priya Nair',
+    slug: 'orthopedic-set-rfq-checklist',
+    category: 'RFQ Guides',
+    title: 'The export RFQ checklist for orthopedic instrument sets',
+    excerpt: 'Item codes, quantities, finish, marking, tray layout, destination port, certificates, and packing details that help suppliers quote accurately.',
+    author: 'Sameer Malik',
     date: '2026-05-14',
-    readTime: '7 min read',
-  },
-  {
-    slug: 'iso-9001-what-it-means-for-buyers',
-    category: 'Quality',
-    title: 'What ISO 9001 certification actually means for buyers',
-    excerpt: 'The certificate is common. Understanding what it guarantees — and what it does not — changes how you should evaluate a manufacturer. A plain-language breakdown for engineering buyers.',
-    author: 'Sandra Mayer',
-    date: '2026-04-30',
-    readTime: '5 min read',
-  },
-  {
-    slug: 'reading-technical-drawings-checklist',
-    category: 'Engineering',
-    title: 'The 10-point checklist we use to review customer drawings before quoting',
-    excerpt: 'Incomplete or ambiguous drawings cause delays and inaccurate quotes. This is the checklist our estimating team runs through every time — share it with your engineering team to get better responses faster.',
-    author: 'James Ofosu',
-    date: '2026-04-15',
     readTime: '6 min read',
   },
   {
-    slug: 'surface-finish-standards-explained',
-    category: 'Materials',
-    title: 'Ra, Rz, Rmax: surface finish standards explained for non-specialists',
-    excerpt: 'Surface roughness parameters appear on nearly every technical drawing, yet many buyers are unsure what they mean for function or manufacturability. We clear up the confusion.',
-    author: 'David Kirchner',
-    date: '2026-03-22',
-    readTime: '9 min read',
+    slug: 'passivation-and-finish-basics',
+    category: 'Quality',
+    title: 'Passivation, polishing, and finish checks buyers should understand',
+    excerpt: 'Reusable surgical instruments need more than a good shape. This article explains finish expectations, passivation basics, and incoming inspection points.',
+    author: 'Dr. Helena Ward',
+    date: '2026-04-30',
+    readTime: '8 min read',
   },
   {
-    slug: 'first-article-inspection-guide',
+    slug: 'private-label-orthopedic-instruments',
+    category: 'OEM',
+    title: 'Private-label orthopedic instruments: what to decide before production',
+    excerpt: 'Logo marking, catalog codes, pouch labels, tray layouts, artwork files, and sample approval steps for distributors building their own instrument line.',
+    author: 'Nadia Farooq',
+    date: '2026-04-15',
+    readTime: '5 min read',
+  },
+  {
+    slug: 'export-documents-medical-instruments',
+    category: 'Export',
+    title: 'Common export documents for surgical instrument shipments',
+    excerpt: 'Commercial invoices, packing lists, material certificates, inspection reports, and the paperwork importers usually request before shipment release.',
+    author: 'Sameer Malik',
+    date: '2026-03-22',
+    readTime: '6 min read',
+  },
+  {
+    slug: 'supplier-audit-questions',
     category: 'Quality',
-    title: 'First Article Inspection (FAI): when to require it and what to expect',
-    excerpt: 'FAI is a critical quality gate before series production — but it adds lead time and cost. Our quality team explains when it is essential, when it is optional, and what the report should contain.',
-    author: 'Priya Nair',
+    title: 'Questions to ask before qualifying an orthopedic instrument supplier',
+    excerpt: 'A short supplier audit guide for buyers comparing factories, not trading companies: process control, traceability, finishing, packing, and documentation.',
+    author: 'Dr. Helena Ward',
     date: '2026-03-08',
     readTime: '7 min read',
   },
 ];
 
-const CATEGORIES = ['All', 'Engineering', 'Materials', 'Quality', 'Industry Insights'];
+const CATEGORIES = ['All', 'RFQ Guides', 'Materials', 'Quality', 'OEM', 'Export'];
 
 export default function BlogPage() {
   const themeLink = useEcommerceThemeLink();
   const [activeCategory, setActiveCategory] = useState('All');
   const [search, setSearch] = useState('');
 
-  const filtered = POSTS.filter((p) => {
-    const matchesCat = activeCategory === 'All' || p.category === activeCategory;
-    const matchesSearch = !search || p.title.toLowerCase().includes(search.toLowerCase()) || p.excerpt.toLowerCase().includes(search.toLowerCase());
+  const filtered = POSTS.filter((post) => {
+    const matchesCat = activeCategory === 'All' || post.category === activeCategory;
+    const matchesSearch = !search || post.title.toLowerCase().includes(search.toLowerCase()) || post.excerpt.toLowerCase().includes(search.toLowerCase());
     return matchesCat && matchesSearch;
   });
 
-  const featured = filtered.find((p) => p.featured);
-  const rest = filtered.filter((p) => !p.featured || activeCategory !== 'All' || search);
-
-  const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const featured = filtered.find((post) => post.featured);
+  const rest = filtered.filter((post) => !post.featured || activeCategory !== 'All' || search);
+  const formatDate = (date: string) => new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
     <main className="b2b-static-page">
       <section className="b2b-static-hero">
-        <span className="b2b-kicker">Insights</span>
-        <h1>Engineering knowledge for industrial buyers.</h1>
-        <p>Practical guides on materials, tolerances, quality standards, and manufacturing processes — written by our technical team for the engineers and buyers we work with.</p>
+        <span className="b2b-kicker">Resources</span>
+        <h1>Orthopedic instrument sourcing guides.</h1>
+        <p>Practical notes on stainless steel, RFQs, finishing, private label, export documents, and supplier qualification for medical buyers.</p>
       </section>
 
-      {/* Search + categories */}
       <div className="b2b-blog-controls">
         <input
           type="text"
           className="b2b-blog-search"
-          placeholder="Search articles…"
+          placeholder="Search articles..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           aria-label="Search articles"
         />
         <div className="b2b-blog-categories" role="tablist" aria-label="Filter by category">
-          {CATEGORIES.map((cat) => (
+          {CATEGORIES.map((category) => (
             <button
-              key={cat}
+              key={category}
               type="button"
               role="tab"
-              aria-selected={activeCategory === cat}
-              className={`b2b-blog-cat-btn${activeCategory === cat ? ' b2b-blog-cat-active' : ''}`}
-              onClick={() => setActiveCategory(cat)}
+              aria-selected={activeCategory === category}
+              className={`b2b-blog-cat-btn${activeCategory === category ? ' b2b-blog-cat-active' : ''}`}
+              onClick={() => setActiveCategory(category)}
             >
-              {cat}
+              {category}
             </button>
           ))}
         </div>
@@ -131,7 +129,6 @@ export default function BlogPage() {
         </div>
       ) : (
         <div className="b2b-blog-layout">
-          {/* Featured post */}
           {featured && activeCategory === 'All' && !search && (
             <a href={themeLink(`/blog/${featured.slug}`)} className="b2b-blog-featured">
               <div className="b2b-blog-featured-meta">
@@ -141,15 +138,14 @@ export default function BlogPage() {
               <h2>{featured.title}</h2>
               <p>{featured.excerpt}</p>
               <div className="b2b-blog-author">
-                <span className="b2b-blog-author-avatar">{featured.author.split(' ').map((n) => n[0]).join('')}</span>
+                <span className="b2b-blog-author-avatar">{featured.author.split(' ').map((name) => name[0]).join('')}</span>
                 <span>{featured.author}</span>
-                <span className="b2b-topbar-sep" aria-hidden="true">·</span>
+                <span className="b2b-topbar-sep" aria-hidden="true">|</span>
                 <span>{formatDate(featured.date)}</span>
               </div>
             </a>
           )}
 
-          {/* Post grid */}
           <div className="b2b-blog-grid">
             {rest.map((post) => (
               <a key={post.slug} href={themeLink(`/blog/${post.slug}`)} className="b2b-blog-card">
@@ -160,9 +156,9 @@ export default function BlogPage() {
                 <h3>{post.title}</h3>
                 <p>{post.excerpt}</p>
                 <div className="b2b-blog-author">
-                  <span className="b2b-blog-author-avatar">{post.author.split(' ').map((n) => n[0]).join('')}</span>
+                  <span className="b2b-blog-author-avatar">{post.author.split(' ').map((name) => name[0]).join('')}</span>
                   <span>{post.author}</span>
-                  <span className="b2b-topbar-sep" aria-hidden="true">·</span>
+                  <span className="b2b-topbar-sep" aria-hidden="true">|</span>
                   <span>{formatDate(post.date)}</span>
                 </div>
               </a>

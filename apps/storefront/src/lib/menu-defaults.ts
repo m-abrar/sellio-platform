@@ -121,10 +121,10 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
 
     if (themeKey === 'ecommerce_b2b') {
       return footerMenu(location, 'Main Header Menu', links(
-        ['Catalog', '/explore'],
-        ['Industries', '/explore'],
-        ['RFQ Flow', '/#b2b-rfq'],
-        ['Procurement', '/explore'],
+        ['Instruments', '/explore'],
+        ['OEM Supply', '/quote'],
+        ['Export RFQ', '/quote'],
+        ['Quality', '/about'],
       ));
     }
 
@@ -146,7 +146,7 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
     }
 
     if (themeKey === 'ecommerce_b2b') {
-      return footerMenu(location, 'Utility Header', links(['Request Quote', '/#b2b-rfq'], ['Supplier Login', '#']));
+      return footerMenu(location, 'Utility Header', links(['Request Quote', '/quote'], ['Export Support', '/contact']));
     }
 
     if (themeKey === 'ecommerce_fashion') {
@@ -162,7 +162,7 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
     }
 
     if (themeKey === 'ecommerce_b2b') {
-      return footerMenu(location, 'Header Actions', links(['Create RFQ', '/#b2b-rfq']));
+      return footerMenu(location, 'Header Actions', links(['Export RFQ', '/quote']));
     }
 
     if (themeKey === 'ecommerce_fashion') {
@@ -191,14 +191,14 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
 
     if (themeKey === 'ecommerce_b2b') {
       if (location === 'footer_column_1') {
-        return footerMenu(location, 'Catalog', links(['All Products', '/explore'], ['Technical Specs', '/explore'], ['Bulk Pricing', '/explore']));
+        return footerMenu(location, 'Instruments', links(['All Instruments', '/explore'], ['Trauma Sets', '/explore'], ['Spine Instruments', '/explore']));
       }
 
       if (location === 'footer_column_2') {
-        return footerMenu(location, 'Procurement', links(['RFQ Requests', '/#b2b-rfq'], ['Lead Times', '/explore'], ['Buyer Support', '/explore']));
+        return footerMenu(location, 'Export Supply', links(['Request RFQ', '/quote'], ['Lead Times', '/quote'], ['Distributor Support', '/contact']));
       }
 
-      return footerMenu(location, 'Suppliers', links(['Vendor Portal', '#'], ['Compliance', '/explore'], ['Private Catalogs', '/explore']));
+      return footerMenu(location, 'Manufacturing', links(['OEM Instruments', '/quote'], ['Private Label', '/contact'], ['Quality Documents', '/about']));
     }
 
     if (themeKey === 'ecommerce_fashion') {

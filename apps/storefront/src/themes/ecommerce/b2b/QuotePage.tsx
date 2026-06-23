@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 
-const CERTIFICATIONS = ['ISO 9001', 'IATF 16949', 'AS9100D', 'PED 2014/68/EU', 'ITAR', 'ATEX', 'ISO 3834', 'None required'];
-const TIMELINES = ['1–2 weeks', '2–4 weeks', '1–2 months', '3–6 months', 'Flexible'];
+const CERTIFICATIONS = ['ISO 13485 support', 'CE documentation support', 'Material certificate', 'Inspection report', 'Private label packing', 'None required'];
+const TIMELINES = ['1-2 weeks', '2-4 weeks', '1-2 months', '3-6 months', 'Flexible'];
 
 export default function QuotePage() {
   const themeLink = useEcommerceThemeLink();
@@ -14,13 +14,14 @@ export default function QuotePage() {
     company: '',
     email: '',
     phone: '',
-    partName: '',
-    drawingRef: '',
-    material: '',
+    instrumentList: '',
+    itemCodes: '',
+    steelGrade: '',
     quantity: '',
-    tolerance: '',
+    finish: '',
     certification: '',
     timeline: '',
+    destination: '',
     notes: '',
   });
 
@@ -36,18 +37,16 @@ export default function QuotePage() {
     <main className="b2b-static-page">
       <section className="b2b-static-hero">
         <span className="b2b-kicker">Request a quotation</span>
-        <h1>Tell us what you need.</h1>
+        <h1>Send your orthopedic instrument RFQ.</h1>
         <p>
-          Submit your part requirements and our sales engineering team will respond within
-          48 business hours with pricing, lead time, and available certifications.
+          Share your item codes, quantities, finish, branding, destination, and required documents.
+          Our export team will respond within 48 business hours.
         </p>
       </section>
 
       <section className="b2b-contact-layout">
-
-        {/* Quote form */}
         <div className="b2b-contact-form-wrap">
-          <h2>Part &amp; project details</h2>
+          <h2>Instrument and export details</h2>
 
           {submitted ? (
             <div className="b2b-contact-success" role="status">
@@ -55,20 +54,18 @@ export default function QuotePage() {
                 <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
               </svg>
               <h3>Quote request received</h3>
-              <p>Our sales engineering team will review your requirements and reply within 48 business hours.</p>
+              <p>Our export team will review your instrument list and reply within 48 business hours.</p>
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem', flexWrap: 'wrap' }}>
                 <button type="button" className="b2b-btn b2b-btn-secondary" onClick={() => setSubmitted(false)}>
                   Submit another
                 </button>
                 <a href={themeLink('/explore')} className="b2b-btn b2b-btn-primary">
-                  Browse catalog
+                  Browse instruments
                 </a>
               </div>
             </div>
           ) : (
             <form className="b2b-contact-form" onSubmit={handleSubmit} noValidate>
-
-              {/* Contact */}
               <p className="b2b-form-section-label">Your contact details</p>
               <div className="b2b-contact-row">
                 <label>
@@ -77,91 +74,87 @@ export default function QuotePage() {
                 </label>
                 <label>
                   <span>Company *</span>
-                  <input type="text" required placeholder="Acme Industries" value={form.company} onChange={set('company')} />
+                  <input type="text" required placeholder="MedGate Imports" value={form.company} onChange={set('company')} />
                 </label>
               </div>
               <div className="b2b-contact-row">
                 <label>
                   <span>Work email *</span>
-                  <input type="email" required placeholder="jane@acme.com" value={form.email} onChange={set('email')} />
+                  <input type="email" required placeholder="jane@company.com" value={form.email} onChange={set('email')} />
                 </label>
                 <label>
-                  <span>Phone</span>
+                  <span>Phone / WhatsApp</span>
                   <input type="tel" placeholder="+1 800 555 0192" value={form.phone} onChange={set('phone')} />
                 </label>
               </div>
 
-              {/* Part requirements */}
-              <p className="b2b-form-section-label" style={{ marginTop: '1.5rem' }}>Part requirements</p>
+              <p className="b2b-form-section-label" style={{ marginTop: '1.5rem' }}>Instrument requirements</p>
+              <label>
+                <span>Instrument list / set description *</span>
+                <textarea rows={4} required placeholder="Example: small fragment set, Hohmann retractors, bone levers, periosteal elevators..." value={form.instrumentList} onChange={set('instrumentList')} />
+              </label>
               <div className="b2b-contact-row">
                 <label>
-                  <span>Part name / description *</span>
-                  <input type="text" required placeholder="e.g. Flanged shaft coupling" value={form.partName} onChange={set('partName')} />
-                </label>
-                <label>
-                  <span>Drawing / part reference</span>
-                  <input type="text" placeholder="e.g. DRW-2024-0042" value={form.drawingRef} onChange={set('drawingRef')} />
-                </label>
-              </div>
-              <div className="b2b-contact-row">
-                <label>
-                  <span>Material specification</span>
-                  <input type="text" placeholder="e.g. 316L stainless steel, 6061-T6 aluminium" value={form.material} onChange={set('material')} />
+                  <span>Item codes or drawing references</span>
+                  <input type="text" placeholder="Example: OF-TF-024, customer drawing DRW-42" value={form.itemCodes} onChange={set('itemCodes')} />
                 </label>
                 <label>
                   <span>Quantity required *</span>
-                  <input type="text" required placeholder="e.g. 500 units / prototype run of 5" value={form.quantity} onChange={set('quantity')} />
+                  <input type="text" required placeholder="Example: 250 pcs / 40 complete sets" value={form.quantity} onChange={set('quantity')} />
                 </label>
               </div>
               <div className="b2b-contact-row">
                 <label>
-                  <span>Required tolerance</span>
-                  <input type="text" placeholder="e.g. ±0.05 mm, ±0.001 in" value={form.tolerance} onChange={set('tolerance')} />
+                  <span>Steel grade</span>
+                  <input type="text" placeholder="Example: 316L, 420, 410, buyer specified" value={form.steelGrade} onChange={set('steelGrade')} />
                 </label>
                 <label>
-                  <span>Certification required</span>
-                  <select value={form.certification} onChange={set('certification')}>
-                    <option value="">Select if applicable</option>
-                    {CERTIFICATIONS.map((c) => <option key={c} value={c}>{c}</option>)}
-                  </select>
+                  <span>Finish / marking</span>
+                  <input type="text" placeholder="Satin, mirror, sandblast, laser logo, UDI" value={form.finish} onChange={set('finish')} />
                 </label>
               </div>
 
-              {/* Project details */}
-              <p className="b2b-form-section-label" style={{ marginTop: '1.5rem' }}>Project details</p>
+              <p className="b2b-form-section-label" style={{ marginTop: '1.5rem' }}>Export details</p>
+              <div className="b2b-contact-row">
+                <label>
+                  <span>Documents required</span>
+                  <select value={form.certification} onChange={set('certification')}>
+                    <option value="">Select if applicable</option>
+                    {CERTIFICATIONS.map((cert) => <option key={cert} value={cert}>{cert}</option>)}
+                  </select>
+                </label>
+                <label>
+                  <span>Required delivery timeline</span>
+                  <select value={form.timeline} onChange={set('timeline')}>
+                    <option value="">Select timeline</option>
+                    {TIMELINES.map((timeline) => <option key={timeline} value={timeline}>{timeline}</option>)}
+                  </select>
+                </label>
+              </div>
               <label>
-                <span>Required delivery timeline</span>
-                <select value={form.timeline} onChange={set('timeline')}>
-                  <option value="">Select timeline</option>
-                  {TIMELINES.map((t) => <option key={t} value={t}>{t}</option>)}
-                </select>
+                <span>Destination country / port</span>
+                <input type="text" placeholder="Example: Jebel Ali, Dubai / Hamburg, Germany" value={form.destination} onChange={set('destination')} />
               </label>
               <label>
-                <span>Additional notes / technical requirements</span>
-                <textarea
-                  rows={5}
-                  placeholder="Include surface finish, heat treatment, inspection requirements, packing instructions, or any other project-specific details…"
-                  value={form.notes}
-                  onChange={set('notes')}
-                />
+                <span>Additional notes</span>
+                <textarea rows={5} placeholder="Include packing, tray, tender, sample, payment, or inspection requirements." value={form.notes} onChange={set('notes')} />
               </label>
 
               <button type="submit" className="b2b-btn b2b-btn-primary" style={{ width: '100%', marginTop: '0.5rem' }}>
-                Submit quote request
+                Submit export RFQ
               </button>
             </form>
           )}
         </div>
 
-        {/* Info sidebar */}
         <aside className="b2b-contact-info">
           <div className="b2b-contact-info-block">
             <h3>What happens next</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '0.75rem' }}>
               {[
-                ['01', 'We review your requirements', 'A sales engineer examines your part details and selects the optimal manufacturing process.'],
-                ['02', 'You receive a quotation', 'Within 48 business hours you get a detailed quote with pricing, lead time, and certification options.'],
-                ['03', 'Confirm and we manufacture', 'Approve the quote and we commence production. Every shipment includes dimensional inspection reports.'],
+                ['01', 'We review the set list', 'A product specialist checks item codes, steel grade, finish, packing, and documentation requirements.'],
+                ['02', 'You receive an export quote', 'Within 48 business hours you get pricing, MOQ, lead time, sample options, and available documents.'],
+                ['03', 'Approve and dispatch', 'Approve the quote and we prepare production, inspection, packing, and shipment under agreed trade terms.'],
               ].map(([n, title, body]) => (
                 <div key={n} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
                   <span style={{ background: 'rgba(45,212,191,0.1)', border: '1px solid rgba(45,212,191,0.25)', borderRadius: '8px', color: 'var(--b2b-accent)', fontSize: '0.72rem', fontWeight: 900, minWidth: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{n}</span>
@@ -175,24 +168,23 @@ export default function QuotePage() {
           </div>
 
           <div className="b2b-contact-info-block">
-            <h3>Certifications we hold</h3>
+            <h3>Common documents</h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.75rem' }}>
-              {['ISO 9001', 'IATF 16949', 'AS9100D', 'ISO 14001', 'ITAR Registered'].map((cert) => (
-                <span key={cert} className="b2b-trust-badge">✓ {cert}</span>
+              {['Material certificate', 'Packing list', 'Inspection report', 'Private label files', 'Certificate support'].map((cert) => (
+                <span key={cert} className="b2b-trust-badge">{cert}</span>
               ))}
             </div>
           </div>
 
           <div className="b2b-contact-info-block">
             <h3>Response guarantee</h3>
-            <p>All quotation requests receive a response within <strong style={{ color: 'var(--b2b-text)' }}>48 business hours</strong>. Urgent requirements? Call our sales team directly.</p>
-            <p style={{ marginTop: '0.5rem' }}>+1 (800) 555-0192</p>
+            <p>All qualified export quotation requests receive a response within <strong style={{ color: 'var(--b2b-text)' }}>48 business hours</strong>.</p>
+            <p style={{ marginTop: '0.5rem' }}>+92 52 355 0192</p>
             <a href={themeLink('/contact')} className="b2b-btn b2b-btn-secondary" style={{ marginTop: '1rem', display: 'inline-flex' }}>
-              Contact us →
+              Contact export desk
             </a>
           </div>
         </aside>
-
       </section>
     </main>
   );
