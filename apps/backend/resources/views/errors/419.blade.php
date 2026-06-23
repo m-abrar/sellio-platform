@@ -20,10 +20,10 @@
         </p>
 
         <div class="error-actions">
-            <a href="javascript:history.back()" class="btn btn-primary-theme btn-lg px-5 rounded-pill">
-                <i class="fas fa-redo me-2"></i>{{ __('Go Back & Retry') }}
+            <a href="javascript:history.back()" class="btn btn-primary btn-lg px-5 rounded-2">
+                <i class="bi bi-arrow-counterclockwise me-2"></i>{{ __('Go Back & Retry') }}
             </a>
-            <a href="{{ url('/') }}" class="btn btn-outline-secondary btn-lg px-4 rounded-pill">
+            <a href="{{ url('/') }}" class="btn btn-outline-secondary btn-lg px-4 rounded-2">
                 {{ __('Homepage') }}
             </a>
         </div>
