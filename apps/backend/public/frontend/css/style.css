@@ -631,12 +631,12 @@ body,html{
     max-width:100%
 }
 html{
-    overflow-x:hidden;
+    overflow-x:clip;
     overflow-y:auto;
     height:100%
 }
 body{
-    overflow-x:hidden;
+    overflow-x:clip;
     overflow-y:visible;
     background:var(--bg-body);
     color:var(--text-dark);

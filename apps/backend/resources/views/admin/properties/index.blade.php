@@ -132,6 +132,16 @@
                                             <i class="fas fa-{{ $status['icon'] }} mr-1"></i> {{ $status['label'] }}
                                         </span>
                                     </div>
+                                    <div class="mb-1">
+                                        <form action="{{ route('admin.properties.toggle-featured', $property->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link p-0 border-0 {{ $property->is_featured ? 'text-warning' : 'text-muted' }}"
+                                                    style="font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;"
+                                                    data-toggle="tooltip" title="{{ $property->is_featured ? __('Remove from Featured') : __('Mark as Featured') }}">
+                                                <i class="fas fa-star mr-1"></i>{{ $property->is_featured ? __('Featured') : __('Not Featured') }}
+                                            </button>
+                                        </form>
+                                    </div>
                                     <small class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
                                         <i class="fas fa-user-tie mr-1 opacity-50"></i> {{ $property->user->name ?? __('Admin') }}
                                     </small>

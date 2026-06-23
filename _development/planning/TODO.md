@@ -527,4 +527,5 @@ The laravel frontend hero section looks like very common design that Ai Tools ge
 Can you suggest something different? Unique UIUX? As well as changing the fonts, colors, spacing throughout all the layout and theme?
 
 
-
+Can we show 'featured' here?
+http://192.168.0.112:8000/admin/properties

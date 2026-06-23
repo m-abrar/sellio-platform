@@ -490,3 +490,20 @@ Browse by Location, etc, etc.
 
 http://192.168.0.112:8000/login
 the login screen is not following the css design tokens, please fix it.
+
+
+
+
+I think the classified sidebar widgets are still old design.
+
+
+
+Let's also work on the partner profile page, testimonial category, location, tags, etcetera.
+
+
+
+DONE
+<header>
+remove empty space here
+<nav></nav>
+</header>

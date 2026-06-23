@@ -1,4 +1,4 @@
-﻿{{--
+{{--
 HEADER NAVIGATION
 Description: Smart sticky navbar with transparency toggling and dynamic user controls.
 Features: Responsive menu, auth-aware actions, and cart integration.
@@ -6,7 +6,7 @@ Features: Responsive menu, auth-aware actions, and cart integration.
 <nav @class([
     'navbar navbar-expand-lg transition-all',
     'navbar-transparent navbar-light' => request()->routeIs('index', 'home'),
-    'navbar-light bg-white shadow-sm sticky-top' => ! request()->routeIs('index', 'home'),
+    'navbar-light bg-white shadow-sm' => ! request()->routeIs('index', 'home'),
 ]) id="mainNav" data-aos="fade-in" data-aos-duration="800" data-navbar-scroll>
 
     <div class="container-xl">

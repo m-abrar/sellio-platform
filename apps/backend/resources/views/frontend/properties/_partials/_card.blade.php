@@ -28,6 +28,13 @@
             {{ __($property->status_label) }}
         </span>
 
+        @if($property->is_featured)
+            <span class="badge position-absolute top-0 start-0 rounded-2 fw-semibold m-2"
+                  style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;">
+                <i class="bi bi-star-fill me-1"></i>{{ __('Featured') }}
+            </span>
+        @endif
+
         <div class="position-absolute bottom-0 start-0 m-3">
             <div class="price-overlay bg-dark bg-opacity-75 backdrop-blur text-white rounded-pill border border-white border-opacity-25 shadow-sm">
                 <span class="price-text-sm fw-800">

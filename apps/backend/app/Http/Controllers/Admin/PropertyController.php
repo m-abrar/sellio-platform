@@ -187,4 +187,10 @@ class PropertyController extends Controller
         return redirect()->route('admin.properties.index')->with('success', __('Property deleted successfully.'));
     }
 
+    public function toggleFeatured(Property $property): RedirectResponse
+    {
+        $property->update(['is_featured' => ! $property->is_featured]);
+        return back()->with('success', $property->is_featured ? __('Property marked as featured.') : __('Property removed from featured.'));
+    }
+
 }

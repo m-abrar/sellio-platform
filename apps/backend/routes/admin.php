@@ -163,6 +163,7 @@ Route::prefix('admin')
                 Route::post('/{property}/approve', 'approve')->name('approve');
                 Route::post('/{property}/disapprove', 'disapprove')->name('disapprove');
                 Route::get('/{property}/duplicate', 'duplicate')->name('duplicate');
+                Route::post('/{property}/toggle-featured', 'toggleFeatured')->name('toggle-featured');
             });
             Route::resource('properties', PropertyController::class)->middleware('module:properties');
         });

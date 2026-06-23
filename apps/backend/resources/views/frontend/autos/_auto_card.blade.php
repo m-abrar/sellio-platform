@@ -9,15 +9,21 @@
                      loading="lazy">
             </div>
             
-            {{-- Badges - Restored Desktop Sizes, Smaller on Mobile --}}
+            {{-- Left badges --}}
+            @if($auto->is_featured)
+                <div class="position-absolute top-0 start-0 m-2 m-md-3">
+                    <span class="badge rounded-2 px-2 px-md-3 py-1 py-md-2 fw-semibold auto-badge"
+                          style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;">
+                        <i class="bi bi-star-fill me-1"></i>{{ __('Featured') }}
+                    </span>
+                </div>
+            @endif
+
+            {{-- Right badges --}}
             <div class="position-absolute top-0 end-0 m-2 m-md-3 d-flex flex-column gap-1">
                 @if($auto->on_sale)
                     <span class="badge bg-danger text-white rounded-2 px-2 px-md-3 py-1 py-md-2 fw-semibold auto-badge">
                         {{ __('Sale') }}
-                    </span>
-                @elseif($auto->is_featured)
-                    <span class="badge bg-warning text-dark rounded-2 px-2 px-md-3 py-1 py-md-2 fw-semibold auto-badge">
-                        {{ __('Featured') }}
                     </span>
                 @endif
 
