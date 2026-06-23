@@ -20,12 +20,12 @@
 
             <div class="card bg-white border overflow-hidden">
                 {{-- Job Summary Strip --}}
-                <div class="p-4 border-bottom d-flex align-items-center justify-content-between" style="background:var(--primary-color)">
+                <div class="p-4 d-flex align-items-center justify-content-between" style="background:#F4F0EC;border-bottom:1.5px solid rgba(15,23,42,.07)">
                     <div>
-                        <span class="small fw-semibold d-block mb-1" style="color:rgba(255,255,255,.7)">{{ __('Position Applied') }}</span>
-                        <h4 class="fw-800 mb-0 text-white">{{ $job->title }}</h4>
+                        <p class="small fw-semibold text-uppercase mb-1" style="letter-spacing:.06em;color:var(--primary-color)">{{ __('Position Applied') }}</p>
+                        <h4 class="fw-800 text-dark mb-0" style="font-family:var(--font-heading)">{{ $job->title }}</h4>
                     </div>
-                    <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:rgba(255,255,255,.2);color:#fff">
+                    <span class="fw-semibold px-3 py-2 rounded-2 small flex-shrink-0 ms-3" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
                         #{{ $application->id }}
                     </span>
                 </div>
