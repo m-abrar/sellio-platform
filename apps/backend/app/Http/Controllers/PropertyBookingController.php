@@ -331,7 +331,7 @@ class PropertyBookingController extends Controller
             'statusIcon' => $isPaid ? 'bi-check-circle-fill' : 'bi-exclamation-circle-fill',
             'buyerBookingsUrl' => Route::has('dashboard.user.bookings.index')
                 ? route('dashboard.user.bookings.index')
-                : url('/buyer/bookings'),
+                : route('dashboard'),
         ]);
     }
 

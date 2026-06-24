@@ -69,6 +69,7 @@ class SettingSeeder extends Seeder
             ['group' => 'content', 'key' => 'site_search_results', 'value' => '1'],
             ['group' => 'content', 'key' => 'site_terms', 'value' => '1'],
             ['group' => 'content', 'key' => 'site_privacy', 'value' => '1'],
+            ['group' => 'content', 'key' => 'legal_last_updated', 'value' => 'January 1, 2025'],
             ['group' => 'content', 'key' => 'site_logo', 'value' => 'settings/logo.png'],
             ['group' => 'content', 'key' => 'site_favicon', 'value' => 'settings/favicon.ico'],
             ['group' => 'commerce', 'key' => 'currency_code', 'value' => 'USD'],

@@ -1,7 +1,7 @@
 # Sellio Public Frontend — Design & Polish Plan
 
 > Platform: Laravel 12 / Blade · Design tokens: `--primary-color: #E05F2C`, `--text-dark: #1C1917`, `--font-heading: DM Serif Display`, `--font-main: Plus Jakarta Sans`
-> Last updated: 2026-06-24 (session 3)
+> Last updated: 2026-06-24 (session 4)
 
 ---
 
@@ -490,10 +490,10 @@ Partner auth pages (`login-partner.blade.php`, `register-partner.blade.php`) —
 | ~~13~~ | ~~Job detail: header + application sidebar~~ | ~~`jobs/show/`~~ | ✅ Done — removed `_head_extra` brand-colour override (was forcing Bootstrap blue); h1 now DM Serif; fake hardcoded rating (4.6★ / 125 reviews) replaced with real employer data; dead "Save job" auth-gated with tooltip; dead "Apply with LinkedIn" removed; mobile sticky Apply Now wired to correct route |
 | ~~14~~ | ~~Product detail: gallery, specs table, seller sidebar~~ | ~~`products/show/`~~ | ✅ Done — removed harmful `.btn-primary !important` and `.btn-outline-secondary` overrides from `_styles_extra`; h1 DM Serif added; lightbox on main product image; `formatCurrency()` now uses `currency_symbol` setting instead of hardcoded `$` |
 | ~~15~~ | ~~Blog post detail: prose styles, sidebar naming issue (`_seller_contact_card`)~~ | ~~`blogs/show/`~~ | ✅ Done — deleted 3 orphan partials (copy-pasted from classifieds); added `#blog-body` prose CSS (h2/h3/blockquote/lists/code/img); wired share buttons to real social URLs + Web Share API copy-link fallback; h1 now DM Serif with `tracking-tight` |
-| ~~16~~ | ~~Booking flows: header treatment (plain white → dark strip)~~ | ~~`properties/booking/`, `events/booking/`~~ | ✅ Done — both `_booking-header.blade.php` partials restructured: title/eyebrow/step now in `.booking-hero` dark strip (Level 3, two faint glows, full bleed via negative margins); context card (thumbnail + back link) moved below on light background |
+| ~~16~~ | ~~Booking flows: header treatment + step 3 confirmation polish~~ | ~~`properties/booking/`, `events/booking/`~~ | ✅ Done — dark strip on all 3 steps; step 3 confirmation page rebuilt: dark hero with success icon + DM Serif h1 + booking ID pill, stepper shown at step 3, receipt card with thumbnail + stay summary rows + rebalanced actions column; events confirmation same treatment. **Known bugs logged in TODO.md:** step 3 "View My Itinerary" / "My Dashboard" links 404; "Contact Host" throws `username field required` validation error. |
 | 17 | Cart + Checkout: header treatment + Stripe Elements styling | `products/cart.blade.php`, checkout partials | M |
-| 18 | Legal page sidebar: add anchor-link table of contents | `pages/terms.blade.php`, `pages/privacy-policy.blade.php` | S |
-| 19 | Terms/Privacy: make "Last updated" date a config/DB setting | Both legal pages + config | XS |
+| ~~18~~ | ~~Legal page sidebar: anchor-link table of contents~~ | ~~`pages/terms.blade.php`, `pages/privacy-policy.blade.php`, `style.css`~~ | ✅ Done — TOC HTML was already present; added `IntersectionObserver` scrollspy JS (highlights active section as you scroll); added `.legal-toc-link.is-active` with primary-colour left-border indicator; `scroll-margin-top` on `.legal-section` accounts for sticky header; all duplicate inline `@push('styles')` CSS moved to `style.css` |
+| ~~19~~ | ~~Terms/Privacy: make "Last updated" date a config/DB setting~~ | ~~Both legal pages + `SettingSeeder`~~ | ✅ Done — `setting('legal_last_updated', 'January 1, 2025')` in both pages; seeder seeds `content` group key `legal_last_updated`; admin can update from DB or settings panel |
 
 ### 🟢 P3 — Nice to have (elevates the product)
 
@@ -544,6 +544,16 @@ Partner auth pages (`login-partner.blade.php`, `register-partner.blade.php`) —
 | All listing page banners | `_page-heading.blade.php`, `style.css` |
 | Jobs listing card redesign (horizontal layout) | `jobs/_partials/_job-card.blade.php`, `style.css` |
 | PageSeeder cleanup | `PageSeeder.php` |
+
+### Session 4
+| Completed | Files changed |
+|---|---|
+| Product detail: tabs (Description / Specs / Reviews / Shipping), star rating summary, write-a-review form, interactive star selector | `products/show/physical-product-detail.blade.php`, `_reviews_tab.blade.php`, `_product_header.blade.php`, `style.css` |
+| Blog post detail: prose CSS, deleted 3 orphan partials, share buttons with Web Share API, DM Serif h1 | `blogs/show/show.blade.php`, `style.css` |
+| Flash alerts → fixed-position toast stack; booking hero alert overlap fixed | `_alerts.blade.php`, `style.css` |
+| Booking flows: dark hero strip on steps 1 & 2 for properties + events | `properties/booking/_partials/_booking-header.blade.php`, `events/booking/_partials/_booking-header.blade.php`, `style.css` |
+| Booking step 3 (properties): full redesign — dark hero + success icon + booking ID pill + stepper at step 3 + receipt card with thumbnail | `properties/booking/confirmation.blade.php`, `style.css` |
+| Booking step 3 (events): same treatment — ticket icon + order ID pill + receipt card | `events/booking/confirmation.blade.php` |
 
 ### Session 3
 | Completed | Files changed |

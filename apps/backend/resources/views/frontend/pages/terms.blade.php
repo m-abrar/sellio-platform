@@ -12,7 +12,7 @@
             {{ __('Legal') }}
         </div>
         <h1 class="page-hero-title mb-2">{{ __('Terms of Service') }}</h1>
-        <p class="page-hero-date">{{ __('Last updated: :date', ['date' => 'January 1, 2025']) }}</p>
+        <p class="page-hero-date">{{ __('Last updated: :date', ['date' => setting('legal_last_updated', 'January 1, 2025')]) }}</p>
     </div>
 </section>
 @endsection
@@ -170,48 +170,24 @@
     </div>
 </x-frontend.page-shell>
 
-@push('styles')
-<style>
-.page-hero-strip { padding: 3.5rem 0 2.5rem; }
-.page-hero-strip--compact { padding: 2.5rem 0 2rem; }
-.page-hero-title { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
-.page-hero-date { font-size: .85rem; color: rgba(255,255,255,.45); margin: 0; }
-.legal-doc { line-height: 1.75; }
-.legal-section { margin-bottom: 2.5rem; }
-.legal-section:last-child { margin-bottom: 0; }
-.legal-h2 {
-    font-family: var(--font-heading);
-    font-size: 1.3rem;
-    color: var(--text-dark);
-    margin-bottom: .75rem;
-    padding-bottom: .5rem;
-    border-bottom: 2px solid var(--primary-light);
-}
-.legal-h3 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-top: 1.25rem;
-    margin-bottom: .5rem;
-}
-.legal-list {
-    padding-left: 1.25rem;
-    color: var(--text-muted);
-}
-.legal-list li { margin-bottom: .4rem; }
-.legal-toc-link {
-    display: block;
-    padding: .35rem .5rem;
-    font-size: .875rem;
-    color: var(--text-muted);
-    text-decoration: none;
-    border-radius: 6px;
-    transition: background .15s, color .15s;
-}
-.legal-toc-link:hover {
-    background: var(--primary-light);
-    color: var(--primary-color);
-}
-</style>
+@push('scripts')
+<script>
+(function () {
+    var sections = document.querySelectorAll('.legal-section[id]');
+    var links    = document.querySelectorAll('.legal-toc-link');
+    if (!sections.length || !links.length) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            links.forEach(function (l) { l.classList.remove('is-active'); });
+            var active = document.querySelector('.legal-toc-link[href="#' + entry.target.id + '"]');
+            if (active) active.classList.add('is-active');
+        });
+    }, { rootMargin: '-20% 0px -75% 0px' });
+
+    sections.forEach(function (s) { observer.observe(s); });
+})();
+</script>
 @endpush
 @endsection

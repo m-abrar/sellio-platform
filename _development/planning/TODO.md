@@ -548,3 +548,7 @@ You have hidden the favorites button conditioned with auth, should not we always
 
 
 In the blogs, Recommended Reading section shows nothing
+
+- [x] **Property booking step 3 — broken CTA links:** Fixed. Controller fallback changed from `url('/buyer/bookings')` (non-existent Laravel path) to `route('dashboard')` which correctly redirects buyers to the React portal via `url_user` setting. "My Dashboard" button in template also changed to always use `route('dashboard')` directly.
+
+- [x] **Property booking step 3 — "Contact Host" validation error:** Fixed. Route `conversation.start` uses `{user:username}` binding. Changed `['user' => $property->user]` (full model) to `['user' => $property->user->username]` in `confirmation.blade.php`.
