@@ -5651,3 +5651,57 @@ body.has-admin-bar .detail-page section{scroll-margin-top:calc(96px + var(--admi
     box-shadow:0 0 0 .25rem rgba(var(--primary-color-rgb),.18)!important;
     outline:none;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Skip link ─────────────────────────────────────────────────────────── */
+.skip-link{
+    position:fixed;
+    top:-100%;
+    left:1rem;
+    z-index:10000;
+    padding:.5rem 1.25rem;
+    background:var(--primary-color);
+    color:#fff;
+    font-weight:700;
+    font-size:.875rem;
+    border-radius:0 0 .5rem .5rem;
+    text-decoration:none;
+    transition:top .18s ease;
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+.skip-link:focus{
+    top:0;
+    outline:2px solid #fff;
+    outline-offset:3px;
+}
+
+/* ── Global keyboard focus ring ────────────────────────────────────────── */
+/* Only show for keyboard navigation (not mouse clicks) */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex="0"]:focus-visible{
+    outline:2.5px solid var(--primary-color)!important;
+    outline-offset:2px;
+}
+/* Buttons get a box-shadow ring — integrates better with pill/rounded shapes */
+.btn:focus-visible{
+    outline:none!important;
+    box-shadow:0 0 0 3px rgba(var(--primary-color-rgb),.35)!important;
+}
+/* Nav links: slightly more offset so ring clears the link text */
+.nav-link:focus-visible,
+.navbar-brand:focus-visible,
+.ft-link:focus-visible,
+.ft-social-icon:focus-visible,
+.dropdown-item:focus-visible{
+    outline:2px solid var(--primary-color)!important;
+    outline-offset:3px;
+    border-radius:4px;
+}

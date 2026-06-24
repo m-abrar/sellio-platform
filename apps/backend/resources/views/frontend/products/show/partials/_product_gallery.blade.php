@@ -22,11 +22,12 @@
             id="mainProductImage"
             src="{{ $initialMainImage }}"
             class="w-100 h-100 object-fit-contain product-gallery__main transition-all"
-            alt="{{ $product->title }}"
+            alt="{{ __('View enlarged photo — :title', ['title' => $product->title]) }}"
             data-is-placeholder="{{ $product->isFallbackUrl($initialMainImage) ? 'true' : 'false' }}"
             data-bs-toggle="modal"
             data-bs-target="#productLightboxModal"
             role="button"
+            tabindex="0"
         >
         <span class="position-absolute bottom-0 end-0 m-2 badge bg-dark bg-opacity-50 text-white" style="font-size:.65rem;pointer-events:none">
             <i class="bi bi-zoom-in me-1"></i>{{ __('Enlarge') }}
@@ -40,8 +41,9 @@
                     src="{{ $product->resolveMediaUrl($media, 'thumb') }}"
                     data-full-src="{{ $product->resolveMediaUrl($media, 'detail') }}"
                     class="product-gallery__thumb-img thumbnail-img w-100 h-100 object-fit-cover rounded-3 border pointer-cursor transition-all {{ $index === 0 ? 'active border-primary border-2' : 'opacity-75' }}"
-                    alt="{{ $product->title }} - {{ $index + 1 }}"
+                    alt="{{ __('Photo :n — :title', ['n' => $index + 1, 'title' => $product->title]) }}"
                     role="button"
+                    tabindex="0"
                 >
             </div>
         @empty

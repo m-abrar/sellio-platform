@@ -74,8 +74,9 @@
                                 <button type="button"
                                         class="btn btn-outline-secondary cart-qty-btn"
                                         :disabled="qty <= 1 || saving"
+                                        aria-label="{{ __('Decrease quantity') }}"
                                         @click="decrement">
-                                    <i class="bi bi-dash"></i>
+                                    <i class="bi bi-dash" aria-hidden="true"></i>
                                 </button>
 
                                 <input type="number"
@@ -89,8 +90,9 @@
                                 <button type="button"
                                         class="btn btn-outline-secondary cart-qty-btn"
                                         :disabled="qty >= 100 || saving"
+                                        aria-label="{{ __('Increase quantity') }}"
                                         @click="increment">
-                                    <i class="bi bi-plus"></i>
+                                    <i class="bi bi-plus" aria-hidden="true"></i>
                                 </button>
                             </div>
 

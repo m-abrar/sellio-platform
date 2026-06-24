@@ -32,12 +32,13 @@
                 <div class="ratio ratio-16x9">
                     <img src="{{ $imgSrc }}"
                          class="object-fit-cover gallery-lightbox-trigger"
-                         alt="{{ $service->title }}"
+                         alt="{{ __('View photo :n of :total — :title', ['n' => $index + 1, 'total' => $totalPhotos ?? '?', 'title' => $service->title]) }}"
                          loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
                          data-lightbox-src="{{ $imgSrc }}"
                          data-bs-toggle="modal"
                          data-bs-target="#serviceLightboxModal"
                          role="button"
+                         tabindex="0"
                          style="cursor:zoom-in">
                 </div>
             </div>

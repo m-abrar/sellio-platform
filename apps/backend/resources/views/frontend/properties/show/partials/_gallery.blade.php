@@ -27,12 +27,13 @@
                 <img
                     src="{{ $imgSrc }}"
                     class="d-block w-100 listing-header-img gallery-lightbox-trigger"
-                    alt="{{ $media->name ?: $property->title }}"
+                    alt="{{ __('View photo: :name', ['name' => $media->name ?: $property->title]) }}"
                     loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
                     data-lightbox-src="{{ $imgSrc }}"
                     data-bs-toggle="modal"
                     data-bs-target="#galleryLightboxModal"
                     role="button"
+                    tabindex="0"
                     style="cursor:zoom-in"
                 >
             </div>

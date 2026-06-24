@@ -70,9 +70,9 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                     {{-- Profile Menu --}}
                     <div class="dropdown">
                         <a href="#" class="dropdown-toggle d-block link-dark text-decoration-none" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                            aria-expanded="false" aria-label="{{ __('Account menu for :name', ['name' => Auth::user()->name]) }}">
                             <img src="{{ Auth::user()->avatar_url }}" width="35" height="35"
-                                class="rounded-circle border border-primary border-opacity-25" alt="Profile">
+                                class="rounded-circle border border-primary border-opacity-25" alt="" aria-hidden="true">
                         </a>
                         <ul class="dropdown-menu nav-dropdown dropdown-menu-end border-0 mt-2 p-2 rounded-3 scale-up-center">
                             @if(auth()->user()->hasRole(['admin', 'super-admin', 'moderator']))
@@ -121,9 +121,10 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                 {{-- Shopping Cart Badge --}}
                 @if(isset($cartCount) && $cartCount > 0)
                     <a href="{{ route('cart.index') }}"
-                        class="btn btn-outline-dark border-0 position-relative hvr-icon-pop">
-                        <i class="bi bi-cart3 fs-5 hvr-icon"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        class="btn btn-outline-dark border-0 position-relative hvr-icon-pop"
+                        aria-label="{{ trans_choice('Shopping cart — :count item|Shopping cart — :count items', $cartCount, ['count' => $cartCount]) }}">
+                        <i class="bi bi-cart3 fs-5 hvr-icon" aria-hidden="true"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" aria-hidden="true">
                             {{ $cartCount }}
                         </span>
                     </a>

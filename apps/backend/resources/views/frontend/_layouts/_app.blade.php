@@ -48,6 +48,8 @@
     auth()->check() && auth()->user()->can('manage-pages') ? ['has-admin-bar'] : []
 ))>
 
+    <a href="#main-content" class="skip-link">{{ __('Skip to content') }}</a>
+
     @auth
         @can('manage-pages')
             @include('admin._partials._adminbar')
