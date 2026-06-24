@@ -71,3 +71,12 @@ export interface ListingCategoryDefinition {
   icon: string;
   endpoint: string;
 }
+
+export type ListingModuleMap = Partial<Record<ListingVertical, boolean>>;
+
+export interface BrandSettingsResponse {
+  site_name?: string | null;
+  site_favicon?: string | null;
+  site_logo?: string | null;
+  modules?: ListingModuleMap | null;
+}

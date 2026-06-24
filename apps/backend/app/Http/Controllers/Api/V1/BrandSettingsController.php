@@ -29,6 +29,15 @@ class BrandSettingsController extends Controller
                 'site_name'    => $siteName,
                 'site_favicon' => $faviconUrl,
                 'site_logo'    => $logoUrl,
+                'modules'      => [
+                    'products'    => module_enabled('products'),
+                    'properties'  => module_enabled('properties'),
+                    'autos'       => module_enabled('autos'),
+                    'events'      => module_enabled('events'),
+                    'services'    => module_enabled('services'),
+                    'jobs'        => module_enabled('jobs'),
+                    'classifieds' => module_enabled('classifieds'),
+                ],
             ],
         ]);
     }

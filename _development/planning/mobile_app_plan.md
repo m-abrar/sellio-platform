@@ -99,8 +99,8 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
 - [x] Extract reusable listing-card components shared by home, favorites, and activity where practical.
 - [x] Add unified and vertical-specific browsing.
 - [x] Add pull-to-refresh on marketplace discovery.
-- [ ] Add search, sorting, filters, and pagination/load-more controls.
-- [ ] Respect enabled/disabled backend modules.
+- [x] Add search, sorting, filters, and pagination/load-more controls.
+- [x] Respect enabled/disabled backend modules.
 - [ ] Respect the buyer's selected location where supported.
 - [x] Add basic image rendering and fallback visuals.
 - [ ] Add image loading failure handling and retry behavior.

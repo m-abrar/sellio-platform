@@ -11,6 +11,11 @@ interface LaravelEnvelope<T> {
   meta?: unknown;
 }
 
+export interface ApiResourceResponse<T> {
+  data: T;
+  meta: unknown;
+}
+
 interface ApiRequestOptions extends RequestInit {
   authenticated?: boolean;
   timeoutMs?: number;
@@ -47,7 +52,11 @@ function validationMessage(errors?: ValidationErrors | null) {
   return Object.values(errors).flat().find(Boolean) || null;
 }
 
-export async function apiRequest<T>(path: string, options: ApiRequestOptions = {}): Promise<T> {
+async function performApiRequest<T>(
+  path: string,
+  options: ApiRequestOptions = {},
+  includeMeta = false,
+): Promise<T | ApiResourceResponse<T>> {
   const {
     authenticated = false,
     timeoutMs = 15_000,
@@ -113,7 +122,21 @@ export async function apiRequest<T>(path: string, options: ApiRequestOptions = {
     }
 
     if (envelope && Object.prototype.hasOwnProperty.call(envelope, 'data')) {
+      if (includeMeta) {
+        return {
+          data: envelope.data as T,
+          meta: envelope.meta ?? null,
+        };
+      }
+
       return envelope.data as T;
+    }
+
+    if (includeMeta) {
+      return {
+        data: payload as T,
+        meta: null,
+      };
     }
 
     return payload as T;
@@ -133,4 +156,15 @@ export async function apiRequest<T>(path: string, options: ApiRequestOptions = {
   } finally {
     clearTimeout(timeout);
   }
+}
+
+export async function apiRequest<T>(path: string, options: ApiRequestOptions = {}): Promise<T> {
+  return performApiRequest<T>(path, options, false) as Promise<T>;
+}
+
+export async function apiResourceRequest<T>(
+  path: string,
+  options: ApiRequestOptions = {},
+): Promise<ApiResourceResponse<T>> {
+  return performApiRequest<T>(path, options, true) as Promise<ApiResourceResponse<T>>;
 }

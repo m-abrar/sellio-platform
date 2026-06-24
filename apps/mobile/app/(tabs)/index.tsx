@@ -1,5 +1,5 @@
 import { useFocusEffect, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -8,19 +8,23 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { apiRequest } from '../../src/api/client';
+import { apiRequest, apiResourceRequest } from '../../src/api/client';
 import { ListingCard } from '../../src/components/listings/ListingCard';
 import { useAuth } from '../../src/context/AuthContext';
 import { FavoriteBatchStatusResponse, FavoriteRecord } from '../../src/features/buyer/types';
 import { toListingCard } from '../../src/features/listings/adapters';
 import { LISTING_CATEGORIES } from '../../src/features/listings/catalog';
 import {
+  BrandSettingsResponse,
   ListingApiRecord,
   ListingCardItem,
   ListingCategory,
+  ListingModuleMap,
+  PaginationMeta,
   ListingVertical,
 } from '../../src/features/listings/types';
 
@@ -28,52 +32,156 @@ function favoriteKey(vertical: ListingVertical, listingId: string) {
   return `${vertical}:${listingId}`;
 }
 
+type SortOption = 'latest' | 'price_low' | 'price_high';
+
+const SORT_OPTIONS: Array<{ label: string; value: SortOption }> = [
+  { label: 'Latest', value: 'latest' },
+  { label: 'Low Price', value: 'price_low' },
+  { label: 'High Price', value: 'price_high' },
+];
+
+function buildListingPath(
+  endpoint: string,
+  search: string,
+  sortBy: SortOption,
+  page: number,
+  perPage: number,
+) {
+  const params = new URLSearchParams({
+    page: String(page),
+    per_page: String(perPage),
+  });
+
+  if (search.trim()) {
+    params.set('search', search.trim());
+  }
+
+  if (sortBy !== 'latest') {
+    params.set('sort_by', sortBy);
+  }
+
+  return `${endpoint}?${params.toString()}`;
+}
+
+function normalizePaginationMeta(meta: unknown): PaginationMeta | null {
+  if (!meta || typeof meta !== 'object') return null;
+
+  const value = meta as Record<string, unknown>;
+  const currentPage = Number(value.current_page);
+  const lastPage = Number(value.last_page);
+  const perPage = Number(value.per_page);
+  const total = Number(value.total);
+
+  if (!Number.isFinite(currentPage) || !Number.isFinite(lastPage)) {
+    return null;
+  }
+
+  return {
+    current_page: currentPage,
+    last_page: lastPage,
+    per_page: Number.isFinite(perPage) ? perPage : 0,
+    total: Number.isFinite(total) ? total : 0,
+  };
+}
+
+function priceValue(item: ListingCardItem) {
+  const numeric = item.price.replace(/[^0-9.]/g, '');
+  const value = Number(numeric);
+
+  return Number.isFinite(value) ? value : null;
+}
+
+function sortListings(items: ListingCardItem[], sortBy: SortOption) {
+  if (sortBy === 'latest') return items;
+
+  return [...items].sort((left, right) => {
+    const leftPrice = priceValue(left);
+    const rightPrice = priceValue(right);
+
+    if (leftPrice == null && rightPrice == null) return 0;
+    if (leftPrice == null) return 1;
+    if (rightPrice == null) return -1;
+
+    return sortBy === 'price_low' ? leftPrice - rightPrice : rightPrice - leftPrice;
+  });
+}
+
+function enabledCategories(moduleMap: ListingModuleMap | null) {
+  if (!moduleMap) return LISTING_CATEGORIES;
+
+  return LISTING_CATEGORIES.filter((category) => moduleMap[category.id] !== false);
+}
+
 export default function HomeView() {
   const router = useRouter();
   const { isAuthenticated, user, signOut } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState<ListingCategory>('all');
+  const [searchInput, setSearchInput] = useState('');
+  const [appliedSearch, setAppliedSearch] = useState('');
+  const [sortBy, setSortBy] = useState<SortOption>('latest');
+  const [moduleMap, setModuleMap] = useState<ListingModuleMap | null>(null);
   const [listings, setListings] = useState<ListingCardItem[]>([]);
+  const [pagination, setPagination] = useState<PaginationMeta | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [favoriteIds, setFavoriteIds] = useState<Record<string, number | null>>({});
   const [pendingFavoriteKeys, setPendingFavoriteKeys] = useState<string[]>([]);
   const [favoriteError, setFavoriteError] = useState<string | null>(null);
+  const activeCategories = useMemo(() => enabledCategories(moduleMap), [moduleMap]);
 
-  const loadCategory = useCallback(async (vertical: ListingVertical) => {
-    const category = LISTING_CATEGORIES.find((item) => item.id === vertical);
+  const loadCategory = useCallback(async (
+    vertical: ListingVertical,
+    page = 1,
+    perPage = selectedCategory === 'all' ? 4 : 12,
+  ) => {
+    const category = activeCategories.find((item) => item.id === vertical);
 
-    if (!category) return [];
+    if (!category) {
+      return { items: [], meta: null };
+    }
 
-    const data = await apiRequest<ListingApiRecord[] | { data?: ListingApiRecord[] }>(
-      category.endpoint,
+    const response = await apiResourceRequest<ListingApiRecord[]>(
+      buildListingPath(category.endpoint, appliedSearch, sortBy, page, perPage),
     );
-    const records = Array.isArray(data) ? data : data?.data;
+    const records = Array.isArray(response.data) ? response.data : [];
 
-    return (records || []).map((record) => toListingCard(record, vertical));
-  }, []);
+    return {
+      items: sortListings(records.map((record) => toListingCard(record, vertical)), sortBy),
+      meta: normalizePaginationMeta(response.meta),
+    };
+  }, [activeCategories, appliedSearch, selectedCategory, sortBy]);
 
-  const fetchListings = useCallback(async () => {
-    setLoading(true);
+  const fetchListings = useCallback(async (nextPage = 1, append = false) => {
+    if (append) setLoadingMore(true);
+    else setLoading(true);
     setError(null);
 
     try {
       if (selectedCategory === 'all') {
         const results = await Promise.allSettled(
-          LISTING_CATEGORIES.map((category) => loadCategory(category.id)),
+          activeCategories.map((category) => loadCategory(category.id, 1, 4)),
         );
         const availableListings = results.flatMap((result) =>
-          result.status === 'fulfilled' ? result.value.slice(0, 4) : [],
+          result.status === 'fulfilled' ? result.value.items : [],
         );
         const failures = results.filter(
           (result): result is PromiseRejectedResult => result.status === 'rejected',
         );
 
-        if (failures.length === LISTING_CATEGORIES.length) {
+        if (activeCategories.length === 0) {
+          setListings([]);
+          setPagination(null);
+          return;
+        }
+
+        if (failures.length === activeCategories.length) {
           throw failures[0].reason;
         }
 
-        setListings(availableListings);
+        setPagination(null);
+        setListings(sortListings(availableListings, sortBy));
 
         if (failures.length > 0) {
           setError(
@@ -81,10 +189,16 @@ export default function HomeView() {
           );
         }
       } else {
-        setListings(await loadCategory(selectedCategory));
+        const result = await loadCategory(selectedCategory, nextPage, 12);
+
+        setPagination(result.meta);
+        setListings((current) => (append ? [...current, ...result.items] : result.items));
       }
     } catch (requestError) {
-      setListings([]);
+      if (!append) {
+        setListings([]);
+        setPagination(null);
+      }
       setError(
         requestError instanceof Error
           ? requestError.message
@@ -92,13 +206,46 @@ export default function HomeView() {
       );
     } finally {
       setLoading(false);
+      setLoadingMore(false);
       setRefreshing(false);
     }
-  }, [loadCategory, selectedCategory]);
+  }, [activeCategories, loadCategory, selectedCategory, sortBy]);
 
   useEffect(() => {
+    setPagination(null);
     fetchListings();
   }, [fetchListings]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadModuleSettings() {
+      try {
+        const settings = await apiRequest<BrandSettingsResponse>('/v1/brand-settings');
+
+        if (!active) return;
+        setModuleMap(settings.modules || null);
+      } catch {
+        if (!active) return;
+        setModuleMap(null);
+      }
+    }
+
+    loadModuleSettings();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (
+      selectedCategory !== 'all'
+      && !activeCategories.some((category) => category.id === selectedCategory)
+    ) {
+      setSelectedCategory('all');
+    }
+  }, [activeCategories, selectedCategory]);
 
   useFocusEffect(
     useCallback(() => {
@@ -202,7 +349,17 @@ export default function HomeView() {
 
   const selectedTitle = selectedCategory === 'all'
     ? 'Featured Marketplace'
-    : LISTING_CATEGORIES.find((category) => category.id === selectedCategory)?.title || 'Listings';
+    : activeCategories.find((category) => category.id === selectedCategory)?.title || 'Listings';
+  const hasMore = selectedCategory !== 'all'
+    && pagination != null
+    && pagination.current_page < pagination.last_page;
+  const applySearch = useCallback(() => {
+    setAppliedSearch(searchInput.trim());
+  }, [searchInput]);
+  const clearSearch = useCallback(() => {
+    setSearchInput('');
+    setAppliedSearch('');
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -214,7 +371,7 @@ export default function HomeView() {
             refreshing={refreshing}
             onRefresh={() => {
               setRefreshing(true);
-              fetchListings();
+              fetchListings(1);
             }}
             tintColor="#818cf8"
             colors={['#6366f1']}
@@ -247,6 +404,44 @@ export default function HomeView() {
           </Text>
         </View>
 
+        <View style={styles.searchPanel}>
+          <Text style={styles.searchLabel}>Search Marketplace</Text>
+          <View style={styles.searchRow}>
+            <TextInput
+              value={searchInput}
+              onChangeText={setSearchInput}
+              onSubmitEditing={applySearch}
+              returnKeyType="search"
+              placeholder="Search listings"
+              placeholderTextColor="#475569"
+              style={styles.searchInput}
+              autoCapitalize="none"
+            />
+            <TouchableOpacity style={styles.searchButton} onPress={applySearch}>
+              <Text style={styles.searchButtonText}>GO</Text>
+            </TouchableOpacity>
+            {appliedSearch ? (
+              <TouchableOpacity style={styles.clearButton} onPress={clearSearch}>
+                <Text style={styles.clearButtonText}>X</Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
+
+          <View style={styles.sortRow}>
+            {SORT_OPTIONS.map((option) => (
+              <TouchableOpacity
+                key={option.value}
+                style={[styles.sortButton, sortBy === option.value && styles.sortButtonActive]}
+                onPress={() => setSortBy(option.value)}
+              >
+                <Text style={[styles.sortButtonText, sortBy === option.value && styles.sortButtonTextActive]}>
+                  {option.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
         <Text style={styles.sectionTitle}>Explore Categories</Text>
         <ScrollView
           horizontal
@@ -262,7 +457,7 @@ export default function HomeView() {
               All
             </Text>
           </TouchableOpacity>
-          {LISTING_CATEGORIES.map((category) => (
+          {activeCategories.map((category) => (
             <TouchableOpacity
               key={category.id}
               style={[
@@ -287,7 +482,9 @@ export default function HomeView() {
         <View style={styles.sectionHeadingRow}>
           <Text style={[styles.sectionTitle, styles.sectionTitleFlush]}>{selectedTitle}</Text>
           {!loading && listings.length > 0 && (
-            <Text style={styles.resultCount}>{listings.length} RESULTS</Text>
+            <Text style={styles.resultCount}>
+              {pagination?.total ? `${pagination.total} RESULTS` : `${listings.length} RESULTS`}
+            </Text>
           )}
         </View>
 
@@ -301,7 +498,7 @@ export default function HomeView() {
               {listings.length > 0 ? 'PARTIAL RESULTS' : "WE COULDN'T LOAD THIS FEED"}
             </Text>
             <Text style={styles.feedbackText}>{error}</Text>
-            <TouchableOpacity style={styles.retryButton} onPress={fetchListings}>
+            <TouchableOpacity style={styles.retryButton} onPress={() => fetchListings(1)}>
               <Text style={styles.retryButtonText}>TRY AGAIN</Text>
             </TouchableOpacity>
           </View>
@@ -319,7 +516,7 @@ export default function HomeView() {
             <Text style={styles.emptyText}>
               This category is available, but it does not have any published listings right now.
             </Text>
-            <TouchableOpacity style={styles.retryButton} onPress={fetchListings}>
+            <TouchableOpacity style={styles.retryButton} onPress={() => fetchListings(1)}>
               <Text style={styles.retryButtonText}>REFRESH</Text>
             </TouchableOpacity>
           </View>
@@ -349,6 +546,19 @@ export default function HomeView() {
                 />
               );
             })}
+            {hasMore && (
+              <TouchableOpacity
+                style={styles.loadMoreButton}
+                onPress={() => fetchListings((pagination?.current_page || 1) + 1, true)}
+                disabled={loadingMore}
+              >
+                {loadingMore ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <Text style={styles.loadMoreButtonText}>LOAD MORE</Text>
+                )}
+              </TouchableOpacity>
+            )}
           </View>
         )}
       </ScrollView>
@@ -429,6 +639,91 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     lineHeight: 18,
+  },
+  searchPanel: {
+    marginBottom: 28,
+    gap: 12,
+  },
+  searchLabel: {
+    color: '#64748b',
+    fontSize: 9,
+    fontWeight: '900',
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+  },
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  searchInput: {
+    flex: 1,
+    minHeight: 46,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
+    backgroundColor: '#121214',
+    paddingHorizontal: 14,
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  searchButton: {
+    minHeight: 46,
+    minWidth: 52,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 16,
+    backgroundColor: '#6366f1',
+  },
+  searchButtonText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 1,
+  },
+  clearButton: {
+    minHeight: 46,
+    minWidth: 42,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: '#121214',
+  },
+  clearButtonText: {
+    color: '#94a3b8',
+    fontSize: 10,
+    fontWeight: '900',
+  },
+  sortRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  sortButton: {
+    flex: 1,
+    minHeight: 38,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
+    backgroundColor: '#121214',
+    paddingHorizontal: 8,
+  },
+  sortButtonActive: {
+    borderColor: 'rgba(129, 140, 248, 0.42)',
+    backgroundColor: 'rgba(99, 102, 241, 0.14)',
+  },
+  sortButtonText: {
+    color: '#94a3b8',
+    fontSize: 9,
+    fontWeight: '900',
+    textAlign: 'center',
+  },
+  sortButtonTextActive: {
+    color: '#a5b4fc',
   },
   sectionTitle: {
     color: '#fff',
@@ -563,6 +858,19 @@ const styles = StyleSheet.create({
   },
   productGrid: {
     gap: 16,
+  },
+  loadMoreButton: {
+    minHeight: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 18,
+    backgroundColor: '#6366f1',
+  },
+  loadMoreButtonText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 1.2,
   },
   favoriteWarning: {
     marginTop: -6,
