@@ -89,6 +89,8 @@ export default function ActivityDetailView() {
   const [classifiedInquiry, setClassifiedInquiry] = useState<BuyerClassifiedInquiryRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
+  const [imageFailed, setImageFailed] = useState(false);
+  const [imageRetryKey, setImageRetryKey] = useState(0);
 
   const loadRecord = useCallback(async () => {
     const id = Number(idParam);
@@ -204,6 +206,11 @@ export default function ActivityDetailView() {
     loadRecord();
   }, [loadRecord]);
 
+  useEffect(() => {
+    setImageFailed(false);
+    setImageRetryKey(0);
+  }, [item?.imageUrl]);
+
   if (loading) {
     return (
       <AuthenticatedScreen returnTo="/activity">
@@ -232,6 +239,7 @@ export default function ActivityDetailView() {
   }
 
   const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
+  const canShowImage = Boolean(item.imageUrl) && !imageFailed;
   const classified = classifiedInquiry?.classified
     || classifiedInquiry?.classifiedAd
     || classifiedInquiry?.classifiedad
@@ -251,13 +259,28 @@ export default function ActivityDetailView() {
 
           <View style={styles.imageFrame}>
             <Text style={styles.imageFallback}>{category?.icon || '*'}</Text>
-            {item.imageUrl && (
+            {canShowImage && item.imageUrl && (
               <Image
+                key={`${item.imageUrl}-${imageRetryKey}`}
                 source={{ uri: item.imageUrl }}
                 style={styles.image}
                 resizeMode="cover"
                 accessibilityLabel={`${item.title} image`}
+                onError={() => setImageFailed(true)}
               />
+            )}
+            {item.imageUrl && imageFailed && (
+              <TouchableOpacity
+                style={styles.imageRetryButton}
+                onPress={() => {
+                  setImageFailed(false);
+                  setImageRetryKey((current) => current + 1);
+                }}
+                accessibilityRole="button"
+                accessibilityLabel={`Retry loading ${item.title} image`}
+              >
+                <Text style={styles.imageRetryText}>RETRY IMAGE</Text>
+              </TouchableOpacity>
             )}
           </View>
 
@@ -468,6 +491,8 @@ const styles = StyleSheet.create({
   imageFrame: { height: 220, alignItems: 'center', justifyContent: 'center', overflow: 'hidden', borderRadius: 26, backgroundColor: '#0b0b0c' },
   imageFallback: { fontSize: 42, opacity: 0.45 },
   image: { ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' },
+  imageRetryButton: { position: 'absolute', bottom: 16, alignSelf: 'center', borderRadius: 999, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.16)', backgroundColor: 'rgba(7, 7, 8, 0.82)', paddingHorizontal: 14, paddingVertical: 8 },
+  imageRetryText: { color: '#c7d2fe', fontSize: 8, fontWeight: '900', letterSpacing: 0.8 },
   detailCard: { marginTop: 16, padding: 22, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.06)', borderRadius: 26, backgroundColor: '#121214' },
   headingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 12 },
   eyebrow: { flex: 1, color: '#818cf8', fontSize: 8, fontWeight: '900', letterSpacing: 1 },

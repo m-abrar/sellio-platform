@@ -1,6 +1,8 @@
 @extends('frontend._layouts._app')
 
 @section('title', $product->title . ' - ' . ($product->category->title ?? __('Product')))
+@section('og_image', $product->primary_image_url)
+@section('og_description', Str::limit(strip_tags($product->description), 160))
 @section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 @section('content')
@@ -27,8 +29,17 @@
                     <div class="position-relative">
                         <div class="position-absolute top-0 start-0 m-3 z-2 d-flex gap-2">
                             @if($product->on_sale)
+                                @php
+                                    $discountPct = ($product->sale_price > 0 && $product->base_price > $product->sale_price)
+                                        ? round((1 - $product->sale_price / $product->base_price) * 100)
+                                        : null;
+                                @endphp
                                 <span class="fw-semibold px-3 py-2 rounded-2 small" style="background:var(--primary-color);color:#fff">
-                                    <i class="bi bi-percent me-1"></i>{{ __('Sale') }}
+                                    @if($discountPct)
+                                        -{{ $discountPct }}%
+                                    @else
+                                        <i class="bi bi-tag me-1"></i>{{ __('Sale') }}
+                                    @endif
                                 </span>
                             @endif
                             @if($product->is_digital)

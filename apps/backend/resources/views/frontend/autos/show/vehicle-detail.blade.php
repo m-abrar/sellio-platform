@@ -1,6 +1,8 @@
 @extends('frontend._layouts._app')
 
 @section('title', $auto->meta_title ?: ($auto->year . ' ' . $auto->make . ' ' . $auto->model . ' ' . __('for Sale in') . ' ' . $auto->city))
+@section('og_image', $auto->primary_image_url)
+@section('og_description', Str::limit(strip_tags($auto->meta_description ?: $auto->description), 160))
 
 @section('body_class', 'has-body-glow bg-light frontend-page--detail')
 

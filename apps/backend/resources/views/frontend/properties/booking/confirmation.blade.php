@@ -4,10 +4,11 @@
 @section('body_class', 'has-body-glow')
 
 @php
-    $backUrl   = $isPaid
+    $backUrl      = $isPaid
         ? route('properties.show', $property->slug)
         : route('property.booking.payment', ['property' => $property->slug, 'booking' => $booking->id]);
-    $backLabel = $isPaid ? __('Back to property') : __('Back to payment');
+    $backLabel    = $isPaid ? __('Back to property') : __('Back to payment');
+    $dashboardUrl = setting('url_user') ?: url('/');
 @endphp
 
 @section('content')
@@ -131,7 +132,7 @@
                                     <i class="bi bi-credit-card me-2"></i>{{ __('Complete Payment') }} — {{ format_currency($booking->total_price) }}<i class="bi bi-arrow-right ms-2"></i>
                                 </a>
                             @endif
-                            <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary fw-semibold py-2">
+                            <a href="{{ $dashboardUrl }}" class="btn btn-outline-secondary fw-semibold py-2">
                                 <i class="bi bi-grid me-2"></i>{{ __('My Dashboard') }}
                             </a>
                         </div>

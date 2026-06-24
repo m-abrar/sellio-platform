@@ -49,6 +49,7 @@
                      alt="{{ e($event->organizer->name ?? '') }}"
                      class="rounded-circle border border-3 border-white shadow-sm object-fit-cover"
                      style="width: 42px; height: 42px;"
+                     loading="lazy"
                      data-bs-toggle="tooltip"
                      title="{{ e($event->organizer->name ?? __('Organizer')) }}">
             </div>

@@ -1,6 +1,8 @@
 @extends('frontend._layouts._app')
 
 @section('title', $service->title)
+@section('og_image', $service->primary_image_url)
+@section('og_description', Str::limit(strip_tags($service->description), 160))
 @section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 @section('content')

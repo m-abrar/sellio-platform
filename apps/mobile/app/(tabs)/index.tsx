@@ -24,6 +24,8 @@ import {
   ListingCardItem,
   ListingCategory,
   ListingModuleMap,
+  LocationApiRecord,
+  LocationFilterItem,
   PaginationMeta,
   ListingVertical,
 } from '../../src/features/listings/types';
@@ -40,10 +42,21 @@ const SORT_OPTIONS: Array<{ label: string; value: SortOption }> = [
   { label: 'High Price', value: 'price_high' },
 ];
 
+const LOCATION_FLAG_BY_VERTICAL: Record<ListingVertical, keyof NonNullable<LocationApiRecord['flags']>> = {
+  products: 'is_product',
+  properties: 'is_property',
+  autos: 'is_auto',
+  events: 'is_event',
+  services: 'is_service',
+  jobs: 'is_job',
+  classifieds: 'is_classified',
+};
+
 function buildListingPath(
   endpoint: string,
   search: string,
   sortBy: SortOption,
+  location: LocationFilterItem | null,
   page: number,
   perPage: number,
 ) {
@@ -58,6 +71,10 @@ function buildListingPath(
 
   if (sortBy !== 'latest') {
     params.set('sort_by', sortBy);
+  }
+
+  if (location) {
+    params.set('location', location.slug || location.id);
   }
 
   return `${endpoint}?${params.toString()}`;
@@ -112,6 +129,28 @@ function enabledCategories(moduleMap: ListingModuleMap | null) {
   return LISTING_CATEGORIES.filter((category) => moduleMap[category.id] !== false);
 }
 
+function toLocationFilterItem(record: LocationApiRecord): LocationFilterItem {
+  const title = record.title?.trim() || 'Unnamed location';
+  const region = [record.state, record.country]
+    .map((value) => value?.trim())
+    .filter((value): value is string => Boolean(value))
+    .join(', ');
+
+  return {
+    id: String(record.id),
+    title,
+    label: region ? `${title} - ${region}` : title,
+    slug: record.slug?.trim() || null,
+    flags: record.flags || {},
+  };
+}
+
+function locationSupportsVertical(location: LocationFilterItem | null, vertical: ListingVertical) {
+  if (!location) return true;
+
+  return location.flags[LOCATION_FLAG_BY_VERTICAL[vertical]] !== false;
+}
+
 export default function HomeView() {
   const router = useRouter();
   const { isAuthenticated, user, signOut } = useAuth();
@@ -120,6 +159,8 @@ export default function HomeView() {
   const [appliedSearch, setAppliedSearch] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('latest');
   const [moduleMap, setModuleMap] = useState<ListingModuleMap | null>(null);
+  const [locations, setLocations] = useState<LocationFilterItem[]>([]);
+  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
   const [listings, setListings] = useState<ListingCardItem[]>([]);
   const [pagination, setPagination] = useState<PaginationMeta | null>(null);
   const [loading, setLoading] = useState(true);
@@ -130,20 +171,28 @@ export default function HomeView() {
   const [pendingFavoriteKeys, setPendingFavoriteKeys] = useState<string[]>([]);
   const [favoriteError, setFavoriteError] = useState<string | null>(null);
   const activeCategories = useMemo(() => enabledCategories(moduleMap), [moduleMap]);
+  const selectedLocation = useMemo(
+    () => locations.find((location) => location.id === selectedLocationId) || null,
+    [locations, selectedLocationId],
+  );
+  const visibleCategories = useMemo(
+    () => activeCategories.filter((category) => locationSupportsVertical(selectedLocation, category.id)),
+    [activeCategories, selectedLocation],
+  );
 
   const loadCategory = useCallback(async (
     vertical: ListingVertical,
     page = 1,
     perPage = selectedCategory === 'all' ? 4 : 12,
   ) => {
-    const category = activeCategories.find((item) => item.id === vertical);
+    const category = visibleCategories.find((item) => item.id === vertical);
 
     if (!category) {
       return { items: [], meta: null };
     }
 
     const response = await apiResourceRequest<ListingApiRecord[]>(
-      buildListingPath(category.endpoint, appliedSearch, sortBy, page, perPage),
+      buildListingPath(category.endpoint, appliedSearch, sortBy, selectedLocation, page, perPage),
     );
     const records = Array.isArray(response.data) ? response.data : [];
 
@@ -151,7 +200,7 @@ export default function HomeView() {
       items: sortListings(records.map((record) => toListingCard(record, vertical)), sortBy),
       meta: normalizePaginationMeta(response.meta),
     };
-  }, [activeCategories, appliedSearch, selectedCategory, sortBy]);
+  }, [appliedSearch, selectedCategory, selectedLocation, sortBy, visibleCategories]);
 
   const fetchListings = useCallback(async (nextPage = 1, append = false) => {
     if (append) setLoadingMore(true);
@@ -161,7 +210,7 @@ export default function HomeView() {
     try {
       if (selectedCategory === 'all') {
         const results = await Promise.allSettled(
-          activeCategories.map((category) => loadCategory(category.id, 1, 4)),
+          visibleCategories.map((category) => loadCategory(category.id, 1, 4)),
         );
         const availableListings = results.flatMap((result) =>
           result.status === 'fulfilled' ? result.value.items : [],
@@ -170,13 +219,13 @@ export default function HomeView() {
           (result): result is PromiseRejectedResult => result.status === 'rejected',
         );
 
-        if (activeCategories.length === 0) {
+        if (visibleCategories.length === 0) {
           setListings([]);
           setPagination(null);
           return;
         }
 
-        if (failures.length === activeCategories.length) {
+        if (failures.length === visibleCategories.length) {
           throw failures[0].reason;
         }
 
@@ -209,7 +258,7 @@ export default function HomeView() {
       setLoadingMore(false);
       setRefreshing(false);
     }
-  }, [activeCategories, loadCategory, selectedCategory, sortBy]);
+  }, [loadCategory, selectedCategory, sortBy, visibleCategories]);
 
   useEffect(() => {
     setPagination(null);
@@ -219,19 +268,27 @@ export default function HomeView() {
   useEffect(() => {
     let active = true;
 
-    async function loadModuleSettings() {
+    async function loadMarketplaceSettings() {
       try {
-        const settings = await apiRequest<BrandSettingsResponse>('/v1/brand-settings');
+        const [settings, locationResponse] = await Promise.all([
+          apiRequest<BrandSettingsResponse>('/v1/brand-settings'),
+          apiResourceRequest<LocationApiRecord[]>('/v1/locations'),
+        ]);
 
         if (!active) return;
         setModuleMap(settings.modules || null);
+        setLocations(
+          (Array.isArray(locationResponse.data) ? locationResponse.data : [])
+            .map(toLocationFilterItem),
+        );
       } catch {
         if (!active) return;
         setModuleMap(null);
+        setLocations([]);
       }
     }
 
-    loadModuleSettings();
+    loadMarketplaceSettings();
 
     return () => {
       active = false;
@@ -241,11 +298,17 @@ export default function HomeView() {
   useEffect(() => {
     if (
       selectedCategory !== 'all'
-      && !activeCategories.some((category) => category.id === selectedCategory)
+      && !visibleCategories.some((category) => category.id === selectedCategory)
     ) {
       setSelectedCategory('all');
     }
-  }, [activeCategories, selectedCategory]);
+  }, [selectedCategory, visibleCategories]);
+
+  useEffect(() => {
+    if (selectedLocationId && !locations.some((location) => location.id === selectedLocationId)) {
+      setSelectedLocationId(null);
+    }
+  }, [locations, selectedLocationId]);
 
   useFocusEffect(
     useCallback(() => {
@@ -440,6 +503,60 @@ export default function HomeView() {
               </TouchableOpacity>
             ))}
           </View>
+
+          {locations.length > 0 && (
+            <View style={styles.locationBlock}>
+              <View style={styles.locationHeadingRow}>
+                <Text style={styles.locationLabel}>Buyer Location</Text>
+                {selectedLocation && (
+                  <TouchableOpacity onPress={() => setSelectedLocationId(null)}>
+                    <Text style={styles.locationClearText}>CLEAR</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.locationScroll}
+              >
+                <TouchableOpacity
+                  style={[
+                    styles.locationChip,
+                    selectedLocationId === null && styles.locationChipActive,
+                  ]}
+                  onPress={() => setSelectedLocationId(null)}
+                >
+                  <Text
+                    style={[
+                      styles.locationChipText,
+                      selectedLocationId === null && styles.locationChipTextActive,
+                    ]}
+                  >
+                    All Locations
+                  </Text>
+                </TouchableOpacity>
+                {locations.map((location) => (
+                  <TouchableOpacity
+                    key={location.id}
+                    style={[
+                      styles.locationChip,
+                      selectedLocationId === location.id && styles.locationChipActive,
+                    ]}
+                    onPress={() => setSelectedLocationId(location.id)}
+                  >
+                    <Text
+                      style={[
+                        styles.locationChipText,
+                        selectedLocationId === location.id && styles.locationChipTextActive,
+                      ]}
+                    >
+                      {location.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
         </View>
 
         <Text style={styles.sectionTitle}>Explore Categories</Text>
@@ -457,7 +574,7 @@ export default function HomeView() {
               All
             </Text>
           </TouchableOpacity>
-          {activeCategories.map((category) => (
+          {visibleCategories.map((category) => (
             <TouchableOpacity
               key={category.id}
               style={[
@@ -512,9 +629,13 @@ export default function HomeView() {
         ) : listings.length === 0 && !error ? (
           <View style={styles.emptyCard}>
             <Text style={styles.emptyIcon}>*</Text>
-            <Text style={styles.emptyTitle}>Nothing listed here yet</Text>
+            <Text style={styles.emptyTitle}>
+              {visibleCategories.length === 0 ? 'No modules for this location' : 'Nothing listed here yet'}
+            </Text>
             <Text style={styles.emptyText}>
-              This category is available, but it does not have any published listings right now.
+              {visibleCategories.length === 0
+                ? 'Choose another location or clear the location filter to browse all enabled marketplaces.'
+                : 'This category is available, but it does not have any published listings right now.'}
             </Text>
             <TouchableOpacity style={styles.retryButton} onPress={() => fetchListings(1)}>
               <Text style={styles.retryButtonText}>REFRESH</Text>
@@ -723,6 +844,53 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   sortButtonTextActive: {
+    color: '#a5b4fc',
+  },
+  locationBlock: {
+    gap: 8,
+  },
+  locationHeadingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  locationLabel: {
+    color: '#64748b',
+    fontSize: 9,
+    fontWeight: '900',
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+  },
+  locationClearText: {
+    color: '#818cf8',
+    fontSize: 9,
+    fontWeight: '900',
+    letterSpacing: 1,
+  },
+  locationScroll: {
+    gap: 8,
+    paddingRight: 24,
+  },
+  locationChip: {
+    maxWidth: 210,
+    minHeight: 38,
+    justifyContent: 'center',
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
+    backgroundColor: '#121214',
+    paddingHorizontal: 13,
+  },
+  locationChipActive: {
+    borderColor: 'rgba(129, 140, 248, 0.42)',
+    backgroundColor: 'rgba(99, 102, 241, 0.14)',
+  },
+  locationChipText: {
+    color: '#94a3b8',
+    fontSize: 10,
+    fontWeight: '800',
+  },
+  locationChipTextActive: {
     color: '#a5b4fc',
   },
   sectionTitle: {

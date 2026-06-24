@@ -5,9 +5,10 @@
             
             <div class="img-container position-relative overflow-hidden rounded-top-4">
                 <div class="listing-card-img aspect-ratio-1-1"> {{-- Products often look better in 1:1 square ratio --}}
-                    <img src="{{ $product->primary_image_url }}" 
-                         alt="{{ $product->title }}" 
-                         class="transition-img w-100 h-100 object-fit-cover">
+                    <img src="{{ $product->primary_image_url }}"
+                         alt="{{ $product->title }}"
+                         class="transition-img w-100 h-100 object-fit-cover"
+                         loading="lazy">
                 </div>
                 
                 {{-- Status Badges: Featured or Digital logic --}}

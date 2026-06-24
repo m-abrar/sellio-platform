@@ -36,18 +36,22 @@
                     const elements = stripe.elements();
                     cardElement = elements.create('card', {
                         hidePostalCode: true,
+                        iconStyle: 'solid',
                         style: {
                             base: {
-                                color: '#111827',
+                                color: '#1C1917',
                                 fontFamily: 'Plus Jakarta Sans, system-ui, sans-serif',
                                 fontSize: '16px',
-                                '::placeholder': { color: '#9ca3af' },
+                                fontWeight: '600',
+                                '::placeholder': { color: '#9ca3af', fontWeight: '400' },
                             },
                             invalid: { color: '#dc3545' },
                         },
                     });
 
                     cardElement.mount(cardElementContainer);
+                    cardElement.on('focus', () => cardElementContainer.classList.add('stripe-focused'));
+                    cardElement.on('blur',  () => cardElementContainer.classList.remove('stripe-focused'));
                     cardElement.on('change', (event) => {
                         if (!cardErrors) return;
                         cardErrors.textContent = event.error ? event.error.message : '';

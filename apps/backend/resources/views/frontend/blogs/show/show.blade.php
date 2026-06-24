@@ -1,7 +1,10 @@
 @extends('frontend._layouts._app')
 
 {{-- Use blog data for title and category name --}}
-@section('title', $blog->title . ' - ' . ($blog->category->title ?? __('Blog'))) 
+@section('title', $blog->title . ' - ' . ($blog->category->title ?? __('Blog')))
+@section('og_type', 'article')
+@section('og_image', $blog->getFirstMediaUrl('featured_image') ?: asset('images/placeholder.jpg'))
+@section('og_description', Str::limit(strip_tags($blog->meta_description ?: $blog->content), 160))
 @section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 @section('content')

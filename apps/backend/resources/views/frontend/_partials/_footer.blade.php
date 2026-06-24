@@ -29,33 +29,49 @@
 @if(filter_var(setting('newsletter_enabled', '1'), FILTER_VALIDATE_BOOLEAN))
 <div class="ft-nl-band">
     <div class="container-xl">
-        <div class="ft-nl-inner">
-            <div class="ft-nl-copy">
-                <p class="ft-nl-eyebrow">{{ __('Stay updated') }}</p>
-                <h2 class="ft-nl-headline">
-                    {{ page_content_string('global.footer.newsletter_title', __('Stay in the loop')) }}
-                </h2>
-                <p class="ft-nl-sub">
-                    {{ page_content_string('global.footer.newsletter_description', __('New listings, market updates, and seller tips — once a week.')) }}
-                </p>
-            </div>
-            <form action="{{ route('newsletter.subscribe') }}" method="POST" class="ft-nl-form">
-                @csrf
-                <input type="hidden" name="source" value="site_footer">
-                <label for="ft-nl-email" class="visually-hidden">{{ __('Email address') }}</label>
-                <div class="ft-nl-field">
-                    <i class="bi bi-envelope ft-nl-field-icon" aria-hidden="true"></i>
-                    <input id="ft-nl-email" type="email" name="email" class="ft-nl-input"
-                           placeholder="{{ page_content_string('global.footer.newsletter_placeholder', __('Your email address')) }}"
-                           required>
-                    <button type="submit" class="ft-nl-btn">
-                        {{ page_content_string('global.footer.newsletter_button', __('Subscribe')) }}
-                        <i class="bi bi-arrow-right ms-1"></i>
-                    </button>
+        @if(session('newsletter_message'))
+            {{-- Success / info state --}}
+            @php $nlIsSuccess = session('newsletter_status') === 'success'; @endphp
+            <div class="ft-nl-feedback" role="status" aria-live="polite">
+                <div class="ft-nl-feedback-icon {{ $nlIsSuccess ? 'ft-nl-feedback-icon--success' : 'ft-nl-feedback-icon--info' }}">
+                    <i class="bi {{ $nlIsSuccess ? 'bi-envelope-check-fill' : 'bi-check-circle-fill' }}"></i>
                 </div>
-                <p class="ft-nl-privacy">{{ __('No spam. Unsubscribe anytime.') }}</p>
-            </form>
-        </div>
+                <div class="ft-nl-feedback-body">
+                    <p class="ft-nl-feedback-title">
+                        {{ $nlIsSuccess ? __('Check your inbox') : __('Already subscribed') }}
+                    </p>
+                    <p class="ft-nl-feedback-sub">{{ session('newsletter_message') }}</p>
+                </div>
+            </div>
+        @else
+            <div class="ft-nl-inner">
+                <div class="ft-nl-copy">
+                    <p class="ft-nl-eyebrow">{{ __('Stay updated') }}</p>
+                    <h2 class="ft-nl-headline">
+                        {{ page_content_string('global.footer.newsletter_title', __('Stay in the loop')) }}
+                    </h2>
+                    <p class="ft-nl-sub">
+                        {{ page_content_string('global.footer.newsletter_description', __('New listings, market updates, and seller tips — once a week.')) }}
+                    </p>
+                </div>
+                <form action="{{ route('newsletter.subscribe') }}" method="POST" class="ft-nl-form">
+                    @csrf
+                    <input type="hidden" name="source" value="site_footer">
+                    <label for="ft-nl-email" class="visually-hidden">{{ __('Email address') }}</label>
+                    <div class="ft-nl-field">
+                        <i class="bi bi-envelope ft-nl-field-icon" aria-hidden="true"></i>
+                        <input id="ft-nl-email" type="email" name="email" class="ft-nl-input"
+                               placeholder="{{ page_content_string('global.footer.newsletter_placeholder', __('Your email address')) }}"
+                               required>
+                        <button type="submit" class="ft-nl-btn">
+                            {{ page_content_string('global.footer.newsletter_button', __('Subscribe')) }}
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    </div>
+                    <p class="ft-nl-privacy">{{ __('No spam. Unsubscribe anytime.') }}</p>
+                </form>
+            </div>
+        @endif
     </div>
 </div>
 @endif

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -51,6 +51,14 @@ export function ListingCard({
 }: ListingCardProps) {
   const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
   const isRow = variant === 'row';
+  const [imageFailed, setImageFailed] = useState(false);
+  const [imageRetryKey, setImageRetryKey] = useState(0);
+  const canShowImage = Boolean(item.imageUrl) && !imageFailed;
+
+  useEffect(() => {
+    setImageFailed(false);
+    setImageRetryKey(0);
+  }, [item.imageUrl]);
 
   return (
     <TouchableOpacity
@@ -64,13 +72,28 @@ export function ListingCard({
         <Text style={[styles.imageFallback, isRow && styles.rowImageFallback]}>
           {category?.icon || '*'}
         </Text>
-        {item.imageUrl && (
+        {canShowImage && item.imageUrl && (
           <Image
+            key={`${item.imageUrl}-${imageRetryKey}`}
             source={{ uri: item.imageUrl }}
             style={styles.image}
             resizeMode="cover"
             accessibilityLabel={`${item.title} image`}
+            onError={() => setImageFailed(true)}
           />
+        )}
+        {item.imageUrl && imageFailed && (
+          <TouchableOpacity
+            style={styles.imageRetryButton}
+            onPress={() => {
+              setImageFailed(false);
+              setImageRetryKey((current) => current + 1);
+            }}
+            accessibilityRole="button"
+            accessibilityLabel={`Retry loading ${item.title} image`}
+          >
+            <Text style={styles.imageRetryText}>RETRY</Text>
+          </TouchableOpacity>
         )}
         {!isRow && (
           <View style={styles.verticalPill}>
@@ -178,6 +201,23 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     width: '100%',
     height: '100%',
+  },
+  imageRetryButton: {
+    position: 'absolute',
+    bottom: 12,
+    alignSelf: 'center',
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.16)',
+    backgroundColor: 'rgba(7, 7, 8, 0.82)',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+  },
+  imageRetryText: {
+    color: '#c7d2fe',
+    fontSize: 8,
+    fontWeight: '900',
+    letterSpacing: 0.8,
   },
   verticalPill: {
     position: 'absolute',

@@ -80,3 +80,29 @@ export interface BrandSettingsResponse {
   site_logo?: string | null;
   modules?: ListingModuleMap | null;
 }
+
+export interface LocationApiRecord {
+  id: number;
+  title?: string | null;
+  slug?: string | null;
+  state?: string | null;
+  country?: string | null;
+  flags?: Partial<Record<
+    | 'is_property'
+    | 'is_event'
+    | 'is_job'
+    | 'is_auto'
+    | 'is_service'
+    | 'is_classified'
+    | 'is_product',
+    boolean
+  >> | null;
+}
+
+export interface LocationFilterItem {
+  id: string;
+  title: string;
+  label: string;
+  slug: string | null;
+  flags: NonNullable<LocationApiRecord['flags']>;
+}

@@ -3,6 +3,8 @@
 @section('title', __('Booking Confirmed'))
 @section('body_class', 'has-body-glow')
 
+@php $dashboardUrl = setting('url_user') ?: url('/'); @endphp
+
 @section('content')
 <x-frontend.page-shell variant="event-booking">
 
@@ -126,8 +128,8 @@
                         <span class="metric-label d-block mb-4">{{ __('Next Steps') }}</span>
 
                         <div class="d-grid gap-3 mb-auto">
-                            <a href="{{ route('dashboard') }}" class="btn btn-primary btn-header-cta py-3">
-                                <i class="bi bi-grid me-2"></i>{{ __('Go to Dashboard') }}<i class="bi bi-arrow-right ms-2"></i>
+                            <a href="{{ $dashboardUrl }}" class="btn btn-primary btn-header-cta py-3">
+                                <i class="bi bi-grid me-2"></i>{{ __('My Dashboard') }}<i class="bi bi-arrow-right ms-2"></i>
                             </a>
                             <button type="button" onclick="window.print()" class="btn btn-outline-secondary fw-semibold py-2">
                                 <i class="bi bi-printer me-2"></i>{{ __('Print Receipt') }}

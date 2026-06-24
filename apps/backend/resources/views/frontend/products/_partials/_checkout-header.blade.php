@@ -1,49 +1,43 @@
 @php
-    $firstItem = $cart->items->first();
-    $product = $firstItem?->product;
+    $firstItem  = $cart->items->first();
+    $product    = $firstItem?->product;
     $showContext = $showContext ?? true;
-    $backUrl = $backUrl ?? route('cart.index');
-    $backLabel = $backLabel ?? __('Back to cart');
+    $backUrl    = $backUrl ?? route('cart.index');
+    $backLabel  = $backLabel ?? __('Back to cart');
 @endphp
 
-<div class="booking-header page-title-section mb-4 mb-lg-5">
-    @if($product && $showContext)
-        <div class="booking-header__context bg-white border mb-4">
-            <div class="booking-header__property">
-                <img src="{{ $product->primary_image_url }}"
-                     class="booking-header__thumb"
-                     alt="{{ $product->title }}">
+{{-- ── Step 2 dark hero strip ──────────────────────────────────────── --}}
+<div class="booking-header mb-4 mb-lg-5">
+    <div class="booking-hero">
+        <div class="booking-hero__inner">
 
-                <div class="booking-header__property-copy">
-                    <span class="metric-label">{{ __('Your Order') }}</span>
-                    <h2 class="booking-header__property-title">{{ $product->title }}</h2>
-                    <p class="booking-header__property-meta mb-0">
-                        {{ trans_choice(':count item in cart|:count items in cart', $cart->items->count(), ['count' => $cart->items->count()]) }}
+            <a href="{{ $backUrl }}" class="booking-hero__nav-link mb-3">
+                <i class="bi bi-arrow-left-short fs-5"></i>{{ $backLabel }}
+            </a>
+
+            <div class="{{ ($product && $showContext) ? 'd-flex align-items-center gap-4 flex-wrap' : 'text-center' }}">
+
+                @if($product && $showContext)
+                    <img src="{{ $product->primary_image_url }}"
+                         class="booking-hero__preview-img"
+                         alt="{{ $product->title }}">
+                @endif
+
+                <div>
+                    <p class="small fw-semibold text-uppercase mb-2"
+                       style="letter-spacing:.08em;color:var(--primary-color)">
+                        <i class="bi bi-bag-check me-1"></i>{{ __('Secure Checkout') }}
+                    </p>
+                    <h1 class="fw-800 tracking-tight mb-1"
+                        style="font-family:var(--font-heading);font-size:clamp(1.75rem,3.5vw,2.5rem);color:#fff;letter-spacing:-0.03em">
+                        {{ __('Checkout') }}<span style="color:rgba(224,95,44,.8)"> &middot; {{ __('Step 2 of 3') }}</span>
+                    </h1>
+                    <p class="booking-hero__subtitle {{ (!$product || !$showContext) ? 'mx-auto' : '' }} mb-0">
+                        {{ __('Review shipping details and complete payment to place your order.') }}
                     </p>
                 </div>
             </div>
 
-            <a href="{{ $backUrl }}" class="booking-header__back">
-                <i class="bi bi-arrow-left"></i>
-                <span>{{ $backLabel }}</span>
-            </a>
         </div>
-    @elseif($backUrl)
-        <div class="mb-4">
-            <a href="{{ $backUrl }}" class="booking-header__back booking-header__back--inline">
-                <i class="bi bi-arrow-left"></i>
-                <span>{{ $backLabel }}</span>
-            </a>
-        </div>
-    @endif
-
-    <div class="text-center">
-        <span class="metric-label mx-auto">{{ __('Commerce') }}</span>
-        <h1 class="fw-800 mb-2 tracking-tight text-dark display-6">
-            {{ __('Secure Checkout') }}<span style="color:var(--primary-color)">: {{ __('Step 2 of 3') }}</span>
-        </h1>
-        <p class="booking-header__subtitle text-muted mb-0 fs-6 mx-auto">
-            {{ __('Review shipping details and complete payment to place your order.') }}
-        </p>
     </div>
 </div>

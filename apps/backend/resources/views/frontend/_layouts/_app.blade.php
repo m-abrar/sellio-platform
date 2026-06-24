@@ -10,6 +10,24 @@
     <title>@yield('title', __('Welcome')) | {{ $siteName ?? config('app.name') }}</title>
 
     <link rel="canonical" href="{{ url()->current() }}">
+
+    {{-- Open Graph --}}
+    @php
+        $_ogTitle = $__env->yieldContent('og_title') ?: strip_tags($__env->yieldContent('title', $siteName ?? config('app.name')));
+        $_ogDesc  = $__env->yieldContent('og_description') ?: strip_tags($__env->yieldContent('meta_description', ''));
+        $_ogImage = $__env->yieldContent('og_image') ?: asset('images/app-logo.webp');
+        $_ogType  = $__env->yieldContent('og_type') ?: 'website';
+    @endphp
+    <meta property="og:type"        content="{{ $_ogType }}">
+    <meta property="og:url"         content="{{ url()->current() }}">
+    <meta property="og:title"       content="{{ $_ogTitle }}">
+    <meta property="og:description" content="{{ $_ogDesc }}">
+    <meta property="og:image"       content="{{ $_ogImage }}">
+    <meta property="og:site_name"   content="{{ $siteName ?? config('app.name') }}">
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:title"       content="{{ $_ogTitle }}">
+    <meta name="twitter:description" content="{{ $_ogDesc }}">
+    <meta name="twitter:image"       content="{{ $_ogImage }}">
     
     <link rel="icon" type="image/x-icon" href="{{ $siteFavicon }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -55,5 +73,14 @@
 
     @stack('modals')
     @stack('scripts')
+    <script>
+    (function(){
+        var nav = document.querySelector('[data-navbar-scroll]');
+        if (!nav) return;
+        function tick(){ nav.classList.toggle('scrolled', window.scrollY > 60); }
+        window.addEventListener('scroll', tick, { passive: true });
+        tick();
+    })();
+    </script>
 </body>
 </html>

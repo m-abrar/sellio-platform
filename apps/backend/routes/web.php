@@ -37,6 +37,7 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyVisitController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\WebhookController;
@@ -50,6 +51,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/admin-bar/status', AdminBarStatusController::class)->name('admin-bar.status');
 Route::get('/admin-bar/context', AdminBarContextController::class)->name('admin-bar.context');
+
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::middleware(['built_in_website'])->group(function () {
     Route::get('/', HomeController::class)->name('index');

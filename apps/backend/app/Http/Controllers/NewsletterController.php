@@ -24,7 +24,8 @@ class NewsletterController extends Controller
         $subscriber = NewsletterSubscriber::where('email', $request->email)->first();
 
         if ($subscriber && $subscriber->is_confirmed) {
-            return back()->with('info', __('You are already subscribed to our newsletter!'));
+            return back()->with('newsletter_status', 'info')
+                         ->with('newsletter_message', __('You are already subscribed to our newsletter!'));
         }
 
         DB::transaction(function () use ($request, &$subscriber) {
@@ -40,7 +41,8 @@ class NewsletterController extends Controller
 
         event(new NewsletterOptinAttempted($subscriber));
 
-        return back()->with('success', __('Please check your email to confirm your subscription.'));
+        return back()->with('newsletter_status', 'success')
+                     ->with('newsletter_message', __('Please check your email to confirm your subscription.'));
     }
 
     /**

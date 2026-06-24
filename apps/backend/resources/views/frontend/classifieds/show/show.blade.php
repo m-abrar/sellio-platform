@@ -1,7 +1,9 @@
 @extends('frontend._layouts._app')
 
 {{-- Use classified data for title and category name --}}
-@section('title', $classified->title . ' - ' . ($classified->category->title ?? __('Classified Ad'))) 
+@section('title', $classified->title . ' - ' . ($classified->category->title ?? __('Classified Ad')))
+@section('og_image', $classified->primary_image_url)
+@section('og_description', Str::limit(strip_tags($classified->description), 160))
 @section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 @section('content')

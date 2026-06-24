@@ -1,45 +1,38 @@
 @extends('frontend._layouts._app')
 
 @section('hero')
-<section class="py-5 border-bottom" style="background:#F4F0EC;border-color:rgba(15,23,42,.07)!important;">
-    <div class="container">
-        <div class="d-flex flex-column flex-sm-row align-items-start gap-4">
+<section class="page-hero-strip hero-section--dark">
+    <div class="container text-center">
 
-            {{-- Avatar --}}
-            <div class="flex-shrink-0 position-relative">
-                <img src="{{ $user->avatar_url }}"
-                     class="rounded-circle object-fit-cover"
-                     style="width:96px;height:96px;border:2px solid rgba(15,23,42,.1)"
-                     alt="{{ $user->name }}">
-            </div>
-
-            {{-- Identity --}}
-            <div class="pt-sm-1 flex-grow-1">
-                <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
-                    <h1 class="mb-0 lh-1" style="font-family:var(--font-heading);font-size:clamp(1.75rem,3vw,2.25rem);color:var(--text-dark)">{{ $user->name }}</h1>
-                    @if($user->is_verified)
-                        <span class="badge rounded-2 fw-semibold" style="background:var(--primary-color);color:#fff;font-size:.7rem">
-                            <i class="bi bi-patch-check-fill me-1"></i>{{ __('Verified') }}
-                        </span>
-                    @endif
-                </div>
-
-                <div class="partner-meta-row d-flex flex-wrap align-items-center small text-muted mb-3">
-                    @if($user->location)
-                        <span><i class="bi bi-geo-alt-fill me-1" style="color:var(--primary-color)"></i>{{ $user->location }}</span>
-                    @endif
-                    <span>{{ $user->roles->pluck('name')->join(', ') ?: __('Member') }}</span>
-                    @if($user->created_at)
-                        <span>{{ __('Member since :year', ['year' => $user->created_at->format('Y')]) }}</span>
-                    @endif
-                </div>
-
-                @if($user->bio)
-                    <p class="text-muted mb-0 lh-base" style="max-width:46rem">{{ $user->bio }}</p>
-                @endif
-            </div>
-
+        <div class="mb-4 mx-auto position-relative d-inline-block">
+            <img src="{{ $user->avatar_url }}"
+                 class="rounded-circle object-fit-cover"
+                 style="width:88px;height:88px;border:3px solid rgba(255,255,255,.2)"
+                 alt="{{ $user->name }}">
+            @if($user->is_verified)
+                <span class="position-absolute bottom-0 end-0 d-flex align-items-center justify-content-center rounded-circle"
+                      style="width:26px;height:26px;background:var(--primary-color);border:2px solid #1C1917">
+                    <i class="bi bi-patch-check-fill" style="font-size:.7rem;color:#fff"></i>
+                </span>
+            @endif
         </div>
+
+        <p class="small fw-semibold text-uppercase mb-2" style="letter-spacing:.08em;color:var(--primary-color)">
+            {{ $user->roles->pluck('name')->first() ? ucfirst($user->roles->pluck('name')->first()) : __('Member') }}
+        </p>
+
+        <h1 class="page-hero-title">{{ $user->name }}</h1>
+
+        <p class="page-hero-subtitle mx-auto">
+            @if($user->location)
+                <i class="bi bi-geo-alt-fill me-1"></i>{{ $user->location }} &middot;
+            @endif
+            {{ __('Member since :year', ['year' => $user->created_at->format('Y')]) }}
+            @if($user->bio)
+                <span class="d-block mt-1">{{ Str::limit($user->bio, 120) }}</span>
+            @endif
+        </p>
+
     </div>
 </section>
 @endsection

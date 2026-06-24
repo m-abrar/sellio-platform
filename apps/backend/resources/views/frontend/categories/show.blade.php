@@ -1,35 +1,34 @@
 @extends('frontend._layouts._app')
 
 @section('hero')
-<section class="py-5 border-bottom" style="background:#F4F0EC;border-color:rgba(15,23,42,.07)!important;">
-    <div class="container">
-        <div class="d-flex flex-column flex-sm-row align-items-start gap-4">
+<section class="page-hero-strip hero-section--dark">
+    <div class="container text-center">
 
+        <div class="mb-4 mx-auto d-flex align-items-center justify-content-center rounded-3"
+             style="width:72px;height:72px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.15)">
             @if($category->primary_image_url)
-            <div class="flex-shrink-0">
-                <img src="{{ $category->primary_image_url }}"
-                     class="rounded-3 object-fit-cover"
-                     style="width:72px;height:72px;border:1.5px solid rgba(15,23,42,.1)"
-                     alt="">
-            </div>
+                <img src="{{ $category->primary_image_url }}" class="rounded-3 object-fit-cover w-100 h-100" alt="">
+            @else
+                <i class="bi bi-grid-fill fs-2" style="color:rgba(255,255,255,.8)"></i>
             @endif
-
-            <div class="pt-sm-1">
-                <h1 class="mb-2 lh-1" style="font-family:var(--font-heading);font-size:clamp(1.75rem,3vw,2.25rem);color:var(--text-dark)">{{ $category->title }}</h1>
-                <div class="d-flex flex-wrap gap-3 align-items-center small text-muted mb-3">
-                    @if($category->type)
-                        <span>{{ $category->type->title }}</span>
-                    @endif
-                    @if(($category->listings_count ?? 0) > 0)
-                        <span>{{ number_format($category->listings_count) }} {{ __('listings') }}</span>
-                    @endif
-                </div>
-                @if($category->description)
-                    <p class="text-muted mb-0 lh-base" style="max-width:46rem">{{ $category->description }}</p>
-                @endif
-            </div>
-
         </div>
+
+        <p class="small fw-semibold text-uppercase mb-2" style="letter-spacing:.08em;color:var(--primary-color)">
+            {{ $category->type->title ?? __('Category') }}
+        </p>
+
+        <h1 class="page-hero-title">{{ $category->title }}</h1>
+
+        <p class="page-hero-subtitle mx-auto">
+            @if($category->description)
+                {{ $category->description }}
+            @elseif(($category->listings_count ?? 0) > 0)
+                {{ number_format($category->listings_count) }} {{ __('listings across all verticals') }}
+            @else
+                {{ __('Browse listings in this category') }}
+            @endif
+        </p>
+
     </div>
 </section>
 @endsection

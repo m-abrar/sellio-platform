@@ -1,6 +1,8 @@
 @extends('frontend._layouts._app')
 
 @section('title', $property->meta_title ?: ($property->title . ' ' . __('in') . ' ' . $property->city))
+@section('og_image', $property->primary_image_url)
+@section('og_description', Str::limit(strip_tags($property->meta_description ?: $property->description), 160))
 
 @section('head_extra')
 <meta name="description" content="{{ $property->meta_description ?: $property->description }}">

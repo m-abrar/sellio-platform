@@ -35,6 +35,8 @@ export default function ListingDetailsView() {
   const [favoriteStatus, setFavoriteStatus] = useState<'checking' | 'idle' | 'saving' | 'saved' | 'removing'>('idle');
   const [favoriteId, setFavoriteId] = useState<number | null>(null);
   const [favoriteError, setFavoriteError] = useState<string | null>(null);
+  const [imageFailed, setImageFailed] = useState(false);
+  const [imageRetryKey, setImageRetryKey] = useState(0);
 
   const fetchDetails = useCallback(async () => {
     const category = LISTING_CATEGORIES.find((entry) => entry.id === vertical);
@@ -65,6 +67,11 @@ export default function ListingDetailsView() {
   useEffect(() => {
     fetchDetails();
   }, [fetchDetails]);
+
+  useEffect(() => {
+    setImageFailed(false);
+    setImageRetryKey(0);
+  }, [item?.imageUrl]);
 
   useEffect(() => {
     let active = true;
@@ -204,6 +211,7 @@ export default function ListingDetailsView() {
   }
 
   const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
+  const canShowImage = Boolean(item.imageUrl) && !imageFailed;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -217,8 +225,28 @@ export default function ListingDetailsView() {
 
         <View style={styles.galleryPlaceholder}>
           <Text style={styles.galleryIcon}>{category?.icon || '*'}</Text>
-          {item.imageUrl && (
-            <Image source={{ uri: item.imageUrl }} style={styles.galleryImage} resizeMode="cover" accessibilityLabel={`${item.title} image`} />
+          {canShowImage && item.imageUrl && (
+            <Image
+              key={`${item.imageUrl}-${imageRetryKey}`}
+              source={{ uri: item.imageUrl }}
+              style={styles.galleryImage}
+              resizeMode="cover"
+              accessibilityLabel={`${item.title} image`}
+              onError={() => setImageFailed(true)}
+            />
+          )}
+          {item.imageUrl && imageFailed && (
+            <TouchableOpacity
+              style={styles.imageRetryButton}
+              onPress={() => {
+                setImageFailed(false);
+                setImageRetryKey((current) => current + 1);
+              }}
+              accessibilityRole="button"
+              accessibilityLabel={`Retry loading ${item.title} image`}
+            >
+              <Text style={styles.imageRetryText}>RETRY IMAGE</Text>
+            </TouchableOpacity>
           )}
         </View>
 
@@ -270,6 +298,8 @@ const styles = StyleSheet.create({
   galleryPlaceholder: { height: 240, backgroundColor: '#0b0b0c', justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: 'rgba(255, 255, 255, 0.04)' },
   galleryIcon: { color: '#818cf8', fontSize: 64 },
   galleryImage: { ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' },
+  imageRetryButton: { position: 'absolute', bottom: 18, alignSelf: 'center', borderRadius: 999, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.16)', backgroundColor: 'rgba(7, 7, 8, 0.82)', paddingHorizontal: 14, paddingVertical: 8 },
+  imageRetryText: { color: '#c7d2fe', fontSize: 8, fontWeight: '900', letterSpacing: 0.8 },
   detailsGroup: { padding: 24 },
   itemTitle: { color: '#fff', fontSize: 24, fontWeight: '900', marginBottom: 6 },
   itemSpec: { color: '#64748b', fontSize: 12, fontWeight: '600', marginBottom: 20 },

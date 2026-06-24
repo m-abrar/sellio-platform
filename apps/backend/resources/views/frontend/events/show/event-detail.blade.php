@@ -1,6 +1,8 @@
 @extends('frontend._layouts._app')
 
 @section('title', $event->title)
+@section('og_image', $event->primary_image_url)
+@section('og_description', Str::limit(strip_tags($event->meta_description ?: $event->description), 160))
 @section('body_class', 'has-body-glow bg-light frontend-page--detail')
 @php $tickets_left = $event->tickets_left @endphp
 @section('content')

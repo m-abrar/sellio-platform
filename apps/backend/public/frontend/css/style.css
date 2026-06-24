@@ -2780,7 +2780,8 @@ footer{
     backdrop-filter:blur(5px)
 }
 #mainNav.scrolled,.glass-surface{
-    backdrop-filter:blur(10px)
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px)
 }
 .btn-icon-glass:hover{
     background:var(--primary-color);
@@ -3134,7 +3135,7 @@ body.has-admin-bar .main-header.sticky-top{
 .main-header--pinned #mainNav,
 .main-header--pinned #mainNav.scrolled{
     background:transparent!important;
-    border-color:transparent!important;
+    border-bottom:none!important;
     box-shadow:none!important;
     padding-top:.65rem;
     padding-bottom:.65rem
@@ -3146,8 +3147,8 @@ body.has-admin-bar .main-header.sticky-top{
 }
 #mainNav.scrolled{
     background-color:rgba(255,255,255,.95)!important;
-    border-color:rgba(15,23,42,.06)!important;
-    box-shadow:0 10px 30px rgba(15,23,42,.08);
+    border-bottom:1.5px solid rgba(var(--primary-color-rgb),.1)!important;
+    box-shadow:0 8px 24px rgba(15,23,42,.07);
     padding-top:.65rem;
     padding-bottom:.65rem
 }
@@ -3399,6 +3400,42 @@ body.has-admin-bar .main-header.sticky-top{
     font-size:.7rem;
     color:rgba(255,255,255,.28);
     margin-top:.6rem;
+    margin-bottom:0;
+}
+.ft-nl-feedback{
+    display:flex;
+    align-items:center;
+    gap:1.5rem;
+    padding:1.25rem 0;
+}
+.ft-nl-feedback-icon{
+    width:3.25rem;
+    height:3.25rem;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    font-size:1.35rem;
+}
+.ft-nl-feedback-icon--success{
+    background:rgba(var(--primary-color-rgb),.15);
+    color:var(--primary-color);
+}
+.ft-nl-feedback-icon--info{
+    background:rgba(255,255,255,.08);
+    color:rgba(255,255,255,.7);
+}
+.ft-nl-feedback-title{
+    font-family:var(--font-heading);
+    font-size:1.2rem;
+    font-weight:400;
+    color:#fff;
+    margin-bottom:.25rem;
+}
+.ft-nl-feedback-sub{
+    font-size:.875rem;
+    color:rgba(255,255,255,.55);
     margin-bottom:0;
 }
 
@@ -4158,25 +4195,25 @@ body.has-admin-bar .main-header.sticky-top{
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-primary);
+    color: var(--primary-color);
     flex-shrink: 0;
 }
 .error-code {
     font-size: 4.5rem;
     font-weight: 900;
     line-height: 1;
-    color: var(--color-primary);
-    font-family: var(--font-family-heading, inherit);
+    color: var(--primary-color);
+    font-family: var(--font-heading, 'DM Serif Display', serif);
     letter-spacing: -2px;
 }
 .error-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--color-text);
+    color: var(--text-dark);
     margin-bottom: .75rem;
 }
 .error-desc {
-    color: var(--color-text-muted);
+    color: #6b7280;
     font-size: 1rem;
     line-height: 1.65;
     margin-bottom: 2rem;
@@ -4189,7 +4226,7 @@ body.has-admin-bar .main-header.sticky-top{
 }
 .error-ref {
     font-size: .8rem;
-    color: var(--color-text-muted);
+    color: #6b7280;
 }
 .error-ref code {
     background: rgba(var(--primary-color-rgb), .07);
@@ -4796,6 +4833,44 @@ body.has-admin-bar .main-header.sticky-top{
 /* Cart icon on transparent header */
 .main-header--home #mainNav.navbar-transparent .bi-cart3 {
     color: rgba(255,255,255,.8);
+}
+
+/* Active link on dark transparent nav — white to match surrounding links */
+.main-header--home #mainNav.navbar-transparent .nav-link--main.active {
+    color: #fff !important;
+}
+.main-header--home #mainNav.navbar-transparent .nav-link--main::before {
+    background: rgba(255,255,255,.75);
+}
+
+/* When nav scrolls to white: reset all link colours to dark */
+.main-header--home #mainNav.scrolled .nav-link,
+.main-header--home #mainNav.scrolled .navbar-brand span {
+    color: var(--text-dark) !important;
+}
+.main-header--home #mainNav.scrolled .nav-link--main.active {
+    color: var(--primary-color) !important;
+}
+.main-header--home #mainNav.scrolled .nav-link--main::before {
+    background: var(--primary-color);
+}
+.main-header--home #mainNav.scrolled .btn-link {
+    color: var(--text-dark) !important;
+}
+.main-header--home #mainNav.scrolled .btn-primary {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #fff !important;
+}
+.main-header--home #mainNav.scrolled .btn-outline-dark {
+    border-color: rgba(15,23,42,.25) !important;
+    color: var(--text-dark) !important;
+}
+.main-header--home #mainNav.scrolled .bi-cart3 {
+    color: var(--text-dark);
+}
+.main-header--home #mainNav.scrolled .navbar-toggler-icon {
+    filter: none;
 }
 
 /* Mobile collapsed menu stays readable on dark hero */
@@ -5543,4 +5618,36 @@ body.has-admin-bar .detail-page section{scroll-margin-top:calc(96px + var(--admi
     color:var(--primary-color);
     font-weight:700;
     border-left-color:var(--primary-color);
+}
+
+/* ── Cart quantity controls ───────────────────────────────────────────────── */
+.cart-qty-control{ display:flex;align-items:center;gap:.25rem }
+.cart-qty-btn{
+    width:2rem;
+    height:2rem;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:.5rem!important;
+    font-size:.8125rem;
+    flex-shrink:0;
+}
+.cart-qty-input{
+    width:3rem!important;
+    height:2rem;
+    padding:.25rem .375rem;
+    font-size:.875rem;
+    border-radius:.5rem!important;
+    -moz-appearance:textfield;
+}
+.cart-qty-input::-webkit-outer-spin-button,
+.cart-qty-input::-webkit-inner-spin-button{ -webkit-appearance:none;margin:0 }
+[x-cloak]{ display:none!important }
+
+/* ── Stripe Elements — brand-coloured focus ring ──────────────────────────── */
+[data-stripe-card-element].stripe-focused{
+    border-color:rgba(var(--primary-color-rgb),.5)!important;
+    box-shadow:0 0 0 .25rem rgba(var(--primary-color-rgb),.18)!important;
+    outline:none;
 }

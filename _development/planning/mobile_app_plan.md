@@ -101,9 +101,9 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
 - [x] Add pull-to-refresh on marketplace discovery.
 - [x] Add search, sorting, filters, and pagination/load-more controls.
 - [x] Respect enabled/disabled backend modules.
-- [ ] Respect the buyer's selected location where supported.
+- [x] Respect the buyer's selected location where supported.
 - [x] Add basic image rendering and fallback visuals.
-- [ ] Add image loading failure handling and retry behavior.
+- [x] Add image loading failure handling and retry behavior.
 - [x] Use vertical-specific listing endpoints for detail screens instead of probing unrelated endpoints.
 - [ ] Expand detail adapters with richer vertical-specific fields and customer actions.
 - [ ] Add shareable listing links.

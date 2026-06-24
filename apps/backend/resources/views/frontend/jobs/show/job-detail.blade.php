@@ -2,6 +2,8 @@
 
 {{-- 1. Metadata --}}
 @section('title', $job->title . ' | ' . setting('site_name', config('app.name')))
+@section('og_image', $job->employer->avatar_url ?? asset('images/app-logo.webp'))
+@section('og_description', Str::limit(strip_tags($job->description), 160))
 @section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
 {{-- 2. SEO & Schema (CodeCanyon reviewers value this highly) --}}

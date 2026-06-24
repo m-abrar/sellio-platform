@@ -12,10 +12,10 @@ body {
     align-items: center;
     justify-content: center;
     padding: 1.5rem;
-    background: #f8fafc;
+    background: #F8F6F3;
     background-image:
-        radial-gradient(circle at 20% 20%, rgba(99,102,241,.06) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(99,102,241,.04) 0%, transparent 50%);
+        radial-gradient(circle at 20% 20%, rgba(224,95,44,.07) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(224,95,44,.04) 0%, transparent 50%);
 }
 
 .wrap { display: flex; flex-direction: column; align-items: center; gap: 2rem; width: 100%; }
@@ -24,7 +24,7 @@ body {
     max-width: 32rem;
     width: 100%;
     background: #fff;
-    border: 1px solid #e2e8f0;
+    border: 1px solid rgba(15,23,42,.08);
     border-radius: 2rem;
     padding: 3rem 2.5rem;
     text-align: center;
@@ -46,14 +46,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* page-specific colours set via modifier classes below */
 }
 
-/* 500 — slate */
+/* 500 — brand orange tint */
 .icon-box--500 {
-    background: #f1f5f9;
-    border: 1.5px solid #e2e8f0;
-    color: #64748b;
+    background: rgba(224,95,44,.08);
+    border: 1.5px solid rgba(224,95,44,.16);
+    color: #E05F2C;
 }
 
 /* 503 — amber */
@@ -74,12 +73,12 @@ body {
     font-size: 4.5rem;
     font-weight: 900;
     line-height: 1;
-    color: #0f172a;
+    color: #1C1917;
     letter-spacing: -2px;
 }
 
-h1 { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: .75rem; }
-p  { color: #64748b; font-size: 1rem; line-height: 1.65; margin-bottom: 2rem; }
+h1 { font-size: 1.5rem; font-weight: 700; color: #1C1917; margin-bottom: .75rem; }
+p  { color: #6b7280; font-size: 1rem; line-height: 1.65; margin-bottom: 2rem; }
 
 /* Buttons */
 .actions { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; }
@@ -89,7 +88,7 @@ p  { color: #64748b; font-size: 1rem; line-height: 1.65; margin-bottom: 2rem; }
     align-items: center;
     gap: .5rem;
     padding: .75rem 1.75rem;
-    border-radius: 999px;
+    border-radius: .625rem;
     font-weight: 700;
     font-size: .95rem;
     cursor: pointer;
@@ -99,22 +98,22 @@ p  { color: #64748b; font-size: 1rem; line-height: 1.65; margin-bottom: 2rem; }
 }
 
 .btn-dark {
-    background: #0f172a;
+    background: #E05F2C;
     color: #fff;
-    box-shadow: 0 4px 12px rgba(15,23,42,.2);
+    box-shadow: 0 4px 12px rgba(224,95,44,.28);
 }
-.btn-dark:hover { background: #1e293b; transform: translateY(-1px); }
+.btn-dark:hover { background: #c4501f; transform: translateY(-1px); }
 
 .btn-ghost {
     background: transparent;
-    color: #475569;
-    border: 1.5px solid #e2e8f0;
+    color: #6b7280;
+    border: 1.5px solid rgba(15,23,42,.12);
 }
-.btn-ghost:hover { border-color: #94a3b8; color: #0f172a; }
+.btn-ghost:hover { border-color: rgba(15,23,42,.25); color: #1C1917; }
 
 /* Brand footer */
-.brand { color: #94a3b8; font-size: .8rem; margin-bottom: 0; }
-.brand strong { color: #64748b; }
+.brand { color: #9ca3af; font-size: .8rem; margin-bottom: 0; }
+.brand strong { color: #6b7280; }
 
 /* 503 — maintenance pulse indicator */
 .pulse-dot {

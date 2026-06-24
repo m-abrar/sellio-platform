@@ -5,7 +5,8 @@
         <div class="jbl-company-logo-wrap">
             <img src="{{ $job->employer->avatar_url }}"
                  alt="{{ $job->employer->name }}"
-                 class="jbl-company-logo">
+                 class="jbl-company-logo"
+                 loading="lazy">
         </div>
     </div>
 

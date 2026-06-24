@@ -1,35 +1,31 @@
 @extends('frontend._layouts._app')
 
 @section('hero')
-<section class="py-5 border-bottom" style="background:#F4F0EC;border-color:rgba(15,23,42,.07)!important;">
-    <div class="container">
-        <div class="d-flex flex-column flex-sm-row align-items-start gap-4">
+<section class="page-hero-strip hero-section--dark">
+    <div class="container text-center">
 
+        <div class="mb-4 mx-auto d-flex align-items-center justify-content-center rounded-3 overflow-hidden"
+             style="width:72px;height:72px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.15)">
             @if($brand->primary_image_url)
-            <div class="flex-shrink-0">
-                <img src="{{ $brand->primary_image_url }}"
-                     class="rounded-3 object-fit-cover"
-                     style="width:72px;height:72px;border:1.5px solid rgba(15,23,42,.1)"
-                     alt="{{ $brand->title }}">
-            </div>
+                <img src="{{ $brand->primary_image_url }}" class="object-fit-contain w-100 h-100 p-1" alt="{{ $brand->title }}">
             @else
-            <div class="flex-shrink-0 rounded-3 d-flex align-items-center justify-content-center"
-                 style="width:72px;height:72px;background:rgba(var(--primary-color-rgb),.08);border:1.5px solid rgba(var(--primary-color-rgb),.15)">
-                <i class="bi bi-tags fs-2" style="color:var(--primary-color)"></i>
-            </div>
+                <i class="bi bi-tags fs-2" style="color:rgba(255,255,255,.8)"></i>
             @endif
-
-            <div class="pt-sm-1">
-                <h1 class="mb-2 lh-1" style="font-family:var(--font-heading);font-size:clamp(1.75rem,3vw,2.25rem);color:var(--text-dark)">{{ $brand->title }}</h1>
-                <div class="d-flex flex-wrap gap-3 align-items-center small text-muted">
-                    @if(($brand->listings_count ?? 0) > 0)
-                        <span>{{ number_format($brand->listings_count) }} {{ __('listings') }}</span>
-                    @endif
-                    <span>{{ __('Since') }} {{ $brand->created_at->format('M Y') }}</span>
-                </div>
-            </div>
-
         </div>
+
+        <p class="small fw-semibold text-uppercase mb-2" style="letter-spacing:.08em;color:var(--primary-color)">
+            {{ __('Brand') }}
+        </p>
+
+        <h1 class="page-hero-title">{{ $brand->title }}</h1>
+
+        <p class="page-hero-subtitle mx-auto">
+            @if(($brand->listings_count ?? 0) > 0)
+                {{ number_format($brand->listings_count) }} {{ __('listings') }} &middot;
+            @endif
+            {{ __('Since') }} {{ $brand->created_at->format('M Y') }}
+        </p>
+
     </div>
 </section>
 @endsection
