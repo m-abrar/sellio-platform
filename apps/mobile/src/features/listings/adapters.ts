@@ -10,7 +10,7 @@ function nested(record: Record<string, unknown> | undefined, key: string) {
 
 function join(values: unknown[], fallback: string) {
   const parts = values.map(text).filter((value): value is string => Boolean(value));
-  return parts.length ? parts.join(' · ') : fallback;
+  return parts.length ? parts.join(' - ') : fallback;
 }
 
 function locationFor(record: ListingApiRecord, vertical: ListingVertical) {

@@ -244,13 +244,13 @@ export default function ActivityDetailView() {
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           <View style={styles.navBar}>
             <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-              <Text style={styles.backButtonText}>← BACK</Text>
+              <Text style={styles.backButtonText}>{'< BACK'}</Text>
             </TouchableOpacity>
             <Text style={styles.navTitle}>{detailLabel(item)}</Text>
           </View>
 
           <View style={styles.imageFrame}>
-            <Text style={styles.imageFallback}>{category?.icon || '◇'}</Text>
+            <Text style={styles.imageFallback}>{category?.icon || '*'}</Text>
             {item.imageUrl && (
               <Image
                 source={{ uri: item.imageUrl }}
@@ -318,7 +318,7 @@ export default function ActivityDetailView() {
                       ? serviceQuote.scope_size || 'Not specified'
                       : application
                         ? workplaceLabel(application.job?.workplace_type)
-                        : item.secondaryStatus?.toUpperCase() || '—'}
+                        : item.secondaryStatus?.toUpperCase() || '-'}
                 </Text>
               </View>
             </View>

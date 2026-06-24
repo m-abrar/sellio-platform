@@ -35,7 +35,7 @@ export default function SettingsView() {
 
         <View style={styles.menuGroup}>
           <TouchableOpacity style={styles.menuItem}>
-            <Text style={styles.menuIcon}>👤</Text>
+            <Text style={styles.menuIcon}>PR</Text>
             <View style={styles.menuTextContainer}>
               <Text style={styles.menuTitle}>Profile Settings</Text>
               <Text style={styles.menuDesc}>Update your name, avatar, and location.</Text>
@@ -43,7 +43,7 @@ export default function SettingsView() {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem}>
-            <Text style={styles.menuIcon}>🔒</Text>
+            <Text style={styles.menuIcon}>PW</Text>
             <View style={styles.menuTextContainer}>
               <Text style={styles.menuTitle}>Security & Passwords</Text>
               <Text style={styles.menuDesc}>Update your password and account security.</Text>
@@ -51,7 +51,7 @@ export default function SettingsView() {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem}>
-            <Text style={styles.menuIcon}>🔔</Text>
+            <Text style={styles.menuIcon}>NT</Text>
             <View style={styles.menuTextContainer}>
               <Text style={styles.menuTitle}>Notifications</Text>
               <Text style={styles.menuDesc}>Manage buyer notification preferences.</Text>

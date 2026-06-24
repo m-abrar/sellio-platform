@@ -19,7 +19,7 @@ export default function TabsLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => (
-            <Text style={{ fontSize: 20, color }}>🏠</Text>
+            <Text style={{ fontSize: 12, fontWeight: '900', color }}>HM</Text>
           ),
         }}
       />
@@ -28,7 +28,7 @@ export default function TabsLayout() {
         options={{
           title: 'Favorites',
           tabBarIcon: ({ color }) => (
-            <Text style={{ fontSize: 20, color }}>⭐</Text>
+            <Text style={{ fontSize: 12, fontWeight: '900', color }}>FV</Text>
           ),
         }}
       />
@@ -37,7 +37,7 @@ export default function TabsLayout() {
         options={{
           title: 'Inbox',
           tabBarIcon: ({ color }) => (
-            <Text style={{ fontSize: 20, color }}>💬</Text>
+            <Text style={{ fontSize: 12, fontWeight: '900', color }}>IN</Text>
           ),
         }}
       />
@@ -46,7 +46,7 @@ export default function TabsLayout() {
         options={{
           title: 'Activity',
           tabBarIcon: ({ color }) => (
-            <Text style={{ fontSize: 20, color }}>▦</Text>
+            <Text style={{ fontSize: 12, fontWeight: '900', color }}>AC</Text>
           ),
         }}
       />
@@ -55,7 +55,7 @@ export default function TabsLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ color }) => (
-            <Text style={{ fontSize: 20, color }}>⚙️</Text>
+            <Text style={{ fontSize: 12, fontWeight: '900', color }}>ST</Text>
           ),
         }}
       />

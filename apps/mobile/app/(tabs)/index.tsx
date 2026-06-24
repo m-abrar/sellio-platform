@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
-  Image,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -13,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { apiRequest } from '../../src/api/client';
+import { ListingCard } from '../../src/components/listings/ListingCard';
 import { useAuth } from '../../src/context/AuthContext';
 import { FavoriteBatchStatusResponse, FavoriteRecord } from '../../src/features/buyer/types';
 import { toListingCard } from '../../src/features/listings/adapters';
@@ -240,7 +240,7 @@ export default function HomeView() {
         </View>
 
         <View style={styles.heroCard}>
-          <Text style={styles.heroBadge}>SEVEN MARKETPLACES · ONE APP</Text>
+          <Text style={styles.heroBadge}>SEVEN MARKETPLACES - ONE APP</Text>
           <Text style={styles.heroTitle}>Find what moves you.</Text>
           <Text style={styles.heroSubtitle}>
             Explore products, homes, vehicles, events, services, careers, and local finds.
@@ -257,7 +257,7 @@ export default function HomeView() {
             style={[styles.categoryBadge, selectedCategory === 'all' && styles.categoryActive]}
             onPress={() => setSelectedCategory('all')}
           >
-            <Text style={styles.categoryIcon}>🌐</Text>
+            <Text style={styles.categoryIcon}>ALL</Text>
             <Text style={[styles.categoryText, selectedCategory === 'all' && styles.textActive]}>
               All
             </Text>
@@ -298,7 +298,7 @@ export default function HomeView() {
         {error && (
           <View style={[styles.feedbackCard, listings.length > 0 && styles.warningCard]}>
             <Text style={styles.feedbackTitle}>
-              {listings.length > 0 ? 'PARTIAL RESULTS' : 'WE COULDN’T LOAD THIS FEED'}
+              {listings.length > 0 ? 'PARTIAL RESULTS' : "WE COULDN'T LOAD THIS FEED"}
             </Text>
             <Text style={styles.feedbackText}>{error}</Text>
             <TouchableOpacity style={styles.retryButton} onPress={fetchListings}>
@@ -310,11 +310,11 @@ export default function HomeView() {
         {loading && !refreshing ? (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="small" color="#818cf8" />
-            <Text style={styles.loaderText}>Curating live listings…</Text>
+            <Text style={styles.loaderText}>Curating live listings...</Text>
           </View>
         ) : listings.length === 0 && !error ? (
           <View style={styles.emptyCard}>
-            <Text style={styles.emptyIcon}>◇</Text>
+            <Text style={styles.emptyIcon}>*</Text>
             <Text style={styles.emptyTitle}>Nothing listed here yet</Text>
             <Text style={styles.emptyText}>
               This category is available, but it does not have any published listings right now.
@@ -326,61 +326,27 @@ export default function HomeView() {
         ) : (
           <View style={styles.productGrid}>
             {listings.map((item) => {
-              const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
               const key = favoriteKey(item.vertical, item.id);
               const isFavorite = Boolean(favoriteIds[key]);
               const isFavoritePending = pendingFavoriteKeys.includes(key);
 
               return (
-                <View
+                <ListingCard
                   key={`${item.vertical}-${item.id}`}
-                  style={styles.productCard}
-                >
-                  <TouchableOpacity
-                  style={styles.productCardLink}
-                  activeOpacity={0.82}
+                  item={item}
                   onPress={() => router.push({
                     pathname: '/listing/[slug]',
                     params: { slug: item.slug, vertical: item.vertical },
                   })}
-                  >
-                  <View style={styles.productImageContainer}>
-                    <Text style={styles.imageFallbackIcon}>{category?.icon || '◇'}</Text>
-                    {item.imageUrl && (
-                      <Image
-                        source={{ uri: item.imageUrl }}
-                        style={styles.productImage}
-                        resizeMode="cover"
-                        accessibilityLabel={`${item.title} image`}
-                      />
-                    )}
-                    <View style={styles.verticalPill}>
-                      <Text style={styles.verticalPillText}>{category?.title || item.vertical}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.cardDetails}>
-                    <Text style={styles.productName} numberOfLines={1}>{item.title}</Text>
-                    <Text style={styles.productSpec} numberOfLines={2}>{item.details}</Text>
-                    <Text style={styles.locationText} numberOfLines={1}>{item.location}</Text>
-                    <Text style={styles.productPrice} numberOfLines={1}>{item.price}</Text>
-                  </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}
-                    onPress={() => toggleCardFavorite(item)}
-                    disabled={isFavoritePending}
-                    accessibilityRole="button"
-                    accessibilityLabel={isFavorite ? `Remove ${item.title} from favorites` : `Save ${item.title} to favorites`}
-                  >
-                    {isFavoritePending ? (
-                      <ActivityIndicator size="small" color="#fff" />
-                    ) : (
-                      <Text style={[styles.favoriteButtonText, isFavorite && styles.favoriteButtonTextActive]}>
-                        {isFavorite ? '★' : '☆'}
-                      </Text>
-                    )}
-                  </TouchableOpacity>
-                </View>
+                  favoriteToggle={{
+                    isFavorite,
+                    isPending: isFavoritePending,
+                    onPress: () => toggleCardFavorite(item),
+                    accessibilityLabel: isFavorite
+                      ? `Remove ${item.title} from favorites`
+                      : `Save ${item.title} to favorites`,
+                  }}
+                />
               );
             })}
           </View>
@@ -598,109 +564,11 @@ const styles = StyleSheet.create({
   productGrid: {
     gap: 16,
   },
-  productCard: {
-    backgroundColor: '#121214',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 24,
-    overflow: 'hidden',
-  },
-  productCardLink: {
-    flex: 1,
-  },
-  favoriteButton: {
-    position: 'absolute',
-    right: 12,
-    top: 12,
-    width: 38,
-    height: 38,
-    zIndex: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 19,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.18)',
-    backgroundColor: 'rgba(7, 7, 8, 0.82)',
-  },
-  favoriteButtonActive: {
-    borderColor: 'rgba(129, 140, 248, 0.6)',
-    backgroundColor: 'rgba(99, 102, 241, 0.9)',
-  },
-  favoriteButtonText: {
-    color: '#fff',
-    fontSize: 22,
-    lineHeight: 24,
-  },
-  favoriteButtonTextActive: {
-    color: '#fff',
-  },
   favoriteWarning: {
     marginTop: -6,
     marginBottom: 16,
     color: '#f59e0b',
     fontSize: 11,
     lineHeight: 16,
-  },
-  productImageContainer: {
-    height: 178,
-    backgroundColor: '#0b0b0c',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.04)',
-  },
-  imageFallbackIcon: {
-    fontSize: 36,
-    opacity: 0.45,
-  },
-  productImage: {
-    ...StyleSheet.absoluteFillObject,
-    width: '100%',
-    height: '100%',
-  },
-  verticalPill: {
-    position: 'absolute',
-    left: 12,
-    top: 12,
-    backgroundColor: 'rgba(7, 7, 8, 0.78)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.12)',
-    borderRadius: 999,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-  },
-  verticalPillText: {
-    color: '#fff',
-    fontSize: 8,
-    fontWeight: '900',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-  },
-  cardDetails: {
-    padding: 16,
-  },
-  productName: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '800',
-    marginBottom: 5,
-  },
-  productSpec: {
-    color: '#94a3b8',
-    fontSize: 11,
-    fontWeight: '500',
-    lineHeight: 16,
-    marginBottom: 10,
-  },
-  locationText: {
-    color: '#64748b',
-    fontSize: 10,
-    fontWeight: '700',
-    marginBottom: 8,
-  },
-  productPrice: {
-    color: '#818cf8',
-    fontSize: 16,
-    fontWeight: '900',
   },
 });

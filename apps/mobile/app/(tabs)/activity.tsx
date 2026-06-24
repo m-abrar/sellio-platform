@@ -75,7 +75,7 @@ function ActivityRecordCard({ item, onPress }: { item: BuyerActivityCard; onPres
       accessibilityLabel={onPress ? `Open ${item.reference}` : item.reference}
     >
       <View style={styles.activityImageFrame}>
-        <Text style={styles.activityImageFallback}>{category?.icon || '◇'}</Text>
+        <Text style={styles.activityImageFallback}>{category?.icon || '*'}</Text>
         {item.imageUrl && (
           <Image
             source={{ uri: item.imageUrl }}
@@ -350,7 +350,7 @@ export default function ActivityView() {
                   </View>
                 ) : !hasActivity && !activityWarning ? (
                   <EmptyState
-                    icon="◇"
+                    icon="*"
                     title="NO ACTIVITY YET"
                     message="Your bookings, orders, applications, and inquiries will appear here."
                   />

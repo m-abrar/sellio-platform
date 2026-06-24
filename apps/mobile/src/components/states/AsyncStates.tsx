@@ -67,7 +67,7 @@ export function LoadingState({
 }
 
 export function EmptyState({
-  icon = '◇',
+  icon = '*',
   title,
   message,
   action,

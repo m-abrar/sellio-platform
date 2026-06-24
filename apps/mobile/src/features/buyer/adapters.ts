@@ -117,11 +117,11 @@ export function toBookingActivityCard(
   const detail = kind === 'event_booking'
     ? [record.ticket_type?.name, record.quantity ? `${record.quantity} ticket${record.quantity === 1 ? '' : 's'}` : null]
         .filter(Boolean)
-        .join(' · ')
+        .join(' - ')
     : kind === 'property_booking'
       ? [record.guests ? `${record.guests} guest${record.guests === 1 ? '' : 's'}` : null, record.duration_nights ? `${record.duration_nights} nights` : null]
           .filter(Boolean)
-          .join(' · ')
+          .join(' - ')
       : kind === 'property_visit'
         ? 'Scheduled property visit'
         : text(record.topic) || 'Service appointment';
@@ -169,7 +169,7 @@ export function toOrderActivityCard(record: BuyerOrderRecord): BuyerActivityCard
     amount: activityMoney(record.pricing.total_amount, record.pricing.currency_symbol || '$'),
     date,
     dateLabel: formatDate(date),
-    detail: `${totalQuantity} item${totalQuantity === 1 ? '' : 's'} · ${record.payment_method.toUpperCase()}`,
+    detail: `${totalQuantity} item${totalQuantity === 1 ? '' : 's'} - ${record.payment_method.toUpperCase()}`,
     reference: record.order_number,
     slug: text(firstItem?.product?.slug),
     isUpcoming: false,
@@ -183,7 +183,7 @@ export function toJobApplicationActivityCard(
   const minimumSalary = activityMoney(record.job?.salary_min);
   const maximumSalary = activityMoney(record.job?.salary_max);
   const salary = minimumSalary && maximumSalary
-    ? `${minimumSalary} – ${maximumSalary}`
+    ? `${minimumSalary} - ${maximumSalary}`
     : minimumSalary || maximumSalary;
   const date = record.created_at;
 
@@ -214,7 +214,7 @@ export function toAutoInquiryActivityCard(
   const preferredSchedule = [
     text(record.preferred_date),
     text(record.preferred_time),
-  ].filter(Boolean).join(' · ');
+  ].filter(Boolean).join(' - ');
   const date = record.created_at;
 
   return {
@@ -294,7 +294,7 @@ export function toClassifiedInquiryActivityCard(
     amount: price,
     date,
     dateLabel: formatDate(date),
-    detail: [condition, brand].filter(Boolean).join(' · ') || 'Classified inquiry submitted',
+    detail: [condition, brand].filter(Boolean).join(' - ') || 'Classified inquiry submitted',
     reference: `Inquiry #${record.id}`,
     slug: text(classified?.slug),
     isUpcoming: false,

@@ -3,21 +3,19 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   FlatList,
-  Image,
   RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { apiRequest } from '../../src/api/client';
 import { AuthenticatedScreen } from '../../src/auth/AuthenticatedScreen';
+import { ListingCard } from '../../src/components/listings/ListingCard';
 import { EmptyState, ErrorState, LoadingState } from '../../src/components/states/AsyncStates';
 import { useAuth } from '../../src/context/AuthContext';
 import { toFavoriteListingCard } from '../../src/features/buyer/adapters';
 import { FavoriteListingCard, FavoriteRecord } from '../../src/features/buyer/types';
-import { LISTING_CATEGORIES } from '../../src/features/listings/catalog';
 
 export default function FavoritesView() {
   const router = useRouter();
@@ -120,7 +118,7 @@ export default function FavoritesView() {
               <ErrorState error={error} onRetry={loadFavorites} />
             ) : (
               <EmptyState
-                icon="⭐"
+                icon="*"
                 title="NO FAVORITES SAVED"
                 message="Listings you favorite will appear here."
                 action={{ label: 'EXPLORE MARKETPLACE', onPress: () => router.push('/') }}
@@ -128,45 +126,21 @@ export default function FavoritesView() {
             )
           }
           renderItem={({ item }) => {
-            const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
-
             return (
-              <TouchableOpacity
-                style={styles.card}
-                activeOpacity={0.82}
+              <ListingCard
+                item={item}
+                variant="row"
                 onPress={() => router.push({
                   pathname: '/listing/[slug]',
                   params: { slug: item.slug, vertical: item.vertical },
                 })}
-              >
-                <View style={styles.imageFrame}>
-                  <Text style={styles.imageFallback}>{category?.icon || '◇'}</Text>
-                  {item.imageUrl && (
-                    <Image
-                      source={{ uri: item.imageUrl }}
-                      style={styles.image}
-                      resizeMode="cover"
-                      accessibilityLabel={`${item.title} image`}
-                    />
-                  )}
-                </View>
-                <View style={styles.cardBody}>
-                  <Text style={styles.category}>{category?.title || item.vertical}</Text>
-                  <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
-                  <Text style={styles.location} numberOfLines={1}>{item.location}</Text>
-                  <View style={styles.cardFooter}>
-                    <Text style={styles.price}>{item.price}</Text>
-                    <TouchableOpacity
-                      style={styles.removeButton}
-                      onPress={() => confirmRemove(item)}
-                      accessibilityRole="button"
-                      accessibilityLabel={`Remove ${item.title} from favorites`}
-                    >
-                      <Text style={styles.removeButtonText}>REMOVE</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </TouchableOpacity>
+                footerAction={{
+                  label: 'REMOVE',
+                  onPress: () => confirmRemove(item),
+                  accessibilityLabel: `Remove ${item.title} from favorites`,
+                  variant: 'danger',
+                }}
+              />
             );
           }}
         />
@@ -181,16 +155,4 @@ const styles = StyleSheet.create({
   header: { marginTop: 10, marginBottom: 22 },
   eyebrow: { color: '#64748b', fontSize: 9, fontWeight: '900', letterSpacing: 2 },
   title: { color: '#fff', fontSize: 26, fontWeight: '900', letterSpacing: 1.5 },
-  card: { flexDirection: 'row', overflow: 'hidden', borderRadius: 24, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)', backgroundColor: '#121214' },
-  imageFrame: { width: 116, minHeight: 132, alignItems: 'center', justifyContent: 'center', backgroundColor: '#0b0b0c' },
-  imageFallback: { fontSize: 32, opacity: 0.5 },
-  image: { ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' },
-  cardBody: { flex: 1, justifyContent: 'center', padding: 16 },
-  category: { marginBottom: 5, color: '#818cf8', fontSize: 8, fontWeight: '900', letterSpacing: 1, textTransform: 'uppercase' },
-  cardTitle: { marginBottom: 7, color: '#fff', fontSize: 15, fontWeight: '800' },
-  location: { marginBottom: 9, color: '#64748b', fontSize: 10, fontWeight: '600' },
-  cardFooter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10 },
-  price: { flex: 1, color: '#a5b4fc', fontSize: 14, fontWeight: '900' },
-  removeButton: { borderRadius: 999, borderWidth: 1, borderColor: 'rgba(239, 68, 68, 0.3)', backgroundColor: 'rgba(239, 68, 68, 0.08)', paddingHorizontal: 10, paddingVertical: 7 },
-  removeButtonText: { color: '#f87171', fontSize: 8, fontWeight: '900', letterSpacing: 0.8 },
 });

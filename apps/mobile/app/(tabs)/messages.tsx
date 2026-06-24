@@ -15,7 +15,7 @@ export default function MessagesView() {
         <Text style={styles.headerTitle}>INBOX.</Text>
 
         <EmptyState
-          icon="💬"
+          icon="IN"
           title="NO MESSAGES FOUND"
           message="You don't have any conversations yet. Contact a seller from a listing to start one."
           action={{ label: 'EXPLORE MARKETPLACE', onPress: () => router.push('/') }}

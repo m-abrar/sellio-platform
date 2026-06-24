@@ -210,13 +210,13 @@ export default function ListingDetailsView() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.navBar}>
           <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-            <Text style={styles.backText}>← BACK</Text>
+            <Text style={styles.backText}>{'< BACK'}</Text>
           </TouchableOpacity>
           <Text style={styles.navTitle}>{category?.title || item.vertical}</Text>
         </View>
 
         <View style={styles.galleryPlaceholder}>
-          <Text style={styles.galleryIcon}>{category?.icon || '◇'}</Text>
+          <Text style={styles.galleryIcon}>{category?.icon || '*'}</Text>
           {item.imageUrl && (
             <Image source={{ uri: item.imageUrl }} style={styles.galleryImage} resizeMode="cover" accessibilityLabel={`${item.title} image`} />
           )}
@@ -243,10 +243,10 @@ export default function ListingDetailsView() {
             ) : (
               <Text style={[styles.favoriteBtnText, favoriteStatus === 'saved' && styles.favoriteBtnTextSaved]}>
                 {favoriteStatus === 'saved'
-                  ? '★ REMOVE FROM FAVORITES'
+                  ? 'REMOVE FROM FAVORITES'
                   : isAuthenticated
-                    ? '☆ SAVE TO FAVORITES'
-                    : '☆ SIGN IN TO SAVE'}
+                    ? 'SAVE TO FAVORITES'
+                    : 'SIGN IN TO SAVE'}
               </Text>
             )}
           </TouchableOpacity>

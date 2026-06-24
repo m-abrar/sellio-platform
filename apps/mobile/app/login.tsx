@@ -120,7 +120,7 @@ export default function LoginModal() {
               style={styles.input}
               value={password}
               onChangeText={setPassword}
-              placeholder="••••••••"
+              placeholder="********"
               placeholderTextColor="#475569"
               secureTextEntry={!isPasswordVisible}
               autoCapitalize="none"

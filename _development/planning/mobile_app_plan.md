@@ -45,7 +45,7 @@ The current implementation is still a prototype because:
 - Favorites load real buyer records, but the favorites tab still needs a focus/mutation refresh so newly saved listings appear without manual refresh.
 - Messages remain a placeholder screen.
 - Settings actions are not connected beyond logout and stored user display.
-- Buyer-facing language is improved, but some source strings still contain mojibake icons/glyphs and need cleanup.
+- Buyer-facing language and source string encoding have been normalized on the implemented screens.
 - There is no automated test suite or release-build configuration yet.
 
 ## Phase 1: Application Foundation
@@ -69,7 +69,7 @@ Make API communication predictable on Android emulators, iOS simulators, physica
 - [x] Add authenticated route guards.
 - [x] Stop silently replacing failed API requests with mock marketplace data.
 - [x] Keep development fixtures explicitly separated from live API behavior.
-- [ ] Clean up remaining mojibake icons/glyphs in mobile source strings.
+- [x] Clean up remaining mojibake icons/glyphs in mobile source strings.
 
 ### Acceptance Criteria
 
@@ -96,7 +96,7 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
   - Services
   - Classifieds
 - [x] Render listing cards with real images and vertical-aware metadata.
-- [ ] Extract reusable listing-card components shared by home, favorites, and activity where practical.
+- [x] Extract reusable listing-card components shared by home, favorites, and activity where practical.
 - [x] Add unified and vertical-specific browsing.
 - [x] Add pull-to-refresh on marketplace discovery.
 - [ ] Add search, sorting, filters, and pagination/load-more controls.
@@ -225,7 +225,7 @@ The first sprint will deliver the foundation and one complete real-data path.
 - [x] Create core listing and pagination types.
 - [x] Remove implicit mock fallback behavior.
 - [x] Normalize first-pass buyer-facing copy and remove the original broken encoding on implemented screens.
-- [ ] Finish cleanup of remaining mojibake icons/glyphs found after the first sprint.
+- [x] Finish cleanup of remaining mojibake icons/glyphs found after the first sprint.
 - [x] Add Products to the category list.
 - [x] Replace the home feed with real API data for all enabled verticals.
 - [x] Render real listing images and vertical-aware card metadata.
