@@ -26,7 +26,7 @@
                 <p class="small fw-semibold text-uppercase mb-1" style="letter-spacing:.06em;color:var(--primary-color)">
                     {{ $job->category->title ?? __('Job Opening') }}
                 </p>
-                <h1 class="display-5 text-dark mb-1 tracking-tight lh-sm">{{ $job->title }}</h1>
+                <h1 class="fw-800 display-5 text-dark mb-1 tracking-tight lh-sm">{{ $job->title }}</h1>
                 <p class="fw-semibold mb-3" style="color:var(--primary-color)">{{ $companyName }}</p>
 
                 <div class="d-flex flex-wrap gap-2 mt-1">

@@ -45,16 +45,16 @@
             
             {{-- Organizer Avatar (Overlapping) --}}
             <div class="evc-organizer-wrapper position-absolute translate-middle-y" style="top: 0; right: 20px; z-index: 11;">
-                <img src="{{ $event->organizer->avatar_url ?? asset('assets/img/default-avatar.png') }}" 
-                     alt="{{ e($event->organizer->name ?? '') }}" 
-                     class="rounded-circle border border-3 border-white shadow-sm bg-white"
-                     class="object-fit-cover" style="width: 42px; height: 42px;"
-                     data-bs-toggle="tooltip" 
+                <img src="{{ $event->organizer->avatar_url ?? asset('assets/img/default-avatar.png') }}"
+                     alt="{{ e($event->organizer->name ?? '') }}"
+                     class="rounded-circle border border-3 border-white shadow-sm object-fit-cover"
+                     style="width: 42px; height: 42px;"
+                     data-bs-toggle="tooltip"
                      title="{{ e($event->organizer->name ?? __('Organizer')) }}">
             </div>
 
             {{-- Title Section --}}
-            <h5 class="fw-800 mb-1 mt-4 {{ $event->is_featured ? 'text-primary' : 'text-dark' }} text-truncate" style="min-height: 3rem;">
+            <h5 class="evc-card__title mb-1 mt-4 {{ $event->is_featured ? 'text-primary' : 'text-dark' }} line-clamp-2" style="min-height: 3rem;">
                 {{ $event->title }}
             </h5>
 

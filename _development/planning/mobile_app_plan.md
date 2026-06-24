@@ -1,6 +1,6 @@
 # Sellio React Native Mobile App Development Plan
 
-Updated: 2026-06-21
+Updated: 2026-06-24
 
 ## Decision
 
@@ -31,16 +31,21 @@ The existing application already provides:
 - Home, favorites, messages, settings, login, and listing-detail screens.
 - Secure token storage with `expo-secure-store`.
 - Laravel Sanctum login and logout integration.
-- An Android bundle that compiles successfully.
+- Environment-based API configuration for emulator, simulator, web, physical phone, staging, and production URLs.
+- A shared API client with Laravel-envelope normalization, bearer-token injection, validation-error extraction, unauthorized-session handling, timeouts, and clear network errors.
+- Authenticated route guards for buyer-only tabs.
+- Real API-backed marketplace discovery for all seven verticals.
+- Real favorite status, create, remove, and card/detail toggle flows.
+- Buyer activity statistics, orders, bookings, applications, vehicle inquiries, service quotes, classified inquiries, and record-detail drilldowns.
 
 The current implementation is still a prototype because:
 
-- The shared API foundation is implemented, but most feature models remain untyped.
-- Home discovery uses the first API page and does not yet expose search, filters, or pagination controls.
-- Listing details use vertical-specific endpoints and show real API failures without mock fallbacks.
-- Favorites load real buyer records; messages remain a placeholder screen.
-- Settings actions are not connected.
-- Buyer-facing language and source encoding have been normalized on the implemented screens.
+- Home discovery uses the first API page and does not yet expose search, sorting, filters, or pagination controls.
+- The all-categories feed tolerates partial API failures, but there is still no module-enabled API contract check.
+- Favorites load real buyer records, but the favorites tab still needs a focus/mutation refresh so newly saved listings appear without manual refresh.
+- Messages remain a placeholder screen.
+- Settings actions are not connected beyond logout and stored user display.
+- Buyer-facing language is improved, but some source strings still contain mojibake icons/glyphs and need cleanup.
 - There is no automated test suite or release-build configuration yet.
 
 ## Phase 1: Application Foundation
@@ -62,9 +67,9 @@ Make API communication predictable on Android emulators, iOS simulators, physica
 - [x] Introduce typed models for users, listings, pagination, favorites, conversations, and buyer activity.
 - [x] Add shared loading, empty, offline, and error states.
 - [x] Add authenticated route guards.
-- [x] Remove broken encoding and normalize buyer-facing language.
-- [ ] Stop silently replacing failed API requests with mock marketplace data.
-- [ ] Keep development fixtures explicitly separated from live API behavior.
+- [x] Stop silently replacing failed API requests with mock marketplace data.
+- [x] Keep development fixtures explicitly separated from live API behavior.
+- [ ] Clean up remaining mojibake icons/glyphs in mobile source strings.
 
 ### Acceptance Criteria
 
@@ -90,13 +95,17 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
   - Jobs
   - Services
   - Classifieds
-- [ ] Build reusable listing-card components with real images and vertical-aware metadata.
+- [x] Render listing cards with real images and vertical-aware metadata.
+- [ ] Extract reusable listing-card components shared by home, favorites, and activity where practical.
 - [x] Add unified and vertical-specific browsing.
-- [ ] Add search, sorting, filters, pagination, and pull-to-refresh.
+- [x] Add pull-to-refresh on marketplace discovery.
+- [ ] Add search, sorting, filters, and pagination/load-more controls.
 - [ ] Respect enabled/disabled backend modules.
 - [ ] Respect the buyer's selected location where supported.
-- [ ] Add proper image loading, fallback, and retry behavior.
-- [ ] Build vertical-specific detail adapters instead of probing unrelated endpoints.
+- [x] Add basic image rendering and fallback visuals.
+- [ ] Add image loading failure handling and retry behavior.
+- [x] Use vertical-specific listing endpoints for detail screens instead of probing unrelated endpoints.
+- [ ] Expand detail adapters with richer vertical-specific fields and customer actions.
 - [ ] Add shareable listing links.
 
 ### Acceptance Criteria
@@ -110,13 +119,14 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
 
 ### Tasks
 
-- [ ] Complete login validation and error presentation.
+- [x] Add basic login validation and error presentation.
 - [ ] Add buyer registration.
 - [ ] Add forgot-password and reset-password flows.
-- [ ] Load the authenticated buyer profile on startup.
+- [x] Restore the stored authenticated buyer session on startup.
+- [ ] Refresh the authenticated buyer profile from the API on startup.
 - [ ] Add profile editing, avatar upload, and location selection.
 - [ ] Add password management.
-- [ ] Ensure the mobile client consistently uses buyer terminology.
+- [ ] Finish buyer terminology and remaining source-string encoding cleanup.
 - [ ] Prevent seller-only accounts from entering unsupported mobile workflows where appropriate.
 
 ### Acceptance Criteria
@@ -137,14 +147,17 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 - [x] Add save-to-favorites action to listing details.
 - [x] Add favorite/unfavorite toggle to listing details.
 - [x] Add favorite/unfavorite toggles to listing cards.
+- [ ] Refresh favorites automatically when a listing is saved or removed from another screen.
 - [x] Add buyer dashboard statistics.
-- [x] Add orders and property/event bookings.
-- [ ] Add job applications.
-- [ ] Add vehicle inquiries.
-- [ ] Add service appointments and quotes.
-- [ ] Add classified inquiries.
+- [x] Add orders.
+- [x] Add property/event bookings and service appointments.
+- [x] Add job applications.
+- [x] Add vehicle inquiries.
+- [x] Add service quotes.
+- [x] Add classified inquiries.
 - [x] Add record-specific detail screens.
 - [ ] Add buyer reviews.
+- [ ] Add focused automated coverage for buyer activity adapters.
 
 ### Acceptance Criteria
 
@@ -211,7 +224,8 @@ The first sprint will deliver the foundation and one complete real-data path.
 - [x] Create the shared authenticated API client.
 - [x] Create core listing and pagination types.
 - [x] Remove implicit mock fallback behavior.
-- [x] Fix broken character encoding.
+- [x] Normalize first-pass buyer-facing copy and remove the original broken encoding on implemented screens.
+- [ ] Finish cleanup of remaining mojibake icons/glyphs found after the first sprint.
 - [x] Add Products to the category list.
 - [x] Replace the home feed with real API data for all enabled verticals.
 - [x] Render real listing images and vertical-aware card metadata.
@@ -231,8 +245,3 @@ The sprint is complete when the physical Android phone can connect to the local 
 - Never hide genuine API failures behind production mock data.
 - Keep each phase runnable and demonstrable on a physical device.
 - Do not advertise React Native mobile support publicly until signed release builds and core buyer workflows have been verified.
-
-
-when a new item is added into favorites, it should automatically appear in the favorites page, currently, i have to refresh the page to see it.
-
-single item detail page should show add or remove from favorites logically by cross checking if it is already there?

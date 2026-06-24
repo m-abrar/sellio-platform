@@ -175,6 +175,36 @@
 .booking-header__subtitle{
     max-width:600px
 }
+
+/* ── Booking page dark hero strip ──────────────────────────────────────────── */
+.booking-hero{
+    background:var(--text-dark,#1C1917);
+    position:relative;
+    overflow:hidden;
+    /* bleed outside frontend-shell__inner horizontal padding */
+    margin-left:calc(-1 * var(--frontend-shell-gutter));
+    margin-right:calc(-1 * var(--frontend-shell-gutter));
+    /* pull up into page-shell top padding so there's no white gap above */
+    margin-top:calc(-1 * var(--frontend-shell-pad-y));
+    padding:calc(var(--frontend-shell-pad-y) + 2rem) var(--frontend-shell-gutter) 2.5rem;
+}
+.booking-hero::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background-image:
+        radial-gradient(ellipse 70% 70% at 85% 10%, rgba(var(--primary-color-rgb),.07) 0%, transparent 100%),
+        radial-gradient(ellipse 50% 60% at 15% 85%, rgba(var(--primary-color-rgb),.04) 0%, transparent 100%);
+    pointer-events:none;
+}
+.booking-hero__subtitle{
+    color:rgba(255,255,255,.65);
+    max-width:520px;
+    margin:.5rem auto 0;
+    font-size:.9375rem;
+    line-height:1.6;
+    margin-bottom:0;
+}
 .booking-header__context{
     display:flex;
     align-items:center;
@@ -184,6 +214,7 @@
     margin-left:auto;
     margin-right:auto;
     padding:.9rem 1rem;
+    background:#fff;
     border:1px solid rgba(15,23,42,.08);
     border-radius:1rem
 }
@@ -1718,6 +1749,128 @@ footer{
     grid-template-columns:minmax(0, 1fr) minmax(300px, 380px);
     gap:1.5rem;
     align-items:start
+}
+.detail-page--product .detail-page__grid{
+    grid-template-columns:1fr
+}
+
+/* ── Product content tabs ──────────────────────────────────────────────────── */
+.product-content-tabs{
+    gap:0;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+}
+.product-content-tabs::-webkit-scrollbar{ display:none }
+.product-content-tab{
+    display:inline-flex;
+    align-items:center;
+    gap:.375rem;
+    background:none;
+    border:none;
+    border-bottom:2.5px solid transparent;
+    padding:.75rem 1rem;
+    font-size:.875rem;
+    font-weight:600;
+    color:var(--text-muted,#64748b);
+    white-space:nowrap;
+    cursor:pointer;
+    transition:color .18s,border-color .18s;
+    margin-bottom:-1px;
+}
+.product-content-tab:hover{
+    color:var(--text-dark,#1C1917);
+}
+.product-content-tab.active{
+    color:var(--primary-color);
+    border-bottom-color:var(--primary-color);
+}
+
+/* ── Reviews star-rating form ──────────────────────────────────────────────── */
+.star-rating{ cursor:pointer }
+.star-rating__label{ line-height:1 }
+
+/* ── Blog article prose ────────────────────────────────────────────────────── */
+#blog-body{
+    font-size:1.0625rem;
+    line-height:1.85;
+    color:#475569;
+}
+#blog-body h2,
+#blog-body h3,
+#blog-body h4{
+    font-family:var(--font-heading);
+    font-weight:400;
+    color:var(--text-dark,#1C1917);
+    letter-spacing:-0.02em;
+    margin-top:2.25rem;
+    margin-bottom:.75rem;
+    line-height:1.25;
+}
+#blog-body h2{ font-size:clamp(1.5rem,3vw,1.875rem) }
+#blog-body h3{ font-size:clamp(1.2rem,2.5vw,1.375rem) }
+#blog-body h4{ font-size:1.0625rem;font-family:var(--font-main,sans-serif);font-weight:700 }
+#blog-body p{ margin-bottom:1.25rem }
+#blog-body a{
+    color:var(--primary-color);
+    text-decoration:underline;
+    text-underline-offset:3px;
+    text-decoration-thickness:1px;
+}
+#blog-body a:hover{ text-decoration-thickness:2px }
+#blog-body blockquote{
+    border-left:3px solid var(--primary-color);
+    background:rgba(var(--primary-color-rgb),.04);
+    margin:2rem 0;
+    padding:1.25rem 1.5rem;
+    border-radius:0 8px 8px 0;
+    font-style:italic;
+    color:var(--text-dark,#1C1917);
+    font-size:1.1rem;
+}
+#blog-body blockquote cite{
+    display:block;
+    margin-top:.75rem;
+    font-size:.875rem;
+    font-style:normal;
+    font-weight:600;
+    opacity:.6;
+}
+#blog-body ul,
+#blog-body ol{
+    padding-left:1.5rem;
+    margin-bottom:1.25rem;
+}
+#blog-body li{ margin-bottom:.375rem }
+#blog-body ul li::marker{ color:var(--primary-color) }
+#blog-body strong{ color:var(--text-dark,#1C1917);font-weight:700 }
+#blog-body code{
+    background:rgba(15,23,42,.06);
+    padding:.15em .4em;
+    border-radius:4px;
+    font-size:.875em;
+    color:var(--text-dark,#1C1917);
+}
+#blog-body pre{
+    background:rgba(15,23,42,.04);
+    border:1.5px solid rgba(15,23,42,.08);
+    border-radius:8px;
+    padding:1.25rem 1.5rem;
+    overflow-x:auto;
+    margin-bottom:1.5rem;
+}
+#blog-body pre code{ background:none;padding:0;font-size:.875rem;color:inherit }
+#blog-body img{
+    max-width:100%;
+    height:auto;
+    border-radius:12px;
+    margin:1rem 0;
+}
+#blog-body hr{
+    border:none;
+    border-top:1.5px solid rgba(15,23,42,.08);
+    margin:2rem 0;
 }
 .detail-page__main,
 .detail-page__sidebar{
@@ -3775,6 +3928,13 @@ body.has-admin-bar .main-header.sticky-top{
     background:#fff;
     border:1.5px solid rgba(15,23,42,.07)
 }
+.evc-card__title{
+    font-family:var(--font-heading);
+    font-weight:400;
+    font-size:clamp(.95rem, 1.3vw, 1.1rem);
+    letter-spacing:-.01em;
+    color:var(--text-dark)
+}
 .evc-featured-border{
     border:2px solid var(--primary-color)!important;
     box-shadow:0 10px 30px rgba(var(--primary-color-rgb),.15)!important
@@ -4562,6 +4722,24 @@ body.has-admin-bar .main-header.sticky-top{
 /* Dark accent section */
 .section-dark {
     background: var(--text-dark);
+    position: relative;
+    overflow: hidden;
+}
+.section-dark::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(ellipse 70% 70% at 85% 10%, rgba(var(--primary-color-rgb), .07) 0%, transparent 100%),
+        radial-gradient(ellipse 50% 60% at 15% 85%, rgba(var(--primary-color-rgb), .04) 0%, transparent 100%);
+    background-size: 100% 100%, 100% 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+.section-dark > .container-xl,
+.section-dark > .container {
+    position: relative;
+    z-index: 1;
 }
 .section-dark h1,
 .section-dark h2,
@@ -4766,8 +4944,10 @@ body.has-admin-bar .main-header.sticky-top{
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
-    background-size: 28px 28px;
+    background-image:
+        radial-gradient(ellipse 70% 70% at 85% 10%, rgba(var(--primary-color-rgb), .07) 0%, transparent 100%),
+        radial-gradient(ellipse 50% 60% at 15% 85%, rgba(var(--primary-color-rgb), .04) 0%, transparent 100%);
+    background-size: 100% 100%, 100% 100%;
     pointer-events: none;
 }
 .cta-inner {

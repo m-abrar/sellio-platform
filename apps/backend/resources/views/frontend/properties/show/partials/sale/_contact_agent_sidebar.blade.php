@@ -65,9 +65,12 @@
         @endif
     </div>
 
-    <div class="text-center mt-4">
-        <button type="button" class="btn btn-link fw-semibold" style="color:var(--primary-color)" data-property-id="{{ $property->id }}">
-            <i class="bi bi-heart me-1"></i>{{ __('Save to favourites') }}
-        </button>
-    </div>
+    @auth
+        <div class="text-center mt-4">
+            <a href="{{ route('dashboard') }}" class="btn btn-link fw-semibold text-decoration-none" style="color:var(--primary-color)"
+               data-bs-toggle="tooltip" title="{{ __('Saved listings available in your dashboard') }}">
+                <i class="bi bi-heart me-1"></i>{{ __('Save to favourites') }}
+            </a>
+        </div>
+    @endauth
 </div>

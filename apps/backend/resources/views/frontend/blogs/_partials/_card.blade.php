@@ -26,7 +26,7 @@
 
         <div class="card-body p-3 d-flex flex-column flex-grow-1">
             <div class="mb-3">
-                <h6 class="property-title fw-800 mb-2 text-dark line-clamp-2 mt-1 lh-base">
+                <h6 class="property-title mb-2 text-dark line-clamp-2 mt-1 lh-base">
                     {{ $blog->title }}
                 </h6>
                 <p class="text-muted small line-clamp-2 mb-0 opacity-75">

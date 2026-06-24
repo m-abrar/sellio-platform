@@ -536,3 +536,15 @@ Can you explain how the 4 cards on home hero are pulled from database? Logic?
 
 On the home page, the CTA is black/dark background and footer too, do you think there should be some additional section like testimonial with light background or any other solution for the problem of continously dark?
 
+
+Laravel Frontend:
+on the home page, the footer newsletter subscribe has vertical space bug.
+
+Laravel Frontend:
+the hero section has search forms, below that we have shown some information. Can we make that information cards more finished and redecide what better content to show there?
+
+Laravel Frontend:
+You have hidden the favorites button conditioned with auth, should not we always show it? So user may login if he wants to add to favorite
+
+
+In the blogs, Recommended Reading section shows nothing

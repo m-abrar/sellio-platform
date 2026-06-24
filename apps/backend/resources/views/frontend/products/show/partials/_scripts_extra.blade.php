@@ -86,7 +86,7 @@
                 },
 
                 formatCurrency(value) {
-                    return '$' + Number(value || 0).toLocaleString(undefined, {
+                    return '{{ setting('currency_symbol', '$') }}' + Number(value || 0).toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                     });

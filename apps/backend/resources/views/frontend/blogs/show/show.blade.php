@@ -33,7 +33,7 @@
 
             <div class="p-4 p-lg-5">
                 <header class="mb-4">
-                    <h1 class="fw-800 text-dark mb-3 display-6">{{ $blog->title }}</h1>
+                    <h1 class="fw-800 text-dark mb-3 display-6 tracking-tight lh-sm" style="font-family:var(--font-heading)">{{ $blog->title }}</h1>
 
                     <div class="d-flex align-items-center flex-wrap gap-3 text-muted small">
                         <div class="d-flex align-items-center">
@@ -49,7 +49,7 @@
                 <hr class="opacity-10 my-4">
 
                 <div class="article-content-wrapper">
-                    <section id="blog-body" class="mb-5 fs-5 lh-lg text-secondary">
+                    <section id="blog-body" class="mb-5">
                         {!! sanitize_rich_html($blog->content) !!}
                     </section>
 
@@ -108,14 +108,58 @@
         </div>
 
         {{-- Share Card --}}
+        @php
+            $encodedUrl   = urlencode(url()->current());
+            $encodedTitle = urlencode($blog->title);
+        @endphp
         <div class="p-4 rounded-4" style="background:rgba(var(--primary-color-rgb),.05);border:1.5px solid rgba(var(--primary-color-rgb),.15)">
             <h6 class="fw-bold text-dark"><i class="bi bi-share me-2" style="color:var(--primary-color)"></i>{{ __('Share Article') }}</h6>
             <div class="d-flex gap-2 mt-3">
-                <button class="btn btn-light btn-sm rounded-circle border shadow-sm"><i class="bi bi-facebook"></i></button>
-                <button class="btn btn-light btn-sm rounded-circle border shadow-sm"><i class="bi bi-twitter-x"></i></button>
-                <button class="btn btn-light btn-sm rounded-circle border shadow-sm"><i class="bi bi-linkedin"></i></button>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ $encodedUrl }}"
+                   target="_blank" rel="noopener"
+                   class="btn btn-light btn-sm rounded-circle border shadow-sm" title="{{ __('Share on Facebook') }}" aria-label="Facebook">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a href="https://twitter.com/intent/tweet?url={{ $encodedUrl }}&text={{ $encodedTitle }}"
+                   target="_blank" rel="noopener"
+                   class="btn btn-light btn-sm rounded-circle border shadow-sm" title="{{ __('Share on X') }}" aria-label="X / Twitter">
+                    <i class="bi bi-twitter-x"></i>
+                </a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $encodedUrl }}"
+                   target="_blank" rel="noopener"
+                   class="btn btn-light btn-sm rounded-circle border shadow-sm" title="{{ __('Share on LinkedIn') }}" aria-label="LinkedIn">
+                    <i class="bi bi-linkedin"></i>
+                </a>
+                <button class="btn btn-light btn-sm rounded-circle border shadow-sm js-share-btn"
+                        data-share-title="{{ $blog->title }}"
+                        data-share-url="{{ url()->current() }}"
+                        title="{{ __('Copy link') }}" aria-label="{{ __('Copy link') }}">
+                    <i class="bi bi-link-45deg"></i>
+                </button>
             </div>
         </div>
+
+        @push('scripts')
+        <script>
+        (function () {
+            document.querySelectorAll('.js-share-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var url   = btn.dataset.shareUrl;
+                    var title = btn.dataset.shareTitle;
+                    if (navigator.share) {
+                        navigator.share({ title: title, url: url }).catch(function () {});
+                    } else {
+                        navigator.clipboard.writeText(url).then(function () {
+                            var icon = btn.querySelector('i');
+                            icon.className = 'bi bi-check2';
+                            setTimeout(function () { icon.className = 'bi bi-link-45deg'; }, 2000);
+                        });
+                    }
+                });
+            });
+        })();
+        </script>
+        @endpush
     </x-slot:sidebar>
 
     <x-slot:related>

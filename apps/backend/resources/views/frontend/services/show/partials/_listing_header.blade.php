@@ -4,10 +4,21 @@
     </p>
 
     <div class="d-flex justify-content-between align-items-start mb-2">
-        <h1 class="display-5 text-dark mb-0 tracking-tight lh-sm pe-md-4">{{ $title }}</h1>
+        <h1 class="fw-800 display-5 text-dark mb-0 tracking-tight lh-sm pe-md-4">{{ $title }}</h1>
         <div class="d-flex gap-2 flex-shrink-0 mt-1">
-            <button class="btn btn-sm border fw-semibold px-3 rounded-2" title="{{ __('Save') }}"><i class="bi bi-heart me-1"></i>{{ __('Save') }}</button>
-            <button class="btn btn-sm border fw-semibold px-3 rounded-2" title="{{ __('Share') }}"><i class="bi bi-share me-1"></i>{{ __('Share') }}</button>
+            @auth
+                <button class="btn btn-sm border fw-semibold px-3 rounded-2"
+                        data-bs-toggle="tooltip"
+                        title="{{ __('Saved listings available in your dashboard') }}">
+                    <i class="bi bi-heart me-1"></i>{{ __('Save') }}
+                </button>
+            @endauth
+            <button class="btn btn-sm border fw-semibold px-3 rounded-2 js-share-btn"
+                    data-share-title="{{ $title }}"
+                    data-share-url="{{ request()->url() }}"
+                    title="{{ __('Share') }}">
+                <i class="bi bi-share me-1"></i>{{ __('Share') }}
+            </button>
         </div>
     </div>
 

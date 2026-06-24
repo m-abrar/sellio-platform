@@ -2,34 +2,37 @@
 <div class="apply-sidebar">
 
     @php
-        $averageRating = number_format(4.6, 1);
-        $reviewCount = 125;
         $companyName = $job->employer->name ?? 'Company';
+        $activeListings = $job->employer->active_jobs_count ?? 0;
     @endphp
 
-    {{-- Company Trust/Rating Card --}}
+    {{-- Company Card --}}
     <div class="card detail-sidebar-card mb-3 overflow-hidden">
         <div class="p-4" style="background:#F4F0EC;border-bottom:1.5px solid rgba(15,23,42,.07)">
             <p class="small fw-semibold text-uppercase mb-1" style="letter-spacing:.06em;color:var(--primary-color)">
                 <i class="bi bi-building-fill me-1"></i>{{ __('Employer') }}
             </p>
-            <h4 class="fw-800 text-dark mb-0" style="font-family:var(--font-heading)">{{ __('Company Snapshot') }}</h4>
+            <h4 class="fw-800 text-dark mb-0" style="font-family:var(--font-heading)">{{ $companyName }}</h4>
         </div>
-        <div class="p-4 text-center">
-            <p class="h2 fw-bolder mb-1" style="color:var(--primary-color)">{{ $averageRating }}<span class="small fw-normal text-muted"> / 5.0</span></p>
-            <div class="mb-2" style="color:var(--primary-color)">
-                @for ($i = 1; $i <= 5; $i++)
-                    @if ($averageRating >= $i)
-                        <i class="bi bi-star-fill"></i>
-                    @elseif ($averageRating >= $i - 0.5)
-                        <i class="bi bi-star-half"></i>
-                    @else
-                        <i class="bi bi-star"></i>
-                    @endif
-                @endfor
+        <div class="p-4">
+            @if($job->employer->profile_summary)
+                <p class="small text-muted mb-3">{{ Str::limit($job->employer->profile_summary, 120) }}</p>
+            @endif
+            <div class="d-flex gap-3 mb-3 small fw-semibold text-muted">
+                @if($activeListings > 0)
+                    <span><i class="bi bi-briefcase-fill me-1" style="color:var(--primary-color)"></i>
+                        {{ trans_choice(':count open role|:count open roles', $activeListings, ['count' => $activeListings]) }}
+                    </span>
+                @endif
+                @if($job->employer->created_at)
+                    <span><i class="bi bi-calendar3 me-1" style="color:var(--primary-color)"></i>
+                        {{ __('Since :year', ['year' => $job->employer->created_at->format('Y')]) }}
+                    </span>
+                @endif
             </div>
-            <p class="small text-muted mb-2">{{ __('Based on :count employee reviews', ['count' => number_format($reviewCount)]) }}</p>
-            <a href="{{ route('partner.profile', $job->employer) }}" class="small text-decoration-none fw-semibold d-block" style="color:var(--primary-color)">{{ __('View company profile') }}</a>
+            <a href="{{ route('partner.profile', $job->employer) }}" class="small text-decoration-none fw-semibold d-block" style="color:var(--primary-color)">
+                {{ __('View company profile') }} <i class="bi bi-arrow-right ms-1"></i>
+            </a>
         </div>
     </div>
 
@@ -58,22 +61,18 @@
                 <i class="bi bi-box-arrow-in-right me-2"></i>{{ __('Apply now') }}<i class="bi bi-arrow-right ms-2"></i>
             </a>
         </div>
-        <div class="d-grid mb-4">
-            <button class="btn btn-outline-secondary fw-semibold" {{ $isExpired ? 'disabled' : '' }}>
-                <i class="bi bi-linkedin me-2"></i>{{ __('Apply with LinkedIn') }}
-            </button>
-        </div>
-
         <hr>
         <div class="text-center small text-muted">
-            <button
-                class="btn btn-link p-0 text-decoration-none fw-semibold"
-                style="color:var(--primary-color)"
-                data-action="toggle-favorite"
-                data-job-id="{{ $job->id }}">
-                <i class="bi bi-heart me-1"></i>{{ __('Save this job') }}
-            </button>
-            <span class="mx-1">|</span>
+            @auth
+                <button
+                    class="btn btn-link p-0 text-decoration-none fw-semibold"
+                    style="color:var(--primary-color)"
+                    data-bs-toggle="tooltip"
+                    title="{{ __('Saved jobs available in your dashboard') }}">
+                    <i class="bi bi-heart me-1"></i>{{ __('Save this job') }}
+                </button>
+                <span class="mx-1">|</span>
+            @endauth
             <a href="{{ route('partner.profile', $job->employer) }}" class="btn btn-link p-0 text-decoration-none fw-semibold" style="color:var(--primary-color)">
                 <i class="bi bi-person-add me-1"></i>{{ __('Follow :company', ['company' => $companyName]) }}
             </a>

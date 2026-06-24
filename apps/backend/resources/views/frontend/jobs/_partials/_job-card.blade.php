@@ -47,6 +47,9 @@
                 </span>
             @endisset
         </div>
+        @if($job->salary_range_formatted)
+            <div class="jbl-salary d-md-none mt-2">{{ $job->salary_range_formatted }}</div>
+        @endif
     </div>
 
     {{-- Right rail -------------------------------------------------------- --}}

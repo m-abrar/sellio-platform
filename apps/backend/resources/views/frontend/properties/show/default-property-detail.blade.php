@@ -11,6 +11,7 @@
 @section('content')
 <x-frontend.detail-shell variant="property">
     <x-slot:breadcrumbs>
+        @include('frontend.properties.show.partials._breadcrumbs')
         @include('frontend.properties.show.partials.sale._header')
     </x-slot:breadcrumbs>
 

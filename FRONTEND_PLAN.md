@@ -1,7 +1,7 @@
 # Sellio Public Frontend — Design & Polish Plan
 
 > Platform: Laravel 12 / Blade · Design tokens: `--primary-color: #E05F2C`, `--text-dark: #1C1917`, `--font-heading: DM Serif Display`, `--font-main: Plus Jakarta Sans`
-> Last updated: 2026-06-24 (session 2)
+> Last updated: 2026-06-24 (session 3)
 
 ---
 
@@ -475,22 +475,22 @@ Partner auth pages (`login-partner.blade.php`, `register-partner.blade.php`) —
 | # | Task | File(s) | Effort |
 |---|---|---|---|
 | ~~5~~ | ~~Audit + fix Classifieds listing card~~ | ~~`classifieds/_partials/_card.blade.php`~~ | ✅ Done — removed double col wrapper, fixed `btn-primary-light`, added hover transition, fixed timestamp |
-| 6 | Blog post title: apply DM Serif font to `property-title` inside blog card | `blogs/_partials/_card.blade.php` + CSS | XS |
-| 7 | Event card (`evc-card`) visual consistency audit | `events/_partials/_card-event.blade.php` | S |
-| 8 | Job mobile card: salary not visible when right rail hidden at `<md` — show salary in main column on mobile | `jobs/_partials/_job-card.blade.php` | XS |
-| 9 | Homepage body sections: audit strip headers, "View all" links, and CTA band | `unifieds/_partials/_index-body.blade.php` | M |
-| 10 | Homepage stats band: verify DM Serif large numbers | Same file | XS |
+| ~~6~~ | ~~Blog post title: apply DM Serif font~~ | ~~Already applied via `.listing-card .property-title` CSS~~ | ✅ Already done |
+| ~~7~~ | ~~Event card (`evc-card`) visual consistency audit~~ | ~~`events/_partials/_card-event.blade.php`~~ | ✅ Done — fixed title to DM Serif (`.evc-card__title`), fixed duplicate `class` attr bug on organizer avatar |
+| ~~8~~ | ~~Job mobile card: salary not visible when right rail hidden at `<md`~~ | ~~`jobs/_partials/_job-card.blade.php`~~ | ✅ Done — added `d-md-none` salary line in card body |
+| ~~9~~ | ~~Homepage body sections: audit strip headers, "View all" links, and CTA band~~ | ~~`unifieds/_partials/_index-body.blade.php`, `style.css`~~ | ✅ Done — h2 headings already DM Serif via `.frontend-site section h2.fw-800`; "View all" links consistent; CTA band dot grid → Level 3 glows; `.section-dark` also gets Level 3 glows |
+| ~~10~~ | ~~Homepage stats band: verify DM Serif large numbers~~ | ~~`.hero-stat__value` and `.cta-stat__value` both already have `font-family: var(--font-heading)`~~ | ✅ Already done |
 
 ### 🟡 P2 — Polish (improves quality significantly)
 
 | # | Task | File(s) | Effort |
 |---|---|---|---|
-| 11 | Property detail: breadcrumb, gallery lightbox, sidebar CTA audit | `properties/show/` | M |
-| 12 | Service detail: header, sidebar form, styles_extra audit | `services/show/` | M |
-| 13 | Job detail: header + application sidebar | `jobs/show/job-detail.blade.php` | S |
-| 14 | Product detail: gallery, specs table, seller sidebar | `products/show/` | M |
-| 15 | Blog post detail: prose styles, sidebar naming issue (`_seller_contact_card`) | `blogs/show/` | S |
-| 16 | Booking flows: header treatment (plain white → dark strip) | `properties/booking/`, `events/booking/` | S |
+| ~~11~~ | ~~Property detail: breadcrumb, gallery lightbox, sidebar CTA audit~~ | ~~`properties/show/`~~ | ✅ Done — breadcrumbs restored (was orphaned); Bootstrap Modal lightbox on gallery images; dead "Save to favourites" button auth-gated + routed to dashboard |
+| ~~12~~ | ~~Service detail: header, sidebar form, styles_extra audit~~ | ~~`services/show/`~~ | ✅ Done — h1 title now DM Serif (added `fw-800`); dead Save/Share buttons fixed (Share uses Web Share API + clipboard fallback, Save auth-gated with tooltip); gallery lightbox + slide counter added; `_styles_extra.blade.php` was empty — no action needed |
+| ~~13~~ | ~~Job detail: header + application sidebar~~ | ~~`jobs/show/`~~ | ✅ Done — removed `_head_extra` brand-colour override (was forcing Bootstrap blue); h1 now DM Serif; fake hardcoded rating (4.6★ / 125 reviews) replaced with real employer data; dead "Save job" auth-gated with tooltip; dead "Apply with LinkedIn" removed; mobile sticky Apply Now wired to correct route |
+| ~~14~~ | ~~Product detail: gallery, specs table, seller sidebar~~ | ~~`products/show/`~~ | ✅ Done — removed harmful `.btn-primary !important` and `.btn-outline-secondary` overrides from `_styles_extra`; h1 DM Serif added; lightbox on main product image; `formatCurrency()` now uses `currency_symbol` setting instead of hardcoded `$` |
+| ~~15~~ | ~~Blog post detail: prose styles, sidebar naming issue (`_seller_contact_card`)~~ | ~~`blogs/show/`~~ | ✅ Done — deleted 3 orphan partials (copy-pasted from classifieds); added `#blog-body` prose CSS (h2/h3/blockquote/lists/code/img); wired share buttons to real social URLs + Web Share API copy-link fallback; h1 now DM Serif with `tracking-tight` |
+| ~~16~~ | ~~Booking flows: header treatment (plain white → dark strip)~~ | ~~`properties/booking/`, `events/booking/`~~ | ✅ Done — both `_booking-header.blade.php` partials restructured: title/eyebrow/step now in `.booking-hero` dark strip (Level 3, two faint glows, full bleed via negative margins); context card (thumbnail + back link) moved below on light background |
 | 17 | Cart + Checkout: header treatment + Stripe Elements styling | `products/cart.blade.php`, checkout partials | M |
 | 18 | Legal page sidebar: add anchor-link table of contents | `pages/terms.blade.php`, `pages/privacy-policy.blade.php` | S |
 | 19 | Terms/Privacy: make "Last updated" date a config/DB setting | Both legal pages + config | XS |
@@ -544,6 +544,16 @@ Partner auth pages (`login-partner.blade.php`, `register-partner.blade.php`) —
 | All listing page banners | `_page-heading.blade.php`, `style.css` |
 | Jobs listing card redesign (horizontal layout) | `jobs/_partials/_job-card.blade.php`, `style.css` |
 | PageSeeder cleanup | `PageSeeder.php` |
+
+### Session 3
+| Completed | Files changed |
+|---|---|
+| Job card mobile: salary now visible at `<md` | `jobs/_partials/_job-card.blade.php` |
+| Event card: title changed to DM Serif (`.evc-card__title`), added CSS rule | `events/_partials/_card-event.blade.php`, `style.css` |
+| Event card: fixed duplicate `class` attribute bug on organizer avatar | `events/_partials/_card-event.blade.php` |
+| Confirmed #6 (blog title) and #10 (stats band) already had DM Serif — no change needed | — |
+| CTA band: replaced dot grid with Level 3 two-glow pattern | `style.css` |
+| `.section-dark` (Autos section): added Level 3 glow `::before` | `style.css` |
 
 ### Session 2
 | Completed | Files changed |
