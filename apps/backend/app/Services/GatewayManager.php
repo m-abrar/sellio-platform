@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Contracts\PaymentGatewayService;
-use App\Exceptions\WebhookSignatureException;
 use App\Models\PaymentGateway;
 use Exception;
 use Illuminate\Container\Container;
@@ -14,8 +13,12 @@ class GatewayManager
      * Map of allowed gateway identifiers to their respective service classes.
      */
     protected array $gatewayMap = [
-        'stripe' => StripeGatewayService::class,
-        'paypal' => PaypalGatewayService::class,
+        'stripe'       => StripeGatewayService::class,
+        'paypal'       => PaypalGatewayService::class,
+        'razorpay'     => RazorpayGatewayService::class,
+        'flutterwave'  => FlutterwaveGatewayService::class,
+        'mollie'       => MollieGatewayService::class,
+        'paystack'     => PaystackGatewayService::class,
     ];
 
     /**

@@ -14,6 +14,10 @@ class PaymentGatewaysSeeder extends Seeder
         $this->call([
             StripeGatewaySeeder::class,
             PaypalGatewaySeeder::class,
+            RazorpayGatewaySeeder::class,
+            FlutterwaveGatewaySeeder::class,
+            MollieGatewaySeeder::class,
+            PaystackGatewaySeeder::class,
         ]);
         
         // Add more gateway seeders here as you integrate them!
