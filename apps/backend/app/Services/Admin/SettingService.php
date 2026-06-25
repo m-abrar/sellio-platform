@@ -56,9 +56,10 @@ class SettingService
                 'meta_title'               => 'nullable|string|max:255',
                 'meta_description'         => 'nullable|string',
                 'google_verification_code' => 'nullable|string|max:255',
-                'google_analytics'         => 'nullable|string', 
-                'custom_head_code'         => 'nullable|string', 
-                'custom_footer_code'       => 'nullable|string', 
+                'gtm_container_id'         => 'nullable|string|max:50',
+                'google_analytics'         => 'nullable|string|max:50',
+                'custom_head_code'         => 'nullable|string',
+                'custom_footer_code'       => 'nullable|string',
             ],
             'social' => [
                 'facebook_url'  => 'nullable|url',

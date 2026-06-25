@@ -25,7 +25,11 @@
             </h1>
 
             <p class="booking-hero__subtitle mx-auto">
-                {{ __('Your bank transfer receipt has been submitted. We will confirm your order once the payment is verified.') }}
+                @if($payment && $payment->proof_file)
+                    {{ __('Your bank transfer receipt has been submitted. We will confirm your order once the payment is verified.') }}
+                @else
+                    {{ __('Your order is placed and awaiting payment. Please transfer the amount using the bank details provided and contact us with your receipt.') }}
+                @endif
             </p>
 
             <div class="booking-confirmation-ref d-inline-flex align-items-center gap-2 mt-4">

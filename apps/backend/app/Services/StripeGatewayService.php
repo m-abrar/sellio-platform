@@ -70,13 +70,12 @@ class StripeGatewayService implements PaymentGatewayService
             $requestArray = [
                 'amount' => $amountInCents,
                 'currency' => $currency,
-                'confirmation_method' => 'manual',
                 'confirm' => true,
                 'description' => $metadata['description'] ?? 'Order payment from your application.',
                 'metadata' => $metadata,
-                
+
                 // CRITICAL: The URL to redirect the user to after external authentication
-                'return_url' => $returnUrl, 
+                'return_url' => $returnUrl,
             ];
 
             // Conditionally add payment source based on token type
@@ -186,6 +185,18 @@ class StripeGatewayService implements PaymentGatewayService
                     'message' => 'Payment successfully completed after authentication.',
                     'details' => $intent->jsonSerialize(),
                 ];
+            }
+
+            if ($intent->status === 'requires_confirmation') {
+                $intent = $this->client->paymentIntents->confirm($paymentIntentId);
+                if ($intent->status === 'succeeded') {
+                    return [
+                        'status'    => 'successful',
+                        'reference' => $intent->id,
+                        'message'   => 'Payment successfully completed after re-confirmation.',
+                        'details'   => $intent->jsonSerialize(),
+                    ];
+                }
             }
 
             if ($intent->status === 'requires_payment_method') {

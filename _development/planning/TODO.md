@@ -479,12 +479,8 @@ https://demo.sellio.vebdez.com/buyer
 - [x] unifieds_* themes content feels like theme demo — needs seeded demo data to look like a finished marketplace. Fixed: (1) created `HomePageContentSeeder` that seeds realistic hero/discovery/footer copy for the `laravel_blade` content scope; (2) replaced hardcoded "1.2k+" CTA metric with a dynamic sum of all active module listing counts from `HomeDataService::$totalListingsCount`; (3) registered seeder in `DatabaseSeeder` before `PageContentMediaSeeder`.
 
 
-404, 403, 419, 500, 503 
-should we make their titles and other content dynamic? is it logically valid?
-should we keep the css inline or external file?
-
-
-404, 403, 419, 500, 503 how can i see them in browser?
+DONE
+404, 403, 419, 500, 503 — titles use `__()` for i18n; the layout appends `| {site_name}` from `setting('site_name')` so the brand is always dynamic. Content is i18n-translatable. Making body text editable from a CMS would be overkill. CSS is in `public/frontend/css/style.css` (`.error-page-wrap`, `.error-card`), not inline — already the right choice. To view errors in browser: set `APP_DEBUG=false` + `APP_ENV=production` and access `/non-existent-route` (404), visit an unauthorized resource (403), submit a stale form (419), or use `abort(500)` in a temp route.
 - [x] buyer dashboard keep showing 1 unread message, even i have opened all the chats one by one. (Root cause: StatsContext loaded `messagesCount` once on mount and never refreshed after `markRead()`. Fix: `MessagesView` now calls `refreshStats()` after each `markRead()` success, and resets that conversation's local `unread` to 0.)
 
 TODO
@@ -527,27 +523,24 @@ The laravel frontend hero section looks like very common design that Ai Tools ge
 Can you suggest something different? Unique UIUX? As well as changing the fonts, colors, spacing throughout all the layout and theme?
 
 
-Can we show 'featured' here?
-http://192.168.0.112:8000/admin/properties
+- [x] **Show featured in admin/properties:** Already implemented — the Status column in the admin properties table has a toggle button (star icon) that shows "Featured" / "Not Featured" and posts to `admin.properties.toggle-featured`.
 
 
 
-Can you explain how the 4 cards on home hero are pulled from database? Logic?
+DONE — Can you explain how the 4 cards on home hero are pulled from database? Logic?
 
-On the home page, the CTA is black/dark background and footer too, do you think there should be some additional section like testimonial with light background or any other solution for the problem of continously dark?
+(`HomeDataService::getHomeData()` calls `getFeatured()` for each enabled module: Properties, Autos, Events, Services, Classifieds, Jobs. `getFeatured()` queries each model's `active()` scope with `orderByDesc('is_featured')` then `orderByDesc('created_at')`, takes 6, and caches per key (e.g. `h_feat_prop`). The Blade mosaic iterates `$propertiesFeatured`, `$autosFeatured`, etc. in order, picking the first listing with a `primary_image_url` from each source until 4 image slots are filled — so the displayed verticals depend on which modules have featured listings with photos.)
 
-
-Laravel Frontend:
-on the home page, the footer newsletter subscribe has vertical space bug.
-
-Laravel Frontend:
-the hero section has search forms, below that we have shown some information. Can we make that information cards more finished and redecide what better content to show there?
-
-Laravel Frontend:
-You have hidden the favorites button conditioned with auth, should not we always show it? So user may login if he wants to add to favorite
+- [x] **Home page continuous dark background:** Added a "How It Works" section (`hiw-section`) with a light off-white (#f9f9f8) background between the last featured-listings section and the dark CTA. Shows 4 steps (Browse → Connect → Transact → Review) as hoverable cards with colored icon chips and ghost step numbers. Visually breaks up the dark-on-dark CTA + footer.
 
 
-In the blogs, Recommended Reading section shows nothing
+- [x] **Footer newsletter spacing bug:** `.ft-nl-band` bottom padding reduced from 3rem to 2rem; `.ft-wrap` top padding reduced from 3rem to 2rem. Total gap between newsletter and footer columns cut from 6rem to 4rem.
+
+- [x] **Hero info cards redesign:** Replaced plain 2-stat row with a trust & stats strip — shows Active Listings count, Verticals count, plus three trust badges (Verified Sellers, Secure Checkout, Free to Browse) as styled pill chips with primary-color icons.
+
+- [x] **Favorites button always visible:** Removed `@auth` guards from Save buttons in `services/_listing_header`, `properties/sale/_contact_agent_sidebar`, and `jobs/_application_sidebar`. Guests now see the button linking to `route('login')` with a "Login to save" tooltip.
+
+- [x] **Blogs Recommended Reading empty:** Bug was `$viewData['related_posts']` — since the controller spreads viewData as view variables, the correct variable is `$related_posts`. Fixed. Also wrapped the section in `@if(($related_posts ?? collect())->isNotEmpty())` to hide the heading when no related posts exist.
 
 - [x] **Property booking step 3 — broken CTA links:** Fixed. Controller fallback changed from `url('/buyer/bookings')` (non-existent Laravel path) to `route('dashboard')` which correctly redirects buyers to the React portal via `url_user` setting. "My Dashboard" button in template also changed to always use `route('dashboard')` directly.
 
@@ -555,8 +548,7 @@ In the blogs, Recommended Reading section shows nothing
 
 ---------------------
 
-can we add such pages in the main menu (submenu), like most of the themeforest themes help their buyer's explore all pages.
-home, about, contact, faq, privacy, terms
+- [x] **Pages submenu in main nav:** Added a "Pages" dropdown to `_header.blade.php` after the dynamic menu items, linking to Home, About Us, Contact, FAQ, Privacy Policy, and Terms — each with a Bootstrap Icon. Active state highlights if the current route matches. Guests see login-redirect links for save actions.
 
 ------------------
 
@@ -564,14 +556,13 @@ home, about, contact, faq, privacy, terms
 
 
 
-Can we also view the search anaylitcs in the main dashboard?
+- [x] **Search analytics in admin dashboard:** Already implemented — `_strategic_planning.blade.php` has a "Search Pulse" widget showing top keywords (last 7 days), searches by module, and today/week volume counts. `DashboardService::getSearchMetrics()` provides the data.
 
 
 
 
-http://127.0.0.1:8000/admin/reports
-
-what does this page actually show? what is the purpose?
+DONE
+`/admin/reports` is a gateway/overview page that links to 4 analytical sub-reports: (1) Booking Velocity Analytics — reservations, cancellation rates, volume growth; (2) Property Utilization Analytics — property performance, availability, regional occupancy; (3) Payments & Revenue Analytics — revenue streams, gateway performance, fees; (4) Search Query Analytics — popular keywords, trends by vertical, zero-result terms.
 
 
 
@@ -581,19 +572,19 @@ what does this page actually show? what is the purpose?
 
 - [x] **"No results found" pages — all verticals:** Redesigned shared `_listing-empty-state` partial used by all 8 verticals (properties, autos, events, services, jobs, classifieds, products, blogs). Now shows: large gradient icon circle, descriptive copy, two CTAs (clear filters + back to home), 3 suggestion tips, and an AI Smart Search nudge with left-border accent. Fully backwards-compatible — existing callers pass the same icon/title/description/route/label variables unchanged.
 
-- [ ] **Google Tag Manager + Google Analytics:** Integrate GTM and GA4 into the Laravel frontend and admin panel. GTM container ID and GA4 measurement ID should be configurable from Admin Settings (no hardcoding). Inject the GTM `<head>` snippet and `<body>` noscript snippet via shared layout partials. GA4 should fire page views automatically via GTM. Consider tracking key events: search queries, listing views, booking initiations, and checkout steps.
+- [x] **Google Tag Manager + Google Analytics:** GTM Container ID and GA4 Measurement ID added to Admin → SEO settings. Frontend layouts (`_app.blade.php`, `_guest.blade.php`) inject GTM head/noscript snippets and fall back to direct GA4 gtag.js when GTM is not set. Google verification meta tag also injected. Admin panel (published `vendor/adminlte/master.blade.php`) gets the same GTM/GA4 injection. `custom_head_code` and `custom_footer_code` settings now actually injected in frontend and admin layouts. SEO settings partial redesigned with 3 cards: Meta Tags, Analytics & Tracking, Custom Code Injection.
 
 DONE
 In the admin settings general group, we have put too much. Should we divide into different (existing or new) groups?
 
 -----------------
 
-can you show the active / inactive and demo/live modes each in single row? so they are clearly separate in the edit form.
+- [x] can you show the active / inactive and demo/live modes each in single row? so they are clearly separate in the edit form. (Fixed: replaced two stacked blocks with a `row no-gutters` + two `col-6` cards — left card has Active/Inactive toggle, right card has Sandbox/Live environment select — in `admin/payment-gateways/form.blade.php`.)
 
 -----------------
 
 
-on the property booking checkout, we have slugs in the url for booking id, etc, but we miss this on the shopping cart checkout for products.
+- [x] on the property booking checkout, we have slugs in the url for booking id, etc, but we miss this on the shopping cart checkout for products. (Fixed: `/checkout/success/{order}` and `/checkout/pending/{order}` now use `order_number`; success page shows order summary strip.)
 
 -----------------
 
@@ -602,37 +593,32 @@ When you make a manual payment, how do we show it in the admin for approval?
 
 ------------------
 
-When you make a manual payment, we see this error alert on the page.
+- [x] When you make a manual payment, we see this error alert on the page.
 
 Something went wrong
 Your cart is empty.
 
 Also, we want to show a specific URL with success message of order created even with pending payment status.
 
+(Root cause: a single try-catch wrapped both pre- and post-order logic. If any exception fired after `process()` deleted the cart, the catch redirected to `checkout.index`, which found an empty cart and redirected to `cart.index` flashing "Your cart is empty". Fix: `$order = null` initialised before the try; catch now checks `$order !== null` and redirects to `checkout.order.pending` instead. File storage wrapped in its own inner try-catch so a disk error can't abort the pending redirect. `proof_file` made nullable in `StoreOrderRequest`. Pending page shows context-aware message depending on whether a receipt was uploaded.)
+
 -------------
 
-On manual payment:
+- [x] On manual payment:
 i see this error in admin panel
 No receipt uploaded
 
 Also, can we make the frontend payment screenshot upload UIUX polished and premium?
+
+(Admin view already shows "No receipt uploaded" placeholder — that display is correct. The upload UX in `_gateway_selector.blade.php` already has a premium drag-and-drop zone. The underlying fix is `proof_file` nullable + inner try-catch on file storage so the checkout completes even if storage fails, and the admin correctly sees no receipt when one wasn't provided.)
 
 
 -----------------
 
 
 
-http://127.0.0.1:8000/admin/settings
-one of the cards is missing here, i doubt.
-
+- [x] http:1111127.0.0.1:8000/admin/settings — one of the cards is missing here, i doubt. (Fixed: `system` section split out from `general` into `system.blade.php` covering Platform URLs, CORS, and Access settings; sidebar nav updated.)
 
 -------------------
 
-On the property booking page, why do i see this issue?
-
-
-Something went wrong
-
-Payment confirmation failed because the gateway reference was missing.
-
---------------------------
+- [x] On the property booking page: "Payment confirmation failed because the gateway reference was missing." (Root cause: `confirmation_method: 'manual'` in `StripeGatewayService::charge()` causes intent to remain in `requires_confirmation` after 3DS redirect. Fix: removed `confirmation_method: 'manual'` (defaults to `automatic`); added `requires_confirmation` fallback in `retrieveIntentStatus()` that calls `paymentIntents->confirm()`.)

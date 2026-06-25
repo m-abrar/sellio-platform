@@ -12,6 +12,12 @@
                         title="{{ __('Saved listings available in your dashboard') }}">
                     <i class="bi bi-heart me-1"></i>{{ __('Save') }}
                 </button>
+            @else
+                <a href="{{ route('login') }}" class="btn btn-sm border fw-semibold px-3 rounded-2 text-decoration-none"
+                   data-bs-toggle="tooltip"
+                   title="{{ __('Login to save this listing') }}">
+                    <i class="bi bi-heart me-1"></i>{{ __('Save') }}
+                </a>
             @endauth
             <button class="btn btn-sm border fw-semibold px-3 rounded-2 js-share-btn"
                     data-share-title="{{ $title }}"

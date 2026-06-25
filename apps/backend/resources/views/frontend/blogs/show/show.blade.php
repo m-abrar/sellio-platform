@@ -166,17 +166,19 @@
     </x-slot:sidebar>
 
     <x-slot:related>
+        @if(($related_posts ?? collect())->isNotEmpty())
         <div class="related-wrapper pb-5">
             <h4 class="fw-800 text-dark mb-4 detail-section-title">
                 <i class="bi bi-grid-fill me-2 text-primary"></i>
                 {{ __('Recommended Reading') }}
             </h4>
             <div class="row row-cols-1 row-cols-md-2 g-4">
-                @foreach($viewData['related_posts'] ?? [] as $related)
+                @foreach($related_posts as $related)
                     @include('frontend.blogs._partials._card', ['blog' => $related])
                 @endforeach
             </div>
         </div>
+        @endif
     </x-slot:related>
 </x-frontend.detail-shell>
 @endsection

@@ -65,12 +65,17 @@
         @endif
     </div>
 
-    @auth
-        <div class="text-center mt-4">
+    <div class="text-center mt-4">
+        @auth
             <a href="{{ route('dashboard') }}" class="btn btn-link fw-semibold text-decoration-none" style="color:var(--primary-color)"
                data-bs-toggle="tooltip" title="{{ __('Saved listings available in your dashboard') }}">
                 <i class="bi bi-heart me-1"></i>{{ __('Save to favourites') }}
             </a>
-        </div>
-    @endauth
+        @else
+            <a href="{{ route('login') }}" class="btn btn-link fw-semibold text-decoration-none" style="color:var(--primary-color)"
+               data-bs-toggle="tooltip" title="{{ __('Login to save to favourites') }}">
+                <i class="bi bi-heart me-1"></i>{{ __('Save to favourites') }}
+            </a>
+        @endauth
+    </div>
 </div>

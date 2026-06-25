@@ -71,8 +71,16 @@
                     title="{{ __('Saved jobs available in your dashboard') }}">
                     <i class="bi bi-heart me-1"></i>{{ __('Save this job') }}
                 </button>
-                <span class="mx-1">|</span>
+            @else
+                <a href="{{ route('login') }}"
+                    class="btn btn-link p-0 text-decoration-none fw-semibold"
+                    style="color:var(--primary-color)"
+                    data-bs-toggle="tooltip"
+                    title="{{ __('Login to save this job') }}">
+                    <i class="bi bi-heart me-1"></i>{{ __('Save this job') }}
+                </a>
             @endauth
+            <span class="mx-1">|</span>
             <a href="{{ route('partner.profile', $job->employer) }}" class="btn btn-link p-0 text-decoration-none fw-semibold" style="color:var(--primary-color)">
                 <i class="bi bi-person-add me-1"></i>{{ __('Follow :company', ['company' => $companyName]) }}
             </a>

@@ -77,26 +77,34 @@
 
                 </div>{{-- /hero-search-module --}}
 
-                {{-- Stats row --}}
-                @if(($totalListingsCount ?? 0) > 0 || ($publicModules ?? collect())->count() > 0)
-                <div class="hero-stats-row mt-5" data-aos="fade-up" data-aos-delay="250">
+                {{-- Trust & stats strip --}}
+                <div class="hero-trust-strip mt-4" data-aos="fade-up" data-aos-delay="250">
                     @if(($totalListingsCount ?? 0) > 0)
-                    <div class="hero-stat">
-                        <span class="hero-stat__value">{{ number_format($totalListingsCount) }}+</span>
-                        <span class="hero-stat__label">{{ __('Active Listings') }}</span>
+                    <div class="hero-trust-stat">
+                        <span class="hero-trust-stat__value">{{ number_format($totalListingsCount) }}+</span>
+                        <span class="hero-trust-stat__label">{{ __('Active Listings') }}</span>
                     </div>
-                    @if(($publicModules ?? collect())->count() > 0)
-                    <div class="hero-stat-divider"></div>
-                    @endif
+                    <div class="hero-trust-sep" aria-hidden="true"></div>
                     @endif
                     @if(($publicModules ?? collect())->count() > 0)
-                    <div class="hero-stat">
-                        <span class="hero-stat__value">{{ ($publicModules ?? collect())->count() }}</span>
-                        <span class="hero-stat__label">{{ __('Categories') }}</span>
+                    <div class="hero-trust-stat">
+                        <span class="hero-trust-stat__value">{{ ($publicModules ?? collect())->count() }}</span>
+                        <span class="hero-trust-stat__label">{{ __('Verticals') }}</span>
                     </div>
+                    <div class="hero-trust-sep" aria-hidden="true"></div>
                     @endif
+                    <div class="hero-trust-badges">
+                        <span class="hero-trust-badge">
+                            <i class="bi bi-shield-check" aria-hidden="true"></i>{{ __('Verified Sellers') }}
+                        </span>
+                        <span class="hero-trust-badge">
+                            <i class="bi bi-lock" aria-hidden="true"></i>{{ __('Secure Checkout') }}
+                        </span>
+                        <span class="hero-trust-badge">
+                            <i class="bi bi-eye" aria-hidden="true"></i>{{ __('Free to Browse') }}
+                        </span>
+                    </div>
                 </div>
-                @endif
 
             </div>{{-- /col-lg-6 left --}}
 

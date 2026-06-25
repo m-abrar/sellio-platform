@@ -73,11 +73,12 @@ class ProductCheckoutPaymentTest extends TestCase
             $mock->shouldReceive('resolve')->once()->andReturn($fakeGateway);
         });
 
-        $this->actingAs($user)
-            ->post(route('checkout.process', 'stripe'), $this->validCheckoutPayload())
-            ->assertRedirect(route('checkout.order.success'));
+        $response = $this->actingAs($user)
+            ->post(route('checkout.process', 'stripe'), $this->validCheckoutPayload());
 
         $order = Order::query()->firstOrFail();
+
+        $response->assertRedirect(route('checkout.order.success', ['order' => $order->order_number]));
 
         $this->assertSame('paid', $order->payment_status);
         $this->assertSame(Order::STATUS_PROCESSING, $order->status);
@@ -165,8 +166,8 @@ class ProductCheckoutPaymentTest extends TestCase
         });
 
         $this->actingAs($user)
-            ->get(route('checkout.confirm', ['gateway' => 'stripe', 'order' => $order->id]) . '?payment_intent=pi_product_order_auth')
-            ->assertRedirect(route('checkout.order.success'));
+            ->get(route('checkout.confirm', ['gateway' => 'stripe', 'order' => $order->order_number]) . '?payment_intent=pi_product_order_auth')
+            ->assertRedirect(route('checkout.order.success', ['order' => $order->order_number]));
 
         $this->assertDatabaseHas('orders', [
             'id' => $order->id,
@@ -197,7 +198,7 @@ class ProductCheckoutPaymentTest extends TestCase
         ]);
 
         $this->actingAs($otherUser)
-            ->get(route('checkout.confirm', ['gateway' => 'stripe', 'order' => $order->id]) . '?payment_intent=pi_product_order_auth')
+            ->get(route('checkout.confirm', ['gateway' => 'stripe', 'order' => $order->order_number]) . '?payment_intent=pi_product_order_auth')
             ->assertForbidden();
     }
 

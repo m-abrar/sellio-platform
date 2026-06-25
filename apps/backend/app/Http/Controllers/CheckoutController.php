@@ -74,6 +74,12 @@ class CheckoutController extends Controller
      */
     public function processPayment(StoreOrderRequest $request, GatewayManager $manager, CheckoutService $checkoutService, string $gatewaySlug): RedirectResponse
     {
+        // Track whether the order was created so the catch knows where to redirect.
+        // After process() runs the cart is deleted, so we must never redirect back
+        // to checkout.index once $order is set (doing so creates an empty cart and
+        // shows "Your cart is empty" on the next page).
+        $order = null;
+
         try {
             if (!Auth::check()) {
                 return redirect()->route('login')->with('error', __('Please sign in to complete checkout.'));
@@ -84,7 +90,7 @@ class CheckoutController extends Controller
 
             // SECURITY: Recalculate amount from the source of truth (Cart)
             $cart = app(CartService::class)->getOrCreateCart();
-            
+
             if ($cart->items->isEmpty()) {
                 return redirect()->route('cart.index')->with('error', __('Your cart is empty.'));
             }
@@ -95,7 +101,7 @@ class CheckoutController extends Controller
                 return redirect()->route('checkout.index')->with('error', __('Payment details are required.'));
             }
 
-            // 1. Persist the Order before charging (pending state)
+            // 1. Persist the Order and delete the cart (no going back after this point)
             $order = $checkoutService->process($cart, $request->validated(), $gatewaySlug);
 
             $returnUrl = route('checkout.confirm', ['gateway' => $gatewaySlug, 'order' => $order->order_number], true);
@@ -107,7 +113,7 @@ class CheckoutController extends Controller
                 'order_number' => $order->order_number,
                 'user_id'      => (string) $order->user_id,
                 'description'  => __('Payment for Order #:num', ['num' => $order->order_number]),
-            ]); 
+            ]);
 
             // 3. Handle Result
             if ($result['status'] === 'successful') {
@@ -122,13 +128,13 @@ class CheckoutController extends Controller
 
                 $order->update(['payment_status' => 'paid', 'status' => 'processing']);
                 Log::info("Payment successful via {$gatewaySlug}. Order: {$order->order_number}");
-                
-                return redirect()->route('checkout.order.success')->with([
+
+                return redirect()->route('checkout.order.success', ['order' => $order->order_number])->with([
                     'success'   => $result['message'],
                     'reference' => $result['reference'],
                 ]);
-            } 
-            
+            }
+
             if ($result['status'] === 'pending_auth' && !empty($result['redirect_url'])) {
                 $checkoutService->recordOrderPayment(
                     $order,
@@ -154,8 +160,12 @@ class CheckoutController extends Controller
                 );
 
                 if ($request->hasFile('proof_file')) {
-                    $path = $request->file('proof_file')->store('payment-proofs', 'public');
-                    $order->payments()->orderBy('id', 'desc')->first()?->update(['proof_file' => $path]);
+                    try {
+                        $path = $request->file('proof_file')->store('payment-proofs', 'public');
+                        $order->payments()->orderBy('id', 'desc')->first()?->update(['proof_file' => $path]);
+                    } catch (\Throwable $fe) {
+                        Log::warning("Proof file storage failed for order {$order->order_number}: " . $fe->getMessage());
+                    }
                 }
 
                 return redirect()->route('checkout.order.pending', ['order' => $order->order_number]);
@@ -173,14 +183,24 @@ class CheckoutController extends Controller
 
                 $order->update(['status' => 'cancelled', 'payment_status' => 'failed', 'notes' => $result['message']]);
                 Log::warning("Payment failed for order {$order->order_number}: " . $result['message']);
-                return redirect()->route('checkout.index')->with('error', $result['message']);
+                return redirect()->route('checkout.order.pending', ['order' => $order->order_number])
+                                 ->with('error', $result['message']);
             }
-            
-            return redirect()->route('checkout.index')->with('info', $result['message'] ?? 'Payment status unhandled.');
+
+            return redirect()->route('checkout.order.pending', ['order' => $order->order_number])
+                             ->with('info', $result['message'] ?? 'Payment status unhandled.');
 
         } catch (Exception $e) {
-            Log::critical("Critical Checkout Error [{$gatewaySlug}]: " . $e->getMessage());
-            return redirect()->route('checkout.index')->with('error', 'A severe error occurred during payment. Please contact support.');
+            Log::critical("Checkout Error [{$gatewaySlug}]: " . $e->getMessage());
+
+            // If the order was already created the cart is gone — send to the pending
+            // page for this order rather than back to checkout.
+            if ($order !== null) {
+                return redirect()->route('checkout.order.pending', ['order' => $order->order_number])
+                                 ->with('warning', __('Your order was placed but payment recording encountered an issue. Our team will review it.'));
+            }
+
+            return redirect()->route('checkout.index')->with('error', __('A severe error occurred during payment. Please contact support.'));
         }
     }
 
@@ -226,7 +246,7 @@ class CheckoutController extends Controller
                 $order->update(['payment_status' => 'paid', 'status' => 'processing']);
                 Log::notice("3DS Confirmation Success for order {$order->order_number}, intent: {$paymentIntentId}");
 
-                return redirect()->route('checkout.order.success')->with([
+                return redirect()->route('checkout.order.success', ['order' => $order->order_number])->with([
                     'success'   => $result['message'] ?? 'Payment confirmed successfully.',
                     'reference' => $paymentIntentId,
                 ]);
@@ -244,18 +264,17 @@ class CheckoutController extends Controller
 
     /**
      * Display the order success confirmation view.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\View\View
      */
-    public function showSuccess(Request $request): View
+    public function showSuccess(Order $order): View|RedirectResponse
     {
-        $reference = $request->session()->get('reference', 'N/A');
-        $message = $request->session()->get('success', 'Your order was placed successfully.');
+        if (Auth::id() !== $order->user_id) {
+            abort(403);
+        }
 
         return view('frontend.products.success', [
-            'reference' => $reference,
-            'message'   => $message,
+            'order'     => $order,
+            'reference' => session('reference', $order->payments()->latest()->value('transaction_id') ?? 'N/A'),
+            'message'   => session('success', __('Your order was placed successfully.')),
         ]);
     }
 

@@ -380,5 +380,46 @@
 </section>
 @endif
 
+{{-- MODULE: How It Works (light buffer before dark CTA) --}}
+<section class="hiw-section" data-aos="fade-up">
+    <div class="container-xl">
+        <div class="text-center mb-5">
+            <div class="hero-eyebrow justify-content-center mb-3">
+                <span class="hero-eyebrow__line" aria-hidden="true"></span>
+                {{ __('Simple process') }}
+            </div>
+            <h2 class="fw-800 text-dark h1 mb-2">
+                @editable('home.hiw.heading', 'How the marketplace works')
+            </h2>
+            <p class="text-muted sub-heading mx-auto" style="max-width:520px">
+                @editable('home.hiw.description', __('Buying and selling is simple, safe, and free to start.'))
+            </p>
+        </div>
+
+        <div class="row g-4 row-cols-1 row-cols-md-4">
+            @php
+                $hiwSteps = [
+                    ['icon' => 'bi-search',       'color' => 'primary',  'step' => '01', 'title' => __('Browse'),    'desc' => __('Search thousands of verified listings across every category.')],
+                    ['icon' => 'bi-chat-dots',    'color' => 'info',     'step' => '02', 'title' => __('Connect'),   'desc' => __('Message sellers directly, ask questions, and negotiate terms.')],
+                    ['icon' => 'bi-shield-check', 'color' => 'success',  'step' => '03', 'title' => __('Transact'),  'desc' => __('Complete your purchase securely through our trusted checkout.')],
+                    ['icon' => 'bi-star',         'color' => 'warning',  'step' => '04', 'title' => __('Review'),    'desc' => __('Leave feedback to help other buyers and reward great sellers.')],
+                ];
+            @endphp
+            @foreach($hiwSteps as $step)
+            <div class="col">
+                <div class="hiw-card">
+                    <div class="hiw-step-num">{{ $step['step'] }}</div>
+                    <div class="hiw-icon-wrap hiw-icon-wrap--{{ $step['color'] }}">
+                        <i class="bi {{ $step['icon'] }}"></i>
+                    </div>
+                    <h3 class="hiw-title">{{ $step['title'] }}</h3>
+                    <p class="hiw-desc">{{ $step['desc'] }}</p>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
 {{-- MODULE: CTA --}}
 @include('frontend.unifieds._partials._index-cta')

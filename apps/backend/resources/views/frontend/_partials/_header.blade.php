@@ -30,8 +30,9 @@ Features: Responsive menu, auth-aware actions, and cart integration.
 
         <div class="collapse navbar-collapse" id="navbarNav">
             {{-- Dynamic Navigation Links --}}
+            @php $mainHeaderMenuItems = menu_items('main_header'); @endphp
             <ul class="navbar-nav me-auto">
-                @foreach(menu_items('main_header') as $menuitem)
+                @foreach($mainHeaderMenuItems as $menuitem)
                     @if($menuitem->children->isNotEmpty())
                         <li class="nav-item dropdown" data-aos="fade-down" data-aos-delay="{{ $loop->iteration * 100 }}">
                             <a @class(['nav-link nav-link--main dropdown-toggle', 'active' => $menuitem->is_active])
@@ -61,6 +62,38 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                         </li>
                     @endif
                 @endforeach
+
+                {{-- Pages Submenu --}}
+                @php
+                    $pagesNav = [
+                        ['label' => __('Home'),          'route' => route('home'),          'icon' => 'bi-house'],
+                        ['label' => __('About Us'),      'route' => route('about'),         'icon' => 'bi-info-circle'],
+                        ['label' => __('Contact'),       'route' => route('contact'),       'icon' => 'bi-envelope'],
+                        ['label' => __('FAQ'),           'route' => route('faq'),           'icon' => 'bi-question-circle'],
+                        ['label' => __('Privacy Policy'),'route' => route('privacy-policy'),'icon' => 'bi-shield-check'],
+                        ['label' => __('Terms'),         'route' => route('terms'),         'icon' => 'bi-file-text'],
+                    ];
+                    $isPagesActive = in_array(request()->route()?->getName(), ['about','contact','faq','privacy-policy','terms']);
+                @endphp
+                <li class="nav-item dropdown" data-aos="fade-down" data-aos-delay="{{ ($mainHeaderMenuItems->count() + 1) * 100 }}">
+                    <a @class(['nav-link nav-link--main dropdown-toggle', 'active' => $isPagesActive])
+                        href="#"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        {{ __('Pages') }}
+                    </a>
+                    <ul class="dropdown-menu nav-dropdown border-0 rounded-3 p-2">
+                        @foreach($pagesNav as $page)
+                            <li>
+                                <a @class(['dropdown-item nav-dropdown__item rounded-2', 'active' => request()->url() === $page['route']])
+                                    href="{{ $page['route'] }}">
+                                    <i class="{{ $page['icon'] }} me-2 text-muted" style="font-size:.85rem"></i>{{ $page['label'] }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
             </ul>
 
             {{-- User Actions & Global Controls --}}

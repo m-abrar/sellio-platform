@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @php
+        $_gtmId  = setting('gtm_container_id');
+        $_ga4Id  = setting('google_analytics');
+        $_gVerif = setting('google_verification_code');
+    @endphp
+    @if(filled($_gtmId))
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','{{ $_gtmId }}');</script>
+    @elseif(filled($_ga4Id))
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $_ga4Id }}"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{{ $_ga4Id }}');</script>
+    @endif
+    @if(filled($_gVerif))
+    <meta name="google-site-verification" content="{{ $_gVerif }}">
+    @endif
 
     <meta name="description" content="{{ strip_tags($__env->yieldContent('meta_description', config('app.name'))) }}">
     <title>@yield('title', __('Welcome')) | {{ $siteName ?? config('app.name') }}</title>
@@ -39,6 +57,9 @@
         @endcan
     @endauth
 
+    @if(filled(setting('custom_head_code')))
+    {!! setting('custom_head_code') !!}
+    @endif
     @yield('head_extra')
     @stack('styles')
 </head>
@@ -48,6 +69,10 @@
     auth()->check() && auth()->user()->can('manage-pages') ? ['has-admin-bar'] : []
 ))>
 
+    @if(filled($_gtmId))
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $_gtmId }}"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    @endif
     <a href="#main-content" class="skip-link">{{ __('Skip to content') }}</a>
 
     @auth
@@ -73,6 +98,9 @@
         @includeIf('frontend._partials._footer')
     </footer>
 
+    @if(filled(setting('custom_footer_code')))
+    {!! setting('custom_footer_code') !!}
+    @endif
     @stack('modals')
     @stack('scripts')
     <script>
