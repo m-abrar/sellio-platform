@@ -34,6 +34,10 @@ class SearchProductRequest extends FormRequest
             'min_price'    => ['nullable', 'numeric', 'min:0'],
             'max_price'    => ['nullable', 'numeric', 'gte:min_price'],
             
+            // Availability toggles
+            'on_sale'      => ['nullable', 'boolean'],
+            'in_stock'     => ['nullable', 'boolean'],
+
             // Sorting and UI Configuration
             'sort_by'      => ['nullable', 'string', 'in:latest,price_low,price_high,rating'],
             'per_page'     => ['nullable', 'integer', 'min:1', 'max:100'],

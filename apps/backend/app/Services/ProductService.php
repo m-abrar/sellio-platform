@@ -56,6 +56,10 @@ class ProductService
         $query->when($f['category'] ?? null, fn($q, $v) => $q->where('category_id', $v));
         $query->when($f['brand'] ?? null, fn($q, $v) => $q->where('brand_id', $v));
 
+        // 3. Availability Toggles
+        $query->when($f['on_sale'] ?? null, fn($q) => $q->where('on_sale', true));
+        $query->when($f['in_stock'] ?? null, fn($q) => $q->where('stock_status', 'in_stock'));
+
         // 3. Dynamic Price Filtering
         $query->when($f['min_price'] ?? null, function ($q, $v) {
             $q->where(DB::raw('COALESCE(sale_price, base_price)'), '>=', (float)$v);

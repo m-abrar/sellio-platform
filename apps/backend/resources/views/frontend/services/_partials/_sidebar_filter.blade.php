@@ -2,7 +2,7 @@
     <div class="filter-sidebar-card p-3 p-lg-4 sticky-sidebar"
         x-data="{
             priceMax: {{ request('max_price', 5000) }},
-            showCategories: {{ request('category') ? 'true' : 'false' }}, 
+            showCategories: {{ request('category_id') ? 'true' : 'false' }},
             showModels: {{ (request('is_project_based') || request('is_subscription')) ? 'true' : 'false' }},
             showFeatures: {{ (request('is_urgent') || request('is_remote')) ? 'true' : 'false' }},
             showTags: {{ request('tag') ? 'true' : 'false' }}
@@ -25,7 +25,7 @@
                     <span class="input-group-text border-0 bg-transparent ps-3">
                         <i class="bi bi-search small"></i>
                     </span>
-                    <input type="text" name="q" value="{{ request('q') }}" 
+                    <input type="text" name="search" value="{{ request('search') }}"
                            class="form-control border-0 shadow-none bg-transparent" 
                            placeholder="{{ __('e.g. Logo Design...') }}">
                 </div>
@@ -39,10 +39,10 @@
                     <span class="input-group-text">
                         <i class="bi bi-geo-alt"></i>
                     </span>
-                    <select name="location_id" class="form-control form-select border-0 shadow-none bg-transparent">
+                    <select name="location" class="form-control form-select border-0 shadow-none bg-transparent">
                         <option value="">{{ __('Anywhere / Remote') }}</option>
                         @foreach($locations as $loc)
-                            <option value="{{ $loc->id }}" {{ request('location_id') == $loc->id ? 'selected' : '' }}>
+                            <option value="{{ $loc->id }}" {{ request('location') == $loc->id ? 'selected' : '' }}>
                                 {{ $loc->title }}
                             </option>
                         @endforeach
@@ -74,10 +74,10 @@
                 </div>
                 <div x-show="showCategories" x-collapse>
                     <div class="pt-1 pb-2">
-                        <select name="category" class="form-select filter-input shadow-none small">
+                        <select name="category_id" class="form-select filter-input shadow-none small">
                             <option value="">{{ __('All Categories') }}</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
                                     {{ $category->title }}
                                 </option>
                             @endforeach

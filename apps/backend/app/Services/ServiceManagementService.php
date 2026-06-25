@@ -61,6 +61,10 @@ class ServiceManagementService
             ->when($filters['expertise'] ?? null, fn($q, $v) => $q->where('expertise_level', $v))
             ->when($filters['min_price'] ?? null, fn($q, $v) => $q->where('base_price', '>=', $v))
             ->when($filters['max_price'] ?? null, fn($q, $v) => $q->where('base_price', '<=', $v))
+            ->when($filters['is_project_based'] ?? null, fn($q) => $q->where('is_project_based', true))
+            ->when($filters['is_subscription'] ?? null, fn($q) => $q->where('is_subscription', true))
+            ->when($filters['is_urgent'] ?? null, fn($q) => $q->where('is_urgent', true))
+            ->when($filters['is_remote'] ?? null, fn($q) => $q->where('is_remote', true))
             ->when($filters['features'] ?? null, function ($q, $v) {
                 $q->whereHas('features', fn($sub) => $sub->whereIn('features.id', (array) $v));
             })

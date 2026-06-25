@@ -22,18 +22,22 @@ class SearchServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'search'      => ['nullable', 'string', 'max:255'],
-            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
-            'location'    => ['nullable', 'integer', 'exists:locations,id'],
-            'type'        => ['nullable', 'integer', 'exists:types,id'],
-            'expertise'   => ['nullable', 'integer', 'in:1,2,3,4'],
-            'min_price'   => ['nullable', 'numeric', 'min:0'],
-            'max_price'   => ['nullable', 'numeric', 'min:0', 'gte:min_price'],
-            'features'    => ['nullable', 'array'],
-            'features.*'  => ['integer', 'exists:features,id'],
-            'tags'        => ['nullable', 'array'],
-            'tags.*'      => ['integer', 'exists:tags,id'],
-            'per_page'    => ['nullable', 'integer', 'min:1', 'max:100'],
+            'search'           => ['nullable', 'string', 'max:255'],
+            'category_id'      => ['nullable', 'integer', 'exists:categories,id'],
+            'location'         => ['nullable', 'integer', 'exists:locations,id'],
+            'type'             => ['nullable', 'integer', 'exists:types,id'],
+            'expertise'        => ['nullable', 'integer', 'in:1,2,3,4'],
+            'min_price'        => ['nullable', 'numeric', 'min:0'],
+            'max_price'        => ['nullable', 'numeric', 'min:0', 'gte:min_price'],
+            'is_project_based' => ['nullable', 'boolean'],
+            'is_subscription'  => ['nullable', 'boolean'],
+            'is_urgent'        => ['nullable', 'boolean'],
+            'is_remote'        => ['nullable', 'boolean'],
+            'features'         => ['nullable', 'array'],
+            'features.*'       => ['integer', 'exists:features,id'],
+            'tags'             => ['nullable', 'array'],
+            'tags.*'           => ['integer', 'exists:tags,id'],
+            'per_page'         => ['nullable', 'integer', 'min:1', 'max:100'],
         ];
     }
 }

@@ -102,23 +102,22 @@
                 </div>
             </div>
 
-            {{-- 5. Brands (Checkboxes) --}}
+            {{-- 5. Brand (Select) --}}
             <div class="mb-2 border-top pt-3">
                 <div class="d-flex justify-content-between align-items-center mb-2 pointer-cursor" @click="showBrands = !showBrands">
-                    <label class="filter-label mb-0 text-dark">{{ __('Brands') }}</label>
+                    <label class="filter-label mb-0 text-dark">{{ __('Brand') }}</label>
                     <i class="bi small text-muted transition-all" :class="showBrands ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                 </div>
                 <div x-show="showBrands" x-collapse>
-                    <div class="pt-1 pb-2 custom-scrollbar scrollable-list">
-                        @foreach ($brands as $brand)
-                            <div class="form-check mb-2 last-child-border-0">
-                                <input class="form-check-input shadow-none pointer-cursor" type="checkbox" name="brand[]" value="{{ $brand->id }}" id="brand-{{ $brand->id }}"
-                                    {{ is_array(request('brand')) && in_array($brand->id, request('brand')) ? 'checked' : '' }}>
-                                <label class="form-check-label small fw-600 text-muted pointer-cursor" for="brand-{{ $brand->id }}">
+                    <div class="pt-1 pb-2">
+                        <select name="brand" class="form-select filter-input shadow-none small">
+                            <option value="">{{ __('All Brands') }}</option>
+                            @foreach ($brands as $brand)
+                                <option value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'selected' : '' }}>
                                     {{ $brand->title }}
-                                </label>
-                            </div>
-                        @endforeach
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
