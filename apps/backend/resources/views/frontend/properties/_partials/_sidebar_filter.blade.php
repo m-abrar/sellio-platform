@@ -21,7 +21,6 @@
         
         <form method="GET" action="{{ route('properties.index') }}" id="filter-form">
             {{-- State preservation --}}
-            <input type="hidden" name="themeVariant" value="{{ request('themeVariant', 'default') }}">
             @if(request()->filled('q')) <input type="hidden" name="q" value="{{ request('q') }}"> @endif
             <input type="hidden" name="sort" value="{{ request('sort') }}">
 

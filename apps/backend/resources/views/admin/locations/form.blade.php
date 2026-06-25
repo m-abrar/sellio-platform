@@ -163,7 +163,6 @@
                 @include('admin._partials._form-actions', [
                     'model' => $location,
                     'title' => 'LOCATION',
-                    'duplicate' => 'admin.locations.duplicate'
                 ])
                 
                 @include('admin.locations.partials.map-card')
