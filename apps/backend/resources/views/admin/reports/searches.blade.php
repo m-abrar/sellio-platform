@@ -259,7 +259,11 @@
                     @php
                         $sortParams = request()->except(['sort', 'direction']);
                         $sortLink = function(string $col) use ($sortCol, $sortDir, $sortParams): string {
-                            $dir = ($sortCol === $col && $sortDir === 'asc') ? 'desc' : 'asc';
+                            if ($sortCol === $col) {
+                                $dir = $sortDir === 'asc' ? 'desc' : 'asc';
+                            } else {
+                                $dir = $col === 'created_at' ? 'desc' : 'asc';
+                            }
                             return route('admin.reports.searches', array_merge($sortParams, ['sort' => $col, 'direction' => $dir]));
                         };
                         $sortIcon = function(string $col) use ($sortCol, $sortDir): string {
@@ -319,8 +323,9 @@
                                     @endif
                                 </td>
                                 <td class="text-muted small">{{ $sq->ip_address ?? '—' }}</td>
-                                <td class="text-muted small" title="{{ $sq->created_at }}">
-                                    {{ $sq->created_at?->diffForHumans() }}
+                                <td class="small" title="{{ $sq->created_at }}">
+                                    <span class="text-dark font-weight-500">{{ $sq->created_at?->diffForHumans() }}</span>
+                                    <br><span class="text-muted" style="font-size:0.68rem;opacity:0.5">{{ $sq->created_at?->format('Y-m-d H:i') }}</span>
                                 </td>
                             </tr>
                         @empty

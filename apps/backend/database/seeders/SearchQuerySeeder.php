@@ -79,6 +79,11 @@ class SearchQuerySeeder extends Seeder
         ];
 
         foreach ($entries as $entry) {
+            $ts = $now->copy()->subDays($entry['days'])->setHour($entry['hour'])->setMinute(rand(0, 59));
+            if ($ts->isFuture()) {
+                $ts = $now->copy()->subMinutes(rand(5, 55));
+            }
+
             SearchQuery::create([
                 'module'       => $entry['module'],
                 'keyword'      => $entry['keyword'],
@@ -86,7 +91,7 @@ class SearchQuerySeeder extends Seeder
                 'result_count' => null,
                 'user_id'      => null,
                 'ip_address'   => fake()->ipv4(),
-                'created_at'   => $now->copy()->subDays($entry['days'])->setHour($entry['hour'])->setMinute(rand(0, 59)),
+                'created_at'   => $ts,
             ]);
         }
     }

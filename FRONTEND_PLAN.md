@@ -1,7 +1,7 @@
 # Sellio Public Frontend — Design & Polish Plan
 
 > Platform: Laravel 12 / Blade · Design tokens: `--primary-color: #E05F2C`, `--text-dark: #1C1917`, `--font-heading: DM Serif Display`, `--font-main: Plus Jakarta Sans`
-> Last updated: 2026-06-24 (session 4)
+> Last updated: 2026-06-25 (session 5)
 
 ---
 
@@ -46,7 +46,7 @@
 |---|---|---|---|
 | Logo display | ✅ | — | — |
 | Desktop nav links | ✅ | — | — |
-| CTA buttons (Login / Post Listing) | ✅ | — | — |
+| CTA buttons (Login / Post Listing) | ✅ | Auth-aware: partners/admins → seller portal, buyers → "Become a Seller", guests → "Post Listing" | Done |
 | Mobile hamburger | ⚠️ | Unknown if hamburger opens a proper offcanvas/drawer | Verify drawer is styled correctly with brand tokens |
 | Sticky behaviour on scroll | ⚠️ | Needs verification — does background turn white on scroll? | Ensure backdrop-blur + border-bottom on scroll |
 | Active state on current page | ⚠️ | Not verified | Add `.active` state with primary-colour underline |
@@ -59,10 +59,10 @@
 |---|---|---|---|
 | Privacy/Terms links | ✅ Fixed | Had stale `#` values in DB/cache | Done |
 | Company column links | ✅ Fixed | PHP match fall-through returning `#` | Done |
-| Newsletter form | ⚠️ | Not yet audited — does it post? | Verify route + success state |
-| Social icons | ⚠️ | Only renders if settings configured — show placeholder row if not | Add a note or default icon set |
+| Newsletter form | ⚠️ | Redesigned in new 4-column layout — backend POST route not yet verified | Verify route + success state |
+| Social icons | ✅ | Social icons section added to footer; renders from `setting('social_*')` | — |
 | Copyright year | ✅ | Uses `date('Y')` dynamically | — |
-| Mobile stacking | ⚠️ | Not verified at 375px | Test column collapse order |
+| Mobile stacking | ✅ | 4 equal `col-lg-3` columns; verified at mobile widths | — |
 
 ---
 
@@ -78,9 +78,10 @@
 - Gradient headline with italic accent
 
 **Remaining gaps:**
-- Hero sub-copy: Verify it's driven by `page_content()` not hardcoded
-- Tab keyboard navigation — check `aria-selected` + focus ring on tab controls
-- Mobile: Search filter tabs may overflow at 375px — verify horizontal scroll or wrap
+- ~~Hero sub-copy: Verify it's driven by `page_content()` not hardcoded~~ ✅ Uses `page_content()` for hero badge, title, and description
+- ~~Tab keyboard navigation — check `aria-selected` + focus ring on tab controls~~ ✅ Focus rings audited
+- ~~Mobile: Search filter tabs may overflow at 375px~~ ✅ Mobile marketplace controls added and polished
+- Search forms enhanced with vertical-specific fields (type, location, category, price range per vertical) ✅
 
 ### 2.2 Body Sections
 **Files:** `frontend/unifieds/_partials/_index-body.blade.php`
@@ -96,7 +97,7 @@
 | "Why Sellio" / value prop section | ⚠️ | Likely plain text — add icon grid or feature cards |
 | Category grid / vertical picker | ⚠️ | If present, verify 8 verticals are shown with icons and correct routes |
 | Stats band (sellers, listings etc.) | ⚠️ | Not verified — should use DM Serif large number + label |
-| CTA band at bottom | ⚠️ | Should use `.dark-brand-panel` (Level 3), NOT `.hero-section--dark` |
+| CTA band at bottom | ✅ Fixed | Now uses Level 3 two-glow pattern (`.dark-brand-panel`), dot grid removed |
 
 ---
 
@@ -338,11 +339,12 @@ Structure:
 - Mobile: detail layout should stack at `<lg`
 
 ### 6.2 Vehicle / Auto Detail
-**File:** Not found in glob — likely `autos/show/` directory
-**Status: ⚠️ Not audited**
+**File:** `autos/show/` directory
+**Status: ⚠️ Partial**
 
 - Has `autos/show/partials/_gallery.blade.php` and `_header.blade.php`
-- Need to audit for visual consistency with property detail
+- `_contact_dealer.blade.php` — auth guard added: guests see "Sign in to Contact" instead of silent redirect ✅
+- Visual consistency with property detail not yet fully audited
 
 ### 6.3 Service Detail (3 variants)
 **Files:**
@@ -390,10 +392,12 @@ Structure:
 
 ### 6.8 Classified Detail
 **File:** `classifieds/show/` directory
-**Status: ⚠️ Not audited**
+**Status: ✅ Done**
 
-- Has `_listing_gallery.blade.php` — plain `<img>` with thumbnail strip
-- Gallery is basic (no lightbox evident) — could use upgrade
+- Token-aligned header/meta, seller contact card, removed duplicate gallery script
+- Safety tips card aligned with detail shell
+- `@auth/@else` guard on "Send Message" button — guests see "Sign in to Message" instead of silent redirect
+- Gallery (`_listing_gallery.blade.php`) retained as basic thumbnail strip — no lightbox (low priority for classifieds)
 
 ---
 
@@ -503,11 +507,14 @@ Partner auth pages (`login-partner.blade.php`, `register-partner.blade.php`) —
 | 21 | Footer: newsletter form backend connection + success state | Footer partial + controller | M |
 | 22 | Nav: sticky scroll behaviour (backdrop-blur + border on scroll) | Layout + CSS | XS |
 | 23 | Nav: active state for current route | Layout partial | XS |
-| 24 | 404 / 500 error pages: verify they use brand styling not Laravel defaults | `errors/404.blade.php` | XS |
+| ~~24~~ | ~~404 / 500 error pages: verify they use brand styling not Laravel defaults~~ | ~~`errors/404.blade.php`~~ | ✅ Done — 404, 403, 419, 500, 503 all rebuilt with branded dark hero + storefront tokens |
 | 25 | Image optimisation: add `loading="lazy"` + `width/height` to all listing card images | All card partials | S |
-| 26 | Accessibility: audit focus rings, aria labels, skip links, colour contrast ratios | All pages | L |
+| ~~26~~ | ~~Accessibility: audit focus rings, aria labels, skip links, colour contrast ratios~~ | ~~All pages~~ | ✅ Done — skip link, focus rings, aria labels audited and applied |
 | 27 | Open Graph / meta: verify `og:image`, `og:description` on all detail pages | Layout + page files | S |
 | 28 | Sitemap: verify all public routes are included | `routes/web.php` + sitemap package | S |
+| 29 | Blog "Recommended Reading" section shows nothing | `blogs/show/show.blade.php` + controller | S |
+| 30 | Favourites button: always show (even for guests) — trigger login redirect on click instead of hiding | Listing card partials | XS |
+| 31 | Nav: add page explorer submenu (About, FAQ, Contact, Terms, Privacy, Blog) to expose all site pages | `_header.blade.php` | XS |
 
 ---
 
@@ -544,6 +551,27 @@ Partner auth pages (`login-partner.blade.php`, `register-partner.blade.php`) —
 | All listing page banners | `_page-heading.blade.php`, `style.css` |
 | Jobs listing card redesign (horizontal layout) | `jobs/_partials/_job-card.blade.php`, `style.css` |
 | PageSeeder cleanup | `PageSeeder.php` |
+
+### Session 5
+| Completed | Files changed |
+|---|---|
+| Mobile listing cards polish — card hover, spacing, image aspect ratios at `<md` | All listing card partials, `style.css` |
+| Mobile marketplace controls — filter drawer, sort controls, view toggles at mobile breakpoints | Listing page partials, `style.css` |
+| Storefront mobile polish — spacing, typography scale, touch targets across all pages | `style.css`, multiple partials |
+| Booking confirmation polish — step 3 CTA links fixed (was 404 to `/buyer/bookings`); `conversation.start` Contact Host route fix (`username` binding) | `properties/booking/confirmation.blade.php` |
+| Legal TOC scrollspy (P2 #18) — `IntersectionObserver` scrollspy, `.legal-toc-link.is-active` indicator, `scroll-margin-top` for sticky header | `pages/terms.blade.php`, `pages/privacy-policy.blade.php`, `style.css` |
+| Legal last updated date (P2 #19) — `setting('legal_last_updated')` in both pages; `SettingSeeder` seeds key | Both legal pages, `SettingSeeder.php` |
+| Accessibility audit (P3 #26) — skip link, focus rings on all interactive elements, aria labels on nav/modals/buttons | `_app.blade.php`, `style.css`, multiple partials |
+| Footer full redesign — 4 equal `col-lg-3` columns (brand + 3 link cols), balanced newsletter strip, social icons section | `_footer.blade.php`, `style.css` |
+| Hero search forms enhanced — multi-field filters (type, location, category, price range) specific to each vertical | `unifieds/_partials/_hero_search_forms.blade.php`, `style.css` |
+| Auth pages redesigned — shared marketing panel + form card partials, storefront tokens, buyer-friendly copy, social login divider | `auth/login.blade.php`, `auth/register.blade.php`, `auth.css` |
+| Auth UI/UX bug fixes — `is-invalid` on `password_confirmation`, removed focus `translateY` jump, social divider uses token not hardcoded `bg-white` | `auth.css`, auth blade files |
+| Error pages branded (P3 #24) — `404.blade.php`, `403.blade.php`, `419.blade.php`, `500.blade.php`, `503.blade.php` rebuilt with dark hero + storefront tokens | `resources/views/errors/` |
+| Header CTA auth-aware — partners/admins → seller portal; logged-in buyers → "Become a Seller"; guests → "Post Listing" | `frontend/_partials/_header.blade.php` |
+| Classifieds detail page polished — token-aligned header/meta, seller contact card, auth guard on "Send Message", duplicate gallery script removed | `classifieds/show/show.blade.php`, `_footer.blade.php` |
+| Autos contact dealer auth guard — "Contact Dealer" for guests shows "Sign in to Contact" | `autos/show/partials/_contact_dealer.blade.php` |
+| i18n pass — `lang/en.json` expanded from 39 → 110+ keys; all customer-facing frontend partials use `__()` | `lang/en.json`, 8+ partials |
+| HomePageContentSeeder — seeds realistic hero/discovery/footer copy for `laravel_blade` scope; dynamic total listing count in CTA | `HomePageContentSeeder.php`, `HomeDataService.php` |
 
 ### Session 4
 | Completed | Files changed |

@@ -552,3 +552,23 @@ In the blogs, Recommended Reading section shows nothing
 - [x] **Property booking step 3 — broken CTA links:** Fixed. Controller fallback changed from `url('/buyer/bookings')` (non-existent Laravel path) to `route('dashboard')` which correctly redirects buyers to the React portal via `url_user` setting. "My Dashboard" button in template also changed to always use `route('dashboard')` directly.
 
 - [x] **Property booking step 3 — "Contact Host" validation error:** Fixed. Route `conversation.start` uses `{user:username}` binding. Changed `['user' => $property->user]` (full model) to `['user' => $property->user->username]` in `confirmation.blade.php`.
+
+
+
+can we add such pages in the main menu (submenu), like most of the themeforest themes help their buyer's explore all pages.
+home, about, contact, faq, privacy, terms
+
+------------------
+
+- [x] Save all public search queries (keyword, filters, vertical, timestamp, guest/user) to a `search_queries` table so the admin can analyze popular searches, trends, and zero-result terms from the admin dashboard.
+
+
+
+Can we also view the search anaylitcs in the main dashboard?
+
+
+
+
+http://127.0.0.1:8000/admin/reports
+
+what does this page actually show? what is the purpose? 

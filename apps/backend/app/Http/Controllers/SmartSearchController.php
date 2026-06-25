@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class SmartSearchController extends Controller
 {
-    private const MODEL     = 'gemini-2.0-flash';
+    private const MODEL     = 'gemini-2.5-flash';
     private const CACHE_TTL = 600; // 10 minutes
     private const API_URL   = 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent';
 
@@ -73,8 +73,9 @@ PROMPT;
                         ['role' => 'user', 'parts' => [['text' => $prompt]]],
                     ],
                     'generationConfig' => [
-                        'maxOutputTokens' => 512,
-                        'temperature'     => 0.1,
+                        'maxOutputTokens'   => 512,
+                        'temperature'       => 0,
+                        'response_mime_type' => 'application/json',
                     ],
                 ]);
 
@@ -85,10 +86,6 @@ PROMPT;
             }
 
             $text = $response->json('candidates.0.content.parts.0.text') ?? '';
-
-            // Strip markdown code fences if Gemini wraps JSON in ```json ... ```
-            $text = preg_replace('/^```(?:json)?\s*/i', '', trim($text));
-            $text = preg_replace('/\s*```$/', '', $text);
 
             $parsed = json_decode(trim($text), true);
 

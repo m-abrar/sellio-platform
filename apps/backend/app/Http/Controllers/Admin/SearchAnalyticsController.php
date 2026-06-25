@@ -58,7 +58,8 @@ class SearchAnalyticsController extends Controller
 
         $sortable  = ['module', 'keyword', 'created_at'];
         $sortCol   = in_array($request->query('sort'), $sortable) ? $request->query('sort') : 'created_at';
-        $sortDir   = $request->query('direction') === 'asc' ? 'asc' : 'desc';
+        $defaultDir = $sortCol === 'created_at' ? 'desc' : 'asc';
+        $sortDir   = in_array($request->query('direction'), ['asc', 'desc']) ? $request->query('direction') : $defaultDir;
 
         $recentSearches = (clone $base)
             ->with('user:id,name,email')
