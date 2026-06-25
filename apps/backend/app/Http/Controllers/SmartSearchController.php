@@ -141,7 +141,7 @@ PROMPT;
 
             $response = Http::timeout(15)
                 ->withOptions(['curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4]])
-                ->withQueryParameters(['key' => config('services.gemini.key')])
+                ->withQueryParameters(['key' => setting('gemini_api_key') ?: config('services.gemini.key')])
                 ->post($url, [
                     'contents' => [
                         ['role' => 'user', 'parts' => [['text' => $prompt]]],
