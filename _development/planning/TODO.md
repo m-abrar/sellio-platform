@@ -575,4 +575,8 @@ what does this page actually show? what is the purpose?
 
 
 
-- [ ] **Recent searches UX:** Attach the user's recent AI/natural-language searches to their session (for guests) and to the database `search_queries` table (for logged-in users). Surface them in the UI — e.g. below the Smart Search input as "Recent searches" chips/tags — so users can re-run a past query in one click. Clicking a chip should re-submit the query through the AI parser and redirect to results. Clear individual entries or all at once. Logged-in users should see their history persist across devices.
+- [x] **Recent searches UX:** Session-based chips for guests; DB-based (search_queries table) for logged-in users with cross-device persistence. Chips shown below Smart Search input; click re-runs via AI parser; clear individual or all. `recentSearches()` reads DB for auth users, session for guests. `clearRecentSearches()` deletes DB rows for auth users + clears session for guests.
+
+- [x] **Recent searches visibility on frontend:** Chips shown below the Smart Search input in the hero section. Guests use session (up to 8, max). Logged-in users pull from search_queries DB — history persists across devices and sessions. Trending/popular searches for guests deferred (low priority for v1).
+
+- [x] **"No results found" pages — all verticals:** Redesigned shared `_listing-empty-state` partial used by all 8 verticals (properties, autos, events, services, jobs, classifieds, products, blogs). Now shows: large gradient icon circle, descriptive copy, two CTAs (clear filters + back to home), 3 suggestion tips, and an AI Smart Search nudge with left-border accent. Fully backwards-compatible — existing callers pass the same icon/title/description/route/label variables unchanged.

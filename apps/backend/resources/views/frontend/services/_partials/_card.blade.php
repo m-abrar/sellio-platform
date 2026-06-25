@@ -1,4 +1,4 @@
-﻿<div class="listing-card h-100 d-flex flex-column transition-all hover-up rounded-4 overflow-hidden">
+﻿<div class="listing-card h-100 d-flex flex-column transition-all hover-up rounded-4 overflow-hidden position-relative">
     
     <div class="position-relative" style="height: 160px; overflow: hidden;">
         <img src="{{ $service->primary_image_url }}"

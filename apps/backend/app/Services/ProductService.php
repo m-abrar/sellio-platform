@@ -47,13 +47,13 @@ class ProductService
     private function applyFilters($query, array $f)
     {
         // 1. Keyword Search (Indexed columns)
-        $query->when($f['search'] ?? null, function ($q, $v) {
+        $query->when($f['q'] ?? null, function ($q, $v) {
             $q->where(fn($sq) => $sq->where('title', 'like', "%$v%")
                 ->orWhere('sku', 'like', "%$v%"));
         });
 
         // 2. Taxonomy Filters
-        $query->when($f['category_id'] ?? null, fn($q, $v) => $q->where('category_id', $v));
+        $query->when($f['category'] ?? null, fn($q, $v) => $q->where('category_id', $v));
         $query->when($f['brand'] ?? null, fn($q, $v) => $q->where('brand_id', $v));
 
         // 3. Dynamic Price Filtering

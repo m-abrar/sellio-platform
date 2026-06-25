@@ -20,9 +20,21 @@
         </div>
         
         <form method="GET" action="{{ route('properties.index') }}" id="filter-form">
-            {{-- State preservation --}}
-            @if(request()->filled('q')) <input type="hidden" name="q" value="{{ request('q') }}"> @endif
             <input type="hidden" name="sort" value="{{ request('sort') }}">
+
+            {{-- 0. KEYWORD SEARCH --}}
+            <div class="mb-4">
+                <label class="filter-label mb-2" for="sidebar-q">{{ __('Keyword') }}</label>
+                <div class="sidebar-keyword-group">
+                    <span class="sidebar-keyword-icon">
+                        <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input type="text" id="sidebar-q" name="q"
+                           class="sidebar-keyword-input"
+                           placeholder="{{ __('Search title or description…') }}"
+                           value="{{ request('q') }}">
+                </div>
+            </div>
 
             {{-- 1. LISTING TYPE TABS --}}
             <div class="mb-4">

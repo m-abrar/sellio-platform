@@ -114,8 +114,8 @@ class PropertyService
     {
         $query->visibleTo($user)->orderByDesc('is_featured')->latest();
 
-        $query->when($f['search'] ?? null, fn($q, $v) => $q->where(fn($sq) => $sq->where('title', 'like', "%$v%")->orWhere('description', 'like', "%$v%")));
-        $query->when($f['category_id'] ?? null, fn($q, $v) => $q->where('category_id', $v));
+        $query->when($f['q'] ?? null, fn($q, $v) => $q->where(fn($sq) => $sq->where('title', 'like', "%$v%")->orWhere('description', 'like', "%$v%")));
+        $query->when($f['category'] ?? null, fn($q, $v) => $q->where('category_id', $v));
         $query->when($f['location'] ?? null, fn($q, $v) => $q->where('location_id', $v));
         
         if (($f['property_type'] ?? null) === 'rental') {

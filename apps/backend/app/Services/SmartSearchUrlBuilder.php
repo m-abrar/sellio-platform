@@ -74,29 +74,28 @@ class SmartSearchUrlBuilder
     /** properties — location and category are integer IDs */
     private function normaliseProperties(array $f): array
     {
-        if (isset($f['location'])) $f['location'] = $this->locationId($f['location']);
-        if (isset($f['category'])) $f['category'] = $this->categoryId($f['category']);
+        if (isset($f['location'])) $f['location'] = $this->locationId($f['location'], 'is_property');
+        if (isset($f['category'])) $f['category'] = $this->categoryId($f['category'], 'is_property');
         return $f;
     }
 
     /** autos — location and category are integer IDs; type is a string (selling|lease) */
     private function normaliseAutos(array $f): array
     {
-        if (isset($f['location'])) $f['location'] = $this->locationId($f['location']);
-        if (isset($f['category'])) $f['category'] = $this->categoryId($f['category']);
+        if (isset($f['location'])) $f['location'] = $this->locationId($f['location'], 'is_auto');
+        if (isset($f['category'])) $f['category'] = $this->categoryId($f['category'], 'is_auto');
         return $f;
     }
 
     /** services — location is ID, category_id is ID, type is ID; remap 'category' → 'category_id' */
     private function normaliseServices(array $f): array
     {
-        // AI may return 'category' — rename to 'category_id'
         if (isset($f['category']) && ! isset($f['category_id'])) {
             $f['category_id'] = $f['category'];
             unset($f['category']);
         }
-        if (isset($f['location']))    $f['location']    = $this->locationId($f['location']);
-        if (isset($f['category_id'])) $f['category_id'] = $this->categoryId($f['category_id']);
+        if (isset($f['location']))    $f['location']    = $this->locationId($f['location'], 'is_service');
+        if (isset($f['category_id'])) $f['category_id'] = $this->categoryId($f['category_id'], 'is_service');
         if (isset($f['type']))        $f['type']        = $this->typeId($f['type']);
         return $f;
     }
@@ -104,8 +103,8 @@ class SmartSearchUrlBuilder
     /** products — location, category, brand are integer IDs */
     private function normaliseProducts(array $f): array
     {
-        if (isset($f['location'])) $f['location'] = $this->locationId($f['location']);
-        if (isset($f['category'])) $f['category'] = $this->categoryId($f['category']);
+        if (isset($f['location'])) $f['location'] = $this->locationId($f['location'], 'is_product');
+        if (isset($f['category'])) $f['category'] = $this->categoryId($f['category'], 'is_product');
         if (isset($f['brand']))    $f['brand']    = $this->brandId($f['brand']);
         return $f;
     }
@@ -123,21 +122,21 @@ class SmartSearchUrlBuilder
 
     // ── DB lookups ────────────────────────────────────────────────────────
 
-    private function locationId(mixed $value): ?int
+    private function locationId(mixed $value, ?string $moduleFlag = null): ?int
     {
         if (is_numeric($value)) return (int) $value;
         if (! is_string($value) || $value === '') return null;
-        return Location::where('slug', Str::slug($value))
-            ->orWhere('title', 'LIKE', $value)
+        return Location::when($moduleFlag, fn($q) => $q->where($moduleFlag, true))
+            ->where(fn($q) => $q->where('slug', Str::slug($value))->orWhere('title', 'LIKE', '%'.$value.'%'))
             ->value('id');
     }
 
-    private function categoryId(mixed $value): ?int
+    private function categoryId(mixed $value, ?string $moduleFlag = null): ?int
     {
         if (is_numeric($value)) return (int) $value;
         if (! is_string($value) || $value === '') return null;
-        return Category::where('slug', Str::slug($value))
-            ->orWhere('title', 'LIKE', $value)
+        return Category::when($moduleFlag, fn($q) => $q->where($moduleFlag, true))
+            ->where(fn($q) => $q->where('slug', Str::slug($value))->orWhere('title', 'LIKE', '%'.$value.'%'))
             ->value('id');
     }
 

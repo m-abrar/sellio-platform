@@ -18,10 +18,6 @@
         </div>
 
         <form method="GET" action="{{ url()->current() }}" id="shop-filter-form">
-            @if(request('q'))
-                <input type="hidden" name="q" value="{{ request('q') }}">
-            @endif
-
             {{-- 1. Search Keywords (Unified Input) --}}
             <div class="mb-4">
                 <label class="filter-label mb-2">{{ __('Search Keywords') }}</label>
@@ -29,9 +25,9 @@
                     <span class="input-group-text">
                         <i class="bi bi-search"></i>
                     </span>
-                    <input type="text" name="keyword" value="{{ request('keyword') }}" 
-                           class="form-control" 
-                           placeholder="{{ __('Product name...') }}">
+                    <input type="text" name="q" value="{{ request('q', request('keyword')) }}"
+                           class="form-control"
+                           placeholder="{{ __('Search title or description…') }}">
                 </div>
             </div>
 

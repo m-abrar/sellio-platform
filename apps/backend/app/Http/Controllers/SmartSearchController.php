@@ -202,13 +202,40 @@ PROMPT;
 
     public function recentSearches(Request $request): JsonResponse
     {
-        return response()->json($request->session()->get(self::RECENT_KEY, []));
+        $user = $request->user();
+
+        if ($user) {
+            // Logged-in: pull from DB so history persists across devices
+            $recents = SearchQuery::where('user_id', $user->id)
+                ->whereNotNull('keyword')
+                ->where('keyword', '!=', '')
+                ->orderByDesc('created_at')
+                ->pluck('keyword')
+                ->unique()
+                ->take(self::RECENT_MAX)
+                ->values()
+                ->all();
+        } else {
+            $recents = $request->session()->get(self::RECENT_KEY, []);
+        }
+
+        return response()->json($recents);
     }
 
     public function clearRecentSearches(Request $request): JsonResponse
     {
         $query = $request->input('q');
+        $user  = $request->user();
 
+        if ($user) {
+            $dbQuery = SearchQuery::where('user_id', $user->id);
+            if ($query) {
+                $dbQuery->where('keyword', $query);
+            }
+            $dbQuery->delete();
+        }
+
+        // Always clear session too (guests + fallback)
         if ($query) {
             $recents = array_values(array_filter(
                 $request->session()->get(self::RECENT_KEY, []),
@@ -224,9 +251,12 @@ PROMPT;
 
     private function pushRecentSearch(Request $request, string $query): void
     {
-        $recents = $request->session()->get(self::RECENT_KEY, []);
-        $recents = array_values(array_filter($recents, fn($item) => $item !== $query));
-        array_unshift($recents, $query);
-        $request->session()->put(self::RECENT_KEY, array_slice($recents, 0, self::RECENT_MAX));
+        // Guests: session only. Logged-in users: DB is source of truth (already saved via SearchQuery::create in parse())
+        if (! $request->user()) {
+            $recents = $request->session()->get(self::RECENT_KEY, []);
+            $recents = array_values(array_filter($recents, fn($item) => $item !== $query));
+            array_unshift($recents, $query);
+            $request->session()->put(self::RECENT_KEY, array_slice($recents, 0, self::RECENT_MAX));
+        }
     }
 }

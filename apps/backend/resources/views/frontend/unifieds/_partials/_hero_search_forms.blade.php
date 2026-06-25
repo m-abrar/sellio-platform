@@ -366,7 +366,7 @@
             <span class="ai-thinking-dot"></span>
             <span class="ai-thinking-dot"></span>
             <span class="ai-thinking-dot"></span>
-            <span class="ai-thinking-label">{{ __('Understanding your search…') }}</span>
+            <span class="ai-thinking-label">{{ __('Hold tight — good things take a second…') }}</span>
         </div>
 
         {{-- Summary panel (shown after response, before redirect) --}}
@@ -399,8 +399,8 @@
         </div>
 
         <p class="ai-search-hint">
-            <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
-            {{ __('Describe what you\'re looking for in plain language') }}
+            <i class="bi bi-stars me-1" aria-hidden="true"></i>
+            {{ __('Your next great find is one sentence away.') }}
         </p>
     </div>
 
@@ -422,13 +422,32 @@
         var submitBtn   = pane.querySelector('[data-ai-submit]');
         var idleSpan    = submitBtn.querySelector('.ai-btn-idle');
         var busySpan    = submitBtn.querySelector('.ai-btn-busy');
-        var thinkingEl  = pane.querySelector('[data-ai-thinking]');
+        var thinkingEl    = pane.querySelector('[data-ai-thinking]');
+        var thinkingLabel = pane.querySelector('.ai-thinking-label');
         var summaryEl   = pane.querySelector('[data-ai-summary]');
         var moduleBadge = pane.querySelector('[data-ai-module-badge]');
         var summaryText = pane.querySelector('[data-ai-summary-text]');
         var redirectBar = pane.querySelector('[data-ai-redirect-bar]');
         var goNowBtn    = pane.querySelector('[data-ai-go]');
         var micBtn      = pane.querySelector('[data-ai-mic]');
+
+        var THINKING_MSGS = [
+            "You're about to find something great…",
+            "Big things incoming…",
+            "Hold tight — good things take a second…",
+            "Great taste. Let's find it for you…",
+            "You've got excellent taste…",
+            "Something amazing is on its way…",
+            "Good call. Let's go find it…",
+            "Hold on — you're going to like this…",
+            "We've got a feeling about this one…",
+            "Your instincts are spot on…",
+            "Almost there — and it's looking good…",
+            "The best part is just ahead…",
+            "We're on it. And it's looking promising…",
+            "Just a second — this one's worth it…",
+            "Great things are worth a moment…",
+        ];
 
         var lastParsed    = null;
         var redirectTimer = null;
@@ -480,8 +499,8 @@
             waitTimer = setTimeout(function () { typeIn(examples[exIdx]); }, 500);
         }
 
-        input.addEventListener('focus', stopCycling);
-        input.addEventListener('blur',  function () { if (!input.value.trim()) startCycling(); });
+        input.addEventListener('focus', function () { stopCycling(); input.placeholder = ''; });
+        input.addEventListener('blur',  function () { if (!input.value.trim()) startCycling(); else input.placeholder = ''; });
         setTimeout(startCycling, 900);
 
         // ── Run search ───────────────────────────────────────────────────
@@ -544,6 +563,7 @@
             busySpan.hidden    = false;
             submitBtn.disabled = true;
             thinkingEl.hidden  = false;
+            if (thinkingLabel) thinkingLabel.textContent = THINKING_MSGS[Math.floor(Math.random() * THINKING_MSGS.length)];
             summaryEl.hidden   = true;
 
             fetch('{{ route("smart-search.parse") }}', {

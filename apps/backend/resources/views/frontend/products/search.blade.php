@@ -34,11 +34,12 @@
             </div>
         @empty
             @include('frontend._partials._listing-empty-state', [
-                'icon' => 'bi-cart-x',
-                'title' => __('No Products Found'),
-                'description' => __('Try adjusting your filters or search terms.'),
-                'route' => route('products.index'),
-                'label' => __('Reset Search'),
+                'icon'        => 'bi-cart-x',
+                'title'       => __('No Products Found'),
+                'description' => __('We couldn\'t find products matching your search. Try adjusting your filters or browse a category below.'),
+                'route'       => route('products.index'),
+                'label'       => __('Reset Search'),
+                'quickLinks'  => ($categories ?? collect())->take(8)->mapWithKeys(fn($c) => [$c->title => route('products.search', ['category' => $c->id])])->all(),
             ])
         @endforelse
     </x-frontend.listing-index>
