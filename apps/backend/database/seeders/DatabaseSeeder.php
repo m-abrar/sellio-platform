@@ -158,6 +158,7 @@ class DatabaseSeeder extends Seeder
             MenuSeeder::class,
             MenuItemSeeder::class,
             ActivityLogSeeder::class,
+            SearchQuerySeeder::class,
             HomePageContentSeeder::class,
             PageContentMediaSeeder::class,
             MediaFullSeeder::class,

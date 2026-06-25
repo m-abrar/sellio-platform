@@ -24,6 +24,7 @@ use App\Models\ServiceQuote;
 use App\Models\Subscription;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\SearchQuery;
 use App\Models\Withdrawal;
 use Bavix\Wallet\Models\Transaction as WalletTransaction;
 use Exception;
@@ -93,6 +94,7 @@ class DashboardService
                 'top_partners' => $topPartners,
                 'user_metrics' => $userMetrics,
                 'top_sales' => $this->getTopSalesData($last30Days, $limit),
+                'search_metrics' => $this->getSearchMetrics($today),
                 'js_data' => [
                     'revenue_chart' => $revenueChart,
                     'type_chart' => $typeChart,
@@ -775,5 +777,40 @@ class DashboardService
             'pgsql' => "cast(extract(month from {$column}) as integer)",
             default => "MONTH({$column})",
         };
+    }
+
+    private function getSearchMetrics(\Illuminate\Support\Carbon $today): array
+    {
+        $last7Days = $today->copy()->subDays(7);
+
+        $todayCount = SearchQuery::whereDate('created_at', $today->toDateString())->count();
+
+        $weekCount = SearchQuery::where('created_at', '>=', $last7Days)->count();
+
+        $topKeywords = SearchQuery::select('keyword', DB::raw('COUNT(*) as total'))
+            ->where('created_at', '>=', $last7Days)
+            ->whereNotNull('keyword')
+            ->where('keyword', '!=', '')
+            ->groupBy('keyword')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get();
+
+        $byModule = SearchQuery::select('module', DB::raw('COUNT(*) as total'))
+            ->where('created_at', '>=', $last7Days)
+            ->groupBy('module')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get();
+
+        $topModule = $byModule->first()?->module;
+
+        return [
+            'today'       => $todayCount,
+            'week'        => $weekCount,
+            'top_module'  => $topModule,
+            'keywords'    => $topKeywords,
+            'by_module'   => $byModule,
+        ];
     }
 }

@@ -3,6 +3,7 @@
 use App\Http\Middleware\ApplyDynamicCorsOrigins;
 use App\Http\Middleware\CheckBuiltInWebsiteStatus;
 use App\Http\Middleware\CheckModuleEnabled;
+use App\Http\Middleware\LogPublicSearch;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -67,6 +68,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'module' => CheckModuleEnabled::class,
             'built_in_website' => CheckBuiltInWebsiteStatus::class,
+            'log_search' => LogPublicSearch::class,
         ]);
         // Add this to ensure CORS headers are attached even if auth fails
         $middleware->validateCsrfTokens(except: [

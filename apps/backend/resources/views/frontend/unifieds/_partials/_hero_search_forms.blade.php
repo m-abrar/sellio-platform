@@ -371,8 +371,7 @@
                         <i class="bi bi-clipboard" aria-hidden="true"></i>
                         <span>{{ __('Copy') }}</span>
                     </button>
-                    <button type="button" class="ai-action-btn ai-action-btn--primary" data-ai-apply
-                            title="{{ __('Backend integration coming soon') }}">
+                    <button type="button" class="ai-action-btn ai-action-btn--primary" data-ai-apply>
                         {{ __('Apply Filters') }}
                         <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
                     </button>
@@ -393,58 +392,9 @@
 @push('scripts')
 <script>
 (function () {
-    function parseNL(q) {
-        var lq = q.toLowerCase();
-        var result = { module: null, filters: {}, confidence: 0 };
-
-        if (/house|apartment|condo|villa|studio|bedroom|property|rent|buy|home/.test(lq)) {
-            result.module = 'properties';
-        } else if (/car|auto|vehicle|truck|suv|van|sedan|motorbike|bike/.test(lq)) {
-            result.module = 'autos';
-        } else if (/job|work|hire|career|position|salary|employment/.test(lq)) {
-            result.module = 'jobs';
-        } else if (/event|concert|festival|workshop|conference|seminar/.test(lq)) {
-            result.module = 'events';
-        } else if (/service|plumber|cleaner|repair|fix|contractor|handyman/.test(lq)) {
-            result.module = 'services';
-        } else {
-            result.module = 'classifieds';
-        }
-
-        var bedroomM = lq.match(/(\d+)[- ]?bed/);
-        if (bedroomM) result.filters.bedrooms = parseInt(bedroomM[1], 10);
-
-        var priceM = lq.match(/\$\s?(\d[\d,]*)\s*k/i) || lq.match(/under\s+\$?\s?(\d[\d,]*)\s*(k)?/i);
-        if (priceM) {
-            var n = parseInt(priceM[1].replace(/,/g, ''), 10);
-            if ((priceM[2] || '').toLowerCase() === 'k' || /\$\s?\d+k/i.test(lq)) n *= 1000;
-            result.filters.max_price = n;
-        }
-
-        if (/\brent\b|\brental\b|\blease\b/.test(lq)) result.filters.listing_type = 'rental';
-        else if (/\bbuy\b|\bfor sale\b|\bpurchase\b/.test(lq))  result.filters.listing_type = 'sale';
-
-        var locM = lq.match(/(?:near|in|around|at)\s+([a-z][a-z\s]{1,30}?)(?:\s+under|\s+with|\s+for|\s+max|\s+bed|\s*$)/);
-        if (locM) result.filters.location = locM[1].trim();
-
-        var amenities = [];
-        if (/\bpool\b/.test(lq))           amenities.push('pool');
-        if (/\bgarage\b/.test(lq))         amenities.push('garage');
-        if (/\bgarden\b|\byard\b/.test(lq)) amenities.push('garden');
-        if (/\bparking\b/.test(lq))        amenities.push('parking');
-        if (/\bbalcony\b/.test(lq))        amenities.push('balcony');
-        if (amenities.length) result.filters.amenities = amenities;
-
-        if (/\bhouse\b|\bvilla\b/.test(lq))   result.filters.property_type = 'house';
-        else if (/\bapartment\b/.test(lq))    result.filters.property_type = 'apartment';
-        else if (/\bcondo\b/.test(lq))        result.filters.property_type = 'condo';
-        else if (/\bstudio\b/.test(lq))       result.filters.property_type = 'studio';
-
-        var matched = Object.keys(result.filters).length;
-        result.confidence = Math.min(0.98, Math.round((0.55 + matched * 0.07) * 100) / 100);
-
-        return result;
-    }
+    var CSRF = document.querySelector('meta[name="csrf-token"]')
+                ? document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                : '';
 
     function syntaxHL(json) {
         return json
@@ -532,16 +482,41 @@
             idleSpan.hidden = true;
             busySpan.hidden = false;
             submitBtn.disabled = true;
+            resultEl.hidden = true;
 
-            setTimeout(function () {
-                lastParsed = parseNL(q);
-                var pretty = JSON.stringify(lastParsed, null, 2);
+            fetch('{{ route("smart-search.parse") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': CSRF,
+                },
+                body: JSON.stringify({ q: q }),
+            })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                if (data.error) throw new Error(data.error);
+                lastParsed = data;
+                var pretty = JSON.stringify({
+                    module:     data.module,
+                    filters:    data.filters,
+                    confidence: data.confidence,
+                    summary:    data.summary,
+                }, null, 2);
                 jsonEl.innerHTML = syntaxHL(pretty);
                 resultEl.hidden = false;
+                applyBtn.disabled = !data.redirect_url;
+            })
+            .catch(function (err) {
+                jsonEl.innerHTML = '<span class="aj-kw">' + (err.message || '{{ __("Something went wrong. Please try again.") }}') + '</span>';
+                resultEl.hidden = false;
+                applyBtn.disabled = true;
+            })
+            .finally(function () {
                 idleSpan.hidden = false;
                 busySpan.hidden = true;
                 submitBtn.disabled = false;
-            }, 1300);
+            });
         }
 
         submitBtn.addEventListener('click', run);
@@ -564,10 +539,9 @@
         });
 
         applyBtn.addEventListener('click', function () {
-            applyBtn.textContent = '{{ __("Coming soon…") }}';
-            setTimeout(function () {
-                applyBtn.innerHTML = '{{ __("Apply Filters") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>';
-            }, 1800);
+            if (lastParsed && lastParsed.redirect_url) {
+                window.location.href = lastParsed.redirect_url;
+            }
         });
 
         // ── Voice search ─────────────────────────────────────────────────

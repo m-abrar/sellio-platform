@@ -49,6 +49,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\PropertyBookingController;
 use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SearchAnalyticsController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceAppointmentController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -360,6 +361,7 @@ Route::prefix('admin')
             Route::get('/bookings', 'bookings')->name('bookings');
             Route::get('/payments', 'payments')->name('payments');
             Route::get('/properties', 'properties')->name('properties');
+            Route::get('/searches', [SearchAnalyticsController::class, 'index'])->name('searches');
         }
         );
         Route::get('payments-report', [ReportController::class , 'payments'])->name('payments_report');

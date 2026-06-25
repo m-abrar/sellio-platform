@@ -10,6 +10,7 @@
  */
 use App\Http\Controllers\AdminBarContextController;
 use App\Http\Controllers\AdminBarStatusController;
+use App\Http\Controllers\SmartSearchController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\AutoController;
 use App\Http\Controllers\AutoInquiryController;
@@ -52,6 +53,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/admin-bar/status', AdminBarStatusController::class)->name('admin-bar.status');
 Route::get('/admin-bar/context', AdminBarContextController::class)->name('admin-bar.context');
 
+Route::post('/smart-search', [SmartSearchController::class, 'parse'])
+    ->middleware('throttle:10,1')
+    ->name('smart-search.parse');
+
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::middleware(['built_in_website'])->group(function () {
@@ -68,7 +73,7 @@ Route::middleware(['built_in_website'])->group(function () {
     /** BLOGS **/
     Route::prefix('blogs')->name('blogs.')->middleware('module:blogs')->group(function () {
         Route::get('/', [BlogController::class, 'index'])->name('index');
-        Route::get('/search', [BlogController::class, 'search'])->name('search');
+        Route::get('/search', [BlogController::class, 'search'])->middleware('log_search')->name('search');
         Route::get('/{blog:slug}', [BlogController::class, 'show'])->name('show');
     });
 
@@ -82,14 +87,14 @@ Route::middleware(['built_in_website'])->group(function () {
     /** CLASSIFIEDS **/
     Route::prefix('classifieds')->name('classifieds.')->middleware('module:classifieds')->group(function () {
         Route::get('/', [ClassifiedController::class, 'index'])->name('index');
-        Route::get('/search', [ClassifiedController::class, 'search'])->name('search');
+        Route::get('/search', [ClassifiedController::class, 'search'])->middleware('log_search')->name('search');
         Route::get('/{classified:slug}', [ClassifiedController::class, 'show'])->name('show');
     });
 
     /** SERVICES **/
     Route::prefix('services')->name('services.')->middleware('module:services')->group(function () {
         Route::get('/', [ServiceController::class, 'index'])->name('index');
-        Route::get('/search', [ServiceController::class, 'search'])->name('search');
+        Route::get('/search', [ServiceController::class, 'search'])->middleware('log_search')->name('search');
         Route::get('/{service:slug}', [ServiceController::class, 'show'])->name('show');
         
         // Booking Handlers
@@ -103,7 +108,7 @@ Route::middleware(['built_in_website'])->group(function () {
     /** JOBS **/
     Route::prefix('jobs')->name('jobs.')->middleware('module:jobs')->group(function () {
         Route::get('/', [JobController::class, 'index'])->name('index');
-        Route::get('/search', [JobController::class, 'search'])->name('search');
+        Route::get('/search', [JobController::class, 'search'])->middleware('log_search')->name('search');
         Route::get('/{job:slug}', [JobController::class, 'show'])->name('show');
         
         // Applications
@@ -115,7 +120,7 @@ Route::middleware(['built_in_website'])->group(function () {
     /** AUTOMOTIVE **/
     Route::prefix('vehicles')->name('autos.')->middleware('module:autos')->group(function () {
         Route::get('/', [AutoController::class, 'index'])->name('index');
-        Route::get('/search', [AutoController::class, 'search'])->name('search');
+        Route::get('/search', [AutoController::class, 'search'])->middleware('log_search')->name('search');
         Route::get('/{auto:slug}', [AutoController::class, 'show'])->name('show');
         Route::post('/{auto:slug}/inquiry', [AutoInquiryController::class, 'store'])->name('inquiry.store');
         Route::get('/{auto:slug}/inquiry/{inquiry}', [AutoInquiryController::class, 'show'])->name('inquiry.confirmation');
@@ -124,7 +129,7 @@ Route::middleware(['built_in_website'])->group(function () {
     /** REAL ESTATE **/
     Route::prefix('properties')->name('properties.')->middleware('module:properties')->group(function () {
         Route::get('/', [PropertyController::class, 'index'])->name('index');
-        Route::get('/search', [PropertyController::class, 'search'])->name('search');
+        Route::get('/search', [PropertyController::class, 'search'])->middleware('log_search')->name('search');
         Route::get('/{property:slug}', [PropertyController::class, 'show'])->name('show');
         Route::get('/{property:slug}/calendar', [PropertyController::class, 'calendar'])->name('calendar');
         Route::get('/{property}/calculate-lodging-price', [PropertyController::class, 'calculateLodgingPrice'])->name('calculate-lodging-price');
@@ -133,7 +138,7 @@ Route::middleware(['built_in_website'])->group(function () {
     /** EVENTS **/
     Route::prefix('events')->name('events.')->middleware('module:events')->group(function () {
         Route::get('/', [EventController::class, 'index'])->name('index');
-        Route::get('/search', [EventController::class, 'search'])->name('search');
+        Route::get('/search', [EventController::class, 'search'])->middleware('log_search')->name('search');
         Route::get('/{event:slug}', [EventController::class, 'show'])->name('show');
         Route::get('/{event:slug}/occurrences', [EventController::class, 'occurrences'])->name('occurrences');
         Route::get('/{event:slug}/tickets', [EventTicketController::class, 'index'])->name('tickets.index');
@@ -146,7 +151,7 @@ Route::middleware(['built_in_website'])->group(function () {
 
     Route::prefix('products')->name('products.')->middleware('module:products')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('index');
-        Route::get('/search', [ProductController::class, 'search'])->name('search');
+        Route::get('/search', [ProductController::class, 'search'])->middleware('log_search')->name('search');
         Route::get('/{product:slug}', fn (\App\Models\Product $product) => redirect()->route('product.show', $product, 301));
 
         // Dynamic Pricing for variations/addons

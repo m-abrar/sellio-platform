@@ -429,6 +429,10 @@ return [
                 'url' => 'admin/email-templates',
                 'icon' => 'far fa-fw fa-envelope-open',
             ], 'Email Templates'),
+            admin_sidebar_item('Search Analytics', [
+                'url' => 'admin/reports/searches',
+                'icon' => 'fas fa-search',
+            ], 'Search Query Analytics'),
             [
                 'text' => 'Manage Ads',
                 'url'  => 'admin/advertisements',

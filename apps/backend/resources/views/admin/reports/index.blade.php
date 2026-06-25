@@ -60,6 +60,13 @@
                     'title' => __('Payments & Revenue Analytics'),
                     'desc' => __('Audit revenue streams, payment gateway performance, and marketplace fee collection ledger.'),
                     'color' => 'info'
+                ],
+                [
+                    'route' => 'admin.reports.searches',
+                    'icon' => 'fa-search',
+                    'title' => __('Search Query Analytics'),
+                    'desc' => __('Analyze popular keywords, search trends by vertical, and zero-result terms across all marketplace modules.'),
+                    'color' => 'warning'
                 ]
             ];
         @endphp
