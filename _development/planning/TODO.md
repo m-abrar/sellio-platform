@@ -622,3 +622,54 @@ Also, can we make the frontend payment screenshot upload UIUX polished and premi
 -------------------
 
 - [x] On the property booking page: "Payment confirmation failed because the gateway reference was missing." (Root cause: `confirmation_method: 'manual'` in `StripeGatewayService::charge()` causes intent to remain in `requires_confirmation` after 3DS redirect. Fix: removed `confirmation_method: 'manual'` (defaults to `automatic`); added `requires_confirmation` fallback in `retrieveIntentStatus()` that calls `paymentIntents->confirm()`.)
+
+
+--------------------
+
+- [x] Main Menu, animation, i dont like it, change the animation to something different? (Changed from center-expand underline to left-to-right scaleX sweep with material decelerate cubic-bezier in `style.css`.)
+
+------------------
+
+how do you fetch 4 card images for hero, logic?
+
+-----------------
+
+Where do you save recent searches of a user?
+do you display anywhere?
+
+---------------------
+
+write a prompt to create logo for this project
+can that be an SVG and dynamic color as per the theme?
+
+-------------
+
+one of the cards is missing here
+http://127.0.0.1:8000/admin/settings
+
+---------------------
+
+can you show data in these settings fields?
+also save to seeders, and read directly from here instead of any other hardcoded fallback
+
+Search Bar Placeholder Examples
+Loading Messages
+these lines are used in hero section
+
+---------------------
+
+
+
+on the home page, you can show two types of recent searches
+my recent searches and publics' trending searches
+
+--------------------
+
+http://127.0.0.1:8000/ this home page forces me to go to login, why?
+
+-------------------
+
+In the recent searches in seeder (and trending searches in hero) 
+please try to only insert the entries which are actually related to our records, please scan carefully our records first in all verticals before creating the entries.
+
+---------------------

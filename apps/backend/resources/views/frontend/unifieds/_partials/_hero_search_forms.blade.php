@@ -400,6 +400,14 @@
             </button>
         </div>
 
+        {{-- Trending searches chips --}}
+        <div class="ai-recents ai-trending" data-ai-trending hidden>
+            <span class="ai-recents-label">
+                <i class="bi bi-fire me-1" aria-hidden="true"></i>{{ __('Trending') }}
+            </span>
+            <div class="ai-recents-chips" data-ai-trending-chips></div>
+        </div>
+
         <p class="ai-search-hint">
             <i class="bi bi-stars me-1" aria-hidden="true"></i>
             {{ __('Your next great find is one sentence away.') }}
@@ -410,48 +418,9 @@
 
 @once
 @php
-    $adminExamples = setting('smart_search_examples');
-    $adminExamples = $adminExamples ? json_decode($adminExamples, true) : null;
-
-    $moduleExamples = [];
-    if (module_enabled('properties'))  $moduleExamples[] = __('3-bedroom house near downtown under $500k with a pool…');
-    if (module_enabled('jobs'))         $moduleExamples[] = __('part-time remote marketing job, flexible hours…');
-    if (module_enabled('autos'))        $moduleExamples[] = __('used SUV under $20k, automatic, low mileage…');
-    if (module_enabled('events'))       $moduleExamples[] = __('weekend cooking class for beginners near me…');
-    if (module_enabled('services'))     $moduleExamples[] = __('plumber available this week for urgent bathroom repair…');
-    if (module_enabled('properties'))   $moduleExamples[] = __('1-bedroom apartment for rent under $1,200 per month…');
-    if (module_enabled('services'))     $moduleExamples[] = __('graphic designer for a logo, $500 budget, fast turnaround…');
-    if (module_enabled('products'))     $moduleExamples[] = __('wireless noise-cancelling headphones under $150…');
-    if (module_enabled('classifieds'))  $moduleExamples[] = __('second-hand iPhone 14 in good condition, under $400…');
-    if (module_enabled('autos'))        $moduleExamples[] = __('family SUV, automatic, petrol, under 50,000 miles…');
-    if (module_enabled('events'))       $moduleExamples[] = __('live jazz concert this Saturday, free or under $30…');
-    if (module_enabled('jobs'))         $moduleExamples[] = __('senior developer role, remote, $80k or above…');
-
-    $searchExamples = $adminExamples ?: $moduleExamples;
+    $searchExamples   = setting_array('smart_search_examples');
     shuffle($searchExamples);
-
-    $adminThinking = setting('smart_search_thinking_messages');
-    $adminThinking = $adminThinking ? json_decode($adminThinking, true) : null;
-
-    $defaultThinking = [
-        __("You're about to find something great…"),
-        __("Big things incoming…"),
-        __("Hold tight — good things take a second…"),
-        __("Great taste. Let's find it for you…"),
-        __("You've got excellent taste…"),
-        __("Something amazing is on its way…"),
-        __("Good call. Let's go find it…"),
-        __("Hold on — you're going to like this…"),
-        __("We've got a feeling about this one…"),
-        __("Your instincts are spot on…"),
-        __("Almost there — and it's looking good…"),
-        __("The best part is just ahead…"),
-        __("We're on it. And it's looking promising…"),
-        __("Just a second — this one's worth it…"),
-        __("Great things are worth a moment…"),
-    ];
-
-    $thinkingMessages = $adminThinking ?: $defaultThinking;
+    $thinkingMessages = setting_array('smart_search_thinking_messages');
 @endphp
 @push('scripts')
 <script type="application/json" id="ai-search-config">{"examples":@json(array_values($searchExamples)),"thinking":@json(array_values($thinkingMessages))}</script>
@@ -522,7 +491,7 @@
         }
 
         function startCycling() {
-            if (input.value || document.activeElement === input) return;
+            if (!examples.length || input.value || document.activeElement === input) return;
             stopCycling();
             waitTimer = setTimeout(function () { typeIn(examples[exIdx]); }, 500);
         }
@@ -593,7 +562,7 @@
             busySpan.hidden    = false;
             submitBtn.disabled = true;
             thinkingEl.hidden  = false;
-            if (thinkingLabel) thinkingLabel.textContent = THINKING_MSGS[Math.floor(Math.random() * THINKING_MSGS.length)];
+            if (thinkingLabel && THINKING_MSGS.length) thinkingLabel.textContent = THINKING_MSGS[Math.floor(Math.random() * THINKING_MSGS.length)];
             summaryEl.hidden   = true;
 
             fetch('{{ route("smart-search.parse") }}', {
@@ -620,6 +589,7 @@
                 busySpan.hidden    = true;
                 submitBtn.disabled = false;
                 thinkingEl.hidden  = true;
+                loadRecents();
             });
         }
 
@@ -638,11 +608,14 @@
         }
 
         // ── Recent searches ──────────────────────────────────────────────
-        var recentsEl      = pane.querySelector('[data-ai-recents]');
+        var recentsEl      = pane.querySelector('[data-ai-recents]:not([data-ai-trending])');
         var recentsChips   = pane.querySelector('[data-ai-recents-chips]');
         var clearAllBtn    = pane.querySelector('[data-ai-recents-clear-all]');
         var RECENTS_URL    = '{{ route("smart-search.recents") }}';
         var RECENTS_CLEAR  = '{{ route("smart-search.recents.clear") }}';
+        var trendingEl     = pane.querySelector('[data-ai-trending]');
+        var trendingChips  = pane.querySelector('[data-ai-trending-chips]');
+        var TRENDING_URL   = '{{ route("smart-search.trending") }}';
 
         function renderRecents(items) {
             if (!items || !items.length) { recentsEl.hidden = true; return; }
@@ -652,7 +625,7 @@
                 chip.className = 'ai-recent-chip';
                 chip.innerHTML =
                     '<button type="button" class="ai-recent-chip-text" title="' + q.replace(/"/g,'&quot;') + '">' +
-                        q.length > 30 ? q.slice(0, 28) + '…' : q +
+                        (q.length > 30 ? q.slice(0, 28) + '…' : q) +
                     '</button>' +
                     '<button type="button" class="ai-recent-chip-remove" aria-label="{{ __("Remove") }}">' +
                         '<i class="bi bi-x" aria-hidden="true"></i>' +
@@ -677,6 +650,35 @@
                 .catch(function () {});
         }
 
+        function renderTrending(items) {
+            if (!trendingEl || !items || !items.length) {
+                if (trendingEl) trendingEl.hidden = true;
+                return;
+            }
+            trendingChips.innerHTML = '';
+            items.forEach(function (q) {
+                var chip = document.createElement('span');
+                chip.className = 'ai-recent-chip ai-trending-chip';
+                chip.innerHTML =
+                    '<button type="button" class="ai-recent-chip-text">' +
+                        (q.length > 30 ? q.slice(0, 28) + '…' : q) +
+                    '</button>';
+                chip.querySelector('.ai-recent-chip-text').addEventListener('click', function () {
+                    input.value = q;
+                    run();
+                });
+                trendingChips.appendChild(chip);
+            });
+            trendingEl.hidden = false;
+        }
+
+        function loadTrending() {
+            fetch(TRENDING_URL, { headers: { 'Accept': 'application/json' } })
+                .then(function (r) { return r.json(); })
+                .then(renderTrending)
+                .catch(function () {});
+        }
+
         function clearRecent(q) {
             fetch(RECENTS_CLEAR, {
                 method: 'POST',
@@ -696,10 +698,7 @@
         }
 
         loadRecents();
-
-        // After a successful search, refresh chips
-        var _origShowSummary = showSummary;
-        showSummary = function (data) { _origShowSummary(data); loadRecents(); };
+        loadTrending();
 
         // ── Voice search ─────────────────────────────────────────────────
         var SR = window.SpeechRecognition || window.webkitSpeechRecognition;

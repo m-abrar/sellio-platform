@@ -41,7 +41,7 @@ class SettingSeeder extends Seeder
             ['group' => 'general', 'key' => 'site_tagline', 'value' => 'Premium Multi-Vendor Marketplace Platform'],
             ['group' => 'general', 'key' => 'default_language', 'value' => 'en'],
             ['group' => 'general', 'key' => 'timezone', 'value' => 'UTC'],
-            ['group' => 'general', 'key' => 'frontend_edit', 'value' => '1'],
+            // frontend_edit seeded under system group below
             
             // --- External Application URLs (Group: general) ---
             // Left blank on install — admin must enter and verify real production URLs.
@@ -64,6 +64,10 @@ class SettingSeeder extends Seeder
             ['group' => 'theme', 'key' => 'theme_classified', 'value' => 'default'],
             ['group' => 'theme', 'key' => 'theme_blog', 'value' => 'default'],
             ['group' => 'theme', 'key' => 'active_theme', 'value' => 'unifieds_default'],
+
+            // --- System / Access (Group: system) ---
+            ['group' => 'system', 'key' => 'built_in_website_status', 'value' => 'active'],
+            ['group' => 'system', 'key' => 'frontend_edit',           'value' => '1'],
 
             // --- Content, Layout & SEO Defaults (Group: content / seo / commerce) ---
             ['group' => 'content', 'key' => 'site_search_results', 'value' => '1'],
@@ -88,6 +92,48 @@ class SettingSeeder extends Seeder
             ['group' => 'scripts', 'key' => 'google_analytics', 'value' => null],
             ['group' => 'scripts', 'key' => 'custom_head_code', 'value' => null],
             ['group' => 'scripts', 'key' => 'custom_footer_code', 'value' => null],
+
+            // --- AI Smart Search (Group: api) ---
+            ['group' => 'api', 'key' => 'gemini_api_key', 'value' => null],
+            ['group' => 'api', 'key' => 'smart_search_examples', 'value' => json_encode([
+                '3-bedroom house for sale under $500k',
+                '1-bedroom apartment for rent, under $1,200/month',
+                'Office space for rent downtown',
+                'Family SUV under $20k, automatic',
+                'Sedan under $15k, low mileage',
+                'Laptop for students under $700',
+                'Wireless headphones under $150',
+                'Dining table set with 6 chairs',
+                'Used iPhone 14, good condition, under $400',
+                'Mountain bike for sale under $500',
+                'Part-time remote marketing job',
+                'Senior Laravel developer, remote, $80k+',
+                'Logo design service, under $500',
+                'Plumber available this week for bathroom repair',
+                'Wedding photographer available, under $800',
+                'House cleaning service available tomorrow',
+                'Pet grooming near me, same day',
+                'Live music concert this Saturday',
+                'Cooking class for beginners this weekend',
+                'Tips for buying your first home',
+            ])],
+            ['group' => 'api', 'key' => 'smart_search_thinking_messages', 'value' => json_encode([
+                "You're about to find something great…",
+                "Big things incoming…",
+                "Hold tight — good things take a second…",
+                "Great taste. Let's find it for you…",
+                "You've got excellent taste…",
+                "Something amazing is on its way…",
+                "Good call. Let's go find it…",
+                "Hold on — you're going to like this…",
+                "We've got a feeling about this one…",
+                "Your instincts are spot on…",
+                "Almost there — and it's looking good…",
+                "The best part is just ahead…",
+                "We're on it. And it's looking promising…",
+                "Just a second — this one's worth it…",
+                "Great things are worth a moment…",
+            ])],
 
             // --- Homepage Configuration (Group: theme) ---
             ['group' => 'theme', 'key' => 'site_home', 'value' => 'unifieds_default'],

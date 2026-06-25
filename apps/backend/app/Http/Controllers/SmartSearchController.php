@@ -129,6 +129,9 @@ PROMPT;
         $query    = trim($validated['q']);
         $cacheKey = 'smart_search:' . md5(strtolower($query));
 
+        // Record immediately so recent chips show regardless of API outcome or cache hit.
+        $this->pushRecentSearch($request, $query);
+
         $cached = Cache::get($cacheKey);
         if ($cached) {
             return response()->json($cached);
@@ -191,8 +194,6 @@ PROMPT;
                 'created_at' => now(),
             ]);
 
-            $this->pushRecentSearch($request, $query);
-
             return response()->json($result);
         } catch (\Throwable $e) {
             Log::error('SmartSearch error', ['message' => $e->getMessage()]);
@@ -205,12 +206,18 @@ PROMPT;
         $user = $request->user();
 
         if ($user) {
-            // Logged-in: pull from DB so history persists across devices
-            $recents = SearchQuery::where('user_id', $user->id)
+            // Session holds the most recent searches (updated on every attempt).
+            // DB holds searches from other sessions/devices (only on API success).
+            // Merge both, deduplicate, session entries first so they appear at the top.
+            $fromSession = $request->session()->get(self::RECENT_KEY, []);
+            $fromDb = SearchQuery::where('user_id', $user->id)
                 ->whereNotNull('keyword')
                 ->where('keyword', '!=', '')
                 ->orderByDesc('created_at')
                 ->pluck('keyword')
+                ->all();
+            $recents = collect($fromSession)
+                ->concat($fromDb)
                 ->unique()
                 ->take(self::RECENT_MAX)
                 ->values()
@@ -220,6 +227,22 @@ PROMPT;
         }
 
         return response()->json($recents);
+    }
+
+    public function trendingSearches(): JsonResponse
+    {
+        $trending = SearchQuery::select('keyword')
+            ->selectRaw('COUNT(*) as cnt')
+            ->whereNotNull('keyword')
+            ->where('keyword', '!=', '')
+            ->where('created_at', '>=', now()->subDays(30))
+            ->groupBy('keyword')
+            ->orderByDesc('cnt')
+            ->limit(self::RECENT_MAX)
+            ->pluck('keyword')
+            ->all();
+
+        return response()->json($trending);
     }
 
     public function clearRecentSearches(Request $request): JsonResponse
@@ -251,12 +274,11 @@ PROMPT;
 
     private function pushRecentSearch(Request $request, string $query): void
     {
-        // Guests: session only. Logged-in users: DB is source of truth (already saved via SearchQuery::create in parse())
-        if (! $request->user()) {
-            $recents = $request->session()->get(self::RECENT_KEY, []);
-            $recents = array_values(array_filter($recents, fn($item) => $item !== $query));
-            array_unshift($recents, $query);
-            $request->session()->put(self::RECENT_KEY, array_slice($recents, 0, self::RECENT_MAX));
-        }
+        // Save to session for all users so chips show even when Gemini API is unavailable.
+        // Logged-in users additionally get DB persistence via SearchQuery::create on API success.
+        $recents = $request->session()->get(self::RECENT_KEY, []);
+        $recents = array_values(array_filter($recents, fn($item) => $item !== $query));
+        array_unshift($recents, $query);
+        $request->session()->put(self::RECENT_KEY, array_slice($recents, 0, self::RECENT_MAX));
     }
 }

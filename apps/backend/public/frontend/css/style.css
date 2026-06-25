@@ -3398,23 +3398,25 @@ body.has-admin-bar .main-header.sticky-top{
     padding-bottom: 0.45rem !important;
     transition: color .2s;
 }
-/* ::before avoids conflict with Bootstrap's dropdown-toggle ::after caret */
+/* ::before avoids conflict with Bootstrap's dropdown-toggle ::after caret.
+   Left-to-right scaleX sweep — GPU-composited, no layout thrash. */
 .nav-link--main::before {
     content: '';
     position: absolute;
-    bottom: 2px;
-    left: 50%;
-    right: 50%;
+    bottom: 0;
+    left: 0.6rem;
+    right: 0.6rem;
     height: 2px;
     background: var(--primary-color);
     border-radius: 2px;
-    transition: left .25s ease, right .25s ease;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform .28s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
 }
 .nav-link--main:hover::before,
 .nav-link--main.active::before {
-    left: 0.6rem;
-    right: 0.6rem;
+    transform: scaleX(1);
 }
 .navbar-light .navbar-nav .nav-link--main.active {
     color: var(--primary-color) !important;
@@ -6238,6 +6240,14 @@ body.has-admin-bar .detail-page section{scroll-margin-top:calc(96px + var(--admi
 .hero-search-card .ai-recents-clear-all { color: #9ca3af; }
 .ai-recents-clear-all:hover { color: rgba(255,255,255,.75); }
 .hero-search-card .ai-recents-clear-all:hover { color: #dc2626; }
+
+/* Trending chip — no remove button, amber fire accent */
+.ai-trending .ai-recents-label { color: rgba(251,191,36,.75); }
+.hero-search-card .ai-trending .ai-recents-label { color: #d97706; }
+.ai-trending-chip .ai-recent-chip-text {
+    padding-right: .55rem;
+    border-radius: 999px;
+}
 
 /* Hint line */
 .ai-search-hint {

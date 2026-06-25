@@ -95,6 +95,34 @@ if (!function_exists('setting')) {
 }
 
 
+if (!function_exists('setting_array')) {
+    /**
+     * Return a settings value that is stored as a JSON array, bypassing the
+     * content_display() coercion that setting() applies (which returns only
+     * the first scalar element and discards the rest of the array).
+     */
+    function setting_array(string $key, array $default = []): array
+    {
+        if (! Schema::hasTable('settings')) {
+            return $default;
+        }
+
+        $settings = Cache::rememberForever('settings_all', function () {
+            return Setting::pluck('value', 'key')->toArray();
+        });
+
+        $raw = Arr::get($settings, $key);
+
+        if ($raw === null) {
+            return $default;
+        }
+
+        $decoded = is_string($raw) ? json_decode($raw, true) : $raw;
+
+        return is_array($decoded) ? $decoded : $default;
+    }
+}
+
 if (!function_exists('module_enabled')) {
     /**
      * Check if a marketplace module is enabled.
