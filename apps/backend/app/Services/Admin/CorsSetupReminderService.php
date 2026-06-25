@@ -58,9 +58,9 @@ class CorsSetupReminderService
 
         return [
             'title' => __('Platform URLs need your attention'),
-            'summary' => __('Enter your real storefront, admin, partner, and customer URLs in Settings → General, then verify each one. CORS updates automatically after you save verified URLs.'),
+            'summary' => __('Enter your real storefront, admin, partner, and customer URLs in Settings → System, then verify each one. CORS updates automatically after you save verified URLs.'),
             'issues' => $issues,
-            'settings_url' => route('admin.settings.group', ['section' => 'general']),
+            'settings_url' => route('admin.settings.group', ['section' => 'system']),
             'active_origins' => $this->corsOriginResolver->resolve(),
         ];
     }
@@ -149,7 +149,7 @@ class CorsSetupReminderService
                 'field' => $field,
                 'label' => $label,
                 'value' => $value,
-                'detail' => __('Saved but not verified — open Settings → General and test the connection'),
+                'detail' => __('Saved but not verified — open Settings → System and test the connection'),
             ];
         }
 

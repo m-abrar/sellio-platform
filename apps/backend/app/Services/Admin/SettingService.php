@@ -8,7 +8,6 @@ use App\Services\Admin\PlatformUrlVerificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class SettingService
 {
@@ -30,17 +29,20 @@ class SettingService
                 'site_tagline'            => 'nullable|string|max:255',
                 'default_language'        => 'required|string',
                 'timezone'                => 'required|string',
-                'frontend_edit'           => 'nullable|boolean',
                 'currency_code'           => 'required|string|max:10',
+                'currency_symbol'         => 'nullable|string|max:10',
                 'hide_site_name'          => 'nullable|boolean',
                 'site_logo'               => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
                 'site_favicon'            => 'nullable|image|mimes:ico,png,webp|max:100',
+            ],
+            'system' => [
                 'url_frontend'            => 'nullable|url',
                 'url_admin'               => 'nullable|url',
                 'url_partner'             => 'nullable|url',
                 'url_user'                => 'nullable|url',
                 'cors_allowed_origins'    => 'nullable|string|max:4000',
                 'built_in_website_status' => 'nullable|string|in:active,redirect',
+                'frontend_edit'           => 'nullable|boolean',
             ],
             'modules' => [
                 'is_section' => 'nullable|array',

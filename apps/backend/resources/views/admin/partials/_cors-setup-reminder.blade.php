@@ -38,8 +38,8 @@
                 </div>
 
                 <div class="ml-lg-auto mt-3 mt-lg-0 text-nowrap">
-                    <a href="{{ $corsSetupReminder['settings_url'] }}" class="btn btn-warning btn-sm rounded-pill px-4 font-weight-bold shadow-sm">
-                        <i class="fas fa-cog mr-1"></i> {{ __('Open Settings → General') }}
+                    <a href="{{ $corsSetupReminder['settings_url'] }}" target="_blank" rel="noopener noreferrer" class="btn btn-warning btn-sm rounded-pill px-4 font-weight-bold shadow-sm">
+                        <i class="fas fa-server mr-1"></i> {{ __('Open Settings → System') }}
                     </a>
                 </div>
             </div>
