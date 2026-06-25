@@ -19,6 +19,7 @@ class GatewayManager
         'flutterwave'  => FlutterwaveGatewayService::class,
         'mollie'       => MollieGatewayService::class,
         'paystack'     => PaystackGatewayService::class,
+        'manual'       => ManualGatewayService::class,
     ];
 
     /**

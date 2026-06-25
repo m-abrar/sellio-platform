@@ -59,6 +59,7 @@ class Payment extends Model
         'paid_at',
         'payable_type',
         'payable_id',
+        'proof_file',
     ];
 
     /**

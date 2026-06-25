@@ -18,6 +18,7 @@ class PaymentGatewaysSeeder extends Seeder
             FlutterwaveGatewaySeeder::class,
             MollieGatewaySeeder::class,
             PaystackGatewaySeeder::class,
+            ManualGatewaySeeder::class,
         ]);
         
         // Add more gateway seeders here as you integrate them!
