@@ -114,7 +114,7 @@
                         </div>
                     </div>
                     <div class="card-footer bg-white border-0 py-4 px-4 text-right">
-                        <button type="submit" class="btn btn-primary rounded-pill px-5 font-weight-bold smallest uppercase letter-spacing-1">
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 font-weight-bold text-uppercase letter-spacing-1">
                             <i class="fas fa-save mr-2"></i> Commit Provider Configuration
                         </button>
                     </div>
