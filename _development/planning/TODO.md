@@ -571,4 +571,8 @@ Can we also view the search anaylitcs in the main dashboard?
 
 http://127.0.0.1:8000/admin/reports
 
-what does this page actually show? what is the purpose? 
+what does this page actually show? what is the purpose?
+
+
+
+- [ ] **Recent searches UX:** Attach the user's recent AI/natural-language searches to their session (for guests) and to the database `search_queries` table (for logged-in users). Surface them in the UI — e.g. below the Smart Search input as "Recent searches" chips/tags — so users can re-run a past query in one click. Clicking a chip should re-submit the query through the AI parser and redirect to results. Clear individual entries or all at once. Logged-in users should see their history persist across devices.

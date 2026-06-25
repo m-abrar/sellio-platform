@@ -57,6 +57,9 @@ Route::post('/smart-search', [SmartSearchController::class, 'parse'])
     ->middleware('throttle:10,1')
     ->name('smart-search.parse');
 
+Route::get('/smart-search/recents',  [SmartSearchController::class, 'recentSearches'])->name('smart-search.recents');
+Route::post('/smart-search/recents/clear', [SmartSearchController::class, 'clearRecentSearches'])->name('smart-search.recents.clear');
+
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::middleware(['built_in_website'])->group(function () {

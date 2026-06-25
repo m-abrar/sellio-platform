@@ -387,9 +387,20 @@
             <p class="ai-redirect-label">{{ __('Taking you to results…') }}</p>
         </div>
 
+        {{-- Recent searches chips --}}
+        <div class="ai-recents" data-ai-recents hidden>
+            <span class="ai-recents-label">
+                <i class="bi bi-clock-history me-1" aria-hidden="true"></i>{{ __('Recent') }}
+            </span>
+            <div class="ai-recents-chips" data-ai-recents-chips></div>
+            <button type="button" class="ai-recents-clear-all" data-ai-recents-clear-all>
+                {{ __('Clear all') }}
+            </button>
+        </div>
+
         <p class="ai-search-hint">
             <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
-            {{ __('Describe what you\'re looking for in plain language — AI will parse it into structured filters.') }}
+            {{ __('Describe what you\'re looking for in plain language') }}
         </p>
     </div>
 
@@ -575,6 +586,70 @@
                 }
             });
         }
+
+        // ── Recent searches ──────────────────────────────────────────────
+        var recentsEl      = pane.querySelector('[data-ai-recents]');
+        var recentsChips   = pane.querySelector('[data-ai-recents-chips]');
+        var clearAllBtn    = pane.querySelector('[data-ai-recents-clear-all]');
+        var RECENTS_URL    = '{{ route("smart-search.recents") }}';
+        var RECENTS_CLEAR  = '{{ route("smart-search.recents.clear") }}';
+
+        function renderRecents(items) {
+            if (!items || !items.length) { recentsEl.hidden = true; return; }
+            recentsChips.innerHTML = '';
+            items.forEach(function (q) {
+                var chip = document.createElement('span');
+                chip.className = 'ai-recent-chip';
+                chip.innerHTML =
+                    '<button type="button" class="ai-recent-chip-text" title="' + q.replace(/"/g,'&quot;') + '">' +
+                        q.length > 30 ? q.slice(0, 28) + '…' : q +
+                    '</button>' +
+                    '<button type="button" class="ai-recent-chip-remove" aria-label="{{ __("Remove") }}">' +
+                        '<i class="bi bi-x" aria-hidden="true"></i>' +
+                    '</button>';
+                chip.querySelector('.ai-recent-chip-text').addEventListener('click', function () {
+                    input.value = q;
+                    run();
+                });
+                chip.querySelector('.ai-recent-chip-remove').addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    clearRecent(q);
+                });
+                recentsChips.appendChild(chip);
+            });
+            recentsEl.hidden = false;
+        }
+
+        function loadRecents() {
+            fetch(RECENTS_URL, { headers: { 'Accept': 'application/json' } })
+                .then(function (r) { return r.json(); })
+                .then(renderRecents)
+                .catch(function () {});
+        }
+
+        function clearRecent(q) {
+            fetch(RECENTS_CLEAR, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
+                body: JSON.stringify({ q: q }),
+            }).then(function () { loadRecents(); }).catch(function () {});
+        }
+
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener('click', function () {
+                fetch(RECENTS_CLEAR, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
+                    body: JSON.stringify({}),
+                }).then(function () { recentsEl.hidden = true; recentsChips.innerHTML = ''; }).catch(function () {});
+            });
+        }
+
+        loadRecents();
+
+        // After a successful search, refresh chips
+        var _origShowSummary = showSummary;
+        showSummary = function (data) { _origShowSummary(data); loadRecents(); };
 
         // ── Voice search ─────────────────────────────────────────────────
         var SR = window.SpeechRecognition || window.webkitSpeechRecognition;

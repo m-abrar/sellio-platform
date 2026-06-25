@@ -61,7 +61,7 @@ class LogPublicSearch
             'module'     => $module,
             'keyword'    => $keyword,
             'filters'    => $filters ?: null,
-            'user_id'    => auth()->id(),
+            'user_id'    => $request->user()?->id,
             'ip_address' => $request->ip(),
             'created_at' => now(),
         ]);

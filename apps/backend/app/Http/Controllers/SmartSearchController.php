@@ -12,63 +12,108 @@ use Illuminate\Support\Facades\Log;
 
 class SmartSearchController extends Controller
 {
-    private const MODEL     = 'gemini-2.5-flash';
-    private const CACHE_TTL = 600; // 10 minutes
+    private const MODEL          = 'gemini-2.5-flash';
+    private const CACHE_TTL      = 600;
+    private const RECENT_KEY     = 'recent_smart_searches';
+    private const RECENT_MAX     = 8;
     private const API_URL   = 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent';
 
     private const SYSTEM_PROMPT = <<<'PROMPT'
-You are a search parser for a marketplace platform. Parse natural language queries into structured JSON.
+You are a search parser for a multi-vertical marketplace. Parse a natural language query into structured JSON.
 
-Available modules and their exact filter parameters:
+MODULES AND THEIR ACCEPTED PARAMETERS:
 
-properties:
-  q (keyword), location (slug), category (slug), property_type (sale|rental),
-  min_price (number), max_price (number), bedrooms (number), bathrooms (number),
-  guests (number), check_in (YYYY-MM-DD), check_out (YYYY-MM-DD)
+properties  — real estate listings
+  q              keyword / address (string)
+  location       city or area name (string — system converts to ID)
+  category       property type e.g. "Apartment", "Villa" (string — system converts to ID)
+  property_type  "sale" or "rental"
+  min_price      number
+  max_price      number
+  bedrooms       number
+  bathrooms      number
+  guests         number
+  check_in       YYYY-MM-DD
+  check_out      YYYY-MM-DD
 
-autos:
-  make (brand name), model (model name), location (slug), category (slug),
-  type (selling|lease), transmission (Automatic|Manual),
-  price_min (number), price_max (number), year_min (number), year_max (number)
+autos  — vehicles for sale or lease
+  make           brand name e.g. "Toyota" (string)
+  model          model name e.g. "Corolla" (string)
+  location       city or area name (string — system converts to ID)
+  category       vehicle category e.g. "SUV", "Sedan" (string — system converts to ID)
+  type           "selling" or "lease"
+  transmission   "Automatic" or "Manual"
+  price_min      number
+  price_max      number
+  year_min       number (4-digit year)
+  year_max       number (4-digit year)
 
-events:
-  search (keyword), location (slug), category (slug), type (slug), tag (slug),
-  date (YYYY-MM-DD), sort (latest|oldest|date_asc|date_desc)
+events  — concerts, workshops, conferences
+  search         keyword (string)
+  location       city slug e.g. "karachi", "new-york"
+  category       category slug e.g. "music", "tech-conference"
+  type           type slug e.g. "online", "in-person"
+  tag            tag slug e.g. "free", "family-friendly"
+  date           YYYY-MM-DD
+  sort           "latest" | "oldest" | "date_asc" | "date_desc"
 
-services:
-  search (keyword), location (slug), category_id (slug), type (slug),
-  min_price (number), max_price (number),
-  expertise (1=beginner|2=intermediate|3=expert|4=master)
+services  — professional services
+  search         keyword (string)
+  location       city or area name (string — system converts to ID)
+  category_id    category name e.g. "Plumbing", "Web Design" (string — system converts to ID)
+  type           type name (string — system converts to ID)
+  min_price      number
+  max_price      number
+  expertise      1 (beginner) | 2 (intermediate) | 3 (expert) | 4 (master)
 
-classifieds:
-  search (keyword), location (slug), category (slug), type (slug), tag (slug),
-  min_price (number), max_price (number), sort (latest|oldest|price_low|price_high)
+classifieds  — buy/sell ads
+  search         keyword (string)
+  location       city slug e.g. "lahore", "dubai"
+  category       category slug e.g. "electronics", "furniture"
+  type           type slug
+  tag            tag slug
+  min_price      number
+  max_price      number
+  sort           "latest" | "oldest" | "price_low" | "price_high"
 
-jobs:
-  search (keyword), location (slug), category (slug), type (slug), tag (slug),
-  workplace_type (remote|hybrid|on-site), experience_level (text),
-  sort (latest|oldest|salary_high|salary_low)
+jobs  — job listings
+  search         job title or keyword (string)
+  location       city slug e.g. "islamabad", "remote"
+  category       category slug e.g. "engineering", "marketing"
+  type           type slug e.g. "full-time", "part-time"
+  tag            tag slug
+  workplace_type "remote" | "hybrid" | "on-site"
+  experience_level  e.g. "junior", "senior", "entry-level"
+  sort           "latest" | "oldest" | "salary_high" | "salary_low"
 
-products:
-  q (keyword), location (slug), category (slug), brand (slug), type (slug),
-  min_price (number), max_price (number), sort_by (latest|price_low|price_high|rating)
+products  — marketplace products
+  q              keyword / product name (string)
+  location       city or area name (string — system converts to ID)
+  category       category name e.g. "Electronics", "Clothing" (string — system converts to ID)
+  brand          brand name e.g. "Apple", "Samsung" (string — system converts to ID)
+  min_price      number
+  max_price      number
+  sort_by        "latest" | "price_low" | "price_high" | "rating"
 
-blogs:
-  search (keyword), category (slug), tag (slug), sort (latest|popular|oldest)
+blogs  — articles and guides
+  search         keyword (string)
+  category       category slug e.g. "real-estate-tips", "auto-news"
+  tag            tag slug
+  sort           "latest" | "popular" | "oldest"
 
-Rules:
-- Pick the single most appropriate module
-- Only include filters clearly implied by the query — omit everything else
-- Convert prices: "$500k" → 500000, "1.2 million" → 1200000, "3 lac" → 300000
-- Slugs must be lowercase, hyphenated (e.g. "karachi", "toyota-corolla", "real-estate")
-- For properties/autos use "q"/"make" as the keyword field; for all others use "search"
-- Return ONLY valid JSON, no explanation
+RULES:
+- Choose the single most relevant module
+- Only include filters explicitly stated or strongly implied — omit everything else
+- Price conversion: "$500k" → 500000 | "1.2 million" → 1200000 | "3 lac" → 300000
+- Slugs (events, classifieds, jobs, blogs fields) must be lowercase-hyphenated
+- Name fields (properties, autos, services, products) use natural capitalised text
+- Return ONLY valid JSON — no markdown, no explanation
 
-Response format:
+RESPONSE FORMAT:
 {
   "module": "<module_name>",
   "filters": { "<param>": "<value>" },
-  "confidence": <0.0-1.0>,
+  "confidence": <0.0–1.0>,
   "summary": "<one sentence describing what was understood>"
 }
 PROMPT;
@@ -145,10 +190,42 @@ PROMPT;
                 'created_at' => now(),
             ]);
 
+            $this->pushRecentSearch($request, $query);
+
             return response()->json($result);
         } catch (\Throwable $e) {
             Log::error('SmartSearch error', ['message' => $e->getMessage()]);
             return response()->json(['error' => 'Unable to parse your query. Please try again.'], 500);
         }
+    }
+
+    public function recentSearches(Request $request): JsonResponse
+    {
+        return response()->json($request->session()->get(self::RECENT_KEY, []));
+    }
+
+    public function clearRecentSearches(Request $request): JsonResponse
+    {
+        $query = $request->input('q');
+
+        if ($query) {
+            $recents = array_values(array_filter(
+                $request->session()->get(self::RECENT_KEY, []),
+                fn($item) => $item !== $query
+            ));
+        } else {
+            $recents = [];
+        }
+
+        $request->session()->put(self::RECENT_KEY, $recents);
+        return response()->json(['ok' => true]);
+    }
+
+    private function pushRecentSearch(Request $request, string $query): void
+    {
+        $recents = $request->session()->get(self::RECENT_KEY, []);
+        $recents = array_values(array_filter($recents, fn($item) => $item !== $query));
+        array_unshift($recents, $query);
+        $request->session()->put(self::RECENT_KEY, array_slice($recents, 0, self::RECENT_MAX));
     }
 }
