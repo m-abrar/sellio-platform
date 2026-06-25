@@ -2,8 +2,12 @@
 
 namespace App\Services\Admin;
 
+use App\Models\EventBooking;
+use App\Models\Order;
 use App\Models\Payment;
+use App\Models\PropertyBooking;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class PaymentManagementService
@@ -66,5 +70,51 @@ class PaymentManagementService
     public function deletePayment(Payment $payment): ?bool
     {
         return $payment->delete();
+    }
+
+    /**
+     * Get paginated pending manual (bank transfer) payments awaiting admin approval.
+     */
+    public function getPendingManualPayments(array $filters = [], int $perPage = 20): LengthAwarePaginator
+    {
+        return Payment::with(['user', 'payable'])
+            ->where('payment_method', 'manual')
+            ->where('status', Payment::STATUS_PENDING)
+            ->when($filters['search'] ?? null, fn($q, $s) => $q->where(function ($q) use ($s) {
+                $q->where('id', $s)->orWhere('transaction_id', 'like', '%' . $s . '%');
+            }))
+            ->orderBy('created_at', 'asc')
+            ->paginate($perPage);
+    }
+
+    /**
+     * Approve a pending manual payment and confirm the associated payable.
+     */
+    public function approveManualPayment(Payment $payment): void
+    {
+        DB::transaction(function () use ($payment) {
+            $payment->update([
+                'status'  => Payment::STATUS_COMPLETED,
+                'paid_at' => now(),
+            ]);
+
+            $payable = $payment->payable;
+
+            if ($payable instanceof PropertyBooking) {
+                $payable->update(['status' => PropertyBooking::STATUS_CONFIRMED]);
+            } elseif ($payable instanceof EventBooking) {
+                $payable->update(['status' => EventBooking::STATUS_CONFIRMED]);
+            } elseif ($payable instanceof Order) {
+                $payable->update(['payment_status' => 'paid', 'status' => Order::STATUS_PROCESSING]);
+            }
+        });
+    }
+
+    /**
+     * Reject a pending manual payment, leaving the payable in pending for retry.
+     */
+    public function rejectManualPayment(Payment $payment): void
+    {
+        $payment->update(['status' => Payment::STATUS_FAILED]);
     }
 }

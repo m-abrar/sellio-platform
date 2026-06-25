@@ -83,12 +83,30 @@
             <div class="text-monospace smallest text-muted opacity-50 smallest-0-65" title="{{ __('Gateway Reference') }}">
                 #{{ Str::limit($payment->transaction_id ?? '---', 10) }}
             </div>
-            <div class="btn-group btn-group-premium">
-                <a href="{{ route('admin.payments.edit', $payment->id) }}" class="btn text-info" data-toggle="tooltip" title="{{ __('Modify Record') }}"><i class="fas fa-edit"></i></a>
-                <form id="delete-form-card-{{ $payment->id }}" action="{{ route('admin.payments.destroy', $payment->id) }}" method="POST" class="d-inline">
-                    @csrf @method('DELETE')
-                    <button type="button" class="btn text-danger" data-toggle="tooltip" title="{{ __('Void Record') }}" onclick="confirmDelete('delete-form-card-{{ $payment->id }}', '{{ __('Void Transaction?') }}', '{{ __('This action will permanently remove this financial record.') }}', '{{ __('Confirm') }}')"><i class="fas fa-trash-alt"></i></button>
-                </form>
+            <div class="d-flex align-items-center gap-6">
+                @if($payment->payment_method === 'manual' && $payment->status === 'pending')
+                    <form id="approve-card-{{ $payment->id }}" action="{{ route('admin.payments.approve', $payment->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="button" class="btn btn-sm text-success" data-toggle="tooltip" title="{{ __('Approve Payment') }}"
+                                onclick="confirmManualAction('approve-card-{{ $payment->id }}', '{{ __('Approve Payment') }}', '{{ __('Confirm this bank transfer and mark the booking as paid?') }}', '{{ __('Approve') }}', 'success')">
+                            <i class="fas fa-check-circle"></i>
+                        </button>
+                    </form>
+                    <form id="reject-card-{{ $payment->id }}" action="{{ route('admin.payments.reject', $payment->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="button" class="btn btn-sm text-warning" data-toggle="tooltip" title="{{ __('Reject Payment') }}"
+                                onclick="confirmManualAction('reject-card-{{ $payment->id }}', '{{ __('Reject Payment') }}', '{{ __('Reject this receipt? The booking stays pending so the user can resubmit.') }}', '{{ __('Reject') }}', 'warning')">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </form>
+                @endif
+                <div class="btn-group btn-group-premium">
+                    <a href="{{ route('admin.payments.edit', $payment->id) }}" class="btn text-info" data-toggle="tooltip" title="{{ __('Modify Record') }}"><i class="fas fa-edit"></i></a>
+                    <form id="delete-form-card-{{ $payment->id }}" action="{{ route('admin.payments.destroy', $payment->id) }}" method="POST" class="d-inline">
+                        @csrf @method('DELETE')
+                        <button type="button" class="btn text-danger" data-toggle="tooltip" title="{{ __('Void Record') }}" onclick="confirmDelete('delete-form-card-{{ $payment->id }}', '{{ __('Void Transaction?') }}', '{{ __('This action will permanently remove this financial record.') }}', '{{ __('Confirm') }}')"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

@@ -594,3 +594,17 @@ on the property booking checkout, we have slugs in the url for booking id, etc, 
 
 
 When you make a manual payment, how do we show it in the admin for approval?
+
+
+
+When you make a manual payment, we see this error alert on the page.
+
+Something went wrong
+Your cart is empty.
+
+Also, we want to show a specific URL with success message of order created even with pending payment status.
+
+
+
+http://127.0.0.1:8000/admin/settings
+one of the cards is missing here, i doubt.

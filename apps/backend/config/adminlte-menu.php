@@ -265,6 +265,11 @@ return [
                         'url' => 'admin/payments',
                         'icon' => 'fas fa-receipt',
                     ], 'All Transactions'),
+                    admin_sidebar_item('Pending Approval', [
+                        'url' => 'admin/payments/pending-manual',
+                        'icon' => 'fas fa-hourglass-half',
+                        'color' => 'warning',
+                    ], 'Pending Manual Payments'),
                     admin_sidebar_item('Failed', [
                         'url' => 'admin/payments/failed',
                         'icon' => 'fas fa-exclamation-triangle',

@@ -339,6 +339,9 @@ Route::prefix('admin')
             Route::get('/', [PaymentController::class , 'index'])->name('index');
             Route::get('/failed', [PaymentController::class , 'failed'])->name('failed');
             Route::get('/duplicate', [PaymentController::class , 'duplicate'])->name('duplicate');
+            Route::get('/pending-manual', [PaymentController::class, 'pendingManual'])->name('pending-manual');
+            Route::post('/{payment}/approve', [PaymentController::class, 'approveManual'])->name('approve');
+            Route::post('/{payment}/reject', [PaymentController::class, 'rejectManual'])->name('reject');
         }
         );
         Route::resource('payments', PaymentController::class)->except(['index']);

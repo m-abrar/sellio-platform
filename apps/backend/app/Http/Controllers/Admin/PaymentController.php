@@ -150,8 +150,50 @@ class PaymentController extends Controller
     public function destroy(Payment $payment): RedirectResponse
     {
         $this->paymentService->deletePayment($payment);
-        
+
         return redirect()->route('admin.payments.index')
             ->with('success', __('Payment record removed successfully.'));
+    }
+
+    /**
+     * Display pending manual (bank transfer) payments awaiting approval.
+     */
+    public function pendingManual(Request $request): View
+    {
+        $filters  = $request->only(['search']);
+        $payments = $this->paymentService->getPendingManualPayments($filters);
+        $pageTitle = __('Pending Manual Payments');
+
+        return view('admin.payments.pending-manual', compact('payments', 'pageTitle'));
+    }
+
+    /**
+     * Approve a pending manual payment and confirm the related booking/order.
+     */
+    public function approveManual(Payment $payment): RedirectResponse
+    {
+        if ($payment->payment_method !== 'manual' || $payment->status !== Payment::STATUS_PENDING) {
+            return back()->with('error', __('This payment cannot be approved.'));
+        }
+
+        $this->paymentService->approveManualPayment($payment);
+
+        return redirect()->route('admin.payments.pending-manual')
+            ->with('success', __('Payment approved and booking confirmed.'));
+    }
+
+    /**
+     * Reject a pending manual payment (leaves the booking/order pending for retry).
+     */
+    public function rejectManual(Payment $payment): RedirectResponse
+    {
+        if ($payment->payment_method !== 'manual' || $payment->status !== Payment::STATUS_PENDING) {
+            return back()->with('error', __('This payment cannot be rejected.'));
+        }
+
+        $this->paymentService->rejectManualPayment($payment);
+
+        return redirect()->route('admin.payments.pending-manual')
+            ->with('success', __('Payment rejected.'));
     }
 }

@@ -93,4 +93,21 @@
 @section('js')
 @include('admin._partials._sweetalert')
 <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
+<script>
+function confirmManualAction(formId, title, message, confirmBtn, type) {
+    Swal.fire({
+        title: title,
+        text: message,
+        icon: type,
+        showCancelButton: true,
+        confirmButtonText: confirmBtn,
+        cancelButtonText: '{{ __('Cancel') }}',
+        confirmButtonColor: type === 'success' ? '#28a745' : '#dc3545',
+    }).then(function (result) {
+        if (result.isConfirmed) {
+            document.getElementById(formId).submit();
+        }
+    });
+}
+</script>
 @endsection
