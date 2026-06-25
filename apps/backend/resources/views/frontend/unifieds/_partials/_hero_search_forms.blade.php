@@ -361,23 +361,30 @@
             </button>
         </div>
 
-        <div class="ai-result-panel" data-ai-result hidden>
-            <div class="ai-result-header">
-                <span class="ai-result-label">
-                    <i class="bi bi-braces me-1" aria-hidden="true"></i>{{ __('Parsed Query') }}
-                </span>
-                <div class="ai-result-actions">
-                    <button type="button" class="ai-action-btn" data-ai-copy title="{{ __('Copy JSON') }}">
-                        <i class="bi bi-clipboard" aria-hidden="true"></i>
-                        <span>{{ __('Copy') }}</span>
-                    </button>
-                    <button type="button" class="ai-action-btn ai-action-btn--primary" data-ai-apply>
-                        {{ __('Apply Filters') }}
-                        <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
-                    </button>
+        {{-- Thinking loader (shown during fetch) --}}
+        <div class="ai-thinking-panel" data-ai-thinking hidden>
+            <span class="ai-thinking-dot"></span>
+            <span class="ai-thinking-dot"></span>
+            <span class="ai-thinking-dot"></span>
+            <span class="ai-thinking-label">{{ __('Understanding your search…') }}</span>
+        </div>
+
+        {{-- Summary panel (shown after response, before redirect) --}}
+        <div class="ai-summary-panel" data-ai-summary hidden>
+            <div class="ai-summary-body">
+                <i class="bi bi-stars ai-summary-icon" aria-hidden="true"></i>
+                <div class="ai-summary-content">
+                    <span class="ai-summary-module" data-ai-module-badge></span>
+                    <p class="ai-summary-sentence" data-ai-summary-text aria-live="polite"></p>
                 </div>
+                <button type="button" class="ai-go-now-btn" data-ai-go title="{{ __('Go now') }}">
+                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                </button>
             </div>
-            <pre class="ai-json-output" data-ai-json aria-live="polite"></pre>
+            <div class="ai-redirect-track">
+                <div class="ai-redirect-bar" data-ai-redirect-bar></div>
+            </div>
+            <p class="ai-redirect-label">{{ __('Taking you to results…') }}</p>
         </div>
 
         <p class="ai-search-hint">
@@ -396,32 +403,24 @@
                 ? document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 : '';
 
-    function syntaxHL(json) {
-        return json
-            .replace(/("(?:[^"\\]|\\.)*")(\s*:)/g, '<span class="aj-key">$1</span>$2')
-            .replace(/(:\s*)("(?:[^"\\]|\\.)*")/g, '$1<span class="aj-str">$2</span>')
-            .replace(/(:\s*)(\d+(?:\.\d+)?)/g,     '$1<span class="aj-num">$2</span>')
-            .replace(/(:\s*)(true|false|null)/g,    '$1<span class="aj-kw">$2</span>')
-            .replace(/(\[)(\s*"[^"]*"(?:\s*,\s*"[^"]*")*\s*)(\])/g, function(_, open, inner, close) {
-                return open + inner.replace(/"([^"]*)"/g, '<span class="aj-str">"$1"</span>') + close;
-            });
-    }
-
     function initAiSearch() {
         var pane = document.getElementById('hero-search-ai');
         if (!pane) return;
 
-        var input     = pane.querySelector('[data-ai-input]');
-        var submitBtn = pane.querySelector('[data-ai-submit]');
-        var idleSpan  = submitBtn.querySelector('.ai-btn-idle');
-        var busySpan  = submitBtn.querySelector('.ai-btn-busy');
-        var resultEl  = pane.querySelector('[data-ai-result]');
-        var jsonEl    = pane.querySelector('[data-ai-json]');
-        var copyBtn   = pane.querySelector('[data-ai-copy]');
-        var applyBtn  = pane.querySelector('[data-ai-apply]');
-        var micBtn    = pane.querySelector('[data-ai-mic]');
+        var input       = pane.querySelector('[data-ai-input]');
+        var submitBtn   = pane.querySelector('[data-ai-submit]');
+        var idleSpan    = submitBtn.querySelector('.ai-btn-idle');
+        var busySpan    = submitBtn.querySelector('.ai-btn-busy');
+        var thinkingEl  = pane.querySelector('[data-ai-thinking]');
+        var summaryEl   = pane.querySelector('[data-ai-summary]');
+        var moduleBadge = pane.querySelector('[data-ai-module-badge]');
+        var summaryText = pane.querySelector('[data-ai-summary-text]');
+        var redirectBar = pane.querySelector('[data-ai-redirect-bar]');
+        var goNowBtn    = pane.querySelector('[data-ai-go]');
+        var micBtn      = pane.querySelector('[data-ai-mic]');
 
-        var lastParsed = null;
+        var lastParsed    = null;
+        var redirectTimer = null;
 
         // ── Cycling placeholder ──────────────────────────────────────────
         var examples = [
@@ -475,14 +474,66 @@
         setTimeout(startCycling, 900);
 
         // ── Run search ───────────────────────────────────────────────────
+        var MODULE_LABELS = {
+            properties: '{{ __("Properties") }}',
+            autos:      '{{ __("Autos") }}',
+            events:     '{{ __("Events") }}',
+            services:   '{{ __("Services") }}',
+            classifieds:'{{ __("Classifieds") }}',
+            jobs:       '{{ __("Jobs") }}',
+            products:   '{{ __("Products") }}',
+            blogs:      '{{ __("Blogs") }}',
+        };
+
+        function cancelRedirect() {
+            clearTimeout(redirectTimer);
+            if (redirectBar) { redirectBar.style.transition = 'none'; redirectBar.style.width = '0%'; }
+        }
+
+        function startRedirect(url) {
+            if (!url) return;
+            var DELAY = 2200;
+            if (redirectBar) {
+                redirectBar.style.transition = 'none';
+                redirectBar.style.width = '0%';
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        redirectBar.style.transition = 'width ' + DELAY + 'ms linear';
+                        redirectBar.style.width = '100%';
+                    });
+                });
+            }
+            redirectTimer = setTimeout(function () { window.location.href = url; }, DELAY);
+        }
+
+        function showSummary(data) {
+            var label = MODULE_LABELS[data.module] || data.module;
+            moduleBadge.textContent = label;
+            moduleBadge.className   = 'ai-summary-module ai-summary-module--' + data.module;
+            summaryText.textContent = data.summary || '{{ __("Search parsed successfully.") }}';
+            summaryEl.hidden = false;
+            goNowBtn.disabled = !data.redirect_url;
+            startRedirect(data.redirect_url);
+        }
+
+        function showError(msg) {
+            moduleBadge.textContent = '{{ __("Error") }}';
+            moduleBadge.className   = 'ai-summary-module ai-summary-module--error';
+            summaryText.textContent = msg || '{{ __("Something went wrong. Please try again.") }}';
+            summaryEl.hidden = false;
+            goNowBtn.disabled = true;
+        }
+
         function run() {
             var q = (input.value || '').trim();
             if (!q) { input.focus(); return; }
 
-            idleSpan.hidden = true;
-            busySpan.hidden = false;
+            cancelRedirect();
+            idleSpan.hidden    = true;
+            busySpan.hidden    = false;
             submitBtn.disabled = true;
-            resultEl.hidden = true;
+            thinkingEl.hidden  = false;
+            summaryEl.hidden   = true;
 
             fetch('{{ route("smart-search.parse") }}', {
                 method: 'POST',
@@ -497,25 +548,17 @@
             .then(function (data) {
                 if (data.error) throw new Error(data.error);
                 lastParsed = data;
-                var pretty = JSON.stringify({
-                    module:     data.module,
-                    filters:    data.filters,
-                    confidence: data.confidence,
-                    summary:    data.summary,
-                }, null, 2);
-                jsonEl.innerHTML = syntaxHL(pretty);
-                resultEl.hidden = false;
-                applyBtn.disabled = !data.redirect_url;
+                showSummary(data);
             })
             .catch(function (err) {
-                jsonEl.innerHTML = '<span class="aj-kw">' + (err.message || '{{ __("Something went wrong. Please try again.") }}') + '</span>';
-                resultEl.hidden = false;
-                applyBtn.disabled = true;
+                showError(err.message);
             })
             .finally(function () {
-                idleSpan.hidden = false;
-                busySpan.hidden = true;
+                thinkingEl.hidden  = false;
+                idleSpan.hidden    = false;
+                busySpan.hidden    = true;
                 submitBtn.disabled = false;
+                thinkingEl.hidden  = true;
             });
         }
 
@@ -524,25 +567,14 @@
             if (e.key === 'Enter') { e.preventDefault(); run(); }
         });
 
-        copyBtn.addEventListener('click', function () {
-            if (!lastParsed) return;
-            navigator.clipboard.writeText(JSON.stringify(lastParsed, null, 2)).then(function () {
-                var icon = copyBtn.querySelector('i');
-                var label = copyBtn.querySelector('span');
-                icon.className = 'bi bi-clipboard-check';
-                label.textContent = '{{ __("Copied!") }}';
-                setTimeout(function () {
-                    icon.className = 'bi bi-clipboard';
-                    label.textContent = '{{ __("Copy") }}';
-                }, 1800);
+        if (goNowBtn) {
+            goNowBtn.addEventListener('click', function () {
+                if (lastParsed && lastParsed.redirect_url) {
+                    cancelRedirect();
+                    window.location.href = lastParsed.redirect_url;
+                }
             });
-        });
-
-        applyBtn.addEventListener('click', function () {
-            if (lastParsed && lastParsed.redirect_url) {
-                window.location.href = lastParsed.redirect_url;
-            }
-        });
+        }
 
         // ── Voice search ─────────────────────────────────────────────────
         var SR = window.SpeechRecognition || window.webkitSpeechRecognition;

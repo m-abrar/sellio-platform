@@ -5,14 +5,14 @@ namespace App\Services;
 class SmartSearchUrlBuilder
 {
     private const MODULE_ROUTES = [
-        'properties' => ['route' => 'properties.search', 'params' => ['q', 'location', 'category', 'max_price', 'min_price', 'property_type', 'bedrooms']],
-        'autos'      => ['route' => 'autos.search',      'params' => ['make', 'location', 'category', 'type', 'transmission', 'max_price', 'min_price']],
-        'events'     => ['route' => 'events.search',     'params' => ['search', 'location', 'category', 'date']],
-        'services'   => ['route' => 'services.search',   'params' => ['search', 'location', 'category_id', 'min_price', 'max_price']],
-        'classifieds'=> ['route' => 'classifieds.search','params' => ['search', 'location', 'category', 'min_price', 'max_price']],
-        'jobs'       => ['route' => 'jobs.search',       'params' => ['search', 'location', 'category', 'workplace_type']],
-        'products'   => ['route' => 'products.search',   'params' => ['q', 'location', 'category', 'min_price', 'max_price']],
-        'blogs'      => ['route' => 'blogs.search',      'params' => ['search', 'category', 'sort']],
+        'properties'  => ['route' => 'properties.search',  'params' => ['q', 'location', 'category', 'property_type', 'min_price', 'max_price', 'bedrooms', 'bathrooms', 'guests', 'check_in', 'check_out']],
+        'autos'       => ['route' => 'autos.search',       'params' => ['make', 'model', 'location', 'category', 'type', 'transmission', 'price_min', 'price_max', 'year_min', 'year_max']],
+        'events'      => ['route' => 'events.search',      'params' => ['search', 'location', 'category', 'type', 'tag', 'date', 'sort']],
+        'services'    => ['route' => 'services.search',    'params' => ['search', 'location', 'category_id', 'type', 'min_price', 'max_price', 'expertise']],
+        'classifieds' => ['route' => 'classifieds.search', 'params' => ['search', 'location', 'category', 'type', 'tag', 'min_price', 'max_price', 'sort']],
+        'jobs'        => ['route' => 'jobs.search',        'params' => ['search', 'location', 'category', 'type', 'tag', 'workplace_type', 'experience_level', 'sort']],
+        'products'    => ['route' => 'products.search',    'params' => ['q', 'location', 'category', 'brand', 'type', 'min_price', 'max_price', 'sort_by']],
+        'blogs'       => ['route' => 'blogs.search',       'params' => ['search', 'category', 'tag', 'sort']],
     ];
 
     public function build(string $module, array $filters): ?string

@@ -323,9 +323,8 @@
                                     @endif
                                 </td>
                                 <td class="text-muted small">{{ $sq->ip_address ?? '—' }}</td>
-                                <td class="small" title="{{ $sq->created_at }}">
-                                    <span class="text-dark font-weight-500">{{ $sq->created_at?->diffForHumans() }}</span>
-                                    <br><span class="text-muted" style="font-size:0.68rem;opacity:0.5">{{ $sq->created_at?->format('Y-m-d H:i') }}</span>
+                                <td class="text-muted small" title="{{ $sq->created_at?->format('Y-m-d H:i:s') }}">
+                                    {{ $sq->created_at?->diffForHumans() }}
                                 </td>
                             </tr>
                         @empty

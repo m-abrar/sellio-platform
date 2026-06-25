@@ -19,29 +19,57 @@ class SmartSearchController extends Controller
     private const SYSTEM_PROMPT = <<<'PROMPT'
 You are a search parser for a marketplace platform. Parse natural language queries into structured JSON.
 
-Available modules and their filter parameters:
-- properties: q, location, category, max_price, min_price, property_type (sale|rental), bedrooms
-- autos: make, location, category, type (selling|lease), transmission (Automatic|Manual), max_price, min_price
-- events: search, location, category, date (YYYY-MM-DD)
-- services: search, location, category_id, min_price, max_price
-- classifieds: search, location, category, min_price, max_price
-- jobs: search, location, category, workplace_type (remote|hybrid|on-site)
-- products: q, location, category, min_price, max_price
-- blogs: search, category, sort (latest|popular)
+Available modules and their exact filter parameters:
+
+properties:
+  q (keyword), location (slug), category (slug), property_type (sale|rental),
+  min_price (number), max_price (number), bedrooms (number), bathrooms (number),
+  guests (number), check_in (YYYY-MM-DD), check_out (YYYY-MM-DD)
+
+autos:
+  make (brand name), model (model name), location (slug), category (slug),
+  type (selling|lease), transmission (Automatic|Manual),
+  price_min (number), price_max (number), year_min (number), year_max (number)
+
+events:
+  search (keyword), location (slug), category (slug), type (slug), tag (slug),
+  date (YYYY-MM-DD), sort (latest|oldest|date_asc|date_desc)
+
+services:
+  search (keyword), location (slug), category_id (slug), type (slug),
+  min_price (number), max_price (number),
+  expertise (1=beginner|2=intermediate|3=expert|4=master)
+
+classifieds:
+  search (keyword), location (slug), category (slug), type (slug), tag (slug),
+  min_price (number), max_price (number), sort (latest|oldest|price_low|price_high)
+
+jobs:
+  search (keyword), location (slug), category (slug), type (slug), tag (slug),
+  workplace_type (remote|hybrid|on-site), experience_level (text),
+  sort (latest|oldest|salary_high|salary_low)
+
+products:
+  q (keyword), location (slug), category (slug), brand (slug), type (slug),
+  min_price (number), max_price (number), sort_by (latest|price_low|price_high|rating)
+
+blogs:
+  search (keyword), category (slug), tag (slug), sort (latest|popular|oldest)
 
 Rules:
 - Pick the single most appropriate module
-- Only include filters that are clearly implied by the query
-- Convert price mentions like "$500k" to 500000, "$1.2k" to 1200
-- For properties/autos, "q" or "make" is the main search text; for others use "search"
+- Only include filters clearly implied by the query — omit everything else
+- Convert prices: "$500k" → 500000, "1.2 million" → 1200000, "3 lac" → 300000
+- Slugs must be lowercase, hyphenated (e.g. "karachi", "toyota-corolla", "real-estate")
+- For properties/autos use "q"/"make" as the keyword field; for all others use "search"
 - Return ONLY valid JSON, no explanation
 
 Response format:
 {
   "module": "<module_name>",
-  "filters": { "<param>": "<value>", ... },
+  "filters": { "<param>": "<value>" },
   "confidence": <0.0-1.0>,
-  "summary": "<one sentence of what was understood>"
+  "summary": "<one sentence describing what was understood>"
 }
 PROMPT;
 
