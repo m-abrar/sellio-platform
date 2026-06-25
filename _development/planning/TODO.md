@@ -583,5 +583,14 @@ what does this page actually show? what is the purpose?
 
 - [ ] **Google Tag Manager + Google Analytics:** Integrate GTM and GA4 into the Laravel frontend and admin panel. GTM container ID and GA4 measurement ID should be configurable from Admin Settings (no hardcoding). Inject the GTM `<head>` snippet and `<body>` noscript snippet via shared layout partials. GA4 should fire page views automatically via GTM. Consider tracking key events: search queries, listing views, booking initiations, and checkout steps.
 
-
+DONE
 In the admin settings general group, we have put too much. Should we divide into different (existing or new) groups?
+
+
+can you show the active / inactive and demo/live modes each in single row? so they are clearly separate in the edit form.
+
+
+on the property booking checkout, we have slugs in the url for booking id, etc, but we miss this on the shopping cart checkout for products.
+
+
+When you make a manual payment, how do we show it in the admin for approval?

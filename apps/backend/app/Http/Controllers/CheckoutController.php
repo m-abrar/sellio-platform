@@ -47,7 +47,7 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('error', __('Your cart is empty.'));
         }
 
-        $stripePublishableKey = $stripeCheckoutConfig->resolvePublishableKey($manager, 'product_checkout');
+        $checkoutGateways = $stripeCheckoutConfig->resolveCheckoutGateways($manager, 'product_checkout');
 
         $orderData = [
             'amount'      => $cart->calculateTotal(),
@@ -57,9 +57,9 @@ class CheckoutController extends Controller
         ];
 
         return view('frontend.products.checkout', [
-            'cart' => $cart,
-            'orderData' => $orderData,
-            'stripePublishableKey' => $stripePublishableKey,
+            'cart'             => $cart,
+            'orderData'        => $orderData,
+            'checkoutGateways' => $checkoutGateways,
         ]);
     }
 
@@ -91,17 +91,17 @@ class CheckoutController extends Controller
 
             $token = $request->input('payment_token') ?? $request->input('stripeToken') ?? $request->input('paymentToken');
 
-            if (!$token) {
-                return redirect()->route('checkout.index')->with('error', __('Stripe payment details are required.'));
+            if (!$token && $gatewaySlug !== 'manual') {
+                return redirect()->route('checkout.index')->with('error', __('Payment details are required.'));
             }
 
-            // 1. Persist the Order before charging (Pendings state)
+            // 1. Persist the Order before charging (pending state)
             $order = $checkoutService->process($cart, $request->validated(), $gatewaySlug);
-            
-            $returnUrl = route('checkout.confirm', ['gateway' => $gatewaySlug, 'order' => $order->id], true);
-            
+
+            $returnUrl = route('checkout.confirm', ['gateway' => $gatewaySlug, 'order' => $order->order_number], true);
+
             // 2. Execute Charge
-            $result = $service->charge($order->total_amount, $token, $returnUrl, [
+            $result = $service->charge($order->total_amount, $token ?? '', $returnUrl, [
                 'purpose'      => 'product_order',
                 'order_id'     => $order->id,
                 'order_number' => $order->order_number,
@@ -139,8 +139,30 @@ class CheckoutController extends Controller
                     $result['message'] ?? 'Product order payment requires authentication.'
                 );
 
-                return redirect($result['redirect_url']); 
-            } 
+                return redirect($result['redirect_url']);
+            }
+
+            // Manual / bank-transfer: pending_auth with no redirect — store proof, await admin
+            if ($result['status'] === 'pending_auth') {
+                $checkoutService->recordOrderPayment(
+                    $order,
+                    $gatewaySlug,
+                    (float) $order->total_amount,
+                    Payment::STATUS_PENDING,
+                    $result['reference'] ?? null,
+                    $result['message'] ?? 'Awaiting bank transfer verification.'
+                );
+
+                if ($request->hasFile('proof_file')) {
+                    $path = $request->file('proof_file')->store('payment-proofs', 'public');
+                    $order->payments()->orderBy('id', 'desc')->first()?->update(['proof_file' => $path]);
+                }
+
+                return redirect()->route('checkout.order.success')->with([
+                    'success'   => __('Your bank transfer receipt has been submitted. Your order is pending admin verification.'),
+                    'reference' => $result['reference'] ?? null,
+                ]);
+            }
 
             if ($result['status'] === 'failed' || $result['status'] === 'error') {
                 $checkoutService->recordOrderPayment(

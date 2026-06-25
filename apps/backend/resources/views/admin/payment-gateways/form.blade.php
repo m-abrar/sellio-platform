@@ -53,26 +53,30 @@
                         <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Connection Logic</h3>
                     </div>
                     <div class="card-body p-4">
-                        {{-- Global Status Controls --}}
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <label class="font-weight-600 small text-muted text-uppercase mb-2 d-block">Operational Mode</label>
-                                <select name="mode" id="mode" class="form-control form-control-lg @error('mode') is-invalid @enderror" style="border-radius: 12px;">
-                                    <option value="sandbox" {{ old('mode', $gateway->mode) === 'sandbox' ? 'selected' : '' }}>
-                                        Sandbox (Testing Environment)
-                                    </option>
-                                    <option value="live" {{ old('mode', $gateway->mode) === 'live' ? 'selected' : '' }}>
-                                        Live (Production Environment)
-                                    </option>
-                                </select>
-                                @error('mode') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-                            </div>
-                            <div class="col-md-6 d-flex align-items-center pt-4">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="activeSwitch" name="is_active" value="1" 
+                        {{-- Operational Mode --}}
+                        <div class="mb-4">
+                            <label class="font-weight-600 small text-muted text-uppercase mb-2 d-block" for="mode">Operational Mode</label>
+                            <select name="mode" id="mode" class="form-control form-control-lg @error('mode') is-invalid @enderror" style="border-radius: 12px;">
+                                <option value="sandbox" {{ old('mode', $gateway->mode) === 'sandbox' ? 'selected' : '' }}>
+                                    🧪 Sandbox — Testing Environment
+                                </option>
+                                <option value="live" {{ old('mode', $gateway->mode) === 'live' ? 'selected' : '' }}>
+                                    ⚡ Live — Production Environment
+                                </option>
+                            </select>
+                            @error('mode') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
+                        </div>
+
+                        {{-- Gateway Status --}}
+                        <div class="mb-4">
+                            <label class="font-weight-600 small text-muted text-uppercase mb-2 d-block">Gateway Status</label>
+                            <div class="d-flex align-items-center p-3 rounded-lg border" style="background: #f9fafb;">
+                                <div class="custom-control custom-switch mb-0">
+                                    <input type="checkbox" class="custom-control-input" id="activeSwitch" name="is_active" value="1"
                                            {{ old('is_active', $gateway->is_active) ? 'checked' : '' }} />
-                                    <label class="custom-control-label font-weight-bold text-dark" for="activeSwitch">
-                                        {{ $gateway->is_active ? 'ENABLED' : 'DISABLED' }}
+                                    <label class="custom-control-label font-weight-bold" for="activeSwitch"
+                                           style="color: {{ $gateway->is_active ? '#28a745' : '#6c757d' }}">
+                                        {{ $gateway->is_active ? '✅ Active — Accepting payments' : '⛔ Inactive — Hidden from checkout' }}
                                     </label>
                                 </div>
                             </div>

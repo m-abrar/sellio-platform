@@ -160,7 +160,7 @@ class PropertyBookingController extends Controller
                 ?? $request->input('stripeToken')
                 ?? $this->demoStripeTokenFromCard($request);
 
-            if (!$token) {
+            if (!$token && $gatewaySlug !== 'manual') {
                 return back()->withInput()->with('error', __('Payment token could not be created. Please check your card details.'));
             }
 
@@ -170,7 +170,7 @@ class PropertyBookingController extends Controller
                 'gateway' => $gatewaySlug,
             ], true);
 
-            $result = $manager->resolve($gateway)->charge((float) $booking->total_price, $token, $returnUrl, [
+            $result = $manager->resolve($gateway)->charge((float) $booking->total_price, $token ?? '', $returnUrl, [
                 'purpose' => 'property_booking',
                 'property_booking_id' => (string) $booking->id,
                 'property_id' => (string) $booking->property_id,
@@ -209,6 +209,28 @@ class PropertyBookingController extends Controller
                 return redirect($result['redirect_url']);
             }
 
+            // Manual / bank-transfer: pending_auth with no redirect — store proof file, await admin verification
+            if (($result['status'] ?? null) === 'pending_auth') {
+                $this->propertyService->recordBookingPayment(
+                    $booking,
+                    $gatewaySlug,
+                    (float) $booking->total_price,
+                    Payment::STATUS_PENDING,
+                    $result['reference'] ?? null,
+                    $result['message'] ?? null
+                );
+
+                if ($request->hasFile('proof_file')) {
+                    $path = $request->file('proof_file')->store('payment-proofs', 'public');
+                    $booking->payments()->orderBy('id', 'desc')->first()?->update(['proof_file' => $path]);
+                }
+
+                return redirect()->route('property.booking.confirmation', [
+                    'property' => $booking->property->slug,
+                    'booking'  => $booking->id,
+                ])->with('info', __('Your payment receipt has been submitted. Your booking is pending admin verification.'));
+            }
+
             $this->propertyService->recordBookingPayment(
                 $booking,
                 $gatewaySlug,
@@ -237,15 +259,15 @@ class PropertyBookingController extends Controller
     {
         $this->authorizeBooking($property, $booking);
 
-        $stripePublishableKey = app(StripeCheckoutConfigService::class)
-            ->resolvePublishableKey($manager, 'property_booking_payment');
+        $checkoutGateways = app(StripeCheckoutConfigService::class)
+            ->resolveCheckoutGateways($manager, 'property_booking_payment');
 
         return view('frontend.properties.booking.payment', [
-            'property' => $property,
-            'booking' => $booking,
-            'nights' => $booking->duration_nights,
-            'stripePublishableKey' => $stripePublishableKey,
-            'addonLines' => $booking->transactionLines()
+            'property'         => $property,
+            'booking'          => $booking,
+            'nights'           => $booking->duration_nights,
+            'checkoutGateways' => $checkoutGateways,
+            'addonLines'       => $booking->transactionLines()
                 ->where('description', 'LIKE', 'Add-on:%')
                 ->get(),
         ]);

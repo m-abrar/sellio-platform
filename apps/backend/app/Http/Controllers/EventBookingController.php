@@ -133,13 +133,13 @@ class EventBookingController extends Controller
         }
 
         $booking->load(['event', 'occurrence', 'ticketType']);
-        $stripePublishableKey = $stripeCheckoutConfig->resolvePublishableKey($manager, 'event_booking_checkout');
+        $checkoutGateways = $stripeCheckoutConfig->resolveCheckoutGateways($manager, 'event_booking_checkout');
 
         return view('frontend.events.booking.checkout', [
-            'event'   => $event,
-            'booking' => $booking,
-            'user'    => Auth::user(),
-            'stripePublishableKey' => $stripePublishableKey,
+            'event'            => $event,
+            'booking'          => $booking,
+            'user'             => Auth::user(),
+            'checkoutGateways' => $checkoutGateways,
         ]);
     }
 
@@ -178,17 +178,16 @@ class EventBookingController extends Controller
         $this->authorizeBooking($booking, $event);
 
         $request->validate([
-            'payment_method' => 'required|string|in:stripe',
-            'payment_token' => 'nullable|string|max:255',
+            'payment_method' => 'required|string|in:stripe,manual',
+            'payment_token'  => 'nullable|string|max:255',
+            'proof_file'     => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ]);
 
-        // SECURITY: Recalculate amount on the server based on the booking record.
-        // Never trust the 'amount' field from the request in financial transactions.
-        $finalTotal = round($booking->total_price * 1.05, 2);
-
+        // SECURITY: Recalculate amount on the server; never trust client-submitted amounts.
+        $finalTotal  = round($booking->total_price * 1.05, 2);
+        $gatewaySlug = $request->input('payment_method');
 
         try {
-            $gatewaySlug = $request->input('payment_method');
             $gateway = PaymentGateway::query()
                 ->where('slug', $gatewaySlug)
                 ->where('is_active', true)
@@ -196,34 +195,30 @@ class EventBookingController extends Controller
 
             $token = $request->input('payment_token');
 
-            if (!$token) {
+            if (!$token && $gatewaySlug !== 'manual') {
                 return back()->with('error', __('Payment token could not be created. Please check your card details.'));
             }
 
             $returnUrl = route('events.tickets.booking.payment.confirm', [
-                'event' => $event->slug,
+                'event'   => $event->slug,
                 'booking' => $booking->id,
                 'gateway' => $gatewaySlug,
             ], true);
 
-            $result = $manager->resolve($gateway)->charge($finalTotal, $token, $returnUrl, [
-                'purpose' => 'event_booking',
+            $result = $manager->resolve($gateway)->charge($finalTotal, $token ?? '', $returnUrl, [
+                'purpose'          => 'event_booking',
                 'event_booking_id' => (string) $booking->id,
-                'event_id' => (string) $event->id,
-                'user_id' => (string) $booking->user_id,
-                'description' => __('Payment for event booking #:id', ['id' => $booking->id]),
+                'event_id'         => (string) $event->id,
+                'user_id'          => (string) $booking->user_id,
+                'description'      => __('Payment for event booking #:id', ['id' => $booking->id]),
             ]);
 
             if (($result['status'] ?? null) === 'successful') {
                 $this->bookingService->recordBookingPayment(
-                    $booking,
-                    $gatewaySlug,
-                    $finalTotal,
+                    $booking, $gatewaySlug, $finalTotal,
                     Payment::STATUS_COMPLETED,
-                    $result['reference'] ?? null,
-                    $result['message'] ?? null
+                    $result['reference'] ?? null, $result['message'] ?? null
                 );
-
                 $this->bookingService->finalizePayment($booking, $gatewaySlug, $result['reference'] ?? null, $finalTotal);
 
                 return redirect()->route('events.tickets.booking.confirmation', [$event->slug, $booking->id])
@@ -232,24 +227,35 @@ class EventBookingController extends Controller
 
             if (($result['status'] ?? null) === 'pending_auth' && !empty($result['redirect_url'])) {
                 $this->bookingService->recordBookingPayment(
-                    $booking,
-                    $gatewaySlug,
-                    $finalTotal,
+                    $booking, $gatewaySlug, $finalTotal,
                     Payment::STATUS_PENDING,
-                    $result['reference'] ?? null,
-                    $result['message'] ?? null
+                    $result['reference'] ?? null, $result['message'] ?? null
                 );
 
                 return redirect($result['redirect_url']);
             }
 
+            // Manual / bank-transfer: pending_auth with no redirect — store proof, await admin
+            if (($result['status'] ?? null) === 'pending_auth') {
+                $this->bookingService->recordBookingPayment(
+                    $booking, $gatewaySlug, $finalTotal,
+                    Payment::STATUS_PENDING,
+                    $result['reference'] ?? null, $result['message'] ?? null
+                );
+
+                if ($request->hasFile('proof_file')) {
+                    $path = $request->file('proof_file')->store('payment-proofs', 'public');
+                    $booking->payments()->orderBy('id', 'desc')->first()?->update(['proof_file' => $path]);
+                }
+
+                return redirect()->route('events.tickets.booking.checkout', [$event->slug, $booking->id])
+                    ->with('info', __('Your payment receipt has been submitted. Your booking is pending admin verification.'));
+            }
+
             $this->bookingService->recordBookingPayment(
-                $booking,
-                $gatewaySlug,
-                $finalTotal,
+                $booking, $gatewaySlug, $finalTotal,
                 Payment::STATUS_FAILED,
-                $result['reference'] ?? null,
-                $result['message'] ?? __('Gateway payment failed.')
+                $result['reference'] ?? null, $result['message'] ?? __('Gateway payment failed.')
             );
 
             return back()->with('error', $result['message'] ?? __('Payment failed. Please try again.'));

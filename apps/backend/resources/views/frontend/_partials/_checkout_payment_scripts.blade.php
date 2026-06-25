@@ -84,6 +84,10 @@
                 };
 
                 form.addEventListener('submit', async (event) => {
+                    // Non-Stripe gateways (e.g. manual bank transfer) submit normally
+                    const gatewayMethod = (form.querySelector('[data-gateway-method]') ?? form.querySelector('[name="payment_method"]'))?.value ?? 'stripe';
+                    if (gatewayMethod !== 'stripe') return;
+
                     if (!stripe || !cardElement || !tokenInput) {
                         setSubmitting(true);
                         return;

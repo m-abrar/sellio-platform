@@ -1,10 +1,14 @@
 @extends('frontend._layouts._app')
 
 @php
-    $usesStripeElements = filled($stripePublishableKey ?? null);
-    $total = $cart->calculateTotal();
-    $totalFormatted = format_currency($total);
-    $firstItem = $cart->items->first();
+    $checkoutGateways   ??= [];
+    $stripeKey           = collect($checkoutGateways)->firstWhere('slug', 'stripe')['config']['publishable_key'] ?? null;
+    $usesStripeElements  = filled($stripeKey);
+    $firstGatewaySlug    = $checkoutGateways[0]['slug'] ?? 'stripe';
+    $canSubmit           = $usesStripeElements || collect($checkoutGateways)->firstWhere('slug', 'manual');
+    $total               = $cart->calculateTotal();
+    $totalFormatted      = format_currency($total);
+    $firstItem           = $cart->items->first();
 @endphp
 
 @section('title', __('Checkout') . ' | ' . __('Step 2 of 3'))
@@ -19,14 +23,13 @@
     @include('frontend.products._partials._checkout-stepper', ['step' => 2])
 
     <form method="POST"
-          action="{{ route('checkout.process', 'stripe') }}"
+          action="{{ route('checkout.process', $firstGatewaySlug) }}"
+          enctype="multipart/form-data"
           class="booking-payment-form"
           data-checkout-payment-form
           data-product-checkout-form
           novalidate>
         @csrf
-        <input type="hidden" name="payment_method" value="stripe">
-        <input type="hidden" name="payment_token" value="" data-stripe-payment-token>
 
         <div class="row g-4 booking-layout">
             <div class="col-lg-7 booking-layout__main">
@@ -69,11 +72,12 @@
                     </div>
                 </div>
 
-                @include('frontend._partials._checkout_payment_panel', [
-                    'stripePublishableKey' => $stripePublishableKey,
-                    'totalFormatted' => $totalFormatted,
-                    'cardholderName' => old('shipping_name', auth()->user()->name),
-                    'submitLabel' => __('Complete Payment'),
+                @include('frontend._partials._gateway_selector', [
+                    'checkoutGateways'    => $checkoutGateways,
+                    'totalFormatted'      => $totalFormatted,
+                    'cardholderName'      => old('shipping_name', auth()->user()->name),
+                    'submitLabel'         => __('Complete Payment'),
+                    'formActionBase'      => route('checkout.process', '__SLUG__'),
                 ])
             </div>
 
@@ -115,7 +119,7 @@
                             <p class="filter-label mb-1">{{ __('Total Amount Due') }}</p>
                             <h2 class="price-text-large mb-0 line-height-1" style="color:var(--primary-color)">{{ $totalFormatted }}</h2>
                             <span class="fw-semibold px-3 py-2 mt-3 d-inline-block rounded-2 small" style="background:rgba(var(--primary-color-rgb),.1);color:var(--primary-color)">
-                                <i class="bi bi-shield-check me-1"></i>{{ __('Secure Stripe checkout') }}
+                                <i class="bi bi-shield-check me-1"></i>{{ __('Secure checkout') }}
                             </span>
                         </div>
 
@@ -132,7 +136,7 @@
                 <span class="booking-mobile-summary__label">{{ __('Total Due') }}</span>
                 <strong>{{ $totalFormatted }}</strong>
             </div>
-            <button type="submit" class="btn btn-primary px-4" data-checkout-payment-submit @disabled(!$usesStripeElements)>
+            <button type="submit" class="btn btn-primary px-4" data-checkout-payment-submit @disabled(!$canSubmit)>
                 {{ __('Pay') }} <i class="bi bi-arrow-right-short ms-1"></i>
             </button>
         </div>
@@ -141,8 +145,8 @@
 @endsection
 
 @include('frontend._partials._checkout_payment_scripts', [
-    'stripePublishableKey' => $stripePublishableKey,
-    'formSelector' => '[data-checkout-payment-form]',
-    'cardholderFallback' => auth()->user()->name ?? '',
-    'submitLabelText' => __('Complete Payment'),
+    'stripePublishableKey' => $stripeKey,
+    'formSelector'         => '[data-checkout-payment-form]',
+    'cardholderFallback'   => auth()->user()->name ?? '',
+    'submitLabelText'      => __('Complete Payment'),
 ])

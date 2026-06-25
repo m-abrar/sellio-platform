@@ -113,6 +113,11 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'order_number';
+    }
+
     public function payments(): MorphMany
     {
         return $this->morphMany(Payment::class, 'payable');
