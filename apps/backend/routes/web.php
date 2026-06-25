@@ -179,6 +179,7 @@ Route::middleware(['built_in_website'])->group(function () {
         Route::post('/process/{gateway}', [CheckoutController::class, 'processPayment'])->name('process');
         Route::get('/confirm/{gateway}/{order}', [CheckoutController::class, 'confirmPayment'])->name('confirm');
         Route::get('/success', [CheckoutController::class, 'showSuccess'])->name('order.success');
+        Route::get('/pending/{order}', [CheckoutController::class, 'showPending'])->middleware('auth')->name('order.pending');
     });
 
     // Property Booking Logic

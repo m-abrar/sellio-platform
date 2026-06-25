@@ -19,6 +19,8 @@ class StoreOrderRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isManual = $this->input('payment_method') === 'manual';
+
         return [
             'shipping_name'    => ['required', 'string', 'max:255'],
             'shipping_address' => ['required', 'string', 'max:500'],
@@ -28,7 +30,9 @@ class StoreOrderRequest extends FormRequest
             'shipping_country' => ['required', 'string', 'max:100'],
             'payment_method'   => ['required', 'string', 'in:stripe,paypal,wallet,bank_transfer,manual'],
             'payment_token'    => ['nullable', 'string', 'max:255'],
-            'proof_file'       => ['nullable', 'file', 'mimes:jpeg,png,jpg,pdf', 'max:5120'],
+            'proof_file'       => $isManual
+                ? ['required', 'file', 'mimes:jpeg,png,jpg,pdf', 'max:5120']
+                : ['nullable', 'file', 'mimes:jpeg,png,jpg,pdf', 'max:5120'],
         ];
     }
 }

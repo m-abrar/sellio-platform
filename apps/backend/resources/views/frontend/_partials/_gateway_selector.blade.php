@@ -23,6 +23,29 @@
 .gateway-tab{display:inline-flex;align-items:center;gap:9px;padding:10px 18px;border:2px solid rgba(var(--primary-color-rgb),.2);border-radius:10px;cursor:pointer;font-weight:600;font-size:.8125rem;color:#6b7280;background:#fff;user-select:none;transition:border-color .15s,background .15s,color .15s}
 .gateway-tab--active{border-color:var(--primary-color);background:rgba(var(--primary-color-rgb),.06);color:var(--primary-color)}
 .gateway-tab i{font-size:.95rem}
+
+/* ── Proof-file upload zone ── */
+.proof-upload{position:relative}
+.proof-upload__input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.proof-upload__zone{border:2px dashed rgba(var(--primary-color-rgb),.25);border-radius:14px;padding:28px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s,box-shadow .2s;background:rgba(var(--primary-color-rgb),.02);user-select:none}
+.proof-upload__zone:hover,.proof-upload__zone--over{border-color:var(--primary-color);background:rgba(var(--primary-color-rgb),.05);box-shadow:0 0 0 4px rgba(var(--primary-color-rgb),.07)}
+.proof-upload__icon{font-size:2rem;color:var(--primary-color);opacity:.55;margin-bottom:10px;display:block;transition:transform .25s,opacity .25s}
+.proof-upload__zone:hover .proof-upload__icon,.proof-upload__zone--over .proof-upload__icon{transform:translateY(-4px);opacity:.9}
+.proof-upload__label-main{display:block;font-weight:700;font-size:.875rem;color:#1f2937}
+.proof-upload__label-sub{display:block;font-size:.8125rem;color:#9ca3af;margin-top:3px}
+.proof-upload__label-link{color:var(--primary-color);font-weight:600;text-decoration:underline}
+.proof-upload__hint{margin-top:10px;font-size:.7rem;color:#d1d5db;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.proof-upload__preview{border:1.5px solid rgba(var(--primary-color-rgb),.2);border-radius:14px;padding:14px 16px;background:rgba(var(--primary-color-rgb),.03);display:flex;align-items:center;gap:14px}
+.proof-upload__thumb{width:58px;height:58px;border-radius:10px;overflow:hidden;background:#f3f4f6;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(0,0,0,.06)}
+.proof-upload__thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.proof-upload__thumb-pdf{font-size:1.75rem;color:#ef4444;line-height:1}
+.proof-upload__meta{flex:1;min-width:0}
+.proof-upload__filename{display:block;font-weight:700;font-size:.8125rem;color:#1f2937;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proof-upload__filesize{display:block;font-size:.74rem;color:#9ca3af;margin-top:2px}
+.proof-upload__success{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;font-weight:600;color:#16a34a;margin-top:4px}
+.proof-upload__remove{background:none;border:none;padding:6px;cursor:pointer;color:#d1d5db;font-size:1.1rem;flex-shrink:0;line-height:1;border-radius:50%;transition:color .15s,background .15s}
+.proof-upload__remove:hover{color:#ef4444;background:rgba(239,68,68,.08)}
+.proof-upload__error{color:#ef4444;font-size:.8125rem;font-weight:500;margin-top:6px;display:flex;align-items:center;gap:5px}
 </style>
 
 <section class="booking-payment-panel bg-white border" data-gateway-selector>
@@ -173,19 +196,53 @@
                 @endif
             </div>
 
-            <div>
-                <label for="proof_file" class="filter-label mb-2">
-                    {{ __('Upload Payment Receipt') }} <span class="text-danger">*</span>
-                </label>
-                <div class="input-group unified-input">
-                    <span class="input-group-text"><i class="bi bi-paperclip"></i></span>
-                    <input type="file" id="proof_file" name="proof_file"
-                           class="form-control @error('proof_file') is-invalid @enderror"
-                           accept=".jpg,.jpeg,.png,.pdf">
+            {{-- ── Premium file-upload drop zone ── --}}
+            <div class="proof-upload" data-proof-upload>
+
+                {{-- Hidden real input --}}
+                <input type="file"
+                       id="proof_file"
+                       name="proof_file"
+                       class="proof-upload__input @error('proof_file') is-invalid @enderror"
+                       accept=".jpg,.jpeg,.png,.pdf"
+                       data-proof-input>
+
+                {{-- Drop zone (visible when no file chosen) --}}
+                <div class="proof-upload__zone" data-proof-zone role="button" tabindex="0"
+                     aria-label="{{ __('Upload payment receipt') }}">
+                    <span class="proof-upload__icon"><i class="bi bi-cloud-arrow-up-fill"></i></span>
+                    <span class="proof-upload__label-main">{{ __('Drop your receipt here') }}</span>
+                    <span class="proof-upload__label-sub">
+                        {{ __('or') }} <span class="proof-upload__label-link">{{ __('click to browse') }}</span>
+                    </span>
+                    <span class="proof-upload__hint">JPG · PNG · PDF &nbsp;·&nbsp; max 5 MB</span>
                 </div>
-                <p class="small text-muted mt-1 mb-0">{{ __('Accepted: JPG, PNG, PDF · Max 5 MB') }}</p>
+
+                {{-- Preview (visible after file chosen) --}}
+                <div class="proof-upload__preview" data-proof-preview style="display:none">
+                    <div class="proof-upload__thumb">
+                        <img src="" alt="" data-proof-img style="display:none">
+                        <span class="proof-upload__thumb-pdf" data-proof-pdf style="display:none">
+                            <i class="bi bi-file-earmark-pdf-fill"></i>
+                        </span>
+                    </div>
+                    <div class="proof-upload__meta">
+                        <span class="proof-upload__filename" data-proof-name></span>
+                        <span class="proof-upload__filesize" data-proof-size></span>
+                        <span class="proof-upload__success">
+                            <i class="bi bi-check-circle-fill"></i> {{ __('Ready to submit') }}
+                        </span>
+                    </div>
+                    <button type="button" class="proof-upload__remove" data-proof-remove
+                            aria-label="{{ __('Remove file') }}">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                </div>
+
                 @error('proof_file')
-                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                    <div class="proof-upload__error">
+                        <i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
+                    </div>
                 @enderror
             </div>
         </div>
@@ -230,6 +287,91 @@
         </div>
     </div>
 </section>
+
+@push($scriptsStack)
+<script>
+(() => {
+    const upload = document.querySelector('[data-proof-upload]');
+    if (!upload) return;
+
+    const input   = upload.querySelector('[data-proof-input]');
+    const zone    = upload.querySelector('[data-proof-zone]');
+    const preview = upload.querySelector('[data-proof-preview]');
+    const img     = upload.querySelector('[data-proof-img]');
+    const pdfIcon = upload.querySelector('[data-proof-pdf]');
+    const nameEl  = upload.querySelector('[data-proof-name]');
+    const sizeEl  = upload.querySelector('[data-proof-size]');
+    const removeBtn = upload.querySelector('[data-proof-remove]');
+
+    const fmtSize = b => b < 1048576 ? (b / 1024).toFixed(1) + ' KB' : (b / 1048576).toFixed(1) + ' MB';
+
+    const show = file => {
+        nameEl.textContent = file.name;
+        sizeEl.textContent = fmtSize(file.size);
+        if (file.type.startsWith('image/')) {
+            const r = new FileReader();
+            r.onload = e => { img.src = e.target.result; img.style.display = ''; pdfIcon.style.display = 'none'; };
+            r.readAsDataURL(file);
+        } else {
+            img.style.display = 'none'; pdfIcon.style.display = '';
+        }
+        zone.style.display = 'none';
+        preview.style.display = '';
+    };
+
+    const clear = () => {
+        input.value = '';
+        img.src = '';
+        zone.style.display = '';
+        preview.style.display = 'none';
+    };
+
+    zone.addEventListener('click', () => input.click());
+    zone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
+    input.addEventListener('change', () => { if (input.files[0]) show(input.files[0]); });
+    removeBtn.addEventListener('click', clear);
+
+    zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('proof-upload__zone--over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('proof-upload__zone--over'));
+    zone.addEventListener('drop', e => {
+        e.preventDefault();
+        zone.classList.remove('proof-upload__zone--over');
+        const file = e.dataTransfer.files[0];
+        if (!file) return;
+        const allowed = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+        if (!allowed.includes(file.type)) return;
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+        show(file);
+    });
+
+    // Intercept form submit: show error on zone if manual tab is active but no file chosen
+    const form = upload.closest('form');
+    if (form) {
+        form.addEventListener('submit', e => {
+            const methodInput = form.querySelector('[data-gateway-method]');
+            const isManual = (methodInput ? methodInput.value : '') === 'manual';
+            if (!isManual || input.files.length > 0) return;
+
+            e.preventDefault();
+            zone.style.display = '';
+            preview.style.display = 'none';
+            zone.style.borderColor = '#ef4444';
+            zone.style.background  = 'rgba(239,68,68,.04)';
+            zone.style.boxShadow   = '0 0 0 4px rgba(239,68,68,.1)';
+            zone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            zone.addEventListener('click', () => {
+                zone.style.borderColor = '';
+                zone.style.background  = '';
+                zone.style.boxShadow   = '';
+            }, { once: true });
+        });
+    }
+})();
+</script>
+@endpush
 
 @if($hasMany)
 @push($scriptsStack)

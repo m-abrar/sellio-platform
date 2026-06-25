@@ -177,10 +177,14 @@ class EventBookingController extends Controller
     {
         $this->authorizeBooking($booking, $event);
 
+        $isManual = $request->input('payment_method') === 'manual';
+
         $request->validate([
             'payment_method' => 'required|string|in:stripe,manual',
             'payment_token'  => 'nullable|string|max:255',
-            'proof_file'     => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
+            'proof_file'     => $isManual
+                ? 'required|file|mimes:jpeg,png,jpg,pdf|max:5120'
+                : 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ]);
 
         // SECURITY: Recalculate amount on the server; never trust client-submitted amounts.

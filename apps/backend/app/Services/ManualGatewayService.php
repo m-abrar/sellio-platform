@@ -33,7 +33,7 @@ class ManualGatewayService implements PaymentGatewayService
         return [
             'status'       => 'pending_auth',
             'reference'    => 'MANUAL-' . strtoupper(uniqid()),
-            'redirect_url' => $returnUrl,
+            'redirect_url' => null,
             'bank_details' => $this->getBankDetails(),
             'message'      => 'Please transfer the amount to the bank account below and upload your payment receipt.',
         ];

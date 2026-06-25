@@ -553,7 +553,7 @@ In the blogs, Recommended Reading section shows nothing
 
 - [x] **Property booking step 3 — "Contact Host" validation error:** Fixed. Route `conversation.start` uses `{user:username}` binding. Changed `['user' => $property->user]` (full model) to `['user' => $property->user->username]` in `confirmation.blade.php`.
 
-
+---------------------
 
 can we add such pages in the main menu (submenu), like most of the themeforest themes help their buyer's explore all pages.
 home, about, contact, faq, privacy, terms
@@ -586,16 +586,21 @@ what does this page actually show? what is the purpose?
 DONE
 In the admin settings general group, we have put too much. Should we divide into different (existing or new) groups?
 
+-----------------
 
 can you show the active / inactive and demo/live modes each in single row? so they are clearly separate in the edit form.
+
+-----------------
 
 
 on the property booking checkout, we have slugs in the url for booking id, etc, but we miss this on the shopping cart checkout for products.
 
+-----------------
 
+DONE, i think
 When you make a manual payment, how do we show it in the admin for approval?
 
-
+------------------
 
 When you make a manual payment, we see this error alert on the page.
 
@@ -604,7 +609,30 @@ Your cart is empty.
 
 Also, we want to show a specific URL with success message of order created even with pending payment status.
 
+-------------
+
+On manual payment:
+i see this error in admin panel
+No receipt uploaded
+
+Also, can we make the frontend payment screenshot upload UIUX polished and premium?
+
+
+-----------------
+
 
 
 http://127.0.0.1:8000/admin/settings
 one of the cards is missing here, i doubt.
+
+
+-------------------
+
+On the property booking page, why do i see this issue?
+
+
+Something went wrong
+
+Payment confirmation failed because the gateway reference was missing.
+
+--------------------------

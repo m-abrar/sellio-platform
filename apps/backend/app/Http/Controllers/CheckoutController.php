@@ -158,10 +158,7 @@ class CheckoutController extends Controller
                     $order->payments()->orderBy('id', 'desc')->first()?->update(['proof_file' => $path]);
                 }
 
-                return redirect()->route('checkout.order.success')->with([
-                    'success'   => __('Your bank transfer receipt has been submitted. Your order is pending admin verification.'),
-                    'reference' => $result['reference'] ?? null,
-                ]);
+                return redirect()->route('checkout.order.pending', ['order' => $order->order_number]);
             }
 
             if ($result['status'] === 'failed' || $result['status'] === 'error') {
@@ -255,10 +252,27 @@ class CheckoutController extends Controller
     {
         $reference = $request->session()->get('reference', 'N/A');
         $message = $request->session()->get('success', 'Your order was placed successfully.');
-        
+
         return view('frontend.products.success', [
             'reference' => $reference,
             'message'   => $message,
+        ]);
+    }
+
+    /**
+     * Display the pending bank transfer confirmation page for a specific order.
+     */
+    public function showPending(Order $order): View|RedirectResponse
+    {
+        if (Auth::id() !== $order->user_id) {
+            abort(403);
+        }
+
+        $payment = $order->payments()->where('payment_method', 'manual')->latest()->first();
+
+        return view('frontend.products.pending', [
+            'order'   => $order,
+            'payment' => $payment,
         ]);
     }
 }
