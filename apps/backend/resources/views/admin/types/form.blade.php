@@ -143,7 +143,6 @@
                 @include('admin._partials._form-actions', [
                     'model' => $type,
                     'title' => 'LISTING TYPE',
-                    'duplicate' => 'admin.types.duplicate'
                 ])
 
                 {{-- Featured Image Partial --}}

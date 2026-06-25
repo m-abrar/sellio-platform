@@ -24,7 +24,7 @@ class BrandSeeder extends Seeder
         // Define brands, associating them with the relevant module column name.
         $moduleBrands = [
             'is_auto' => [
-                'Toyota', 'Ford', 'BMW', 'Honda', 'Tesla'
+                'Toyota', 'Ford', 'BMW', 'Honda', 'Tesla', 'Mercedes'
             ],
             'is_property' => [
                 'RE/MAX', 'Coldwell Banker', 'Keller Williams'

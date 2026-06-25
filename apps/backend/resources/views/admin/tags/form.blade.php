@@ -124,7 +124,6 @@
                 @include('admin._partials._form-actions', [
                     'model' => $tag,
                     'title' => 'TAG',
-                    'duplicate' => 'admin.tags.duplicate'
                 ])
 
                 {{-- Featured Image Partial --}}

@@ -381,10 +381,12 @@
                     <i class="bi bi-arrow-right" aria-hidden="true"></i>
                 </button>
             </div>
-            <div class="ai-redirect-track">
-                <div class="ai-redirect-bar" data-ai-redirect-bar></div>
+            <div data-ai-redirect-section hidden>
+                <div class="ai-redirect-track">
+                    <div class="ai-redirect-bar" data-ai-redirect-bar></div>
+                </div>
+                <p class="ai-redirect-label">{{ __('Taking you to results…') }}</p>
             </div>
-            <p class="ai-redirect-label">{{ __('Taking you to results…') }}</p>
         </div>
 
         {{-- Recent searches chips --}}
@@ -407,12 +409,61 @@
 </div>
 
 @once
+@php
+    $adminExamples = setting('smart_search_examples');
+    $adminExamples = $adminExamples ? json_decode($adminExamples, true) : null;
+
+    $moduleExamples = [];
+    if (module_enabled('properties'))  $moduleExamples[] = __('3-bedroom house near downtown under $500k with a pool…');
+    if (module_enabled('jobs'))         $moduleExamples[] = __('part-time remote marketing job, flexible hours…');
+    if (module_enabled('autos'))        $moduleExamples[] = __('used SUV under $20k, automatic, low mileage…');
+    if (module_enabled('events'))       $moduleExamples[] = __('weekend cooking class for beginners near me…');
+    if (module_enabled('services'))     $moduleExamples[] = __('plumber available this week for urgent bathroom repair…');
+    if (module_enabled('properties'))   $moduleExamples[] = __('1-bedroom apartment for rent under $1,200 per month…');
+    if (module_enabled('services'))     $moduleExamples[] = __('graphic designer for a logo, $500 budget, fast turnaround…');
+    if (module_enabled('products'))     $moduleExamples[] = __('wireless noise-cancelling headphones under $150…');
+    if (module_enabled('classifieds'))  $moduleExamples[] = __('second-hand iPhone 14 in good condition, under $400…');
+    if (module_enabled('autos'))        $moduleExamples[] = __('family SUV, automatic, petrol, under 50,000 miles…');
+    if (module_enabled('events'))       $moduleExamples[] = __('live jazz concert this Saturday, free or under $30…');
+    if (module_enabled('jobs'))         $moduleExamples[] = __('senior developer role, remote, $80k or above…');
+
+    $searchExamples = $adminExamples ?: $moduleExamples;
+    shuffle($searchExamples);
+
+    $adminThinking = setting('smart_search_thinking_messages');
+    $adminThinking = $adminThinking ? json_decode($adminThinking, true) : null;
+
+    $defaultThinking = [
+        __("You're about to find something great…"),
+        __("Big things incoming…"),
+        __("Hold tight — good things take a second…"),
+        __("Great taste. Let's find it for you…"),
+        __("You've got excellent taste…"),
+        __("Something amazing is on its way…"),
+        __("Good call. Let's go find it…"),
+        __("Hold on — you're going to like this…"),
+        __("We've got a feeling about this one…"),
+        __("Your instincts are spot on…"),
+        __("Almost there — and it's looking good…"),
+        __("The best part is just ahead…"),
+        __("We're on it. And it's looking promising…"),
+        __("Just a second — this one's worth it…"),
+        __("Great things are worth a moment…"),
+    ];
+
+    $thinkingMessages = $adminThinking ?: $defaultThinking;
+@endphp
 @push('scripts')
+<script type="application/json" id="ai-search-config">{"examples":@json(array_values($searchExamples)),"thinking":@json(array_values($thinkingMessages))}</script>
 <script>
 (function () {
     var CSRF = document.querySelector('meta[name="csrf-token"]')
                 ? document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 : '';
+
+    var _aiCfg       = JSON.parse(document.getElementById('ai-search-config').textContent || '{}');
+    var _aiExamples  = _aiCfg.examples  || [];
+    var _aiThinking  = _aiCfg.thinking  || [];
 
     function initAiSearch() {
         var pane = document.getElementById('hero-search-ai');
@@ -427,41 +478,18 @@
         var summaryEl   = pane.querySelector('[data-ai-summary]');
         var moduleBadge = pane.querySelector('[data-ai-module-badge]');
         var summaryText = pane.querySelector('[data-ai-summary-text]');
-        var redirectBar = pane.querySelector('[data-ai-redirect-bar]');
+        var redirectBar     = pane.querySelector('[data-ai-redirect-bar]');
+        var redirectSection = pane.querySelector('[data-ai-redirect-section]');
         var goNowBtn    = pane.querySelector('[data-ai-go]');
         var micBtn      = pane.querySelector('[data-ai-mic]');
 
-        var THINKING_MSGS = [
-            "You're about to find something great…",
-            "Big things incoming…",
-            "Hold tight — good things take a second…",
-            "Great taste. Let's find it for you…",
-            "You've got excellent taste…",
-            "Something amazing is on its way…",
-            "Good call. Let's go find it…",
-            "Hold on — you're going to like this…",
-            "We've got a feeling about this one…",
-            "Your instincts are spot on…",
-            "Almost there — and it's looking good…",
-            "The best part is just ahead…",
-            "We're on it. And it's looking promising…",
-            "Just a second — this one's worth it…",
-            "Great things are worth a moment…",
-        ];
+        var THINKING_MSGS = _aiThinking;
 
         var lastParsed    = null;
         var redirectTimer = null;
 
         // ── Cycling placeholder ──────────────────────────────────────────
-        var examples = [
-            '{{ __("3-bedroom house near downtown under $500k with a pool…") }}',
-            '{{ __("part-time remote marketing job, flexible hours…") }}',
-            '{{ __("used SUV under $20k, automatic, low mileage…") }}',
-            '{{ __("weekend cooking class near me, beginner friendly…") }}',
-            '{{ __("plumber available this week for urgent bathroom repair…") }}',
-            '{{ __("1-bedroom apartment for rent under $1,200/month…") }}',
-            '{{ __("graphic designer for logo, $500 budget, fast turnaround…") }}',
-        ];
+        var examples = _aiExamples;
         var exIdx = 0, typeTimer = null, waitTimer = null;
 
         function stopCycling() {
@@ -518,11 +546,13 @@
         function cancelRedirect() {
             clearTimeout(redirectTimer);
             if (redirectBar) { redirectBar.style.transition = 'none'; redirectBar.style.width = '0%'; }
+            if (redirectSection) redirectSection.hidden = true;
         }
 
         function startRedirect(url) {
             if (!url) return;
             var DELAY = 2200;
+            if (redirectSection) redirectSection.hidden = false;
             if (redirectBar) {
                 redirectBar.style.transition = 'none';
                 redirectBar.style.width = '0%';

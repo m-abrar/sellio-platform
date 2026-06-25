@@ -5,7 +5,7 @@
             showCategories: {{ request('category_id') ? 'true' : 'false' }},
             showModels: {{ (request('is_project_based') || request('is_subscription')) ? 'true' : 'false' }},
             showFeatures: {{ (request('is_urgent') || request('is_remote')) ? 'true' : 'false' }},
-            showTags: {{ request('tag') ? 'true' : 'false' }}
+            showTags: {{ request('tags') ? 'true' : 'false' }}
         }"
     >
         {{-- Header --}}
@@ -136,8 +136,8 @@
                 <div x-show="showTags" x-collapse>
                     <div class="pt-2 d-flex flex-wrap gap-2">
                         @foreach ($tags as $tag)
-                            <input type="checkbox" class="btn-check" name="tag[]" value="{{ $tag->id }}" id="tag_{{ $tag->id }}" 
-                                {{ is_array(request('tag')) && in_array($tag->id, request('tag')) ? 'checked' : '' }}>
+                            <input type="checkbox" class="btn-check" name="tags[]" value="{{ $tag->id }}" id="tag_{{ $tag->id }}"
+                                {{ is_array(request('tags')) && in_array($tag->id, request('tags')) ? 'checked' : '' }}>
                             <label class="btn btn-outline-secondary btn-sm rounded-2 px-3 py-1" style="font-size: 0.72rem;" for="tag_{{ $tag->id }}">
                                 #{{ $tag->title }}
                             </label>

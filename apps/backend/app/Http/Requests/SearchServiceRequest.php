@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SearchServiceRequest extends FormRequest
 {
@@ -28,11 +29,9 @@ class SearchServiceRequest extends FormRequest
             'type'             => ['nullable', 'integer', 'exists:types,id'],
             'expertise'        => ['nullable', 'integer', 'in:1,2,3,4'],
             'min_price'        => ['nullable', 'numeric', 'min:0'],
-            'max_price'        => ['nullable', 'numeric', 'min:0', 'gte:min_price'],
+            'max_price'        => ['nullable', 'numeric', 'min:0', Rule::when($this->filled('min_price'), 'gte:min_price')],
             'is_project_based' => ['nullable', 'boolean'],
             'is_subscription'  => ['nullable', 'boolean'],
-            'is_urgent'        => ['nullable', 'boolean'],
-            'is_remote'        => ['nullable', 'boolean'],
             'features'         => ['nullable', 'array'],
             'features.*'       => ['integer', 'exists:features,id'],
             'tags'             => ['nullable', 'array'],

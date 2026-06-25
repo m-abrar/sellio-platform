@@ -19,7 +19,7 @@
 
         @if ($auto->category)
             <li class="breadcrumb-item">
-                <a href="{{ route('autos.index', ['category' => $auto->category->slug]) }}" 
+                <a href="{{ route('autos.index', ['category' => $auto->category_id]) }}"
                    class="text-muted text-decoration-none small fw-500 hover-primary">
                     {{ $auto->category->title }}
                 </a>

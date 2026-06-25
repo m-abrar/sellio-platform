@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SearchProductRequest extends FormRequest
 {
@@ -32,7 +33,7 @@ class SearchProductRequest extends FormRequest
             
             // Pricing filters
             'min_price'    => ['nullable', 'numeric', 'min:0'],
-            'max_price'    => ['nullable', 'numeric', 'gte:min_price'],
+            'max_price'    => ['nullable', 'numeric', Rule::when($this->filled('min_price'), 'gte:min_price')],
             
             // Availability toggles
             'on_sale'      => ['nullable', 'boolean'],

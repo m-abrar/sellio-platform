@@ -124,7 +124,6 @@
                 @include('admin._partials._form-actions', [
                     'model' => $feature,
                     'title' => 'FEATURE',
-                    'duplicate' => 'admin.features.duplicate'
                 ])
 
                 {{-- Featured Image Partial --}}

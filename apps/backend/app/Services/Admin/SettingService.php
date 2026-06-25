@@ -75,7 +75,10 @@ class SettingService
                 'site_privacy'      => 'nullable|integer',
             ],
             'apis' => [
-                'google_map_api_key' => 'nullable|string|max:255',
+                'google_map_api_key'               => 'nullable|string|max:255',
+                'gemini_api_key'                   => 'nullable|string|max:255',
+                'smart_search_examples'            => 'nullable|string',
+                'smart_search_thinking_messages'   => 'nullable|string',
             ],
         ];
 
@@ -122,6 +125,7 @@ class SettingService
             $booleanKeys = ['frontend_edit', 'hide_site_name'];
             $fileKeys = ['site_logo', 'site_favicon'];
             $arrayKeys = ['is_section'];
+            $jsonLineKeys = ['smart_search_examples', 'smart_search_thinking_messages'];
 
             foreach ($validKeys as $key) {
                 // Skip files if not present in request to prevent overwriting with null
@@ -130,6 +134,16 @@ class SettingService
                 }
 
                 $value = $request->input($key);
+
+                // Handle line-separated → JSON array fields
+                if (in_array($key, $jsonLineKeys)) {
+                    $lines = array_values(array_filter(
+                        array_map('trim', explode("\n", $value ?? '')),
+                        fn($l) => $l !== ''
+                    ));
+                    Setting::updateOrCreate(['key' => $key], ['value' => $lines ? json_encode($lines) : null]);
+                    continue;
+                }
 
                 // Handle Booleans
                 if (in_array($key, $booleanKeys)) {

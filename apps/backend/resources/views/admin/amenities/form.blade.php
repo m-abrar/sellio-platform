@@ -124,7 +124,6 @@
                 @include('admin._partials._form-actions', [
                     'model' => $amenity,
                     'title' => 'AMENITY',
-                    'duplicate' => 'admin.amenities.duplicate'
                 ])
 
                 {{-- Featured Image Partial --}}

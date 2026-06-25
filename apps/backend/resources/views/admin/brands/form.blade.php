@@ -124,7 +124,6 @@
                 @include('admin._partials._form-actions', [
                     'model' => $brand,
                     'title' => 'BRAND',
-                    'duplicate' => 'admin.brands.duplicate'
                 ])
 
                 {{-- Featured Image Partial --}}

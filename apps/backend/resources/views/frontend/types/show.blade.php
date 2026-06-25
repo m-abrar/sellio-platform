@@ -131,7 +131,15 @@
                     <div class="d-flex flex-column gap-2">
                         @foreach($sections as $section)
                             @if($section['data']->count())
-                                <a href="{{ route(str_replace('.show', '.index', $section['route'])) }}?types[]={{ $type->id }}"
+                                @php
+                                    $vertical = str_replace('.show', '', $section['route']);
+                                    $typeParam = match($vertical) {
+                                        'services'                         => 'type=' . $type->id,
+                                        'jobs', 'events', 'classifieds'    => 'type=' . $type->slug,
+                                        default                            => null,
+                                    };
+                                @endphp
+                                <a href="{{ route(str_replace('.show', '.index', $section['route'])) }}{{ $typeParam ? '?' . $typeParam : '' }}"
                                    class="d-flex align-items-center gap-3 p-3 rounded-4 text-decoration-none transition-up bg-white"
                                    style="border:1.5px solid rgba(15,23,42,.07)">
                                     <i class="bi {{ $section['icon'] }} flex-shrink-0" style="color:var(--primary-color)"></i>

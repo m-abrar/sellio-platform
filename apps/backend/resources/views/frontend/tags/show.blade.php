@@ -135,8 +135,14 @@
                         <p class="text-muted small mb-4">{{ __('Filter results by category to find exactly what you need.') }}</p>
                         <div class="row g-3">
                             @foreach($collections as $col)
+                                @php
+                                    $vertical = str_replace('.show', '', $col['route']);
+                                    $tagParam = in_array($vertical, ['jobs', 'events', 'classifieds'])
+                                        ? 'tag=' . $tag->slug
+                                        : 'tags[]=' . $tag->id;
+                                @endphp
                                 <div class="col-md-6">
-                                    <a href="{{ route(str_replace('.show', '.index', $col['route'])) }}?tags[]={{ $tag->id }}"
+                                    <a href="{{ route(str_replace('.show', '.index', $col['route'])) }}?{{ $tagParam }}"
                                        class="d-flex align-items-center gap-3 p-3 rounded-4 text-decoration-none transition-up bg-white"
                                        style="border:1.5px solid rgba(15,23,42,.07)">
                                         <i class="bi {{ $col['icon'] }} fs-5 flex-shrink-0" style="color:var(--primary-color)"></i>

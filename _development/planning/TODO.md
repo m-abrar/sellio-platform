@@ -582,3 +582,6 @@ what does this page actually show? what is the purpose?
 - [x] **"No results found" pages — all verticals:** Redesigned shared `_listing-empty-state` partial used by all 8 verticals (properties, autos, events, services, jobs, classifieds, products, blogs). Now shows: large gradient icon circle, descriptive copy, two CTAs (clear filters + back to home), 3 suggestion tips, and an AI Smart Search nudge with left-border accent. Fully backwards-compatible — existing callers pass the same icon/title/description/route/label variables unchanged.
 
 - [ ] **Google Tag Manager + Google Analytics:** Integrate GTM and GA4 into the Laravel frontend and admin panel. GTM container ID and GA4 measurement ID should be configurable from Admin Settings (no hardcoding). Inject the GTM `<head>` snippet and `<body>` noscript snippet via shared layout partials. GA4 should fire page views automatically via GTM. Consider tracking key events: search queries, listing views, booking initiations, and checkout steps.
+
+
+In the admin settings general group, we have put too much. Should we divide into different (existing or new) groups?

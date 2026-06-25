@@ -54,12 +54,12 @@ class AutoService
             ->latest()
             ->visibleTo($user);
 
-        $query->when($filters['category_id'] ?? null, fn($q, $val) => $q->where('category_id', $val));
+        $query->when($filters['category'] ?? null, fn($q, $val) => $q->where('category_id', $val));
         $query->when($filters['make'] ?? null, fn($q, $val) => $q->where('make', $val));
         $query->when($filters['model'] ?? null, fn($q, $val) => $q->where('model', 'like', "%{$val}%"));
         $query->when($filters['location'] ?? null, fn($q, $val) => $q->where('location_id', $val));
-        $query->when($filters['min_price'] ?? null, fn($q, $val) => $q->where('base_price', '>=', $val));
-        $query->when($filters['max_price'] ?? null, fn($q, $val) => $q->where('base_price', '<=', $val));
+        $query->when($filters['price_min'] ?? null, fn($q, $val) => $q->where('base_price', '>=', $val));
+        $query->when($filters['price_max'] ?? null, fn($q, $val) => $q->where('base_price', '<=', $val));
         $query->when($filters['search'] ?? null, fn($q, $val) => $q->where(fn($sq) => $sq->where('make', 'like', "%{$val}%")->orWhere('model', 'like', "%{$val}%")));
         $query->when($filters['year_min'] ?? null, fn($q, $val) => $q->where('year', '>=', $val));
         $query->when($filters['year_max'] ?? null, fn($q, $val) => $q->where('year', '<=', $val));

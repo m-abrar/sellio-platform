@@ -196,7 +196,7 @@ PROMPT;
             return response()->json($result);
         } catch (\Throwable $e) {
             Log::error('SmartSearch error', ['message' => $e->getMessage()]);
-            return response()->json(['error' => 'Unable to parse your query. Please try again.'], 500);
+            return response()->json(['error' => 'Unable to understand your query. Please try again.'], 500);
         }
     }
 

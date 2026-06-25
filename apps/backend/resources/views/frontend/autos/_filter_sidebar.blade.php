@@ -2,7 +2,7 @@
     // Get the current request parameters to retain selected filter values
     $currentCategory = request('category');
     $currentLocation = request('location');
-    $currentTransactionType = request('transaction');
+    $currentTransactionType = request('type');
     $currentBrand = request('make');
     $currentModel = request('model');
     $currentTransmission = request('transmission');
@@ -14,7 +14,7 @@
         x-data="{
             priceMax: {{ request('price_max', $maxAllowedPrice) }}, 
             transmission: '{{ $currentTransmission ?: '' }}', 
-            transaction: '{{ $currentTransactionType ?: '' }}',
+            type: '{{ $currentTransactionType ?: '' }}',
             showAdvanced: {{ request('year_min') || request('price_min') ? 'true' : 'false' }},
             showTags: {{ request('tags') ? 'true' : 'false' }},
 
@@ -40,12 +40,12 @@
             <div class="mb-4">
                 <label class="filter-label mb-2">{{ __('Availability') }}</label>
                 <div class="btn-group w-100 bg-light p-1 rounded-3" role="group">
-                    <input type="radio" class="btn-check" name="transaction" value="" id="t_any" x-model="transaction">
-                    <label class="btn btn-filter-tab" :class="transaction === '' ? 'btn-primary text-white shadow-sm' : 'text-muted'" for="t_any">{{ __('Any') }}</label>
+                    <input type="radio" class="btn-check" name="type" value="" id="t_any" x-model="type">
+                    <label class="btn btn-filter-tab" :class="type === '' ? 'btn-primary text-white shadow-sm' : 'text-muted'" for="t_any">{{ __('Any') }}</label>
 
                     @foreach ($transactionType as $tType)
-                        <input type="radio" class="btn-check" name="transaction" value="{{ $tType->id }}" id="t_{{ $tType->id }}" x-model="transaction">
-                        <label class="btn btn-filter-tab" :class="transaction == '{{ $tType->id }}' ? 'btn-primary text-white shadow-sm' : 'text-muted'" for="t_{{ $tType->id }}">{{ $tType->title }}</label>
+                        <input type="radio" class="btn-check" name="type" value="{{ $tType->id }}" id="t_{{ $tType->id }}" x-model="type">
+                        <label class="btn btn-filter-tab" :class="type == '{{ $tType->id }}' ? 'btn-primary text-white shadow-sm' : 'text-muted'" for="t_{{ $tType->id }}">{{ $tType->title }}</label>
                     @endforeach
                 </div>
             </div>
