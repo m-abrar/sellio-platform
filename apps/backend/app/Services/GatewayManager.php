@@ -33,7 +33,16 @@ class GatewayManager
         }
 
         $className = $this->gatewayMap[$key];
-        $config = $gateway->active_config;
+        $config    = $gateway->active_config;
+
+        if ($key === 'stripe') {
+            $config = array_merge([
+                'secret_key'      => env('STRIPE_SECRET_KEY') ?: env('STRIPE_SECRET'),
+                'publishable_key' => env('STRIPE_PUBLISHABLE_KEY') ?: env('STRIPE_KEY'),
+                'webhook_secret'  => env('STRIPE_WEBHOOK_SECRET'),
+                'currency'        => env('STRIPE_CURRENCY', 'USD'),
+            ], array_filter($config, fn ($v) => filled($v)));
+        }
 
         return Container::getInstance()->makeWith($className, ['config' => $config]);
     }

@@ -42,33 +42,9 @@ class StripeGatewaySeeder extends Seeder
         // 2. Initial Credentials Record (Empty/Encrypted)
         // Use the relationship to create the credentials record cleanly.
         // ----------------------------------------------------
-        $sandboxConfig = array_filter([
-            'secret_key' => env('STRIPE_SECRET_KEY') ?: env('STRIPE_SECRET'),
-            'publishable_key' => env('STRIPE_PUBLISHABLE_KEY') ?: env('STRIPE_KEY'),
-            'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
-            'currency' => env('STRIPE_CURRENCY', 'USD'),
-        ], fn ($value) => filled($value));
-
-        $liveConfig = array_filter([
-            'secret_key' => env('STRIPE_LIVE_SECRET_KEY'),
-            'publishable_key' => env('STRIPE_LIVE_PUBLISHABLE_KEY'),
-            'webhook_secret' => env('STRIPE_LIVE_WEBHOOK_SECRET'),
-            'currency' => env('STRIPE_CURRENCY', 'USD'),
-        ], fn ($value) => filled($value));
-
         $gateway->credentials()->firstOrCreate(
-            [],
-            [
-                'live_config' => $liveConfig,
-                'sandbox_config' => $sandboxConfig,
-            ]
+            ['payment_gateway_id' => $gateway->id],
+            ['live_config' => [], 'sandbox_config' => []]
         );
-
-        if (!empty($sandboxConfig['secret_key']) && !empty($sandboxConfig['publishable_key'])) {
-            $gateway->forceFill([
-                'is_active' => true,
-                'mode' => PaymentGateway::MODE_SANDBOX,
-            ])->save();
-        }
     }
 }
