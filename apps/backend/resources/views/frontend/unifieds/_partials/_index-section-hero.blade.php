@@ -33,16 +33,29 @@
                         </button>
                         <div class="hero-tabs-strip">
                             <ul class="nav hero-tabs-inline" id="searchTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button type="button"
+                                            class="nav-link nav-link--ai active"
+                                            id="ai-search-tab"
+                                            role="tab"
+                                            data-hero-tab
+                                            data-hero-target="hero-search-ai"
+                                            aria-controls="hero-search-ai"
+                                            aria-selected="true">
+                                        <i class="bi bi-search" aria-hidden="true"></i>
+                                        <span>{{ __('Smart Search') }}</span>
+                                    </button>
+                                </li>
                                 @foreach(($publicModules ?? collect())->take(8) as $tab)
                                     <li class="nav-item" role="presentation">
                                         <button type="button"
-                                                class="nav-link @if($loop->first) active @endif"
+                                                class="nav-link"
                                                 id="{{ $tab['id'] }}-tab"
                                                 role="tab"
                                                 data-hero-tab
                                                 data-hero-target="hero-search-{{ $tab['id'] }}"
                                                 aria-controls="hero-search-{{ $tab['id'] }}"
-                                                aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                                                aria-selected="false">
                                             <i class="bi {{ $tab['icon'] }}" aria-hidden="true"></i>
                                             <span>{{ $tab['label'] }}</span>
                                         </button>
