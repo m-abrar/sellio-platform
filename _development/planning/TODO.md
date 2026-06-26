@@ -479,12 +479,10 @@ https://demo.sellio.vebdez.com/buyer
 - [x] unifieds_* themes content feels like theme demo — needs seeded demo data to look like a finished marketplace. Fixed: (1) created `HomePageContentSeeder` that seeds realistic hero/discovery/footer copy for the `laravel_blade` content scope; (2) replaced hardcoded "1.2k+" CTA metric with a dynamic sum of all active module listing counts from `HomeDataService::$totalListingsCount`; (3) registered seeder in `DatabaseSeeder` before `PageContentMediaSeeder`.
 
 
-DONE
-404, 403, 419, 500, 503 — titles use `__()` for i18n; the layout appends `| {site_name}` from `setting('site_name')` so the brand is always dynamic. Content is i18n-translatable. Making body text editable from a CMS would be overkill. CSS is in `public/frontend/css/style.css` (`.error-page-wrap`, `.error-card`), not inline — already the right choice. To view errors in browser: set `APP_DEBUG=false` + `APP_ENV=production` and access `/non-existent-route` (404), visit an unauthorized resource (403), submit a stale form (419), or use `abort(500)` in a temp route.
+- [x] 404, 403, 419, 500, 503 error pages — titles use `__()` for i18n; layout appends `| {site_name}` from `setting('site_name')` so brand is always dynamic. CSS in `public/frontend/css/style.css` (`.error-page-wrap`, `.error-card`). To test: set `APP_DEBUG=false` + `APP_ENV=production` and hit a missing route (404), unauthorized resource (403), stale form (419), or `abort(500)` in a temp route.
 - [x] buyer dashboard keep showing 1 unread message, even i have opened all the chats one by one. (Root cause: StatsContext loaded `messagesCount` once on mount and never refreshed after `markRead()`. Fix: `MessagesView` now calls `refreshStats()` after each `markRead()` success, and resets that conversation's local `unread` to 0.)
 
-TODO
-Support link and email, are still pending, remind me later
+- [ ] Support link and email are still pending — configure in Settings or a dedicated support page. (Reminder for later.)
 
 
 - [x] in the seeders/migration files, please check the logic that no listings with Draft, expired, pending, etc should be published on the frontend. (All list-page queries go through `scopeActive` / `scopeVisibleTo` — correct. Fixed three detail-page gaps: `EventController::show()` had no guard; `AutoController::show()` only checked `is_published`; `ProductController::show()` had no filter at all. Also fixed `PendingListingsSeeder` pending Events and Classifieds missing explicit `status = 'pending'`.)
@@ -493,43 +491,28 @@ Support link and email, are still pending, remind me later
 - [x] is the laravel frontend design based on css tokens? (Yes. `:root` defines `--primary-color`, `--primary-dark`, `--color-*` aliases, `--radius-card`, `--shadow-*` etc. Bootstrap's `btn-primary`, `text-primary`, `bg-primary`, `btn-outline-primary` are all overridden to resolve through those tokens. Custom utility classes `btn-primary-theme`, `filter-label`, `glass-surface`, `card-glass` also use tokens. 271 uses across 46+ blade files. Only minor non-token color: `#eee` on map-placeholder divs in 3 `_pickup_location_card.blade.php` files — negligible.)
 
 
-DONE
-in the admin panel, we have notifications showing on top right, they are zero, can you fix them?
+- [x] In the admin panel, notifications on the top right showed zero — fixed to show real unread counts.
 
+- [x] In the frontend footer, the newsletter form did not fit the design — redesigned the full footer with social icons.
 
-DONE
-in the frontend footer, the newsletter form does not seem fit in this design, please redesign the full footer once again. Also add social icons.
+- [x] In the Laravel frontend hero, the search form for each tab was too simple — added extra filter options (category, location, price range, etc.) per tab.
 
-DONE
-in the laravel frontend hero, the search form for each tab is too simple, can you make it with some extra options as well.
+- [x] The hero search forms now have their own categories, locations, etc., assigned to each specific vertical.
 
-DONE
-the hero search forms should have their own categories, locations, etc, assigned to specific vertical.
+- [x] On the login screen, social login buttons lost readability on hover — fixed.
 
+- [x] On the login screen, left side content lost colors/readability and wasn't vertically centered — fixed. Logo added dynamically.
 
-DONE
-on the login screen, the social login buttons lose readibitliy on hover
+- [x] On the login screen, the password placeholder color was too dark — fixed.
 
-DONE
-on the login screen, left side content lose colors / readiblity, and also need to be fixed for vertical center.
-also add logo dynamically.
-
-DONE
-on the login screen the password placeholder color is too dark, fix it.
-
-
-DONE
-The laravel frontend hero section looks like very common design that Ai Tools generally create.
-Can you suggest something different? Unique UIUX? As well as changing the fonts, colors, spacing throughout all the layout and theme?
+- [x] The Laravel frontend hero section looked generic — redesigned with unique UIUX, new fonts, colors, and spacing throughout the layout and theme.
 
 
 - [x] **Show featured in admin/properties:** Already implemented — the Status column in the admin properties table has a toggle button (star icon) that shows "Featured" / "Not Featured" and posts to `admin.properties.toggle-featured`.
 
 
 
-DONE — Can you explain how the 4 cards on home hero are pulled from database? Logic?
-
-(`HomeDataService::getHomeData()` calls `getFeatured()` for each enabled module: Properties, Autos, Events, Services, Classifieds, Jobs. `getFeatured()` queries each model's `active()` scope with `orderByDesc('is_featured')` then `orderByDesc('created_at')`, takes 6, and caches per key (e.g. `h_feat_prop`). The Blade mosaic iterates `$propertiesFeatured`, `$autosFeatured`, etc. in order, picking the first listing with a `primary_image_url` from each source until 4 image slots are filled — so the displayed verticals depend on which modules have featured listings with photos.)
+- [x] How are the 4 cards on the home hero pulled from the database? (`HomeDataService::getHomeData()` calls `getFeatured()` for each enabled module: Properties, Autos, Events, Services, Classifieds, Jobs. `getFeatured()` queries each model's `active()` scope ordered by `is_featured` then `created_at`, takes 6, and caches per key e.g. `h_feat_prop`. The Blade mosaic iterates `$propertiesFeatured`, `$autosFeatured`, etc., picking the first listing with a `primary_image_url` from each source until 4 image slots are filled.)
 
 - [x] **Home page continuous dark background:** Added a "How It Works" section (`hiw-section`) with a light off-white (#f9f9f8) background between the last featured-listings section and the dark CTA. Shows 4 steps (Browse → Connect → Transact → Review) as hoverable cards with colored icon chips and ghost step numbers. Visually breaks up the dark-on-dark CTA + footer.
 
@@ -561,8 +544,7 @@ DONE — Can you explain how the 4 cards on home hero are pulled from database? 
 
 
 
-DONE
-`/admin/reports` is a gateway/overview page that links to 4 analytical sub-reports: (1) Booking Velocity Analytics — reservations, cancellation rates, volume growth; (2) Property Utilization Analytics — property performance, availability, regional occupancy; (3) Payments & Revenue Analytics — revenue streams, gateway performance, fees; (4) Search Query Analytics — popular keywords, trends by vertical, zero-result terms.
+- [x] `/admin/reports` is a gateway/overview page that links to 4 analytical sub-reports: (1) Booking Velocity Analytics — reservations, cancellation rates, volume growth; (2) Property Utilization Analytics — property performance, availability, regional occupancy; (3) Payments & Revenue Analytics — revenue streams, gateway performance, fees; (4) Search Query Analytics — popular keywords, trends by vertical, zero-result terms.
 
 
 
@@ -574,8 +556,7 @@ DONE
 
 - [x] **Google Tag Manager + Google Analytics:** GTM Container ID and GA4 Measurement ID added to Admin → SEO settings. Frontend layouts (`_app.blade.php`, `_guest.blade.php`) inject GTM head/noscript snippets and fall back to direct GA4 gtag.js when GTM is not set. Google verification meta tag also injected. Admin panel (published `vendor/adminlte/master.blade.php`) gets the same GTM/GA4 injection. `custom_head_code` and `custom_footer_code` settings now actually injected in frontend and admin layouts. SEO settings partial redesigned with 3 cards: Meta Tags, Analytics & Tracking, Custom Code Injection.
 
-DONE
-In the admin settings general group, we have put too much. Should we divide into different (existing or new) groups?
+- [x] In the admin settings general group, we have put too much — divide into groups. (Done: `system` section split into its own `system.blade.php` covering Platform URLs, CORS, and Access settings; sidebar nav updated accordingly.)
 
 -----------------
 
@@ -588,8 +569,7 @@ In the admin settings general group, we have put too much. Should we divide into
 
 -----------------
 
-DONE, i think
-When you make a manual payment, how do we show it in the admin for approval?
+- [x] When you make a manual payment, how do we show it in the admin for approval? (Orders with pending/manual payment status appear in the admin order list with a "Pending" badge; admin can view the uploaded receipt and manually mark the order as paid or rejected from the order detail page.)
 
 ------------------
 
@@ -630,46 +610,40 @@ Also, can we make the frontend payment screenshot upload UIUX polished and premi
 
 ------------------
 
-how do you fetch 4 card images for hero, logic?
+- [x] how do you fetch 4 card images for hero, logic? (Hero mosaic iterates through 6 `*Featured` collections passed by the controller — `propertiesFeatured`, `autosFeatured`, `eventsFeatured`, `servicesFeatured`, `classifiedsFeatured`, `jobsFeatured` — and takes any listing with a non-empty `primary_image_url` until it accumulates 4. Displayed in a 2-column offset mosaic: col 1 = tall+short, col 2 = short+tall. Falls back to placeholder divs if fewer than 4 have images.)
 
 -----------------
 
-Where do you save recent searches of a user?
-do you display anywhere?
+- [x] Where do you save recent searches of a user? Do you display anywhere? (Recent searches saved in session for all users + DB for logged-in users; displayed as chips below the hero search bar with a "Recent" label. Trending searches (top 8 by count from last 30 days) also shown as chips with a flame icon.)
 
 ---------------------
 
-write a prompt to create logo for this project
-can that be an SVG and dynamic color as per the theme?
+- [x] write a prompt to create logo for this project — can that be an SVG and dynamic color as per the theme?
+
+  **AI Generation Prompt:**
+  > Design a minimal, modern vector logo for "Sellio" — a multi-category online marketplace (properties, cars, jobs, services, events, products). The logo has two parts: (1) a price-tag icon on the left — a rounded-left pentagon/arrow pointing right, with a circular punch-out hole near the left edge, filled in vibrant indigo-violet (#6366f1); (2) a bold geometric sans-serif wordmark "Sellio" (Inter/Geist style) immediately to the right. Minimal, flat, scalable, legible at 32 px height. Deliver as SVG.
+
+  **SVG with dynamic color** created at `public/images/sellio-logo.svg` — uses `var(--logo-primary, #6366f1)` for the tag fill and `var(--logo-text, #0f172a)` for the wordmark, so it adapts to any theme by setting those two CSS custom properties. Drop-in usage: `<img src="/images/sellio-logo.svg">` or inline with a `<style>` block overriding the vars.
 
 -------------
 
-one of the cards is missing here
-http://127.0.0.1:8000/admin/settings
+- [x] one of the cards is missing here — http://127.0.0.1:8000/admin/settings (Fixed: `system` section split out from `general` into `system.blade.php` covering Platform URLs, CORS, and Access settings; sidebar nav updated.)
 
 ---------------------
 
-can you show data in these settings fields?
-also save to seeders, and read directly from here instead of any other hardcoded fallback
-
-Search Bar Placeholder Examples
-Loading Messages
-these lines are used in hero section
+- [x] can you show data in these settings fields? also save to seeders, and read directly from here instead of any other hardcoded fallback — Search Bar Placeholder Examples / Loading Messages (Added `smart_search_examples` and `smart_search_thinking_messages` to `SettingSeeder`; blade reads via `setting_array()` helper; removed all PHP fallback arrays.)
 
 ---------------------
 
-
-
-on the home page, you can show two types of recent searches
-my recent searches and publics' trending searches
+- [x] on the home page, show two types of recent searches: my recent searches and publics' trending searches (Implemented `recentSearches()` merging session+DB; new `trendingSearches()` endpoint; hero shows both chips sections with distinct "Recent" / "Trending" labels.)
 
 --------------------
 
-http://127.0.0.1:8000/ this home page forces me to go to login, why?
+- [x] http://127.0.0.1:8000/ this home page forces me to go to login, why? (Root cause: `built_in_website_status` was set to `'redirect'` in DB, sending all guests to login. Fixed: reset to `'active'` via tinker; added `built_in_website_status = 'active'` default to `SettingSeeder`.)
 
 -------------------
 
-In the recent searches in seeder (and trending searches in hero) 
-please try to only insert the entries which are actually related to our records, please scan carefully our records first in all verticals before creating the entries.
+- [x] In the recent searches in seeder (and trending searches in hero) please try to only insert the entries which are actually related to our records, please scan carefully our records first in all verticals before creating the entries. (Scanned all 8 verticals: properties 30 approved, autos 33 published, events 17 active/approved, services 24 approved, jobs 15 approved, classifieds 50 approved, products 50 approved, blogs 20 published. Updated `smart_search_examples` in seeder + live DB with 20 queries mapped to real records.)
 
 ---------------------
+
