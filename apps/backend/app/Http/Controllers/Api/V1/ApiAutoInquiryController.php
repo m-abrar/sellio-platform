@@ -31,7 +31,9 @@ class ApiAutoInquiryController extends Controller
         ]);
 
         try {
+            $buyer = $request->user('sanctum');
             $inquiry = $this->inquiryService->createInquiry($auto, [
+                'user_id' => $buyer?->id,
                 'full_name' => $validated['full_name'],
                 'email' => $validated['email'],
                 'phone' => $validated['phone'] ?? null,

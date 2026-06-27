@@ -106,6 +106,9 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
 - [x] Add image loading failure handling and retry behavior.
 - [x] Use vertical-specific listing endpoints for detail screens instead of probing unrelated endpoints.
 - [ ] Expand detail adapters with richer vertical-specific fields and customer actions.
+  - [x] Render contract-backed detail facts and vertical-aware action labels for all seven verticals.
+  - [x] Connect the vehicle detail action to a real, buyer-linked dealer inquiry form.
+  - [ ] Connect each action to its real buyer workflow and replace the temporary availability notice.
 - [ ] Add shareable listing links.
 
 ### Acceptance Criteria

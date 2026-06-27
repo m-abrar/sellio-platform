@@ -2,11 +2,13 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -24,7 +26,7 @@ function isListingVertical(value: string | undefined): value is ListingVertical 
 
 export default function ListingDetailsView() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const params = useLocalSearchParams<{ slug?: string; vertical?: string }>();
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
   const verticalParam = Array.isArray(params.vertical) ? params.vertical[0] : params.vertical;
@@ -37,6 +39,13 @@ export default function ListingDetailsView() {
   const [favoriteError, setFavoriteError] = useState<string | null>(null);
   const [imageFailed, setImageFailed] = useState(false);
   const [imageRetryKey, setImageRetryKey] = useState(0);
+  const [showVehicleInquiry, setShowVehicleInquiry] = useState(false);
+  const [inquiryName, setInquiryName] = useState('');
+  const [inquiryEmail, setInquiryEmail] = useState('');
+  const [inquiryPhone, setInquiryPhone] = useState('');
+  const [inquiryMessage, setInquiryMessage] = useState('');
+  const [inquiryError, setInquiryError] = useState<string | null>(null);
+  const [isSubmittingInquiry, setIsSubmittingInquiry] = useState(false);
 
   const fetchDetails = useCallback(async () => {
     const category = LISTING_CATEGORIES.find((entry) => entry.id === vertical);
@@ -72,6 +81,14 @@ export default function ListingDetailsView() {
     setImageFailed(false);
     setImageRetryKey(0);
   }, [item?.imageUrl]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    setInquiryName((current) => current || user.name || '');
+    setInquiryEmail((current) => current || user.email || '');
+    setInquiryPhone((current) => current || user.phone || '');
+  }, [user]);
 
   useEffect(() => {
     let active = true;
@@ -212,10 +229,69 @@ export default function ListingDetailsView() {
 
   const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
   const canShowImage = Boolean(item.imageUrl) && !imageFailed;
+  const handlePrimaryAction = () => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    if (item.vertical === 'autos') {
+      setInquiryError(null);
+      setShowVehicleInquiry(true);
+      return;
+    }
+
+    Alert.alert('Coming soon', item.primaryActionDescription);
+  };
+
+  const submitVehicleInquiry = async () => {
+    if (!item || item.vertical !== 'autos' || isSubmittingInquiry) return;
+
+    const fullName = inquiryName.trim();
+    const email = inquiryEmail.trim();
+
+    if (!fullName || !email) {
+      setInquiryError('Your name and email address are required.');
+      return;
+    }
+
+    setIsSubmittingInquiry(true);
+    setInquiryError(null);
+
+    try {
+      await apiRequest(`/v1/vehicles/${encodeURIComponent(item.id)}/inquiries`, {
+        method: 'POST',
+        authenticated: true,
+        body: JSON.stringify({
+          full_name: fullName,
+          email,
+          phone: inquiryPhone.trim() || null,
+          message: inquiryMessage.trim() || null,
+          preferred_time: 'Anytime',
+        }),
+      });
+
+      setShowVehicleInquiry(false);
+      setInquiryMessage('');
+      Alert.alert('Inquiry sent', 'The dealer has received your inquiry. You can track it in Buyer Activity.');
+    } catch (requestError) {
+      setInquiryError(
+        requestError instanceof Error
+          ? requestError.message
+          : 'Could not send your inquiry. Please try again.',
+      );
+    } finally {
+      setIsSubmittingInquiry(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.navBar}>
           <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
             <Text style={styles.backText}>{'< BACK'}</Text>
@@ -259,6 +335,19 @@ export default function ListingDetailsView() {
           </View>
           <Text style={styles.sectionHeader}>DESCRIPTION</Text>
           <Text style={styles.itemDesc}>{item.description}</Text>
+          {item.facts.length > 0 && (
+            <>
+              <Text style={styles.sectionHeader}>DETAILS</Text>
+              <View style={styles.factsGrid}>
+                {item.facts.map((detail) => (
+                  <View key={`${detail.label}-${detail.value}`} style={styles.factCard}>
+                    <Text style={styles.factLabel}>{detail.label}</Text>
+                    <Text style={styles.factValue}>{detail.value}</Text>
+                  </View>
+                ))}
+              </View>
+            </>
+          )}
           <TouchableOpacity
             style={[styles.favoriteBtn, favoriteStatus === 'saved' && styles.favoriteBtnSaved]}
             onPress={toggleFavorite}
@@ -279,8 +368,80 @@ export default function ListingDetailsView() {
             )}
           </TouchableOpacity>
           {favoriteError && <Text style={styles.favoriteError}>{favoriteError}</Text>}
-          <TouchableOpacity style={styles.actionBtn} onPress={() => router.push('/login')}>
-            <Text style={styles.actionBtnText}>CONTINUE</Text>
+          {showVehicleInquiry && item.vertical === 'autos' && (
+            <View style={styles.inquiryForm}>
+              <View style={styles.inquiryHeadingRow}>
+                <View style={styles.inquiryHeadingCopy}>
+                  <Text style={styles.sectionHeader}>VEHICLE INQUIRY</Text>
+                  <Text style={styles.inquiryHelp}>Send your details directly to the dealer.</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => setShowVehicleInquiry(false)}
+                  disabled={isSubmittingInquiry}
+                  accessibilityRole="button"
+                  accessibilityLabel="Close vehicle inquiry form"
+                >
+                  <Text style={styles.inquiryClose}>CLOSE</Text>
+                </TouchableOpacity>
+              </View>
+              <TextInput
+                style={styles.inquiryInput}
+                value={inquiryName}
+                onChangeText={setInquiryName}
+                placeholder="Full name"
+                placeholderTextColor="#475569"
+                autoCapitalize="words"
+                editable={!isSubmittingInquiry}
+              />
+              <TextInput
+                style={styles.inquiryInput}
+                value={inquiryEmail}
+                onChangeText={setInquiryEmail}
+                placeholder="Email address"
+                placeholderTextColor="#475569"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                editable={!isSubmittingInquiry}
+              />
+              <TextInput
+                style={styles.inquiryInput}
+                value={inquiryPhone}
+                onChangeText={setInquiryPhone}
+                placeholder="Phone number (optional)"
+                placeholderTextColor="#475569"
+                keyboardType="phone-pad"
+                editable={!isSubmittingInquiry}
+              />
+              <TextInput
+                style={[styles.inquiryInput, styles.inquiryMessageInput]}
+                value={inquiryMessage}
+                onChangeText={setInquiryMessage}
+                placeholder="What would you like to ask? (optional)"
+                placeholderTextColor="#475569"
+                multiline
+                maxLength={500}
+                textAlignVertical="top"
+                editable={!isSubmittingInquiry}
+              />
+              {inquiryError && <Text style={styles.inquiryError}>{inquiryError}</Text>}
+              <TouchableOpacity
+                style={[styles.inquirySubmit, isSubmittingInquiry && styles.inquirySubmitBusy]}
+                onPress={submitVehicleInquiry}
+                disabled={isSubmittingInquiry}
+                accessibilityRole="button"
+                accessibilityState={{ busy: isSubmittingInquiry, disabled: isSubmittingInquiry }}
+              >
+                {isSubmittingInquiry && <ActivityIndicator size="small" color="#fff" />}
+                <Text style={styles.actionBtnText}>
+                  {isSubmittingInquiry ? 'SENDING INQUIRY...' : 'SEND INQUIRY'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          <TouchableOpacity style={styles.actionBtn} onPress={handlePrimaryAction}>
+            <Text style={styles.actionBtnText}>
+              {isAuthenticated ? item.primaryActionLabel : `SIGN IN TO ${item.primaryActionLabel}`}
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -307,12 +468,26 @@ const styles = StyleSheet.create({
   priceText: { color: '#818cf8', fontSize: 20, fontWeight: '900' },
   locationText: { color: '#fff', fontSize: 12, fontWeight: '800' },
   sectionHeader: { color: '#64748b', fontSize: 10, fontWeight: '900', letterSpacing: 1.5, marginBottom: 10 },
-  itemDesc: { color: '#94a3b8', fontSize: 13, fontWeight: '500', lineHeight: 20, marginBottom: 40 },
+  itemDesc: { color: '#94a3b8', fontSize: 13, fontWeight: '500', lineHeight: 20, marginBottom: 30 },
+  factsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 34 },
+  factCard: { width: '48%', minHeight: 74, justifyContent: 'center', borderRadius: 18, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.06)', backgroundColor: '#121214', paddingHorizontal: 14, paddingVertical: 12 },
+  factLabel: { color: '#64748b', fontSize: 8, fontWeight: '900', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 5 },
+  factValue: { color: '#e2e8f0', fontSize: 12, fontWeight: '800', lineHeight: 17 },
   favoriteBtn: { minHeight: 52, marginBottom: 12, alignItems: 'center', justifyContent: 'center', borderRadius: 20, borderWidth: 1, borderColor: 'rgba(129, 140, 248, 0.35)', backgroundColor: 'rgba(99, 102, 241, 0.08)', paddingHorizontal: 20 },
   favoriteBtnSaved: { borderColor: 'rgba(239, 68, 68, 0.35)', backgroundColor: 'rgba(239, 68, 68, 0.08)' },
   favoriteBtnText: { color: '#a5b4fc', fontSize: 10, fontWeight: '900', letterSpacing: 1.2 },
   favoriteBtnTextSaved: { color: '#f87171' },
   favoriteError: { marginTop: -2, marginBottom: 14, color: '#f87171', fontSize: 11, lineHeight: 16, textAlign: 'center' },
+  inquiryForm: { gap: 12, marginBottom: 16, borderRadius: 24, borderWidth: 1, borderColor: 'rgba(129, 140, 248, 0.22)', backgroundColor: '#101012', padding: 18 },
+  inquiryHeadingRow: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 2 },
+  inquiryHeadingCopy: { flex: 1 },
+  inquiryHelp: { color: '#64748b', fontSize: 11, lineHeight: 16 },
+  inquiryClose: { color: '#a5b4fc', fontSize: 9, fontWeight: '900', letterSpacing: 1 },
+  inquiryInput: { minHeight: 50, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.07)', backgroundColor: '#17171a', paddingHorizontal: 16, paddingVertical: 13, color: '#fff', fontSize: 13, fontWeight: '600' },
+  inquiryMessageInput: { minHeight: 108 },
+  inquiryError: { color: '#f87171', fontSize: 11, lineHeight: 16 },
+  inquirySubmit: { minHeight: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, borderRadius: 18, backgroundColor: '#6366f1', paddingHorizontal: 20 },
+  inquirySubmitBusy: { backgroundColor: '#4f46e5' },
   actionBtn: { backgroundColor: '#6366f1', paddingVertical: 18, paddingHorizontal: 24, borderRadius: 20, alignItems: 'center' },
   actionBtnText: { color: '#fff', fontSize: 10, fontWeight: '900', letterSpacing: 1.5 },
 });

@@ -1,4 +1,10 @@
-import { ListingApiRecord, ListingCardItem, ListingDetailItem, ListingVertical } from './types';
+import {
+  ListingApiRecord,
+  ListingCardItem,
+  ListingDetailFact,
+  ListingDetailItem,
+  ListingVertical,
+} from './types';
 
 function text(value: unknown) {
   return typeof value === 'string' && value.trim() ? value.trim() : null;
@@ -6,6 +12,49 @@ function text(value: unknown) {
 
 function nested(record: Record<string, unknown> | undefined, key: string) {
   return record?.[key];
+}
+
+function nestedRecord(record: Record<string, unknown> | undefined, key: string) {
+  const value = nested(record, key);
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : undefined;
+}
+
+function display(value: unknown) {
+  if (typeof value === 'string' && value.trim()) return value.trim();
+  if (typeof value === 'number' && Number.isFinite(value)) return String(value);
+  return null;
+}
+
+function title(value: unknown) {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    return display((value as Record<string, unknown>).title)
+      || display((value as Record<string, unknown>).name);
+  }
+
+  return display(value);
+}
+
+function fact(label: string, value: unknown, suffix = ''): ListingDetailFact | null {
+  const resolved = display(value);
+  return resolved ? { label, value: `${resolved}${suffix}` } : null;
+}
+
+function compactFacts(values: Array<ListingDetailFact | null>) {
+  return values.filter((value): value is ListingDetailFact => Boolean(value));
+}
+
+function dateTime(value: unknown) {
+  const resolved = display(value);
+  if (!resolved) return null;
+
+  const date = new Date(resolved);
+  return Number.isNaN(date.getTime()) ? resolved : date.toLocaleString();
+}
+
+function yesNo(value: unknown, yes: string, no: string) {
+  return typeof value === 'boolean' ? (value ? yes : no) : null;
 }
 
 function join(values: unknown[], fallback: string) {
@@ -118,6 +167,108 @@ function detailsFor(record: ListingApiRecord, vertical: ListingVertical) {
   }
 }
 
+function factsFor(record: ListingApiRecord, vertical: ListingVertical): ListingDetailFact[] {
+  const billingType = nestedRecord(record.pricing, 'billing_type');
+  const transactionType = nestedRecord(record.pricing, 'transaction_type');
+
+  switch (vertical) {
+    case 'products':
+      return compactFacts([
+        fact('Category', title(nested(record.taxonomy, 'category'))),
+        fact('Brand', title(nested(record.taxonomy, 'brand'))),
+        fact('Type', nested(record.specs, 'type')),
+        fact('Availability', nested(record.inventory, 'stock_quantity')),
+        fact('Weight', nested(record.specs, 'weight')),
+        fact('Dimensions', nested(record.specs, 'dimensions')),
+      ]);
+    case 'properties':
+      return compactFacts([
+        fact('Property type', nested(record.specs, 'property_type')),
+        fact('Bedrooms', nested(record.specs, 'bedrooms')),
+        fact('Bathrooms', nested(record.specs, 'bathrooms')),
+        fact('Maximum guests', nested(record.specs, 'max_guests')),
+        fact('Area', nested(record.specs, 'area_formatted')),
+        fact('Year built', nested(record.specs, 'year_built')),
+        fact('Parking spaces', nested(record.specs, 'parking_spots')),
+        fact('Minimum stay', nested(record.specs, 'minimum_rental_days'), ' days'),
+      ]);
+    case 'autos':
+      return compactFacts([
+        fact('Year', nested(record.specs, 'year')),
+        fact('Make', nested(record.specs, 'make')),
+        fact('Model', nested(record.specs, 'model')),
+        fact('Mileage', nested(record.specs, 'mileage')),
+        fact('Transmission', nested(record.specs, 'transmission')),
+        fact('Engine', nested(record.specs, 'engine')),
+        fact('Drivetrain', nested(record.specs, 'drivetrain')),
+        fact('Exterior color', nested(record.specs, 'exterior_color')),
+      ]);
+    case 'events':
+      return compactFacts([
+        fact('Starts', dateTime(nested(record.schedule, 'start_at'))),
+        fact('Ends', dateTime(nested(record.schedule, 'end_at'))),
+        fact('Format', yesNo(nested(record.schedule, 'is_virtual'), 'Virtual event', 'In-person event')),
+        fact('Type', nested(record.specs, 'type')),
+        fact('Genre', nested(record.specs, 'event_genre')),
+        fact('Venue size', nested(record.specs, 'venue_size')),
+        fact('Tickets left', nested(record.ticketing, 'tickets_left')),
+      ]);
+    case 'jobs':
+      return compactFacts([
+        fact('Company', nested(record.company, 'name')),
+        fact('Employment', nested(record.employment, 'type')),
+        fact('Workplace', nested(record.employment, 'workplace')),
+        fact('Education', nested(record.employment, 'education')),
+        fact('Salary', nested(record.compensation, 'range_full')),
+        fact('Apply by', dateTime(nested(record.status, 'deadline'))),
+      ]);
+    case 'services':
+      return compactFacts([
+        fact('Category', title(nested(record.professional, 'category'))),
+        fact('Provider', nested(record.provider, 'name')),
+        fact('Availability', yesNo(nested(record.operations, 'is_open'), 'Open now', 'Currently closed')),
+        fact('Hours', nested(record.operations, 'hours_label')),
+        fact('Operating days', nested(record.operations, 'days_label')),
+        fact('Service radius', nested(record.operations, 'radius')),
+        fact('Billing', yesNo(nested(billingType, 'is_subscription'), 'Subscription',
+          nested(billingType, 'is_project_based') ? 'Project based' : 'Standard')),
+      ]);
+    case 'classifieds':
+      return compactFacts([
+        fact('Category', title(nested(record.taxonomy, 'category'))),
+        fact('Brand', title(nested(record.taxonomy, 'brand'))),
+        fact('Condition', nested(record.item_specs, 'condition_label')),
+        fact('Available for', yesNo(nested(transactionType, 'for_rent'), 'Rent',
+          nested(transactionType, 'for_sale') ? 'Sale' : 'Inquiry')),
+        fact('Quantity', nested(record.item_specs, 'quantity')),
+        fact('Item age', nested(record.item_specs, 'age_years'), ' years'),
+        fact('Dimensions', nested(record.item_specs, 'dimensions')),
+        fact('Shipping', yesNo(nested(record.status, 'is_shipping'), 'Available', 'Not available')),
+      ]);
+  }
+}
+
+function primaryActionFor(record: ListingApiRecord, vertical: ListingVertical) {
+  switch (vertical) {
+    case 'products':
+      return { label: 'ADD TO CART', description: 'Product checkout is not available in the mobile app yet.' };
+    case 'properties':
+      return nested(record.status, 'is_rental')
+        ? { label: 'BOOK THIS PROPERTY', description: 'Property booking is not available in the mobile app yet.' }
+        : { label: 'ASK ABOUT THIS PROPERTY', description: 'Property inquiries are not available in the mobile app yet.' };
+    case 'autos':
+      return { label: 'ASK ABOUT THIS VEHICLE', description: 'Vehicle inquiries are not available in the mobile app yet.' };
+    case 'events':
+      return { label: 'RESERVE TICKETS', description: 'Event booking is not available in the mobile app yet.' };
+    case 'jobs':
+      return { label: 'APPLY FOR THIS JOB', description: 'Job applications are not available in the mobile app yet.' };
+    case 'services':
+      return { label: 'REQUEST A QUOTE', description: 'Service quotes are not available in the mobile app yet.' };
+    case 'classifieds':
+      return { label: 'CONTACT THE SELLER', description: 'Classified inquiries are not available in the mobile app yet.' };
+  }
+}
+
 export function toListingCard(record: ListingApiRecord, vertical: ListingVertical): ListingCardItem {
   return {
     id: String(record.id),
@@ -135,10 +286,15 @@ export function toListingDetail(
   record: ListingApiRecord,
   vertical: ListingVertical,
 ): ListingDetailItem {
+  const primaryAction = primaryActionFor(record, vertical);
+
   return {
     ...toListingCard(record, vertical),
     description: text(record.description)
       || text(record.short_description)
       || 'No description has been provided for this listing.',
+    facts: factsFor(record, vertical),
+    primaryActionLabel: primaryAction.label,
+    primaryActionDescription: primaryAction.description,
   };
 }

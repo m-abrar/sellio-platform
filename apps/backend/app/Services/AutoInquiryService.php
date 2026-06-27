@@ -26,7 +26,7 @@ class AutoInquiryService
     {
         return DB::transaction(function () use ($auto, $data) {
             $inquiry = AutoInquiry::create([
-                'user_id'        => Auth::id(),
+                'user_id'        => $data['user_id'] ?? Auth::id(),
                 'auto_id'        => $auto->id,
                 'full_name'      => $data['full_name'],
                 'email'          => $data['email'],

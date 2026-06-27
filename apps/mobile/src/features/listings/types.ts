@@ -48,6 +48,12 @@ export interface ListingApiRecord {
   employment?: Record<string, unknown>;
   professional?: Record<string, unknown>;
   schedule?: Record<string, unknown>;
+  operations?: Record<string, unknown>;
+  status?: Record<string, unknown>;
+  vendor?: Record<string, unknown>;
+  provider?: Record<string, unknown>;
+  seller?: Record<string, unknown>;
+  owner?: Record<string, unknown>;
 }
 
 export interface ListingCardItem {
@@ -63,6 +69,14 @@ export interface ListingCardItem {
 
 export interface ListingDetailItem extends ListingCardItem {
   description: string;
+  facts: ListingDetailFact[];
+  primaryActionLabel: string;
+  primaryActionDescription: string;
+}
+
+export interface ListingDetailFact {
+  label: string;
+  value: string;
 }
 
 export interface ListingCategoryDefinition {
