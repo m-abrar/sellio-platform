@@ -8,18 +8,30 @@ interface EmptyStateProps {
   description: string;
   actionLabel?: string;
   onAction?: () => void;
+  iconColor?: string;
+  iconBg?: string;
 }
 
-export const EmptyState = ({ icon: Icon, title, description, actionLabel, onAction }: EmptyStateProps) => {
+export const EmptyState = ({
+  icon: Icon,
+  title,
+  description,
+  actionLabel,
+  onAction,
+  iconColor = 'text-slate-400',
+  iconBg = 'bg-slate-100',
+}: EmptyStateProps) => {
   return (
-    <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-zinc-200">
-      <div className="w-16 h-16 bg-zinc-50 rounded-full flex items-center justify-center mx-auto mb-4 text-zinc-400">
-        <Icon size={32} />
+    <div className="flex flex-col items-center justify-center text-center py-20 px-8 bg-white rounded-3xl border border-dashed border-slate-200">
+      <div className={`w-16 h-16 ${iconBg} rounded-3xl flex items-center justify-center mb-5 shadow-sm`}>
+        <Icon size={30} className={iconColor} strokeWidth={1.5} />
       </div>
-      <h3 className="text-lg font-bold text-zinc-900">{title}</h3>
-      <p className="text-zinc-500 mb-6 max-w-sm mx-auto">{description}</p>
+      <h3 className="text-base font-black text-slate-800 mb-2">{title}</h3>
+      <p className="text-sm text-slate-500 max-w-xs leading-relaxed mb-6 font-medium">{description}</p>
       {actionLabel && onAction && (
-        <Button onClick={onAction}>{actionLabel}</Button>
+        <Button onClick={onAction} size="sm">
+          {actionLabel}
+        </Button>
       )}
     </div>
   );

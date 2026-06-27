@@ -1,301 +1,208 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Bell, 
-  CheckCircle, 
-  Trash2, 
-  ShoppingBag, 
-  Calendar, 
-  MessageSquare, 
-  Clock, 
-  Heart, 
-  Sparkles, 
-  ArrowLeft 
+import {
+  Bell,
+  CheckCircle,
+  Trash2,
+  ShoppingBag,
+  Calendar,
+  MessageSquare,
+  Clock,
+  Heart,
+  Sparkles,
+  ArrowLeft,
+  Check,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
-
-interface Notification {
-  id: string;
-  type: 'order' | 'booking' | 'message' | 'favorite' | 'appointment' | 'system';
-  title: string;
-  message: string;
-  date: string;
-  read: boolean;
-}
-
-const getIcon = (type: string) => {
-  switch (type) {
-    case 'order': return ShoppingBag;
-    case 'booking': return Calendar;
-    case 'message': return MessageSquare;
-    case 'favorite': return Heart;
-    case 'appointment': return Clock;
-    case 'system': return Sparkles;
-    default: return Bell;
-  }
-};
-
-const getColorClass = (type: string) => {
-  switch (type) {
-    case 'order': return 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/30';
-    case 'booking': return 'bg-purple-50 text-purple-600 dark:bg-purple-950/30';
-    case 'message': return 'bg-amber-50 text-amber-600 dark:bg-amber-950/30';
-    case 'favorite': return 'bg-rose-50 text-rose-650 dark:bg-rose-950/30';
-    case 'appointment': return 'bg-blue-50 text-blue-600 dark:bg-blue-950/30';
-    case 'system': return 'bg-purple-100 text-[var(--primary-color)] dark:bg-purple-950/50';
-    default: return 'bg-zinc-100 text-zinc-500';
-  }
-};
-
-const INITIAL_NOTIFICATIONS: Notification[] = [
-  {
-    id: 'notif-1',
-    type: 'booking',
-    title: 'Booking Confirmed!',
-    message: 'Your booking request for "Cozy Mountain Chalet" has been approved by the host! Get ready for your trip starting next Friday.',
-    date: 'Today, 10:24 AM',
-    read: false
-  },
-  {
-    id: 'notif-2',
-    type: 'message',
-    title: 'New Inbox Message',
-    message: 'You received a new message from Sarah Connor regarding your inquiry on "Tesla Model S". Open your inbox to reply.',
-    date: 'Today, 8:15 AM',
-    read: false
-  },
-  {
-    id: 'notif-3',
-    type: 'favorite',
-    title: 'Price Drop Alert!',
-    message: 'Great news! "Minimalist Leather Sofa" in your Favorites list has dropped by 15%. Grab it now while stock lasts.',
-    date: 'Yesterday',
-    read: false
-  },
-  {
-    id: 'notif-4',
-    type: 'appointment',
-    title: 'Service Appointment Scheduled',
-    message: 'Your upcoming service appointment for "Premium Brake System Maintenance" is scheduled for June 5, 2026 at 10:00 AM.',
-    date: 'May 28, 2026',
-    read: true
-  },
-  {
-    id: 'notif-5',
-    type: 'system',
-    title: 'Buyer Portal Redesigned!',
-    message: 'Welcome to the premium Sellio Buyer Dashboard! Enjoy 1-click quick-shortcut docks, date-grouped real-time chats, and highly fluid layouts.',
-    date: 'May 26, 2026',
-    read: true
-  }
-];
-
-import { 
-  fetchNotifications, 
-  markNotificationAsRead, 
-  markAllNotificationsAsRead, 
-  deleteNotification as deleteNotificationApi, 
-  NotificationItem 
+import {
+  fetchNotifications,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+  deleteNotification as deleteNotificationApi,
+  NotificationItem,
 } from '../api/notificationApi';
 import { toast } from 'sonner';
+
+const TYPE_CONFIG: Record<string, { icon: React.ElementType; bg: string; text: string }> = {
+  order:       { icon: ShoppingBag,  bg: 'bg-indigo-50',  text: 'text-indigo-600' },
+  booking:     { icon: Calendar,     bg: 'bg-violet-50',  text: 'text-violet-600' },
+  message:     { icon: MessageSquare,bg: 'bg-amber-50',   text: 'text-amber-600' },
+  favorite:    { icon: Heart,        bg: 'bg-rose-50',    text: 'text-rose-600' },
+  appointment: { icon: Clock,        bg: 'bg-sky-50',     text: 'text-sky-600' },
+  system:      { icon: Sparkles,     bg: 'bg-purple-50',  text: 'text-purple-600' },
+};
 
 export default function NotificationsView() {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [loading, setLoading] = useState(true);
 
-  const loadNotifications = async () => {
-    try {
-      setLoading(true);
-      const data = await fetchNotifications();
-      setNotifications(data);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to load notifications.';
-      toast.error(message);
-      console.error('Failed to load notifications from database:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const dispatch = () => window.dispatchEvent(new Event('sellio_notifications_updated'));
 
   useEffect(() => {
-    loadNotifications();
+    setLoading(true);
+    fetchNotifications()
+      .then(setNotifications)
+      .catch(() => toast.error('Failed to load notifications.'))
+      .finally(() => setLoading(false));
   }, []);
 
   const markAsRead = async (id: string) => {
-    try {
-      await markNotificationAsRead(id);
-      setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
-      
-      // Dispatch custom event to notify App header to update notification badges
-      window.dispatchEvent(new Event('sellio_notifications_updated'));
-    } catch (error) {
-      console.error('Failed to mark notification as read:', error);
-    }
+    await markNotificationAsRead(id).catch(console.error);
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+    dispatch();
   };
 
   const markAllAsRead = async () => {
-    try {
-      await markAllNotificationsAsRead();
-      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-      
-      // Dispatch custom event to notify App header to update notification badges
-      window.dispatchEvent(new Event('sellio_notifications_updated'));
-    } catch (error) {
-      console.error('Failed to mark all notifications as read:', error);
-    }
+    await markAllNotificationsAsRead().catch(console.error);
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    dispatch();
   };
 
-  const deleteNotification = async (id: string) => {
-    try {
-      await deleteNotificationApi(id);
-      setNotifications(prev => prev.filter(n => n.id !== id));
-      
-      // Dispatch custom event to notify App header to update notification badges
-      window.dispatchEvent(new Event('sellio_notifications_updated'));
-    } catch (error) {
-      console.error('Failed to delete notification:', error);
-    }
+  const remove = async (id: string) => {
+    await deleteNotificationApi(id).catch(console.error);
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+    dispatch();
   };
 
-  const filteredNotifications = filter === 'all' 
-    ? notifications 
-    : notifications.filter(n => !n.read);
-
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const filtered = filter === 'unread' ? notifications.filter((n) => !n.read) : notifications;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-4xl mx-auto px-1">
+    <div className="space-y-6 max-w-3xl mx-auto">
       {/* Header card */}
-      <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-zinc-200/40 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-[var(--primary-light)] text-[var(--primary-color)] rounded-xl flex items-center justify-center shadow-xs">
-            <Bell size={24} className="animate-swing" />
+      <div className="bg-white rounded-3xl border border-slate-200/70 shadow-sm p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-[var(--primary-light)] text-[var(--primary-color)] rounded-2xl flex items-center justify-center shadow-sm">
+            <Bell size={22} />
           </div>
           <div>
-            <span className="text-[10px] font-bold text-[var(--primary-color)] uppercase tracking-wider">Alert Center</span>
-            <h1 className="text-xl font-extrabold text-zinc-800 leading-tight">Notifications</h1>
+            <p className="section-label text-[var(--primary-color)]">Alert Center</p>
+            <h1 className="text-xl font-black text-slate-800 leading-tight">
+              Notifications
+              {unreadCount > 0 && (
+                <span className="ml-2.5 px-2.5 py-0.5 bg-red-500 text-white text-[10px] font-black rounded-full align-middle">
+                  {unreadCount} new
+                </span>
+              )}
+            </h1>
           </div>
         </div>
-
         <Link
           to="/"
-          className="px-4 py-2 bg-white border border-zinc-200 text-zinc-650 hover:text-zinc-900 rounded-xl hover:shadow-xs transition-all flex items-center justify-center gap-1.5 text-xs font-bold shrink-0 self-start md:self-auto cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors shrink-0"
         >
-          <ArrowLeft size={14} /> Back to Dashboard
+          <ArrowLeft size={13} />
+          Dashboard
         </Link>
       </div>
 
-      {/* Filter tab bar */}
-      <div className="flex items-center justify-between border-b border-zinc-200/60 pb-4">
+      {/* Filter bar */}
+      <div className="flex items-center justify-between">
         <div className="flex gap-2">
-          <button 
-            onClick={() => setFilter('all')}
-            className={cn(
-              "px-5 py-2 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all cursor-pointer",
-              filter === 'all' ? 'bg-zinc-900 text-white shadow-md' : 'text-zinc-450 hover:text-zinc-800'
-            )}
-          >
-            All Alerts
-          </button>
-          <button 
-            onClick={() => setFilter('unread')}
-            className={cn(
-              "px-5 py-2 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all cursor-pointer",
-              filter === 'unread' ? 'bg-zinc-900 text-white shadow-md' : 'text-zinc-450 hover:text-zinc-800'
-            )}
-          >
-            Unread {unreadCount > 0 && `(${unreadCount})`}
-          </button>
+          {(['all', 'unread'] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={cn(
+                'px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all',
+                filter === f ? 'bg-slate-900 text-white shadow-md' : 'text-slate-500 hover:text-slate-800',
+              )}
+            >
+              {f === 'all' ? 'All' : `Unread${unreadCount > 0 ? ` (${unreadCount})` : ''}`}
+            </button>
+          ))}
         </div>
-        
         {unreadCount > 0 && (
-          <button 
+          <button
             onClick={markAllAsRead}
-            className="px-4 py-2 bg-zinc-900 hover:bg-[var(--primary-color)] text-white rounded-xl text-xs font-bold hover:shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-[var(--primary-color)] text-white rounded-xl text-xs font-bold transition-colors"
           >
-            <CheckCircle size={14} /> Mark All Read
+            <Check size={13} />
+            Mark all read
           </button>
         )}
       </div>
 
-      {/* Notifications list */}
+      {/* List */}
       {loading ? (
-        <div className="h-64 flex items-center justify-center">
-          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-300 animate-pulse">Syncing alerts...</span>
+        <div className="space-y-3">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="bg-white rounded-2xl border border-slate-200/70 p-5 flex gap-4 animate-pulse">
+              <div className="w-11 h-11 rounded-xl bg-slate-100 shrink-0" />
+              <div className="flex-1 space-y-2.5 pt-1">
+                <div className="h-3.5 w-2/5 bg-slate-100 rounded-full" />
+                <div className="h-3 w-4/5 bg-slate-100 rounded-full" />
+                <div className="h-3 w-3/5 bg-slate-100 rounded-full" />
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           <AnimatePresence initial={false}>
-            {filteredNotifications.length === 0 ? (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="text-center py-20 bg-white/70 backdrop-blur-xs rounded-2xl border border-zinc-200/40 shadow-xs max-w-md mx-auto"
+            {filtered.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200"
               >
-                <div className="w-16 h-16 bg-zinc-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-zinc-300 border border-zinc-200/10 shadow-2xs">
-                  <Bell size={28} />
+                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Bell size={24} className="text-slate-400" strokeWidth={1.5} />
                 </div>
-                <h4 className="font-extrabold text-zinc-800 text-sm mb-1">Pristine Notification Center</h4>
-                <p className="text-zinc-500 text-xs leading-relaxed px-6">
-                  You are all caught up! No notifications found under this filter.
-                </p>
+                <p className="font-black text-slate-700 text-sm">All caught up</p>
+                <p className="text-xs text-slate-400 mt-1.5 font-medium">No notifications under this filter.</p>
               </motion.div>
             ) : (
-              filteredNotifications.map((n) => {
-                const IconComponent = getIcon(n.type);
+              filtered.map((n) => {
+                const cfg = TYPE_CONFIG[n.type] ?? { icon: Bell, bg: 'bg-slate-100', text: 'text-slate-500' };
+                const Icon = cfg.icon;
                 return (
-                  <motion.div 
-                    key={n.id} 
+                  <motion.div
+                    key={n.id}
                     layout
-                    initial={{ opacity: 0, y: 15 }}
+                    initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, x: -50 }}
+                    exit={{ opacity: 0, x: -24, scale: 0.97 }}
                     className={cn(
-                      "group relative bg-white/90 backdrop-blur-md p-5 rounded-2xl border transition-all duration-300 flex items-start gap-4 shadow-2xs",
-                      n.read ? "border-zinc-200/45 opacity-75" : "border-purple-200/60 shadow-xs shadow-purple-500/3"
+                      'bg-white rounded-2xl border p-5 flex items-start gap-4 transition-all group',
+                      n.read
+                        ? 'border-slate-200/60 opacity-80'
+                        : 'border-[var(--primary-color)]/20 shadow-sm shadow-[var(--primary-color)]/5',
                     )}
                   >
-                    <div className={cn(
-                      "w-12 h-12 rounded-xl shrink-0 flex items-center justify-center transition-colors shadow-2xs",
-                      getColorClass(n.type)
-                    )}>
-                      <IconComponent size={22} className="transition-transform group-hover:scale-105" />
+                    <div className={cn('w-11 h-11 rounded-xl flex items-center justify-center shrink-0', cfg.bg)}>
+                      <Icon size={20} className={cfg.text} />
                     </div>
-                    
-                    <div className="flex-1 min-w-0 pt-0.5">
-                      <div className="flex items-center justify-between gap-4 mb-1">
-                        <h4 className={cn(
-                          "font-extrabold text-xs sm:text-sm tracking-tight transition-colors",
-                          n.read ? "text-zinc-600" : "text-zinc-800"
-                        )}>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-3 mb-1">
+                        <h4 className={cn('text-sm font-black text-slate-800 leading-tight flex items-center gap-1.5', !n.read && 'text-slate-900')}>
                           {n.title}
-                          {!n.read && <span className="inline-block w-2 h-2 bg-[var(--primary-color)] rounded-full ml-2 animate-pulse" />}
+                          {!n.read && (
+                            <span className="w-2 h-2 bg-[var(--primary-color)] rounded-full inline-block shrink-0" />
+                          )}
                         </h4>
-                        <span className="text-[9px] font-semibold text-zinc-400 uppercase tracking-wider shrink-0">
-                          {n.date}
-                        </span>
+                        <span className="section-label shrink-0">{n.date}</span>
                       </div>
-                      <p className="text-xs text-zinc-500 leading-relaxed mb-3.5 max-w-3xl">
-                        {n.message}
-                      </p>
-                      
+                      <p className="text-xs text-slate-500 leading-relaxed mb-3">{n.message}</p>
                       <div className="flex gap-2">
                         {!n.read && (
-                          <button 
+                          <button
                             onClick={() => markAsRead(n.id)}
-                            className="px-3.5 py-1.5 bg-zinc-50 hover:bg-[var(--primary-color)] hover:text-white rounded-lg text-[9px] font-bold uppercase tracking-wider text-zinc-600 hover:shadow-2xs transition-all flex items-center gap-1 cursor-pointer"
+                            className="flex items-center gap-1 px-3 py-1.5 bg-slate-50 hover:bg-[var(--primary-color)] hover:text-white rounded-lg text-[10px] font-bold text-slate-600 transition-all"
                           >
-                            <CheckCircle size={11} /> Mark Read
+                            <CheckCircle size={10} />
+                            Mark read
                           </button>
                         )}
-                        <button 
-                          onClick={() => deleteNotification(n.id)}
-                          className="px-3.5 py-1.5 bg-zinc-50 hover:bg-red-500 hover:text-white rounded-lg text-[9px] font-bold uppercase tracking-wider text-zinc-650 hover:shadow-2xs transition-all flex items-center gap-1 cursor-pointer"
+                        <button
+                          onClick={() => remove(n.id)}
+                          className="flex items-center gap-1 px-3 py-1.5 bg-slate-50 hover:bg-red-500 hover:text-white rounded-lg text-[10px] font-bold text-slate-500 transition-all"
                         >
-                          <Trash2 size={11} /> Delete
+                          <Trash2 size={10} />
+                          Delete
                         </button>
                       </div>
                     </div>

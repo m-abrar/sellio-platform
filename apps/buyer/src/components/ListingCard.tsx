@@ -1,9 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { MapPin, Star, Heart, ArrowRight, Calendar } from 'lucide-react';
+import { MapPin, Star, Heart, ArrowRight, Calendar, Tag } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { Badge } from './Badge';
-import { Button } from './Button';
 
 interface ListingCardProps {
   item: any;
@@ -15,104 +13,119 @@ interface ListingCardProps {
   actionLabel?: string;
 }
 
-export const ListingCard = ({ 
-  item, 
-  module, 
-  viewMode = 'grid', 
-  onToggleFavorite, 
+export const ListingCard = ({
+  item,
+  module,
+  viewMode = 'grid',
+  onToggleFavorite,
   onAction,
   index = 0,
-  actionLabel = 'View Details'
+  actionLabel = 'View Details',
 }: ListingCardProps) => {
+  const isList = viewMode === 'list';
+
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ delay: index * 0.05 }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ delay: index * 0.05, duration: 0.25 }}
       className={cn(
-        "bg-white border border-zinc-200 overflow-hidden group hover:border-zinc-900 transition-all duration-300",
-        viewMode === 'grid' ? "rounded-3xl flex flex-col" : "rounded-2xl flex flex-col md:flex-row"
+        'group bg-white border border-slate-200/80 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5',
+        isList ? 'rounded-2xl flex flex-col sm:flex-row' : 'rounded-3xl flex flex-col',
       )}
     >
-      <div className={cn(
-        "relative overflow-hidden",
-        viewMode === 'grid' ? "aspect-[4/3]" : "w-full md:w-64 aspect-video md:aspect-square"
-      )}>
+      {/* Image */}
+      <div
+        className={cn(
+          'relative overflow-hidden bg-slate-100 shrink-0',
+          isList ? 'sm:w-56 aspect-video sm:aspect-[4/3]' : 'aspect-[16/10]',
+        )}
+      >
         <img
           src={item.image}
           alt={item.title}
           loading="lazy"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           referrerPolicy="no-referrer"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute top-4 left-4">
-          <Badge variant="default" className="bg-white/90 backdrop-blur-md text-zinc-900">
-            {item.category}
-          </Badge>
+
+        {/* Category pill */}
+        <div className="absolute top-3.5 left-3.5">
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-black text-slate-700 shadow-sm capitalize">
+            <Tag size={9} />
+            {item.category || module}
+          </span>
         </div>
-        <button 
-          onClick={() => onToggleFavorite?.(item.favoriteId || item.id)}
-          className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-md rounded-full text-zinc-400 hover:text-rose-500 transition-colors shadow-sm"
-        >
-          <Heart size={16} />
-        </button>
+
+        {/* Remove favorite */}
+        {onToggleFavorite && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onToggleFavorite(item.favoriteId || item.id); }}
+            className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-rose-400 hover:text-rose-600 hover:bg-white transition-all shadow-sm hover:scale-110 active:scale-95"
+          >
+            <Heart size={14} fill="currentColor" />
+          </button>
+        )}
+
+        {/* Price overlay on image bottom */}
+        {item.price != null && (
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-4 pt-8 pb-3">
+            <p className="text-white font-black text-lg leading-none">
+              ${typeof item.price === 'number' ? item.price.toLocaleString() : item.price}
+              {module === 'properties' && <span className="text-white/70 text-xs font-semibold ml-1">/mo</span>}
+              {module === 'autos' && <span className="text-white/70 text-xs font-semibold ml-1">/day</span>}
+            </p>
+          </div>
+        )}
       </div>
 
-      <div className="p-6 flex-1 flex flex-col">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="text-lg font-bold text-zinc-900 group-hover:text-zinc-700 transition-colors">
-            {item.title}
-          </h3>
-          <div className="flex items-center gap-1 text-zinc-900 font-bold">
-            <span className="text-sm">$</span>
-            <span className="text-xl">{item.price.toLocaleString()}</span>
-            {module === 'properties' && <span className="text-xs text-zinc-400 font-medium">/mo</span>}
-            {module === 'autos' && <span className="text-xs text-zinc-400 font-medium">/day</span>}
-          </div>
-        </div>
+      {/* Body */}
+      <div className="flex-1 flex flex-col p-5">
+        <h3 className="font-bold text-slate-900 text-sm leading-snug mb-2 group-hover:text-[var(--primary-color)] transition-colors line-clamp-2">
+          {item.title}
+        </h3>
 
-        <p className="text-sm text-zinc-500 line-clamp-2 mb-4 flex-1">
-          {item.description}
-        </p>
+        {item.description && (
+          <p className="text-xs text-slate-500 line-clamp-2 mb-3 leading-relaxed flex-1">{item.description}</p>
+        )}
 
-        <div className="flex flex-wrap gap-4 mb-6">
+        {/* Meta row */}
+        <div className="flex flex-wrap gap-3 mb-4">
           {item.metadata?.location && (
-            <div className="flex items-center gap-1.5 text-zinc-500">
-              <MapPin size={14} />
-              <span className="text-xs font-medium">{item.metadata.location}</span>
-            </div>
+            <span className="flex items-center gap-1 text-[11px] text-slate-500 font-medium">
+              <MapPin size={11} className="text-slate-400" />
+              {item.metadata.location}
+            </span>
           )}
           {item.metadata?.date && (
-            <div className="flex items-center gap-1.5 text-zinc-500">
-              <Calendar size={14} />
-              <span className="text-xs font-medium">{item.metadata.date}</span>
-            </div>
+            <span className="flex items-center gap-1 text-[11px] text-slate-500 font-medium">
+              <Calendar size={11} className="text-slate-400" />
+              {item.metadata.date}
+            </span>
           )}
           {item.metadata?.rating && (
-            <div className="flex items-center gap-1.5 text-amber-500">
-              <Star size={14} fill="currentColor" />
-              <span className="text-xs font-bold">{item.metadata.rating}</span>
-            </div>
+            <span className="flex items-center gap-1 text-[11px] text-amber-600 font-bold">
+              <Star size={11} fill="currentColor" />
+              {item.metadata.rating}
+            </span>
           )}
           {item.metadata?.beds && (
-            <div className="flex items-center gap-3 text-zinc-400">
-              <span className="text-xs font-medium"><span className="text-zinc-900 font-bold">{item.metadata.beds}</span> Beds</span>
-              <span className="w-1 h-1 rounded-full bg-zinc-200" />
-              <span className="text-xs font-medium"><span className="text-zinc-900 font-bold">{item.metadata.baths}</span> Baths</span>
-            </div>
+            <span className="text-[11px] text-slate-500 font-medium">
+              <strong className="text-slate-800">{item.metadata.beds}</strong> bd ·{' '}
+              <strong className="text-slate-800">{item.metadata.baths}</strong> ba
+            </span>
           )}
         </div>
 
-        <Button 
-          variant="outline" 
-          className="w-full hover:bg-zinc-900 hover:text-white"
-          rightIcon={<ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
+        <button
           onClick={() => onAction?.(item)}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all group/btn"
         >
           {actionLabel}
-        </Button>
+          <ArrowRight size={13} className="group-hover/btn:translate-x-0.5 transition-transform" />
+        </button>
       </div>
     </motion.div>
   );

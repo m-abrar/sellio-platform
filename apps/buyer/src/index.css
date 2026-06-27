@@ -10,121 +10,199 @@
 }
 
 :root {
-    /* Primary Color Palette (Purple/Indigo Focus) */
-    --primary-hue: 250; 
-    --primary-color: hsl(var(--primary-hue), 75%, 60%);
-    --primary-dark: hsl(var(--primary-hue), 70%, 50%);
-    --primary-light: hsl(var(--primary-hue), 85%, 95%);
+  --primary-hue: 250;
+  --primary-color: hsl(var(--primary-hue), 75%, 60%);
+  --primary-dark: hsl(var(--primary-hue), 70%, 50%);
+  --primary-light: hsl(var(--primary-hue), 85%, 95%);
 
-    /* Backgrounds & Surfaces (Minimalist Nordic Light) */
-    --bg-body: #f8fafc; /* Beautiful clean zinc slate background canvas */
-    --bg-glass: #ffffff; /* Solid pristine white cards */
-    --bg-surface: #ffffff; 
-    --bg-glass-heavy: #ffffff;
-    
-    /* Text & Borders */
-    --text-dark: #09090b; /* Deep high-contrast charcoal black */
-    --text-muted: #71717a; /* Sleek neutral gray */
-    --border-color: rgba(228, 228, 231, 0.6); /* Zinc-200 micro-thin borders */
-    
-    /* Dimensions & Shadow (Subtle Diffused SaaS Shadows) */
-    --card-radius: 24px; 
-    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.01), 0 10px 40px rgba(0, 0, 0, 0.02); 
-    --shadow-deep: 0 1px 10px rgba(0, 0, 0, 0.02), 0 25px 50px rgba(0, 0, 0, 0.04); 
+  --bg-body: #f4f6f9;
+  --bg-glass: #ffffff;
+  --bg-surface: #ffffff;
+
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+  --border-subtle: rgba(226, 232, 240, 0.8);
+
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04), 0 6px 16px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 8px rgba(15, 23, 42, 0.06), 0 16px 32px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.08), 0 32px 64px rgba(15, 23, 42, 0.08);
+  --shadow-colored: 0 8px 24px rgba(101, 78, 226, 0.2);
+
+  --card-radius: 20px;
+  --card-radius-lg: 28px;
 }
 
 @layer base {
   body {
-    @apply antialiased bg-zinc-50;
-    background: var(--bg-body);
+    @apply antialiased;
+    background-color: var(--bg-body);
     color: var(--text-dark);
     min-height: 100vh;
+    font-feature-settings: "kern", "liga", "calt";
+  }
+
+  * {
+    box-sizing: border-box;
   }
 }
 
 @layer components {
+  /* ── Primary card surface ─────────────────────── */
   .glass-surface {
     background-color: var(--bg-glass);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-subtle);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
     border-radius: var(--card-radius);
-    backdrop-filter: blur(12px); 
-    -webkit-backdrop-filter: blur(12px);
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .glass-surface:hover {
-    box-shadow: var(--shadow-deep); 
+    box-shadow: var(--shadow-md);
   }
 
+  /* ── Stat cards ───────────────────────────────── */
+  .stat-card {
+    background-color: white;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-xs);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .stat-card:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+  }
+
+  /* ── Activity row (left accent strip) ─────────── */
+  .activity-row {
+    background-color: white;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    display: flex;
+    box-shadow: var(--shadow-xs);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .activity-row:hover {
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* ── Widget card ──────────────────────────────── */
+  .widget-card {
+    background-color: white;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--card-radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* ── Stat icon wrapper ────────────────────────── */
+  .stat-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background-color: var(--primary-light);
+    box-shadow: var(--shadow-xs);
+    flex-shrink: 0;
+  }
+
+  /* ── Primary button ───────────────────────────── */
   .btn-primary-custom {
     background-color: var(--primary-color);
     color: white;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 0.2s;
   }
 
   .btn-primary-custom:hover {
     background-color: var(--primary-dark);
-    box-shadow: 0 5px 15px hsla(var(--primary-hue), 75%, 60%, 0.4);
+    box-shadow: 0 8px 24px hsla(var(--primary-hue), 75%, 60%, 0.35);
+    transform: translateY(-1px);
   }
 
-  .stat-icon-wrapper {
-    width: 55px; 
-    height: 55px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    border-radius: 12px; 
-    font-size: 1.6rem;
-    background-color: var(--primary-light); 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  }
-
-  .text-lead-stat {
-    font-size: 2.2rem;
+  /* ── Section label ────────────────────────────── */
+  .section-label {
+    font-size: 10px;
     font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #94a3b8;
   }
 }
 
-/* Custom scrollbar */
+/* ── Custom scrollbar ────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-zinc-300 rounded-full hover:bg-zinc-400 transition-colors;
+  background: #cbd5e1;
+  border-radius: 99px;
 }
 
-/* Hide scrollbar utility class */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
-/* Mobile touch improvements */
-button,
-a,
-[role="button"],
-label[for] {
-  touch-action: manipulation; /* eliminates 300ms tap delay */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Animations ───────────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
 }
 
-/* Momentum scroll on iOS */
-.overflow-y-auto,
-.overflow-y-scroll {
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes buyer-load-bar {
+  0%   { width: 0%;   margin-left: 0%; }
+  50%  { width: 60%;  margin-left: 20%; }
+  100% { width: 0%;   margin-left: 100%; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+@keyframes swing {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+}
+
+.animate-float { animation: float 3.5s ease-in-out infinite; }
+.animate-swing { animation: swing 1.8s ease-in-out infinite; }
+.animate-slide-up { animation: slide-up 0.35s ease forwards; }
+
+/* ── Touch & mobile ───────────────────────────────── */
+button, a, [role="button"], label[for] {
+  touch-action: manipulation;
+}
+
+.overflow-y-auto, .overflow-y-scroll {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Prevent iOS from zooming in on focused inputs (requires font-size >= 16px) */
 @media (max-width: 768px) {
   input[type="text"],
   input[type="email"],
@@ -138,7 +216,13 @@ label[for] {
   }
 }
 
-/* Safe area insets for notched phones (iPhone X+) */
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ── Focus ring ───────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: 6px;
 }
