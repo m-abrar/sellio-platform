@@ -1,6 +1,6 @@
 ﻿@extends('frontend._layouts._app')
 
-@section('title', 'Apply for ' . $job->title) 
+@section('title', __('Apply for :title', ['title' => $job->title]))
 @section('body_class', 'has-body-glow')
 
 @section('content')
@@ -54,7 +54,7 @@
                                             <input type="text" id="full_name" name="full_name" 
                                                 class="form-control @error('full_name') is-invalid @enderror"
                                                 value="{{ old('full_name', $defaultName) }}" placeholder="{{ __('Full Name') }}" required>
-                                            <label for="full_name">Full Name *</label>
+                                            <label for="full_name">{{ __('Full Name') }} *</label>
                                             @error('full_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
                                     </div>
@@ -64,7 +64,7 @@
                                             <input type="email" id="email" name="email" 
                                                 class="form-control @error('email') is-invalid @enderror"
                                                 value="{{ old('email', $defaultEmail) }}" placeholder="{{ __('Email') }}" required>
-                                            <label for="email">Email Address *</label>
+                                            <label for="email">{{ __('Email Address') }} *</label>
                                             @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
                                     </div>
@@ -74,13 +74,13 @@
                                             <input type="tel" id="phone" name="phone" 
                                                 class="form-control @error('phone') is-invalid @enderror"
                                                 value="{{ old('phone', $defaultPhone) }}" placeholder="{{ __('Phone') }}">
-                                            <label for="phone">Phone Number</label>
+                                            <label for="phone">{{ __('Phone Number') }}</label>
                                             @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="resume_file" class="form-label smaller fw-bold text-muted mb-1 ps-2">Resume/CV (PDF/DOCX) *</label>
+                                        <label for="resume_file" class="form-label smaller fw-bold text-muted mb-1 ps-2">{{ __('Resume/CV (PDF/DOCX)') }} *</label>
                                         <input type="file" id="resume_file" name="resume_file" 
                                             class="form-control py-2 @error('resume_file') is-invalid @enderror" required>
                                         @error('resume_file') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -99,7 +99,7 @@
                                     <button type="submit" class="btn btn-lg btn-primary btn-header-cta px-5">
                                         {{ __('Submit Application') }} <i class="bi bi-arrow-right ms-2"></i>
                                     </button>
-                                    <p class="text-muted smaller mt-3">By clicking submit, you agree to our recruitment privacy policy.</p>
+                                    <p class="text-muted smaller mt-3">{{ __('By clicking submit, you agree to our recruitment privacy policy.') }}</p>
                                 </div>
                             </form>
                         @else

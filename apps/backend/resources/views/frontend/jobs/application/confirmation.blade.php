@@ -1,6 +1,6 @@
 @extends('frontend._layouts._app')
 
-@section('title', 'Application Sent!')
+@section('title', __('Application Sent!'))
 @section('body_class', 'has-body-glow')
 
 @section('content')
@@ -67,22 +67,22 @@
 
                     {{-- Next Steps Roadmap --}}
                     <div class="p-4 mb-5 rounded-4" style="background:rgba(248,246,243,.8);border:1.5px solid rgba(15,23,42,.07)">
-                        <h6 class="fw-bold text-dark mb-3"><i class="bi bi-map me-2"></i> What happens next?</h6>
+                        <h6 class="fw-bold text-dark mb-3"><i class="bi bi-map me-2"></i> {{ __('What happens next?') }}</h6>
                         <div class="roadmap">
                             <div class="roadmap-item active">
                                 <div class="roadmap-dot"></div>
-                                <div class="smaller fw-bold">Application Received</div>
-                                <div class="text-muted extra-small">The employer has been notified of your interest.</div>
+                                <div class="smaller fw-bold">{{ __('Application Received') }}</div>
+                                <div class="text-muted extra-small">{{ __('The employer has been notified of your interest.') }}</div>
                             </div>
                             <div class="roadmap-item">
                                 <div class="roadmap-dot"></div>
-                                <div class="smaller fw-bold">Review Process</div>
-                                <div class="text-muted extra-small">Hiring managers will screen your resume.</div>
+                                <div class="smaller fw-bold">{{ __('Review Process') }}</div>
+                                <div class="text-muted extra-small">{{ __('Hiring managers will screen your resume.') }}</div>
                             </div>
                             <div class="roadmap-item">
                                 <div class="roadmap-dot"></div>
-                                <div class="smaller fw-bold">Feedback/Interview</div>
-                                <div class="text-muted extra-small">You will be contacted via email if shortlisted.</div>
+                                <div class="smaller fw-bold">{{ __('Feedback/Interview') }}</div>
+                                <div class="text-muted extra-small">{{ __('You will be contacted via email if shortlisted.') }}</div>
                             </div>
                         </div>
                     </div>
@@ -90,10 +90,10 @@
                     {{-- Action Buttons --}}
                     <div class="d-flex flex-column flex-md-row gap-3 justify-content-center">
                         <a href="{{ setting('url_user', '#') }}" class="btn btn-primary btn-header-cta">
-                            <i class="bi bi-grid-fill me-2"></i> Track in Dashboard
+                            <i class="bi bi-grid-fill me-2"></i> {{ __('Track in Dashboard') }}
                         </a>
                         <a href="{{ route('jobs.index') }}" class="btn btn-outline-secondary px-5 py-3 fw-semibold">
-                            <i class="bi bi-search me-2"></i> Keep Browsing
+                            <i class="bi bi-search me-2"></i> {{ __('Keep Browsing') }}
                         </a>
                     </div>
                 </div>

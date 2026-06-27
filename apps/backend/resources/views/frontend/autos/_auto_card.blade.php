@@ -64,15 +64,15 @@
             <div class="row g-0 pt-2 pt-md-3 border-top mt-auto align-items-center">
                 <div class="col-4 text-center border-end">
                     <span class="metric-label">{{ __('MILEAGE') }}</span>
-                    <span class="metric-value fw-800">{{ $auto->mileage_formatted ?? 'N/A' }}</span>
+                    <span class="metric-value fw-800">{{ $auto->mileage_formatted ?? __('N/A') }}</span>
                 </div>
                 <div class="col-4 text-center border-end px-1">
                     <span class="metric-label">{{ __('GEAR') }}</span>
-                    <span class="metric-value fw-800 text-truncate px-1 d-block">{{ $auto->transmission ?? 'N/A' }}</span>
+                    <span class="metric-value fw-800 text-truncate px-1 d-block">{{ $auto->transmission ?? __('N/A') }}</span>
                 </div>
                 <div class="col-4 text-center">
                     <span class="metric-label">{{ __('FUEL') }}</span>
-                    <span class="metric-value fw-800">{{ ucfirst($auto->engine_type) ?? 'Gas' }}</span>
+                    <span class="metric-value fw-800">{{ ucfirst($auto->engine_type ?? __('Gas')) }}</span>
                 </div>
             </div>
         </div>

@@ -310,5 +310,40 @@
     "Currently Closed": "Currently Closed",
     "Direct Contact": "Direct Contact",
     "Send Email": "Send Email",
-    "No contact info available": "No contact info available"
+    "No contact info available": "No contact info available",
+
+    "Gas": "Gas",
+    "mi": "mi",
+
+    "Item Description": "Item Description",
+    "Key Details": "Key Details",
+    "Condition:": "Condition:",
+    "Category:": "Category:",
+    "Brand:": "Brand:",
+    "Year/Age:": "Year/Age:",
+    ":count years old": ":count years old",
+    "Quantity:": "Quantity:",
+    ":count available": ":count available",
+    "Shipping:": "Shipping:",
+    "Available (Inquire for details)": "Available (Inquire for details)",
+    "Not available; Local Pickup Only": "Not available; Local Pickup Only",
+    "Safety Tip: Always meet in a public location and inspect the item before finalizing the purchase.": "Safety Tip: Always meet in a public location and inspect the item before finalizing the purchase.",
+
+    "Apply for :title": "Apply for :title",
+    "Full Name": "Full Name",
+    "Email Address": "Email Address",
+    "Phone Number": "Phone Number",
+    "Resume/CV (PDF/DOCX)": "Resume/CV (PDF/DOCX)",
+    "By clicking submit, you agree to our recruitment privacy policy.": "By clicking submit, you agree to our recruitment privacy policy.",
+
+    "Application Sent!": "Application Sent!",
+    "What happens next?": "What happens next?",
+    "Application Received": "Application Received",
+    "The employer has been notified of your interest.": "The employer has been notified of your interest.",
+    "Review Process": "Review Process",
+    "Hiring managers will screen your resume.": "Hiring managers will screen your resume.",
+    "Feedback/Interview": "Feedback/Interview",
+    "You will be contacted via email if shortlisted.": "You will be contacted via email if shortlisted.",
+    "Track in Dashboard": "Track in Dashboard",
+    "Keep Browsing": "Keep Browsing"
 }
