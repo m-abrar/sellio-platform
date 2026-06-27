@@ -8,6 +8,7 @@ use App\Services\CartService;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApiCartController extends Controller
 {
@@ -21,8 +22,9 @@ class ApiCartController extends Controller
     /**
      * Display the current cart.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $this->useSanctumUser($request);
         $cart = $this->cartService->getOrCreateCart();
         $cart->load(['items.product.media']);
 
@@ -34,6 +36,7 @@ class ApiCartController extends Controller
      */
     public function add(Request $request, Product $product): JsonResponse
     {
+        $this->useSanctumUser($request);
         $data = $request->validate([
             'quantity'      => 'required|integer|min:1|max:100',
             'attribute_ids' => 'nullable|array',
@@ -61,6 +64,7 @@ class ApiCartController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
+        $this->useSanctumUser($request);
         $request->validate(['quantity' => 'required|integer|min:1|max:100']);
 
         $this->cartService->updateQuantity($id, $request->quantity);
@@ -77,8 +81,9 @@ class ApiCartController extends Controller
     /**
      * Remove an item from the cart.
      */
-    public function remove(int $id): JsonResponse
+    public function remove(Request $request, int $id): JsonResponse
     {
+        $this->useSanctumUser($request);
         $this->cartService->removeItem($id);
 
         $cart = $this->cartService->getOrCreateCart();
@@ -88,5 +93,12 @@ class ApiCartController extends Controller
             new CartResource($cart),
             __('Item removed from cart.')
         );
+    }
+
+    private function useSanctumUser(Request $request): void
+    {
+        if ($request->user('sanctum')) {
+            Auth::shouldUse('sanctum');
+        }
     }
 }

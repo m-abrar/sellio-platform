@@ -108,6 +108,11 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
 - [ ] Expand detail adapters with richer vertical-specific fields and customer actions.
   - [x] Render contract-backed detail facts and vertical-aware action labels for all seven verticals.
   - [x] Connect the vehicle detail action to a real, buyer-linked dealer inquiry form.
+  - [x] Connect the classified detail action to a real, buyer-linked seller inquiry form.
+  - [x] Connect the service detail action to a real package-based quote request.
+  - [x] Connect the job detail action to a real cover-letter application form.
+  - [x] Connect the product detail action to the buyer-owned cart.
+  - [x] Connect for-sale property details to a buyer-linked agent inquiry.
   - [ ] Connect each action to its real buyer workflow and replace the temporary availability notice.
 - [ ] Add shareable listing links.
 

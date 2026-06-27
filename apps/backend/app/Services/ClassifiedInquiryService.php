@@ -22,7 +22,7 @@ class ClassifiedInquiryService
 
             $inquiry = ClassifiedInquiry::create([
                 'classified_id' => $classified->id,
-                'user_id'       => Auth::id(),
+                'user_id'       => $data['user_id'] ?? Auth::id(),
                 'name'          => $data['full_name'],
                 'email'         => $data['email'],
                 'phone'         => $data['phone'] ?? null,

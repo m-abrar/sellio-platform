@@ -112,6 +112,18 @@ class ServiceResource extends JsonResource
                 'icon'  => $f->icon,
             ])),
             'tags' => $this->whenLoaded('tags', fn() => $this->tags->pluck('title')),
+            'packages' => $this->whenLoaded('packages', fn() => $this->packages
+                ->where('is_active', true)
+                ->values()
+                ->map(fn($package) => [
+                    'id' => $package->id,
+                    'title' => $package->title,
+                    'description' => $package->description,
+                    'price' => (float) $package->price,
+                    'price_display' => $package->price_display,
+                    'billing_period' => $package->billing_period,
+                    'is_popular' => (bool) $package->is_popular,
+                ])),
 
             // Meta & Status
             'status' => [

@@ -30,11 +30,15 @@ class ApiClassifiedInquiryController extends Controller
         ]);
 
         try {
+            $buyer = $request->user('sanctum');
             $classified = Classified::where('slug', $slug)
-                ->visibleTo($request->user())
+                ->visibleTo($buyer)
                 ->firstOrFail();
 
-            $inquiry = $this->inquiryService->createInquiry($classified, $validated);
+            $inquiry = $this->inquiryService->createInquiry($classified, [
+                ...$validated,
+                'user_id' => $buyer?->id,
+            ]);
 
             return $this->successResponse(
                 new ClassifiedInquiryResource($inquiry->load(['classifiedAd', 'user'])),

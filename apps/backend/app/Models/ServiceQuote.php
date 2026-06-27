@@ -49,11 +49,13 @@ class ServiceQuote extends Model
      */
     protected $fillable = [
         'service_id',
+        'user_id',
         'service_package_id',
         'scope_size',
         'details',        // The project requirements submitted by the user
         'requested_date',  // Desired start date for the service
         'viewed_at',       // Tracked for provider notification badges
+        'status',
     ];
     
     /**

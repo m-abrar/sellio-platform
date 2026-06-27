@@ -54,6 +54,17 @@ export interface ListingApiRecord {
   provider?: Record<string, unknown>;
   seller?: Record<string, unknown>;
   owner?: Record<string, unknown>;
+  packages?: ServicePackageApiRecord[];
+}
+
+export interface ServicePackageApiRecord {
+  id: number | string;
+  title?: string | null;
+  description?: string | null;
+  price?: number | string | null;
+  price_display?: string | null;
+  billing_period?: string | null;
+  is_popular?: boolean;
 }
 
 export interface ListingCardItem {
@@ -72,6 +83,15 @@ export interface ListingDetailItem extends ListingCardItem {
   facts: ListingDetailFact[];
   primaryActionLabel: string;
   primaryActionDescription: string;
+  servicePackages: ServicePackageOption[];
+  isRentalProperty: boolean;
+}
+
+export interface ServicePackageOption {
+  id: string;
+  title: string;
+  price: string;
+  description: string | null;
 }
 
 export interface ListingDetailFact {

@@ -22,6 +22,15 @@ class ApiPropertyLeadController extends Controller
 
     public function store(Request $request, Property $property): JsonResponse
     {
+        $buyer = $request->user('sanctum');
+        if ($buyer) {
+            Auth::shouldUse('sanctum');
+        }
+
+        $property = Property::query()
+            ->visibleTo($buyer)
+            ->findOrFail($property->id);
+
         $validated = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],

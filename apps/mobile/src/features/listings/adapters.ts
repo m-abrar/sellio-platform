@@ -4,6 +4,7 @@ import {
   ListingDetailFact,
   ListingDetailItem,
   ListingVertical,
+  ServicePackageOption,
 } from './types';
 
 function text(value: unknown) {
@@ -269,6 +270,24 @@ function primaryActionFor(record: ListingApiRecord, vertical: ListingVertical) {
   }
 }
 
+function servicePackagesFor(record: ListingApiRecord): ServicePackageOption[] {
+  if (!Array.isArray(record.packages)) return [];
+
+  return record.packages.flatMap((servicePackage) => {
+    const packageTitle = text(servicePackage.title);
+    if (!packageTitle) return [];
+
+    return [{
+      id: String(servicePackage.id),
+      title: packageTitle,
+      price: text(servicePackage.price_display)
+        || display(servicePackage.price)
+        || 'Price on request',
+      description: text(servicePackage.description),
+    }];
+  });
+}
+
 export function toListingCard(record: ListingApiRecord, vertical: ListingVertical): ListingCardItem {
   return {
     id: String(record.id),
@@ -296,5 +315,7 @@ export function toListingDetail(
     facts: factsFor(record, vertical),
     primaryActionLabel: primaryAction.label,
     primaryActionDescription: primaryAction.description,
+    servicePackages: vertical === 'services' ? servicePackagesFor(record) : [],
+    isRentalProperty: vertical === 'properties' && nested(record.status, 'is_rental') === true,
   };
 }

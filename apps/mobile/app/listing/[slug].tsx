@@ -39,13 +39,19 @@ export default function ListingDetailsView() {
   const [favoriteError, setFavoriteError] = useState<string | null>(null);
   const [imageFailed, setImageFailed] = useState(false);
   const [imageRetryKey, setImageRetryKey] = useState(0);
-  const [showVehicleInquiry, setShowVehicleInquiry] = useState(false);
+  const [showInquiryForm, setShowInquiryForm] = useState(false);
   const [inquiryName, setInquiryName] = useState('');
   const [inquiryEmail, setInquiryEmail] = useState('');
   const [inquiryPhone, setInquiryPhone] = useState('');
   const [inquiryMessage, setInquiryMessage] = useState('');
+  const [inquiryOffer, setInquiryOffer] = useState('');
+  const [selectedServicePackageId, setSelectedServicePackageId] = useState('');
+  const [serviceTargetDate, setServiceTargetDate] = useState('');
+  const [serviceScopeSize, setServiceScopeSize] = useState('');
+  const [jobPortfolioUrl, setJobPortfolioUrl] = useState('');
   const [inquiryError, setInquiryError] = useState<string | null>(null);
   const [isSubmittingInquiry, setIsSubmittingInquiry] = useState(false);
+  const [isPerformingPrimaryAction, setIsPerformingPrimaryAction] = useState(false);
 
   const fetchDetails = useCallback(async () => {
     const category = LISTING_CATEGORIES.find((entry) => entry.id === vertical);
@@ -89,6 +95,11 @@ export default function ListingDetailsView() {
     setInquiryEmail((current) => current || user.email || '');
     setInquiryPhone((current) => current || user.phone || '');
   }, [user]);
+
+  useEffect(() => {
+    if (item?.vertical !== 'services' || selectedServicePackageId) return;
+    setSelectedServicePackageId(item.servicePackages[0]?.id || '');
+  }, [item, selectedServicePackageId]);
 
   useEffect(() => {
     let active = true;
@@ -229,29 +240,86 @@ export default function ListingDetailsView() {
 
   const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
   const canShowImage = Boolean(item.imageUrl) && !imageFailed;
-  const handlePrimaryAction = () => {
+  const handlePrimaryAction = async () => {
     if (!isAuthenticated) {
       router.push('/login');
       return;
     }
 
-    if (item.vertical === 'autos') {
+    if (item.vertical === 'products') {
+      setIsPerformingPrimaryAction(true);
+
+      try {
+        const cart = await apiRequest<{ item_count: number }>(
+          `/v1/cart/add/${encodeURIComponent(item.id)}`,
+          {
+            method: 'POST',
+            authenticated: true,
+            body: JSON.stringify({ quantity: 1 }),
+          },
+        );
+        Alert.alert(
+          'Added to cart',
+          `${item.title} is in your cart. Your cart now has ${cart.item_count} item${cart.item_count === 1 ? '' : 's'}.`,
+        );
+      } catch (requestError) {
+        Alert.alert(
+          'Could not add item',
+          requestError instanceof Error ? requestError.message : 'Please try again.',
+        );
+      } finally {
+        setIsPerformingPrimaryAction(false);
+      }
+
+      return;
+    }
+
+    if (item.vertical === 'services' && item.servicePackages.length === 0) {
+      Alert.alert('Quote unavailable', 'This provider has not published an active service package yet.');
+      return;
+    }
+
+    if (item.vertical === 'properties' && item.isRentalProperty) {
+      Alert.alert('Coming soon', item.primaryActionDescription);
+      return;
+    }
+
+    if (
+      item.vertical === 'autos'
+      || item.vertical === 'classifieds'
+      || item.vertical === 'services'
+      || item.vertical === 'jobs'
+      || item.vertical === 'properties'
+    ) {
       setInquiryError(null);
-      setShowVehicleInquiry(true);
+      setShowInquiryForm(true);
       return;
     }
 
     Alert.alert('Coming soon', item.primaryActionDescription);
   };
 
-  const submitVehicleInquiry = async () => {
-    if (!item || item.vertical !== 'autos' || isSubmittingInquiry) return;
+  const submitListingInquiry = async () => {
+    if (!item || !['autos', 'classifieds', 'services', 'jobs', 'properties'].includes(item.vertical) || isSubmittingInquiry) return;
 
     const fullName = inquiryName.trim();
     const email = inquiryEmail.trim();
+    const isServiceQuote = item.vertical === 'services';
+    const isJobApplication = item.vertical === 'jobs';
+    const isPropertyInquiry = item.vertical === 'properties';
 
-    if (!fullName || !email) {
+    if (!isServiceQuote && !isJobApplication && (!fullName || !email)) {
       setInquiryError('Your name and email address are required.');
+      return;
+    }
+
+    if (isServiceQuote && (!selectedServicePackageId || !serviceTargetDate.trim() || !serviceScopeSize.trim())) {
+      setInquiryError('Choose a package and enter the target date and project size.');
+      return;
+    }
+
+    if (isJobApplication && !inquiryMessage.trim()) {
+      setInquiryError('Write a cover letter before submitting your application.');
       return;
     }
 
@@ -259,21 +327,62 @@ export default function ListingDetailsView() {
     setInquiryError(null);
 
     try {
-      await apiRequest(`/v1/vehicles/${encodeURIComponent(item.id)}/inquiries`, {
+      const isVehicle = item.vertical === 'autos';
+      const endpoint = isJobApplication
+        ? `/v1/jobs/${encodeURIComponent(item.slug)}/applications`
+        : isServiceQuote
+        ? `/v1/services/${encodeURIComponent(item.id)}/quotes`
+        : isPropertyInquiry
+          ? `/v1/properties/${encodeURIComponent(item.id)}/inquiries`
+        : isVehicle
+          ? `/v1/vehicles/${encodeURIComponent(item.id)}/inquiries`
+          : `/v1/classifieds/${encodeURIComponent(item.slug)}/inquiries`;
+      const body = isJobApplication
+        ? {
+            cover_letter: inquiryMessage.trim(),
+            portfolio_url: jobPortfolioUrl.trim() || null,
+          }
+        : isServiceQuote
+        ? {
+            service_package_id: Number(selectedServicePackageId),
+            target_date: serviceTargetDate.trim(),
+            scope_size: Number(serviceScopeSize),
+            notes: inquiryMessage.trim() || null,
+          }
+        : {
+            full_name: fullName,
+            email,
+            phone: inquiryPhone.trim() || null,
+            message: inquiryMessage.trim() || null,
+            ...(isVehicle
+              ? { preferred_time: 'Anytime' }
+              : item.vertical === 'classifieds'
+                ? { offer_price: inquiryOffer.trim() || null }
+                : {}),
+          };
+
+      await apiRequest(endpoint, {
         method: 'POST',
         authenticated: true,
-        body: JSON.stringify({
-          full_name: fullName,
-          email,
-          phone: inquiryPhone.trim() || null,
-          message: inquiryMessage.trim() || null,
-          preferred_time: 'Anytime',
-        }),
+        body: JSON.stringify(body),
       });
 
-      setShowVehicleInquiry(false);
+      setShowInquiryForm(false);
       setInquiryMessage('');
-      Alert.alert('Inquiry sent', 'The dealer has received your inquiry. You can track it in Buyer Activity.');
+      setInquiryOffer('');
+      setJobPortfolioUrl('');
+      Alert.alert(
+        isJobApplication ? 'Application submitted' : 'Inquiry sent',
+        `${isJobApplication
+          ? 'The employer'
+          : isServiceQuote
+            ? 'The provider'
+            : isVehicle
+              ? 'The dealer'
+              : isPropertyInquiry
+                ? 'The listing agent'
+              : 'The seller'} has received your ${isJobApplication ? 'application' : 'inquiry'}. You can track it in Buyer Activity.`,
+      );
     } catch (requestError) {
       setInquiryError(
         requestError instanceof Error
@@ -368,79 +477,184 @@ export default function ListingDetailsView() {
             )}
           </TouchableOpacity>
           {favoriteError && <Text style={styles.favoriteError}>{favoriteError}</Text>}
-          {showVehicleInquiry && item.vertical === 'autos' && (
+          {showInquiryForm && ['autos', 'classifieds', 'services', 'jobs', 'properties'].includes(item.vertical) && (
             <View style={styles.inquiryForm}>
               <View style={styles.inquiryHeadingRow}>
                 <View style={styles.inquiryHeadingCopy}>
-                  <Text style={styles.sectionHeader}>VEHICLE INQUIRY</Text>
-                  <Text style={styles.inquiryHelp}>Send your details directly to the dealer.</Text>
+                  <Text style={styles.sectionHeader}>
+                    {item.vertical === 'autos'
+                      ? 'VEHICLE INQUIRY'
+                      : item.vertical === 'services'
+                        ? 'SERVICE QUOTE'
+                      : item.vertical === 'jobs'
+                          ? 'JOB APPLICATION'
+                          : item.vertical === 'properties'
+                            ? 'PROPERTY INQUIRY'
+                        : 'SELLER INQUIRY'}
+                  </Text>
+                  <Text style={styles.inquiryHelp}>
+                    {item.vertical === 'jobs'
+                      ? 'Introduce yourself to the employer and share relevant work.'
+                      : item.vertical === 'properties'
+                        ? 'Send your details directly to the listing agent.'
+                      : item.vertical === 'services'
+                      ? 'Tell the provider what you need and when you need it.'
+                      : `Send your details directly to the ${item.vertical === 'autos' ? 'dealer' : 'seller'}.`}
+                  </Text>
                 </View>
                 <TouchableOpacity
-                  onPress={() => setShowVehicleInquiry(false)}
+                  onPress={() => setShowInquiryForm(false)}
                   disabled={isSubmittingInquiry}
                   accessibilityRole="button"
-                  accessibilityLabel="Close vehicle inquiry form"
+                  accessibilityLabel="Close inquiry form"
                 >
                   <Text style={styles.inquiryClose}>CLOSE</Text>
                 </TouchableOpacity>
               </View>
-              <TextInput
-                style={styles.inquiryInput}
-                value={inquiryName}
-                onChangeText={setInquiryName}
-                placeholder="Full name"
-                placeholderTextColor="#475569"
-                autoCapitalize="words"
-                editable={!isSubmittingInquiry}
-              />
-              <TextInput
-                style={styles.inquiryInput}
-                value={inquiryEmail}
-                onChangeText={setInquiryEmail}
-                placeholder="Email address"
-                placeholderTextColor="#475569"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                editable={!isSubmittingInquiry}
-              />
-              <TextInput
-                style={styles.inquiryInput}
-                value={inquiryPhone}
-                onChangeText={setInquiryPhone}
-                placeholder="Phone number (optional)"
-                placeholderTextColor="#475569"
-                keyboardType="phone-pad"
-                editable={!isSubmittingInquiry}
-              />
+              {item.vertical !== 'services' && item.vertical !== 'jobs' && (
+                <>
+                  <TextInput
+                    style={styles.inquiryInput}
+                    value={inquiryName}
+                    onChangeText={setInquiryName}
+                    placeholder="Full name"
+                    placeholderTextColor="#475569"
+                    autoCapitalize="words"
+                    editable={!isSubmittingInquiry}
+                  />
+                  <TextInput
+                    style={styles.inquiryInput}
+                    value={inquiryEmail}
+                    onChangeText={setInquiryEmail}
+                    placeholder="Email address"
+                    placeholderTextColor="#475569"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    editable={!isSubmittingInquiry}
+                  />
+                  <TextInput
+                    style={styles.inquiryInput}
+                    value={inquiryPhone}
+                    onChangeText={setInquiryPhone}
+                    placeholder="Phone number (optional)"
+                    placeholderTextColor="#475569"
+                    keyboardType="phone-pad"
+                    editable={!isSubmittingInquiry}
+                  />
+                </>
+              )}
+              {item.vertical === 'services' && (
+                <>
+                  <Text style={styles.inquiryFieldLabel}>CHOOSE A PACKAGE</Text>
+                  {item.servicePackages.map((servicePackage) => (
+                    <TouchableOpacity
+                      key={servicePackage.id}
+                      style={[
+                        styles.packageOption,
+                        selectedServicePackageId === servicePackage.id && styles.packageOptionSelected,
+                      ]}
+                      onPress={() => setSelectedServicePackageId(servicePackage.id)}
+                      disabled={isSubmittingInquiry}
+                    >
+                      <View style={styles.packageOptionCopy}>
+                        <Text style={styles.packageOptionTitle}>{servicePackage.title}</Text>
+                        {servicePackage.description && (
+                          <Text style={styles.packageOptionDescription}>{servicePackage.description}</Text>
+                        )}
+                      </View>
+                      <Text style={styles.packageOptionPrice}>{servicePackage.price}</Text>
+                    </TouchableOpacity>
+                  ))}
+                  <TextInput
+                    style={styles.inquiryInput}
+                    value={serviceTargetDate}
+                    onChangeText={setServiceTargetDate}
+                    placeholder="Target date (YYYY-MM-DD)"
+                    placeholderTextColor="#475569"
+                    autoCapitalize="none"
+                    maxLength={10}
+                    editable={!isSubmittingInquiry}
+                  />
+                  <TextInput
+                    style={styles.inquiryInput}
+                    value={serviceScopeSize}
+                    onChangeText={setServiceScopeSize}
+                    placeholder="Project size or quantity"
+                    placeholderTextColor="#475569"
+                    keyboardType="numeric"
+                    editable={!isSubmittingInquiry}
+                  />
+                </>
+              )}
+              {item.vertical === 'jobs' && (
+                <TextInput
+                  style={styles.inquiryInput}
+                  value={jobPortfolioUrl}
+                  onChangeText={setJobPortfolioUrl}
+                  placeholder="Portfolio URL (optional)"
+                  placeholderTextColor="#475569"
+                  keyboardType="url"
+                  autoCapitalize="none"
+                  maxLength={255}
+                  editable={!isSubmittingInquiry}
+                />
+              )}
               <TextInput
                 style={[styles.inquiryInput, styles.inquiryMessageInput]}
                 value={inquiryMessage}
                 onChangeText={setInquiryMessage}
-                placeholder="What would you like to ask? (optional)"
+                placeholder={item.vertical === 'jobs'
+                  ? 'Write your cover letter'
+                  : item.vertical === 'services'
+                    ? 'Describe your requirements (optional)'
+                    : 'What would you like to ask? (optional)'}
                 placeholderTextColor="#475569"
                 multiline
-                maxLength={500}
+                maxLength={item.vertical === 'jobs' ? 5000 : item.vertical === 'services' ? 1000 : 500}
                 textAlignVertical="top"
                 editable={!isSubmittingInquiry}
               />
+              {item.vertical === 'classifieds' && (
+                <TextInput
+                  style={styles.inquiryInput}
+                  value={inquiryOffer}
+                  onChangeText={setInquiryOffer}
+                  placeholder="Your offer (optional)"
+                  placeholderTextColor="#475569"
+                  keyboardType="decimal-pad"
+                  maxLength={100}
+                  editable={!isSubmittingInquiry}
+                />
+              )}
               {inquiryError && <Text style={styles.inquiryError}>{inquiryError}</Text>}
               <TouchableOpacity
                 style={[styles.inquirySubmit, isSubmittingInquiry && styles.inquirySubmitBusy]}
-                onPress={submitVehicleInquiry}
+                onPress={submitListingInquiry}
                 disabled={isSubmittingInquiry}
                 accessibilityRole="button"
                 accessibilityState={{ busy: isSubmittingInquiry, disabled: isSubmittingInquiry }}
               >
                 {isSubmittingInquiry && <ActivityIndicator size="small" color="#fff" />}
                 <Text style={styles.actionBtnText}>
-                  {isSubmittingInquiry ? 'SENDING INQUIRY...' : 'SEND INQUIRY'}
+                  {isSubmittingInquiry
+                    ? item.vertical === 'jobs' ? 'SUBMITTING...' : 'SENDING INQUIRY...'
+                    : item.vertical === 'jobs' ? 'SUBMIT APPLICATION' : 'SEND INQUIRY'}
                 </Text>
               </TouchableOpacity>
             </View>
           )}
-          <TouchableOpacity style={styles.actionBtn} onPress={handlePrimaryAction}>
+          <TouchableOpacity
+            style={[styles.actionBtn, isPerformingPrimaryAction && styles.actionBtnBusy]}
+            onPress={handlePrimaryAction}
+            disabled={isPerformingPrimaryAction}
+            accessibilityRole="button"
+            accessibilityState={{ busy: isPerformingPrimaryAction, disabled: isPerformingPrimaryAction }}
+          >
+            {isPerformingPrimaryAction && <ActivityIndicator size="small" color="#fff" />}
             <Text style={styles.actionBtnText}>
-              {isAuthenticated ? item.primaryActionLabel : `SIGN IN TO ${item.primaryActionLabel}`}
+              {isPerformingPrimaryAction
+                ? 'ADDING TO CART...'
+                : isAuthenticated ? item.primaryActionLabel : `SIGN IN TO ${item.primaryActionLabel}`}
             </Text>
           </TouchableOpacity>
         </View>
@@ -482,12 +696,20 @@ const styles = StyleSheet.create({
   inquiryHeadingRow: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 2 },
   inquiryHeadingCopy: { flex: 1 },
   inquiryHelp: { color: '#64748b', fontSize: 11, lineHeight: 16 },
+  inquiryFieldLabel: { color: '#64748b', fontSize: 9, fontWeight: '900', letterSpacing: 1, marginTop: 2 },
   inquiryClose: { color: '#a5b4fc', fontSize: 9, fontWeight: '900', letterSpacing: 1 },
   inquiryInput: { minHeight: 50, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.07)', backgroundColor: '#17171a', paddingHorizontal: 16, paddingVertical: 13, color: '#fff', fontSize: 13, fontWeight: '600' },
   inquiryMessageInput: { minHeight: 108 },
+  packageOption: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.07)', backgroundColor: '#17171a', padding: 14 },
+  packageOptionSelected: { borderColor: '#818cf8', backgroundColor: 'rgba(99, 102, 241, 0.12)' },
+  packageOptionCopy: { flex: 1 },
+  packageOptionTitle: { color: '#fff', fontSize: 12, fontWeight: '900' },
+  packageOptionDescription: { color: '#64748b', fontSize: 10, lineHeight: 14, marginTop: 3 },
+  packageOptionPrice: { color: '#a5b4fc', fontSize: 11, fontWeight: '900' },
   inquiryError: { color: '#f87171', fontSize: 11, lineHeight: 16 },
   inquirySubmit: { minHeight: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, borderRadius: 18, backgroundColor: '#6366f1', paddingHorizontal: 20 },
   inquirySubmitBusy: { backgroundColor: '#4f46e5' },
-  actionBtn: { backgroundColor: '#6366f1', paddingVertical: 18, paddingHorizontal: 24, borderRadius: 20, alignItems: 'center' },
+  actionBtn: { minHeight: 52, flexDirection: 'row', justifyContent: 'center', gap: 10, backgroundColor: '#6366f1', paddingVertical: 18, paddingHorizontal: 24, borderRadius: 20, alignItems: 'center' },
+  actionBtnBusy: { backgroundColor: '#4f46e5' },
   actionBtnText: { color: '#fff', fontSize: 10, fontWeight: '900', letterSpacing: 1.5 },
 });

@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\V1\ApiFeatureController;
 use App\Http\Controllers\Api\V1\ApiJobApplicationController;
 use App\Http\Controllers\Api\V1\ApiJobController;
 use App\Http\Controllers\Api\V1\ApiServiceConsultationController;
+use App\Http\Controllers\Api\V1\ApiServiceQuoteController;
 use App\Http\Controllers\Api\V1\ApiLocationController;
 use App\Http\Controllers\Api\V1\ApiMenuController;
 use App\Http\Controllers\Api\V1\ApiOrderController;
@@ -237,6 +238,8 @@ Route::prefix('services')->middleware('module:services')->group(function () {
     Route::get('consultations/{appointment}', [ApiServiceConsultationController::class, 'show']);
     Route::post('{service}/consultations', [ApiServiceConsultationController::class, 'store'])
         ->middleware('throttle:api-write');
+    Route::post('{service}/quotes', [ApiServiceQuoteController::class, 'store'])
+        ->middleware(['auth:sanctum', 'throttle:api-write']);
     Route::get('{slug}', [ApiServiceController::class, 'show']);
 });
 
