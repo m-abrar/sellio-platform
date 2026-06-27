@@ -320,9 +320,9 @@ export default function Sidebar({ user }: any) {
       </div>
 
       {/* 2. DESKTOP SIDEBAR (UPDATED FONTS) */}
-      <aside className="hidden lg:flex flex-col sticky top-6 ml-6 h-[94dvh] w-[320px] bg-white border border-slate-100 rounded-container shadow-elite overflow-hidden relative">
+      <aside className="hidden lg:flex flex-col sticky top-5 h-[90dvh] w-[300px] bg-white border border-slate-100 rounded-card-lg shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_4px_32px_rgba(0,0,0,0.04)] overflow-hidden relative">
 
-        <div className="px-10 pt-12 pb-6 flex-shrink-0">
+        <div className="px-8 pt-10 pb-5 flex-shrink-0">
           <NavLink aria-current="page" className="flex items-center no-underline group active" to="/dashboard">
             {brand?.site_logo ? (
               <img src={brand.site_logo} alt={brand.site_name} className="w-12 h-12 object-contain rounded-2xl group-hover:rotate-6 transition-transform" />

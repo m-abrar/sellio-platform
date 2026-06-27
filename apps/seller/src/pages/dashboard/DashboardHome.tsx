@@ -146,56 +146,73 @@ export default function DashboardHome() {
         </div>
       </PageHeader>
 
-      {/* ── KPI Grid ──────────────────────────────── */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 md:gap-5">
-        <StatCard
-          title="Your Listings"
-          value={stats.activeInventory?.toString() || '0'}
-          icon={HiOutlineHome}
-          color={subscriptionLimits?.is_limit_exceeded ? 'text-red-500 bg-red-50' : 'text-brand bg-brand/8'}
-          trend={subscriptionLimits?.is_limit_exceeded ? 'Limit Reached' : undefined}
-          detailColumns={2}
-          details={[
-            { label: 'Props',  value: stats.moduleCounts?.properties || 0 },
-            { label: 'Autos',  value: stats.moduleCounts?.autos || 0 },
-            { label: 'Prods',  value: stats.moduleCounts?.products || 0 },
-            { label: 'Events', value: stats.moduleCounts?.events || 0 },
-            { label: 'Servs',  value: stats.moduleCounts?.services || 0 },
-            { label: 'Class',  value: stats.moduleCounts?.classifieds || 0 },
-            { label: 'Jobs',   value: stats.moduleCounts?.jobs || 0 },
-          ]}
-        />
-        <StatCard
-          title="Needs Attention"
-          value={stats.urgentAlerts?.toString() || '0'}
-          icon={HiOutlineBell}
-          color="text-red-500 bg-red-50"
-          trend="+2 New"
-          details={[
-            { label: 'Msgs',   value: stats.alerts?.messages || 0 },
-            { label: 'Notifs', value: stats.alerts?.notifications || 0 },
-          ]}
-        />
-        <StatCard
-          title="Total Views"
-          value={stats.marketViews?.toLocaleString() || '0'}
-          icon={HiOutlineChartBar}
-          color="text-blue-500 bg-blue-50"
-          details={[
-            { label: 'Unique', value: Math.round(Number(stats.marketViews || 0) * 0.58) },
-            { label: 'Direct', value: Number(stats.marketViews || 0) - Math.round(Number(stats.marketViews || 0) * 0.58) },
-          ]}
-        />
-        <StatCard
-          title="Total Revenue"
-          value={`$${Number(stats.totalRevenue || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-          icon={HiOutlineCurrencyDollar}
-          color="text-emerald-500 bg-emerald-50"
-          details={[
-            { label: 'Earn', value: `$${Number(stats.revenue?.earnings || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
-            { label: 'Paid', value: `$${Number(stats.revenue?.payouts || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
-          ]}
-        />
+      {/* ── KPI Grid — asymmetric 5-col on desktop ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-12 gap-4 md:gap-5">
+
+        {/* Your Listings — wider, has the most detail */}
+        <div className="col-span-2 lg:col-span-4">
+          <StatCard
+            title="Your Listings"
+            value={stats.activeInventory?.toString() || '0'}
+            icon={HiOutlineHome}
+            color={subscriptionLimits?.is_limit_exceeded ? 'text-red-500 bg-red-50' : 'text-brand bg-brand/8'}
+            trend={subscriptionLimits?.is_limit_exceeded ? 'Limit Reached' : undefined}
+            detailColumns={2}
+            details={[
+              { label: 'Props',  value: stats.moduleCounts?.properties || 0 },
+              { label: 'Autos',  value: stats.moduleCounts?.autos || 0 },
+              { label: 'Prods',  value: stats.moduleCounts?.products || 0 },
+              { label: 'Events', value: stats.moduleCounts?.events || 0 },
+              { label: 'Servs',  value: stats.moduleCounts?.services || 0 },
+              { label: 'Class',  value: stats.moduleCounts?.classifieds || 0 },
+              { label: 'Jobs',   value: stats.moduleCounts?.jobs || 0 },
+            ]}
+          />
+        </div>
+
+        {/* Needs Attention */}
+        <div className="col-span-1 lg:col-span-2">
+          <StatCard
+            title="Needs Attention"
+            value={stats.urgentAlerts?.toString() || '0'}
+            icon={HiOutlineBell}
+            color="text-red-500 bg-red-50"
+            trend="+2 New"
+            details={[
+              { label: 'Msgs',   value: stats.alerts?.messages || 0 },
+              { label: 'Notifs', value: stats.alerts?.notifications || 0 },
+            ]}
+          />
+        </div>
+
+        {/* Total Views */}
+        <div className="col-span-1 lg:col-span-2">
+          <StatCard
+            title="Total Views"
+            value={stats.marketViews?.toLocaleString() || '0'}
+            icon={HiOutlineChartBar}
+            color="text-blue-500 bg-blue-50"
+            details={[
+              { label: 'Unique', value: Math.round(Number(stats.marketViews || 0) * 0.58) },
+              { label: 'Direct', value: Number(stats.marketViews || 0) - Math.round(Number(stats.marketViews || 0) * 0.58) },
+            ]}
+          />
+        </div>
+
+        {/* Revenue — also wider */}
+        <div className="col-span-2 lg:col-span-4">
+          <StatCard
+            title="Total Revenue"
+            value={`$${Number(stats.totalRevenue || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            icon={HiOutlineCurrencyDollar}
+            color="text-emerald-500 bg-emerald-50"
+            details={[
+              { label: 'Earned', value: `$${Number(stats.revenue?.earnings || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+              { label: 'Paid out', value: `$${Number(stats.revenue?.payouts || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+            ]}
+          />
+        </div>
+
       </div>
 
       {/* ── Analytics Chart ───────────────────────── */}

@@ -16,30 +16,30 @@ export default function PageHeader({
   const navigate = useNavigate();
 
   return (
-    <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-5 md:gap-8 mb-10 md:mb-14">
-      <div className="min-w-0">
-        {/* Badge / breadcrumb */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="w-1.5 h-1.5 rounded-full bg-brand shrink-0" />
-          <span className="text-label font-semibold text-slate-400 uppercase tracking-label-wide">
+    <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-6 pb-8 mb-8 border-b border-slate-100">
+      {/* Left: title block */}
+      <div className="min-w-0 flex-1">
+        {badge && (
+          <p className="text-label font-semibold text-brand uppercase tracking-label-caps mb-2 opacity-75">
             {badge}
-          </span>
-        </div>
-
-        {/* Page title */}
-        <h1 className="text-display md:text-display font-black text-slate-900 tracking-tight leading-[1.02]">
-          {title} <span className="font-light text-slate-300">{subtitle}</span>
+          </p>
+        )}
+        <h1 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+          {title}
+          {subtitle && (
+            <span className="font-light text-slate-300 ml-2">{subtitle}</span>
+          )}
         </h1>
       </div>
 
-      {/* Actions row */}
-      <div className="flex items-center gap-2.5 w-full md:w-auto shrink-0">
+      {/* Right: actions */}
+      <div className="flex items-center gap-2.5 shrink-0">
         <button
           onClick={() => navigate('/dashboard/notifications')}
-          className="relative w-11 h-11 bg-white border border-slate-100 rounded-interactive flex items-center justify-center text-slate-400 hover:text-brand hover:border-purple-100 hover:bg-purple-50/40 transition-all duration-200 shrink-0 group"
+          className="relative w-10 h-10 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 hover:text-brand hover:border-brand/20 hover:bg-brand/5 transition-all duration-200 group shrink-0"
         >
-          <HiOutlineBell className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-          <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-brand rounded-full" />
+          <HiOutlineBell className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
+          <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-red-400 rounded-full" />
         </button>
 
         {children}
