@@ -49,6 +49,9 @@ export default function ListingDetailsView() {
   const [serviceTargetDate, setServiceTargetDate] = useState('');
   const [serviceScopeSize, setServiceScopeSize] = useState('');
   const [jobPortfolioUrl, setJobPortfolioUrl] = useState('');
+  const [selectedEventOccurrenceId, setSelectedEventOccurrenceId] = useState('');
+  const [selectedEventTicketId, setSelectedEventTicketId] = useState('');
+  const [eventTicketQuantity, setEventTicketQuantity] = useState('1');
   const [inquiryError, setInquiryError] = useState<string | null>(null);
   const [isSubmittingInquiry, setIsSubmittingInquiry] = useState(false);
   const [isPerformingPrimaryAction, setIsPerformingPrimaryAction] = useState(false);
@@ -100,6 +103,22 @@ export default function ListingDetailsView() {
     if (item?.vertical !== 'services' || selectedServicePackageId) return;
     setSelectedServicePackageId(item.servicePackages[0]?.id || '');
   }, [item, selectedServicePackageId]);
+
+  useEffect(() => {
+    if (item?.vertical !== 'events') return;
+
+    const occurrence = item.eventOccurrences.find((entry) => entry.id === selectedEventOccurrenceId)
+      || item.eventOccurrences[0];
+    if (!occurrence) return;
+
+    if (occurrence.id !== selectedEventOccurrenceId) {
+      setSelectedEventOccurrenceId(occurrence.id);
+    }
+
+    if (!occurrence.tickets.some((ticket) => ticket.id === selectedEventTicketId)) {
+      setSelectedEventTicketId(occurrence.tickets[0]?.id || '');
+    }
+  }, [item, selectedEventOccurrenceId, selectedEventTicketId]);
 
   useEffect(() => {
     let active = true;
@@ -240,6 +259,9 @@ export default function ListingDetailsView() {
 
   const category = LISTING_CATEGORIES.find((entry) => entry.id === item.vertical);
   const canShowImage = Boolean(item.imageUrl) && !imageFailed;
+  const selectedEventOccurrence = item.eventOccurrences.find(
+    (occurrence) => occurrence.id === selectedEventOccurrenceId,
+  ) || item.eventOccurrences[0];
   const handlePrimaryAction = async () => {
     if (!isAuthenticated) {
       router.push('/login');
@@ -284,12 +306,18 @@ export default function ListingDetailsView() {
       return;
     }
 
+    if (item.vertical === 'events' && item.eventOccurrences.length === 0) {
+      Alert.alert('Tickets unavailable', 'There are no upcoming ticket options for this event.');
+      return;
+    }
+
     if (
       item.vertical === 'autos'
       || item.vertical === 'classifieds'
       || item.vertical === 'services'
       || item.vertical === 'jobs'
       || item.vertical === 'properties'
+      || item.vertical === 'events'
     ) {
       setInquiryError(null);
       setShowInquiryForm(true);
@@ -300,15 +328,16 @@ export default function ListingDetailsView() {
   };
 
   const submitListingInquiry = async () => {
-    if (!item || !['autos', 'classifieds', 'services', 'jobs', 'properties'].includes(item.vertical) || isSubmittingInquiry) return;
+    if (!item || !['autos', 'classifieds', 'services', 'jobs', 'properties', 'events'].includes(item.vertical) || isSubmittingInquiry) return;
 
     const fullName = inquiryName.trim();
     const email = inquiryEmail.trim();
     const isServiceQuote = item.vertical === 'services';
     const isJobApplication = item.vertical === 'jobs';
     const isPropertyInquiry = item.vertical === 'properties';
+    const isEventBooking = item.vertical === 'events';
 
-    if (!isServiceQuote && !isJobApplication && (!fullName || !email)) {
+    if (!isServiceQuote && !isJobApplication && !isEventBooking && (!fullName || !email)) {
       setInquiryError('Your name and email address are required.');
       return;
     }
@@ -323,12 +352,20 @@ export default function ListingDetailsView() {
       return;
     }
 
+    const quantity = Number(eventTicketQuantity);
+    if (isEventBooking && (!selectedEventOccurrenceId || !selectedEventTicketId || !Number.isInteger(quantity) || quantity < 1 || quantity > 10)) {
+      setInquiryError('Choose an event date and ticket, then enter a quantity from 1 to 10.');
+      return;
+    }
+
     setIsSubmittingInquiry(true);
     setInquiryError(null);
 
     try {
       const isVehicle = item.vertical === 'autos';
-      const endpoint = isJobApplication
+      const endpoint = isEventBooking
+        ? `/v1/events/${encodeURIComponent(item.id)}/bookings`
+        : isJobApplication
         ? `/v1/jobs/${encodeURIComponent(item.slug)}/applications`
         : isServiceQuote
         ? `/v1/services/${encodeURIComponent(item.id)}/quotes`
@@ -337,7 +374,13 @@ export default function ListingDetailsView() {
         : isVehicle
           ? `/v1/vehicles/${encodeURIComponent(item.id)}/inquiries`
           : `/v1/classifieds/${encodeURIComponent(item.slug)}/inquiries`;
-      const body = isJobApplication
+      const body = isEventBooking
+        ? {
+            event_occurrence_id: Number(selectedEventOccurrenceId),
+            event_ticket_type_id: Number(selectedEventTicketId),
+            quantity,
+          }
+        : isJobApplication
         ? {
             cover_letter: inquiryMessage.trim(),
             portfolio_url: jobPortfolioUrl.trim() || null,
@@ -361,7 +404,7 @@ export default function ListingDetailsView() {
                 : {}),
           };
 
-      await apiRequest(endpoint, {
+      const submission = await apiRequest<{ status?: string; total_price?: number | string }>(endpoint, {
         method: 'POST',
         authenticated: true,
         body: JSON.stringify(body),
@@ -371,6 +414,19 @@ export default function ListingDetailsView() {
       setInquiryMessage('');
       setInquiryOffer('');
       setJobPortfolioUrl('');
+      setEventTicketQuantity('1');
+
+      if (isEventBooking) {
+        const confirmed = submission.status === 'confirmed';
+        Alert.alert(
+          confirmed ? 'Tickets confirmed' : 'Booking created',
+          confirmed
+            ? 'Your tickets are confirmed and available in Buyer Activity.'
+            : 'Your tickets are reserved. Payment handoff will be connected in a later transaction slice.',
+        );
+        return;
+      }
+
       Alert.alert(
         isJobApplication ? 'Application submitted' : 'Inquiry sent',
         `${isJobApplication
@@ -477,13 +533,15 @@ export default function ListingDetailsView() {
             )}
           </TouchableOpacity>
           {favoriteError && <Text style={styles.favoriteError}>{favoriteError}</Text>}
-          {showInquiryForm && ['autos', 'classifieds', 'services', 'jobs', 'properties'].includes(item.vertical) && (
+          {showInquiryForm && ['autos', 'classifieds', 'services', 'jobs', 'properties', 'events'].includes(item.vertical) && (
             <View style={styles.inquiryForm}>
               <View style={styles.inquiryHeadingRow}>
                 <View style={styles.inquiryHeadingCopy}>
                   <Text style={styles.sectionHeader}>
                     {item.vertical === 'autos'
                       ? 'VEHICLE INQUIRY'
+                      : item.vertical === 'events'
+                        ? 'EVENT BOOKING'
                       : item.vertical === 'services'
                         ? 'SERVICE QUOTE'
                       : item.vertical === 'jobs'
@@ -495,6 +553,8 @@ export default function ListingDetailsView() {
                   <Text style={styles.inquiryHelp}>
                     {item.vertical === 'jobs'
                       ? 'Introduce yourself to the employer and share relevant work.'
+                      : item.vertical === 'events'
+                        ? 'Choose an event date, ticket type, and quantity.'
                       : item.vertical === 'properties'
                         ? 'Send your details directly to the listing agent.'
                       : item.vertical === 'services'
@@ -511,7 +571,7 @@ export default function ListingDetailsView() {
                   <Text style={styles.inquiryClose}>CLOSE</Text>
                 </TouchableOpacity>
               </View>
-              {item.vertical !== 'services' && item.vertical !== 'jobs' && (
+              {item.vertical !== 'services' && item.vertical !== 'jobs' && item.vertical !== 'events' && (
                 <>
                   <TextInput
                     style={styles.inquiryInput}
@@ -599,21 +659,76 @@ export default function ListingDetailsView() {
                   editable={!isSubmittingInquiry}
                 />
               )}
-              <TextInput
-                style={[styles.inquiryInput, styles.inquiryMessageInput]}
-                value={inquiryMessage}
-                onChangeText={setInquiryMessage}
-                placeholder={item.vertical === 'jobs'
-                  ? 'Write your cover letter'
-                  : item.vertical === 'services'
-                    ? 'Describe your requirements (optional)'
-                    : 'What would you like to ask? (optional)'}
-                placeholderTextColor="#475569"
-                multiline
-                maxLength={item.vertical === 'jobs' ? 5000 : item.vertical === 'services' ? 1000 : 500}
-                textAlignVertical="top"
-                editable={!isSubmittingInquiry}
-              />
+              {item.vertical === 'events' && (
+                <>
+                  <Text style={styles.inquiryFieldLabel}>CHOOSE AN EVENT DATE</Text>
+                  {item.eventOccurrences.map((occurrence) => (
+                    <TouchableOpacity
+                      key={occurrence.id}
+                      style={[
+                        styles.packageOption,
+                        selectedEventOccurrenceId === occurrence.id && styles.packageOptionSelected,
+                      ]}
+                      onPress={() => setSelectedEventOccurrenceId(occurrence.id)}
+                      disabled={isSubmittingInquiry}
+                    >
+                      <View style={styles.packageOptionCopy}>
+                        <Text style={styles.packageOptionTitle}>{occurrence.label}</Text>
+                        {occurrence.venue && (
+                          <Text style={styles.packageOptionDescription}>{occurrence.venue}</Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                  <Text style={styles.inquiryFieldLabel}>CHOOSE A TICKET</Text>
+                  {selectedEventOccurrence?.tickets.map((ticket) => (
+                    <TouchableOpacity
+                      key={ticket.id}
+                      style={[
+                        styles.packageOption,
+                        selectedEventTicketId === ticket.id && styles.packageOptionSelected,
+                      ]}
+                      onPress={() => setSelectedEventTicketId(ticket.id)}
+                      disabled={isSubmittingInquiry}
+                    >
+                      <View style={styles.packageOptionCopy}>
+                        <Text style={styles.packageOptionTitle}>{ticket.title}</Text>
+                        <Text style={styles.packageOptionDescription}>
+                          {ticket.availableQuantity} available
+                        </Text>
+                      </View>
+                      <Text style={styles.packageOptionPrice}>{ticket.price}</Text>
+                    </TouchableOpacity>
+                  ))}
+                  <TextInput
+                    style={styles.inquiryInput}
+                    value={eventTicketQuantity}
+                    onChangeText={setEventTicketQuantity}
+                    placeholder="Ticket quantity (1-10)"
+                    placeholderTextColor="#475569"
+                    keyboardType="number-pad"
+                    maxLength={2}
+                    editable={!isSubmittingInquiry}
+                  />
+                </>
+              )}
+              {item.vertical !== 'events' && (
+                <TextInput
+                  style={[styles.inquiryInput, styles.inquiryMessageInput]}
+                  value={inquiryMessage}
+                  onChangeText={setInquiryMessage}
+                  placeholder={item.vertical === 'jobs'
+                    ? 'Write your cover letter'
+                    : item.vertical === 'services'
+                      ? 'Describe your requirements (optional)'
+                      : 'What would you like to ask? (optional)'}
+                  placeholderTextColor="#475569"
+                  multiline
+                  maxLength={item.vertical === 'jobs' ? 5000 : item.vertical === 'services' ? 1000 : 500}
+                  textAlignVertical="top"
+                  editable={!isSubmittingInquiry}
+                />
+              )}
               {item.vertical === 'classifieds' && (
                 <TextInput
                   style={styles.inquiryInput}
@@ -637,8 +752,12 @@ export default function ListingDetailsView() {
                 {isSubmittingInquiry && <ActivityIndicator size="small" color="#fff" />}
                 <Text style={styles.actionBtnText}>
                   {isSubmittingInquiry
-                    ? item.vertical === 'jobs' ? 'SUBMITTING...' : 'SENDING INQUIRY...'
-                    : item.vertical === 'jobs' ? 'SUBMIT APPLICATION' : 'SEND INQUIRY'}
+                    ? item.vertical === 'jobs'
+                      ? 'SUBMITTING...'
+                      : item.vertical === 'events' ? 'RESERVING...' : 'SENDING INQUIRY...'
+                    : item.vertical === 'jobs'
+                      ? 'SUBMIT APPLICATION'
+                      : item.vertical === 'events' ? 'RESERVE TICKETS' : 'SEND INQUIRY'}
                 </Text>
               </TouchableOpacity>
             </View>

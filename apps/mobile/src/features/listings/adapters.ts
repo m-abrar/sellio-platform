@@ -4,6 +4,7 @@ import {
   ListingDetailFact,
   ListingDetailItem,
   ListingVertical,
+  EventOccurrenceOption,
   ServicePackageOption,
 } from './types';
 
@@ -288,6 +289,41 @@ function servicePackagesFor(record: ListingApiRecord): ServicePackageOption[] {
   });
 }
 
+function eventOccurrencesFor(record: ListingApiRecord): EventOccurrenceOption[] {
+  if (!Array.isArray(record.occurrences) || !Array.isArray(record.ticket_types)) return [];
+
+  const ticketTitles = new Map(
+    record.ticket_types.map((ticket) => [String(ticket.id), text(ticket.title) || 'Event ticket']),
+  );
+
+  return record.occurrences.flatMap((occurrence) => {
+    const occurrenceId = String(occurrence.id);
+    const startsAt = dateTime(occurrence.start_date_time);
+    if (!startsAt) return [];
+
+    const tickets = Object.entries(occurrence.inventory || {}).flatMap(([ticketId, inventory]) => {
+      const availableQuantity = Number(inventory.available_quantity || 0);
+      if (!Number.isFinite(availableQuantity) || availableQuantity < 1) return [];
+
+      return [{
+        id: ticketId,
+        title: ticketTitles.get(ticketId) || 'Event ticket',
+        price: text(inventory.price_formatted)
+          || display(inventory.price)
+          || 'Price unavailable',
+        availableQuantity,
+      }];
+    });
+
+    return tickets.length ? [{
+      id: occurrenceId,
+      label: startsAt,
+      venue: text(occurrence.venue_details),
+      tickets,
+    }] : [];
+  });
+}
+
 export function toListingCard(record: ListingApiRecord, vertical: ListingVertical): ListingCardItem {
   return {
     id: String(record.id),
@@ -317,5 +353,6 @@ export function toListingDetail(
     primaryActionDescription: primaryAction.description,
     servicePackages: vertical === 'services' ? servicePackagesFor(record) : [],
     isRentalProperty: vertical === 'properties' && nested(record.status, 'is_rental') === true,
+    eventOccurrences: vertical === 'events' ? eventOccurrencesFor(record) : [],
   };
 }

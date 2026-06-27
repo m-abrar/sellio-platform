@@ -55,6 +55,25 @@ export interface ListingApiRecord {
   seller?: Record<string, unknown>;
   owner?: Record<string, unknown>;
   packages?: ServicePackageApiRecord[];
+  ticket_types?: EventTicketTypeApiRecord[];
+  occurrences?: EventOccurrenceApiRecord[];
+}
+
+export interface EventTicketTypeApiRecord {
+  id: number | string;
+  title?: string | null;
+  base_price?: number | string | null;
+}
+
+export interface EventOccurrenceApiRecord {
+  id: number | string;
+  start_date_time?: string | null;
+  venue_details?: string | null;
+  inventory?: Record<string, {
+    available_quantity?: number | string | null;
+    price?: number | string | null;
+    price_formatted?: string | null;
+  }> | null;
 }
 
 export interface ServicePackageApiRecord {
@@ -85,6 +104,21 @@ export interface ListingDetailItem extends ListingCardItem {
   primaryActionDescription: string;
   servicePackages: ServicePackageOption[];
   isRentalProperty: boolean;
+  eventOccurrences: EventOccurrenceOption[];
+}
+
+export interface EventOccurrenceOption {
+  id: string;
+  label: string;
+  venue: string | null;
+  tickets: EventTicketOption[];
+}
+
+export interface EventTicketOption {
+  id: string;
+  title: string;
+  price: string;
+  availableQuantity: number;
 }
 
 export interface ServicePackageOption {

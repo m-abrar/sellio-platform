@@ -113,6 +113,7 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
   - [x] Connect the job detail action to a real cover-letter application form.
   - [x] Connect the product detail action to the buyer-owned cart.
   - [x] Connect for-sale property details to a buyer-linked agent inquiry.
+  - [x] Connect event details to occurrence and ticket selection with real booking creation.
   - [ ] Connect each action to its real buyer workflow and replace the temporary availability notice.
 - [ ] Add shareable listing links.
 
