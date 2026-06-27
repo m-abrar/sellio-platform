@@ -22,17 +22,10 @@ export default function DashboardLayout() {
           <Sidebar user={user} />
         </div>
 
-        {/* Main — also a floating rounded card, framed by the bg */}
-        <main className="flex-1 min-w-0 px-3 py-4 lg:py-5 lg:pl-3 lg:pr-5">
-          <div
-            className="bg-white rounded-card-lg min-h-[90dvh] px-5 py-8 md:px-10 md:py-10 pb-32"
-            style={{
-              boxShadow: '0 0 0 1px rgba(0,0,0,0.04), 0 4px 32px rgba(0,0,0,0.04)',
-            }}
-          >
-            <div className="animate-in fade-in slide-in-from-bottom-3 duration-500">
-              <Outlet context={{ user }} />
-            </div>
+        {/* Main — transparent, content cards sit directly on bg */}
+        <main className="flex-1 min-w-0 px-4 py-6 lg:py-8 lg:pl-4 lg:pr-8 pb-32">
+          <div className="animate-in fade-in slide-in-from-bottom-3 duration-500">
+            <Outlet context={{ user }} />
           </div>
         </main>
       </div>
