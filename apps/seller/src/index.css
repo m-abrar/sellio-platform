@@ -148,6 +148,53 @@ button, a, [role="button"], label[for] {
 
 
 /* ═══════════════════════════════════════════════════════════
+   DESIGN TOKEN UTILITIES
+   Explicit CSS classes so custom token names are guaranteed
+   to exist regardless of Tailwind v4 @theme generation.
+   ═══════════════════════════════════════════════════════════ */
+
+/* Border radii */
+.rounded-container  { border-radius: 2.5rem; }
+.rounded-floating   { border-radius: 3rem; }
+.rounded-card-lg    { border-radius: 2rem; }
+.rounded-card       { border-radius: 1.75rem; }
+.rounded-card-sm    { border-radius: 1.5rem; }
+.rounded-inner      { border-radius: 1.2rem; }
+.rounded-interactive { border-radius: 0.875rem; }
+.rounded-badge      { border-radius: 0.625rem; }
+
+/* Shadows */
+.shadow-card        { box-shadow: 0 1px 3px rgb(0 0 0 / 0.04), 0 6px 24px rgb(0 0 0 / 0.04); }
+.shadow-card-hover  { box-shadow: 0 4px 16px rgb(0 0 0 / 0.07), 0 16px 48px rgb(0 0 0 / 0.05); }
+.shadow-elite       { box-shadow: 0 20px 50px rgb(0 0 0 / 0.04); }
+.shadow-elite-soft  { box-shadow: 0 20px 50px rgb(0 0 0 / 0.02); }
+.shadow-cta         { box-shadow: 0 8px 24px rgb(102 16 242 / 0.28); }
+.shadow-nav-active  { box-shadow: 0 1px 4px rgb(0 0 0 / 0.07); }
+.shadow-dropdown    { box-shadow: 0 4px 24px rgb(0 0 0 / 0.08), 0 1px 4px rgb(0 0 0 / 0.04); }
+.shadow-sidebar     { box-shadow: 0 0 0 1px rgb(0 0 0 / 0.04), 0 24px 60px rgb(0 0 0 / 0.06); }
+.shadow-brand-glow  { box-shadow: 0 8px 32px rgb(102 16 242 / 0.20); }
+
+/* Font sizes */
+.text-display  { font-size: 3rem; }
+.text-title    { font-size: 1.75rem; }
+.text-hero-num { font-size: 2.1rem; }
+.text-caption  { font-size: 0.6875rem; }
+.text-nav      { font-size: 0.8125rem; }
+.text-label    { font-size: 0.625rem; }
+.text-micro    { font-size: 0.5625rem; }
+.text-tiny     { font-size: 0.5rem; }
+
+/* Letter spacing */
+.tracking-label      { letter-spacing: 0.12em; }
+.tracking-label-sm   { letter-spacing: 0.15em; }
+.tracking-label-wide { letter-spacing: 0.18em; }
+.tracking-label-caps { letter-spacing: 0.25em; }
+.tracking-caps       { letter-spacing: 0.2em; }
+.tracking-caps-wide  { letter-spacing: 0.3em; }
+.tracking-caps-xl    { letter-spacing: 0.4em; }
+
+
+/* ═══════════════════════════════════════════════════════════
    ANIMATIONS
    ═══════════════════════════════════════════════════════════ */
 @keyframes fade-slide-up {
