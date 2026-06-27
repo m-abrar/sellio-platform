@@ -62,7 +62,7 @@ export default function ProductDetailPage() {
     );
   }
 
-  const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-8 md:p-12';
+  const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-5 sm:p-8 md:p-12';
   const gallery = [
     ...(product.featured_image ? [{ original_url: product.featured_image }] : []),
     ...(product.gallery ?? []).map((item: any) => ({ original_url: item.url })),
@@ -75,18 +75,18 @@ export default function ProductDetailPage() {
         title={product.title}
         subtitle="Product Detail"
       >
-        <div className="flex gap-4">
+        <div className="flex gap-2">
           <button
             onClick={() => navigate(-1)}
-            className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
+            className="bg-white border border-slate-100 text-slate-900 px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
           >
-            <HiOutlineChevronLeft className="w-4 h-4" /> Back
+            <HiOutlineChevronLeft className="w-4 h-4" /> <span className="hidden sm:inline">Back</span>
           </button>
           <button
             onClick={() => navigate(`/dashboard/products/edit/${product.slug}`)}
-            className="bg-brand text-white px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-brand-hover transition-all flex items-center gap-2"
+            className="bg-brand text-white px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-brand-hover transition-all flex items-center gap-2"
           >
-            <HiOutlinePencilSquare className="w-4 h-4" /> Edit Product
+            <HiOutlinePencilSquare className="w-4 h-4" /> <span className="hidden sm:inline">Edit Product</span>
           </button>
         </div>
       </PageHeader>
@@ -97,7 +97,7 @@ export default function ProductDetailPage() {
             <img
               src={product.featured_image || gallery[0]?.original_url || PLACEHOLDER_LISTING}
               alt={product.title}
-              className="w-full h-[420px] object-cover"
+              className="w-full h-[250px] sm:h-[420px] object-cover"
             />
           </div>
 

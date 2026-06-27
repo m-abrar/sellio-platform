@@ -274,7 +274,7 @@ export default function WalletPage() {
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* BALANCE CARD */}
-        <div className="lg:col-span-7 bg-slate-900 rounded-floating p-12 text-white shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[400px] transition-all duration-500 hover:scale-[1.01] hover:shadow-purple-900/10">
+        <div className="lg:col-span-7 bg-slate-900 rounded-floating p-6 sm:p-10 lg:p-12 text-white shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[320px] sm:min-h-[400px] transition-all duration-500 hover:scale-[1.01] hover:shadow-purple-900/10">
           <div className="relative z-10 animate-in fade-in slide-in-from-top-4 duration-1000">
             <div className="flex justify-between items-start">
               <div>
@@ -309,7 +309,7 @@ export default function WalletPage() {
 
         {/* LINKED ACCOUNTS & STATS */}
         <div className="lg:col-span-5 space-y-8 animate-in fade-in slide-in-from-right-6 duration-1000 delay-100">
-          <div className="bg-white p-10 rounded-container border border-slate-100 shadow-premium transition-all duration-500 hover:shadow-premium-hover">
+          <div className="bg-white p-6 sm:p-10 rounded-container border border-slate-100 shadow-premium transition-all duration-500 hover:shadow-premium-hover">
             <h3 className="text-xl font-black text-slate-900 italic tracking-tight mb-8">Linked Accounts.</h3>
             
             <div className="space-y-4 max-h-[220px] overflow-y-auto pr-1">
@@ -423,21 +423,50 @@ export default function WalletPage() {
 
       {/* TRANSACTION HISTORY */}
       <div className="bg-white rounded-floating border border-slate-100 shadow-premium overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300 transition-all duration-500 hover:shadow-premium-hover">
-        <div className="p-10 md:p-12 flex justify-between items-center border-b border-slate-50">
+        <div className="px-5 sm:px-10 md:px-12 py-5 sm:py-8 flex justify-between items-center border-b border-slate-50">
           <div>
-            <h3 className="text-2xl font-black text-slate-900 italic tracking-tight">Transaction History.</h3>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 italic tracking-tight">Transaction History.</h3>
             <p className="text-label font-bold text-slate-400 uppercase tracking-caps-wide mt-2">Recent financial activity</p>
           </div>
-          <button 
+          <button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="p-4 bg-slate-50 text-slate-400 rounded-2xl hover:text-brand transition-all hover:bg-slate-100 active:scale-95 cursor-pointer disabled:opacity-50"
+            className="p-3 sm:p-4 bg-slate-50 text-slate-400 rounded-2xl hover:text-brand transition-all hover:bg-slate-100 active:scale-95 cursor-pointer disabled:opacity-50"
           >
-            <HiOutlineArrowPath className={`w-6 h-6 ${isRefreshing ? 'animate-spin text-brand' : 'transition-transform duration-500 hover:rotate-180'}`} />
+            <HiOutlineArrowPath className={`w-5 h-5 sm:w-6 sm:h-6 ${isRefreshing ? 'animate-spin text-brand' : 'transition-transform duration-500 hover:rotate-180'}`} />
           </button>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Mobile transaction rows */}
+        <div className="sm:hidden divide-y divide-slate-50">
+          {transactions.map((tx) => {
+            const iconColor = tx.type === 'earning' ? 'bg-emerald-50 text-emerald-600' : tx.type === 'payout' ? 'bg-indigo-50 text-indigo-600' : 'bg-red-50 text-red-600';
+            const amountColor = tx.status === 'Rejected' ? 'text-slate-400 line-through' : tx.amount.startsWith('+') ? 'text-emerald-600' : 'text-slate-900';
+            const statusColor = tx.status === 'Completed' || tx.status === 'Approved' ? 'text-emerald-500' : tx.status === 'Rejected' ? 'text-rose-500' : 'text-amber-500';
+            return (
+              <div
+                key={tx.id}
+                onClick={() => tx.url && navigate(tx.url)}
+                className={`flex items-center gap-4 px-5 py-4 ${tx.url ? 'cursor-pointer hover:bg-slate-50/40' : ''} transition-colors`}
+              >
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${iconColor}`}>
+                  {tx.type === 'earning' ? <HiOutlineArrowDownLeft className="w-5 h-5" /> : <HiOutlineArrowUpRight className="w-5 h-5" />}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-black text-slate-900 truncate">{tx.title}</p>
+                  <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{tx.date}</span>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className={`text-sm font-black ${amountColor}`}>{tx.amount}</p>
+                  <span className={`text-tiny font-black uppercase tracking-widest ${statusColor}`}>{tx.status}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop transaction table */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-slate-50">
@@ -449,8 +478,8 @@ export default function WalletPage() {
             </thead>
             <tbody className="divide-y divide-slate-50">
               {transactions.map((tx, index) => (
-                <tr 
-                  key={tx.id} 
+                <tr
+                  key={tx.id}
                   onClick={() => tx.url && navigate(tx.url)}
                   className={`group transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-500 ${
                     tx.url ? 'cursor-pointer hover:bg-slate-50/50' : 'cursor-default'
@@ -460,8 +489,8 @@ export default function WalletPage() {
                   <td className="px-10 py-8">
                     <div className="flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105 ${
-                        tx.type === 'earning' ? 'bg-emerald-50 text-emerald-600' : 
-                        tx.type === 'payout' ? 'bg-indigo-50 text-indigo-600' : 
+                        tx.type === 'earning' ? 'bg-emerald-50 text-emerald-600' :
+                        tx.type === 'payout' ? 'bg-indigo-50 text-indigo-600' :
                         'bg-red-50 text-red-600'
                       }`}>
                         {tx.type === 'earning' ? <HiOutlineArrowDownLeft className="w-6 h-6 animate-pulse" /> : <HiOutlineArrowUpRight className="w-6 h-6" />}
@@ -475,8 +504,8 @@ export default function WalletPage() {
                   <td className="px-10 py-8 text-xs font-bold text-slate-500 uppercase tracking-widest">{tx.date}</td>
                   <td className="px-10 py-8">
                     <span className={`px-4 py-1.5 rounded-full text-micro font-black uppercase tracking-widest border transition-all duration-300 ${
-                      tx.status === 'Completed' || tx.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border-emerald-100 group-hover:bg-emerald-100 group-hover:text-emerald-700' : 
-                      tx.status === 'Rejected' ? 'bg-rose-50 text-rose-600 border-rose-100 group-hover:bg-rose-100 group-hover:text-rose-700' : 
+                      tx.status === 'Completed' || tx.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border-emerald-100 group-hover:bg-emerald-100 group-hover:text-emerald-700' :
+                      tx.status === 'Rejected' ? 'bg-rose-50 text-rose-600 border-rose-100 group-hover:bg-rose-100 group-hover:text-rose-700' :
                       'bg-amber-50 text-amber-600 border-amber-100 group-hover:bg-amber-100 group-hover:text-amber-700'
                     }`}>
                       {tx.status}
@@ -493,8 +522,8 @@ export default function WalletPage() {
             </tbody>
           </table>
         </div>
-        
-        <div className="p-10 text-center border-t border-slate-50">
+
+        <div className="p-6 sm:p-10 text-center border-t border-slate-50">
           <button 
             onClick={() => navigate('/dashboard/transactions')}
             className="text-caption font-black text-brand uppercase tracking-caps-wide hover:underline cursor-pointer"

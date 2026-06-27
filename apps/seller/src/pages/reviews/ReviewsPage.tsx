@@ -162,7 +162,7 @@ export default function ReviewsPage() {
       </div>
 
       {/* Dynamic Rating Distribution HUD Panel */}
-      <div className="bg-white p-8 md:p-12 rounded-container border border-slate-100 shadow-elite-soft flex flex-col md:flex-row items-stretch gap-10 md:gap-14">
+      <div className="bg-white p-5 sm:p-8 md:p-12 rounded-container border border-slate-100 shadow-elite-soft flex flex-col md:flex-row items-stretch gap-10 md:gap-14">
         {/* Left Side: Score Index */}
         <div className="flex flex-col justify-center items-center text-center md:border-r border-slate-100 pr-0 md:pr-14 shrink-0">
           <h2 className="text-6xl md:text-7xl font-black italic tracking-tighter text-slate-900 leading-none">
@@ -224,7 +224,7 @@ export default function ReviewsPage() {
             return (
               <div
                 key={review.id}
-                className="bg-white p-8 md:p-12 rounded-container border border-slate-100 shadow-elite-soft group hover:border-slate-200/80 transition-all duration-300 relative overflow-hidden"
+                className="bg-white p-5 sm:p-8 md:p-12 rounded-container border border-slate-100 shadow-elite-soft group hover:border-slate-200/80 transition-all duration-300 relative overflow-hidden"
               >
                 {/* Active Testimonial Corner Glow Indicator */}
                 {review.isFeatured && (

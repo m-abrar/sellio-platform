@@ -60,18 +60,18 @@ export default function AutoDetailPage() {
     );
   }
 
-  const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-8 md:p-12';
+  const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-5 sm:p-8 md:p-12';
   const features = (auto.features ?? []).map((item: any) => item.title).filter(Boolean);
 
   return (
     <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       <PageHeader badge="Vehicle" title={auto.title} subtitle="Details">
         <div className="flex gap-4">
-          <button onClick={() => navigate(-1)} className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2">
-            <HiOutlineChevronLeft className="w-4 h-4" /> Back
+          <button onClick={() => navigate(-1)} className="bg-white border border-slate-100 text-slate-900 px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2">
+            <HiOutlineChevronLeft className="w-4 h-4" /><span className="hidden sm:inline">Back</span>
           </button>
-          <button onClick={() => navigate(`/dashboard/autos/edit/${auto.slug}`)} className="bg-brand text-white px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-brand-hover transition-all flex items-center gap-2">
-            <HiOutlinePencilSquare className="w-4 h-4" /> Edit Vehicle
+          <button onClick={() => navigate(`/dashboard/autos/edit/${auto.slug}`)} className="bg-brand text-white px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-brand-hover transition-all flex items-center gap-2">
+            <HiOutlinePencilSquare className="w-4 h-4" /><span className="hidden sm:inline">Edit</span>
           </button>
         </div>
       </PageHeader>
@@ -117,7 +117,7 @@ export default function AutoDetailPage() {
         </div>
 
         <div className="lg:col-span-4 space-y-10">
-          <div className="bg-slate-900 rounded-floating p-10 text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-slate-900 rounded-floating p-6 sm:p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="relative z-10">
               <p className="text-label font-black uppercase tracking-widest text-slate-500 mb-4">Market Valuation</p>
               <h4 className="text-5xl font-black italic tracking-tighter mb-8">{auto.price || 'N/A'}</h4>

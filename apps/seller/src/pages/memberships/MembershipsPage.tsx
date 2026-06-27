@@ -171,7 +171,7 @@ export default function MembershipsPage() {
           {memberships.map((plan) => (
             <div
               key={plan.id}
-              className={`p-12 rounded-floating border-2 transition-all duration-500 relative overflow-hidden flex flex-col justify-between ${plan.status === 'Current' ? 'bg-slate-900 border-slate-900 text-white shadow-2xl' : 'bg-white border-slate-100 text-slate-900 shadow-premium hover:border-brand/20'}`}
+              className={`p-6 sm:p-10 lg:p-12 rounded-floating border-2 transition-all duration-500 relative overflow-hidden flex flex-col justify-between ${plan.status === 'Current' ? 'bg-slate-900 border-slate-900 text-white shadow-2xl' : 'bg-white border-slate-100 text-slate-900 shadow-premium hover:border-brand/20'}`}
             >
               <div>
                 <div className="flex justify-between items-start mb-10">

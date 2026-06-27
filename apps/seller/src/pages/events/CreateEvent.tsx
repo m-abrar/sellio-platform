@@ -19,7 +19,7 @@ import { createEvent, getEventBySlug, getEventFormMeta, updateEvent } from '../.
 import { getWelcomeData } from '../../api/dashboard';
 import { ApiError } from '../../lib/apiError';
 
-const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-8 md:p-12';
+const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-5 sm:p-8 md:p-12';
 const labelClass = 'text-label font-black text-slate-400 uppercase tracking-caps mb-3 block ml-2';
 const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-brand focus:bg-white rounded-card-sm px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
 
@@ -508,9 +508,9 @@ export default function CreateEvent() {
       >
         <button
           onClick={() => navigate(-1)}
-          className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
+          className="bg-white border border-slate-100 text-slate-900 px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
         >
-          <HiOutlineChevronLeft className="w-4 h-4" /> Back
+          <HiOutlineChevronLeft className="w-4 h-4" /> <span className="hidden sm:inline">Back</span>
         </button>
       </PageHeader>
 
@@ -948,7 +948,7 @@ export default function CreateEvent() {
         </div>
 
         <div className="lg:col-span-4 space-y-10">
-          <div className="bg-slate-900 rounded-floating p-10 text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-slate-900 rounded-floating p-6 sm:p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="relative z-10">
               <p className="text-label font-black uppercase tracking-widest text-slate-500 mb-6">Event Readiness</p>
               <span className="text-7xl font-black italic tracking-tighter">{progress}%</span>

@@ -171,7 +171,7 @@ export default function ListingAnalyticsPage() {
           return (
             <div 
               key={idx}
-              className="bg-white p-8 rounded-card-lg border border-slate-100 shadow-elite-soft transition-all duration-500 hover:shadow-lg hover:-translate-y-1"
+              className="bg-white p-5 sm:p-8 rounded-card-lg border border-slate-100 shadow-elite-soft transition-all duration-500 hover:shadow-lg hover:-translate-y-1"
             >
               <div className="flex justify-between items-start mb-6">
                 <span className="text-label font-black text-slate-400 uppercase tracking-widest">{kpi.label}</span>
@@ -190,7 +190,7 @@ export default function ListingAnalyticsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         
         {/* Daily Leads/Views Trends Plot */}
-        <div className="lg:col-span-8 bg-white p-8 md:p-12 rounded-container border border-slate-100 shadow-elite-soft flex flex-col justify-between">
+        <div className="lg:col-span-8 bg-white p-5 sm:p-8 md:p-12 rounded-container border border-slate-100 shadow-elite-soft flex flex-col justify-between">
           <div>
             <h3 className="text-2xl font-black text-slate-900 italic tracking-tight mb-2">Trend Velocity.</h3>
             <p className="text-label font-black text-slate-400 uppercase tracking-caps-wide mb-10">Concurrent Views vs. Leads logs</p>
@@ -257,7 +257,7 @@ export default function ListingAnalyticsPage() {
         <div className="lg:col-span-4 space-y-8">
           
           {/* Quick Actions Panel */}
-          <div className="bg-slate-900 p-10 rounded-container text-white shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[300px]">
+          <div className="bg-slate-900 p-6 sm:p-10 rounded-container text-white shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[300px]">
             <div>
               <h4 className="text-caption font-black uppercase tracking-caps-wide text-slate-500 mb-8">Asset Cockpit</h4>
               
@@ -291,7 +291,7 @@ export default function ListingAnalyticsPage() {
           </div>
 
           {/* Quick Context Card */}
-          <div className="bg-white p-10 rounded-container border border-slate-100 shadow-premium">
+          <div className="bg-white p-6 sm:p-10 rounded-container border border-slate-100 shadow-premium">
             <h4 className="text-caption font-black uppercase tracking-caps-wide text-slate-400 mb-6">Quick Overview</h4>
             <div className="space-y-4">
               <div className="flex justify-between items-center text-xs font-bold text-slate-500">

@@ -220,7 +220,7 @@ export default function AnalyticsPage() {
         ].map((kpi, idx) => (
           <div 
             key={idx} 
-            className={`p-8 rounded-card-lg border transition-all duration-500 hover:shadow-xl hover:-translate-y-1 bg-white ${activeMeta.border}`}
+            className={`p-5 sm:p-8 rounded-card-lg border transition-all duration-500 hover:shadow-xl hover:-translate-y-1 bg-white ${activeMeta.border}`}
           >
             <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-2">{kpi.label}</p>
             <h4 
@@ -238,7 +238,7 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         
         {/* Daily Leads Area Chart */}
-        <div className="bg-white p-8 md:p-10 rounded-container border border-slate-100 shadow-elite-soft">
+        <div className="bg-white p-5 sm:p-8 md:p-10 rounded-container border border-slate-100 shadow-elite-soft">
           <div className="mb-10">
             <h3 className="text-2xl font-black text-slate-900 italic tracking-tight">Lead Stream.</h3>
             <p className="text-label font-black text-slate-400 uppercase tracking-caps-wide mt-2">Daily lead volume</p>
@@ -287,7 +287,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Daily Views Bar Chart */}
-        <div className="bg-white p-8 md:p-10 rounded-container border border-slate-100 shadow-elite-soft">
+        <div className="bg-white p-5 sm:p-8 md:p-10 rounded-container border border-slate-100 shadow-elite-soft">
           <div className="mb-10">
             <h3 className="text-2xl font-black text-slate-900 italic tracking-tight">Traffic Volume.</h3>
             <p className="text-label font-black text-slate-400 uppercase tracking-caps-wide mt-2">Asset visibility index</p>
@@ -337,7 +337,7 @@ export default function AnalyticsPage() {
 
       {/* 4. Detailed Listings Performance Ledger */}
       <div className="bg-white border border-slate-100 rounded-container overflow-hidden shadow-elite-soft">
-        <div className="p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="px-5 py-5 sm:p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight italic leading-none">Listing Analytics.</h3>
             <p className="text-label md:text-xs text-slate-400 font-bold mt-3 uppercase tracking-caps-wide">Per-listing breakdown</p>

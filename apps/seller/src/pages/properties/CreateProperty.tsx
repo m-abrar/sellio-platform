@@ -321,9 +321,9 @@ export default function CreateProperty() {
       <PageHeader badge="Properties" title={isEditMode ? 'Edit' : 'Add'} subtitle="Property">
         <button
           onClick={() => navigate(-1)}
-          className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
+          className="bg-white border border-slate-100 text-slate-900 px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
         >
-          <HiOutlineChevronLeft className="w-4 h-4" /> Back
+          <HiOutlineChevronLeft className="w-4 h-4" /> <span className="hidden sm:inline">Back</span>
         </button>
       </PageHeader>
 
@@ -1147,7 +1147,7 @@ export default function CreateProperty() {
 
           <div className="lg:col-span-3">
             <div className="lg:sticky lg:top-10 space-y-8">
-              <div className="bg-slate-900 rounded-card-lg p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
+              <div className="bg-slate-900 rounded-card-lg p-5 sm:p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
                 <div className="relative z-10">
                   <p className="text-label font-black uppercase tracking-widest text-slate-500 mb-6">Asset Status</p>
                   <span className="text-4xl font-black italic tracking-tighter">{form.is_published ? 'LIVE' : 'DRAFT'}</span>

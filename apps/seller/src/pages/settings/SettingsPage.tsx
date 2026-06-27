@@ -89,7 +89,7 @@ export default function SettingsPage() {
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader badge="Configuration" title="Settings" subtitle="Account Preferences" />
 
-      <form onSubmit={handleSubmit} className="bg-white p-10 rounded-container border border-slate-100 shadow-premium space-y-8">
+      <form onSubmit={handleSubmit} className="bg-white p-6 sm:p-10 rounded-container border border-slate-100 shadow-premium space-y-8">
         <div>
           <h3 className="text-2xl font-black text-slate-900 italic tracking-tight mb-2">Profile Settings.</h3>
           <p className="text-sm text-slate-400 font-medium">Update your partner account details synced with the Laravel API.</p>
@@ -175,7 +175,7 @@ export default function SettingsPage() {
       </form>
 
       {/* Password Change */}
-      <form onSubmit={handlePasswordChange} className="bg-white p-10 rounded-container border border-slate-100 shadow-premium space-y-8">
+      <form onSubmit={handlePasswordChange} className="bg-white p-6 sm:p-10 rounded-container border border-slate-100 shadow-premium space-y-8">
         <div className="flex items-start gap-6">
           <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300 shrink-0">
             <HiOutlineLockClosed className="w-8 h-8" />
@@ -231,7 +231,7 @@ export default function SettingsPage() {
       {/* Deferred sections */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {deferredSections.map((section) => (
-          <div key={section.title} className="group relative bg-white p-10 rounded-container border border-slate-100 shadow-premium overflow-hidden">
+          <div key={section.title} className="group relative bg-white p-6 sm:p-10 rounded-container border border-slate-100 shadow-premium overflow-hidden">
             <div className="flex items-start gap-6">
               <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300">
                 <section.icon className="w-8 h-8" />

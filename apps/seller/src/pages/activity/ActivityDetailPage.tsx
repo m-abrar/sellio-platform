@@ -97,18 +97,18 @@ export default function ActivityDetailPage() {
         title={activity.asset} 
         subtitle={`ID: #${activity.id}`}
       >
-        <div className="flex gap-3">
-          <button 
+        <div className="flex gap-2">
+          <button
             onClick={() => handleStatusUpdate('Confirmed')}
-            className="bg-green-500 text-white px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-green-600 transition-all active:scale-95 flex items-center gap-2"
+            className="bg-green-500 text-white px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-green-600 transition-all active:scale-95 flex items-center gap-2"
           >
-            <HiOutlineCheckCircle className="w-4 h-4" /> Approve
+            <HiOutlineCheckCircle className="w-4 h-4" /> <span className="hidden sm:inline">Approve</span>
           </button>
-          <button 
+          <button
             onClick={() => handleStatusUpdate('Rejected')}
-            className="bg-white text-red-500 border border-red-100 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-sm hover:bg-red-50 transition-all active:scale-95 flex items-center gap-2"
+            className="bg-white text-red-500 border border-red-100 px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-sm hover:bg-red-50 transition-all active:scale-95 flex items-center gap-2"
           >
-            <HiOutlineXCircle className="w-4 h-4" /> Reject
+            <HiOutlineXCircle className="w-4 h-4" /> <span className="hidden sm:inline">Reject</span>
           </button>
         </div>
       </PageHeader>
@@ -116,8 +116,8 @@ export default function ActivityDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* MAIN DETAILS */}
         <div className="lg:col-span-8 space-y-10">
-          <div className="bg-white p-12 rounded-floating border border-slate-100 shadow-premium">
-            <h3 className="text-2xl font-black text-slate-900 italic tracking-tight mb-10">Interaction Overview.</h3>
+          <div className="bg-white p-5 sm:p-8 lg:p-12 rounded-floating border border-slate-100 shadow-premium">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 italic tracking-tight mb-6 sm:mb-10">Interaction Overview.</h3>
             
             {module === 'properties' && type === 'bookings' ? (
               <div className="space-y-10 animate-in fade-in duration-500">
@@ -728,9 +728,9 @@ export default function ActivityDetailPage() {
             )}
           </div>
 
-          <div className="bg-white p-12 rounded-floating border border-slate-100 shadow-premium">
-            <div className="flex justify-between items-center mb-10">
-              <h3 className="text-2xl font-black text-slate-900 italic tracking-tight">Communication.</h3>
+          <div className="bg-white p-5 sm:p-8 lg:p-12 rounded-floating border border-slate-100 shadow-premium">
+            <div className="flex justify-between items-center mb-6 sm:mb-10">
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900 italic tracking-tight">Communication.</h3>
               <button className="text-label font-black text-brand uppercase tracking-widest flex items-center gap-2">
                 <HiOutlineChatBubbleLeftRight className="w-4 h-4" /> Open Full Chat
               </button>
@@ -755,13 +755,13 @@ export default function ActivityDetailPage() {
                 </div>
               </div>
             </div>
-            <div className="mt-10 flex gap-4">
-              <input 
-                type="text" 
-                placeholder="Type your response..." 
-                className="flex-1 bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all"
+            <div className="mt-6 sm:mt-10 flex gap-3">
+              <input
+                type="text"
+                placeholder="Type your response..."
+                className="flex-1 bg-slate-50 border border-slate-100 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all"
               />
-              <button className="bg-brand text-white px-8 rounded-2xl font-black text-caption uppercase tracking-widest shadow-lg shadow-purple-200">Send</button>
+              <button className="bg-brand text-white px-5 sm:px-8 rounded-2xl font-black text-caption uppercase tracking-widest shadow-lg shadow-purple-200">Send</button>
             </div>
           </div>
         </div>
@@ -770,7 +770,7 @@ export default function ActivityDetailPage() {
         <div className="lg:col-span-4 space-y-10">
           <div 
             onClick={() => navigate(assetUrl)}
-            className="bg-slate-900 p-10 rounded-container text-white shadow-2xl relative overflow-hidden cursor-pointer border border-transparent hover:border-brand/50 hover:shadow-[0_20px_50px_rgba(102,16,242,0.15)] group transition-all duration-300"
+            className="bg-slate-900 p-6 sm:p-10 rounded-container text-white shadow-2xl relative overflow-hidden cursor-pointer border border-transparent hover:border-brand/50 hover:shadow-[0_20px_50px_rgba(102,16,242,0.15)] group transition-all duration-300"
           >
             <h4 className="text-caption font-black uppercase tracking-caps-wide text-slate-500 mb-8">Asset Details</h4>
             <div className="space-y-6">
@@ -814,7 +814,7 @@ export default function ActivityDetailPage() {
             <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-brand/20 rounded-full blur-[60px]" />
           </div>
 
-          <div className="bg-white p-10 rounded-container border border-slate-100 shadow-premium">
+          <div className="bg-white p-6 sm:p-10 rounded-container border border-slate-100 shadow-premium">
             <h4 className="text-caption font-black uppercase tracking-caps-wide text-slate-400 mb-8">Timeline</h4>
             <div className="space-y-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100">
               <div className="relative pl-10">

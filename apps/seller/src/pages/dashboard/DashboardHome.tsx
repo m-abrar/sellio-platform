@@ -222,8 +222,8 @@ export default function DashboardHome() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-8">
 
         {/* Live Interactions */}
-        <div className="lg:col-span-8 bg-white border border-slate-100 rounded-card p-8 md:p-10">
-          <div className="flex justify-between items-start mb-8">
+        <div className="lg:col-span-8 bg-white border border-slate-100 rounded-card p-5 sm:p-8 md:p-10">
+          <div className="flex justify-between items-start mb-5 sm:mb-8">
             <div>
               <h3 className="text-2xl md:text-title font-black text-slate-900 tracking-tight italic leading-tight">
                 Recent Activity.
@@ -276,7 +276,7 @@ export default function DashboardHome() {
                       {interaction.listingName}
                     </p>
                   </div>
-                  <div className="shrink-0 w-14 h-9 rounded-lg overflow-hidden border border-slate-100 group-hover:scale-105 transition-transform duration-300">
+                  <div className="hidden sm:block shrink-0 w-14 h-9 rounded-lg overflow-hidden border border-slate-100 group-hover:scale-105 transition-transform duration-300">
                     <img src={interaction.listingImage} className="w-full h-full object-cover" alt="" />
                   </div>
                   <HiOutlineArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-brand group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
@@ -378,7 +378,7 @@ export default function DashboardHome() {
 
       {/* ── Recent Assets Table ───────────────────── */}
       <div className="bg-white border border-slate-100 rounded-card overflow-hidden">
-        <div className="px-8 md:px-12 py-7 md:py-9 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 border-b border-slate-50">
+        <div className="px-5 sm:px-8 md:px-12 py-5 sm:py-7 md:py-9 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-50">
           <div>
             <h3 className="text-2xl md:text-title font-black text-slate-900 tracking-tight italic leading-tight">
               Your Listings.

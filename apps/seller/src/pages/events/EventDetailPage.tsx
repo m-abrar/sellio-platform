@@ -61,7 +61,7 @@ export default function EventDetailPage() {
     );
   }
 
-  const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-8 md:p-12';
+  const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-5 sm:p-8 md:p-12';
   const formattedDate = event.date
     ? new Date(`${event.date}T${event.time || '00:00'}`).toLocaleDateString(undefined, {
         month: 'short',
@@ -77,18 +77,18 @@ export default function EventDetailPage() {
         title={event.title}
         subtitle="Event Detail"
       >
-        <div className="flex gap-4">
+        <div className="flex gap-2">
           <button
             onClick={() => navigate(-1)}
-            className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
+            className="bg-white border border-slate-100 text-slate-900 px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
           >
-            <HiOutlineChevronLeft className="w-4 h-4" /> Back
+            <HiOutlineChevronLeft className="w-4 h-4" /> <span className="hidden sm:inline">Back</span>
           </button>
           <button
             onClick={() => navigate(`/dashboard/events/edit/${event.slug}`)}
-            className="bg-brand text-white px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-brand-hover transition-all flex items-center gap-2"
+            className="bg-brand text-white px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-brand-hover transition-all flex items-center gap-2"
           >
-            <HiOutlinePencilSquare className="w-4 h-4" /> Edit Event
+            <HiOutlinePencilSquare className="w-4 h-4" /> <span className="hidden sm:inline">Edit Event</span>
           </button>
         </div>
       </PageHeader>
@@ -124,7 +124,7 @@ export default function EventDetailPage() {
         </div>
 
         <div className="lg:col-span-4 space-y-10">
-          <div className="bg-slate-900 rounded-floating p-10 text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-slate-900 rounded-floating p-6 sm:p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="relative z-10">
               <p className="text-label font-black uppercase tracking-widest text-slate-500 mb-4">Standard Admission</p>
               <h4 className="text-5xl font-black italic tracking-tighter mb-8">{event.price || 'Free'}</h4>

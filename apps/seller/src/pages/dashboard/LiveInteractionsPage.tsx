@@ -79,14 +79,13 @@ export default function LiveInteractionsPage() {
         title="Recent" 
         subtitle="Activity"
       >
-        <div className="flex gap-3">
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="px-6 py-3 bg-white border border-slate-100 rounded-2xl text-caption font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all flex items-center gap-2 shadow-xs"
-          >
-            <HiOutlineArrowLeft className="w-4 h-4" /> Back to Dashboard
-          </button>
-        </div>
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="px-4 sm:px-6 py-3 bg-white border border-slate-100 rounded-2xl text-caption font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all flex items-center gap-2 shadow-xs"
+        >
+          <HiOutlineArrowLeft className="w-4 h-4" />
+          <span className="hidden sm:inline">Back to Dashboard</span>
+        </button>
       </PageHeader>
 
       {isLoading ? (
@@ -107,7 +106,7 @@ export default function LiveInteractionsPage() {
         </div>
       ) : (
         <div className="bg-white rounded-container border border-slate-100 overflow-hidden shadow-sm animate-in fade-in slide-in-from-top-4 duration-700">
-          <div className="p-8 border-b border-slate-50">
+          <div className="p-5 sm:p-8 border-b border-slate-50">
             <h4 className="text-xs font-black text-slate-400 uppercase tracking-caps">All Activity ({activities.length})</h4>
           </div>
           

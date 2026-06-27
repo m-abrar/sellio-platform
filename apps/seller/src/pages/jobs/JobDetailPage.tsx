@@ -61,7 +61,7 @@ export default function JobDetailPage() {
     );
   }
 
-  const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-8 md:p-12';
+  const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-5 sm:p-8 md:p-12';
   const skills = job.skills ? job.skills.split(',').map((skill: string) => skill.trim()).filter(Boolean) : [];
 
   return (
@@ -71,18 +71,18 @@ export default function JobDetailPage() {
         title={job.title}
         subtitle="Job Detail"
       >
-        <div className="flex gap-4">
+        <div className="flex gap-2">
           <button
             onClick={() => navigate(-1)}
-            className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
+            className="bg-white border border-slate-100 text-slate-900 px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
           >
-            <HiOutlineChevronLeft className="w-4 h-4" /> Back
+            <HiOutlineChevronLeft className="w-4 h-4" /> <span className="hidden sm:inline">Back</span>
           </button>
           <button
             onClick={() => navigate(`/dashboard/joblistings/edit/${job.slug}`)}
-            className="bg-brand text-white px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-brand-hover transition-all flex items-center gap-2"
+            className="bg-brand text-white px-4 sm:px-8 py-3 sm:py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-brand-hover transition-all flex items-center gap-2"
           >
-            <HiOutlinePencilSquare className="w-4 h-4" /> Edit Listing
+            <HiOutlinePencilSquare className="w-4 h-4" /> <span className="hidden sm:inline">Edit Listing</span>
           </button>
         </div>
       </PageHeader>
@@ -123,7 +123,7 @@ export default function JobDetailPage() {
         </div>
 
         <div className="lg:col-span-4 space-y-10">
-          <div className="bg-slate-900 rounded-floating p-10 text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-slate-900 rounded-floating p-6 sm:p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="relative z-10">
               <p className="text-label font-black uppercase tracking-widest text-slate-500 mb-4">Annual Compensation</p>
               <h4 className="text-4xl font-black italic tracking-tighter mb-8">{job.price || 'Negotiable'}</h4>

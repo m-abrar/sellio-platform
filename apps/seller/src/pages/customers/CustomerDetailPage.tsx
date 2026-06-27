@@ -122,7 +122,7 @@ export default function CustomerDetailPage() {
         {/* RIGHT COLUMN: STATS & HISTORY */}
         <div className="lg:col-span-8 space-y-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-slate-900 p-10 rounded-container text-white shadow-2xl relative overflow-hidden">
+            <div className="bg-slate-900 p-6 sm:p-10 rounded-container text-white shadow-2xl relative overflow-hidden">
               <p className="text-label font-black uppercase tracking-caps-wide text-slate-500 mb-2">Lifetime Value</p>
               <h4 className="text-4xl font-black italic tracking-tighter">{customer.total_spent}</h4>
               <div className="mt-8 flex items-center gap-2 text-label font-black text-green-400 uppercase tracking-widest">
@@ -139,8 +139,8 @@ export default function CustomerDetailPage() {
             </div>
           </div>
 
-          <div className="bg-white p-12 rounded-floating border border-slate-100 shadow-premium">
-            <h3 className="text-2xl font-black text-slate-900 italic tracking-tight mb-10">Order History.</h3>
+          <div className="bg-white p-5 sm:p-10 lg:p-12 rounded-floating border border-slate-100 shadow-premium">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 italic tracking-tight mb-6 sm:mb-10">Order History.</h3>
             <div className="space-y-4">
               {[1, 2, 3].map(i => (
                 <div key={i} className="flex items-center justify-between p-6 bg-slate-50 rounded-2xl border border-slate-100">

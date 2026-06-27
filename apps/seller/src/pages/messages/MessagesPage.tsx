@@ -308,7 +308,7 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="h-[calc(100dvh-205px)] md:h-[calc(100dvh-120px)] flex flex-col space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+    <div className="h-[calc(100dvh-112px)] lg:h-[calc(100dvh-48px)] flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader badge="Communication" title="Messages" subtitle="Inbox" />
 
       {isLoading ? (
@@ -368,7 +368,7 @@ export default function MessagesPage() {
               <div className="flex-1 flex flex-row min-w-0 h-full overflow-hidden">
                 {/* 1. Message Thread Panel */}
                 <div className="flex-1 flex flex-col min-w-0 h-full bg-slate-50/5">
-                  <div className="p-6 bg-white border-b border-slate-50 flex items-center justify-between">
+                  <div className="p-4 sm:p-6 bg-white border-b border-slate-50 flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <button onClick={() => navigate('/dashboard/messages')} className="lg:hidden p-2 text-slate-400">
                         <HiOutlineArrowLeft className="w-5 h-5" />
@@ -394,7 +394,7 @@ export default function MessagesPage() {
                     </button>
                   </div>
 
-                  <div ref={threadScrollRef} className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+                  <div ref={threadScrollRef} className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-4 sm:space-y-8 custom-scrollbar">
                     {isThreadLoading ? (
                       <div className="space-y-6 pt-2">
                         {[{ w: 'w-48', mine: false }, { w: 'w-36', mine: true }, { w: 'w-56', mine: false }, { w: 'w-32', mine: true }, { w: 'w-44', mine: false }].map((s, i) => (
@@ -437,7 +437,7 @@ export default function MessagesPage() {
                             )
                           )}
                           <div
-                            className={`p-6 rounded-2xl max-w-[80%] shadow-sm ${
+                            className={`p-4 sm:p-6 rounded-2xl max-w-[85%] sm:max-w-[80%] shadow-sm ${
                               message.isMine
                                 ? 'bg-brand text-white rounded-tr-none shadow-lg shadow-purple-200'
                                 : 'bg-white border border-slate-100 rounded-tl-none'
@@ -458,15 +458,15 @@ export default function MessagesPage() {
                     )}
                   </div>
 
-                  <div className="p-6 bg-white border-t border-slate-50">
+                  <div className="p-3 sm:p-6 bg-white border-t border-slate-50">
                     <div className="relative">
                       <textarea
-                        placeholder="Type your message here… (Enter to send, Shift+Enter for new line)"
+                        placeholder="Type a message…"
                         rows={1}
                         value={draft}
                         onChange={(event) => setDraft(event.target.value)}
                         onKeyDown={handleKeyDown}
-                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 pr-16 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all resize-none"
+                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 pr-16 text-sm font-medium outline-none focus:border-brand/30 focus:bg-white transition-all resize-none appearance-none"
                       />
                       <button
                         onClick={() => void handleSend()}
