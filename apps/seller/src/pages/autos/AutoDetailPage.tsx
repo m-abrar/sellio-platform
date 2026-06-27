@@ -94,7 +94,7 @@ export default function AutoDetailPage() {
 
           <div className={containerClass}>
             <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-brand rounded-full" /> Vehicle Narrative.
+              <span className="w-2 h-8 bg-brand rounded-full" /> About This Car.
             </h3>
             <p className="text-slate-600 leading-relaxed text-lg font-medium">{auto.description || 'No description provided.'}</p>
           </div>

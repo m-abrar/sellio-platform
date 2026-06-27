@@ -828,7 +828,7 @@ export default function ActivityDetailPage() {
                 <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-brand border-4 border-white shadow-sm flex items-center justify-center">
                   <HiOutlineChatBubbleLeftRight className="w-3 h-3 text-white" />
                 </div>
-                <p className="text-xs font-black text-slate-900 uppercase tracking-tight">Partner Responded</p>
+                <p className="text-xs font-black text-slate-900 uppercase tracking-tight">You Replied</p>
                 <p className="text-label font-bold text-slate-400 mt-1 uppercase tracking-widest">{activity.date} • 11:15 AM</p>
               </div>
               <div className="relative pl-10">

@@ -529,8 +529,8 @@ export default function CreateAuto() {
             </div>
 
             <div className={containerClass}>
-              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Vehicle Narrative.</h3>
-              <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} rows={6} className={`${inputClass} resize-none`} placeholder="Describe the condition, history, and features..." />
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">About This Car.</h3>
+              <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} rows={6} className={`${inputClass} resize-none`} placeholder="Tell buyers about this car — mileage, condition, service history, anything worth knowing..." />
               <p className={fieldHintClass}>Required</p>
             </div>
 

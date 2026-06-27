@@ -108,7 +108,7 @@ export default function LiveInteractionsPage() {
       ) : (
         <div className="bg-white rounded-container border border-slate-100 overflow-hidden shadow-sm animate-in fade-in slide-in-from-top-4 duration-700">
           <div className="p-8 border-b border-slate-50">
-            <h4 className="text-xs font-black text-slate-400 uppercase tracking-caps">Partner Interactions History ({activities.length})</h4>
+            <h4 className="text-xs font-black text-slate-400 uppercase tracking-caps">All Activity ({activities.length})</h4>
           </div>
           
           <div className="overflow-x-auto">

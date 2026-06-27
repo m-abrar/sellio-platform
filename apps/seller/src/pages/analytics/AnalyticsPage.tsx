@@ -153,7 +153,7 @@ export default function AnalyticsPage() {
   const activeMeta = VERTICALS[selectedVertical] ?? VERTICALS.All;
 
   const handleExportCSV = () => {
-    const headers = ['Title', 'Category', 'Views', 'Leads', 'Conversion Rate', 'Revenue'];
+    const headers = ['Title', 'Category', 'Views', 'Inquiries', 'Lead Rate', 'Revenue'];
     const rows = filteredListings.map((l) => [
       `"${l.title.replace(/"/g, '""')}"`,
       l.type,
@@ -213,10 +213,10 @@ export default function AnalyticsPage() {
       {/* 2. Poly-Themed KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Impressions', value: summary.views.toLocaleString(), labelDesc: 'Total Views' },
-          { label: 'Conversion Leads', value: summary.leads.toLocaleString(), labelDesc: 'Total Leads' },
-          { label: 'Conversion Rate', value: `${summary.conversionRate}%`, labelDesc: 'Ratio views/leads' },
-          { label: 'Period Earnings', value: `$${summary.earnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, labelDesc: 'Earning change (30d)' },
+          { label: 'Views', value: summary.views.toLocaleString(), labelDesc: 'Total views' },
+          { label: 'Inquiries', value: summary.leads.toLocaleString(), labelDesc: 'Total leads received' },
+          { label: 'Lead Rate', value: `${summary.conversionRate}%`, labelDesc: 'Views that turned into inquiries' },
+          { label: 'Earnings', value: `$${summary.earnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, labelDesc: 'Over the selected period' },
         ].map((kpi, idx) => (
           <div 
             key={idx} 
@@ -340,7 +340,7 @@ export default function AnalyticsPage() {
         <div className="p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight italic leading-none">Listing Analytics.</h3>
-            <p className="text-label md:text-xs text-slate-400 font-bold mt-3 uppercase tracking-caps-wide">Detailed item conversions</p>
+            <p className="text-label md:text-xs text-slate-400 font-bold mt-3 uppercase tracking-caps-wide">Per-listing breakdown</p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
@@ -377,12 +377,12 @@ export default function AnalyticsPage() {
             <table className="w-full border-separate border-spacing-y-4">
               <thead>
                 <tr className="text-left text-label font-black uppercase tracking-caps-wide text-slate-400">
-                  <th className="pb-3 px-6">Asset Title</th>
-                  <th className="pb-3 px-6">Vertical</th>
-                  <th className="pb-3 px-6 text-center">Impressions</th>
-                  <th className="pb-3 px-6 text-center">Leads</th>
+                  <th className="pb-3 px-6">Listing</th>
+                  <th className="pb-3 px-6">Category</th>
+                  <th className="pb-3 px-6 text-center">Views</th>
+                  <th className="pb-3 px-6 text-center">Inquiries</th>
                   <th className="pb-3 px-6 text-center">Earnings</th>
-                  <th className="pb-3 px-6 text-right">Conversion</th>
+                  <th className="pb-3 px-6 text-right">Lead Rate</th>
                 </tr>
               </thead>
               <tbody>

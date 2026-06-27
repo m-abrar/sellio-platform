@@ -106,7 +106,7 @@ export default function MembershipsPage() {
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <PageHeader badge="Subscription" title="Partner" subtitle="Memberships" />
+      <PageHeader badge="Plans" title="Your" subtitle="Plan" />
 
       {/* Dynamic Active Quota Alert Card */}
       {!isLoading && limits && (

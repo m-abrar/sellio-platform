@@ -308,7 +308,7 @@ export default function CreateClassified() {
   return (
     <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       <PageHeader
-        badge="Community Exchange"
+        badge="Classifieds"
         title={isEditMode ? 'Edit' : 'Post'}
         subtitle="Classified"
       >
@@ -544,7 +544,7 @@ export default function CreateClassified() {
               onChange={(e) => updateForm('description', e.target.value)}
               rows={6}
               className={`${inputClass} resize-none`}
-              placeholder="Tell buyers more about the item..."
+              placeholder="What are you selling? Describe the condition, size, what's included..."
             />
             <p className={fieldHintClass}>Required</p>
           </div>

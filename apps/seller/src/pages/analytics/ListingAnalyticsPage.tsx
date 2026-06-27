@@ -110,10 +110,10 @@ export default function ListingAnalyticsPage() {
   }
 
   const kpis = [
-    { label: 'Impressions', value: data.performanceData.total_views.toLocaleString(), desc: 'Views over period', icon: HiOutlineEye, color: 'text-blue-500', bg: 'bg-blue-50' },
-    { label: 'Conversion Leads', value: data.performanceData.total_leads.toLocaleString(), desc: 'Inquiries/Visits', icon: HiOutlineUser, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-    { label: 'Conversion Rate', value: `${data.performanceData.conversion_rate}%`, desc: 'Ratio views/leads', icon: HiOutlineArrowTrendingUp, color: 'text-purple-500', bg: 'bg-purple-50' },
-    { label: 'Asset Earnings', value: `$${data.performanceData.total_revenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, desc: 'Total period earnings', icon: HiOutlineBanknotes, color: 'text-amber-500', bg: 'bg-amber-50' },
+    { label: 'Views', value: data.performanceData.total_views.toLocaleString(), desc: 'Total views over this period', icon: HiOutlineEye, color: 'text-blue-500', bg: 'bg-blue-50' },
+    { label: 'Inquiries', value: data.performanceData.total_leads.toLocaleString(), desc: 'People who reached out', icon: HiOutlineUser, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+    { label: 'Lead Rate', value: `${data.performanceData.conversion_rate}%`, desc: 'Views that became inquiries', icon: HiOutlineArrowTrendingUp, color: 'text-purple-500', bg: 'bg-purple-50' },
+    { label: 'Earnings', value: `$${data.performanceData.total_revenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, desc: 'Total earned this period', icon: HiOutlineBanknotes, color: 'text-amber-500', bg: 'bg-amber-50' },
   ];
 
   return (
@@ -303,11 +303,11 @@ export default function ListingAnalyticsPage() {
                 <span className="text-slate-900 font-extrabold uppercase tracking-wider">{type === 'JobListing' ? 'Job' : type}</span>
               </div>
               <div className="flex justify-between items-center text-xs font-bold text-slate-500">
-                <span>Impressions (views)</span>
+                <span>Total Views</span>
                 <span className="text-slate-900 font-extrabold">{data.performanceData.total_views.toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center text-xs font-bold text-slate-500">
-                <span>Conversion Rate</span>
+                <span>Lead Rate</span>
                 <span className="text-slate-900 font-extrabold">{data.performanceData.conversion_rate}%</span>
               </div>
             </div>

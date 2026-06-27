@@ -53,7 +53,7 @@ export default function DashboardHome() {
     return (
       <div className="h-screen flex items-center justify-center">
         <span className="text-label font-semibold uppercase tracking-caps-xl text-slate-300 animate-pulse">
-          Loading dashboard…
+          Loading...
         </span>
       </div>
     );
@@ -104,9 +104,9 @@ export default function DashboardHome() {
     <div className="space-y-10 md:space-y-14 pb-24">
       {/* ── Page Header ───────────────────────────── */}
       <PageHeader
-        badge={subscriptionLimits?.is_limit_exceeded ? 'Limit Exceeded ⚠️' : 'Seller Account'}
+        badge={subscriptionLimits?.is_limit_exceeded ? 'Limit Reached ⚠️' : 'Dashboard'}
         title="Welcome,"
-        subtitle="Partner"
+        subtitle="back"
       >
         <div className="relative flex-1 md:flex-none">
           <button
@@ -128,7 +128,7 @@ export default function DashboardHome() {
               <div className="fixed inset-0 z-40" onClick={() => setIsCreateDropdownOpen(false)} />
               <div className="absolute right-0 mt-2 w-60 bg-white border border-slate-100 rounded-2xl shadow-xl shadow-slate-200/60 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                 <div className="px-4 py-2 border-b border-slate-50 mb-1">
-                  <p className="text-micro font-semibold text-slate-400 uppercase tracking-widest">Select Category</p>
+                  <p className="text-micro font-semibold text-slate-400 uppercase tracking-widest">What are you listing?</p>
                 </div>
                 {CREATE_ITEMS.map((item) => (
                   <button
@@ -149,7 +149,7 @@ export default function DashboardHome() {
       {/* ── KPI Grid ──────────────────────────────── */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 md:gap-5">
         <StatCard
-          title="Active Inventory"
+          title="Your Listings"
           value={stats.activeInventory?.toString() || '0'}
           icon={HiOutlineHome}
           color={subscriptionLimits?.is_limit_exceeded ? 'text-red-500 bg-red-50' : 'text-brand bg-brand/8'}
@@ -166,7 +166,7 @@ export default function DashboardHome() {
           ]}
         />
         <StatCard
-          title="Urgent Alerts"
+          title="Needs Attention"
           value={stats.urgentAlerts?.toString() || '0'}
           icon={HiOutlineBell}
           color="text-red-500 bg-red-50"
@@ -177,7 +177,7 @@ export default function DashboardHome() {
           ]}
         />
         <StatCard
-          title="Market Views"
+          title="Total Views"
           value={stats.marketViews?.toLocaleString() || '0'}
           icon={HiOutlineChartBar}
           color="text-blue-500 bg-blue-50"
@@ -209,10 +209,10 @@ export default function DashboardHome() {
           <div className="flex justify-between items-start mb-8">
             <div>
               <h3 className="text-2xl md:text-title font-black text-slate-900 tracking-tight italic leading-tight">
-                Live Interactions.
+                Recent Activity.
               </h3>
               <p className="text-label font-semibold text-slate-400 uppercase tracking-label-wide mt-1.5">
-                Real-time buyer activity
+                What's happening right now
               </p>
             </div>
             <button
@@ -303,7 +303,7 @@ export default function DashboardHome() {
                 <HiOutlineSparkles className="w-4 h-4 text-amber-500" />
               </div>
               <div>
-                <p className="text-label font-semibold text-slate-900 uppercase tracking-widest mb-1">Trust Index</p>
+                <p className="text-label font-semibold text-slate-900 uppercase tracking-widest mb-1">Your Rating</p>
                 <p className="text-xs text-slate-500 leading-relaxed">
                   Listing Health:{' '}
                   <span className="text-slate-900 font-semibold">
@@ -324,7 +324,7 @@ export default function DashboardHome() {
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-brand rounded-l-[1.75rem]" />
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <p className="text-label font-semibold text-slate-900 uppercase tracking-widest mb-1">Quota</p>
+                  <p className="text-label font-semibold text-slate-900 uppercase tracking-widest mb-1">Plan Usage</p>
                   <p className="text-xs font-medium text-slate-500">{subscriptionLimits.plan_title}</p>
                 </div>
                 <span className={`px-2 py-0.5 rounded-full text-micro font-semibold ${
@@ -335,7 +335,7 @@ export default function DashboardHome() {
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-label font-medium">
-                  <span className="text-slate-400">Consumed</span>
+                  <span className="text-slate-400">Used</span>
                   <span className="text-slate-900 font-bold">
                     {subscriptionLimits.current_listings_count}
                     <span className="text-slate-400 font-medium"> / {subscriptionLimits.max_listings === 999 ? '∞' : subscriptionLimits.max_listings}</span>
@@ -364,10 +364,10 @@ export default function DashboardHome() {
         <div className="px-8 md:px-12 py-7 md:py-9 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 border-b border-slate-50">
           <div>
             <h3 className="text-2xl md:text-title font-black text-slate-900 tracking-tight italic leading-tight">
-              Recent Assets.
+              Your Listings.
             </h3>
             <p className="text-label font-semibold text-slate-400 uppercase tracking-label-wide mt-1.5">
-              Inventory overview
+              Latest additions
             </p>
           </div>
 
@@ -385,7 +385,7 @@ export default function DashboardHome() {
                 <div className="fixed inset-0 z-40" onClick={() => setIsInventoryDropdownOpen(false)} />
                 <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl shadow-slate-200/50 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                   <div className="px-4 py-2 border-b border-slate-50 mb-1">
-                    <p className="text-micro font-semibold text-slate-400 uppercase tracking-widest">Select Vertical</p>
+                    <p className="text-micro font-semibold text-slate-400 uppercase tracking-widest">Go to...</p>
                   </div>
                   {INVENTORY_ITEMS.map((item) => (
                     <button

@@ -65,7 +65,7 @@ export default function Login() {
           </div>
           <div>
             <p className="font-black text-slate-900 text-xs uppercase tracking-tight">Access Granted</p>
-            <p className="text-label text-slate-500 font-medium">Welcome back, {user.name || 'Partner'}</p>
+            <p className="text-label text-slate-500 font-medium">Welcome back, {user.name || 'there'}</p>
           </div>
         </div>
       ),
@@ -103,7 +103,7 @@ export default function Login() {
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tighter">
             {brand?.site_name || 'Partner'} Portal
           </h1>
-          <p className="text-micro sm:text-label font-black text-slate-400 uppercase tracking-caps-wide mt-2">Partner Access</p>
+          <p className="text-micro sm:text-label font-black text-slate-400 uppercase tracking-caps-wide mt-2">Seller Login</p>
         </div>
 
         <div className="bg-white rounded-container p-8 sm:p-10 shadow-elite border border-slate-100">

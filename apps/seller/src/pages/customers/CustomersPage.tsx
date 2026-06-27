@@ -111,7 +111,7 @@ export default function CustomersPage() {
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <PageHeader badge="CRM" title="Customer" subtitle="Directory" />
+      <PageHeader badge="Customers" title="Your" subtitle="Customers" />
 
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">

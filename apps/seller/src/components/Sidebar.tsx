@@ -251,7 +251,7 @@ export default function Sidebar({ user }: any) {
               )}
               <div className="flex flex-col ms-3 min-w-0">
                 <span className="text-lg font-black text-slate-900 tracking-tighter leading-none">{brand?.site_name || 'Sellio.'}</span>
-                <span className="text-tiny font-black text-purple-500 uppercase tracking-caps mt-1">Seller Account</span>
+                <span className="text-tiny font-black text-purple-500 uppercase tracking-caps mt-1">Seller Panel</span>
               </div>
             </div>
             <button onClick={() => setIsMobileOpen(false)} className="w-10 h-10 rounded-xl bg-white shadow-md text-slate-900 flex items-center justify-center border border-slate-100 active:scale-90 transition-transform">
@@ -437,7 +437,7 @@ export default function Sidebar({ user }: any) {
           {activeTab === 'operations' ? (
             <>
               <CollapsibleHeader
-                label="Activity & Bookings"
+                label="Activity"
                 isExpanded={isActivityExpanded}
                 onToggle={() => setIsActivityExpanded(!isActivityExpanded)}
               />
@@ -492,7 +492,7 @@ export default function Sidebar({ user }: any) {
               </AnimatePresence>
 
               <CollapsibleHeader
-                label="Relations & Growth"
+                label="Customers"
                 isExpanded={isRelationsExpanded}
                 onToggle={() => setIsRelationsExpanded(!isRelationsExpanded)}
               />
@@ -551,7 +551,7 @@ export default function Sidebar({ user }: any) {
           ) : (
             <>
               <CollapsibleHeader
-                label="Inventory & Media"
+                label="Inventory"
                 isExpanded={isInventoryExpanded}
                 onToggle={() => setIsInventoryExpanded(!isInventoryExpanded)}
               />

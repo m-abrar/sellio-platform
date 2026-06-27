@@ -326,7 +326,7 @@ export default function ReviewsPage() {
                     <textarea
                       value={replyDrafts[review.id] ?? ''}
                       onChange={(event) => setReplyDrafts((prev) => ({ ...prev, [review.id]: event.target.value }))}
-                      placeholder={review.partnerReply ? "Modify your public response..." : "Compose a professional response..."}
+                      placeholder={review.partnerReply ? "Update your reply..." : "Write a reply to this review..."}
                       rows={3}
                       className="w-full bg-slate-50 border border-slate-100 rounded-3xl px-6 py-5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand/20 shadow-inner"
                     />

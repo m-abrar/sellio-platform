@@ -38,7 +38,7 @@ export default function ActivityPage() {
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <PageHeader badge="Live Feed" title="Recent" subtitle={getTitle()} />
+      <PageHeader badge="Activity" title="Recent" subtitle={getTitle()} />
       
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">

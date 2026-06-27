@@ -550,8 +550,8 @@ export default function CreateProperty() {
             </div>
 
             <div className={containerClass}>
-              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Property Narrative.</h3>
-              <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} rows={6} className={`${inputClass} resize-none`} placeholder="Describe the architectural highlights and amenities..." />
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">About This Property.</h3>
+              <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} rows={6} className={`${inputClass} resize-none`} placeholder="Tell people what makes this property worth seeing — features, location, what's nearby..." />
               <p className={fieldHintClass}>Required</p>
 
               <div className="mt-8 border-t border-slate-100 pt-8">

@@ -52,8 +52,8 @@ export default function ListingAnalyticsWidget({ listingId, listingType }: Listi
   if (!performance) {
     return (
       <div className="bg-white border border-slate-100 rounded-container p-8 shadow-sm text-center">
-        <p className="text-label font-black text-slate-400 uppercase tracking-widest">No 30-Day Metrics Registered</p>
-        <p className="text-micro font-bold text-slate-400 mt-2 leading-relaxed max-w-[200px] mx-auto">This asset has not accumulated traffic or conversion logs within the last 30 days.</p>
+        <p className="text-label font-black text-slate-400 uppercase tracking-widest">No data yet</p>
+        <p className="text-micro font-bold text-slate-400 mt-2 leading-relaxed max-w-[200px] mx-auto">No traffic recorded for this listing in the last 30 days.</p>
       </div>
     );
   }

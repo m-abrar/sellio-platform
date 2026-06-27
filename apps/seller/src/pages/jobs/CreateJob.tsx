@@ -542,7 +542,7 @@ export default function CreateJob() {
               onChange={(e) => updateForm('description', e.target.value)}
               rows={10}
               className={`${inputClass} resize-none`}
-              placeholder="Detail the responsibilities, requirements, and company culture..."
+              placeholder="Describe the role — what they'll do, what you need, and why someone would want to work here..."
             />
 
             {/* Discoverability Tags manager */}

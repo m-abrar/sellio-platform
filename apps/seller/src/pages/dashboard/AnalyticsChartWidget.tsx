@@ -42,21 +42,21 @@ const VERTICAL_METADATA: Record<string, { label: string; icon: string }> = {
 const KPI_CARDS = [
   {
     key: 'views',
-    label: 'Impressions',
+    label: 'Views',
     icon: HiOutlineChartBar,
     iconBg: 'bg-violet-50 text-violet-600',
     format: (v: number) => v.toLocaleString(),
   },
   {
     key: 'leads',
-    label: 'Leads Generated',
+    label: 'Inquiries',
     icon: HiOutlineUsers,
     iconBg: 'bg-emerald-50 text-emerald-600',
     format: (v: number) => v.toLocaleString(),
   },
   {
     key: 'conversionRate',
-    label: 'Conversion Rate',
+    label: 'Lead Rate',
     icon: HiOutlineArrowTrendingUp,
     iconBg: 'bg-amber-50 text-amber-600',
     format: (v: number) => `${v}%`,
@@ -106,7 +106,7 @@ export default function AnalyticsChartWidget({ verticalsData }: AnalyticsChartWi
     return (
       <div className="bg-white border border-slate-100 rounded-card p-12 h-96 flex items-center justify-center">
         <span className="text-label font-semibold uppercase tracking-caps-wide text-slate-300 animate-pulse">
-          Loading performance data…
+          Loading chart...
         </span>
       </div>
     );
@@ -122,10 +122,10 @@ export default function AnalyticsChartWidget({ verticalsData }: AnalyticsChartWi
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-start gap-6 mb-8">
         <div>
           <h3 className="text-2xl md:text-title font-black text-slate-900 tracking-tight italic leading-tight">
-            Performance Trends.
+            Views & Leads.
           </h3>
           <p className="text-label font-semibold text-slate-400 uppercase tracking-caps mt-1.5">
-            Market insights &amp; conversion
+            Traffic over time
           </p>
         </div>
 
