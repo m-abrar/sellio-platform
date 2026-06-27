@@ -38,5 +38,9 @@ export function resolveStorefrontBaseUrl(): string {
   const envUrl = import.meta.env.VITE_STOREFRONT_URL?.trim();
   if (envUrl) return trimTrailingSlash(envUrl);
 
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return trimTrailingSlash(window.location.origin);
+  }
+
   return 'http://localhost:3000';
 }
