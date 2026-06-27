@@ -17,7 +17,6 @@ import {
 import { cn } from '../lib/utils';
 import { Button } from '../components/Button';
 import { LocationPicker } from '../components/LocationPicker';
-import { LoadingSpinner } from '../components/LoadingSpinner';
 import { API_BASE_URL } from '../config/api';
 import { fetchUserProfile, updateUserProfile, updatePassword, uploadUserAvatar, UserProfile } from '../api/userApi';
 
@@ -142,7 +141,45 @@ export default function SettingsView() {
       withIcon ? 'pl-11' : 'pl-4',
     );
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) return (
+    <div className="space-y-6 max-w-4xl animate-pulse">
+      <div className="space-y-2">
+        <div className="h-8 w-32 bg-slate-100 rounded-2xl" />
+        <div className="h-4 w-64 bg-slate-100 rounded-full" />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="space-y-2">
+          <div className="h-14 w-full bg-slate-100 rounded-2xl" />
+          <div className="h-14 w-full bg-slate-100 rounded-2xl" />
+        </div>
+        <div className="lg:col-span-3 bg-white rounded-3xl border border-slate-200/70 overflow-hidden">
+          <div className="p-6 sm:p-8 border-b border-slate-100 flex items-center gap-6">
+            <div className="w-24 h-24 rounded-3xl bg-slate-100 shrink-0" />
+            <div className="space-y-2.5 flex-1">
+              <div className="h-5 w-40 bg-slate-100 rounded-full" />
+              <div className="h-4 w-56 bg-slate-100 rounded-full" />
+              <div className="h-3 w-32 bg-slate-100 rounded-full" />
+              <div className="flex gap-2 mt-1">
+                <div className="h-6 w-16 bg-slate-100 rounded-full" />
+                <div className="h-6 w-14 bg-slate-100 rounded-full" />
+              </div>
+            </div>
+          </div>
+          <div className="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="space-y-2">
+                <div className="h-3 w-24 bg-slate-100 rounded-full" />
+                <div className="h-11 w-full bg-slate-100 rounded-2xl" />
+              </div>
+            ))}
+          </div>
+          <div className="px-6 sm:px-8 pb-6 flex justify-end">
+            <div className="h-10 w-32 bg-slate-100 rounded-2xl" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-6 max-w-4xl">

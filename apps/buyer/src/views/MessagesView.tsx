@@ -395,11 +395,11 @@ export default function MessagesView() {
   let lastDateStr = '';
 
   return (
-    <div className="h-[calc(100dvh-204px)] md:h-[calc(100dvh-140px)] flex gap-6 px-1 md:px-3 overflow-hidden">
+    <div className="h-[calc(100dvh-204px)] lg:h-[calc(100dvh-140px)] flex gap-6 px-1 lg:px-3 overflow-hidden">
       {/* Conversation List */}
       <div className={cn(
-        "w-full md:w-80 lg:w-96 flex-shrink-0 flex flex-col bg-white/90 backdrop-blur-md rounded-2xl border border-zinc-200/40 overflow-hidden shadow-xs transition-all duration-300",
-        activeConvo ? "hidden md:flex" : "flex"
+        "w-full lg:w-80 xl:w-96 flex-shrink-0 flex flex-col bg-white/90 backdrop-blur-md rounded-2xl border border-zinc-200/40 overflow-hidden shadow-xs transition-all duration-300",
+        activeConvo ? "hidden lg:flex" : "flex"
       )}>
         <div className="px-5 py-4 border-b border-zinc-100 flex items-center justify-between bg-white/50">
           <h2 className="font-extrabold text-base bg-gradient-to-r from-[var(--primary-color)] to-[var(--primary-dark)] bg-clip-text text-transparent">
@@ -514,7 +514,7 @@ export default function MessagesView() {
       {/* Chat Area */}
       <div className={cn(
         "flex-1 flex flex-col bg-white/90 backdrop-blur-md rounded-2xl border border-zinc-200/40 overflow-hidden shadow-xs transition-all duration-300",
-        activeConvo ? "flex" : "hidden md:flex"
+        activeConvo ? "flex" : "hidden lg:flex"
       )}>
         {activeConvo ? (
           <>
@@ -523,7 +523,7 @@ export default function MessagesView() {
               <div className="flex items-center gap-3">
                 <button 
                   onClick={() => navigate('/messages')} 
-                  className="md:hidden p-1.5 hover:bg-zinc-100 rounded-lg text-zinc-500 transition-colors mr-1 cursor-pointer"
+                  className="lg:hidden p-1.5 hover:bg-zinc-100 rounded-lg text-zinc-500 transition-colors mr-1 cursor-pointer"
                   title="Back to inbox"
                 >
                   <ChevronLeft size={18} />
@@ -584,11 +584,11 @@ export default function MessagesView() {
                       <React.Fragment key={msg.id}>
                         {showDateDivider && (
                           <div className="flex items-center justify-center my-6">
-                            <div className="h-[1px] bg-zinc-200/50 flex-grow max-w-[80px] md:max-w-[150px]" />
+                            <div className="h-[1px] bg-zinc-200/50 flex-grow max-w-[80px] lg:max-w-[150px]" />
                             <span className="px-3 py-1 text-[10px] font-bold text-zinc-500 bg-white rounded-full border border-zinc-200/50 shadow-2xs mx-3 uppercase tracking-wider">
                               {msgDateStr}
                             </span>
-                            <div className="h-[1px] bg-zinc-200/50 flex-grow max-w-[80px] md:max-w-[150px]" />
+                            <div className="h-[1px] bg-zinc-200/50 flex-grow max-w-[80px] lg:max-w-[150px]" />
                           </div>
                         )}
 

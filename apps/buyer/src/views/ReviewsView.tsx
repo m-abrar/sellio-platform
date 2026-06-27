@@ -4,7 +4,6 @@ import { Star, MessageSquare, Calendar, X, CheckCircle2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { deleteReview, fetchReviews, updateReview } from '../api/reviewApi';
 import { useUser } from '../context/UserContext';
-import { LoadingSpinner } from '../components/LoadingSpinner';
 import { PageHeader } from '../components/PageHeader';
 import { EmptyState } from '../components/EmptyState';
 import { Button } from '../components/Button';
@@ -109,10 +108,35 @@ export default function ReviewsView() {
     }
   };
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) return (
+    <div className="space-y-6">
+      <div className="h-10 w-36 bg-slate-100 rounded-2xl animate-pulse" />
+      <div className="space-y-4">
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className="bg-white rounded-3xl border border-slate-200/70 overflow-hidden animate-pulse flex flex-col sm:flex-row">
+            <div className="w-full sm:w-44 h-36 bg-slate-100 shrink-0" />
+            <div className="flex-1 p-6 space-y-4">
+              <div className="h-4 w-2/3 bg-slate-100 rounded-full" />
+              <div className="flex gap-1">
+                {[...Array(5)].map((_, j) => <div key={j} className="w-4 h-4 rounded bg-slate-100" />)}
+              </div>
+              <div className="bg-slate-50 rounded-2xl p-4 space-y-2">
+                <div className="h-3 w-full bg-slate-100 rounded-full" />
+                <div className="h-3 w-4/5 bg-slate-100 rounded-full" />
+              </div>
+              <div className="flex justify-between">
+                <div className="h-3 w-28 bg-slate-100 rounded-full" />
+                <div className="h-3 w-16 bg-slate-100 rounded-full" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-4xl">
       <PageHeader
         breadcrumb="Reviews"
         title="My Reviews"

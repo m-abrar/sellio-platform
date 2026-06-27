@@ -83,7 +83,7 @@ const SECONDARY_STATS = [
 
 function StatSkeleton() {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {[...Array(4)].map((_, i) => (
         <div key={i} className="stat-card p-5 animate-pulse">
           <div className="h-1 w-full bg-slate-100 mb-4 rounded-t" />
@@ -157,27 +157,27 @@ export default function DashboardOverview() {
             <p className="text-slate-500 text-sm mt-1.5 font-medium">{formatDate()}</p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:gap-2.5 shrink-0">
             <Link
               to="/bookings"
-              className="px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-white text-xs font-bold transition-colors flex items-center gap-1.5"
+              className="px-3 py-2 sm:px-4 sm:py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
             >
-              <CalendarCheck size={14} />
-              Bookings
+              <CalendarCheck size={14} className="shrink-0" />
+              <span>Bookings</span>
             </Link>
             <Link
               to="/favorites"
-              className="px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-white text-xs font-bold transition-colors flex items-center gap-1.5"
+              className="px-3 py-2 sm:px-4 sm:py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
             >
-              <Heart size={14} />
-              Favorites
+              <Heart size={14} className="shrink-0" />
+              <span>Favorites</span>
             </Link>
             <Link
               to="/messages"
-              className="px-4 py-2.5 bg-[var(--primary-color)] hover:bg-[var(--primary-dark)] rounded-xl text-white text-xs font-bold shadow-lg shadow-[var(--primary-color)]/30 transition-all flex items-center gap-1.5"
+              className="px-3 py-2 sm:px-4 sm:py-2.5 bg-[var(--primary-color)] hover:bg-[var(--primary-dark)] rounded-xl text-white text-xs font-bold shadow-lg shadow-[var(--primary-color)]/30 transition-all flex items-center justify-center gap-1.5"
             >
-              <MessageSquare size={14} />
-              Messages
+              <MessageSquare size={14} className="shrink-0" />
+              <span>Messages</span>
               {stats.messagesCount > 0 && (
                 <span className="bg-white text-[var(--primary-color)] text-[9px] font-black min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1">
                   {stats.messagesCount}
@@ -192,7 +192,7 @@ export default function DashboardOverview() {
       {showSkeleton ? (
         <StatSkeleton />
       ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {primaryStatValues.map((stat, i) => (
             <motion.div
               key={stat.key}
@@ -315,7 +315,7 @@ export default function DashboardOverview() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
               {SECONDARY_STATS.map((s, i) => (
                 <motion.div
                   key={s.key}

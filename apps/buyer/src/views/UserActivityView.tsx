@@ -19,7 +19,6 @@ import { createReview } from '../api/reviewApi';
 import { Button } from '../components/Button';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { EmptyState } from '../components/EmptyState';
-import { LoadingSpinner } from '../components/LoadingSpinner';
 import { PageHeader } from '../components/PageHeader';
 
 interface ActivityItem {
@@ -134,24 +133,47 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
     return acc;
   }, {});
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) return (
+    <div className="space-y-6">
+      <div className="h-10 w-48 bg-slate-100 rounded-2xl animate-pulse" />
+      <div className="space-y-3">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="activity-row animate-pulse">
+            <div className="w-1 shrink-0 bg-slate-100" />
+            <div className="flex-1 flex items-center gap-4 p-5">
+              <div className="w-14 h-14 rounded-2xl bg-slate-100 shrink-0 hidden sm:block" />
+              <div className="flex-1 space-y-2.5">
+                <div className="flex gap-2">
+                  <div className="h-4 w-16 bg-slate-100 rounded-full" />
+                  <div className="h-4 w-20 bg-slate-100 rounded-full" />
+                </div>
+                <div className="h-4 w-3/4 bg-slate-100 rounded-full" />
+                <div className="h-3 w-1/2 bg-slate-100 rounded-full" />
+              </div>
+              <div className="h-8 w-20 bg-slate-100 rounded-xl shrink-0" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-4xl">
       <PageHeader
         breadcrumb={title || 'Activity'}
         title={title || 'My Activity'}
         description="Track your bookings, applications, and inquiries."
         action={
-          <div className="flex items-center gap-2">
-            <SlidersHorizontal size={14} className="text-slate-400" />
-            <div className="flex bg-white border border-slate-200 p-1 rounded-2xl gap-1">
+          <div className="flex items-center gap-2 min-w-0">
+            <SlidersHorizontal size={14} className="text-slate-400 shrink-0" />
+            <div className="flex bg-white border border-slate-200 p-1 rounded-2xl gap-1 overflow-x-auto scrollbar-none">
               {FILTERS.map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
                   className={cn(
-                    'px-3.5 py-1.5 rounded-xl text-[11px] font-bold capitalize transition-all',
+                    'px-3 py-1.5 rounded-xl text-[11px] font-bold capitalize transition-all whitespace-nowrap shrink-0',
                     filter === f ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-800',
                   )}
                 >

@@ -18,7 +18,7 @@ function FavoriteSkeleton({ viewMode }: { viewMode: ViewMode }) {
     <div className={cn('grid gap-5', viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1')}>
       {[...Array(6)].map((_, i) => (
         <div key={i} className="bg-white rounded-3xl border border-slate-200/70 overflow-hidden animate-pulse">
-          <div className={cn('bg-slate-100', viewMode === 'grid' ? 'aspect-[16/10]' : 'h-36')} />
+          <div className={cn('bg-slate-100', viewMode === 'grid' ? 'h-44 sm:aspect-[16/10] sm:h-auto' : 'h-36')} />
           <div className="p-5 space-y-3">
             <div className="h-4 w-3/4 bg-slate-100 rounded-full" />
             <div className="h-3 w-full bg-slate-100 rounded-full" />

@@ -23,21 +23,21 @@ export const PageHeader = ({
 }: PageHeaderProps) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-1">
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-4 min-w-0">
         {Icon && (
           <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 mt-0.5 ${iconBg}`}>
             <Icon size={22} className={iconColor} strokeWidth={2} />
           </div>
         )}
-        <div>
+        <div className="min-w-0">
           {breadcrumb && (
-            <nav className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 mb-1.5">
-              <Link to="/" className="hover:text-[var(--primary-color)] transition-colors flex items-center gap-1">
+            <nav className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 mb-1.5 min-w-0">
+              <Link to="/" className="hover:text-[var(--primary-color)] transition-colors flex items-center gap-1 shrink-0">
                 <LayoutDashboard size={11} />
                 Dashboard
               </Link>
-              <ChevronRight size={11} className="text-slate-300" />
-              <span className="text-slate-600">{breadcrumb}</span>
+              <ChevronRight size={11} className="text-slate-300 shrink-0" />
+              <span className="text-slate-600 truncate">{breadcrumb}</span>
             </nav>
           )}
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 leading-tight">{title}</h1>
