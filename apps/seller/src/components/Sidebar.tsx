@@ -192,24 +192,24 @@ export default function Sidebar({ user }: any) {
   };
 
   const NavGroupHeader = ({ children }: { children: React.ReactNode }) => (
-    <h6 className="px-5 mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 mt-8 first:mt-0">
+    <h6 className="px-4 mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-400 mt-7 first:mt-0">
       {children}
     </h6>
   );
 
-  const CollapsibleHeader = ({ 
-    label, 
-    isExpanded, 
-    onToggle 
-  }: { 
-    label: string; 
-    isExpanded: boolean; 
-    onToggle: () => void; 
+  const CollapsibleHeader = ({
+    label,
+    isExpanded,
+    onToggle
+  }: {
+    label: string;
+    isExpanded: boolean;
+    onToggle: () => void;
   }) => (
     <button
       type="button"
       onClick={onToggle}
-      className="w-full flex items-center justify-between px-5 mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-slate-600 transition-colors mt-8 first:mt-0 outline-none focus:outline-none group"
+      className="w-full flex items-center justify-between px-4 mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-400 hover:text-slate-600 transition-colors mt-7 first:mt-0 outline-none focus:outline-none group"
     >
       <span>{label}</span>
       <motion.div
@@ -338,13 +338,13 @@ export default function Sidebar({ user }: any) {
 
         {/* Main Link - Dashboard Overview */}
         <div className="px-6 pb-4 flex-shrink-0">
-          <NavLink to="/dashboard" end className={({ isActive }) => `flex items-center py-4 px-6 rounded-2xl text-[15px] font-black transition-all ${isActive ? 'bg-[#6610f2] text-white shadow-xl shadow-purple-100' : 'text-slate-600 hover:bg-slate-50'}`}>
-            <HiOutlineSquares2X2 className="w-6 h-6 mr-3" /> Dashboard
+          <NavLink to="/dashboard" end className={({ isActive }) => `flex items-center py-3.5 px-5 rounded-2xl text-[13.5px] font-bold transition-all duration-200 ${isActive ? 'bg-[#6610f2] text-white shadow-lg shadow-[#6610f2]/20' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+            <HiOutlineSquares2X2 className="w-5 h-5 mr-3" /> Dashboard
           </NavLink>
         </div>
 
         {/* Pinned Quick-Links Dock */}
-        <div className="px-6 pb-5 flex-shrink-0 flex items-center justify-between gap-2 border-b border-slate-50">
+        <div className="px-6 pb-5 flex-shrink-0 flex items-center justify-between gap-1.5 border-b border-slate-50">
           {[
             { to: '/dashboard/properties', icon: HiOutlineHome, label: 'Properties' },
             { to: '/dashboard/messages', icon: HiOutlineChatBubbleLeftRight, label: 'Messages' },
@@ -354,102 +354,63 @@ export default function Sidebar({ user }: any) {
           ].map((item, idx) => {
             const isActive = location.pathname.startsWith(item.to);
             return (
-              <NavLink 
+              <NavLink
                 key={idx}
                 to={item.to}
                 title={item.label}
-                className={`w-[46px] h-[46px] rounded-2xl flex items-center justify-center border transition-all duration-300 relative group cursor-pointer ${
-                  isActive 
-                    ? 'bg-[#6610f2] border-[#6610f2] text-white shadow-lg shadow-purple-100' 
-                    : 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:text-[#6610f2] hover:border-slate-200 hover:shadow-xs'
+                className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-200 relative group cursor-pointer ${
+                  isActive
+                    ? 'bg-[#6610f2] border-[#6610f2] text-white shadow-md shadow-[#6610f2]/20'
+                    : 'bg-slate-50 border-slate-100/80 text-slate-400 hover:bg-slate-100 hover:text-slate-600 hover:border-slate-200'
                 }`}
               >
-                <item.icon className="w-5 h-5 transition-transform group-hover:scale-110" />
-                {/* CSS Tooltip */}
-                <span className="absolute bottom-full mb-2 scale-0 group-hover:scale-100 transition-all duration-200 origin-bottom bg-slate-900 text-white text-[9px] font-black uppercase tracking-wider py-1.5 px-3 rounded-xl whitespace-nowrap shadow-md pointer-events-none z-50">
+                <item.icon className="w-4 h-4" />
+                {/* Tooltip */}
+                <span className="absolute bottom-full mb-2 scale-0 group-hover:scale-100 transition-all duration-150 origin-bottom bg-slate-900 text-white text-[8.5px] font-semibold tracking-wide py-1 px-2.5 rounded-lg whitespace-nowrap shadow-lg pointer-events-none z-50">
                   {item.label}
                 </span>
-                <span className="absolute bottom-full mb-1 scale-0 group-hover:scale-100 transition-all duration-200 origin-bottom border-4 border-transparent border-t-slate-900 pointer-events-none z-50" />
               </NavLink>
             );
           })}
         </div>
 
-        {/* Premium Segmented Glowing Switcher */}
-        <div className="px-6 pb-6 flex-shrink-0">
-          <div className="bg-slate-50 p-1.5 rounded-[1.25rem] flex border border-slate-100 relative shadow-inner">
+        {/* Segmented nav switcher */}
+        <div className="px-6 pb-5 flex-shrink-0">
+          <div className="bg-slate-50/80 p-1 rounded-[14px] flex border border-slate-100/80 relative">
             <button
               type="button"
               onClick={() => setActiveTab('operations')}
-              className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all duration-300 relative z-10 flex items-center justify-center ${
-                activeTab === 'operations' ? 'text-white' : 'text-slate-500 hover:text-slate-850'
+              className={`flex-1 py-2 text-[11px] font-semibold rounded-xl transition-all duration-200 relative z-10 flex items-center justify-center gap-1.5 ${
+                activeTab === 'operations' ? 'text-white' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               {activeTab === 'operations' && (
                 <motion.div
                   layoutId="active-segment-bg"
-                  className="absolute inset-0 bg-gradient-to-r from-[#6610f2] to-[#8b5cf6] rounded-xl shadow-md shadow-purple-200/40 border border-[#7c3aed]/20"
+                  className="absolute inset-0 bg-[#6610f2] rounded-xl shadow-sm shadow-[#6610f2]/25"
                   style={{ zIndex: -1 }}
-                  transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+                  transition={{ type: 'spring', damping: 28, stiffness: 260 }}
                 />
               )}
-              <motion.div
-                animate={activeTab !== 'operations' ? {
-                  rotate: [0, -12, 12, -6, 6, 0],
-                  scale: [1, 1.15, 1]
-                } : {
-                  rotate: 0,
-                  scale: 1
-                }}
-                transition={activeTab !== 'operations' ? {
-                  repeat: Infinity,
-                  repeatDelay: 2.3, // Animate periodically every 2.3 seconds
-                  duration: 0.5,
-                  ease: 'easeInOut'
-                } : {
-                  duration: 0.2
-                }}
-                className="mr-1.5 flex items-center justify-center flex-shrink-0"
-              >
-                <HiOutlineChartBar className="w-4 h-4" />
-              </motion.div>
+              <HiOutlineChartBar className="w-3.5 h-3.5" />
               Operations
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('management')}
-              className={`flex-1 py-2.5 text-xs font-black rounded-xl transition-all duration-300 relative z-10 flex items-center justify-center ${
-                activeTab === 'management' ? 'text-white' : 'text-slate-500 hover:text-slate-850'
+              className={`flex-1 py-2 text-[11px] font-semibold rounded-xl transition-all duration-200 relative z-10 flex items-center justify-center gap-1.5 ${
+                activeTab === 'management' ? 'text-white' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               {activeTab === 'management' && (
                 <motion.div
                   layoutId="active-segment-bg"
-                  className="absolute inset-0 bg-gradient-to-r from-[#6610f2] to-[#8b5cf6] rounded-xl shadow-md shadow-purple-200/40 border border-[#7c3aed]/20"
+                  className="absolute inset-0 bg-[#6610f2] rounded-xl shadow-sm shadow-[#6610f2]/25"
                   style={{ zIndex: -1 }}
-                  transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+                  transition={{ type: 'spring', damping: 28, stiffness: 260 }}
                 />
               )}
-              <motion.div
-                animate={activeTab !== 'management' ? {
-                  rotate: [0, -12, 12, -6, 6, 0],
-                  scale: [1, 1.15, 1]
-                } : {
-                  rotate: 0,
-                  scale: 1
-                }}
-                transition={activeTab !== 'management' ? {
-                  repeat: Infinity,
-                  repeatDelay: 2.3, // Animate periodically every 2.3 seconds
-                  duration: 0.5,
-                  ease: 'easeInOut'
-                } : {
-                  duration: 0.2
-                }}
-                className="mr-1.5 flex items-center justify-center flex-shrink-0"
-              >
-                <HiOutlineCog6Tooth className="w-4 h-4" />
-              </motion.div>
+              <HiOutlineCog6Tooth className="w-3.5 h-3.5" />
               Management
             </button>
           </div>
@@ -516,11 +477,11 @@ export default function Sidebar({ user }: any) {
                           closed: { opacity: 0, x: -10 }
                         }}
                       >
-                        <NavLink to={`/dashboard/${mod.slug}/${mod.type.toLowerCase()}`} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:text-slate-900'}`}>
+                        <NavLink to={`/dashboard/${mod.slug}/${mod.type.toLowerCase()}`} className={({ isActive }) => `flex items-center justify-between py-2.5 px-4 rounded-xl text-[13px] font-medium transition-all duration-200 ${isActive ? 'bg-white text-slate-900 shadow-[0_1px_4px_rgba(0,0,0,0.07)] border border-slate-100/80' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/70'}`}>
                           {({ isActive }) => (
                             <>
-                              <div className="flex items-center"><mod.icon className="w-5 h-5 mr-3 opacity-70" /> {mod.label}</div>
-                              {mod.count > 0 && <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-black ${isActive ? 'bg-white/20 text-white' : 'bg-red-500 text-white'}`}>{mod.count}</span>}
+                              <div className="flex items-center min-w-0"><mod.icon className="w-4 h-4 mr-2.5 shrink-0 opacity-55" /><span className="truncate">{mod.label}</span></div>
+                              {mod.count > 0 && <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold shrink-0 ml-2 ${isActive ? 'bg-[#6610f2] text-white' : 'bg-red-500 text-white'}`}>{mod.count}</span>}
                             </>
                           )}
                         </NavLink>
@@ -571,12 +532,12 @@ export default function Sidebar({ user }: any) {
                           closed: { opacity: 0, x: -10 }
                         }}
                       >
-                        <NavLink to={link.to} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'text-slate-900 bg-slate-50' : 'text-slate-500 hover:text-slate-900'}`}>
-                          <div className="flex items-center">
-                            <link.icon className="w-5 h-5 mr-3 opacity-70" /> {link.label}
+                        <NavLink to={link.to} className={({ isActive }) => `flex items-center justify-between py-2.5 px-4 rounded-xl text-[13px] font-medium transition-all duration-200 ${isActive ? 'bg-white text-slate-900 shadow-[0_1px_4px_rgba(0,0,0,0.07)] border border-slate-100/80' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/70'}`}>
+                          <div className="flex items-center min-w-0">
+                            <link.icon className="w-4 h-4 mr-2.5 shrink-0 opacity-55" /><span className="truncate">{link.label}</span>
                           </div>
                           {link.count > 0 && (
-                            <span className="bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full">
+                            <span className="bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-2">
                               {link.count}
                             </span>
                           )}
@@ -634,12 +595,12 @@ export default function Sidebar({ user }: any) {
                             closed: { opacity: 0, x: -10 }
                           }}
                         >
-                          <NavLink to={`/dashboard/${slug}`} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'text-slate-900 bg-slate-50' : 'text-slate-500 hover:text-slate-900'}`}>
-                            <div className="flex items-center">
-                              <HiOutlineFolder className="w-5 h-5 mr-3 opacity-70" /> Manage {displayName}
+                          <NavLink to={`/dashboard/${slug}`} className={({ isActive }) => `flex items-center justify-between py-2.5 px-4 rounded-xl text-[13px] font-medium transition-all duration-200 ${isActive ? 'bg-white text-slate-900 shadow-[0_1px_4px_rgba(0,0,0,0.07)] border border-slate-100/80' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/70'}`}>
+                            <div className="flex items-center min-w-0">
+                              <HiOutlineFolder className="w-4 h-4 mr-2.5 shrink-0 opacity-55" /><span className="truncate">{displayName}</span>
                             </div>
                             {count > 0 && (
-                              <span className="bg-slate-100 text-slate-600 text-[9px] font-black px-2 py-0.5 rounded-full">
+                              <span className="bg-slate-200 text-slate-600 text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-2">
                                 {count}
                               </span>
                             )}
@@ -692,12 +653,12 @@ export default function Sidebar({ user }: any) {
                           closed: { opacity: 0, x: -10 }
                         }}
                       >
-                        <NavLink to={link.to} className={({ isActive }) => `flex items-center justify-between py-3 px-6 rounded-xl text-[14px] font-bold transition-all ${isActive ? 'text-slate-900 bg-slate-50' : 'text-slate-500 hover:text-slate-900'}`}>
-                          <div className="flex items-center">
-                            <link.icon className="w-5 h-5 mr-3 opacity-70" /> {link.label}
+                        <NavLink to={link.to} className={({ isActive }) => `flex items-center justify-between py-2.5 px-4 rounded-xl text-[13px] font-medium transition-all duration-200 ${isActive ? 'bg-white text-slate-900 shadow-[0_1px_4px_rgba(0,0,0,0.07)] border border-slate-100/80' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/70'}`}>
+                          <div className="flex items-center min-w-0">
+                            <link.icon className="w-4 h-4 mr-2.5 shrink-0 opacity-55" /><span className="truncate">{link.label}</span>
                           </div>
                           {link.count > 0 && (
-                            <span className="bg-slate-100 text-slate-600 text-[9px] font-black px-2 py-0.5 rounded-full">
+                            <span className="bg-slate-200 text-slate-600 text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-2">
                               {link.count}
                             </span>
                           )}
@@ -731,21 +692,28 @@ export default function Sidebar({ user }: any) {
           )}
         </AnimatePresence>
 
-        <div className="p-5 bg-white border-t border-slate-50 flex-shrink-0">
-          <div className="flex items-center justify-between bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
-            <div className="flex items-center gap-3">
-              <img src={user?.avatar_url || `https://ui-avatars.com/api/?name=${user?.name}&background=6610f2&color=fff`} className="w-10 h-10 rounded-xl border border-white shadow-sm object-cover" alt="avatar" />
-              <div className="min-w-0">
-                <p className="text-[12px] font-black text-slate-900 truncate uppercase tracking-tighter leading-none mb-1">
-                  {user?.name ? user.name.split(' ')[0] : user?.email?.split('@')[0] || 'Seller'}
-                </p>
-                <p className="text-[9px] font-bold text-green-500 uppercase tracking-wider">
-                  {user?.name || 'Partner'}
-                </p>
-              </div>
+        <div className="px-5 pb-5 pt-4 border-t border-slate-50/80 flex-shrink-0">
+          <div className="flex items-center gap-3 bg-slate-50/60 px-4 py-3.5 rounded-2xl border border-slate-100/80">
+            <div className="relative shrink-0">
+              <img
+                src={user?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'S')}&background=6610f2&color=fff&size=80`}
+                className="w-9 h-9 rounded-[10px] object-cover border-2 border-white shadow-sm"
+                alt="avatar"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-white" />
             </div>
-            <button onClick={handleLogout} className="p-2 text-slate-300 hover:text-red-500 transition-colors">
-              <HiOutlinePower className={`w-6 h-6 ${isLoggingOut ? 'animate-spin' : ''}`} />
+            <div className="min-w-0 flex-1">
+              <p className="text-[12px] font-bold text-slate-900 truncate leading-tight">
+                {user?.name || user?.email?.split('@')[0] || 'Seller'}
+              </p>
+              <p className="text-[9px] font-medium text-slate-400 tracking-wide mt-0.5">Active Seller</p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="p-1.5 text-slate-300 hover:text-red-400 hover:bg-red-50 rounded-lg transition-all shrink-0"
+              title="Sign out"
+            >
+              <HiOutlinePower className={`w-4 h-4 ${isLoggingOut ? 'animate-spin' : ''}`} />
             </button>
           </div>
         </div>

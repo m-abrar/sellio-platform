@@ -1,43 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
-import { 
-  HiOutlineBell, 
-  HiOutlineCheckCircle, 
-  HiOutlineTrash, 
-  HiOutlineShoppingBag, 
-  HiOutlineCalendar, 
-  HiOutlineChatBubbleLeftRight, 
-  HiOutlineBanknotes, 
-  HiOutlineShieldCheck, 
+import {
+  HiOutlineBell,
+  HiOutlineCheckCircle,
+  HiOutlineTrash,
+  HiOutlineShoppingBag,
+  HiOutlineCalendar,
+  HiOutlineChatBubbleLeftRight,
+  HiOutlineBanknotes,
+  HiOutlineShieldCheck,
   HiOutlineStar,
-  HiOutlineArrowLeft
+  HiOutlineArrowLeft,
 } from 'react-icons/hi2';
 import { toast } from 'sonner';
-import { getNotifications, markNotificationAsRead, markAllNotificationsAsRead, deleteNotification as deleteNotificationApi } from '../../api/notifications';
+import {
+  getNotifications,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+  deleteNotification as deleteNotificationApi,
+} from '../../api/notifications';
 import { getApiErrorMessage } from '../../lib/apiErrorMessage';
 
 const getIcon = (type: string) => {
   switch (type) {
-    case 'order': return HiOutlineShoppingBag;
+    case 'order':   return HiOutlineShoppingBag;
     case 'booking': return HiOutlineCalendar;
     case 'inquiry': return HiOutlineChatBubbleLeftRight;
-    case 'payout': return HiOutlineBanknotes;
-    case 'system': return HiOutlineShieldCheck;
-    case 'review': return HiOutlineStar;
-    default: return HiOutlineBell;
+    case 'payout':  return HiOutlineBanknotes;
+    case 'system':  return HiOutlineShieldCheck;
+    case 'review':  return HiOutlineStar;
+    default:        return HiOutlineBell;
   }
 };
 
 const getColor = (type: string) => {
   switch (type) {
-    case 'order': return 'bg-indigo-50 text-indigo-600';
-    case 'booking': return 'bg-purple-50 text-purple-600';
+    case 'order':   return 'bg-indigo-50 text-indigo-600';
+    case 'booking': return 'bg-violet-50 text-violet-600';
     case 'inquiry': return 'bg-blue-50 text-blue-600';
-    case 'payout': return 'bg-emerald-50 text-emerald-600';
-    case 'system': return 'bg-amber-50 text-amber-600';
-    case 'review': return 'bg-pink-50 text-pink-600';
-    default: return 'bg-slate-50 text-slate-600';
+    case 'payout':  return 'bg-emerald-50 text-emerald-600';
+    case 'system':  return 'bg-amber-50 text-amber-600';
+    case 'review':  return 'bg-pink-50 text-pink-600';
+    default:        return 'bg-slate-50 text-slate-500';
   }
 };
 
@@ -53,7 +58,6 @@ export default function NotificationsPage() {
         setNotifications(response.data.data);
       } catch (error) {
         toast.error(getApiErrorMessage(error, 'Failed to load notifications.'));
-        console.error("Failed to fetch notifications", error);
       } finally {
         setIsLoading(false);
       }
@@ -66,9 +70,8 @@ export default function NotificationsPage() {
       await markNotificationAsRead(id);
       setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
       toast.success('Marked as read');
-    } catch (error) {
-      console.error('Failed to mark notification as read', error);
-      toast.error('Failed to mark notification as read');
+    } catch {
+      toast.error('Failed to mark as read');
     }
   };
 
@@ -77,9 +80,8 @@ export default function NotificationsPage() {
       await markAllNotificationsAsRead();
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
       toast.success('All notifications marked as read');
-    } catch (error) {
-      console.error('Failed to mark all notifications as read', error);
-      toast.error('Failed to mark all notifications as read');
+    } catch {
+      toast.error('Failed to mark all as read');
     }
   };
 
@@ -88,115 +90,126 @@ export default function NotificationsPage() {
       await deleteNotificationApi(id);
       setNotifications((prev) => prev.filter((n) => n.id !== id));
       toast.success('Notification deleted');
-    } catch (error) {
-      console.error('Failed to delete notification', error);
+    } catch {
       toast.error('Failed to delete notification');
     }
   };
 
-  const filteredNotifications = filter === 'all' 
-    ? notifications 
-    : notifications.filter(n => !n.read);
+  const filteredNotifications =
+    filter === 'all' ? notifications : notifications.filter((n) => !n.read);
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <PageHeader 
-        badge="Alerts" 
-        title="Notification" 
-        subtitle="Center"
-      >
-        <div className="flex gap-3">
-          <Link
-            to="/dashboard"
-            className="px-6 py-3 bg-white border border-slate-100 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all flex items-center gap-2 shadow-xs"
-          >
-            <HiOutlineArrowLeft className="w-4 h-4" /> Back to Dashboard
-          </Link>
-        </div>
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <PageHeader badge="Alerts" title="Notifications" subtitle="">
+        <Link
+          to="/dashboard"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-[11px] font-semibold uppercase tracking-wider text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-all shadow-xs"
+        >
+          <HiOutlineArrowLeft className="w-4 h-4" /> Back
+        </Link>
       </PageHeader>
 
-      <div className="flex items-center justify-between border-b border-slate-100 pb-6">
-        <div className="flex gap-4">
-          <button 
-            onClick={() => setFilter('all')}
-            className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-900'}`}
-          >
-            All Notifications
-          </button>
-          <button 
-            onClick={() => setFilter('unread')}
-            className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${filter === 'unread' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-900'}`}
-          >
-            Unread ({notifications.filter(n => !n.read).length})
-          </button>
+      {/* Filter bar */}
+      <div className="flex items-center justify-between">
+        <div className="flex gap-1.5 bg-slate-50/80 p-1 rounded-[14px] border border-slate-100/80">
+          {(['all', 'unread'] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-4 py-2 rounded-xl text-[11px] font-semibold uppercase tracking-wider transition-all duration-200 ${
+                filter === f
+                  ? 'bg-white text-slate-900 shadow-sm border border-slate-100/80'
+                  : 'text-slate-400 hover:text-slate-600'
+              }`}
+            >
+              {f === 'all' ? 'All' : `Unread (${unreadCount})`}
+            </button>
+          ))}
         </div>
-        
-        {notifications.some(n => !n.read) && (
-          <button 
+
+        {unreadCount > 0 && (
+          <button
             onClick={markAllAsRead}
-            className="px-6 py-3 bg-slate-900 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-[#6610f2] hover:shadow-lg hover:shadow-purple-100 transition-all flex items-center gap-2"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl text-[11px] font-semibold uppercase tracking-wider hover:bg-[#6610f2] transition-all"
           >
             <HiOutlineCheckCircle className="w-4 h-4" /> Mark All Read
           </button>
         )}
       </div>
 
+      {/* Content */}
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Syncing Alerts...</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-300 animate-pulse">
+            Loading alerts…
+          </span>
+        </div>
+      ) : filteredNotifications.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24 bg-white rounded-[1.75rem] border border-slate-100">
+          <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mb-4">
+            <HiOutlineBell className="w-6 h-6 text-slate-200" />
+          </div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-300">
+            No notifications found
+          </p>
         </div>
       ) : (
-        <div className="space-y-4">
-          {filteredNotifications.length === 0 ? (
-            <div className="text-center py-24 bg-white rounded-[2.5rem] border border-slate-100">
-              <HiOutlineBell className="w-12 h-12 text-slate-100 mx-auto mb-4" />
-              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">No notifications found</p>
-            </div>
-          ) : (
-            filteredNotifications.map((n) => {
-              const Icon = getIcon(n.type);
-              return (
-                <div 
-                  key={n.id} 
-                  className={`group relative bg-white p-6 rounded-[2rem] border transition-all duration-300 flex items-start gap-6 ${n.read ? 'border-slate-100 opacity-75' : 'border-purple-100 shadow-sm shadow-purple-50'}`}
-                >
-                  <div className={`w-14 h-14 rounded-2xl shrink-0 flex items-center justify-center ${getColor(n.type)}`}>
-                    <Icon className="w-7 h-7" />
-                  </div>
-                  
-                  <div className="flex-1 min-w-0 pt-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <h4 className={`text-sm font-black tracking-tight ${n.read ? 'text-slate-600' : 'text-slate-900'}`}>
-                        {n.title}
-                        {!n.read && <span className="inline-block w-2 h-2 bg-purple-500 rounded-full ml-2 animate-pulse" />}
-                      </h4>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{n.date}</span>
-                    </div>
-                    <p className="text-xs text-slate-500 leading-relaxed max-w-2xl mb-4">{n.message}</p>
-                    
-                    <div className="flex gap-2.5">
+        <div className="space-y-2.5">
+          {filteredNotifications.map((n) => {
+            const Icon = getIcon(n.type);
+            return (
+              <div
+                key={n.id}
+                className={`group relative bg-white rounded-[1.5rem] border transition-all duration-200 flex items-start gap-5 p-5 md:p-6 ${
+                  n.read
+                    ? 'border-slate-100 opacity-70 hover:opacity-100'
+                    : 'border-[#6610f2]/15 shadow-sm shadow-violet-50/80'
+                }`}
+              >
+                {/* Unread indicator bar */}
+                {!n.read && (
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#6610f2] rounded-r-full" />
+                )}
+
+                <div className={`w-11 h-11 rounded-2xl shrink-0 flex items-center justify-center ${getColor(n.type)}`}>
+                  <Icon className="w-5 h-5" />
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-3 mb-1">
+                    <h4 className={`text-[13.5px] font-semibold leading-snug ${n.read ? 'text-slate-600' : 'text-slate-900'}`}>
+                      {n.title}
                       {!n.read && (
-                        <button 
-                          onClick={() => markAsRead(n.id)}
-                          className="px-4 py-2 bg-slate-50 hover:bg-purple-500 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 transition-all flex items-center gap-1.5"
-                          title="Mark as read"
-                        >
-                          <HiOutlineCheckCircle className="w-4 h-4" /> Mark as Read
-                        </button>
+                        <span className="inline-block w-1.5 h-1.5 bg-[#6610f2] rounded-full ml-2 align-middle" />
                       )}
-                      <button 
-                        onClick={() => deleteNotification(n.id)}
-                        className="px-4 py-2 bg-slate-50 hover:bg-red-500 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 transition-all flex items-center gap-1.5"
-                        title="Delete"
+                    </h4>
+                    <span className="text-[9px] font-medium text-slate-400 uppercase tracking-wider shrink-0 mt-0.5">
+                      {n.date}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500 leading-relaxed max-w-2xl mb-3">{n.message}</p>
+
+                  <div className="flex gap-2">
+                    {!n.read && (
+                      <button
+                        onClick={() => markAsRead(n.id)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-[#6610f2] hover:text-white text-[10px] font-semibold uppercase tracking-wider text-slate-500 transition-all"
                       >
-                        <HiOutlineTrash className="w-4 h-4" /> Delete
+                        <HiOutlineCheckCircle className="w-3.5 h-3.5" /> Read
                       </button>
-                    </div>
+                    )}
+                    <button
+                      onClick={() => deleteNotification(n.id)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-red-500 hover:text-white text-[10px] font-semibold uppercase tracking-wider text-slate-500 transition-all"
+                    >
+                      <HiOutlineTrash className="w-3.5 h-3.5" /> Delete
+                    </button>
                   </div>
                 </div>
-              );
-            })
-          )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

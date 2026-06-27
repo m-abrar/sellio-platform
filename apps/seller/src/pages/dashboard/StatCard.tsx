@@ -1,5 +1,6 @@
 import React from 'react';
 import type { IconType } from 'react-icons';
+import { HiOutlineArrowTrendingUp, HiOutlineExclamationTriangle } from 'react-icons/hi2';
 
 interface StatCardProps {
   title: string;
@@ -12,53 +13,60 @@ interface StatCardProps {
 }
 
 export default function StatCard({ title, value, icon: Icon, color, trend, details, detailColumns = 1 }: StatCardProps) {
-  return (
-    <div className="bg-white p-6 md:p-8 rounded-[2rem] xl:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] transition-all duration-500 hover:shadow-2xl hover:shadow-slate-200/50 hover:-translate-y-1.5 group flex flex-col justify-between h-full relative overflow-hidden">
-      {/* Decorative Glow */}
-      <div className="absolute -top-12 -right-12 w-24 h-24 bg-slate-50 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+  const isWarning = color.includes('red-');
 
-      {/* Top Row: Icon and Trend */}
-      <div className="flex justify-between items-start mb-8 relative z-10">
-        <div className={`w-14 h-14 md:w-16 md:h-16 rounded-[1.8rem] flex items-center justify-center transition-all duration-500 ${color} group-hover:bg-slate-900 group-hover:text-white shrink-0 shadow-sm`}>
-          <Icon className="w-7 h-7 md:w-8 md:h-8" />
+  return (
+    <div className="relative bg-white rounded-[1.5rem] border border-slate-100 p-6 md:p-7 flex flex-col h-full overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:border-slate-200/60">
+      {/* Subtle gradient shimmer on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white via-transparent to-slate-50/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+      {/* Row 1: Icon + Trend badge */}
+      <div className="relative z-10 flex items-start justify-between mb-5">
+        <div className={`w-10 h-10 md:w-11 md:h-11 rounded-2xl flex items-center justify-center shrink-0 ${color}`}>
+          <Icon className="w-5 h-5" />
         </div>
-        
+
         {trend && (
-          <span className="text-[10px] font-black text-green-600 bg-green-50 px-3 py-1.5 rounded-full border border-green-100 uppercase tracking-widest shadow-inner">
+          <span className={`inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${
+            isWarning
+              ? 'bg-red-50 text-red-500 border border-red-100/80'
+              : 'bg-emerald-50 text-emerald-600 border border-emerald-100/80'
+          }`}>
+            {isWarning
+              ? <HiOutlineExclamationTriangle className="w-3 h-3" />
+              : <HiOutlineArrowTrendingUp className="w-3 h-3" />
+            }
             {trend}
           </span>
         )}
       </div>
-      
-      {/* Bottom Row: Text content */}
-      <div className="min-w-0 relative z-10 w-full">
-        <p className="text-[10px] md:text-[11px] font-black text-slate-400 uppercase mb-2 truncate">
-          {title}
-        </p>
-        <div className="flex items-baseline gap-1 mb-4 min-w-0">
-           <h3 
-             className="text-xl sm:text-2xl xl:text-3xl font-black text-slate-900 tracking-tighter italic leading-none shrink-0"
-             title={value}
-           >
-             {value}
-           </h3>
-           <span className="w-2 h-2 rounded-full bg-[#6610f2] opacity-0 group-hover:opacity-100 transition-opacity duration-500 shrink-0" />
-        </div>
 
-        {details && details.length > 0 && (
-          <div className={detailColumns === 2
-            ? "grid grid-cols-2 gap-x-4 gap-y-2 pt-4 border-t border-slate-50 w-full min-w-0"
-            : "flex flex-col gap-2.5 pt-4 border-t border-slate-50 w-full min-w-0"
-          }>
-            {details.map((item, i) => (
-              <div key={i} className="flex justify-between items-center w-full min-w-0">
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider shrink-0">{item.label}</span>
-                <span className="text-[10px] font-black text-slate-900 pl-2 text-right shrink-0" title={String(item.value)}>{item.value}</span>
-              </div>
-            ))}
-          </div>
-        )}
+      {/* Row 2: Label + Hero Number */}
+      <div className="relative z-10 flex-1 mb-5">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400 mb-2">{title}</p>
+        <p
+          className="text-2xl sm:text-3xl xl:text-[2.1rem] font-black text-slate-900 tracking-tight leading-none"
+          title={value}
+        >
+          {value}
+        </p>
       </div>
+
+      {/* Row 3: Detail breakdown */}
+      {details && details.length > 0 && (
+        <div className={`relative z-10 pt-4 border-t border-slate-50 ${
+          detailColumns === 2 ? 'grid grid-cols-2 gap-x-4 gap-y-2.5' : 'space-y-2.5'
+        }`}>
+          {details.map((item, i) => (
+            <div key={i} className="flex items-center justify-between gap-1 min-w-0">
+              <span className="text-[8.5px] font-semibold uppercase tracking-wider text-slate-400 shrink-0">{item.label}</span>
+              <span className="text-[10px] font-black text-slate-700 shrink-0 text-right" title={String(item.value)}>
+                {item.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

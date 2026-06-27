@@ -13,21 +13,21 @@ interface Listing {
 }
 
 const StatusBadge = ({ isActive }: { isActive: boolean }) => (
-  <div className="flex items-center gap-2 shrink-0 bg-white px-3 py-1.5 rounded-full border border-slate-100 shadow-sm">
-    <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-green-500 animate-pulse' : 'bg-amber-400'}`} />
-    <span className="text-[10px] font-black text-slate-900 uppercase tracking-wider">
-      {isActive ? 'Live' : 'Draft'}
-    </span>
-  </div>
+  <span className={`inline-flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full ${
+    isActive ? 'bg-emerald-50 text-emerald-600 border border-emerald-100/80' : 'bg-amber-50 text-amber-600 border border-amber-100/80'
+  }`}>
+    <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActive ? 'bg-emerald-500' : 'bg-amber-400'}`} />
+    {isActive ? 'Live' : 'Draft'}
+  </span>
 );
 
 const MobileActionBtn = ({ Icon, label, color, onClick }: any) => (
-  <button 
+  <button
     onClick={onClick}
-    className={`flex items-center justify-center gap-3 py-4 w-full rounded-[1.5rem] bg-white border border-slate-100 text-slate-400 transition-all active:scale-[0.96] active:text-white shadow-sm group ${color}`}
+    className={`flex items-center justify-center gap-2 py-3 w-full rounded-xl bg-slate-50 border border-slate-100 text-slate-400 transition-all active:scale-[0.96] active:bg-slate-100 text-[10px] font-semibold uppercase tracking-wider ${color}`}
   >
     <Icon className="w-4 h-4" />
-    <span className="text-[10px] font-black uppercase tracking-widest">{label}</span>
+    {label}
   </button>
 );
 
@@ -36,118 +36,121 @@ export default function RecentListingsTable({ listings }: { listings: Listing[] 
 
   const handleView = (item: Listing) => {
     const module = item.module_slug || `${item.module_type.toLowerCase()}s`;
-    const identifier = item.slug || item.id;
-    navigate(`/dashboard/${module}/view/${identifier}`);
+    navigate(`/dashboard/${module}/view/${item.slug || item.id}`);
   };
 
   const handleEdit = (item: Listing) => {
     const module = item.module_slug || `${item.module_type.toLowerCase()}s`;
-    const identifier = item.slug || item.id;
-    navigate(`/dashboard/${module}/edit/${identifier}`);
+    navigate(`/dashboard/${module}/edit/${item.slug || item.id}`);
   };
+
+  if (!listings?.length) {
+    return (
+      <div className="px-8 py-16 text-center">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-300">No listings yet</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
-      {/* MOBILE VIEW */}
-      <div className="lg:hidden space-y-6 px-6 pb-12">
+      {/* Mobile cards */}
+      <div className="lg:hidden space-y-4 p-5">
         {listings.map((item) => (
-          <div key={`${item.module_type}-${item.id}`} className="bg-slate-50/50 border border-slate-100 rounded-[2.5rem] p-8 shadow-sm">
-            <div className="flex gap-6 items-start">
-              <img 
-                src={item.media?.[0]?.original_url} 
-                className="w-24 h-24 object-cover rounded-[2rem] border-4 border-white shadow-lg shrink-0" 
-                alt={item.title} 
+          <div
+            key={`${item.module_type}-${item.id}`}
+            className="bg-slate-50/50 border border-slate-100 rounded-2xl p-5"
+          >
+            <div className="flex gap-4 items-start mb-5">
+              <img
+                src={item.media?.[0]?.original_url}
+                className="w-20 h-16 object-cover rounded-xl border-2 border-white shadow-sm shrink-0"
+                alt={item.title}
               />
-              <div className="min-w-0 flex-1 pt-2">
-                <span className="text-[10px] font-black text-[#6610f2] uppercase tracking-[0.2em] opacity-60">
-                  {item.module_type} • ID {item.id}
-                </span>
-                <h4 className="text-lg font-black text-slate-900 leading-tight italic mt-1 line-clamp-2">
-                  {item.title}
-                </h4>
-                <div className="mt-3">
+              <div className="min-w-0 flex-1 pt-0.5">
+                <p className="text-[9px] font-semibold text-[#6610f2] uppercase tracking-[0.15em] opacity-70 mb-1">
+                  {item.module_type} · #{item.id}
+                </p>
+                <h4 className="text-[15px] font-bold text-slate-900 leading-snug line-clamp-2 italic">{item.title}</h4>
+                <div className="mt-2.5">
                   <StatusBadge isActive={item.is_active} />
                 </div>
               </div>
             </div>
-
-            <div className="grid grid-cols-3 gap-3 mt-8 pt-8 border-t border-slate-200/50">
-              <MobileActionBtn Icon={HiOutlineEye} label="View" color="active:bg-blue-600" onClick={() => handleView(item)} />
-              <MobileActionBtn Icon={HiOutlinePencilSquare} label="Edit" color="active:bg-[#6610f2]" onClick={() => handleEdit(item)} />
-              <MobileActionBtn Icon={HiOutlineTrash} label="Del" color="active:bg-red-500" />
+            <div className="grid grid-cols-3 gap-2 pt-4 border-t border-slate-100/80">
+              <MobileActionBtn Icon={HiOutlineEye} label="View" color="hover:text-blue-600 hover:border-blue-100 hover:bg-blue-50" onClick={() => handleView(item)} />
+              <MobileActionBtn Icon={HiOutlinePencilSquare} label="Edit" color="hover:text-[#6610f2] hover:border-purple-100 hover:bg-purple-50" onClick={() => handleEdit(item)} />
+              <MobileActionBtn Icon={HiOutlineTrash} label="Del" color="hover:text-red-500 hover:border-red-100 hover:bg-red-50" onClick={() => {}} />
             </div>
           </div>
         ))}
       </div>
 
-      {/* DESKTOP VIEW */}
-      <div className="hidden lg:block px-12 pb-12">
-        <table className="w-full border-separate border-spacing-y-5">
+      {/* Desktop table */}
+      <div className="hidden lg:block px-8 pb-8">
+        <table className="w-full border-separate border-spacing-y-2">
           <thead>
-            <tr className="text-left text-[11px] font-black uppercase tracking-[0.4em] text-slate-400">
-              <th className="px-10 pb-2">Asset Identity</th>
-              <th className="px-10 pb-2">Classification</th>
-              <th className="px-10 pb-2 text-right">Controls</th>
+            <tr>
+              <th className="text-left text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-400 px-5 pb-3">Asset</th>
+              <th className="text-left text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-400 px-5 pb-3">Type</th>
+              <th className="text-right text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-400 px-5 pb-3">Status / Actions</th>
             </tr>
           </thead>
           <tbody>
             {listings.map((item) => (
               <tr key={`${item.module_type}-${item.id}`} className="group">
-                {/* ASSET IDENTITY */}
-                <td className="bg-slate-50/40 group-hover:bg-white border-y border-l border-slate-100 group-hover:border-[#6610f2]/20 rounded-l-[2rem] px-10 py-8 transition-all duration-300">
-                  <div className="flex items-center gap-6">
-                    <img 
-                      src={item.media?.[0]?.original_url} 
-                      className="w-20 h-16 object-cover rounded-[1rem] border-2 border-white shadow-sm group-hover:scale-110 transition-transform" 
-                      alt="" 
-                    />
+                {/* Asset identity */}
+                <td className="bg-slate-50/50 group-hover:bg-slate-50 border-y border-l border-slate-100/80 group-hover:border-slate-200/60 rounded-l-2xl px-5 py-4 transition-all duration-200">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-11 rounded-xl overflow-hidden border border-slate-100 shrink-0 group-hover:scale-105 transition-transform duration-300">
+                      <img
+                        src={item.media?.[0]?.original_url}
+                        className="w-full h-full object-cover"
+                        alt=""
+                      />
+                    </div>
                     <div className="min-w-0">
-                      <p className="text-xl font-black text-slate-900 truncate tracking-tight">
+                      <p className="text-[13.5px] font-semibold text-slate-900 truncate leading-tight">
                         {item.title}
                       </p>
-                      <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-1">
-                        Primary Entry
+                      <p className="text-[9px] font-medium text-slate-400 uppercase tracking-wider mt-0.5">
+                        ID {item.id}
                       </p>
                     </div>
                   </div>
                 </td>
 
-                {/* CLASSIFICATION */}
-                <td className="bg-slate-50/40 group-hover:bg-white border-y border-slate-100 group-hover:border-[#6610f2]/20 px-10 py-8 transition-all duration-300">
-                  <span className="text-[11px] font-black text-[#6610f2] bg-[#6610f2]/5 px-6 py-2.5 rounded-full uppercase tracking-widest border border-[#6610f2]/10">
+                {/* Type badge */}
+                <td className="bg-slate-50/50 group-hover:bg-slate-50 border-y border-slate-100/80 group-hover:border-slate-200/60 px-5 py-4 transition-all duration-200">
+                  <span className="text-[10px] font-semibold text-[#6610f2] bg-[#6610f2]/6 border border-[#6610f2]/10 px-3 py-1.5 rounded-full uppercase tracking-wider">
                     {item.module_type}
                   </span>
                 </td>
 
-                {/* CONTROLS COLUMN (THE SWAP ZONE) */}
-                <td className="bg-slate-50/40 group-hover:bg-white border-y border-r border-slate-100 group-hover:border-[#6610f2]/20 rounded-r-[2rem] px-10 py-8 text-right transition-all duration-300 relative overflow-hidden">
-                  <div className="relative h-12 flex items-center justify-end">
-                    
-                    {/* META DETAILS: Visible by default, hidden on hover */}
-                    <div className="flex items-center gap-4 transition-all duration-300 group-hover:opacity-0 group-hover:-translate-x-4">
-                      <span className="text-[11px] text-slate-400 font-bold uppercase tracking-widest tabular-nums">
-                        UID: {item.id}
-                      </span>
+                {/* Actions / Status */}
+                <td className="bg-slate-50/50 group-hover:bg-slate-50 border-y border-r border-slate-100/80 group-hover:border-slate-200/60 rounded-r-2xl px-5 py-4 text-right transition-all duration-200 relative overflow-hidden">
+                  <div className="relative h-10 flex items-center justify-end">
+                    {/* Default: status badge */}
+                    <div className="flex items-center gap-3 transition-all duration-200 group-hover:opacity-0 group-hover:-translate-x-3 pointer-events-none">
                       <StatusBadge isActive={item.is_active} />
                     </div>
-
-                    {/* ACTION BUTTONS: Hidden by default, visible on hover */}
-                    <div className="absolute inset-y-0 right-0 flex items-center gap-3 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                    {/* Hover: action buttons */}
+                    <div className="absolute inset-y-0 right-0 flex items-center gap-2 opacity-0 translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200">
                       {[
-                        { Icon: HiOutlineEye, bg: 'hover:bg-blue-600', hoverText: 'hover:text-white', onClick: () => handleView(item) },
-                        { Icon: HiOutlinePencilSquare, bg: 'hover:bg-[#6610f2]', hoverText: 'hover:text-white', onClick: () => handleEdit(item) },
-                        { Icon: HiOutlineTrash, bg: 'hover:bg-red-500', hoverText: 'hover:text-white', onClick: () => {} }
+                        { Icon: HiOutlineEye, tip: 'View', cls: 'hover:bg-blue-500 hover:text-white hover:border-blue-500', fn: () => handleView(item) },
+                        { Icon: HiOutlinePencilSquare, tip: 'Edit', cls: 'hover:bg-[#6610f2] hover:text-white hover:border-[#6610f2]', fn: () => handleEdit(item) },
+                        { Icon: HiOutlineTrash, tip: 'Delete', cls: 'hover:bg-red-500 hover:text-white hover:border-red-500', fn: () => {} },
                       ].map((btn, idx) => (
-                        <button 
-                          key={idx} 
-                          onClick={btn.onClick}
-                          className={`p-4 text-slate-400 bg-white rounded-2xl border border-slate-100 shadow-sm transition-all active:scale-90 ${btn.bg} ${btn.hoverText}`}
+                        <button
+                          key={idx}
+                          onClick={btn.fn}
+                          title={btn.tip}
+                          className={`w-9 h-9 flex items-center justify-center text-slate-400 bg-white rounded-xl border border-slate-100 shadow-sm transition-all duration-150 active:scale-90 ${btn.cls}`}
                         >
-                          <btn.Icon className="w-5 h-5" />
+                          <btn.Icon className="w-4 h-4" />
                         </button>
                       ))}
                     </div>
-
                   </div>
                 </td>
               </tr>
