@@ -40,10 +40,7 @@ Sellio is a high-performance, multi-vertical marketplace platform built on the c
 
 ### 2. Deployment Protocol
 ```bash
-# Clone the repository
-git clone https://github.com/m-abrar/sellio-platform.git
-
-# Enter the backend directory
+# Extract the downloaded zip from CodeCanyon, then enter the backend directory
 cd apps/backend
 
 # Install dependencies

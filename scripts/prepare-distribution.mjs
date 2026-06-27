@@ -103,6 +103,8 @@ const EXCLUDED_DIR_NAMES = new Set([
   '.zed',
   '.phpunit.cache',
   'distribution',
+  'test-results',
+  'scratch',
 ]);
 
 const EXCLUDED_FILE_NAMES = new Set([
@@ -116,6 +118,10 @@ const EXCLUDED_FILE_NAMES = new Set([
   '.phpunit.result.cache',
   '.DS_Store',
   'Thumbs.db',
+  'verify_buyer.mjs',
+  'verify_buyer2.mjs',
+  'screenshot_phase2.cjs',
+  'screenshot_phase3.cjs',
 ]);
 
 const EXCLUDED_FILE_PATTERNS = [/\.zip$/i, /^\.env\./];

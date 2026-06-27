@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { resolveStorefrontBaseUrl } from '../config/resolveApiBaseUrl';
 import { 
   Rocket, 
   BarChart3, 
@@ -34,7 +35,7 @@ export default function PartnerView() {
       
       setTimeout(() => {
         setShowUpgradeModal(false);
-        window.location.assign('http://localhost:3000/dashboard');
+        window.location.assign(resolveStorefrontBaseUrl() + '/dashboard/partner');
       }, 1500);
     } catch {
       alert('Failed to upgrade account.');
