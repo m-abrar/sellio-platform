@@ -20,14 +20,14 @@ export default function PageHeader({
       <div className="min-w-0">
         {/* Badge / breadcrumb */}
         <div className="flex items-center gap-2 mb-3">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#6610f2] shrink-0" />
-          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.18em]">
+          <span className="w-1.5 h-1.5 rounded-full bg-brand shrink-0" />
+          <span className="text-label font-semibold text-slate-400 uppercase tracking-label-wide">
             {badge}
           </span>
         </div>
 
         {/* Page title */}
-        <h1 className="text-[2.25rem] md:text-[3rem] font-black text-slate-900 tracking-tight leading-[1.02]">
+        <h1 className="text-display md:text-display font-black text-slate-900 tracking-tight leading-[1.02]">
           {title} <span className="font-light text-slate-300">{subtitle}</span>
         </h1>
       </div>
@@ -36,10 +36,10 @@ export default function PageHeader({
       <div className="flex items-center gap-2.5 w-full md:w-auto shrink-0">
         <button
           onClick={() => navigate('/dashboard/notifications')}
-          className="relative w-11 h-11 bg-white border border-slate-100 rounded-[14px] flex items-center justify-center text-slate-400 hover:text-[#6610f2] hover:border-purple-100 hover:bg-purple-50/40 transition-all duration-200 shrink-0 group"
+          className="relative w-11 h-11 bg-white border border-slate-100 rounded-interactive flex items-center justify-center text-slate-400 hover:text-brand hover:border-purple-100 hover:bg-purple-50/40 transition-all duration-200 shrink-0 group"
         >
           <HiOutlineBell className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-          <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-[#6610f2] rounded-full" />
+          <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-brand rounded-full" />
         </button>
 
         {children}

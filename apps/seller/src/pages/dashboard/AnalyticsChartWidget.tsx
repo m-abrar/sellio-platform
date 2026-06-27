@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { HiOutlineChartBar, HiOutlineUsers, HiOutlineArrowTrendingUp } from 'react-icons/hi2';
+import { CHART_COLORS } from '../../lib/tokens';
 
 interface ChartPoint {
   name: string;
@@ -103,8 +104,8 @@ export default function AnalyticsChartWidget({ verticalsData }: AnalyticsChartWi
 
   if (!verticalsData || activeChartData.length === 0) {
     return (
-      <div className="bg-white border border-slate-100 rounded-[1.75rem] p-12 h-96 flex items-center justify-center">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-300 animate-pulse">
+      <div className="bg-white border border-slate-100 rounded-card p-12 h-96 flex items-center justify-center">
+        <span className="text-label font-semibold uppercase tracking-caps-wide text-slate-300 animate-pulse">
           Loading performance data…
         </span>
       </div>
@@ -116,14 +117,14 @@ export default function AnalyticsChartWidget({ verticalsData }: AnalyticsChartWi
   );
 
   return (
-    <div className="bg-white border border-slate-100 rounded-[1.75rem] p-8 md:p-10 transition-all duration-300">
+    <div className="bg-white border border-slate-100 rounded-card p-8 md:p-10 transition-all duration-300">
       {/* Header row */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-start gap-6 mb-8">
         <div>
-          <h3 className="text-2xl md:text-[1.75rem] font-black text-slate-900 tracking-tight italic leading-tight">
+          <h3 className="text-2xl md:text-title font-black text-slate-900 tracking-tight italic leading-tight">
             Performance Trends.
           </h3>
-          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.2em] mt-1.5">
+          <p className="text-label font-semibold text-slate-400 uppercase tracking-caps mt-1.5">
             Market insights &amp; conversion
           </p>
         </div>
@@ -140,9 +141,9 @@ export default function AnalyticsChartWidget({ verticalsData }: AnalyticsChartWi
               <button
                 key={key}
                 onClick={() => setSelectedVertical(key)}
-                className={`flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-[10px] text-[10px] font-bold uppercase tracking-wider transition-all duration-200 shrink-0 ${
+                className={`flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-badge text-label font-bold uppercase tracking-wider transition-all duration-200 shrink-0 ${
                   isActive
-                    ? 'bg-[#6610f2] text-white shadow-md shadow-[#6610f2]/20'
+                    ? 'bg-brand text-white shadow-md shadow-brand/20'
                     : 'bg-slate-50 text-slate-500 border border-slate-100 hover:bg-slate-100 hover:text-slate-700'
                 }`}
               >
@@ -159,13 +160,13 @@ export default function AnalyticsChartWidget({ verticalsData }: AnalyticsChartWi
         {KPI_CARDS.map(({ key, label, icon: CardIcon, iconBg, format }) => (
           <div
             key={key}
-            className="flex items-center gap-4 bg-slate-50/60 border border-slate-100/80 rounded-2xl p-5 group hover:bg-white hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:border-slate-200/60 transition-all duration-300"
+            className="flex items-center gap-4 bg-slate-50/60 border border-slate-100/80 rounded-2xl p-5 group hover:bg-white hover:shadow-card-hover hover:border-slate-200/60 transition-all duration-300"
           >
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${iconBg}`}>
               <CardIcon className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-[9px] font-semibold uppercase tracking-widest text-slate-400 mb-1 truncate">{label}</p>
+              <p className="text-micro font-semibold uppercase tracking-widest text-slate-400 mb-1 truncate">{label}</p>
               <p className="text-xl font-black text-slate-900 tracking-tight leading-none">
                 {format(kpiValues[key])}
               </p>
@@ -180,12 +181,12 @@ export default function AnalyticsChartWidget({ verticalsData }: AnalyticsChartWi
           <AreaChart data={activeChartData} margin={{ top: 8, right: 4, left: -24, bottom: 0 }}>
             <defs>
               <linearGradient id="viewsGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%"  stopColor="#6610f2" stopOpacity={0.12} />
-                <stop offset="95%" stopColor="#6610f2" stopOpacity={0} />
+                <stop offset="5%"  stopColor={CHART_COLORS.views} stopOpacity={0.12} />
+                <stop offset="95%" stopColor={CHART_COLORS.views} stopOpacity={0} />
               </linearGradient>
               <linearGradient id="leadsGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%"  stopColor="#10b981" stopOpacity={0.12} />
-                <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                <stop offset="5%"  stopColor={CHART_COLORS.leads} stopOpacity={0.12} />
+                <stop offset="95%" stopColor={CHART_COLORS.leads} stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -207,15 +208,15 @@ export default function AnalyticsChartWidget({ verticalsData }: AnalyticsChartWi
                 const d = payload[0].payload as ChartPoint;
                 return (
                   <div className="bg-white border border-slate-100 p-4 rounded-2xl shadow-xl space-y-2">
-                    <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">{d.name}</p>
+                    <p className="text-micro font-bold uppercase tracking-widest text-slate-400 mb-2">{d.name}</p>
                     <div className="flex items-center gap-3 justify-between">
-                      <span className="text-[11px] font-medium text-slate-500 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#6610f2] shrink-0" /> Views
+                      <span className="text-caption font-medium text-slate-500 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-brand shrink-0" /> Views
                       </span>
                       <span className="text-xs font-black text-slate-900">{d.views.toLocaleString()}</span>
                     </div>
                     <div className="flex items-center gap-3 justify-between">
-                      <span className="text-[11px] font-medium text-slate-500 flex items-center gap-1.5">
+                      <span className="text-caption font-medium text-slate-500 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" /> Leads
                       </span>
                       <span className="text-xs font-black text-slate-900">{d.leads.toLocaleString()}</span>
@@ -224,18 +225,18 @@ export default function AnalyticsChartWidget({ verticalsData }: AnalyticsChartWi
                 );
               }}
             />
-            <Area type="monotone" dataKey="views" stroke="#6610f2" strokeWidth={2.5} fillOpacity={1} fill="url(#viewsGrad)" dot={false} />
-            <Area type="monotone" dataKey="leads" stroke="#10b981" strokeWidth={2.5} fillOpacity={1} fill="url(#leadsGrad)" dot={false} />
+            <Area type="monotone" dataKey="views" stroke={CHART_COLORS.views} strokeWidth={2.5} fillOpacity={1} fill="url(#viewsGrad)" dot={false} />
+            <Area type="monotone" dataKey="leads" stroke={CHART_COLORS.leads} strokeWidth={2.5} fillOpacity={1} fill="url(#leadsGrad)" dot={false} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
       {/* Legend */}
       <div className="flex items-center gap-5 mt-5 justify-center">
-        <span className="flex items-center gap-2 text-[10px] font-medium text-slate-500">
-          <span className="w-5 h-0.5 rounded-full bg-[#6610f2]" /> Views
+        <span className="flex items-center gap-2 text-label font-medium text-slate-500">
+          <span className="w-5 h-0.5 rounded-full bg-brand" /> Views
         </span>
-        <span className="flex items-center gap-2 text-[10px] font-medium text-slate-500">
+        <span className="flex items-center gap-2 text-label font-medium text-slate-500">
           <span className="w-5 h-0.5 rounded-full bg-emerald-500" /> Leads
         </span>
       </div>

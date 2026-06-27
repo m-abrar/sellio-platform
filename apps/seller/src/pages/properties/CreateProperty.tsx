@@ -15,11 +15,11 @@ import {
 import { getWelcomeData } from '../../api/dashboard';
 import { ApiError } from '../../lib/apiError';
 
-const containerClass = 'bg-white border border-slate-100 rounded-[2rem] shadow-[0_18px_44px_rgba(0,0,0,0.035)] p-6 md:p-10';
-const labelClass = 'text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2';
-const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
-const tableInputClass = 'w-full min-w-[120px] bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-xl px-4 py-3.5 text-slate-900 font-semibold text-sm transition-all outline-none placeholder:text-slate-300 min-h-[48px]';
-const fieldHintClass = 'mt-2 ml-2 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-300';
+const containerClass = 'bg-white border border-slate-100 rounded-card-lg shadow-elite p-6 md:p-10';
+const labelClass = 'text-label font-black text-slate-400 uppercase tracking-caps mb-3 block ml-2';
+const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-brand focus:bg-white rounded-card-sm px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
+const tableInputClass = 'w-full min-w-[120px] bg-slate-50 border-2 border-transparent focus:border-brand focus:bg-white rounded-xl px-4 py-3.5 text-slate-900 font-semibold text-sm transition-all outline-none placeholder:text-slate-300 min-h-[48px]';
+const fieldHintClass = 'mt-2 ml-2 text-micro font-bold uppercase tracking-label-wide text-slate-300';
 
 const SCORE_PRESETS = [
   { title: 'Walk Score', units: '/100' },
@@ -289,9 +289,9 @@ export default function CreateProperty() {
     return (
       <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
         <PageHeader badge="Limit Reached" title="Add" subtitle="Property" />
-        <div className="bg-slate-900 rounded-[3rem] p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
+        <div className="bg-slate-900 rounded-floating p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
           <div className="relative z-10 max-w-md space-y-8">
-            <div className="w-20 h-20 rounded-3xl bg-[#6610f2]/20 border border-[#6610f2]/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
+            <div className="w-20 h-20 rounded-3xl bg-brand/20 border border-brand/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
               <span className="text-4xl">🛡️</span>
             </div>
             <div className="space-y-4">
@@ -304,13 +304,13 @@ export default function CreateProperty() {
             <button 
               type="button"
               onClick={() => navigate('/dashboard/memberships')}
-              className="bg-[#6610f2] hover:bg-[#7b2dfd] px-10 py-5 rounded-[1.8rem] font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-xl shadow-purple-900/40 inline-flex items-center gap-2 cursor-pointer"
+              className="bg-brand hover:bg-brand-hover px-10 py-5 rounded-card font-black text-xs uppercase tracking-caps transition-all duration-300 shadow-xl shadow-purple-900/40 inline-flex items-center gap-2 cursor-pointer"
             >
               Upgrade Subscription Plan
             </button>
           </div>
-          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#6610f2]/20 rounded-full blur-[120px]" />
-          <div className="absolute -left-20 -top-20 w-80 h-80 bg-[#6610f2]/10 rounded-full blur-[120px]" />
+          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-brand/20 rounded-full blur-[120px]" />
+          <div className="absolute -left-20 -top-20 w-80 h-80 bg-brand/10 rounded-full blur-[120px]" />
         </div>
       </div>
     );
@@ -321,7 +321,7 @@ export default function CreateProperty() {
       <PageHeader badge="Properties" title={isEditMode ? 'Edit' : 'Add'} subtitle="Property">
         <button
           onClick={() => navigate(-1)}
-          className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center gap-2"
+          className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
         >
           <HiOutlineChevronLeft className="w-4 h-4" /> Back
         </button>
@@ -329,14 +329,14 @@ export default function CreateProperty() {
 
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading Property Form...</span>
+          <span className="text-label font-black uppercase tracking-caps-xl text-slate-300 animate-pulse">Loading Property Form...</span>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10">
           <div className="lg:col-span-9 space-y-8 md:space-y-10">
             <div className={containerClass}>
               <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-                <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Property Identity.
+                <span className="w-2 h-8 bg-brand rounded-full" /> Property Identity.
               </h3>
               <div className="space-y-7">
                 <div>
@@ -427,12 +427,12 @@ export default function CreateProperty() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                 <label className="flex items-center justify-between min-h-[72px] p-5 bg-slate-50 rounded-2xl border border-slate-100 cursor-pointer hover:bg-white hover:shadow-sm transition-all">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">For Sale</span>
-                  <input type="checkbox" checked={form.is_sale} onChange={(e) => updateForm('is_sale', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
+                  <span className="text-label font-black uppercase tracking-widest text-slate-500">For Sale</span>
+                  <input type="checkbox" checked={form.is_sale} onChange={(e) => updateForm('is_sale', e.target.checked)} className="w-5 h-5 accent-brand" />
                 </label>
                 <label className="flex items-center justify-between min-h-[72px] p-5 bg-slate-50 rounded-2xl border border-slate-100 cursor-pointer hover:bg-white hover:shadow-sm transition-all">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">For Rent</span>
-                  <input type="checkbox" checked={form.is_rental} onChange={(e) => updateForm('is_rental', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
+                  <span className="text-label font-black uppercase tracking-widest text-slate-500">For Rent</span>
+                  <input type="checkbox" checked={form.is_rental} onChange={(e) => updateForm('is_rental', e.target.checked)} className="w-5 h-5 accent-brand" />
                 </label>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -501,8 +501,8 @@ export default function CreateProperty() {
                 <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Amenities.</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {formMeta.amenities.map((amenity: any) => (
-                    <label key={amenity.id} className={`flex items-center gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${selectedAmenities.includes(amenity.id) ? 'border-[#6610f2] bg-[#6610f2]/5' : 'border-slate-100 bg-slate-50'}`}>
-                      <input type="checkbox" checked={selectedAmenities.includes(amenity.id)} onChange={() => toggleAmenity(amenity.id)} className="accent-[#6610f2]" />
+                    <label key={amenity.id} className={`flex items-center gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${selectedAmenities.includes(amenity.id) ? 'border-brand bg-brand/5' : 'border-slate-100 bg-slate-50'}`}>
+                      <input type="checkbox" checked={selectedAmenities.includes(amenity.id)} onChange={() => toggleAmenity(amenity.id)} className="accent-brand" />
                       <span className="text-sm font-bold text-slate-700">{amenity.title}</span>
                     </label>
                   ))}
@@ -515,8 +515,8 @@ export default function CreateProperty() {
                 <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Specification Features.</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {formMeta.features.map((feature: any) => (
-                    <label key={feature.id} className={`flex items-center gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${selectedFeatures.includes(feature.id) ? 'border-[#6610f2] bg-[#6610f2]/5' : 'border-slate-100 bg-slate-50'}`}>
-                      <input type="checkbox" checked={selectedFeatures.includes(feature.id)} onChange={() => setSelectedFeatures(prev => prev.includes(feature.id) ? prev.filter(id => id !== feature.id) : [...prev, feature.id])} className="accent-[#6610f2]" />
+                    <label key={feature.id} className={`flex items-center gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${selectedFeatures.includes(feature.id) ? 'border-brand bg-brand/5' : 'border-slate-100 bg-slate-50'}`}>
+                      <input type="checkbox" checked={selectedFeatures.includes(feature.id)} onChange={() => setSelectedFeatures(prev => prev.includes(feature.id) ? prev.filter(id => id !== feature.id) : [...prev, feature.id])} className="accent-brand" />
                       <span className="text-sm font-bold text-slate-700">{feature.title}</span>
                     </label>
                   ))}
@@ -526,14 +526,14 @@ export default function CreateProperty() {
 
             <div className={containerClass}>
               <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-                <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Photos & Media.
+                <span className="w-2 h-8 bg-brand rounded-full" /> Photos & Media.
               </h3>
               <MediaStudio files={files} setFiles={setFiles} />
             </div>
 
             <div className={containerClass}>
               <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-                <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Tours & Media Embeds.
+                <span className="w-2 h-8 bg-brand rounded-full" /> Tours & Media Embeds.
               </h3>
               <div className="space-y-6">
                 <div>
@@ -558,13 +558,13 @@ export default function CreateProperty() {
                 <label className={labelClass}>Discoverability Tags</label>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {tags.map((tag) => (
-                    <span key={tag} className="flex items-center gap-2 bg-[#6610f2]/5 text-[#6610f2] border border-[#6610f2]/10 px-4 py-2 rounded-full font-black text-[10px] uppercase tracking-wider">
+                    <span key={tag} className="flex items-center gap-2 bg-brand/5 text-brand border border-brand/10 px-4 py-2 rounded-full font-black text-label uppercase tracking-wider">
                       {tag}
                       <button type="button" onClick={() => setTags(prev => prev.filter(t => t !== tag))} className="text-red-500 hover:text-red-700 font-bold ml-1">×</button>
                     </span>
                   ))}
                   {tags.length === 0 && (
-                    <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest ml-2">No tags added yet.</span>
+                    <span className="text-label font-bold text-slate-300 uppercase tracking-widest ml-2">No tags added yet.</span>
                   )}
                 </div>
                 <div className="flex gap-4">
@@ -592,7 +592,7 @@ export default function CreateProperty() {
                         setTagInput('');
                       }
                     }}
-                    className="bg-[#6610f2] text-white px-6 py-2.5 rounded-full font-black text-[10px] uppercase tracking-wider hover:bg-[#520dc2] transition-colors"
+                    className="bg-brand text-white px-6 py-2.5 rounded-full font-black text-label uppercase tracking-wider hover:bg-[#520dc2] transition-colors"
                   >
                     Add
                   </button>
@@ -610,9 +610,9 @@ export default function CreateProperty() {
                   <table className="min-w-[720px] w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-slate-100">
-                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Landmark Title</th>
-                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Description</th>
-                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-32 pr-4">Distance (miles)</th>
+                        <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps pr-4">Landmark Title</th>
+                        <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps pr-4">Description</th>
+                        <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps w-32 pr-4">Distance (miles)</th>
                         <th className="pb-3 w-16"></th>
                       </tr>
                     </thead>
@@ -672,7 +672,7 @@ export default function CreateProperty() {
                       ))}
                       {neighborhoods.length === 0 && (
                         <tr>
-                          <td colSpan={4} className="py-8 text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                          <td colSpan={4} className="py-8 text-center text-label font-bold text-slate-300 uppercase tracking-widest">
                             No landmarks added yet. Click '+ Add Landmark' below to add nearby landmarks.
                           </td>
                         </tr>
@@ -683,7 +683,7 @@ export default function CreateProperty() {
                 <button
                   type="button"
                   onClick={() => setNeighborhoods(prev => [...prev, { title: '', description: '', distance_miles: 0.5 }])}
-                  className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-wider hover:bg-slate-100 transition-colors"
+                  className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-label uppercase tracking-wider hover:bg-slate-100 transition-colors"
                 >
                   + Add Landmark
                 </button>
@@ -695,7 +695,7 @@ export default function CreateProperty() {
                 <span className="w-2 h-8 bg-emerald-500 rounded-full" /> Livability & Accessibility Scores.
               </h3>
               <div className="space-y-6">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                <p className="text-label font-bold text-slate-400 uppercase tracking-widest">
                   Walk Score, transit ratings, school ratings, and other lifestyle metrics shown on the property detail page.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-2">
@@ -704,7 +704,7 @@ export default function CreateProperty() {
                       key={preset.title}
                       type="button"
                       onClick={() => setScores((prev) => [...prev, { title: preset.title, score: '', units: preset.units, description: '' }])}
-                      className="bg-emerald-50 border border-emerald-100 text-emerald-700 px-4 py-2 rounded-xl font-black text-[10px] uppercase tracking-wider hover:bg-emerald-100 transition-colors"
+                      className="bg-emerald-50 border border-emerald-100 text-emerald-700 px-4 py-2 rounded-xl font-black text-label uppercase tracking-wider hover:bg-emerald-100 transition-colors"
                     >
                       + {preset.title}
                     </button>
@@ -714,10 +714,10 @@ export default function CreateProperty() {
                   <table className="min-w-[760px] w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-slate-100">
-                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Metric</th>
-                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-28 pr-4">Score</th>
-                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-24 pr-4">Units</th>
-                        <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Label</th>
+                        <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps pr-4">Metric</th>
+                        <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps w-28 pr-4">Score</th>
+                        <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps w-24 pr-4">Units</th>
+                        <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps pr-4">Label</th>
                         <th className="pb-3 w-16"></th>
                       </tr>
                     </thead>
@@ -791,7 +791,7 @@ export default function CreateProperty() {
                       ))}
                       {scores.length === 0 && (
                         <tr>
-                          <td colSpan={5} className="py-8 text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                          <td colSpan={5} className="py-8 text-center text-label font-bold text-slate-300 uppercase tracking-widest">
                             No scores added yet. Use a preset above or add a custom metric.
                           </td>
                         </tr>
@@ -802,7 +802,7 @@ export default function CreateProperty() {
                 <button
                   type="button"
                   onClick={() => setScores((prev) => [...prev, { title: '', score: '', units: '/100', description: '' }])}
-                  className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-wider hover:bg-slate-100 transition-colors"
+                  className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-label uppercase tracking-wider hover:bg-slate-100 transition-colors"
                 >
                   + Add Custom Score
                 </button>
@@ -824,7 +824,7 @@ export default function CreateProperty() {
                     key={tab.id}
                     type="button"
                     onClick={() => setActivePricingTab(tab.id as any)}
-                    className={`px-5 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${activePricingTab === tab.id ? 'bg-[#6610f2] text-white shadow-md' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}
+                    className={`px-5 py-3 rounded-xl font-black text-label uppercase tracking-widest transition-all ${activePricingTab === tab.id ? 'bg-brand text-white shadow-md' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}
                   >
                     {tab.label}
                   </button>
@@ -833,15 +833,15 @@ export default function CreateProperty() {
 
               {activePricingTab === 'seasonal' && (
                 <div className="space-y-6">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Override base price per night for short term rental seasons</p>
+                  <p className="text-label font-bold text-slate-400 uppercase tracking-widest mb-4">Override base price per night for short term rental seasons</p>
                   <div className="overflow-x-auto">
                     <table className="min-w-[780px] w-full text-left border-collapse">
                       <thead>
                         <tr className="border-b border-slate-100">
-                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Season Name</th>
-                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Start Date</th>
-                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">End Date</th>
-                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-36 pr-4">Override Price ($)</th>
+                          <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps pr-4">Season Name</th>
+                          <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps pr-4">Start Date</th>
+                          <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps pr-4">End Date</th>
+                          <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps w-36 pr-4">Override Price ($)</th>
                           <th className="pb-3 w-16"></th>
                         </tr>
                       </thead>
@@ -911,7 +911,7 @@ export default function CreateProperty() {
                         ))}
                         {seasonalPrices.length === 0 && (
                           <tr>
-                            <td colSpan={5} className="py-8 text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                            <td colSpan={5} className="py-8 text-center text-label font-bold text-slate-300 uppercase tracking-widest">
                               No seasonal overrides defined yet.
                             </td>
                           </tr>
@@ -922,7 +922,7 @@ export default function CreateProperty() {
                   <button
                     type="button"
                     onClick={() => setSeasonalPrices(prev => [...prev, { season_name: '', start_date: '', end_date: '', price: 0 }])}
-                    className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-wider hover:bg-slate-100 transition-colors"
+                    className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-label uppercase tracking-wider hover:bg-slate-100 transition-colors"
                   >
                     + Add Season Price
                   </button>
@@ -931,14 +931,14 @@ export default function CreateProperty() {
 
               {activePricingTab === 'addons' && (
                 <div className="space-y-6">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Add optional up-sell services (daily cleaning, car rental, tour guide)</p>
+                  <p className="text-label font-bold text-slate-400 uppercase tracking-widest mb-4">Add optional up-sell services (daily cleaning, car rental, tour guide)</p>
                   <div className="overflow-x-auto">
                     <table className="min-w-[720px] w-full text-left border-collapse">
                       <thead>
                         <tr className="border-b border-slate-100">
-                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Addon Service</th>
-                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Description</th>
-                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-36 pr-4">Addon Cost ($)</th>
+                          <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps pr-4">Addon Service</th>
+                          <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps pr-4">Description</th>
+                          <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps w-36 pr-4">Addon Cost ($)</th>
                           <th className="pb-3 w-16"></th>
                         </tr>
                       </thead>
@@ -997,7 +997,7 @@ export default function CreateProperty() {
                         ))}
                         {addons.length === 0 && (
                           <tr>
-                            <td colSpan={4} className="py-8 text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                            <td colSpan={4} className="py-8 text-center text-label font-bold text-slate-300 uppercase tracking-widest">
                               No auxiliary addons defined yet.
                             </td>
                           </tr>
@@ -1008,7 +1008,7 @@ export default function CreateProperty() {
                   <button
                     type="button"
                     onClick={() => setAddons(prev => [...prev, { title: '', description: '', price: 0 }])}
-                    className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-wider hover:bg-slate-100 transition-colors"
+                    className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-label uppercase tracking-wider hover:bg-slate-100 transition-colors"
                   >
                     + Add Addon Service
                   </button>
@@ -1017,15 +1017,15 @@ export default function CreateProperty() {
 
               {activePricingTab === 'fees' && (
                 <div className="space-y-6">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Set additional fees (taxes, cleanings) with dynamic multipliers</p>
+                  <p className="text-label font-bold text-slate-400 uppercase tracking-widest mb-4">Set additional fees (taxes, cleanings) with dynamic multipliers</p>
                   <div className="overflow-x-auto">
                     <table className="min-w-[900px] w-full text-left border-collapse">
                       <thead>
                         <tr className="border-b border-slate-100">
-                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pr-4">Fee Title</th>
-                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-36 pr-4">Calculation</th>
-                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-32 pr-4">Amount ($/%)</th>
-                          <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] w-36 pr-4">Charge Multiplier</th>
+                          <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps pr-4">Fee Title</th>
+                          <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps w-36 pr-4">Calculation</th>
+                          <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps w-32 pr-4">Amount ($/%)</th>
+                          <th className="pb-3 text-label font-black text-slate-400 uppercase tracking-caps w-36 pr-4">Charge Multiplier</th>
                           <th className="pb-3 w-16"></th>
                         </tr>
                       </thead>
@@ -1107,7 +1107,7 @@ export default function CreateProperty() {
                         ))}
                         {fees.length === 0 && (
                           <tr>
-                            <td colSpan={5} className="py-8 text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                            <td colSpan={5} className="py-8 text-center text-label font-bold text-slate-300 uppercase tracking-widest">
                               No additional fees defined yet.
                             </td>
                           </tr>
@@ -1118,7 +1118,7 @@ export default function CreateProperty() {
                   <button
                     type="button"
                     onClick={() => setFees(prev => [...prev, { title: '', amount: 0, type: 'fixed', rate: null, charge_type: 'per_stay' }])}
-                    className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-wider hover:bg-slate-100 transition-colors"
+                    className="bg-slate-50 border border-slate-100 text-slate-800 px-6 py-3 rounded-2xl font-black text-label uppercase tracking-wider hover:bg-slate-100 transition-colors"
                   >
                     + Add Charge Fee
                   </button>
@@ -1128,7 +1128,7 @@ export default function CreateProperty() {
 
             <div className={containerClass}>
               <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-                <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Terms & Regulations.
+                <span className="w-2 h-8 bg-brand rounded-full" /> Terms & Regulations.
               </h3>
               <div className="space-y-6">
                 <div>
@@ -1147,25 +1147,25 @@ export default function CreateProperty() {
 
           <div className="lg:col-span-3">
             <div className="lg:sticky lg:top-10 space-y-8">
-              <div className="bg-slate-900 rounded-[2rem] p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
+              <div className="bg-slate-900 rounded-card-lg p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
                 <div className="relative z-10">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Asset Status</p>
+                  <p className="text-label font-black uppercase tracking-widest text-slate-500 mb-6">Asset Status</p>
                   <span className="text-4xl font-black italic tracking-tighter">{form.is_published ? 'LIVE' : 'DRAFT'}</span>
                   <div className="space-y-4 mt-8">
                     <label className="flex items-center justify-between p-4 bg-white/5 rounded-2xl cursor-pointer">
                       <span className="text-sm font-bold">Published</span>
-                      <input type="checkbox" checked={form.is_published} onChange={(e) => updateForm('is_published', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
+                      <input type="checkbox" checked={form.is_published} onChange={(e) => updateForm('is_published', e.target.checked)} className="w-5 h-5 accent-brand" />
                     </label>
                     <label className="flex items-center justify-between p-4 bg-white/5 rounded-2xl cursor-pointer">
                       <span className="text-sm font-bold">Featured</span>
-                      <input type="checkbox" checked={form.is_featured} onChange={(e) => updateForm('is_featured', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
+                      <input type="checkbox" checked={form.is_featured} onChange={(e) => updateForm('is_featured', e.target.checked)} className="w-5 h-5 accent-brand" />
                     </label>
                   </div>
                 </div>
               </div>
 
-              <div className="p-6 border-2 border-dashed border-slate-100 rounded-[2rem] bg-white/60">
-                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">
+              <div className="p-6 border-2 border-dashed border-slate-100 rounded-card-lg bg-white/60">
+                <p className="text-label font-black text-slate-500 uppercase tracking-caps mb-4">
                   Listing Checklist
                 </p>
                 <div className="space-y-3">
@@ -1176,13 +1176,13 @@ export default function CreateProperty() {
                     { label: 'Primary media', done: files.some(f => f.isMain) },
                     { label: 'Narrative', done: form.description.length > 20 },
                   ].map((item) => (
-                    <div key={item.label} className="flex items-center justify-between gap-4 text-[10px] font-black uppercase tracking-widest">
+                    <div key={item.label} className="flex items-center justify-between gap-4 text-label font-black uppercase tracking-widest">
                       <span className="text-slate-500">{item.label}</span>
                       <span className={item.done ? 'text-green-500' : 'text-slate-300'}>{item.done ? 'Ready' : 'Missing'}</span>
                     </div>
                   ))}
                 </div>
-                <p className="mt-6 text-[9px] font-bold text-slate-400 uppercase leading-relaxed tracking-widest">
+                <p className="mt-6 text-micro font-bold text-slate-400 uppercase leading-relaxed tracking-widest">
                   Complete taxonomy, address, media, and narrative before publishing.
                 </p>
               </div>

@@ -128,8 +128,8 @@ export default function GoogleMapPicker({
 
   if (!apiKey) {
     return (
-      <div className="md:col-span-2 rounded-[1.5rem] border border-dashed border-slate-200 bg-slate-50 p-6 space-y-1">
-        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Map picker disabled</p>
+      <div className="md:col-span-2 rounded-card-sm border border-dashed border-slate-200 bg-slate-50 p-6 space-y-1">
+        <p className="text-label font-black uppercase tracking-caps text-slate-400">Map picker disabled</p>
         <p className="text-xs font-bold text-slate-400 leading-relaxed">
           Set <code className="bg-slate-100 px-1 rounded text-slate-500">GOOGLE_MAPS_API_KEY</code> in <span className="text-slate-500">.env</span> or add the key under <span className="text-slate-500">Admin → Settings → Google Maps API Key</span> to enable drag-and-drop pin selection.
         </p>
@@ -138,7 +138,7 @@ export default function GoogleMapPicker({
   }
 
   return (
-    <div className="md:col-span-2 overflow-hidden rounded-[1.75rem] border border-slate-100 bg-slate-100 shadow-inner">
+    <div className="md:col-span-2 overflow-hidden rounded-card border border-slate-100 bg-slate-100 shadow-inner">
       <div ref={mapElementRef} className="h-[320px] w-full" />
     </div>
   );

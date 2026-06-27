@@ -18,10 +18,10 @@ import { createService, getServiceBySlug, getServiceFormMeta, updateService } fr
 import { getWelcomeData } from '../../api/dashboard';
 import { ApiError } from '../../lib/apiError';
 
-const containerClass = 'bg-white border border-slate-100 rounded-[2rem] shadow-[0_18px_44px_rgba(0,0,0,0.035)] p-6 md:p-10';
-const labelClass = 'text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2';
-const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
-const fieldHintClass = 'mt-2 ml-2 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-300';
+const containerClass = 'bg-white border border-slate-100 rounded-card-lg shadow-elite p-6 md:p-10';
+const labelClass = 'text-label font-black text-slate-400 uppercase tracking-caps mb-3 block ml-2';
+const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-brand focus:bg-white rounded-card-sm px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
+const fieldHintClass = 'mt-2 ml-2 text-micro font-bold uppercase tracking-label-wide text-slate-300';
 
 const defaultForm = {
   title: '',
@@ -284,7 +284,7 @@ export default function CreateService() {
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading...</span>
+        <span className="text-label font-black uppercase tracking-caps-xl text-slate-300 animate-pulse">Loading...</span>
       </div>
     );
   }
@@ -293,9 +293,9 @@ export default function CreateService() {
     return (
       <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
         <PageHeader badge="Limit Reached" title="Add" subtitle="Service" />
-        <div className="bg-slate-900 rounded-[3rem] p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
+        <div className="bg-slate-900 rounded-floating p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
           <div className="relative z-10 max-w-md space-y-8">
-            <div className="w-20 h-20 rounded-3xl bg-[#6610f2]/20 border border-[#6610f2]/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
+            <div className="w-20 h-20 rounded-3xl bg-brand/20 border border-brand/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
               <span className="text-4xl">🛡️</span>
             </div>
             <div className="space-y-4">
@@ -308,13 +308,13 @@ export default function CreateService() {
             <button 
               type="button"
               onClick={() => navigate('/dashboard/memberships')}
-              className="bg-[#6610f2] hover:bg-[#7b2dfd] px-10 py-5 rounded-[1.8rem] font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-xl shadow-purple-900/40 inline-flex items-center gap-2 cursor-pointer"
+              className="bg-brand hover:bg-brand-hover px-10 py-5 rounded-card font-black text-xs uppercase tracking-caps transition-all duration-300 shadow-xl shadow-purple-900/40 inline-flex items-center gap-2 cursor-pointer"
             >
               Upgrade Subscription Plan
             </button>
           </div>
-          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#6610f2]/20 rounded-full blur-[120px]" />
-          <div className="absolute -left-20 -top-20 w-80 h-80 bg-[#6610f2]/10 rounded-full blur-[120px]" />
+          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-brand/20 rounded-full blur-[120px]" />
+          <div className="absolute -left-20 -top-20 w-80 h-80 bg-brand/10 rounded-full blur-[120px]" />
         </div>
       </div>
     );
@@ -329,7 +329,7 @@ export default function CreateService() {
       >
         <button
           onClick={() => navigate(-1)}
-          className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center gap-2"
+          className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
         >
           <HiOutlineChevronLeft className="w-4 h-4" /> Back
         </button>
@@ -339,7 +339,7 @@ export default function CreateService() {
         <div className="lg:col-span-8 space-y-8 md:space-y-10">
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Service Identity.
+              <span className="w-2 h-8 bg-brand rounded-full" /> Service Identity.
             </h3>
             <div className="space-y-7">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -437,9 +437,9 @@ export default function CreateService() {
                       key={type}
                       type="button"
                       onClick={() => updateForm('rate_type', type)}
-                      className={`flex-1 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border-2 ${
+                      className={`flex-1 py-4 rounded-2xl font-black text-label uppercase tracking-widest transition-all border-2 ${
                         form.rate_type === type 
-                        ? 'bg-[#6610f2] text-white border-[#6610f2]' 
+                        ? 'bg-brand text-white border-brand' 
                         : 'bg-slate-50 text-slate-400 border-transparent hover:border-slate-200'
                       }`}
                     >
@@ -541,14 +541,14 @@ export default function CreateService() {
                       onClick={() => toggleFeature(feature.id)}
                       className={`flex items-center gap-4 p-5 rounded-2xl text-left border-2 transition-all ${
                         isSelected
-                          ? 'bg-[#6610f2]/5 border-[#6610f2] text-slate-950 font-black'
+                          ? 'bg-brand/5 border-brand text-slate-950 font-black'
                           : 'bg-slate-50/50 border-slate-100 text-slate-500 hover:border-slate-200'
                       }`}
                     >
                       <div
                         className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${
                           isSelected
-                            ? 'border-[#6610f2] bg-[#6610f2] text-white'
+                            ? 'border-brand bg-brand text-white'
                             : 'border-slate-300 bg-white'
                         }`}
                       >
@@ -621,7 +621,7 @@ export default function CreateService() {
 
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Photos & Media.
+              <span className="w-2 h-8 bg-brand rounded-full" /> Photos & Media.
             </h3>
             <MediaStudio files={files} setFiles={setFiles} />
           </div>
@@ -642,14 +642,14 @@ export default function CreateService() {
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-6 flex items-center gap-3">
               <span className="w-2 h-8 bg-teal-500 rounded-full" /> Discoverability Tags.
             </h3>
-            <p className="text-[10px] font-black text-slate-400 mb-6 leading-relaxed tracking-wider">
+            <p className="text-label font-black text-slate-400 mb-6 leading-relaxed tracking-wider">
               ADD SEARCH KEYWORDS AND RELEVANT TAGS TO AMPLIFY DISCOVERABILITY ACROSS SEARCH SECTORS (E.G. 'PLUMBING', 'EMERGENCY', 'REPAIR'). PRESS ENTER OR COMMA TO CAST A TAG CHIP.
             </p>
             <div className="flex flex-wrap gap-2.5 mb-6">
               {tags.map((tag, idx) => (
                 <span
                   key={idx}
-                  className="inline-flex items-center gap-2 bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest px-4.5 py-2.5 rounded-full shadow-sm select-none"
+                  className="inline-flex items-center gap-2 bg-slate-900 text-white font-black text-label uppercase tracking-widest px-4.5 py-2.5 rounded-full shadow-sm select-none"
                 >
                   {tag}
                   <button
@@ -664,7 +664,7 @@ export default function CreateService() {
                 </span>
               ))}
               {tags.length === 0 && (
-                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300 italic py-2">
+                <span className="text-label font-bold uppercase tracking-widest text-slate-300 italic py-2">
                   No tags added yet...
                 </span>
               )}
@@ -714,21 +714,21 @@ export default function CreateService() {
 
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-10 space-y-8">
-          <div className="bg-slate-900 rounded-[2rem] p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-slate-900 rounded-card-lg p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="relative z-10">
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Service Readiness</p>
+              <p className="text-label font-black uppercase tracking-widest text-slate-500 mb-6">Service Readiness</p>
               <span className="text-5xl font-black italic tracking-tighter">{progress}%</span>
               <div className="w-full h-1.5 bg-white/10 rounded-full mt-6 overflow-hidden">
-                <div className="h-full bg-[#6610f2] transition-all duration-1000 shadow-[0_0_15px_#6610f2]" style={{ width: `${progress}%` }} />
+                <div className="h-full bg-brand transition-all duration-1000 shadow-[0_0_15px_#6610f2]" style={{ width: `${progress}%` }} />
               </div>
               <div className="space-y-4 mt-8">
                 <label className="flex items-center justify-between p-4 bg-white/5 rounded-2xl cursor-pointer">
                   <span className="text-sm font-bold">Published</span>
-                  <input type="checkbox" checked={form.is_published} onChange={(e) => updateForm('is_published', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
+                  <input type="checkbox" checked={form.is_published} onChange={(e) => updateForm('is_published', e.target.checked)} className="w-5 h-5 accent-brand" />
                 </label>
                 <label className="flex items-center justify-between p-4 bg-white/5 rounded-2xl cursor-pointer">
                   <span className="text-sm font-bold">Featured</span>
-                  <input type="checkbox" checked={form.is_featured} onChange={(e) => updateForm('is_featured', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
+                  <input type="checkbox" checked={form.is_featured} onChange={(e) => updateForm('is_featured', e.target.checked)} className="w-5 h-5 accent-brand" />
                 </label>
               </div>
             </div>
@@ -745,15 +745,15 @@ export default function CreateService() {
                 { key: 'is_project_based', label: 'Project Based' },
               ].map((item) => (
                 <label key={item.key} className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl cursor-pointer hover:bg-slate-100 transition-colors group">
-                  <span className="text-sm font-bold text-slate-700 group-hover:text-[#6610f2] transition-colors">{item.label}</span>
-                  <input type="checkbox" checked={form[item.key as keyof typeof form] as boolean} onChange={(e) => updateForm(item.key, e.target.checked)} className="w-6 h-6 rounded-lg accent-[#6610f2] cursor-pointer" />
+                  <span className="text-sm font-bold text-slate-700 group-hover:text-brand transition-colors">{item.label}</span>
+                  <input type="checkbox" checked={form[item.key as keyof typeof form] as boolean} onChange={(e) => updateForm(item.key, e.target.checked)} className="w-6 h-6 rounded-lg accent-brand cursor-pointer" />
                 </label>
               ))}
             </div>
           </div>
 
-          <div className="p-6 border-2 border-dashed border-slate-100 rounded-[2rem] bg-white/60">
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Service Checklist</p>
+          <div className="p-6 border-2 border-dashed border-slate-100 rounded-card-lg bg-white/60">
+            <p className="text-label font-black text-slate-500 uppercase tracking-caps mb-4">Service Checklist</p>
             <div className="space-y-3">
               {[
                 { label: 'Title', done: form.title.length > 5 },
@@ -762,7 +762,7 @@ export default function CreateService() {
                 { label: 'Media', done: files.some((f) => f.isMain) },
                 { label: 'Narrative', done: form.description.length > 20 },
               ].map((item) => (
-                <div key={item.label} className="flex items-center justify-between gap-4 text-[10px] font-black uppercase tracking-widest">
+                <div key={item.label} className="flex items-center justify-between gap-4 text-label font-black uppercase tracking-widest">
                   <span className="text-slate-500">{item.label}</span>
                   <span className={item.done ? 'text-green-500' : 'text-slate-300'}>{item.done ? 'Ready' : 'Missing'}</span>
                 </div>

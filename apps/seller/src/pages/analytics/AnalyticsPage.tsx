@@ -175,7 +175,7 @@ export default function AnalyticsPage() {
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">
+        <span className="text-label font-black uppercase tracking-caps-xl text-slate-300 animate-pulse">
           Syncing Analytics Hub...
         </span>
       </div>
@@ -189,7 +189,7 @@ export default function AnalyticsPage() {
       <PageHeader badge="Analytics" title="Performance" subtitle="Overview" />
 
       {/* 2. Responsive Symmetrical Grid Slicer (Zero Horizontal Scroll) */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3.5 w-full bg-slate-50/50 p-3 rounded-[2.5rem] border border-slate-100/75 shadow-xs">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3.5 w-full bg-slate-50/50 p-3 rounded-container border border-slate-100/75 shadow-xs">
         {Object.keys(VERTICALS).map((key) => {
           const meta = VERTICALS[key];
           const isActive = selectedVertical === key;
@@ -197,7 +197,7 @@ export default function AnalyticsPage() {
             <button
               key={key}
               onClick={() => setSelectedVertical(key)}
-              className={`px-3 py-4 sm:px-5 sm:py-4.5 rounded-[1.5rem] sm:rounded-[1.8rem] text-[8px] sm:text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-[0.15em] transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2.5 border shadow-sm cursor-pointer ${
+              className={`px-3 py-4 sm:px-5 sm:py-4.5 rounded-card-sm sm:rounded-card text-tiny sm:text-label font-black uppercase tracking-label sm:tracking-label-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2.5 border shadow-sm cursor-pointer ${
                 isActive
                   ? 'bg-slate-900 border-slate-900 text-white shadow-lg scale-[1.03] translate-y-[-1px]'
                   : 'bg-white hover:bg-slate-50 border-slate-100 text-slate-500 hover:text-slate-900 hover:scale-[1.01]'
@@ -220,16 +220,16 @@ export default function AnalyticsPage() {
         ].map((kpi, idx) => (
           <div 
             key={idx} 
-            className={`p-8 rounded-[2rem] border transition-all duration-500 hover:shadow-xl hover:-translate-y-1 bg-white ${activeMeta.border}`}
+            className={`p-8 rounded-card-lg border transition-all duration-500 hover:shadow-xl hover:-translate-y-1 bg-white ${activeMeta.border}`}
           >
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{kpi.label}</p>
+            <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-2">{kpi.label}</p>
             <h4 
               className="text-3xl font-black tracking-tight italic"
               style={{ color: activeMeta.color }}
             >
               {kpi.value}
             </h4>
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-3">{kpi.labelDesc}</p>
+            <p className="text-micro font-bold text-slate-400 uppercase tracking-wider mt-3">{kpi.labelDesc}</p>
           </div>
         ))}
       </div>
@@ -238,10 +238,10 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         
         {/* Daily Leads Area Chart */}
-        <div className="bg-white p-8 md:p-10 rounded-[2.5rem] border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
+        <div className="bg-white p-8 md:p-10 rounded-container border border-slate-100 shadow-elite-soft">
           <div className="mb-10">
             <h3 className="text-2xl font-black text-slate-900 italic tracking-tight">Lead Stream.</h3>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mt-2">Daily lead volume</p>
+            <p className="text-label font-black text-slate-400 uppercase tracking-caps-wide mt-2">Daily lead volume</p>
           </div>
           <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
@@ -267,9 +267,9 @@ export default function AnalyticsPage() {
                       const data = payload[0].payload;
                       return (
                         <div className="bg-white/95 backdrop-blur-md border border-slate-100 p-5 rounded-2xl shadow-xl space-y-1.5 animate-in fade-in zoom-in-95 duration-150">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">{data.name}</p>
+                          <p className="text-micro font-black uppercase tracking-widest text-slate-400 mb-1">{data.name}</p>
                           <div className="flex items-center gap-4 justify-between">
-                            <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1.5">
+                            <span className="text-label font-bold text-slate-500 flex items-center gap-1.5">
                               <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: activeMeta.color }} /> Leads
                             </span>
                             <span className="text-xs font-black text-slate-900">{data.leads}</span>
@@ -287,10 +287,10 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Daily Views Bar Chart */}
-        <div className="bg-white p-8 md:p-10 rounded-[2.5rem] border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
+        <div className="bg-white p-8 md:p-10 rounded-container border border-slate-100 shadow-elite-soft">
           <div className="mb-10">
             <h3 className="text-2xl font-black text-slate-900 italic tracking-tight">Traffic Volume.</h3>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mt-2">Asset visibility index</p>
+            <p className="text-label font-black text-slate-400 uppercase tracking-caps-wide mt-2">Asset visibility index</p>
           </div>
           <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
@@ -311,9 +311,9 @@ export default function AnalyticsPage() {
                       const data = payload[0].payload;
                       return (
                         <div className="bg-white/95 backdrop-blur-md border border-slate-100 p-5 rounded-2xl shadow-xl space-y-1.5 animate-in fade-in zoom-in-95 duration-150">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">{data.name}</p>
+                          <p className="text-micro font-black uppercase tracking-widest text-slate-400 mb-1">{data.name}</p>
                           <div className="flex items-center gap-4 justify-between">
-                            <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1.5">
+                            <span className="text-label font-bold text-slate-500 flex items-center gap-1.5">
                               <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: activeMeta.color }} /> Views
                             </span>
                             <span className="text-xs font-black text-slate-900">{data.views.toLocaleString()}</span>
@@ -336,11 +336,11 @@ export default function AnalyticsPage() {
       </div>
 
       {/* 4. Detailed Listings Performance Ledger */}
-      <div className="bg-white border border-slate-100 rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
+      <div className="bg-white border border-slate-100 rounded-container overflow-hidden shadow-elite-soft">
         <div className="p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight italic leading-none">Listing Analytics.</h3>
-            <p className="text-[10px] md:text-xs text-slate-400 font-bold mt-3 uppercase tracking-[0.3em]">Detailed item conversions</p>
+            <p className="text-label md:text-xs text-slate-400 font-bold mt-3 uppercase tracking-caps-wide">Detailed item conversions</p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
@@ -352,13 +352,13 @@ export default function AnalyticsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search listing by title..."
-                className="w-full bg-slate-50 border border-slate-100 rounded-full pl-14 pr-8 py-3.5 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#6610f2]/20 shadow-inner"
+                className="w-full bg-slate-50 border border-slate-100 rounded-full pl-14 pr-8 py-3.5 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-brand/20 shadow-inner"
               />
             </div>
             <button
               onClick={handleExportCSV}
               disabled={filteredListings.length === 0}
-              className="flex items-center justify-center gap-2 bg-slate-900 text-white hover:bg-slate-800 px-6 py-4.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-slate-900/10 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-2 bg-slate-900 text-white hover:bg-slate-800 px-6 py-4.5 rounded-full text-label font-black uppercase tracking-widest shadow-lg shadow-slate-900/10 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <HiOutlineArrowDownTray className="w-4 h-4 stroke-[3px]" /> Export
             </button>
@@ -376,7 +376,7 @@ export default function AnalyticsPage() {
           ) : (
             <table className="w-full border-separate border-spacing-y-4">
               <thead>
-                <tr className="text-left text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
+                <tr className="text-left text-label font-black uppercase tracking-caps-wide text-slate-400">
                   <th className="pb-3 px-6">Asset Title</th>
                   <th className="pb-3 px-6">Vertical</th>
                   <th className="pb-3 px-6 text-center">Impressions</th>
@@ -394,13 +394,13 @@ export default function AnalyticsPage() {
                   >
                     {/* Title */}
                     <td className="bg-slate-50/45 group-hover:bg-slate-50/20 border-y border-l border-slate-100 rounded-l-2xl px-6 py-6 transition-all duration-300">
-                      <p className="text-sm font-black text-slate-900 line-clamp-1 leading-snug group-hover:text-[#6610f2] transition-colors">{item.title}</p>
-                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-1.5">ID: {item.id}</p>
+                      <p className="text-sm font-black text-slate-900 line-clamp-1 leading-snug group-hover:text-brand transition-colors">{item.title}</p>
+                      <p className="text-micro text-slate-400 font-bold uppercase tracking-wider mt-1.5">ID: {item.id}</p>
                     </td>
 
                     {/* Vertical Category */}
                     <td className="bg-slate-50/45 group-hover:bg-slate-50/20 border-y border-slate-100 px-6 py-6 transition-all duration-300">
-                      <span className="text-[9px] font-black bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full uppercase tracking-widest border border-slate-200">
+                      <span className="text-micro font-black bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full uppercase tracking-widest border border-slate-200">
                         {item.type === 'JobListing' ? 'Job' : item.type}
                       </span>
                     </td>
@@ -423,7 +423,7 @@ export default function AnalyticsPage() {
                     {/* Conversion Rate */}
                     <td className="bg-slate-50/45 group-hover:bg-slate-50/20 border-y border-r border-slate-100 rounded-r-2xl px-6 py-6 text-right transition-all duration-300">
                       <span 
-                        className="text-[11px] font-black italic px-4 py-1.5 rounded-full"
+                        className="text-caption font-black italic px-4 py-1.5 rounded-full"
                         style={{
                           backgroundColor: `${activeMeta.color}0a`,
                           color: activeMeta.color,

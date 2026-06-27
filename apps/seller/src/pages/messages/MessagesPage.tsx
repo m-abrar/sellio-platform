@@ -313,16 +313,16 @@ export default function MessagesPage() {
 
       {isLoading ? (
         <div className="flex-1 flex items-center justify-center">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Syncing Messages...</span>
+          <span className="text-label font-black uppercase tracking-caps-xl text-slate-300 animate-pulse">Syncing Messages...</span>
         </div>
       ) : (
-        <div className="flex-1 bg-white rounded-[2.5rem] border border-slate-100 shadow-premium overflow-hidden flex">
+        <div className="flex-1 bg-white rounded-container border border-slate-100 shadow-premium overflow-hidden flex">
           <div className={`w-full lg:w-80 border-r border-slate-50 flex flex-col ${selectedId ? 'hidden lg:flex' : 'flex'}`}>
             <div className="p-6 border-b border-slate-50 bg-slate-50/30">
               <input
                 type="text"
                 placeholder="Search conversations..."
-                className="w-full bg-white border border-slate-100 rounded-xl px-4 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#6610f2]/10 transition-all"
+                className="w-full bg-white border border-slate-100 rounded-xl px-4 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-brand/10 transition-all"
               />
             </div>
             <div className="flex-1 overflow-y-auto custom-scrollbar">
@@ -338,7 +338,7 @@ export default function MessagesPage() {
                 <div
                   key={msg.id}
                   onClick={() => navigate(`/dashboard/messages/${msg.id}`)}
-                  className={`p-4 flex items-center gap-3 hover:bg-slate-50 transition-all cursor-pointer border-b border-slate-50 last:border-0 group ${selectedId === msg.id ? 'bg-slate-50 border-l-4 border-l-[#6610f2]' : ''} ${msg.unread ? 'bg-slate-50/30' : ''}`}
+                  className={`p-4 flex items-center gap-3 hover:bg-slate-50 transition-all cursor-pointer border-b border-slate-50 last:border-0 group ${selectedId === msg.id ? 'bg-slate-50 border-l-4 border-l-brand' : ''} ${msg.unread ? 'bg-slate-50/30' : ''}`}
                 >
                   {msg.avatarUrl ? (
                     <img 
@@ -347,16 +347,16 @@ export default function MessagesPage() {
                       alt={msg.sender} 
                     />
                   ) : (
-                    <div className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${msg.unread ? 'bg-[#6610f2] border-[#6610f2] text-white' : 'bg-white border-slate-100 text-slate-300'}`}>
+                    <div className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${msg.unread ? 'bg-brand border-brand text-white' : 'bg-white border-slate-100 text-slate-300'}`}>
                       {msg.unread ? <HiOutlineEnvelope className="w-5 h-5" /> : <HiOutlineEnvelopeOpen className="w-5 h-5" />}
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-center mb-0.5">
                       <h4 className={`text-sm tracking-tight truncate ${msg.unread ? 'font-black text-slate-900' : 'font-bold text-slate-600'}`}>{msg.sender}</h4>
-                      <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest">{msg.date}</span>
+                      <span className="text-tiny font-black text-slate-300 uppercase tracking-widest">{msg.date}</span>
                     </div>
-                    <p className={`text-[11px] truncate ${msg.unread ? 'font-bold text-slate-800' : 'font-medium text-slate-400'}`}>{msg.preview}</p>
+                    <p className={`text-caption truncate ${msg.unread ? 'font-bold text-slate-800' : 'font-medium text-slate-400'}`}>{msg.preview}</p>
                   </div>
                 </div>
               ))}
@@ -380,13 +380,13 @@ export default function MessagesPage() {
                           alt={selectedMessage.sender} 
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-xl bg-[#6610f2]/5 flex items-center justify-center text-[#6610f2] font-black">
+                        <div className="w-10 h-10 rounded-xl bg-brand/5 flex items-center justify-center text-brand font-black">
                           {selectedMessage.sender.charAt(0)}
                         </div>
                       )}
                       <div>
                         <h4 className="text-sm font-black text-slate-900 tracking-tight">{selectedMessage.sender}</h4>
-                        <p className="text-[10px] font-black text-[#6610f2] uppercase tracking-widest">{selectedMessage.subject}</p>
+                        <p className="text-label font-black text-brand uppercase tracking-widest">{selectedMessage.subject}</p>
                       </div>
                     </div>
                     <button className="p-3 bg-slate-50 text-slate-400 rounded-xl hover:text-red-500 transition-colors">
@@ -419,7 +419,7 @@ export default function MessagesPage() {
                                 alt="avatar" 
                               />
                             ) : (
-                              <div className="w-10 h-10 rounded-xl bg-[#6610f2]/5 flex items-center justify-center text-[#6610f2] font-black shrink-0">
+                              <div className="w-10 h-10 rounded-xl bg-brand/5 flex items-center justify-center text-brand font-black shrink-0">
                                 {currentUser?.name?.charAt(0) || 'Me'}
                               </div>
                             )
@@ -439,18 +439,18 @@ export default function MessagesPage() {
                           <div
                             className={`p-6 rounded-2xl max-w-[80%] shadow-sm ${
                               message.isMine
-                                ? 'bg-[#6610f2] text-white rounded-tr-none shadow-lg shadow-purple-200'
+                                ? 'bg-brand text-white rounded-tr-none shadow-lg shadow-purple-200'
                                 : 'bg-white border border-slate-100 rounded-tl-none'
                             }`}
                           >
                             <p className={`text-sm font-medium leading-relaxed ${message.isMine ? 'text-white' : 'text-slate-600'}`}>{message.body}</p>
                             {String(message.id).startsWith('temp-') ? (
-                              <p className="text-[9px] font-black uppercase tracking-widest mt-4 text-white/30 flex items-center gap-1">
+                              <p className="text-micro font-black uppercase tracking-widest mt-4 text-white/30 flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-white/30 animate-pulse inline-block" />
                                 Sending…
                               </p>
                             ) : (
-                              <p className={`text-[9px] font-black uppercase tracking-widest mt-4 ${message.isMine ? 'text-white/50' : 'text-slate-300'}`}>{message.createdAt}</p>
+                              <p className={`text-micro font-black uppercase tracking-widest mt-4 ${message.isMine ? 'text-white/50' : 'text-slate-300'}`}>{message.createdAt}</p>
                             )}
                           </div>
                         </div>
@@ -466,12 +466,12 @@ export default function MessagesPage() {
                         value={draft}
                         onChange={(event) => setDraft(event.target.value)}
                         onKeyDown={handleKeyDown}
-                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 pr-16 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#6610f2]/20 transition-all resize-none"
+                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 pr-16 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all resize-none"
                       />
                       <button
                         onClick={() => void handleSend()}
                         disabled={isSending || !draft.trim()}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#6610f2] text-white rounded-xl flex items-center justify-center shadow-lg shadow-purple-200 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-brand text-white rounded-xl flex items-center justify-center shadow-lg shadow-purple-200 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
                       >
                         <HiOutlinePaperAirplane className="w-5 h-5" />
                       </button>
@@ -487,10 +487,10 @@ export default function MessagesPage() {
                     <div className="hidden xl:flex w-64 border-l border-slate-100 bg-white flex-col overflow-y-auto custom-scrollbar p-5 space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
                       {/* Sidebar Header */}
                       <div className="space-y-2">
-                        <p className="text-[9px] font-black uppercase tracking-[0.25em] text-slate-400">Contextual Asset</p>
+                        <p className="text-micro font-black uppercase tracking-label-caps text-slate-400">Contextual Asset</p>
                         <div className="flex justify-between items-center">
                           <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider">Reference</h4>
-                          <span className={`text-[9px] font-black border px-3 py-1 rounded-full uppercase tracking-wider ${catStyle.bg}`}>
+                          <span className={`text-micro font-black border px-3 py-1 rounded-full uppercase tracking-wider ${catStyle.bg}`}>
                             {catStyle.icon} {item.type === 'JobListing' ? 'Job Listing' : item.type}
                           </span>
                         </div>
@@ -507,35 +507,35 @@ export default function MessagesPage() {
                         ) : (
                           <div className="w-full h-32 bg-gradient-to-tr from-slate-50 to-slate-100/50 rounded-2xl flex flex-col items-center justify-center border border-slate-100 text-slate-300">
                             <span className="text-4xl mb-2">{catStyle.icon}</span>
-                            <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Premium Registry Asset</span>
+                            <span className="text-micro font-black uppercase tracking-wider text-slate-400">Premium Registry Asset</span>
                           </div>
                         )}
                       </div>
 
                       {/* Core Specs */}
                       <div className="space-y-4">
-                        <h3 className="text-md font-black text-slate-900 tracking-tight leading-snug hover:text-[#6610f2] transition-colors duration-300">
+                        <h3 className="text-md font-black text-slate-900 tracking-tight leading-snug hover:text-brand transition-colors duration-300">
                           {item.title}
                         </h3>
 
                         {/* Prominent Pricing HUD */}
                         <div className="bg-slate-950 p-4 rounded-2xl shadow-xl shadow-slate-900/5 flex items-center justify-between relative overflow-hidden group">
                           <div className="relative z-10 min-w-0">
-                            <p className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-500 mb-1">Pricing Valuation</p>
-                            <p className="text-lg font-black italic text-[#6610f2] tracking-tighter truncate pr-1" title={item.price}>
+                            <p className="text-tiny font-black uppercase tracking-caps-wide text-slate-500 mb-1">Pricing Valuation</p>
+                            <p className="text-lg font-black italic text-brand tracking-tighter truncate pr-1" title={item.price}>
                               {item.price}
                             </p>
                           </div>
                           <span className="text-2xl relative z-10">{catStyle.icon}</span>
-                          <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#6610f2]/10 rounded-full blur-2xl group-hover:bg-[#6610f2]/20 transition-all duration-700" />
+                          <div className="absolute -top-10 -right-10 w-24 h-24 bg-brand/10 rounded-full blur-2xl group-hover:bg-brand/20 transition-all duration-700" />
                         </div>
                       </div>
 
                       {/* Specs Detail Pane */}
                       {item.details && (
                         <div className="space-y-2">
-                          <h5 className="text-[9px] font-black uppercase tracking-widest text-slate-400">Registry Overview</h5>
-                          <p className="text-[11px] text-slate-500 font-bold leading-relaxed bg-slate-50/50 p-3 rounded-2xl border border-slate-100/50 max-h-28 overflow-y-auto custom-scrollbar italic">
+                          <h5 className="text-micro font-black uppercase tracking-widest text-slate-400">Registry Overview</h5>
+                          <p className="text-caption text-slate-500 font-bold leading-relaxed bg-slate-50/50 p-3 rounded-2xl border border-slate-100/50 max-h-28 overflow-y-auto custom-scrollbar italic">
                             "{item.details}"
                           </p>
                         </div>
@@ -545,7 +545,7 @@ export default function MessagesPage() {
                       <div className="pt-4 border-t border-slate-50">
                         <a 
                           href={item.viewUrl}
-                          className="w-full bg-slate-900 text-white hover:bg-[#6610f2] hover:shadow-lg hover:shadow-purple-100 py-4.5 rounded-2xl font-black text-[9px] uppercase tracking-[0.2em] shadow-sm flex items-center justify-center transition-all duration-300 group"
+                          className="w-full bg-slate-900 text-white hover:bg-brand hover:shadow-lg hover:shadow-purple-100 py-4.5 rounded-2xl font-black text-micro uppercase tracking-caps shadow-sm flex items-center justify-center transition-all duration-300 group"
                         >
                           Manage Asset <HiOutlineArrowLeft className="w-3.5 h-3.5 ml-2.5 rotate-180 transition-transform group-hover:translate-x-1" />
                         </a>
@@ -556,7 +556,7 @@ export default function MessagesPage() {
               </div>
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-center p-10">
-                <div className="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center text-slate-200 mb-6">
+                <div className="w-20 h-20 bg-slate-50 rounded-card-lg flex items-center justify-center text-slate-200 mb-6">
                   <HiOutlineEnvelope className="w-10 h-10" />
                 </div>
                 <h4 className="text-lg font-black text-slate-900 italic tracking-tight">Select a Conversation.</h4>

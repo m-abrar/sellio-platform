@@ -45,7 +45,7 @@ export default function SetupReminderBanner() {
 
           <div className="min-w-0 flex-1 space-y-4">
             <div className="space-y-1">
-              <p className="text-[11px] font-black uppercase tracking-[0.24em] text-amber-800">
+              <p className="text-caption font-black uppercase tracking-caps text-amber-800">
                 {context.panelLabel} setup required
               </p>
               <h2 className="text-lg font-black text-amber-950">{primary.title}</h2>
@@ -54,17 +54,17 @@ export default function SetupReminderBanner() {
 
             <div className="grid gap-3 md:grid-cols-2">
               <div className="rounded-2xl border border-amber-200 bg-white/80 p-4 shadow-sm">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-700">
+                <p className="text-label font-black uppercase tracking-caps text-amber-700">
                   Current config.js value
                 </p>
                 <div className="mt-3 space-y-2">
                   {context.issues.map((issue) => (
                     <div key={issue.id} className="rounded-xl border border-amber-100 bg-amber-50/70 px-3 py-2">
                       <div className="mb-1 flex items-center justify-between gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700">
+                        <span className="text-label font-bold uppercase tracking-wider text-amber-700">
                           {issue.field}
                         </span>
-                        <span className="rounded-full bg-amber-200 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-amber-900">
+                        <span className="rounded-full bg-amber-200 px-2 py-0.5 text-label font-black uppercase tracking-wide text-amber-900">
                           {issueBadge(issue)}
                         </span>
                       </div>
@@ -78,13 +78,13 @@ export default function SetupReminderBanner() {
 
               <div className="rounded-2xl border border-amber-200 bg-white/80 p-4 shadow-sm">
                 <div className="mb-3 flex items-center justify-between gap-3">
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-700">
+                  <p className="text-label font-black uppercase tracking-caps text-amber-700">
                     Example config.js
                   </p>
                   <button
                     type="button"
                     onClick={() => void copySnippet()}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-wide text-amber-800 transition hover:bg-amber-100"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-label font-black uppercase tracking-wide text-amber-800 transition hover:bg-amber-100"
                   >
                     {copied ? <HiOutlineCheck className="h-3.5 w-3.5" /> : <HiOutlineClipboardDocument className="h-3.5 w-3.5" />}
                     {copied ? 'Copied' : 'Copy'}

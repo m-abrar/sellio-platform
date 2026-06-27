@@ -104,7 +104,7 @@ export default function NotificationsPage() {
       <PageHeader badge="Alerts" title="Notifications" subtitle="">
         <Link
           to="/dashboard"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-[11px] font-semibold uppercase tracking-wider text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-all shadow-xs"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-caption font-semibold uppercase tracking-wider text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-all shadow-xs"
         >
           <HiOutlineArrowLeft className="w-4 h-4" /> Back
         </Link>
@@ -112,12 +112,12 @@ export default function NotificationsPage() {
 
       {/* Filter bar */}
       <div className="flex items-center justify-between">
-        <div className="flex gap-1.5 bg-slate-50/80 p-1 rounded-[14px] border border-slate-100/80">
+        <div className="flex gap-1.5 bg-slate-50/80 p-1 rounded-interactive border border-slate-100/80">
           {(['all', 'unread'] as const).map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-4 py-2 rounded-xl text-[11px] font-semibold uppercase tracking-wider transition-all duration-200 ${
+              className={`px-4 py-2 rounded-xl text-caption font-semibold uppercase tracking-wider transition-all duration-200 ${
                 filter === f
                   ? 'bg-white text-slate-900 shadow-sm border border-slate-100/80'
                   : 'text-slate-400 hover:text-slate-600'
@@ -131,7 +131,7 @@ export default function NotificationsPage() {
         {unreadCount > 0 && (
           <button
             onClick={markAllAsRead}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl text-[11px] font-semibold uppercase tracking-wider hover:bg-[#6610f2] transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl text-caption font-semibold uppercase tracking-wider hover:bg-brand transition-all"
           >
             <HiOutlineCheckCircle className="w-4 h-4" /> Mark All Read
           </button>
@@ -141,16 +141,16 @@ export default function NotificationsPage() {
       {/* Content */}
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-300 animate-pulse">
+          <span className="text-label font-semibold uppercase tracking-caps-wide text-slate-300 animate-pulse">
             Loading alerts…
           </span>
         </div>
       ) : filteredNotifications.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-24 bg-white rounded-[1.75rem] border border-slate-100">
+        <div className="flex flex-col items-center justify-center py-24 bg-white rounded-card border border-slate-100">
           <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mb-4">
             <HiOutlineBell className="w-6 h-6 text-slate-200" />
           </div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-300">
+          <p className="text-label font-semibold uppercase tracking-label-caps text-slate-300">
             No notifications found
           </p>
         </div>
@@ -161,15 +161,15 @@ export default function NotificationsPage() {
             return (
               <div
                 key={n.id}
-                className={`group relative bg-white rounded-[1.5rem] border transition-all duration-200 flex items-start gap-5 p-5 md:p-6 ${
+                className={`group relative bg-white rounded-card-sm border transition-all duration-200 flex items-start gap-5 p-5 md:p-6 ${
                   n.read
                     ? 'border-slate-100 opacity-70 hover:opacity-100'
-                    : 'border-[#6610f2]/15 shadow-sm shadow-violet-50/80'
+                    : 'border-brand/15 shadow-sm shadow-violet-50/80'
                 }`}
               >
                 {/* Unread indicator bar */}
                 {!n.read && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#6610f2] rounded-r-full" />
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-brand rounded-r-full" />
                 )}
 
                 <div className={`w-11 h-11 rounded-2xl shrink-0 flex items-center justify-center ${getColor(n.type)}`}>
@@ -178,13 +178,13 @@ export default function NotificationsPage() {
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-3 mb-1">
-                    <h4 className={`text-[13.5px] font-semibold leading-snug ${n.read ? 'text-slate-600' : 'text-slate-900'}`}>
+                    <h4 className={`text-nav font-semibold leading-snug ${n.read ? 'text-slate-600' : 'text-slate-900'}`}>
                       {n.title}
                       {!n.read && (
-                        <span className="inline-block w-1.5 h-1.5 bg-[#6610f2] rounded-full ml-2 align-middle" />
+                        <span className="inline-block w-1.5 h-1.5 bg-brand rounded-full ml-2 align-middle" />
                       )}
                     </h4>
-                    <span className="text-[9px] font-medium text-slate-400 uppercase tracking-wider shrink-0 mt-0.5">
+                    <span className="text-micro font-medium text-slate-400 uppercase tracking-wider shrink-0 mt-0.5">
                       {n.date}
                     </span>
                   </div>
@@ -194,14 +194,14 @@ export default function NotificationsPage() {
                     {!n.read && (
                       <button
                         onClick={() => markAsRead(n.id)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-[#6610f2] hover:text-white text-[10px] font-semibold uppercase tracking-wider text-slate-500 transition-all"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-brand hover:text-white text-label font-semibold uppercase tracking-wider text-slate-500 transition-all"
                       >
                         <HiOutlineCheckCircle className="w-3.5 h-3.5" /> Read
                       </button>
                     )}
                     <button
                       onClick={() => deleteNotification(n.id)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-red-500 hover:text-white text-[10px] font-semibold uppercase tracking-wider text-slate-500 transition-all"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-red-500 hover:text-white text-label font-semibold uppercase tracking-wider text-slate-500 transition-all"
                     >
                       <HiOutlineTrash className="w-3.5 h-3.5" /> Delete
                     </button>

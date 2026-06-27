@@ -12,7 +12,7 @@ export default function MediaStudio({ files, setFiles }: any) {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | number | null>(null);
 
   // Styling Constants
-  const controlBtnClass = "p-2 bg-white/10 backdrop-blur-md text-white rounded-xl hover:bg-[#6610f2] hover:scale-110 transition-all duration-300";
+  const controlBtnClass = "p-2 bg-white/10 backdrop-blur-md text-white rounded-xl hover:bg-brand hover:scale-110 transition-all duration-300";
 
   const moveImage = (e: React.MouseEvent, index: number, direction: 'left' | 'right') => {
     e.preventDefault(); e.stopPropagation();
@@ -66,29 +66,29 @@ export default function MediaStudio({ files, setFiles }: any) {
     <div className="space-y-8">
       <div className="flex items-center justify-between px-2">
         <div className="flex items-center gap-3 text-slate-900">
-          <div className="w-8 h-8 bg-[#6610f2]/10 rounded-xl flex items-center justify-center">
-            <HiOutlinePhoto className="w-4 h-4 text-[#6610f2]" />
+          <div className="w-8 h-8 bg-brand/10 rounded-xl flex items-center justify-center">
+            <HiOutlinePhoto className="w-4 h-4 text-brand" />
           </div>
-          <span className="text-[11px] font-black uppercase tracking-[0.2em] italic">Listing Photos</span>
+          <span className="text-caption font-black uppercase tracking-caps italic">Listing Photos</span>
         </div>
-        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{files.length} Files Attached</span>
+        <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{files.length} Files Attached</span>
       </div>
 
       {/* ELITE DROPZONE */}
-      <div className="group relative border-4 border-dashed border-slate-50 rounded-[2.5rem] p-12 transition-all hover:border-[#6610f2]/20 hover:bg-[#6610f2]/5 flex flex-col items-center justify-center cursor-pointer overflow-hidden">
+      <div className="group relative border-4 border-dashed border-slate-50 rounded-container p-12 transition-all hover:border-brand/20 hover:bg-brand/5 flex flex-col items-center justify-center cursor-pointer overflow-hidden">
         <input type="file" multiple accept="image/*" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
         
-        <div className="w-20 h-20 bg-white rounded-[1.8rem] shadow-xl shadow-slate-200/50 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-          <HiOutlineCloudArrowUp className="w-10 h-10 text-[#6610f2]" />
+        <div className="w-20 h-20 bg-white rounded-card shadow-xl shadow-slate-200/50 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+          <HiOutlineCloudArrowUp className="w-10 h-10 text-brand" />
         </div>
         
         <div className="text-center">
             <p className="text-lg font-black text-slate-900 italic tracking-tight">Upload Images.</p>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Drag & Drop or Click to Browse</p>
+            <p className="text-label font-bold text-slate-400 uppercase tracking-widest mt-1">Drag & Drop or Click to Browse</p>
         </div>
 
         {/* Decorative corner accent */}
-        <div className="absolute top-0 right-0 w-24 h-24 bg-[#6610f2]/5 rounded-bl-full -mr-12 -mt-12 group-hover:bg-[#6610f2]/10 transition-colors" />
+        <div className="absolute top-0 right-0 w-24 h-24 bg-brand/5 rounded-bl-full -mr-12 -mt-12 group-hover:bg-brand/10 transition-colors" />
       </div>
 
       {/* PREVIEW GRID */}
@@ -101,8 +101,8 @@ export default function MediaStudio({ files, setFiles }: any) {
               <div 
                 key={item.id} 
                 onMouseLeave={() => setConfirmDeleteId(null)}
-                className={`relative aspect-[4/5] rounded-[2rem] overflow-hidden group border-2 transition-all duration-500 ${
-                  item.isMain ? 'border-[#6610f2] shadow-2xl scale-[1.03] z-20' : 'border-transparent shadow-sm'
+                className={`relative aspect-[4/5] rounded-card-lg overflow-hidden group border-2 transition-all duration-500 ${
+                  item.isMain ? 'border-brand shadow-2xl scale-[1.03] z-20' : 'border-transparent shadow-sm'
                 }`}
               >
                 <img src={item.preview} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
@@ -115,7 +115,7 @@ export default function MediaStudio({ files, setFiles }: any) {
                   {isConfirming ? (
                     <button type="button" onClick={(e) => removeFile(e, item.id)} className="flex flex-col items-center text-white space-y-2 animate-bounce">
                       <HiOutlineTrash className="w-8 h-8" />
-                      <span className="text-[10px] font-black uppercase tracking-tighter">Confirm Delete</span>
+                      <span className="text-label font-black uppercase tracking-tighter">Confirm Delete</span>
                     </button>
                   ) : (
                     <div className="space-y-4 w-full px-4">
@@ -128,7 +128,7 @@ export default function MediaStudio({ files, setFiles }: any) {
                       {/* Action Row */}
                       <div className="flex items-center justify-center gap-2 pt-2">
                          {!item.isMain && (
-                          <button onClick={(e) => setMain(e, item.id)} className="px-5 py-3 bg-[#6610f2] text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-white hover:text-[#6610f2] transition-all">
+                          <button onClick={(e) => setMain(e, item.id)} className="px-5 py-3 bg-brand text-white rounded-xl text-micro font-black uppercase tracking-widest hover:bg-white hover:text-brand transition-all">
                             Master
                           </button>
                         )}
@@ -142,11 +142,11 @@ export default function MediaStudio({ files, setFiles }: any) {
                 
                 {/* Labels */}
                 {item.isMain && (
-                   <div className="absolute top-4 left-4 bg-[#6610f2] text-white text-[8px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg italic">
+                   <div className="absolute top-4 left-4 bg-brand text-white text-tiny font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg italic">
                     Primary
                   </div>
                 )}
-                <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm text-slate-900 text-[9px] font-black w-7 h-7 flex items-center justify-center rounded-xl shadow-md border border-slate-100">
+                <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm text-slate-900 text-micro font-black w-7 h-7 flex items-center justify-center rounded-xl shadow-md border border-slate-100">
                   {index + 1}
                 </div>
               </div>

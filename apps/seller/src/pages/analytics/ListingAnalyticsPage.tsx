@@ -88,7 +88,7 @@ export default function ListingAnalyticsPage() {
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">
+        <span className="text-label font-black uppercase tracking-caps-xl text-slate-300 animate-pulse">
           Calibrating Listing Cockpit...
         </span>
       </div>
@@ -98,10 +98,10 @@ export default function ListingAnalyticsPage() {
   if (!data) {
     return (
       <div className="h-screen flex flex-col items-center justify-center space-y-6">
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">Listing Metrics Not Found</p>
+        <p className="text-label font-black uppercase tracking-caps-xl text-slate-300">Listing Metrics Not Found</p>
         <button 
           onClick={() => navigate('/dashboard/analytics')} 
-          className="text-[#6610f2] font-black uppercase text-xs tracking-widest flex items-center gap-2"
+          className="text-brand font-black uppercase text-xs tracking-widest flex items-center gap-2"
         >
           <HiOutlineArrowLeft className="w-4 h-4" /> Back to Analytics
         </button>
@@ -123,11 +123,11 @@ export default function ListingAnalyticsPage() {
       <div className="flex items-center gap-4 mb-2">
         <button 
           onClick={() => navigate('/dashboard/analytics')} 
-          className="p-3 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-[#6610f2] hover:border-[#6610f2]/20 transition-all cursor-pointer"
+          className="p-3 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-brand hover:border-brand/20 transition-all cursor-pointer"
         >
           <HiOutlineArrowLeft className="w-5 h-5" />
         </button>
-        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Back to Hub</span>
+        <span className="text-label font-black text-slate-400 uppercase tracking-caps-wide">Back to Hub</span>
       </div>
 
       {/* Header Row */}
@@ -140,9 +140,9 @@ export default function ListingAnalyticsPage() {
           <button 
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="p-4 bg-white border border-slate-100 text-slate-400 rounded-2xl hover:text-[#6610f2] hover:border-[#6610f2]/20 transition-all cursor-pointer active:scale-95 disabled:opacity-50 shadow-sm"
+            className="p-4 bg-white border border-slate-100 text-slate-400 rounded-2xl hover:text-brand hover:border-brand/20 transition-all cursor-pointer active:scale-95 disabled:opacity-50 shadow-sm"
           >
-            <HiOutlineArrowPath className={`w-5 h-5 ${isRefreshing ? 'animate-spin text-[#6610f2]' : ''}`} />
+            <HiOutlineArrowPath className={`w-5 h-5 ${isRefreshing ? 'animate-spin text-brand' : ''}`} />
           </button>
 
           {/* Period selector */}
@@ -151,7 +151,7 @@ export default function ListingAnalyticsPage() {
               <button
                 key={days}
                 onClick={() => setPeriod(days)}
-                className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-xl text-micro font-black uppercase tracking-wider transition-all cursor-pointer ${
                   period === days
                     ? 'bg-slate-900 text-white shadow-xs'
                     : 'text-slate-400 hover:text-slate-700'
@@ -171,16 +171,16 @@ export default function ListingAnalyticsPage() {
           return (
             <div 
               key={idx}
-              className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)] transition-all duration-500 hover:shadow-lg hover:-translate-y-1"
+              className="bg-white p-8 rounded-card-lg border border-slate-100 shadow-elite-soft transition-all duration-500 hover:shadow-lg hover:-translate-y-1"
             >
               <div className="flex justify-between items-start mb-6">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{kpi.label}</span>
+                <span className="text-label font-black text-slate-400 uppercase tracking-widest">{kpi.label}</span>
                 <div className={`w-10 h-10 rounded-xl ${kpi.bg} ${kpi.color} flex items-center justify-center`}>
                   <Icon className="w-5 h-5 stroke-[2.2px]" />
                 </div>
               </div>
               <h4 className="text-3xl font-black text-slate-900 tracking-tight italic">{kpi.value}</h4>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-3">{kpi.desc}</p>
+              <p className="text-micro font-bold text-slate-400 uppercase tracking-wider mt-3">{kpi.desc}</p>
             </div>
           );
         })}
@@ -190,10 +190,10 @@ export default function ListingAnalyticsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         
         {/* Daily Leads/Views Trends Plot */}
-        <div className="lg:col-span-8 bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)] flex flex-col justify-between">
+        <div className="lg:col-span-8 bg-white p-8 md:p-12 rounded-container border border-slate-100 shadow-elite-soft flex flex-col justify-between">
           <div>
             <h3 className="text-2xl font-black text-slate-900 italic tracking-tight mb-2">Trend Velocity.</h3>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-10">Concurrent Views vs. Leads logs</p>
+            <p className="text-label font-black text-slate-400 uppercase tracking-caps-wide mb-10">Concurrent Views vs. Leads logs</p>
           </div>
 
           <div className="h-96 w-full relative">
@@ -225,16 +225,16 @@ export default function ListingAnalyticsPage() {
                       const leadsPt = payload.find(p => p.name === 'Leads' || p.dataKey === 'leads');
                       return (
                         <div className="bg-white/95 backdrop-blur-md border border-slate-100 p-5 rounded-2xl shadow-xl space-y-2.5 animate-in fade-in zoom-in-95 duration-150">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1 leading-none">{payload[0].payload.name}</p>
+                          <p className="text-micro font-black uppercase tracking-widest text-slate-400 mb-1 leading-none">{payload[0].payload.name}</p>
                           <div className="space-y-1.5">
                             <div className="flex items-center gap-4 justify-between min-w-[100px]">
-                              <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1.5">
+                              <span className="text-label font-bold text-slate-500 flex items-center gap-1.5">
                                 <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: config.color }} /> Views
                               </span>
                               <span className="text-xs font-black text-slate-900">{viewsPt?.value ?? 0}</span>
                             </div>
                             <div className="flex items-center gap-4 justify-between min-w-[100px]">
-                              <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1.5">
+                              <span className="text-label font-bold text-slate-500 flex items-center gap-1.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Leads
                               </span>
                               <span className="text-xs font-black text-slate-900">{leadsPt?.value ?? 0}</span>
@@ -257,42 +257,42 @@ export default function ListingAnalyticsPage() {
         <div className="lg:col-span-4 space-y-8">
           
           {/* Quick Actions Panel */}
-          <div className="bg-slate-900 p-10 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[300px]">
+          <div className="bg-slate-900 p-10 rounded-container text-white shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[300px]">
             <div>
-              <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-500 mb-8">Asset Cockpit</h4>
+              <h4 className="text-caption font-black uppercase tracking-caps-wide text-slate-500 mb-8">Asset Cockpit</h4>
               
               <div className="space-y-4">
                 <button 
                   onClick={() => navigate(`/dashboard/${config.module}/view/${data.listing.slug || data.listing.id}`)}
-                  className="w-full bg-white/10 hover:bg-white/20 py-4.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border border-white/10 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full bg-white/10 hover:bg-white/20 py-4.5 rounded-2xl font-black text-label uppercase tracking-widest transition-all border border-white/10 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <HiOutlineHomeModern className="w-4 h-4" /> View Asset Details
                 </button>
                 <button 
                   onClick={() => navigate(`/dashboard/${config.module}/edit/${data.listing.slug || data.listing.id}`)}
-                  className="w-full bg-white/10 hover:bg-white/20 py-4.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border border-white/10 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full bg-white/10 hover:bg-white/20 py-4.5 rounded-2xl font-black text-label uppercase tracking-widest transition-all border border-white/10 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <HiOutlinePencilSquare className="w-4 h-4" /> Edit Listing
                 </button>
                 <button 
                   onClick={() => navigate(`/dashboard/${config.module}`)}
-                  className="w-full bg-white/10 hover:bg-white/20 py-4.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border border-white/10 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full bg-white/10 hover:bg-white/20 py-4.5 rounded-2xl font-black text-label uppercase tracking-widest transition-all border border-white/10 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <HiOutlineListBullet className="w-4 h-4" /> View All Listings
                 </button>
               </div>
             </div>
 
-            <div className="text-[9px] font-black text-slate-600 uppercase tracking-widest mt-8 border-t border-white/5 pt-4">
+            <div className="text-micro font-black text-slate-600 uppercase tracking-widest mt-8 border-t border-white/5 pt-4">
               Category: {type}
             </div>
 
-            <div className="absolute -right-20 -bottom-20 w-60 h-60 bg-[#6610f2]/10 rounded-full blur-[80px]" />
+            <div className="absolute -right-20 -bottom-20 w-60 h-60 bg-brand/10 rounded-full blur-[80px]" />
           </div>
 
           {/* Quick Context Card */}
-          <div className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-premium">
-            <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400 mb-6">Quick Overview</h4>
+          <div className="bg-white p-10 rounded-container border border-slate-100 shadow-premium">
+            <h4 className="text-caption font-black uppercase tracking-caps-wide text-slate-400 mb-6">Quick Overview</h4>
             <div className="space-y-4">
               <div className="flex justify-between items-center text-xs font-bold text-slate-500">
                 <span>Asset ID</span>

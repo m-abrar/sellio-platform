@@ -52,7 +52,7 @@ export default function DashboardHome() {
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.35em] text-slate-300 animate-pulse">
+        <span className="text-label font-semibold uppercase tracking-caps-xl text-slate-300 animate-pulse">
           Loading dashboard…
         </span>
       </div>
@@ -117,7 +117,7 @@ export default function DashboardHome() {
                 setIsCreateDropdownOpen(!isCreateDropdownOpen);
               }
             }}
-            className="w-full md:w-auto bg-[#6610f2] text-white px-6 py-3 rounded-2xl font-bold text-[11px] uppercase tracking-[0.15em] shadow-lg shadow-[#6610f2]/25 hover:bg-[#7b2dfd] hover:shadow-[#6610f2]/35 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 group"
+            className="w-full md:w-auto bg-brand text-white px-6 py-3 rounded-2xl font-bold text-caption uppercase tracking-label-sm shadow-lg shadow-brand/25 hover:bg-brand-hover hover:shadow-brand/35 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 group"
           >
             <HiOutlinePlus className={`w-4 h-4 stroke-[2.5px] transition-transform duration-300 ${isCreateDropdownOpen ? 'rotate-45' : ''}`} />
             Create Listing
@@ -128,16 +128,16 @@ export default function DashboardHome() {
               <div className="fixed inset-0 z-40" onClick={() => setIsCreateDropdownOpen(false)} />
               <div className="absolute right-0 mt-2 w-60 bg-white border border-slate-100 rounded-2xl shadow-xl shadow-slate-200/60 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                 <div className="px-4 py-2 border-b border-slate-50 mb-1">
-                  <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">Select Category</p>
+                  <p className="text-micro font-semibold text-slate-400 uppercase tracking-widest">Select Category</p>
                 </div>
                 {CREATE_ITEMS.map((item) => (
                   <button
                     key={item.to}
                     onClick={() => { setIsCreateDropdownOpen(false); navigate(item.to); }}
-                    className="w-full text-left px-4 py-2.5 text-[12px] font-medium text-slate-700 hover:text-[#6610f2] hover:bg-slate-50 transition-colors flex items-center justify-between group"
+                    className="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:text-brand hover:bg-slate-50 transition-colors flex items-center justify-between group"
                   >
                     {item.label}
-                    <HiOutlinePlus className="w-3 h-3 text-slate-300 group-hover:text-[#6610f2] transition-colors" />
+                    <HiOutlinePlus className="w-3 h-3 text-slate-300 group-hover:text-brand transition-colors" />
                   </button>
                 ))}
               </div>
@@ -152,7 +152,7 @@ export default function DashboardHome() {
           title="Active Inventory"
           value={stats.activeInventory?.toString() || '0'}
           icon={HiOutlineHome}
-          color={subscriptionLimits?.is_limit_exceeded ? 'text-red-500 bg-red-50' : 'text-[#6610f2] bg-[#6610f2]/8'}
+          color={subscriptionLimits?.is_limit_exceeded ? 'text-red-500 bg-red-50' : 'text-brand bg-brand/8'}
           trend={subscriptionLimits?.is_limit_exceeded ? 'Limit Reached' : undefined}
           detailColumns={2}
           details={[
@@ -205,19 +205,19 @@ export default function DashboardHome() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-8">
 
         {/* Live Interactions */}
-        <div className="lg:col-span-8 bg-white border border-slate-100 rounded-[1.75rem] p-8 md:p-10">
+        <div className="lg:col-span-8 bg-white border border-slate-100 rounded-card p-8 md:p-10">
           <div className="flex justify-between items-start mb-8">
             <div>
-              <h3 className="text-2xl md:text-[1.625rem] font-black text-slate-900 tracking-tight italic leading-tight">
+              <h3 className="text-2xl md:text-title font-black text-slate-900 tracking-tight italic leading-tight">
                 Live Interactions.
               </h3>
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.18em] mt-1.5">
+              <p className="text-label font-semibold text-slate-400 uppercase tracking-label-wide mt-1.5">
                 Real-time buyer activity
               </p>
             </div>
             <button
               onClick={() => navigate('/dashboard/live-interactions')}
-              className="text-[10px] font-semibold text-[#6610f2] uppercase tracking-widest hover:opacity-70 transition-opacity shrink-0 flex items-center gap-1"
+              className="text-label font-semibold text-brand uppercase tracking-widest hover:opacity-70 transition-opacity shrink-0 flex items-center gap-1"
             >
               View All <HiOutlineChevronRight className="w-3.5 h-3.5" />
             </button>
@@ -228,7 +228,7 @@ export default function DashboardHome() {
               <div className="w-14 h-14 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-center text-slate-200 mx-auto">
                 <HiOutlineArrowUpRight className="w-6 h-6" />
               </div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-300">No interactions yet</p>
+              <p className="text-label font-semibold uppercase tracking-label-caps text-slate-300">No interactions yet</p>
               <p className="text-xs text-slate-400 font-medium max-w-xs leading-relaxed">
                 Buyer activity will appear here once your listings go live.
               </p>
@@ -248,13 +248,13 @@ export default function DashboardHome() {
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-2 mb-0.5">
-                      <p className="text-[13px] font-semibold text-slate-900 leading-none truncate group-hover:text-[#6610f2] transition-colors">
+                      <p className="text-nav font-semibold text-slate-900 leading-none truncate group-hover:text-brand transition-colors">
                         {interaction.name}
                       </p>
-                      <span className="text-[9px] font-medium text-slate-400 shrink-0">{interaction.time}</span>
+                      <span className="text-micro font-medium text-slate-400 shrink-0">{interaction.time}</span>
                     </div>
-                    <p className="text-[10px] font-medium text-slate-500 truncate">
-                      <span className="text-[#6610f2] font-semibold">{interaction.actionText}</span>
+                    <p className="text-label font-medium text-slate-500 truncate">
+                      <span className="text-brand font-semibold">{interaction.actionText}</span>
                       {' — '}
                       {interaction.listingName}
                     </p>
@@ -262,7 +262,7 @@ export default function DashboardHome() {
                   <div className="shrink-0 w-14 h-9 rounded-lg overflow-hidden border border-slate-100 group-hover:scale-105 transition-transform duration-300">
                     <img src={interaction.listingImage} className="w-full h-full object-cover" alt="" />
                   </div>
-                  <HiOutlineArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-[#6610f2] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                  <HiOutlineArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-brand group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
                 </div>
               ))}
             </div>
@@ -273,9 +273,9 @@ export default function DashboardHome() {
         <div className="lg:col-span-4 flex flex-col gap-5">
 
           {/* Payout card */}
-          <div className="bg-slate-900 rounded-[1.75rem] p-8 relative overflow-hidden flex-1 flex flex-col justify-between min-h-[200px]">
+          <div className="bg-slate-900 rounded-card p-8 relative overflow-hidden flex-1 flex flex-col justify-between min-h-[200px]">
             <div className="relative z-10">
-              <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-500 mb-3">Available Payout</p>
+              <p className="text-micro font-semibold uppercase tracking-caps text-slate-500 mb-3">Available Payout</p>
               <p
                 className="text-4xl xl:text-5xl font-black text-white tracking-tight italic leading-none mb-8"
                 title={`${earningChange?.currency_symbol ?? '$'}${Number(earningChange?.total ?? 0).toLocaleString()}`}
@@ -284,26 +284,26 @@ export default function DashboardHome() {
               </p>
               <button
                 onClick={() => navigate('/dashboard/wallet')}
-                className="w-full bg-[#6610f2] text-white py-3.5 rounded-xl font-bold text-[11px] uppercase tracking-[0.15em] hover:bg-[#7b2dfd] active:scale-[0.98] transition-all shadow-lg shadow-[#6610f2]/30 flex items-center justify-center gap-2"
+                className="w-full bg-brand text-white py-3.5 rounded-xl font-bold text-caption uppercase tracking-label-sm hover:bg-brand-hover active:scale-[0.98] transition-all shadow-lg shadow-brand/30 flex items-center justify-center gap-2"
               >
                 <HiOutlineArrowUpRight className="w-4 h-4" />
                 Instant Withdraw
               </button>
             </div>
             {/* Background glow */}
-            <div className="absolute -top-8 -right-8 w-40 h-40 bg-[#6610f2]/25 rounded-full blur-[80px] pointer-events-none" />
+            <div className="absolute -top-8 -right-8 w-40 h-40 bg-brand/25 rounded-full blur-[80px] pointer-events-none" />
             <div className="absolute -bottom-12 -left-6 w-32 h-32 bg-violet-900/40 rounded-full blur-[60px] pointer-events-none" />
           </div>
 
           {/* Trust Index */}
-          <div className="bg-white rounded-[1.75rem] border border-slate-100 p-6 relative overflow-hidden">
+          <div className="bg-white rounded-card border border-slate-100 p-6 relative overflow-hidden">
             <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-amber-400 rounded-l-[1.75rem]" />
             <div className="flex items-start gap-3 mb-2">
               <div className="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
                 <HiOutlineSparkles className="w-4 h-4 text-amber-500" />
               </div>
               <div>
-                <p className="text-[10px] font-semibold text-slate-900 uppercase tracking-widest mb-1">Trust Index</p>
+                <p className="text-label font-semibold text-slate-900 uppercase tracking-widest mb-1">Trust Index</p>
                 <p className="text-xs text-slate-500 leading-relaxed">
                   Listing Health:{' '}
                   <span className="text-slate-900 font-semibold">
@@ -318,23 +318,23 @@ export default function DashboardHome() {
           {/* Subscription Quota */}
           {subscriptionLimits && (
             <div
-              className="bg-white rounded-[1.75rem] border border-slate-100 p-6 relative overflow-hidden cursor-pointer hover:border-[#6610f2]/20 hover:shadow-[0_4px_24px_rgba(102,16,242,0.08)] transition-all duration-300 group"
+              className="bg-white rounded-card border border-slate-100 p-6 relative overflow-hidden cursor-pointer hover:border-brand/20 hover:shadow-brand-glow transition-all duration-300 group"
               onClick={() => navigate('/dashboard/memberships')}
             >
-              <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#6610f2] rounded-l-[1.75rem]" />
+              <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-brand rounded-l-[1.75rem]" />
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <p className="text-[10px] font-semibold text-slate-900 uppercase tracking-widest mb-1">Quota</p>
+                  <p className="text-label font-semibold text-slate-900 uppercase tracking-widest mb-1">Quota</p>
                   <p className="text-xs font-medium text-slate-500">{subscriptionLimits.plan_title}</p>
                 </div>
-                <span className={`px-2 py-0.5 rounded-full text-[9px] font-semibold ${
-                  subscriptionLimits.is_limit_exceeded ? 'bg-red-50 text-red-500' : 'bg-violet-50 text-[#6610f2]'
+                <span className={`px-2 py-0.5 rounded-full text-micro font-semibold ${
+                  subscriptionLimits.is_limit_exceeded ? 'bg-red-50 text-red-500' : 'bg-violet-50 text-brand'
                 }`}>
                   {subscriptionLimits.is_limit_exceeded ? '⚠️ Limit' : 'Active'}
                 </span>
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between text-[10px] font-medium">
+                <div className="flex justify-between text-label font-medium">
                   <span className="text-slate-400">Consumed</span>
                   <span className="text-slate-900 font-bold">
                     {subscriptionLimits.current_listings_count}
@@ -345,12 +345,12 @@ export default function DashboardHome() {
                   <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                     <div
                       style={{ width: `${Math.min(100, (subscriptionLimits.current_listings_count / subscriptionLimits.max_listings) * 100)}%` }}
-                      className={`h-full rounded-full transition-all duration-500 ${subscriptionLimits.is_limit_exceeded ? 'bg-red-500' : 'bg-[#6610f2]'}`}
+                      className={`h-full rounded-full transition-all duration-500 ${subscriptionLimits.is_limit_exceeded ? 'bg-red-500' : 'bg-brand'}`}
                     />
                   </div>
                 ) : (
                   <div className="h-1.5 bg-violet-100 rounded-full overflow-hidden">
-                    <div className="w-full h-full bg-[#6610f2] rounded-full" />
+                    <div className="w-full h-full bg-brand rounded-full" />
                   </div>
                 )}
               </div>
@@ -360,13 +360,13 @@ export default function DashboardHome() {
       </div>
 
       {/* ── Recent Assets Table ───────────────────── */}
-      <div className="bg-white border border-slate-100 rounded-[1.75rem] overflow-hidden">
+      <div className="bg-white border border-slate-100 rounded-card overflow-hidden">
         <div className="px-8 md:px-12 py-7 md:py-9 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 border-b border-slate-50">
           <div>
-            <h3 className="text-2xl md:text-[1.625rem] font-black text-slate-900 tracking-tight italic leading-tight">
+            <h3 className="text-2xl md:text-title font-black text-slate-900 tracking-tight italic leading-tight">
               Recent Assets.
             </h3>
-            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.18em] mt-1.5">
+            <p className="text-label font-semibold text-slate-400 uppercase tracking-label-wide mt-1.5">
               Inventory overview
             </p>
           </div>
@@ -374,7 +374,7 @@ export default function DashboardHome() {
           <div className="relative">
             <button
               onClick={() => setIsInventoryDropdownOpen(!isInventoryDropdownOpen)}
-              className="flex items-center gap-2 text-[11px] font-semibold text-[#6610f2] uppercase tracking-[0.15em] bg-violet-50/80 hover:bg-violet-100/60 px-5 py-2.5 rounded-full transition-all"
+              className="flex items-center gap-2 text-caption font-semibold text-brand uppercase tracking-label-sm bg-violet-50/80 hover:bg-violet-100/60 px-5 py-2.5 rounded-full transition-all"
             >
               View Inventory
               <HiOutlineChevronRight className={`w-3.5 h-3.5 transition-transform duration-300 ${isInventoryDropdownOpen ? 'rotate-90' : ''}`} />
@@ -385,16 +385,16 @@ export default function DashboardHome() {
                 <div className="fixed inset-0 z-40" onClick={() => setIsInventoryDropdownOpen(false)} />
                 <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl shadow-slate-200/50 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                   <div className="px-4 py-2 border-b border-slate-50 mb-1">
-                    <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">Select Vertical</p>
+                    <p className="text-micro font-semibold text-slate-400 uppercase tracking-widest">Select Vertical</p>
                   </div>
                   {INVENTORY_ITEMS.map((item) => (
                     <button
                       key={item.to}
                       onClick={() => { setIsInventoryDropdownOpen(false); navigate(item.to); }}
-                      className="w-full text-left px-4 py-2.5 text-[12px] font-medium text-slate-700 hover:text-[#6610f2] hover:bg-slate-50 transition-colors flex items-center justify-between group"
+                      className="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:text-brand hover:bg-slate-50 transition-colors flex items-center justify-between group"
                     >
                       {item.label}
-                      <HiOutlineChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#6610f2] group-hover:translate-x-0.5 transition-all" />
+                      <HiOutlineChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-brand group-hover:translate-x-0.5 transition-all" />
                     </button>
                   ))}
                 </div>

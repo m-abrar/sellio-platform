@@ -8,7 +8,7 @@ export default function DashboardLayout() {
 
   return (
     <div
-      className="min-h-screen text-slate-900 selection:bg-violet-100 selection:text-[#6610f2] flex flex-col"
+      className="min-h-screen text-slate-900 selection:bg-violet-100 selection:text-brand flex flex-col"
       style={{ backgroundColor: 'var(--color-bg)' }}
     >
       <SetupReminderBanner />

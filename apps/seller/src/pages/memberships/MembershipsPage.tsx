@@ -110,15 +110,15 @@ export default function MembershipsPage() {
 
       {/* Dynamic Active Quota Alert Card */}
       {!isLoading && limits && (
-        <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-10 shadow-sm relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
+        <div className="bg-white border border-slate-100 rounded-container p-8 md:p-10 shadow-sm relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
           
           {/* Left Side: Plan Info and Progress */}
           <div className="w-full md:flex-1 space-y-6">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-500 mb-2">Active Subscription Status</p>
+              <p className="text-label font-black uppercase tracking-caps-wide text-purple-500 mb-2">Active Subscription Status</p>
               <h3 className="text-2xl md:text-3xl font-black italic tracking-tight text-slate-900 flex items-center gap-3">
                 {limits.plan_title}
-                <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${limits.is_limit_exceeded ? 'bg-red-50 text-red-500 border border-red-100' : 'bg-green-50 text-green-600 border border-green-100'}`}>
+                <span className={`px-4 py-1.5 rounded-full text-micro font-black uppercase tracking-widest ${limits.is_limit_exceeded ? 'bg-red-50 text-red-500 border border-red-100' : 'bg-green-50 text-green-600 border border-green-100'}`}>
                   {limits.is_limit_exceeded ? 'Limit Reached ⚠️' : 'Active ✅'}
                 </span>
               </h3>
@@ -138,12 +138,12 @@ export default function MembershipsPage() {
                 <div className="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden">
                   <div 
                     style={{ width: `${Math.min(100, (limits.current_listings_count / limits.max_listings) * 100)}%` }}
-                    className={`h-full rounded-full transition-all duration-1000 bg-gradient-to-r ${limits.is_limit_exceeded ? 'from-red-500 to-[#6610f2]' : 'from-[#6610f2] to-purple-500'}`}
+                    className={`h-full rounded-full transition-all duration-1000 bg-gradient-to-r ${limits.is_limit_exceeded ? 'from-red-500 to-brand' : 'from-brand to-purple-500'}`}
                   />
                 </div>
               ) : (
                 <div className="w-full h-3.5 bg-purple-50 rounded-full flex items-center px-1">
-                  <div className="w-full h-1.5 bg-[#6610f2] rounded-full" />
+                  <div className="w-full h-1.5 bg-brand rounded-full" />
                 </div>
               )}
             </div>
@@ -154,33 +154,33 @@ export default function MembershipsPage() {
             <div className="text-3xl font-black italic tracking-tighter text-slate-900 mb-1">
               {limits.max_listings === 999 ? '0%' : `${Math.round(Math.min(100, (limits.current_listings_count / limits.max_listings) * 100))}%`}
             </div>
-            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Quota Consumed</p>
+            <p className="text-micro font-black uppercase tracking-widest text-slate-400">Quota Consumed</p>
           </div>
 
           {/* Background subtle glow */}
-          <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-[#6610f2]/5 rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-brand/5 rounded-full blur-[80px] pointer-events-none" />
         </div>
       )}
 
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Syncing Plans...</span>
+          <span className="text-label font-black uppercase tracking-caps-xl text-slate-300 animate-pulse">Syncing Plans...</span>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {memberships.map((plan) => (
             <div
               key={plan.id}
-              className={`p-12 rounded-[3rem] border-2 transition-all duration-500 relative overflow-hidden flex flex-col justify-between ${plan.status === 'Current' ? 'bg-slate-900 border-slate-900 text-white shadow-2xl' : 'bg-white border-slate-100 text-slate-900 shadow-premium hover:border-[#6610f2]/20'}`}
+              className={`p-12 rounded-floating border-2 transition-all duration-500 relative overflow-hidden flex flex-col justify-between ${plan.status === 'Current' ? 'bg-slate-900 border-slate-900 text-white shadow-2xl' : 'bg-white border-slate-100 text-slate-900 shadow-premium hover:border-brand/20'}`}
             >
               <div>
                 <div className="flex justify-between items-start mb-10">
                   <div>
                     <h3 className="text-3xl font-black italic tracking-tight mb-2">{plan.name}</h3>
-                    <p className={`text-[10px] font-black uppercase tracking-[0.3em] ${plan.status === 'Current' ? 'text-slate-500' : 'text-slate-400'}`}>Tier Level</p>
+                    <p className={`text-label font-black uppercase tracking-caps-wide ${plan.status === 'Current' ? 'text-slate-500' : 'text-slate-400'}`}>Tier Level</p>
                   </div>
                   {plan.status === 'Current' && (
-                    <span className="bg-[#6610f2] text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                    <span className="bg-brand text-white px-4 py-2 rounded-full text-label font-black uppercase tracking-widest flex items-center gap-2">
                       <HiOutlineSparkles className="w-4 h-4" /> Current Plan
                     </span>
                   )}
@@ -191,7 +191,7 @@ export default function MembershipsPage() {
                   <div className="space-y-4">
                     {plan.features.map((feature: string, index: number) => (
                       <div key={index} className="flex items-center gap-4">
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${plan.status === 'Current' ? 'bg-[#6610f2] text-white' : 'bg-slate-100 text-slate-400'}`}>
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${plan.status === 'Current' ? 'bg-brand text-white' : 'bg-slate-100 text-slate-400'}`}>
                           <HiOutlineCheck className="w-4 h-4" />
                         </div>
                         <span className={`text-sm font-bold ${plan.status === 'Current' ? 'text-slate-300' : 'text-slate-600'}`}>{feature}</span>
@@ -204,7 +204,7 @@ export default function MembershipsPage() {
               <button
                 disabled={plan.status === 'Current' || upgradingPlanId === plan.planId}
                 onClick={() => handleSubscribe(plan.planId)}
-                className={`w-full py-6 rounded-[1.8rem] font-black text-[12px] uppercase tracking-[0.2em] transition-all ${plan.status === 'Current' ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'bg-[#6610f2] text-white hover:bg-[#7b2dfd] shadow-lg shadow-purple-200'}`}
+                className={`w-full py-6 rounded-card font-black text-xs uppercase tracking-caps transition-all ${plan.status === 'Current' ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'bg-brand text-white hover:bg-brand-hover shadow-lg shadow-purple-200'}`}
               >
                 {plan.status === 'Current'
                   ? 'Active Subscription'
@@ -214,7 +214,7 @@ export default function MembershipsPage() {
               </button>
 
               {plan.status === 'Current' && (
-                <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#6610f2]/10 rounded-full blur-[100px]" />
+                <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-brand/10 rounded-full blur-[100px]" />
               )}
             </div>
           ))}

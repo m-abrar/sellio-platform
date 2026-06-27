@@ -46,9 +46,9 @@ export default function ProductDetailPage() {
       <div className="h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-1 bg-slate-100 rounded-full overflow-hidden">
-            <div className="h-full bg-[#6610f2] animate-progress-loading" />
+            <div className="h-full bg-brand animate-progress-loading" />
           </div>
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">Syncing Inventory Data...</span>
+          <span className="text-label font-black uppercase tracking-caps-xl text-slate-300">Syncing Inventory Data...</span>
         </div>
       </div>
     );
@@ -62,7 +62,7 @@ export default function ProductDetailPage() {
     );
   }
 
-  const containerClass = 'bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12';
+  const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-8 md:p-12';
   const gallery = [
     ...(product.featured_image ? [{ original_url: product.featured_image }] : []),
     ...(product.gallery ?? []).map((item: any) => ({ original_url: item.url })),
@@ -78,13 +78,13 @@ export default function ProductDetailPage() {
         <div className="flex gap-4">
           <button
             onClick={() => navigate(-1)}
-            className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center gap-2"
+            className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
           >
             <HiOutlineChevronLeft className="w-4 h-4" /> Back
           </button>
           <button
             onClick={() => navigate(`/dashboard/products/edit/${product.slug}`)}
-            className="bg-[#6610f2] text-white px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-[#7b2dfd] transition-all flex items-center gap-2"
+            className="bg-brand text-white px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-brand-hover transition-all flex items-center gap-2"
           >
             <HiOutlinePencilSquare className="w-4 h-4" /> Edit Product
           </button>
@@ -108,7 +108,7 @@ export default function ProductDetailPage() {
                   key={index}
                   src={item.original_url}
                   alt=""
-                  className="w-full h-28 object-cover rounded-[1.5rem] border border-slate-100"
+                  className="w-full h-28 object-cover rounded-card-sm border border-slate-100"
                 />
               ))}
             </div>
@@ -131,19 +131,19 @@ export default function ProductDetailPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-slate-50 rounded-2xl p-4">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">SKU</p>
+                <p className="text-label font-black uppercase tracking-widest text-slate-400">SKU</p>
                 <p className="text-sm font-bold text-slate-800 mt-1">{product.sku || 'N/A'}</p>
               </div>
               <div className="bg-slate-50 rounded-2xl p-4">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Stock</p>
+                <p className="text-label font-black uppercase tracking-widest text-slate-400">Stock</p>
                 <p className="text-sm font-bold text-slate-800 mt-1">{product.inventory?.stock_quantity ?? 0} units</p>
               </div>
               <div className="bg-slate-50 rounded-2xl p-4">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Category</p>
+                <p className="text-label font-black uppercase tracking-widest text-slate-400">Category</p>
                 <p className="text-sm font-bold text-slate-800 mt-1">{product.category?.title || 'Uncategorized'}</p>
               </div>
               <div className="bg-slate-50 rounded-2xl p-4">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Brand</p>
+                <p className="text-label font-black uppercase tracking-widest text-slate-400">Brand</p>
                 <p className="text-sm font-bold text-slate-800 mt-1">{product.brand?.title || 'N/A'}</p>
               </div>
             </div>

@@ -21,7 +21,7 @@ export default function ListingCountCards({ entityLabel, counts, isLoading = fal
         {cardTones.map((tone, index) => (
           <div
             key={index}
-            className={`rounded-[1.75rem] border px-6 py-5 shadow-[0_14px_30px_rgba(15,23,42,0.04)] animate-pulse ${tone}`}
+            className={`rounded-card border px-6 py-5 shadow-elite animate-pulse ${tone}`}
           >
             <div className="h-3 w-24 rounded-full bg-slate-200" />
             <div className="mt-5 h-9 w-14 rounded-xl bg-slate-200" />
@@ -43,9 +43,9 @@ export default function ListingCountCards({ entityLabel, counts, isLoading = fal
       {cards.map((item) => (
         <div
           key={item.label}
-          className={`rounded-[1.75rem] border px-6 py-5 shadow-[0_14px_30px_rgba(15,23,42,0.04)] ${item.tone}`}
+          className={`rounded-card border px-6 py-5 shadow-elite ${item.tone}`}
         >
-          <p className="text-[9px] font-black uppercase tracking-[0.22em] opacity-60">{item.label}</p>
+          <p className="text-micro font-black uppercase tracking-caps opacity-60">{item.label}</p>
           <p className="mt-3 text-3xl font-black tracking-tighter">{item.value}</p>
         </div>
       ))}

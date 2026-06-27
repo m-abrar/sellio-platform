@@ -64,16 +64,16 @@ export default function TransactionsPage() {
       <PageHeader badge="Payments" title="Transactions" subtitle="History" />
 
       {/* FILTER & SEARCH BAR */}
-      <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-premium">
+      <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between bg-white p-6 rounded-container border border-slate-100 shadow-premium">
         {/* Pills */}
         <div className="flex flex-wrap gap-2">
           {(['all', 'earning', 'payout', 'refund'] as const).map((filter) => (
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
-              className={`px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-wider transition-all border ${
+              className={`px-6 py-3 rounded-full text-label font-black uppercase tracking-wider transition-all border ${
                 activeFilter === filter
-                  ? 'bg-[#6610f2] text-white border-[#6610f2] shadow-lg shadow-purple-900/10'
+                  ? 'bg-brand text-white border-brand shadow-lg shadow-purple-900/10'
                   : 'bg-slate-50 text-slate-400 border-slate-100 hover:bg-slate-100 hover:text-slate-600'
               }`}
             >
@@ -90,30 +90,30 @@ export default function TransactionsPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search transactions..."
-            className="w-full bg-slate-50 border-none rounded-full py-4 pl-12 pr-6 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-[#6610f2] transition-all"
+            className="w-full bg-slate-50 border-none rounded-full py-4 pl-12 pr-6 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-brand transition-all"
           />
         </div>
       </div>
 
       {isLoading ? (
-        <div className="h-64 flex items-center justify-center bg-white rounded-[3rem] border border-slate-100 shadow-premium">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Syncing Ledger...</span>
+        <div className="h-64 flex items-center justify-center bg-white rounded-floating border border-slate-100 shadow-premium">
+          <span className="text-label font-black uppercase tracking-caps-xl text-slate-300 animate-pulse">Syncing Ledger...</span>
         </div>
       ) : filteredTransactions.length === 0 ? (
-        <div className="h-64 flex flex-col gap-4 items-center justify-center bg-white rounded-[3rem] border border-slate-100 shadow-premium p-12 text-center">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Zero Ledger Entries Found</span>
+        <div className="h-64 flex flex-col gap-4 items-center justify-center bg-white rounded-floating border border-slate-100 shadow-premium p-12 text-center">
+          <span className="text-label font-black uppercase tracking-caps-xl text-slate-400">Zero Ledger Entries Found</span>
           <p className="text-xs font-medium text-slate-400 max-w-sm">No transaction records match your filters or query criteria.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-[3rem] border border-slate-100 shadow-premium overflow-hidden">
+        <div className="bg-white rounded-floating border border-slate-100 shadow-premium overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-slate-50">
-                  <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Transaction</th>
-                  <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Date</th>
-                  <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
-                  <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Amount</th>
+                  <th className="px-10 py-6 text-label font-black text-slate-400 uppercase tracking-widest">Transaction</th>
+                  <th className="px-10 py-6 text-label font-black text-slate-400 uppercase tracking-widest">Date</th>
+                  <th className="px-10 py-6 text-label font-black text-slate-400 uppercase tracking-widest">Status</th>
+                  <th className="px-10 py-6 text-label font-black text-slate-400 uppercase tracking-widest text-right">Amount</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
@@ -141,7 +141,7 @@ export default function TransactionsPage() {
                         </div>
                         <div>
                           <p className="text-sm font-black text-slate-900">{tx.title}</p>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{tx.type}</p>
+                          <p className="text-label font-bold text-slate-400 uppercase tracking-widest">{tx.type}</p>
                         </div>
                       </div>
                     </td>
@@ -155,7 +155,7 @@ export default function TransactionsPage() {
                         ) : (
                           <HiOutlineClock className="w-5 h-5 text-amber-500" />
                         )}
-                        <span className={`text-[9px] font-black uppercase tracking-widest ${
+                        <span className={`text-micro font-black uppercase tracking-widest ${
                           tx.status === 'Completed' || tx.status === 'Approved' ? 'text-emerald-600' : 
                           tx.status === 'Rejected' ? 'text-rose-600' : 
                           'text-amber-600'

@@ -26,10 +26,10 @@ export default function CreateProduct() {
   const isEditMode = Boolean(slug);
 
   // Design Constants (Mirroring Create Property)
-  const containerClass = "bg-white border border-slate-100 rounded-[2rem] shadow-[0_18px_44px_rgba(0,0,0,0.035)] p-6 md:p-10";
-  const labelClass = "text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2";
-  const inputClass = "w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300";
-  const fieldHintClass = "mt-2 ml-2 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-300";
+  const containerClass = "bg-white border border-slate-100 rounded-card-lg shadow-elite p-6 md:p-10";
+  const labelClass = "text-label font-black text-slate-400 uppercase tracking-caps mb-3 block ml-2";
+  const inputClass = "w-full bg-slate-50 border-2 border-transparent focus:border-brand focus:bg-white rounded-card-sm px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300";
+  const fieldHintClass = "mt-2 ml-2 text-micro font-bold uppercase tracking-label-wide text-slate-300";
 
   const [categories, setCategories] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
@@ -254,9 +254,9 @@ export default function CreateProduct() {
     return (
       <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
         <PageHeader badge="Limit Reached" title="Add" subtitle="Product" />
-        <div className="bg-slate-900 rounded-[3rem] p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
+        <div className="bg-slate-900 rounded-floating p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
           <div className="relative z-10 max-w-md space-y-8">
-            <div className="w-20 h-20 rounded-3xl bg-[#6610f2]/20 border border-[#6610f2]/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
+            <div className="w-20 h-20 rounded-3xl bg-brand/20 border border-brand/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
               <span className="text-4xl">🛡️</span>
             </div>
             <div className="space-y-4">
@@ -269,13 +269,13 @@ export default function CreateProduct() {
             <button 
               type="button"
               onClick={() => navigate('/dashboard/memberships')}
-              className="bg-[#6610f2] hover:bg-[#7b2dfd] px-10 py-5 rounded-[1.8rem] font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-xl shadow-purple-900/40 inline-flex items-center gap-2 cursor-pointer"
+              className="bg-brand hover:bg-brand-hover px-10 py-5 rounded-card font-black text-xs uppercase tracking-caps transition-all duration-300 shadow-xl shadow-purple-900/40 inline-flex items-center gap-2 cursor-pointer"
             >
               Upgrade Subscription Plan
             </button>
           </div>
-          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#6610f2]/20 rounded-full blur-[120px]" />
-          <div className="absolute -left-20 -top-20 w-80 h-80 bg-[#6610f2]/10 rounded-full blur-[120px]" />
+          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-brand/20 rounded-full blur-[120px]" />
+          <div className="absolute -left-20 -top-20 w-80 h-80 bg-brand/10 rounded-full blur-[120px]" />
         </div>
       </div>
     );
@@ -290,7 +290,7 @@ export default function CreateProduct() {
       >
         <button
           onClick={() => navigate(-1)}
-          className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center gap-2"
+          className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
         >
           <HiOutlineChevronLeft className="w-4 h-4" /> Back
         </button>
@@ -302,13 +302,13 @@ export default function CreateProduct() {
             {[1, 2, 3].map((i) => (
               <div key={i} className={`${containerClass} h-[300px] animate-pulse flex flex-col justify-center items-center`}>
                 <div className="w-12 h-1 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-[#6610f2] animate-progress-loading" />
+                  <div className="h-full bg-brand animate-progress-loading" />
                 </div>
               </div>
             ))}
           </div>
           <div className="lg:col-span-4 space-y-10">
-             <div className="bg-slate-900 rounded-[3rem] h-[200px] animate-pulse" />
+             <div className="bg-slate-900 rounded-floating h-[200px] animate-pulse" />
              <div className={`${containerClass} h-[400px] animate-pulse`} />
           </div>
         </div>
@@ -317,7 +317,7 @@ export default function CreateProduct() {
         <div className="lg:col-span-8 space-y-8 md:space-y-10">
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Primary Identity.
+              <span className="w-2 h-8 bg-brand rounded-full" /> Primary Identity.
             </h3>
             <div className="space-y-7">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -481,21 +481,21 @@ export default function CreateProduct() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <label className="flex items-center justify-between min-h-[72px] p-5 bg-slate-50 rounded-2xl border border-slate-100 cursor-pointer hover:bg-white hover:shadow-sm transition-all group">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-[#6610f2]">Track Inventory</span>
+                  <span className="text-label font-black uppercase tracking-widest text-slate-500 group-hover:text-brand">Track Inventory</span>
                   <input
                     type="checkbox"
                     checked={form.manage_stock}
                     onChange={(e) => updateForm('manage_stock', e.target.checked)}
-                    className="w-5 h-5 rounded accent-[#6610f2]"
+                    className="w-5 h-5 rounded accent-brand"
                   />
                 </label>
                 <label className="flex items-center justify-between min-h-[72px] p-5 bg-slate-50 rounded-2xl border border-slate-100 cursor-pointer hover:bg-white hover:shadow-sm transition-all group">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-[#6610f2]">Digital Product</span>
+                  <span className="text-label font-black uppercase tracking-widest text-slate-500 group-hover:text-brand">Digital Product</span>
                   <input
                     type="checkbox"
                     checked={form.is_digital}
                     onChange={(e) => updateForm('is_digital', e.target.checked)}
-                    className="w-5 h-5 rounded accent-[#6610f2]"
+                    className="w-5 h-5 rounded accent-brand"
                   />
                 </label>
               </div>
@@ -504,7 +504,7 @@ export default function CreateProduct() {
 
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Photos & Media.
+              <span className="w-2 h-8 bg-brand rounded-full" /> Photos & Media.
             </h3>
             <div className="mt-4">
               <MediaStudio files={files} setFiles={setFiles} />
@@ -538,9 +538,9 @@ export default function CreateProduct() {
 
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Specification Features.
+              <span className="w-2 h-8 bg-brand rounded-full" /> Specification Features.
             </h3>
-            <p className="text-[10px] font-black text-slate-400 mb-8 leading-relaxed tracking-wider">
+            <p className="text-label font-black text-slate-400 mb-8 leading-relaxed tracking-wider">
               SELECT ALL RELEVANT SPECIFICATIONS AND FEATURES TO DECORATE THE E-COMMERCE LISTING PAGE (E.G. 'WARRANTY INCLUDED', 'ECO-FRIENDLY').
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -553,20 +553,20 @@ export default function CreateProduct() {
                     onClick={() => toggleFeature(feat.id)}
                     className={`flex items-center justify-between p-5 rounded-2xl border text-left transition-all group ${
                       isChecked
-                        ? 'bg-[#6610f2]/5 border-[#6610f2] shadow-[0_4px_20px_rgba(102,16,242,0.08)]'
+                        ? 'bg-brand/5 border-brand shadow-brand-glow'
                         : 'bg-slate-50 border-slate-100 hover:bg-white hover:shadow-sm'
                     }`}
                   >
                     <span
                       className={`text-xs font-bold uppercase tracking-wider transition-colors ${
-                        isChecked ? 'text-[#6610f2]' : 'text-slate-500 group-hover:text-[#6610f2]'
+                        isChecked ? 'text-brand' : 'text-slate-500 group-hover:text-brand'
                       }`}
                     >
                       {feat.title}
                     </span>
                     <div
                       className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${
-                        isChecked ? 'border-[#6610f2] bg-[#6610f2]' : 'border-slate-300'
+                        isChecked ? 'border-brand bg-brand' : 'border-slate-300'
                       }`}
                     >
                       {isChecked && (
@@ -579,7 +579,7 @@ export default function CreateProduct() {
                 );
               })}
               {allFeatures.length === 0 && (
-                <div className="col-span-full py-6 text-center text-[10px] font-bold uppercase tracking-widest text-slate-300 italic">
+                <div className="col-span-full py-6 text-center text-label font-bold uppercase tracking-widest text-slate-300 italic">
                   No features available in metadata...
                 </div>
               )}
@@ -602,14 +602,14 @@ export default function CreateProduct() {
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
               <span className="w-2 h-8 bg-teal-500 rounded-full" /> Discoverability Tags.
             </h3>
-            <p className="text-[10px] font-black text-slate-400 mb-6 leading-relaxed tracking-wider">
+            <p className="text-label font-black text-slate-400 mb-6 leading-relaxed tracking-wider">
               ADD SEARCH KEYWORDS AND RELEVANT TAGS TO AMPLIFY DISCOVERABILITY ACROSS SEARCH SECTORS (E.G. 'NEW ARRIVAL', 'LIMITED EDITION'). PRESS ENTER OR COMMA TO CAST A TAG CHIP.
             </p>
             <div className="flex flex-wrap gap-2.5 mb-6">
               {tags.map((tag, idx) => (
                 <span
                   key={idx}
-                  className="inline-flex items-center gap-2 bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest px-4.5 py-2.5 rounded-full shadow-sm select-none"
+                  className="inline-flex items-center gap-2 bg-slate-900 text-white font-black text-label uppercase tracking-widest px-4.5 py-2.5 rounded-full shadow-sm select-none"
                 >
                   {tag}
                   <button
@@ -624,7 +624,7 @@ export default function CreateProduct() {
                 </span>
               ))}
               {tags.length === 0 && (
-                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300 italic py-2">
+                <span className="text-label font-bold uppercase tracking-widest text-slate-300 italic py-2">
                   No tags added yet...
                 </span>
               )}
@@ -683,12 +683,12 @@ export default function CreateProduct() {
 
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-10 space-y-8">
-          <div className="bg-slate-900 rounded-[2rem] p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-slate-900 rounded-card-lg p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="relative z-10">
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Readiness Score</p>
+              <p className="text-label font-black uppercase tracking-widest text-slate-500 mb-6">Readiness Score</p>
               <span className="text-7xl font-black italic tracking-tighter">{progress}%</span>
               <div className="w-full h-1.5 bg-white/10 rounded-full mt-6 overflow-hidden">
-                <div className="h-full bg-[#6610f2] transition-all duration-1000 shadow-[0_0_15px_#6610f2]" style={{ width: `${progress}%` }} />
+                <div className="h-full bg-brand transition-all duration-1000 shadow-[0_0_15px_#6610f2]" style={{ width: `${progress}%` }} />
               </div>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-10">
@@ -704,20 +704,20 @@ export default function CreateProduct() {
                 { key: 'is_featured', label: 'Featured Asset' }
               ].map((item) => (
                 <label key={item.key} className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl cursor-pointer hover:bg-slate-100 transition-colors group">
-                  <span className="text-sm font-bold text-slate-700 group-hover:text-[#6610f2] transition-colors">{item.label}</span>
+                  <span className="text-sm font-bold text-slate-700 group-hover:text-brand transition-colors">{item.label}</span>
                   <input
                     type="checkbox"
                     checked={form[item.key] as boolean}
                     onChange={(e) => updateForm(item.key, e.target.checked)}
-                    className="w-6 h-6 rounded-lg accent-[#6610f2] cursor-pointer"
+                    className="w-6 h-6 rounded-lg accent-brand cursor-pointer"
                   />
                 </label>
               ))}
             </div>
           </div>
 
-          <div className="p-6 border-2 border-dashed border-slate-100 rounded-[2rem] bg-white/60">
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">
+          <div className="p-6 border-2 border-dashed border-slate-100 rounded-card-lg bg-white/60">
+            <p className="text-label font-black text-slate-500 uppercase tracking-caps mb-4">
               Listing Checklist
             </p>
             <div className="space-y-3">
@@ -728,7 +728,7 @@ export default function CreateProduct() {
                 { label: 'Category', done: form.category_id !== '' },
                 { label: 'SKU', done: form.sku !== '' },
               ].map((item) => (
-                <div key={item.label} className="flex items-center justify-between gap-4 text-[10px] font-black uppercase tracking-widest">
+                <div key={item.label} className="flex items-center justify-between gap-4 text-label font-black uppercase tracking-widest">
                   <span className="text-slate-500">{item.label}</span>
                   <span className={item.done ? 'text-green-500' : 'text-slate-300'}>
                     {item.done ? 'Ready' : 'Missing'}
@@ -736,7 +736,7 @@ export default function CreateProduct() {
                 </div>
               ))}
             </div>
-            <p className="mt-6 text-[9px] font-bold text-slate-400 uppercase leading-relaxed tracking-widest">
+            <p className="mt-6 text-micro font-bold text-slate-400 uppercase leading-relaxed tracking-widest">
               Upload high-resolution assets and complete the required fields before publishing.
             </p>
           </div>

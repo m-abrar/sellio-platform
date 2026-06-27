@@ -19,9 +19,9 @@ import { createEvent, getEventBySlug, getEventFormMeta, updateEvent } from '../.
 import { getWelcomeData } from '../../api/dashboard';
 import { ApiError } from '../../lib/apiError';
 
-const containerClass = 'bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12';
-const labelClass = 'text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2';
-const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
+const containerClass = 'bg-white border border-slate-100 rounded-container shadow-elite p-8 md:p-12';
+const labelClass = 'text-label font-black text-slate-400 uppercase tracking-caps mb-3 block ml-2';
+const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-brand focus:bg-white rounded-card-sm px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
 
 const defaultForm = {
   title: '',
@@ -463,7 +463,7 @@ export default function CreateEvent() {
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading...</span>
+        <span className="text-label font-black uppercase tracking-caps-xl text-slate-300 animate-pulse">Loading...</span>
       </div>
     );
   }
@@ -472,9 +472,9 @@ export default function CreateEvent() {
     return (
       <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
         <PageHeader badge="Limit Reached" title="Create" subtitle="Event" />
-        <div className="bg-slate-900 rounded-[3rem] p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
+        <div className="bg-slate-900 rounded-floating p-12 text-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[400px]">
           <div className="relative z-10 max-w-md space-y-8">
-            <div className="w-20 h-20 rounded-3xl bg-[#6610f2]/20 border border-[#6610f2]/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
+            <div className="w-20 h-20 rounded-3xl bg-brand/20 border border-brand/30 flex items-center justify-center mx-auto shadow-lg animate-bounce">
               <span className="text-4xl">🛡️</span>
             </div>
             <div className="space-y-4">
@@ -487,13 +487,13 @@ export default function CreateEvent() {
             <button 
               type="button"
               onClick={() => navigate('/dashboard/memberships')}
-              className="bg-[#6610f2] hover:bg-[#7b2dfd] px-10 py-5 rounded-[1.8rem] font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-xl shadow-purple-900/40 inline-flex items-center gap-2 cursor-pointer"
+              className="bg-brand hover:bg-brand-hover px-10 py-5 rounded-card font-black text-xs uppercase tracking-caps transition-all duration-300 shadow-xl shadow-purple-900/40 inline-flex items-center gap-2 cursor-pointer"
             >
               Upgrade Subscription Plan
             </button>
           </div>
-          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#6610f2]/20 rounded-full blur-[120px]" />
-          <div className="absolute -left-20 -top-20 w-80 h-80 bg-[#6610f2]/10 rounded-full blur-[120px]" />
+          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-brand/20 rounded-full blur-[120px]" />
+          <div className="absolute -left-20 -top-20 w-80 h-80 bg-brand/10 rounded-full blur-[120px]" />
         </div>
       </div>
     );
@@ -508,7 +508,7 @@ export default function CreateEvent() {
       >
         <button
           onClick={() => navigate(-1)}
-          className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center gap-2"
+          className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps hover:bg-slate-50 transition-all flex items-center gap-2"
         >
           <HiOutlineChevronLeft className="w-4 h-4" /> Back
         </button>
@@ -518,7 +518,7 @@ export default function CreateEvent() {
         <div className="lg:col-span-8 space-y-10">
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Event Identity.
+              <span className="w-2 h-8 bg-brand rounded-full" /> Event Identity.
             </h3>
             <div className="space-y-6">
               <div>
@@ -733,7 +733,7 @@ export default function CreateEvent() {
                       type="text"
                       value={ticket.title}
                       onChange={(e) => updateTicketField(ticket.id, 'title', e.target.value)}
-                      className="w-full bg-white border-2 border-transparent focus:border-[#6610f2] rounded-2xl px-6 py-4 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300 text-sm"
+                      className="w-full bg-white border-2 border-transparent focus:border-brand rounded-2xl px-6 py-4 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300 text-sm"
                       placeholder="e.g. VIP Access, General Admission"
                     />
                   </div>
@@ -745,7 +745,7 @@ export default function CreateEvent() {
                         type="number"
                         value={ticket.base_price}
                         onChange={(e) => updateTicketField(ticket.id, 'base_price', e.target.value)}
-                        className="w-full bg-white border-2 border-transparent focus:border-[#6610f2] rounded-2xl pl-10 pr-6 py-4 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300 text-sm"
+                        className="w-full bg-white border-2 border-transparent focus:border-brand rounded-2xl pl-10 pr-6 py-4 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300 text-sm"
                         placeholder="0.00"
                       />
                     </div>
@@ -766,7 +766,7 @@ export default function CreateEvent() {
               <button
                 type="button"
                 onClick={addTicketType}
-                className="bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest px-8 py-4.5 rounded-2xl hover:bg-slate-800 transition-colors"
+                className="bg-slate-900 text-white font-black text-label uppercase tracking-widest px-8 py-4.5 rounded-2xl hover:bg-slate-800 transition-colors"
               >
                 + Add Pricing Tier
               </button>
@@ -780,16 +780,16 @@ export default function CreateEvent() {
             </h3>
             <div className="space-y-8">
               {occurrencesList.map((occ, occIdx) => (
-                <div key={occ.id} className="p-8 bg-slate-50/50 border border-slate-100 rounded-[2.5rem] space-y-6 relative">
+                <div key={occ.id} className="p-8 bg-slate-50/50 border border-slate-100 rounded-container space-y-6 relative">
                   <div className="flex justify-between items-center pb-4 border-b border-slate-100">
-                    <h4 className="text-xs font-black text-[#6610f2] uppercase tracking-widest italic">
+                    <h4 className="text-xs font-black text-brand uppercase tracking-widest italic">
                       // Occurrence Slot #{occIdx + 1}
                     </h4>
                     <button
                       type="button"
                       disabled={occurrencesList.length === 1}
                       onClick={() => removeOccurrenceSlot(occ.id)}
-                      className="text-red-500 hover:text-red-700 text-[10px] font-black uppercase tracking-widest disabled:opacity-30"
+                      className="text-red-500 hover:text-red-700 text-label font-black uppercase tracking-widest disabled:opacity-30"
                     >
                       Remove Slot
                     </button>
@@ -848,8 +848,8 @@ export default function CreateEvent() {
                   </div>
 
                   {/* Nested Inventory Mapping */}
-                  <div className="bg-white p-6 rounded-[2rem] border border-slate-100/80 space-y-4">
-                    <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block ml-2">
+                  <div className="bg-white p-6 rounded-card-lg border border-slate-100/80 space-y-4">
+                    <h5 className="text-label font-black text-slate-400 uppercase tracking-widest mb-3 block ml-2">
                       Ticket Inventory & Availability Allocations
                     </h5>
                     <div className="space-y-4">
@@ -859,25 +859,25 @@ export default function CreateEvent() {
                           <div key={ticket.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center p-5 bg-slate-50 rounded-2xl border border-slate-100/50">
                             <div className="md:col-span-4">
                               <span className="text-xs font-black text-slate-800 italic block">{ticket.title || 'Untitled Ticket Tier'}</span>
-                              <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mt-0.5">Base: ${parseFloat(ticket.base_price) || 0}</span>
+                              <span className="text-micro text-slate-400 font-bold uppercase tracking-wider block mt-0.5">Base: ${parseFloat(ticket.base_price) || 0}</span>
                             </div>
                             <div className="md:col-span-4">
-                              <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest block mb-1">Available Qty</label>
+                              <label className="text-tiny font-black text-slate-400 uppercase tracking-widest block mb-1">Available Qty</label>
                               <input
                                 type="number"
                                 value={inv.available_quantity}
                                 onChange={(e) => updateInventoryField(occ.id, ticket.id, 'available_quantity', e.target.value)}
-                                className="w-full bg-white border-2 border-transparent focus:border-[#6610f2] rounded-xl px-4 py-2.5 text-xs font-bold outline-none"
+                                className="w-full bg-white border-2 border-transparent focus:border-brand rounded-xl px-4 py-2.5 text-xs font-bold outline-none"
                                 placeholder="Quantity"
                               />
                             </div>
                             <div className="md:col-span-4">
-                              <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest block mb-1">Override Price ($)</label>
+                              <label className="text-tiny font-black text-slate-400 uppercase tracking-widest block mb-1">Override Price ($)</label>
                               <input
                                 type="number"
                                 value={inv.override_price}
                                 onChange={(e) => updateInventoryField(occ.id, ticket.id, 'override_price', e.target.value)}
-                                className="w-full bg-white border-2 border-transparent focus:border-[#6610f2] rounded-xl px-4 py-2.5 text-xs font-bold outline-none"
+                                className="w-full bg-white border-2 border-transparent focus:border-brand rounded-xl px-4 py-2.5 text-xs font-bold outline-none"
                                 placeholder="0 for default"
                               />
                             </div>
@@ -891,7 +891,7 @@ export default function CreateEvent() {
               <button
                 type="button"
                 onClick={addOccurrenceSlot}
-                className="bg-[#6610f2] text-white font-black text-[10px] uppercase tracking-widest px-8 py-4.5 rounded-2xl hover:bg-[#520dc2] transition-colors"
+                className="bg-brand text-white font-black text-label uppercase tracking-widest px-8 py-4.5 rounded-2xl hover:bg-[#520dc2] transition-colors"
               >
                 + Add Scheduled Slot
               </button>
@@ -900,7 +900,7 @@ export default function CreateEvent() {
 
           <div className={containerClass}>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Photos & Media.
+              <span className="w-2 h-8 bg-brand rounded-full" /> Photos & Media.
             </h3>
             <MediaStudio files={files} setFiles={setFiles} />
           </div>
@@ -918,17 +918,17 @@ export default function CreateEvent() {
             {/* Discoverability Tags manager */}
             <div className="space-y-4 pt-8 border-t border-slate-100">
               <label className={labelClass}>Discoverability Keywords / Tags</label>
-              <div className="flex flex-wrap gap-2.5 p-5 bg-slate-50 border-2 border-slate-100/50 rounded-[2rem] min-h-[72px] items-center">
+              <div className="flex flex-wrap gap-2.5 p-5 bg-slate-50 border-2 border-slate-100/50 rounded-card-lg min-h-[72px] items-center">
                 {tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="inline-flex items-center gap-2 bg-[#6610f2]/5 text-[#6610f2] text-xs font-bold pl-4 pr-3 py-2 rounded-xl border border-[#6610f2]/10"
+                    className="inline-flex items-center gap-2 bg-brand/5 text-brand text-xs font-bold pl-4 pr-3 py-2 rounded-xl border border-brand/10"
                   >
                     {tag}
                     <button
                       type="button"
                       onClick={() => setTags((prev) => prev.filter((_, idx) => idx !== i))}
-                      className="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black hover:bg-[#6610f2] hover:text-white transition-colors text-[#6610f2]/60"
+                      className="w-4 h-4 rounded-full flex items-center justify-center text-label font-black hover:bg-brand hover:text-white transition-colors text-brand/60"
                     >
                       ×
                     </button>
@@ -948,12 +948,12 @@ export default function CreateEvent() {
         </div>
 
         <div className="lg:col-span-4 space-y-10">
-          <div className="bg-slate-900 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-slate-900 rounded-floating p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="relative z-10">
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Event Readiness</p>
+              <p className="text-label font-black uppercase tracking-widest text-slate-500 mb-6">Event Readiness</p>
               <span className="text-7xl font-black italic tracking-tighter">{progress}%</span>
               <div className="w-full h-1.5 bg-white/10 rounded-full mt-6 overflow-hidden">
-                <div className="h-full bg-[#6610f2] transition-all duration-1000 shadow-[0_0_15px_#6610f2]" style={{ width: `${progress}%` }} />
+                <div className="h-full bg-brand transition-all duration-1000 shadow-[0_0_15px_#6610f2]" style={{ width: `${progress}%` }} />
               </div>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-10">
@@ -974,12 +974,12 @@ export default function CreateEvent() {
           <div className={containerClass}>
             <h4 className={labelClass}>Visibility</h4>
             <label className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl cursor-pointer hover:bg-slate-100 transition-colors group mt-6">
-              <span className="text-sm font-bold text-slate-700 group-hover:text-[#6610f2] transition-colors">Public Listing</span>
+              <span className="text-sm font-bold text-slate-700 group-hover:text-brand transition-colors">Public Listing</span>
               <input
                 type="checkbox"
                 checked={form.is_published}
                 onChange={(e) => updateForm('is_published', e.target.checked)}
-                className="w-6 h-6 rounded-lg accent-[#6610f2] cursor-pointer"
+                className="w-6 h-6 rounded-lg accent-brand cursor-pointer"
               />
             </label>
           </div>

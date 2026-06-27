@@ -67,7 +67,7 @@ export default function ActivityDetailPage() {
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading Details...</span>
+        <span className="text-label font-black uppercase tracking-caps-xl text-slate-300 animate-pulse">Loading Details...</span>
       </div>
     );
   }
@@ -75,8 +75,8 @@ export default function ActivityDetailPage() {
   if (!activity) {
     return (
       <div className="h-screen flex flex-col items-center justify-center space-y-6">
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">Activity not found</p>
-        <button onClick={() => navigate(-1)} className="text-[#6610f2] font-black uppercase text-xs tracking-widest flex items-center gap-2">
+        <p className="text-label font-black uppercase tracking-caps-xl text-slate-300">Activity not found</p>
+        <button onClick={() => navigate(-1)} className="text-brand font-black uppercase text-xs tracking-widest flex items-center gap-2">
           <HiOutlineArrowLeft className="w-4 h-4" /> Go Back
         </button>
       </div>
@@ -86,10 +86,10 @@ export default function ActivityDetailPage() {
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20">
       <div className="flex items-center gap-4 mb-2">
-        <button onClick={() => navigate(-1)} className="p-3 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-[#6610f2] hover:border-[#6610f2]/20 transition-all">
+        <button onClick={() => navigate(-1)} className="p-3 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-brand hover:border-brand/20 transition-all">
           <HiOutlineArrowLeft className="w-5 h-5" />
         </button>
-        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Back to {type}</span>
+        <span className="text-label font-black text-slate-400 uppercase tracking-caps-wide">Back to {type}</span>
       </div>
 
       <PageHeader 
@@ -100,13 +100,13 @@ export default function ActivityDetailPage() {
         <div className="flex gap-3">
           <button 
             onClick={() => handleStatusUpdate('Confirmed')}
-            className="bg-green-500 text-white px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-green-600 transition-all active:scale-95 flex items-center gap-2"
+            className="bg-green-500 text-white px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-xl hover:bg-green-600 transition-all active:scale-95 flex items-center gap-2"
           >
             <HiOutlineCheckCircle className="w-4 h-4" /> Approve
           </button>
           <button 
             onClick={() => handleStatusUpdate('Rejected')}
-            className="bg-white text-red-500 border border-red-100 px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-sm hover:bg-red-50 transition-all active:scale-95 flex items-center gap-2"
+            className="bg-white text-red-500 border border-red-100 px-8 py-4.5 rounded-card font-black text-caption uppercase tracking-caps shadow-sm hover:bg-red-50 transition-all active:scale-95 flex items-center gap-2"
           >
             <HiOutlineXCircle className="w-4 h-4" /> Reject
           </button>
@@ -116,29 +116,29 @@ export default function ActivityDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* MAIN DETAILS */}
         <div className="lg:col-span-8 space-y-10">
-          <div className="bg-white p-12 rounded-[3rem] border border-slate-100 shadow-premium">
+          <div className="bg-white p-12 rounded-floating border border-slate-100 shadow-premium">
             <h3 className="text-2xl font-black text-slate-900 italic tracking-tight mb-10">Interaction Overview.</h3>
             
             {module === 'properties' && type === 'bookings' ? (
               <div className="space-y-10 animate-in fade-in duration-500">
                 {/* 1. Stay Schedule Grid */}
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Reservation Timeline</p>
+                  <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Reservation Timeline</p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Check In</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Check In</p>
                       <p className="text-xs font-black text-slate-900 leading-none">{activity.raw.check_in_date ? new Date(activity.raw.check_in_date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : '—'}</p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Check Out</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Check Out</p>
                       <p className="text-xs font-black text-slate-900 leading-none">{activity.raw.check_out_date ? new Date(activity.raw.check_out_date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : '—'}</p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Duration</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Duration</p>
                       <p className="text-xs font-black text-slate-900 leading-none">{activity.raw.duration_nights || 1} {Number(activity.raw.duration_nights) === 1 ? 'Night' : 'Nights'}</p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Guests</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Guests</p>
                       <p className="text-xs font-black text-slate-900 leading-none">{activity.raw.guests || 1} {Number(activity.raw.guests) === 1 ? 'Guest' : 'Guests'}</p>
                     </div>
                   </div>
@@ -153,28 +153,28 @@ export default function ActivityDetailPage() {
                       alt="guest" 
                     />
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Guest Identity</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Guest Identity</p>
                       <p className="text-base font-black text-slate-900 leading-tight">{activity.customer}</p>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.email}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.email}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[#6610f2] border border-slate-100 shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand border border-slate-100 shrink-0">
                       <HiOutlineCheckCircle className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Reservation Status</p>
-                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${activity.status === 'Confirmed' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Reservation Status</p>
+                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-micro font-black uppercase tracking-widest ${activity.status === 'Confirmed' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
                         {activity.status}
                       </span>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* 3. Detailed Financial Statement */}
-                <div className="bg-slate-50/50 p-8 rounded-[2rem] border border-slate-100 pt-6 mt-8">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Financial Statement</p>
+                <div className="bg-slate-50/50 p-8 rounded-card-lg border border-slate-100 pt-6 mt-8">
+                  <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Financial Statement</p>
                   <div className="space-y-3.5">
                     <div className="flex justify-between items-center text-xs font-bold text-slate-500">
                       <span>Base Rental Amount</span>
@@ -191,8 +191,8 @@ export default function ActivityDetailPage() {
                       </div>
                     )}
                     <div className="border-t border-slate-200/60 my-2 pt-4 flex justify-between items-baseline">
-                      <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Total Stay Price</span>
-                      <span className="text-2xl font-black text-[#6610f2] italic tracking-tight">${Number(activity.raw.total_price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                      <span className="text-label font-black text-slate-900 uppercase tracking-widest">Total Stay Price</span>
+                      <span className="text-2xl font-black text-brand italic tracking-tight">${Number(activity.raw.total_price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
                   </div>
                 </div>
@@ -201,10 +201,10 @@ export default function ActivityDetailPage() {
               <div className="space-y-10 animate-in fade-in duration-500">
                 {/* 1. Event Timeline Grid */}
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Event Admission Timeline</p>
+                  <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Event Admission Timeline</p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Date & Time</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Date & Time</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
                         {activity.raw.occurrence?.start_date_time 
                           ? new Date(activity.raw.occurrence.start_date_time).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) 
@@ -214,7 +214,7 @@ export default function ActivityDetailPage() {
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Starting At</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Starting At</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
                         {activity.raw.occurrence?.start_date_time 
                           ? new Date(activity.raw.occurrence.start_date_time).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) 
@@ -222,11 +222,11 @@ export default function ActivityDetailPage() {
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Ticket Tier</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Ticket Tier</p>
                       <p className="text-xs font-black text-slate-900 leading-none truncate">{activity.raw.ticket_type?.name || 'General Admission'}</p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Quantity</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Quantity</p>
                       <p className="text-xs font-black text-slate-900 leading-none">{activity.raw.quantity || 1} {Number(activity.raw.quantity) === 1 ? 'Ticket' : 'Tickets'}</p>
                     </div>
                   </div>
@@ -241,28 +241,28 @@ export default function ActivityDetailPage() {
                       alt="attendee" 
                     />
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Attendee Identity</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Attendee Identity</p>
                       <p className="text-base font-black text-slate-900 leading-tight">{activity.customer}</p>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.email || 'No email provided'}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.email || 'No email provided'}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[#6610f2] border border-slate-100 shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand border border-slate-100 shrink-0">
                       <HiOutlineCheckCircle className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Registration Status</p>
-                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${activity.status === 'Confirmed' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Registration Status</p>
+                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-micro font-black uppercase tracking-widest ${activity.status === 'Confirmed' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
                         {activity.status}
                       </span>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* 3. Detailed Financial Statement */}
-                <div className="bg-slate-50/50 p-8 rounded-[2rem] border border-slate-100 pt-6 mt-8">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Financial Ticket Summary</p>
+                <div className="bg-slate-50/50 p-8 rounded-card-lg border border-slate-100 pt-6 mt-8">
+                  <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Financial Ticket Summary</p>
                   <div className="space-y-3.5">
                     <div className="flex justify-between items-center text-xs font-bold text-slate-500">
                       <span>Ticket Price ({activity.raw.ticket_type?.name || 'General Admission'})</span>
@@ -279,8 +279,8 @@ export default function ActivityDetailPage() {
                       <span className="text-slate-900">Included</span>
                     </div>
                     <div className="border-t border-slate-200/60 my-2 pt-4 flex justify-between items-baseline">
-                      <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Total Transaction Price</span>
-                      <span className="text-2xl font-black text-[#6610f2] italic tracking-tight">${Number(activity.raw.total_price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                      <span className="text-label font-black text-slate-900 uppercase tracking-widest">Total Transaction Price</span>
+                      <span className="text-2xl font-black text-brand italic tracking-tight">${Number(activity.raw.total_price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
                   </div>
                 </div>
@@ -289,10 +289,10 @@ export default function ActivityDetailPage() {
               <div className="space-y-10 animate-in fade-in duration-500">
                 {/* 1. Vehicle Preference Timeline Grid */}
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Preference & Viewing Schedule</p>
+                  <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Preference & Viewing Schedule</p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Viewing Date</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Viewing Date</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
                         {activity.raw.preferred_date 
                           ? new Date(activity.raw.preferred_date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) 
@@ -300,17 +300,17 @@ export default function ActivityDetailPage() {
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Viewing Time</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Viewing Time</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
                         {activity.raw.preferred_time || 'Flexible'}
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Vehicle Year</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Vehicle Year</p>
                       <p className="text-xs font-black text-slate-900 leading-none">{activity.raw.auto?.year || '—'}</p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Transmission</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Transmission</p>
                       <p className="text-xs font-black text-slate-900 leading-none truncate">{activity.raw.auto?.transmission || 'Automatic'}</p>
                     </div>
                   </div>
@@ -325,21 +325,21 @@ export default function ActivityDetailPage() {
                       alt="lead" 
                     />
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Lead Identity</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Lead Identity</p>
                       <p className="text-base font-black text-slate-900 leading-tight">{activity.customer}</p>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.email || 'No email provided'}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.email || 'No email provided'}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[#6610f2] border border-slate-100 shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand border border-slate-100 shrink-0">
                       <HiOutlineCheckCircle className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Inquiry Status</p>
-                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${activity.status === 'Resolved' || activity.status === 'Contacted' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Inquiry Status</p>
+                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-micro font-black uppercase tracking-widest ${activity.status === 'Resolved' || activity.status === 'Contacted' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
                         {activity.status}
                       </span>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
                     </div>
                   </div>
                 </div>
@@ -354,8 +354,8 @@ export default function ActivityDetailPage() {
                   const estimatedMonthlyPayment = (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, loanTermMonths)) / (Math.pow(1 + monthlyInterestRate, loanTermMonths) - 1);
 
                   return (
-                    <div className="bg-slate-50/50 p-8 rounded-[2rem] border border-slate-100 pt-6 mt-8">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Estimated Vehicle Valuation & Finance Proposal</p>
+                    <div className="bg-slate-50/50 p-8 rounded-card-lg border border-slate-100 pt-6 mt-8">
+                      <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Estimated Vehicle Valuation & Finance Proposal</p>
                       <div className="space-y-3.5">
                         <div className="flex justify-between items-center text-xs font-bold text-slate-500">
                           <span>Vehicle Selling Price</span>
@@ -374,8 +374,8 @@ export default function ActivityDetailPage() {
                           <span className="text-slate-900 font-extrabold">${estimatedMonthlyPayment.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / mo</span>
                         </div>
                         <div className="border-t border-slate-200/60 my-2 pt-4 flex justify-between items-baseline">
-                          <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Total Valuation</span>
-                          <span className="text-2xl font-black text-[#6610f2] italic tracking-tight">${autoPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                          <span className="text-label font-black text-slate-900 uppercase tracking-widest">Total Valuation</span>
+                          <span className="text-2xl font-black text-brand italic tracking-tight">${autoPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                         </div>
                       </div>
                     </div>
@@ -386,10 +386,10 @@ export default function ActivityDetailPage() {
               <div className="space-y-10 animate-in fade-in duration-500">
                 {/* 1. Job Details & Preferences Timeline Grid */}
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Job Specs & Placement details</p>
+                  <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Job Specs & Placement details</p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Workplace</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Workplace</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
                         {activity.raw.job?.workplace_type === 1 
                           ? 'Remote' 
@@ -399,7 +399,7 @@ export default function ActivityDetailPage() {
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Salary Range</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Salary Range</p>
                       <p className="text-xs font-black text-slate-900 leading-none truncate">
                         {activity.raw.job?.salary_min 
                           ? `$${(activity.raw.job.salary_min / 1000).toFixed(0)}k – $${(activity.raw.job.salary_max / 1000).toFixed(0)}k` 
@@ -407,13 +407,13 @@ export default function ActivityDetailPage() {
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Applied On</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Applied On</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
                         {activity.raw.created_at ? new Date(activity.raw.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Position</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Position</p>
                       <p className="text-xs font-black text-slate-900 leading-none truncate">{activity.raw.job?.title || 'Job Opening'}</p>
                     </div>
                   </div>
@@ -428,31 +428,31 @@ export default function ActivityDetailPage() {
                       alt="candidate" 
                     />
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Candidate Identity</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Candidate Identity</p>
                       <p className="text-base font-black text-slate-900 leading-tight">{activity.customer}</p>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.email || 'No email provided'}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.email || 'No email provided'}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[#6610f2] border border-slate-100 shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand border border-slate-100 shrink-0">
                       <HiOutlineCheckCircle className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Hiring Status</p>
-                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${activity.status === 'Hired' || activity.status === 'Interviewing' || activity.status === 'Shortlisted' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Hiring Status</p>
+                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-micro font-black uppercase tracking-widest ${activity.status === 'Hired' || activity.status === 'Interviewing' || activity.status === 'Shortlisted' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
                         {activity.status}
                       </span>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* 3. Applicant Summary Statement (Cover Letter, Portfolio, Resume) */}
-                <div className="bg-slate-50/50 p-8 rounded-[2rem] border border-slate-100 pt-6 mt-8">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Application Attachments & Statement</p>
+                <div className="bg-slate-50/50 p-8 rounded-card-lg border border-slate-100 pt-6 mt-8">
+                  <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Application Attachments & Statement</p>
                   <div className="space-y-4">
                     <div>
-                      <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Cover Letter Introduction</span>
+                      <span className="text-micro font-black text-slate-400 uppercase tracking-widest block mb-1">Cover Letter Introduction</span>
                       <p className="text-slate-600 font-medium italic text-xs leading-relaxed bg-white p-6 rounded-2xl border border-slate-100">
                         "{activity.raw.cover_letter || "Greetings, I am highly interested in this role and look forward to discussing how my experience aligns with your team's goals."}"
                       </p>
@@ -460,7 +460,7 @@ export default function ActivityDetailPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                       <div className="bg-white p-5 rounded-2xl border border-slate-100/60 flex items-center justify-between">
                         <div>
-                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Candidate Resume</p>
+                          <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Candidate Resume</p>
                           <p className="text-xs font-black text-slate-900 leading-none">
                             {activity.raw.resume_path ? activity.raw.resume_path.split('/').pop() : 'CV_Document.pdf'}
                           </p>
@@ -469,14 +469,14 @@ export default function ActivityDetailPage() {
                           href={activity.raw.resume_path ? `file:///${activity.raw.resume_path}` : '#'} 
                           target="_blank" 
                           rel="noreferrer"
-                          className="bg-[#6610f2]/10 hover:bg-[#6610f2]/20 text-[#6610f2] px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all"
+                          className="bg-brand/10 hover:bg-brand/20 text-brand px-4 py-2.5 rounded-xl font-black text-label uppercase tracking-widest transition-all"
                         >
                           View CV
                         </a>
                       </div>
                       <div className="bg-white p-5 rounded-2xl border border-slate-100/60 flex items-center justify-between">
                         <div>
-                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Portfolio & Links</p>
+                          <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Portfolio & Links</p>
                           <p className="text-xs font-black text-slate-900 leading-none">
                             {activity.raw.portfolio_url ? new URL(activity.raw.portfolio_url).hostname : 'portfolio.website.com'}
                           </p>
@@ -485,7 +485,7 @@ export default function ActivityDetailPage() {
                           href={activity.raw.portfolio_url || '#'} 
                           target="_blank" 
                           rel="noreferrer"
-                          className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all"
+                          className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-black text-label uppercase tracking-widest transition-all"
                         >
                           Portfolio
                         </a>
@@ -498,10 +498,10 @@ export default function ActivityDetailPage() {
               <div className="space-y-10 animate-in fade-in duration-500">
                 {/* 1. Service Details Timeline Grid */}
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Service Schedule & Preferences</p>
+                  <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Service Schedule & Preferences</p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Desired Start</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Desired Start</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
                         {activity.raw.requested_date || activity.raw.scheduled_at 
                           ? new Date((activity.raw.requested_date || activity.raw.scheduled_at) as string).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) 
@@ -509,19 +509,19 @@ export default function ActivityDetailPage() {
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Project Scope</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Project Scope</p>
                       <p className="text-xs font-black text-slate-900 leading-none truncate">
                         {activity.raw.scope_size || 'Standard'}
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Inquiry Date</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Inquiry Date</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
                         {activity.raw.created_at ? new Date(activity.raw.created_at as string).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '—'}
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Service</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Service</p>
                       <p className="text-xs font-black text-slate-900 leading-none truncate">{activity.raw.service?.title || 'Custom Service'}</p>
                     </div>
                   </div>
@@ -536,28 +536,28 @@ export default function ActivityDetailPage() {
                       alt="client" 
                     />
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Client Identity</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Client Identity</p>
                       <p className="text-base font-black text-slate-900 leading-tight">{activity.customer}</p>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.email || 'No email provided'}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.email || 'No email provided'}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[#6610f2] border border-slate-100 shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand border border-slate-100 shrink-0">
                       <HiOutlineCheckCircle className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Quote Status</p>
-                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${activity.status === 'Accepted' || activity.status === 'Quoted' || activity.status === 'Sent' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Quote Status</p>
+                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-micro font-black uppercase tracking-widest ${activity.status === 'Accepted' || activity.status === 'Quoted' || activity.status === 'Sent' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
                         {activity.status}
                       </span>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* 3. Detailed Financial Statement / Pricing Quote */}
-                <div className="bg-slate-50/50 p-8 rounded-[2rem] border border-slate-100 pt-6 mt-8">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Estimated Service Quote proposal</p>
+                <div className="bg-slate-50/50 p-8 rounded-card-lg border border-slate-100 pt-6 mt-8">
+                  <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Estimated Service Quote proposal</p>
                   <div className="space-y-3.5">
                     <div className="flex justify-between items-center text-xs font-bold text-slate-500">
                       <span>Quoted Service Rate</span>
@@ -572,8 +572,8 @@ export default function ActivityDetailPage() {
                       <span className="text-slate-900">Included</span>
                     </div>
                     <div className="border-t border-slate-200/60 my-2 pt-4 flex justify-between items-baseline">
-                      <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Estimated Project Total</span>
-                      <span className="text-2xl font-black text-[#6610f2] italic tracking-tight">${Number(activity.raw.quoted_price || activity.raw.total_price || activity.raw.price || 150).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                      <span className="text-label font-black text-slate-900 uppercase tracking-widest">Estimated Project Total</span>
+                      <span className="text-2xl font-black text-brand italic tracking-tight">${Number(activity.raw.quoted_price || activity.raw.total_price || activity.raw.price || 150).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
                   </div>
                 </div>
@@ -582,28 +582,28 @@ export default function ActivityDetailPage() {
               <div className="space-y-10 animate-in fade-in duration-500">
                 {/* 1. Item Specifics Timeline Grid */}
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Item Condition & Specifics</p>
+                  <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Item Condition & Specifics</p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Condition</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Condition</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
                         {activity.raw.classified?.condition_label || 'Unspecified'}
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Brand</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Brand</p>
                       <p className="text-xs font-black text-slate-900 leading-none truncate">
                         {activity.raw.classified?.brand?.name || 'Generic'}
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Inquiry Date</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Inquiry Date</p>
                       <p className="text-xs font-black text-slate-900 leading-none">
                         {activity.raw.created_at ? new Date(activity.raw.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
                       </p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/60">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Quantity</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1.5">Quantity</p>
                       <p className="text-xs font-black text-slate-900 leading-none">{activity.raw.classified?.item_quantity || 1} Available</p>
                     </div>
                   </div>
@@ -618,21 +618,21 @@ export default function ActivityDetailPage() {
                       alt="client" 
                     />
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Lead Identity</p>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Lead Identity</p>
                       <p className="text-base font-black text-slate-900 leading-tight">{activity.customer}</p>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.email || 'No email provided'}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.email || 'No email provided'}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[#6610f2] border border-slate-100 shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand border border-slate-100 shrink-0">
                       <HiOutlineCheckCircle className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Inquiry Status</p>
-                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${activity.status === 'Resolved' || activity.status === 'Contacted' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
+                      <p className="text-micro font-black text-slate-400 uppercase tracking-widest mb-1">Inquiry Status</p>
+                      <span className={`inline-block mt-1 px-4 py-1 rounded-full text-micro font-black uppercase tracking-widest ${activity.status === 'Resolved' || activity.status === 'Contacted' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
                         {activity.status}
                       </span>
-                      <p className="text-[10px] font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
+                      <p className="text-label font-medium text-slate-400 mt-1">{activity.raw.phone || 'No phone provided'}</p>
                     </div>
                   </div>
                 </div>
@@ -644,8 +644,8 @@ export default function ActivityDetailPage() {
                   const activePrice = salePrice > 0 ? salePrice : basePrice;
 
                   return (
-                    <div className="bg-slate-50/50 p-8 rounded-[2rem] border border-slate-100 pt-6 mt-8">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Item Pricing & Proposed Valuation</p>
+                    <div className="bg-slate-50/50 p-8 rounded-card-lg border border-slate-100 pt-6 mt-8">
+                      <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Item Pricing & Proposed Valuation</p>
                       <div className="space-y-3.5">
                         <div className="flex justify-between items-center text-xs font-bold text-slate-500">
                           <span>Original Base Price</span>
@@ -662,8 +662,8 @@ export default function ActivityDetailPage() {
                           <span className="text-slate-900">{activity.raw.classified?.condition_label || 'Good'}</span>
                         </div>
                         <div className="border-t border-slate-200/60 my-2 pt-4 flex justify-between items-baseline">
-                          <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Target Value</span>
-                          <span className="text-2xl font-black text-[#6610f2] italic tracking-tight">${activePrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                          <span className="text-label font-black text-slate-900 uppercase tracking-widest">Target Value</span>
+                          <span className="text-2xl font-black text-brand italic tracking-tight">${activePrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                         </div>
                       </div>
                     </div>
@@ -674,21 +674,21 @@ export default function ActivityDetailPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div className="space-y-8">
                   <div className="flex items-start gap-5">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[#6610f2] border border-slate-100">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand border border-slate-100">
                       <HiOutlineUser className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Customer</p>
+                      <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-1">Customer</p>
                       <p className="text-lg font-black text-slate-900 italic">{activity.customer}</p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-5">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[#6610f2] border border-slate-100">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand border border-slate-100">
                       <HiOutlineCalendar className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Schedule / Date</p>
+                      <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-1">Schedule / Date</p>
                       <p className="text-lg font-black text-slate-900 italic">{activity.date}</p>
                     </div>
                   </div>
@@ -696,22 +696,22 @@ export default function ActivityDetailPage() {
 
                 <div className="space-y-8">
                   <div className="flex items-start gap-5">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[#6610f2] border border-slate-100">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand border border-slate-100">
                       <HiOutlineCurrencyDollar className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Financial Value</p>
+                      <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-1">Financial Value</p>
                       <p className="text-lg font-black text-slate-900 italic">{activity.amount || 'Quote Requested'}</p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-5">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[#6610f2] border border-slate-100">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand border border-slate-100">
                       <HiOutlineCheckCircle className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Current Status</p>
-                      <span className={`inline-block mt-1 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${activity.status === 'Confirmed' || activity.status === 'Shipped' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
+                      <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-1">Current Status</p>
+                      <span className={`inline-block mt-1 px-4 py-1.5 rounded-full text-label font-black uppercase tracking-widest ${activity.status === 'Confirmed' || activity.status === 'Shipped' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-amber-50 text-amber-500 border border-amber-100'}`}>
                         {activity.status}
                       </span>
                     </div>
@@ -721,17 +721,17 @@ export default function ActivityDetailPage() {
             )}
 
             {activity.message && (
-              <div className="mt-12 p-8 bg-slate-50 rounded-[2rem] border border-slate-100">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Message from Customer</p>
+              <div className="mt-12 p-8 bg-slate-50 rounded-card-lg border border-slate-100">
+                <p className="text-label font-black text-slate-400 uppercase tracking-widest mb-4">Message from Customer</p>
                 <p className="text-slate-600 font-medium italic leading-relaxed">"{activity.message}"</p>
               </div>
             )}
           </div>
 
-          <div className="bg-white p-12 rounded-[3rem] border border-slate-100 shadow-premium">
+          <div className="bg-white p-12 rounded-floating border border-slate-100 shadow-premium">
             <div className="flex justify-between items-center mb-10">
               <h3 className="text-2xl font-black text-slate-900 italic tracking-tight">Communication.</h3>
-              <button className="text-[10px] font-black text-[#6610f2] uppercase tracking-widest flex items-center gap-2">
+              <button className="text-label font-black text-brand uppercase tracking-widest flex items-center gap-2">
                 <HiOutlineChatBubbleLeftRight className="w-4 h-4" /> Open Full Chat
               </button>
             </div>
@@ -747,10 +747,10 @@ export default function ActivityDetailPage() {
                 </div>
               </div>
               <div className="flex gap-4 flex-row-reverse">
-                <div className="w-10 h-10 rounded-xl bg-[#6610f2]/10 border border-[#6610f2]/20 flex items-center justify-center text-[#6610f2] font-black text-xs shrink-0 select-none">
+                <div className="w-10 h-10 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-black text-xs shrink-0 select-none">
                   ME
                 </div>
-                <div className="bg-[#6610f2] p-6 rounded-2xl rounded-tr-none text-white max-w-[80%] shadow-lg shadow-purple-200">
+                <div className="bg-brand p-6 rounded-2xl rounded-tr-none text-white max-w-[80%] shadow-lg shadow-purple-200">
                   <p className="text-sm font-medium">Greetings! Yes, it is fully active. Let me know if you would like to proceed with the arrangements.</p>
                 </div>
               </div>
@@ -759,9 +759,9 @@ export default function ActivityDetailPage() {
               <input 
                 type="text" 
                 placeholder="Type your response..." 
-                className="flex-1 bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#6610f2]/20 transition-all"
+                className="flex-1 bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all"
               />
-              <button className="bg-[#6610f2] text-white px-8 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-lg shadow-purple-200">Send</button>
+              <button className="bg-brand text-white px-8 rounded-2xl font-black text-caption uppercase tracking-widest shadow-lg shadow-purple-200">Send</button>
             </div>
           </div>
         </div>
@@ -770,9 +770,9 @@ export default function ActivityDetailPage() {
         <div className="lg:col-span-4 space-y-10">
           <div 
             onClick={() => navigate(assetUrl)}
-            className="bg-slate-900 p-10 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden cursor-pointer border border-transparent hover:border-[#6610f2]/50 hover:shadow-[0_20px_50px_rgba(102,16,242,0.15)] group transition-all duration-300"
+            className="bg-slate-900 p-10 rounded-container text-white shadow-2xl relative overflow-hidden cursor-pointer border border-transparent hover:border-brand/50 hover:shadow-[0_20px_50px_rgba(102,16,242,0.15)] group transition-all duration-300"
           >
-            <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-500 mb-8">Asset Details</h4>
+            <h4 className="text-caption font-black uppercase tracking-caps-wide text-slate-500 mb-8">Asset Details</h4>
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-12 rounded-xl bg-white/10 border border-white/10 overflow-hidden shrink-0 group-hover:scale-105 transition-transform duration-300">
@@ -790,7 +790,7 @@ export default function ActivityDetailPage() {
                 </div>
                 <div className="min-w-0">
                   <p className="text-sm font-black italic truncate pr-1 group-hover:text-[#9b51e0] transition-colors">{activity.asset}</p>
-                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">
+                  <p className="text-label font-black text-slate-500 uppercase tracking-widest mt-1">
                     Ref: #ASSET-{(module === 'properties' ? activity.raw.property?.id 
                                   : module === 'events' ? activity.raw.event?.id 
                                   : module === 'autos' ? activity.raw.auto?.id 
@@ -806,35 +806,35 @@ export default function ActivityDetailPage() {
                   e.stopPropagation();
                   navigate(assetUrl);
                 }}
-                className="w-full py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10 group-hover:border-[#6610f2]/40"
+                className="w-full py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-label font-black uppercase tracking-widest transition-all border border-white/10 group-hover:border-brand/40"
               >
                 View Asset Listing
               </button>
             </div>
-            <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-[#6610f2]/20 rounded-full blur-[60px]" />
+            <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-brand/20 rounded-full blur-[60px]" />
           </div>
 
-          <div className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-premium">
-            <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8">Timeline</h4>
+          <div className="bg-white p-10 rounded-container border border-slate-100 shadow-premium">
+            <h4 className="text-caption font-black uppercase tracking-caps-wide text-slate-400 mb-8">Timeline</h4>
             <div className="space-y-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100">
               <div className="relative pl-10">
                 <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-green-500 border-4 border-white shadow-sm flex items-center justify-center">
                   <HiOutlineCheckCircle className="w-3 h-3 text-white" />
                 </div>
                 <p className="text-xs font-black text-slate-900 uppercase tracking-tight">Interaction Created</p>
-                <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest">{activity.date} • 10:30 AM</p>
+                <p className="text-label font-bold text-slate-400 mt-1 uppercase tracking-widest">{activity.date} • 10:30 AM</p>
               </div>
               <div className="relative pl-10">
-                <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-[#6610f2] border-4 border-white shadow-sm flex items-center justify-center">
+                <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-brand border-4 border-white shadow-sm flex items-center justify-center">
                   <HiOutlineChatBubbleLeftRight className="w-3 h-3 text-white" />
                 </div>
                 <p className="text-xs font-black text-slate-900 uppercase tracking-tight">Partner Responded</p>
-                <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest">{activity.date} • 11:15 AM</p>
+                <p className="text-label font-bold text-slate-400 mt-1 uppercase tracking-widest">{activity.date} • 11:15 AM</p>
               </div>
               <div className="relative pl-10">
                 <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-slate-200 border-4 border-white shadow-sm" />
                 <p className="text-xs font-black text-slate-400 uppercase tracking-tight">Awaiting Approval</p>
-                <p className="text-[10px] font-bold text-slate-300 mt-1 uppercase tracking-widest">Current Stage</p>
+                <p className="text-label font-bold text-slate-300 mt-1 uppercase tracking-widest">Current Stage</p>
               </div>
             </div>
           </div>

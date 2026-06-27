@@ -16,7 +16,7 @@ export default function StatCard({ title, value, icon: Icon, color, trend, detai
   const isWarning = color.includes('red-');
 
   return (
-    <div className="relative bg-white rounded-[1.5rem] border border-slate-100 p-6 md:p-7 flex flex-col h-full overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:border-slate-200/60">
+    <div className="relative bg-white rounded-card-sm border border-slate-100 p-6 md:p-7 flex flex-col h-full overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover hover:border-slate-200/60">
       {/* Subtle gradient shimmer on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-white via-transparent to-slate-50/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
@@ -27,7 +27,7 @@ export default function StatCard({ title, value, icon: Icon, color, trend, detai
         </div>
 
         {trend && (
-          <span className={`inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${
+          <span className={`inline-flex items-center gap-1 text-micro font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${
             isWarning
               ? 'bg-red-50 text-red-500 border border-red-100/80'
               : 'bg-emerald-50 text-emerald-600 border border-emerald-100/80'
@@ -43,9 +43,9 @@ export default function StatCard({ title, value, icon: Icon, color, trend, detai
 
       {/* Row 2: Label + Hero Number */}
       <div className="relative z-10 flex-1 mb-5">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400 mb-2">{title}</p>
+        <p className="text-label font-semibold uppercase tracking-label text-slate-400 mb-2">{title}</p>
         <p
-          className="text-2xl sm:text-3xl xl:text-[2.1rem] font-black text-slate-900 tracking-tight leading-none"
+          className="text-2xl sm:text-3xl xl:text-hero-num font-black text-slate-900 tracking-tight leading-none"
           title={value}
         >
           {value}
@@ -59,8 +59,8 @@ export default function StatCard({ title, value, icon: Icon, color, trend, detai
         }`}>
           {details.map((item, i) => (
             <div key={i} className="flex items-center justify-between gap-1 min-w-0">
-              <span className="text-[8.5px] font-semibold uppercase tracking-wider text-slate-400 shrink-0">{item.label}</span>
-              <span className="text-[10px] font-black text-slate-700 shrink-0 text-right" title={String(item.value)}>
+              <span className="text-micro font-semibold uppercase tracking-wider text-slate-400 shrink-0">{item.label}</span>
+              <span className="text-label font-black text-slate-700 shrink-0 text-right" title={String(item.value)}>
                 {item.value}
               </span>
             </div>

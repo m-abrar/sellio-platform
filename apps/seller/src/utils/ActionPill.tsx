@@ -16,7 +16,7 @@ export default function ActionPill({ isSaving, isEditMode, onSave, label, varian
       <button
         onClick={onSave}
         disabled={isSaving}
-        className="w-full bg-[#6610f2] text-white p-8 rounded-[2.5rem] font-black text-sm uppercase tracking-[0.3em] shadow-2xl shadow-[#6610f2]/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 disabled:opacity-50"
+        className="w-full bg-brand text-white p-8 rounded-container font-black text-sm uppercase tracking-caps-wide shadow-2xl shadow-brand/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 disabled:opacity-50"
       >
         {isSaving ? (
           <HiOutlineArrowPath className="w-6 h-6 animate-spin" />
@@ -33,7 +33,7 @@ export default function ActionPill({ isSaving, isEditMode, onSave, label, varian
       <button
         onClick={onSave}
         disabled={isSaving}
-        className="bg-[#6610f2] text-white px-10 py-5 md:px-12 md:py-6 rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-2xl shadow-[#6610f2]/40 flex items-center gap-4 active:scale-90 transition-all disabled:opacity-50 hover:scale-[1.02]"
+        className="bg-brand text-white px-10 py-5 md:px-12 md:py-6 rounded-full font-black text-xs uppercase tracking-caps-wide shadow-2xl shadow-brand/40 flex items-center gap-4 active:scale-90 transition-all disabled:opacity-50 hover:scale-[1.02]"
       >
         {isSaving ? (
           <HiOutlineArrowPath className="w-5 h-5 animate-spin" />

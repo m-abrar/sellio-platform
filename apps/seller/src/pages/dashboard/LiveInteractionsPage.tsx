@@ -82,7 +82,7 @@ export default function LiveInteractionsPage() {
         <div className="flex gap-3">
           <button
             onClick={() => navigate('/dashboard')}
-            className="px-6 py-3 bg-white border border-slate-100 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all flex items-center gap-2 shadow-xs"
+            className="px-6 py-3 bg-white border border-slate-100 rounded-2xl text-caption font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all flex items-center gap-2 shadow-xs"
           >
             <HiOutlineArrowLeft className="w-4 h-4" /> Back to Dashboard
           </button>
@@ -91,11 +91,11 @@ export default function LiveInteractionsPage() {
 
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Syncing Feed Log...</span>
+          <span className="text-label font-black uppercase tracking-caps-xl text-slate-300 animate-pulse">Syncing Feed Log...</span>
         </div>
       ) : activities.length === 0 ? (
-        <div className="bg-white rounded-[3rem] border border-slate-100 p-20 text-center space-y-6 shadow-premium max-w-2xl mx-auto animate-in fade-in duration-700">
-          <div className="w-20 h-20 bg-purple-50 border border-purple-100 rounded-3xl flex items-center justify-center text-[#6610f2] mx-auto shadow-md">
+        <div className="bg-white rounded-floating border border-slate-100 p-20 text-center space-y-6 shadow-premium max-w-2xl mx-auto animate-in fade-in duration-700">
+          <div className="w-20 h-20 bg-purple-50 border border-purple-100 rounded-3xl flex items-center justify-center text-brand mx-auto shadow-md">
             <HiOutlineUser className="w-10 h-10" />
           </div>
           <div className="space-y-2">
@@ -106,15 +106,15 @@ export default function LiveInteractionsPage() {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden shadow-sm animate-in fade-in slide-in-from-top-4 duration-700">
+        <div className="bg-white rounded-container border border-slate-100 overflow-hidden shadow-sm animate-in fade-in slide-in-from-top-4 duration-700">
           <div className="p-8 border-b border-slate-50">
-            <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Partner Interactions History ({activities.length})</h4>
+            <h4 className="text-xs font-black text-slate-400 uppercase tracking-caps">Partner Interactions History ({activities.length})</h4>
           </div>
           
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-slate-100 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                <tr className="border-b border-slate-100 text-label font-black uppercase tracking-widest text-slate-400">
                   <th className="px-8 py-5">Customer & Vertical</th>
                   <th className="px-8 py-5">Listing Preview</th>
                   <th className="px-8 py-5">Event Description</th>
@@ -143,9 +143,9 @@ export default function LiveInteractionsPage() {
                                 className="w-6 h-6 rounded-full object-cover border border-slate-100 shadow-xs shrink-0" 
                                 alt="avatar" 
                               />
-                              <p className="text-sm font-black text-slate-900 leading-none group-hover:text-[#6610f2] transition-colors">{item.user}</p>
+                              <p className="text-sm font-black text-slate-900 leading-none group-hover:text-brand transition-colors">{item.user}</p>
                             </div>
-                            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 mt-2 inline-block bg-slate-100 px-2.5 py-1 rounded-md">{item.type}</span>
+                            <span className="text-micro font-black uppercase tracking-widest text-slate-400 mt-2 inline-block bg-slate-100 px-2.5 py-1 rounded-md">{item.type}</span>
                           </div>
                         </div>
                       </td>
@@ -159,7 +159,7 @@ export default function LiveInteractionsPage() {
                           </div>
                         ) : (
                           <div className="w-16 h-10 rounded-lg bg-slate-50 border border-slate-100/60 flex items-center justify-center text-slate-300">
-                            <span className="text-[8px] font-bold uppercase tracking-wider">No Image</span>
+                            <span className="text-tiny font-bold uppercase tracking-wider">No Image</span>
                           </div>
                         )}
                       </td>
@@ -177,7 +177,7 @@ export default function LiveInteractionsPage() {
                           <span className="text-xs font-bold text-slate-400">{item.time}</span>
                         </div>
                         <div className="absolute inset-y-0 right-8 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          <span className="text-[10px] font-black text-[#6610f2] uppercase tracking-widest flex items-center gap-1.5">
+                          <span className="text-label font-black text-brand uppercase tracking-widest flex items-center gap-1.5">
                             View Details <HiOutlineChevronRight className="w-4 h-4 stroke-[2.5px] group-hover:translate-x-0.5 transition-transform" />
                           </span>
                         </div>
@@ -199,7 +199,7 @@ export default function LiveInteractionsPage() {
                 <button
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                  className="px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-slate-500 transition-all shadow-xs"
+                  className="px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-label font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-slate-500 transition-all shadow-xs"
                 >
                   Prev
                 </button>
@@ -207,7 +207,7 @@ export default function LiveInteractionsPage() {
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={`w-9 h-9 rounded-xl text-[10px] font-black transition-all flex items-center justify-center ${currentPage === page ? 'bg-[#6610f2] text-white shadow-md shadow-purple-200' : 'bg-white border border-slate-100 text-slate-500 hover:bg-slate-50 hover:text-slate-900'}`}
+                    className={`w-9 h-9 rounded-xl text-label font-black transition-all flex items-center justify-center ${currentPage === page ? 'bg-brand text-white shadow-md shadow-purple-200' : 'bg-white border border-slate-100 text-slate-500 hover:bg-slate-50 hover:text-slate-900'}`}
                   >
                     {page}
                   </button>
@@ -215,7 +215,7 @@ export default function LiveInteractionsPage() {
                 <button
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                  className="px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-slate-500 transition-all shadow-xs"
+                  className="px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-label font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-slate-500 transition-all shadow-xs"
                 >
                   Next
                 </button>
