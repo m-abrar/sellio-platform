@@ -92,53 +92,57 @@ export default function PropertiesPage() {
         </div>
       ) : (
         <>
-          <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Mobile — all rows grouped inside one card */}
+          <div className="lg:hidden bg-white rounded-card border border-slate-100 overflow-hidden shadow-card divide-y divide-slate-50">
             {properties.map((property) => (
-              <div key={property.id} className="bg-white rounded-container border border-slate-100 shadow-premium overflow-hidden group">
-                <div className="relative h-48 overflow-hidden cursor-pointer" onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}>
+              <div key={property.id} className="flex items-center gap-4 px-5 py-4 group hover:bg-slate-50/40 transition-colors">
+                <div
+                  className="w-16 h-12 rounded-xl overflow-hidden bg-slate-100 shrink-0 cursor-pointer"
+                  onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}
+                >
                   <img src={property.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={property.title} loading="lazy" />
-                  <div className="absolute top-4 right-4">
-                    <span className={`px-4 py-2 rounded-full text-micro font-black uppercase tracking-widest ${property.is_active ? 'bg-green-500 text-white' : property.is_published ? 'bg-amber-400 text-white animate-pulse' : 'bg-slate-500 text-white'}`}>
-                      {property.is_active ? 'Live' : property.is_published ? 'Pending' : 'Draft'}
-                    </span>
-                  </div>
                 </div>
-                <div className="p-8">
-                  <span className="text-label font-black text-brand uppercase tracking-widest">{property.location}</span>
-                  <h3
-                    className="text-xl font-black text-slate-900 mt-2 italic tracking-tight truncate pr-1 cursor-pointer hover:text-brand transition-colors"
+                <div className="min-w-0 flex-1">
+                  <p
+                    className="text-sm font-bold tracking-tight text-slate-900 truncate italic cursor-pointer hover:text-brand transition-colors"
                     onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}
                   >
                     {property.title}
-                  </h3>
-                  <p className="text-2xl font-black text-slate-900 mt-4 tracking-tighter">{property.price || 'N/A'}</p>
-
-                  <div className="flex gap-3 mt-8 pt-8 border-t border-slate-50">
-                    <button onClick={() => navigate(`/dashboard/properties/edit/${property.slug}`)} className="flex-1 py-4 bg-slate-50 text-slate-400 rounded-2xl font-black text-label uppercase tracking-widest hover:bg-brand hover:text-white transition-all flex items-center justify-center gap-2">
-                      <HiOutlinePencilSquare className="w-4 h-4" /> Edit
-                    </button>
-                    <button onClick={() => handleDelete(property.id, property.title)} className="p-4 bg-red-50/50 text-red-400 rounded-2xl hover:bg-red-500 hover:text-white transition-all">
-                      <HiOutlineTrash className="w-5 h-5" />
-                    </button>
-                  </div>
+                  </p>
+                  <span className="text-label font-bold px-2 py-0.5 bg-brand/5 text-brand rounded-full uppercase tracking-widest">{property.location}</span>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className="text-base font-black text-slate-900 tracking-tighter">{property.price || 'N/A'}</p>
+                  <span className={`text-tiny font-black uppercase tracking-widest ${property.is_active ? 'text-green-500' : property.is_published ? 'text-amber-500' : 'text-slate-400'}`}>
+                    {property.is_active ? 'Live' : property.is_published ? 'Pending' : 'Draft'}
+                  </span>
+                </div>
+                <div className="flex gap-1.5 shrink-0">
+                  <button onClick={() => navigate(`/dashboard/properties/edit/${property.slug}`)} className="p-2.5 text-slate-400 hover:bg-brand hover:text-white rounded-xl transition-all">
+                    <HiOutlinePencilSquare className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => handleDelete(property.id, property.title)} className="p-2.5 text-slate-400 hover:bg-red-500 hover:text-white rounded-xl transition-all">
+                    <HiOutlineTrash className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="hidden lg:block">
-            <table className="w-full border-separate border-spacing-y-4">
+          {/* Desktop — all rows grouped inside one card */}
+          <div className="hidden lg:block bg-white rounded-card border border-slate-100 overflow-hidden shadow-card">
+            <table className="w-full">
               <thead>
-                <tr className="text-left text-caption font-black uppercase tracking-caps-wide text-slate-400">
-                  <th className="px-10 pb-2">Asset Identity</th>
-                  <th className="px-10 pb-2">Valuation</th>
-                  <th className="px-10 pb-2 text-right">Controls</th>
+                <tr className="border-b border-slate-100">
+                  <th className="px-8 py-4 text-left text-caption font-black uppercase tracking-caps-wide text-slate-400">Asset Identity</th>
+                  <th className="px-8 py-4 text-left text-caption font-black uppercase tracking-caps-wide text-slate-400">Valuation</th>
+                  <th className="px-8 py-4 text-right text-caption font-black uppercase tracking-caps-wide text-slate-400">Controls</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-50">
                 {properties.map((property) => (
-                  <tr key={property.id} className="group">
-                    <td className="bg-white group-hover:bg-slate-50/50 border-y border-l border-slate-100 group-hover:border-brand/20 rounded-l-[2rem] px-10 py-6 transition-all duration-300">
+                  <tr key={property.id} className="group hover:bg-slate-50/40 transition-colors duration-150">
+                    <td className="px-8 py-5">
                       <div className="flex items-center gap-6">
                         <div
                           className="w-20 h-16 rounded-inner overflow-hidden bg-slate-100 border-2 border-white shadow-sm shrink-0 cursor-pointer"
@@ -157,11 +161,11 @@ export default function PropertiesPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="bg-white group-hover:bg-slate-50/50 border-y border-slate-100 group-hover:border-brand/20 px-10 py-6 transition-all duration-300">
+                    <td className="px-8 py-5">
                       <span className="text-xl font-black text-slate-900 tracking-tighter">{property.price || 'N/A'}</span>
                       <p className="text-micro font-black text-slate-400 uppercase tracking-widest mt-1">Market Value</p>
                     </td>
-                    <td className="bg-white group-hover:bg-slate-50/50 border-y border-r border-slate-100 group-hover:border-brand/20 rounded-r-[2rem] px-10 py-6 text-right transition-all duration-300 relative overflow-hidden">
+                    <td className="px-8 py-5 text-right relative overflow-hidden">
                       <div className="relative h-16 flex items-center justify-end">
                         <div className="flex flex-col items-end transition-all duration-500 group-hover:opacity-0 group-hover:translate-y-4">
                           <div className="flex items-center gap-2">

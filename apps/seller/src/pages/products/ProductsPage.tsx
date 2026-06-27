@@ -103,94 +103,82 @@ export default function ProductsPage() {
         </div>
       ) : (
         <>
-          {/* 3. MOBILE CARD VIEW */}
-          <div className="lg:hidden space-y-6">
+          {/* Mobile — all rows grouped inside one card */}
+          <div className="lg:hidden bg-white rounded-card border border-slate-100 overflow-hidden shadow-card divide-y divide-slate-50">
             {products.length === 0 ? (
-              <div className="text-center py-24 bg-white rounded-container border border-slate-100">
+              <div className="text-center py-24">
                 <p className="text-label font-black uppercase tracking-caps-xl text-slate-300">No assets found</p>
               </div>
-            ) : (
-              products.map((product) => (
-                <div key={product.id} className="bg-white p-8 rounded-container border border-slate-100 shadow-premium relative overflow-hidden group">
-                  <div className="flex gap-6">
-                    <div className="w-24 h-24 rounded-card-lg overflow-hidden bg-slate-50 shrink-0 border-4 border-white shadow-md cursor-pointer" onClick={() => navigate(`/dashboard/products/view/${product.slug}`)}>
-                      <img src={product.featured_image || PLACEHOLDER_LISTING} className="w-full h-full object-cover" alt={product.title} loading="lazy" />
-                    </div>
-                    <div className="min-w-0 flex-1 pt-1">
-                      <span className="text-micro font-black text-brand bg-brand/5 px-3 py-1 rounded-full uppercase tracking-widest">{product.sku || 'NO-SKU'}</span>
-                      <h3 
-                        className="text-lg font-black text-slate-900 truncate pr-1 mt-2 italic tracking-tight cursor-pointer hover:text-brand transition-colors"
-                        onClick={() => navigate(`/dashboard/products/view/${product.slug}`)}
-                      >
-                        {product.title}
-                      </h3>
-                      <p className="text-2xl font-black text-slate-900 mt-1 tracking-tighter">
-                        {product.pricing?.formatted || `$${product.pricing?.base_price ?? '0.00'}`}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between mt-6 pt-6 border-t border-slate-50">
-                    <div className="flex flex-col text-left">
-                      <span className="text-micro font-black text-slate-300 uppercase tracking-widest mb-1">Stock Position</span>
-                      <div className="flex items-center gap-2">
-                        <span className={`w-1.5 h-1.5 rounded-full ${product.inventory?.in_stock ? 'bg-green-500' : 'bg-red-500'}`} />
-                        <span className={`text-xs font-black uppercase ${(product.inventory?.stock_quantity ?? 0) <= 5 ? 'text-red-500' : 'text-slate-600'}`}>
-                          {product.inventory?.stock_quantity ?? 0} Units
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <button onClick={() => navigate(`/dashboard/products/edit/${product.slug}`)} className="p-4 bg-slate-50 text-slate-400 rounded-2xl hover:bg-brand hover:text-white transition-all"><HiOutlinePencilSquare className="w-5 h-5" /></button>
-                      <button onClick={() => handleDelete(product.id, product.title)} className="p-4 bg-red-50/50 text-red-400 rounded-2xl hover:bg-red-500 hover:text-white transition-all"><HiOutlineTrash className="w-5 h-5" /></button>
-                    </div>
-                  </div>
+            ) : products.map((product) => (
+              <div key={product.id} className="flex items-center gap-4 px-5 py-4 group hover:bg-slate-50/40 transition-colors">
+                <div className="w-16 h-12 rounded-xl overflow-hidden bg-slate-100 shrink-0 cursor-pointer" onClick={() => navigate(`/dashboard/products/view/${product.slug}`)}>
+                  <img src={product.featured_image || PLACEHOLDER_LISTING} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={product.title} loading="lazy" />
                 </div>
-              ))
-            )}
+                <div className="min-w-0 flex-1">
+                  <p
+                    className="text-sm font-bold tracking-tight text-slate-900 truncate italic cursor-pointer hover:text-brand transition-colors"
+                    onClick={() => navigate(`/dashboard/products/view/${product.slug}`)}
+                  >
+                    {product.title}
+                  </p>
+                  <span className="text-label font-bold px-2 py-0.5 bg-brand/5 text-brand rounded-full uppercase tracking-widest">{product.sku || 'NO-SKU'}</span>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className="text-base font-black text-slate-900 tracking-tighter">{product.pricing?.formatted || `$${product.pricing?.base_price ?? '0.00'}`}</p>
+                  <span className={`text-tiny font-black uppercase tracking-widest ${(product.inventory?.stock_quantity ?? 0) === 0 ? 'text-slate-400' : (product.inventory?.stock_quantity ?? 0) <= 5 ? 'text-red-500' : 'text-green-500'}`}>
+                    {(product.inventory?.stock_quantity ?? 0) === 0 ? 'No Stock' : `${product.inventory?.stock_quantity} Units`}
+                  </span>
+                </div>
+                <div className="flex gap-1.5 shrink-0">
+                  <button onClick={() => navigate(`/dashboard/products/edit/${product.slug}`)} className="p-2.5 text-slate-400 hover:bg-brand hover:text-white rounded-xl transition-all"><HiOutlinePencilSquare className="w-4 h-4" /></button>
+                  <button onClick={() => handleDelete(product.id, product.title)} className="p-2.5 text-slate-400 hover:bg-red-500 hover:text-white rounded-xl transition-all"><HiOutlineTrash className="w-4 h-4" /></button>
+                </div>
+              </div>
+            ))}
           </div>
 
-          {/* 4. DESKTOP TABLE VIEW */}
-          <div className="hidden lg:block">
-            <table className="w-full border-separate border-spacing-y-4">
+          {/* Desktop — all rows grouped inside one card */}
+          <div className="hidden lg:block bg-white rounded-card border border-slate-100 overflow-hidden shadow-card">
+            <table className="w-full">
               <thead>
-                <tr className="text-left text-caption font-black uppercase tracking-caps-wide text-slate-400">
-                  <th className="px-10 pb-2">Asset Identity</th>
-                  <th className="px-10 pb-2">Valuation</th>
-                  <th className="px-10 pb-2 text-right">Controls</th>
+                <tr className="border-b border-slate-100">
+                  <th className="px-8 py-4 text-left text-caption font-black uppercase tracking-caps-wide text-slate-400">Asset Identity</th>
+                  <th className="px-8 py-4 text-left text-caption font-black uppercase tracking-caps-wide text-slate-400">Valuation</th>
+                  <th className="px-8 py-4 text-right text-caption font-black uppercase tracking-caps-wide text-slate-400">Controls</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-50">
                 {products.map((product) => {
                   const stockCount = product.inventory?.stock_quantity ?? 0;
                   const isLowStock = stockCount > 0 && stockCount <= 5;
                   const isOutOfStock = stockCount === 0;
 
                   return (
-                    <tr key={product.id} className="group">
-                      <td className="bg-white group-hover:bg-slate-50/50 border-y border-l border-slate-100 group-hover:border-brand/20 rounded-l-[2rem] px-10 py-6 transition-all duration-300">
+                    <tr key={product.id} className="group hover:bg-slate-50/40 transition-colors duration-150">
+                      <td className="px-8 py-5">
                         <div className="flex items-center gap-6">
-                        <div 
-                          className="w-20 h-16 rounded-inner overflow-hidden bg-slate-100 border-2 border-white shadow-sm shrink-0 cursor-pointer"
-                          onClick={() => navigate(`/dashboard/products/view/${product.slug}`)}
-                        >
-                          <img src={product.featured_image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" loading="lazy" />
-                        </div>
-                        <div className="min-w-0">
-                          <p 
-                            className="text-lg font-black tracking-tighter mb-1 truncate pr-1 text-slate-900 italic cursor-pointer hover:text-brand transition-colors"
+                          <div
+                            className="w-20 h-16 rounded-inner overflow-hidden bg-slate-100 border-2 border-white shadow-sm shrink-0 cursor-pointer"
                             onClick={() => navigate(`/dashboard/products/view/${product.slug}`)}
                           >
-                            {product.title}
-                          </p>
-                          <span className="text-label font-bold px-3 py-1 rounded-full uppercase tracking-widest bg-brand/5 text-brand border border-brand/10">{product.sku || 'NO-SKU'}</span>
-                        </div>
+                            <img src={product.featured_image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" loading="lazy" />
+                          </div>
+                          <div className="min-w-0">
+                            <p
+                              className="text-lg font-black tracking-tighter mb-1 truncate pr-1 text-slate-900 italic cursor-pointer hover:text-brand transition-colors"
+                              onClick={() => navigate(`/dashboard/products/view/${product.slug}`)}
+                            >
+                              {product.title}
+                            </p>
+                            <span className="text-label font-bold px-3 py-1 rounded-full uppercase tracking-widest bg-brand/5 text-brand border border-brand/10">{product.sku || 'NO-SKU'}</span>
+                          </div>
                         </div>
                       </td>
-                      <td className="bg-white group-hover:bg-slate-50/50 border-y border-slate-100 group-hover:border-brand/20 px-10 py-6 transition-all duration-300">
+                      <td className="px-8 py-5">
                         <span className="text-xl font-black text-slate-900 tracking-tighter">{product.pricing?.formatted || `$${product.pricing?.base_price ?? '0.00'}`}</span>
                         <p className="text-micro font-black text-slate-400 uppercase tracking-widest mt-1">MSRP Base</p>
                       </td>
-                      <td className="bg-white group-hover:bg-slate-50/50 border-y border-r border-slate-100 group-hover:border-brand/20 rounded-r-[2rem] px-10 py-6 text-right transition-all duration-300 relative overflow-hidden">
+                      <td className="px-8 py-5 text-right relative overflow-hidden">
                         <div className="relative h-16 flex items-center justify-end">
                           <div className="flex flex-col items-end transition-all duration-500 group-hover:opacity-0 group-hover:translate-y-4">
                             <div className="flex items-center gap-2">

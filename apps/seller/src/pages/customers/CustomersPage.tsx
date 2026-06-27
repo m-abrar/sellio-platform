@@ -30,76 +30,68 @@ export default function CustomersPage() {
     fetchCustomers();
   }, []);
 
-  const renderCustomerRow = (customer: any, variant: 'card' | 'table') => {
+  const renderMobileRow = (customer: any) => {
     const avatar = customer.avatar_url ? (
-      <img
-        src={customer.avatar_url}
-        className={`${variant === 'card' ? 'w-12 h-12' : 'w-14 h-14'} rounded-2xl object-cover border border-slate-100 shadow-xs shrink-0`}
-        alt="avatar"
-      />
+      <img src={customer.avatar_url} className="w-11 h-11 rounded-2xl object-cover border border-slate-100 shadow-xs shrink-0" alt="avatar" />
     ) : (
-      <div className={`${variant === 'card' ? 'w-12 h-12 text-lg' : 'w-14 h-14 text-xl'} rounded-2xl bg-brand/5 flex items-center justify-center text-brand font-black group-hover:bg-brand group-hover:text-white transition-all shrink-0`}>
+      <div className="w-11 h-11 rounded-2xl bg-brand/5 flex items-center justify-center text-brand font-black text-base group-hover:bg-brand group-hover:text-white transition-all shrink-0">
         {customer.name.charAt(0)}
       </div>
     );
-
-    if (variant === 'card') {
-      return (
-        <button
-          key={customer.id}
-          type="button"
-          onClick={() => navigate(`/dashboard/customers/${customer.id}`)}
-          className="group w-full text-left bg-white border border-slate-100 rounded-card-lg p-6 hover:border-brand/20 hover:shadow-premium transition-all"
-        >
-          <div className="flex items-center gap-4">
-            {avatar}
-            <div className="flex-1 min-w-0">
-              <p className="text-base font-black tracking-tight text-slate-900 group-hover:text-brand transition-colors truncate">{customer.name}</p>
-              <p className="text-label font-bold text-slate-400 uppercase tracking-widest truncate mt-1">{customer.email}</p>
-            </div>
-            <HiOutlineChevronRight className="w-5 h-5 text-slate-300 group-hover:text-brand" />
-          </div>
-          <div className="mt-4 flex items-center justify-between text-label font-black uppercase tracking-widest">
-            <span className="text-slate-500">{customer.total_orders} orders · {customer.total_spent}</span>
-            <span className={`px-3 py-1 rounded-full ${customer.status === 'Active' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-slate-50 text-slate-400 border border-slate-100'}`}>
-              {customer.status}
-            </span>
-          </div>
-        </button>
-      );
-    }
-
     return (
-      <tr
+      <button
         key={customer.id}
-        className="group cursor-pointer"
+        type="button"
         onClick={() => navigate(`/dashboard/customers/${customer.id}`)}
+        className="group w-full text-left flex items-center gap-4 px-5 py-4 hover:bg-slate-50/40 transition-colors"
       >
-        <td className="bg-white group-hover:bg-slate-50/50 border-y border-l border-slate-100 group-hover:border-brand/20 rounded-l-[2rem] px-10 py-6 transition-all duration-300">
+        {avatar}
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-bold tracking-tight text-slate-900 group-hover:text-brand transition-colors truncate">{customer.name}</p>
+          <p className="text-label font-bold text-slate-400 uppercase tracking-widest truncate">{customer.email}</p>
+        </div>
+        <div className="shrink-0 text-right">
+          <p className="text-sm font-black text-slate-900">{customer.total_spent}</p>
+          <span className={`text-tiny font-black uppercase tracking-widest ${customer.status === 'Active' ? 'text-green-500' : 'text-slate-400'}`}>{customer.total_orders} orders</span>
+        </div>
+        <HiOutlineChevronRight className="w-4 h-4 text-slate-300 group-hover:text-brand shrink-0" />
+      </button>
+    );
+  };
+
+  const renderTableRow = (customer: any) => {
+    const avatar = customer.avatar_url ? (
+      <img src={customer.avatar_url} className="w-14 h-14 rounded-2xl object-cover border border-slate-100 shadow-xs shrink-0" alt="avatar" />
+    ) : (
+      <div className="w-14 h-14 rounded-2xl text-xl bg-brand/5 flex items-center justify-center text-brand font-black group-hover:bg-brand group-hover:text-white transition-all shrink-0">
+        {customer.name.charAt(0)}
+      </div>
+    );
+    return (
+      <tr key={customer.id} className="group cursor-pointer hover:bg-slate-50/40 transition-colors duration-150" onClick={() => navigate(`/dashboard/customers/${customer.id}`)}>
+        <td className="px-8 py-5">
           <div className="flex items-center gap-6">
             {avatar}
             <div className="min-w-0">
               <p className="text-lg font-black tracking-tighter text-slate-900 italic group-hover:text-brand transition-colors">{customer.name}</p>
-              <div className="flex items-center gap-4 mt-1">
-                <span className="flex items-center gap-1 text-label font-bold text-slate-400 uppercase tracking-widest">
-                  <HiOutlineEnvelope className="w-3 h-3" /> {customer.email}
-                </span>
-              </div>
+              <span className="flex items-center gap-1 text-label font-bold text-slate-400 uppercase tracking-widest mt-1">
+                <HiOutlineEnvelope className="w-3 h-3" /> {customer.email}
+              </span>
             </div>
           </div>
         </td>
-        <td className="bg-white group-hover:bg-slate-50/50 border-y border-slate-100 group-hover:border-brand/20 px-10 py-6 transition-all duration-300">
+        <td className="px-8 py-5">
           <p className="text-lg font-black text-slate-900 tracking-tighter">{customer.total_spent}</p>
           <p className="text-micro font-black text-slate-400 uppercase tracking-widest mt-1">{customer.total_orders} Orders</p>
         </td>
-        <td className="bg-white group-hover:bg-slate-50/50 border-y border-slate-100 group-hover:border-brand/20 px-10 py-6 transition-all duration-300">
+        <td className="px-8 py-5">
           <span className={`text-label font-black uppercase tracking-widest px-3 py-1 rounded-full ${customer.status === 'Active' ? 'bg-green-50 text-green-500 border border-green-100' : 'bg-slate-50 text-slate-400 border border-slate-100'}`}>
             {customer.status}
           </span>
         </td>
-        <td className="bg-white group-hover:bg-slate-50/50 border-y border-r border-slate-100 group-hover:border-brand/20 rounded-r-[2rem] px-10 py-6 text-right transition-all duration-300 relative">
+        <td className="px-8 py-5 text-right relative">
           <span className="text-xs font-black text-slate-400 uppercase tracking-widest group-hover:opacity-0 transition-opacity">{customer.joined}</span>
-          <div className="absolute inset-y-0 right-10 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute inset-y-0 right-8 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
             <span className="text-label font-black text-brand uppercase tracking-widest flex items-center gap-2">
               View Profile <HiOutlineChevronRight className="w-4 h-4" />
             </span>
@@ -134,22 +126,24 @@ export default function CustomersPage() {
         </div>
       ) : (
         <>
-          <div className="grid gap-4 lg:hidden">
-            {customers.map((customer) => renderCustomerRow(customer, 'card'))}
+          {/* Mobile — all rows grouped inside one card */}
+          <div className="lg:hidden bg-white rounded-card border border-slate-100 overflow-hidden shadow-card divide-y divide-slate-50">
+            {customers.map((customer) => renderMobileRow(customer))}
           </div>
 
-          <div className="hidden lg:block">
-            <table className="w-full border-separate border-spacing-y-4">
+          {/* Desktop — all rows grouped inside one card */}
+          <div className="hidden lg:block bg-white rounded-card border border-slate-100 overflow-hidden shadow-card">
+            <table className="w-full">
               <thead>
-                <tr className="text-left text-caption font-black uppercase tracking-caps-wide text-slate-400">
-                  <th className="px-10 pb-2">Customer Identity</th>
-                  <th className="px-10 pb-2">Engagement</th>
-                  <th className="px-10 pb-2">Status</th>
-                  <th className="px-10 pb-2 text-right">Joined</th>
+                <tr className="border-b border-slate-100">
+                  <th className="px-8 py-4 text-left text-caption font-black uppercase tracking-caps-wide text-slate-400">Customer Identity</th>
+                  <th className="px-8 py-4 text-left text-caption font-black uppercase tracking-caps-wide text-slate-400">Engagement</th>
+                  <th className="px-8 py-4 text-left text-caption font-black uppercase tracking-caps-wide text-slate-400">Status</th>
+                  <th className="px-8 py-4 text-right text-caption font-black uppercase tracking-caps-wide text-slate-400">Joined</th>
                 </tr>
               </thead>
-              <tbody>
-                {customers.map((customer) => renderCustomerRow(customer, 'table'))}
+              <tbody className="divide-y divide-slate-50">
+                {customers.map((customer) => renderTableRow(customer))}
               </tbody>
             </table>
           </div>
