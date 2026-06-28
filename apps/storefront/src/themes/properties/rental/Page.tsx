@@ -14,6 +14,7 @@ import {
 import { mapPropertyToLeaseCard, type RentalUnitCard } from './property-utils';
 import { getAdminBaseUrl } from '@/lib/admin-urls';
 import { CatalogRegistryAlert } from './components/explore';
+import { CityHighlightGrid } from './components/CityHighlightGrid';
 
 const adminListPropertyUrl = `${getAdminBaseUrl()}/admin/properties/create`;
 
@@ -107,12 +108,13 @@ export default function Page() {
   );
 
   const ctaKicker = useThemeContent('cta.kicker', 'Start your search');
-  const ctaTitle = useThemeContent('cta.title', 'Pick a neighborhood, \nset your budget.');
-  const ctaHighlight = useThemeContent('cta.highlight', 'budget.');
+  const ctaTitle = useThemeContent('cta.title', 'Pick a neighborhood, \nset your budget');
+  const ctaHighlight = useThemeContent('cta.highlight', 'budget');
   const ctaDescription = useThemeContent(
     'cta.description',
     'Filter by rent, bedrooms, and move-in date, then send a lease inquiry when you are ready.',
   );
+  const gridViewAllLabel = useThemeContent('grid.view_all_label', 'View all rentals');
   const ctaButtonLabel = useThemeContent('cta.button_label', 'View all rentals');
 
   useEffect(() => {
@@ -315,7 +317,7 @@ export default function Page() {
         ) : rentals.length > 0 ? (
           <div className="pr-rent-grid">
             {rentals.map((rental) => (
-              <a key={rental.slug} href={themeLink(`/product/${rental.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+              <a key={rental.slug} href={themeLink(`/product/${rental.slug}`)} className="pr-rent-card-link">
                 <LeaseUnitCard
                   {...rental}
                   rating={4.5 + (rental.id % 5) * 0.1}
@@ -335,10 +337,12 @@ export default function Page() {
 
         <div className="pr-grid-section__actions">
           <a className="pr-btn-primary" href={themeLink('/explore')}>
-            View all rentals
+            {gridViewAllLabel}
           </a>
         </div>
       </section>
+
+      <CityHighlightGrid />
 
       <section className="pr-section-cta">
         <div className="pr-cta-panel">

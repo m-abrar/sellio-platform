@@ -282,6 +282,7 @@
 }
 
 .pr-badge-floater__dot {
+  animation: pr-pulse 1.5s ease infinite;
   background: var(--pr-sage);
   border-radius: 50%;
   flex-shrink: 0;
@@ -306,6 +307,7 @@
 }
 
 .pr-hero-image {
+  aspect-ratio: 4 / 3;
   display: block;
   height: auto;
   object-fit: cover;
@@ -369,6 +371,14 @@
 .pr-booking-input:focus {
   border-color: var(--pr-mint-deep);
   box-shadow: 0 0 0 3px var(--pr-mint-glow);
+}
+
+select.pr-booking-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c2410c' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  padding-right: 2.5rem;
 }
 
 /* --- LISTING CARDS --- */
@@ -3174,4 +3184,88 @@ a.pr-contact-info-value:hover {
   color: var(--pr-slate);
   font-size: 1.05rem;
   margin: 0;
+}
+
+/* ─── Card link reset ─── */
+.pr-rent-card-link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+/* ─── City Highlight Grid ─── */
+.pr-cities-section {
+  margin: 0 auto 5rem;
+  max-width: 1200px;
+  padding: 0 6%;
+}
+
+.pr-cities-header {
+  margin-bottom: 2rem;
+}
+
+.pr-cities-title {
+  margin-top: 0.75rem;
+}
+
+.pr-city-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.pr-city-card {
+  border-radius: var(--pr-radius-lg);
+  display: block;
+  overflow: hidden;
+  position: relative;
+  text-decoration: none;
+}
+
+.pr-city-card__img {
+  aspect-ratio: 3 / 4;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  width: 100%;
+}
+
+.pr-city-card:hover .pr-city-card__img {
+  transform: scale(1.05);
+}
+
+.pr-city-card__overlay {
+  background: linear-gradient(to top, rgba(28, 25, 23, 0.72) 0%, transparent 55%);
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.pr-city-card__name {
+  bottom: 1.25rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  left: 1.25rem;
+  letter-spacing: 0.01em;
+  position: absolute;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+@media (max-width: 768px) {
+  .pr-city-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .pr-city-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pr-city-card__img {
+    aspect-ratio: 16 / 9;
+  }
 }
