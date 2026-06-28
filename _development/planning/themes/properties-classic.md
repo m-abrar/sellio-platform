@@ -263,40 +263,40 @@ The live label `'The Collection // 01'` is hardcoded.
 
 ```
 dangerouslySetInnerHTML REMOVAL (Page.tsx)
-  [ ] Move skeleton CSS + pcPulse keyframes + breakpoint to styles.css
-  [ ] Move .pc-testimonials-grid responsive CSS to styles.css
+  [x] Move skeleton CSS + pcPulse keyframes + breakpoint to styles.css
+  [x] Move .pc-testimonials-grid responsive CSS to styles.css
 
 INLINE STYLES → CSS CLASSES (Page.tsx)
-  [ ] pc-hero-eyebrow: add color + opacity to CSS class
-  [ ] pc-hero-catalogue-link: add all properties to CSS class
-  [ ] pc-section-eyebrow collection: color + opacity to CSS
-  [ ] pc-section-title: size/color to CSS
-  [ ] pc-collection-desc: textAlign, maxWidth, width, color etc to CSS
-  [ ] DynamicTestimonials: remove sectionStyle + titleStyle; use class props
+  [x] pc-hero-eyebrow: add color + opacity to CSS class
+  [x] pc-hero-catalogue-link: add all properties to CSS class
+  [x] pc-section-eyebrow collection: color + opacity to CSS
+  [x] pc-section-title: size/color to CSS
+  [x] pc-collection-desc: textAlign, maxWidth, width, color etc to CSS
+  [x] DynamicTestimonials: remove sectionStyle + titleStyle; use class props
 
 INLINE STYLES → CSS CLASSES (HeritageHeader.tsx)
-  [ ] Logo → .pc-header-logo CSS class
-  [ ] Mobile right div: marginTop to .pc-mobile-header-right CSS
-  [ ] Both MenuActionButtons renderItem inline styles → CSS class
+  [x] Logo → .pc-header-logo CSS class
+  [x] Mobile right div: marginTop to .pc-mobile-header-right CSS
+  [x] Both MenuActionButtons renderItem inline styles → CSS class
 
 HEADER
-  [ ] Add aria-expanded={isOpen} to hamburger button
+  [x] Add aria-expanded={isOpen} to hamburger button
 
 FOOTER BUGS
-  [ ] Newsletter form: replace cart redirect with API call or success message
-  [ ] Copyright year: dynamic fallback
+  [x] Newsletter form: replace cart redirect with API call or success message
+  [x] Copyright year: dynamic fallback
 
 PRODUCTPAGE ACCESSIBILITY
-  [ ] Add id + htmlFor to all 6 form label/input pairs
+  [x] Add id + htmlFor to all 6 form label/input pairs
 
 NEW COMPONENTS
-  [ ] AgentBioPage.tsx: photo, bio, specialties, contact, recent listings
-  [ ] NeighborhoodStats.tsx: walk score, transit, schools, landmarks
-  [ ] Integrate NeighborhoodStats into ProductPage after spec grid
-  [ ] Export both from components/index.tsx
+  [x] AgentBioPage.tsx: photo, bio, specialties, contact, recent listings
+  [x] NeighborhoodStats.tsx: walk score, transit, schools, landmarks
+  [x] Integrate NeighborhoodStats into ProductPage after spec grid
+  [x] Export both from components/index.tsx
 
 STRINGS → useThemeContent
-  [ ] Page.tsx: load more label, collection issue label
+  [x] Page.tsx: load more label, collection issue label
 
 RESPONSIVE
   [ ] Filter sidebar: mobile collapse/reflow
