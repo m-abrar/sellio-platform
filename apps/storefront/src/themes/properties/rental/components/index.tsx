@@ -9,6 +9,7 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useRentalThemeLink } from '../hooks/useRentalThemeLink';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const RentalHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +25,7 @@ export const RentalHeader = () => {
         className={`pr-hamburger ${isOpen ? 'pr-hamburger-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle navigation"
+        aria-expanded={isOpen}
         id="pr-hamburger-toggle"
         type="button"
       >
@@ -169,17 +171,19 @@ export const TrustMetrics = ({ value, label }: { value: string; label: string })
 
 export const TenantFooter = () => {
   const themeLink = useRentalThemeLink();
+  const brandName = useThemeContent('brand.name', 'RentEase');
+  const footerTagline = useThemeContent('footer.tagline', 'Monthly rentals made simple — verified listings, transparent pricing, and digital lease tools built for tenants and landlords who lease month to month.');
+  const footerCopyright = useThemeContent('footer.copyright', '');
+  const year = new Date().getFullYear();
+
   return (
-  <footer className="pr-footer">
-    <div className="pr-footer-grid">
+  <footer className=”pr-footer”>
+    <div className=”pr-footer-grid”>
       <div>
-        <a href={themeLink('/')} className="pr-logo pr-logo--footer">
-          Rent<span className="pr-logo__mark">Ease</span>
+        <a href={themeLink('/')} className=”pr-logo pr-logo--footer”>
+          {brandName}
         </a>
-        <p className="pr-footer__tagline">
-          Monthly rentals made simple â€” verified listings, transparent pricing, and digital lease
-          tools built for tenants and landlords who lease month to month.
-        </p>
+        <p className=”pr-footer__tagline”>{footerTagline}</p>
       </div>
       <FooterMenuColumn
         location="footer_column_1"
@@ -198,7 +202,7 @@ export const TenantFooter = () => {
       />
     </div>
     <div className="pr-footer-bottom">
-      <div className="pr-footer__copyright">© 2026 Sellio. All rights reserved.</div>
+      <div className="pr-footer__copyright">{footerCopyright || `© ${year} Sellio. All rights reserved.`}</div>
       <div className="pr-footer-social">
         <MenuNav
           location="social_footer"

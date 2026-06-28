@@ -90,7 +90,14 @@ const ENRICHMENTS: Record<string, Partial<PropertyDetail>> = {
     amenities: [
       { id: 1, title: 'Private garden', slug: 'garden', icon: '🌳' },
       { id: 2, title: '2-car garage', slug: 'garage', icon: '🚗' },
+      { id: 3, title: 'Playground', slug: 'playground', icon: '🛝' },
     ] as DemoAmenity[],
+    owner: {
+      id: 4,
+      name: 'Sarah Mitchell',
+      avatar_url: '/demo-assets/users/avatar-04.svg',
+    },
+    brand: { id: 2, title: 'Suburban Properties LLC' },
   },
   'compact-downtown-micro-studio': {
     tags: ['Micro-studio', 'Transit hub', 'Utilities included'],

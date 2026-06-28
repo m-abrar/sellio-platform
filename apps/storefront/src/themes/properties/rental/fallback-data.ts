@@ -211,7 +211,8 @@ export const FALLBACK_RENTALS: Property[] = [
       property_type: 'Rent',
     },
     featured_image: themeImage(4),
-  },
+    stock_count: 1,
+  } as Property & { stock_count: number },
   {
     id: 5,
     user_id: 1,
@@ -258,7 +259,8 @@ export const FALLBACK_RENTALS: Property[] = [
       property_type: 'Rent',
     },
     featured_image: themeImage(5),
-  },
+    stock_count: 2,
+  } as Property & { stock_count: number },
   {
     id: 6,
     user_id: 1,
