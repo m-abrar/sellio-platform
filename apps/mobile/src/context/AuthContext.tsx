@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
 import { ApiError, apiRequest, setUnauthorizedHandler } from '../api/client';
+import { SELLER_ONLY_MOBILE_MESSAGE, supportsBuyerMobile } from '../auth/buyerAccess';
 import { clearStoredSession, loadStoredSession, storeSession } from '../auth/sessionStorage';
 import { AuthResponse, AuthUser, BuyerRegistrationInput } from '../features/auth/types';
 
@@ -16,6 +17,13 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+async function revokeToken(token: string) {
+  await apiRequest('/v1/auth/logout', {
+    method: 'POST',
+    accessToken: token,
+  }).catch(() => {});
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
@@ -34,6 +42,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (session) {
           if (!active) return;
 
+          if (!supportsBuyerMobile(session.user)) {
+            await revokeToken(session.token);
+            await clearStoredSession();
+            if (!active) return;
+            setError(SELLER_ONLY_MOBILE_MESSAGE);
+            return;
+          }
+
           setToken(session.token);
           setUser(session.user);
           setIsLoading(false);
@@ -46,6 +62,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const mergedUser = { ...session.user, ...refreshedUser };
 
             if (!active || refreshRevision !== authRevision.current) return;
+
+            if (!supportsBuyerMobile(mergedUser)) {
+              await revokeToken(session.token);
+              await clearStoredSession();
+              if (!active || refreshRevision !== authRevision.current) return;
+              setToken(null);
+              setUser(null);
+              setError(SELLER_ONLY_MOBILE_MESSAGE);
+              return;
+            }
 
             await storeSession(session.token, mergedUser);
             if (!active || refreshRevision !== authRevision.current) return;
@@ -105,13 +131,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (!userVal) {
-        throw new Error('User not found in authentication payload');
+        throw new Error('Buyer account was not found in the authentication response.');
       }
 
-      await storeSession(tokenVal, userVal);
+      let resolvedUser = userVal;
+      try {
+        const refreshedUser = await apiRequest<AuthUser>('/v1/auth/me', {
+          accessToken: tokenVal,
+        });
+        resolvedUser = { ...userVal, ...refreshedUser };
+      } catch (profileError) {
+        console.warn('Could not confirm buyer roles immediately after sign in.', profileError);
+      }
+
+      if (!supportsBuyerMobile(resolvedUser)) {
+        await revokeToken(tokenVal);
+        throw new Error(SELLER_ONLY_MOBILE_MESSAGE);
+      }
+
+      await storeSession(tokenVal, resolvedUser);
 
       setToken(tokenVal);
-      setUser(userVal);
+      setUser(resolvedUser);
     } catch (err: any) {
       const message = err?.message || 'Failed to sign in';
 

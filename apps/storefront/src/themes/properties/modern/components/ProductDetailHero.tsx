@@ -37,7 +37,7 @@ export function ProductDetailHero({
     <section className={`pm-detail-bento pm-detail-bento--${listingMode}`}>
       <div className="pm-gallery">
         <div className="pm-gallery-main">
-          <img src={activeImage} alt={property.title} />
+          <img src={activeImage} alt={property.title} loading="eager" />
         </div>
         {images.length > 1 && (
           <div className="pm-gallery-thumbs">

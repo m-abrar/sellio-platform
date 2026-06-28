@@ -5,10 +5,12 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useModernThemeLink } from '../hooks/useModernThemeLink';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const UrbanHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
     const themeLink = useModernThemeLink();
+    const brandLabel = useThemeContent('brand.name', 'URBAN.');
 
     useEffect(() => {
         document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -19,7 +21,7 @@ export const UrbanHeader = () => {
 
     return (
         <header className="urban-header">
-            <a href={themeLink('/')} className="urban-logo">URBAN<span>.</span></a>
+            <a href={themeLink('/')} className="urban-logo">{brandLabel.slice(0, -1)}<span>{brandLabel.slice(-1)}</span></a>
 
             {isOpen && (
                 <button

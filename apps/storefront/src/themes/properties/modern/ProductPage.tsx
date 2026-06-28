@@ -17,6 +17,7 @@ import {
 } from './components';
 import { useModernThemeLink } from './hooks/useModernThemeLink';
 import { useDemoFallbackAllowed } from './hooks/useDemoFallbackAllowed';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { FALLBACK_ESTATES } from './fallback-data';
 import { enrichDemoDetail } from './demo-detail-enrichment';
 import { getListingMode } from './listing-mode';
@@ -38,6 +39,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const clientReady = useClientReady();
   const themeLink = useModernThemeLink();
   const allowDemoCatalog = useDemoFallbackAllowed();
+  const notFoundKicker = useThemeContent('detail.not_found_kicker', 'Not found');
+  const notFoundTitle = useThemeContent('detail.not_found_title', 'Property could not be loaded');
+  const notFoundDescription = useThemeContent('detail.not_found_description', 'This property does not exist, or the listing API is unavailable in production mode.');
+  const notFoundCta = useThemeContent('detail.not_found_cta', 'Browse properties');
 
   const [property, setProperty] = useState<Property | null>(null);
   const [detail, setDetail] = useState<PropertyDetail | null>(null);
@@ -277,14 +282,11 @@ export default function ProductPage({ slug }: ProductPageProps) {
     return (
       <main className="pm-detail-page">
         <section className="urban-detail-state" role="status">
-          <div className="urban-detail-kicker">Not found</div>
-          <h1>Property could not be loaded</h1>
-          <p>
-            {apiError ||
-              'This property does not exist, or the listing API is unavailable in production mode.'}
-          </p>
+          <div className="urban-detail-kicker">{notFoundKicker}</div>
+          <h1>{notFoundTitle}</h1>
+          <p>{apiError || notFoundDescription}</p>
           <a href={themeLink('/explore')} className="urban-btn-primary">
-            Browse properties
+            {notFoundCta}
           </a>
         </section>
       </main>

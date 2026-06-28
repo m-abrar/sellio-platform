@@ -48,7 +48,7 @@ export default function SettingsView() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/password')}>
             <Text style={styles.menuIcon}>PW</Text>
             <View style={styles.menuTextContainer}>
               <Text style={styles.menuTitle}>Security & Passwords</Text>

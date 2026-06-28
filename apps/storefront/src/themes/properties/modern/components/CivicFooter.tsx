@@ -3,21 +3,25 @@
 import React from 'react';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { useModernThemeLink } from '../hooks/useModernThemeLink';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const CivicFooter = () => {
   const themeLink = useModernThemeLink();
+  const brandName = useThemeContent('brand.name', 'URBAN.');
+  const footerTagline = useThemeContent('footer.tagline', 'Discover premium homes, apartments, and commercial spaces in cities worldwide. Browse listings, compare amenities, and contact agents or hosts directly.');
+  const footerCtaLabel = useThemeContent('footer.cta_label', 'Browse available properties');
+  const footerCopyright = useThemeContent('footer.copyright', '');
+  const footerSubTagline = useThemeContent('footer.sub_tagline', 'Verified property search for sale and rental listings.');
+  const year = new Date().getFullYear();
 
   return (
     <footer className="civic-footer">
       <div className="civic-footer-grid">
         <div className="civic-footer-brand">
-          <a className="urban-logo civic-footer-logo" href={themeLink('/')}>URBAN.</a>
-          <p className="civic-footer-copy">
-            Discover premium homes, apartments, and commercial spaces in cities worldwide.
-            Browse listings, compare amenities, and contact agents or hosts directly.
-          </p>
+          <a className="urban-logo civic-footer-logo" href={themeLink('/')}>{brandName}</a>
+          <p className="civic-footer-copy">{footerTagline}</p>
           <a href={themeLink('/explore')} className="civic-footer-cta">
-            Browse available properties
+            {footerCtaLabel}
           </a>
         </div>
         <FooterMenuColumn
@@ -40,8 +44,8 @@ export const CivicFooter = () => {
         />
       </div>
       <div className="civic-footer-bottom">
-        <span>2026 Sellio Urban. All rights reserved.</span>
-        <span>Verified property search for sale and rental listings.</span>
+        <span>{footerCopyright || `© ${year} Sellio Urban. All rights reserved.`}</span>
+        <span>{footerSubTagline}</span>
       </div>
     </footer>
   );

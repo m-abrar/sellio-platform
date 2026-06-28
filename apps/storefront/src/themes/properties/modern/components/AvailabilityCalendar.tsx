@@ -51,11 +51,11 @@ export function AvailabilityCalendar({
       ) : null}
 
       <div className="pm-calendar-nav">
-        <button type="button" className="pm-calendar-nav__btn" onClick={() => setOffset((v) => v - 1)}>
+        <button type="button" className="pm-calendar-nav__btn" onClick={() => setOffset((v) => v - 1)} aria-label="Previous month">
           ←
         </button>
         <span>{monthLabel}</span>
-        <button type="button" className="pm-calendar-nav__btn" onClick={() => setOffset((v) => v + 1)}>
+        <button type="button" className="pm-calendar-nav__btn" onClick={() => setOffset((v) => v + 1)} aria-label="Next month">
           →
         </button>
       </div>
@@ -77,7 +77,7 @@ export function AvailabilityCalendar({
             <span
               key={date.toISOString()}
               className={`pm-calendar-day${booked ? ' pm-calendar-day--booked' : ''}${isToday ? ' pm-calendar-day--today' : ''}`}
-              title={booked ? 'Booked' : 'Available'}
+              aria-label={`${date.toLocaleDateString('default', { month: 'long', day: 'numeric' })} — ${booked ? 'Booked' : 'Available'}`}
             >
               {date.getDate()}
             </span>

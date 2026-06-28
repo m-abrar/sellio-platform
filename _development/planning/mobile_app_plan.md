@@ -134,9 +134,9 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
 - [x] Restore the stored authenticated buyer session on startup.
 - [x] Refresh the authenticated buyer profile from the API on startup.
 - [x] Add profile editing, avatar upload, and location selection.
-- [ ] Add password management.
-- [ ] Finish buyer terminology and remaining source-string encoding cleanup.
-- [ ] Prevent seller-only accounts from entering unsupported mobile workflows where appropriate.
+- [x] Add password management.
+- [x] Finish buyer terminology and remaining source-string encoding cleanup.
+- [x] Prevent seller-only accounts from entering unsupported mobile workflows where appropriate.
 
 ### Acceptance Criteria
 
@@ -156,7 +156,7 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 - [x] Add save-to-favorites action to listing details.
 - [x] Add favorite/unfavorite toggle to listing details.
 - [x] Add favorite/unfavorite toggles to listing cards.
-- [ ] Refresh favorites automatically when a listing is saved or removed from another screen.
+- [x] Refresh favorites automatically when a listing is saved or removed from another screen.
 - [x] Add buyer dashboard statistics.
 - [x] Add orders.
 - [x] Add property/event bookings and service appointments.

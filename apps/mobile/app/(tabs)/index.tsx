@@ -449,7 +449,7 @@ export default function HomeView() {
           {isAuthenticated ? (
             <TouchableOpacity style={styles.accountButton} onPress={signOut}>
               <Text style={styles.accountButtonText}>
-                LOG OUT ({user?.name ? user.name.split(' ')[0].toUpperCase() : 'USER'})
+                LOG OUT ({user?.name ? user.name.split(' ')[0].toUpperCase() : 'BUYER'})
               </Text>
             </TouchableOpacity>
           ) : (

@@ -18,6 +18,7 @@ export interface ApiResourceResponse<T> {
 
 interface ApiRequestOptions extends RequestInit {
   authenticated?: boolean;
+  accessToken?: string;
   timeoutMs?: number;
 }
 
@@ -59,6 +60,7 @@ async function performApiRequest<T>(
 ): Promise<T | ApiResourceResponse<T>> {
   const {
     authenticated = false,
+    accessToken,
     timeoutMs = 15_000,
     body,
     headers,
@@ -72,7 +74,9 @@ async function performApiRequest<T>(
     requestHeaders.set('Content-Type', 'application/json');
   }
 
-  if (authenticated) {
+  if (accessToken) {
+    requestHeaders.set('Authorization', `Bearer ${accessToken}`);
+  } else if (authenticated) {
     const token = await getStoredToken();
 
     if (!token) {
@@ -107,7 +111,7 @@ async function performApiRequest<T>(
       ? payload as LaravelEnvelope<T>
       : null;
 
-    if (response.status === 401) {
+    if (response.status === 401 && authenticated) {
       await clearStoredSession();
       unauthorizedHandler?.();
     }

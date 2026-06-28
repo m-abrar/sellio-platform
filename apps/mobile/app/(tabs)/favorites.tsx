@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
+import React, { useCallback, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -44,16 +44,18 @@ export default function FavoritesView() {
     }
   }, []);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      loadFavorites();
-      return;
-    }
+  useFocusEffect(
+    useCallback(() => {
+      if (isAuthenticated) {
+        loadFavorites();
+        return;
+      }
 
-    setFavorites([]);
-    setError(null);
-    setLoading(true);
-  }, [isAuthenticated, loadFavorites]);
+      setFavorites([]);
+      setError(null);
+      setLoading(true);
+    }, [isAuthenticated, loadFavorites]),
+  );
 
   const confirmRemove = useCallback((item: FavoriteListingCard) => {
     const snapshot = favorites;

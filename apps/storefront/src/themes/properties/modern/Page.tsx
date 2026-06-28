@@ -13,6 +13,14 @@ export default function Page() {
   const themeLink = useModernThemeLink();
   const allowDemoCatalog = useDemoFallbackAllowed();
 
+  const feature1Title = useThemeContent('features.1.title', 'Verified pricing');
+  const feature1Description = useThemeContent('features.1.description', 'Compare rent, sale price, and key listing terms before opening a detail page.');
+  const feature2Title = useThemeContent('features.2.title', 'Useful shortlists');
+  const feature2Description = useThemeContent('features.2.description', 'Start with a curated homepage edit, then move into the full archive when ready.');
+  const feature3Title = useThemeContent('features.3.title', 'Agent-ready details');
+  const feature3Description = useThemeContent('features.3.description', 'Each property detail page is built around inquiry, booking, and next-step context.');
+  const ctaSecondaryLabel = useThemeContent('cta.secondary_label', 'View rentals');
+
   const [structureItems, setStructureItems] = useState<ReturnType<typeof mapPropertyToStructure>[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [propertyError, setPropertyError] = useState<string | null>(null);
@@ -131,7 +139,7 @@ export default function Page() {
           </div>
         </div>
         <div className="urban-hero-market-panel">
-          <div className="urban-hero-panel-kicker">Live market snapshot</div>
+          <div className="urban-hero-panel-kicker">{useThemeContent('hero.panel_kicker', 'Live market snapshot')}</div>
           <div className="urban-hero-stat-card">
             <div className="urban-hero-stat-value">
               {loadingProperties ? '...' : nodeCount || structureItems.length}
@@ -142,16 +150,16 @@ export default function Page() {
           </div>
           <div className="urban-hero-panel-grid">
             <div>
-              <span>Archive</span>
-              <strong>Sale + rent</strong>
+              <span>{useThemeContent('hero.panel_archive_label', 'Archive')}</span>
+              <strong>{useThemeContent('hero.panel_archive_value', 'Sale + rent')}</strong>
             </div>
             <div>
-              <span>Details</span>
-              <strong>Photos, map, specs</strong>
+              <span>{useThemeContent('hero.panel_details_label', 'Details')}</span>
+              <strong>{useThemeContent('hero.panel_details_value', 'Photos, map, specs')}</strong>
             </div>
           </div>
           <a href={themeLink('/explore?mode=sale')} className="urban-hero-panel-link">
-            Browse homes for sale
+            {useThemeContent('hero.panel_cta_label', 'Browse homes for sale')}
           </a>
         </div>
       </section>
@@ -160,9 +168,9 @@ export default function Page() {
 
       <section className="urban-feature-band" aria-label="Property search advantages">
         {[
-          ['Verified pricing', 'Compare rent, sale price, and key listing terms before opening a detail page.'],
-          ['Useful shortlists', 'Start with a curated homepage edit, then move into the full archive when ready.'],
-          ['Agent-ready details', 'Each property detail page is built around inquiry, booking, and next-step context.'],
+          [feature1Title, feature1Description],
+          [feature2Title, feature2Description],
+          [feature3Title, feature3Description],
         ].map(([title, description]) => (
           <article className="urban-feature-card" key={title}>
             <span className="urban-feature-card__mark" aria-hidden="true" />
@@ -265,7 +273,7 @@ export default function Page() {
             {useThemeContent('cta.button_label', 'Search properties')}
           </a>
           <a href={themeLink('/explore?mode=rental')} className="urban-final-cta-secondary">
-            View rentals
+            {ctaSecondaryLabel}
           </a>
         </div>
       </section>

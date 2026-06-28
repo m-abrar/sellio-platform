@@ -6,7 +6,7 @@ import { useAuth } from '../src/context/AuthContext';
 export default function LoginModal() {
   const router = useRouter();
   const { returnTo } = useLocalSearchParams<{ returnTo?: string }>();
-  const { signIn } = useAuth();
+  const { signIn, error: authError } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -95,9 +95,9 @@ export default function LoginModal() {
         <Text style={styles.subtitle}>Sign in with your buyer account.</Text>
 
         <View style={styles.form}>
-          {errorMsg && (
+          {(errorMsg || authError) && (
             <View style={styles.errorContainer}>
-              <Text style={styles.errorText}>{errorMsg}</Text>
+              <Text style={styles.errorText}>{errorMsg || authError}</Text>
             </View>
           )}
 

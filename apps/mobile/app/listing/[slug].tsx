@@ -284,7 +284,7 @@ export default function ListingDetailsView() {
     try {
       await Share.share({
         title: item.title,
-        message: `${item.title}\n${item.price} · ${item.location}\n${url}`,
+        message: `${item.title}\n${item.price} | ${item.location}\n${url}`,
         url,
       });
     } catch (shareError) {
@@ -919,7 +919,7 @@ export default function ListingDetailsView() {
                   {propertyBookingPreview && (
                     <View style={styles.bookingPreviewCard}>
                       <Text style={styles.bookingPreviewTitle}>
-                        {propertyBookingPreview.nights} night{propertyBookingPreview.nights === 1 ? '' : 's'} · {propertyBookingPreview.guests} guest{propertyBookingPreview.guests === 1 ? '' : 's'}
+                        {propertyBookingPreview.nights} night{propertyBookingPreview.nights === 1 ? '' : 's'} | {propertyBookingPreview.guests} guest{propertyBookingPreview.guests === 1 ? '' : 's'}
                       </Text>
                       {propertyBookingPreview.lines.map((line, index) => (
                         <View key={`${line.title}-${index}`} style={styles.bookingPreviewLine}>

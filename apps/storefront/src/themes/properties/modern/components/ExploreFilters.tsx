@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import type { Category, Location } from '@sellio/types';
 import type { ListingFilter } from '../listing-mode';
 import { getExplorePriceRangeOptions } from '../explore-utils';
@@ -43,6 +43,13 @@ export function ExploreFilters({
   onClear,
 }: ExploreFiltersProps) {
   const priceOptions = getExplorePriceRangeOptions(listingFilter);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      closeButtonRef.current?.focus();
+    }
+  }, [mobileOpen]);
 
   const listingModes: { value: ListingFilter; label: string }[] = [
     { value: 'all', label: 'All' },
@@ -64,6 +71,7 @@ export function ExploreFilters({
       <aside
         className={`pm-explore-sidebar ${mobileOpen ? 'pm-explore-sidebar--open' : ''}`}
         aria-label="Search filters"
+        aria-modal={mobileOpen}
       >
         <div className="pm-explore-sidebar__header">
           <div>
@@ -71,6 +79,7 @@ export function ExploreFilters({
             <h3>Refine results</h3>
           </div>
           <button
+            ref={closeButtonRef}
             type="button"
             className="pm-explore-sidebar__close"
             aria-label="Close filters"

@@ -21,6 +21,7 @@ export default function RootLayout() {
           <Stack.Screen name="forgot-password" options={{ presentation: 'modal' }} />
           <Stack.Screen name="reset-password" options={{ presentation: 'modal' }} />
           <Stack.Screen name="profile" options={{ headerShown: false }} />
+          <Stack.Screen name="password" options={{ headerShown: false }} />
           <Stack.Screen name="listing/[slug]" options={{ headerShown: false }} />
           <Stack.Screen name="activity/[source]/[id]" options={{ headerShown: false }} />
         </Stack>
