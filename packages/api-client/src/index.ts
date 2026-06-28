@@ -65,6 +65,9 @@ export class SellioAPI {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
+      // Server-side SSR calls fall back to defaults after 5s rather than
+      // blocking the page indefinitely when the backend is slow or unreachable.
+      timeout: typeof window === 'undefined' ? 5000 : 0,
     });
   }
 
