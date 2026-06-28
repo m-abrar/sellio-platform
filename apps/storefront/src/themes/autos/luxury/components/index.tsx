@@ -23,6 +23,7 @@ export const LuxuryHeader = () => {
         className={`lx-hamburger ${isOpen ? 'lx-hamburger-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle Navigation"
+        aria-expanded={isOpen}
         id="lx-hamburger-toggle"
       >
         <span className="lx-hamburger-bar" />
@@ -62,21 +63,15 @@ export const LuxuryCarCard = ({ title, specs, price, image, slug }: LuxuryCarCar
 
   return (
     <div className="lx-car-card">
-      <div style={{ overflow: 'hidden', height: '200px' }}>
+      <div className="lx-car-img-wrap">
         <img src={image} className="lx-car-img" alt={title} />
       </div>
       <div className="lx-car-body">
         <h5 className="lx-car-title">{title}</h5>
-        <p style={{ color: 'var(--lx-text-muted)', marginBottom: '1rem', fontSize: '0.9rem' }}>
-          {specs}
-        </p>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <p className="lx-car-specs">{specs}</p>
+        <div className="lx-car-meta">
           <span className="lx-car-price">{price}</span>
-          <a
-            href={detailUrl}
-            className="lx-btn lx-btn-outline"
-            style={{ padding: '0.4rem 1rem', fontSize: '0.8rem' }}
-          >
+          <a href={detailUrl} className="lx-btn lx-btn-outline lx-car-detail-btn">
             View Details
           </a>
         </div>
@@ -92,54 +87,35 @@ export const LuxuryFooter = () => {
     'footer.description',
     "Curating the world's finest automobiles for the most discerning clientele.",
   );
+  const footerCopyright = useThemeContent('footer.copyright', '');
 
   return (
     <footer className="lx-footer">
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '3rem',
-          marginBottom: '3rem',
-        }}
-      >
+      <div className="lx-footer-grid">
         <div>
-          <a href={themeLink('/')} className="lx-logo" style={{ marginBottom: '1rem', display: 'block', textDecoration: 'none', color: 'inherit' }}>
+          <a href={themeLink('/')} className="lx-logo lx-footer-logo">
             {brandLabel}
           </a>
-          <p style={{ color: 'var(--lx-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>
-            {footerDescription}
-          </p>
+          <p className="lx-footer-desc">{footerDescription}</p>
         </div>
         <FooterMenuColumn
           location="footer_column_1"
-          titleTag="h5"
-          titleStyle={{ color: 'white', marginBottom: '1.5rem', fontWeight: 600 }}
+          renderTitle={(title) => <h5 className="lx-footer-col-title">{title}</h5>}
           linkClassName="lx-footer-link"
         />
         <FooterMenuColumn
           location="footer_column_2"
-          titleTag="h5"
-          titleStyle={{ color: 'white', marginBottom: '1.5rem', fontWeight: 600 }}
+          renderTitle={(title) => <h5 className="lx-footer-col-title">{title}</h5>}
           linkClassName="lx-footer-link"
         />
         <FooterMenuColumn
           location="footer_column_3"
-          titleTag="h5"
-          titleStyle={{ color: 'white', marginBottom: '1.5rem', fontWeight: 600 }}
+          renderTitle={(title) => <h5 className="lx-footer-col-title">{title}</h5>}
           linkClassName="lx-footer-link"
         />
       </div>
-      <div
-        style={{
-          borderTop: '1px solid #333',
-          paddingTop: '1.5rem',
-          textAlign: 'center',
-          color: 'var(--lx-text-muted)',
-          fontSize: '0.85rem',
-        }}
-      >
-        © 2026 Sellio. All rights reserved.
+      <div className="lx-footer-bottom">
+        {footerCopyright || `© ${new Date().getFullYear()}. All rights reserved.`}
       </div>
     </footer>
   );

@@ -266,6 +266,8 @@
     font-weight: 600;
     font-size: 1.25rem;
     letter-spacing: 1px;
+    color: var(--lx-text-light);
+    text-decoration: none;
 }
 
 .lx-brand-item:hover {
@@ -512,6 +514,589 @@
     font-size: 0.85rem;
     font-weight: 600;
     margin-top: 0.35rem;
+}
+
+/* ============================================================
+   HOMEPAGE — Extracted inline styles
+   ============================================================ */
+
+.lx-hero-description {
+    font-size: 1.25rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.lx-hero-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.lx-filter-submit {
+    flex: 1;
+    padding: 0.8rem;
+}
+
+.lx-skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.lx-skeleton-card {
+    height: 380px;
+    position: relative;
+    overflow: hidden;
+    border: 1px dashed #444;
+    background-color: var(--lx-bg-card);
+}
+
+.lx-skeleton-body {
+    padding: 1.5rem;
+}
+
+.lx-skeleton-img {
+    height: 200px;
+    background-color: #333;
+}
+
+.lx-skeleton-title {
+    height: 20px;
+    width: 60%;
+    background-color: #444;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+}
+
+.lx-skeleton-subtitle {
+    height: 15px;
+    width: 80%;
+    background-color: #444;
+    margin-bottom: 2rem;
+    border-radius: 4px;
+}
+
+.lx-skeleton-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lx-skeleton-price {
+    height: 25px;
+    width: 30%;
+    background-color: #444;
+    border-radius: 4px;
+}
+
+.lx-skeleton-btn {
+    height: 30px;
+    width: 35%;
+    background-color: #444;
+    border-radius: 50px;
+}
+
+.lx-collection-footer {
+    text-align: center;
+    margin-top: 4rem;
+}
+
+.lx-collection-footer .lx-btn {
+    padding: 1rem 3rem;
+}
+
+.lx-showcase-section {
+    background-color: var(--lx-bg-darker);
+}
+
+.lx-showcase-section .lx-section-title {
+    color: var(--lx-text-light);
+}
+
+.lx-showcase-img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.lx-showcase-heading {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.lx-showcase-subtitle {
+    font-size: 1.2rem;
+    color: var(--lx-text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.lx-showcase-description {
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.lx-testimonials-section {
+    background-color: var(--lx-bg-darker);
+}
+
+.lx-testimonials-title {
+    color: var(--lx-text-light);
+}
+
+/* ============================================================
+   CAR CARD — Extracted inline styles
+   ============================================================ */
+
+.lx-car-img-wrap {
+    overflow: hidden;
+    height: 200px;
+}
+
+.lx-car-specs {
+    color: var(--lx-text-muted);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.lx-car-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lx-car-detail-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+}
+
+/* ============================================================
+   FOOTER — Extracted inline styles
+   ============================================================ */
+
+.lx-footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.lx-footer-logo {
+    margin-bottom: 1rem;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.lx-footer-desc {
+    color: var(--lx-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.lx-footer-col-title {
+    color: white;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.lx-footer-bottom {
+    border-top: 1px solid #333;
+    padding-top: 1.5rem;
+    text-align: center;
+    color: var(--lx-text-muted);
+    font-size: 0.85rem;
+}
+
+/* ============================================================
+   PRODUCT PAGE — Loading / Not-found
+   ============================================================ */
+
+.lx-loading-state {
+    background-color: var(--lx-bg-dark);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--lx-gold);
+}
+
+.lx-loading-state-inner {
+    text-align: center;
+}
+
+.lx-loading-title {
+    letter-spacing: 2px;
+}
+
+.lx-loading-bar {
+    height: 4px;
+    width: 200px;
+    background-color: #333;
+    margin: 2rem auto;
+    border-radius: 4px;
+}
+
+.lx-notfound-state {
+    background-color: var(--lx-bg-dark);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--lx-text-light);
+    padding: 2rem;
+}
+
+.lx-notfound-inner {
+    text-align: center;
+}
+
+.lx-notfound-message {
+    color: var(--lx-text-muted);
+    margin-bottom: 2rem;
+}
+
+/* ============================================================
+   PRODUCT PAGE — Detail hero
+   ============================================================ */
+
+.lx-detail-hero {
+    height: 60vh;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: flex-end;
+    padding: 4rem 5%;
+    position: relative;
+}
+
+.lx-detail-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,26,26,1) 0%, rgba(26,26,26,0.3) 50%, rgba(0,0,0,0.5) 100%);
+    z-index: 1;
+}
+
+.lx-detail-hero-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.lx-detail-title {
+    font-family: var(--lx-font-heading);
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.lx-detail-subtitle {
+    color: var(--lx-gold);
+    font-family: var(--lx-font-body);
+    font-size: 1.25rem;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.lx-detail-price-panel {
+    text-align: right;
+}
+
+.lx-detail-price-label {
+    color: var(--lx-text-muted);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.lx-detail-price-value {
+    font-size: 3rem;
+    display: block;
+    color: var(--lx-gold);
+    font-family: var(--lx-font-heading);
+    font-weight: 600;
+}
+
+/* ============================================================
+   PRODUCT PAGE — Details + Spec sheet
+   ============================================================ */
+
+.lx-detail-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.lx-detail-section-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.lx-detail-description {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #ddd;
+    margin-bottom: 2.5rem;
+}
+
+.lx-spec-sheet {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.lx-spec-tile {
+    padding: 1.25rem;
+    border-left: 3px solid var(--lx-gold);
+    background-color: var(--lx-bg-card);
+    border-radius: 8px;
+    transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+.lx-spec-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.lx-spec-label {
+    color: var(--lx-text-muted);
+    display: block;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.lx-spec-value {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* ============================================================
+   PRODUCT PAGE — Finance calculator
+   ============================================================ */
+
+.lx-finance-calc {
+    background: var(--lx-bg-card);
+    border-radius: 10px;
+    padding: 2.5rem;
+    border: 1px solid #333;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    margin-bottom: 3rem;
+}
+
+.lx-finance-calc-title {
+    font-size: 1.5rem;
+    margin: 0 0 1.5rem;
+}
+
+.lx-finance-sliders {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.lx-slider-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.lx-slider-value {
+    color: var(--lx-gold);
+}
+
+.lx-range {
+    width: 100%;
+    accent-color: var(--lx-gold);
+}
+
+.lx-term-row {
+    margin-bottom: 2.5rem;
+}
+
+.lx-term-label {
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.75rem;
+    color: var(--lx-text-muted);
+}
+
+.lx-term-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.lx-term-btn {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.lx-finance-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #333;
+    padding-top: 1.5rem;
+}
+
+.lx-finance-result-label {
+    font-size: 0.9rem;
+    color: var(--lx-text-muted);
+    text-transform: uppercase;
+}
+
+.lx-finance-result-amount {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--lx-gold);
+}
+
+.lx-finance-disclaimer {
+    color: var(--lx-text-muted);
+    max-width: 250px;
+    text-align: right;
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+/* ============================================================
+   PRODUCT PAGE — VIP Desk sidebar
+   ============================================================ */
+
+.lx-vip-desk {
+    background: var(--lx-bg-filter);
+    border-radius: 10px;
+    border: 2px solid var(--lx-gold);
+    padding: 2rem;
+    position: sticky;
+    top: 100px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.lx-vip-desk-title {
+    font-size: 1.4rem;
+    margin: 0 0 0.5rem;
+    text-align: center;
+}
+
+.lx-vip-desk-intro {
+    font-size: 0.85rem;
+    color: var(--lx-text-muted);
+    margin: 0 0 1.5rem;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.lx-vip-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.lx-form-label {
+    font-size: 0.8rem;
+    display: block;
+    margin-bottom: 0.25rem;
+    color: #ccc;
+}
+
+.lx-form-input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.lx-form-date-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.lx-vip-submit {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    border-radius: 4px;
+}
+
+.lx-vip-privacy {
+    font-size: 0.7rem;
+    color: var(--lx-text-muted);
+    margin: 0;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* ============================================================
+   PRODUCT PAGE — Related section
+   ============================================================ */
+
+.lx-related-section {
+    border-top: 1px solid #333;
+    background-color: #111;
+}
+
+.lx-related-section .lx-section-title {
+    color: var(--lx-text-light);
+}
+
+/* ============================================================
+   RESPONSIVE — Product page breakpoints
+   ============================================================ */
+
+@media (max-width: 1024px) {
+    .lx-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lx-vip-desk {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .lx-finance-sliders {
+        grid-template-columns: 1fr;
+    }
+
+    .lx-detail-title {
+        font-size: clamp(2rem, 8vw, 2.5rem);
+    }
+
+    .lx-detail-hero {
+        background-attachment: scroll;
+        height: 50vh;
+    }
+
+    .lx-form-date-row {
+        grid-template-columns: 1fr;
+    }
+
+    .lx-finance-disclaimer {
+        max-width: 100%;
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .lx-finance-result {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
 }
 
 /* ============================================================

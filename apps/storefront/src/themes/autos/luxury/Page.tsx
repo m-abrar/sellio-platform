@@ -119,10 +119,8 @@ export default function Page() {
         <div className="lx-hero-overlay"></div>
         <div className="lx-hero-content">
             <h1 className="lx-hero-title">{heroTitle}</h1>
-            <p style={{ fontSize: '1.25rem', fontWeight: 300, marginBottom: '2rem', lineHeight: 1.6 }}>
-                {heroDescription}
-            </p>
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            <p className="lx-hero-description">{heroDescription}</p>
+            <div className="lx-hero-actions">
                 <a href={themeLink('/explore')} className="lx-btn lx-btn-gold">
                   {heroPrimaryCta}
                 </a>
@@ -194,7 +192,7 @@ export default function Page() {
             </>
           )}
         </select>
-        <button className="lx-btn lx-btn-gold" style={{ flex: 1, padding: '0.8rem' }} onClick={handleSearchSubmit}>{searchButtonLabel}</button>
+        <button className="lx-btn lx-btn-gold lx-filter-submit" onClick={handleSearchSubmit}>{searchButtonLabel}</button>
       </section>
 
       {apiError && useFallback && (
@@ -213,16 +211,16 @@ export default function Page() {
         <h2 className="lx-section-title">{collectionTitle}</h2>
         
         {loading ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+          <div className="lx-skeleton-grid">
             {[1, 2, 3, 4].map(idx => (
-              <div key={idx} className="lx-car-card" style={{ height: '380px', position: 'relative', overflow: 'hidden', border: '1px dashed #444', backgroundColor: 'var(--lx-bg-card)' }}>
-                <div style={{ height: '200px', backgroundColor: '#333' }} className="lx-skeleton"></div>
-                <div style={{ padding: '1.5rem' }}>
-                  <div style={{ height: '20px', width: '60%', backgroundColor: '#444', marginBottom: '1rem', borderRadius: '4px' }} className="lx-skeleton"></div>
-                  <div style={{ height: '15px', width: '80%', backgroundColor: '#444', marginBottom: '2rem', borderRadius: '4px' }} className="lx-skeleton"></div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ height: '25px', width: '30%', backgroundColor: '#444', borderRadius: '4px' }} className="lx-skeleton"></div>
-                    <div style={{ height: '30px', width: '35%', backgroundColor: '#444', borderRadius: '50px' }} className="lx-skeleton"></div>
+              <div key={idx} className="lx-car-card lx-skeleton-card">
+                <div className="lx-skeleton lx-skeleton-img"></div>
+                <div className="lx-skeleton-body">
+                  <div className="lx-skeleton lx-skeleton-title"></div>
+                  <div className="lx-skeleton lx-skeleton-subtitle"></div>
+                  <div className="lx-skeleton-meta">
+                    <div className="lx-skeleton lx-skeleton-price"></div>
+                    <div className="lx-skeleton lx-skeleton-btn"></div>
                   </div>
                 </div>
               </div>
@@ -251,26 +249,24 @@ export default function Page() {
           </div>
         )}
 
-        <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-            <a href={themeLink('/explore')} className="lx-btn lx-btn-gold" style={{ padding: '1rem 3rem' }}>
+        <div className="lx-collection-footer">
+            <a href={themeLink('/explore')} className="lx-btn lx-btn-gold">
               {viewAllLabel}
             </a>
         </div>
       </section>
 
       {/* Exclusive Showcase */}
-      <section className="lx-section" style={{ backgroundColor: '#111111' }}>
-        <h2 className="lx-section-title" style={{ color: 'white' }}>{showcaseTitle}</h2>
+      <section className="lx-section lx-showcase-section">
+        <h2 className="lx-section-title">{showcaseTitle}</h2>
         <div className="lx-showcase-item">
             <div>
-                <img src={showcaseImage} style={{ width: '100%', borderRadius: '8px' }} alt="" />
+                <img src={showcaseImage} className="lx-showcase-img" alt={showcaseHeading} />
             </div>
             <div>
-                <h3 className="lx-heading lx-text-gold" style={{ fontSize: '2rem', marginBottom: '1rem' }}>{showcaseHeading}</h3>
-                <p style={{ fontSize: '1.2rem', color: 'var(--lx-text-muted)', marginBottom: '1.5rem' }}>{showcaseSubtitle}</p>
-                <p style={{ marginBottom: '2rem', lineHeight: 1.6 }}>
-                    {showcaseDescription}
-                </p>
+                <h3 className="lx-heading lx-text-gold lx-showcase-heading">{showcaseHeading}</h3>
+                <p className="lx-showcase-subtitle">{showcaseSubtitle}</p>
+                <p className="lx-showcase-description">{showcaseDescription}</p>
                 <a href={themeLink('/explore?search=Ferrari')} className="lx-btn lx-btn-gold">
                   {showcaseCta}
                 </a>
@@ -282,11 +278,21 @@ export default function Page() {
       <section className="lx-section" id="brands">
         <h2 className="lx-section-title">{brandsTitle}</h2>
         <div className="lx-brand-grid">
-            <a href={themeLink('/explore?brand=Ferrari')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Ferrari</a>
-            <a href={themeLink('/explore?brand=Lamborghini')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Lamborghini</a>
-            <a href={themeLink('/explore?brand=Mercedes-Benz')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Mercedes</a>
-            <a href={themeLink('/explore?brand=Rolls-Royce')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Rolls Royce</a>
-            <a href={themeLink('/explore?brand=Porsche')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Porsche</a>
+          {brands.length > 0 ? (
+            brands.slice(0, 5).map(b => (
+              <a key={b.id} href={themeLink(`/explore?brand=${encodeURIComponent(b.title)}`)} className="lx-brand-item">
+                {b.title}
+              </a>
+            ))
+          ) : (
+            <>
+              <a href={themeLink('/explore?brand=Ferrari')} className="lx-brand-item">Ferrari</a>
+              <a href={themeLink('/explore?brand=Lamborghini')} className="lx-brand-item">Lamborghini</a>
+              <a href={themeLink('/explore?brand=Mercedes-Benz')} className="lx-brand-item">Mercedes</a>
+              <a href={themeLink('/explore?brand=Rolls-Royce')} className="lx-brand-item">Rolls Royce</a>
+              <a href={themeLink('/explore?brand=Porsche')} className="lx-brand-item">Porsche</a>
+            </>
+          )}
         </div>
       </section>
 
@@ -294,10 +300,8 @@ export default function Page() {
         title={testimonialsTitle}
         limit={3}
         variant="luxury"
-        sectionClassName="lx-section"
-        sectionStyle={{ backgroundColor: '#111111' }}
-        titleClassName="lx-section-title"
-        titleStyle={{ color: 'white' }}
+        sectionClassName="lx-section lx-testimonials-section"
+        titleClassName="lx-section-title lx-testimonials-title"
         layoutClassName="lx-testimonial-grid"
         cardClassName="lx-testimonial-card"
         headingId="lx-testimonials-title"

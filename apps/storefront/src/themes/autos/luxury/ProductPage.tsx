@@ -21,6 +21,7 @@ import {
   getLuxuryVehicleSpecLabel,
 } from '@/themes/autos/shared/vehicle-utils';
 import { LiveChatWidget } from '@/components/chat/LiveChatWidget';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 interface ProductPageProps {
   slug: string;
@@ -30,18 +31,47 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const themeLink = useAutosThemeLink();
   const allowDemo = useDemoFallbackAllowed();
 
+  // useThemeContent — all user-visible strings
+  const labelPriceLabel = useThemeContent('detail.price_label', 'Acquisition Valuation');
+  const labelSpecsHeading = useThemeContent('detail.specs_heading', 'Provenance & Specifications');
+  const labelSpecYear = useThemeContent('detail.spec_year', 'Production Year');
+  const labelSpecMileage = useThemeContent('detail.spec_mileage', 'Odometer Mileage');
+  const labelSpecEngine = useThemeContent('detail.spec_engine', 'Engine Architecture');
+  const labelSpecTransmission = useThemeContent('detail.spec_transmission', 'Transmission Type');
+  const labelSpecDrivetrain = useThemeContent('detail.spec_drivetrain', 'Drivetrain System');
+  const labelSpecColor = useThemeContent('detail.spec_color', 'Exterior Finish');
+  const labelSpecEconomy = useThemeContent('detail.spec_economy', 'Fuel Economy');
+  const labelSpecCondition = useThemeContent('detail.spec_condition', 'Condition Score');
+  const labelSpecWarranty = useThemeContent('detail.spec_warranty', 'VIP Warranty');
+  const labelFinanceHeading = useThemeContent('detail.finance_heading', 'Elite Financing Estimator');
+  const labelFinanceDown = useThemeContent('finance.down_payment_label', 'Down Payment');
+  const labelFinanceAPR = useThemeContent('finance.apr_label', 'Interest Rate (APR)');
+  const labelFinanceTerm = useThemeContent('finance.term_label', 'Loan Term Period');
+  const labelFinanceRate = useThemeContent('finance.rate_label', 'Estimated Monthly Rate');
+  const labelFinanceDisclaimer = useThemeContent('finance.disclaimer', 'Taxes, license, and dealer administration fees excluded. Formulated on prime catalog criteria.');
+  const labelVipHeading = useThemeContent('detail.vip_heading', 'Showroom VIP Desk');
+  const labelVipDescription = useThemeContent('detail.vip_description', 'Register for a private viewing of this vehicle asset.');
+  const labelFormName = useThemeContent('form.name_label', 'Full Name *');
+  const labelFormEmail = useThemeContent('form.email_label', 'Email Address *');
+  const labelFormPhone = useThemeContent('form.phone_label', 'Phone Contact *');
+  const labelFormDate = useThemeContent('form.date_label', 'Viewing Date *');
+  const labelFormTime = useThemeContent('form.time_label', 'Time Preference');
+  const labelFormSubmit = useThemeContent('form.submit_label', 'Schedule Private Viewing');
+  const labelFormPrivacy = useThemeContent('form.privacy_note', 'By scheduling, you agree to our private showroom access codes and credentials guidelines.');
+  const labelRelatedHeading = useThemeContent('detail.related_heading', 'Related Masterpieces');
+
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [relatedVehicles, setRelatedVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
 
-  // Leasing Calculator Inputs
-  const [downPaymentPercent, setDownPaymentPercent] = useState(20); // Default 20%
-  const [interestAPR, setInterestAPR] = useState(5.9); // Default 5.9% APR
-  const [loanTerm, setLoanTerm] = useState(60); // Default 60 Months
+  // Finance estimator inputs
+  const [downPaymentPercent, setDownPaymentPercent] = useState(20);
+  const [interestAPR, setInterestAPR] = useState(5.9);
+  const [loanTerm, setLoanTerm] = useState(60);
 
-  // Inquiry VIP reservation form inputs
+  // VIP inquiry form inputs
   const [inquiryName, setInquiryName] = useState('');
   const [inquiryEmail, setInquiryEmail] = useState('');
   const [inquiryPhone, setInquiryPhone] = useState('');
@@ -81,25 +111,23 @@ export default function ProductPage({ slug }: ProductPageProps) {
     loadVehicleDetails();
   }, [slug, allowDemo]);
 
-  // Dynamic Monthly Payment Lease/Finance Estimator calculation
   const calculateMonthlyPayment = () => {
-    if (!vehicle) return "0.00";
-    
+    if (!vehicle) return '0.00';
+
     const basePrice = Number(vehicle.pricing?.base_price || 0);
     const downPaymentAmount = (basePrice * downPaymentPercent) / 100;
     const principalAmount = basePrice - downPaymentAmount;
-
-    // Monthly interest calculation
-    const monthlyRate = (interestAPR / 12) / 100;
+    const monthlyRate = interestAPR / 12 / 100;
 
     if (monthlyRate === 0) {
       return (principalAmount / loanTerm).toFixed(2);
     }
 
-    const payment = (principalAmount * monthlyRate * Math.pow(1 + monthlyRate, loanTerm)) / 
-                    (Math.pow(1 + monthlyRate, loanTerm) - 1);
-                    
-    return isNaN(payment) ? "0.00" : payment.toFixed(2);
+    const payment =
+      (principalAmount * monthlyRate * Math.pow(1 + monthlyRate, loanTerm)) /
+      (Math.pow(1 + monthlyRate, loanTerm) - 1);
+
+    return isNaN(payment) ? '0.00' : payment.toFixed(2);
   };
 
   const handleVIPInquirySubmit = async (e: React.FormEvent) => {
@@ -164,10 +192,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   if (loading) {
     return (
-      <div style={{ backgroundColor: '#1a1a1a', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#c3a16d', fontFamily: 'sans-serif' }}>
-        <div style={{ textAlign: 'center' }}>
-          <h2 style={{ letterSpacing: '2px' }}>PREPARING MANORIAL SHOWROOM PROVENANCE...</h2>
-          <div className="lx-skeleton" style={{ height: '4px', width: '200px', backgroundColor: '#333', margin: '2rem auto', borderRadius: '4px' }}></div>
+      <div className="lx-loading-state">
+        <div className="lx-loading-state-inner">
+          <h2 className="lx-loading-title">PREPARING MANORIAL SHOWROOM PROVENANCE...</h2>
+          <div className="lx-skeleton lx-loading-bar"></div>
         </div>
       </div>
     );
@@ -175,10 +203,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   if (!vehicle) {
     return (
-      <div style={{ backgroundColor: '#1a1a1a', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#fff', fontFamily: 'sans-serif', padding: '2rem' }}>
-        <div style={{ textAlign: 'center' }}>
+      <div className="lx-notfound-state">
+        <div className="lx-notfound-inner">
           <h2 className="lx-text-gold">Asset Not Located</h2>
-          <p style={{ color: 'var(--lx-text-muted)', marginBottom: '2rem' }}>
+          <p className="lx-notfound-message">
             {apiError || 'The requested vehicle could not be loaded from the ledger.'}
           </p>
           <a href={themeLink('/explore')} className="lx-btn lx-btn-gold">
@@ -195,28 +223,22 @@ export default function ProductPage({ slug }: ProductPageProps) {
     <div className="autos-luxury-wrapper">
       <LuxuryHeader />
 
-      {/* Cinematic Parallax Blur Header */}
-      <section className="lx-hero" style={{ 
-        height: '60vh', 
-        backgroundImage: `url(${vehicle.media?.main_photo || vehicle.featured_image || "/themes/autos/luxury/mercedes.png"})`,
-        backgroundAttachment: 'fixed',
-        display: 'flex',
-        alignItems: 'flex-end',
-        padding: '4rem 5%'
-      }}>
-        <div className="lx-hero-overlay" style={{ background: 'linear-gradient(to top, rgba(26,26,26,1) 0%, rgba(26,26,26,0.3) 50%, rgba(0,0,0,0.5) 100%)' }}></div>
-        <div className="lx-hero-content" style={{ position: 'relative', zIndex: 10, width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem' }}>
+      {/* Cinematic Parallax Hero */}
+      <section
+        className="lx-detail-hero"
+        style={{ backgroundImage: `url(${vehicle.media?.main_photo || vehicle.featured_image || '/themes/autos/luxury/mercedes.png'})` }}
+      >
+        <div className="lx-detail-hero-overlay"></div>
+        <div className="lx-detail-hero-content">
           <div>
-            <h1 className="lx-heading" style={{ fontSize: 'clamp(2.5rem, 4vw, 4rem)', fontWeight: 900, marginBottom: '0.5rem', color: '#fff' }}>
-              {vehicle.title}
-            </h1>
-            <p style={{ color: 'var(--lx-text-gold)', fontFamily: 'var(--lx-font-body)', fontSize: '1.25rem', letterSpacing: '1px', margin: 0 }}>
+            <h1 className="lx-detail-title">{vehicle.title}</h1>
+            <p className="lx-detail-subtitle">
               {vehicle.specs?.make} {vehicle.specs?.model}
             </p>
           </div>
-          <div style={{ textAlign: 'right' }}>
-            <span style={{ color: 'var(--lx-text-muted)', fontSize: '0.9rem', textTransform: 'uppercase', display: 'block', marginBottom: '0.25rem' }}>Acquisition Valuation</span>
-            <span className="lx-car-price" style={{ fontSize: '3rem', display: 'block' }}>
+          <div className="lx-detail-price-panel">
+            <span className="lx-detail-price-label">{labelPriceLabel}</span>
+            <span className="lx-car-price lx-detail-price-value">
               {vehicle.pricing?.formatted || `$${basePriceValue.toLocaleString()}`}
             </span>
           </div>
@@ -229,128 +251,110 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
       )}
 
-      {/* Main Details and Spec Ledger */}
+      {/* Main Details + Spec Ledger */}
       <section className="lx-section">
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '3rem', alignItems: 'start' }}>
-          
-          {/* Main Specifications Ledger */}
+        <div className="lx-detail-grid">
+
+          {/* Left: Specs + Finance Calculator */}
           <div>
-            <h3 className="lx-heading lx-text-gold" style={{ fontSize: '1.8rem', marginBottom: '1.5rem' }}>Provenance & Specifications</h3>
-            <p style={{ lineHeight: 1.8, fontSize: '1.1rem', color: '#ddd', marginBottom: '2.5rem' }}>
-              {vehicle.description}
-            </p>
+            <h3 className="lx-heading lx-text-gold lx-detail-section-title">{labelSpecsHeading}</h3>
+            <p className="lx-detail-description">{vehicle.description}</p>
 
-            {/* Spec Sheet Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
-              
-              <div className="lx-testimonial-card" style={{ padding: '1.25rem', borderLeft: '3px solid var(--lx-gold)', backgroundColor: 'var(--lx-bg-card)' }}>
-                <small style={{ color: 'var(--lx-text-muted)', display: 'block', textTransform: 'uppercase', fontSize: '0.75rem' }}>Production Year</small>
-                <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>{vehicle.specs?.year}</span>
+            {/* Spec Sheet */}
+            <div className="lx-spec-sheet">
+              <div className="lx-spec-tile">
+                <small className="lx-spec-label">{labelSpecYear}</small>
+                <span className="lx-spec-value">{vehicle.specs?.year}</span>
               </div>
-
-              <div className="lx-testimonial-card" style={{ padding: '1.25rem', borderLeft: '3px solid var(--lx-gold)', backgroundColor: 'var(--lx-bg-card)' }}>
-                <small style={{ color: 'var(--lx-text-muted)', display: 'block', textTransform: 'uppercase', fontSize: '0.75rem' }}>Odometer Mileage</small>
-                <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>{vehicle.specs?.mileage}</span>
+              <div className="lx-spec-tile">
+                <small className="lx-spec-label">{labelSpecMileage}</small>
+                <span className="lx-spec-value">{vehicle.specs?.mileage}</span>
               </div>
-
-              <div className="lx-testimonial-card" style={{ padding: '1.25rem', borderLeft: '3px solid var(--lx-gold)', backgroundColor: 'var(--lx-bg-card)' }}>
-                <small style={{ color: 'var(--lx-text-muted)', display: 'block', textTransform: 'uppercase', fontSize: '0.75rem' }}>Engine Architecture</small>
-                <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>{vehicle.specs?.engine}</span>
+              <div className="lx-spec-tile">
+                <small className="lx-spec-label">{labelSpecEngine}</small>
+                <span className="lx-spec-value">{vehicle.specs?.engine}</span>
               </div>
-
-              <div className="lx-testimonial-card" style={{ padding: '1.25rem', borderLeft: '3px solid var(--lx-gold)', backgroundColor: 'var(--lx-bg-card)' }}>
-                <small style={{ color: 'var(--lx-text-muted)', display: 'block', textTransform: 'uppercase', fontSize: '0.75rem' }}>Transmission Type</small>
-                <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>{vehicle.specs?.transmission}</span>
+              <div className="lx-spec-tile">
+                <small className="lx-spec-label">{labelSpecTransmission}</small>
+                <span className="lx-spec-value">{vehicle.specs?.transmission}</span>
               </div>
-
-              <div className="lx-testimonial-card" style={{ padding: '1.25rem', borderLeft: '3px solid var(--lx-gold)', backgroundColor: 'var(--lx-bg-card)' }}>
-                <small style={{ color: 'var(--lx-text-muted)', display: 'block', textTransform: 'uppercase', fontSize: '0.75rem' }}>Drivetrain System</small>
-                <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>{vehicle.specs?.drivetrain}</span>
+              <div className="lx-spec-tile">
+                <small className="lx-spec-label">{labelSpecDrivetrain}</small>
+                <span className="lx-spec-value">{vehicle.specs?.drivetrain}</span>
               </div>
-
-              <div className="lx-testimonial-card" style={{ padding: '1.25rem', borderLeft: '3px solid var(--lx-gold)', backgroundColor: 'var(--lx-bg-card)' }}>
-                <small style={{ color: 'var(--lx-text-muted)', display: 'block', textTransform: 'uppercase', fontSize: '0.75rem' }}>Exterior Finish</small>
-                <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>{vehicle.specs?.exterior_color}</span>
+              <div className="lx-spec-tile">
+                <small className="lx-spec-label">{labelSpecColor}</small>
+                <span className="lx-spec-value">{vehicle.specs?.exterior_color}</span>
               </div>
-
-              <div className="lx-testimonial-card" style={{ padding: '1.25rem', borderLeft: '3px solid var(--lx-gold)', backgroundColor: 'var(--lx-bg-card)' }}>
-                <small style={{ color: 'var(--lx-text-muted)', display: 'block', textTransform: 'uppercase', fontSize: '0.75rem' }}>Fuel Economy</small>
-                <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>{vehicle.specs?.fuel_economy}</span>
+              <div className="lx-spec-tile">
+                <small className="lx-spec-label">{labelSpecEconomy}</small>
+                <span className="lx-spec-value">{vehicle.specs?.fuel_economy}</span>
               </div>
-
-              <div className="lx-testimonial-card" style={{ padding: '1.25rem', borderLeft: '3px solid var(--lx-gold)', backgroundColor: 'var(--lx-bg-card)' }}>
-                <small style={{ color: 'var(--lx-text-muted)', display: 'block', textTransform: 'uppercase', fontSize: '0.75rem' }}>Condition Score</small>
-                <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>{vehicle.specs?.condition || "9.5/10"}</span>
+              <div className="lx-spec-tile">
+                <small className="lx-spec-label">{labelSpecCondition}</small>
+                <span className="lx-spec-value">{vehicle.specs?.condition || '9.5/10'}</span>
               </div>
-
-              <div className="lx-testimonial-card" style={{ padding: '1.25rem', borderLeft: '3px solid var(--lx-gold)', backgroundColor: 'var(--lx-bg-card)' }}>
-                <small style={{ color: 'var(--lx-text-muted)', display: 'block', textTransform: 'uppercase', fontSize: '0.75rem' }}>VIP Warranty</small>
-                <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>{vehicle.specs?.warranty || "36 Months"}</span>
+              <div className="lx-spec-tile">
+                <small className="lx-spec-label">{labelSpecWarranty}</small>
+                <span className="lx-spec-value">{vehicle.specs?.warranty || '36 Months'}</span>
               </div>
-
             </div>
 
-            {/* Glassmorphic Dynamic Lease/Finance Calculator */}
-            <div style={{
-              background: '#242424',
-              borderRadius: '10px',
-              padding: '2.5rem',
-              border: '1px solid #333',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.5)',
-              marginBottom: '3rem'
-            }}>
-              <h4 className="lx-heading lx-text-gold" style={{ fontSize: '1.5rem', margin: '0 0 1.5rem' }}>
-                🧮 Elite Financing Estimator
+            {/* Finance Calculator */}
+            <div className="lx-finance-calc">
+              <h4 className="lx-heading lx-text-gold lx-finance-calc-title">
+                {labelFinanceHeading}
               </h4>
-              
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
-                
-                {/* Down Payment % Slider */}
+
+              <div className="lx-finance-sliders">
+                {/* Down Payment */}
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                    <span>Down Payment</span>
-                    <span className="lx-text-gold">{downPaymentPercent}% (${(basePriceValue * downPaymentPercent / 100).toLocaleString()})</span>
+                  <div className="lx-slider-header">
+                    <span>{labelFinanceDown}</span>
+                    <span className="lx-slider-value">
+                      {downPaymentPercent}% (${(basePriceValue * downPaymentPercent / 100).toLocaleString()})
+                    </span>
                   </div>
-                  <input 
+                  <input
                     type="range"
                     min="0"
                     max="80"
                     step="5"
                     value={downPaymentPercent}
                     onChange={(e) => setDownPaymentPercent(Number(e.target.value))}
-                    style={{ width: '100%', accentColor: 'var(--lx-gold)' }}
+                    className="lx-range"
+                    aria-label="Down payment percentage"
                   />
                 </div>
 
-                {/* APR Interest Slider */}
+                {/* APR */}
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                    <span>Interest Rate (APR)</span>
-                    <span className="lx-text-gold">{interestAPR}%</span>
+                  <div className="lx-slider-header">
+                    <span>{labelFinanceAPR}</span>
+                    <span className="lx-slider-value">{interestAPR}%</span>
                   </div>
-                  <input 
+                  <input
                     type="range"
                     min="2"
                     max="15"
                     step="0.1"
                     value={interestAPR}
                     onChange={(e) => setInterestAPR(Number(e.target.value))}
-                    style={{ width: '100%', accentColor: 'var(--lx-gold)' }}
+                    className="lx-range"
+                    aria-label="Annual percentage rate"
                   />
                 </div>
-
               </div>
 
-              {/* Term Duration Selectors */}
-              <div style={{ marginBottom: '2.5rem' }}>
-                <span style={{ fontSize: '0.9rem', display: 'block', marginBottom: '0.75rem', color: 'var(--lx-text-muted)' }}>Loan Term Period</span>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+              {/* Loan Term */}
+              <div className="lx-term-row">
+                <span className="lx-term-label">{labelFinanceTerm}</span>
+                <div className="lx-term-buttons">
                   {[24, 36, 48, 60, 72].map(months => (
-                    <button 
+                    <button
                       key={months}
                       type="button"
-                      className={`lx-btn ${loanTerm === months ? 'lx-btn-gold' : 'lx-btn-outline'}`}
-                      style={{ padding: '0.5rem 1rem', borderRadius: '4px', flex: 1, fontSize: '0.9rem' }}
+                      className={`lx-btn lx-term-btn ${loanTerm === months ? 'lx-btn-gold' : 'lx-btn-outline'}`}
                       onClick={() => setLoanTerm(months)}
                     >
                       {months} Mo
@@ -359,41 +363,25 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </div>
               </div>
 
-              {/* Live Rate Badge */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #333', paddingTop: '1.5rem' }}>
+              {/* Result */}
+              <div className="lx-finance-result">
                 <div>
-                  <span style={{ fontSize: '0.9rem', color: 'var(--lx-text-muted)', textTransform: 'uppercase' }}>Estimated Monthly Rate</span>
-                  <span style={{ display: 'block', fontSize: '2rem', fontWeight: 700, color: 'var(--lx-gold)' }}>
+                  <span className="lx-finance-result-label">{labelFinanceRate}</span>
+                  <span className="lx-finance-result-amount">
                     ${Number(calculateMonthlyPayment()).toLocaleString()}/mo
                   </span>
                 </div>
-                <small style={{ color: 'var(--lx-text-muted)', maxWidth: '250px', textAlign: 'right', fontSize: '0.75rem', lineHeight: 1.4 }}>
-                  Taxes, license, and dealer administration fees excluded. Formulated on prime catalog criteria.
-                </small>
+                <small className="lx-finance-disclaimer">{labelFinanceDisclaimer}</small>
               </div>
-
             </div>
-
           </div>
 
-          {/* Side VIP Reservation Desk */}
-          <div style={{ 
-            background: 'var(--lx-bg-filter)',
-            borderRadius: '10px',
-            border: '2px solid var(--lx-gold)',
-            padding: '2rem',
-            position: 'sticky',
-            top: '100px',
-            boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
-          }}>
-            <h4 className="lx-heading lx-text-gold" style={{ fontSize: '1.4rem', margin: '0 0 0.5rem', textAlign: 'center' }}>
-              ⚜️ Showroom VIP Desk
-            </h4>
-            <p style={{ fontSize: '0.85rem', color: 'var(--lx-text-muted)', margin: '0 0 1.5rem', textAlign: 'center', lineHeight: 1.4 }}>
-              Register for a private private viewing of this vehicle asset.
-            </p>
+          {/* Right: VIP Reservation Desk */}
+          <div className="lx-vip-desk">
+            <h4 className="lx-heading lx-text-gold lx-vip-desk-title">{labelVipHeading}</h4>
+            <p className="lx-vip-desk-intro">{labelVipDescription}</p>
 
-            <form onSubmit={handleVIPInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <form onSubmit={handleVIPInquirySubmit} className="lx-vip-form">
               {formError && (
                 <p className="lx-form-error" role="alert">
                   {formError}
@@ -401,12 +389,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
               )}
 
               <div>
-                <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Full Name *</label>
+                <label htmlFor="vip-name" className="lx-form-label">{labelFormName}</label>
                 <input
+                  id="vip-name"
                   type="text"
                   placeholder="Enter your name"
-                  className="lx-select"
-                  style={{ width: '100%', boxSizing: 'border-box' }}
+                  className="lx-select lx-form-input"
                   required
                   value={inquiryName}
                   onChange={(e) => setInquiryName(e.target.value)}
@@ -414,12 +402,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Email Address *</label>
+                <label htmlFor="vip-email" className="lx-form-label">{labelFormEmail}</label>
                 <input
+                  id="vip-email"
                   type="email"
                   placeholder="name@luxury.com"
-                  className="lx-select"
-                  style={{ width: '100%', boxSizing: 'border-box' }}
+                  className="lx-select lx-form-input"
                   required
                   value={inquiryEmail}
                   onChange={(e) => setInquiryEmail(e.target.value)}
@@ -427,50 +415,51 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Phone Contact *</label>
+                <label htmlFor="vip-phone" className="lx-form-label">{labelFormPhone}</label>
                 <input
+                  id="vip-phone"
                   type="tel"
                   placeholder="+1 (555) 000-0000"
-                  className="lx-select"
-                  style={{ width: '100%', boxSizing: 'border-box' }}
+                  className="lx-select lx-form-input"
                   required
                   value={inquiryPhone}
                   onChange={(e) => setInquiryPhone(e.target.value)}
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+              <div className="lx-form-date-row">
                 <div>
-                  <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Viewing Date *</label>
+                  <label htmlFor="vip-date" className="lx-form-label">{labelFormDate}</label>
                   <input
+                    id="vip-date"
                     type="date"
-                    className="lx-select"
-                    style={{ width: '100%', boxSizing: 'border-box' }}
+                    className="lx-select lx-form-input"
                     required
                     value={inquiryDate}
                     onChange={(e) => setInquiryDate(e.target.value)}
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.8rem', display: 'block', marginBottom: '0.25rem', color: '#ccc' }}>Time Preference</label>
+                  <label htmlFor="vip-time" className="lx-form-label">{labelFormTime}</label>
                   <input
+                    id="vip-time"
                     type="time"
-                    className="lx-select"
-                    style={{ width: '100%', boxSizing: 'border-box' }}
+                    className="lx-select lx-form-input"
                     value={inquiryTime}
                     onChange={(e) => setInquiryTime(e.target.value)}
                   />
                 </div>
               </div>
 
-              <button type="submit" className="lx-btn lx-btn-gold" style={{ width: '100%', padding: '0.8rem', marginTop: '1rem', borderRadius: '4px' }}>
-                Schedule Private Viewing
+              <button
+                type="submit"
+                className="lx-btn lx-btn-gold lx-vip-submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? '...' : labelFormSubmit}
               </button>
 
-              <p style={{ fontSize: '0.7rem', color: 'var(--lx-text-muted)', margin: 0, textAlign: 'center', lineHeight: 1.4 }}>
-                By scheduling, you agree to our private showroom access codes and credentials guidelines.
-              </p>
-
+              <p className="lx-vip-privacy">{labelFormPrivacy}</p>
             </form>
 
             <div className="sl-chat-section">
@@ -484,8 +473,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
       {/* Related Premium Showroom Grid */}
       {relatedVehicles.length > 0 && (
-        <section className="lx-section" style={{ borderTop: '1px solid #333', backgroundColor: '#111' }}>
-          <h3 className="lx-section-title" style={{ color: '#fff' }}>Related Masterpieces</h3>
+        <section className="lx-section lx-related-section">
+          <h3 className="lx-section-title">{labelRelatedHeading}</h3>
           <div className="lx-grid">
             {relatedVehicles.slice(0, 3).map((car) => (
               <LuxuryCarCard
