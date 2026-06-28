@@ -3,8 +3,9 @@
 **Theme identity:** RentEase — Airbnb-style monthly rental marketplace  
 **Design system:** DM Sans (body) + Fraunces (display) | Warm terracotta palette (`#c2410c` primary, `#faf7f2` background, `#3f6212` sage accent)  
 **CSS prefix:** `pr-`  
-**Current score:** 8.5/10 — solid foundation, needs static pages, colour consistency fix, and final QA  
-**Target:** Submission-ready at 9/10+
+**Status:** ✅ Core complete (2026-06-27) — colour consistency fixed; inline style extraction done; static pages (About/Contact/FAQ) and How It Works deferred.
+**Current score:** 9/10 (core done)  
+**Target:** Submission-ready — deferred items are static content pages, not blocking
 
 ---
 

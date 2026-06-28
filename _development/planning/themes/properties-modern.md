@@ -1,8 +1,9 @@
 # Theme Completion Plan: `properties/modern`
 
+**Status:** ✅ Complete — all checklist items done; About + Contact pages added; SEO metadata; accessibility audit passed.
 **Priority:** #1 — Highest market demand (real estate), highest base quality (9/10)
 **Theme path:** `apps/storefront/src/themes/properties/modern/`
-**Audit score:** 9/10 — mostly production-ready, specific gaps documented below
+**Audit score:** 9/10 — production-ready
 
 ---
 

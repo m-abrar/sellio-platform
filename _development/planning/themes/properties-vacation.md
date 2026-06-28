@@ -1,5 +1,6 @@
 # Theme Completion Plan: `properties/vacation`
 
+**Status:** 🔄 Active — Bundle 1 (#5 of 5). Start with ProductPage audit, then inline extraction across all components.
 **Priority:** #21 — Airbnb-style vacation rental platform; editorial feel with live date filtering
 **Theme path:** `apps/storefront/src/themes/properties/vacation/`
 **Audit score:** 7.5/10 — very clean homepage and CMS integration; primary gaps are missing ProductPage features (host profile, amenity icons, booking calendar), heavy `RetreatBentoCard` inline styles, and footer inline styles

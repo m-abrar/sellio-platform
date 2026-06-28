@@ -1,9 +1,21 @@
 # Frontend Theme Development Plan
 
-Last updated: 2026-06-27
+Last updated: 2026-06-28
 
 **Overall audit score: 6.2/10** — ~30% of 52 themes are skeletal or near-duplicate.
 **Target after cleanup: 30 themes at 7/10+** — a focused, polished product.
+
+---
+
+## Bundle 1 — Real Estate Pro · Progress
+
+| Theme | Status | Notes |
+|---|---|---|
+| `properties/modern` | ✅ Complete | Inline styles extracted; About + Contact pages added; SEO metadata; accessibility audit |
+| `properties/rental` | ✅ Complete | Core extraction done; colour consistency fixed; About/Contact/FAQ deferred |
+| `properties/luxury` | ✅ Complete | Inline extraction across 7 files; hardcoded strings → useThemeContent; SEO done |
+| `properties/classic` | ✅ Complete | dangerouslySetInnerHTML removed; AgentBioPage + NeighborhoodStats built; newsletter bug fixed; responsive + SEO deferred |
+| `properties/vacation` | 🔄 Active | ProductPage audit next: host profile, amenity icons, booking calendar; then inline extraction |
 
 ---
 
@@ -12,9 +24,9 @@ Last updated: 2026-06-27
 
 | # | Theme | Score | Notes |
 |---|---|---|---|
-| 1 | `properties/modern` | 9/10 | Flagship. Real estate is #1 CodeCanyon category. 61 files, 42 components, calendar, gallery, filtering. → [Detailed plan](themes/properties-modern.md) |
+| 1 | `properties/modern` | ✅ 9/10 | ✅ **Complete.** Flagship. Real estate is #1 CodeCanyon category. 61 files, 42 components, calendar, gallery, filtering. → [Detailed plan](themes/properties-modern.md) |
 | 2 | `ecommerce/b2b` | 9/10 | B2B marketplace sells at premium. Quote requests, bulk ordering, multi-page (blog, contact, about). → [Detailed plan](themes/ecommerce-b2b.md) |
-| 3 | `properties/rental` | 8.5/10 | Airbnb-style rental demand. Availability calendars, host features, booking flow. → [Detailed plan](themes/properties-rental.md) |
+| 3 | `properties/rental` | ✅ 8.5/10 | ✅ **Complete (core done).** Airbnb-style rental demand. Availability calendars, host features, booking flow. → [Detailed plan](themes/properties-rental.md) |
 | 4 | `unifieds/marketplace` | 8.5/10 | Widest buyer pool. Multi-vertical homepage, rich filtering, editorial sections. → [Detailed plan](themes/unifieds-marketplace.md) |
 | 4b | `unifieds/default` | 7.5/10 | Foundation theme — needs full discovery layer to match Laravel homepage. → [Detailed plan](themes/unifieds-default.md) |
 | 5 | `classifieds/elite` | 8.5/10 | Underserved luxury/collectibles niche. Spotlight carousel, QuickView overlay, favorites. → [Detailed plan](themes/classifieds-elite.md) |
@@ -29,9 +41,9 @@ Last updated: 2026-06-27
 | # | Theme | Score | What's Missing |
 |---|---|---|---|
 | 8 | `ecommerce/fashion` | 8/10 | Cart/checkout flow review; strong editorial identity already exists. → [Detailed plan](themes/ecommerce-fashion.md) |
-| 9 | `properties/luxury` | 8/10 | Confirm gold palette consistency across all pages. → [Detailed plan](themes/properties-luxury.md) |
+| 9 | `properties/luxury` | ✅ 8/10 | ✅ **Complete (core done).** Gold palette consistent; inline extraction done across all files. → [Detailed plan](themes/properties-luxury.md) |
 | 10 | `autos/luxury` | 8/10 | Vehicle spec display + comparison component. → [Detailed plan](themes/autos-luxury.md) |
-| 11 | `properties/classic` | 8/10 | Agent bio page + neighborhood stats component. → [Detailed plan](themes/properties-classic.md) |
+| 11 | `properties/classic` | ✅ 8.5/10 | ✅ **Complete (core done; responsive + SEO deferred).** AgentBioPage + NeighborhoodStats built; dangerouslySetInnerHTML removed; newsletter fixed. → [Detailed plan](themes/properties-classic.md) |
 | 12 | `events/corporate` | 8/10 | Speaker grid + sponsor row components. → [Detailed plan](themes/events-corporate.md) |
 | 13 | `classifieds/general` | 7/10 | Category filter breadcrumb + saved search UI. → [Detailed plan](themes/classifieds-general.md) |
 | 14 | `classifieds/local` | 7/10 | Map embed + community board section. → [Detailed plan](themes/classifieds-local.md) |
@@ -49,7 +61,7 @@ Last updated: 2026-06-27
 |---|---|---|---|
 | 19 | `autos/modern` | 7/10 | Differentiate from luxury — bold hero + search filter bar. → [Detailed plan](themes/autos-modern.md) |
 | 20 | `ecommerce/electronics` | 7/10 | Spec comparison table + tech-forward color scheme. → [Detailed plan](themes/ecommerce-electronics.md) |
-| 21 | `properties/vacation` | 7.5/10 | Host profile + amenity icons + booking calendar (1,120 CSS lines already, good start). → [Detailed plan](themes/properties-vacation.md) |
+| 21 | `properties/vacation` | 🔄 7.5/10 | 🔄 **Active — Bundle 1 next.** Host profile + amenity icons + booking calendar; heavy inline styles in RetreatBentoCard, ExperienceStats, EscapeFooter. → [Detailed plan](themes/properties-vacation.md) |
 | 22 | `classifieds/deals` | 6/10 | Countdown timer component + "ending soon" urgency badge. → [Detailed plan](themes/classifieds-deals.md) |
 | 23 | `events/creative` | 7/10 | Artist/speaker showcase + colorful hero (only 639 CSS lines — needs visual lift). → [Detailed plan](themes/events-creative.md) |
 | 24 | `events/festival` | 7/10 | Lineup grid + stage schedule + ticket pricing component. → [Detailed plan](themes/events-festival.md) |

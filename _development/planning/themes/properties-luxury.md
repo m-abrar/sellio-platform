@@ -1,8 +1,9 @@
 # Theme Completion Plan: `properties/luxury`
 
+**Status:** ✅ Core complete (2026-06-27) — inline extraction done across all 7 files; SEO metadata added; hardcoded strings → useThemeContent; booking flow verified. Responsive QA and section label strings deferred.
 **Priority:** #9 — Luxury real estate niche; distinct gold palette, full booking+inquiry flow already wired
 **Theme path:** `apps/storefront/src/themes/properties/luxury/`
-**Audit score:** 8/10 — feature-complete, but inline styles are even heavier than `ecommerce/fashion`
+**Audit score:** 8.5/10 (was 8/10)
 
 ---
 
