@@ -5,6 +5,7 @@ import type { Category } from '@sellio/types';
 import { RetreatBentoCard, ExperienceStats } from './components';
 import { CatalogSyncAlert } from './components/CatalogSyncAlert';
 import { fetchVacationCatalogPage } from './catalog';
+import { FALLBACK_RETREATS } from './fallback-data';
 import {
   buildVacationCategories,
   mapPropertyToVacationCard,
@@ -87,6 +88,24 @@ export default function Page() {
     '100% Verified|No Hidden Fees|Local Expert Support|Secure Booking',
   ).split('|');
 
+  const searchLocationLabel = useThemeContent('search.location_label', 'Where to?');
+  const searchLocationPlaceholder = useThemeContent('search.location_placeholder', 'Search city, region, or retreat name...');
+  const searchCheckInLabel = useThemeContent('search.check_in_label', 'Check In');
+  const searchCheckOutLabel = useThemeContent('search.check_out_label', 'Check Out');
+  const searchBudgetLabel = useThemeContent('search.budget_label', 'Budget / Night');
+  const searchBudgetAll = useThemeContent('search.budget_all', 'All Budgets');
+  const searchBudgetUnder500 = useThemeContent('search.budget_under_500', 'Under $500/night');
+  const searchBudget500to1000 = useThemeContent('search.budget_500_1000', '$500–$1,000/night');
+  const searchBudget1000plus = useThemeContent('search.budget_1000_plus', '$1,000+/night');
+  const searchResetLabel = useThemeContent('search.reset_label', 'Reset');
+  const gridInventorySuffix = useThemeContent('grid.inventory_suffix', 'retreats in catalog');
+  const gridCategoryAllLabel = useThemeContent('grid.category_all_label', 'All Retreats');
+  const emptyTitle = useThemeContent('empty.title', 'No retreats found');
+  const emptyDescription = useThemeContent('empty.description', 'We could not find any vacation retreats matching your filters.');
+  const emptyResetLabel = useThemeContent('empty.reset_label', 'Clear filters');
+  const statsRetreatsLabel = useThemeContent('stats.retreats_label', 'Live Retreats');
+  const statsLocationsLabel = useThemeContent('stats.locations_label', 'Unique Locations');
+
   const [retreats, setRetreats] = useState<VacationRetreatCard[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [inventoryTotal, setInventoryTotal] = useState<number | null>(null);
@@ -118,7 +137,7 @@ export default function Page() {
         setInventoryTotal(result.total);
         setApiError(null);
       } else {
-        setRetreats([]);
+        setRetreats(FALLBACK_RETREATS);
         setCategories([]);
         setInventoryTotal(null);
         setApiError(result.error);
@@ -174,18 +193,18 @@ export default function Page() {
 
       <section className="pv-search-hud" aria-label="Search vacation retreats">
         <div className="pv-search-field pv-search-field--wide">
-          <label htmlFor="pv-search-location">Where to?</label>
+          <label htmlFor="pv-search-location">{searchLocationLabel}</label>
           <input
             id="pv-search-location"
             type="search"
-            placeholder="Search city, region, or retreat name..."
+            placeholder={searchLocationPlaceholder}
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
           />
         </div>
 
         <div className="pv-search-field">
-          <label htmlFor="pv-search-checkin">Check In</label>
+          <label htmlFor="pv-search-checkin">{searchCheckInLabel}</label>
           <input
             id="pv-search-checkin"
             type="date"
@@ -195,7 +214,7 @@ export default function Page() {
         </div>
 
         <div className="pv-search-field">
-          <label htmlFor="pv-search-checkout">Check Out</label>
+          <label htmlFor="pv-search-checkout">{searchCheckOutLabel}</label>
           <input
             id="pv-search-checkout"
             type="date"
@@ -205,22 +224,22 @@ export default function Page() {
         </div>
 
         <div className="pv-search-field">
-          <label htmlFor="pv-search-budget">Budget / Night</label>
+          <label htmlFor="pv-search-budget">{searchBudgetLabel}</label>
           <select
             id="pv-search-budget"
             value={priceRange}
             onChange={(event) => setPriceRange(event.target.value)}
           >
-            <option value="">All Budgets</option>
-            <option value="under-500">Under $500/night</option>
-            <option value="500-1000">$500 - $1,000/night</option>
-            <option value="1000-plus">$1,000+/night</option>
+            <option value="">{searchBudgetAll}</option>
+            <option value="under-500">{searchBudgetUnder500}</option>
+            <option value="500-1000">{searchBudget500to1000}</option>
+            <option value="1000-plus">{searchBudget1000plus}</option>
           </select>
         </div>
 
         {hasActiveFilters && (
           <button type="button" className="pv-reset-btn" onClick={clearFilters}>
-            Reset
+            {searchResetLabel}
           </button>
         )}
       </section>
@@ -241,7 +260,7 @@ export default function Page() {
               {renderMultilineTitle(gridTitle, gridHighlight, 'pv-italic')}
             </h2>
             {!loading && inventoryTotal != null && (
-              <p className="pv-grid-meta">{inventoryTotal} retreats in catalog</p>
+              <p className="pv-grid-meta">{inventoryTotal} {gridInventorySuffix}</p>
             )}
           </div>
           <p className="pv-grid-description">{gridDescription}</p>
@@ -259,7 +278,7 @@ export default function Page() {
             className={`pv-category-pill ${!selectedCategory ? 'pv-category-pill--active' : ''}`}
             onClick={() => setSelectedCategory('')}
           >
-            All Retreats
+            {gridCategoryAllLabel}
           </button>
           {categoryList.map((category) => (
             <button
@@ -282,10 +301,10 @@ export default function Page() {
         ) : filteredRetreats.length === 0 ? (
           <div className="pv-empty-state">
             <span className="pv-empty-icon">🏝️</span>
-            <h3>No retreats found</h3>
-            <p>We could not find any vacation retreats matching your filters.</p>
+            <h3>{emptyTitle}</h3>
+            <p>{emptyDescription}</p>
             <button type="button" className="pv-btn-primary" onClick={clearFilters}>
-              Clear filters
+              {emptyResetLabel}
             </button>
           </div>
         ) : (
@@ -307,8 +326,8 @@ export default function Page() {
           </h2>
           <p className="pv-philosophy-copy">{philosophyDescription}</p>
           <div className="pv-stats-grid">
-            <ExperienceStats value={String(liveStats.retreats)} label="Live Retreats" />
-            <ExperienceStats value={String(liveStats.locations)} label="Unique Locations" />
+            <ExperienceStats value={String(liveStats.retreats)} label={statsRetreatsLabel} />
+            <ExperienceStats value={String(liveStats.locations)} label={statsLocationsLabel} />
           </div>
         </div>
         <div className="pv-phil-img-wrapper">
