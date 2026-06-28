@@ -380,6 +380,16 @@
     background: #eef2ff;
     border-bottom: 1px solid var(--ud-border);
     overflow: hidden;
+    position: relative;
+}
+
+/* Depth gradient matching home page listing cards */
+.ud-listing-image-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.35) 0%, transparent 55%);
+    pointer-events: none;
 }
 
 .ud-listing-image-wrap img {
@@ -447,27 +457,52 @@
     text-transform: uppercase;
 }
 
+/* Category label inside listing card body renders as a badge pill */
+.ud-listing-body .ud-mono {
+    display: inline-block;
+    background: rgba(37, 99, 235, 0.07);
+    border: 1px solid rgba(37, 99, 235, 0.14);
+    border-radius: 999px;
+    color: var(--ud-azure);
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    padding: 0.22rem 0.75rem;
+}
+
 .ud-listing-state {
     background: var(--ud-card);
-    border: 1px dashed var(--ud-azure);
+    border: 1px dashed rgba(37, 99, 235, 0.3);
     border-radius: 24px;
-    padding: 4rem;
+    padding: 5rem 4rem;
     text-align: center;
+}
+
+.ud-listing-state-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    background: rgba(37, 99, 235, 0.07);
+    border: 1.5px solid rgba(37, 99, 235, 0.15);
+    border-radius: 50%;
+    color: var(--ud-azure);
+    margin-bottom: 2rem;
 }
 
 .ud-listing-state h3 {
     color: #1e293b;
     font-family: var(--ud-font-heading);
-    font-size: 1.75rem;
+    font-size: 1.65rem;
     font-weight: 800;
-    margin: 0 0 1rem;
+    margin: 0.75rem 0 1rem;
 }
 
 .ud-listing-state p {
     color: var(--ud-slate);
     line-height: 1.7;
-    margin: 0 auto;
-    max-width: 560px;
+    margin: 0 auto 2rem;
+    max-width: 480px;
 }
 
 .ud-listing-skeleton {
@@ -1117,12 +1152,42 @@
     text-align: center;
 }
 
-.ud-explore-page,
+.ud-explore-page {
+    padding: 5.5rem 6% 6rem;
+}
+
 .ud-cart-page {
     padding: 8rem 6% 6rem;
 }
 
-.ud-explore-header,
+/* Dark contained header panel for the explore page */
+.ud-explore-header {
+    background: #080e1f;
+    border-radius: 20px;
+    margin-bottom: 3rem;
+    max-width: none;
+    overflow: hidden;
+    padding: 3.5rem 4rem;
+    position: relative;
+}
+
+/* Dot-grid texture matching the hero and Seller CTA */
+.ud-explore-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 26px 26px;
+    pointer-events: none;
+}
+
+/* Eyebrow pill in dark context */
+.ud-explore-header .ud-section-eyebrow {
+    background: rgba(147, 197, 253, 0.1);
+    border: 1px solid rgba(147, 197, 253, 0.25);
+    color: #93c5fd;
+}
+
 .ud-cart-header {
     margin-bottom: 4rem;
     max-width: 760px;
@@ -1131,12 +1196,17 @@
 .ud-explore-header h1,
 .ud-cart-header h1,
 .ud-cart-state h1 {
-    color: #1e293b;
+    color: white;
     font-family: var(--ud-font-heading);
-    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 800;
     line-height: 1.05;
     margin: 0 0 1rem;
+    position: relative;
+}
+
+.ud-cart-header h1 {
+    color: #1e293b;
 }
 
 .ud-explore-header p,
@@ -1254,26 +1324,29 @@
 }
 
 .ud-explore-title {
-    color: #1e293b;
+    color: white;
     font-family: var(--ud-font-heading);
-    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 800;
     line-height: 1.05;
     margin: 0 0 1rem;
+    position: relative;
 }
 
 .ud-explore-description {
-    color: var(--ud-slate);
+    color: #94a3b8;
     line-height: 1.8;
     margin: 0;
-    max-width: 620px;
+    max-width: 560px;
+    position: relative;
 }
 
 .ud-explore-meta {
-    color: var(--ud-azure);
+    color: #60a5fa;
     font-size: 0.85rem;
     font-weight: 700;
     margin: 0.75rem 0 0;
+    position: relative;
 }
 
 .ud-vertical-chip-count {

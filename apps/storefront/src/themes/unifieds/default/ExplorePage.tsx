@@ -322,6 +322,12 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
         </>
       ) : (
         <div className="ud-listing-state" role="status">
+          <div className="ud-listing-state-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+          </div>
           <div className="ud-mono ud-section-eyebrow">No matches</div>
           <h3>{emptyTitle}</h3>
           <p>{emptyDescription}</p>
