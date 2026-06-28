@@ -1,0 +1,9 @@
+appId: com.sellio.marketplace
+---
+- launchApp
+- assertVisible: "MARKETPLACE"
+- tapOn: "ADD TO CART"
+- tapOn: "OPEN CART"
+- assertVisible: "YOUR CART."
+- tapOn: "SECURE CHECKOUT"
+- assertVisible: "Checkout"

@@ -1,0 +1,11 @@
+appId: com.sellio.marketplace
+---
+- launchApp:
+    clearState: true
+- tapOn: "LOG IN"
+- tapOn: "e.g. buyer@sellio.com"
+- inputText: ${BUYER_EMAIL}
+- tapOn: "********"
+- inputText: ${BUYER_PASSWORD}
+- tapOn: "SECURE SIGN IN"
+- assertVisible: "MARKETPLACE"

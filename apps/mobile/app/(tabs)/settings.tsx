@@ -56,7 +56,7 @@ export default function SettingsView() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/notifications')}>
             <Text style={styles.menuIcon}>NT</Text>
             <View style={styles.menuTextContainer}>
               <Text style={styles.menuTitle}>Notifications</Text>

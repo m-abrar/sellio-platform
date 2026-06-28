@@ -66,5 +66,8 @@ return [
         'key' => env('GEMINI_API_KEY'),
     ],
 
-];
+    'expo_push' => [
+        'endpoint' => env('EXPO_PUSH_ENDPOINT', 'https://exp.host/--/api/v2/push/send'),
+    ],
 
+];

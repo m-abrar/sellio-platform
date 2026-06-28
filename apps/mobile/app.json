@@ -1,26 +1,31 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "Sellio",
+    "slug": "sellio",
     "scheme": "sellio",
-    "version": "1.0.0",
+    "version": "2.4.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/sellio-icon.png",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/sellio-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#070708"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sellio.marketplace",
+      "buildNumber": "1"
     },
     "android": {
       "usesCleartextTraffic": true,
+      "package": "com.sellio.marketplace",
+      "versionCode": 1,
+      "blockedPermissions": ["android.permission.RECORD_AUDIO"],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/sellio-icon.png",
+        "backgroundColor": "#070708"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
@@ -31,12 +36,14 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
+      "expo-notifications",
       [
         "expo-image-picker",
         {
           "photosPermission": "Allow Sellio to choose a profile photo."
         }
-      ]
+      ],
+      "expo-web-browser"
     ]
   }
 }

@@ -13,6 +13,7 @@ import {
   View,
 } from 'react-native';
 import { useAuth } from '../src/context/AuthContext';
+import { validateBuyerRegistration } from '../src/validation/auth';
 
 export default function RegisterView() {
   const router = useRouter();
@@ -31,20 +32,9 @@ export default function RegisterView() {
     const cleanName = name.trim();
     const cleanEmail = email.trim().toLowerCase();
 
-    if (!cleanName || !cleanEmail || !password || !passwordConfirmation) {
-      setErrorMessage('Name, email, password, and password confirmation are required.');
-      return;
-    }
-    if (!/^\S+@\S+\.\S+$/.test(cleanEmail)) {
-      setErrorMessage('Enter a valid email address.');
-      return;
-    }
-    if (password.length < 8) {
-      setErrorMessage('Your password must contain at least 8 characters.');
-      return;
-    }
-    if (password !== passwordConfirmation) {
-      setErrorMessage('The password confirmation does not match.');
+    const validationError = validateBuyerRegistration(cleanName, cleanEmail, password, passwordConfirmation);
+    if (validationError) {
+      setErrorMessage(validationError);
       return;
     }
 

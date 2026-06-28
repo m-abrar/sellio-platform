@@ -1,7 +1,6 @@
 import { API_URL } from '../config/api';
 import { clearStoredSession, getStoredToken } from '../auth/sessionStorage';
-
-type ValidationErrors = Record<string, string[]>;
+import { responseErrorMessage, ValidationErrors } from './errors';
 
 interface LaravelEnvelope<T> {
   success?: boolean;
@@ -45,12 +44,6 @@ function resolveUrl(path: string) {
   }
 
   return `${API_URL}${path.startsWith('/') ? path : `/${path}`}`;
-}
-
-function validationMessage(errors?: ValidationErrors | null) {
-  if (!errors) return null;
-
-  return Object.values(errors).flat().find(Boolean) || null;
 }
 
 async function performApiRequest<T>(
@@ -119,7 +112,7 @@ async function performApiRequest<T>(
     if (!response.ok) {
       const errors = envelope?.errors || null;
       throw new ApiError(
-        validationMessage(errors) || envelope?.message || `Request failed (${response.status}).`,
+        responseErrorMessage(response.status, envelope?.message, errors),
         response.status,
         errors,
       );

@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\Dashboard\User\{
     MessageController,
     BookingController,
     NotificationController,
+    PushTokenController,
 
     // 2. Lead & Inquiry Management
     AutoInquiryController,
@@ -66,6 +67,8 @@ Route::group([], function () {
         Route::get('/', [NotificationController::class, 'index']);
         Route::post('read-all', [NotificationController::class, 'markAllAsRead']);
         Route::patch('{notification}/read', [NotificationController::class, 'markAsRead']);
+        Route::post('push-token', [PushTokenController::class, 'store']);
+        Route::delete('push-token', [PushTokenController::class, 'destroy']);
         Route::delete('{notification}', [NotificationController::class, 'destroy']);
     });
 

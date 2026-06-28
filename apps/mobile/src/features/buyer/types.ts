@@ -56,6 +56,8 @@ export interface ConversationRecord {
   user?: AuthUser;
   partner?: AuthUser;
   last_message?: MessageRecord | null;
+  lastMessage?: MessageRecord | null;
+  unread_count?: number;
   created_at: string;
   updated_at: string;
 }
@@ -64,6 +66,12 @@ export interface ConversationIndexData {
   conversations: ConversationRecord[];
   activeConversation: ConversationRecord | null;
   messages: MessageRecord[];
+  message_meta?: {
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+  } | null;
   user: AuthUser;
 }
 

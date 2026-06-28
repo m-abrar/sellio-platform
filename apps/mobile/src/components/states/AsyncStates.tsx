@@ -39,12 +39,12 @@ function StateFrame({
       {title && <Text style={styles.title}>{title}</Text>}
       <Text style={styles.message}>{message}</Text>
       {primaryAction && (
-        <TouchableOpacity style={styles.primaryButton} onPress={primaryAction.onPress}>
+        <TouchableOpacity style={styles.primaryButton} onPress={primaryAction.onPress} accessibilityRole="button" accessibilityLabel={primaryAction.label}>
           <Text style={styles.primaryButtonText}>{primaryAction.label}</Text>
         </TouchableOpacity>
       )}
       {secondaryAction && (
-        <TouchableOpacity style={styles.secondaryButton} onPress={secondaryAction.onPress}>
+        <TouchableOpacity style={styles.secondaryButton} onPress={secondaryAction.onPress} accessibilityRole="button" accessibilityLabel={secondaryAction.label}>
           <Text style={styles.secondaryButtonText}>{secondaryAction.label}</Text>
         </TouchableOpacity>
       )}

@@ -282,6 +282,7 @@ Route::prefix('cart')->middleware('module:products')->group(function () {
 // =======================
 Route::middleware(['auth:sanctum', 'module:products'])->prefix('checkout')->group(function () {
     Route::get('context', [ApiCheckoutController::class, 'context']);
+    Route::post('handoff', [ApiCheckoutController::class, 'handoff'])->middleware('throttle:api-write');
     Route::post('process/{gateway}', [ApiCheckoutController::class, 'processPayment'])->middleware('throttle:api-write');
     Route::match(['get', 'post'], 'confirm/{gateway}/{order}', [ApiCheckoutController::class, 'confirmPayment']);
 });

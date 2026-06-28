@@ -1,4 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
+import { parseStoredSession, serializeStoredUser } from './sessionCodec';
 
 const TOKEN_KEY = 'sellio_auth_token';
 const USER_KEY = 'sellio_auth_user';
@@ -13,20 +14,13 @@ export async function loadStoredSession<T>() {
     SecureStore.getItemAsync(USER_KEY),
   ]);
 
-  if (!token || !userJson) {
-    return null;
-  }
-
-  return {
-    token,
-    user: JSON.parse(userJson) as T,
-  };
+  return parseStoredSession<T>(token, userJson);
 }
 
 export async function storeSession<T>(token: string, user: T) {
   await Promise.all([
     SecureStore.setItemAsync(TOKEN_KEY, token),
-    SecureStore.setItemAsync(USER_KEY, JSON.stringify(user)),
+    SecureStore.setItemAsync(USER_KEY, serializeStoredUser(user)),
   ]);
 }
 

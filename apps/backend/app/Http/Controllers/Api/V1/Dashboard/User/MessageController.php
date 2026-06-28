@@ -30,17 +30,21 @@ class MessageController extends Controller
      * @param  int|null  $conversationId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index($conversationId = null) {
+    public function index(Request $request, $conversationId = null) {
         $user = Auth::user();
         
         // 1. Fetch all conversations for the user using the correct scope
         $conversations = Conversation::forUser($user->id)
             ->with(['partner', 'user', 'lastMessage'])
+            ->withCount(['messages as unread_count' => function ($query) use ($user) {
+                $query->where('sender_id', '!=', $user->id)->whereNull('read_at');
+            }])
             ->orderByDesc('updated_at')
             ->get();
 
         $activeConversation = null;
         $messages = collect();
+        $messageMeta = null;
 
         if ($conversations->isNotEmpty()) {
             // 2. Identify the active conversation
@@ -50,9 +54,22 @@ class MessageController extends Controller
 
             // 3. Load messages for the active conversation
             if ($activeConversation) {
-                $messages = $activeConversation->messages()
-                    ->orderBy('created_at', 'asc')
-                    ->get();
+                if ($request->has('per_page')) {
+                    $paginator = $activeConversation->messages()
+                        ->orderByDesc('created_at')
+                        ->paginate(min(max($request->integer('per_page', 30), 1), 100));
+                    $messages = collect($paginator->items())->reverse()->values();
+                    $messageMeta = [
+                        'current_page' => $paginator->currentPage(),
+                        'last_page' => $paginator->lastPage(),
+                        'per_page' => $paginator->perPage(),
+                        'total' => $paginator->total(),
+                    ];
+                } else {
+                    $messages = $activeConversation->messages()
+                        ->orderBy('created_at', 'asc')
+                        ->get();
+                }
             }
         }
 
@@ -60,6 +77,7 @@ class MessageController extends Controller
             'conversations'      => $conversations,
             'activeConversation' => $activeConversation,
             'messages'           => $messages,
+            'message_meta'       => $messageMeta,
             'user'               => $user,
         ])->header('Cache-Control', 'no-store, no-cache, must-revalidate')
           ->header('Pragma', 'no-cache');
@@ -136,6 +154,13 @@ class MessageController extends Controller
         $partner = User::findOrFail($listing->user_id);
 
         $conversation = (new ConversationService())->findOrCreate($partner, $user->id);
+
+        if (!$conversation->inquiriable_id) {
+            $conversation->update([
+                'inquiriable_type' => $typeMap[$vertical],
+                'inquiriable_id' => $listing->id,
+            ]);
+        }
 
         $messages = $conversation->messages()
             ->orderBy('created_at', 'asc')

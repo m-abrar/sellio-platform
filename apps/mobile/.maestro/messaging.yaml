@@ -1,0 +1,11 @@
+appId: com.sellio.marketplace
+---
+- launchApp
+- tapOn: "Inbox"
+- assertVisible: "INBOX."
+- tapOn:
+    index: 0
+- tapOn: "Write a message"
+- inputText: "Mobile E2E message"
+- tapOn: "SEND"
+- assertVisible: "Mobile E2E message"

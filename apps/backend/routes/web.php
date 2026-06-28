@@ -28,6 +28,7 @@ use App\Http\Controllers\EventTicketController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\MobileCheckoutHandoffController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
@@ -62,6 +63,10 @@ Route::post('/smart-search/recents/clear', [SmartSearchController::class, 'clear
 Route::get('/smart-search/trending',      [SmartSearchController::class, 'trendingSearches'])->name('smart-search.trending');
 
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+
+Route::get('/mobile/checkout/handoff/{user}', MobileCheckoutHandoffController::class)
+    ->middleware('signed')
+    ->name('mobile.checkout.handoff');
 
 Route::middleware(['built_in_website'])->group(function () {
     Route::get('/', HomeController::class)->name('index');
@@ -298,4 +303,3 @@ if (!app()->environment('production')) {
         return response(view($view), (int) $code);
     });
 }
-

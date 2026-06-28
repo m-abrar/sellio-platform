@@ -36,17 +36,17 @@ The existing application already provides:
 - Authenticated route guards for buyer-only tabs.
 - Real API-backed marketplace discovery for all seven verticals.
 - Real favorite status, create, remove, and card/detail toggle flows.
-- Buyer activity statistics, orders, bookings, applications, vehicle inquiries, service quotes, classified inquiries, and record-detail drilldowns.
+- Buyer activity statistics, orders, bookings, applications, inquiries, reviews, and record-detail drilldowns.
+- Real conversations, paginated message history, optimistic sending, read states, typing, and Echo/Pusher integration.
+- In-app notifications plus Expo push-token registration and backend delivery.
+- Product cart management and a signed web-assisted checkout handoff with deep-link verification.
+- Automated unit/component-state tests, Maestro smoke flows, EAS profiles, and production branding.
 
-The current implementation is still a prototype because:
+The implementation is feature-complete for the planned buyer scope. Release remains blocked until:
 
-- Home discovery uses the first API page and does not yet expose search, sorting, filters, or pagination controls.
-- The all-categories feed tolerates partial API failures, but there is still no module-enabled API contract check.
-- Favorites load real buyer records, but the favorites tab still needs a focus/mutation refresh so newly saved listings appear without manual refresh.
-- Messages remain a placeholder screen.
-- Settings actions are not connected beyond logout and stored user display.
-- Buyer-facing language and source string encoding have been normalized on the implemented screens.
-- There is no automated test suite or release-build configuration yet.
+- The Expo project is initialized with its real EAS project ID and production Pusher/API environment values.
+- Push delivery and realtime messaging are verified on signed Android and iOS builds.
+- A signed Android App Bundle and iOS archive pass physical-device and payment-return QA.
 
 ## Phase 1: Application Foundation
 
@@ -166,7 +166,7 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 - [x] Add classified inquiries.
 - [x] Add record-specific detail screens.
 - [x] Add buyer reviews.
-- [ ] Add focused automated coverage for buyer activity adapters.
+- [x] Add focused automated coverage for buyer activity adapters.
 
 ### Acceptance Criteria
 
@@ -177,14 +177,14 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 
 ### Tasks
 
-- [ ] Replace the messages placeholder with real conversation data.
-- [ ] Add conversation detail and message sending.
-- [ ] Add read states, unread counts, pagination, and optimistic sending.
-- [ ] Support starting a conversation from relevant listings.
-- [ ] Add notifications with read, read-all, and delete actions.
-- [ ] Integrate the existing Laravel Echo/Pusher-compatible realtime contracts.
-- [ ] Add typing and connection indicators only after the basic message flow is reliable.
-- [ ] Add push-notification delivery after in-app notification behavior is verified.
+- [x] Replace the messages placeholder with real conversation data.
+- [x] Add conversation detail and message sending.
+- [x] Add read states, unread counts, pagination, and optimistic sending.
+- [x] Support starting a conversation from relevant listings.
+- [x] Add notifications with read, read-all, and delete actions.
+- [x] Integrate the existing Laravel Echo/Pusher-compatible realtime contracts.
+- [x] Add typing and connection indicators only after the basic message flow is reliable.
+- [x] Add push-notification delivery after in-app notification behavior is verified.
 
 ### Acceptance Criteria
 
@@ -195,15 +195,15 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 
 ### Tasks
 
-- [ ] Add product cart and checkout entry.
+- [x] Add product cart and checkout entry.
 - [x] Add property inquiry, date selection, pricing, and booking entry.
-- [ ] Add vehicle inquiry.
-- [ ] Add event ticket selection and booking entry.
-- [ ] Add job application submission.
-- [ ] Add service consultation, quote, and appointment entry.
-- [ ] Add classified inquiry.
-- [ ] Implement secure web-assisted Stripe/PayPal checkout handoff and return verification.
-- [ ] Add deep links for listings, authentication returns, and payment returns.
+- [x] Add vehicle inquiry.
+- [x] Add event ticket selection and booking entry.
+- [x] Add job application submission.
+- [x] Add service consultation, quote, and appointment entry.
+- [x] Add classified inquiry.
+- [x] Implement secure web-assisted Stripe/PayPal checkout handoff and return verification.
+- [x] Add deep links for listings, authentication returns, and payment returns.
 
 ### Acceptance Criteria
 
@@ -214,14 +214,17 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 
 ### Tasks
 
-- [ ] Add unit tests for adapters, validation, API errors, and auth storage.
-- [ ] Add component tests for important loading, empty, error, and authenticated states.
-- [ ] Add end-to-end tests for login, discovery, favorites, messaging, and transaction handoffs.
-- [ ] Review accessibility, keyboard handling, safe areas, and small-screen layouts.
-- [ ] Add production branding, icons, splash screens, bundle identifiers, and versioning.
-- [ ] Configure EAS development, preview, and production profiles.
-- [ ] Document Android and iOS setup and build commands.
+- [x] Add unit tests for adapters, validation, API errors, and auth storage.
+- [x] Add component tests for important loading, empty, error, and authenticated states.
+- [x] Add end-to-end tests for login, discovery, favorites, messaging, and transaction handoffs.
+- [x] Review accessibility, keyboard handling, safe areas, and small-screen layouts.
+- [x] Add production branding, icons, splash screens, bundle identifiers, and versioning.
+- [x] Configure EAS development, preview, and production profiles.
+- [x] Document Android and iOS setup and build commands.
 - [ ] Produce and verify an Android App Bundle and iOS archive before advertising mobile support.
+  - [x] Verify the production Android JavaScript/Hermes export.
+  - [ ] Produce and install a signed Android App Bundle through EAS.
+  - [ ] Produce and install an iOS archive through EAS or macOS.
 
 ## First Sprint
 

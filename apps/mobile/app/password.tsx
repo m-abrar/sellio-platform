@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { apiRequest } from '../src/api/client';
 import { AuthenticatedScreen } from '../src/auth/AuthenticatedScreen';
+import { validatePasswordChange } from '../src/validation/auth';
 
 export default function PasswordView() {
   const router = useRouter();
@@ -26,20 +27,9 @@ export default function PasswordView() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const updatePassword = async () => {
-    if (!currentPassword || !password || !passwordConfirmation) {
-      setFormError('Enter your current password, new password, and password confirmation.');
-      return;
-    }
-    if (password.length < 8) {
-      setFormError('Your new password must contain at least 8 characters.');
-      return;
-    }
-    if (password !== passwordConfirmation) {
-      setFormError('The password confirmation does not match.');
-      return;
-    }
-    if (currentPassword === password) {
-      setFormError('Choose a new password that is different from your current password.');
+    const validationError = validatePasswordChange(currentPassword, password, passwordConfirmation);
+    if (validationError) {
+      setFormError(validationError);
       return;
     }
 

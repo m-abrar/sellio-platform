@@ -18,9 +18,29 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 
 class ApiCheckoutController extends Controller
 {
+    public function handoff(Request $request): JsonResponse
+    {
+        $user = $request->user('sanctum');
+        if (!$user) {
+            return $this->errorResponse(__('Please sign in to complete checkout.'), 401);
+        }
+
+        $url = URL::temporarySignedRoute(
+            'mobile.checkout.handoff',
+            now()->addMinutes(5),
+            ['user' => $user->id],
+        );
+
+        return $this->successResponse([
+            'url' => $url,
+            'expires_at' => now()->addMinutes(5)->toIso8601String(),
+        ]);
+    }
+
     public function context(
         CartService $cartService,
         GatewayManager $manager,

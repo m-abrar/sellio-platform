@@ -44,6 +44,7 @@ use App\Listeners\SendRenewalReminderEmail;
 use App\Listeners\SendReviewReceivedEmail;
 use App\Listeners\SendReviewRequestEmail;
 use App\Listeners\SendWelcomeEmail;
+use App\Listeners\SendExpoPushNotification;
 use App\Models\CartItem;
 use App\Models\PageContent;
 use App\Observers\CartItemObserver;
@@ -52,6 +53,7 @@ use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Notifications\Events\NotificationSent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
@@ -147,6 +149,7 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(PlanUpgraded::class, SendPlanUpgradedEmail::class);
         Event::listen(NewsletterOptinAttempted::class, SendOptinConfirmationEmail::class);
         Event::listen(NewsletterSubscriptionConfirmed::class, SendNewsletterWelcomeEmail::class);
+        Event::listen(NotificationSent::class, SendExpoPushNotification::class);
 
         // 3. Global View Composer (Common Branding)
         View::composer(['frontend._layouts._app', 'frontend._layouts._guest'], function ($view) use ($cartService) {

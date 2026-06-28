@@ -81,6 +81,7 @@ export default function ListingDetailsView() {
   const [inquiryMessage, setInquiryMessage] = useState('');
   const [inquiryOffer, setInquiryOffer] = useState('');
   const [selectedServicePackageId, setSelectedServicePackageId] = useState('');
+  const [serviceRequestMode, setServiceRequestMode] = useState<'quote' | 'consultation'>('quote');
   const [serviceTargetDate, setServiceTargetDate] = useState('');
   const [serviceScopeSize, setServiceScopeSize] = useState('');
   const [jobPortfolioUrl, setJobPortfolioUrl] = useState('');
@@ -95,6 +96,7 @@ export default function ListingDetailsView() {
   const [inquiryError, setInquiryError] = useState<string | null>(null);
   const [isSubmittingInquiry, setIsSubmittingInquiry] = useState(false);
   const [isPerformingPrimaryAction, setIsPerformingPrimaryAction] = useState(false);
+  const [isStartingConversation, setIsStartingConversation] = useState(false);
 
   const fetchDetails = useCallback(async () => {
     const category = LISTING_CATEGORIES.find((entry) => entry.id === vertical);
@@ -344,6 +346,10 @@ export default function ListingDetailsView() {
         Alert.alert(
           'Added to cart',
           `${item.title} is in your cart. Your cart now has ${cart.item_count} item${cart.item_count === 1 ? '' : 's'}.`,
+          [
+            { text: 'KEEP BROWSING', style: 'cancel' },
+            { text: 'OPEN CART', onPress: () => router.push('/cart') },
+          ],
         );
       } catch (requestError) {
         Alert.alert(
@@ -354,11 +360,6 @@ export default function ListingDetailsView() {
         setIsPerformingPrimaryAction(false);
       }
 
-      return;
-    }
-
-    if (item.vertical === 'services' && item.servicePackages.length === 0) {
-      Alert.alert('Quote unavailable', 'This provider has not published an active service package yet.');
       return;
     }
 
@@ -381,6 +382,28 @@ export default function ListingDetailsView() {
     }
 
     Alert.alert('Coming soon', item.primaryActionDescription);
+  };
+
+  const startConversation = async () => {
+    if (!item || isStartingConversation) return;
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    setIsStartingConversation(true);
+    try {
+      const response = await apiRequest<{ conversation_id: number }>('/dashboard/user/messages/start', {
+        method: 'POST',
+        authenticated: true,
+        body: JSON.stringify({ vertical: item.vertical, listing_id: Number(item.id) }),
+      });
+      router.push({ pathname: '/messages/[id]', params: { id: String(response.conversation_id) } });
+    } catch (requestError) {
+      Alert.alert('Could not open conversation', requestError instanceof Error ? requestError.message : 'Please try again.');
+    } finally {
+      setIsStartingConversation(false);
+    }
   };
 
   const previewPropertyBooking = async () => {
@@ -450,8 +473,13 @@ export default function ListingDetailsView() {
       return;
     }
 
-    if (isServiceQuote && (!selectedServicePackageId || !serviceTargetDate.trim() || !serviceScopeSize.trim())) {
+    if (isServiceQuote && serviceRequestMode === 'quote' && (!selectedServicePackageId || !serviceTargetDate.trim() || !serviceScopeSize.trim())) {
       setInquiryError('Choose a package and enter the target date and project size.');
+      return;
+    }
+
+    if (isServiceQuote && serviceRequestMode === 'consultation' && !serviceTargetDate.trim()) {
+      setInquiryError('Enter your preferred consultation date.');
       return;
     }
 
@@ -482,7 +510,9 @@ export default function ListingDetailsView() {
         : isJobApplication
         ? `/v1/jobs/${encodeURIComponent(item.slug)}/applications`
         : isServiceQuote
-        ? `/v1/services/${encodeURIComponent(item.id)}/quotes`
+        ? serviceRequestMode === 'consultation'
+          ? `/v1/services/${encodeURIComponent(item.id)}/consultations`
+          : `/v1/services/${encodeURIComponent(item.id)}/quotes`
         : isPropertyBooking
           ? `/v1/properties/${encodeURIComponent(item.id)}/bookings`
         : isPropertyInquiry
@@ -500,6 +530,15 @@ export default function ListingDetailsView() {
         ? {
             cover_letter: inquiryMessage.trim(),
             portfolio_url: jobPortfolioUrl.trim() || null,
+          }
+        : isServiceQuote && serviceRequestMode === 'consultation'
+        ? {
+            full_name: user?.name || fullName,
+            email: user?.email || email,
+            phone: user?.phone || inquiryPhone.trim() || null,
+            preferred_date: serviceTargetDate.trim(),
+            requirements: inquiryMessage.trim() || null,
+            topic: 'Service consultation',
           }
         : isServiceQuote
         ? {
@@ -567,13 +606,13 @@ export default function ListingDetailsView() {
         isJobApplication ? 'Application submitted' : 'Inquiry sent',
         `${isJobApplication
           ? 'The employer'
-          : isServiceQuote
+            : isServiceQuote
             ? 'The provider'
             : isVehicle
               ? 'The dealer'
               : isPropertyInquiry
                 ? 'The listing agent'
-              : 'The seller'} has received your ${isJobApplication ? 'application' : 'inquiry'}. You can track it in Buyer Activity.`,
+              : 'The seller'} has received your ${isJobApplication ? 'application' : isServiceQuote && serviceRequestMode === 'consultation' ? 'consultation request' : 'inquiry'}. You can track it in Buyer Activity.`,
       );
     } catch (requestError) {
       setInquiryError(
@@ -751,26 +790,39 @@ export default function ListingDetailsView() {
               )}
               {item.vertical === 'services' && (
                 <>
-                  <Text style={styles.inquiryFieldLabel}>CHOOSE A PACKAGE</Text>
-                  {item.servicePackages.map((servicePackage) => (
+                  <View style={styles.serviceModeRow}>
                     <TouchableOpacity
-                      key={servicePackage.id}
-                      style={[
-                        styles.packageOption,
-                        selectedServicePackageId === servicePackage.id && styles.packageOptionSelected,
-                      ]}
-                      onPress={() => setSelectedServicePackageId(servicePackage.id)}
-                      disabled={isSubmittingInquiry}
+                      style={[styles.serviceModeButton, serviceRequestMode === 'quote' && styles.serviceModeButtonSelected]}
+                      onPress={() => setServiceRequestMode('quote')}
                     >
-                      <View style={styles.packageOptionCopy}>
-                        <Text style={styles.packageOptionTitle}>{servicePackage.title}</Text>
-                        {servicePackage.description && (
-                          <Text style={styles.packageOptionDescription}>{servicePackage.description}</Text>
-                        )}
-                      </View>
-                      <Text style={styles.packageOptionPrice}>{servicePackage.price}</Text>
+                      <Text style={styles.serviceModeText}>REQUEST QUOTE</Text>
                     </TouchableOpacity>
-                  ))}
+                    <TouchableOpacity
+                      style={[styles.serviceModeButton, serviceRequestMode === 'consultation' && styles.serviceModeButtonSelected]}
+                      onPress={() => setServiceRequestMode('consultation')}
+                    >
+                      <Text style={styles.serviceModeText}>BOOK CONSULTATION</Text>
+                    </TouchableOpacity>
+                  </View>
+                  {serviceRequestMode === 'quote' && (
+                    <>
+                      <Text style={styles.inquiryFieldLabel}>CHOOSE A PACKAGE</Text>
+                      {item.servicePackages.map((servicePackage) => (
+                        <TouchableOpacity
+                          key={servicePackage.id}
+                          style={[styles.packageOption, selectedServicePackageId === servicePackage.id && styles.packageOptionSelected]}
+                          onPress={() => setSelectedServicePackageId(servicePackage.id)}
+                          disabled={isSubmittingInquiry}
+                        >
+                          <View style={styles.packageOptionCopy}>
+                            <Text style={styles.packageOptionTitle}>{servicePackage.title}</Text>
+                            {servicePackage.description && <Text style={styles.packageOptionDescription}>{servicePackage.description}</Text>}
+                          </View>
+                          <Text style={styles.packageOptionPrice}>{servicePackage.price}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </>
+                  )}
                   <TextInput
                     style={styles.inquiryInput}
                     value={serviceTargetDate}
@@ -781,15 +833,17 @@ export default function ListingDetailsView() {
                     maxLength={10}
                     editable={!isSubmittingInquiry}
                   />
-                  <TextInput
-                    style={styles.inquiryInput}
-                    value={serviceScopeSize}
-                    onChangeText={setServiceScopeSize}
-                    placeholder="Project size or quantity"
-                    placeholderTextColor="#475569"
-                    keyboardType="numeric"
-                    editable={!isSubmittingInquiry}
-                  />
+                  {serviceRequestMode === 'quote' && (
+                    <TextInput
+                      style={styles.inquiryInput}
+                      value={serviceScopeSize}
+                      onChangeText={setServiceScopeSize}
+                      placeholder="Project size or quantity"
+                      placeholderTextColor="#475569"
+                      keyboardType="numeric"
+                      editable={!isSubmittingInquiry}
+                    />
+                  )}
                 </>
               )}
               {item.vertical === 'jobs' && (
@@ -1003,6 +1057,15 @@ export default function ListingDetailsView() {
                 : isAuthenticated ? item.primaryActionLabel : `SIGN IN TO ${item.primaryActionLabel}`}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.messageSellerButton}
+            onPress={startConversation}
+            disabled={isStartingConversation}
+            accessibilityRole="button"
+          >
+            {isStartingConversation && <ActivityIndicator size="small" color="#a5b4fc" />}
+            <Text style={styles.messageSellerText}>{isStartingConversation ? 'OPENING CONVERSATION...' : 'MESSAGE SELLER'}</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -1045,6 +1108,10 @@ const styles = StyleSheet.create({
   inquiryHeadingCopy: { flex: 1 },
   inquiryHelp: { color: '#64748b', fontSize: 11, lineHeight: 16 },
   inquiryFieldLabel: { color: '#64748b', fontSize: 9, fontWeight: '900', letterSpacing: 1, marginTop: 2 },
+  serviceModeRow: { flexDirection: 'row', gap: 8 },
+  serviceModeButton: { flex: 1, minHeight: 42, alignItems: 'center', justifyContent: 'center', borderRadius: 14, borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', backgroundColor: '#17171a' },
+  serviceModeButtonSelected: { borderColor: '#818cf8', backgroundColor: 'rgba(99,102,241,0.14)' },
+  serviceModeText: { color: '#c7d2fe', fontSize: 7, fontWeight: '900', letterSpacing: 0.7 },
   inquiryClose: { color: '#a5b4fc', fontSize: 9, fontWeight: '900', letterSpacing: 1 },
   inquiryInput: { minHeight: 50, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.07)', backgroundColor: '#17171a', paddingHorizontal: 16, paddingVertical: 13, color: '#fff', fontSize: 13, fontWeight: '600' },
   inquiryMessageInput: { minHeight: 108 },
@@ -1071,4 +1138,6 @@ const styles = StyleSheet.create({
   actionBtn: { minHeight: 52, flexDirection: 'row', justifyContent: 'center', gap: 10, backgroundColor: '#6366f1', paddingVertical: 18, paddingHorizontal: 24, borderRadius: 20, alignItems: 'center' },
   actionBtnBusy: { backgroundColor: '#4f46e5' },
   actionBtnText: { color: '#fff', fontSize: 10, fontWeight: '900', letterSpacing: 1.5 },
+  messageSellerButton: { minHeight: 50, marginTop: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, borderRadius: 18, borderWidth: 1, borderColor: 'rgba(129, 140, 248, 0.35)', backgroundColor: 'rgba(99, 102, 241, 0.07)' },
+  messageSellerText: { color: '#a5b4fc', fontSize: 9, fontWeight: '900', letterSpacing: 1.1 },
 });
