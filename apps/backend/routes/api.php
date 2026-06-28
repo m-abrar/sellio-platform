@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\V1\ApiBrandController;
 use App\Http\Controllers\Api\V1\ApiCartController;
 use App\Http\Controllers\Api\V1\ApiCheckoutController;
 use App\Http\Controllers\Api\V1\ApiPaymentGatewayController;
+use App\Http\Controllers\Api\V1\ApiCatalogController;
 use App\Http\Controllers\Api\V1\ApiCategoryController;
 use App\Http\Controllers\Api\V1\ApiClassifiedController;
 use App\Http\Controllers\Api\V1\ApiClassifiedInquiryController;
@@ -65,6 +66,11 @@ Route::prefix('themes')->group(function () {
 });
 
 Route::prefix('v1')->group(function () {
+
+// =======================
+// Unified Catalog (home page — replaces 7 parallel vertical requests with 1)
+// =======================
+Route::get('catalog/home', [ApiCatalogController::class, 'home']);
 
 // =======================
 // Menu Routes

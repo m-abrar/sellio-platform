@@ -304,6 +304,71 @@ export type MultiVerticalResult = {
   failedVerticals: Vertical[];
 };
 
+/**
+ * Fetches all 7 verticals in a single HTTP request via the unified catalog
+ * endpoint. Used by the home page to avoid 7 parallel round trips to the
+ * backend (which queues on php artisan serve).
+ */
+export async function fetchHomeListings(): Promise<MultiVerticalResult> {
+  const url = `${resolveApiBaseUrl()}/v1/catalog/home`;
+
+  let body: Record<string, unknown> = {};
+
+  try {
+    const response = await fetch(url, {
+      credentials: 'include',
+      headers: { Accept: 'application/json' },
+    });
+
+    if (response.ok) {
+      body = (await response.json()) as Record<string, unknown>;
+    }
+  } catch {
+    // Silently fall through — all verticals will be treated as failed
+  }
+
+  const categories: Category[] = [];
+  const listings: ExploreListing[] = [];
+  const totals: Partial<Record<Vertical, number>> = {};
+  const failedVerticals: Vertical[] = [];
+  let total = 0;
+  let lastPage = 1;
+
+  function process<T>(
+    key: Vertical,
+    toListingFn: (item: T, cats?: Category[]) => ExploreListing,
+    productCats?: Category[],
+  ) {
+    const block = body[key] as { data?: T[]; meta?: { total?: number; last_page?: number }; sidebar?: { categories?: Category[] } } | undefined;
+    if (!block || !Array.isArray(block.data)) {
+      failedVerticals.push(key);
+      return;
+    }
+    const blockCats = block.sidebar?.categories ?? [];
+    categories.push(...blockCats);
+    listings.push(...block.data.map((item) => toListingFn(item, productCats ?? blockCats)));
+    const t = block.meta?.total ?? block.data.length;
+    totals[key] = t;
+    total += t;
+    lastPage = Math.max(lastPage, block.meta?.last_page ?? 1);
+  }
+
+  const productCats = (body.products as { sidebar?: { categories?: Category[] } } | undefined)?.sidebar?.categories ?? [];
+
+  process<Product>('products', (p) => productToListing(p as Product, productCats));
+  process<Property>('properties', (p) => propertyToListing(p as Property));
+  process<Vehicle>('autos', (v) => vehicleToListing(v as Vehicle));
+  process<EventListing>('events', (e) => eventToListing(e as EventListing));
+  process<JobListing>('jobs', (j) => jobToListing(j as JobListing));
+  process<ServiceListing>('services', (s) => serviceToListing(s as ServiceListing));
+  process<ClassifiedListing>('classifieds', (c) => classifiedToListing(c as ClassifiedListing));
+
+  const seenCategorySlugs = new Map<string, Category>();
+  categories.forEach((cat) => seenCategorySlugs.set(cat.slug, cat));
+
+  return { listings, categories: Array.from(seenCategorySlugs.values()), totals, total, lastPage, failedVerticals };
+}
+
 export async function fetchAllVerticals(params: Record<string, unknown>): Promise<MultiVerticalResult> {
   const [
     productsResult,

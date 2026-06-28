@@ -22,7 +22,7 @@ import { useThemeContent } from '@/components/theme-content/ThemeContentProvider
 import { CatalogSyncAlert } from '@/themes/unifieds/shared/CatalogSyncAlert';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 import {
-  fetchAllVerticals,
+  fetchHomeListings,
   VERTICALS,
   type ExploreListing,
   type Vertical,
@@ -138,7 +138,7 @@ export default function Page() {
 
     async function loadListings() {
       setLoadingListings(true);
-      const result = await fetchAllVerticals({ per_page: 4 });
+      const result = await fetchHomeListings();
 
       if (!isMounted) return;
 
