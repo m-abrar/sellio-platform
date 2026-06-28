@@ -31,6 +31,9 @@ export default function Page() {
     'collection.description',
     'The collection includes historic estates with verified architectural provenance and heritage significance.',
   );
+  const collectionIssueLabel = useThemeContent('collection.issue_label', 'The Collection // 01');
+  const loadMoreLabel = useThemeContent('collection.load_more_label', 'LOAD MORE ESTATES');
+  const loadingLabel = useThemeContent('collection.loading_label', 'Loading...');
   const testimonialsEyebrow = useThemeContent('testimonials.eyebrow', 'Patron Feedback');
   const testimonialsTitle = useThemeContent('testimonials.title', 'Voices of Trust.');
   const showTestimonials = useThemeConfig('show_testimonials', true);
@@ -148,7 +151,7 @@ export default function Page() {
         </div>
         
         <div className="pc-hero-card">
-          <div className="pc-caps pc-hero-eyebrow" style={{ color: 'var(--pc-teal)', opacity: 0.4 }}>{heroEyebrow}</div>
+          <div className="pc-caps pc-hero-eyebrow">{heroEyebrow}</div>
           <h1 className="pc-hero-title">
             {heroTitle.split('\n').map((line, index) => (
               <React.Fragment key={`${line}-${index}`}>
@@ -179,18 +182,7 @@ export default function Page() {
               </button>
             </div>
           </div>
-          <a
-            href={themeLink('/explore')}
-            className="pc-caps pc-hero-catalogue-link"
-            style={{
-              fontSize: '0.7rem',
-              fontWeight: 900,
-              letterSpacing: '2px',
-              color: 'var(--pc-teal)',
-              opacity: 0.55,
-              textDecoration: 'none',
-            }}
-          >
+          <a href={themeLink('/explore')} className="pc-caps pc-hero-catalogue-link">
             VIEW FULL CATALOGUE →
           </a>
         </div>
@@ -216,14 +208,14 @@ export default function Page() {
           <div className="pc-listing-column">
             <div className="pc-section-header">
                 <div>
-                    <div className="pc-caps pc-section-eyebrow" style={{ color: 'var(--pc-teal)', opacity: 0.4 }}>
-                      {useFallback ? 'Sample Properties // Preview' : 'The Collection // 01'}
+                    <div className="pc-caps pc-section-eyebrow">
+                      {useFallback ? 'Sample Properties // Preview' : collectionIssueLabel}
                     </div>
-                    <h2 className="pc-serif pc-section-title" style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}>
+                    <h2 className="pc-serif pc-section-title">
                         {collectionHeading}
                     </h2>
                 </div>
-                <p className="pc-collection-desc" style={{ textAlign: 'right', maxWidth: '350px', width: '100%', fontSize: '0.9rem', color: 'var(--pc-text-muted)', lineHeight: 1.8, margin: 0 }}>
+                <p className="pc-collection-desc">
                     {collectionDescription}
                 </p>
             </div>
@@ -236,24 +228,7 @@ export default function Page() {
             )}
 
             {loading && displayEstates.length === 0 ? (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '4rem' }} className="pc-estate-grid-skeleton">
-                <style dangerouslySetInnerHTML={{ __html: `
-                  .pc-skeleton-card {
-                    background: var(--pc-white);
-                    border: 1px solid var(--pc-border);
-                    height: 550px;
-                    opacity: 0.6;
-                    animation: pcPulse 1.5s infinite ease-in-out;
-                  }
-                  @keyframes pcPulse {
-                    0% { opacity: 0.4; }
-                    50% { opacity: 0.8; }
-                    100% { opacity: 0.4; }
-                  }
-                  @media (min-width: 992px) {
-                    .pc-estate-grid-skeleton { grid-template-columns: repeat(2, 1fr) !important; }
-                  }
-                ` }} />
+              <div className="pc-estate-grid-skeleton">
                 <div className="pc-skeleton-card" />
                 <div className="pc-skeleton-card" />
               </div>
@@ -267,9 +242,9 @@ export default function Page() {
                 ))}
               </div>
             ) : (
-              <div className="pc-empty-state" style={{ border: '1px dashed var(--pc-border)', background: 'var(--pc-white)' }}>
-                <h4 className="pc-serif" style={{ fontSize: '1.8rem', color: 'var(--pc-teal)' }}>No Properties Found</h4>
-                <p style={{ color: 'var(--pc-text-muted)', fontSize: '0.95rem' }}>No heritage estates match the current filters. Try adjusting your search criteria.</p>
+              <div className="pc-empty-state">
+                <h4 className="pc-serif">No Properties Found</h4>
+                <p>No heritage estates match the current filters. Try adjusting your search criteria.</p>
               </div>
             )}
             
@@ -281,7 +256,7 @@ export default function Page() {
                     onClick={handleLoadMore}
                     disabled={loadingMore}
                   >
-                      {loadingMore ? 'Loading...' : 'LOAD MORE ESTATES'}
+                      {loadingMore ? loadingLabel : loadMoreLabel}
                   </button>
               </div>
             )}
@@ -297,30 +272,13 @@ export default function Page() {
           title={testimonialsTitle}
           limit={3}
           variant="editorial"
-          sectionClassName="pc-section"
-          sectionStyle={{ paddingBottom: 'clamp(3rem, 6vw, 5rem)' }}
+          sectionClassName="pc-section pc-section--testimonials"
           titleWrapClassName="pc-testimonials-heading"
-          titleClassName="pc-serif"
-          titleStyle={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}
+          titleClassName="pc-serif pc-testimonials-title"
           layoutClassName="pc-testimonials-grid"
           headingId="pc-testimonials-title"
         />
       )}
-      <style dangerouslySetInnerHTML={{ __html: `
-        .pc-testimonials-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 3rem;
-          max-width: 1400px;
-          margin: 0 auto;
-        }
-        @media (min-width: 768px) {
-          .pc-testimonials-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (min-width: 1200px) {
-          .pc-testimonials-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-      ` }} />
     </div>
   );
 }

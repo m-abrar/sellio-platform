@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { EstateCard } from './components';
+import { NeighborhoodStats } from './components/NeighborhoodStats';
 import { FALLBACK_ESTATES } from './fallback-data';
 import { redirectToPropertyBookingReserve } from '@/themes/properties/shared/property-booking-utils';
 import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
@@ -350,6 +351,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </div>
             </div>
 
+            <NeighborhoodStats property={property} />
+
             {property.amenities && property.amenities.length > 0 && (
               <div className="pc-prose-block">
                 <div className="pc-caps pc-section-eyebrow">Luxury Amenities</div>
@@ -443,8 +446,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     <div className="pc-caps pc-inquiry-rental-box__title">Estimated Lodging Rental</div>
                     <div className="pc-inquiry-fields">
                       <div className="pc-filter-group">
-                        <label className="pc-filter-label pc-caps">Check In Date</label>
+                        <label className="pc-filter-label pc-caps" htmlFor="pc-check-in-date">Check In Date</label>
                         <input
+                          id="pc-check-in-date"
                           type="date"
                           required
                           value={checkIn}
@@ -452,8 +456,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
                         />
                       </div>
                       <div className="pc-filter-group">
-                        <label className="pc-filter-label pc-caps">Check Out Date</label>
+                        <label className="pc-filter-label pc-caps" htmlFor="pc-check-out-date">Check Out Date</label>
                         <input
+                          id="pc-check-out-date"
                           type="date"
                           required
                           value={checkOut}
@@ -461,8 +466,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
                         />
                       </div>
                       <div className="pc-filter-group">
-                        <label className="pc-filter-label pc-caps">Patron Guests</label>
-                        <select value={guests} onChange={(e) => setGuests(e.target.value)}>
+                        <label className="pc-filter-label pc-caps" htmlFor="pc-patron-guests">Patron Guests</label>
+                        <select id="pc-patron-guests" value={guests} onChange={(e) => setGuests(e.target.value)}>
                           {[...Array(guestsCount)].map((_, i) => (
                             <option key={i + 1} value={i + 1}>
                               {i + 1} Patron{i > 0 ? 's' : ''}
@@ -492,8 +497,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 )}
 
                 <div className="pc-filter-group">
-                  <label className="pc-filter-label pc-caps">Full Name</label>
+                  <label className="pc-filter-label pc-caps" htmlFor="pc-inquiry-name">Full Name</label>
                   <input
+                    id="pc-inquiry-name"
                     type="text"
                     required
                     placeholder="Grace Bennett"
@@ -504,8 +510,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </div>
 
                 <div className="pc-filter-group">
-                  <label className="pc-filter-label pc-caps">Email Address</label>
+                  <label className="pc-filter-label pc-caps" htmlFor="pc-inquiry-email">Email Address</label>
                   <input
+                    id="pc-inquiry-email"
                     type="email"
                     required
                     placeholder="grace@pemberley.com"
@@ -516,8 +523,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </div>
 
                 <div className="pc-filter-group">
-                  <label className="pc-filter-label pc-caps">Message</label>
+                  <label className="pc-filter-label pc-caps" htmlFor="pc-inquiry-message">Message</label>
                   <textarea
+                    id="pc-inquiry-message"
                     rows={4}
                     placeholder="Inquire on architectural provenance and deed allocation details..."
                     value={message}

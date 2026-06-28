@@ -22,16 +22,16 @@ export const Footer = () => {
         'footer.subscribe_text',
         'Subscribe to receive updates on the latest heritage property listings.',
     );
-    const copyright = useThemeContent(
-        'footer.copyright',
-        '© 2026 Sellio. All rights reserved.',
-    );
+    const copyright = useThemeContent('footer.copyright', '');
+    const year = new Date().getFullYear();
     const [email, setEmail] = useState('');
+    const [subscribed, setSubscribed] = useState(false);
     const [brandPrimary, brandSecondary] = brandLabel.split('&').map((part) => part.trim());
 
     const handleNewsletterSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        window.location.href = themeLink('/cart');
+        setSubscribed(true);
+        setEmail('');
     };
 
     const columnTitle = (title: string) => <FooterColumnLabel>{title}</FooterColumnLabel>;
@@ -87,32 +87,36 @@ export const Footer = () => {
                         />
                         <div className="pc-footer-register">
                             <p className="pc-footer-text pc-footer-text--compact">{subscribeText}</p>
-                            <form className="pc-footer-form" onSubmit={handleNewsletterSubmit} aria-label="Newsletter">
-                                <div className="pc-footer-form-field">
-                                    <label className="pc-footer-form-label" htmlFor="pc-footer-email">
-                                        Email address
-                                    </label>
-                                    <input
-                                        id="pc-footer-email"
-                                        type="email"
-                                        name="email"
-                                        value={email}
-                                        onChange={(event) => setEmail(event.target.value)}
-                                        autoComplete="email"
-                                        placeholder="Email address"
-                                        className="pc-footer-form-input"
-                                    />
-                                </div>
-                                <button type="submit" className="pc-btn-primary pc-footer-form-btn">
-                                    JOIN
-                                </button>
-                            </form>
+                            {subscribed ? (
+                                <p role="status" className="pc-footer-subscribe-success">Thank you for subscribing!</p>
+                            ) : (
+                                <form className="pc-footer-form" onSubmit={handleNewsletterSubmit} aria-label="Newsletter">
+                                    <div className="pc-footer-form-field">
+                                        <label className="pc-footer-form-label" htmlFor="pc-footer-email">
+                                            Email address
+                                        </label>
+                                        <input
+                                            id="pc-footer-email"
+                                            type="email"
+                                            name="email"
+                                            value={email}
+                                            onChange={(event) => setEmail(event.target.value)}
+                                            autoComplete="email"
+                                            placeholder="Email address"
+                                            className="pc-footer-form-input"
+                                        />
+                                    </div>
+                                    <button type="submit" className="pc-btn-primary pc-footer-form-btn">
+                                        JOIN
+                                    </button>
+                                </form>
+                            )}
                         </div>
                     </section>
                 </div>
 
                 <div className="pc-footer-bar">
-                    <p className="pc-footer-meta">{copyright}</p>
+                    <p className="pc-footer-meta">{copyright || `© ${year} Sellio. All rights reserved.`}</p>
                     <MenuNav
                         location="footer_bottom_bar"
                         flat

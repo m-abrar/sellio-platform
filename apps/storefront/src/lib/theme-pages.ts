@@ -3,6 +3,7 @@ import type { ComponentType } from 'react';
 export type ThemeSubpage =
   | 'ProductPage'
   | 'ExplorePage'
+  | 'AgentBioPage'
   | 'CartPage'
   | 'CheckoutPage'
   | 'CheckoutConfirmationPage'
@@ -24,6 +25,7 @@ const VERTICAL_SUBPAGE_FALLBACKS: Record<string, Partial<Record<ThemeSubpage, st
     BookingConfirmationPage: 'properties/rental',
     BookingConfirmPage: 'properties/rental',
     BookingReservePage: 'properties/rental',
+    AgentBioPage: 'properties/classic',
   },
   ecommerce: {
     ProductPage: 'ecommerce/default',
@@ -89,6 +91,7 @@ const GLOBAL_SUBPAGE_FALLBACKS: Record<ThemeSubpage, string> = {
   ConsultationConfirmationPage: 'services/marketplace',
   InquiryConfirmationPage: 'classifieds/local',
   ApplicationConfirmationPage: 'jobs/modern',
+  AgentBioPage: 'properties/classic',
 };
 
 async function importThemeSubpage(

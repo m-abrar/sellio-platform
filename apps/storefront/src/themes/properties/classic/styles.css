@@ -257,6 +257,8 @@ body.has-admin-bar .properties-classic-theme .pc-page-shell {
 
 .pc-hero-eyebrow {
   margin: 0;
+  color: var(--pc-teal);
+  opacity: 0.4;
 }
 
 .pc-hero-title {
@@ -278,6 +280,12 @@ body.has-admin-bar .properties-classic-theme .pc-page-shell {
 
 .pc-hero-catalogue-link {
   margin: 0;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--pc-teal);
+  opacity: 0.55;
+  text-decoration: none;
 }
 
 /* Buttons — scoped to avoid collision with properties/commercial (.pc-btn-primary) */
@@ -414,10 +422,16 @@ body.has-admin-bar .properties-classic-theme .pc-page-shell {
 
 .pc-section-eyebrow {
   margin: 0 0 var(--pc-space-sm);
+  color: var(--pc-teal);
+  opacity: 0.4;
 }
 
 .pc-section-title {
   margin: 0;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -2px;
+  color: var(--pc-teal);
 }
 
 .pc-results-meta {
@@ -439,14 +453,20 @@ body.has-admin-bar .properties-classic-theme .pc-page-shell {
   margin: var(--pc-space-xl) 0;
   padding: var(--pc-space-3xl) var(--pc-space-lg);
   text-align: center;
+  border: 1px dashed var(--pc-border);
+  background: var(--pc-white);
 }
 
 .pc-empty-state h4 {
   margin: 0 0 var(--pc-space-sm);
+  font-size: 1.8rem;
+  color: var(--pc-teal);
 }
 
 .pc-empty-state p {
   margin: 0 auto;
+  color: var(--pc-text-muted);
+  font-size: 0.95rem;
   max-width: 28rem;
 }
 
@@ -1163,6 +1183,7 @@ body.has-admin-bar .properties-classic-theme .pc-page-shell {
     align-items: center;
     gap: 1rem;
     width: 100%;
+    margin-top: 2rem;
   }
 }
 
@@ -2207,3 +2228,321 @@ body.has-admin-bar .properties-classic-theme .pc-inquiry-panel {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* â”€â”€â”€ Collection description â”€â”€â”€ */
+.pc-collection-desc {
+  text-align: right;
+  max-width: 350px;
+  width: 100%;
+  font-size: 0.9rem;
+  color: var(--pc-text-muted);
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* â”€â”€â”€ Header logo link â”€â”€â”€ */
+.pc-header-logo {
+  text-decoration: none;
+  font-family: var(--pc-font-serif);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--pc-teal);
+  letter-spacing: -1px;
+  cursor: pointer;
+  z-index: 1045;
+  position: relative;
+}
+
+.pc-header-brand-ampersand {
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+.pc-header-brand-ampersand--scrolled {
+  opacity: 0.3;
+}
+
+/* â”€â”€â”€ Header action buttons (CTA in nav) â”€â”€â”€ */
+.pc-header-action-btn {
+  padding: 0.8rem 2.5rem;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.pc-mobile-action-btn {
+  margin-top: 1.5rem;
+}
+
+/* â”€â”€â”€ Testimonials title â”€â”€â”€ */
+.pc-testimonials-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  letter-spacing: -2px;
+  color: var(--pc-teal);
+  margin: 0;
+}
+
+/* â”€â”€â”€ Testimonials section bottom padding modifier â”€â”€â”€ */
+.pc-section--testimonials {
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+/* â”€â”€â”€ Testimonials grid layout (replaces dangerouslySetInnerHTML) â”€â”€â”€ */
+.pc-testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .pc-testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1200px) {
+  .pc-testimonials-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* â”€â”€â”€ Skeleton card (replaces dangerouslySetInnerHTML) â”€â”€â”€ */
+@keyframes pcPulse {
+  0%   { opacity: 0.4; }
+  50%  { opacity: 0.8; }
+  100% { opacity: 0.4; }
+}
+
+.pc-skeleton-card {
+  background: var(--pc-white);
+  border: 1px solid var(--pc-border);
+  height: 550px;
+  opacity: 0.6;
+  animation: pcPulse 1.5s infinite ease-in-out;
+}
+
+.pc-estate-grid-skeleton {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+}
+
+@media (min-width: 992px) {
+  .pc-estate-grid-skeleton {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* â”€â”€â”€ Neighborhood Stats component â”€â”€â”€ */
+.pc-neighborhood-stats {
+  margin-top: var(--pc-space-lg);
+}
+
+.pc-neighborhood-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--pc-space-md);
+  margin-top: var(--pc-space-md);
+}
+
+@media (min-width: 600px) {
+  .pc-neighborhood-stats__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.pc-neighborhood-stats__item {
+  background: var(--pc-bone);
+  border: 1px solid var(--pc-border);
+  padding: var(--pc-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pc-neighborhood-stats__label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pc-text-muted);
+  opacity: 0.7;
+}
+
+.pc-neighborhood-stats__value {
+  font-family: var(--pc-font-serif);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--pc-teal);
+  line-height: 1.1;
+}
+
+.pc-neighborhood-stats__landmarks {
+  margin-top: var(--pc-space-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pc-space-sm);
+}
+
+.pc-neighborhood-stats__landmark {
+  font-size: 0.8rem;
+  color: var(--pc-text-muted);
+  background: var(--pc-bone);
+  border: 1px solid var(--pc-border);
+  padding: 0.35rem 0.75rem;
+}
+
+/* â”€â”€â”€ Footer newsletter success â”€â”€â”€ */
+.pc-footer-subscribe-success {
+  font-size: 0.85rem;
+  color: var(--pc-beige);
+  opacity: 0.9;
+  margin-top: var(--pc-space-sm);
+}
+
+/* â”€â”€â”€ Agent Bio Page â”€â”€â”€ */
+.pc-agent-page {
+  min-height: 100vh;
+  background: var(--pc-bone);
+}
+
+.pc-agent-hero {
+  background: var(--pc-teal);
+  padding: clamp(4rem, 8vw, 6rem) 6% clamp(3rem, 6vw, 5rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: center;
+}
+
+.pc-agent-photo-wrap {
+  flex-shrink: 0;
+  width: clamp(120px, 18vw, 180px);
+  height: clamp(120px, 18vw, 180px);
+  border: 3px solid rgba(255,255,255,0.2);
+  overflow: hidden;
+}
+
+.pc-agent-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pc-agent-hero-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.pc-agent-name {
+  font-family: var(--pc-font-serif);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: var(--pc-beige);
+  letter-spacing: -0.03em;
+  margin: 0 0 0.5rem;
+}
+
+.pc-agent-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pc-beige);
+  opacity: 0.6;
+  margin: 0 0 var(--pc-space-md);
+}
+
+.pc-agent-contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pc-space-md);
+  margin-top: var(--pc-space-lg);
+}
+
+.pc-agent-contact-btn {
+  padding: 0.75rem 1.75rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.5);
+  color: var(--pc-beige);
+  background: transparent;
+  transition: var(--pc-transition);
+}
+
+.pc-agent-contact-btn:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: var(--pc-beige);
+}
+
+.pc-agent-body {
+  padding: clamp(2.5rem, 5vw, 4rem) 6%;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+@media (min-width: 1024px) {
+  .pc-agent-body {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+.pc-agent-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pc-space-xl);
+}
+
+.pc-agent-quote {
+  font-family: var(--pc-font-serif);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-style: italic;
+  color: var(--pc-teal);
+  line-height: 1.6;
+  padding-left: var(--pc-space-lg);
+  border-left: 3px solid var(--pc-accent);
+  margin: 0;
+}
+
+.pc-agent-specialties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pc-space-sm);
+  margin-top: var(--pc-space-md);
+}
+
+.pc-agent-specialty-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--pc-teal);
+  background: var(--pc-beige);
+  border: 1px solid var(--pc-border);
+  padding: 0.4rem 0.9rem;
+}
+
+.pc-agent-listings-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--pc-space-xl);
+}
+
+@media (min-width: 600px) {
+  .pc-agent-listings-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.pc-agent-empty {
+  text-align: center;
+  padding: var(--pc-space-2xl) var(--pc-space-lg);
+  background: var(--pc-white);
+  border: 1px dashed var(--pc-border);
+  color: var(--pc-text-muted);
+}
+

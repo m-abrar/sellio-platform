@@ -8,3 +8,4 @@ export { default as BookingPage } from './BookingPage';
 export { default as BookingConfirmationPage } from './BookingConfirmationPage';
 export { default as BookingConfirmPage } from './BookingConfirmPage';
 export { default as BookingReservePage } from './BookingReservePage';
+export { default as AgentBioPage } from './AgentBioPage';

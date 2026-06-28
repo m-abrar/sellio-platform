@@ -24,21 +24,22 @@ export const Header = () => {
 
     return (
         <header className={`pc-header ${scrolled ? 'scrolled' : ''}`}>
-            <a 
+            <a
                 href={getThemeLink('/', themeKey, isPreview)}
-                style={{ textDecoration: 'none', fontFamily: 'var(--pc-font-serif)', fontSize: '1.4rem', fontWeight: 900, color: 'var(--pc-teal)', letterSpacing: '-1px', cursor: 'pointer', zIndex: 1045, position: 'relative' }}
+                className="pc-header-logo"
             >
                 {brandSecondary ? (
                     <>
-                        {brandPrimary} <span style={{ fontWeight: 400, opacity: scrolled ? 0.3 : 0.6 }}>&</span> {brandSecondary}
+                        {brandPrimary} <span className={`pc-header-brand-ampersand${scrolled ? ' pc-header-brand-ampersand--scrolled' : ''}`}>&</span> {brandSecondary}
                     </>
                 ) : brandLabel}
             </a>
             
-            <button 
-                className={`pc-hamburger ${isOpen ? 'pc-hamburger-open' : ''}`} 
+            <button
+                className={`pc-hamburger ${isOpen ? 'pc-hamburger-open' : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="Toggle Navigation"
+                aria-expanded={isOpen}
             >
                 <span className="pc-hamburger-bar"></span>
                 <span className="pc-hamburger-bar"></span>
@@ -55,7 +56,7 @@ export const Header = () => {
                     renderItem={defaultNavItemRenderer}
                 />
 
-                <div className="pc-mobile-header-right" style={{ marginTop: '2rem' }}>
+                <div className="pc-mobile-header-right">
                     <MenuUtilityNav
                         linkClassName="pc-nav-link"
                         onNavigate={() => setIsOpen(false)}
@@ -67,19 +68,7 @@ export const Header = () => {
                         renderItem={(item, { href, className, onNavigate }) => (
                             <a
                                 href={href}
-                                className={className}
-                                style={{
-                                    padding: '0.8rem 2.5rem',
-                                    fontSize: '0.85rem',
-                                    textDecoration: 'none',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginTop: '1.5rem',
-                                    backgroundColor: 'var(--pc-accent, #8b6b4d)',
-                                    color: '#ffffff',
-                                    border: '1px solid var(--pc-accent, #8b6b4d)',
-                                }}
+                                className={`${className} pc-header-action-btn pc-mobile-action-btn`}
                                 onClick={onNavigate}
                             >
                                 {item.title}
@@ -99,18 +88,7 @@ export const Header = () => {
                     renderItem={(item, { href, className, onNavigate }) => (
                         <a
                             href={href}
-                            className={className}
-                            style={{
-                                padding: '0.8rem 2.5rem',
-                                fontSize: '0.85rem',
-                                textDecoration: 'none',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: 'var(--pc-accent, #8b6b4d)',
-                                color: '#ffffff',
-                                border: '1px solid var(--pc-accent, #8b6b4d)',
-                            }}
+                            className={`${className} pc-header-action-btn`}
                             onClick={onNavigate}
                         >
                             {item.title}
