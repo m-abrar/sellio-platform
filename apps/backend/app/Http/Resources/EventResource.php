@@ -112,6 +112,8 @@ class EventResource extends JsonResource
                         (string) $item->event_ticket_type_id => [
                             'available_quantity' => (int) $item->available_quantity,
                             'override_price'     => (float) $item->override_price,
+                            'price'              => (float) ($item->sale_price ?? $item->override_price ?? $item->ticketType?->base_price ?? 0),
+                            'price_formatted'    => format_currency($item->sale_price ?? $item->override_price ?? $item->ticketType?->base_price ?? 0),
                         ],
                     ])
                     : [],

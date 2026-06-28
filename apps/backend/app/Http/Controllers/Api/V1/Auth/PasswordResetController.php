@@ -9,14 +9,22 @@ use App\Http\Requests\Auth\ResetPasswordRequest;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
+use App\Notifications\MobileResetPasswordNotification;
 
 class PasswordResetController extends Controller
 {
     public function sendResetLinkEmail(SendResetLinkEmailRequest $request)
     {
 
+        $callback = $request->validated('client') === 'mobile'
+            ? function ($user, string $token): void {
+                $user->notify(new MobileResetPasswordNotification($token));
+            }
+            : null;
+
         $status = Password::broker()->sendResetLink(
-            $request->only('email')
+            $request->only('email'),
+            $callback,
         );
 
         if ($status === Password::RESET_LINK_SENT) {

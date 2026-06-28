@@ -7,6 +7,8 @@ use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\MobileResetPasswordNotification;
 
 class ApiPasswordResetTest extends TestCase
 {
@@ -32,6 +34,30 @@ class ApiPasswordResetTest extends TestCase
         ]);
 
         $response->assertStatus(200);
+    }
+
+    public function test_mobile_reset_request_sends_app_deep_link(): void
+    {
+        Notification::fake();
+
+        $response = $this->postJson('/api/v1/auth/password/email', [
+            'email' => 'test@example.com',
+            'client' => 'mobile',
+        ]);
+
+        $response->assertOk();
+
+        Notification::assertSentTo(
+            $this->user,
+            MobileResetPasswordNotification::class,
+            function (MobileResetPasswordNotification $notification): bool {
+                $url = $notification->toMail($this->user)->actionUrl;
+
+                return str_starts_with($url, 'sellio://reset-password?')
+                    && str_contains($url, 'email=test%40example.com')
+                    && str_contains($url, 'token=');
+            },
+        );
     }
 
     public function test_can_reset_password_with_token()

@@ -15,6 +15,7 @@ class SendResetLinkEmailRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email'],
+            'client' => ['nullable', 'string', 'in:web,mobile'],
         ];
     }
 }

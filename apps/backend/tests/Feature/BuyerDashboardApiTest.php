@@ -8,6 +8,7 @@ use App\Models\Property;
 use App\Models\PropertyBooking;
 use App\Models\Review;
 use App\Models\User;
+use App\Models\Location;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -27,13 +28,14 @@ class BuyerDashboardApiTest extends TestCase
     public function test_buyer_can_update_profile_location_and_preferences(): void
     {
         $buyer = $this->createBuyer();
+        $location = Location::factory()->create();
 
         $response = $this->actingAs($buyer, 'sanctum')
             ->putJson('/api/dashboard/user/profile', [
                 'name' => 'Updated Buyer',
                 'email' => $buyer->email,
                 'phone' => '+1 555 0100',
-                'location' => 'Austin, TX',
+                'location_id' => $location->id,
                 'settings' => [
                     'email_notifications' => true,
                     'two_factor_enabled' => false,
@@ -41,12 +43,12 @@ class BuyerDashboardApiTest extends TestCase
             ]);
 
         $response->assertOk()
-            ->assertJsonPath('data.location', 'Austin, TX')
+            ->assertJsonPath('data.location_id', $location->id)
             ->assertJsonPath('data.settings.email_notifications', true);
 
         $this->assertDatabaseHas('users', [
             'id' => $buyer->id,
-            'location' => 'Austin, TX',
+            'location_id' => $location->id,
         ]);
 
         $buyer->refresh();

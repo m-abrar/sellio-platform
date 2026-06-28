@@ -81,8 +81,8 @@ class ApiEventBookingController extends Controller
                         'event_occurrence_id' => $occurrence->id,
                         'occurrence_ticket_id' => $occurrenceTicket->id,
                         'quantity' => $validated['quantity'],
-                        'user_name' => $validated['name'] ?: $user->name,
-                        'user_email' => $validated['email'] ?: $user->email,
+                        'user_name' => ($validated['name'] ?? null) ?: $user->name,
+                        'user_email' => ($validated['email'] ?? null) ?: $user->email,
                         'user_phone' => $validated['phone'] ?? null,
                     ]);
 
