@@ -3,38 +3,28 @@
 import React from 'react';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const ConciergeFooter = () => {
-    const themeLink = usePropertyThemeLink();
+  const themeLink = usePropertyThemeLink();
+  const tagline = useThemeContent('footer.tagline', 'Curated luxury real estate for the discerning estate holder.');
+  const copyright = useThemeContent('footer.copyright', '');
+  const year = new Date().getFullYear();
 
-    return (
+  return (
     <footer className="concierge-footer">
-        <div className="concierge-footer-grid">
-            <div>
-                <a className="platinum-logo" href={themeLink('/')} style={{ fontSize: '2.5rem', marginBottom: '2rem', display: 'block', textDecoration: 'none' }}>PLATINUM.</a>
-                <p style={{ color: '#888', lineHeight: 2 }}>
-                    Curated luxury real estate for the discerning estate holder.
-                </p>
-            </div>
-            <FooterMenuColumn
-                location="footer_column_1"
-                titleTag="h4"
-                linkClassName="footer-link"
-            />
-            <FooterMenuColumn
-                location="footer_column_2"
-                titleTag="h4"
-                linkClassName="footer-link"
-            />
-            <FooterMenuColumn
-                location="footer_column_3"
-                titleTag="h4"
-                linkClassName="footer-link"
-            />
+      <div className="concierge-footer-grid">
+        <div>
+          <a className="platinum-logo concierge-footer-logo" href={themeLink('/')}>PLATINUM.</a>
+          <p className="concierge-footer-desc">{tagline}</p>
         </div>
-        <div style={{ marginTop: '8rem', paddingTop: '4rem', borderTop: '1px solid var(--luxury-border)', fontSize: '0.8rem', color: '#aaa', fontWeight: 600, letterSpacing: '2px' }}>
-            <span>© 2026 Sellio. All rights reserved.</span>
-        </div>
+        <FooterMenuColumn location="footer_column_1" titleTag="h4" linkClassName="footer-link" />
+        <FooterMenuColumn location="footer_column_2" titleTag="h4" linkClassName="footer-link" />
+        <FooterMenuColumn location="footer_column_3" titleTag="h4" linkClassName="footer-link" />
+      </div>
+      <div className="concierge-footer-bottom">
+        <span>{copyright || `© ${year} Sellio. All rights reserved.`}</span>
+      </div>
     </footer>
-    );
+  );
 };
