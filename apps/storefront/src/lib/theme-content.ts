@@ -10,19 +10,14 @@ async function fetchThemeContent(themeKey: string, page: string): Promise<ThemeC
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 5000);
 
-  let response: Response;
-  try {
-    response = await fetch(url, {
-      headers: {
-        Accept: 'application/json',
-        'X-Theme-Key': themeKey,
-      },
-      next: { revalidate: 0 },
-      signal: controller.signal,
-    });
-  } finally {
-    clearTimeout(timer);
-  }
+  const response = await fetch(url, {
+    headers: {
+      Accept: 'application/json',
+      'X-Theme-Key': themeKey,
+    },
+    next: { revalidate: 0 },
+    signal: controller.signal,
+  }).finally(() => clearTimeout(timer));
 
   if (!response.ok) {
     throw new Error(`Theme content request failed with status ${response.status}`);
