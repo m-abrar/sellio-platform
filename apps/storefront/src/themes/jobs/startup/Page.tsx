@@ -25,6 +25,7 @@ export default function Page() {
   const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Browse Jobs');
   const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'View Opportunities');
   const trustLeft = useThemeContent('trust.left_text', 'Funded Startups');
+  const trustNewRoles = useThemeContent('trust.new_roles_text', 'New Roles Daily');
   const trustRight = useThemeContent('trust.right_text', 'Equity Verified');
   const trustNetwork = useThemeContent('trust.network_text', 'Top-Rated Network');
   const statsStartupsValue = useThemeContent('stats.startups_value', '450+');
@@ -73,7 +74,7 @@ export default function Page() {
     <div>
       <section className="growth-hero">
           <div className="growth-hero-glow"></div>
-          <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.9rem', color: 'var(--growth-neon)', letterSpacing: '8px', marginBottom: '2.5rem', fontWeight: 700 }}>{heroEyebrow}</div>
+          <div className="growth-hero-eyebrow">{heroEyebrow}</div>
           <h1>
             {heroTitle.split('\n').map((line, index) => (
               <React.Fragment key={`${line}-${index}`}>
@@ -82,38 +83,38 @@ export default function Page() {
               </React.Fragment>
             ))}
           </h1>
-          <p style={{ maxWidth: '800px', fontSize: '1.25rem', color: 'var(--growth-dim)', lineHeight: 1.8, marginBottom: '5rem' }}>
+          <p className="growth-hero-description">
               {heroDescription}
           </p>
-          <div style={{ display: 'flex', gap: '2rem' }}>
-              <a href={themeLink('/explore')} className="growth-btn-primary" style={{ textDecoration: 'none' }}>
+          <div className="growth-hero-actions">
+              <a href={themeLink('/explore')} className="growth-btn-primary">
                 {heroPrimaryCta}
               </a>
-              <a href={themeLink('/explore')} className="growth-btn-outline" style={{ textDecoration: 'none' }}>
+              <a href={themeLink('/explore?workplace=remote')} className="growth-btn-outline">
                 {heroSecondaryCta}
               </a>
           </div>
       </section>
 
-      <section style={{ padding: '4rem 6%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(15, 23, 42, 0.5)', borderTop: '1px solid var(--growth-border)', borderBottom: '1px solid var(--growth-border)', color: 'var(--growth-dim)', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '3px' }}>
+      <section className="growth-trust-band">
           <span>{trustLeft}</span>
-          <span>New Roles Daily</span>
+          <span>{trustNewRoles}</span>
           <span>{trustRight}</span>
           <span>{trustNetwork}</span>
       </section>
 
-      <section style={{ padding: '6rem 6%', display: 'flex', justifyContent: 'center', gap: '8rem' }}>
-          <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', fontWeight: 700, color: 'white', fontFamily: 'var(--font-heading)' }}>{statsStartupsValue}</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--growth-dim)', fontWeight: 800, letterSpacing: '2px', marginTop: '0.5rem' }}>{statsStartupsLabel}</div>
+      <section className="growth-stats-row">
+          <div className="growth-stat-item">
+              <div className="growth-stat-value">{statsStartupsValue}</div>
+              <div className="growth-stat-label">{statsStartupsLabel}</div>
           </div>
-          <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', fontWeight: 700, color: 'white', fontFamily: 'var(--font-heading)' }}>{statsEquityValue}</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--growth-dim)', fontWeight: 800, letterSpacing: '2px', marginTop: '0.5rem' }}>{statsEquityLabel}</div>
+          <div className="growth-stat-item">
+              <div className="growth-stat-value">{statsEquityValue}</div>
+              <div className="growth-stat-label">{statsEquityLabel}</div>
           </div>
-          <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', fontWeight: 700, color: 'white', fontFamily: 'var(--font-heading)' }}>{statsConnectionsValue}</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--growth-dim)', fontWeight: 800, letterSpacing: '2px', marginTop: '0.5rem' }}>{statsConnectionsLabel}</div>
+          <div className="growth-stat-item">
+              <div className="growth-stat-value">{statsConnectionsValue}</div>
+              <div className="growth-stat-label">{statsConnectionsLabel}</div>
           </div>
       </section>
 
@@ -132,9 +133,9 @@ export default function Page() {
 
       <MissionControlSection />
 
-      <section style={{ padding: '15rem 6%', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', bottom: '-20%', left: '50%', transform: 'translateX(-50%)', width: '1000px', height: '600px', background: 'radial-gradient(circle, var(--growth-purple) 0%, transparent 70%)', opacity: 0.1, filter: 'blur(100px)', zIndex: -1 }}></div>
-          <h2 style={{ fontSize: '6rem', fontWeight: 700, fontFamily: 'var(--font-heading)', marginBottom: '3.5rem', letterSpacing: '-4px', color: 'white' }}>
+      <section className="growth-cta-section">
+          <div className="growth-cta-glow" aria-hidden="true"></div>
+          <h2 className="growth-cta-heading">
             {ctaTitle.split('\n').map((line, index) => (
               <React.Fragment key={`${line}-${index}`}>
                 {index > 0 && <br />}
@@ -142,10 +143,10 @@ export default function Page() {
               </React.Fragment>
             ))}
           </h2>
-          <p style={{ maxWidth: '600px', margin: '0 auto 5rem', fontSize: '1.25rem', color: 'var(--growth-dim)' }}>
+          <p className="growth-cta-description">
               {ctaDescription}
           </p>
-          <a href={themeLink('/explore')} className="growth-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.1rem', textDecoration: 'none', display: 'inline-block' }}>
+          <a href={themeLink('/explore')} className="growth-btn-primary growth-cta-btn">
             {ctaButtonLabel}
           </a>
       </section>

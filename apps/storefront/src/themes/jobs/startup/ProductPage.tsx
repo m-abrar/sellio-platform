@@ -19,6 +19,7 @@ import {
 } from '@/themes/jobs/shared/job-application-confirmation';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { api } from '@/lib/storefront-api';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 interface ProductPageProps {
   slug: string;
@@ -34,6 +35,13 @@ interface JobApplicationForm {
 export default function ProductPage({ slug }: ProductPageProps) {
   const themeLink = useJobsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
+  const labelMissionHeading = useThemeContent('detail.mission_heading', 'Mission Overview');
+  const labelSpecsHeading = useThemeContent('detail.specs_heading', 'Role Specifications');
+  const labelTagsHeading = useThemeContent('detail.tags_heading', 'Tech Stack');
+  const labelCompensationLabel = useThemeContent('detail.compensation_label', 'Financial Package');
+  const labelApplyHeading = useThemeContent('detail.apply_heading', 'Initialize Growth Node');
+  const labelApplyDescription = useThemeContent('detail.apply_description', 'Submit your candidate node details to initialize live contract negotiations.');
+  const labelRelatedHeading = useThemeContent('detail.related_heading', 'Related Nodes.');
   const [job, setJob] = useState<JobListing | null>(null);
   const [relatedJobs, setRelatedJobs] = useState<JobListing[]>([]);
   const [loading, setLoading] = useState(true);
@@ -177,17 +185,17 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   if (loading) {
     return (
-      <div className="growth-details-header" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-        <div className="growth-skeleton" style={{ width: '120px', height: '24px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)' }}></div>
-        <div className="growth-skeleton" style={{ width: '40%', height: '50px', marginTop: '2rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)' }}></div>
-        <div className="growth-skeleton" style={{ width: '20%', height: '30px', marginTop: '1.5rem', borderRadius: '4px', background: 'rgba(255,255,255,0.05)' }}></div>
+      <div className="growth-loading-state">
+        <div className="growth-shimmer" style={{ width: '120px', height: '24px', borderRadius: '4px' }}></div>
+        <div className="growth-shimmer" style={{ width: '40%', height: '50px', marginTop: '2rem', borderRadius: '8px' }}></div>
+        <div className="growth-shimmer" style={{ width: '20%', height: '30px', marginTop: '1.5rem', borderRadius: '4px' }}></div>
       </div>
     );
   }
 
   if (notFound || !job) {
     return (
-      <div className="p-20 text-center" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div className="growth-notfound-state">
         <h2 style={{ fontFamily: 'var(--font-heading)', color: 'white' }}>Job Not Found</h2>
         <p style={{ color: 'var(--growth-dim)' }}>This job listing could not be found or may have been removed.</p>
         <Link href={themeLink('/explore')} className="growth-btn-outline" style={{ display: 'inline-block', margin: '2rem auto', textDecoration: 'none' }}>
@@ -213,28 +221,25 @@ export default function ProductPage({ slug }: ProductPageProps) {
         )}
 
         <div style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '2rem' }}>
-            <Link
-              href={themeLink('/explore')}
-              style={{ color: 'var(--growth-neon)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '2px' }}
-            >
+          <div className="growth-detail-breadcrumb">
+            <Link href={themeLink('/explore')} className="growth-detail-breadcrumb-link">
               &larr; Back to Jobs
             </Link>
-            <span style={{ color: 'var(--growth-dim)' }}>/</span>
-            <span style={{ fontSize: '0.8rem', color: 'var(--growth-dim)', letterSpacing: '2px', fontWeight: 600 }}>
+            <span className="growth-detail-breadcrumb-sep">/</span>
+            <span className="growth-detail-breadcrumb-cat">
               {job.taxonomy?.category?.replace(/_/g, ' ').toUpperCase() || 'ENGINEERING'}
             </span>
           </div>
 
-          <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', flexWrap: 'wrap' }}>
-            <div className="venture-logo" style={{ width: '80px', height: '80px', borderRadius: '16px', background: 'var(--growth-purple)', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '2.5rem', fontWeight: 900, color: 'white' }}>
+          <div className="growth-detail-title-row">
+            <div className="venture-logo-box">
               {job.company?.name ? job.company.name[0] : 'V'}
             </div>
             <div>
-              <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '3.5rem', fontWeight: 700, color: 'white', margin: 0, letterSpacing: '-2px' }}>
+              <h1 className="growth-detail-heading">
                 {job.title}
               </h1>
-              <div style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--growth-neon)', marginTop: '0.5rem' }}>
+              <div className="growth-detail-company">
                 {job.company?.name || 'Venture Startup'}
               </div>
             </div>
@@ -245,18 +250,14 @@ export default function ProductPage({ slug }: ProductPageProps) {
       <section className="growth-details-grid">
         <div className="growth-detail-main">
           <div className="growth-panel" style={{ padding: '3rem' }}>
-            <h2 style={{ fontFamily: 'var(--font-heading)', color: 'white', fontSize: '1.8rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--growth-border)', paddingBottom: '1rem' }}>
-              Mission Overview
-            </h2>
-            <p style={{ color: 'var(--growth-dim)', fontSize: '1.1rem', lineHeight: 1.8, margin: 0 }}>
+            <h2 className="growth-panel-section-heading">{labelMissionHeading}</h2>
+            <p className="growth-detail-description">
               {job.description}
             </p>
           </div>
 
           <div>
-            <h2 style={{ fontFamily: 'var(--font-heading)', color: 'white', fontSize: '1.8rem', marginBottom: '1.5rem' }}>
-              Role Specifications
-            </h2>
+            <h2 className="growth-section-heading">{labelSpecsHeading}</h2>
             <div className="growth-spec-grid">
               <div className="growth-spec-card growth-panel">
                 <div className="growth-spec-title">Workplace Model</div>
@@ -279,23 +280,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
           {job.taxonomy?.tags && job.taxonomy.tags.length > 0 && (
             <div>
-              <h2 style={{ fontFamily: 'var(--font-heading)', color: 'white', fontSize: '1.2rem', marginBottom: '1rem', letterSpacing: '1px' }}>
-                Tech Stack
-              </h2>
-              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <h2 className="growth-section-heading-sm">{labelTagsHeading}</h2>
+              <div className="growth-detail-tags">
                 {job.taxonomy.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    style={{
-                      fontSize: '0.8rem',
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid var(--growth-border)',
-                      padding: '0.5rem 1.25rem',
-                      borderRadius: '8px',
-                      color: 'var(--growth-neon)',
-                      fontWeight: 600,
-                    }}
-                  >
+                  <span key={tag} className="growth-tag-chip">
                     #{tag.replace(/_/g, ' ').toUpperCase()}
                   </span>
                 ))}
@@ -306,43 +294,33 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
         <div className="growth-detail-sidebar">
           <div className="growth-panel" style={{ padding: '2.5rem' }}>
-            <div style={{ fontSize: '0.65rem', color: 'var(--growth-dim)', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '1rem' }}>
-              Financial Package
-            </div>
+            <div className="growth-sidebar-section-label">{labelCompensationLabel}</div>
             <div style={{ marginBottom: '2rem' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'white', fontFamily: 'var(--font-heading)' }}>
-                {formatJobCompensation(job)}
-              </div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--growth-dim)', fontWeight: 600, marginTop: '0.25rem' }}>
+              <div className="growth-salary-value">{formatJobCompensation(job)}</div>
+              <div className="growth-salary-period">
                 Base Salary ({job.compensation?.frequency || 'Yearly'})
               </div>
             </div>
-            <div style={{ borderTop: '1px solid var(--growth-border)', paddingTop: '1.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--growth-dim)' }}>Equity Range</span>
-                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--growth-neon)' }}>{equityShareRange}</span>
+            <div className="growth-equity-row">
+              <div className="growth-equity-header">
+                <span className="growth-equity-label">Equity Range</span>
+                <span className="growth-equity-value">{equityShareRange}</span>
               </div>
-              <div style={{ width: '100%', height: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '100px', overflow: 'hidden' }}>
-                <div style={{ width: percentFill, height: '100%', background: 'linear-gradient(to right, var(--growth-purple), var(--growth-neon))', borderRadius: '100px' }}></div>
+              <div className="growth-equity-bar-wrap">
+                <div className="growth-equity-bar-fill" style={{ width: percentFill }}></div>
               </div>
             </div>
           </div>
 
           <div className="growth-panel growth-apply-desk">
-            <h3 style={{ fontFamily: 'var(--font-heading)', color: 'white', fontSize: '1.5rem', marginBottom: '0.5rem', letterSpacing: '-1px' }}>
-              Initialize Growth Node
-            </h3>
-            <p style={{ color: 'var(--growth-dim)', fontSize: '0.8rem', lineHeight: 1.5, marginBottom: '2rem' }}>
-              Submit your candidate node details to initialize live contract negotiations.
-            </p>
+            <h3 className="growth-apply-heading">{labelApplyHeading}</h3>
+            <p className="growth-apply-description">{labelApplyDescription}</p>
 
             {isSubmitted ? (
-              <div style={{ textAlign: 'center', padding: '2rem 0' }}>
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎉</div>
-                <h4 style={{ fontFamily: 'var(--font-heading)', color: 'var(--growth-neon)', fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>
-                  Application Submitted!
-                </h4>
-                <p style={{ color: 'var(--growth-dim)', fontSize: '0.8rem', marginTop: '0.5rem', lineHeight: 1.5 }}>
+              <div className="growth-apply-success-center">
+                <div className="growth-apply-success-emoji" aria-hidden="true">🎉</div>
+                <h4 className="growth-apply-success-heading">Application Submitted!</h4>
+                <p className="growth-apply-success-note">
                   {useFallback
                     ? 'Application saved in demo mode.'
                     : `Application #${applicationId ?? '—'} submitted. The hiring team will follow up by email.`}
@@ -353,50 +331,48 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </div>
             ) : !useFallback && !user ? (
               <form onSubmit={handleAuthSubmit}>
-                <p style={{ color: 'var(--growth-dim)', fontSize: '0.8rem', marginBottom: '1.5rem' }}>
-                  Sign in to apply for this role.
-                </p>
+                <p className="growth-auth-sign-in-note">Sign in to apply for this role.</p>
                 <div className="growth-form-group">
-                  <label>Full Name</label>
-                  <input type="text" className="growth-input" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                  <label htmlFor="auth-name">Full Name</label>
+                  <input id="auth-name" type="text" className="growth-input" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
                 </div>
                 <div className="growth-form-group">
-                  <label>Email</label>
-                  <input type="email" className="growth-input" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                  <label htmlFor="auth-email">Email</label>
+                  <input id="auth-email" type="email" className="growth-input" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
+                <div className="growth-auth-toggle-row">
                   <button type="button" className="growth-btn-outline" onClick={() => setAuthMode('login')} disabled={authMode === 'login'}>Login</button>
                   <button type="button" className="growth-btn-outline" onClick={() => setAuthMode('register')} disabled={authMode === 'register'}>Register</button>
                 </div>
                 <div className="growth-form-group">
-                  <label>Password</label>
-                  <input type="password" className="growth-input" required value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} />
+                  <label htmlFor="auth-password">Password</label>
+                  <input id="auth-password" type="password" className="growth-input" required value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} />
                 </div>
                 {formError && <p className="gr-form-error" role="alert">{formError}</p>}
-                <button type="submit" className="growth-btn-primary" disabled={authBusy} style={{ width: '100%', padding: '1.25rem', fontSize: '0.9rem', marginTop: '1rem' }}>
+                <button type="submit" className="growth-btn-primary growth-form-btn-full" disabled={authBusy}>
                   {authBusy ? 'Please wait...' : authMode === 'login' ? 'Sign In to Apply' : 'Create Account'}
                 </button>
               </form>
             ) : (
               <form onSubmit={handleApplySubmit}>
                 <div className="growth-form-group">
-                  <label>Full Name</label>
-                  <input type="text" className="growth-input" required placeholder="Candidate Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                  <label htmlFor="apply-name">Full Name</label>
+                  <input id="apply-name" type="text" className="growth-input" required placeholder="Candidate Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
                 </div>
                 <div className="growth-form-group">
-                  <label>Candidate Email</label>
-                  <input type="email" className="growth-input" required placeholder="name@node.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                  <label htmlFor="apply-email">Candidate Email</label>
+                  <input id="apply-email" type="email" className="growth-input" required placeholder="name@node.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
                 </div>
                 <div className="growth-form-group">
-                  <label>GitHub or Portfolio URL</label>
-                  <input type="url" className="growth-input" placeholder="https://github.com/nodal" value={form.portfolio} onChange={(e) => setForm({ ...form, portfolio: e.target.value })} />
+                  <label htmlFor="apply-portfolio">GitHub or Portfolio URL</label>
+                  <input id="apply-portfolio" type="url" className="growth-input" placeholder="https://github.com/nodal" value={form.portfolio} onChange={(e) => setForm({ ...form, portfolio: e.target.value })} />
                 </div>
                 <div className="growth-form-group">
-                  <label>Cover Note (Mission Specs)</label>
-                  <textarea className="growth-textarea" placeholder="Describe your technical capabilities..." value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} />
+                  <label htmlFor="apply-note">Cover Note (Mission Specs)</label>
+                  <textarea id="apply-note" className="growth-textarea" placeholder="Describe your technical capabilities..." value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} />
                 </div>
                 {formError && <p className="gr-form-error" role="alert">{formError}</p>}
-                <button type="submit" className="growth-btn-primary" disabled={isSubmitting} style={{ width: '100%', padding: '1.25rem', fontSize: '0.9rem', marginTop: '1rem' }}>
+                <button type="submit" className="growth-btn-primary growth-form-btn-full" disabled={isSubmitting}>
                   {isSubmitting ? 'Submitting...' : 'Submit Application'}
                 </button>
               </form>
@@ -406,11 +382,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
       </section>
 
       {relatedJobs.length > 0 && (
-        <section style={{ padding: '6rem 6%', borderTop: '1px solid var(--growth-border)' }}>
-          <h2 style={{ fontFamily: 'var(--font-heading)', color: 'white', fontSize: '2.5rem', fontWeight: 700, marginBottom: '3rem', letterSpacing: '-1px' }}>
-            Related Nodes.
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}>
+        <section className="growth-related-section">
+          <h2 className="growth-related-heading">{labelRelatedHeading}</h2>
+          <div className="growth-related-grid">
             {relatedJobs.map((relatedJob) => (
               <OpportunityCard key={relatedJob.id} job={relatedJob} />
             ))}

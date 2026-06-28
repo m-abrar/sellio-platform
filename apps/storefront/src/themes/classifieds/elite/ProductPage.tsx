@@ -184,14 +184,14 @@ export default function ProductPage({ slug }: { slug: string }) {
         <div className="elite-product-container">
           <div className="elite-product-main-grid">
             <div className="elite-product-gallery">
-              <div className="elite-product-main-img-wrap" style={{ animation: 'pulse 1.5s infinite' }}>
+              <div className="elite-product-main-img-wrap elite-shimmer">
                 <div style={{ width: '100%', height: '100%', backgroundColor: '#18181b' }} />
               </div>
             </div>
             <div className="elite-product-details-block">
-              <div style={{ height: '32px', width: '70%', backgroundColor: '#18181b', borderRadius: '4px', animation: 'pulse 1.5s infinite' }} />
-              <div style={{ height: '40px', width: '30%', backgroundColor: '#18181b', borderRadius: '4px', animation: 'pulse 1.5s infinite', marginTop: '1rem' }} />
-              <div style={{ height: '150px', width: '100%', backgroundColor: '#18181b', borderRadius: '12px', animation: 'pulse 1.5s infinite', marginTop: '1.5rem' }} />
+              <div className="elite-shimmer" style={{ height: '32px', width: '70%', backgroundColor: '#18181b', borderRadius: '4px' }} />
+              <div className="elite-shimmer" style={{ height: '40px', width: '30%', backgroundColor: '#18181b', borderRadius: '4px', marginTop: '1rem' }} />
+              <div className="elite-shimmer" style={{ height: '150px', width: '100%', backgroundColor: '#18181b', borderRadius: '12px', marginTop: '1.5rem' }} />
             </div>
           </div>
         </div>
@@ -276,14 +276,15 @@ export default function ProductPage({ slug }: { slug: string }) {
           <div className="elite-product-details-block">
             <div className="elite-product-description-card">
               <div className="elite-product-meta-header">
-                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--prem-accent)', letterSpacing: '4px', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>
-                  🛡️ Curated Exclusive Vault Listing
+                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--prem-accent)', letterSpacing: '4px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.3rem', marginBottom: '0.5rem' }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                  Curated Exclusive Vault Listing
                 </span>
                 <h1 className="elite-product-title">{item.title}</h1>
                 <div className="elite-product-price">{getAssetPrice(item)}</div>
                 <div className="elite-product-meta-row">
                   <span className="elite-product-badge">{getAssetCategoryLabel(item)}</span>
-                  <span className="elite-product-badge">📍 {getAssetLocation(item).split(',')[0]}</span>
+                  <span className="elite-product-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>{getAssetLocation(item).split(',')[0]}</span>
                   <span className="elite-product-badge" style={{ fontFamily: 'monospace' }}>{getAssetVaultId(item)}</span>
                 </div>
               </div>
@@ -297,15 +298,17 @@ export default function ProductPage({ slug }: { slug: string }) {
             </div>
 
             <div className="elite-product-seller-card">
-              <div className="elite-product-seller-avatar">GA</div>
+              <div className="elite-product-seller-avatar">
+                {((item.seller?.name || 'GA').split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase())}
+              </div>
               <div className="elite-product-seller-info">
-                <h5 className="elite-product-seller-name">Global Advisory Vaults</h5>
-                <span className="elite-product-seller-badge">🔒 Vetted Advisory Custodian &bull; {getAssetLocation(item)}</span>
+                <h5 className="elite-product-seller-name">{item.seller?.name || 'Global Advisory Vaults'}</h5>
+                <span className="elite-product-seller-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> Vetted Advisory Custodian &bull; {getAssetLocation(item)}</span>
               </div>
             </div>
 
             <div className="elite-product-booking-drawer">
-              <h4 className="elite-product-card-title" style={{ margin: 0 }}>💼 Request Prospectus Memorandum</h4>
+              <h4 className="elite-product-card-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.4rem' }}><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 6h-2.18c.07-.44.18-.88.18-1 0-2.21-1.79-4-4-4s-4 1.79-4 4c0 .12.11.56.18 1H8c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-3c1.1 0 2 .9 2 2 0 .12-.11.56-.18 1h-3.64C12.11 5.56 12 5.12 12 5c0-1.1.9-2 2-2zm6 16H8V8h12v11z"/></svg> Request Prospectus Memorandum</h4>
               <div style={{ fontSize: '0.8rem', color: 'var(--prem-muted)', lineHeight: '1.5', fontWeight: 600 }}>
                 Provide your professional details to establish encrypted communication with the key vault custodian at <span style={{ fontFamily: 'monospace', color: 'var(--prem-accent)' }}>{getAssetVaultId(item)}</span>.
               </div>
@@ -361,8 +364,8 @@ export default function ProductPage({ slug }: { slug: string }) {
                 </form>
             </div>
 
-            <div className="sl-chat-section">
-              <p className="sl-chat-section-label">Have questions?</p>
+            <div className="elite-chat-section">
+              <p className="elite-chat-section-label">Have questions?</p>
               <LiveChatWidget vertical="classifieds" listingId={item.id} listingTitle={item.title} />
             </div>
           </div>
@@ -370,7 +373,7 @@ export default function ProductPage({ slug }: { slug: string }) {
 
         {related.length > 0 && (
           <div className="elite-related-section" id="ce-catalog">
-            <h3 className="elite-related-title">🏺 Other High-Value Vaults</h3>
+            <h3 className="elite-related-title">Other Curated Acquisitions</h3>
             <div className="elite-related-grid">
               {related.map((relItem) => (
                 <a
@@ -384,12 +387,12 @@ export default function ProductPage({ slug }: { slug: string }) {
                   </div>
                   <div className="elite-related-info">
                     <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--prem-accent)', letterSpacing: '2px', textTransform: 'uppercase' }}>
-                      🛡️ {getAssetCategoryLabel(relItem)}
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{marginRight:'0.2rem'}}><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>{getAssetCategoryLabel(relItem)}
                     </span>
                     <h4 className="elite-related-card-title">{relItem.title}</h4>
                     <div className="elite-related-price-row">
                       <span className="elite-related-price">{getAssetPrice(relItem)}</span>
-                      <span style={{ fontSize: '0.7rem', color: 'var(--prem-muted)', fontWeight: 800 }}>📍 {getAssetLocation(relItem).split(',')[0]}</span>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--prem-muted)', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>{getAssetLocation(relItem).split(',')[0]}</span>
                     </div>
                   </div>
                 </a>
@@ -399,12 +402,6 @@ export default function ProductPage({ slug }: { slug: string }) {
         )}
       </div>
 
-      <style jsx global>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: .4; }
-        }
-      `}</style>
     </div>
   );
 }

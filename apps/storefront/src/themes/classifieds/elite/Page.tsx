@@ -6,7 +6,6 @@ import {
   getClassifiedCategoryKey,
   getClassifiedCategoryTitle,
 } from '@/lib/classified-category';
-import { getAdminBaseUrl } from '@/lib/admin-urls';
 import { PremiumCard } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
@@ -14,9 +13,6 @@ import { fetchClassifiedsHome, resolveClassifiedsFailure } from '@/themes/classi
 import { ELITE_DEMO_CATEGORIES } from '@/themes/classifieds/shared/fallback-data';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
 import { useDemoFallbackAllowed } from '@/themes/classifieds/shared/useDemoFallbackAllowed';
-
-// Premium high-fidelity Classifieds Elite fallback listings matching ClassifiedListing schema
-const adminCreateClassifiedUrl = `${getAdminBaseUrl()}/admin/classifieds/create`;
 
 export default function Page() {
   const themeLink = useClassifiedsThemeLink();
@@ -159,13 +155,6 @@ export default function Page() {
     }
   };
 
-  const handleShareClick = async (title: string, channel: string) => {
-    try {
-      await navigator.clipboard.writeText(`${title} (${channel})`);
-    } catch {
-      // Clipboard API may be unavailable in some contexts; ignore quietly.
-    }
-  };
 
   // Helper translators to fit Premium theme structures
   const getAssetPrice = (item: ClassifiedListing): string => {
@@ -255,7 +244,7 @@ export default function Page() {
 
         {loading ? (
           // Gold Shimmer Spotlight Carousel Skeleton
-          <div className="spotlight-carousel" style={{ animation: 'pulse 1.5s infinite' }}>
+          <div className="spotlight-carousel elite-shimmer">
             <div className="spotlight-media-wrap" style={{ backgroundColor: '#18181b' }}></div>
             <div className="spotlight-content">
               <div style={{ height: '15px', width: '30%', backgroundColor: '#18181b', borderRadius: '4px', marginBottom: '1rem' }}></div>
@@ -270,21 +259,27 @@ export default function Page() {
               <img src={activeSpotlight.media?.main_photo || activeSpotlight.media?.thumbnail || "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=400"} className="spotlight-img" alt={activeSpotlight.title} />
               
               <div className="spotlight-meta-overlay">
-                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--prem-accent)', letterSpacing: '2px', textTransform: 'uppercase' }}>
-                  📍 {getAssetLocation(activeSpotlight)}
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--prem-accent)', letterSpacing: '2px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                  {getAssetLocation(activeSpotlight)}
                 </span>
               </div>
 
               {/* Carousel Navigation buttons */}
               <div className="spotlight-controls">
-                <button className="spotlight-arrow" onClick={handlePrevSpotlight} title="Previous Spotlight">&lt;</button>
-                <button className="spotlight-arrow" onClick={handleNextSpotlight} title="Next Spotlight">&gt;</button>
+                <button className="spotlight-arrow" onClick={handlePrevSpotlight} title="Previous Spotlight">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+                <button className="spotlight-arrow" onClick={handleNextSpotlight} title="Next Spotlight">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                </button>
               </div>
             </div>
 
             <div className="spotlight-content">
-              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--prem-accent)', letterSpacing: '4px', textTransform: 'uppercase' }}>
-                🛡️ {getAssetCategoryLabel(activeSpotlight)}
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--prem-accent)', letterSpacing: '4px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                {getAssetCategoryLabel(activeSpotlight)}
               </span>
               
               <h3 className="spotlight-name">{activeSpotlight.title}</h3>
@@ -325,9 +320,9 @@ export default function Page() {
         {/* Dynamic Grid Cards */}
         {loading ? (
           // Gold Shimmer Grid Skeletons
-          <div className="elite-grid">
+          <div className="elite-grid elite-grid--loading">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="elite-card" style={{ animation: 'pulse 1.5s infinite' }}>
+              <div key={i} className="elite-card elite-shimmer">
                 <div className="elite-card-img-wrapper" style={{ backgroundColor: '#18181b' }}></div>
                 <div className="elite-card-content">
                   <div style={{ height: '12px', width: '30%', backgroundColor: '#18181b', borderRadius: '4px', marginBottom: '0.85rem' }}></div>
@@ -356,7 +351,7 @@ export default function Page() {
                   isFavorite={favorites.includes(asset.id)}
                   onQuickView={() => setQuickViewAsset(asset)}
                   onToggleFavorite={() => toggleFavoriteAsset(asset.id)}
-                  onShare={() => handleShareClick(asset.title, 'clipboard')}
+                  onShare={() => { navigator.clipboard.writeText(`${typeof window !== 'undefined' ? window.location.origin : ''}${themeLink('/product/' + asset.slug)}`).catch(() => {}); }}
                 />
               </a>
             ))}
@@ -396,16 +391,23 @@ export default function Page() {
               </div>
             </div>
 
-            {/* Luxury Sharing Icons */}
+            {/* Copy listing link */}
             <div className="elite-modal-socials">
-              <button className="elite-social-icon" onClick={() => handleShareClick(quickViewAsset.title, 'Encrypted Mail')} title="Send Encrypted Prospectus">✉️</button>
-              <button className="elite-social-icon" onClick={() => handleShareClick(quickViewAsset.title, 'Wholesale Brokerage')} title="Broker Invitation">💼</button>
-              <button className="elite-social-icon" onClick={() => handleShareClick(quickViewAsset.title, 'Share')} title="Share listing">🖥️</button>
+              <button
+                className="elite-social-icon"
+                title="Copy listing link"
+                onClick={() => {
+                  const url = `${typeof window !== 'undefined' ? window.location.origin : ''}${themeLink('/product/' + quickViewAsset.slug)}`;
+                  navigator.clipboard.writeText(url).catch(() => {});
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              </button>
             </div>
 
-            <button 
+            <button
               className="elite-modal-cta"
-              onClick={() => window.open(adminCreateClassifiedUrl, '_blank', 'noopener,noreferrer')}
+              onClick={() => { window.location.href = themeLink('/product/' + quickViewAsset.slug); }}
             >
               {inquiryButton}
             </button>
@@ -413,13 +415,6 @@ export default function Page() {
         </div>
       )}
 
-      {/* Styled JSX for elegant shimmer and scroll pulse animations */}
-      <style jsx global>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: .4; }
-        }
-      `}</style>
 
     </>
   );

@@ -1,41 +1,5 @@
 'use client';
 import React from 'react';
-import { MenuNav } from '@/components/menu/MenuNav';
-import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
-import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
-import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
-import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
-
-interface HeaderProps {
-  onPostClick: () => void;
-}
-
-export const PremiumHeader = ({ onPostClick }: HeaderProps) => {
-  const themeLink = useClassifiedsThemeLink();
-  return (
-  <header className="elite-header">
-    <a href={themeLink('/')} className="elite-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
-      SELLIO<span>_ELITE</span>
-    </a>
-    
-    <div className="elite-nav-panel">
-      <MenuNav
-        location="main_header"
-        flat
-        className="elite-nav"
-        linkClassName="elite-nav-link"
-        activeClassName="active"
-        renderItem={defaultNavItemRenderer}
-      />
-      <MenuActionButtons
-        buttonClassName="elite-btn-login"
-        as="button"
-        onAction={onPostClick}
-      />
-    </div>
-  </header>
-  );
-};
 
 interface PremiumCardProps {
   title: string;
@@ -49,32 +13,39 @@ interface PremiumCardProps {
   onClick?: () => void;
 }
 
-export const PremiumCard = ({ 
-  title, 
-  price, 
-  category, 
-  image, 
-  isFavorite, 
-  onQuickView, 
-  onToggleFavorite, 
+export const PremiumCard = ({
+  title,
+  price,
+  category,
+  image,
+  isFavorite,
+  onQuickView,
+  onToggleFavorite,
   onShare,
-  onClick
+  onClick,
 }: PremiumCardProps) => {
   return (
     <div className="elite-card" onClick={onClick} style={{ cursor: 'pointer' }}>
       <div className="elite-card-img-wrapper">
         <img src={image} className="elite-card-img" alt={title} />
-        
-        {/* Luxury Action Overlay Hover Buttons */}
+
         <div className="elite-card-overlay" onClick={(e) => e.stopPropagation()}>
-          <button className="elite-action-btn" title="Quick View" onClick={onQuickView}>👁️</button>
+          <button className="elite-action-btn" title="Quick View" onClick={onQuickView}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            </svg>
+          </button>
           <button className="elite-action-btn" title="Toggle Favorite" onClick={onToggleFavorite} style={{ color: isFavorite ? '#ef4444' : 'var(--prem-accent)' }}>
             {isFavorite ? '❤️' : '♡'}
           </button>
-          <button className="elite-action-btn" title="Share Asset" onClick={onShare}>🔗</button>
+          <button className="elite-action-btn" title="Share Asset" onClick={onShare}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+            </svg>
+          </button>
         </div>
       </div>
-      
+
       <div className="elite-card-content">
         <span className="elite-card-tag">{category}</span>
         <h3 className="elite-card-title">{title}</h3>
@@ -84,53 +55,5 @@ export const PremiumCard = ({
   );
 };
 
-export const PremiumFooter = () => {
-  const themeLink = useClassifiedsThemeLink();
-  return (
-  <footer className="diamond-footer">
-    <div className="footer-row">
-      <div className="footer-col">
-        <a href={themeLink('/')} className="elite-logo" style={{ marginBottom: '1.5rem', textDecoration: 'none', color: 'inherit' }}>SELLIO<span>_ELITE</span></a>
-        <p style={{ fontSize: '0.85rem', color: 'var(--prem-muted)', lineHeight: 1.8 }}>
-          A boutique marketplace for high-value curated assets, verified by expert appraisers and trusted by collectors worldwide.
-        </p>
-      </div>
-      
-      <FooterMenuColumn
-        location="footer_column_1"
-        className="footer-col"
-        titleTag="h4"
-        titleClassName="footer-col-title"
-        listClassName="footer-nav-list"
-        linkClassName="footer-nav-link"
-      />
-      <FooterMenuColumn
-        location="footer_column_2"
-        className="footer-col"
-        titleTag="h4"
-        titleClassName="footer-col-title"
-        listClassName="footer-nav-list"
-        linkClassName="footer-nav-link"
-      />
-      <FooterMenuColumn
-        location="footer_column_3"
-        className="footer-col"
-        titleTag="h4"
-        titleClassName="footer-col-title"
-        listClassName="footer-nav-list"
-        linkClassName="footer-nav-link"
-      />
-    </div>
-    
-    <div className="footer-bottom">
-      <span>© 2026 Sellio. All rights reserved.</span>
-      <span>🔒 Secure &amp; Verified Marketplace</span>
-    </div>
-  </footer>
-  );
-};
-
-// Obsolete compatibility placeholders
-export const CuratedListingCard = () => null;
 export { DiamondFooter } from './DiamondFooter';
 export { EliteHeader } from './EliteHeader';

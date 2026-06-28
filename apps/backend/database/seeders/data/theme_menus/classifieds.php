@@ -45,8 +45,8 @@ return [
         tm_menu('main_header', 'Main Header Menu', tm_links([
             'Collections',
             'Appraisals',
-            'Concierge Hub',
-            'Auctions',
+            ['About', '/about'],
+            ['Contact', '/contact'],
         ])),
         tm_menu('action_buttons', 'Header Actions', tm_links([
             'Member Login',
@@ -63,11 +63,12 @@ return [
             'Vault Storage',
             'Estate Trusts',
         ])),
-        tm_menu('footer_column_3', 'Connect', tm_links([
+        tm_menu('footer_column_3', 'Company', tm_links([
+            ['About', '/about'],
+            ['Contact', '/contact'],
+            ['FAQ', '/faq'],
             'Concierge Line',
             'Investor Reports',
-            'LinkedIn',
-            'Instagram',
         ])),
     ],
 

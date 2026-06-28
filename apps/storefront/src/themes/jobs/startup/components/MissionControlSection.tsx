@@ -14,14 +14,15 @@ export const MissionControlSection = () => {
     const metricOneLabel = useThemeContent('mission.metric_1_label', 'VC Funding Tracked');
     const metricTwoValue = useThemeContent('mission.metric_2_value', '12.4%');
     const metricTwoLabel = useThemeContent('mission.metric_2_label', 'Avg. Equity Offered');
-    const image = useThemeMedia('mission.image', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072');
+    const imageAlt = useThemeContent('mission.image_alt', 'Mission visual');
+    const image = useThemeMedia('mission.image', '/themes/jobs/startup/mission-visual.svg');
 
     return (
-        <section style={{ padding: '10rem 6%', background: '#0a0f1d', borderTop: '1px solid var(--growth-border)' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '8rem', alignItems: 'center' }}>
+        <section className="growth-mission-section">
+            <div className="growth-mission-grid">
                 <div>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--growth-neon)', letterSpacing: '5px' }}>{eyebrow}</span>
-                    <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '4.5rem', fontWeight: 700, color: 'white', marginTop: '1.5rem', marginBottom: '3rem', letterSpacing: '-2px' }}>
+                    <span className="growth-mission-eyebrow">{eyebrow}</span>
+                    <h2 className="growth-mission-heading">
                         {title.split('\n').map((line, index) => (
                             <React.Fragment key={`${line}-${index}`}>
                                 {index > 0 && <br />}
@@ -29,24 +30,31 @@ export const MissionControlSection = () => {
                             </React.Fragment>
                         ))}
                     </h2>
-                    <p style={{ fontSize: '1.2rem', color: 'var(--growth-dim)', lineHeight: 2, marginBottom: '4rem' }}>
+                    <p className="growth-mission-description">
                         {description}
                     </p>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
-                        <div className="growth-panel" style={{ padding: '2rem' }}>
-                            <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--growth-neon)', fontFamily: 'var(--font-heading)' }}>{metricOneValue}</div>
-                            <div style={{ fontSize: '0.6rem', color: 'var(--growth-dim)', fontWeight: 800, letterSpacing: '2px' }}>{metricOneLabel}</div>
+                    <div className="growth-mission-metrics">
+                        <div className="growth-panel growth-mission-metric-card">
+                            <div className="growth-mission-metric-value">{metricOneValue}</div>
+                            <div className="growth-mission-metric-label">{metricOneLabel}</div>
                         </div>
-                        <div className="growth-panel" style={{ padding: '2rem' }}>
-                            <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--growth-neon)', fontFamily: 'var(--font-heading)' }}>{metricTwoValue}</div>
-                            <div style={{ fontSize: '0.6rem', color: 'var(--growth-dim)', fontWeight: 800, letterSpacing: '2px' }}>{metricTwoLabel}</div>
+                        <div className="growth-panel growth-mission-metric-card">
+                            <div className="growth-mission-metric-value">{metricTwoValue}</div>
+                            <div className="growth-mission-metric-label">{metricTwoLabel}</div>
                         </div>
                     </div>
                 </div>
-                <div style={{ position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: '-1rem', left: '-1rem', width: '50px', height: '50px', borderTop: '2px solid var(--growth-neon)', borderLeft: '2px solid var(--growth-neon)' }}></div>
-                    <div style={{ height: '500px', background: 'rgba(30, 41, 59, 0.4)', borderRadius: '24px', border: '1px solid var(--growth-border)', overflow: 'hidden' }}>
-                        <img src={image} alt="Space Tech" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3 }} />
+                <div className="growth-mission-visual">
+                    <div className="growth-mission-corner" aria-hidden="true"></div>
+                    <div className="growth-mission-img-wrap">
+                        {image && (
+                            <img
+                                src={image}
+                                alt={imageAlt}
+                                aria-hidden="true"
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3 }}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

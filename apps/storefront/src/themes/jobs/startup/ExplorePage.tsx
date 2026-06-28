@@ -12,12 +12,16 @@ import {
 } from '@/themes/jobs/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const themeLink = useJobsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
+  const exploreEyebrow = useThemeContent('explore.eyebrow', 'Discover Opportunities');
+  const exploreHeading = useThemeContent('explore.heading', 'Venture Catalog.');
+  const exploreDescription = useThemeContent('explore.description', 'Search and filter thousands of roles at venture-backed startups and high-growth companies.');
 
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -142,16 +146,10 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
 
   return (
     <div className="growth-explore-container">
-      <div style={{ marginBottom: '4rem' }}>
-        <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.8rem', color: 'var(--growth-neon)', letterSpacing: '4px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '1rem' }}>
-          Discover Opportunities
-        </div>
-        <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '3.5rem', fontWeight: 700, color: 'white', margin: 0, letterSpacing: '-2px' }}>
-          Venture Catalog.
-        </h1>
-        <p style={{ color: 'var(--growth-dim)', fontSize: '1.1rem', marginTop: '1rem', maxWidth: '600px', lineHeight: 1.6 }}>
-          Search and filter thousands of roles at venture-backed startups and high-growth companies.
-        </p>
+      <div className="growth-explore-header">
+        <div className="growth-explore-eyebrow">{exploreEyebrow}</div>
+        <h1 className="growth-explore-heading">{exploreHeading}</h1>
+        <p className="growth-explore-description">{exploreDescription}</p>
       </div>
 
       {apiError && useFallback && (
@@ -271,7 +269,7 @@ function ExplorePageContent({ initialCategorySlug }: { initialCategorySlug?: str
               </div>
 
               {currentPage < totalPages && (
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+                <div className="growth-load-more-row">
                   <button
                     type="button"
                     className="growth-btn-primary"

@@ -3,9 +3,11 @@
 import React from 'react';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { useClassifiedsThemeLink } from '@/themes/classifieds/shared/useClassifiedsThemeLink';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const DiamondFooter = () => {
     const themeLink = useClassifiedsThemeLink();
+    const siteName = useThemeContent('site_name', 'Sellio Elite');
     return (
     <footer className="diamond-footer">
         <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4rem' }}>
@@ -41,8 +43,8 @@ export const DiamondFooter = () => {
             />
         </div>
         <div style={{ maxWidth: '1400px', margin: '8rem auto 0 auto', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#333' }}>
-            <span>© 2026 Sellio. All rights reserved.</span>
-            <span>🔒 Secure & Verified Marketplace</span>
+            <span>© {new Date().getFullYear()} {siteName}. All rights reserved.</span>
+            <span>Secure &amp; Verified Marketplace</span>
         </div>
     </footer>
     );
