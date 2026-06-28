@@ -14,11 +14,26 @@ $modernFooterLinks = tm_links([
     'Stable Sync',
 ]);
 
-$marketplaceFooterLinks = tm_links([
-    'Browse Listings',
-    'Seller Directory',
+$marketplaceExploreLinks = tm_links([
+    ['Browse all listings', '/explore'],
+    ['Products', '/explore?category=products'],
+    ['Properties', '/explore?category=properties'],
+    ['Autos', '/explore?category=autos'],
+    ['Services', '/explore?category=services'],
+    ['Jobs', '/explore?category=jobs'],
+]);
+
+$marketplaceCompanyLinks = tm_links([
+    ['About', '/about'],
+    ['Contact', '/contact'],
+    ['FAQ', '/faq'],
+]);
+
+$marketplaceTrustLinks = tm_links([
     'Buyer Protection',
-    'Marketplace Help',
+    'Seller Guide',
+    'Terms of Service',
+    'Privacy Policy',
 ]);
 
 $interactiveFooterLinks = tm_links([
@@ -116,14 +131,16 @@ return [
     'unifieds_marketplace' => [
         tm_menu('main_header', 'Main Header Menu', tm_links([
             ['Explore', '/explore'],
-            ['Categories', '/explore#categories'],
-            ['Featured', '/explore'],
-            ['Cart', '/cart'],
+            ['About', '/about'],
+            ['FAQ', '/faq'],
+            ['Contact', '/contact'],
         ])),
         tm_menu('action_buttons', 'Header Actions', tm_links([
             ['Explore listings', '/explore'],
         ])),
-        ...tm_footer_node_cols('MARKETPLACE', 'SELLERS', 'TRUST', $marketplaceFooterLinks),
+        tm_menu('footer_column_1', 'Marketplace', $marketplaceExploreLinks),
+        tm_menu('footer_column_2', 'Company', $marketplaceCompanyLinks),
+        tm_menu('footer_column_3', 'Trust', $marketplaceTrustLinks),
         tm_social_os(),
     ],
 
