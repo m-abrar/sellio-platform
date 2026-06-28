@@ -165,7 +165,7 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 - [x] Add service quotes.
 - [x] Add classified inquiries.
 - [x] Add record-specific detail screens.
-- [ ] Add buyer reviews.
+- [x] Add buyer reviews.
 - [ ] Add focused automated coverage for buyer activity adapters.
 
 ### Acceptance Criteria

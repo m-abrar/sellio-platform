@@ -15,3 +15,4 @@ Updated: 2026-06-28
 - [x] Normalize remaining buyer terminology and encoding-sensitive source strings.
 - [x] Block seller-only accounts from buyer-only mobile workflows.
 - [x] Refresh the Favorites tab after save/remove mutations on other screens.
+- [x] Add buyer review listing, editing, deletion, and pagination.

@@ -200,6 +200,45 @@ class BuyerDashboardApiTest extends TestCase
         ]);
     }
 
+    public function test_buyer_can_list_update_and_delete_own_reviews(): void
+    {
+        $buyer = $this->createBuyer();
+        $property = Property::factory()->create(['title' => 'Reviewed Mobile Property']);
+        $review = Review::factory()->create([
+            'user_id' => $buyer->id,
+            'reviewable_id' => $property->id,
+            'reviewable_type' => Property::class,
+            'rating' => 4,
+            'comment' => 'A strong original mobile review.',
+        ]);
+
+        $this->actingAs($buyer, 'sanctum')
+            ->getJson('/api/dashboard/user/reviews')
+            ->assertOk()
+            ->assertJsonPath('data.0.id', $review->id)
+            ->assertJsonPath('data.0.reviewable.title', 'Reviewed Mobile Property')
+            ->assertJsonPath('meta.stats.reviews_given', 1);
+
+        $this->actingAs($buyer, 'sanctum')
+            ->putJson("/api/dashboard/user/reviews/{$review->id}", [
+                'rating' => 5,
+                'comment' => 'An updated review from the mobile workspace.',
+            ])
+            ->assertOk();
+
+        $this->assertDatabaseHas('reviews', [
+            'id' => $review->id,
+            'rating' => 5,
+            'comment' => 'An updated review from the mobile workspace.',
+        ]);
+
+        $this->actingAs($buyer, 'sanctum')
+            ->deleteJson("/api/dashboard/user/reviews/{$review->id}")
+            ->assertOk();
+
+        $this->assertSoftDeleted('reviews', ['id' => $review->id]);
+    }
+
     public function test_buyer_can_upload_profile_avatar(): void
     {
         Storage::fake('public');

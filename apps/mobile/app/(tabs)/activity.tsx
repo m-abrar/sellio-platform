@@ -263,14 +263,14 @@ export default function ActivityView() {
   );
 
   const stats = dashboard?.stats;
-  const statisticCards = stats ? [
+  const statisticCards: Array<{ label: string; value: number | string; path?: '/reviews' }> = stats ? [
     { label: 'Favorites', value: stats.favoritesCount },
     { label: 'Bookings', value: stats.bookingsCount },
     { label: 'Messages', value: stats.messagesCount },
     { label: 'Applications', value: stats.appsCount },
     { label: 'Appointments', value: stats.appointmentsCount },
     { label: 'Inquiries', value: stats.inquiriesCount },
-    { label: 'Reviews', value: stats.reviewsCount },
+    { label: 'Reviews', value: stats.reviewsCount, path: '/reviews' },
     { label: 'Total Activity', value: stats.totalItemsCount },
   ] : [];
   const hasActivity = upcomingActivities.length > 0 || recentActivities.length > 0;
@@ -326,10 +326,17 @@ export default function ActivityView() {
 
               <View style={styles.grid}>
                 {statisticCards.map((card) => (
-                  <View key={card.label} style={styles.statCard}>
+                  <TouchableOpacity
+                    key={card.label}
+                    style={styles.statCard}
+                    onPress={card.path ? () => router.push(card.path!) : undefined}
+                    disabled={!card.path}
+                    accessibilityRole={card.path ? 'button' : undefined}
+                    accessibilityLabel={card.path ? `Open ${card.label}` : undefined}
+                  >
                     <Text style={styles.statValue}>{card.value}</Text>
                     <Text style={styles.statLabel}>{card.label}</Text>
-                  </View>
+                  </TouchableOpacity>
                 ))}
               </View>
 
