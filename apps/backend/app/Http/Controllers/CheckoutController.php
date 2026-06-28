@@ -271,6 +271,13 @@ class CheckoutController extends Controller
             abort(403);
         }
 
+        if ($returnUrl = session()->pull('mobile_checkout_return_url')) {
+            return redirect()->away($returnUrl . '?' . http_build_query([
+                'status' => 'successful',
+                'order' => $order->order_number,
+            ]));
+        }
+
         return view('frontend.products.success', [
             'order'     => $order,
             'reference' => session('reference', $order->payments()->latest()->value('transaction_id') ?? 'N/A'),
@@ -285,6 +292,13 @@ class CheckoutController extends Controller
     {
         if (Auth::id() !== $order->user_id) {
             abort(403);
+        }
+
+        if ($returnUrl = session()->pull('mobile_checkout_return_url')) {
+            return redirect()->away($returnUrl . '?' . http_build_query([
+                'status' => 'pending',
+                'order' => $order->order_number,
+            ]));
         }
 
         $payment = $order->payments()->where('payment_method', 'manual')->latest()->first();

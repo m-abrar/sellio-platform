@@ -2803,6 +2803,502 @@
   animation: um-shimmer 1.6s ease-in-out infinite;
 }
 
+/* ─── Static pages ─────────────────────────────────────────────────────────── */
+
+.um-static-page {
+  padding: 0 5% 0;
+}
+
+/* ─── Utility ─────────────────────────────────────────────────────────────── */
+
+.um-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.um-detail-cart-notice {
+  color: var(--um-muted);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.um-detail-cart-notice a {
+  color: var(--um-blue);
+  font-weight: 700;
+}
+
+/* ─── About page ───────────────────────────────────────────────────────────── */
+
+.um-about-hero {
+  max-width: 720px;
+  padding: 4rem 0 2rem;
+}
+
+.um-about-hero h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0.75rem 0 1rem;
+}
+
+.um-about-hero p {
+  color: var(--um-muted);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  margin: 0 0 2rem;
+}
+
+.um-about-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.um-about-stats {
+  background: var(--um-soft);
+  border-radius: var(--um-radius);
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 3rem 0;
+  overflow: hidden;
+}
+
+.um-about-stat {
+  background: var(--um-card);
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+}
+
+.um-about-stat strong {
+  color: var(--um-orange);
+  display: block;
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.um-about-stat span {
+  color: var(--um-muted);
+  font-size: 0.875rem;
+}
+
+.um-about-timeline {
+  border-left: 3px solid var(--um-blue);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 3rem 0;
+  padding-left: 2rem;
+}
+
+.um-about-step {
+  position: relative;
+}
+
+.um-about-step::before {
+  background: var(--um-blue);
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--um-blue);
+  content: '';
+  height: 14px;
+  left: -2.85rem;
+  position: absolute;
+  top: 0.35rem;
+  width: 14px;
+}
+
+.um-about-step h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+
+.um-about-step p {
+  color: var(--um-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.um-about-verticals {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 3rem 0;
+}
+
+.um-about-vertical-card {
+  background: var(--um-card);
+  border: 1px solid var(--um-border);
+  border-radius: var(--um-radius);
+  padding: 1.5rem;
+  text-decoration: none;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.um-about-vertical-card:hover {
+  border-color: var(--um-blue);
+  box-shadow: var(--um-shadow-soft);
+  transform: translateY(-2px);
+}
+
+.um-about-vertical-icon {
+  border-radius: 8px;
+  display: inline-flex;
+  height: 44px;
+  margin-bottom: 1rem;
+  padding: 11px;
+  width: 44px;
+}
+
+.um-about-vertical-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+}
+
+.um-about-vertical-card p {
+  color: var(--um-muted);
+  font-size: 0.82rem;
+  margin: 0 0 0.75rem;
+}
+
+.um-about-vertical-link {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.um-about-trust-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 3rem 0;
+}
+
+.um-about-trust-card {
+  background: var(--um-card);
+  border: 1px solid var(--um-border);
+  border-radius: var(--um-radius);
+  padding: 1.75rem;
+}
+
+.um-about-trust-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.um-about-trust-card p {
+  color: var(--um-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── Contact page ─────────────────────────────────────────────────────────── */
+
+.um-contact-grid {
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: 1fr 1fr;
+  margin: 2rem 0 4rem;
+}
+
+.um-contact-form {
+  background: var(--um-card);
+  border: 1px solid var(--um-border);
+  border-radius: var(--um-radius);
+  padding: 2rem;
+}
+
+.um-contact-form h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem;
+}
+
+.um-contact-form label {
+  color: var(--um-ink);
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  margin-top: 1.1rem;
+}
+
+.um-contact-form label:first-of-type {
+  margin-top: 0;
+}
+
+.um-contact-form input,
+.um-contact-form select,
+.um-contact-form textarea {
+  background: var(--um-soft);
+  border: 1px solid var(--um-border);
+  border-radius: 6px;
+  color: var(--um-ink);
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.65rem 0.85rem;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.um-contact-form input:focus,
+.um-contact-form select:focus,
+.um-contact-form textarea:focus {
+  border-color: var(--um-blue);
+  outline: none;
+}
+
+.um-contact-receipt {
+  align-items: center;
+  background: var(--um-ink);
+  border-radius: var(--um-radius);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 200px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.um-contact-receipt-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.um-contact-receipt h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.um-contact-receipt p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.um-contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.um-contact-info-card {
+  background: var(--um-card);
+  border: 1px solid var(--um-border);
+  border-radius: var(--um-radius);
+  padding: 1.25rem 1.5rem;
+}
+
+.um-contact-info-card h3 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+  text-transform: uppercase;
+}
+
+.um-contact-info-card p,
+.um-contact-info-card a {
+  color: var(--um-muted);
+  font-size: 0.9rem;
+  margin: 0;
+  text-decoration: none;
+}
+
+.um-contact-info-card a:hover {
+  color: var(--um-blue);
+}
+
+.um-contact-verticals {
+  background: var(--um-soft);
+  border-radius: var(--um-radius);
+  padding: 1.25rem 1.5rem;
+}
+
+.um-contact-verticals h3 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+}
+
+.um-contact-vertical-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.um-contact-vertical-links a {
+  background: var(--um-card);
+  border: 1px solid var(--um-border);
+  border-radius: 999px;
+  color: var(--um-ink);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.85rem;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.um-contact-vertical-links a:hover {
+  border-color: var(--um-blue);
+  color: var(--um-blue);
+}
+
+/* ─── FAQ page ─────────────────────────────────────────────────────────────── */
+
+.um-faq-hero {
+  max-width: 620px;
+  padding: 4rem 0 2rem;
+}
+
+.um-faq-hero h1 {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0.75rem 0 1.25rem;
+}
+
+.um-faq-search {
+  background: var(--um-soft);
+  border: 1px solid var(--um-border);
+  border-radius: 999px;
+  color: var(--um-ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.7rem 1.25rem;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.um-faq-search:focus {
+  border-color: var(--um-blue);
+  outline: none;
+}
+
+.um-faq-section-title {
+  border-bottom: 2px solid var(--um-border);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 3rem 0 1rem;
+  padding-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.um-faq-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.um-faq-item {
+  border-bottom: 1px solid var(--um-border);
+}
+
+.um-faq-item:first-child {
+  border-top: 1px solid var(--um-border);
+}
+
+.um-faq-summary {
+  align-items: center;
+  color: var(--um-ink);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.95rem;
+  font-weight: 600;
+  gap: 1rem;
+  justify-content: space-between;
+  list-style: none;
+  padding: 1.1rem 0;
+  user-select: none;
+}
+
+.um-faq-summary::-webkit-details-marker {
+  display: none;
+}
+
+.um-faq-chevron {
+  color: var(--um-muted);
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+details[open] .um-faq-chevron {
+  transform: rotate(180deg);
+}
+
+.um-faq-answer {
+  color: var(--um-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  padding: 0 0 1.25rem;
+}
+
+.um-faq-cta {
+  background: var(--um-soft);
+  border-radius: var(--um-radius);
+  margin: 4rem 0;
+  padding: 3rem;
+  text-align: center;
+}
+
+.um-faq-cta h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+.um-faq-cta p {
+  color: var(--um-muted);
+  margin: 0 0 1.5rem;
+}
+
+/* ─── Responsive — static pages ──────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .um-about-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .um-about-verticals {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .um-about-trust-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .um-contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .um-about-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .um-about-verticals {
+    grid-template-columns: 1fr;
+  }
+
+  .um-about-timeline {
+    padding-left: 1.25rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

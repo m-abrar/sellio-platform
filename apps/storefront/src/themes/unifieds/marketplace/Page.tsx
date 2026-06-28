@@ -512,7 +512,7 @@ export default function Page() {
               <img src={category.image} alt={category.sample} />
               <div>
                 <span>{category.title}</span>
-                <strong>{category.count}</strong>
+                {category.count !== '—' && category.count !== '-' && <strong>{category.count}</strong>}
                 <h3>{category.sample}</h3>
                 <p>{category.detail}</p>
               </div>
@@ -609,7 +609,7 @@ export default function Page() {
               <div className="um-testimonial-card" key={t.id}>
                 <div className="um-testimonial-stars" aria-label={`${t.rating ?? 5} out of 5 stars`}>
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <span key={i} className={i < (t.rating ?? 5) ? 'um-star-on' : 'um-star-off'}>*</span>
+                    <span key={i} className={i < (t.rating ?? 5) ? 'um-star-on' : 'um-star-off'} aria-hidden="true">★</span>
                   ))}
                 </div>
                 <p className="um-testimonial-quote">"{t.quote}"</p>

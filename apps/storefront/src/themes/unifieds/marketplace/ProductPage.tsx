@@ -148,7 +148,7 @@ function productToDetail(product: Product): MarketplaceDetail {
     price: formatProductPrice(product),
     image: getProductImage(product, PRODUCT_DETAIL_PLACEHOLDER),
     category: categoryTitle,
-    description: product.description || 'Verified marketplace product synchronized from Sellio.',
+    description: product.description || 'Verified marketplace product.',
     ownerLabel: brandTitle || 'Marketplace seller',
     actionLabel: 'Add to cart',
     actionHref: '/cart',
@@ -176,10 +176,10 @@ function propertyToDetail(property: Property): MarketplaceDetail {
     price: property.pricing?.price_formatted || formatCurrency(property.pricing?.active_price ?? property.base_price),
     image: property.primary_image_url || property.featured_image || property.thumbnail_image || PRODUCT_DETAIL_PLACEHOLDER,
     category: plainText(property.category?.title || specs?.category, 'Properties'),
-    description: property.short_description || property.description || 'Published property listing synchronized from Sellio.',
+    description: property.short_description || property.description || 'Verified property listing.',
     ownerLabel: property.owner?.name || property.user?.name || 'Property host',
-    actionLabel: property.is_rental ? 'Browse rentals' : 'Browse properties',
-    actionHref: '/explore?vertical=properties',
+    actionLabel: 'View full listing',
+    actionHref: property.slug ? `/properties/${property.slug}` : '/explore?vertical=properties',
     meta: [
       { label: 'Location', value: location },
       { label: 'Beds', value: String(specs?.bedrooms ?? property.number_of_bedrooms ?? 'Ask') },
@@ -208,10 +208,10 @@ function vehicleToDetail(vehicle: Vehicle): MarketplaceDetail {
     price: vehicle.pricing?.formatted || vehicle.pricing?.formatted_short || formatCurrency(vehicle.pricing?.base_price),
     image: vehicle.media?.main_photo || vehicle.media?.preview || vehicle.featured_image || PRODUCT_DETAIL_PLACEHOLDER,
     category: plainText(vehicle.taxonomy?.category, 'Autos'),
-    description: vehicle.short_description || vehicle.description || 'Published vehicle listing synchronized from Sellio.',
+    description: vehicle.short_description || vehicle.description || 'Verified vehicle listing.',
     ownerLabel: vehicle.owner?.name || 'Auto seller',
-    actionLabel: 'Browse autos',
-    actionHref: '/explore?vertical=autos',
+    actionLabel: 'View full listing',
+    actionHref: vehicle.slug ? `/autos/${vehicle.slug}` : '/explore?vertical=autos',
     meta: [
       { label: 'Make', value: vehicle.specs?.make || 'Ask seller' },
       { label: 'Model', value: vehicle.specs?.model || 'Ask seller' },
@@ -240,10 +240,10 @@ function serviceToDetail(service: ServiceListing): MarketplaceDetail {
     price: service.pricing?.formatted || service.pricing?.formatted_short || formatCurrency(service.pricing?.base_price, 'Request quote'),
     image: service.media?.main_photo || service.provider?.avatar || PRODUCT_DETAIL_PLACEHOLDER,
     category: plainText(service.professional?.category, 'Services'),
-    description: service.short_description || service.description || 'Published service listing synchronized from Sellio.',
+    description: service.short_description || service.description || 'Verified service listing.',
     ownerLabel: service.provider?.name || 'Service provider',
-    actionLabel: 'Browse services',
-    actionHref: '/explore?vertical=services',
+    actionLabel: 'Book this service',
+    actionHref: service.slug ? `/services/${service.slug}` : '/explore?vertical=services',
     meta: [
       { label: 'Provider', value: service.provider?.name || 'Verified provider' },
       { label: 'Availability', value: service.operations?.is_open ? 'Open now' : 'Schedule required' },
@@ -270,10 +270,10 @@ function jobToDetail(job: JobListing): MarketplaceDetail {
     price: job.compensation?.range_compact || job.compensation?.range_full || 'Apply now',
     image: job.company?.logo_card || job.company?.logo || PRODUCT_DETAIL_PLACEHOLDER,
     category: plainText(job.taxonomy?.category, 'Jobs'),
-    description: job.description || 'Published job listing synchronized from Sellio.',
+    description: job.description || 'Verified job listing.',
     ownerLabel: job.company?.name || job.employer?.name || 'Hiring team',
-    actionLabel: 'Browse jobs',
-    actionHref: '/explore?vertical=jobs',
+    actionLabel: 'Apply for role',
+    actionHref: job.slug ? `/jobs/${job.slug}` : '/explore?vertical=jobs',
     meta: [
       { label: 'Company', value: job.company?.name || 'Company' },
       { label: 'Location', value: job.location?.display || 'Location flexible' },
@@ -304,10 +304,10 @@ function eventToDetail(event: EventListing): MarketplaceDetail {
     price: event.ticketing?.price_formatted || event.ticketing?.price_formatted_k || formatCurrency(event.ticketing?.base_price, 'Free'),
     image: event.media?.poster || event.media?.preview || PRODUCT_DETAIL_PLACEHOLDER,
     category: plainText(event.specs?.category || event.specs?.event_genre, 'Events'),
-    description: event.description || 'Published event listing synchronized from Sellio.',
+    description: event.description || 'Verified event listing.',
     ownerLabel: event.organizer?.name || 'Event organizer',
-    actionLabel: 'Browse events',
-    actionHref: '/explore?vertical=events',
+    actionLabel: 'Get tickets',
+    actionHref: event.slug ? `/events/${event.slug}` : '/explore?vertical=events',
     meta: [
       { label: 'Date', value: formatDate(event.schedule?.start_at, 'Date pending') },
       { label: 'Location', value: location },
@@ -336,10 +336,10 @@ function classifiedToDetail(classified: ClassifiedListing): MarketplaceDetail {
     price: classified.pricing?.formatted || classified.pricing?.formatted_short || formatCurrency(classified.pricing?.base_price),
     image: classified.media?.main_photo || classified.media?.thumbnail || PRODUCT_DETAIL_PLACEHOLDER,
     category: plainText(classified.taxonomy?.category, 'Classifieds'),
-    description: classified.short_description || classified.description || 'Published classified listing synchronized from Sellio.',
+    description: classified.short_description || classified.description || 'Verified classified listing.',
     ownerLabel: classified.seller?.name || 'Local seller',
-    actionLabel: 'Browse classifieds',
-    actionHref: '/explore?vertical=classifieds',
+    actionLabel: 'Contact seller',
+    actionHref: classified.slug ? `/classifieds/${classified.slug}` : '/explore?vertical=classifieds',
     meta: [
       { label: 'Condition', value: classified.item_specs?.condition_label || 'Ask seller' },
       { label: 'Quantity', value: String(classified.item_specs?.quantity ?? 1) },
@@ -544,7 +544,7 @@ export default function ProductPage({ slug, vertical = 'products' }: ProductPage
           <aside className="um-detail-owner-panel">
             <span>Managed by</span>
             <strong>{detail.ownerLabel}</strong>
-            <p>This record is synchronized from the active Sellio {detail.label.toLowerCase()} catalog.</p>
+            <p>Verified and published on MarketHub.</p>
           </aside>
 
           <div className="um-detail-actions">
@@ -561,7 +561,7 @@ export default function ProductPage({ slug, vertical = 'products' }: ProductPage
               Explore all
             </a>
             {cartNotice ? (
-              <p className="uni-detail-cart-notice">
+              <p className="um-detail-cart-notice">
                 {cartNotice}{' '}
                 <a href={themeLink('/cart')}>View cart</a>
               </p>

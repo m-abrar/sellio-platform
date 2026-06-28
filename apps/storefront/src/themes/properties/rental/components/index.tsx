@@ -177,13 +177,13 @@ export const TenantFooter = () => {
   const year = new Date().getFullYear();
 
   return (
-  <footer className=”pr-footer”>
-    <div className=”pr-footer-grid”>
+  <footer className="pr-footer">
+    <div className="pr-footer-grid">
       <div>
-        <a href={themeLink('/')} className=”pr-logo pr-logo--footer”>
+        <a href={themeLink('/')} className="pr-logo pr-logo--footer">
           {brandName}
         </a>
-        <p className=”pr-footer__tagline”>{footerTagline}</p>
+        <p className="pr-footer__tagline">{footerTagline}</p>
       </div>
       <FooterMenuColumn
         location="footer_column_1"

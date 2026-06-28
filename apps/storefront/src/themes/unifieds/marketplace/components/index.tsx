@@ -36,8 +36,8 @@ const marketCategories: MarketCategory[] = [
     title: 'Properties',
     detail: 'Homes, rentals & commercial spaces',
     query: 'properties',
-    color: '#0d6efd',
-    bg: 'rgba(13,110,253,0.1)',
+    color: '#059669',
+    bg: 'rgba(5,150,105,0.1)',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
@@ -399,7 +399,7 @@ export const MarketplaceFooter = () => {
       </div>
 
       <div className="um-footer-bottom">
-        <span>(c) {currentYear} {siteName}. All rights reserved.</span>
+        <span>© {currentYear} {siteName}. All rights reserved.</span>
         <div className="um-footer-bottom-right">
           <MenuNav
             location="social_footer"
