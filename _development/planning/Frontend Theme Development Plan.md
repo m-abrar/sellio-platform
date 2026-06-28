@@ -15,7 +15,7 @@ Last updated: 2026-06-28
 | `properties/rental` | ✅ Complete | Core extraction done; colour consistency fixed; About/Contact/FAQ deferred |
 | `properties/luxury` | ✅ Complete | Inline extraction across 7 files; hardcoded strings → useThemeContent; SEO done |
 | `properties/classic` | ✅ Complete | dangerouslySetInnerHTML removed; AgentBioPage + NeighborhoodStats built; newsletter bug fixed; responsive + SEO deferred |
-| `properties/vacation` | 🔄 Active | ProductPage audit next: host profile, amenity icons, booking calendar; then inline extraction |
+| `properties/vacation` | ✅ Complete | Inline extraction done; host profile + amenity icons added; CMS strings wrapped; fallback-data.ts created; responsive QA deferred |
 
 ---
 
@@ -61,7 +61,7 @@ Last updated: 2026-06-28
 |---|---|---|---|
 | 19 | `autos/modern` | 7/10 | Differentiate from luxury — bold hero + search filter bar. → [Detailed plan](themes/autos-modern.md) |
 | 20 | `ecommerce/electronics` | 7/10 | Spec comparison table + tech-forward color scheme. → [Detailed plan](themes/ecommerce-electronics.md) |
-| 21 | `properties/vacation` | 🔄 7.5/10 | 🔄 **Active — Bundle 1 next.** Host profile + amenity icons + booking calendar; heavy inline styles in RetreatBentoCard, ExperienceStats, EscapeFooter. → [Detailed plan](themes/properties-vacation.md) |
+| 21 | `properties/vacation` | ✅ 8/10 | ✅ **Complete (core done; responsive QA + booking calendar deferred).** Host profile, amenity icons, fallback data, full CMS string coverage. → [Detailed plan](themes/properties-vacation.md) |
 | 22 | `classifieds/deals` | 6/10 | Countdown timer component + "ending soon" urgency badge. → [Detailed plan](themes/classifieds-deals.md) |
 | 23 | `events/creative` | 7/10 | Artist/speaker showcase + colorful hero (only 639 CSS lines — needs visual lift). → [Detailed plan](themes/events-creative.md) |
 | 24 | `events/festival` | 7/10 | Lineup grid + stage schedule + ticket pricing component. → [Detailed plan](themes/events-festival.md) |

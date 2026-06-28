@@ -1,6 +1,6 @@
 # Theme Completion Plan: `properties/vacation`
 
-**Status:** 🔄 Active — Bundle 1 (#5 of 5). Start with ProductPage audit, then inline extraction across all components.
+**Status:** ✅ Core complete (2026-06-28) — all inline styles extracted; CMS strings wrapped; host profile + amenity icons added; fallback-data.ts created. Responsive QA and booking calendar upgrade deferred.
 **Priority:** #21 — Airbnb-style vacation rental platform; editorial feel with live date filtering
 **Theme path:** `apps/storefront/src/themes/properties/vacation/`
 **Audit score:** 7.5/10 — very clean homepage and CMS integration; primary gaps are missing ProductPage features (host profile, amenity icons, booking calendar), heavy `RetreatBentoCard` inline styles, and footer inline styles
@@ -314,61 +314,61 @@ The current `useEffect` (lines 102–131) sets `apiError` and renders an empty g
 ## Completion Checklist Summary
 
 ```
-PRIMARY FEATURES (ProductPage — not yet audited)
-  [ ] Read ProductPage.tsx
-  [ ] Host profile section: avatar, name, bio, response rate
-  [ ] Amenity icons section: Pool, WiFi, Kitchen, etc. with aria-hidden icons
-  [ ] Booking calendar/date-range picker with availability visualization
+PRIMARY FEATURES (ProductPage)
+  [x] Read ProductPage.tsx
+  [x] Host profile section: useThemeContent-driven; conditional render when host.name set
+  [x] Amenity icons section: pipe-split CMS list with icon map + aria-hidden
+  [ ] Booking calendar/date-range picker — deferred (plain date inputs remain; low effort lift)
 
 HEADER
-  [ ] Add aria-expanded={isOpen} to hamburger button
-  [ ] Logo link: inline styles → CSS (.pv-logo, .pv-logo-accent)
-  [ ] Logo text: useThemeContent brand label
-  [ ] MenuActionButtons renderItem: inline styles → .pv-btn-primary--mobile/desktop
+  [x] Add aria-expanded={isOpen} to hamburger button
+  [x] Logo link: inline styles → CSS (.pv-logo, .pv-logo-accent)
+  [x] Logo text: useThemeContent (header.brand_name + header.brand_accent)
+  [x] MenuActionButtons renderItem: inline styles → .pv-btn-primary--mobile/desktop
 
 RETREATBENTOCARD
-  [ ] Card body: all inline styles → CSS classes (.pv-card-body, -title, -location, -footer, -price, -verified-label)
-  [ ] Remove unused onClick prop
-  [ ] Replace any type with proper interface
-  [ ] Star ★ character: add aria-hidden="true"
-  [ ] Hardcoded 'Verified Retreat', 'Book Now →', '/night' → useThemeContent or prop
+  [x] Card body: all inline styles → CSS classes (.pv-card-body, -title, -location, -footer-row, -price, -verified-label)
+  [x] Remove unused onClick prop
+  [x] Replace any type with Pick<VacationRetreatCard, ...>
+  [x] Star ★ character: add aria-hidden="true"
+  [x] Hardcoded 'Verified Retreat', 'Book Now →', '/night' → useThemeContent
 
 EXPERIENCESTATS
-  [ ] All inline styles → CSS (.pv-stat-item, .pv-stat-value, .pv-stat-label)
+  [x] All inline styles → CSS (.pv-stat-item, .pv-stat-value, .pv-stat-label)
 
 ESCAPEFOOTER
-  [ ] Footer grid → .pv-footer-grid CSS
-  [ ] Footer logo link → .pv-footer-logo CSS
-  [ ] Footer description → .pv-footer-desc CSS
-  [ ] FooterMenuColumn renderTitle: style → pv-footer-col-title class on all 3
-  [ ] Footer bottom div → .pv-footer-bottom CSS
-  [ ] Copyright: dynamic year; hardcoded string → useThemeContent
-  [ ] Social wrapper → .pv-footer-socials CSS
-  [ ] Social renderItem: style → CSS
+  [x] Footer grid → .pv-footer-grid CSS
+  [x] Footer logo link → .pv-footer-logo CSS
+  [x] Footer description → .pv-footer-desc CSS
+  [x] FooterMenuColumn renderTitle: style → pv-footer-col-title class on all 3
+  [x] Footer bottom div → .pv-footer-bottom CSS
+  [x] Copyright: dynamic year; hardcoded string → useThemeContent
+  [x] Social wrapper → .pv-footer-socials CSS
+  [x] Social renderItem: style → CSS
 
 PAGE.TSX
-  [ ] renderMultilineTitle: remove inline style; add .pv-azure-text class
-  [ ] Retreat card link: style → .pv-retreat-link CSS
+  [x] renderMultilineTitle: remove inline style; default class → pv-italic pv-azure-text
+  [x] Retreat card link: style → .pv-retreat-link CSS
 
 HARDCODED STRINGS → useThemeContent
-  [ ] Search: location label/placeholder, check-in/out labels, budget label, options × 4, reset
-  [ ] Grid: inventory suffix, all-category pill
-  [ ] Empty state: title, description, reset label
-  [ ] Stats: retreats label, locations label
+  [x] Search: location label/placeholder, check-in/out labels, budget label, options × 4, reset
+  [x] Grid: inventory suffix, all-category pill
+  [x] Empty state: title, description, reset label
+  [x] Stats: retreats label, locations label
 
 DEMO FALLBACK
-  [ ] Verify resolvePropertiesFailure pattern; add if missing
+  [x] Created fallback-data.ts with 6 curated demo retreats; loaded on API failure
 
 RESPONSIVE
   [ ] Search HUD: stack on mobile
-  [ ] Retreat grid: 1 col mobile
-  [ ] Philosophy: stack on mobile
-  [ ] Footer grid: collapse on mobile
+  [ ] Retreat grid: 1 col mobile (already in CSS — verify at 375px)
+  [ ] Philosophy: stack on mobile (already in CSS — verify at 375px)
+  [ ] Footer grid: collapse on mobile (already in CSS — verify at 375px)
 
 SEO
-  [ ] Homepage metadata
-  [ ] ProductPage generateMetadata (title + location)
-  [ ] ExplorePage title
+  [x] Homepage metadata — covered by root layout generateMetadata (app_settings)
+  [x] ProductPage generateMetadata — covered by app/properties/[slug]/page.tsx
+  [x] ExplorePage — no ExplorePage exists for this theme; N/A
 ```
 
 ---
