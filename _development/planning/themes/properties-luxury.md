@@ -357,60 +357,60 @@ Meaningless to screen readers.
 
 ```
 INLINE STYLES → CSS CLASSES (very heavy — 7 files)
-  [ ] Page.tsx: hero kicker, description, logic bar, editorial section,
+  [x] Page.tsx: hero kicker, description, logic bar, editorial section,
       editorial image/badge, CTA section, CTA title/desc/btn
-  [ ] EstateShowcase.tsx: card meta, price, location, section header,
+  [x] EstateShowcase.tsx: card meta, price, location, section header,
       skeleton, "View Full Portfolio" → .luxury-btn-outline
-  [ ] LuxuryAmenities.tsx: section header, eyebrow, title, h4, p
-  [ ] ConciergeFooter.tsx: logo, desc, bottom bar
-  [ ] PlatinumHeader.tsx: inquire button inline styles → CSS classes
-  [ ] ProductPage.tsx: loading/notfound states, hero section, API alert,
+  [x] LuxuryAmenities.tsx: section header, eyebrow, title, h4, p
+  [x] ConciergeFooter.tsx: logo, desc, bottom bar
+  [x] PlatinumHeader.tsx: inquire button inline styles → CSS classes
+  [x] ProductPage.tsx: loading/notfound states, hero section, API alert,
       all left-column sections, inquiry card (all elements),
       related affiliations section
-  [ ] ExplorePage.tsx: explore header, skeleton, empty state, Load More →
+  [x] ExplorePage.tsx: explore header, skeleton, empty state, Load More →
       .luxury-btn-outline; remove JS hover handlers
 
 DANGEROUSLY SET INNER HTML
-  [ ] ProductPage.tsx: move .pc-feats-grid @media to styles.css
+  [x] ProductPage.tsx: move .pc-feats-grid @media to styles.css
 
 FALLBACK DATA → fallback-data.ts
-  [ ] Create fallback-data.ts with LUXURY_FALLBACK_ESTATES (3),
+  [x] Create fallback-data.ts with LUXURY_FALLBACK_ESTATES (3),
       FALLBACK_CATEGORIES (4), FALLBACK_LOCATIONS (3)
-  [ ] Update imports in EstateShowcase.tsx, ProductPage.tsx, ExplorePage.tsx
+  [x] Update imports in EstateShowcase.tsx, ProductPage.tsx, ExplorePage.tsx
 
 HARDCODED STRINGS → useThemeContent
-  [ ] EstateShowcase.tsx: showcase eyebrow, title, CTA label
-  [ ] LuxuryAmenities.tsx: all 10 content strings (eyebrow, title, 4×title+desc)
-  [ ] ExplorePage.tsx: explore eyebrow, title, description
-  [ ] ProductPage.tsx: all section label strings
+  [x] EstateShowcase.tsx: showcase eyebrow, title, CTA label
+  [x] LuxuryAmenities.tsx: all 10 content strings (eyebrow, title, 4×title+desc)
+  [x] ExplorePage.tsx: explore eyebrow, title, description
+  [ ] ProductPage.tsx: section labels (HISTORIC_ACCOUNT etc.) — deferred, lower priority
 
 FOOTER
-  [ ] Copyright → dynamic year with useThemeContent fallback
+  [x] Copyright → dynamic year with useThemeContent fallback
 
 ACCESSIBILITY
-  [ ] PlatinumHeader: add aria-expanded={isOpen} to hamburger
-  [ ] ProductPage form: add id + htmlFor to all 6 label/input pairs
-  [ ] LuxuryAmenities emoji icons: add aria-hidden="true" to all 4
-  [ ] ProductPage gallery alt: use meaningful alt text
+  [x] PlatinumHeader: add aria-expanded={isOpen} to hamburger
+  [x] ProductPage form: add id + htmlFor to all 6 label/input pairs
+  [x] LuxuryAmenities emoji icons: add aria-hidden="true" to all 4
+  [x] ProductPage gallery alt: use meaningful alt text
 
 RESPONSIVE (after CSS extraction)
-  [ ] Logic bar: flex-wrap or 2-col grid on mobile
-  [ ] Editorial section: single-column on mobile
-  [ ] Editorial badge: constrain absolute position on mobile
-  [ ] Hero: verify 2-col stacks on mobile
-  [ ] ProductPage details container: single-column on mobile
-  [ ] Spec grid: 2-col tablet, 1-col mobile
-  [ ] Filter bar: flex-wrap on mobile
-  [ ] showcase-grid: verify columns collapse correctly
+  [x] Logic bar: flex-wrap on mobile
+  [x] Editorial section: single-column on mobile
+  [x] Editorial badge: constrain absolute position on mobile (position: static)
+  [x] Hero: 2-col already in existing CSS; price card hidden on mobile
+  [x] ProductPage details container: already 1-col → 2-col at 1024px in existing CSS
+  [x] Spec grid: 2-col tablet, 1-col mobile (existing luxury-spec-grid rules)
+  [x] Filter bar: flex-wrap already in existing CSS
+  [x] showcase-grid: 1-col already in existing CSS
 
 BOOKING FLOW
-  [ ] CSS prefix alignment with shared subpages
+  [ ] CSS prefix alignment with shared subpages — verify when testing
   [ ] Walk full booking flow manually
 
 SEO
-  [ ] Homepage metadata
-  [ ] ProductPage generateMetadata (estate title + location)
-  [ ] ExplorePage title
+  [x] Homepage metadata — handled by root layout generateMetadata
+  [x] ProductPage generateMetadata — /properties/[slug] has api.getPropertyBySlug
+  [x] ExplorePage title — added in properties/rental session
 ```
 
 ---
