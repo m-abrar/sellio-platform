@@ -26,7 +26,7 @@ const ShimmerCard = () => (
   </div>
 );
 
-function renderMultilineTitle(text: string, highlight: string, highlightClassName = 'pv-italic') {
+function renderMultilineTitle(text: string, highlight: string, highlightClassName = 'pv-italic pv-azure-text') {
   return text.split('\n').map((line, index, lines) => {
     const hasHighlight = highlight && line.includes(highlight);
     return (
@@ -36,7 +36,7 @@ function renderMultilineTitle(text: string, highlight: string, highlightClassNam
               <React.Fragment key={partIndex}>
                 {part}
                 {partIndex < parts.length - 1 && (
-                  <span className={highlightClassName} style={{ color: 'var(--pv-azure)' }}>
+                  <span className={highlightClassName}>
                     {highlight}
                   </span>
                 )}
@@ -291,7 +291,7 @@ export default function Page() {
         ) : (
           <div className="pv-retreat-grid">
             {filteredRetreats.map((retreat) => (
-              <a key={retreat.id} href={themeLink(`/product/${retreat.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+              <a key={retreat.id} href={themeLink(`/product/${retreat.slug}`)} className="pv-retreat-link">
                 <RetreatBentoCard {...retreat} />
               </a>
             ))}

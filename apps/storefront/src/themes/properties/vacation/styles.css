@@ -78,8 +78,9 @@
   font-weight: 900;
   font-size: 1.75rem;
   letter-spacing: -1px;
-  color: var(--pv-azure);
+  color: inherit;
   font-style: italic;
+  text-decoration: none;
 }
 
 .pv-nav-panel {
@@ -234,6 +235,10 @@
 
 .pv-card-cta {
   transition: var(--pv-transition);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--pv-coral);
 }
 
 .pv-retreat-card:hover .pv-card-cta {
@@ -1118,3 +1123,77 @@
   }
 }
 
+
+/* --- LOGO & BRAND --- */
+.pv-logo-accent { color: var(--pv-coral); }
+.pv-azure-text  { color: var(--pv-azure); }
+
+/* --- RETREAT LINK WRAPPER --- */
+.pv-retreat-link { text-decoration: none; color: inherit; display: block; }
+
+/* --- HEADER ACTION BUTTON VARIANTS --- */
+.pv-btn-primary--mobile  { padding: 1rem 3rem; font-size: 0.8rem; margin-top: 2rem; width: 100%; }
+.pv-btn-primary--desktop { padding: 0.8rem 2rem; font-size: 0.75rem; box-shadow: none; }
+
+/* --- RETREAT BENTO CARD BODY --- */
+.pv-card-body          { padding: 3rem; }
+.pv-card-verified-label { margin-bottom: 1rem; color: var(--pv-sand); }
+.pv-card-title {
+  font-family: var(--pv-font-serif);
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  color: var(--pv-ink);
+}
+.pv-card-location     { font-size: 0.9rem; color: var(--pv-text-muted); margin-bottom: 3rem; }
+.pv-card-footer-row   { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--pv-border); padding-top: 2.5rem; }
+.pv-card-price        { font-size: 1.6rem; font-weight: 900; color: var(--pv-azure); }
+.pv-card-price-period { font-size: 0.9rem; color: var(--pv-text-muted); font-weight: 600; }
+
+/* --- EXPERIENCE STATS --- */
+.pv-stat-item  { text-align: center; }
+.pv-stat-value { font-size: 4rem; font-family: var(--pv-font-serif); font-weight: 900; color: var(--pv-azure); margin-bottom: 1rem; }
+.pv-stat-label { color: var(--pv-text-muted); font-size: 0.65rem; }
+
+/* --- FOOTER LAYOUT CLASSES (replaces all inline styles) --- */
+.pv-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 8rem;
+}
+.pv-footer-logo {
+  display: block;
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  text-decoration: none;
+}
+.pv-footer-desc   { opacity: 0.5; line-height: 2; font-size: 0.95rem; max-width: 400px; }
+.pv-footer-col-title { color: var(--pv-sand); margin-bottom: 3rem; }
+.pv-footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10rem;
+  padding-top: 4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.pv-footer-copyright { opacity: 0.4; font-size: 0.65rem; }
+.pv-footer-socials   { display: flex; gap: 4rem; }
+.pv-social-link      { opacity: 0.4; font-size: 0.65rem; cursor: pointer; }
+.pv-social-link a    { color: inherit; text-decoration: none; }
+
+/* --- HOST PROFILE (ProductPage) --- */
+.pv-host-section { margin-top: 0; }
+.pv-host-card    { display: flex; gap: 2rem; align-items: flex-start; margin-top: 1.5rem; }
+.pv-host-avatar  { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--pv-border); flex-shrink: 0; }
+.pv-host-name    { font-family: var(--pv-font-serif); font-size: 1.25rem; font-weight: 900; margin: 0 0 0.25rem; color: var(--pv-ink); }
+.pv-host-meta    { font-size: 0.8rem; color: var(--pv-text-muted); margin: 0 0 0.5rem; }
+.pv-host-bio     { font-size: 0.9rem; color: var(--pv-text-muted); line-height: 1.7; margin: 0; }
+
+/* --- AMENITY ICONS (ProductPage) --- */
+.pv-amenities-section { margin-top: 0; }
+.pv-amenities-grid    { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+.pv-amenity-item      { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; color: var(--pv-ink); }
+.pv-amenity-icon      { font-size: 1.25rem; flex-shrink: 0; }

@@ -5,132 +5,154 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import type { VacationRetreatCard } from '../vacation-utils';
 
 export const VacationHeader = () => {
   const themeLink = usePropertyThemeLink();
   const [isOpen, setIsOpen] = useState(false);
+  const brandMain = useThemeContent('header.brand_name', 'ESCAPE');
+  const brandAccent = useThemeContent('header.brand_accent', 'Node');
 
   return (
     <header className="pv-header">
-      <a href={themeLink('/')} className="pv-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
-        ESCAPE<span style={{ color: 'var(--pv-coral)' }}>Node</span>
+      <a href={themeLink('/')} className="pv-logo">
+        {brandMain}<span className="pv-logo-accent">{brandAccent}</span>
       </a>
-      
-      <button 
-          className={`pv-hamburger ${isOpen ? 'pv-hamburger-open' : ''}`} 
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle Navigation"
-          id="pv-hamburger-toggle"
+
+      <button
+        className={`pv-hamburger ${isOpen ? 'pv-hamburger-open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Navigation"
+        aria-expanded={isOpen}
+        id="pv-hamburger-toggle"
       >
-          <span className="pv-hamburger-bar"></span>
-          <span className="pv-hamburger-bar"></span>
-          <span className="pv-hamburger-bar"></span>
+        <span className="pv-hamburger-bar" />
+        <span className="pv-hamburger-bar" />
+        <span className="pv-hamburger-bar" />
       </button>
 
       <div className={`pv-nav-panel ${isOpen ? 'pv-nav-open' : ''}`}>
-          <MenuNav
-            location="main_header"
-            flat
-            className="pv-nav"
-            linkClassName="pv-nav-link"
-            onNavigate={() => setIsOpen(false)}
-            renderItem={defaultNavItemRenderer}
-          />
-          <MenuActionButtons
-            as="button"
-            buttonClassName="pv-btn-primary pv-mobile-btn"
-            onNavigate={() => setIsOpen(false)}
-            renderItem={(item, { className, onNavigate }) => (
-              <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={onNavigate}>{item.title}</button>
-            )}
-          />
+        <MenuNav
+          location="main_header"
+          flat
+          className="pv-nav"
+          linkClassName="pv-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={defaultNavItemRenderer}
+        />
+        <MenuActionButtons
+          as="button"
+          buttonClassName="pv-btn-primary pv-mobile-btn"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={(item, { className, onNavigate }) => (
+            <button type="button" className={`${className} pv-btn-primary--mobile`} onClick={onNavigate}>
+              {item.title}
+            </button>
+          )}
+        />
       </div>
 
       <MenuActionButtons
         as="button"
         buttonClassName="pv-btn-primary pv-desktop-btn"
         renderItem={(item, { className, onNavigate }) => (
-          <button type="button" className={className} style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', boxShadow: 'none' }} onClick={onNavigate} id="pv-btn-header-book">{item.title}</button>
+          <button type="button" className={`${className} pv-btn-primary--desktop`} onClick={onNavigate} id="pv-btn-header-book">
+            {item.title}
+          </button>
         )}
       />
     </header>
   );
 };
 
-export const RetreatBentoCard = ({ title, location, price, rating, image, onClick }: any) => (
-  <div className="pv-retreat-card" onClick={onClick}>
-    <div className="pv-card-img-wrapper">
-      <img src={image} alt={title} className="pv-card-img" />
-      <div className="pv-card-rating">
-        ★ {rating}
+type RetreatCardProps = Pick<VacationRetreatCard, 'title' | 'location' | 'price' | 'rating' | 'image'>;
+
+export function RetreatBentoCard({ title, location, price, rating, image }: RetreatCardProps) {
+  const verifiedLabel = useThemeContent('card.verified_label', 'Verified Retreat');
+  const ctaLabel = useThemeContent('card.cta_label', 'Book Now →');
+  const pricePeriod = useThemeContent('card.price_period', '/night');
+
+  return (
+    <div className="pv-retreat-card">
+      <div className="pv-card-img-wrapper">
+        <img src={image} alt={title} className="pv-card-img" />
+        <div className="pv-card-rating">
+          <span aria-hidden="true">★</span> {rating}
+        </div>
+      </div>
+      <div className="pv-card-body">
+        <div className="pv-mono pv-card-verified-label">{verifiedLabel}</div>
+        <h3 className="pv-card-title">{title}</h3>
+        <div className="pv-card-location">{location}</div>
+        <div className="pv-card-footer-row">
+          <div className="pv-card-price">
+            {price}<span className="pv-card-price-period">{pricePeriod}</span>
+          </div>
+          <div className="pv-card-cta pv-mono">{ctaLabel}</div>
+        </div>
       </div>
     </div>
-    <div style={{ padding: '3rem' }}>
-        <div className="pv-mono" style={{ marginBottom: '1rem', color: 'var(--pv-sand)' }}>Verified Retreat</div>
-        <h3 style={{ fontFamily: 'var(--pv-font-serif)', fontSize: '2rem', fontWeight: 900, marginBottom: '0.5rem', lineHeight: 1.2 }}>{title}</h3>
-        <div style={{ fontSize: '0.9rem', color: 'var(--pv-text-muted)', marginBottom: '3rem' }}>{location}</div>
-        
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--pv-border)', paddingTop: '2.5rem' }}>
-            <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--pv-azure)' }}>{price}<span style={{ fontSize: '0.9rem', color: 'var(--pv-text-muted)', fontWeight: 600 }}>/night</span></div>
-            <div style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '2px', color: 'var(--pv-coral)' }} className="pv-card-cta">Book Now →</div>
-        </div>
-    </div>
+  );
+}
+
+export const ExperienceStats = ({ value, label }: { value: string; label: string }) => (
+  <div className="pv-stat-item">
+    <div className="pv-stat-value">{value}</div>
+    <div className="pv-mono pv-stat-label">{label}</div>
   </div>
-);
-
-
-export const ExperienceStats = ({ value, label }: { value: string, label: string }) => (
-    <div style={{ textAlign: 'center' }} className="pv-stat-item">
-        <div style={{ fontSize: '4rem', fontFamily: 'var(--pv-font-serif)', fontWeight: 900, color: 'var(--pv-azure)', marginBottom: '1rem' }} className="pv-stat-value">{value}</div>
-        <div className="pv-mono" style={{ color: 'var(--pv-text-muted)', fontSize: '0.65rem' }}>{label}</div>
-    </div>
 );
 
 export const EscapeFooter = () => {
   const themeLink = usePropertyThemeLink();
+  const copyright = useThemeContent('footer.copyright', '');
+  const year = new Date().getFullYear();
+
   return (
     <footer className="pv-footer">
-        <div className="pv-footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '8rem' }}>
-            <div>
-                <a href={themeLink('/')} className="pv-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem', textDecoration: 'none' }}>ESCAPENODE</a>
-                <p style={{ opacity: 0.5, lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px' }}>
-                    Discover the world's finest vacation retreats, verified by local experts and curated for discerning travelers.
-                </p>
-            </div>
-            <FooterMenuColumn
-                location="footer_column_1"
-                renderTitle={(title) => <div className="pv-mono" style={{ color: 'var(--pv-sand)', marginBottom: '3rem' }}>{title}</div>}
-                listClassName="pv-footer-link-group"
-                linkClassName="pv-footer-link"
-            />
-            <FooterMenuColumn
-                location="footer_column_2"
-                renderTitle={(title) => <div className="pv-mono" style={{ color: 'var(--pv-sand)', marginBottom: '3rem' }}>{title}</div>}
-                listClassName="pv-footer-link-group"
-                linkClassName="pv-footer-link"
-            />
-            <FooterMenuColumn
-                location="footer_column_3"
-                renderTitle={(title) => <div className="pv-mono" style={{ color: 'var(--pv-sand)', marginBottom: '3rem' }}>{title}</div>}
-                listClassName="pv-footer-link-group"
-                linkClassName="pv-footer-link"
-            />
+      <div className="pv-footer-grid">
+        <div>
+          <a href={themeLink('/')} className="pv-logo pv-footer-logo">ESCAPENODE</a>
+          <p className="pv-footer-desc">
+            Discover the world's finest vacation retreats, verified by local experts and curated for discerning travelers.
+          </p>
         </div>
-        <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="pv-footer-bottom">
-            <div className="pv-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
-            <div style={{ display: 'flex', gap: '4rem' }} className="pv-footer-socials">
-                <MenuNav
-                    location="social_footer"
-                    flat
-                    linkClassName="pv-mono"
-                    renderItem={(item, { href, className, onNavigate }) => (
-                        <span className={className} style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>
-                            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
-                        </span>
-                    )}
-                />
-            </div>
+        <FooterMenuColumn
+          location="footer_column_1"
+          renderTitle={(title) => <div className="pv-mono pv-footer-col-title">{title}</div>}
+          listClassName="pv-footer-link-group"
+          linkClassName="pv-footer-link"
+        />
+        <FooterMenuColumn
+          location="footer_column_2"
+          renderTitle={(title) => <div className="pv-mono pv-footer-col-title">{title}</div>}
+          listClassName="pv-footer-link-group"
+          linkClassName="pv-footer-link"
+        />
+        <FooterMenuColumn
+          location="footer_column_3"
+          renderTitle={(title) => <div className="pv-mono pv-footer-col-title">{title}</div>}
+          listClassName="pv-footer-link-group"
+          linkClassName="pv-footer-link"
+        />
+      </div>
+      <div className="pv-footer-bottom">
+        <div className="pv-mono pv-footer-copyright">
+          {copyright || `© ${year} Sellio. All rights reserved.`}
         </div>
+        <div className="pv-footer-socials">
+          <MenuNav
+            location="social_footer"
+            flat
+            linkClassName="pv-mono"
+            renderItem={(item, { href, className, onNavigate }) => (
+              <span className={`${className} pv-social-link`}>
+                <a href={href} onClick={onNavigate}>{item.title}</a>
+              </span>
+            )}
+          />
+        </div>
+      </div>
     </footer>
   );
 };

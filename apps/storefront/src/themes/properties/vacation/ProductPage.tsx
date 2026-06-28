@@ -7,13 +7,38 @@ import { CatalogSyncAlert } from './components/CatalogSyncAlert';
 import { loadVacationDetailPage } from './catalog';
 import { redirectToPropertyBookingReserve } from '@/themes/properties/shared/property-booking-utils';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 import {
   mapPropertyToVacationCard,
   type VacationRetreatCard,
 } from './vacation-utils';
 
+const AMENITY_ICONS: Record<string, string> = {
+  Pool: '🏊',
+  WiFi: '📶',
+  Kitchen: '🍳',
+  Parking: '🚗',
+  'Air conditioning': '❄️',
+  'Hot tub': '♨️',
+  Gym: '🏋️',
+  'Pet friendly': '🐾',
+  BBQ: '🍖',
+  Beach: '🏖️',
+  Garden: '🌿',
+  Fireplace: '🔥',
+};
+
 export default function ProductPage({ slug }: { slug: string }) {
   const themeLink = usePropertyThemeLink();
+
+  const hostSectionTitle = useThemeContent('host.section_title', 'Meet Your Host');
+  const hostName = useThemeContent('host.name', '');
+  const hostBio = useThemeContent('host.bio', '');
+  const hostResponseRate = useThemeContent('host.response_rate', '');
+  const hostMemberSince = useThemeContent('host.member_since', '');
+  const hostAvatarUrl = useThemeMedia('host.avatar', '');
+  const amenitiesTitle = useThemeContent('amenities.title', 'Amenities');
+  const amenitiesRaw = useThemeContent('amenities.list', 'Pool|WiFi|Kitchen|Parking|Air conditioning|Hot tub');
 
   const [retreat, setRetreat] = useState<VacationRetreatCard | null>(null);
   const [related, setRelated] = useState<VacationRetreatCard[]>([]);
@@ -191,6 +216,42 @@ export default function ProductPage({ slug }: { slug: string }) {
             <h4>The retreat narrative</h4>
             <p>{retreat.description}</p>
           </div>
+
+          {amenitiesRaw && (
+            <div className="pv-detail-specs-card pv-amenities-section">
+              <h4>{amenitiesTitle}</h4>
+              <div className="pv-amenities-grid">
+                {amenitiesRaw.split('|').filter(Boolean).map((amenity) => (
+                  <div key={amenity} className="pv-amenity-item">
+                    <span aria-hidden="true" className="pv-amenity-icon">
+                      {AMENITY_ICONS[amenity] ?? '✓'}
+                    </span>
+                    <span>{amenity}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {hostName && (
+            <div className="pv-detail-specs-card pv-host-section">
+              <h4>{hostSectionTitle}</h4>
+              <div className="pv-host-card">
+                {hostAvatarUrl && (
+                  <img src={hostAvatarUrl} alt={hostName} className="pv-host-avatar" loading="lazy" />
+                )}
+                <div>
+                  <p className="pv-host-name">{hostName}</p>
+                  {(hostResponseRate || hostMemberSince) && (
+                    <p className="pv-host-meta">
+                      {[hostResponseRate, hostMemberSince].filter(Boolean).join(' · ')}
+                    </p>
+                  )}
+                  {hostBio && <p className="pv-host-bio">{hostBio}</p>}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div>
@@ -210,11 +271,11 @@ export default function ProductPage({ slug }: { slug: string }) {
               <h4>Request booking</h4>
               <p>Secure your check-in dates directly with the property host.</p>
 
-              <label className="pv-booking-label">Check in *</label>
-              <input type="date" required value={checkIn} onChange={(event) => setCheckIn(event.target.value)} />
+              <label className="pv-booking-label" htmlFor="pv-book-checkin">Check in *</label>
+              <input id="pv-book-checkin" type="date" required value={checkIn} onChange={(event) => setCheckIn(event.target.value)} />
 
-              <label className="pv-booking-label">Check out *</label>
-              <input type="date" required value={checkOut} onChange={(event) => setCheckOut(event.target.value)} />
+              <label className="pv-booking-label" htmlFor="pv-book-checkout">Check out *</label>
+              <input id="pv-book-checkout" type="date" required value={checkOut} onChange={(event) => setCheckOut(event.target.value)} />
 
               <div className="pv-upgrades-section">
                 <span className="pv-mono">Optional upgrades</span>
@@ -236,8 +297,9 @@ export default function ProductPage({ slug }: { slug: string }) {
                 </label>
               </div>
 
-              <label className="pv-booking-label">Traveler name *</label>
+              <label className="pv-booking-label" htmlFor="pv-book-name">Traveler name *</label>
               <input
+                id="pv-book-name"
                 type="text"
                 required
                 value={travelerName}
@@ -245,8 +307,9 @@ export default function ProductPage({ slug }: { slug: string }) {
                 placeholder="Alice Wonderland"
               />
 
-              <label className="pv-booking-label">Email *</label>
+              <label className="pv-booking-label" htmlFor="pv-book-email">Email *</label>
               <input
+                id="pv-book-email"
                 type="email"
                 required
                 value={travelerEmail}
@@ -254,16 +317,18 @@ export default function ProductPage({ slug }: { slug: string }) {
                 placeholder="alice@example.com"
               />
 
-              <label className="pv-booking-label">Phone</label>
+              <label className="pv-booking-label" htmlFor="pv-book-phone">Phone</label>
               <input
+                id="pv-book-phone"
                 type="tel"
                 value={travelerPhone}
                 onChange={(event) => setTravelerPhone(event.target.value)}
                 placeholder="+1 555 0100"
               />
 
-              <label className="pv-booking-label">Notes</label>
+              <label className="pv-booking-label" htmlFor="pv-book-notes">Notes</label>
               <textarea
+                id="pv-book-notes"
                 rows={3}
                 value={travelerNotes}
                 onChange={(event) => setTravelerNotes(event.target.value)}
@@ -297,7 +362,7 @@ export default function ProductPage({ slug }: { slug: string }) {
           <h3>Similar getaways nearby</h3>
           <div className="pv-retreat-grid">
             {related.map((item) => (
-              <a key={item.id} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+              <a key={item.id} href={themeLink(`/product/${item.slug}`)} className="pv-retreat-link">
                 <RetreatBentoCard {...item} />
               </a>
             ))}
