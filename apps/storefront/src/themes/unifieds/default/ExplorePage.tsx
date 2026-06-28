@@ -3,6 +3,8 @@
 import React, { useEffect, useMemo, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { Category } from '@sellio/types';
+import { ExploreLoadingShell } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { CatalogSyncAlert } from '@/themes/unifieds/shared/CatalogSyncAlert';
 import { isExploreSortOption, type ExploreSortOption } from '@/themes/unifieds/shared/product-utils';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
@@ -28,6 +30,27 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [listingError, setListingError] = useState<string | null>(null);
+  const [locationFilter, setLocationFilter] = useState('');
+
+  // ── Customisable strings ──────────────────────────────────────────────────
+  const pageEyebrow = useThemeContent('explore.eyebrow', 'Marketplace directory');
+  const pageTitle = useThemeContent('explore.title', 'Explore the catalog');
+  const pageDescription = useThemeContent('explore.description', 'Search and filter live listings across every marketplace vertical.');
+  const searchLabel = useThemeContent('explore.search_label', 'Search');
+  const searchPlaceholder = useThemeContent('explore.search_placeholder', 'Search listings...');
+  const categoryLabel = useThemeContent('explore.category_label', 'Category');
+  const allCategoriesLabel = useThemeContent('explore.all_categories', 'All categories');
+  const locationLabel = useThemeContent('explore.location_label', 'Location');
+  const locationPlaceholder = useThemeContent('explore.location_placeholder', 'City or region…');
+  const sortLabel = useThemeContent('explore.sort_label', 'Sort by');
+  const sortDefault = useThemeContent('explore.sort_default', 'Featured first');
+  const sortPriceAsc = useThemeContent('explore.sort_price_asc', 'Price: Low to High');
+  const sortPriceDesc = useThemeContent('explore.sort_price_desc', 'Price: High to Low');
+  const allVerticals = useThemeContent('explore.all_verticals', 'All');
+  const loadMoreLabel = useThemeContent('explore.load_more', 'Load more listings');
+  const loadingLabel = useThemeContent('explore.loading', 'Loading…');
+  const emptyTitle = useThemeContent('explore.empty_title', 'No listings matched your filters.');
+  const emptyDescription = useThemeContent('explore.empty_description', 'Try adjusting your search keywords or choosing a different category.');
 
   const page = Math.max(1, Number(searchParams.get('page') || 1));
   const searchQuery = searchParams.get('search') || searchParams.get('q') || initialSearch;
@@ -58,9 +81,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
 
       const result = await fetchAllVerticals(query);
 
-      if (!isMounted) {
-        return;
-      }
+      if (!isMounted) return;
 
       setListings((previous) => {
         const merged = isFirstPage ? result.listings : [...previous, ...result.listings];
@@ -93,9 +114,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
 
     loadData();
 
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, [page, searchKey, searchQuery, selectedCategorySlug]);
 
   const verticalCounts = useMemo(() => {
@@ -107,6 +126,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
 
   const filteredListings = useMemo(() => {
     const normalizedSearch = searchQuery.toLowerCase();
+    const normalizedLocation = locationFilter.toLowerCase().trim();
 
     return listings
       .filter((listing) => {
@@ -117,7 +137,11 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
           !normalizedSearch ||
           listing.title.toLowerCase().includes(normalizedSearch) ||
           listing.description.toLowerCase().includes(normalizedSearch);
-        return matchesVertical && matchesCategory && matchesSearch;
+        const matchesLocation =
+          !normalizedLocation ||
+          (listing.specs?.location ?? '').toLowerCase().includes(normalizedLocation) ||
+          listing.description.toLowerCase().includes(normalizedLocation);
+        return matchesVertical && matchesCategory && matchesSearch && matchesLocation;
       })
       .sort((left, right) => {
         if (sortBy === 'price_asc') {
@@ -128,7 +152,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
         }
         return 0;
       });
-  }, [listings, searchQuery, selectedCategory, selectedVerticalKey, sortBy]);
+  }, [listings, searchQuery, selectedCategory, selectedVerticalKey, sortBy, locationFilter]);
 
   const updateFilters = (updates: Record<string, string>, pageNumber = 1) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -157,9 +181,9 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
   return (
     <main className="ud-explore-page">
       <div className="ud-explore-header">
-        <div className="ud-mono ud-section-eyebrow">Marketplace directory</div>
-        <h1>Explore the catalog</h1>
-        <p>Search and filter live listings across every marketplace vertical on Sellio.</p>
+        <div className="ud-mono ud-section-eyebrow">{pageEyebrow}</div>
+        <h1 className="ud-explore-title">{pageTitle}</h1>
+        <p className="ud-explore-description">{pageDescription}</p>
         {!loading && inventoryTotal != null && (
           <p className="ud-explore-meta">{inventoryTotal.toLocaleString()} listings available</p>
         )}
@@ -171,7 +195,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
           className={`ud-explore-vertical-chip ${!selectedVerticalKey ? 'is-active' : ''}`}
           onClick={() => updateFilters({ vertical: '', category: '' })}
         >
-          All
+          {allVerticals}
         </button>
         {VERTICALS.map((vertical) => (
           <button
@@ -181,18 +205,19 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
             onClick={() => updateFilters({ vertical: vertical.key, category: '' })}
           >
             {vertical.label}
-            <span>{(verticalCounts[vertical.key] ?? 0).toLocaleString()}</span>
+            <span className="ud-vertical-chip-count">{(verticalCounts[vertical.key] ?? 0).toLocaleString()}</span>
           </button>
         ))}
       </section>
 
       <section className="ud-explore-controls" aria-label="Explore filters">
-        <div>
-          <label htmlFor="ud-explore-search">Search</label>
+        <div className="ud-explore-control-group">
+          <label className="ud-explore-label" htmlFor="ud-explore-search">{searchLabel}</label>
           <input
             id="ud-explore-search"
+            className="ud-explore-input"
             type="search"
-            placeholder="Search listings..."
+            placeholder={searchPlaceholder}
             defaultValue={searchQuery}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
@@ -201,14 +226,26 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
             }}
           />
         </div>
-        <div>
-          <label htmlFor="ud-explore-category">Category</label>
+        <div className="ud-explore-control-group">
+          <label className="ud-explore-label" htmlFor="ud-explore-location">{locationLabel}</label>
+          <input
+            id="ud-explore-location"
+            className="ud-explore-input"
+            type="text"
+            placeholder={locationPlaceholder}
+            value={locationFilter}
+            onChange={(e) => setLocationFilter(e.target.value)}
+          />
+        </div>
+        <div className="ud-explore-control-group">
+          <label className="ud-explore-label" htmlFor="ud-explore-category">{categoryLabel}</label>
           <select
             id="ud-explore-category"
+            className="ud-explore-select"
             value={selectedCategorySlug}
             onChange={(event) => updateFilters({ category: event.target.value })}
           >
-            <option value="">All categories</option>
+            <option value="">{allCategoriesLabel}</option>
             {categories.map((category) => (
               <option key={category.id} value={category.slug}>
                 {category.title}
@@ -216,10 +253,11 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
             ))}
           </select>
         </div>
-        <div>
-          <label htmlFor="ud-explore-sort">Sort by</label>
+        <div className="ud-explore-control-group">
+          <label className="ud-explore-label" htmlFor="ud-explore-sort">{sortLabel}</label>
           <select
             id="ud-explore-sort"
+            className="ud-explore-select"
             value={sortBy}
             onChange={(event) => {
               if (isExploreSortOption(event.target.value)) {
@@ -227,9 +265,9 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
               }
             }}
           >
-            <option value="default">Featured first</option>
-            <option value="price_asc">Price: Low to High</option>
-            <option value="price_desc">Price: High to Low</option>
+            <option value="default">{sortDefault}</option>
+            <option value="price_asc">{sortPriceAsc}</option>
+            <option value="price_desc">{sortPriceDesc}</option>
           </select>
         </div>
       </section>
@@ -241,7 +279,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       )}
 
       {loading ? (
-        <div className="ud-listings-grid" aria-label="Loading explore listings">
+        <div className="ud-listings-grid" aria-label="Loading explore listings" aria-busy="true">
           {[1, 2, 3, 4, 5, 6].map((item) => (
             <div className="ud-listing-card ud-listing-skeleton" key={item}>
               <div className="ud-listing-image-wrap" />
@@ -259,7 +297,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
             {filteredListings.map((listing) => (
               <a href={themeLink(listing.href)} className="ud-listing-card" key={listing.id}>
                 <div className="ud-listing-image-wrap">
-                  <img src={listing.image} alt={listing.title} loading="lazy" /> 
+                  <img src={listing.image} alt={listing.title} loading="lazy" />
                 </div>
                 <div className="ud-listing-body">
                   <div className="ud-mono">{listing.category}</div>
@@ -277,7 +315,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
           {page < lastPage && (
             <div className="ud-load-more-wrap">
               <button type="button" className="core-btn-primary" onClick={handleLoadMore} disabled={loadingMore}>
-                {loadingMore ? 'Loading listings...' : 'Load more listings'}
+                {loadingMore ? loadingLabel : loadMoreLabel}
               </button>
             </div>
           )}
@@ -285,8 +323,8 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
       ) : (
         <div className="ud-listing-state" role="status">
           <div className="ud-mono ud-section-eyebrow">No matches</div>
-          <h3>No listings matched your filters.</h3>
-          <p>Try adjusting your search keywords or choosing a different category.</p>
+          <h3>{emptyTitle}</h3>
+          <p>{emptyDescription}</p>
           <a href={themeLink('/')} className="core-btn-primary ud-empty-cta">
             Back to home
           </a>
@@ -298,7 +336,7 @@ function ExplorePageContent({ initialCategorySlug, initialSearch = '' }: Explore
 
 export default function ExplorePage(props: ExplorePageProps) {
   return (
-    <Suspense fallback={<main className="ud-explore-page"><p>Loading explore...</p></main>}>
+    <Suspense fallback={<ExploreLoadingShell />}>
       <ExplorePageContent {...props} />
     </Suspense>
   );

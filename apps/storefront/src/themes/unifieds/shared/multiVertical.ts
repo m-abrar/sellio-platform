@@ -42,6 +42,21 @@ export const VERTICALS: VerticalDescriptor[] = [
   { key: 'classifieds', label: 'Classifieds', description: 'Local listings and deals' },
 ];
 
+export type ExploreListingSpecs = {
+  beds?: string;
+  baths?: string;
+  area?: string;
+  mileage?: string;
+  transmission?: string;
+  workplace?: string;
+  company?: string;
+  companyLogo?: string;
+  salary?: string;
+  condition?: string;
+  location?: string;
+  ticketsLeft?: string;
+};
+
 export type ExploreListing = {
   id: string;
   title: string;
@@ -53,6 +68,9 @@ export type ExploreListing = {
   vertical: Vertical;
   href: string;
   actionLabel: string;
+  specs?: ExploreListingSpecs;
+  date?: string;
+  listingType?: string;
 };
 
 type CatalogResponse<T> = {
@@ -155,6 +173,8 @@ function productToListing(product: Product, categories: Category[]): ExploreList
 }
 
 function propertyToListing(property: Property): ExploreListing {
+  const specs = property.specs;
+  const location = compact([property.city, property.state]).join(', ') || undefined;
   return {
     id: `properties-${property.id}`,
     title: property.title,
@@ -162,10 +182,17 @@ function propertyToListing(property: Property): ExploreListing {
     description: property.short_description || property.description || 'Browse this property listing for full details.',
     price: property.pricing?.price_formatted || formatCurrency(property.pricing?.active_price ?? property.base_price),
     image: property.primary_image_url || property.featured_image || property.thumbnail_image || PRODUCT_CARD_PLACEHOLDER,
-    category: plainText(property.category?.title || property.specs?.category, 'Properties'),
+    category: plainText(property.category?.title || specs?.category, 'Properties'),
     vertical: 'properties',
     href: `/properties/${property.slug}`,
     actionLabel: 'View property',
+    listingType: property.is_rental ? 'For Rent' : 'For Sale',
+    specs: {
+      beds: specs?.bedrooms != null ? String(specs.bedrooms) : property.number_of_bedrooms != null ? String(property.number_of_bedrooms) : undefined,
+      baths: specs?.bathrooms != null ? String(specs.bathrooms) : property.number_of_bathrooms != null ? String(property.number_of_bathrooms) : undefined,
+      area: specs?.area_formatted || (property.area_sq_ft ? `${property.area_sq_ft.toLocaleString()} sq ft` : undefined),
+      location,
+    },
   };
 }
 
@@ -181,6 +208,12 @@ function vehicleToListing(vehicle: Vehicle): ExploreListing {
     vertical: 'autos',
     href: `/autos/${vehicle.slug}`,
     actionLabel: 'View vehicle',
+    listingType: vehicle.specs?.type || vehicle.specs?.condition || undefined,
+    specs: {
+      mileage: vehicle.specs?.mileage || undefined,
+      transmission: vehicle.specs?.transmission || undefined,
+      location: compact([vehicle.location?.city, vehicle.location?.state]).join(', ') || undefined,
+    },
   };
 }
 
@@ -196,6 +229,14 @@ function jobToListing(job: JobListing): ExploreListing {
     vertical: 'jobs',
     href: `/jobs/${job.slug}`,
     actionLabel: 'View role',
+    listingType: job.employment?.workplace || undefined,
+    specs: {
+      company: job.company?.name || undefined,
+      companyLogo: job.company?.logo_card || job.company?.logo || undefined,
+      workplace: job.employment?.workplace || undefined,
+      salary: job.compensation?.range_compact || job.compensation?.range_full || undefined,
+      location: job.location?.display || undefined,
+    },
   };
 }
 
@@ -215,6 +256,11 @@ function serviceToListing(service: ServiceListing): ExploreListing {
 }
 
 function eventToListing(event: EventListing): ExploreListing {
+  const startsAt = event.schedule?.starts_at || event.schedule?.start_date || undefined;
+  const ticketsLeft = event.ticketing?.tickets_left != null ? String(event.ticketing.tickets_left) : undefined;
+  const location = event.schedule?.is_virtual
+    ? 'Virtual'
+    : compact([event.location?.city, event.location?.state]).join(', ') || undefined;
   return {
     id: `events-${event.id}`,
     title: event.title,
@@ -226,6 +272,11 @@ function eventToListing(event: EventListing): ExploreListing {
     vertical: 'events',
     href: `/events/${event.slug}`,
     actionLabel: 'View event',
+    date: startsAt,
+    specs: {
+      location,
+      ticketsLeft,
+    },
   };
 }
 

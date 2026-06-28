@@ -2,72 +2,156 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import type { Category } from '@sellio/types';
-import { CoreFeatures, GlobalTrust } from './components';
-import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+import {
+  AutoCard,
+  ClassifiedMiniCard,
+  CoreFeatures,
+  EventCard,
+  GlobalTrust,
+  HeroMosaic,
+  HeroSearchModule,
+  HowItWorks,
+  JobListItem,
+  JobsClassifiedsSplitPanel,
+  PopularCategoriesSection,
+  PropertyCard,
+  ServiceCategoryCard,
+  VerticalModuleCards,
+} from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { CatalogSyncAlert } from '@/themes/unifieds/shared/CatalogSyncAlert';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
-import { fetchAllVerticals, VERTICALS, type ExploreListing } from '@/themes/unifieds/shared/multiVertical';
+import {
+  fetchAllVerticals,
+  VERTICALS,
+  type ExploreListing,
+  type Vertical,
+} from '@/themes/unifieds/shared/multiVertical';
+
+function byVertical(listings: ExploreListing[], vertical: Vertical): ExploreListing[] {
+  return listings.filter((l) => l.vertical === vertical).slice(0, 4);
+}
+
+// Shared skeleton grid shown while a section loads
+function SectionSkeletons({ count = 4, gridClass }: { count?: number; gridClass: string }) {
+  return (
+    <div className={gridClass}>
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className="ud-listing-card ud-listing-skeleton">
+          <div className="ud-listing-image-wrap" />
+          <div className="ud-listing-body">
+            <span />
+            <strong />
+            <em />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Simple product card (no specs; just image + category + title + price)
+function ProductCard({
+  listing,
+  themeLink,
+}: {
+  listing: ExploreListing;
+  themeLink: (path: string) => string;
+}) {
+  return (
+    <a href={themeLink(listing.href)} className="ud-product-card">
+      <div className="ud-product-card__img-wrap">
+        <img src={listing.image} alt={listing.title} loading="lazy" className="ud-product-card__img" />
+        <span className="ud-product-card__badge">{listing.category}</span>
+      </div>
+      <div className="ud-product-card__body">
+        <h3 className="ud-product-card__title">{listing.title}</h3>
+        <div className="ud-product-card__footer">
+          <span className="ud-product-card__price">{listing.price}</span>
+          <span className="ud-product-card__action">{listing.actionLabel}</span>
+        </div>
+      </div>
+    </a>
+  );
+}
 
 export default function Page() {
   const [listings, setListings] = useState<ExploreListing[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [totals, setTotals] = useState<Partial<Record<Vertical, number>>>({});
   const [inventoryTotal, setInventoryTotal] = useState<number | null>(null);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
   const themeLink = useUnifiedThemeLink();
 
+  // ── Hero ──────────────────────────────────────────────────────────────────
   const heroEyebrow = useThemeContent('hero.eyebrow', 'Multi-Vertical Marketplace');
   const heroTitle = useThemeContent('hero.title', 'Everything you need,\nall in one place.');
   const heroHighlight = useThemeContent('hero.highlight', 'all in one place.');
   const heroDescription = useThemeContent(
     'hero.description',
-    'A comprehensive marketplace platform for discovering products, properties, services, and more — all in one place.',
+    'Discover properties, vehicles, events, jobs, and more — all in one trusted marketplace.',
   );
-  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'Explore listings');
-  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'Browse catalog');
-  const heroImage = useThemeMedia('hero.image', '/themes/unifieds/default/1.webp');
   const heroBadgeLabel = useThemeContent('hero.badge_label', 'Live listings');
 
-  const collectionEyebrow = useThemeContent('collection.eyebrow', 'Live Catalog');
-  const collectionTitle = useThemeContent('collection.title', 'Featured Listings.');
-  const collectionDescription = useThemeContent(
-    'collection.description',
-    'Browse real listings from the live Sellio catalog.',
-  );
+  // ── Section: Properties ───────────────────────────────────────────────────
+  const propertiesTitle = useThemeContent('properties_section.title', 'Properties');
+  const propertiesCta = useThemeContent('properties_section.cta', 'View all properties');
 
+  // ── Section: Products ─────────────────────────────────────────────────────
+  const productsTitle = useThemeContent('products_section.title', 'Products');
+  const productsCta = useThemeContent('products_section.cta', 'Browse all products');
+
+  // ── Section: Autos ────────────────────────────────────────────────────────
+  const autosTitle = useThemeContent('autos_section.title', 'Vehicles for Sale');
+  const autosCta = useThemeContent('autos_section.cta', 'Browse all vehicles');
+
+  // ── Section: Events ───────────────────────────────────────────────────────
+  const eventsTitle = useThemeContent('events_section.title', 'Upcoming Events');
+  const eventsCta = useThemeContent('events_section.cta', 'See all events');
+
+  // ── Section: Services ─────────────────────────────────────────────────────
+  const servicesTitle = useThemeContent('services_section.title', 'Service Providers');
+  const servicesCta = useThemeContent('services_section.cta', 'Find services');
+
+  // ── Seller CTA ────────────────────────────────────────────────────────────
+  const sellerCtaEyebrow = useThemeContent('seller_cta.eyebrow', 'Sell on the marketplace');
+  const sellerCtaTitle = useThemeContent('seller_cta.title', 'Reach more buyers');
+  const sellerCtaDescription = useThemeContent(
+    'seller_cta.description',
+    'List your property, vehicle, service, or product in minutes and connect with thousands of active buyers.',
+  );
+  const sellerCtaButton = useThemeContent('seller_cta.button', 'Post a listing');
+  const sellerCtaHiwLink = useThemeContent('seller_cta.hiw_link', 'How it works');
+
+  // ── Empty state ───────────────────────────────────────────────────────────
   const emptyKicker = useThemeContent('empty.kicker', 'No listings yet');
   const emptyTitle = useThemeContent('empty.title', 'No live listings are available yet.');
   const emptyDescription = useThemeContent(
     'empty.description',
     'Add listings in the admin panel and they will appear here automatically.',
   );
-
-  const ctaTitle = useThemeContent('cta.title', 'Start browsing\ntoday.');
-  const ctaDescription = useThemeContent(
-    'cta.description',
-    'Discover products, properties, services, and more across all categories in one unified marketplace.',
-  );
-  const ctaButtonLabel = useThemeContent('cta.button_label', 'Browse the catalog');
+  const emptyCta = useThemeContent('empty.cta', 'Open catalog directory');
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadListings() {
       setLoadingListings(true);
-      const result = await fetchAllVerticals({ per_page: 1 });
+      const result = await fetchAllVerticals({ per_page: 4 });
 
-      if (!isMounted) {
-        return;
-      }
+      if (!isMounted) return;
 
       if (result.listings.length > 0 || result.failedVerticals.length < VERTICALS.length) {
-        setListings(result.listings.slice(0, 6));
+        setListings(result.listings);
         setInventoryTotal(result.total || result.listings.length);
         setCategories(result.categories);
+        setTotals(result.totals);
         setListingError(null);
       } else {
         setListings([]);
         setCategories([]);
+        setTotals({});
         setInventoryTotal(null);
         setListingError('Listings are temporarily unavailable.');
       }
@@ -76,65 +160,110 @@ export default function Page() {
     }
 
     loadListings();
-
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, []);
 
-  const liveStats = useMemo(
-    () => ({
-      inventory: inventoryTotal ?? listings.length,
-      categories: categories.length,
-      verticals: VERTICALS.length,
-    }),
-    [categories.length, inventoryTotal, listings.length],
-  );
+  const properties = useMemo(() => byVertical(listings, 'properties'), [listings]);
+  const products   = useMemo(() => byVertical(listings, 'products'),   [listings]);
+  const autos      = useMemo(() => byVertical(listings, 'autos'),      [listings]);
+  const events     = useMemo(() => byVertical(listings, 'events'),     [listings]);
+  const jobs       = useMemo(() => byVertical(listings, 'jobs'),       [listings]);
+  const classifieds = useMemo(() => byVertical(listings, 'classifieds'), [listings]);
 
-  const heroBadgeValue =
-    inventoryTotal != null ? `${inventoryTotal}` : listings.length > 0 ? `${listings.length}` : '0';
+  // Service categories (from API sidebar.categories tagged as 'services'),
+  // falling back to any category if none are vertically tagged.
+  const serviceCategories = useMemo(() => {
+    const tagged = categories.filter((c) => c.vertical === 'services');
+    return tagged.length > 0 ? tagged.slice(0, 6) : [];
+  }, [categories]);
+
+  const mosaicImages = useMemo(() => {
+    const priority: Vertical[] = ['properties', 'autos', 'events', 'services'];
+    const seen: ExploreListing[] = [];
+    for (const v of priority) {
+      const match = listings.find((l) => l.vertical === v && l.image && !l.image.includes('placeholder'));
+      if (match) seen.push(match);
+    }
+    return seen;
+  }, [listings]);
+
+  // Show '—' while loading so badge doesn't flash '0'
+  const heroBadgeValue = loadingListings
+    ? '—'
+    : (inventoryTotal ?? listings.length).toLocaleString();
+
+  const noListings = !loadingListings && listings.length === 0 && !listingError;
 
   return (
     <div>
+      {/* ── Hero ───────────────────────────────────────────────────────────── */}
       <section className="origin-hero" aria-labelledby="ud-hero-title">
-        <div>
-          <div className="ud-mono ud-hero-eyebrow">{heroEyebrow}</div>
+        <div className="ud-hero-content">
+          <div className="ud-hero-eyebrow-wrap">
+            <span className="ud-hero-eyebrow-dot" aria-hidden="true" />
+            <span className="ud-mono ud-hero-eyebrow">{heroEyebrow}</span>
+          </div>
           <h1 className="ud-heading-xl" id="ud-hero-title">
-            {heroTitle.split('\n').map((line, index, lines) => {
-              const parts = heroHighlight ? line.split(new RegExp(`(${heroHighlight})`, 'g')) : [line];
+            {heroTitle.split('\n').map((line, lineIndex, lines) => {
+              const escapedHighlight = heroHighlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const parts = heroHighlight
+                ? line.split(new RegExp(`(${escapedHighlight})`, 'g'))
+                : [line];
               return (
-                <React.Fragment key={`${line}-${index}`}>
-                  {parts.map((part, partIndex) => (
-                    <React.Fragment key={`${part}-${partIndex}`}>{part}</React.Fragment>
-                  ))}
-                  {index < lines.length - 1 ? <br /> : null}
+                <React.Fragment key={`line-${lineIndex}`}>
+                  {parts.map((part, pi) =>
+                    part === heroHighlight ? (
+                      // Picked up by: .origin-hero h1 span { color: var(--ud-azure) }
+                      <span key={`hl-${pi}`}>{part}</span>
+                    ) : (
+                      <React.Fragment key={`txt-${pi}`}>{part}</React.Fragment>
+                    ),
+                  )}
+                  {lineIndex < lines.length - 1 && <br />}
                 </React.Fragment>
               );
             })}
           </h1>
           <p className="ud-hero-copy">{heroDescription}</p>
-          <div className="ud-hero-buttons">
-            <button
-              type="button"
-              className="core-btn-primary"
-              id="ud-btn-explore"
-              onClick={() =>
-                document.getElementById('ud-listings-section')?.scrollIntoView({ behavior: 'smooth' })
-              }
-            >
-              {heroPrimaryCtaLabel}
-            </button>
-            <a href={themeLink('/explore')} className="ud-hero-secondary-btn" id="ud-btn-spec">
-              {heroSecondaryCtaLabel}
-            </a>
-          </div>
+          <HeroSearchModule
+            categories={categories}
+            themeLink={themeLink}
+            inventoryTotal={inventoryTotal}
+            isLoading={loadingListings}
+          />
         </div>
-        <div className="ud-hero-img-wrapper">
-          <div className="ud-hero-img-container">
-            <img src={heroImage} alt="Marketplace listings preview" className="ud-hero-img" />
-          </div>
+
+        <div className="ud-hero-visual">
+          {mosaicImages.length > 0 ? (
+            <HeroMosaic listings={mosaicImages} />
+          ) : (
+            <div className="ud-hero-mosaic" aria-hidden="true">
+              <div className="ud-hero-mosaic__col">
+                <div className="ud-hero-mosaic__item ud-hero-mosaic__item--lg">
+                  <div className="ud-hero-mosaic__placeholder" />
+                </div>
+                <div className="ud-hero-mosaic__item ud-hero-mosaic__item--sm">
+                  <div className="ud-hero-mosaic__placeholder" />
+                </div>
+              </div>
+              <div className="ud-hero-mosaic__col ud-hero-mosaic__col--offset">
+                <div className="ud-hero-mosaic__item ud-hero-mosaic__item--sm">
+                  <div className="ud-hero-mosaic__placeholder" />
+                </div>
+                <div className="ud-hero-mosaic__item ud-hero-mosaic__item--lg">
+                  <div className="ud-hero-mosaic__placeholder" />
+                </div>
+              </div>
+            </div>
+          )}
           <div className="ud-floating-badge">
-            <div className="ud-floating-badge-value">{heroBadgeValue}</div>
+            <div className="ud-floating-badge-live" aria-hidden="true">
+              <span className="ud-floating-badge-live-dot" />
+              <span className="ud-mono ud-floating-badge-live-label">LIVE</span>
+            </div>
+            <div className={`ud-floating-badge-value${loadingListings ? ' ud-floating-badge-value--loading' : ''}`}>
+              {heroBadgeValue}
+            </div>
             <div className="ud-mono ud-floating-badge-label">{heroBadgeLabel}</div>
           </div>
         </div>
@@ -142,106 +271,231 @@ export default function Page() {
 
       <GlobalTrust />
 
-      <section className="ud-stats-grid" aria-label="Catalog metrics">
-        <div>
-          <div className="ud-stat-value">{liveStats.inventory.toLocaleString()}</div>
-          <div className="ud-mono ud-stat-label">Live listings</div>
+      {listingError && (
+        <div className="ud-alert-slot">
+          <CatalogSyncAlert error={listingError} />
         </div>
-        <div>
-          <div className="ud-stat-value">{liveStats.categories.toLocaleString()}</div>
-          <div className="ud-mono ud-stat-label">Active categories</div>
-        </div>
-        <div>
-          <div className="ud-stat-value">{liveStats.verticals.toLocaleString()}</div>
-          <div className="ud-mono ud-stat-label">Marketplace verticals</div>
-        </div>
-      </section>
+      )}
 
-      <section className="ud-listings-section" id="ud-listings-section" aria-labelledby="ud-listings-title">
-        <div className="ud-listings-header">
-          <div className="ud-mono ud-section-eyebrow">{collectionEyebrow}</div>
-          <h2 id="ud-listings-title">{collectionTitle}</h2>
-          <p>{collectionDescription}</p>
-          {!loadingListings && inventoryTotal != null && (
-            <p className="ud-listings-meta">{inventoryTotal.toLocaleString()} listings available</p>
-          )}
-        </div>
+      {/* ── Vertical Module Cards ─────────────────────────────────────────── */}
+      <div id="ud-discovery-section">
+        <VerticalModuleCards
+          verticals={VERTICALS}
+          totals={totals}
+          themeLink={themeLink}
+          isLoading={loadingListings}
+        />
+      </div>
 
-        {listingError && (
-          <div className="ud-alert-slot">
-            <CatalogSyncAlert error={listingError} />
-          </div>
-        )}
-
-        {loadingListings ? (
-          <div className="ud-listings-grid" aria-label="Loading live listings">
-            {[1, 2, 3].map((item) => (
-              <div className="ud-listing-card ud-listing-skeleton" key={item}>
-                <div className="ud-listing-image-wrap" />
-                <div className="ud-listing-body">
-                  <span />
-                  <strong />
-                  <em />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : listings.length === 0 ? (
-          <div className="ud-listing-state" role="status">
-            <div className="ud-mono ud-section-eyebrow">{emptyKicker}</div>
-            <h3>{emptyTitle}</h3>
-            <p>{emptyDescription}</p>
-            <a href={themeLink('/explore')} className="core-btn-primary ud-empty-cta">
-              Open catalog directory
+      {/* ── Properties ───────────────────────────────────────────────────── */}
+      {(loadingListings || properties.length > 0) && (
+        <section className="ud-vertical-section" aria-labelledby="ud-properties-title">
+          <div className="ud-section-head">
+            <div>
+              <h2 className="ud-section-title" id="ud-properties-title">{propertiesTitle}</h2>
+              {!loadingListings && (
+                <p className="ud-section-count">
+                  {(totals.properties ?? 0).toLocaleString()} listings
+                </p>
+              )}
+            </div>
+            <a href={themeLink('/explore?vertical=properties')} className="ud-section-cta">
+              {propertiesCta}
             </a>
           </div>
+          {loadingListings ? (
+            <SectionSkeletons count={4} gridClass="ud-property-grid" />
+          ) : (
+            <div className="ud-property-grid">
+              {properties.map((l) => <PropertyCard key={l.id} listing={l} themeLink={themeLink} />)}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ── Products ─────────────────────────────────────────────────────── */}
+      {(loadingListings || products.length > 0) && (
+        <section className="ud-vertical-section ud-vertical-section--alt" aria-labelledby="ud-products-title">
+          <div className="ud-section-head">
+            <div>
+              <h2 className="ud-section-title" id="ud-products-title">{productsTitle}</h2>
+              {!loadingListings && (
+                <p className="ud-section-count">
+                  {(totals.products ?? 0).toLocaleString()} listings
+                </p>
+              )}
+            </div>
+            <a href={themeLink('/explore?vertical=products')} className="ud-section-cta">
+              {productsCta}
+            </a>
+          </div>
+          {loadingListings ? (
+            <SectionSkeletons count={4} gridClass="ud-product-grid" />
+          ) : (
+            <div className="ud-product-grid">
+              {products.map((l) => <ProductCard key={l.id} listing={l} themeLink={themeLink} />)}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ── Autos ────────────────────────────────────────────────────────── */}
+      {(loadingListings || autos.length > 0) && (
+        <section className="ud-vertical-section" aria-labelledby="ud-autos-title">
+          <div className="ud-section-head">
+            <div>
+              <h2 className="ud-section-title" id="ud-autos-title">{autosTitle}</h2>
+              {!loadingListings && (
+                <p className="ud-section-count">
+                  {(totals.autos ?? 0).toLocaleString()} listings
+                </p>
+              )}
+            </div>
+            <a href={themeLink('/explore?vertical=autos')} className="ud-section-cta">
+              {autosCta}
+            </a>
+          </div>
+          {loadingListings ? (
+            <SectionSkeletons count={4} gridClass="ud-auto-grid" />
+          ) : (
+            <div className="ud-auto-grid">
+              {autos.map((l) => <AutoCard key={l.id} listing={l} themeLink={themeLink} />)}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ── Events ───────────────────────────────────────────────────────── */}
+      {(loadingListings || events.length > 0) && (
+        <section className="ud-vertical-section ud-vertical-section--alt" aria-labelledby="ud-events-title">
+          <div className="ud-section-head">
+            <div>
+              <h2 className="ud-section-title" id="ud-events-title">{eventsTitle}</h2>
+              {!loadingListings && (
+                <p className="ud-section-count">
+                  {(totals.events ?? 0).toLocaleString()} listings
+                </p>
+              )}
+            </div>
+            <a href={themeLink('/explore?vertical=events')} className="ud-section-cta">
+              {eventsCta}
+            </a>
+          </div>
+          {loadingListings ? (
+            <SectionSkeletons count={4} gridClass="ud-event-grid" />
+          ) : (
+            <div className="ud-event-grid">
+              {events.map((l) => <EventCard key={l.id} listing={l} themeLink={themeLink} />)}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ── Jobs + Classifieds Split ──────────────────────────────────────── */}
+      {(loadingListings || jobs.length > 0 || classifieds.length > 0) && (
+        loadingListings ? (
+          <section className="ud-split-section">
+            <div className="ud-split-panel-grid">
+              <div className="ud-split-panel">
+                <SectionSkeletons count={4} gridClass="ud-jobs-list" />
+              </div>
+              <div className="ud-split-panel">
+                <SectionSkeletons count={4} gridClass="ud-classifieds-mini-grid" />
+              </div>
+            </div>
+          </section>
         ) : (
-          <>
-            <div className="ud-listings-grid">
-              {listings.map((listing) => (
-                <a href={themeLink(listing.href)} className="ud-listing-card" key={listing.id}>
-                  <div className="ud-listing-image-wrap">
-                    <img src={listing.image} alt={listing.title} loading="lazy" /> 
-                  </div>
-                  <div className="ud-listing-body">
-                    <div className="ud-mono">{listing.category}</div>
-                    <h3>{listing.title}</h3>
-                    <p>{listing.description}</p>
-                    <div className="ud-listing-meta">
-                      <span>{listing.price}</span>
-                      <span>{listing.actionLabel}</span>
-                    </div>
-                  </div>
-                </a>
+          <JobsClassifiedsSplitPanel
+            jobs={jobs}
+            classifieds={classifieds}
+            themeLink={themeLink}
+          />
+        )
+      )}
+
+      {/* ── Services ─────────────────────────────────────────────────────── */}
+      {(loadingListings || serviceCategories.length > 0) && (
+        <section className="ud-vertical-section" aria-labelledby="ud-services-title">
+          <div className="ud-section-head">
+            <div>
+              <h2 className="ud-section-title" id="ud-services-title">{servicesTitle}</h2>
+              {!loadingListings && (
+                <p className="ud-section-count">
+                  {(totals.services ?? 0).toLocaleString()} providers
+                </p>
+              )}
+            </div>
+            <a href={themeLink('/explore?vertical=services')} className="ud-section-cta">
+              {servicesCta}
+            </a>
+          </div>
+          {loadingListings ? (
+            <SectionSkeletons count={6} gridClass="ud-svc-grid" />
+          ) : (
+            <div className="ud-svc-grid">
+              {serviceCategories.map((cat) => (
+                <ServiceCategoryCard key={cat.id} category={cat} themeLink={themeLink} />
               ))}
             </div>
-            {(inventoryTotal ?? 0) > listings.length && (
-              <div className="ud-listings-footer">
-                <a href={themeLink('/explore')} className="ud-hero-secondary-btn">
-                  Browse full catalog
-                </a>
-              </div>
-            )}
-          </>
-        )}
-      </section>
+          )}
+        </section>
+      )}
+
+      {/* ── Empty state ───────────────────────────────────────────────────── */}
+      {noListings && (
+        <section className="ud-listings-section" aria-labelledby="ud-empty-title">
+          <div className="ud-listing-state" role="status">
+            <div className="ud-mono ud-section-eyebrow">{emptyKicker}</div>
+            <h3 id="ud-empty-title">{emptyTitle}</h3>
+            <p>{emptyDescription}</p>
+            <a href={themeLink('/explore')} className="core-btn-primary ud-empty-cta">
+              {emptyCta}
+            </a>
+          </div>
+        </section>
+      )}
+
+      {/* ── Popular Categories ────────────────────────────────────────────── */}
+      {!loadingListings && categories.length > 0 && (
+        <PopularCategoriesSection categories={categories} themeLink={themeLink} />
+      )}
+
+      {/* ── How It Works ──────────────────────────────────────────────────── */}
+      <HowItWorks />
 
       <CoreFeatures />
 
-      <section className="ud-final-cta" aria-labelledby="ud-cta-title">
-        <div className="ud-final-cta-inner">
-          <h2 id="ud-cta-title">
-            {ctaTitle.split('\n').map((line, index, lines) => (
-              <React.Fragment key={`${line}-${index}`}>
-                {line}
-                {index < lines.length - 1 ? <br /> : null}
-              </React.Fragment>
-            ))}
-          </h2>
-          <p>{ctaDescription}</p>
-          <a href={themeLink('/explore')} className="core-btn-primary ud-final-cta-btn" id="ud-btn-cta-handshake">
-            {ctaButtonLabel}
-          </a>
+      {/* ── Seller CTA ────────────────────────────────────────────────────── */}
+      <section className="ud-seller-cta" aria-labelledby="ud-seller-cta-title">
+        <div className="ud-seller-cta-inner">
+          <div className="ud-seller-cta-copy">
+            <div className="ud-mono ud-section-eyebrow">{sellerCtaEyebrow}</div>
+            <h2 id="ud-seller-cta-title">{sellerCtaTitle}</h2>
+            <p>{sellerCtaDescription}</p>
+            <div className="ud-seller-cta-actions">
+              <a href={themeLink('/listing')} className="core-btn-primary ud-seller-cta-btn">
+                {sellerCtaButton}
+              </a>
+              {/* Links to HIW section above — same page */}
+              <a href="#ud-hiw-section" className="ud-seller-cta-link">{sellerCtaHiwLink}</a>
+            </div>
+          </div>
+          <div className="ud-seller-cta-stats">
+            {inventoryTotal != null && (
+              <div className="ud-seller-stat">
+                <span className="ud-seller-stat__value">{inventoryTotal.toLocaleString()}</span>
+                <span className="ud-mono ud-seller-stat__label">Active listings</span>
+              </div>
+            )}
+            <div className="ud-seller-stat">
+              <span className="ud-seller-stat__value">{VERTICALS.length}</span>
+              <span className="ud-mono ud-seller-stat__label">Marketplace verticals</span>
+            </div>
+            <div className="ud-seller-stat">
+              <span className="ud-seller-stat__value">{!loadingListings ? categories.length || '—' : '—'}</span>
+              <span className="ud-mono ud-seller-stat__label">Active categories</span>
+            </div>
+          </div>
         </div>
       </section>
     </div>
