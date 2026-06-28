@@ -463,7 +463,8 @@ function VerticalSearchPane({
   themeLink: (p: string) => string;
 }) {
   const cfg = PANE_CONFIG[vertical];
-  const vertCats = categories.filter(c => c.vertical === vertical);
+  const vertCatKey = `is_${vertical === 'autos' ? 'auto' : vertical === 'classifieds' ? 'classified' : vertical.replace(/s$/, '')}` as keyof typeof categories[0];
+  const vertCats = categories.filter(c => (c as Record<string, unknown>)[vertCatKey]);
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
 

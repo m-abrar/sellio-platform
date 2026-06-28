@@ -314,17 +314,23 @@ export async function fetchHomeListings(): Promise<MultiVerticalResult> {
 
   let body: Record<string, unknown> = {};
 
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10_000);
+
   try {
     const response = await fetch(url, {
       credentials: 'include',
       headers: { Accept: 'application/json' },
+      signal: controller.signal,
     });
 
     if (response.ok) {
       body = (await response.json()) as Record<string, unknown>;
     }
   } catch {
-    // Silently fall through — all verticals will be treated as failed
+    // Network error, timeout abort, or non-ok response — fall through with empty body
+  } finally {
+    clearTimeout(timer);
   }
 
   const categories: Category[] = [];
