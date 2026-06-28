@@ -1,9 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, View, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useAuth } from '../../src/context/AuthContext';
 import { AuthenticatedScreen } from '../../src/auth/AuthenticatedScreen';
 
 export default function SettingsView() {
+  const router = useRouter();
   const { isAuthenticated, user, signOut } = useAuth();
 
   const userInitial = user?.name ? user.name[0].toUpperCase() : 'B';
@@ -19,9 +21,13 @@ export default function SettingsView() {
 
         <View style={styles.profileSection}>
           <View style={[styles.avatarPlaceholder, isAuthenticated && styles.avatarActive]}>
-            <Text style={[styles.avatarLetter, isAuthenticated && styles.avatarLetterActive]}>
-              {userInitial}
-            </Text>
+            {user?.avatar_url ? (
+              <Image source={{ uri: user.avatar_url }} style={styles.avatarImage} accessibilityLabel={`${displayName} avatar`} />
+            ) : (
+              <Text style={[styles.avatarLetter, isAuthenticated && styles.avatarLetterActive]}>
+                {userInitial}
+              </Text>
+            )}
           </View>
           <Text style={styles.profileName}>{displayName}</Text>
           <Text style={styles.profileEmail}>{displayEmail}</Text>
@@ -34,7 +40,7 @@ export default function SettingsView() {
         </View>
 
         <View style={styles.menuGroup}>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/profile')}>
             <Text style={styles.menuIcon}>PR</Text>
             <View style={styles.menuTextContainer}>
               <Text style={styles.menuTitle}>Profile Settings</Text>
@@ -115,6 +121,11 @@ const styles = StyleSheet.create({
   },
   avatarLetterActive: {
     color: '#6366f1',
+  },
+  avatarImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 40,
   },
   profileName: {
     color: '#fff',

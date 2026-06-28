@@ -1,4 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import * as ExpoLinking from 'expo-linking';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -6,6 +7,7 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   TextInput,
@@ -19,6 +21,39 @@ import { FavoriteRecord, FavoriteStatusResponse } from '../../src/features/buyer
 import { toListingDetail } from '../../src/features/listings/adapters';
 import { LISTING_CATEGORIES } from '../../src/features/listings/catalog';
 import { ListingApiRecord, ListingDetailItem, ListingVertical } from '../../src/features/listings/types';
+
+interface PropertyBookingPreview {
+  check_in: string;
+  check_out: string;
+  nights: number;
+  guests: number;
+  lines: Array<{ title: string; amount: number | string }>;
+  initial_total: number | string;
+}
+
+interface PropertyBookingResult {
+  id: number;
+  status: string;
+  total_price: number | string;
+  check_in_date: string;
+  check_out_date: string;
+}
+
+function formatUsd(value: number | string) {
+  const amount = Number(value);
+  return Number.isFinite(amount) ? `$${amount.toFixed(2)}` : String(value);
+}
+
+function stayLengthInNights(checkIn: string, checkOut: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(checkIn) || !/^\d{4}-\d{2}-\d{2}$/.test(checkOut)) return null;
+
+  const start = Date.parse(`${checkIn}T00:00:00Z`);
+  const end = Date.parse(`${checkOut}T00:00:00Z`);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) return null;
+  if (new Date(start).toISOString().slice(0, 10) !== checkIn || new Date(end).toISOString().slice(0, 10) !== checkOut) return null;
+
+  return (end - start) / 86_400_000;
+}
 
 function isListingVertical(value: string | undefined): value is ListingVertical {
   return LISTING_CATEGORIES.some((category) => category.id === value);
@@ -52,6 +87,11 @@ export default function ListingDetailsView() {
   const [selectedEventOccurrenceId, setSelectedEventOccurrenceId] = useState('');
   const [selectedEventTicketId, setSelectedEventTicketId] = useState('');
   const [eventTicketQuantity, setEventTicketQuantity] = useState('1');
+  const [propertyCheckIn, setPropertyCheckIn] = useState('');
+  const [propertyCheckOut, setPropertyCheckOut] = useState('');
+  const [propertyGuests, setPropertyGuests] = useState('1');
+  const [propertyBookingPreview, setPropertyBookingPreview] = useState<PropertyBookingPreview | null>(null);
+  const [isPreviewingBooking, setIsPreviewingBooking] = useState(false);
   const [inquiryError, setInquiryError] = useState<string | null>(null);
   const [isSubmittingInquiry, setIsSubmittingInquiry] = useState(false);
   const [isPerformingPrimaryAction, setIsPerformingPrimaryAction] = useState(false);
@@ -234,6 +274,27 @@ export default function ListingDetailsView() {
     }
   }, [favoriteId, favoriteStatus, isAuthenticated, item, router]);
 
+  const shareListing = useCallback(async () => {
+    if (!item) return;
+
+    const url = ExpoLinking.createURL(`/listing/${encodeURIComponent(item.slug)}`, {
+      queryParams: { vertical: item.vertical },
+    });
+
+    try {
+      await Share.share({
+        title: item.title,
+        message: `${item.title}\n${item.price} · ${item.location}\n${url}`,
+        url,
+      });
+    } catch (shareError) {
+      Alert.alert(
+        'Could not share listing',
+        shareError instanceof Error ? shareError.message : 'Please try again.',
+      );
+    }
+  }, [item]);
+
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -301,11 +362,6 @@ export default function ListingDetailsView() {
       return;
     }
 
-    if (item.vertical === 'properties' && item.isRentalProperty) {
-      Alert.alert('Coming soon', item.primaryActionDescription);
-      return;
-    }
-
     if (item.vertical === 'events' && item.eventOccurrences.length === 0) {
       Alert.alert('Tickets unavailable', 'There are no upcoming ticket options for this event.');
       return;
@@ -327,6 +383,57 @@ export default function ListingDetailsView() {
     Alert.alert('Coming soon', item.primaryActionDescription);
   };
 
+  const previewPropertyBooking = async () => {
+    if (!item || item.vertical !== 'properties' || !item.isRentalProperty || isPreviewingBooking) return;
+
+    const guests = Number(propertyGuests);
+    if (!propertyCheckIn.trim() || !propertyCheckOut.trim() || !Number.isInteger(guests) || guests < 1 || guests > item.maxGuests) {
+      setInquiryError(`Enter check-in and check-out dates and a guest count from 1 to ${item.maxGuests}.`);
+      return;
+    }
+
+    const nights = stayLengthInNights(propertyCheckIn.trim(), propertyCheckOut.trim());
+    if (!nights) {
+      setInquiryError('Enter valid dates in YYYY-MM-DD format. Check-out must be after check-in.');
+      return;
+    }
+    if (nights < item.minimumStayNights) {
+      setInquiryError(`This property requires a minimum stay of ${item.minimumStayNights} nights.`);
+      return;
+    }
+    if (item.maximumStayNights && nights > item.maximumStayNights) {
+      setInquiryError(`This property allows a maximum stay of ${item.maximumStayNights} nights.`);
+      return;
+    }
+
+    setIsPreviewingBooking(true);
+    setInquiryError(null);
+    setPropertyBookingPreview(null);
+
+    try {
+      const preview = await apiRequest<PropertyBookingPreview>(
+        `/v1/properties/${encodeURIComponent(item.id)}/booking-preview`,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            check_in: propertyCheckIn.trim(),
+            check_out: propertyCheckOut.trim(),
+            guests,
+          }),
+        },
+      );
+      setPropertyBookingPreview(preview);
+    } catch (requestError) {
+      setInquiryError(
+        requestError instanceof Error
+          ? requestError.message
+          : 'Could not calculate this stay. Please check the dates and try again.',
+      );
+    } finally {
+      setIsPreviewingBooking(false);
+    }
+  };
+
   const submitListingInquiry = async () => {
     if (!item || !['autos', 'classifieds', 'services', 'jobs', 'properties', 'events'].includes(item.vertical) || isSubmittingInquiry) return;
 
@@ -335,6 +442,7 @@ export default function ListingDetailsView() {
     const isServiceQuote = item.vertical === 'services';
     const isJobApplication = item.vertical === 'jobs';
     const isPropertyInquiry = item.vertical === 'properties';
+    const isPropertyBooking = isPropertyInquiry && item.isRentalProperty;
     const isEventBooking = item.vertical === 'events';
 
     if (!isServiceQuote && !isJobApplication && !isEventBooking && (!fullName || !email)) {
@@ -349,6 +457,12 @@ export default function ListingDetailsView() {
 
     if (isJobApplication && !inquiryMessage.trim()) {
       setInquiryError('Write a cover letter before submitting your application.');
+      return;
+    }
+
+    const propertyGuestCount = Number(propertyGuests);
+    if (isPropertyBooking && (!propertyBookingPreview || !Number.isInteger(propertyGuestCount))) {
+      setInquiryError('Check the stay price before reserving this property.');
       return;
     }
 
@@ -369,6 +483,8 @@ export default function ListingDetailsView() {
         ? `/v1/jobs/${encodeURIComponent(item.slug)}/applications`
         : isServiceQuote
         ? `/v1/services/${encodeURIComponent(item.id)}/quotes`
+        : isPropertyBooking
+          ? `/v1/properties/${encodeURIComponent(item.id)}/bookings`
         : isPropertyInquiry
           ? `/v1/properties/${encodeURIComponent(item.id)}/inquiries`
         : isVehicle
@@ -392,6 +508,16 @@ export default function ListingDetailsView() {
             scope_size: Number(serviceScopeSize),
             notes: inquiryMessage.trim() || null,
           }
+        : isPropertyBooking
+        ? {
+            check_in: propertyCheckIn.trim(),
+            check_out: propertyCheckOut.trim(),
+            guests: propertyGuestCount,
+            full_name: fullName,
+            email,
+            phone: inquiryPhone.trim() || null,
+            message: inquiryMessage.trim() || null,
+          }
         : {
             full_name: fullName,
             email,
@@ -404,7 +530,7 @@ export default function ListingDetailsView() {
                 : {}),
           };
 
-      const submission = await apiRequest<{ status?: string; total_price?: number | string }>(endpoint, {
+      const submission = await apiRequest<PropertyBookingResult | { status?: string; total_price?: number | string }>(endpoint, {
         method: 'POST',
         authenticated: true,
         body: JSON.stringify(body),
@@ -415,6 +541,16 @@ export default function ListingDetailsView() {
       setInquiryOffer('');
       setJobPortfolioUrl('');
       setEventTicketQuantity('1');
+
+      if (isPropertyBooking) {
+        const booking = submission as PropertyBookingResult;
+        setPropertyBookingPreview(null);
+        Alert.alert(
+          'Stay reserved',
+          `Booking #${booking.id} is pending for ${booking.check_in_date} to ${booking.check_out_date}. Total: ${formatUsd(booking.total_price)}. You can track it in Buyer Activity.`,
+        );
+        return;
+      }
 
       if (isEventBooking) {
         const confirmed = submission.status === 'confirmed';
@@ -514,6 +650,14 @@ export default function ListingDetailsView() {
             </>
           )}
           <TouchableOpacity
+            style={styles.shareBtn}
+            onPress={shareListing}
+            accessibilityRole="button"
+            accessibilityLabel={`Share ${item.title}`}
+          >
+            <Text style={styles.shareBtnText}>SHARE LISTING</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={[styles.favoriteBtn, favoriteStatus === 'saved' && styles.favoriteBtnSaved]}
             onPress={toggleFavorite}
             disabled={favoriteStatus === 'checking' || favoriteStatus === 'saving' || favoriteStatus === 'removing'}
@@ -547,7 +691,7 @@ export default function ListingDetailsView() {
                       : item.vertical === 'jobs'
                           ? 'JOB APPLICATION'
                           : item.vertical === 'properties'
-                            ? 'PROPERTY INQUIRY'
+                            ? item.isRentalProperty ? 'PROPERTY BOOKING' : 'PROPERTY INQUIRY'
                         : 'SELLER INQUIRY'}
                   </Text>
                   <Text style={styles.inquiryHelp}>
@@ -556,7 +700,9 @@ export default function ListingDetailsView() {
                       : item.vertical === 'events'
                         ? 'Choose an event date, ticket type, and quantity.'
                       : item.vertical === 'properties'
-                        ? 'Send your details directly to the listing agent.'
+                        ? item.isRentalProperty
+                          ? `Choose your dates and guests. This property allows up to ${item.maxGuests} guests.`
+                          : 'Send your details directly to the listing agent.'
                       : item.vertical === 'services'
                       ? 'Tell the provider what you need and when you need it.'
                       : `Send your details directly to the ${item.vertical === 'autos' ? 'dealer' : 'seller'}.`}
@@ -712,6 +858,83 @@ export default function ListingDetailsView() {
                   />
                 </>
               )}
+              {item.vertical === 'properties' && item.isRentalProperty && (
+                <>
+                  <Text style={styles.inquiryFieldLabel}>STAY DETAILS</Text>
+                  <TextInput
+                    style={styles.inquiryInput}
+                    value={propertyCheckIn}
+                    onChangeText={(value) => {
+                      setPropertyCheckIn(value);
+                      setPropertyBookingPreview(null);
+                    }}
+                    placeholder="Check-in (YYYY-MM-DD)"
+                    placeholderTextColor="#475569"
+                    autoCapitalize="none"
+                    maxLength={10}
+                    editable={!isSubmittingInquiry && !isPreviewingBooking}
+                  />
+                  <TextInput
+                    style={styles.inquiryInput}
+                    value={propertyCheckOut}
+                    onChangeText={(value) => {
+                      setPropertyCheckOut(value);
+                      setPropertyBookingPreview(null);
+                    }}
+                    placeholder="Check-out (YYYY-MM-DD)"
+                    placeholderTextColor="#475569"
+                    autoCapitalize="none"
+                    maxLength={10}
+                    editable={!isSubmittingInquiry && !isPreviewingBooking}
+                  />
+                  <TextInput
+                    style={styles.inquiryInput}
+                    value={propertyGuests}
+                    onChangeText={(value) => {
+                      setPropertyGuests(value);
+                      setPropertyBookingPreview(null);
+                    }}
+                    placeholder={`Guests (1-${item.maxGuests})`}
+                    placeholderTextColor="#475569"
+                    keyboardType="number-pad"
+                    maxLength={2}
+                    editable={!isSubmittingInquiry && !isPreviewingBooking}
+                  />
+                  <Text style={styles.bookingStayRules}>
+                    Minimum stay: {item.minimumStayNights} night{item.minimumStayNights === 1 ? '' : 's'}
+                    {item.maximumStayNights ? ` - Maximum stay: ${item.maximumStayNights} nights` : ''}
+                  </Text>
+                  <TouchableOpacity
+                    style={[styles.bookingPreviewButton, isPreviewingBooking && styles.inquirySubmitBusy]}
+                    onPress={previewPropertyBooking}
+                    disabled={isPreviewingBooking || isSubmittingInquiry}
+                    accessibilityRole="button"
+                    accessibilityState={{ busy: isPreviewingBooking, disabled: isPreviewingBooking || isSubmittingInquiry }}
+                  >
+                    {isPreviewingBooking && <ActivityIndicator size="small" color="#c7d2fe" />}
+                    <Text style={styles.bookingPreviewButtonText}>
+                      {isPreviewingBooking ? 'CHECKING PRICE...' : 'CHECK STAY PRICE'}
+                    </Text>
+                  </TouchableOpacity>
+                  {propertyBookingPreview && (
+                    <View style={styles.bookingPreviewCard}>
+                      <Text style={styles.bookingPreviewTitle}>
+                        {propertyBookingPreview.nights} night{propertyBookingPreview.nights === 1 ? '' : 's'} · {propertyBookingPreview.guests} guest{propertyBookingPreview.guests === 1 ? '' : 's'}
+                      </Text>
+                      {propertyBookingPreview.lines.map((line, index) => (
+                        <View key={`${line.title}-${index}`} style={styles.bookingPreviewLine}>
+                          <Text style={styles.bookingPreviewLineLabel}>{line.title}</Text>
+                          <Text style={styles.bookingPreviewLineAmount}>{formatUsd(line.amount)}</Text>
+                        </View>
+                      ))}
+                      <View style={styles.bookingPreviewTotal}>
+                        <Text style={styles.bookingPreviewTotalLabel}>TOTAL</Text>
+                        <Text style={styles.bookingPreviewTotalAmount}>{formatUsd(propertyBookingPreview.initial_total)}</Text>
+                      </View>
+                    </View>
+                  )}
+                </>
+              )}
               {item.vertical !== 'events' && (
                 <TextInput
                   style={[styles.inquiryInput, styles.inquiryMessageInput]}
@@ -752,9 +975,13 @@ export default function ListingDetailsView() {
                 {isSubmittingInquiry && <ActivityIndicator size="small" color="#fff" />}
                 <Text style={styles.actionBtnText}>
                   {isSubmittingInquiry
-                    ? item.vertical === 'jobs'
+                    ? item.vertical === 'properties' && item.isRentalProperty
+                      ? 'RESERVING...'
+                    : item.vertical === 'jobs'
                       ? 'SUBMITTING...'
                       : item.vertical === 'events' ? 'RESERVING...' : 'SENDING INQUIRY...'
+                    : item.vertical === 'properties' && item.isRentalProperty
+                      ? 'RESERVE STAY'
                     : item.vertical === 'jobs'
                       ? 'SUBMIT APPLICATION'
                       : item.vertical === 'events' ? 'RESERVE TICKETS' : 'SEND INQUIRY'}
@@ -806,6 +1033,8 @@ const styles = StyleSheet.create({
   factCard: { width: '48%', minHeight: 74, justifyContent: 'center', borderRadius: 18, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.06)', backgroundColor: '#121214', paddingHorizontal: 14, paddingVertical: 12 },
   factLabel: { color: '#64748b', fontSize: 8, fontWeight: '900', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 5 },
   factValue: { color: '#e2e8f0', fontSize: 12, fontWeight: '800', lineHeight: 17 },
+  shareBtn: { minHeight: 52, marginBottom: 12, alignItems: 'center', justifyContent: 'center', borderRadius: 20, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.12)', backgroundColor: 'rgba(255, 255, 255, 0.035)', paddingHorizontal: 20 },
+  shareBtnText: { color: '#e2e8f0', fontSize: 10, fontWeight: '900', letterSpacing: 1.2 },
   favoriteBtn: { minHeight: 52, marginBottom: 12, alignItems: 'center', justifyContent: 'center', borderRadius: 20, borderWidth: 1, borderColor: 'rgba(129, 140, 248, 0.35)', backgroundColor: 'rgba(99, 102, 241, 0.08)', paddingHorizontal: 20 },
   favoriteBtnSaved: { borderColor: 'rgba(239, 68, 68, 0.35)', backgroundColor: 'rgba(239, 68, 68, 0.08)' },
   favoriteBtnText: { color: '#a5b4fc', fontSize: 10, fontWeight: '900', letterSpacing: 1.2 },
@@ -825,6 +1054,17 @@ const styles = StyleSheet.create({
   packageOptionTitle: { color: '#fff', fontSize: 12, fontWeight: '900' },
   packageOptionDescription: { color: '#64748b', fontSize: 10, lineHeight: 14, marginTop: 3 },
   packageOptionPrice: { color: '#a5b4fc', fontSize: 11, fontWeight: '900' },
+  bookingStayRules: { color: '#64748b', fontSize: 10, lineHeight: 15 },
+  bookingPreviewButton: { minHeight: 46, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 9, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(129, 140, 248, 0.4)', backgroundColor: 'rgba(99, 102, 241, 0.1)', paddingHorizontal: 16 },
+  bookingPreviewButtonText: { color: '#c7d2fe', fontSize: 9, fontWeight: '900', letterSpacing: 1.1 },
+  bookingPreviewCard: { gap: 9, borderRadius: 18, borderWidth: 1, borderColor: 'rgba(129, 140, 248, 0.2)', backgroundColor: '#17171a', padding: 15 },
+  bookingPreviewTitle: { color: '#fff', fontSize: 12, fontWeight: '900', marginBottom: 2 },
+  bookingPreviewLine: { flexDirection: 'row', justifyContent: 'space-between', gap: 12 },
+  bookingPreviewLineLabel: { flex: 1, color: '#94a3b8', fontSize: 10, lineHeight: 15 },
+  bookingPreviewLineAmount: { color: '#cbd5e1', fontSize: 10, fontWeight: '800' },
+  bookingPreviewTotal: { flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 1, borderTopColor: 'rgba(255, 255, 255, 0.08)', paddingTop: 11, marginTop: 2 },
+  bookingPreviewTotalLabel: { color: '#a5b4fc', fontSize: 10, fontWeight: '900', letterSpacing: 1 },
+  bookingPreviewTotalAmount: { color: '#fff', fontSize: 13, fontWeight: '900' },
   inquiryError: { color: '#f87171', fontSize: 11, lineHeight: 16 },
   inquirySubmit: { minHeight: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, borderRadius: 18, backgroundColor: '#6366f1', paddingHorizontal: 20 },
   inquirySubmitBusy: { backgroundColor: '#4f46e5' },

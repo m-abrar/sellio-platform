@@ -135,6 +135,14 @@ export default function LoginModal() {
                 {isPasswordVisible ? 'HIDE PASSWORD' : 'SHOW PASSWORD'}
               </Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.forgotPasswordButton}
+              onPress={() => router.push('/forgot-password')}
+              disabled={isSubmitting}
+              accessibilityRole="button"
+            >
+              <Text style={styles.forgotPasswordText}>FORGOT PASSWORD?</Text>
+            </TouchableOpacity>
           </View>
 
           <TouchableOpacity 
@@ -148,6 +156,19 @@ export default function LoginModal() {
             <Text style={styles.submitBtnText}>
               {isSubmitting ? 'SIGNING YOU IN...' : 'SECURE SIGN IN'}
             </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.registerBtn}
+            onPress={() => router.push({
+              pathname: '/register',
+              params: returnTo ? { returnTo } : {},
+            })}
+            disabled={isSubmitting}
+            accessibilityRole="button"
+          >
+            <Text style={styles.registerPrompt}>NEW TO SELLIO?</Text>
+            <Text style={styles.registerBtnText}>CREATE BUYER ACCOUNT</Text>
           </TouchableOpacity>
 
           <TouchableOpacity 
@@ -241,6 +262,16 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     letterSpacing: 1,
   },
+  forgotPasswordButton: {
+    alignSelf: 'flex-start',
+    paddingVertical: 4,
+  },
+  forgotPasswordText: {
+    color: '#94a3b8',
+    fontSize: 9,
+    fontWeight: '900',
+    letterSpacing: 1,
+  },
   submitBtn: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -263,6 +294,25 @@ const styles = StyleSheet.create({
   closeBtn: {
     paddingVertical: 14,
     alignItems: 'center',
+  },
+  registerBtn: {
+    alignItems: 'center',
+    gap: 5,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.06)',
+    paddingTop: 20,
+  },
+  registerPrompt: {
+    color: '#475569',
+    fontSize: 9,
+    fontWeight: '900',
+    letterSpacing: 1.2,
+  },
+  registerBtnText: {
+    color: '#a5b4fc',
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 1.1,
   },
   closeBtnText: {
     color: '#64748b',

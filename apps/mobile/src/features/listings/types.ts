@@ -104,6 +104,9 @@ export interface ListingDetailItem extends ListingCardItem {
   primaryActionDescription: string;
   servicePackages: ServicePackageOption[];
   isRentalProperty: boolean;
+  maxGuests: number;
+  minimumStayNights: number;
+  maximumStayNights: number | null;
   eventOccurrences: EventOccurrenceOption[];
 }
 

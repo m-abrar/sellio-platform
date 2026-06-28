@@ -29,6 +29,11 @@ function display(value: unknown) {
   return null;
 }
 
+function positiveInteger(value: unknown, fallback: number) {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
 function title(value: unknown) {
   if (value && typeof value === 'object' && !Array.isArray(value)) {
     return display((value as Record<string, unknown>).title)
@@ -253,21 +258,21 @@ function factsFor(record: ListingApiRecord, vertical: ListingVertical): ListingD
 function primaryActionFor(record: ListingApiRecord, vertical: ListingVertical) {
   switch (vertical) {
     case 'products':
-      return { label: 'ADD TO CART', description: 'Product checkout is not available in the mobile app yet.' };
+      return { label: 'ADD TO CART', description: 'Add this item to your buyer cart.' };
     case 'properties':
       return nested(record.status, 'is_rental')
-        ? { label: 'BOOK THIS PROPERTY', description: 'Property booking is not available in the mobile app yet.' }
-        : { label: 'ASK ABOUT THIS PROPERTY', description: 'Property inquiries are not available in the mobile app yet.' };
+        ? { label: 'BOOK THIS PROPERTY', description: 'Choose your stay dates and reserve this property.' }
+        : { label: 'ASK ABOUT THIS PROPERTY', description: 'Send an inquiry to the listing agent.' };
     case 'autos':
-      return { label: 'ASK ABOUT THIS VEHICLE', description: 'Vehicle inquiries are not available in the mobile app yet.' };
+      return { label: 'ASK ABOUT THIS VEHICLE', description: 'Send an inquiry to the dealer.' };
     case 'events':
-      return { label: 'RESERVE TICKETS', description: 'Event booking is not available in the mobile app yet.' };
+      return { label: 'RESERVE TICKETS', description: 'Choose a date and reserve your tickets.' };
     case 'jobs':
-      return { label: 'APPLY FOR THIS JOB', description: 'Job applications are not available in the mobile app yet.' };
+      return { label: 'APPLY FOR THIS JOB', description: 'Submit your application to the employer.' };
     case 'services':
-      return { label: 'REQUEST A QUOTE', description: 'Service quotes are not available in the mobile app yet.' };
+      return { label: 'REQUEST A QUOTE', description: 'Choose a package and send your requirements.' };
     case 'classifieds':
-      return { label: 'CONTACT THE SELLER', description: 'Classified inquiries are not available in the mobile app yet.' };
+      return { label: 'CONTACT THE SELLER', description: 'Send an inquiry to the seller.' };
   }
 }
 
@@ -353,6 +358,11 @@ export function toListingDetail(
     primaryActionDescription: primaryAction.description,
     servicePackages: vertical === 'services' ? servicePackagesFor(record) : [],
     isRentalProperty: vertical === 'properties' && nested(record.status, 'is_rental') === true,
+    maxGuests: positiveInteger(nested(record.specs, 'max_guests'), 1),
+    minimumStayNights: positiveInteger(nested(record.specs, 'minimum_rental_days'), 1),
+    maximumStayNights: nested(record.specs, 'maximum_rental_days') == null
+      ? null
+      : positiveInteger(nested(record.specs, 'maximum_rental_days'), 1),
     eventOccurrences: vertical === 'events' ? eventOccurrencesFor(record) : [],
   };
 }

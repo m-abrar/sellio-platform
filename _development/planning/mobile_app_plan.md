@@ -1,6 +1,6 @@
 # Sellio React Native Mobile App Development Plan
 
-Updated: 2026-06-24
+Updated: 2026-06-28
 
 ## Decision
 
@@ -105,7 +105,7 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
 - [x] Add basic image rendering and fallback visuals.
 - [x] Add image loading failure handling and retry behavior.
 - [x] Use vertical-specific listing endpoints for detail screens instead of probing unrelated endpoints.
-- [ ] Expand detail adapters with richer vertical-specific fields and customer actions.
+- [x] Expand detail adapters with richer vertical-specific fields and customer actions.
   - [x] Render contract-backed detail facts and vertical-aware action labels for all seven verticals.
   - [x] Connect the vehicle detail action to a real, buyer-linked dealer inquiry form.
   - [x] Connect the classified detail action to a real, buyer-linked seller inquiry form.
@@ -114,8 +114,8 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
   - [x] Connect the product detail action to the buyer-owned cart.
   - [x] Connect for-sale property details to a buyer-linked agent inquiry.
   - [x] Connect event details to occurrence and ticket selection with real booking creation.
-  - [ ] Connect each action to its real buyer workflow and replace the temporary availability notice.
-- [ ] Add shareable listing links.
+  - [x] Connect each action to its real buyer workflow and replace the temporary availability notice.
+- [x] Add shareable listing links.
 
 ### Acceptance Criteria
 
@@ -129,11 +129,11 @@ Replace the prototype home feed with a complete, API-backed marketplace experien
 ### Tasks
 
 - [x] Add basic login validation and error presentation.
-- [ ] Add buyer registration.
-- [ ] Add forgot-password and reset-password flows.
+- [x] Add buyer registration.
+- [x] Add forgot-password and reset-password flows.
 - [x] Restore the stored authenticated buyer session on startup.
-- [ ] Refresh the authenticated buyer profile from the API on startup.
-- [ ] Add profile editing, avatar upload, and location selection.
+- [x] Refresh the authenticated buyer profile from the API on startup.
+- [x] Add profile editing, avatar upload, and location selection.
 - [ ] Add password management.
 - [ ] Finish buyer terminology and remaining source-string encoding cleanup.
 - [ ] Prevent seller-only accounts from entering unsupported mobile workflows where appropriate.
@@ -196,7 +196,7 @@ Reuse the established Laravel endpoints under `/api/dashboard/user` and align mo
 ### Tasks
 
 - [ ] Add product cart and checkout entry.
-- [ ] Add property inquiry, date selection, pricing, and booking entry.
+- [x] Add property inquiry, date selection, pricing, and booking entry.
 - [ ] Add vehicle inquiry.
 - [ ] Add event ticket selection and booking entry.
 - [ ] Add job application submission.

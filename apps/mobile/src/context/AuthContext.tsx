@@ -1,7 +1,7 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { apiRequest, setUnauthorizedHandler } from '../api/client';
+import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
+import { ApiError, apiRequest, setUnauthorizedHandler } from '../api/client';
 import { clearStoredSession, loadStoredSession, storeSession } from '../auth/sessionStorage';
-import { AuthResponse, AuthUser } from '../features/auth/types';
+import { AuthResponse, AuthUser, BuyerRegistrationInput } from '../features/auth/types';
 
 interface AuthContextType {
   token: string | null;
@@ -9,6 +9,8 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (input: BuyerRegistrationInput) => Promise<void>;
+  updateUser: (updates: Partial<AuthUser>) => Promise<void>;
   signOut: () => Promise<void>;
   error: string | null;
 }
@@ -20,28 +22,65 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const authRevision = useRef(0);
 
   useEffect(() => {
+    let active = true;
+
     async function loadStorageData() {
       try {
         const session = await loadStoredSession<AuthUser>();
 
         if (session) {
+          if (!active) return;
+
           setToken(session.token);
           setUser(session.user);
+          setIsLoading(false);
+          const refreshRevision = authRevision.current;
+
+          try {
+            const refreshedUser = await apiRequest<AuthUser>('/v1/auth/me', {
+              authenticated: true,
+            });
+            const mergedUser = { ...session.user, ...refreshedUser };
+
+            if (!active || refreshRevision !== authRevision.current) return;
+
+            await storeSession(session.token, mergedUser);
+            if (!active || refreshRevision !== authRevision.current) return;
+            setUser(mergedUser);
+          } catch (refreshError) {
+            if (!active) return;
+
+            if (refreshError instanceof ApiError && refreshError.status === 401) {
+              await clearStoredSession();
+              setToken(null);
+              setUser(null);
+              setError('Your session has expired. Please sign in again.');
+            } else {
+              console.warn('Using the cached buyer profile until the API is reachable.', refreshError);
+            }
+          }
         }
       } catch (e) {
         console.warn('Failed to load secure auth credentials', e);
+        await clearStoredSession().catch(() => {});
       } finally {
-        setIsLoading(false);
+        if (active) setIsLoading(false);
       }
     }
 
     loadStorageData();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
     setUnauthorizedHandler(() => {
+      authRevision.current += 1;
       setToken(null);
       setUser(null);
       setError('Your session has expired. Please sign in again.');
@@ -51,6 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
+    authRevision.current += 1;
     setError(null);
     try {
       const authData = await apiRequest<AuthResponse>('/v1/auth/login', {
@@ -80,7 +120,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const signUp = async (input: BuyerRegistrationInput) => {
+    authRevision.current += 1;
+    setError(null);
+    try {
+      const authData = await apiRequest<AuthResponse>('/v1/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: input.name,
+          email: input.email,
+          phone: input.phone || null,
+          password: input.password,
+          password_confirmation: input.passwordConfirmation,
+          role: 'user',
+        }),
+      });
+      const tokenVal = authData.access_token || authData.token || '';
+      const userVal = authData.user;
+
+      if (!tokenVal || !userVal) {
+        throw new Error('The registration response did not include a valid buyer session.');
+      }
+
+      await storeSession(tokenVal, userVal);
+      setToken(tokenVal);
+      setUser(userVal);
+    } catch (err: any) {
+      const message = err?.message || 'Failed to create your buyer account';
+      setError(message);
+      throw new Error(message);
+    }
+  };
+
   const signOut = async () => {
+    authRevision.current += 1;
     setError(null);
     try {
       if (token) {
@@ -96,6 +169,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateUser = async (updates: Partial<AuthUser>) => {
+    if (!token || !user) return;
+
+    authRevision.current += 1;
+    const nextUser = { ...user, ...updates };
+    await storeSession(token, nextUser);
+    setUser(nextUser);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -104,6 +186,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthenticated: !!token,
         isLoading,
         signIn,
+        signUp,
+        updateUser,
         signOut,
         error,
       }}
