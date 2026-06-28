@@ -97,6 +97,17 @@ export default function Page() {
     'We do not build garments. We architect confidence through the precision of silhouette and the purity of material.',
   );
   const philosophyEyebrow = useThemeContent('philosophy.eyebrow', 'Atelier philosophy');
+  const heroSidebarLabel = useThemeContent('hero.sidebar_label', 'Runway note');
+  const heroSidebarNote = useThemeContent('hero.sidebar_note', 'A calm editorial storefront for statement silhouettes, tactile materials, and curated seasonal drops.');
+  const heroSideLabel1 = useThemeContent('hero.side_label_1', 'Limited accessories');
+  const heroSideLabel2 = useThemeContent('hero.side_label_2', 'Ready-to-wear edit');
+  const heroArchiveLabel = useThemeContent('hero.archive_link_label', 'View full archive');
+  const metricsFeaturedLabel = useThemeContent('metrics.featured_label', 'Featured edit');
+  const metricsFeaturedValue = useThemeContent('metrics.featured_value', '03');
+  const metricsReturnsLabel = useThemeContent('metrics.returns_label', 'Returns');
+  const metricsReturnsValue = useThemeContent('metrics.returns_value', '30D');
+  const metricsShippingLabel = useThemeContent('metrics.shipping_label', 'Shipping');
+  const metricsShippingValue = useThemeContent('metrics.shipping_value', 'Express');
 
   const [products, setProducts] = useState<FashionProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -166,30 +177,28 @@ export default function Page() {
         </div>
         <div className="ef-hero-editorial">
           <div>
-            <div className="ef-mono">Runway note</div>
-            <p>
-              A calm editorial storefront for statement silhouettes, tactile materials, and curated seasonal drops.
-            </p>
+            <div className="ef-mono">{heroSidebarLabel}</div>
+            <p>{heroSidebarNote}</p>
           </div>
           <div className="ef-hero-editorial-row">
             <span>{sideImageOneLabel}</span>
-            <strong>Limited accessories</strong>
+            <strong>{heroSideLabel1}</strong>
           </div>
           <div className="ef-hero-editorial-row">
             <span>{sideImageTwoLabel}</span>
-            <strong>Ready-to-wear edit</strong>
+            <strong>{heroSideLabel2}</strong>
           </div>
           <a href={themeLink('/explore')} className="ef-hero-text-link">
-            View full archive
+            {heroArchiveLabel}
           </a>
         </div>
       </section>
 
       <section className="ef-metrics-grid">
         <TrendHUD label="Curated pieces" value={productCountLabel} />
-        <TrendHUD label="Featured edit" value="03" />
-        <TrendHUD label="Returns" value="30D" />
-        <TrendHUD label="Shipping" value="Express" />
+        <TrendHUD label={metricsFeaturedLabel} value={metricsFeaturedValue} />
+        <TrendHUD label={metricsReturnsLabel} value={metricsReturnsValue} />
+        <TrendHUD label={metricsShippingLabel} value={metricsShippingValue} />
       </section>
 
       {apiError && useFallback && (

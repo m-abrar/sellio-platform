@@ -5,6 +5,7 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 
 const footerGroups = [
   {
@@ -53,6 +54,7 @@ export const RunwayHeader = () => {
         className={`ef-hamburger ${isOpen ? 'ef-hamburger-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle Navigation"
+        aria-expanded={isOpen}
         type="button"
       >
         <span className="ef-hamburger-bar" />
@@ -86,17 +88,18 @@ interface EditorialLookCardProps {
   price: string | number;
   image: string;
   lookNumber?: string;
+  categoryLabel?: string;
   onClick?: () => void;
 }
 
-export const EditorialLookCard = ({ name, price, image, lookNumber = 'LOOK 07', onClick }: EditorialLookCardProps) => (
+export const EditorialLookCard = ({ name, price, image, lookNumber = 'LOOK 07', categoryLabel = 'Ready to wear', onClick }: EditorialLookCardProps) => (
   <div className="ef-look-card" onClick={onClick}>
     <div className="ef-img-frame">
       <img src={image} alt={name} className="ef-img" />
       <div className="ef-look-badge">{lookNumber}</div>
     </div>
     <div className="ef-look-card-body">
-      <div className="ef-mono">Ready to wear</div>
+      <div className="ef-mono">{categoryLabel}</div>
       <h3>{name}</h3>
       <div>{price}</div>
     </div>
@@ -117,6 +120,7 @@ export const AtelierFooter = () => {
     'footer.description',
     'A refined fashion storefront for curated seasonal pieces, confident checkout, and considered client care.',
   );
+  const footerCopyright = useThemeContent('footer.copyright', '');
 
   return (
     <footer className="ef-footer">
@@ -131,20 +135,30 @@ export const AtelierFooter = () => {
             <div className="ef-mono">Philosophy</div>
             <p>{footerDescription}</p>
           </div>
-          {footerGroups.map((group) => (
-            <div key={group.title} className="ef-footer-links">
-              <div className="ef-mono">{group.title}</div>
-              {group.links.map((link) => (
-                <a key={link.label} href={themeLink(link.href)}>
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          ))}
+          <FooterMenuColumn
+            location="footer_column_1"
+            renderTitle={(title) => <div className="ef-mono">{title}</div>}
+            listClassName="ef-footer-links"
+            linkClassName="ef-footer-link"
+          />
+          <FooterMenuColumn
+            location="footer_column_2"
+            renderTitle={(title) => <div className="ef-mono">{title}</div>}
+            listClassName="ef-footer-links"
+            linkClassName="ef-footer-link"
+          />
+          <FooterMenuColumn
+            location="footer_column_3"
+            renderTitle={(title) => <div className="ef-mono">{title}</div>}
+            listClassName="ef-footer-links"
+            linkClassName="ef-footer-link"
+          />
         </div>
 
         <div className="ef-footer-bottom">
-          <div className="ef-mono">2026 Sellio Atelier. All rights reserved.</div>
+          <div className="ef-mono">
+            {footerCopyright || `© ${new Date().getFullYear()}. All rights reserved.`}
+          </div>
           <MenuNav
             location="social_footer"
             flat

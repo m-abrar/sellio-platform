@@ -1,13 +1,18 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import type { Product } from '@sellio/types';
 import { EditorialLookCard } from './components';
 import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
-import { fetchProductDetail, resolveProductFailure } from '@/themes/ecommerce/shared/catalog';
+import {
+  fetchProductDetail,
+  fetchProductsCatalog,
+  resolveProductFailure,
+} from '@/themes/ecommerce/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
 import { addProductToCart } from '@/themes/unifieds/shared/cart';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 interface ProductPageProps {
   slug: string;
@@ -96,7 +101,6 @@ const getFallbackProduct = (slug: string): any => {
   const resolved = fallbacks[slug];
   if (resolved) return resolved;
 
-  // Generic fallback if slug isn't matched directly
   const titleStr = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   return {
     id: 999,
@@ -111,7 +115,7 @@ const getFallbackProduct = (slug: string): any => {
   };
 };
 
-const SUGGESTED_LOOKS = [
+const FALLBACK_SUGGESTED = [
   { title: "Silk Drape Blazer", price: "$1,250.00", slug: "silk-drape-blazer", image: "/themes/ecommerce/fashion/11.webp" },
   { title: "Monolith Chelsea Boots", price: "$850.00", slug: "monolith-chelsea-boots", image: "/themes/ecommerce/fashion/12.webp" },
   { title: "Oversized Cashmere Coat", price: "$3,200.00", slug: "oversized-cashmere-coat", image: "/themes/ecommerce/fashion/14.webp" }
@@ -120,7 +124,13 @@ const SUGGESTED_LOOKS = [
 export default function ProductPage({ slug }: ProductPageProps) {
   const themeLink = useEcommerceThemeLink();
   const allowDemo = useDemoFallbackAllowed();
+  const labelSuggestionsEyebrow = useThemeContent('suggestions.eyebrow', 'LOOKBOOK_CURATION');
+  const labelSuggestionsSeason = useThemeContent('suggestions.season_label', 'AUTUMN_WINTER_2026_CURATIONS');
+  const labelSpecsTitle = useThemeContent('detail.specs_title', 'Atelier Garment Blueprint');
+  const labelCatalogLabel = useThemeContent('detail.catalog_label', 'READY_TO_WEAR_CATALOG');
+
   const [product, setProduct] = useState<any | null>(null);
+  const [catalogProducts, setCatalogProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -128,8 +138,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [cartNotice, setCartNotice] = useState(false);
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'details' | 'reviews' | 'care'>('details');
+  const [activeTabId] = useState(() => `tab-panel-${Math.random().toString(36).slice(2)}`);
 
-  // Bespoke form states
   const [selectedSize, setSelectedSize] = useState<string>("M");
   const [form, setForm] = useState<BespokeFittingForm>({
     name: '',
@@ -183,11 +193,18 @@ export default function ProductPage({ slug }: ProductPageProps) {
   }, [slug, allowDemo]);
 
   useEffect(() => {
+    fetchProductsCatalog().then(result => {
+      if (result.ok && result.data?.length) {
+        setCatalogProducts(result.data);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     setActiveImage(null);
     setActiveTab('details');
   }, [slug]);
 
-  // Sync selected standard size to form
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size);
     setForm(prev => ({ ...prev, size }));
@@ -208,7 +225,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
     setIsSubmitting(true);
     setTimeout(() => {
-      // Create order object
       const newOrder = {
         id: `ATELIER-${Date.now()}`,
         productSlug: slug,
@@ -218,7 +234,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
         timestamp: new Date().toISOString()
       };
 
-      // Push to localStorage
       try {
         const existing = localStorage.getItem('sellio_ecommerce_fashion_orders');
         const orders = existing ? JSON.parse(existing) : [];
@@ -260,43 +275,43 @@ export default function ProductPage({ slug }: ProductPageProps) {
     ].filter(Boolean))) as string[];
   };
 
+  const suggestedLooks = useMemo(() => {
+    const fromCatalog = catalogProducts
+      .filter(p => p.slug !== slug)
+      .slice(0, 3);
+    if (fromCatalog.length > 0) {
+      return fromCatalog.map((p, i) => ({
+        title: p.title,
+        price: p.pricing?.formatted || (typeof p.price === 'number' ? `$${p.price.toLocaleString()}` : '$0.00'),
+        slug: p.slug || '',
+        image: p.image_url || `/themes/ecommerce/fashion/${(i % 6) + 11}.webp`,
+      }));
+    }
+    return FALLBACK_SUGGESTED.filter(l => l.slug !== slug).slice(0, 3);
+  }, [catalogProducts, slug]);
 
   if (loading) {
     return (
-      <div style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
-        <style dangerouslySetInnerHTML={{ __html: `
-          @keyframes efSpinnerRotate {
-            to { transform: rotate(360deg); }
-          }
-          .ef-loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 1px solid var(--ef-border);
-            border-top: 1px solid var(--ef-champagne);
-            border-radius: 50%;
-            animation: efSpinnerRotate 1s linear infinite;
-          }
-        ` }} />
+      <div className="ef-detail-loading">
         <div className="ef-loading-spinner" />
-        <div className="ef-mono" style={{ marginTop: '2.5rem', opacity: 0.5 }}>LOADING_ATELIER_NODE</div>
+        <div className="ef-mono ef-detail-loading-label">LOADING_ATELIER_NODE</div>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div style={{ textAlign: 'center', padding: '8rem 2rem' }}>
-        <h2 style={{ fontFamily: 'var(--ef-serif)', fontSize: '2rem' }}>Garment not found</h2>
-        <p style={{ opacity: 0.6, margin: '1rem 0 2rem' }}>{apiError || 'This lookbook item could not be loaded.'}</p>
-        <a href={themeLink('/explore')} className="ef-btn-primary" style={{ textDecoration: 'none' }}>Browse lookbook</a>
+      <div className="ef-detail-notfound">
+        <h2>Garment not found</h2>
+        <p>{apiError || 'This lookbook item could not be loaded.'}</p>
+        <a href={themeLink('/explore')} className="ef-btn-primary">Browse lookbook</a>
       </div>
     );
   }
 
   const priceFormatted = product?.pricing?.formatted ||
     (typeof product?.price === 'number' ? `$${product.price.toLocaleString()}` : "$0.00");
-  
-  // Clean fallback values for specifications
+
   const specs = product?.specs || {
     material: "Atelier Handcrafted Twill",
     weight: "Premium drape profile",
@@ -308,57 +323,26 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <div style={{ background: '#ffffff', minHeight: '100vh', padding: '0 0 10rem 0' }}>
-      
+
       {useFallback && apiError && (
-        <div style={{ padding: '0 6% 2rem', maxWidth: '1800px', margin: '0 auto' }}>
+        <div className="ef-detail-alert-wrap">
           <CatalogSyncAlert variant="demo" error={apiError} classPrefix="ef" />
         </div>
       )}
 
-      {/* Back to Atelier Catalog Navigation */}
-      <div style={{ padding: '4rem 6% 1rem', maxWidth: '1800px', margin: '0 auto' }}>
-        <a
-          href={themeLink('/')}
-          style={{
-            fontFamily: 'var(--ef-sans)',
-            fontWeight: 800,
-            fontSize: '0.65rem',
-            letterSpacing: '3px',
-            textTransform: 'uppercase',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem',
-            color: 'var(--ef-ebony)',
-            textDecoration: 'none',
-          }}
-        >
+      <div className="ef-detail-back-wrap">
+        <a href={themeLink('/')} className="ef-detail-back">
           <span>&larr;</span> Back to catalog
         </a>
       </div>
 
-      {/* Product Detail Layout */}
-      <section className="ef-section" style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '8rem', paddingTop: '2rem', paddingBottom: '10rem' }}>
-        
+      <section className="ef-section ef-detail-grid">
+
         {/* Left: Garment Image Visual */}
         <div>
-          <div style={{
-            width: '100%',
-            aspectRatio: '3/4',
-            background: 'var(--ef-oyster)',
-            overflow: 'hidden',
-            border: '1px solid var(--ef-border)',
-            position: 'relative'
-          }}>
-            <img
-              src={selectedImage}
-              alt={product?.title} 
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover'
-              }}
-            />
-            <div className="ef-mono" style={{ position: 'absolute', bottom: '2rem', left: '2rem', background: '#ffffff', padding: '0.5rem 1.5rem', fontSize: '0.6rem' }}>
+          <div className="ef-detail-media">
+            <img src={selectedImage} alt={product?.title} />
+            <div className="ef-mono ef-detail-atelier-badge">
               ATELIER_NO_0{product?.id || 101}
             </div>
           </div>
@@ -375,280 +359,186 @@ export default function ProductPage({ slug }: ProductPageProps) {
               </button>
             ))}
           </div>
-          
-          {/* Garment Specifications Details Grid */}
-          <div style={{ marginTop: '5rem', borderTop: '1px solid var(--ef-border)', paddingTop: '4rem' }}>
-            <h3 style={{ fontFamily: 'var(--ef-serif)', fontSize: '2rem', fontWeight: 900, marginBottom: '2.5rem' }}>
-              Atelier Garment Blueprint
-            </h3>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
+
+          {/* Garment Specifications */}
+          <div className="ef-detail-specs-section">
+            <h3 className="ef-detail-specs-title">{labelSpecsTitle}</h3>
+            <div className="ef-detail-specs-grid">
               <div>
-                <div className="ef-mono" style={{ fontSize: '0.55rem', opacity: 0.4, marginBottom: '0.5rem' }}>MATERIAL_PROFILE</div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>{specs.material}</div>
+                <div className="ef-mono ef-detail-spec-label">MATERIAL_PROFILE</div>
+                <div className="ef-detail-spec-value">{specs.material}</div>
               </div>
               <div>
-                <div className="ef-mono" style={{ fontSize: '0.55rem', opacity: 0.4, marginBottom: '0.5rem' }}>STRUCTURE_WEIGHT</div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>{specs.weight}</div>
+                <div className="ef-mono ef-detail-spec-label">STRUCTURE_WEIGHT</div>
+                <div className="ef-detail-spec-value">{specs.weight}</div>
               </div>
               <div>
-                <div className="ef-mono" style={{ fontSize: '0.55rem', opacity: 0.4, marginBottom: '0.5rem' }}>ORIGIN_ATELIER</div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>{specs.origin}</div>
+                <div className="ef-mono ef-detail-spec-label">ORIGIN_ATELIER</div>
+                <div className="ef-detail-spec-value">{specs.origin}</div>
               </div>
               <div>
-                <div className="ef-mono" style={{ fontSize: '0.55rem', opacity: 0.4, marginBottom: '0.5rem' }}>CARE_INSTRUCTION</div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>{specs.care}</div>
+                <div className="ef-mono ef-detail-spec-label">CARE_INSTRUCTION</div>
+                <div className="ef-detail-spec-value">{specs.care}</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Right: Garment Title, Price, Sizes and Custom Order Form */}
-        <div>
-          <div style={{ position: 'sticky', top: '150px' }}>
-            
-            {/* Metadata and Title */}
-            <div className="ef-mono" style={{ marginBottom: '1.5rem', fontSize: '0.6rem' }}>READY_TO_WEAR_CATALOG</div>
-            <h1 style={{ fontFamily: 'var(--ef-serif)', fontSize: '4rem', fontWeight: 900, lineHeight: 1.1, marginBottom: '2rem' }}>
-              {product?.title}
-            </h1>
-            
-            {/* Price */}
-            <div style={{
-              fontFamily: 'var(--ef-serif)',
-              fontSize: '2.2rem',
-              color: 'var(--ef-champagne)',
-              fontWeight: 700,
-              marginBottom: '3rem',
-              borderBottom: '1px solid var(--ef-border)',
-              paddingBottom: '2.5rem'
-            }}>
-              {priceFormatted}
-            </div>
+        <div className="ef-detail-info-panel">
 
-            {/* Description */}
-            <p className="ef-detail-summary" style={{
-              fontSize: '0.95rem',
-              lineHeight: 1.9,
-              opacity: 0.7,
-              marginBottom: '2rem'
-            }}>
-              {product?.description}
+          <div className="ef-mono ef-detail-catalog-label">{labelCatalogLabel}</div>
+          <h1 className="ef-detail-title">{product?.title}</h1>
+          <div className="ef-detail-price">{priceFormatted}</div>
+
+          <p className="ef-detail-summary ef-detail-desc">{product?.description}</p>
+
+          <button
+            type="button"
+            className={`ef-btn-primary ef-detail-cart-btn${cartNotice ? ' ef-detail-cart-btn--noticed' : ''}`}
+            onClick={handleAddToCart}
+            disabled={addingToCart}
+          >
+            {addingToCart ? 'Adding...' : 'Add to cart'}
+          </button>
+          {cartNotice && (
+            <p role="status" className="ef-detail-cart-notice">
+              Added to cart.{' '}
+              <a href={themeLink('/cart')} className="ef-detail-cart-link">
+                View cart
+              </a>
             </p>
+          )}
 
-            <button
-              type="button"
-              className="ef-btn-primary"
-              style={{ width: '100%', padding: '1.4rem', marginBottom: cartNotice ? '1rem' : '4rem' }}
-              onClick={handleAddToCart}
-              disabled={addingToCart}
-            >
-              {addingToCart ? 'Adding...' : 'Add to cart'}
-            </button>
-            {cartNotice && (
-              <p role="status" style={{ marginBottom: '4rem', fontSize: '0.9rem', opacity: 0.7 }}>
-                Added to cart.{' '}
-                <a href={themeLink('/cart')} style={{ color: 'var(--ef-champagne)', fontWeight: 700 }}>
-                  View cart
-                </a>
-              </p>
-            )}
-
-            {/* Size Selector */}
-            <div style={{ marginBottom: '4rem' }}>
-              <div className="ef-mono" style={{ fontSize: '0.55rem', opacity: 0.4, marginBottom: '1.5rem' }}>SELECT_ATELIER_SIZE</div>
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                {["XS", "S", "M", "L", "XL"].map(size => {
-                  const isActive = selectedSize === size;
-                  return (
-                    <button
-                      key={size}
-                      onClick={() => handleSizeSelect(size)}
-                      style={{
-                        width: '55px',
-                        height: '55px',
-                        border: isActive ? '1px solid var(--ef-ebony)' : '1px solid var(--ef-border)',
-                        background: isActive ? 'var(--ef-ebony)' : '#ffffff',
-                        color: isActive ? '#ffffff' : 'var(--ef-ebony)',
-                        fontFamily: 'var(--ef-sans)',
-                        fontWeight: 800,
-                        fontSize: '0.75rem',
-                        cursor: 'pointer',
-                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-                      }}
-                    >
-                      {size}
-                    </button>
-                  );
-                })}
-              </div>
+          {/* Size Selector */}
+          <div className="ef-detail-size-section">
+            <div className="ef-mono ef-detail-size-label">SELECT_ATELIER_SIZE</div>
+            <div className="ef-detail-size-row">
+              {["XS", "S", "M", "L", "XL"].map(size => (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() => handleSizeSelect(size)}
+                  className={selectedSize === size ? 'ef-size-btn ef-size-btn-active' : 'ef-size-btn'}
+                >
+                  {size}
+                </button>
+              ))}
             </div>
-
-            {/* Atelier Bespoke Inquiries */}
-            <div style={{ borderTop: '1px solid var(--ef-border)', paddingTop: '4rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
-                <div style={{ width: '6px', height: '6px', borderRadius: '3px', background: 'var(--ef-champagne)' }} />
-                <h3 className="ef-mono" style={{ fontSize: '0.65rem', margin: 0 }}>BESPOKE_TAILORED_FITTING_REQUEST</h3>
-              </div>
-
-              {isSubmitted ? (
-                <div style={{ background: 'var(--ef-oyster)', border: '1px solid var(--ef-champagne)', padding: '2.5rem', textAlign: 'center' }}>
-                  <div style={{ color: 'var(--ef-champagne)', fontSize: '2.5rem', marginBottom: '1rem' }}>✦</div>
-                  <h4 style={{ fontFamily: 'var(--ef-serif)', fontSize: '1.5rem', fontWeight: 900, marginBottom: '1rem' }}>
-                    Inquiry Confirmed
-                  </h4>
-                  <p style={{ fontSize: '0.85rem', opacity: 0.7, lineHeight: 1.6, margin: 0 }}>
-                    Your custom silhouette tailoring specifications have been successfully transmitted. Our atelier node will contact you to align on measurement precision.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleBespokeSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                  
-                  {/* Grid Inputs for Height, Chest, Waist */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
-                    <div>
-                      <label className="ef-mono" style={{ fontSize: '0.5rem', opacity: 0.5, display: 'block', marginBottom: '0.5rem' }}>HEIGHT (CM)</label>
-                      <input 
-                        type="number" 
-                        name="height"
-                        value={form.height}
-                        onChange={handleInputChange}
-                        placeholder="180"
-                        style={{
-                          width: '100%',
-                          padding: '1rem',
-                          border: '1px solid var(--ef-border)',
-                          fontFamily: 'var(--ef-sans)',
-                          fontSize: '0.8rem',
-                          fontWeight: 600,
-                          outline: 'none'
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <label className="ef-mono" style={{ fontSize: '0.5rem', opacity: 0.5, display: 'block', marginBottom: '0.5rem' }}>CHEST (CM)</label>
-                      <input 
-                        type="number" 
-                        name="chest"
-                        value={form.chest}
-                        onChange={handleInputChange}
-                        placeholder="96"
-                        style={{
-                          width: '100%',
-                          padding: '1rem',
-                          border: '1px solid var(--ef-border)',
-                          fontFamily: 'var(--ef-sans)',
-                          fontSize: '0.8rem',
-                          fontWeight: 600,
-                          outline: 'none'
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <label className="ef-mono" style={{ fontSize: '0.5rem', opacity: 0.5, display: 'block', marginBottom: '0.5rem' }}>WAIST (CM)</label>
-                      <input 
-                        type="number" 
-                        name="waist"
-                        value={form.waist}
-                        onChange={handleInputChange}
-                        placeholder="82"
-                        style={{
-                          width: '100%',
-                          padding: '1rem',
-                          border: '1px solid var(--ef-border)',
-                          fontFamily: 'var(--ef-sans)',
-                          fontSize: '0.8rem',
-                          fontWeight: 600,
-                          outline: 'none'
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Customer Information */}
-                  <div>
-                    <label className="ef-mono" style={{ fontSize: '0.5rem', opacity: 0.5, display: 'block', marginBottom: '0.5rem' }}>FULL NAME</label>
-                    <input 
-                      type="text" 
-                      name="name"
-                      value={form.name}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Alexander McQueen"
-                      style={{
-                        width: '100%',
-                        padding: '1.2rem',
-                        border: '1px solid var(--ef-border)',
-                        fontFamily: 'var(--ef-sans)',
-                        fontSize: '0.85rem',
-                        fontWeight: 600,
-                        outline: 'none'
-                      }}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="ef-mono" style={{ fontSize: '0.5rem', opacity: 0.5, display: 'block', marginBottom: '0.5rem' }}>EMAIL ADDRESS</label>
-                    <input 
-                      type="email" 
-                      name="email"
-                      value={form.email}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="alexander@atelier.luxury"
-                      style={{
-                        width: '100%',
-                        padding: '1.2rem',
-                        border: '1px solid var(--ef-border)',
-                        fontFamily: 'var(--ef-sans)',
-                        fontSize: '0.85rem',
-                        fontWeight: 600,
-                        outline: 'none'
-                      }}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="ef-mono" style={{ fontSize: '0.5rem', opacity: 0.5, display: 'block', marginBottom: '0.5rem' }}>FITTING & ADJUSTMENT NOTES</label>
-                    <textarea 
-                      name="notes"
-                      value={form.notes}
-                      onChange={handleInputChange}
-                      rows={3}
-                      placeholder="Provide shoulder-to-shoulder width, arm length, or specific drape fitting overrides..."
-                      style={{
-                        width: '100%',
-                        padding: '1.2rem',
-                        border: '1px solid var(--ef-border)',
-                        fontFamily: 'var(--ef-sans)',
-                        fontSize: '0.85rem',
-                        fontWeight: 600,
-                        outline: 'none',
-                        resize: 'none'
-                      }}
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="ef-btn-primary"
-                    style={{ width: '100%', padding: '1.6rem', marginTop: '1rem', position: 'relative' }}
-                  >
-                    {isSubmitting ? "TRANSMITTING INQUIRY..." : "SUBMIT ATELIER SPECS"}
-                  </button>
-                  {formError && (
-                    <p role="alert" style={{ marginTop: '1rem', color: '#b45309', fontSize: '0.85rem', textAlign: 'center' }}>
-                      {formError}
-                    </p>
-                  )}
-                </form>
-              )}
-            </div>
-
           </div>
-        </div>
 
+          {/* Bespoke Fitting Request */}
+          <div className="ef-detail-bespoke">
+            <div className="ef-detail-bespoke-header">
+              <div className="ef-detail-bespoke-dot" />
+              <h3 className="ef-mono" style={{ margin: 0 }}>BESPOKE_TAILORED_FITTING_REQUEST</h3>
+            </div>
+
+            {isSubmitted ? (
+              <div className="ef-detail-bespoke-success">
+                <div className="ef-detail-bespoke-success-icon" aria-hidden="true">✦</div>
+                <h4>Inquiry Confirmed</h4>
+                <p>
+                  Your custom silhouette tailoring specifications have been successfully transmitted. Our atelier node will contact you to align on measurement precision.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleBespokeSubmit} className="ef-bespoke-form">
+                <div className="ef-bespoke-measurements">
+                  <div>
+                    <label htmlFor="height-input" className="ef-mono ef-bespoke-label">HEIGHT (CM)</label>
+                    <input
+                      id="height-input"
+                      type="number"
+                      name="height"
+                      value={form.height}
+                      onChange={handleInputChange}
+                      placeholder="180"
+                      className="ef-bespoke-input"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="chest-input" className="ef-mono ef-bespoke-label">CHEST (CM)</label>
+                    <input
+                      id="chest-input"
+                      type="number"
+                      name="chest"
+                      value={form.chest}
+                      onChange={handleInputChange}
+                      placeholder="96"
+                      className="ef-bespoke-input"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="waist-input" className="ef-mono ef-bespoke-label">WAIST (CM)</label>
+                    <input
+                      id="waist-input"
+                      type="number"
+                      name="waist"
+                      value={form.waist}
+                      onChange={handleInputChange}
+                      placeholder="82"
+                      className="ef-bespoke-input"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="name-input" className="ef-mono ef-bespoke-label">FULL NAME</label>
+                  <input
+                    id="name-input"
+                    type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="Alexander McQueen"
+                    className="ef-bespoke-input ef-bespoke-input--lg"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="email-input" className="ef-mono ef-bespoke-label">EMAIL ADDRESS</label>
+                  <input
+                    id="email-input"
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="alexander@atelier.luxury"
+                    className="ef-bespoke-input ef-bespoke-input--lg"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="notes-input" className="ef-mono ef-bespoke-label">FITTING & ADJUSTMENT NOTES</label>
+                  <textarea
+                    id="notes-input"
+                    name="notes"
+                    value={form.notes}
+                    onChange={handleInputChange}
+                    rows={3}
+                    placeholder="Provide shoulder-to-shoulder width, arm length, or specific drape fitting overrides..."
+                    className="ef-bespoke-input ef-bespoke-input--lg"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="ef-btn-primary ef-bespoke-submit"
+                >
+                  {isSubmitting ? "TRANSMITTING INQUIRY..." : "SUBMIT ATELIER SPECS"}
+                </button>
+                {formError && (
+                  <p role="alert" className="ef-bespoke-error">{formError}</p>
+                )}
+              </form>
+            )}
+          </div>
+
+        </div>
       </section>
 
       <section className="ef-detail-tabs-section">
@@ -662,7 +552,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
               key={key}
               type="button"
               role="tab"
+              id={`tab-${key}`}
               aria-selected={activeTab === key}
+              aria-controls={activeTabId}
               className={activeTab === key ? 'ef-detail-tab-active' : undefined}
               onClick={() => setActiveTab(key as typeof activeTab)}
             >
@@ -670,7 +562,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </button>
           ))}
         </div>
-        <div className="ef-detail-tab-panel">
+        <div
+          className="ef-detail-tab-panel"
+          role="tabpanel"
+          id={activeTabId}
+          aria-labelledby={`tab-${activeTab}`}
+        >
           {activeTab === 'details' && (
             <>
               <h2>Garment details</h2>
@@ -697,19 +594,20 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
       </section>
 
-      {/* Suggested Looks Carousel */}
-      <section style={{ borderTop: '1px solid var(--ef-border)', paddingTop: '10rem', maxWidth: '1800px', margin: '0 auto', paddingLeft: '6%', paddingRight: '6%' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem' }}>
+      {/* Suggested Looks */}
+      <section className="ef-detail-suggestions">
+        <div className="ef-detail-suggestions-header">
           <div>
-            <div className="ef-mono" style={{ marginBottom: '1.5rem' }}>LOOKBOOK_CURATION</div>
-            <h2 className="ef-heading-xl" style={{ fontSize: '4.5rem' }}>Complete the <br/><span className="ef-italic">Silhouette.</span></h2>
+            <div className="ef-mono ef-detail-suggestions-eyebrow">{labelSuggestionsEyebrow}</div>
+            <h2 className="ef-heading-xl ef-detail-suggestions-title">
+              Complete the <br/><span className="ef-italic">Silhouette.</span>
+            </h2>
           </div>
-          <div className="ef-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>AUTUMN_WINTER_2026_CURATIONS</div>
+          <div className="ef-mono ef-detail-suggestions-season">{labelSuggestionsSeason}</div>
         </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4rem' }}>
-          {SUGGESTED_LOOKS.map((item, idx) => (
-            <a key={item.slug} href={themeLink(`/product/${item.slug}`)} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+        <div className="ef-detail-suggestions-grid">
+          {suggestedLooks.map((item, idx) => (
+            <a key={item.slug} href={themeLink(`/product/${item.slug}`)} className="ef-detail-suggestions-link">
               <EditorialLookCard
                 name={item.title}
                 price={item.price}
