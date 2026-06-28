@@ -59,15 +59,11 @@ export default function ExplorePage() {
             <div className="artist-card-premium">
               <img src={headliner.image} alt={headliner.name} className="artist-img" />
               <div className="artist-info">
-                <div style={{ fontSize: '0.7rem', color: 'var(--neon-blue)', fontWeight: 900, marginBottom: '0.5rem' }}>
-                  {headliner.eventTitle}
-                </div>
+                <div className="evm-card-event-title">{headliner.eventTitle}</div>
                 <div className="artist-name">{headliner.name}</div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--neon-pink)', fontWeight: 800, marginTop: '1rem' }}>
-                  {headliner.date}
-                </div>
+                <div className="evm-card-date">{headliner.date}</div>
               </div>
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%)' }} />
+              <div className="evm-card-gradient" />
             </div>
           </a>
         );

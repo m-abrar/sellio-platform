@@ -17,6 +17,7 @@ import {
   getEventLocationLabel,
   getMusicEventImage,
 } from '@/themes/events/shared/event-utils';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 interface ProductPageProps {
   slug: string;
@@ -25,6 +26,10 @@ interface ProductPageProps {
 export default function ProductPage({ slug }: ProductPageProps) {
   const themeLink = useEventsThemeLink();
   const allowDemo = useDemoFallbackAllowed();
+  const labelInfoHeading = useThemeContent('detail.info_heading', 'Performance Details');
+  const labelTicketHeading = useThemeContent('detail.ticket_heading', 'Get Your Tickets');
+  const labelSuccessMessage = useThemeContent('detail.success_message', 'Access reserved locally.');
+  const labelFallbackDescription = useThemeContent('detail.fallback_description', 'This live headliner is synchronized from the Sellio events catalog.');
   const [event, setEvent] = useState<EventListing | null>(null);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
@@ -172,24 +177,27 @@ export default function ProductPage({ slug }: ProductPageProps) {
       </header>
       <section className="sonic-detail-grid">
         <article className="sonic-detail-main">
-          <h2>Performance Details</h2>
-          <p>{event.description || 'This live headliner is synchronized from the Sellio events catalog.'}</p>
+          <h2>{labelInfoHeading}</h2>
+          <p>{event.description || labelFallbackDescription}</p>
           {event.specs?.tags && (
             <div className="sonic-detail-tags">{event.specs.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
           )}
         </article>
         <aside className="sonic-detail-sidebar">
-          <h3>Get Your Tickets</h3>
+          <h3>{labelTicketHeading}</h3>
           <p className="sonic-detail-price">{formatEventPrice(event)}</p>
           {isSubmitted ? (
-            <div className="sonic-detail-success" role="status">Access reserved locally.</div>
+            <div className="sonic-detail-success" role="status">{labelSuccessMessage}</div>
           ) : (
             <form onSubmit={handleSubmit}>
-              <label>Name<input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
-              <label>Email<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
-              <label>Tickets<input type="number" min="1" max="8" value={form.tickets} onChange={(e) => setForm({ ...form, tickets: e.target.value })} /></label>
+              <label htmlFor="ticket-name">Name</label>
+              <input id="ticket-name" required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+              <label htmlFor="ticket-email">Email</label>
+              <input id="ticket-email" required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+              <label htmlFor="ticket-qty">Tickets</label>
+              <input id="ticket-qty" type="number" min="1" max="8" value={form.tickets} onChange={(e) => setForm({ ...form, tickets: e.target.value })} />
               <button className="sonic-btn-primary" type="submit">Reserve Access</button>
-              {formError && <p style={{ color: '#fca5a5', fontSize: '0.85rem', marginTop: '0.75rem' }}>{formError}</p>}
+              {formError && <p className="sonic-form-error" role="alert">{formError}</p>}
             </form>
           )}
         </aside>

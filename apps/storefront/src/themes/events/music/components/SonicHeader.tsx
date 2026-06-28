@@ -16,10 +16,11 @@ export const SonicHeader = () => {
     <header className="sonic-header">
       <a href={themeLink('/')} className="sonic-logo" style={{ textDecoration: 'none', color: 'inherit' }}>{brandLabel}</a>
       
-      <button 
-        className={`sonic-hamburger ${isOpen ? 'sonic-hamburger-open' : ''}`} 
+      <button
+        className={`sonic-hamburger ${isOpen ? 'sonic-hamburger-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle Navigation"
+        aria-expanded={isOpen}
         id="sonic-hamburger-toggle"
       >
         <span className="sonic-hamburger-bar"></span>

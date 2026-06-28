@@ -12,51 +12,46 @@ export const VoltageFooter = () => {
       'footer.description',
       "The heartbeat of live music. Discover and book the best events in your city and beyond.",
     );
+    const footerCopyright = useThemeContent('footer.copyright', '');
 
     return (
     <footer className="voltage-footer">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '6rem' }}>
+        <div className="voltage-footer-grid">
             <div>
-                <a href={themeLink('/')} className="sonic-logo" style={{ fontSize: '3rem', marginBottom: '3rem', display: 'block', textDecoration: 'none', color: 'inherit' }}>{brandLabel}</a>
-                <p style={{ color: '#666', lineHeight: 2, fontSize: '0.95rem' }}>
-                    {footerDescription}
-                </p>
+                <a href={themeLink('/')} className="sonic-logo voltage-footer-brand-link">{brandLabel}</a>
+                <p className="voltage-footer-desc">{footerDescription}</p>
             </div>
             <FooterMenuColumn
               location="footer_column_1"
-              renderTitle={(title) => (
-                <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.7rem', fontWeight: 900, marginBottom: '3rem', color: 'var(--neon-pink)', letterSpacing: '3px' }}>{title}</div>
-              )}
+              renderTitle={(title) => <div className="voltage-footer-col-title">{title}</div>}
               listClassName="voltage-footer-links"
               linkClassName="footer-link"
             />
             <FooterMenuColumn
               location="footer_column_2"
-              renderTitle={(title) => (
-                <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.7rem', fontWeight: 900, marginBottom: '3rem', color: 'var(--neon-pink)', letterSpacing: '3px' }}>{title}</div>
-              )}
+              renderTitle={(title) => <div className="voltage-footer-col-title">{title}</div>}
               listClassName="voltage-footer-links"
               linkClassName="footer-link"
             />
             <FooterMenuColumn
               location="footer_column_3"
-              renderTitle={(title) => (
-                <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.7rem', fontWeight: 900, marginBottom: '3rem', color: 'var(--neon-pink)', letterSpacing: '3px' }}>{title}</div>
-              )}
+              renderTitle={(title) => <div className="voltage-footer-col-title">{title}</div>}
               listClassName="voltage-footer-links"
               linkClassName="footer-link"
             />
         </div>
-        <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid var(--sonic-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '3rem' }}>
-            <div style={{ fontSize: '0.7rem', color: '#444', fontWeight: 900, letterSpacing: '2px' }}>© 2026 Sellio. All rights reserved.</div>
+        <div className="voltage-footer-bottom">
+            <div className="voltage-footer-copyright">
+              {footerCopyright || `© ${new Date().getFullYear()}. All rights reserved.`}
+            </div>
             <MenuNav
               location="social_footer"
               flat
               className="voltage-footer-socials"
               linkClassName=""
               renderItem={(item, { href, className, onNavigate }) => (
-                <span key={item.title} style={{ fontSize: '0.7rem', color: '#444', fontWeight: 900, letterSpacing: '2px', cursor: 'pointer' }}>
-                  <a href={href} className={className} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                <span key={item.title} className="voltage-footer-social-item">
+                  <a href={href} className={className} onClick={onNavigate}>{item.title}</a>
                 </span>
               )}
             />

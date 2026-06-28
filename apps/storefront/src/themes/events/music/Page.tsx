@@ -90,9 +90,9 @@ export default function Page() {
     <div className="sonic-pulse-wrapper">
       {/* Hero Section */}
       <section className="sonic-hero" style={{ background: `url("${heroImage}") center/cover no-repeat` }} aria-labelledby="sonic-hero-title">
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}></div>
-          <div style={{ position: 'relative', zIndex: 2 }}>
-              <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.8rem', color: 'var(--neon-blue)', letterSpacing: '12px', marginBottom: '2.5rem', fontWeight: 900 }}>{heroEyebrow}</div>
+          <div className="sonic-hero-overlay"></div>
+          <div className="sonic-hero-inner">
+              <div className="sonic-hero-eyebrow">{heroEyebrow}</div>
               <h1 id="sonic-hero-title">
                 {heroTitle.split('\n').map((line, index) => (
                   <React.Fragment key={`${line}-${index}`}>
@@ -101,38 +101,26 @@ export default function Page() {
                   </React.Fragment>
                 ))}
               </h1>
-              <p style={{ maxWidth: '700px', margin: '4rem auto 0', fontSize: '1.25rem', color: '#ccc', lineHeight: 1.8, fontWeight: 400 }}>
-                  {heroDescription}
-              </p>
-              <div style={{ display: 'flex', gap: '3rem', marginTop: '6rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <p className="sonic-hero-description">{heroDescription}</p>
+              <div className="sonic-hero-actions">
                   <a href={themeLink('/explore')} className="sonic-btn-primary">{primaryCtaLabel}</a>
-                  <a
-                    href={themeLink('/explore')}
-                    style={{ background: 'transparent', border: '2px solid var(--neon-blue)', color: 'white', padding: '1.5rem 5rem', fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '1.1rem', cursor: 'pointer', borderRadius: '50px', boxShadow: '0 0 20px var(--neon-blue)', transition: 'all 0.3s ease', textDecoration: 'none', display: 'inline-block' }}
-                  >
-                    {secondaryCtaLabel}
-                  </a>
+                  <a href={themeLink('/explore')} className="sonic-btn-outline">{secondaryCtaLabel}</a>
               </div>
           </div>
       </section>
 
       {/* Live Metrics Bar */}
-      <section style={{ padding: '3rem 6%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#000', borderTop: '1px solid var(--sonic-border)', borderBottom: '1px solid var(--sonic-border)', color: '#444', fontSize: '0.75rem', fontWeight: 900, letterSpacing: '4px' }} aria-label="System Metrics">
-          <style dangerouslySetInnerHTML={{ __html: `
-            @media (max-width: 1024px) {
-                .jt-metrics { display: none !important; }
-            }
-          ` }} />
-          <div className="jt-metrics" style={{ display: 'flex', gap: '4rem' }}>
+      <section className="sonic-metrics-bar" aria-label="System Metrics">
+          <div className="jt-metrics sonic-metrics-left">
               {metricsLeftText.split('|').map((item) => <span key={item.trim()}>{item.trim()}</span>)}
           </div>
-          <div style={{ color: 'var(--neon-lime)' }}>{metricsRightText}</div>
+          <div className="sonic-metrics-bpm">{metricsRightText}</div>
       </section>
 
       {/* Featured Lineup Section */}
-      <section style={{ padding: '12rem 6% 4rem', textAlign: 'center' }} id="sonic-lineup-section" aria-labelledby="sonic-lineup-title">
-          <span style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--neon-lime)', letterSpacing: '8px', textTransform: 'uppercase' }}>{lineupEyebrow}</span>
-          <h2 id="sonic-lineup-title" style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', fontWeight: 900, marginTop: '2.5rem', textTransform: 'uppercase', letterSpacing: '4px' }}>{lineupTitle}</h2>
+      <section className="sonic-lineup-header" id="sonic-lineup-section" aria-labelledby="sonic-lineup-title">
+          <span className="sonic-section-eyebrow sonic-section-eyebrow--lime">{lineupEyebrow}</span>
+          <h2 id="sonic-lineup-title" className="sonic-lineup-title">{lineupTitle}</h2>
       </section>
 
       <section style={{ padding: '0 6% 8rem' }}>
@@ -169,11 +157,11 @@ export default function Page() {
                       <div className="artist-card-premium">
                         <img src={headliner.image} alt={headliner.name} className="artist-img" />
                         <div className="artist-info">
-                          <div style={{ fontSize: '0.7rem', color: 'var(--neon-blue)', fontWeight: 900, marginBottom: '0.5rem' }}>{headliner.event}</div>
+                          <div className="evm-card-event-title">{headliner.event}</div>
                           <div className="artist-name">{headliner.name}</div>
-                          <div style={{ fontSize: '0.85rem', color: 'var(--neon-pink)', fontWeight: 800, marginTop: '1rem' }}>{headliner.date}</div>
+                          <div className="evm-card-date">{headliner.date}</div>
                         </div>
-                        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%)' }}></div>
+                        <div className="evm-card-gradient"></div>
                       </div>
                     </a>
                   );
@@ -183,9 +171,9 @@ export default function Page() {
       </section>
 
       {/* Modular Lineup Grid (Underground Artists) */}
-      <section style={{ padding: '4rem 6% 8rem', textAlign: 'center' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--neon-blue)', letterSpacing: '8px', textTransform: 'uppercase' }}>{supportEyebrow}</span>
-          <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 4rem)', fontWeight: 900, marginTop: '2rem', textTransform: 'uppercase', letterSpacing: '4px' }}>{supportTitle}</h3>
+      <section className="sonic-support-header">
+          <span className="sonic-section-eyebrow sonic-section-eyebrow--blue">{supportEyebrow}</span>
+          <h3 className="sonic-support-title">{supportTitle}</h3>
       </section>
       <LineupGrid />
 
@@ -193,21 +181,21 @@ export default function Page() {
       <PulseExperience />
 
       {/* Masonry Gallery */}
-      <section style={{ padding: '12rem 6%' }} id="sonic-gallery-section" aria-labelledby="sonic-gallery-title">
-          <h2 id="sonic-gallery-title" style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', fontWeight: 900, textAlign: 'center', marginBottom: '8rem', textTransform: 'uppercase', color: 'var(--neon-blue)', textShadow: '0 0 20px var(--neon-blue)' }}>{galleryTitle}</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
+      <section className="sonic-gallery-section" id="sonic-gallery-section" aria-labelledby="sonic-gallery-title">
+          <h2 id="sonic-gallery-title" className="sonic-gallery-title">{galleryTitle}</h2>
+          <div className="sonic-gallery-grid">
               {[16, 17, 18, 19, 20, 21].map((imgNum, idx) => (
-                  <div key={idx} style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--sonic-border)', transition: 'all 0.3s ease' }}>
-                      <img src={`/themes/events/music/${imgNum}.webp`} alt={`Sonic Recap ${idx + 1}`} style={{ width: '100%', height: '400px', objectFit: 'cover' }} />
+                  <div key={idx} className="sonic-gallery-item">
+                      <img src={`/themes/events/music/${imgNum}.webp`} alt={`Sonic Recap ${idx + 1}`} />
                   </div>
               ))}
           </div>
       </section>
 
       {/* Final CTA */}
-      <section style={{ padding: '15rem 6%', textAlign: 'center', position: 'relative', overflow: 'hidden' }} id="sonic-cta-section" aria-labelledby="sonic-cta-title">
-          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '600px', height: '600px', background: 'radial-gradient(circle, var(--neon-pink) 0%, transparent 70%)', opacity: 0.1, filter: 'blur(100px)' }}></div>
-          <h2 id="sonic-cta-title" style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(3rem, 8vw, 8rem)', fontWeight: 900, marginBottom: '4rem', letterSpacing: '-2px', textTransform: 'uppercase', lineHeight: 0.9 }}>
+      <section className="sonic-cta-section" id="sonic-cta-section" aria-labelledby="sonic-cta-title">
+          <div className="sonic-cta-glow" aria-hidden="true"></div>
+          <h2 id="sonic-cta-title" className="sonic-cta-title">
             {ctaTitle.split('\n').map((line, index) => (
               <React.Fragment key={`${line}-${index}`}>
                 {index > 0 && <br/>}
@@ -215,10 +203,8 @@ export default function Page() {
               </React.Fragment>
             ))}
           </h2>
-          <p style={{ maxWidth: '700px', margin: '0 auto 6rem', fontSize: '1.25rem', color: '#888', lineHeight: 1.8 }}>
-              {ctaDescription}
-          </p>
-          <a href={themeLink('/explore')} className="sonic-btn-primary" style={{ padding: '2rem 10rem', fontSize: '1.5rem', display: 'inline-block', textDecoration: 'none' }}>{ctaButtonLabel}</a>
+          <p className="sonic-cta-description">{ctaDescription}</p>
+          <a href={themeLink('/explore')} className="sonic-btn-primary sonic-cta-btn">{ctaButtonLabel}</a>
       </section>
     </div>
   );

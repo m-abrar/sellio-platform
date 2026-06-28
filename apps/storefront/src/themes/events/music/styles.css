@@ -470,10 +470,445 @@
         padding: 8rem 6% 4rem;
     }
 
-    .voltage-footer div:first-child {
-        grid-template-columns: 1fr !important;
-        gap: 4rem !important;
+    .voltage-footer-grid {
+        grid-template-columns: 1fr;
+        gap: 4rem;
     }
+
+    .sonic-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pulse-experience-grid {
+        gap: 4rem;
+    }
+
+    .pulse-experience-corner {
+        display: none;
+    }
+
+    .pulse-experience-callout {
+        left: 0;
+    }
+
+    .sonic-gallery-item img {
+        height: 250px;
+    }
+
+    .sonic-cta-section {
+        padding: 8rem 6%;
+    }
+}
+
+/* ==========================================================================
+   Events Music — Page & Section Layout Classes
+   ========================================================================== */
+
+/* Hero */
+.sonic-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.sonic-hero-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.sonic-hero-eyebrow {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  color: var(--neon-blue);
+  letter-spacing: 12px;
+  margin-bottom: 2.5rem;
+  font-weight: 900;
+}
+
+.sonic-hero-description {
+  max-width: 700px;
+  margin: 4rem auto 0;
+  font-size: 1.25rem;
+  color: #ccc;
+  line-height: 1.8;
+  font-weight: 400;
+}
+
+.sonic-hero-actions {
+  display: flex;
+  gap: 3rem;
+  margin-top: 6rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.sonic-btn-outline {
+  background: transparent;
+  border: 2px solid var(--neon-blue);
+  color: white;
+  padding: 1.5rem 5rem;
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border-radius: 50px;
+  box-shadow: 0 0 20px var(--neon-blue);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.sonic-btn-outline:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 40px var(--neon-blue);
+}
+
+/* Metrics bar */
+.sonic-metrics-bar {
+  padding: 3rem 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #000;
+  border-top: 1px solid var(--sonic-border);
+  border-bottom: 1px solid var(--sonic-border);
+  color: #444;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+}
+
+.sonic-metrics-left {
+  display: flex;
+  gap: 4rem;
+}
+
+.sonic-metrics-bpm {
+  color: var(--neon-lime);
+}
+
+@media (max-width: 1024px) {
+  .jt-metrics {
+    display: none !important;
+  }
+}
+
+/* Lineup section headers */
+.sonic-lineup-header {
+  padding: 12rem 6% 4rem;
+  text-align: center;
+}
+
+.sonic-section-eyebrow {
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+}
+
+.sonic-section-eyebrow--lime { color: var(--neon-lime); }
+.sonic-section-eyebrow--blue { color: var(--neon-blue); }
+
+.sonic-lineup-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-weight: 900;
+  margin-top: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+.sonic-support-header {
+  padding: 4rem 6% 8rem;
+  text-align: center;
+}
+
+.sonic-support-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 900;
+  margin-top: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+/* Gallery */
+.sonic-gallery-section {
+  padding: 12rem 6%;
+}
+
+.sonic-gallery-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 8rem;
+  text-transform: uppercase;
+  color: var(--neon-blue);
+  text-shadow: 0 0 20px var(--neon-blue);
+}
+
+.sonic-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.sonic-gallery-item {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--sonic-border);
+  transition: all 0.3s ease;
+}
+
+.sonic-gallery-item:hover {
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 20px var(--neon-blue);
+}
+
+.sonic-gallery-item img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+/* CTA section */
+.sonic-cta-section {
+  padding: 15rem 6%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.sonic-cta-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--neon-pink) 0%, transparent 70%);
+  opacity: 0.1;
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.sonic-cta-title {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 8vw, 8rem);
+  font-weight: 900;
+  margin-bottom: 4rem;
+  letter-spacing: -2px;
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+
+.sonic-cta-description {
+  max-width: 700px;
+  margin: 0 auto 6rem;
+  font-size: 1.25rem;
+  color: #888;
+  line-height: 1.8;
+}
+
+.sonic-cta-btn {
+  padding: 2rem 10rem;
+  font-size: 1.5rem;
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* PulseExperience */
+.pulse-experience-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 8rem;
+  align-items: center;
+}
+
+.pulse-experience-eyebrow {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: var(--neon-pink);
+  letter-spacing: 8px;
+}
+
+.pulse-experience-description {
+  font-size: 1.25rem;
+  color: #888;
+  line-height: 2;
+  margin-bottom: 4rem;
+}
+
+.pulse-experience-stats {
+  display: flex;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.pulse-stat-value {
+  font-size: 3rem;
+  font-family: var(--font-heading);
+  color: white;
+}
+
+.pulse-stat-label {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.pulse-stat-label--lime { color: var(--neon-lime); }
+.pulse-stat-label--blue { color: var(--neon-blue); }
+
+.pulse-experience-visual {
+  position: relative;
+}
+
+.pulse-experience-corner {
+  position: absolute;
+  top: -2rem;
+  right: -2rem;
+  width: 200px;
+  height: 200px;
+  border-top: 4px solid var(--neon-pink);
+  border-right: 4px solid var(--neon-pink);
+  box-shadow: 0 0 20px var(--neon-pink);
+  border-radius: 0 20px 0 0;
+}
+
+.pulse-experience-img-wrap {
+  height: 600px;
+  background: var(--sonic-card);
+  border: 1px solid var(--sonic-border);
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.pulse-experience-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+}
+
+.pulse-experience-callout {
+  position: absolute;
+  bottom: 2rem;
+  left: -2rem;
+  padding: 2rem;
+  background: var(--sonic-bg);
+  border: 1px solid var(--neon-blue);
+  box-shadow: 0 0 20px var(--neon-blue);
+  border-radius: 12px;
+}
+
+.pulse-experience-callout-text {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: var(--neon-blue);
+  letter-spacing: 2px;
+}
+
+/* VoltageFooter */
+.voltage-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 6rem;
+}
+
+.voltage-footer-brand-link {
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.voltage-footer-desc {
+  color: #666;
+  line-height: 2;
+  font-size: 0.95rem;
+}
+
+.voltage-footer-col-title {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 900;
+  margin-bottom: 3rem;
+  color: var(--neon-pink);
+  letter-spacing: 3px;
+}
+
+.voltage-footer-bottom {
+  margin-top: 10rem;
+  padding-top: 4rem;
+  border-top: 1px solid var(--sonic-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
+
+.voltage-footer-copyright {
+  font-size: 0.7rem;
+  color: #444;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.voltage-footer-social-item {
+  font-size: 0.7rem;
+  color: #444;
+  font-weight: 900;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+
+.voltage-footer-social-item a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ExplorePage event card overlays */
+.evm-card-event-title {
+  font-size: 0.7rem;
+  color: var(--neon-blue);
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+}
+
+.evm-card-date {
+  font-size: 0.85rem;
+  color: var(--neon-pink);
+  font-weight: 800;
+  margin-top: 1rem;
+}
+
+.evm-card-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 60%);
+}
+
+/* LineupGrid artist label */
+.artist-genre-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--neon-pink);
+  letter-spacing: 4px;
+  margin-bottom: 0.5rem;
+}
+
+/* ProductPage form error */
+.sonic-form-error {
+  color: #fca5a5;
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
 }
 
 /* ==========================================================================
