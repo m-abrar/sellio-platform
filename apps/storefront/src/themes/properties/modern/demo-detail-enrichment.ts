@@ -1,4 +1,4 @@
-import type { Amenity, PropertyFeature } from '@sellio/types';
+import type { Amenity, PropertyFeature } from '@/types';
 import type { PropertyDetail } from './property-detail-types';
 
 type DemoAmenity = Amenity & { icon?: string };

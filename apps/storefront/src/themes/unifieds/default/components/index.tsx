@@ -8,7 +8,7 @@ import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLin
 import { isCartMenuItem } from '@/themes/unifieds/shared/menu-utils';
 import { useUnifiedCartCount } from '@/themes/unifieds/shared/useUnifiedCartCount';
 import type { ExploreListing, Vertical, VerticalDescriptor } from '@/themes/unifieds/shared/multiVertical';
-import type { Category } from '@sellio/types';
+import type { Category } from '@/types';
 
 const CartIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

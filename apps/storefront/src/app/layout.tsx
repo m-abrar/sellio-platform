@@ -10,7 +10,7 @@ import UnifiedDefaultLayout from "@/themes/unifieds/default/Layout";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { AdminBar } from "@/components/AdminBar";
 import DatabaseOfflineResilience from "@/components/DatabaseOfflineResilience";
-import { MENU_LOCATIONS } from "@sellio/types";
+import { MENU_LOCATIONS } from "@/types";
 import "./globals.css";
 
 export const viewport: Viewport = {

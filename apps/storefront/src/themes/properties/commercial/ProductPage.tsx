@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
+import { api } from '@/lib/api-client';
 import { AssetRegistryCard } from './components';
 import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';

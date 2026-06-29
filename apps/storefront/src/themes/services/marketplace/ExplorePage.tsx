@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import type { Category, Location, ServiceListing } from '@sellio/types';
+import type { Category, Location, ServiceListing } from '@/types';
 import { SmProviderCard, SmProviderSkeleton } from './components';
 import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';
 import {

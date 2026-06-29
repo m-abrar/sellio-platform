@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { ServiceListing } from '@sellio/types';
+import type { ServiceListing } from '@/types';
 import { CrtvHeader, CrtvCategoryCard, CrtvCreativeCard, CrtvPortfolioItem, CrtvFooter } from './components';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';

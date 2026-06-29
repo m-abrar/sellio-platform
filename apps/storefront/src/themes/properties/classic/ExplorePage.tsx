@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import type { Property, Category, Location } from '@sellio/types';
+import type { Property, Category, Location } from '@/types';
 import { EstateCard, FilterSidebar } from './components';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {

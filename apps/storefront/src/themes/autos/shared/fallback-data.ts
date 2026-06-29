@@ -1,4 +1,4 @@
-import type { Vehicle } from '@sellio/types';
+import type { Vehicle } from '@/types';
 
 const publishedStatus = {
   is_published: true,

@@ -1,7 +1,7 @@
 'use client';
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import type { Category } from '@sellio/types';
+import type { Category } from '@/types';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
 import { isExploreSortOption, type ExploreSortOption } from '@/themes/unifieds/shared/product-utils';
 import { fetchAllVerticals, VERTICALS, type ExploreListing, type Vertical } from '@/themes/unifieds/shared/multiVertical';

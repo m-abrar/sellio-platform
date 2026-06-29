@@ -1,5 +1,5 @@
-import { api } from '@sellio/api-client';
-import type { ServiceConsultationRecord, ServiceListing } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { ServiceConsultationRecord, ServiceListing } from '@/types';
 import {
   findFallbackService,
   findLocalFallbackService,

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import type { User } from '@sellio/types';
+import type { User } from '@/types';
 import { api } from '@/lib/storefront-api';
 import { readAuthToken, writeAuthToken } from '@/lib/auth-storage';
 

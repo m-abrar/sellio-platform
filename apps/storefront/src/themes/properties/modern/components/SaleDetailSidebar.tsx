@@ -1,6 +1,6 @@
 'use client';
 
-import type { Property } from '@sellio/types';
+import type { Property } from '@/types';
 import { AgentProfileCard } from './AgentProfileCard';
 import type { PropertyDetail } from '../property-detail-types';
 import { formatMoney } from '../property-detail-utils';

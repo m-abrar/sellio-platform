@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo, useState, useEffect } from 'react';
-import type { Vehicle } from '@sellio/types';
+import type { Vehicle } from '@/types';
 import { ClassicCarCard, AuctionCard } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
 import { fetchVehiclesHome, resolveVehiclesFailure } from '@/themes/autos/shared/catalog';

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
-import type { Testimonial } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Testimonial } from '@/types';
 import { useMenuContext } from '@/components/menu/MenuProvider';
 
 type TestimonialVariant = 'default' | 'luxury' | 'editorial' | 'centered';

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
+import { api } from '@/lib/api-client';
 import type {
   ClassifiedListing,
   EventListing,
@@ -10,7 +10,7 @@ import type {
   Property,
   ServiceListing,
   Vehicle,
-} from '@sellio/types';
+} from '@/types';
 import { addProductToCart } from '@/themes/unifieds/shared/cart';
 import {
   formatProductPrice,

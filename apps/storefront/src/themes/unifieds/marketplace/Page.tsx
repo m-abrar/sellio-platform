@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { api } from '@sellio/api-client';
-import type { ClassifiedListing, EventListing, JobListing, Product, Property, ServiceListing, Testimonial, Vehicle } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { ClassifiedListing, EventListing, JobListing, Product, Property, ServiceListing, Testimonial, Vehicle } from '@/types';
 import { MarketGrid, LiquidSyncBar } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';

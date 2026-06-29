@@ -1,4 +1,4 @@
-import type { JobListing } from '@sellio/types';
+import type { JobListing } from '@/types';
 
 const CORPORATE_LOGOS = [
   '/themes/jobs/corporate/1.webp',

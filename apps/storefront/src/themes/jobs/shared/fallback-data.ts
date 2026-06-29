@@ -1,4 +1,4 @@
-import type { JobListing } from '@sellio/types';
+import type { JobListing } from '@/types';
 
 const publishedStatus = {
   is_published: true,

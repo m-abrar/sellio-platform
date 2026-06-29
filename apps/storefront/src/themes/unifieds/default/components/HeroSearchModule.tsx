@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import type { Category } from '@sellio/types';
+import type { Category } from '@/types';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { VERTICALS, type Vertical } from '@/themes/unifieds/shared/multiVertical';
 
@@ -128,6 +128,7 @@ function SmartSearchPane({ themeLink }: { themeLink: (p: string) => string }) {
   useEffect(() => {
     const input = inputRef.current;
     if (!input) return;
+    const el = input;
     let cancelled = false;
     let exIdx = 0;
     let timer: ReturnType<typeof setTimeout> | null = null;
@@ -135,8 +136,8 @@ function SmartSearchPane({ themeLink }: { themeLink: (p: string) => string }) {
     function stopTimer() { if (timer) clearTimeout(timer); }
 
     function typeIn(text: string, i = 0) {
-      if (cancelled || document.activeElement === input || input.value) return;
-      input.placeholder = text.slice(0, i);
+      if (cancelled || document.activeElement === el || el.value) return;
+      el.placeholder = text.slice(0, i);
       if (i < text.length) {
         timer = setTimeout(() => typeIn(text, i + 1), 38);
       } else {
@@ -145,8 +146,8 @@ function SmartSearchPane({ themeLink }: { themeLink: (p: string) => string }) {
     }
 
     function eraseOut(text: string, len: number) {
-      if (cancelled || document.activeElement === input || input.value) return;
-      input.placeholder = text.slice(0, len);
+      if (cancelled || document.activeElement === el || el.value) return;
+      el.placeholder = text.slice(0, len);
       if (len > 0) {
         timer = setTimeout(() => eraseOut(text, len - 1), 18);
       } else {
@@ -155,18 +156,18 @@ function SmartSearchPane({ themeLink }: { themeLink: (p: string) => string }) {
       }
     }
 
-    const onFocus = () => { stopTimer(); input.placeholder = ''; };
-    const onBlur  = () => { if (!input.value.trim()) timer = setTimeout(() => typeIn(AI_EXAMPLES[exIdx], 0), 500); };
+    const onFocus = () => { stopTimer(); el.placeholder = ''; };
+    const onBlur  = () => { if (!el.value.trim()) timer = setTimeout(() => typeIn(AI_EXAMPLES[exIdx], 0), 500); };
 
-    input.addEventListener('focus', onFocus);
-    input.addEventListener('blur', onBlur);
+    el.addEventListener('focus', onFocus);
+    el.addEventListener('blur', onBlur);
     timer = setTimeout(() => typeIn(AI_EXAMPLES[0], 0), 900);
 
     return () => {
       cancelled = true;
       stopTimer();
-      input.removeEventListener('focus', onFocus);
-      input.removeEventListener('blur', onBlur);
+      el.removeEventListener('focus', onFocus);
+      el.removeEventListener('blur', onBlur);
     };
   }, []);
 
@@ -608,7 +609,7 @@ function VerticalSearchPane({
 }) {
   const cfg = PANE_CONFIG[vertical];
   const vertCatKey = `is_${vertical === 'autos' ? 'auto' : vertical === 'classifieds' ? 'classified' : vertical.replace(/s$/, '')}`;
-  const vertCats = categories.filter(c => !!(c as Record<string, unknown>)[vertCatKey]);
+  const vertCats = categories.filter(c => !!(c as unknown as Record<string, unknown>)[vertCatKey]);
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
 

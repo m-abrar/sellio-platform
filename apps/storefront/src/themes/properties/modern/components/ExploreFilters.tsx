@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import type { Category, Location } from '@sellio/types';
+import type { Category, Location } from '@/types';
 import type { ListingFilter } from '../listing-mode';
 import { getExplorePriceRangeOptions } from '../explore-utils';
 

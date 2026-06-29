@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import type { Vehicle } from '@sellio/types';
+import type { Vehicle } from '@/types';
 import Link from 'next/link';
 import { ModernHeader, ModernCarCard, ModernFooter } from './components';
 import {

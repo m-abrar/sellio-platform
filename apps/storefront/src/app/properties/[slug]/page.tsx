@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { MarketplaceDetailRoute } from '@/components/MarketplaceDetailRoute';
-import { api } from '@sellio/api-client';
+import { api } from '@/lib/api-client';
 import { buildListingMetadata } from '@/lib/listing-metadata';
 
 interface PageProps {

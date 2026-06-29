@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import type { Property, Category, Location } from '@sellio/types';
+import type { Property, Category, Location } from '@/types';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { useClientReady } from '@/hooks/useClientReady';

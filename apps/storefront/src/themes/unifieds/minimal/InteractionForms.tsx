@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { ClassifiedListing, JobListing, ServiceListing, Vehicle } from '@sellio/types';
+import type { ClassifiedListing, JobListing, ServiceListing, Vehicle } from '@/types';
 import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';
 import { submitClassifiedInquiry } from '@/themes/classifieds/shared/submit-inquiry';
 import { submitServiceConsultation } from '@/themes/services/shared/submit-service-consultation';

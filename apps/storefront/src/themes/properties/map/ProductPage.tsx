@@ -2,8 +2,8 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
-import { api } from '@sellio/api-client';
-import type { Property } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Property } from '@/types';
 import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 

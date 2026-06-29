@@ -1,4 +1,4 @@
-import type { Property, Category, Location } from '@sellio/types';
+import type { Property, Category, Location } from '@/types';
 import type { ListingFilter } from './listing-mode';
 import { getPropertyListingMode } from './listing-mode';
 

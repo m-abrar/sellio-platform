@@ -1,4 +1,4 @@
-import type { Property } from '@sellio/types';
+import type { Property } from '@/types';
 
 const demoImage = (n: number) => `/demo-assets/properties/item-${String(n).padStart(2, '0')}.svg`;
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { Vehicle } from '@sellio/types';
+import type { Vehicle } from '@/types';
 import { ElectricHeader, EVCard, IconBox, ElectricFooter } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
 import { fetchVehiclesHome, resolveVehiclesFailure } from '@/themes/autos/shared/catalog';

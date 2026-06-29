@@ -1,5 +1,5 @@
-import { api } from '@sellio/api-client';
-import type { Category, Product } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Category, Product } from '@/types';
 import { FALLBACK_PRODUCTS, findFallbackProduct } from './fallback-data';
 
 function toErrorMessage(error: unknown): string {

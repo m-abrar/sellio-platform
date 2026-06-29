@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { EventListing } from '@sellio/types';
+import type { EventListing } from '@/types';
 import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
 import { fetchEventDetail, resolveEventFailure } from '@/themes/events/shared/catalog';
 import {

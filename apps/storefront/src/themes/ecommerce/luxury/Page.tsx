@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { Product } from '@sellio/types';
+import type { Product } from '@/types';
 import { LuxuryHeader, LuxuryFooter } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';

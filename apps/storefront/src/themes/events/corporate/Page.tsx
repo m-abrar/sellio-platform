@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import type { EventListing } from '@sellio/types';
+import type { EventListing } from '@/types';
 import Link from 'next/link';
 import { SpeakerCard, AgendaItem, EventCard, ShimmerCard } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';

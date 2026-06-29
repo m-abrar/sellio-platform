@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { ClassifiedListing } from '@sellio/types';
+import type { ClassifiedListing } from '@/types';
 import { ModernHeader, ModernCard, ModernFooter } from './components';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
 import {

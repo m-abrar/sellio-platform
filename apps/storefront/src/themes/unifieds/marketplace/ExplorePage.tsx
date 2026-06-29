@@ -11,7 +11,7 @@ import type {
   Property,
   ServiceListing,
   Vehicle,
-} from '@sellio/types';
+} from '@/types';
 import {
   formatProductPrice,
   getProductCategoryLabel,

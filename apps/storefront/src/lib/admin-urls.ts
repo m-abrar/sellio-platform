@@ -1,4 +1,4 @@
-import type { Theme } from '@sellio/types';
+import type { Theme } from '@/types';
 
 function stripTrailingSlash(value: string): string {
   return value.replace(/\/+$/, '');

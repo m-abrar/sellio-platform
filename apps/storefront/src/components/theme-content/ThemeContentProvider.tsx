@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useMemo } from 'react';
-import type { ThemeContentResponse } from '@sellio/types';
+import type { ThemeContentResponse } from '@/types';
 import { EMPTY_THEME_CONTENT } from '@/lib/theme-content-defaults';
 
 interface ThemeContentContextValue {

@@ -1,6 +1,6 @@
 'use client';
 
-import type { Property } from '@sellio/types';
+import type { Property } from '@/types';
 import { LeaseUnitCard } from '../index';
 import { useRentalThemeLink } from '../../hooks/useRentalThemeLink';
 import { mapPropertyToLeaseCard } from '../../property-utils';

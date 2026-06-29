@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { ServiceConsultationRecord } from '@sellio/types';
+import type { ServiceConsultationRecord } from '@/types';
 import { fetchServiceConsultation } from '@/themes/services/shared/catalog';
 import {
   formatConsultationDate,

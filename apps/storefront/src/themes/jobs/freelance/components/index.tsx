@@ -4,7 +4,7 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
-import type { MenuItem } from '@sellio/types';
+import type { MenuItem } from '@/types';
 import type { MenuItemRenderProps } from '@/components/menu/menu-renderers';
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { EventListing } from '@sellio/types';
+import type { EventListing } from '@/types';
 import { ArtisanEventCard } from './components';
 import EventsExplorePage from '@/themes/events/shared/EventsExplorePage';
 import { useEventsThemeLink } from '@/themes/events/shared/useEventsThemeLink';

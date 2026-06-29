@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { ServiceListing } from '@sellio/types';
+import type { ServiceListing } from '@/types';
 import { PractitionerCard, VitalityHUD } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';

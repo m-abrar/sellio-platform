@@ -1,6 +1,6 @@
 'use client';
 
-import type { Property } from '@sellio/types';
+import type { Property } from '@/types';
 import { ListingBadges } from './ListingBadges';
 import { StructureSpecBar } from './StructureSpecBar';
 import { TagList } from './TagList';

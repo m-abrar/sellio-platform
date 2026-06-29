@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import type { Product } from '@sellio/types';
+import type { Product } from '@/types';
 import { EditorialLookCard, TrendHUD } from './components';
 import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
 import { fetchProductsCatalog, resolveProductsFailure } from '@/themes/ecommerce/shared/catalog';

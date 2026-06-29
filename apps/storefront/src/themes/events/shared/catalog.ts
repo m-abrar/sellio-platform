@@ -1,5 +1,5 @@
-import { api } from '@sellio/api-client';
-import type { EventListing } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { EventListing } from '@/types';
 import {
   findClassicFallbackEvent,
   findCorporateFallbackEvent,

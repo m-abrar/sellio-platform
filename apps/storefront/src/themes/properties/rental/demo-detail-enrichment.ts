@@ -1,4 +1,4 @@
-import type { Amenity, PropertyFeature } from '@sellio/types';
+import type { Amenity, PropertyFeature } from '@/types';
 import type { PropertyDetail } from './property-detail-types';
 
 const demoImage = (n: number) => `/demo-assets/properties/item-${String(n).padStart(2, '0')}.svg`;

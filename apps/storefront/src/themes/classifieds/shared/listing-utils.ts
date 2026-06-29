@@ -1,4 +1,4 @@
-import type { Category, ClassifiedListing } from '@sellio/types';
+import type { Category, ClassifiedListing } from '@/types';
 import {
   getClassifiedCategoryKey,
   getClassifiedCategoryTitle,

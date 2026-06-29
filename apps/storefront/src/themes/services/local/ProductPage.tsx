@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { ServiceListing } from '@sellio/types';
+import type { ServiceListing } from '@/types';
 import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';
 import { fetchServiceDetail, resolveServiceFailure } from '@/themes/services/shared/catalog';
 import {

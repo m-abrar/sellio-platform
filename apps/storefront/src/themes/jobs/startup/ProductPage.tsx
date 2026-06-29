@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import type { JobListing } from '@sellio/types';
+import type { JobListing } from '@/types';
 import { OpportunityCard } from './components/OpportunityGrid';
 import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
 import { fetchJobDetail, resolveJobFailure } from '@/themes/jobs/shared/catalog';

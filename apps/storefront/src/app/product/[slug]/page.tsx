@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ThemeSubpageUnavailable } from '@/components/ThemeSubpageUnavailable';
 import { loadThemeSubpage } from '@/lib/theme-pages';
 import { getActiveTheme } from '@/lib/theme';
-import { api } from '@sellio/api-client';
+import { api } from '@/lib/api-client';
 import { buildListingMetadata } from '@/lib/listing-metadata';
 import React from 'react';
 

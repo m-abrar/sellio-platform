@@ -1,4 +1,4 @@
-import type { EventListing } from '@sellio/types';
+import type { EventListing } from '@/types';
 
 const published = { is_published: true, is_featured: true, rating: 4.8 };
 

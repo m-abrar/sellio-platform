@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import type { JobListing, Category, Location } from '@sellio/types';
+import type { JobListing, Category, Location } from '@/types';
 import { OpportunityCard, OpportunityGrid } from './components/OpportunityGrid';
 import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
 import {

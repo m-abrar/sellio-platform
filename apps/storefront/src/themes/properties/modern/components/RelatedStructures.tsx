@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { Property } from '@sellio/types';
+import type { Property } from '@/types';
 import { collectPropertyImages, getPropertyLocation, getPropertyPrice } from '../property-utils';
 import { useModernThemeLink } from '../hooks/useModernThemeLink';
 

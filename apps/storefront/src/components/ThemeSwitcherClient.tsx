@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import type { Theme } from "@sellio/types";
+import type { Theme } from "@/types";
 
 interface ThemeSwitcherClientProps {
   themes: Theme[];

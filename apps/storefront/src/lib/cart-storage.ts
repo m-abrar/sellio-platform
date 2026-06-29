@@ -1,4 +1,4 @@
-import type { Product } from '@sellio/types';
+import type { Product } from '@/types';
 
 export interface UnifiedCartItem {
   product: Product;

@@ -1,5 +1,5 @@
 import { api } from '@/lib/storefront-api';
-import type { Category, Product } from '@sellio/types';
+import type { Category, Product } from '@/types';
 
 function toErrorMessage(error: unknown): string {
   if (error instanceof Error) {

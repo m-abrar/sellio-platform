@@ -1,4 +1,4 @@
-import type { ClassifiedListing } from '@sellio/types';
+import type { ClassifiedListing } from '@/types';
 import { DEALS_FALLBACK_CLASSIFIEDS } from './fallback-deals';
 import { ELITE_FALLBACK_CLASSIFIEDS } from './fallback-elite';
 import { MODERN_FALLBACK_CLASSIFIEDS } from './fallback-modern';

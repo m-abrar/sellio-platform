@@ -1,4 +1,4 @@
-import type { ClassifiedListing } from '@sellio/types';
+import type { ClassifiedListing } from '@/types';
 
 type ClassifiedCategoryRef = ClassifiedListing['taxonomy']['category'] | {
   id?: number;

@@ -1,4 +1,4 @@
-import type { ThemeContentResponse } from '@sellio/types';
+import type { ThemeContentResponse } from '@/types';
 
 export const EMPTY_THEME_CONTENT: ThemeContentResponse = {
   theme_key: 'fallback',

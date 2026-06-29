@@ -1,4 +1,4 @@
-import type { ClassifiedListing } from '@sellio/types';
+import type { ClassifiedListing } from '@/types';
 
 export const ELITE_FALLBACK_CLASSIFIEDS: ClassifiedListing[] = [
   {

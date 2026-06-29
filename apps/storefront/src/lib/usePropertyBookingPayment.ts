@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { PropertyBookingPaymentContext } from '@sellio/types';
+import type { PropertyBookingPaymentContext } from '@/types';
 import { useAuth } from '@/components/auth/AuthProvider';
 import type { StripeCardFormHandle } from '@/components/checkout/StripeCardForm';
 import { api } from '@/lib/storefront-api';

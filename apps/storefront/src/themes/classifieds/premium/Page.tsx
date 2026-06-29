@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { ClassifiedListing } from '@sellio/types';
+import type { ClassifiedListing } from '@/types';
 import { PremiumHeader, PremiumCard, PremiumFooter } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { getAdminBaseUrl } from '@/lib/admin-urls';

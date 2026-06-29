@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Product } from '@sellio/types';
+import type { Product } from '@/types';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';

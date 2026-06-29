@@ -1,4 +1,4 @@
-import type { Theme } from '@sellio/types';
+import type { Theme } from '@/types';
 import { headers } from 'next/headers';
 import { fetchAdminBarContext } from '@/lib/admin-bar-context';
 import { fetchAdminUser } from '@/lib/admin-bar-auth';

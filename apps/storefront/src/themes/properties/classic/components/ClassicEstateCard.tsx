@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { Property } from '@sellio/types';
+import type { Property } from '@/types';
 import { useClassicListingLink } from '../hooks/useClassicThemeLink';
 
 interface Props {

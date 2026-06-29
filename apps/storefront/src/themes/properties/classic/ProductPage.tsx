@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
-import type { Property } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Property } from '@/types';
 import { EstateCard } from './components';
 import { NeighborhoodStats } from './components/NeighborhoodStats';
 import { FALLBACK_ESTATES } from './fallback-data';

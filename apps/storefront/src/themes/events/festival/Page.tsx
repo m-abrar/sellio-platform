@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { EventListing } from '@sellio/types';
+import type { EventListing } from '@/types';
 import { StageLineupCard, AtmosphereHUD } from './components';
 import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
 import { fetchEventsHome, resolveEventsFailure } from '@/themes/events/shared/catalog';

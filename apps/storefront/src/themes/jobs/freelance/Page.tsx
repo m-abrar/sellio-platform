@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { JobListing } from '@sellio/types';
+import type { JobListing } from '@/types';
 import { FreelanceHeader, GigCard, FreelanceFooter } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';

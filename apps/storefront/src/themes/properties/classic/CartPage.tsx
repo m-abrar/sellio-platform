@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
+import { api } from '@/lib/api-client';
 import { FALLBACK_ESTATE_IDS } from './fallback-data';
 import { useClassicListingLink, useClassicThemeLink } from './hooks/useClassicThemeLink';
 import { useDemoFallbackAllowed } from './hooks/useDemoFallbackAllowed';

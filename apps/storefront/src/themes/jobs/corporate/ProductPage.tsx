@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { JobListing } from '@sellio/types';
+import type { JobListing } from '@/types';
 import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
 import { fetchJobDetail, resolveJobFailure } from '@/themes/jobs/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/jobs/shared/useDemoFallbackAllowed';

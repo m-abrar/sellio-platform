@@ -1,4 +1,4 @@
-import type { EventTicketDataMap } from '@sellio/types';
+import type { EventTicketDataMap } from '@/types';
 
 export type EventTicketOption = {
   occurrenceId: number;

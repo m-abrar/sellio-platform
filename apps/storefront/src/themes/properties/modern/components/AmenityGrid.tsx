@@ -1,6 +1,6 @@
 'use client';
 
-import type { Amenity } from '@sellio/types';
+import type { Amenity } from '@/types';
 
 interface AmenityGridProps {
   amenities: Amenity[];

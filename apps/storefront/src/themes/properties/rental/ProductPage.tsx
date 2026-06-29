@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
-import type { Property } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Property } from '@/types';
 import { useClientReady } from '@/hooks/useClientReady';
 import { CatalogRegistryAlert } from './components/explore';
 import {

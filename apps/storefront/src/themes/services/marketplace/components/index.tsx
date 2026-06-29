@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import type { ServiceListing } from '@sellio/types';
+import type { ServiceListing } from '@/types';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { useMenu, useMenuTitle } from '@/components/menu/MenuProvider';

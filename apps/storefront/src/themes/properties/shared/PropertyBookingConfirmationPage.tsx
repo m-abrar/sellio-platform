@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { PropertyBookingRecord } from '@sellio/types';
+import type { PropertyBookingRecord } from '@/types';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { api } from '@/lib/storefront-api';
 import {

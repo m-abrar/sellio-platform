@@ -1,5 +1,5 @@
-import { api } from '@sellio/api-client';
-import type { JobListing } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { JobListing } from '@/types';
 import {
   findCorporateFallbackJob,
   findFallbackJob,

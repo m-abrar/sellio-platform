@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
-import type { ClassifiedListing } from '@sellio/types';
+import type { ClassifiedListing } from '@/types';
 import { LocalHeader, LocalCard, PinIcon } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { getAdminBaseUrl } from '@/lib/admin-urls';

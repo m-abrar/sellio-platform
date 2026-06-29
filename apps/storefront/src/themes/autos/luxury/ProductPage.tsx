@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { Vehicle } from '@sellio/types';
+import type { Vehicle } from '@/types';
 import { LuxuryHeader, LuxuryCarCard, LuxuryFooter } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';
 import {

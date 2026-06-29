@@ -1,5 +1,5 @@
-import { api } from '@sellio/api-client';
-import type { Vehicle } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Vehicle } from '@/types';
 import {
   findFallbackVehicle,
   findLuxuryFallbackVehicle,

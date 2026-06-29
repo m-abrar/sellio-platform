@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { MenuItem, MenuLocationKey } from '@sellio/types';
+import type { MenuItem, MenuLocationKey } from '@/types';
 import { useMenu, useMenuTitle } from '@/components/menu/MenuProvider';
 import { MenuLink } from '@/components/menu/MenuLink';
 import { useMenuContext } from '@/components/menu/MenuProvider';

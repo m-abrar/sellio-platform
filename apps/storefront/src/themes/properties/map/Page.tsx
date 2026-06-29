@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import { api } from '@sellio/api-client';
-import type { Property } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Property } from '@/types';
 import { MapListCard, MapCanvas, type MapMarker } from './components';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';

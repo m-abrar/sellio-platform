@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { Category, Location } from '@sellio/types';
+import type { Category, Location } from '@/types';
 import { getMonthlyRentPriceRangeOptions } from '../../explore-utils';
 
 interface ExploreFiltersProps {

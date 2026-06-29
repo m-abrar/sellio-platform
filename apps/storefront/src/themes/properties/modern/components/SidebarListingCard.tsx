@@ -1,6 +1,6 @@
 'use client';
 
-import type { Property } from '@sellio/types';
+import type { Property } from '@/types';
 import { getPropertyPrice } from '../property-utils';
 
 interface SidebarListingCardProps {

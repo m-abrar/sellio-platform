@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
-import type { Category, Product } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Category, Product } from '@/types';
 import {
   formatProductPrice,
   getProductImage,

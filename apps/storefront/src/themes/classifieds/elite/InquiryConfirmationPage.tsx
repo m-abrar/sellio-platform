@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { ClassifiedInquiryRecord } from '@sellio/types';
+import type { ClassifiedInquiryRecord } from '@/types';
 import { fetchClassifiedInquiry } from '@/themes/classifieds/shared/catalog';
 import {
   readClassifiedInquirySnapshot,

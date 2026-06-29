@@ -1,5 +1,5 @@
 import { api } from '@/lib/storefront-api';
-import type { Category, Location, Property } from '@sellio/types';
+import type { Category, Location, Property } from '@/types';
 import { isVacationRentalProperty } from './vacation-utils';
 
 function toErrorMessage(error: unknown): string {

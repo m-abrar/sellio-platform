@@ -1,4 +1,4 @@
-import type { Property, Category, Location } from '@sellio/types';
+import type { Property, Category, Location } from '@/types';
 
 /**
  * Demo catalogue for properties_classic preview (/preview/*) or when

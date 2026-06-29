@@ -1,4 +1,4 @@
-import type { Property, Category, Location } from '@sellio/types';
+import type { Property, Category, Location } from '@/types';
 import { getMonthlyRent } from './property-utils';
 
 export type ExploreSort = 'newest' | 'price-asc' | 'price-desc';

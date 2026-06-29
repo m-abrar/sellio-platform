@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import type { Vehicle } from '@sellio/types';
+import type { Vehicle } from '@/types';
 import { ClassicCarCard } from './components';
 import AutosExplorePage from '@/themes/autos/shared/AutosExplorePage';
 import { useAutosThemeLink } from '@/themes/autos/shared/useAutosThemeLink';

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
-import type { Property } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Property } from '@/types';
 import { redirectToPropertyBookingReserve } from '@/themes/properties/shared/property-booking-utils';
 import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';

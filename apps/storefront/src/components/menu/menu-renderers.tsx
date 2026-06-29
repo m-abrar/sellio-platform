@@ -1,6 +1,6 @@
 'use client';
 
-import type { MenuItem } from '@sellio/types';
+import type { MenuItem } from '@/types';
 
 export type MenuItemRenderProps = {
   href: string;

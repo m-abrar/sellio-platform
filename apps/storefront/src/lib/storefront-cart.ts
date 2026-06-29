@@ -1,4 +1,4 @@
-import type { Cart, CartItem, Product } from '@sellio/types';
+import type { Cart, CartItem, Product } from '@/types';
 import { api } from '@/lib/storefront-api';
 import { readCart, writeCart, type UnifiedCartItem } from '@/lib/cart-storage';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useMemo } from 'react';
-import type { Menu, MenuItem, MenuLocationKey, MenuMap } from '@sellio/types';
+import type { Menu, MenuItem, MenuLocationKey, MenuMap } from '@/types';
 import { getDefaultMenu } from '@/lib/menu-defaults';
 
 interface MenuContextValue {

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import type { Category, ClassifiedListing } from '@sellio/types';
+import type { Category, ClassifiedListing } from '@/types';
 import { LocalHeader, LocalCard, LocalFooter } from './components';
 import { getAdminBaseUrl } from '@/lib/admin-urls';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';

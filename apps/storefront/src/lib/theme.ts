@@ -1,5 +1,5 @@
-import type { Theme } from "@sellio/types";
-import { api } from "@sellio/api-client";
+import type { Theme } from "@/types";
+import { api } from "@/lib/api-client";
 import { headers } from "next/headers";
 import { cache } from "react";
 

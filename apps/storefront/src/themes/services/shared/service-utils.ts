@@ -1,4 +1,4 @@
-import type { ServiceListing } from '@sellio/types';
+import type { ServiceListing } from '@/types';
 
 export type ServiceCategoryRef =
   | string

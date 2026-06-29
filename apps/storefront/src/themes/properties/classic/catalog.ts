@@ -1,5 +1,5 @@
-import { api } from '@sellio/api-client';
-import type { Property, Category, Location } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Property, Category, Location } from '@/types';
 import {
   FALLBACK_CATEGORIES,
   FALLBACK_ESTATES,

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import type { JobListing } from '@sellio/types';
+import type { JobListing } from '@/types';
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
 import { formatJobCompensation, getJobLocationDisplay } from '@/themes/jobs/shared/job-utils';
 

@@ -1,4 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sellio Storefront
+
+**Standalone — no monorepo required.**
+
+This Next.js app is fully self-contained. All shared types and the API client are inlined directly under `src/`:
+
+| Path | Purpose |
+|------|---------|
+| `src/types/index.ts` | All TypeScript interfaces shared across the storefront |
+| `src/lib/api-client.ts` | `SellioAPI` class and `api` singleton for backend calls |
+
+To install and build independently (e.g. on shared hosting or a VPS):
+
+```bash
+npm install
+npm run build
+npm run start      # production server
+# or: npm run dev  # development with Turbopack
+```
+
+No `packages/` directory, no workspace tools (pnpm/yarn workspaces), and no additional monorepo siblings are required.
+
+**Monorepo note:** When working inside the full Sellio monorepo at `repo/apps/storefront/`, the same standalone setup applies — the `packages/api-client` and `packages/types` directories are no longer referenced by the storefront. They remain in the monorepo as a historical artifact and may be used by other tooling, but the storefront does not depend on them.
 
 ## Getting Started
 

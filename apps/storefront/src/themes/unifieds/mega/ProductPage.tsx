@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
-import type { Product } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Product } from '@/types';
 import { addProductToCart } from '@/themes/unifieds/shared/cart';
 import {
   formatProductPrice,

@@ -1,4 +1,4 @@
-import type { Property, Category, Location } from '@sellio/types';
+import type { Property, Category, Location } from '@/types';
 
 const themeImage = (n: number) => `/themes/properties/rental/${n}.webp`;
 

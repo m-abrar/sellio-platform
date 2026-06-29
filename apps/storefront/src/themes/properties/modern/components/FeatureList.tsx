@@ -1,6 +1,6 @@
 'use client';
 
-import type { PropertyFeature } from '@sellio/types';
+import type { PropertyFeature } from '@/types';
 
 interface FeatureListProps {
   features: PropertyFeature[];

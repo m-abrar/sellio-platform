@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState, Suspense } from 'react';
-import { api } from '@sellio/api-client';
-import type { Property, Category, Location } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Property, Category, Location } from '@/types';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';

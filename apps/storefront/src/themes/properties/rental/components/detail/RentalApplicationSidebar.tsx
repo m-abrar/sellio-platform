@@ -1,6 +1,6 @@
 'use client';
 
-import type { Property } from '@sellio/types';
+import type { Property } from '@/types';
 import type { PropertyBookingBlock, PropertyDetail } from '../../property-detail-types';
 import { formatMonthlyRent } from '../../property-utils';
 import { formatLocalDate } from '../../property-detail-utils';

@@ -5,7 +5,7 @@ import { MenuLink } from '@/components/menu/MenuLink';
 import { useMenuContext } from '@/components/menu/MenuProvider';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { useJobsThemeLink } from '@/themes/jobs/shared/useJobsThemeLink';
-import type { MenuLocationKey } from '@sellio/types';
+import type { MenuLocationKey } from '@/types';
 
 const FALLBACK_COLUMNS = [
   {

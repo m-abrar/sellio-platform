@@ -1,5 +1,5 @@
 import { api } from '@/lib/storefront-api';
-import type { ClassifiedListing } from '@sellio/types';
+import type { ClassifiedListing } from '@/types';
 import { classifiedCategoriesMatch } from '@/lib/classified-category';
 import {
   findFallbackListing,

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import type { EventListing } from '@sellio/types';
+import type { EventListing } from '@/types';
 import Link from 'next/link';
 import { EventCard } from './components';
 import { loadEventDetailPage } from '@/themes/events/shared/catalog';

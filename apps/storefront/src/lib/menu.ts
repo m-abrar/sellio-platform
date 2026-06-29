@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
-import { SellioAPI } from '@sellio/api-client';
-import type { MenuLocationKey, MenuMap } from '@sellio/types';
-import { MENU_LOCATIONS } from '@sellio/types';
+import { SellioAPI } from '@/lib/api-client';
+import type { MenuLocationKey, MenuMap } from '@/types';
+import { MENU_LOCATIONS } from '@/types';
 import { getMenuDefaults } from '@/lib/menu-defaults';
 
 function createApiClient() {

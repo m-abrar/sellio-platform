@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { api } from '@sellio/api-client';
+import { api } from '@/lib/api-client';
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://sellio.vebdez.com').replace(/\/$/, '');
 

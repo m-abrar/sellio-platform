@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { ClassifiedListing, EventListing, JobListing, Property, ServiceListing, Vehicle } from '@sellio/types';
+import type { ClassifiedListing, EventListing, JobListing, Property, ServiceListing, Vehicle } from '@/types';
 import { redirectToPropertyBookingReserve } from '@/themes/properties/shared/property-booking-utils';
 import { redirectToEventBookingReserve } from '@/themes/events/shared/event-booking-utils';
 import { submitVehicleInquiry } from '@/themes/autos/shared/submit-vehicle-inquiry';

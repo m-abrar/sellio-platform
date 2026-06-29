@@ -1,7 +1,7 @@
 'use client';
  
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
+import { api } from '@/lib/api-client';
 import { AssetRegistryCard, IntelligenceHUD } from './components';
 import { scrollToSection } from '@/themes/properties/shared/property-utils';
 import { getAdminBaseUrl } from '@/lib/admin-urls';

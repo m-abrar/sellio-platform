@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { JobListing } from '@sellio/types';
+import type { JobListing } from '@/types';
 import { ModernHeader, ModernJobCard, ModernFooter } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';

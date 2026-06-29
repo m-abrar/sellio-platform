@@ -1,4 +1,4 @@
-import type { Product } from '@sellio/types';
+import type { Product } from '@/types';
 import { addProductToStorefrontCart } from '@/lib/storefront-cart';
 import {
   CART_STORAGE_KEY,

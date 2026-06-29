@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { EventBookingRecord } from '@sellio/types';
+import type { EventBookingRecord } from '@/types';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { api } from '@/lib/storefront-api';
 import type { EventBookingPrefix } from '@/themes/events/shared/EventBookingPaymentPage';

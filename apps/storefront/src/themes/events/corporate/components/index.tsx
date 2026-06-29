@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { EventListing } from '@sellio/types';
+import { EventListing } from '@/types';
 import Link from 'next/link';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';

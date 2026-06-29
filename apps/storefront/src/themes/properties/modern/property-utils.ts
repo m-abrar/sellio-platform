@@ -1,4 +1,4 @@
-import type { Property } from '@sellio/types';
+import type { Property } from '@/types';
 import {
   getListingModeLabel,
   getPropertyListingMode,

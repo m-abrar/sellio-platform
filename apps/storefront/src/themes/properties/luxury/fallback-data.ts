@@ -1,4 +1,4 @@
-import type { Property, Category, Location } from '@sellio/types';
+import type { Property, Category, Location } from '@/types';
 
 export const LUXURY_FALLBACK_ESTATES: Property[] = [
   {

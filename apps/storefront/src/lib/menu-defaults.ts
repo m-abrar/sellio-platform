@@ -1,5 +1,5 @@
-import type { Menu, MenuItem, MenuLocationKey, MenuMap } from '@sellio/types';
-import { MENU_LOCATIONS } from '@sellio/types';
+import type { Menu, MenuItem, MenuLocationKey, MenuMap } from '@/types';
+import { MENU_LOCATIONS } from '@/types';
 
 function fallbackHeaderItems(themeKey?: string): MenuItem[] {
   const vertical = themeKey?.split('_')[0];

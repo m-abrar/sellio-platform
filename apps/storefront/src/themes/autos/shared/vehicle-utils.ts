@@ -1,4 +1,4 @@
-import type { Vehicle } from '@sellio/types';
+import type { Vehicle } from '@/types';
 
 const MODERN_IMAGE_FALLBACK = '/themes/autos/modern/11.webp';
 const LUXURY_IMAGE_FALLBACK = '/themes/autos/luxury/mercedes.png';

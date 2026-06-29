@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import type { Category } from '@sellio/types';
+import type { Category } from '@/types';
 import {
   AutoCard,
   ClassifiedMiniCard,

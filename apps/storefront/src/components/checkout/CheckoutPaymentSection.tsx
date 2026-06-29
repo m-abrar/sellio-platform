@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { PaymentGatewayOption } from '@sellio/types';
+import type { PaymentGatewayOption } from '@/types';
 import { StripeCardForm, type StripeCardFormHandle } from '@/components/checkout/StripeCardForm';
 import './checkout-payment.css';
 

@@ -1,5 +1,5 @@
-import { api, SellioAPI } from '@sellio/api-client';
-import type { ClassifiedInquiryRecord, ServiceConsultationRecord } from '@sellio/types';
+import { api, SellioAPI } from '@/lib/api-client';
+import type { ClassifiedInquiryRecord, ServiceConsultationRecord } from '@/types';
 import { readAuthToken } from '@/lib/auth-storage';
 
 function syncAuthToken(): void {

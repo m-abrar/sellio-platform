@@ -9,7 +9,7 @@ import {
   SmCategorySkeleton,
   SmProviderSkeleton,
 } from './components';
-import type { ServiceListing, Category, Location } from '@sellio/types';
+import type { ServiceListing, Category, Location } from '@/types';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { CatalogSyncAlert } from '@/themes/services/shared/CatalogSyncAlert';

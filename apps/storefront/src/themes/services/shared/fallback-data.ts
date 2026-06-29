@@ -1,4 +1,4 @@
-import type { ServiceListing } from '@sellio/types';
+import type { ServiceListing } from '@/types';
 
 const publishedStatus = {
   is_published: true,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { api } from "@sellio/api-client";
+import { api } from "@/lib/api-client";
 import { ThemeSwitcherClient } from './ThemeSwitcherClient';
 
 import { getActiveTheme } from '@/lib/theme';

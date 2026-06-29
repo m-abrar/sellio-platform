@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, Suspense } from 'react';
-import type { EventListing } from '@sellio/types';
+import type { EventListing } from '@/types';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { CatalogSyncAlert } from '@/themes/events/shared/CatalogSyncAlert';
 import {

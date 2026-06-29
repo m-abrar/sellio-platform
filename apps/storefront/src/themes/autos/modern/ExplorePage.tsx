@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import type { Vehicle, Category, Location } from '@sellio/types';
+import type { Vehicle, Category, Location } from '@/types';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ModernHeader, ModernCarCard, ModernFooter, CarCardSkeleton } from './components';
 import { CatalogSyncAlert } from '@/themes/autos/shared/CatalogSyncAlert';

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { EstateCard, FilterSidebar } from './components';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 import { useThemeContent, useThemeMedia, useThemeConfig } from '@/components/theme-content/ThemeContentProvider';
-import type { Property, Category, Location } from '@sellio/types';
+import type { Property, Category, Location } from '@/types';
 import {
   applyBedroomFilter,
   fetchPropertyCatalogPage,

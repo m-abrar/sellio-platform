@@ -1,4 +1,4 @@
-import type { ApiResponse, ThemeContentResponse } from '@sellio/types';
+import type { ApiResponse, ThemeContentResponse } from '@/types';
 import { getThemeContentDefaults } from '@/lib/theme-content-defaults';
 
 async function fetchThemeContent(themeKey: string, page: string): Promise<ThemeContentResponse> {

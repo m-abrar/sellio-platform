@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { ClassifiedListing } from '@sellio/types';
+import type { ClassifiedListing } from '@/types';
 import { DealsHeader, DealCard, DealsFooter, CountdownTimer } from './components';
 import { CatalogSyncAlert } from '@/themes/classifieds/shared/CatalogSyncAlert';
 import {

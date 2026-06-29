@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, Suspense } from 'react';
-import type { JobListing, Category, Location } from '@sellio/types';
+import type { JobListing, Category, Location } from '@/types';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { CatalogSyncAlert } from '@/themes/jobs/shared/CatalogSyncAlert';
 import {

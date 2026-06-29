@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { Vehicle, Category } from '@sellio/types';
+import type { Vehicle, Category } from '@/types';
 import { useRouter } from 'next/navigation';
 import {
   ModernHeader,

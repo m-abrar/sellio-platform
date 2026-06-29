@@ -8,7 +8,7 @@ import type {
   Property,
   ServiceListing,
   Vehicle,
-} from '@sellio/types';
+} from '@/types';
 import {
   formatProductPrice,
   getProductCategoryLabel,
@@ -208,7 +208,7 @@ function vehicleToListing(vehicle: Vehicle): ExploreListing {
     vertical: 'autos',
     href: `/autos/${vehicle.slug}`,
     actionLabel: 'View vehicle',
-    listingType: vehicle.specs?.type || vehicle.specs?.condition || undefined,
+    listingType: vehicle.specs?.condition || undefined,
     specs: {
       mileage: vehicle.specs?.mileage || undefined,
       transmission: vehicle.specs?.transmission || undefined,
@@ -256,7 +256,7 @@ function serviceToListing(service: ServiceListing): ExploreListing {
 }
 
 function eventToListing(event: EventListing): ExploreListing {
-  const startsAt = event.schedule?.starts_at || event.schedule?.start_date || undefined;
+  const startsAt = event.schedule?.start_at || undefined;
   const ticketsLeft = event.ticketing?.tickets_left != null ? String(event.ticketing.tickets_left) : undefined;
   const location = event.schedule?.is_virtual
     ? 'Virtual'

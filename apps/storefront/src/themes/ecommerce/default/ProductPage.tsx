@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import type { Product } from '@sellio/types';
+import type { Product } from '@/types';
 import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
 import { fetchProductDetail, resolveProductFailure } from '@/themes/ecommerce/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';

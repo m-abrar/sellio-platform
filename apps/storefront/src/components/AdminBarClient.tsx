@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import type { Theme } from '@sellio/types';
+import type { Theme } from '@/types';
 import {
   buildAdminUrls,
   getAdminBaseUrl,

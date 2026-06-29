@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
-import type { Product } from '@sellio/types';
+import { api } from '@/lib/api-client';
+import type { Product } from '@/types';
 import { EfficiencyBar, ProtocolGrid } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';

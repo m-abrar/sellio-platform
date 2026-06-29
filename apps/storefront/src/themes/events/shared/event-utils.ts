@@ -1,4 +1,4 @@
-import type { EventListing } from '@sellio/types';
+import type { EventListing } from '@/types';
 
 const CORPORATE_IMAGE_FALLBACK = '/themes/events/corporate/1.webp';
 const CLASSIC_IMAGE_FALLBACK = '/themes/events/classic/1.webp';
