@@ -398,22 +398,7 @@ async function writeSellerProductionEnv() {
   const sellerRoot = join(repoRoot, 'apps', 'seller');
   const sellerEnv = `VITE_API_URL=${distributionApiUrl}\n`;
   await writeFile(join(sellerRoot, '.env.production'), sellerEnv, 'utf8');
-
-  const sellerConfigJs = `/**
- * Sellio Partner Panel — API connection (edit after upload, no rebuild needed)
- *
- * Set apiUrl to your Laravel backend URL + /api
- * Example: https://marketplace.yourdomain.com/api
- */
-window.SELLIO_CONFIG = {
-  apiUrl: 'https://your-laravel-domain.com/api',
-};
-`;
-
-  await mkdir(join(sellerRoot, 'public'), { recursive: true });
-  await writeFile(join(sellerRoot, 'public', 'config.js'), sellerConfigJs, 'utf8');
   console.log(`Portal API URL for production build: ${distributionApiUrl}`);
-  console.log('Wrote seller/public/config.js');
 }
 
 async function writePortalProductionEnv() {
@@ -433,40 +418,8 @@ async function writePortalProductionEnv() {
   await writeFile(join(sellerRoot, '.env.production'), sellerEnv, 'utf8');
   await writeFile(join(buyerRoot, '.env.production'), buyerEnv, 'utf8');
 
-  const sellerConfigJs = `/**
- * Sellio Partner Panel — API connection (edit after upload, no rebuild needed)
- *
- * apiUrl   — Laravel backend URL + /api
- * basePath — Subfolder path when not on a dedicated subdomain (e.g. '/seller')
- */
-window.SELLIO_CONFIG = {
-  apiUrl: '${distributionApiUrl}',
-  basePath: '${distributionSellerBasePath}',
-};
-`;
-
-  const buyerConfigJs = `/**
- * Sellio Buyer Panel — API connection (edit after upload, no rebuild needed)
- *
- * apiUrl        — Laravel backend URL + /api
- * storefrontUrl — Public storefront base URL
- * basePath      — Subfolder path when not on a dedicated subdomain (e.g. '/buyer')
- */
-window.SELLIO_CONFIG = {
-  apiUrl: '${distributionApiUrl}',
-  storefrontUrl: '${distributionStorefrontUrl}',
-  basePath: '${distributionBuyerBasePath}',
-};
-`;
-
-  await mkdir(join(sellerRoot, 'public'), { recursive: true });
-  await mkdir(join(buyerRoot, 'public'), { recursive: true });
-  await writeFile(join(sellerRoot, 'public', 'config.js'), sellerConfigJs, 'utf8');
-  await writeFile(join(buyerRoot, 'public', 'config.js'), buyerConfigJs, 'utf8');
-
   console.log(`Portal API URL for production build: ${distributionApiUrl}`);
   console.log(`Portal storefront URL for buyer build: ${distributionStorefrontUrl}`);
-  console.log('Wrote seller/public/config.js and buyer/public/config.js');
 }
 
 async function buildFrontendApps() {
@@ -593,6 +546,21 @@ async function runSellerOnlyDistribution() {
 
   console.log('\n==> Copying seller dist into output folder...');
   await copySellerDistToOutput();
+
+  const sellerConfigJs = `/**
+ * Sellio Partner Panel — API connection (edit after upload, no rebuild needed)
+ *
+ * Set apiUrl to your Laravel backend URL + /api
+ * Example: https://marketplace.yourdomain.com/api
+ */
+window.SELLIO_CONFIG = {
+  apiUrl: '${distributionApiUrl}',
+  basePath: '${distributionSellerBasePath}',
+};
+`;
+  await writeFile(join(outputDir, 'config.js'), sellerConfigJs, 'utf8');
+  console.log('Wrote config.js into output folder');
+
   await writeSellerDeployGuide();
   await writeSellerManifest();
 
@@ -604,6 +572,38 @@ async function runSellerOnlyDistribution() {
   console.log('\nDone.');
   console.log(`Seller panel package: ${outputDir}`);
   console.log('Next: upload to seller subdomain root and edit config.js');
+}
+
+async function writeDistributionConfigJs() {
+  const sellerConfigJs = `/**
+ * Sellio Partner Panel — API connection (edit after upload, no rebuild needed)
+ *
+ * apiUrl   — Laravel backend URL + /api
+ * basePath — Subfolder path when not on a dedicated subdomain (e.g. '/seller')
+ */
+window.SELLIO_CONFIG = {
+  apiUrl: '${distributionApiUrl}',
+  basePath: '${distributionSellerBasePath}',
+};
+`;
+
+  const buyerConfigJs = `/**
+ * Sellio Buyer Panel — API connection (edit after upload, no rebuild needed)
+ *
+ * apiUrl        — Laravel backend URL + /api
+ * storefrontUrl — Public storefront base URL
+ * basePath      — Subfolder path when not on a dedicated subdomain (e.g. '/buyer')
+ */
+window.SELLIO_CONFIG = {
+  apiUrl: '${distributionApiUrl}',
+  storefrontUrl: '${distributionStorefrontUrl}',
+  basePath: '${distributionBuyerBasePath}',
+};
+`;
+
+  await writeFile(join(outputDir, 'apps', 'seller', 'dist', 'config.js'), sellerConfigJs, 'utf8');
+  await writeFile(join(outputDir, 'apps', 'buyer', 'dist', 'config.js'), buyerConfigJs, 'utf8');
+  console.log('Wrote config.js into seller/dist and buyer/dist');
 }
 
 async function copyBuildArtifacts() {
@@ -966,6 +966,7 @@ async function main() {
 
   console.log('\n==> Copying built frontend assets into distribution...');
   await copyBuildArtifacts();
+  await writeDistributionConfigJs();
 
   await writeDeployGuide();
   await writeManifest();
