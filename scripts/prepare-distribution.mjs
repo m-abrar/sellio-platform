@@ -134,7 +134,6 @@ const INCLUDE_ROOTS = [
   'apps',
   'documentation',
   'Documentation',
-  'index.html',
   'CHANGELOG.md',
   'README.md',
   'LICENSE',
