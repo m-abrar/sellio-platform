@@ -95,6 +95,10 @@ const EXCLUDED_DIR_NAMES = new Set([
   'vendor',
   '.git',
   '.next',
+  '.expo',
+  '.maestro',
+  '.test-dist',
+  'tests',
   '.cursor',
   '_development',
   '.idea',
@@ -107,6 +111,10 @@ const EXCLUDED_DIR_NAMES = new Set([
   'test-results',
   'scratch',
 ]);
+
+const EXCLUDED_DIR_PATTERNS = [
+  /^\.expo-export/,  // .expo-export-check, .expo-export-final-android, etc.
+];
 
 const EXCLUDED_FILE_NAMES = new Set([
   '.env',
@@ -122,6 +130,9 @@ const EXCLUDED_FILE_NAMES = new Set([
   'AGENTS.md',
   'CLAUDE.md',
   'tsconfig.tsbuildinfo',
+  'tsconfig.tests.json',
+  '.metro-phone.stderr.log',
+  '.metro-phone.stdout.log',
   'verify_buyer.mjs',
   'verify_buyer2.mjs',
   'screenshot_phase2.cjs',
@@ -183,8 +194,9 @@ function shouldExclude(relPath, isDir, name) {
   if (
     parts.some(
       (part) =>
-        EXCLUDED_DIR_NAMES.has(part) &&
-        !(part === 'vendor' && !isComposerVendorPath(relPath)),
+        (EXCLUDED_DIR_NAMES.has(part) &&
+          !(part === 'vendor' && !isComposerVendorPath(relPath))) ||
+        EXCLUDED_DIR_PATTERNS.some((p) => p.test(part)),
     )
   ) {
     return true;
