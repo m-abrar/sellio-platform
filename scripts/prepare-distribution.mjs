@@ -53,7 +53,7 @@ function readArg(flag, envKey, fallback = '') {
 const distributionApiUrl = readArg(
   '--api-url',
   'DISTRIBUTION_API_URL',
-  'https://demo.sellio.vebdez.com/api',
+  'https://your-domain.com/api',
 ).replace(/\/$/, '');
 
 const distributionStorefrontUrl = readArg(
@@ -65,13 +65,13 @@ const distributionStorefrontUrl = readArg(
 const distributionSellerUrl = readArg(
   '--seller-url',
   'DISTRIBUTION_SELLER_URL',
-  'https://seller-panel.sellio.vebdez.com',
+  'https://seller.your-domain.com',
 ).replace(/\/$/, '');
 
 const distributionBuyerUrl = readArg(
   '--buyer-url',
   'DISTRIBUTION_BUYER_URL',
-  'https://buyer-panel.sellio.vebdez.com',
+  'https://buyer.your-domain.com',
 ).replace(/\/$/, '');
 
 function portalBasePathFromUrl(url) {
@@ -561,7 +561,6 @@ window.SELLIO_CONFIG = {
   console.log('Wrote config.js into output folder');
 
   await writeSellerDeployGuide();
-  await writeSellerManifest();
 
   if (makeZip) {
     console.log('\n==> Creating ZIP archive...');
@@ -632,9 +631,6 @@ async function copyBuildArtifacts() {
 
 async function writeDeployGuide() {
   const guide = `# Sellio distribution — server deploy guide
-
-Generated: ${new Date().toISOString()}
-Source repo: ${repoRoot}
 
 ## 1. Upload this entire folder
 
@@ -968,7 +964,6 @@ async function main() {
   await writeDistributionConfigJs();
 
   await writeDeployGuide();
-  await writeManifest();
 
   if (makeZip) {
     console.log('\n==> Creating ZIP archive...');
