@@ -956,11 +956,12 @@ async function main() {
 
   if (!skipBuild) {
     await buildFrontendApps();
-    console.log('\n==> Copying built frontend assets into distribution...');
-    await copyBuildArtifacts();
   } else {
     console.log('\n==> Skipping frontend builds (--skip-build)');
   }
+
+  console.log('\n==> Copying built frontend assets into distribution...');
+  await copyBuildArtifacts();
 
   await writeDeployGuide();
   await writeManifest();

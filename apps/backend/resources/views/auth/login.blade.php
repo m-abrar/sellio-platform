@@ -21,7 +21,7 @@
                 <span class="auth-panel-wordmark">{{ setting('site_name', config('app.name')) }}</span>
             </a>
 
-            <h2 class="fw-800 lh-sm mb-3" style="font-size:clamp(1.9rem,3vw,2.6rem);color:#fff">
+            <h2 class="lh-sm mb-3" style="font-size:clamp(1.9rem,3vw,2.6rem);color:#fff">
                 {{ __('The marketplace') }}<br>
                 <span class="text-gradient">{{ __('for everything.') }}</span>
             </h2>

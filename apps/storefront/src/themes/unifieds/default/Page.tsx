@@ -85,14 +85,12 @@ export default function Page() {
   const themeLink = useUnifiedThemeLink();
 
   // ── Hero ──────────────────────────────────────────────────────────────────
-  const heroEyebrow = useThemeContent('hero.eyebrow', 'Multi-Vertical Marketplace');
   const heroTitle = useThemeContent('hero.title', 'Everything you need,\nall in one place.');
   const heroHighlight = useThemeContent('hero.highlight', 'all in one place.');
   const heroDescription = useThemeContent(
     'hero.description',
     'Discover properties, vehicles, events, jobs, and more — all in one trusted marketplace.',
   );
-  const heroBadgeLabel = useThemeContent('hero.badge_label', 'Live listings');
 
   // ── Section: Properties ───────────────────────────────────────────────────
   const propertiesTitle = useThemeContent('properties_section.title', 'Properties');
@@ -199,9 +197,11 @@ export default function Page() {
       {/* ── Hero ───────────────────────────────────────────────────────────── */}
       <section className="origin-hero" aria-labelledby="ud-hero-title">
         <div className="ud-hero-content">
-          <div className="ud-hero-eyebrow-wrap">
-            <span className="ud-hero-eyebrow-dot" aria-hidden="true" />
-            <span className="ud-mono ud-hero-eyebrow">{heroEyebrow}</span>
+          <div className="ud-hero-verticals-strip" aria-label="Marketplace verticals">
+            {['Properties', 'Autos', 'Jobs', 'Events'].map(v => (
+              <span key={v} className="ud-hero-vertical-chip">{v}</span>
+            ))}
+            <span className="ud-hero-vertical-more">+3 more</span>
           </div>
           <h1 className="ud-heading-xl" id="ud-hero-title">
             {heroTitle.split('\n').map((line, lineIndex, lines) => {
@@ -257,14 +257,21 @@ export default function Page() {
             </div>
           )}
           <div className="ud-floating-badge">
-            <div className="ud-floating-badge-live" aria-hidden="true">
-              <span className="ud-floating-badge-live-dot" />
-              <span className="ud-mono ud-floating-badge-live-label">LIVE</span>
+            <div className="ud-fbl-live-row">
+              <span className="ud-floating-badge-live-dot" aria-hidden="true" />
+              <span className="ud-fbl-live-text">Live now</span>
             </div>
-            <div className={`ud-floating-badge-value${loadingListings ? ' ud-floating-badge-value--loading' : ''}`}>
+            <div className={`ud-fbl-count${loadingListings ? ' ud-fbl-count--loading' : ''}`}>
               {heroBadgeValue}
+              {!loadingListings && <span className="ud-fbl-count-plus" aria-hidden="true">+</span>}
             </div>
-            <div className="ud-mono ud-floating-badge-label">{heroBadgeLabel}</div>
+            <p className="ud-fbl-desc">active listings</p>
+            <div className="ud-fbl-sep" aria-hidden="true" />
+            <div className="ud-fbl-verticals">
+              <span className="ud-fbl-vchip">Properties</span>
+              <span className="ud-fbl-vchip">Autos</span>
+              <span className="ud-fbl-vchip ud-fbl-vchip--more">+5 more</span>
+            </div>
           </div>
         </div>
       </section>

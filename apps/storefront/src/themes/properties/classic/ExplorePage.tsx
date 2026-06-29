@@ -176,17 +176,17 @@ export default function ExplorePage({ initialCategorySlug }: ExplorePageProps) {
     : applyBedroomFilter(estates, selectedBedrooms);
 
   return (
-    <div className="pc-container-base pc-page-shell" style={{ background: 'var(--pc-bone)', minHeight: '100vh' }}>
-      
+    <div className="pc-container-base pc-page-shell">
+
       <section className="pc-section pc-section--compact">
         <div className="pc-page-header">
           <div>
-            <div className="pc-caps pc-section-eyebrow" style={{ color: 'var(--pc-teal)', opacity: 0.4 }}>Global Provenance Catalog</div>
-            <h1 className="pc-serif" style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}>
-              The <span className="pc-italic" style={{ fontWeight: 400 }}>Catalogue.</span>
+            <div className="pc-caps pc-section-eyebrow">Global Provenance Catalog</div>
+            <h1 className="pc-serif pc-section-title">
+              The <span className="pc-italic pc-heading-light">Catalogue.</span>
             </h1>
           </div>
-          <div style={{ maxWidth: '400px', width: '100%' }}>
+          <div className="pc-explore-search-wrap">
             <div className="pc-search-bar-frame">
               <div className="pc-search-bar pc-search-bar--compact">
                 <div className="pc-search-inner">
@@ -229,34 +229,17 @@ export default function ExplorePage({ initialCategorySlug }: ExplorePageProps) {
             {apiError && !useFallback && <CatalogRegistryAlert variant="production" error={apiError} />}
 
             {loading && displayEstates.length === 0 ? (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '4rem' }} className="pc-estate-grid-skeleton">
-                <style dangerouslySetInnerHTML={{ __html: `
-                  .pc-skeleton-card {
-                    background: var(--pc-white);
-                    border: 1px solid var(--pc-border);
-                    height: 550px;
-                    opacity: 0.6;
-                    animation: pcPulse 1.5s infinite ease-in-out;
-                  }
-                  @keyframes pcPulse {
-                    0% { opacity: 0.4; }
-                    50% { opacity: 0.8; }
-                    100% { opacity: 0.4; }
-                  }
-                  @media (min-width: 992px) {
-                    .pc-estate-grid-skeleton { grid-template-columns: repeat(2, 1fr) !important; }
-                  }
-                ` }} />
+              <div className="pc-estate-grid-skeleton">
                 <div className="pc-skeleton-card" />
                 <div className="pc-skeleton-card" />
               </div>
             ) : displayEstates.length > 0 ? (
               <div>
-                <div className="pc-section-header pc-results-meta" style={{ alignItems: 'center', fontSize: '0.8rem', color: 'var(--pc-text-muted)' }}>
-                  <div className="pc-caps" style={{ opacity: 0.5 }}>
+                <div className="pc-section-header pc-results-meta">
+                  <div className="pc-caps pc-results-meta-label">
                     {displayEstates.length} Listing{displayEstates.length !== 1 ? 's' : ''} Cataloged
                   </div>
-                  <div style={{ fontWeight: 800 }}>SORT: PROVENANCE DEFAULT</div>
+                  <div className="pc-results-sort">SORT: PROVENANCE DEFAULT</div>
                 </div>
 
                 <div className="pc-estate-grid">
@@ -269,9 +252,9 @@ export default function ExplorePage({ initialCategorySlug }: ExplorePageProps) {
                 </div>
               </div>
             ) : (
-              <div className="pc-empty-state" style={{ border: '1px dashed var(--pc-border)', background: 'var(--pc-white)' }}>
-                <h4 className="pc-serif" style={{ fontSize: '2rem', color: 'var(--pc-teal)' }}>No Listings Located</h4>
-                <p style={{ color: 'var(--pc-text-muted)', fontSize: '1rem' }}>
+              <div className="pc-empty-state">
+                <h4 className="pc-serif">No Listings Located</h4>
+                <p>
                   Adjust your search guidelines or filter specifications to locate available estates.
                 </p>
               </div>

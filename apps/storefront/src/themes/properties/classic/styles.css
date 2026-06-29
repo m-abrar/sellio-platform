@@ -72,6 +72,8 @@ body.has-admin-bar .properties-classic-theme .pc-hero {
 .properties-classic-theme .pc-page-shell {
   padding-top: 5.5rem;
   padding-bottom: var(--pc-space-2xl);
+  background: var(--pc-bone);
+  min-height: 100vh;
 }
 
 body.has-admin-bar .properties-classic-theme .pc-page-shell {
@@ -436,6 +438,9 @@ body.has-admin-bar .properties-classic-theme .pc-page-shell {
 
 .pc-results-meta {
   margin-bottom: var(--pc-space-md) !important;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--pc-text-muted);
 }
 
 .pc-listing-column {
@@ -1405,7 +1410,13 @@ body.has-admin-bar .properties-classic-theme .pc-product-hero-container {
 }
 
 .pc-ledger-card {
-  margin: 0;
+  background: var(--pc-white);
+  border: 1px solid var(--pc-border);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  position: relative;
 }
 
 .pc-inquiry-aside {
@@ -2544,5 +2555,364 @@ body.has-admin-bar .properties-classic-theme .pc-inquiry-panel {
   background: var(--pc-white);
   border: 1px dashed var(--pc-border);
   color: var(--pc-text-muted);
+}
+
+/* ─── ExplorePage / CartPage shared heading ─── */
+
+.pc-heading-light {
+  font-weight: 400;
+}
+
+.pc-explore-search-wrap {
+  max-width: 400px;
+  width: 100%;
+}
+
+.pc-results-meta-label {
+  opacity: 0.5;
+}
+
+.pc-results-sort {
+  font-weight: 800;
+}
+
+/* ─── CartPage — loading state ─── */
+
+.pc-cart-loading {
+  background: var(--pc-bone);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--pc-font-serif);
+}
+
+.pc-cart-loading-title {
+  font-size: 2.5rem;
+  color: var(--pc-teal);
+}
+
+.pc-cart-loading-divider {
+  width: 80px;
+  height: 1px;
+  background: var(--pc-teal);
+  margin-top: 2rem;
+  opacity: 0.3;
+}
+
+/* ─── CartPage — page-header alignment modifier ─── */
+
+.pc-page-header--bottom {
+  align-items: flex-end;
+}
+
+/* ─── CartPage — form submitted confirmation ─── */
+
+.pc-cart-submitted {
+  background: var(--pc-white);
+  border: 1px solid var(--pc-border);
+  padding: 6rem 3rem;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: var(--pc-shadow-premium);
+}
+
+.pc-cart-submitted-ornament {
+  font-size: 3rem;
+  color: var(--pc-accent);
+}
+
+.pc-cart-submitted-title {
+  font-family: var(--pc-font-serif);
+  font-size: 2.5rem;
+  color: var(--pc-teal);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.pc-cart-submitted-desc {
+  color: var(--pc-text-muted);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 550px;
+  margin: 0 auto 3rem;
+}
+
+/* ─── CartPage — ledger layout grid ─── */
+
+.pc-ledger-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .pc-ledger-layout {
+    grid-template-columns: 1fr 420px;
+  }
+}
+
+/* ─── CartPage — ledger list header ─── */
+
+.pc-ledger-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--pc-border);
+  padding-bottom: 1.5rem;
+}
+
+.pc-ledger-count {
+  opacity: 0.5;
+}
+
+.pc-ledger-clear-btn {
+  background: transparent;
+  border: none;
+  color: var(--pc-accent);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+
+/* ─── CartPage — ledger card inner layout ─── */
+
+.pc-ledger-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+@media (min-width: 600px) {
+  .pc-ledger-card-inner {
+    flex-direction: row;
+  }
+}
+
+.pc-ledger-thumb {
+  width: 100%;
+  max-width: 200px;
+  height: 140px;
+  border: 1px solid var(--pc-border);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.pc-ledger-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pc-ledger-content {
+  flex: 1;
+}
+
+.pc-ledger-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.pc-ledger-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: var(--pc-teal);
+  margin: 0;
+}
+
+.pc-ledger-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pc-ledger-remove-btn {
+  background: transparent;
+  border: none;
+  color: #cc0000;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.pc-ledger-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--pc-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.pc-ledger-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.pc-ledger-valuation-label {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: var(--pc-teal);
+  opacity: 0.5;
+}
+
+.pc-ledger-price-value {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--pc-teal);
+}
+
+/* ─── CartPage — rental box inside card ─── */
+
+.pc-ledger-rental-box {
+  background: var(--pc-bone);
+  border: 1px solid var(--pc-border);
+  padding: 2rem;
+  margin-top: 1rem;
+}
+
+.pc-ledger-rental-label {
+  font-size: 0.65rem;
+  margin-bottom: 1.5rem;
+  color: var(--pc-teal);
+  opacity: 0.5;
+}
+
+.pc-dates-subgrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 600px) {
+  .pc-dates-subgrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.pc-cart-date-label {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: var(--pc-teal);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.pc-cart-date-input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--pc-border);
+  background: white;
+  font-family: var(--pc-font-body);
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* ─── CartPage — inquiry aside sticky ─── */
+
+@media (min-width: 1024px) {
+  .pc-inquiry-aside {
+    position: sticky;
+    top: 140px;
+  }
+}
+
+/* ─── CartPage — dispatch panel ─── */
+
+.pc-inquiry-dispatch-panel {
+  background: var(--pc-white);
+  border: 1px solid var(--pc-border);
+  padding: 3.5rem;
+  box-shadow: var(--pc-shadow-premium);
+}
+
+.pc-dispatch-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.pc-dispatch-eyebrow {
+  opacity: 0.4;
+  margin-bottom: 1rem;
+}
+
+.pc-dispatch-title {
+  font-family: var(--pc-font-serif);
+  font-size: 1.8rem;
+  color: var(--pc-teal);
+  font-weight: 900;
+}
+
+.pc-dispatch-sublabel {
+  font-size: 0.8rem;
+  color: var(--pc-text-muted);
+  margin-top: 0.5rem;
+}
+
+.pc-dispatch-form .pc-filter-group {
+  margin-bottom: 1.5rem;
+}
+
+.pc-dispatch-form .pc-filter-label {
+  font-size: 0.7rem;
+}
+
+.pc-dispatch-form .pc-filter-input {
+  background: white;
+}
+
+.pc-dispatch-form textarea.pc-filter-input {
+  resize: none;
+}
+
+.pc-dispatch-submit {
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.pc-dispatch-error {
+  margin-top: 1rem;
+  color: var(--pc-accent);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.pc-dispatch-footer-label {
+  margin-top: 2.5rem;
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  opacity: 0.3;
+}
+
+/* ─── CartPage — empty ledger ─── */
+
+.pc-empty-state--centered {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pc-empty-ornament {
+  font-size: 2.5rem;
+  color: var(--pc-teal);
+  opacity: 0.3;
+}
+
+.pc-empty-title {
+  font-size: 2.25rem;
+  color: var(--pc-teal);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 

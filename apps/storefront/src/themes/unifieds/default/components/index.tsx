@@ -366,7 +366,7 @@ export const VerticalModuleCards = ({ verticals, totals, themeLink, isLoading }:
     <section className="ud-discovery-section">
       <div className="ud-discovery-header">
         <div>
-          <div className="ud-mono ud-section-eyebrow ud-discovery-eyebrow">{eyebrow}</div>
+          <div className="ud-discovery-kicker">{eyebrow}</div>
           <h2 className="ud-discovery-title">{heading}</h2>
           <p className="ud-discovery-description">{description}</p>
         </div>
@@ -380,17 +380,16 @@ export const VerticalModuleCards = ({ verticals, totals, themeLink, isLoading }:
           const count = totals[v.key] ?? 0;
           return (
             <a key={v.key} href={themeLink(`/explore?vertical=${v.key}`)} className="ud-module-card" data-vertical={v.key}>
-              <span className="ud-module-icon-wrap" aria-hidden="true">
+              <span className="ud-module-icon" aria-hidden="true">
                 {VERTICAL_ICONS[v.key]}
               </span>
-              <span className="ud-module-label">{v.label}</span>
               {isLoading ? (
                 <div className="ud-module-count--skeleton" aria-hidden="true" />
               ) : (
-                <span className="ud-module-stat">
-                  {count.toLocaleString()} {count === 1 ? 'listing' : 'listings'}
-                </span>
+                <span className="ud-module-count">{count.toLocaleString()}</span>
               )}
+              <span className="ud-module-label">{v.label}</span>
+              <span className="ud-module-stat">{count === 1 ? 'listing' : 'listings'}</span>
             </a>
           );
         })}
@@ -411,7 +410,9 @@ export const PropertyCard = ({ listing, themeLink }: PropertyCardProps) => (
     <div className="ud-property-card__img-wrap">
       <img src={listing.image} alt={listing.title} loading="lazy" className="ud-property-card__img" />
       {listing.listingType && (
-        <span className="ud-property-card__badge">{listing.listingType}</span>
+        <span className={`ud-property-card__badge${listing.listingType === 'For Rent' ? ' ud-property-card__badge--rent' : ''}`}>
+          {listing.listingType}
+        </span>
       )}
     </div>
     <div className="ud-property-card__body">
@@ -527,14 +528,15 @@ export const JobListItem = ({ listing, themeLink }: PropertyCardProps) => (
 // ─── Classified Mini Card ─────────────────────────────────────────────────────
 
 export const ClassifiedMiniCard = ({ listing, themeLink }: PropertyCardProps) => (
-  <a href={themeLink(listing.href)} className="ud-classified-mini-card">
-    <div className="ud-classified-mini-card__img-wrap">
-      <img src={listing.image} alt={listing.title} loading="lazy" className="ud-classified-mini-card__img" />
+  <a href={themeLink(listing.href)} className="ud-classified-list-item">
+    <div className="ud-classified-list-item__img-wrap">
+      <img src={listing.image} alt={listing.title} loading="lazy" className="ud-classified-list-item__img" />
     </div>
-    <div className="ud-classified-mini-card__body">
-      <h3 className="ud-classified-mini-card__title">{listing.title}</h3>
-      <span className="ud-classified-mini-card__price">{listing.price}</span>
+    <div className="ud-classified-list-item__body">
+      <h3 className="ud-classified-list-item__title">{listing.title}</h3>
+      {listing.category && <span className="ud-classified-list-item__cat">{listing.category}</span>}
     </div>
+    <span className="ud-classified-list-item__price">{listing.price}</span>
   </a>
 );
 
@@ -575,7 +577,7 @@ export const JobsClassifiedsSplitPanel = ({ jobs, classifieds, themeLink }: Spli
         {jobs.length > 0 && (
           <div className="ud-split-panel">
             <div className="ud-split-panel__head">
-              <h2 className="ud-split-panel__title"><BriefcaseIcon /> {jobsTitle}</h2>
+              <h2 className="ud-split-panel__title">{jobsTitle}</h2>
               <a href={themeLink('/explore?vertical=jobs')} className="ud-split-panel__link">{jobsCta}</a>
             </div>
             <div className="ud-jobs-list">
@@ -588,10 +590,10 @@ export const JobsClassifiedsSplitPanel = ({ jobs, classifieds, themeLink }: Spli
         {classifieds.length > 0 && (
           <div className="ud-split-panel">
             <div className="ud-split-panel__head">
-              <h2 className="ud-split-panel__title"><TagIcon /> {classifiedsTitle}</h2>
+              <h2 className="ud-split-panel__title">{classifiedsTitle}</h2>
               <a href={themeLink('/explore?vertical=classifieds')} className="ud-split-panel__link">{classifiedsCta}</a>
             </div>
-            <div className="ud-classifieds-mini-grid">
+            <div className="ud-classifieds-list">
               {classifieds.slice(0, 4).map((item) => (
                 <ClassifiedMiniCard key={item.id} listing={item} themeLink={themeLink} />
               ))}
@@ -620,14 +622,16 @@ export const PopularCategoriesSection = ({ categories, themeLink }: PopularCateg
   return (
     <section className="ud-taxonomy-section">
       <div className="ud-taxonomy-header">
-        <div className="ud-mono ud-section-eyebrow ud-taxonomy-eyebrow">{eyebrow}</div>
-        <h2 className="ud-taxonomy-title">{heading}</h2>
-        <p className="ud-taxonomy-sub">{subheading}</p>
+        <div>
+          <div className="ud-discovery-kicker">{eyebrow}</div>
+          <h2 className="ud-taxonomy-title">{heading}</h2>
+          <p className="ud-taxonomy-sub">{subheading}</p>
+        </div>
       </div>
       <div className="ud-taxonomy-grid">
         {top.map((cat) => (
           <a key={cat.id} href={themeLink(`/explore?category=${cat.slug}`)} className="ud-taxonomy-chip">
-            <span className="ud-taxonomy-chip__label">{cat.title}</span>
+            {cat.title}
           </a>
         ))}
       </div>
@@ -660,15 +664,17 @@ export const HowItWorks = () => {
   return (
     <section className="ud-hiw-section" id="ud-hiw-section">
       <div className="ud-hiw-header">
-        <div className="ud-mono ud-section-eyebrow">{kicker}</div>
-        <h2 className="ud-hiw-title">{heading}</h2>
+        <div>
+          <div className="ud-hiw-kicker">{kicker}</div>
+          <h2 className="ud-hiw-title">{heading}</h2>
+        </div>
         <p className="ud-hiw-description">{description}</p>
       </div>
       <div className="ud-hiw-grid">
         {steps.map((s) => (
           <div key={s.step} className="ud-hiw-card">
-            <div className="ud-hiw-step-num">{s.step}</div>
-            <div className="ud-hiw-icon-wrap">{s.icon}</div>
+            <span className="ud-hiw-step" aria-hidden="true">{s.step}</span>
+            <span className="ud-hiw-icon" aria-hidden="true">{s.icon}</span>
             <h3 className="ud-hiw-card-title">{s.title}</h3>
             <p className="ud-hiw-card-desc">{s.desc}</p>
           </div>
@@ -684,6 +690,11 @@ interface HeroMosaicProps {
   listings: ExploreListing[];
 }
 
+const MOSAIC_VERTICAL_LABELS: Record<string, string> = {
+  properties: 'Property', autos: 'Auto', jobs: 'Job',
+  events: 'Event', products: 'Product', services: 'Service', classifieds: 'Classified',
+};
+
 export const HeroMosaic = ({ listings }: HeroMosaicProps) => {
   const images = listings
     .filter((l) => l.image && !l.image.includes('placeholder'))
@@ -691,39 +702,40 @@ export const HeroMosaic = ({ listings }: HeroMosaicProps) => {
 
   const slots = [0, 1, 2, 3].map((i) => images[i] || null);
 
+  const renderSlot = (idx: number, size: 'lg' | 'sm') => (
+    <div key={idx} className={`ud-hero-mosaic__item ud-hero-mosaic__item--${size}`}>
+      {slots[idx] ? (
+        <>
+          <img src={slots[idx]!.image} alt="" className="ud-hero-mosaic__img" loading={idx === 0 ? 'eager' : 'lazy'} />
+          <div className="ud-hero-mosaic__overlay">
+            <div className="ud-hero-mosaic__meta">
+              <span className="ud-hero-mosaic__title">{slots[idx]!.title}</span>
+              <div className="ud-hero-mosaic__footer">
+                <span className="ud-hero-mosaic__badge">
+                  {MOSAIC_VERTICAL_LABELS[slots[idx]!.vertical] ?? slots[idx]!.vertical}
+                </span>
+                {slots[idx]!.price && (
+                  <span className="ud-hero-mosaic__price">{slots[idx]!.price}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="ud-hero-mosaic__placeholder" />
+      )}
+    </div>
+  );
+
   return (
     <div className="ud-hero-mosaic" aria-hidden="true">
       <div className="ud-hero-mosaic__col">
-        {[0, 1].map((idx) => (
-          <div key={idx} className={`ud-hero-mosaic__item ud-hero-mosaic__item--${idx === 0 ? 'lg' : 'sm'}`}>
-            {slots[idx] ? (
-              <img
-                src={slots[idx]!.image}
-                alt=""
-                className="ud-hero-mosaic__img"
-                loading={idx === 0 ? 'eager' : 'lazy'}
-              />
-            ) : (
-              <div className="ud-hero-mosaic__placeholder" />
-            )}
-          </div>
-        ))}
+        {renderSlot(0, 'lg')}
+        {renderSlot(1, 'sm')}
       </div>
       <div className="ud-hero-mosaic__col ud-hero-mosaic__col--offset">
-        {[2, 3].map((idx) => (
-          <div key={idx} className={`ud-hero-mosaic__item ud-hero-mosaic__item--${idx === 2 ? 'sm' : 'lg'}`}>
-            {slots[idx] ? (
-              <img
-                src={slots[idx]!.image}
-                alt=""
-                className="ud-hero-mosaic__img"
-                loading="lazy"
-              />
-            ) : (
-              <div className="ud-hero-mosaic__placeholder" />
-            )}
-          </div>
-        ))}
+        {renderSlot(2, 'sm')}
+        {renderSlot(3, 'lg')}
       </div>
     </div>
   );

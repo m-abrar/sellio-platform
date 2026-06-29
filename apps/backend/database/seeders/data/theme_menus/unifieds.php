@@ -46,13 +46,13 @@ $interactiveFooterLinks = tm_links([
 return [
     'unifieds_default' => [
         tm_menu('main_header', 'Main Header Menu', tm_links([
-            ['Registry', '/'],
-            ['Features', '/explore'],
-            ['Analytics', '/explore'],
-            ['Enterprise', '/explore'],
+            ['Browse', '/explore'],
+            ['Sell', '/dashboard/listings/create'],
+            ['How it works', '/about'],
+            ['Pricing', '/pricing'],
         ])),
         tm_menu('action_buttons', 'Header Actions', tm_links([
-            'GET STARTED',
+            'Get started',
         ])),
         tm_menu('footer_column_1', 'Company', tm_links([
             ['About', '/about'],

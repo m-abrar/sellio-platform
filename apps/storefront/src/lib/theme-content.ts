@@ -54,7 +54,9 @@ export async function getThemeContent(page: string, themeKey?: string): Promise<
       },
     };
   } catch (error) {
-    console.error(`Failed to load theme content for ${themeKey}/${page}`, error);
+    if (error instanceof Error && error.name !== 'AbortError') {
+      console.warn(`Failed to load theme content for ${themeKey}/${page}`, error);
+    }
     return defaults;
   }
 }

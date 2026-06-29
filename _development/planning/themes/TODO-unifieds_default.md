@@ -70,3 +70,52 @@ Scoping discussion confirmed: implement inquiry/apply for jobs, autos, services,
   - Added `BookingReservePage`, `BookingPage`, `BookingConfirmationPage`, `BookingConfirmPage` to the `unifieds` vertical fallback in `theme-pages.ts`.
   - TypeScript: 0 errors.
 - [x] Live chat: `LiveChatWidget` component added to `unifieds/default` product pages; auth-gated (inline login/register), opens/finds conversation via new `POST /dashboard/user/messages/start` backend endpoint (maps vertical+listing_id to partner user_id via model lookup), loads thread, sends messages, polls every 5 s for updates. Shown below the primary interaction form for all verticals except `products`. CSS classes `ud-chat-*`. Real-time push deferred for storefront (Echo / Next.js runtime not yet wired); polling covers the gap.
+
+### 2026-06-29 UI polish pass
+
+**Laravel auth (backend)**
+- [x] Login screen: removed `fw-800` faux-bold from the DM Serif Display heading on the dark marketing panel (font only ships at weight 400).
+- [x] Login screen: reversed the `.auth-split-marketing .text-gradient` direction — was `white → orange` (bleached out start on dark bg); now `orange → white` for a proper warm-lift effect.
+
+**Hero section**
+- [x] Remove the border/outline around the 4-card group on the right column — removed the `0 0 0 1px rgba(255,255,255,0.07)` inset ring from `.ud-hero-mosaic` box-shadow.
+- [x] Fix z-index issue on the live listings count — added `z-index: 2` to `.ud-floating-badge` so it always sits above the mosaic (`z-index: 1`).
+- [x] Replace the smart search icon — swapped the generic 5-pointed star polygon for a 4-pointed diamond sparkle + secondary sparkle + accent dot (the modern AI-feature icon language used by Gemini/Copilot/Apple Intelligence).
+- [x] Smart search sparkle icon was reused in 4 places — replaced: tab keeps sparkle (identity), input prefix → wand icon, submit button → arrow icon, hint line → icon removed.
+- [x] Redesign all search forms — replaced the flat white SaaS card with a dark glass panel (backdrop-filter blur, `rgba(8,14,31,0.88)`); inputs and filter selects converted to white-on-dark glass fields; submit button upgraded to gradient blue with glow; all AI panel sub-elements (thinking panel, summary, chips, hint) adapted to dark glass; active tab now seamlessly merges with card.
+- [x] Events search filter: replaced the native `<input type="date">` with a custom dark-glass datepicker — month navigation, dimmed past days, today highlighted, `position: fixed` to escape the hero's `overflow: hidden`.
+
+**Hero — deep AI-template patterns (2026-06-29 audit)**
+- [x] **Background grid overlay** — removed `.origin-hero::before` (72×72px white line grid). Hero background now shows only the existing radial gradients — clean, deep, no template noise.
+- [x] **Eyebrow badge** — replaced generic blue pill + monospace "MULTI-VERTICAL MARKETPLACE" with a loose row of 4 concrete vertical chips (Properties · Autos · Jobs · Events) + "+3 more". No pill, no glowing dot, no monospace.
+- [x] **Floating badge** — replaced monospace "LIVE" + isolated huge number + monospace "LIVE LISTINGS" with a premium data widget: left azure accent stripe, clean "Live now" label in body font, `214+` with superscript plus, "active listings" in muted body text, separator, and 3 sub-chips (Properties · Autos · +5 more).
+- [ ] **Header navigation labels** ("Registry / Features / Analytics / Enterprise") — B2B SaaS labels with no relevance to a consumer/seller marketplace. Replace with marketplace-appropriate nav: Browse, Sell, How it Works, and one more relevant item (Pricing, Blog, etc.).
+- [ ] **Mosaic listing cards** — the 4 image cards in the right column are pure image crops with zero listing context. Add subtle category/type badge overlays (e.g. "Property", "Autos", bottom-left chip) so they read as real marketplace listings rather than stock-photo placeholders. On hover, a micro listing title + price could surface.
+
+**Browse Categories section**
+- [ ] Full redesign to premium UIUX — current layout reads as a dated AI-generated template.
+
+**Properties section**
+- [ ] Audit the For Sale / For Rent badge — verify it reflects the listing's actual `listing_type` value.
+- [ ] Elevate the section to premium UIUX — card design, typography hierarchy, and spacing all feel too basic.
+
+**Careers + Top Deals dual-column row**
+- [ ] Both sections sit side-by-side in a single row but look unfinished — mismatched heights, unbalanced proportions. Redesign as a cohesive paired layout with equal dimensions and an aesthetic, premium feel.
+
+**Popular Categories section**
+- [ ] Wire up real data — currently appears to use static/placeholder content; fetch live category data from the API.
+- [ ] Add icons per category and any supporting detail (listing count, etc.) to lift it from placeholder to a premium, finished design.
+
+**Simple Process section**
+- [ ] Current design reads as a generic AI-generated "how it works" template. Redesign from scratch — handcrafted, visually interesting, and unique. Should feel considered and premium, not boilerplate.
+
+**Why Choose Us section**
+- [ ] Current design reads as a generic AI-generated feature grid. Redesign from scratch — handcrafted, visually interesting, and unique. Should feel considered and premium, not boilerplate.
+
+**CTA — Sell on the Marketplace**
+- [ ] Audit for AI-generated / generic design patterns. Redesign as a handcrafted, excellent CTA — compelling, visually distinctive, and conversion-focused.
+
+ Eyebrow badge ("MULTI-VERTICAL MARKETPLACE") — monospace pill + glowing dot + all-caps = textbook AI-template eyebrow. Replace with something considered (vertical chips, trust signal line, or distinctive kicker).
+ Floating badge ("LIVE • 214 • LIVE LISTINGS") — plain dark rectangle with dev-speak monospace label. Redesign as a premium data widget with richer typography and intentional layout.
+ Header nav labels ("Registry / Features / Analytics / Enterprise") — B2B SaaS labels. Replace with marketplace-appropriate nav (Browse, Sell, How it Works, etc.).
+ Mosaic listing cards — pure image crops with no listing context. Add subtle category/type badge overlays so they read as real marketplace listings, not stock-photo placeholders.

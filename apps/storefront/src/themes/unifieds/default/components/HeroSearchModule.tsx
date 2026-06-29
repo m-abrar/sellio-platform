@@ -25,8 +25,19 @@ interface AiResult {
 // ─── Inline SVGs ───────────────────────────────────────────────────────────────
 
 const SearchSvg = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
-const StarsSvg = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>;
+const StarsSvg = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    {/* 4-pointed diamond star — primary sparkle */}
+    <path d="M12 2L13.7 10.3L22 12L13.7 13.7L12 22L10.3 13.7L2 12L10.3 10.3Z"/>
+    {/* Small secondary sparkle top-right */}
+    <path d="M20 3L20.6 5.4L23 6L20.6 6.6L20 9L19.4 6.6L17 6L19.4 5.4Z"/>
+    {/* Tiny accent dot lower-left */}
+    <circle cx="4.5" cy="19.5" r="1.3"/>
+  </svg>
+);
 const MicSvg  = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>;
+const WandSvg     = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h2"/><path d="M17.8 11.8 19 13"/><path d="M17.8 6.2 19 5"/><path d="M3 21l9-9"/><path d="M12.2 6.2 11 5"/></svg>;
+const CalendarSvg = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
 const ChevronLeftSvg  = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>;
 const ChevronRightSvg = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>;
 const ClockSvg    = () => <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
@@ -260,7 +271,7 @@ function SmartSearchPane({ themeLink }: { themeLink: (p: string) => string }) {
       {/* Input row */}
       <div className="ud-hsf-main-row">
         <div className={`ud-hsf-input-wrap ud-hsf-input-wrap--ai${isListening ? ' is-listening' : ''}`}>
-          <span className="ud-hsf-icon ud-hsf-icon--ai"><StarsSvg /></span>
+          <span className="ud-hsf-icon ud-hsf-icon--ai"><WandSvg /></span>
           <input
             ref={inputRef}
             type="text"
@@ -288,7 +299,7 @@ function SmartSearchPane({ themeLink }: { themeLink: (p: string) => string }) {
         >
           {busy
             ? <><span className="ud-ai-spinner" aria-hidden="true" /> Searching…</>
-            : <><StarsSvg /> Search</>}
+            : <><ArrowSvg /> Search</>}
         </button>
       </div>
 
@@ -378,7 +389,7 @@ function SmartSearchPane({ themeLink }: { themeLink: (p: string) => string }) {
 
       {/* Hint when empty */}
       {!showPanel && !busy && recents.length === 0 && trending.length === 0 && (
-        <p className="ud-ai-hint"><StarsSvg /> Your next great find is one sentence away.</p>
+        <p className="ud-ai-hint">Your next great find is one sentence away.</p>
       )}
     </div>
   );
@@ -453,6 +464,139 @@ const PANE_CONFIG: Record<Vertical, VerticalPaneConfig> = {
   },
 };
 
+// ─── Date Picker ─────────────────────────────────────────────────────────────
+
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAY_LABELS  = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+
+function dayToIso(y: number, m: number, d: number) {
+  return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+}
+function isoToLabel(iso: string) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return `${MONTH_NAMES[m - 1].slice(0, 3)} ${d}, ${y}`;
+}
+
+function DatePicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const now   = new Date();
+  const todayY = now.getFullYear();
+  const todayM = now.getMonth();
+  const todayD = now.getDate();
+
+  const [open, setOpen] = useState(false);
+  const [panelPos, setPanelPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const [viewY, setViewY] = useState(() => value ? Number(value.split('-')[0]) : todayY);
+  const [viewM, setViewM] = useState(() => value ? Number(value.split('-')[1]) - 1 : todayM);
+  const wrapRef    = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  function toggleOpen() {
+    if (!open && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setPanelPos({ top: rect.bottom + 8, left: rect.left });
+    }
+    setOpen(o => !o);
+  }
+
+  const firstWeekday = new Date(viewY, viewM, 1).getDay();
+  const daysInMonth  = new Date(viewY, viewM + 1, 0).getDate();
+
+  function prevM() {
+    if (viewM === 0) { setViewM(11); setViewY(y => y - 1); } else setViewM(m => m - 1);
+  }
+  function nextM() {
+    if (viewM === 11) { setViewM(0); setViewY(y => y + 1); } else setViewM(m => m + 1);
+  }
+  function pick(day: number) {
+    const isPast = viewY < todayY ||
+      (viewY === todayY && viewM < todayM) ||
+      (viewY === todayY && viewM === todayM && day < todayD);
+    if (isPast) return;
+    onChange(dayToIso(viewY, viewM, day));
+    setOpen(false);
+  }
+
+  const [selY, selMRaw, selD] = value ? value.split('-').map(Number) : [0, 0, 0];
+  const selM = selMRaw - 1;
+
+  return (
+    <div ref={wrapRef} className="ud-datepicker">
+      <button
+        ref={triggerRef}
+        type="button"
+        className={`ud-datepicker-trigger${open ? ' is-open' : ''}`}
+        onClick={toggleOpen}
+        aria-haspopup="true"
+        aria-expanded={open}
+      >
+        <CalendarSvg />
+        <span className="ud-datepicker-label">{value ? isoToLabel(value) : 'Any date'}</span>
+        {value && (
+          <span
+            className="ud-datepicker-clear"
+            role="button"
+            tabIndex={0}
+            aria-label="Clear date"
+            onClick={e => { e.stopPropagation(); onChange(''); }}
+            onKeyDown={e => { if (e.key === 'Enter') { e.stopPropagation(); onChange(''); } }}
+          >×</span>
+        )}
+      </button>
+
+      {open && (
+        <div
+          className="ud-datepicker-panel"
+          role="dialog"
+          aria-label="Choose a date"
+          style={{ position: 'fixed', top: panelPos.top, left: panelPos.left }}
+        >
+          <div className="ud-datepicker-nav">
+            <button type="button" className="ud-datepicker-nav-btn" onClick={prevM} aria-label="Previous month">
+              <ChevronLeftSvg />
+            </button>
+            <span className="ud-datepicker-month-label">{MONTH_NAMES[viewM]} {viewY}</span>
+            <button type="button" className="ud-datepicker-nav-btn" onClick={nextM} aria-label="Next month">
+              <ChevronRightSvg />
+            </button>
+          </div>
+          <div className="ud-datepicker-grid">
+            {DAY_LABELS.map(d => <span key={d} className="ud-datepicker-weekday">{d}</span>)}
+            {Array.from({ length: firstWeekday }).map((_, i) => <span key={`pad-${i}`} />)}
+            {Array.from({ length: daysInMonth }).map((_, i) => {
+              const day = i + 1;
+              const isPast = viewY < todayY ||
+                (viewY === todayY && viewM < todayM) ||
+                (viewY === todayY && viewM === todayM && day < todayD);
+              const isToday    = viewY === todayY && viewM === todayM && day === todayD;
+              const isSelected = value ? (selY === viewY && selM === viewM && selD === day) : false;
+              return (
+                <button
+                  key={day}
+                  type="button"
+                  disabled={isPast}
+                  className={['ud-datepicker-day', isSelected ? 'is-selected' : '', isToday ? 'is-today' : '', isPast ? 'is-past' : ''].filter(Boolean).join(' ')}
+                  onClick={() => pick(day)}
+                >{day}</button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 function VerticalSearchPane({
   vertical,
   categories,
@@ -479,8 +623,6 @@ function VerticalSearchPane({
     Object.entries(filters).forEach(([k, v]) => { if (v) params.set(k, v); });
     window.location.href = themeLink(`/explore?${params.toString()}`);
   }
-
-  const todayStr = new Date().toISOString().split('T')[0];
 
   return (
     <form className="ud-hsf-form" onSubmit={handleSubmit}>
@@ -528,7 +670,7 @@ function VerticalSearchPane({
               );
             }
             if (f.type === 'date') {
-              return <input key={i} type="date" className="ud-hsf-filter-select" min={todayStr} value={filters[f.name] ?? ''} onChange={e => setFilter(f.name, e.target.value)} />;
+              return <DatePicker key={i} value={filters[f.name] ?? ''} onChange={v => setFilter(f.name, v)} />;
             }
             return null;
           })}

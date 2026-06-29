@@ -647,3 +647,10 @@ Also, can we make the frontend payment screenshot upload UIUX polished and premi
 
 ---------------------
 
+**Laravel auth (backend)**
+- [x] Login screen: removed `fw-800` faux-bold from the DM Serif Display heading on the dark marketing panel (font only ships at weight 400).
+- [x] Login screen: reversed the `.auth-split-marketing .text-gradient` direction — was `white → orange` (bleached out start on dark bg); now `orange → white` for a proper warm-lift effect.
+
+
+Remove all the unused files
+db_check.php
