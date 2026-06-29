@@ -128,6 +128,7 @@ const EXCLUDED_FILE_PATTERNS = [/\.zip$/i, /^\.env\./];
 
 const INCLUDE_ROOTS = [
   'apps',
+  'packages',
   'documentation',
   'Documentation',
   'introduction',
@@ -761,7 +762,7 @@ Without matching origins, browser requests from the React subdomains are blocked
 
 On hosts like Hostinger, each subdomain gets its **own document root** — folders are not shared between \`main\`, \`seller\`, and \`buyer\`. That is the expected setup.
 
-**Do not upload \`packages/\` to production.** It is dev/build-time shared TypeScript source in the repo only. Seller and buyer ship as pre-built static files; Laravel does not read it.
+The \`packages/\` folder contains shared TypeScript source required by the storefront at install/build time. It must stay alongside \`apps/\` — do not move or delete it. Seller and buyer ship as pre-built static files; Laravel does not read it.
 
 | Subdomain | Document root | Upload from this distribution |
 |-----------|---------------|-------------------------------|
@@ -842,7 +843,7 @@ async function writeManifest() {
     notes: [
       'vendor/ intentionally omitted — install via web wizard or composer install',
       'node_modules/ intentionally omitted',
-      'packages/ intentionally omitted — dev-only shared TypeScript; not used at runtime',
+      'packages/ included — shared TypeScript source required by storefront npm install (file: deps)',
       'installed.lock and .env removed for fresh-install testing',
       'storage/app/public/settings/ always shipped (logo.png, favicon.ico)',
       'other storage/app/public/ paths emptied — dev uploads excluded; demo seed repopulates listing media',
