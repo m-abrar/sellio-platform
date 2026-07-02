@@ -1,17 +1,17 @@
 <?php
 $technologyIcons = [
-    'Laravel' => 'https://cdn.simpleicons.org/laravel',
-    'PHP' => 'https://cdn.simpleicons.org/php',
-    'Next.js' => 'https://cdn.simpleicons.org/nextdotjs',
-    'React' => 'https://cdn.simpleicons.org/react',
-    'Expo' => 'https://cdn.simpleicons.org/expo',
-    'MySQL' => 'https://cdn.simpleicons.org/mysql',
-    'Echo / Pusher' => 'https://cdn.simpleicons.org/pusher',
+    'Laravel' => 'assets/icons/laravel.svg',
+    'PHP' => 'assets/icons/php.svg',
+    'Next.js' => 'assets/icons/nextjs.svg',
+    'React' => 'assets/icons/react.svg',
+    'Expo' => 'assets/icons/expo.svg',
+    'MySQL' => 'assets/icons/mysql.svg',
+    'Echo / Pusher' => 'assets/icons/pusher.svg',
 ];
 $gatewayIcons = [
-    'Stripe' => 'https://cdn.simpleicons.org/stripe',
-    'PayPal' => 'https://cdn.simpleicons.org/paypal',
-    'Razorpay' => 'https://cdn.simpleicons.org/razorpay',
+    'Stripe' => 'assets/icons/stripe.svg',
+    'PayPal' => 'assets/icons/paypal.svg',
+    'Razorpay' => 'assets/icons/razorpay.svg',
 ];
 ?>
 <section class="section tech" id="technology"><div class="wrap"><div class="eyebrow">Technology</div><h2>Modern tools, fully open in the source code.</h2><p class="lead">A Laravel backend powers APIs and operations, while React applications, Next.js storefronts, and an Expo mobile client serve different audiences.</p><div class="tech-grid">

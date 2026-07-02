@@ -119,11 +119,12 @@
     .journey:nth-child(2){border-left-color:var(--blue);color:var(--blue)}
     .journey:nth-child(3){border-left-color:var(--orange);color:#c25a1e}
     .journey:nth-child(4){border-left-color:var(--violet);color:var(--violet)}
-    .journey-icon{display:grid;place-items:center;width:44px;height:44px;margin-bottom:14px;border:1px solid currentColor;border-radius:50%;background:#f5faef;box-shadow:0 0 0 5px rgba(118,192,67,.08)}
+    .journey-icon{position:relative;display:grid;place-items:center;width:48px;height:42px;margin:0 0 16px 4px;border:1px solid currentColor;background:#f5faef;clip-path:polygon(9px 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%,0 9px)}
+    .journey-icon:before{content:"";position:absolute;inset:4px;border:1px solid currentColor;opacity:.2;clip-path:inherit}
     .journey-icon svg{width:22px;height:22px}
-    .journey:nth-child(2) .journey-icon{background:#f1f4ff;box-shadow:0 0 0 5px rgba(75,103,209,.08)}
-    .journey:nth-child(3) .journey-icon{background:#fff4ec;box-shadow:0 0 0 5px rgba(214,114,50,.08)}
-    .journey:nth-child(4) .journey-icon{background:#f7f1fb;box-shadow:0 0 0 5px rgba(125,72,154,.08)}
+    .journey:nth-child(2) .journey-icon{background:#f1f4ff}
+    .journey:nth-child(3) .journey-icon{background:#fff4ec}
+    .journey:nth-child(4) .journey-icon{background:#f7f1fb}
     .journey b{display:block;margin-bottom:18px;color:var(--ink);font-family:var(--display);font-size:14px}
     .steps{position:relative;display:flex;gap:14px;margin-top:4px}
     .steps span{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:7px;flex:1;text-align:center}
@@ -139,7 +140,7 @@
     .gateway-row span img,.gateway-row span svg{width:14px;height:14px;flex:0 0 14px}
 
     #installation{overflow:hidden}
-    #installation:before{content:"";position:absolute;inset:0;z-index:0;opacity:.3;filter:grayscale(1);pointer-events:none;background:url("installation.jpg") center/cover no-repeat;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 30%,#000 70%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,#000 30%,#000 70%,transparent 100%)}
+    #installation:before{content:"";position:absolute;inset:0;z-index:0;opacity:.3;filter:grayscale(1);pointer-events:none;background:url("assets/installation.jpg") center/cover no-repeat;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 30%,#000 70%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,#000 30%,#000 70%,transparent 100%)}
     #installation>.wrap{position:relative;z-index:1}
     .install-row{display:flex;align-items:flex-start;gap:4px;margin-top:36px}
     .install-step{display:flex;flex-direction:column;align-items:center;gap:10px;flex:1;text-align:center;color:var(--lime-dark)}

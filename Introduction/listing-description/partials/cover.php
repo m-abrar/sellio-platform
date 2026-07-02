@@ -10,32 +10,32 @@
         <div class="chat-timeline">
           <div class="chat-entry chat-left">
             <div class="chat-side"><div class="chat-bubble">&ldquo;I need 2-bedroom house for sale&rdquo;</div></div>
-            <span class="chat-node"><img src="https://i.pravatar.cc/72?img=32" alt="" loading="lazy"></span>
+            <span class="chat-node"><img src="assets/avatar-property.jpg" alt="" loading="lazy"></span>
             <div class="chat-side"></div>
           </div>
           <div class="chat-entry chat-right">
             <div class="chat-side"></div>
-            <span class="chat-node"><img src="https://i.pravatar.cc/72?img=47" alt="" loading="lazy"></span>
+            <span class="chat-node"><img src="assets/avatar-booking.jpg" alt="" loading="lazy"></span>
             <div class="chat-side"><div class="chat-bubble">&ldquo;Book a 3 nights stay in New York&rdquo;</div></div>
           </div>
           <div class="chat-entry chat-left">
             <div class="chat-side"><div class="chat-bubble">&ldquo;Electric SUV under $20K&rdquo;</div></div>
-            <span class="chat-node"><img src="https://i.pravatar.cc/72?img=15" alt="" loading="lazy"></span>
+            <span class="chat-node"><img src="assets/avatar-vehicle.jpg" alt="" loading="lazy"></span>
             <div class="chat-side"></div>
           </div>
           <div class="chat-entry chat-right">
             <div class="chat-side"></div>
-            <span class="chat-node"><img src="https://i.pravatar.cc/72?img=25" alt="" loading="lazy"></span>
+            <span class="chat-node"><img src="assets/avatar-product.jpg" alt="" loading="lazy"></span>
             <div class="chat-side"><div class="chat-bubble">&ldquo;Used iPhone 17 Pro&rdquo;</div></div>
           </div>
           <div class="chat-entry chat-left">
             <div class="chat-side"><div class="chat-bubble">&ldquo;AC repair urgent&rdquo;</div></div>
-            <span class="chat-node"><img src="https://i.pravatar.cc/72?img=8" alt="" loading="lazy"></span>
+            <span class="chat-node"><img src="assets/avatar-service.jpg" alt="" loading="lazy"></span>
             <div class="chat-side"></div>
           </div>
           <div class="chat-entry chat-right">
             <div class="chat-side"></div>
-            <span class="chat-node"><img src="https://i.pravatar.cc/72?img=60" alt="" loading="lazy"></span>
+            <span class="chat-node"><img src="assets/avatar-job.jpg" alt="" loading="lazy"></span>
             <div class="chat-side"><div class="chat-bubble">&ldquo;Remote React Developer&rdquo;</div></div>
           </div>
         </div>
