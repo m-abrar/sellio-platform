@@ -5,7 +5,7 @@
 <head>
     <?php include('header.php'); ?>
 </head>
-<body>
+<body id="page-top">
     <?php include('navbar.php'); ?>
 
     <section class="hero-section bg-hero position-relative overflow-hidden pb-0">
@@ -34,6 +34,33 @@
     </section>
 
     <?php include('demo-access.php'); ?>
+
+    <section id="product-tour" class="flipbook-invite-section py-5">
+        <div class="container">
+            <div class="flipbook-invite overflow-hidden position-relative">
+                <div class="row align-items-center g-5 position-relative">
+                    <div class="col-lg-7">
+                        <div class="pg-kicker">Prefer a guided product tour?</div>
+                        <h2 class="display-5 fw-800 text-white mb-3">Explore Sellio, <span class="text-sellio">one page at a time.</span></h2>
+                        <p class="text-white-50 lead mb-4">Open the interactive product tour for a focused visual journey through marketplace discovery, selling, administration, payments, and growth.</p>
+                        <a href="product-tour/" class="btn-main flipbook-invite-cta" target="_blank" rel="noopener">Explore the interactive product tour <i class="fas fa-arrow-right ms-2"></i></a>
+                    </div>
+                    <div class="col-lg-5 d-none d-md-flex justify-content-center" aria-hidden="true">
+                        <div class="flipbook-preview">
+                            <div class="flipbook-preview-sheet sheet-back"></div>
+                            <div class="flipbook-preview-sheet sheet-middle"></div>
+                            <div class="flipbook-preview-cover">
+                                <img src="images/logo.png" alt="">
+                                <small>THE COMPLETE MARKETPLACE PLATFORM</small>
+                                <strong>SELLIO</strong>
+                                <span>Turn ideas into marketplaces.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section id="automation" class="py-100 bg-automation border-bottom reveal position-relative" data-animation="animate__fadeIn">
         <div class="container">
@@ -206,6 +233,7 @@
         </div>
     </section>
 
+    <?php /* Removed: unverified Intelligence & Scale metrics.
     <section class="py-100 bg-comparison border-top border-bottom reveal" data-animation="animate__fadeIn">
         <div class="container text-center mb-5">
             <h2 class="display-5 fw-800 mb-5">Intelligence & <span class="text-sellio">Scale</span></h2>
@@ -238,6 +266,7 @@
         </div>
     </section>
 
+    */ ?>
     <section id="comparison" class="py-100 bg-comparison border-top border-bottom reveal" data-animation="animate__slideInUp">
         <div class="container">
             <div class="text-center mb-5">
@@ -297,6 +326,7 @@
         </div>
     </section>
 
+    <?php /* Performance Architecture section removed from the introduction page.
     <section id="intelligence" class="py-100 position-relative overflow-hidden reveal" data-animation="animate__fadeIn">
         <!-- Background Data Grid -->
         <div class="position-absolute top-0 start-0 w-100 h-100 opacity-05" style="background-image: radial-gradient(#76c043 1px, transparent 1px); background-size: 30px 30px; pointer-events: none;"></div>
@@ -412,12 +442,13 @@
             </div>
         </div>
     </section>
+    */ ?>
     <section id="reviews" class="py-100 bg-reviews reveal" data-animation="animate__fadeInUp">
         <div class="container">
             <div class="row align-items-end mb-5">
                 <div class="col-lg-6 text-start">
-                    <h2 class="display-5 fw-800">Trusted by <span class="text-sellio">Thousands</span>.</h2>
-                    <p class="text-muted lead">Join 5,000+ business owners building on our core system.</p>
+                    <h2 class="display-5 fw-800">Trusted by <span class="text-sellio">Marketplace Builders</span>.</h2>
+                    <p class="text-muted lead">See why customers choose Sellio to build and grow their marketplaces.</p>
                 </div>
                 <div class="col-lg-6 text-md-end pb-2">
                     <div class="d-inline-flex align-items-center gap-2 bg-light p-3 rounded-4 border">
@@ -473,7 +504,7 @@
         <?php include('mobile-ready.php'); ?>
     </section>
     
-    <section class="py-100 bg-tech-stack">
+    <section id="technology" class="py-100 bg-tech-stack">
         <?php include('tech-stack.php'); ?>
     </section>
 

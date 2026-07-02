@@ -2,7 +2,7 @@
     <h2 class="display-5 fw-800 mb-2 text-white">Explore 50+ Demos</h2>
     <p class="text-white opacity-75 lead mb-5">One license gives you access to every niche imaginable.</p>
 
-    <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
+    <div class="demo-filter-bar d-flex flex-wrap justify-content-center gap-2 mb-5" aria-label="Filter marketplace demos">
         <button class="filter-btn active" data-filter="all">
             All Demos <span class="badge-count"><?php echo $total_demos; ?></span>
         </button>

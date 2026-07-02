@@ -15,6 +15,7 @@
                 <li class="nav-item"><a class="nav-link fw-bold" href="#automation">Smart Automation</a></li>
                 <li class="nav-item"><a class="nav-link fw-bold" href="#demos">Demos</a></li>
                 <li class="nav-item"><a class="nav-link fw-bold" href="#live-demo">Live Demo</a></li>
+                <li class="nav-item"><a class="nav-link fw-bold" href="product-tour/" target="_blank" rel="noopener">Product Tour</a></li>
                 <li class="nav-item"><a class="nav-link text-sellio fw-bold" href="<?= htmlspecialchars($sites['documentation']) ?>" target="_blank" rel="noopener">Documentation</a></li>
             </ul>
             <div class="ms-auto d-flex align-items-center gap-3">

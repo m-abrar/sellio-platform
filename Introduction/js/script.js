@@ -3,7 +3,24 @@ document.addEventListener('DOMContentLoaded', () => {
     initHighSpeedWheel();
     initDemoFilter();
     initPersonaNexus();
+    initBackToTop();
 });
+
+function initBackToTop() {
+    const button = document.getElementById('backToTop');
+    if (!button) return;
+
+    const updateVisibility = () => {
+        button.classList.toggle('is-visible', window.scrollY > 500);
+    };
+
+    button.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+    updateVisibility();
+}
 
 // 1. TYPEWRITER EFFECT
 function initTypewriter() {
@@ -238,4 +255,4 @@ function initPersonaNexus() {
     updateRole(0);
     startRotation();
 }
-
+

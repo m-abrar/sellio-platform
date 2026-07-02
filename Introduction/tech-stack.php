@@ -37,10 +37,31 @@
                 <small class="text-muted smallest">Interactivity</small>
             </div>
         </div>
+        <div class="col-6 col-md-3 col-lg-2">
+            <div class="tech-box p-4 rounded-4 bg-white border shadow-premium-sm transition-all hover-translate-y hover-border-sellio h-100 d-flex flex-column align-items-center justify-content-center">
+                <i class="fab fa-react fs-1 mb-3 text-info opacity-75"></i>
+                <div class="fw-bold text-dark">React</div>
+                <small class="text-muted smallest">Seller &amp; Buyer Panels</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+            <div class="tech-box p-4 rounded-4 bg-white border shadow-premium-sm transition-all hover-translate-y hover-border-sellio h-100 d-flex flex-column align-items-center justify-content-center">
+                <i class="fas fa-n fs-1 mb-3 text-dark opacity-75"></i>
+                <div class="fw-bold text-dark">Next.js</div>
+                <small class="text-muted smallest">Modern Storefronts</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+            <div class="tech-box p-4 rounded-4 bg-white border shadow-premium-sm transition-all hover-translate-y hover-border-sellio h-100 d-flex flex-column align-items-center justify-content-center">
+                <i class="fas fa-mobile-screen-button fs-1 mb-3 text-success opacity-75"></i>
+                <div class="fw-bold text-dark">Expo / React Native</div>
+                <small class="text-muted smallest">Mobile Application</small>
+            </div>
+        </div>
     </div>
 </div>
 
 <style>
     .smallest { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
     .text-purple { color: #6f42c1; }
-</style>
+</style>

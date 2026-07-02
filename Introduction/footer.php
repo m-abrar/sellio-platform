@@ -36,10 +36,13 @@
         </div>
         <div class="pt-5 mt-5 border-top d-flex flex-column flex-md-row justify-content-between align-items-center gap-4">
             <p class="text-muted small mb-0">© 2026 <strong>Sellio Platform</strong>. Built for high-performance scale.</p>
-            <div class="d-flex gap-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-center gap-4">
                 <a href="#" class="text-muted small text-decoration-none">Privacy Policy</a>
                 <a href="#" class="text-muted small text-decoration-none">Terms of Service</a>
                 <a href="#" class="text-muted small text-decoration-none">Cookie Policy</a>
+                <a id="backToTop" href="#page-top" class="footer-back-to-top text-decoration-none" aria-label="Go back to the top of the page">
+                    <span class="visually-hidden">Back to top</span><i class="fas fa-arrow-up"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -47,4 +50,8 @@
 
 <style>
     .hover-sellio:hover { color: var(--primary-sellio) !important; padding-left: 5px; transition: all 0.3s ease; }
+    .footer-back-to-top { position: fixed; right: 22px; bottom: 22px; z-index: 1040; display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--primary-sellio); color: #fff; box-shadow: 0 12px 30px rgba(15,23,42,0.3); opacity: 0; visibility: hidden; transform: translateY(14px); transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease, background 0.2s ease; }
+    .footer-back-to-top.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    .footer-back-to-top i { color: #fff; }
+    .footer-back-to-top:hover { color: #fff; background: var(--primary-dark); transform: translateY(-3px); }
 </style>

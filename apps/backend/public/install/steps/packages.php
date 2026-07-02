@@ -69,14 +69,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phpBinary = get_php_binary();
     $composerPhar = $basePath . '/composer.phar';
 
-    $cmdWithFlags = "{$phpBinary} -d register_argc_argv=Off -d memory_limit=-1 {$composerPhar}";
-    $cmdWithoutFlags = "{$phpBinary} {$composerPhar}";
-    
+    // --- Pre-flight diagnostics ---
+    echo "ℹ️ [Diagnostic] PHP binary  : {$phpBinary}\n";
+    echo "ℹ️ [Diagnostic] PHP version : " . PHP_VERSION . "\n";
+    echo "ℹ️ [Diagnostic] Memory limit: " . ini_get('memory_limit') . "\n";
+    echo "ℹ️ [Diagnostic] Composer    : " . (file_exists($composerPhar) ? $composerPhar : 'system composer') . "\n";
+    echo "ℹ️ [Diagnostic] Base path   : {$basePath}\n\n";
+    flush();
+
+    $cmdWithFlags = "{$phpBinary} -d register_argc_argv=Off -d memory_limit=-1 " . escapeshellarg($composerPhar);
+    $cmdWithoutFlags = "{$phpBinary} " . escapeshellarg($composerPhar);
+
     if (file_exists($composerPhar)) {
         $testOut = [];
         $testRes = -1;
         exec("{$cmdWithFlags} --version 2>&1", $testOut, $testRes);
-        
+
         if ($testRes === 0 && strpos(implode('', $testOut), 'Usage:') === false) {
             $composerCmd = $cmdWithFlags;
         } else {
@@ -85,9 +93,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         $composerCmd = "composer";
+        echo "ℹ️ [Notice] composer.phar not found — falling back to system 'composer' command.\n";
     }
 
     $flags = "--no-interaction --prefer-dist --optimize-autoloader";
+    echo "▶ Running: {$composerCmd} install {$flags}\n";
+    echo str_repeat('─', 60) . "\n\n";
+    flush();
 
     if (function_exists('passthru')) {
         passthru("{$composerCmd} install {$flags} 2>&1", $status);
@@ -96,9 +108,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "❌ [Error] The 'passthru' function is disabled on your server. This installer requires it to run Composer.";
     }
 
+    echo "\n" . str_repeat('─', 60) . "\n";
+
+    $failureHint = '';
     if ($status !== 0) {
         $error = true;
-        $message = '❌ Package installation failed. The PHP binary may not be compatible or there was a network error.';
+        $message = '❌ Package installation failed (exit code ' . $status . ').';
+
+        // Map common Composer exit codes to actionable hints
+        if ($status === 127) {
+            $failureHint = 'The PHP binary or composer.phar could not be found. Check that your server\'s PHP CLI path is reachable, or ask your host to enable the <code>exec</code> function.';
+        } elseif ($status === 1) {
+            $failureHint = 'Composer reported an error (see terminal output above). Common causes: missing PHP extensions, a blocked outbound network connection to packagist.org, or insufficient disk space.';
+        } elseif ($status === 2) {
+            $failureHint = 'Composer failed with a dependency-resolution error. Ensure your PHP version (' . PHP_VERSION . ') satisfies all package requirements.';
+        } else {
+            $failureHint = 'Review the terminal output above for the exact error. If your server blocks outbound connections, ask your host to whitelist packagist.org and repo.packagist.com. Alternatively, upload a pre-built <code>vendor/</code> folder via FTP and reload this page.';
+        }
     } else {
         $message = '✅ All packages installed successfully!';
         $success = true;
@@ -111,6 +137,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($message) {
         display_message($message, $error);
     }
+
+    if ($failureHint): ?>
+    <div class="info-panel mb-4">
+        <h3 class="h6 fw-bold mb-2 text-danger smallest text-uppercase letter-spacing-1">
+            <i class="fas fa-circle-info me-2"></i>Troubleshooting
+        </h3>
+        <p class="small mb-3"><?= $failureHint ?></p>
+        <p class="small mb-2 fw-semibold">If you have SSH / terminal access, run this command from your site root:</p>
+        <code class="d-block bg-dark text-light rounded p-2 small user-select-all">
+            php -d memory_limit=-1 composer.phar install --no-interaction --prefer-dist --optimize-autoloader
+        </code>
+    </div>
+    <?php endif; ?>
+    <?php
 
     installer_step_result_nav(
         $success,
