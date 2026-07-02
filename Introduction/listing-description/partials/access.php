@@ -1,5 +1,6 @@
-  <section class="section access" id="access"><div class="wrap"><div class="eyebrow">Try every role</div><h2>Sign in and explore each dashboard.</h2><p class="lead">Live demo accounts for all three connected experiences.</p><div class="cards c3">
-    <a class="card" href="#placeholder-admin-dashboard" target="_blank" rel="noopener"><span class="card-tag">A</span><b>Admin Dashboard</b><p>Configure modules, moderate listings, manage payments and reporting.</p><span class="cred"><b>Email</b> admin@example.com<br><b>Password</b> password</span></a>
-    <a class="card" href="#placeholder-seller-dashboard" target="_blank" rel="noopener"><span class="card-tag">S</span><b>Seller Dashboard</b><p>Create listings, manage orders, track inventory and payouts.</p><span class="cred"><b>Email</b> seller@example.com<br><b>Password</b> password</span></a>
-    <a class="card" href="#placeholder-buyer-dashboard" target="_blank" rel="noopener"><span class="card-tag">B</span><b>Buyer Dashboard</b><p>Browse, save, message sellers, and track account activity.</p><span class="cred"><b>Email</b> buyer@example.com<br><b>Password</b> password</span></a>
-  </div></div></section>
+<section class="section access" id="access"><div class="wrap"><div class="eyebrow">Try every role</div><h2>Log in and try each dashboard yourself.</h2><p class="lead">Published demo accounts for the connected administration, seller, and buyer experiences.</p><div class="cards c3">
+<?php foreach ($publicContent['demo_accounts'] as $account): ?>
+  <?php $url = $publicContent['urls'][$account['url_key']] ?? $publicContent['urls']['storefront']; ?>
+  <a class="card" href="<?= htmlspecialchars($url) ?>" target="_blank" rel="noopener"><span class="card-tag"><?= htmlspecialchars(substr($account['role'], 0, 1)) ?></span><b><?= htmlspecialchars($account['role']) ?> Dashboard</b><p>Open the <?= htmlspecialchars(strtolower($account['role'])) ?> experience using the published demo account.</p><span class="cred"><b>Email</b> <?= htmlspecialchars($account['email']) ?><br><b>Password</b> <?= htmlspecialchars($account['password']) ?></span></a>
+<?php endforeach; ?>
+</div></div></section>

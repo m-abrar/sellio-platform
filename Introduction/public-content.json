@@ -1,0 +1,17 @@
+{
+  "product": {
+    "name": "Sellio",
+    "version": "2.4.0",
+    "positioning": "Self-hosted multi-purpose marketplace platform"
+  },
+  "verticals": ["Products", "Properties", "Vehicles", "Events", "Jobs", "Services", "Classifieds"],
+  "stack": ["Laravel 12", "PHP 8.2+", "Next.js 16", "React 19", "Expo 54", "MySQL 8", "Sanctum 4", "Echo / Pusher"],
+  "gateways": ["Stripe", "Razorpay", "Flutterwave", "Paystack", "Mollie", "Manual / Bank Transfer"],
+  "installation": ["Check server requirements", "Configure application and database", "Create the administrator", "Select modules and prepare data", "Run migrations and finish setup"],
+  "claims": {
+    "customer_count": null,
+    "performance_score": null,
+    "uptime": null,
+    "guaranteed_launch_time": null
+  }
+}

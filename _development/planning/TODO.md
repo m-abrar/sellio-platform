@@ -654,3 +654,7 @@ Also, can we make the frontend payment screenshot upload UIUX polished and premi
 
 Remove all the unused files
 db_check.php
+
+
+
+- [ ] "find if it exists in the database table? admin@sellio-platform.test, set the password to admin123." 

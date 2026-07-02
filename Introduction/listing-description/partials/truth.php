@@ -1,4 +1,4 @@
-  <section class="section truth"><div class="wrap"><div class="eyebrow">Clear expectations</div><h2>Built as a foundation you can inspect and adapt.</h2><div class="truth-grid">
+  <section class="section truth"><div class="wrap"><div class="eyebrow">Clear expectations</div><h2>Full source code, yours to inspect and customize.</h2><div class="truth-grid">
     <div class="truth-card"><b>Self-hosted</b><p>Deploy to a compatible environment and retain control over application data and configuration.</p></div>
     <div class="truth-card"><b>Source included</b><p>Included application source is provided without application-level code obfuscation, subject to the product license.</p></div>
     <div class="truth-card"><b>Configurable security</b><p>Sanctum authentication, CSRF protection, validation, permissions, encrypted gateway credentials, and signed webhook checks provide the application foundation.</p></div>
