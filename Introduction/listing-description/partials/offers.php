@@ -1,0 +1,5 @@
+  <section class="section offers" id="offers"><div class="wrap"><div class="eyebrow">Limited offers</div><h2>We'll help you get started.</h2><p class="lead">Launch support for buyers who want a hand with the first setup.</p><div class="cards c3">
+    <a class="card" href="#placeholder-free-installation" target="_blank" rel="noopener"><span class="offer-badge">Included</span><b>Free Installation</b><p>We'll install Sellio on your server so you start from a working platform.</p><span class="card-cta">Claim install &rarr;</span></a>
+    <a class="card" href="#placeholder-hire-us" target="_blank" rel="noopener"><span class="offer-badge">Available</span><b>Hire Us for Customization</b><p>Bring your own scope. Our team can extend or tailor Sellio for you.</p><span class="card-cta">Get a quote &rarr;</span></a>
+    <a class="card" href="#placeholder-free-hours" target="_blank" rel="noopener"><span class="offer-badge">Limited</span><b>2 Hours Free Development</b><p>New buyers can claim two free hours of development or customization.</p><span class="card-cta">Claim now &rarr;</span></a>
+  </div></div></section>

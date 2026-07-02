@@ -1,0 +1,6 @@
+  <section class="section" id="foundation"><div class="wrap chapter"><div class="chapter-no">01</div><div><div class="eyebrow">The foundation</div><h2>Start with marketplace work that already connects.</h2><p class="lead">Sellio brings the recurring parts of a marketplace into one codebase so your effort can move toward branding, business rules, content, and launch preparation.</p><div class="pillars">
+    <div class="pillar"><div class="pillar-mark">A</div><b>Central administration</b><p>Users, roles, modules, listings, payments, subscriptions, withdrawals, content, settings, and reporting.</p></div>
+    <div class="pillar"><div class="pillar-mark">S</div><b>Seller operations</b><p>Vertical-aware listings, orders, bookings, inquiries, analytics, memberships, wallet activity, and payouts.</p></div>
+    <div class="pillar"><div class="pillar-mark">B</div><b>Buyer workspace</b><p>Favorites, messages, notifications, orders, bookings, applications, inquiries, reviews, and profile tools.</p></div>
+    <div class="pillar"><div class="pillar-mark">M</div><b>Mobile customer journey</b><p>Expo/React Native discovery, account activity, messaging, push notifications, and secure checkout handoff.</p></div>
+  </div></div></div></section>

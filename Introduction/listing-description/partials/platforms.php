@@ -1,0 +1,5 @@
+  <section class="section" id="platforms"><div class="wrap"><div class="eyebrow">Every surface</div><h2>Web, storefront, and mobile.</h2><p class="lead">The same marketplace data, available wherever your customers are.</p><div class="cards c3">
+    <a class="card" href="#placeholder-laravel-frontend" target="_blank" rel="noopener"><span class="card-tag">L</span><b>Laravel Frontend</b><p>The Laravel-rendered admin and API surface behind every experience.</p><span class="card-cta">Visit site &rarr;</span></a>
+    <a class="card" href="#placeholder-nextjs-frontend" target="_blank" rel="noopener"><span class="card-tag">N</span><b>Next.js Frontend</b><p>The fast, SEO-ready storefront customers browse and buy from.</p><span class="card-cta">Visit site &rarr;</span></a>
+    <a class="card" href="#placeholder-mobile-app" target="_blank" rel="noopener"><span class="qr-box" aria-hidden="true"></span><b>Mobile App</b><p>Scan to open the Expo/React Native customer app on your device.</p><span class="card-cta">Scan to open &rarr;</span></a>
+  </div></div></section>

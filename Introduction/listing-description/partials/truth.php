@@ -1,0 +1,5 @@
+  <section class="section truth"><div class="wrap"><div class="eyebrow">Clear expectations</div><h2>Built as a foundation you can inspect and adapt.</h2><div class="truth-grid">
+    <div class="truth-card"><b>Self-hosted</b><p>Deploy to a compatible environment and retain control over application data and configuration.</p></div>
+    <div class="truth-card"><b>Source included</b><p>Included application source is provided without application-level code obfuscation, subject to the product license.</p></div>
+    <div class="truth-card"><b>Configurable security</b><p>Sanctum authentication, CSRF protection, validation, permissions, encrypted gateway credentials, and signed webhook checks provide the application foundation.</p></div>
+  </div><div class="ownership-band"><div class="ownership-title"><small>Built to own</small><b>Your platform, deployment, and data.</b></div><div><span>Source</span><p>Inspect and customize the included application code.</p></div><div><span>Hosting</span><p>Deploy to a compatible environment you control.</p></div><div><span>Direction</span><p>Choose the modules and storefront experience that fit.</p></div></div></div></section>

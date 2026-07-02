@@ -1,0 +1,5 @@
+  <section class="section" id="explore"><div class="wrap"><div class="eyebrow">Explore first</div><h2>See it, read it, ask about it.</h2><p class="lead">Everything you need to evaluate Sellio before you buy, one click away.</p><div class="cards c3">
+    <a class="card" href="https://demo.sellio.vebdez.com" target="_blank" rel="noopener"><span class="card-tag">&rarr;</span><b>Live Demo</b><p>Explore the full unified marketplace storefront and admin experience.</p><span class="card-cta">Open demo &rarr;</span></a>
+    <a class="card" href="https://sellio.vebdez.com/documentation" target="_blank" rel="noopener"><span class="card-tag">D</span><b>Documentation</b><p>Setup, configuration, and module guides for every marketplace direction.</p><span class="card-cta">Read docs &rarr;</span></a>
+    <a class="card" href="#placeholder-support" target="_blank" rel="noopener"><span class="card-tag">?</span><b>Get our Support</b><p>Questions before or after purchase? Reach the Sellio support team.</p><span class="card-cta">Contact support &rarr;</span></a>
+  </div></div></section>
