@@ -1,0 +1,214 @@
+{
+  "generatedAt": "2026-07-02T17:52:50.352Z",
+  "source": "http://127.0.0.1:8765/listing-description/index.php",
+  "exports": [
+    {
+      "file": "01-cover.png",
+      "type": "section",
+      "title": "01-cover",
+      "href": null,
+      "width": 615,
+      "height": 1221
+    },
+    {
+      "file": "02-foundation.png",
+      "type": "section",
+      "title": "02-foundation",
+      "href": null,
+      "width": 615,
+      "height": 698
+    },
+    {
+      "file": "03-storefronts.png",
+      "type": "section",
+      "title": "03-storefronts",
+      "href": null,
+      "width": 615,
+      "height": 908
+    },
+    {
+      "file": "04-marketplace-modules.png",
+      "type": "section",
+      "title": "04-marketplace-modules",
+      "href": null,
+      "width": 615,
+      "height": 736
+    },
+    {
+      "file": "05-connected-workflows.png",
+      "type": "section",
+      "title": "05-connected-workflows",
+      "href": null,
+      "width": 615,
+      "height": 1123
+    },
+    {
+      "file": "06-technology.png",
+      "type": "section",
+      "title": "06-technology",
+      "href": null,
+      "width": 615,
+      "height": 726
+    },
+    {
+      "file": "07-installation.png",
+      "type": "section",
+      "title": "07-installation",
+      "href": null,
+      "width": 615,
+      "height": 407
+    },
+    {
+      "file": "08-connected-roles.png",
+      "type": "section",
+      "title": "08-connected-roles",
+      "href": null,
+      "width": 615,
+      "height": 753
+    },
+    {
+      "file": "09-product-facts.png",
+      "type": "section",
+      "title": "09-product-facts",
+      "href": null,
+      "width": 615,
+      "height": 831
+    },
+    {
+      "file": "10-final-cta.png",
+      "type": "section",
+      "title": "10-final-cta",
+      "href": null,
+      "width": 615,
+      "height": 382
+    },
+    {
+      "file": "explore-card-live-demo.png",
+      "type": "linked-card",
+      "title": "Live Demo",
+      "href": "https://demo.sellio.vebdez.com",
+      "width": 177,
+      "height": 200
+    },
+    {
+      "file": "explore-card-documentation.png",
+      "type": "linked-card",
+      "title": "Documentation",
+      "href": "https://sellio.vebdez.com/documentation",
+      "width": 177,
+      "height": 200
+    },
+    {
+      "file": "explore-card-get-support.png",
+      "type": "linked-card",
+      "title": "Get Support",
+      "href": "#placeholder-support",
+      "width": 177,
+      "height": 200
+    },
+    {
+      "file": "preview-card-videos-introduction.png",
+      "type": "linked-card",
+      "title": "Videos Introduction",
+      "href": "#placeholder-video-gallery",
+      "width": 271,
+      "height": 181
+    },
+    {
+      "file": "preview-card-product-tour.png",
+      "type": "linked-card",
+      "title": "Product Tour",
+      "href": "#placeholder-product-tour",
+      "width": 271,
+      "height": 181
+    },
+    {
+      "file": "access-heading.png",
+      "type": "heading",
+      "title": "access-heading",
+      "href": null,
+      "width": 615,
+      "height": 294
+    },
+    {
+      "file": "access-card-admin-dashboard.png",
+      "type": "linked-card",
+      "title": "Admin Dashboard",
+      "href": "https://demo.sellio.vebdez.com/admin",
+      "width": 177,
+      "height": 288
+    },
+    {
+      "file": "access-card-seller-dashboard.png",
+      "type": "linked-card",
+      "title": "Seller Dashboard",
+      "href": "https://seller-panel.sellio.vebdez.com",
+      "width": 177,
+      "height": 288
+    },
+    {
+      "file": "access-card-buyer-dashboard.png",
+      "type": "linked-card",
+      "title": "Buyer Dashboard",
+      "href": "https://buyer-panel.sellio.vebdez.com",
+      "width": 177,
+      "height": 288
+    },
+    {
+      "file": "platforms-heading.png",
+      "type": "heading",
+      "title": "platforms-heading",
+      "href": null,
+      "width": 615,
+      "height": 294
+    },
+    {
+      "file": "platforms-card-laravel-platform.png",
+      "type": "linked-card",
+      "title": "Laravel Platform",
+      "href": "https://demo.sellio.vebdez.com/admin",
+      "width": 177,
+      "height": 231
+    },
+    {
+      "file": "platforms-card-next-js-storefront.png",
+      "type": "linked-card",
+      "title": "Next.js Storefront",
+      "href": "https://frontend.sellio.vebdez.com",
+      "width": 177,
+      "height": 231
+    },
+    {
+      "file": "offers-heading.png",
+      "type": "heading",
+      "title": "offers-heading",
+      "href": null,
+      "width": 615,
+      "height": 242
+    },
+    {
+      "file": "offers-card-free-installation.png",
+      "type": "linked-card",
+      "title": "Free Installation",
+      "href": "#placeholder-free-installation",
+      "width": 177,
+      "height": 218
+    },
+    {
+      "file": "offers-card-hire-us-for-customization.png",
+      "type": "linked-card",
+      "title": "Hire Us for Customization",
+      "href": "#placeholder-hire-us",
+      "width": 177,
+      "height": 218
+    },
+    {
+      "file": "offers-card-2-hours-free-development.png",
+      "type": "linked-card",
+      "title": "2 Hours Free Development",
+      "href": "#placeholder-free-hours",
+      "width": 177,
+      "height": 218
+    }
+  ]
+}
