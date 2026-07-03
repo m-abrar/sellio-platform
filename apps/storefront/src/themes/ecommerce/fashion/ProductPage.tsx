@@ -18,16 +18,6 @@ interface ProductPageProps {
   slug: string;
 }
 
-interface BespokeFittingForm {
-  name: string;
-  email: string;
-  size: string;
-  height: string;
-  chest: string;
-  waist: string;
-  notes: string;
-}
-
 const getFallbackProduct = (slug: string): any => {
   const fallbacks: Record<string, any> = {
     'silk-drape-blazer': {
@@ -141,18 +131,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [activeTabId] = useState(() => `tab-panel-${Math.random().toString(36).slice(2)}`);
 
   const [selectedSize, setSelectedSize] = useState<string>("M");
-  const [form, setForm] = useState<BespokeFittingForm>({
-    name: '',
-    email: '',
-    size: 'M',
-    height: '',
-    chest: '',
-    waist: '',
-    notes: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -207,45 +185,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size);
-    setForm(prev => ({ ...prev, size }));
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleBespokeSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name || !form.email) {
-      setFormError('Please enter your name and email to submit a fitting request.');
-      return;
-    }
-    setFormError(null);
-
-    setIsSubmitting(true);
-    setTimeout(() => {
-      const newOrder = {
-        id: `ATELIER-${Date.now()}`,
-        productSlug: slug,
-        productTitle: product?.title || slug,
-        price: product?.pricing?.formatted || (product?.price ? `$${product.price}` : "$0.00"),
-        customizations: { ...form },
-        timestamp: new Date().toISOString()
-      };
-
-      try {
-        const existing = localStorage.getItem('sellio_ecommerce_fashion_orders');
-        const orders = existing ? JSON.parse(existing) : [];
-        orders.push(newOrder);
-        localStorage.setItem('sellio_ecommerce_fashion_orders', JSON.stringify(orders));
-      } catch (e) {
-        console.warn("Could not save to LocalStorage:", e);
-      }
-
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-    }, 1200);
   };
 
   const handleAddToCart = () => {
@@ -425,117 +364,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 </button>
               ))}
             </div>
-          </div>
-
-          {/* Bespoke Fitting Request */}
-          <div className="ef-detail-bespoke">
-            <div className="ef-detail-bespoke-header">
-              <div className="ef-detail-bespoke-dot" />
-              <h3 className="ef-mono" style={{ margin: 0 }}>BESPOKE_TAILORED_FITTING_REQUEST</h3>
-            </div>
-
-            {isSubmitted ? (
-              <div className="ef-detail-bespoke-success">
-                <div className="ef-detail-bespoke-success-icon" aria-hidden="true">✦</div>
-                <h4>Inquiry Confirmed</h4>
-                <p>
-                  Your custom silhouette tailoring specifications have been successfully transmitted. Our atelier node will contact you to align on measurement precision.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleBespokeSubmit} className="ef-bespoke-form">
-                <div className="ef-bespoke-measurements">
-                  <div>
-                    <label htmlFor="height-input" className="ef-mono ef-bespoke-label">HEIGHT (CM)</label>
-                    <input
-                      id="height-input"
-                      type="number"
-                      name="height"
-                      value={form.height}
-                      onChange={handleInputChange}
-                      placeholder="180"
-                      className="ef-bespoke-input"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="chest-input" className="ef-mono ef-bespoke-label">CHEST (CM)</label>
-                    <input
-                      id="chest-input"
-                      type="number"
-                      name="chest"
-                      value={form.chest}
-                      onChange={handleInputChange}
-                      placeholder="96"
-                      className="ef-bespoke-input"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="waist-input" className="ef-mono ef-bespoke-label">WAIST (CM)</label>
-                    <input
-                      id="waist-input"
-                      type="number"
-                      name="waist"
-                      value={form.waist}
-                      onChange={handleInputChange}
-                      placeholder="82"
-                      className="ef-bespoke-input"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="name-input" className="ef-mono ef-bespoke-label">FULL NAME</label>
-                  <input
-                    id="name-input"
-                    type="text"
-                    name="name"
-                    value={form.name}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Alexander McQueen"
-                    className="ef-bespoke-input ef-bespoke-input--lg"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email-input" className="ef-mono ef-bespoke-label">EMAIL ADDRESS</label>
-                  <input
-                    id="email-input"
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="alexander@atelier.luxury"
-                    className="ef-bespoke-input ef-bespoke-input--lg"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="notes-input" className="ef-mono ef-bespoke-label">FITTING & ADJUSTMENT NOTES</label>
-                  <textarea
-                    id="notes-input"
-                    name="notes"
-                    value={form.notes}
-                    onChange={handleInputChange}
-                    rows={3}
-                    placeholder="Provide shoulder-to-shoulder width, arm length, or specific drape fitting overrides..."
-                    className="ef-bespoke-input ef-bespoke-input--lg"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="ef-btn-primary ef-bespoke-submit"
-                >
-                  {isSubmitting ? "TRANSMITTING INQUIRY..." : "SUBMIT ATELIER SPECS"}
-                </button>
-                {formError && (
-                  <p role="alert" className="ef-bespoke-error">{formError}</p>
-                )}
-              </form>
-            )}
           </div>
 
         </div>

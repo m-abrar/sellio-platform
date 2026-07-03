@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { api } from '@/lib/api-client';
+import { submitPropertyInquiry } from '@/themes/properties/shared/submit-property-inquiry';
 import { FALLBACK_ESTATE_IDS } from './fallback-data';
 import { useClassicListingLink, useClassicThemeLink } from './hooks/useClassicThemeLink';
 import { useDemoFallbackAllowed } from './hooks/useDemoFallbackAllowed';
@@ -37,6 +38,7 @@ export default function CartPage() {
   const [specialRegistryText, setSpecialRegistryText] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const list = JSON.parse(localStorage.getItem('sellio_classic_inquiries') || '[]');
@@ -104,16 +106,60 @@ export default function CartPage() {
     setInquiries([]);
   };
 
-  const handleInquirySubmit = (e: React.FormEvent) => {
+  const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName || !email) {
       setFormError('Please complete the required coordination details.');
       return;
     }
     setFormError(null);
+    setSubmitting(true);
+
+    const remaining: InquiredEstate[] = [];
+    let anyFailed = false;
+
+    for (const estate of inquiries) {
+      const isFallback = allowDemoCatalog && FALLBACK_ESTATE_IDS.has(estate.id);
+      const result = await submitPropertyInquiry({
+        propertyId: estate.id,
+        useFallback: isFallback,
+        storageKey: 'sellio_classic_inquiries',
+        fullName,
+        email,
+        phone: phone || undefined,
+        message: [specialRegistryText, `Also interested in: ${estate.title}`].filter(Boolean).join('\n'),
+        checkIn: estate.checkIn || undefined,
+        checkOut: estate.checkOut || undefined,
+        demoRecord: {
+          id: Date.now(),
+          property_id: estate.id,
+          property_title: estate.title,
+          contact_name: fullName,
+          contact_email: email,
+          submitted_at: new Date().toISOString(),
+        },
+      });
+
+      if (!result.ok) {
+        anyFailed = true;
+        remaining.push(estate);
+      }
+    }
+
+    setSubmitting(false);
+    setInquiries(remaining);
+    localStorage.setItem('sellio_classic_inquiries', JSON.stringify(remaining));
+
+    if (anyFailed) {
+      setFormError(
+        remaining.length === inquiries.length
+          ? 'Could not submit your inquiries. Please try again.'
+          : `${inquiries.length - remaining.length} of ${inquiries.length} inquiries sent. ${remaining.length} could not be submitted — please retry.`,
+      );
+      return;
+    }
+
     setFormSubmitted(true);
-    localStorage.removeItem('sellio_classic_inquiries');
-    setInquiries([]);
   };
 
   if (loading) {
@@ -300,8 +346,8 @@ export default function CartPage() {
                     />
                   </div>
 
-                  <button type="submit" className="pc-btn-primary pc-dispatch-submit">
-                    DISPATCH UNIFIED DOSSIER
+                  <button type="submit" className="pc-btn-primary pc-dispatch-submit" disabled={submitting}>
+                    {submitting ? 'DISPATCHING...' : 'DISPATCH UNIFIED DOSSIER'}
                   </button>
                   {formError && (
                     <p role="alert" className="pc-dispatch-error">{formError}</p>

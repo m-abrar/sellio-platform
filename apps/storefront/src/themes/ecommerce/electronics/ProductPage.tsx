@@ -13,12 +13,6 @@ interface ProductPageProps {
   slug: string;
 }
 
-interface SpecOrderForm {
-  name: string;
-  email: string;
-  tuningRequests: string;
-}
-
 const getFallbackProduct = (slug: string): any => {
   const fallbacks: Record<string, any> = {
     'nvidia-rtx-5090-ti': {
@@ -142,12 +136,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
-  // Form states
-  const [form, setForm] = useState<SpecOrderForm>({ name: '', email: '', tuningRequests: '' });
   const [quantity, setQuantity] = useState<number>(1);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -267,43 +256,12 @@ export default function ProductPage({ slug }: ProductPageProps) {
     return list ? list[index % list.length] : "NeuralGear Verified";
   };
 
-  const handleInquirySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name || !form.email) {
-      setFormError('Please enter your name and email to transmit the order protocol.');
-      return;
-    }
-    setFormError(null);
-
-    setIsSubmitting(true);
-    setTimeout(() => {
-      // Record booking order to localStorage for localized client persistence
-      const activeOrders = JSON.parse(localStorage.getItem('sellio_ecommerce_electronics_orders') || '[]');
-      const newOrder = {
-        id: Date.now(),
-        productSlug: slug,
-        productTitle: product?.title || 'Unknown Hardware',
-        price: getPriceStr(product),
-        quantity: quantity,
-        customerName: form.name,
-        customerEmail: form.email,
-        tuningRequests: form.tuningRequests,
-        timestamp: new Date().toISOString()
-      };
-      activeOrders.push(newOrder);
-      localStorage.setItem('sellio_ecommerce_electronics_orders', JSON.stringify(activeOrders));
-
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-    }, 800);
-  };
-
   const getThemeLink = (path: string) => themeLink(path);
 
   const handleAddToCart = () => {
     if (!product) return;
     setAddingToCart(true);
-    addProductToCart(product as Product);
+    addProductToCart(product as Product, quantity);
     setCartNotice(true);
     setAddingToCart(false);
     window.setTimeout(() => setCartNotice(false), 4200);
@@ -720,10 +678,31 @@ export default function ProductPage({ slug }: ProductPageProps) {
               {product.description}
             </p>
 
+            <div className="el-input-group">
+              <label>ORDER QUANTITY</label>
+              <div className="el-qty-selector">
+                <button
+                  type="button"
+                  className="el-qty-btn"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                >
+                  -
+                </button>
+                <span className="el-qty-val">{quantity}</span>
+                <button
+                  type="button"
+                  className="el-qty-btn"
+                  onClick={() => setQuantity(quantity + 1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
             <button
               type="button"
               className="el-btn el-btn-primary"
-              style={{ width: '100%', marginBottom: cartNotice ? '0.75rem' : '2rem' }}
+              style={{ width: '100%', marginTop: '1rem', marginBottom: cartNotice ? '0.75rem' : '2rem' }}
               onClick={handleAddToCart}
               disabled={addingToCart}
             >
@@ -735,103 +714,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 <a href={themeLink('/cart')} style={{ color: 'var(--el-primary)' }}>View cart</a>
               </div>
             )}
-
-            {/* Order inquiry Console */}
-            <div className="el-inquiry-box">
-              {isSubmitted ? (
-                <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-                  <div style={{ fontSize: '3rem', color: 'var(--el-primary)', marginBottom: '1.5rem' }}>✓</div>
-                  <h3 className="el-tech-font" style={{ fontSize: '1.5rem', color: 'white', marginBottom: '0.5rem' }}>TUNING PROTOCOL INITIALIZED</h3>
-                  <p style={{ color: 'var(--el-text-muted)', lineHeight: 1.6 }}>
-                    Our master hardware rig builders have loaded your customization request. A technical diagnostics engineer will contact you shortly at <strong>{form.email}</strong>.
-                  </p>
-                  <button 
-                    className="el-btn el-btn-outline" 
-                    style={{ marginTop: '2rem', padding: '0.8rem 2.5rem' }} 
-                    onClick={() => { setIsSubmitted(false); setForm({ name: '', email: '', tuningRequests: '' }); setQuantity(1); }}
-                  >
-                    SUBMIT NEW PROTOCOL
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleInquirySubmit}>
-                  <h3 className="el-tech-font" style={{ fontSize: '1.25rem', color: 'white', marginBottom: '1.5rem', borderBottom: '1px solid var(--el-border)', paddingBottom: '0.75rem' }}>
-                    INITIALIZE ORDER PROTOCOL
-                  </h3>
-
-                  <div className="el-input-group">
-                    <label>YOUR OPERATOR NAME</label>
-                    <input 
-                      type="text" 
-                      className="el-input-field" 
-                      placeholder="e.g. Neo Builder" 
-                      required
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    />
-                  </div>
-
-                  <div className="el-input-group">
-                    <label>SECURE DISPATCH EMAIL</label>
-                    <input 
-                      type="email" 
-                      className="el-input-field" 
-                      placeholder="e.g. operator@neuralgear.tech" 
-                      required
-                      value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    />
-                  </div>
-
-                  {/* Quantity Counter */}
-                  <div className="el-input-group">
-                    <label>ORDER QUANTITY</label>
-                    <div className="el-qty-selector">
-                      <button 
-                        type="button" 
-                        className="el-qty-btn" 
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      >
-                        -
-                      </button>
-                      <span className="el-qty-val">{quantity}</span>
-                      <button 
-                        type="button" 
-                        className="el-qty-btn" 
-                        onClick={() => setQuantity(quantity + 1)}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="el-input-group">
-                    <label>CUSTOM OVERCLOCKING & PERFORMANCE REQUESTS</label>
-                    <textarea 
-                      className="el-input-field" 
-                      style={{ minHeight: '100px', resize: 'vertical' }}
-                      placeholder="e.g. Pre-applied Liquid Metal thermal grease, stress test diagnostics logs, custom BIOS profiles..."
-                      value={form.tuningRequests}
-                      onChange={(e) => setForm({ ...form, tuningRequests: e.target.value })}
-                    />
-                  </div>
-
-                  <button 
-                    type="submit" 
-                    className="el-btn el-btn-primary" 
-                    style={{ width: '100%', marginTop: '1rem', padding: '1rem 0' }}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'TRANSMITTING...' : 'TRANSMIT TUNING PROTOCOL'}
-                  </button>
-                  {formError && (
-                    <p role="alert" style={{ marginTop: '1rem', color: 'var(--el-secondary)', fontSize: '0.85rem' }}>
-                      {formError}
-                    </p>
-                  )}
-                </form>
-              )}
-            </div>
           </div>
         </div>
       )}

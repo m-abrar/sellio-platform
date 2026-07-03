@@ -57,8 +57,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   const [estimatingPrice, setEstimatingPrice] = useState(false);
   const [estimation, setEstimation] = useState<{ total_nights: number; estimated_lodging_total: string } | null>(null);
-  const [inquiryAdded, setInquiryAdded] = useState(false);
-  const [registryFeedback, setRegistryFeedback] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [inquiryDispatched, setInquiryDispatched] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -123,36 +121,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
     };
     calculatePrice();
   }, [checkIn, checkOut, property, useFallback]);
-
-  useEffect(() => {
-    if (!property) return;
-    const currentList: { id: number }[] = JSON.parse(localStorage.getItem('sellio_luxury_inquiries') || '[]');
-    setInquiryAdded(currentList.some((item) => item.id === property.id));
-  }, [property]);
-
-  const handleAddToRegistry = () => {
-    if (!property) return;
-    const currentList: { id: number }[] = JSON.parse(localStorage.getItem('sellio_luxury_inquiries') || '[]');
-    if (!currentList.some((item) => item.id === property.id)) {
-      const updatedList = [...currentList, {
-        id: property.id, title: property.title, slug: property.slug,
-        featured_image: property.featured_image || property.thumbnail_image,
-        location: property.location?.title || property.city,
-        price: property.pricing?.price_formatted || property.base_price,
-        beds: property.specs?.bedrooms ?? property.number_of_bedrooms,
-        baths: property.specs?.bathrooms ?? property.number_of_bathrooms,
-        area: property.specs?.area_formatted || `${property.area_sq_ft} SQFT`,
-      }];
-      localStorage.setItem('sellio_luxury_inquiries', JSON.stringify(updatedList));
-      setInquiryAdded(true);
-      setRegistryFeedback('Estate collected successfully for direct coordination.');
-    } else {
-      const updatedList = currentList.filter((item) => item.id !== property.id);
-      localStorage.setItem('sellio_luxury_inquiries', JSON.stringify(updatedList));
-      setInquiryAdded(false);
-      setRegistryFeedback('Estate removed from your Heritage collection.');
-    }
-  };
 
   const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -358,22 +326,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   Manorial <span>Inquiry.</span>
                 </h3>
                 <span className="pl-inquiry-location">{displayLocation.toUpperCase()}</span>
-              </div>
-
-              <button
-                onClick={handleAddToRegistry}
-                className={`pl-registry-btn${inquiryAdded ? ' pl-registry-btn-active' : ''}`}
-              >
-                {inquiryAdded ? '✓ ADDED TO HERITAGE REGISTRY' : '❦ COLLECT FOR DIRECT INQUIRY'}
-              </button>
-              {registryFeedback && (
-                <p role="status" className="pl-registry-feedback">{registryFeedback}</p>
-              )}
-
-              <div className="pl-inquiry-divider">
-                <div className="pl-inquiry-divider-line" aria-hidden="true" />
-                <span className="pl-inquiry-divider-text">OR DISPATCH COORDINATION</span>
-                <div className="pl-inquiry-divider-line" aria-hidden="true" />
               </div>
 
               {inquiryDispatched ? (

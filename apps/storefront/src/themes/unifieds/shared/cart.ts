@@ -11,18 +11,18 @@ import {
 export type { UnifiedCartItem };
 export { CART_STORAGE_KEY, readCart, writeCart, getCartItemCount };
 
-export function addProductToCart(product: Product): UnifiedCartItem[] {
+export function addProductToCart(product: Product, quantity = 1): UnifiedCartItem[] {
   if (typeof window !== 'undefined') {
-    void addProductToStorefrontCart(product);
+    void addProductToStorefrontCart(product, quantity);
   }
 
   const cart = readCart();
   const existing = cart.find((item) => item.product.id === product.id);
 
   if (existing) {
-    existing.quantity += 1;
+    existing.quantity += quantity;
   } else {
-    cart.push({ product, quantity: 1 });
+    cart.push({ product, quantity });
   }
 
   writeCart(cart);

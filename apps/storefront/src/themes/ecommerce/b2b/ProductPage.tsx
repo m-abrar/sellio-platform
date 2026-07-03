@@ -6,6 +6,7 @@ import { CatalogSyncAlert } from '@/themes/ecommerce/shared/CatalogSyncAlert';
 import { fetchProductDetail, resolveProductFailure } from '@/themes/ecommerce/shared/catalog';
 import { useDemoFallbackAllowed } from '@/themes/ecommerce/shared/useDemoFallbackAllowed';
 import { useEcommerceThemeLink } from '@/themes/ecommerce/shared/useEcommerceThemeLink';
+import { addProductToCart } from '@/themes/unifieds/shared/cart';
 import {
   formatProductPrice,
   getProductImage,
@@ -87,11 +88,7 @@ export default function ProductPage({ slug }: { slug: string }) {
 
   const handleRfq = () => {
     if (!product) return;
-    const existing = JSON.parse(localStorage.getItem('sellio_b2b_rfq_items') || '[]') as Array<{ id: number; title: string; slug: string }>;
-    const next = existing.some((item) => item.id === product.id)
-      ? existing
-      : [...existing, { id: product.id, title: product.title, slug: product.slug }];
-    localStorage.setItem('sellio_b2b_rfq_items', JSON.stringify(next));
+    addProductToCart(product);
     setNotice(true);
   };
 
