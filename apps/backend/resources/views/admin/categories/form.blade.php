@@ -130,7 +130,7 @@
                     </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
-                            'name' => 'gallery',
+                            'name' => \App\Models\Category::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
                             'model' => 'category',
@@ -157,7 +157,7 @@
                     </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
-                            'name' => 'thumbnail',
+                            'name' => \App\Models\Category::PRIMARY_MEDIA,
                             'label' => 'Main Icon / Badge',
                             'multiple' => false,
                             'model' => 'category',

@@ -1,16 +1,14 @@
 {{--
     Administrative E-Commerce: Addon Configuration
-    
-    This view serves as the authoritative interface for managing 
-    supplemental service addons. It orchestrates parameters for 
-    addon naming, financial valuation (price), and functional 
-    descriptions. It also manages visual identity through specialized 
-    media uploads to ensure professional presentation in platform 
-    listings.
-    
+
+    This view serves as the authoritative interface for managing
+    supplemental service addons. It orchestrates parameters for
+    addon naming, financial valuation (price), and functional
+    descriptions.
+
     @extends adminlte::page
     @context E-Commerce Module Management
-    @variables PropertyAddon $addon The addon model instance.
+    @variables Addon $addon The addon model instance.
 --}}
 @extends('adminlte::page')
 
@@ -95,23 +93,6 @@
                     'title' => 'ADDON',
                     'back' => 'admin.addons.index'
                 ])
-
-                {{-- Visual Identity Card --}}
-                <div class="card border-0 shadow-premium mt-4 mb-4 rounded-xl overflow-hidden">
-                    <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-side">Visual Identity</h3>
-                    </div>
-                    <div class="card-body p-0">
-                        @include('admin._partials._image-uploader', [
-                            'name' => \App\Models\PropertyAddon::PRIMARY_MEDIA,
-                            'label' => 'Service Icon / Badge',
-                            'multiple' => false,
-                            'model' => 'addon',
-                            'id' => $addon->id ?? null,
-                            'noCard' => true,
-                        ])
-                    </div>
-                </div>
             </div>
         </div>
     </form>
