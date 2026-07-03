@@ -8,6 +8,7 @@ import { PortfolioAssetCard, YieldAnalyticsHUD } from './components';
 import { getAdminBaseUrl } from '@/lib/admin-urls';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+import { getInvestmentMetric, INVESTMENT_METHODOLOGY_NOTE } from './investment-metrics';
 
 const assetTypes = ['Residential', 'Commercial', 'Industrial', 'Retail', 'Specialty', 'Development', 'Infrastructure', 'Commercial'];
 const statusLabels = ['VERIFIED', 'ACTIVE', 'PREMIUM', 'INSTITUTIONAL'];
@@ -19,12 +20,13 @@ function getPropertyPrice(property: Property) {
 }
 
 function mapPropertyToAsset(property: Property, index: number) {
-  const yieldRate = `${((property.id % 8) + 6 + (index % 3) * 0.5).toFixed(1)}% ARR`;
+  const metric = getInvestmentMetric(property);
   const type = property.specs?.property_type || property.specs?.category || assetTypes[index % assetTypes.length];
 
   return {
     title: property.title,
-    yield: yieldRate,
+    metricLabel: metric?.label ?? null,
+    metricValue: metric?.value ?? null,
     price: getPropertyPrice(property),
     type: typeof type === 'string' ? type : assetTypes[index % assetTypes.length],
     status: property.is_featured ? 'PREMIUM' : statusLabels[index % statusLabels.length],
@@ -130,7 +132,7 @@ export default function Page() {
 
       {/* Asset Performance Grid */}
       <section style={{ marginTop: '10rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
               <div>
                   <div className="pi-mono" style={{ marginBottom: '1.5rem' }}>{useThemeContent('grid.kicker', 'Asset Performance')}</div>
                   <h2 style={{ fontSize: '5rem', fontWeight: 900, letterSpacing: '-2px', textTransform: 'uppercase' }}>
@@ -146,6 +148,7 @@ export default function Page() {
                   {useThemeContent('grid.description', 'Browse residential, commercial, and industrial properties with yield data and pricing information.')}
               </div>
           </div>
+          <p className="pi-mono pi-methodology-note" style={{ marginBottom: '5rem' }}>*{INVESTMENT_METHODOLOGY_NOTE}</p>
 
           <div className="pi-asset-grid">
             {loadingProperties ? (

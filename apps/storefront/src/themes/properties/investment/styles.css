@@ -139,7 +139,20 @@
   font-size: 2rem;
   font-weight: 700;
   color: var(--pi-emerald);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pi-asset-metric-label {
+  font-size: 0.6rem;
+  color: var(--pi-slate);
+  margin-bottom: 1rem;
+}
+
+.pi-methodology-note {
+  font-size: 0.7rem;
+  color: var(--pi-slate);
+  line-height: 1.7;
+  max-width: 640px;
 }
 
 /* Buttons */
@@ -159,6 +172,48 @@
 .pi-btn-primary:hover {
   background: var(--pi-emerald);
   transform: translateY(-3px);
+}
+
+/* Explore page */
+.pi-xplore-page { max-width: 1600px; margin: 0 auto; padding: 6rem 6% 10rem; }
+.pi-xplore-hero { border-bottom: 1px solid var(--pi-border); padding-bottom: 4rem; margin-bottom: 4rem; }
+
+.pi-xplore-controls { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 3rem; }
+.pi-xplore-search {
+  background: var(--pi-white);
+  border: 1px solid var(--pi-border);
+  color: var(--pi-midnight);
+  flex: 1 1 260px;
+  font-family: var(--pi-font);
+  font-size: 0.95rem;
+  padding: 1rem 1.25rem;
+}
+.pi-xplore-select {
+  background: var(--pi-white);
+  border: 1px solid var(--pi-border);
+  color: var(--pi-midnight);
+  font-family: var(--pi-font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 1rem 1.25rem;
+}
+.pi-xplore-clear {
+  background: transparent;
+  border: 2px solid var(--pi-midnight);
+  color: var(--pi-midnight);
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  padding: 0 1.5rem;
+  text-transform: uppercase;
+}
+.pi-xplore-clear:hover { background: var(--pi-midnight); color: white; }
+
+.pi-xplore-count { margin-bottom: 1.5rem; }
+
+@media (max-width: 900px) {
+  .pi-xplore-controls { flex-direction: column; }
 }
 
 /* Footer */
@@ -374,6 +429,29 @@
 .pi-detail-inquiry label { font-size: 0.85rem; font-weight: 700; gap: 0.4rem; text-transform: uppercase; }
 .pi-detail-inquiry input, .pi-detail-inquiry textarea { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 0.75rem; }
 .pi-detail-success { background: rgba(212, 175, 55, 0.12); border: 1px solid var(--pi-gold); color: var(--pi-gold); padding: 1rem; }
+.pi-detail-form-error { background: rgba(239, 68, 68, 0.12); border: 1px solid #ef4444; color: #f87171; font-size: 0.85rem; margin: 0; padding: 0.85rem 1rem; }
+
+.pi-detail-page .pi-methodology-note { color: rgba(255, 255, 255, 0.5); }
+
+/* Investment ROI calculator */
+.pi-detail-roi { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); margin: 4rem auto 0; max-width: 1280px; padding: 3rem; }
+.pi-detail-roi h2 { font-size: 1.5rem; font-weight: 900; margin: 0 0 1rem; text-transform: uppercase; }
+.pi-roi-grid { display: grid; gap: 3rem; grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr); margin-top: 2.5rem; }
+
+.pi-roi-inputs { display: flex; flex-direction: column; gap: 1.75rem; }
+.pi-roi-inputs label { color: rgba(255,255,255,0.7); display: flex; flex-direction: column; font-size: 0.8rem; font-weight: 700; gap: 0.6rem; letter-spacing: 0.5px; text-transform: uppercase; }
+.pi-roi-input-row { align-items: center; display: flex; gap: 1rem; }
+.pi-roi-input-row input[type="range"] { accent-color: var(--pi-gold); flex: 1; }
+.pi-roi-input-row span { color: white; font-size: 0.9rem; min-width: 4.5rem; text-align: right; }
+
+.pi-roi-table { border-collapse: collapse; width: 100%; }
+.pi-roi-table td { border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); font-size: 0.85rem; padding: 0.85rem 0; }
+.pi-roi-table td:last-child { color: white; font-weight: 700; text-align: right; }
+.pi-roi-row-highlight td { color: var(--pi-emerald) !important; font-weight: 800 !important; }
+
+@media (max-width: 768px) {
+  .pi-roi-grid { grid-template-columns: 1fr; }
+}
 .pi-detail-state { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); margin: 5rem auto; max-width: 680px; padding: 4rem 2rem; text-align: center; }
 .pi-detail-skeleton, .pi-detail-line { animation: prop-shimmer 1.5s infinite; background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%); background-size: 200% 100%; border-radius: 4px; }
 .pi-detail-hero-skeleton { height: 480px; margin: 0 auto 2rem; max-width: 1280px; }

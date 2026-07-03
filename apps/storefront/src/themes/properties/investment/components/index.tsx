@@ -47,15 +47,34 @@ export const InvestmentHeader = () => {
   );
 };
 
-export const PortfolioAssetCard = ({ title, yield: yieldVal, price, type, status }: any) => (
+export const PortfolioAssetCard = ({
+  title,
+  metricLabel,
+  metricValue,
+  price,
+  type,
+  status,
+}: {
+  title: string;
+  metricLabel: string | null;
+  metricValue: string | null;
+  price: string;
+  type: string;
+  status: string;
+}) => (
   <div className="pi-asset-card">
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
         <div className="pi-mono" style={{ fontSize: '0.6rem' }}>{type}</div>
         <div style={{ padding: '0.25rem 0.75rem', background: 'var(--pi-bg)', borderRadius: '2px', fontSize: '0.65rem', fontWeight: 900, color: 'var(--pi-slate)' }}>{status}</div>
     </div>
-    <div className="pi-asset-yield">{yieldVal}</div>
-    <h3 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '2.5rem', color: 'var(--pi-midnight)' }}>{title}</h3>
-    
+    {metricValue && (
+      <>
+        <div className="pi-asset-yield">{metricValue}</div>
+        <div className="pi-mono pi-asset-metric-label">{metricLabel}*</div>
+      </>
+    )}
+    <h3 style={{ fontSize: '1.5rem', fontWeight: 900, marginTop: metricValue ? '1rem' : 0, marginBottom: '2.5rem', color: 'var(--pi-midnight)' }}>{title}</h3>
+
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--pi-border)', paddingTop: '2rem' }}>
         <div style={{ fontSize: '1.1rem', fontWeight: 800 }}>{price}</div>
         <div className="pi-mono" style={{ fontSize: '0.65rem', color: 'var(--pi-emerald)', cursor: 'pointer' }}>View →</div>
