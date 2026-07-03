@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sellio — Pending Work Audit</title>
+<style>
+  :root {
+    --bg: #F6F7FA;
+    --bg-raised: #FFFFFF;
+    --text: #1B2028;
+    --text-muted: #5C6472;
+    --border: #DCE0E8;
+    --accent: #34517D;
+    --accent-soft: #E7ECF5;
+    --bug: #B7402A;
+    --bug-soft: #FBEAE5;
+    --decision: #97690D;
+    --decision-soft: #FBEEDA;
+    --polish: #64548A;
+    --polish-soft: #EEEAF6;
+    --done: #3D7250;
+    --done-soft: #E7F1EB;
+    --shadow: 0 1px 2px rgba(27,32,40,0.04), 0 4px 14px rgba(27,32,40,0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12151B;
+      --bg-raised: #1A1F28;
+      --text: #E8EAEF;
+      --text-muted: #99A1AF;
+      --border: #2B3140;
+      --accent: #8AACDD;
+      --accent-soft: #22304A;
+      --bug: #E58A70;
+      --bug-soft: #3A2620;
+      --decision: #E2B564;
+      --decision-soft: #3A2E17;
+      --polish: #BCA9E0;
+      --polish-soft: #2B2438;
+      --done: #83C29E;
+      --done-soft: #1E2E25;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 20px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12151B; --bg-raised: #1A1F28; --text: #E8EAEF; --text-muted: #99A1AF;
+    --border: #2B3140; --accent: #8AACDD; --accent-soft: #22304A;
+    --bug: #E58A70; --bug-soft: #3A2620; --decision: #E2B564; --decision-soft: #3A2E17;
+    --polish: #BCA9E0; --polish-soft: #2B2438; --done: #83C29E; --done-soft: #1E2E25;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 20px rgba(0,0,0,0.35);
+  }
+  :root[data-theme="light"] {
+    --bg: #F6F7FA; --bg-raised: #FFFFFF; --text: #1B2028; --text-muted: #5C6472;
+    --border: #DCE0E8; --accent: #34517D; --accent-soft: #E7ECF5;
+    --bug: #B7402A; --bug-soft: #FBEAE5; --decision: #97690D; --decision-soft: #FBEEDA;
+    --polish: #64548A; --polish-soft: #EEEAF6; --done: #3D7250; --done-soft: #E7F1EB;
+    --shadow: 0 1px 2px rgba(27,32,40,0.04), 0 4px 14px rgba(27,32,40,0.05);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 15.5px;
+    line-height: 1.55;
+    margin: 0;
+    padding: 40px 20px 80px;
+  }
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .font-display {
+    font-family: "Bahnschrift", "SF Compact Display", "Segoe UI Semibold", system-ui, sans-serif;
+    font-variation-settings: "wght" 620, "wdth" 85;
+    letter-spacing: -0.01em;
+  }
+  code, .mono {
+    font-family: "Cascadia Code", "Cascadia Mono", Consolas, "SF Mono", ui-monospace, monospace;
+  }
+
+  header.top {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 28px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  h1 {
+    font-size: 30px;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .top-meta {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .top-meta .mono {
+    color: var(--text-muted);
+  }
+
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .stat {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 13px;
+    box-shadow: var(--shadow);
+  }
+  .stat .n {
+    font-family: "Cascadia Code", Consolas, ui-monospace, monospace;
+    font-size: 17px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .label {
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  .stat.bug .n { color: var(--bug); }
+  .stat.decision .n { color: var(--decision); }
+  .stat.open .n { color: var(--accent); }
+  .stat.polish .n { color: var(--polish); }
+  .stat.done .n { color: var(--done); }
+
+  section.group {
+    margin-bottom: 40px;
+  }
+  .group-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .group-head h2 {
+    font-size: 19px;
+    margin: 0;
+  }
+  .group-sub {
+    color: var(--text-muted);
+    font-size: 13.5px;
+    margin: 0 0 16px;
+    max-width: 62ch;
+  }
+
+  .cards {
+    display: grid;
+    gap: 10px;
+  }
+  .card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--stripe, var(--accent));
+    border-radius: 7px;
+    padding: 13px 16px;
+    box-shadow: var(--shadow);
+  }
+  .card .title {
+    font-weight: 600;
+    font-size: 14.8px;
+    margin-bottom: 3px;
+  }
+  .card .desc {
+    color: var(--text-muted);
+    font-size: 13.8px;
+  }
+  .card .src {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 11.8px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: var(--chip-bg, var(--accent-soft));
+    color: var(--stripe, var(--accent));
+  }
+
+  .bug .card, .card.bug { --stripe: var(--bug); --chip-bg: var(--bug-soft); }
+  .decision .card, .card.decision { --stripe: var(--decision); --chip-bg: var(--decision-soft); }
+  .open .card, .card.open { --stripe: var(--accent); --chip-bg: var(--accent-soft); }
+  .polish .card, .card.polish { --stripe: var(--polish); --chip-bg: var(--polish-soft); }
+
+  .subhead {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin: 22px 0 10px;
+  }
+  .subhead:first-child { margin-top: 0; }
+
+  .callout {
+    background: var(--decision-soft);
+    border: 1px solid color-mix(in srgb, var(--decision) 35%, var(--border));
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .callout .ctitle {
+    font-weight: 700;
+    color: var(--decision);
+    font-size: 14.5px;
+    margin-bottom: 5px;
+  }
+  .callout p {
+    margin: 0;
+    font-size: 13.8px;
+    color: var(--text);
+  }
+  .callout p + p { margin-top: 8px; }
+  .callout .mono { font-size: 12.3px; color: var(--text-muted); }
+
+  .done-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 8px;
+  }
+  .done-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 13.3px;
+    color: var(--text-muted);
+    padding: 8px 10px;
+    background: var(--done-soft);
+    border-radius: 6px;
+  }
+  .done-item .check {
+    color: var(--done);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .done-item b { color: var(--text); font-weight: 600; }
+
+  footer.note {
+    margin-top: 44px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 520px) {
+    body { padding: 28px 14px 60px; }
+    h1 { font-size: 25px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <div class="eyebrow">Pending Work Audit</div>
+    <h1 class="font-display">Sellio — TODOs, plans &amp; open threads</h1>
+    <div class="top-meta">Scanned <span class="mono">51</span> planning/TODO documents across the repo · 2026-07-03</div>
+    <div class="stat-row">
+      <div class="stat bug"><span class="n">6</span><span class="label">bugs to fix</span></div>
+      <div class="stat decision"><span class="n">3</span><span class="label">need a decision</span></div>
+      <div class="stat open"><span class="n">18</span><span class="label">open feature items</span></div>
+      <div class="stat polish"><span class="n">20+</span><span class="label">polish / UI items</span></div>
+      <div class="stat done"><span class="n">9</span><span class="label">docs fully complete</span></div>
+    </div>
+  </header>
+
+  <section class="group bug">
+    <div class="group-head"><h2>Fix now</h2></div>
+    <p class="group-sub">Concrete, reproducible bugs sitting in append-only feedback logs and the search test plan — small, high-value fixes.</p>
+    <div class="cards">
+      <div class="card"><div class="title">Undefined variable <span class="mono">$locations</span></div><div class="desc">Crashes on <span class="mono">admin/listings</span>.</div><span class="src mono">ListingController.php:61</span></div>
+      <div class="card"><div class="title">"Cannot end a section without first starting one"</div><div class="desc">Blade layout error on <span class="mono">admin/products</span>.</div><span class="src mono">ManagesLayouts.php:94</span></div>
+      <div class="card"><div class="title">Undefined method on order creation</div><div class="desc"><span class="mono">OrderController::create()</span> — breaks the product-orders "Add New" flow.</div><span class="src mono">TODO1.md</span></div>
+      <div class="card"><div class="title">Services filters silently dropped</div><div class="desc">Sidebar sends 3 param names that don't match what the backend expects, so filtering does nothing.</div><span class="src mono">search-test-plan.md</span></div>
+      <div class="card"><div class="title">Products brand filter mismatch</div><div class="desc">Brand checkboxes submit an array; validation expects an integer — filter silently fails.</div><span class="src mono">search-test-plan.md</span></div>
+      <div class="card"><div class="title">Properties location/category select broken</div><div class="desc">On <span class="mono">admin/properties/create</span>, location select doesn't populate and taxonomy filtering isn't scoped correctly — reported twice.</div><span class="src mono">TODO.md</span></div>
+    </div>
+  </section>
+
+  <section class="group decision">
+    <div class="group-head"><h2>Needs a decision</h2></div>
+    <p class="group-sub">Documents that actively disagree with each other, or scope questions nobody has closed out.</p>
+    <div class="callout">
+      <div class="ctitle">Mobile app: Flutter vs. React Native</div>
+      <p><span class="mono">FLUTTER_BUYER_APP_DEVELOPMENT_PLAN_2026-06-20.md</span> proposes dropping Expo/RN for a new Flutter app — all 7 phases still unstarted.</p>
+      <p>Nine days later, <span class="mono">mobile_app_plan.md</span> (updated 2026-06-28) reverses course: keep the Expo/RN app, "Flutter development is paused." <span class="mono">TODO-mobile.md</span> agrees.</p>
+      <p>Net effect: the only real open task is producing signed Android/iOS release builds. The Flutter plan document has no "superseded" marker and should probably be deleted or archived so it stops looking active.</p>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="title">Checkout scope for Classifieds / Autos / Jobs</div><div class="desc">Undecided whether these verticals get paid checkout &amp; deposits, or stay inquiry-only permanently.</div><span class="src mono">TODO2.md</span></div>
+      <div class="card"><div class="title">Two roadmap docs contradict each other</div><div class="desc"><span class="mono">pending_tasks_report.md</span> and <span class="mono">proposed_roadmap_options.md</span> cover the same 7 features (messaging, analytics, reviews, wallet ledger, payouts, deposits, Stripe billing) — one says complete, the other still frames them as proposals.</div><span class="src mono">planning/</span></div>
+    </div>
+  </section>
+
+  <section class="group open">
+    <div class="group-head"><h2>Open feature work</h2></div>
+    <p class="group-sub">Real, scoped work that hasn't been built yet — not just polish.</p>
+
+    <div class="subhead">Payments &amp; billing</div>
+    <div class="cards">
+      <div class="card"><div class="title">Stripe checkout redirection &amp; webhooks</div><div class="desc">Checkout session endpoint + handlers for <span class="mono">checkout.session.completed</span>, <span class="mono">invoice.payment_succeeded</span>, <span class="mono">customer.subscription.deleted</span>.</div><span class="src mono">next_steps_roadmap.md</span></div>
+      <div class="card"><div class="title">Billing ledger &amp; PDF invoices</div><div class="desc"><span class="mono">invoices</span> table, download endpoint, seller Billing Ledger UI.</div><span class="src mono">next_steps_roadmap.md</span></div>
+      <div class="card"><div class="title">Listing-quota enforcement</div><div class="desc">Middleware to block listing creation past plan limits + upgrade-prompt overlay.</div><span class="src mono">next_steps_roadmap.md</span></div>
+      <div class="card"><div class="title">Activate Stripe production keys</div><div class="desc">Manual step — code side is done.</div><span class="src mono">TODO2.md</span></div>
+    </div>
+
+    <div class="subhead">Notifications &amp; realtime</div>
+    <div class="cards">
+      <div class="card"><div class="title">Buyer notification preferences — entire feature</div><div class="desc">Status: "Frozen / Not started." Needs backend model, API endpoints, channel checks, Settings UI, in-app bell.</div><span class="src mono">NOTIFICATIONS_PLAN.md</span></div>
+      <div class="card"><div class="title">Real-time push alerts</div><div class="desc">Laravel Broadcasting + Pusher/Soketi, Echo-driven toasts/badges.</div><span class="src mono">next_steps_roadmap.md</span></div>
+      <div class="card"><div class="title">Pusher reliability gaps</div><div class="desc">Presence channels, retry/backoff + dead-letter for failed broadcasts, polling fallback, chat rate limiting, evaluate self-hosted <span class="mono">laravel/reverb</span>. Optional FCM push workstream needs a scope decision.</div><span class="src mono">TODO-firebase_pusher_survey.md</span></div>
+    </div>
+
+    <div class="subhead">Buyer panel</div>
+    <div class="cards">
+      <div class="card"><div class="title">Confirm final API contracts</div><div class="desc">Favorites, bookings, inquiries, applications, quotes, appointments, reviews, messages, settings.</div><span class="src mono">buyer_panel_completion_plan.md</span></div>
+      <div class="card"><div class="title">Replace placeholder error states</div><div class="desc">Real notification source instead of a fixed badge count; route-level 404/error fallbacks; standardized loading/empty/error states.</div><span class="src mono">buyer_panel_completion_plan.md</span></div>
+      <div class="card"><div class="title">Tests for API adapters, auth, critical flows</div><div class="desc">No coverage yet.</div><span class="src mono">buyer_panel_completion_plan.md</span></div>
+    </div>
+
+    <div class="subhead">Seller portal</div>
+    <div class="cards">
+      <div class="card"><div class="title">Verify partner activity counts against seeded data</div><div class="desc"><span class="mono">Activities.php</span> — needs acceptance testing.</div><span class="src mono">seller_portal_completion_plan.md</span></div>
+      <div class="card"><div class="title">Production mail transport for contact form</div><div class="desc"><span class="mono">ContactService</span> currently uses <span class="mono">Mail::raw</span>, dev-only.</div><span class="src mono">seller_portal_completion_plan.md</span></div>
+      <div class="card"><div class="title">Live-test Stripe subscription checkout with real keys</div><div class="desc"><span class="mono">PartnerSubscriptionCheckoutTest</span>.</div><span class="src mono">seller_portal_completion_plan.md</span></div>
+      <div class="card"><div class="title">Full manual acceptance checklist</div><div class="desc">CRUD per vertical, image upload, validation, wallet/messages/reviews/analytics/memberships — not yet executed.</div><span class="src mono">seller_portal_completion_plan.md</span></div>
+    </div>
+
+    <div class="subhead">Testing</div>
+    <div class="cards">
+      <div class="card"><div class="title">Admin dashboard E2E test plan — nothing executed</div><div class="desc">10-phase spec (route inventory → CRUD E2E → Playwright checks → error-log gate); not even the first deliverable exists yet.</div><span class="src mono">admin_dashboard_e2e_database_test_plan.md</span></div>
+      <div class="card"><div class="title">Manual runtime search tests</div><div class="desc">All 8 verticals, not yet run.</div><span class="src mono">search-test-plan.md</span></div>
+      <div class="card"><div class="title">Public web views: responsive QA + full test suite</div><div class="desc">Manual desktop/tablet/mobile pass, plus <span class="mono">php artisan test</span> run.</div><span class="src mono">laravel-public-web-views-plan.md</span></div>
+    </div>
+  </section>
+
+  <section class="group polish">
+    <div class="group-head"><h2>Storefront &amp; theme work</h2></div>
+    <p class="group-sub">43 themes have a working baseline; "completion" (real forms, real data, dedicated pages) is a separate, mostly-open effort.</p>
+    <div class="cards">
+      <div class="card"><div class="title">properties_map, properties_investment, properties_rental — P0</div><div class="desc">No real map (mock markers), synthetic yield calc, missing scarcity badge respectively.</div><span class="src mono">storefront_themes_pending_work_report.md</span></div>
+      <div class="card"><div class="title">Duplicate ProductPage template across 5+ properties themes</div><div class="desc"><span class="mono">properties_classic</span> backend inquiry wiring would unlock the fix pattern for the rest of the vertical.</div><span class="src mono">storefront_themes_pending_work_report.md</span></div>
+      <div class="card"><div class="title">Heavy unconditional mock-fallback data</div><div class="desc">autos_modern, classifieds_*, ecommerce_electronics/fashion; jobs_tech/jobs_startup apply-flow debt.</div><span class="src mono">storefront_themes_pending_work_report.md</span></div>
+      <div class="card"><div class="title">38 of 52 themes lack a dedicated Explore page</div><div class="desc">Cart rollout mostly missing outside ecommerce + properties_classic.</div><span class="src mono">storefront_themes_pending_work_report.md</span></div>
+      <div class="card"><div class="title">Forms write to localStorage instead of the API</div><div class="desc">Inquiry/booking/apply forms across nearly every theme use <span class="mono">alert()</span> validation and never reach Laravel.</div><span class="src mono">storefront_themes_pending_work_report.md</span></div>
+      <div class="card"><div class="title">unifieds_default homepage — 11 open items</div><div class="desc">Nav copy reads "B2B SaaS"; Browse Categories, Simple Process, and Why Choose Us sections flagged as generic AI-template and need a from-scratch redesign; Popular Categories needs real API data.</div><span class="src mono">TODO-unifieds_default.md</span></div>
+      <div class="card"><div class="title">Blade public frontend — several pages still "not audited"</div><div class="desc">Properties, Autos, Events, Services, Job, Product, Blog detail pages; booking/checkout/cart/job-application flows.</div><span class="src mono">FRONTEND_PLAN.md</span></div>
+      <div class="card"><div class="title">Properties UI/UX polish — not started</div><div class="desc">9 areas: listing cards, filter sidebar, gallery, booking-widget consolidation, 3-step booking flow, CSS cleanup, QA pass.</div><span class="src mono">properties_uiux_polish_plan.md</span></div>
+      <div class="card"><div class="title">Product tour — steps 6–9 open</div><div class="desc">Real screenshots, nav verification, responsive testing, review testimonial claims.</div><span class="src mono">product_tour_content_redesign_plan.md</span></div>
+    </div>
+  </section>
+
+  <section class="group polish">
+    <div class="group-head"><h2>Admin panel polish backlog</h2></div>
+    <p class="group-sub">Tail end of two append-only feedback logs — the most recently added, least-addressed items.</p>
+    <div class="cards">
+      <div class="card"><div class="title">Booking pages need a new layout</div><div class="desc">Autos/jobs/services/classifieds bookings described as "old ugly layout"; events booking has a sidebar/body overlap.</div><span class="src mono">TODO.md, TODO1.md</span></div>
+      <div class="card"><div class="title">Checkbox theme-color consistency</div><div class="desc">Configuration, Featured, On Sale, Manage Stock, Digital Goods toggles — plus a full pass across all 7 vertical forms.</div><span class="src mono">TODO1.md</span></div>
+      <div class="card"><div class="title">Layout &amp; sizing fixes</div><div class="desc"><span class="mono">payments/create</span> heading/sidebar sizing; <span class="mono">products/create</span> sidebar width + outdated addon button; search inputs inconsistent across bookings and product-orders.</div><span class="src mono">TODO.md, TODO1.md</span></div>
+      <div class="card"><div class="title">Small UI gaps</div><div class="desc">Missing icon on event-bookings/create; unpopulated "Intelligence Pulse" card on admin/welcome; Aggregate Health Score contrast; breadcrumb → "Add New" button on product-orders.</div><span class="src mono">TODO.md, TODO1.md</span></div>
+      <div class="card"><div class="title">Bare, unscoped mentions</div><div class="desc">"Rate Limits," "API Resource Hardening," "Tests" — listed with no detail, need scoping before they're actionable.</div><span class="src mono">TODO.md</span></div>
+    </div>
+    <div class="subhead">Broader roadmap (Qualification_Plan.md, phases 2–5)</div>
+    <div class="cards">
+      <div class="card"><div class="title">Role-based dynamic menus, elite UI audit, N+1 query audit</div><div class="desc">Dashboard controller performance pass not yet done.</div><span class="src mono">Qualification_Plan.md</span></div>
+      <div class="card"><div class="title">Regional payment gateways</div><div class="desc">Razorpay, Paystack, Flutterwave.</div><span class="src mono">Qualification_Plan.md</span></div>
+      <div class="card"><div class="title">Dynamic theme switcher, web-based installer</div><div class="desc">Color-picker → CSS vars; GUI wizard to replace the CLI installer.</div><span class="src mono">Qualification_Plan.md</span></div>
+      <div class="card"><div class="title">SEO suite, impersonation audit log, asset optimization</div><div class="desc">Meta controls + sitemap.xml; "Login As" activity logging; CSS/JS minify + WebP.</div><span class="src mono">Qualification_Plan.md</span></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head"><h2 class="font-display">Fully complete</h2></div>
+    <p class="group-sub">For reference — no action needed, listed so they don't get re-audited by mistake.</p>
+    <div class="done-grid">
+      <div class="done-item"><span class="check">✓</span><span><b>remediation_plan.md</b> — all P0 items resolved, "100% production ready."</span></div>
+      <div class="done-item"><span class="check">✓</span><span><b>TODO3.md</b> — fully closed out.</span></div>
+      <div class="done-item"><span class="check">✓</span><span><b>14 of 16</b> theme TODO files fully checked off.</span></div>
+      <div class="done-item"><span class="check">✓</span><span><b>Storefront roadmaps</b> round 1–3 — all 52 themes baselined.</span></div>
+      <div class="done-item"><span class="check">✓</span><span><b>FRONTEND_REDESIGN_PLAN.md</b> — complete, nothing left open.</span></div>
+      <div class="done-item"><span class="check">✓</span><span><b>Mobile responsiveness &amp; mobile-first plans</b> — complete aside from manual device testing.</span></div>
+      <div class="done-item"><span class="check">✓</span><span><b>DISTRIBUTION_PREP_PLAN.md</b> — stable reference doc.</span></div>
+      <div class="done-item"><span class="check">✓</span><span><b>Listing-description TODO</b> — fully done.</span></div>
+      <div class="done-item"><span class="check">✓</span><span><b>TODO-aadab-theme.md</b> — out of scope, separate client site.</span></div>
+    </div>
+  </section>
+
+  <footer class="note">
+    Compiled from 51 TODO/plan/roadmap files under <span class="mono">_development/</span>, <span class="mono">introduction/</span>, and <span class="mono">documentation/</span>. <span class="mono">_development/planning/TODO.md</span> has uncommitted local changes — its content here reflects the current working copy, not the last commit.
+  </footer>
+
+</div>
+</body>
+</html>

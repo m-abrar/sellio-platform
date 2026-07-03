@@ -658,3 +658,15 @@ db_check.php
 
 
 - [ ] "find if it exists in the database table? admin@sellio-platform.test, set the password to admin123." 
+
+
+
+
+can you scan for media errors?
+
+the seeder had inserted a record with collection_name:
+category_icon
+
+but UIUX browser generated:
+thumbnail
+

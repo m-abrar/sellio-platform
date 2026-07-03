@@ -37,6 +37,7 @@ Do not claim a feature merely because it appears in marketing copy. Every record
 
 ## Source Files
 
+- [Test voice-over](00_TEST_VOICE_OVER.md)
 - [Master sales trailer](01_MASTER_SALES_TRAILER.md)
 - [Buyer journey](02_BUYER_JOURNEY.md)
 - [Seller journey](03_SELLER_JOURNEY.md)
@@ -58,4 +59,3 @@ Do not claim a feature merely because it appears in marketing copy. Every record
 | Documentation | `https://sellio.vebdez.com/documentation` |
 
 Treat these as production targets, not proof that deployment is currently healthy. Complete the pre-recording checks before capture.
-
