@@ -102,7 +102,7 @@ export default function Page() {
 
     async function loadProperties() {
       try {
-        const response = await api.getProperties({ per_page: 20 });
+        const response = await api.getProperties({ per_page: 100 });
         if (!isMounted) return;
         setProperties(Array.isArray(response.data) ? response.data : []);
         setPropertyError(null);

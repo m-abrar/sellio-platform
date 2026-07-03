@@ -1111,6 +1111,32 @@
   box-shadow: 0 6px 20px rgba(0, 229, 255, 0.4);
 }
 
+/* Cluster bubbles (Leaflet.markercluster divIcon) */
+.pm-cluster-bubble {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pm-obsidian);
+  color: var(--pm-gold);
+  border: 2px solid var(--pm-gold);
+  border-radius: 50%;
+  font-family: var(--pm-font-heading);
+  font-weight: 800;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4), 0 0 18px rgba(212, 175, 55, 0.3);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.leaflet-marker-icon:has(.pm-cluster-bubble):hover .pm-cluster-bubble {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 229, 255, 0.35);
+  border-color: var(--pm-cyan);
+  color: var(--pm-cyan);
+}
+
 /* Leaflet tooltip on pin hover */
 .pm-map-tooltip.leaflet-tooltip {
   background: var(--pm-obsidian) !important;

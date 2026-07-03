@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useMenu } from '@/components/menu/MenuProvider';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 import { usePropertyThemeLink } from '@/themes/properties/shared/usePropertyThemeLink';
@@ -129,6 +131,7 @@ export function MapCanvas({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
+  const clusterGroupRef = useRef<any>(null);
   const slugToMarkerRef = useRef<Map<string, any>>(new Map());
   const onMarkerClickRef = useRef(onMarkerClick);
   const markersRef = useRef(markers);
@@ -146,12 +149,12 @@ export function MapCanvas({
   }
 
   function placeMarkers(L: any, map: any) {
-    slugToMarkerRef.current.forEach((m) => m.remove());
+    const clusterGroup = clusterGroupRef.current;
+    clusterGroup.clearLayers();
     slugToMarkerRef.current = new Map();
 
     markersRef.current.forEach((m) => {
       const marker = L.marker([m.lat, m.lng], { icon: buildIcon(L, m.price, false) })
-        .addTo(map)
         .on('click', () => onMarkerClickRef.current(m.slug));
 
       marker.bindTooltip(m.address, {
@@ -160,6 +163,7 @@ export function MapCanvas({
         className: 'pm-map-tooltip',
       });
 
+      clusterGroup.addLayer(marker);
       slugToMarkerRef.current.set(m.slug, { marker, data: m });
     });
 
@@ -167,9 +171,7 @@ export function MapCanvas({
       const m = markersRef.current[0];
       map.setView([m.lat, m.lng], 14);
     } else if (slugToMarkerRef.current.size > 1) {
-      const layers = Array.from(slugToMarkerRef.current.values()).map((e) => e.marker);
-      const group = L.featureGroup(layers);
-      map.fitBounds(group.getBounds(), { padding: [50, 50] });
+      map.fitBounds(clusterGroup.getBounds(), { padding: [50, 50] });
     }
   }
 
@@ -178,8 +180,11 @@ export function MapCanvas({
     if (!containerRef.current) return;
     const mapEl = containerRef.current;
 
-    function initMap(L: any) {
+    async function initMap() {
       if (mapRef.current) return;
+
+      const { default: L } = await import('leaflet');
+      await import('leaflet.markercluster');
 
       const map = L.map(mapEl, {
         zoomControl: false,
@@ -193,14 +198,27 @@ export function MapCanvas({
       }).addTo(map);
 
       L.control.zoom({ position: 'topright' }).addTo(map);
+
+      const clusterGroup = (L as any).markerClusterGroup({
+        maxClusterRadius: 50,
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: false,
+        iconCreateFunction: (cluster: any) =>
+          L.divIcon({
+            className: '',
+            html: `<div class="pm-cluster-bubble">${cluster.getChildCount()}</div>`,
+            iconSize: [40, 40],
+          }),
+      });
+      clusterGroup.addTo(map);
+      clusterGroupRef.current = clusterGroup;
+
       mapRef.current = map;
       placeMarkers(L, map);
     }
 
     let cancelled = false;
-    import('leaflet').then(({ default: L }) => {
-      if (!cancelled) initMap(L);
-    }).catch(() => {
+    initMap().catch(() => {
       if (!cancelled) setMapError(true);
     });
 
@@ -209,6 +227,7 @@ export function MapCanvas({
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
+        clusterGroupRef.current = null;
       }
     };
   }, []);
@@ -216,7 +235,7 @@ export function MapCanvas({
   // Re-place markers when listing data changes
   useEffect(() => {
     markersRef.current = markers;
-    if (!mapRef.current) return;
+    if (!mapRef.current || !clusterGroupRef.current) return;
     import('leaflet').then(({ default: L }) => {
       if (mapRef.current) placeMarkers(L, mapRef.current);
     });
@@ -224,7 +243,7 @@ export function MapCanvas({
 
   // Highlight active marker when selectedSlug changes
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !clusterGroupRef.current) return;
     import('leaflet').then(({ default: L }) => {
       slugToMarkerRef.current.forEach(({ marker, data }, slug) => {
         marker.setIcon(buildIcon(L, data.price, slug === selectedSlug));
@@ -232,7 +251,10 @@ export function MapCanvas({
       if (selectedSlug) {
         const entry = slugToMarkerRef.current.get(selectedSlug);
         if (entry) {
-          mapRef.current.panTo([entry.data.lat, entry.data.lng], { animate: true, duration: 0.4 });
+          // Zooms/expands the cluster as needed until the marker is visible, then centers on it.
+          clusterGroupRef.current.zoomToShowLayer(entry.marker, () => {
+            mapRef.current.panTo([entry.data.lat, entry.data.lng], { animate: true, duration: 0.4 });
+          });
         }
       }
     });
