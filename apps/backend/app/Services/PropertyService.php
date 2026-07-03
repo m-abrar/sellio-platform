@@ -120,6 +120,10 @@ class PropertyService
         
         if (($f['property_type'] ?? null) === 'rental') {
             $query->where('is_rental', true);
+            // base_price is the monthly rent for rental listings (price_per_night is a
+            // separate nightly figure), so filter rental price ranges against it directly.
+            $query->when($f['min_price'] ?? null, fn($q, $v) => $q->where('base_price', '>=', $v));
+            $query->when($f['max_price'] ?? null, fn($q, $v) => $q->where('base_price', '<=', $v));
             if ($checkIn && $checkOut) {
                 $query->whereDoesntHave('bookings', function ($b) use ($checkIn, $checkOut) {
                     $b->where('status', '!=', 'cancelled')

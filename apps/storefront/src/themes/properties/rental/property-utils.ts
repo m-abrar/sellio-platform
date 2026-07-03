@@ -17,15 +17,18 @@ export type RentalUnitCard = {
 };
 
 export function getMonthlyRent(property: Property): number {
+  // For rentals, base_price is the real monthly rent (this theme's whole pricing model —
+  // e.g. nightly estimates elsewhere are derived as monthly / 30). price_per_night is a
+  // genuinely nightly figure and is only used as a fallback, converted to a monthly basis.
+  const monthly = Number(property.pricing?.base_price ?? property.base_price ?? 0);
+  if (monthly > 0 && monthly < 50000) {
+    return monthly;
+  }
   const nightly = Number(property.pricing?.price_per_night ?? 0);
-  if (nightly > 0 && nightly < 5000) {
-    return nightly;
+  if (nightly > 0) {
+    return nightly * 30;
   }
-  let raw = Number(property.pricing?.base_price ?? property.base_price ?? 0);
-  if (raw > 100000) {
-    raw = 1200 + (Number(property.id) % 8) * 450;
-  }
-  return raw;
+  return monthly;
 }
 
 export function formatMonthlyRent(property: Property): string {
@@ -164,9 +167,12 @@ export function mapPropertyToLeaseCard(property: Property, index = 0): RentalUni
 }
 
 export function isRentalProperty(property: Property): boolean {
+  // property.is_rental is set on demo/fallback data but the live API never exposes it
+  // (or any is_rental/is_sale flag) at all — a real nightly rate is only ever populated
+  // for rental listings, so its presence is the reliable real-data signal.
   return (
     Boolean(property.is_rental) ||
-    property.specs?.property_type?.toLowerCase() === 'rent' ||
+    Boolean(Number(property.pricing?.price_per_night ?? 0) > 0) ||
     getMonthlyRent(property) < 50000
   );
 }

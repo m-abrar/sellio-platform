@@ -50,11 +50,14 @@ export function buildPropertiesApiParams(
   const params: Record<string, string | number> = {
     page,
     per_page: perPage,
-    property_type: 'rent',
+    // Backend only recognizes the exact strings 'rental' / 'sale' (PropertyService::applyFilters).
+    property_type: 'rental',
   };
 
-  if (filters.searchQuery) params.search = filters.searchQuery;
-  if (filters.selectedCategory) params.category_id = filters.selectedCategory;
+  // Param keys below must match PropertyService::applyFilters' raw $request->all() keys exactly
+  // ('q', 'category', 'location') — anything else is silently ignored by the backend.
+  if (filters.searchQuery) params.q = filters.searchQuery;
+  if (filters.selectedCategory) params.category = filters.selectedCategory;
   if (filters.selectedLocation) params.location = filters.selectedLocation;
 
   if (filters.selectedPriceRange) {
