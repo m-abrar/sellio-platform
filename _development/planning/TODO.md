@@ -652,21 +652,37 @@ Also, can we make the frontend payment screenshot upload UIUX polished and premi
 - [x] Login screen: reversed the `.auth-split-marketing .text-gradient` direction — was `white → orange` (bleached out start on dark bg); now `orange → white` for a proper warm-lift effect.
 
 
-Remove all the unused files
-db_check.php
-
 
 
 - [ ] "find if it exists in the database table? admin@sellio-platform.test, set the password to admin123." 
 
+-------------------
+
+- [ ] Remove all the unused and orphan files — for example `db_check.php`
+
+- [ ] We have to replace the logo of the app — create a list of how many files reference it and in what folders
+
+- [ ] Scan for media errors
+
+- [ ] The seeder had inserted a record with `collection_name: category_icon`, but the UI/UX browser generated `thumbnail` — reconcile the mismatched collection name
+
+- [ ] When updating a menu item, error alert appears: `Update failed: Unexpected token '<', "` ×
+
+- [ ] Why are JPGs showing in the frontend? We have WebP converted images
 
 
 
-can you scan for media errors?
 
-the seeder had inserted a record with collection_name:
-category_icon
+-------------------
 
-but UIUX browser generated:
-thumbnail
+- [ ] Admin dashboard shows an alert: "Platform URLs need your attention — Enter your real storefront, admin, partner, and customer URLs in Settings → System, then verify each one. CORS updates automatically after you save verified URLs." (Public Storefront URL saved but not verified; Admin Control Panel, Partner Portal, and Customer App URLs all show "Not set".) Can we prompt the user to enter these URLs during the installation wizard instead of only surfacing this after the fact?
 
+- [ ] During the installation wizard, show the user the API path they'll need to enter into the React/Next.js apps, with an "I have copied" button to confirm before they proceed.
+
+-------------------
+
+- [ ] Scan the whole admin dashboard and figure out if we are displaying the correct converted image size/version (not just falling back to originals/JPGs). Do the same audit for the API and the frontend themes.
+
+-------------------
+
+- [ ] Plan seeders so they only seed data relevant to the modules selected during the installation wizard — do not seed extra images or attributes for modules that weren't selected. For example, amenities are only related to properties, so they shouldn't be seeded if the properties module isn't enabled. Figure out which seeders/attributes are module-specific vs shared before implementing.
