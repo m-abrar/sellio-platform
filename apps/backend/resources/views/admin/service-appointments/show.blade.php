@@ -26,7 +26,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Operational manifest for scheduled service fulfillment and technician dispatch.') }}</p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.service-bookings.index') }}" class="btn-back shadow-sm">
+                <a href="{{ route('admin.service-appointments.index') }}" class="btn-back shadow-sm">
                     <i class="fas fa-calendar-check mr-2"></i> {{ __('Back to List') }}
                 </a>
             </div>
