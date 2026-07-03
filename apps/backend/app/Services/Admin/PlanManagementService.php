@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\Plan;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 /**
@@ -73,6 +74,30 @@ class PlanManagementService
     public function deletePlan(Plan $plan): ?bool
     {
         return $plan->delete();
+    }
+
+    /**
+     * Duplicate an existing subscription plan as an inactive draft copy.
+     *
+     * @param Plan $plan
+     * @return Plan
+     */
+    public function duplicatePlan(Plan $plan): Plan
+    {
+        $data = Arr::only($plan->getAttributes(), $this->fillableFields());
+        $data['title'] = $plan->title . ' (Copy)';
+        $data['slug'] = null;
+        $data['is_active'] = false;
+
+        return $this->createPlan($data);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function fillableFields(): array
+    {
+        return (new Plan())->getFillable();
     }
 
     /**

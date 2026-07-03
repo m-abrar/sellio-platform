@@ -14,7 +14,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3 class="card-title">Booking Details</h3>
         <!-- Edit Booking Button on the right -->
-        <a href="{{ route('admin.bookings.edit', $transaction->booking->id) }}" class="btn btn-sm btn-info ml-auto">
+        <a href="{{ route('admin.property-bookings.edit', $transaction->booking->id) }}" class="btn btn-sm btn-info ml-auto">
             Edit Booking
         </a>
     </div>

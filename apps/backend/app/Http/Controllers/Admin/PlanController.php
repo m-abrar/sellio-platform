@@ -8,6 +8,7 @@ use App\Models\Plan;
 use App\Services\Admin\PlanManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 /**
@@ -96,6 +97,25 @@ class PlanController extends Controller
 
         return redirect()->route('admin.plans.index')
             ->with('success', __('Subscription plan updated successfully.'));
+    }
+
+    /**
+     * Duplicate an existing subscription plan as an inactive draft copy.
+     *
+     * @param  \App\Models\Plan  $plan
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function duplicate(Plan $plan): RedirectResponse
+    {
+        try {
+            $newPlan = $this->planService->duplicatePlan($plan);
+
+            return redirect()->route('admin.plans.edit', $newPlan->id)
+                ->with('success', __('Subscription plan duplicated as an inactive draft.'));
+        } catch (\Exception $e) {
+            Log::error("Plan Duplication Failure: {$e->getMessage()}", ['id' => $plan->id]);
+            return back()->with('error', __('Duplication failure.'));
+        }
     }
 
     /**
