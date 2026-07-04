@@ -151,17 +151,23 @@ const INCLUDE_ROOTS = [
 ];
 
 /** Dev-uploaded media — never ship; demo seed recreates files after install. */
-const STORAGE_APP_PUBLIC_PREFIX = 'backend/storage/app/public';
+const STORAGE_APP_PUBLIC_PREFIX = 'apps/backend/storage/app/public';
 /** Brand logo/favicon — always ship so /storage/settings/* works before seed. */
 const STORAGE_SETTINGS_PREFIX = `${STORAGE_APP_PUBLIC_PREFIX}/settings`;
+/** Only these settings/ filenames ship — other entries are stray local test uploads. */
+const SETTINGS_ALLOWED_FILENAMES = new Set(['logo.png', 'logo.webp', 'favicon.ico', '.gitignore']);
 
-function isShippedStoragePublicPath(relPath) {
+function isShippedStoragePublicPath(relPath, name) {
   const normalized = relPath.replace(/\\/g, '/');
 
-  return (
-    normalized === STORAGE_SETTINGS_PREFIX ||
-    normalized.startsWith(`${STORAGE_SETTINGS_PREFIX}/`)
-  );
+  if (normalized === STORAGE_SETTINGS_PREFIX) {
+    return true;
+  }
+  if (!normalized.startsWith(`${STORAGE_SETTINGS_PREFIX}/`)) {
+    return false;
+  }
+
+  return SETTINGS_ALLOWED_FILENAMES.has(name);
 }
 
 function isDevUploadedMedia(relPath, name) {
@@ -172,7 +178,7 @@ function isDevUploadedMedia(relPath, name) {
   if (!normalized.startsWith(`${STORAGE_APP_PUBLIC_PREFIX}/`)) {
     return false;
   }
-  if (isShippedStoragePublicPath(normalized)) {
+  if (isShippedStoragePublicPath(normalized, name)) {
     return false;
   }
   return name !== '.gitignore';
