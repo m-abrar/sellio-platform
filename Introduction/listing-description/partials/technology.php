@@ -23,6 +23,6 @@ $gatewayIcons = [
 <?php endforeach; ?>
 </div><div class="gateway-row">
 <?php foreach ($publicContent['gateways'] as $gateway): ?>
-  <span><?php if (isset($gatewayIcons[$gateway])): ?><img src="<?= htmlspecialchars($gatewayIcons[$gateway]) ?>" alt="<?= htmlspecialchars($gateway) ?>" loading="lazy"><?php else: ?><svg viewBox="0 0 20 20" aria-label="<?= htmlspecialchars($gateway) ?>"><rect width="20" height="20" rx="4" fill="#eef2e9"/><text x="10" y="14" font-size="10" font-weight="800" text-anchor="middle" fill="#477d25"><?= htmlspecialchars(substr($gateway, 0, 1)) ?></text></svg><?php endif; ?><?= htmlspecialchars($gateway) ?></span>
+  <span><?php if (isset($gatewayIcons[$gateway])): ?><img src="<?= htmlspecialchars($gatewayIcons[$gateway]) ?>" alt="<?= htmlspecialchars($gateway) ?>" loading="lazy"><?php else: ?><svg viewBox="0 0 20 20" aria-label="<?= htmlspecialchars($gateway) ?>"><rect width="20" height="20" rx="4" fill="#eef2e9"/><text x="10" y="14" font-size="10" font-weight="800" text-anchor="middle" fill="#2a7e83"><?= htmlspecialchars(substr($gateway, 0, 1)) ?></text></svg><?php endif; ?><?= htmlspecialchars($gateway) ?></span>
 <?php endforeach; ?>
 </div></div></section>

@@ -4,13 +4,17 @@
 */
 
 :root {
-    --primary: #76c043;
-    --primary-light: #8fd456;
-    --primary-dark: #5f9e35;
-    --primary-soft: rgba(118, 192, 67, 0.12);
-    --primary-glow: rgba(118, 192, 67, 0.35);
+    --primary: #d1a84d;
+    --primary-light: #dfc282;
+    --primary-dark: #9e7931;
+    --primary-soft: rgba(209, 168, 77, 0.12);
+    --primary-glow: rgba(209, 168, 77, 0.35);
+    --secondary-color: #1b4363;
+    --accent-color: #f37022;
+    --background-dark: #0a1c33;
+    --on-primary: var(--background-dark);
     --secondary: #0f172a;
-    --success: #10b981;
+    --success: #1b4363;
     --warning: #f59e0b;
     --danger: #ef4444;
     --info: #3b82f6;
@@ -33,9 +37,9 @@
 body {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background:
-        radial-gradient(circle at 0% 0%, rgba(118, 192, 67, 0.08) 0%, transparent 42%),
-        radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.04) 0%, transparent 40%),
-        linear-gradient(160deg, #f8fafc 0%, #eef2f7 100%);
+        radial-gradient(circle at 0% 0%, rgba(209, 168, 77, 0.18) 0%, transparent 42%),
+        radial-gradient(circle at 100% 100%, rgba(27, 67, 99, 0.45) 0%, transparent 40%),
+        linear-gradient(160deg, var(--background-dark) 0%, #132a4a 100%);
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
@@ -84,7 +88,7 @@ body {
     height: 52px;
     border-radius: 16px;
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: #fff;
+    color: var(--on-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -129,7 +133,7 @@ body {
     letter-spacing: 0.08em;
     color: var(--primary-dark);
     background: var(--primary-soft);
-    border: 1px solid rgba(118, 192, 67, 0.2);
+    border: 1px solid rgba(209, 168, 77, 0.2);
     padding: 0.35rem 0.7rem;
     border-radius: 999px;
     white-space: nowrap;
@@ -236,7 +240,7 @@ body {
 .step.active .step-icon {
     background: var(--primary);
     border-color: var(--primary);
-    color: #fff;
+    color: var(--on-primary);
     transform: scale(1.06);
     box-shadow: 0 8px 20px var(--primary-glow);
 }
@@ -319,12 +323,12 @@ body {
 
 .info-panel-primary {
     background: var(--primary-soft);
-    border-color: rgba(118, 192, 67, 0.18);
+    border-color: rgba(209, 168, 77, 0.18);
 }
 
 .info-panel-success {
-    background: rgba(16, 185, 129, 0.06);
-    border-color: rgba(16, 185, 129, 0.15);
+    background: rgba(27, 67, 99, 0.06);
+    border-color: rgba(27, 67, 99, 0.15);
 }
 
 .info-panel-warning {
@@ -377,7 +381,7 @@ body {
 
 .icon-square-primary {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: #fff;
+    color: var(--on-primary);
 }
 
 .stat-tile {
@@ -427,7 +431,7 @@ body {
 .form-select:focus {
     background: #fff;
     border-color: var(--primary-light);
-    box-shadow: 0 0 0 4px rgba(118, 192, 67, 0.15);
+    box-shadow: 0 0 0 4px rgba(209, 168, 77, 0.15);
 }
 
 .input-group-text {
@@ -452,7 +456,7 @@ body {
 }
 
 .input-group:focus-within {
-    box-shadow: 0 0 0 4px rgba(118, 192, 67, 0.15);
+    box-shadow: 0 0 0 4px rgba(209, 168, 77, 0.15);
     border-radius: var(--radius-control);
 }
 
@@ -523,7 +527,7 @@ body {
 .btn-primary {
     background: linear-gradient(135deg, var(--primary-dark), var(--primary));
     border: none;
-    color: #fff;
+    color: var(--on-primary);
     box-shadow: 0 8px 20px var(--primary-glow);
 }
 
@@ -532,19 +536,19 @@ body {
     transform: translateY(-1px);
     box-shadow: 0 12px 28px var(--primary-glow);
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    color: #fff;
+    color: var(--on-primary);
 }
 
 .btn-outline-secondary {
-    border: 2px solid #e2e8f0;
-    color: var(--text-muted);
+    border: 2px solid var(--secondary-color);
+    color: var(--secondary-color);
     background: #fff;
 }
 
 .btn-outline-secondary:hover {
-    background: #f8fafc;
-    color: var(--text-main);
-    border-color: #cbd5e1;
+    background: var(--secondary-color);
+    color: #fff;
+    border-color: var(--secondary-color);
 }
 
 .step-nav {
@@ -614,8 +618,8 @@ body {
 }
 
 .summary-pill-success {
-    background: rgba(16, 185, 129, 0.1);
-    color: #047857;
+    background: rgba(27, 67, 99, 0.1);
+    color: #1b4363;
 }
 
 .summary-pill-danger {
@@ -692,14 +696,14 @@ body {
 
 .status-banner-primary {
     background: var(--primary-soft);
-    border-color: rgba(118, 192, 67, 0.2);
+    border-color: rgba(209, 168, 77, 0.2);
     color: var(--primary-dark);
 }
 
 .status-banner-success {
-    background: rgba(16, 185, 129, 0.07);
-    border-color: rgba(16, 185, 129, 0.15);
-    color: #047857;
+    background: rgba(27, 67, 99, 0.07);
+    border-color: rgba(27, 67, 99, 0.15);
+    color: #1b4363;
 }
 
 .terminal-window {
@@ -776,7 +780,7 @@ body {
 .badge-pill-brand {
     background: var(--primary-soft);
     color: var(--primary-dark);
-    border-color: rgba(118, 192, 67, 0.2);
+    border-color: rgba(209, 168, 77, 0.2);
 }
 
 /* Finished */
@@ -784,13 +788,13 @@ body {
     width: 96px;
     height: 96px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--success), #059669);
+    background: linear-gradient(135deg, var(--success), #16364f);
     color: #fff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 2.5rem;
-    box-shadow: 0 16px 32px rgba(16, 185, 129, 0.35);
+    box-shadow: 0 16px 32px rgba(27, 67, 99, 0.35);
 }
 
 .finish-actions {
@@ -825,7 +829,7 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.5);
     margin-bottom: 0.35rem;
 }
 
@@ -841,12 +845,12 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
 }
 
 .installer-footer-links a:hover {
-    color: var(--primary-dark);
+    color: var(--primary-light);
 }
 
 /* Utilities */
