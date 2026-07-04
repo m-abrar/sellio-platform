@@ -20,7 +20,7 @@ class BrandSettingsController extends Controller
         $logoPath = setting('site_logo');
 
         // Dynamically build fully qualified URLs for the brand assets
-        $faviconUrl = $faviconPath ? url(Storage::url($faviconPath)) : asset('favicons/favicon.ico');
+        $faviconUrl = $faviconPath ? url(Storage::url($faviconPath)) : asset('favicon.ico');
         $logoUrl = $logoPath ? url(Storage::url($logoPath)) : asset('admin-assets/app-logo.webp');
 
         return response()->json([

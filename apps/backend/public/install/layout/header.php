@@ -33,7 +33,7 @@ $installerLogoUrl = installer_logo_url();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= htmlspecialchars(($title ?? 'Installation Wizard') . ' | Sellio') ?></title>
-    <link rel="icon" type="image/x-icon" href="<?= htmlspecialchars(installer_asset('favicons/favicon.ico')) ?>">
+    <link rel="icon" type="image/x-icon" href="<?= htmlspecialchars(installer_asset('favicon.ico')) ?>">
 
     <link href="<?= htmlspecialchars($bootstrapCss) ?>" rel="stylesheet">
     <link href="<?= htmlspecialchars($fontawesomeCss) ?>" rel="stylesheet">

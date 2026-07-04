@@ -239,7 +239,7 @@ class SettingService
     {
         try {
             $sourcePath = storage_path('app/public/' . $storagePath);
-            $destinationPath = public_path('favicons/favicon.ico');
+            $destinationPath = public_path('favicon.ico');
             
             if (!file_exists(dirname($destinationPath))) {
                 mkdir(dirname($destinationPath), 0755, true);
