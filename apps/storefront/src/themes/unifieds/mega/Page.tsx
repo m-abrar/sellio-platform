@@ -1,14 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { api } from '@/lib/api-client';
-import type { Product } from '@/types';
 import { HeavyweightGrid, MassiveSyncBar } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
+import { fetchAllVerticals, VERTICALS, type ExploreListing } from '@/themes/unifieds/shared/multiVertical';
 
 export default function Page() {
   const themeLink = useUnifiedThemeLink();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [listings, setListings] = useState<ExploreListing[]>([]);
+  const [inventoryTotal, setInventoryTotal] = useState<number | null>(null);
+  const [categoriesCount, setCategoriesCount] = useState(0);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
 
@@ -21,13 +22,13 @@ export default function Page() {
 
   const collectionEyebrow = useThemeContent('collection.eyebrow', 'Live Marketplace');
   const collectionTitle = useThemeContent('collection.title', 'Heavyweight Listings.');
-  const collectionDescription = useThemeContent('collection.description', 'Browse live product listings from verified sellers across all marketplace categories.');
+  const collectionDescription = useThemeContent('collection.description', 'Browse live listings from verified sellers across every marketplace category.');
 
   const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'Connection Error');
   const syncOfflineTitle = useThemeContent('sync.offline_title', 'Listings could not be synchronized.');
   const emptyKicker = useThemeContent('empty.kicker', 'No Listings Yet');
   const emptyTitle = useThemeContent('empty.title', 'No live listings are available yet.');
-  const emptyDescription = useThemeContent('empty.description', 'Add product records in the admin panel and they will appear here.');
+  const emptyDescription = useThemeContent('empty.description', 'Add listings in the admin panel and they will appear here.');
 
   const midSectionEyebrow = useThemeContent('mid_section.eyebrow', 'Built for Scale');
   const midSectionTitle = useThemeContent('mid_section.title', 'Structural\nAuthority.');
@@ -42,20 +43,25 @@ export default function Page() {
   const ctaDescription = useThemeContent('cta.description', "List your products on a platform built for scale. Reach buyers across every category with a storefront that handles high-volume traffic with ease.");
   const ctaButtonLabel = useThemeContent('cta.button_label', 'Get Started');
 
-  const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%23171717'/><g transform='translate(328,214)' stroke='%23f97316' stroke-width='3' fill='none' stroke-linecap='square' stroke-linejoin='miter'><rect x='2' y='2' width='60' height='60'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='13' font-weight='900' letter-spacing='2' fill='%23ffffff'>MEGA RECORD</text></svg>";
-
   useEffect(() => {
     let isMounted = true;
 
     async function loadListings() {
       try {
-        const fetchedProducts = await api.getProducts();
+        const result = await fetchAllVerticals({ per_page: 1 });
         if (!isMounted) {
           return;
         }
 
-        setProducts(Array.isArray(fetchedProducts) ? fetchedProducts : []);
-        setListingError(null);
+        if (result.listings.length > 0 || result.failedVerticals.length < VERTICALS.length) {
+          setListings(result.listings.slice(0, 6));
+          setInventoryTotal(result.total || result.listings.length);
+          setCategoriesCount(result.categories.length);
+          setListingError(null);
+        } else {
+          setListings([]);
+          setListingError('Listings are temporarily unavailable.');
+        }
       } catch (error: unknown) {
         if (!isMounted) {
           return;
@@ -76,14 +82,6 @@ export default function Page() {
       isMounted = false;
     };
   }, []);
-
-  const getProductImage = (product: Product) => (
-    product.media?.featured_image || product.image_url || placeholderImage
-  );
-
-  const formatPrice = (product: Product) => (
-    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Heavyweight quote')
-  );
 
   return (
     <div>
@@ -136,7 +134,11 @@ export default function Page() {
       <MassiveSyncBar />
 
       {/* Heavyweight Grid Section */}
-      <HeavyweightGrid />
+      <HeavyweightGrid
+        listingsTotal={inventoryTotal}
+        categoriesCount={categoriesCount}
+        verticalsCount={VERTICALS.length}
+      />
 
       {/* Live Listings */}
       <section className="ugm-listings-section" id="ugm-exchange-section" aria-labelledby="ugm-exchange-title">
@@ -165,7 +167,7 @@ export default function Page() {
                   <h3>{syncOfflineTitle}</h3>
                   <p>Check your API connection and confirm listings are published in the admin panel.</p>
               </div>
-          ) : products.length === 0 ? (
+          ) : listings.length === 0 ? (
               <div className="ugm-listing-state" role="status">
                   <div className="ugm-mono" style={{ color: 'var(--ugm-orange)', marginBottom: '1rem' }}>{emptyKicker}</div>
                   <h3>{emptyTitle}</h3>
@@ -173,18 +175,19 @@ export default function Page() {
               </div>
           ) : (
               <div className="ugm-listings-grid">
-                  {products.slice(0, 6).map((product) => (
-                      <a href={themeLink(`/product/${product.slug}`)} className="ugm-listing-card" key={product.id}>
+                  {listings.map((listing) => (
+                      <a href={themeLink(listing.href)} className="ugm-listing-card" key={listing.id}>
                           <div className="ugm-listing-image-wrap">
-                              <img src={getProductImage(product)} alt={product.title} />
+                              <img src={listing.image} alt={listing.title} />
+                              <span className="ugm-listing-vertical-badge">{listing.vertical}</span>
                           </div>
                           <div className="ugm-listing-body">
-                              <div className="ugm-mono">{'Listing'}</div>
-                              <h3>{product.title}</h3>
-                              <p>{product.description || 'Browse this listing for full details and pricing.'}</p>
+                              <div className="ugm-mono">{listing.category}</div>
+                              <h3>{listing.title}</h3>
+                              <p>{listing.description}</p>
                               <div className="ugm-listing-meta">
-                                  <span>{formatPrice(product)}</span>
-                                  <span>View Details</span>
+                                  <span>{listing.price}</span>
+                                  <span>{listing.actionLabel}</span>
                               </div>
                           </div>
                       </a>

@@ -276,6 +276,21 @@
     background: var(--ugm-charcoal);
     border-bottom: 2px solid var(--ugm-charcoal);
     overflow: hidden;
+    position: relative;
+}
+
+.ugm-listing-vertical-badge {
+    background: var(--ugm-orange);
+    color: white;
+    font-family: var(--ugm-font-heading);
+    font-size: 0.65rem;
+    font-weight: 900;
+    left: 1rem;
+    letter-spacing: 2px;
+    padding: 0.4rem 0.9rem;
+    position: absolute;
+    text-transform: uppercase;
+    top: 1rem;
 }
 
 .ugm-listing-image-wrap img {

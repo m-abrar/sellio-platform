@@ -68,6 +68,54 @@
   width: 100%;
 }
 
+.uni-vertical-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.uni-vertical-chip {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  color: #1e293b;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.65rem 1.25rem;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.uni-vertical-chip:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.uni-vertical-chip-active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.uni-vertical-chip-active:hover {
+  color: #fff;
+}
+
+.uni-card-vertical-badge {
+  background: rgba(15, 23, 42, 0.72);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  left: 0.85rem;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.75rem;
+  position: absolute;
+  text-transform: uppercase;
+  top: 0.85rem;
+}
+
 .uni-listings-grid {
   display: grid;
   gap: 2rem;
@@ -95,6 +143,7 @@
   aspect-ratio: 4 / 3;
   background: #f8fafc;
   overflow: hidden;
+  position: relative;
 }
 
 .uni-listing-image-wrap img {

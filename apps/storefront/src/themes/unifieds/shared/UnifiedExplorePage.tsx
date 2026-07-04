@@ -1,15 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { api } from '@/lib/api-client';
-import type { Category, Product } from '@/types';
-import {
-  formatProductPrice,
-  getProductImage,
-  isExploreSortOption,
-  type ExploreSortOption,
-} from '@/themes/unifieds/shared/product-utils';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import type { Category } from '@/types';
+import { isExploreSortOption, type ExploreSortOption } from '@/themes/unifieds/shared/product-utils';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
+import { fetchAllVerticals, VERTICALS, type ExploreListing, type Vertical } from '@/themes/unifieds/shared/multiVertical';
 import './subpages.css';
 
 export type UnifiedExplorePageProps = {
@@ -20,60 +16,88 @@ export type UnifiedExplorePageProps = {
   description?: string;
 };
 
-export default function UnifiedExplorePage({
+const EXPLORE_PAGE_SIZE = 9;
+
+function ExplorePageContent({
   initialCategorySlug,
   initialSearch = '',
-  eyebrow = 'CATALOG_DIRECTORY',
+  eyebrow = 'Explore the marketplace',
   title = 'Explore Listings',
-  description = 'Search, filter, and inspect live marketplace listings synchronized from your Sellio catalog.',
+  description = 'Search, filter, and browse live listings across every marketplace category.',
 }: UnifiedExplorePageProps) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [listingError, setListingError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState(initialSearch);
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [sortBy, setSortBy] = useState<ExploreSortOption>('default');
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const themeLink = useUnifiedThemeLink();
+
+  const [listings, setListings] = useState<ExploreListing[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [inventoryTotal, setInventoryTotal] = useState<number | null>(null);
+  const [verticalTotals, setVerticalTotals] = useState<Partial<Record<Vertical, number>>>({});
+  const [lastPage, setLastPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [listingError, setListingError] = useState<string | null>(null);
+
+  const page = Math.max(1, Number(searchParams.get('page') || 1));
+  const searchQuery = searchParams.get('search') || searchParams.get('q') || initialSearch;
+  const selectedCategorySlug = searchParams.get('category') || initialCategorySlug || '';
+  const selectedVerticalKey = (searchParams.get('vertical') as Vertical | null) || null;
+  const sortBy = (searchParams.get('sort') as ExploreSortOption) || 'default';
+
+  const selectedCategory =
+    categories.find((category) => category.slug.toLowerCase() === selectedCategorySlug.toLowerCase()) ?? null;
+
+  const searchKey = searchParams.toString();
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadData() {
-      try {
-        const [fetchedProducts, fetchedCategories] = await Promise.all([
-          api.getProducts(),
-          api.getCategories(),
-        ]);
+      const isFirstPage = page === 1;
 
-        if (!isMounted) {
-          return;
-        }
-
-        setProducts(Array.isArray(fetchedProducts) ? fetchedProducts : []);
-        setCategories(Array.isArray(fetchedCategories) ? fetchedCategories : []);
-        setListingError(null);
-
-        if (initialCategorySlug) {
-          const matchedCategory = fetchedCategories?.find(
-            (category) => category.slug.toLowerCase() === initialCategorySlug.toLowerCase(),
-          );
-          if (matchedCategory) {
-            setSelectedCategory(matchedCategory.id);
-          }
-        }
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
-
-        console.error('Failed to load unified explore listings:', error);
-        setListingError(error instanceof Error ? error.message : 'Listings are temporarily unavailable.');
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+      if (isFirstPage) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
       }
+
+      const query: Record<string, unknown> = { page, per_page: EXPLORE_PAGE_SIZE };
+      if (searchQuery) query.search = searchQuery;
+      if (selectedCategorySlug) query.category = selectedCategorySlug;
+
+      const result = await fetchAllVerticals(query);
+
+      if (!isMounted) {
+        return;
+      }
+
+      setListings((previous) => {
+        const merged = isFirstPage ? result.listings : [...previous, ...result.listings];
+        const seen = new Set<string>();
+        return merged.filter((item) => {
+          if (seen.has(item.id)) return false;
+          seen.add(item.id);
+          return true;
+        });
+      });
+
+      setCategories((previous) => {
+        const bySlug = new Map<string, Category>();
+        [...previous, ...result.categories].forEach((category) => bySlug.set(category.slug, category));
+        return Array.from(bySlug.values());
+      });
+
+      setVerticalTotals((previous) => (isFirstPage ? result.totals : { ...previous, ...result.totals }));
+      setInventoryTotal(result.total || result.listings.length);
+      setLastPage(result.lastPage);
+      setListingError(
+        result.failedVerticals.length > 0 && result.listings.length === 0
+          ? `Could not load listings (${result.failedVerticals.join(', ')}).`
+          : null,
+      );
+
+      setLoading(false);
+      setLoadingMore(false);
     }
 
     loadData();
@@ -81,36 +105,63 @@ export default function UnifiedExplorePage({
     return () => {
       isMounted = false;
     };
-  }, [initialCategorySlug]);
+  }, [page, searchKey, searchQuery, selectedCategorySlug]);
 
-  const handleCategoryChange = (categoryId: number | null) => {
-    setSelectedCategory(categoryId);
-    const matchedCategory = categories.find((category) => category.id === categoryId);
-    const newPath = matchedCategory
-      ? themeLink(`/explore/${matchedCategory.slug.toLowerCase()}`)
-      : themeLink('/explore');
-    window.history.pushState(null, '', newPath);
+  const verticalCounts = useMemo(() => {
+    return VERTICALS.reduce<Record<string, number>>((counts, vertical) => {
+      counts[vertical.key] = verticalTotals[vertical.key] ?? listings.filter((item) => item.vertical === vertical.key).length;
+      return counts;
+    }, {});
+  }, [listings, verticalTotals]);
+
+  const filteredListings = useMemo(() => {
+    const normalizedSearch = searchQuery.toLowerCase();
+
+    return listings
+      .filter((listing) => {
+        const matchesVertical = !selectedVerticalKey || listing.vertical === selectedVerticalKey;
+        const matchesCategory =
+          !selectedCategory || listing.category.toLowerCase() === selectedCategory.title.toLowerCase();
+        const matchesSearch =
+          !normalizedSearch ||
+          listing.title.toLowerCase().includes(normalizedSearch) ||
+          listing.description.toLowerCase().includes(normalizedSearch);
+        return matchesVertical && matchesCategory && matchesSearch;
+      })
+      .sort((left, right) => {
+        if (sortBy === 'price_asc') {
+          return Number(left.price.replace(/[^0-9.]/g, '')) - Number(right.price.replace(/[^0-9.]/g, ''));
+        }
+        if (sortBy === 'price_desc') {
+          return Number(right.price.replace(/[^0-9.]/g, '')) - Number(left.price.replace(/[^0-9.]/g, ''));
+        }
+        return 0;
+      });
+  }, [listings, searchQuery, selectedCategory, selectedVerticalKey, sortBy]);
+
+  const updateFilters = (updates: Record<string, string>, pageNumber = 1) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+    });
+
+    if (pageNumber > 1) {
+      params.set('page', pageNumber.toString());
+    } else {
+      params.delete('page');
+    }
+
+    router.push(themeLink(`/explore?${params.toString()}`));
   };
 
-  const filteredProducts = products
-    .filter((product) => {
-      const matchesSearch =
-        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (product.description &&
-          product.description.toLowerCase().includes(searchQuery.toLowerCase()));
-      const matchesCategory =
-        selectedCategory === null || product.category_id === selectedCategory;
-      return matchesSearch && matchesCategory;
-    })
-    .sort((left, right) => {
-      if (sortBy === 'price_asc') {
-        return Number(left.price) - Number(right.price);
-      }
-      if (sortBy === 'price_desc') {
-        return Number(right.price) - Number(left.price);
-      }
-      return 0;
-    });
+  const handleLoadMore = () => {
+    updateFilters({}, page + 1);
+  };
 
   return (
     <main className="uni-explore-page">
@@ -120,6 +171,31 @@ export default function UnifiedExplorePage({
         </div>
         <h1>{title}</h1>
         <p>{description}</p>
+        {!loading && inventoryTotal != null ? (
+          <p style={{ marginTop: '1rem', fontWeight: 700, color: '#1e293b' }}>
+            {inventoryTotal.toLocaleString()} listings available
+          </p>
+        ) : null}
+      </div>
+
+      <div className="uni-vertical-chips" role="group" aria-label="Filter by category type">
+        <button
+          type="button"
+          className={`uni-vertical-chip${!selectedVerticalKey ? ' uni-vertical-chip-active' : ''}`}
+          onClick={() => updateFilters({ vertical: '', category: '' })}
+        >
+          All
+        </button>
+        {VERTICALS.map((vertical) => (
+          <button
+            type="button"
+            key={vertical.key}
+            className={`uni-vertical-chip${selectedVerticalKey === vertical.key ? ' uni-vertical-chip-active' : ''}`}
+            onClick={() => updateFilters({ vertical: vertical.key, category: '' })}
+          >
+            {vertical.label} ({(verticalCounts[vertical.key] ?? 0).toLocaleString()})
+          </button>
+        ))}
       </div>
 
       <section className="uni-explore-controls" aria-label="Explore filters">
@@ -129,22 +205,24 @@ export default function UnifiedExplorePage({
             id="uni-explore-search"
             type="text"
             placeholder="Search active listings..."
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
+            defaultValue={searchQuery}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                updateFilters({ search: (event.target as HTMLInputElement).value });
+              }
+            }}
           />
         </div>
         <div>
           <label htmlFor="uni-explore-category">Category</label>
           <select
             id="uni-explore-category"
-            value={selectedCategory === null ? '' : selectedCategory.toString()}
-            onChange={(event) =>
-              handleCategoryChange(event.target.value === '' ? null : Number(event.target.value))
-            }
+            value={selectedCategorySlug}
+            onChange={(event) => updateFilters({ category: event.target.value })}
           >
             <option value="">All Categories</option>
             {categories.map((category) => (
-              <option key={category.id} value={category.id.toString()}>
+              <option key={category.id} value={category.slug}>
                 {category.title}
               </option>
             ))}
@@ -157,11 +235,11 @@ export default function UnifiedExplorePage({
             value={sortBy}
             onChange={(event) => {
               if (isExploreSortOption(event.target.value)) {
-                setSortBy(event.target.value);
+                updateFilters({ sort: event.target.value });
               }
             }}
           >
-            <option value="default">Default</option>
+            <option value="default">Featured first</option>
             <option value="price_asc">Price: Low to High</option>
             <option value="price_desc">Price: High to Low</option>
           </select>
@@ -184,46 +262,62 @@ export default function UnifiedExplorePage({
       ) : listingError ? (
         <div className="uni-listing-state" role="status">
           <div className="uni-mono" style={{ color: '#2563eb', marginBottom: '1rem' }}>
-            REGISTRY_OFFLINE
+            Connection issue
           </div>
           <h3>Explore listings could not be synchronized.</h3>
           <p>{listingError}</p>
         </div>
-      ) : filteredProducts.length > 0 ? (
-        <div className="uni-listings-grid">
-          {filteredProducts.map((product) => (
-            <a
-              href={themeLink(`/product/${product.slug}`)}
-              className="uni-listing-card"
-              key={product.id}
-            >
-              <div className="uni-listing-image-wrap">
-                <img src={getProductImage(product)} alt={product.title} />
-              </div>
-              <div className="uni-listing-body">
-                <div className="uni-mono">LISTING_{product.id}</div>
-                <h3>{product.title}</h3>
-                <p>
-                  {product.description ||
-                    'Verified marketplace listing synchronized from the Sellio catalog.'}
-                </p>
-                <div className="uni-listing-meta">
-                  <span>{formatProductPrice(product)}</span>
-                  <span>View Listing</span>
+      ) : filteredListings.length > 0 ? (
+        <>
+          <div className="uni-listings-grid">
+            {filteredListings.map((listing) => (
+              <a
+                href={themeLink(listing.href)}
+                className="uni-listing-card"
+                key={listing.id}
+              >
+                <div className="uni-listing-image-wrap">
+                  <img src={listing.image} alt={listing.title} loading="lazy" />
+                  <span className="uni-card-vertical-badge">{listing.vertical}</span>
                 </div>
-              </div>
-            </a>
-          ))}
-        </div>
+                <div className="uni-listing-body">
+                  <div className="uni-mono">{listing.category}</div>
+                  <h3>{listing.title}</h3>
+                  <p>{listing.description}</p>
+                  <div className="uni-listing-meta">
+                    <span>{listing.price}</span>
+                    <span>{listing.actionLabel}</span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          {page < lastPage ? (
+            <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+              <button type="button" className="uni-btn-primary" onClick={handleLoadMore} disabled={loadingMore}>
+                {loadingMore ? 'Loading listings...' : 'Load more listings'}
+              </button>
+            </div>
+          ) : null}
+        </>
       ) : (
         <div className="uni-listing-state" role="status">
           <div className="uni-mono" style={{ color: '#2563eb', marginBottom: '1rem' }}>
-            EMPTY_RESULTS
+            No results
           </div>
           <h3>No listings matched your filters.</h3>
           <p>Try adjusting your search keywords or choosing a different category.</p>
         </div>
       )}
     </main>
+  );
+}
+
+export default function UnifiedExplorePage(props: UnifiedExplorePageProps) {
+  return (
+    <Suspense fallback={<main className="uni-explore-page" style={{ textAlign: 'center' }}>Loading explore...</main>}>
+      <ExplorePageContent {...props} />
+    </Suspense>
   );
 }

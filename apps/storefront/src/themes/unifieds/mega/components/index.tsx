@@ -5,6 +5,7 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { useUnifiedThemeLink } from '@/themes/unifieds/shared/useUnifiedThemeLink';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const MegaHeader = () => {
   const themeLink = useUnifiedThemeLink();
@@ -71,12 +72,18 @@ const MegaItem = ({ title, value, label }: MegaItemProps) => (
     </div>
 );
 
-export const HeavyweightGrid = () => {
+interface HeavyweightGridProps {
+    listingsTotal?: number | null;
+    categoriesCount?: number;
+    verticalsCount?: number;
+}
+
+export const HeavyweightGrid = ({ listingsTotal, categoriesCount, verticalsCount }: HeavyweightGridProps = {}) => {
     const items = [
-        { title: "Global Throughput", value: "840TB", label: "Monthly Data Volume" },
-        { title: "Active Capacity", value: "12k+", label: "Active Seller Accounts" },
-        { title: "Verified Listings", value: "1.4M", label: "Verified Product Records" },
-        { title: "System Uptime", value: "99.9", label: "Core Reliability" },
+        { title: "Live Inventory", value: listingsTotal != null ? listingsTotal.toLocaleString() : '—', label: "Active Listings" },
+        { title: "Marketplace Reach", value: verticalsCount != null ? String(verticalsCount) : '—', label: "Categories Served" },
+        { title: "Catalog Depth", value: categoriesCount != null ? categoriesCount.toLocaleString() : '—', label: "Listing Categories" },
+        { title: "System Uptime", value: "99.9%", label: "Core Reliability" },
     ];
 
     return (
@@ -104,6 +111,8 @@ export const MassiveSyncBar = () => (
 
 export const AuthorityFooter = () => {
   const themeLink = useUnifiedThemeLink();
+  const siteName = useThemeContent('site_name', 'Sellio');
+  const currentYear = new Date().getFullYear();
   return (
     <footer className="ugm-authority-footer">
         <div className="ugm-footer-grid">
@@ -133,7 +142,7 @@ export const AuthorityFooter = () => {
             />
         </div>
         <div className="ugm-footer-bottom">
-            <div className="ugm-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 Sellio. All rights reserved.</div>
+            <div className="ugm-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© {currentYear} {siteName}. All rights reserved.</div>
             <div className="ugm-footer-socials">
                 <MenuNav
                     location="social_footer"
