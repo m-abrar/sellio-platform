@@ -342,6 +342,29 @@ body {
     border-color: rgba(239, 68, 68, 0.12);
 }
 
+.copy-field {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(15, 23, 42, 0.04);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 12px;
+    padding: 0.65rem 0.9rem;
+}
+
+.copy-field-value {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    color: var(--primary-dark);
+}
+
+.copy-field-btn {
+    flex-shrink: 0;
+}
+
 .icon-square {
     width: 52px;
     height: 52px;

@@ -17,6 +17,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    document.querySelectorAll('[data-copy-target]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-copy-target');
+            const target = targetId ? document.getElementById(targetId) : null;
+
+            if (!target) {
+                return;
+            }
+
+            const text = target.textContent || '';
+            const restoreLabel = button.innerHTML;
+
+            const markCopied = () => {
+                button.innerHTML = '<i class="fa-solid fa-check me-1"></i> Copied';
+                setTimeout(() => { button.innerHTML = restoreLabel; }, 2000);
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(markCopied).catch(() => {});
+            } else {
+                const scratch = document.createElement('textarea');
+                scratch.value = text;
+                scratch.style.position = 'fixed';
+                scratch.style.opacity = '0';
+                document.body.appendChild(scratch);
+                scratch.select();
+                document.execCommand('copy');
+                document.body.removeChild(scratch);
+                markCopied();
+            }
+
+            const checkbox = document.getElementById('api_url_copied');
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+        });
+    });
+
     document.querySelectorAll('.terminal-body').forEach((terminal) => {
         terminal.scrollTop = terminal.scrollHeight;
 

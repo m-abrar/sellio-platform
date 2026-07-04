@@ -35,13 +35,13 @@ test.describe('Installer smoke', () => {
         await page.getByRole('button', { name: /connect & initialize/i }).click();
         await page.waitForURL(/step=packages/);
         await assertNoInstallerErrors(page);
-        await expect(page.getByRole('button', { name: /execute package installation/i })).toBeVisible();
 
         const vendorExists = fs.existsSync(path.join(backendRoot, 'vendor', 'autoload.php'));
         if (vendorExists) {
             // Dev trees already have vendor/; web SAPI composer autoload regen can hang for minutes.
             await page.goto('/install/?step=migration');
         } else {
+            await expect(page.getByRole('button', { name: /execute package installation/i })).toBeVisible();
             await page.getByRole('button', { name: /execute package installation/i }).click();
             await expect(
                 page.getByRole('link', { name: /next: data structure import/i }),
@@ -70,6 +70,10 @@ test.describe('Installer smoke', () => {
         await page.locator('input[name="password"]').fill(adminPassword);
         await page.locator('input[name="password_confirmation"]').fill(adminPassword);
         await page.getByRole('button', { name: /create account & finish setup/i }).click();
+
+        await page.waitForURL(/step=platform_urls/);
+        await page.locator('#api_url_copied').check();
+        await page.getByRole('button', { name: /save & continue/i }).click();
 
         await page.waitForURL(/step=finished/);
         await expect(page.getByRole('heading', { name: /system online & ready/i })).toBeVisible();

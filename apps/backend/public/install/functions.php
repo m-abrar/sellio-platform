@@ -312,8 +312,9 @@ $steps = [
     'packages' => ['Packages', 'fa-box-open'], 
     'migration' => ['Import Database', 'fa-database'], 
     'modules' => ['Configure Modules', 'fa-th-large'], 
-    'seeding' => ['Import Demos', 'fa-seedling'], 
-    'admin' => ['Admin User', 'fa-user-tie'], 
+    'seeding' => ['Import Demos', 'fa-seedling'],
+    'admin' => ['Admin User', 'fa-user-tie'],
+    'platform_urls' => ['Platform URLs', 'fa-link'],
     'finished' => ['Finished', 'fa-check-double']
 ];
 

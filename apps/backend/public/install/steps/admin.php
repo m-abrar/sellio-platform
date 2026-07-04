@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($status === 0) {
-            redirect('finished');
+            redirect('platform_urls');
         } else {
             $error = true;
             $message = "❌ Could not create admin account. See log for details.";
