@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\ChecksEnabledModules;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -14,6 +15,22 @@ use Illuminate\Support\Str;
  */
 class BrandSeeder extends Seeder
 {
+    use ChecksEnabledModules;
+
+    /**
+     * Maps each brand flag to its `is_section.*` settings key.
+     */
+    private const MODULE_KEYS = [
+        'is_property'   => 'properties',
+        'is_auto'       => 'autos',
+        'is_event'      => 'events',
+        'is_job'        => 'jobs',
+        'is_service'    => 'services',
+        'is_classified' => 'classifieds',
+        'is_product'    => 'products',
+        'is_blog'       => 'blog',
+    ];
+
     /**
      * Run the database seeds.
      *
@@ -60,6 +77,12 @@ class BrandSeeder extends Seeder
         $brandsToInsert = [];
 
         foreach ($moduleBrands as $moduleFlag => $brandNames) {
+            $moduleKey = self::MODULE_KEYS[$moduleFlag] ?? null;
+
+            if ($moduleKey !== null && ! $this->isModuleEnabled($moduleKey)) {
+                continue;
+            }
+
             foreach ($brandNames as $brandName) {
                 $brandData = [
                     'title' => $brandName,

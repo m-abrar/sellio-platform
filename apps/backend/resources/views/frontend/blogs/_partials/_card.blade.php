@@ -3,7 +3,7 @@
         <div class="img-container position-relative overflow-hidden rounded-top-4">
             <div class="listing-card-img aspect-ratio-4-3">
                 {{-- Spatie Media Integration --}}
-                <img src="{{ $blog->getFirstMediaUrl('featured_image') ?: asset('images/placeholder.jpg') }}"
+                <img src="{{ $blog->getFirstMediaUrl('featured_image', 'card') ?: asset('images/placeholder.jpg') }}"
                      alt="{{ $blog->title }}"
                      class="transition-img w-100 h-100 object-fit-cover"
                      loading="lazy">

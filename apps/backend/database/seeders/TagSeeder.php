@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\ChecksEnabledModules;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -16,6 +17,22 @@ use App\Models\Tag;
  */
 class TagSeeder extends Seeder
 {
+    use ChecksEnabledModules;
+
+    /**
+     * Maps each tag flag to its `is_section.*` settings key.
+     */
+    private const MODULE_KEYS = [
+        'is_property'   => 'properties',
+        'is_auto'       => 'autos',
+        'is_event'      => 'events',
+        'is_job'        => 'jobs',
+        'is_service'    => 'services',
+        'is_classified' => 'classifieds',
+        'is_product'    => 'products',
+        'is_blog'       => 'blog',
+    ];
+
     public function run(): void
     {
         $this->command->info('Preparing to clear Tags and Taggables tables...');
@@ -63,9 +80,25 @@ class TagSeeder extends Seeder
 
         $count = 0;
         foreach ($tagsData as $data) {
+            $flags = [
+                'is_property'   => ($data['is_property'] ?? false) && $this->isFlagEnabled('is_property'),
+                'is_event'      => ($data['is_event'] ?? false) && $this->isFlagEnabled('is_event'),
+                'is_job'        => ($data['is_job'] ?? false) && $this->isFlagEnabled('is_job'),
+                'is_auto'       => ($data['is_auto'] ?? false) && $this->isFlagEnabled('is_auto'),
+                'is_service'    => ($data['is_service'] ?? false) && $this->isFlagEnabled('is_service'),
+                'is_classified' => ($data['is_classified'] ?? false) && $this->isFlagEnabled('is_classified'),
+                'is_product'    => ($data['is_product'] ?? false) && $this->isFlagEnabled('is_product'),
+                'is_blog'       => ($data['is_blog'] ?? false) && $this->isFlagEnabled('is_blog'),
+            ];
+
+            // Skip tags that end up with no enabled module left to belong to.
+            if (! in_array(true, $flags, true)) {
+                continue;
+            }
+
             Tag::updateOrCreate(
                 ['slug' => Str::slug($data['title']) . '-' . Str::random(5)],
-                [
+                array_merge([
                     'title'         => $data['title'],
                     'color'         => $data['color'] ?? '#6c757d',
                     'sort_order'    => $data['sort_order'] ?? 0,
@@ -73,15 +106,7 @@ class TagSeeder extends Seeder
                     'admin_note'    => 'System default tag.',
                     'is_premium'    => false,
                     'is_published'  => true,
-                    'is_property'   => $data['is_property'] ?? false,
-                    'is_event'      => $data['is_event'] ?? false,
-                    'is_job'        => $data['is_job'] ?? false,
-                    'is_auto'       => $data['is_auto'] ?? false,
-                    'is_service'    => $data['is_service'] ?? false,
-                    'is_classified' => $data['is_classified'] ?? false,
-                    'is_product'    => $data['is_product'] ?? false,
-                    'is_blog'       => $data['is_blog'] ?? false,
-                ]
+                ], $flags)
             );
             $count++;
         }
@@ -89,5 +114,15 @@ class TagSeeder extends Seeder
         Schema::enableForeignKeyConstraints();
 
         $this->command->info("✅ Tag seeding complete! {$count} tags created/updated.");
+    }
+
+    /**
+     * Whether the module a given `is_*` flag belongs to is enabled.
+     */
+    private function isFlagEnabled(string $flag): bool
+    {
+        $moduleKey = self::MODULE_KEYS[$flag] ?? null;
+
+        return $moduleKey === null || $this->isModuleEnabled($moduleKey);
     }
 }

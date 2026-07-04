@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\ChecksEnabledModules;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -12,6 +13,22 @@ use Illuminate\Support\Str;
  */
 class TypeSeeder extends Seeder
 {
+    use ChecksEnabledModules;
+
+    /**
+     * Maps each type flag to its `is_section.*` settings key.
+     */
+    private const MODULE_KEYS = [
+        'is_property'   => 'properties',
+        'is_auto'       => 'autos',
+        'is_event'      => 'events',
+        'is_job'        => 'jobs',
+        'is_service'    => 'services',
+        'is_classified' => 'classifieds',
+        'is_product'    => 'products',
+        'is_blog'       => 'blog',
+    ];
+
     /**
      * Run the database seeds.
      *
@@ -195,21 +212,27 @@ class TypeSeeder extends Seeder
         $colors = ['#1e4d4e', '#3949ab', '#ff7043', '#0891b2', '#059669', '#d4af37'];
         
         foreach ($types as $type) {
-            $inserted = DB::table('types')->insertOrIgnore([
+            $flags = [
+                'is_property' => ($type['is_property'] ?? false) && $this->isFlagEnabled('is_property'),
+                'is_event' => ($type['is_event'] ?? false) && $this->isFlagEnabled('is_event'),
+                'is_job' => ($type['is_job'] ?? false) && $this->isFlagEnabled('is_job'),
+                'is_auto' => ($type['is_auto'] ?? false) && $this->isFlagEnabled('is_auto'),
+                'is_service' => ($type['is_service'] ?? false) && $this->isFlagEnabled('is_service'),
+                'is_classified' => ($type['is_classified'] ?? false) && $this->isFlagEnabled('is_classified'),
+                'is_product' => ($type['is_product'] ?? false) && $this->isFlagEnabled('is_product'),
+                'is_blog' => ($type['is_blog'] ?? false) && $this->isFlagEnabled('is_blog'),
+            ];
+
+            // Skip types that end up with no enabled module left to belong to.
+            if (! in_array(true, $flags, true)) {
+                continue;
+            }
+
+            $inserted = DB::table('types')->insertOrIgnore(array_merge([
                 'title' => $type['title'],
                 'slug' => Str::slug($type['title']) . '-' . Str::random(5),
                 'icon' => $type['icon'],
                 'color' => collect($colors)->random(),
-
-                // Module Flags
-                'is_property' => $type['is_property'] ?? false,
-                'is_event' => $type['is_event'] ?? false,
-                'is_job' => $type['is_job'] ?? false,
-                'is_auto' => $type['is_auto'] ?? false,
-                'is_service' => $type['is_service'] ?? false,
-                'is_classified' => $type['is_classified'] ?? false,
-                'is_product' => $type['is_product'] ?? false,
-                'is_blog' => $type['is_blog'] ?? false,
 
                 // Hardened Metadata
                 'status' => 'active',
@@ -218,7 +241,7 @@ class TypeSeeder extends Seeder
                 'is_published' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
+            ], $flags));
 
             if ($inserted) {
                 $count++;
@@ -229,5 +252,15 @@ class TypeSeeder extends Seeder
             $this->command->info("   Inserted/Updated {$count} listing types.");
             $this->command->info('--- 🏁 Type Seeding Complete ---');
         }
+    }
+
+    /**
+     * Whether the module a given `is_*` flag belongs to is enabled.
+     */
+    private function isFlagEnabled(string $flag): bool
+    {
+        $moduleKey = self::MODULE_KEYS[$flag] ?? null;
+
+        return $moduleKey === null || $this->isModuleEnabled($moduleKey);
     }
 }

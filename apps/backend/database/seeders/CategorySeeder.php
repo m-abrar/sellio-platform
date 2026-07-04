@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\ChecksEnabledModules;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -15,6 +16,22 @@ use Illuminate\Support\Str;
  */
 class CategorySeeder extends Seeder
 {
+    use ChecksEnabledModules;
+
+    /**
+     * Maps each category flag to its `is_section.*` settings key.
+     */
+    private const MODULE_KEYS = [
+        'is_property'   => 'properties',
+        'is_auto'       => 'autos',
+        'is_event'      => 'events',
+        'is_job'        => 'jobs',
+        'is_service'    => 'services',
+        'is_classified' => 'classifieds',
+        'is_product'    => 'products',
+        'is_blog'       => 'blog',
+    ];
+
     public function run(): void
     {
         $moduleCategories = [
@@ -95,6 +112,12 @@ class CategorySeeder extends Seeder
         $this->command->line("🏗️ Seeding Hierarchical Categories...");
 
         foreach ($moduleCategories as $moduleFlag => $categories) {
+            $moduleKey = self::MODULE_KEYS[$moduleFlag] ?? null;
+
+            if ($moduleKey !== null && ! $this->isModuleEnabled($moduleKey)) {
+                continue;
+            }
+
             $this->seedRecursive($categories, $moduleFlag);
         }
 

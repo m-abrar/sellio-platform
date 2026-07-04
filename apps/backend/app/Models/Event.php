@@ -130,6 +130,7 @@ class Event extends Model implements HasMedia
         $this->addMediaConversion('event_poster_preview')
             ->width(1200)
             ->height(675)
+            ->format('webp')
             ->nonQueued();
     }
 

@@ -93,8 +93,8 @@
                     <div class="col-6 col-md-4 col-lg-3 mb-4">
                         <div class="card h-100 border-0 shadow-sm gallery-card overflow-hidden" style="border-radius: 20px;">
                             <div class="position-relative">
-                                <img src="{{ $media->getUrl() }}" 
-                                     class="card-img-top img-fluid h-200-p object-fit-cover" 
+                                <img src="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl() }}"
+                                     class="card-img-top img-fluid h-200-p object-fit-cover"
                                      alt="{{ $media->name }}">
                                 
                                 <div class="gallery-overlay d-flex align-items-center justify-content-center">
@@ -150,7 +150,7 @@
                                     <div class="modal-body p-4">
                                         <div class="p-3 bg-light rounded-xl mb-4 text-center border">
                                             <p class="small text-muted mb-2 font-weight-bold text-uppercase" style="letter-spacing: 1px;">Current Version</p>
-                                            <img src="{{ $media->getUrl() }}" class="img-thumbnail border-0 shadow-sm h-max-120 rounded-12">
+                                            <img src="{{ $media->hasGeneratedConversion('thumb') ? $media->getUrl('thumb') : $media->getUrl() }}" class="img-thumbnail border-0 shadow-sm h-max-120 rounded-12">
                                             <div class="mt-2 small text-dark font-weight-bold">{{ $media->file_name }}</div>
                                         </div>
                                         <div class="form-group mb-0">

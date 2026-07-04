@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\ChecksEnabledModules;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -14,6 +15,22 @@ use Illuminate\Support\Str;
  */
 class FeatureSeeder extends Seeder
 {
+    use ChecksEnabledModules;
+
+    /**
+     * Maps each feature flag to its `is_section.*` settings key.
+     */
+    private const MODULE_KEYS = [
+        'is_property'   => 'properties',
+        'is_auto'       => 'autos',
+        'is_event'      => 'events',
+        'is_job'        => 'jobs',
+        'is_service'    => 'services',
+        'is_classified' => 'classifieds',
+        'is_product'    => 'products',
+        'is_blog'       => 'blog',
+    ];
+
     /**
      * Run the database seeds.
      *
@@ -69,38 +86,60 @@ class FeatureSeeder extends Seeder
         ];
 
         $featuresToInsert = [];
-        
+
         // 3. Process Module-Specific Features
         foreach ($moduleFeatures as $moduleFlag => $featureNames) {
+            if (! $this->isFlagEnabled($moduleFlag)) {
+                continue;
+            }
+
             foreach ($featureNames as $title) {
                 $data = $this->getBaseFeatureData($title);
-                
+
                 // Set the specific module flag to true
                 $data[$moduleFlag] = true;
-                
+
                 $featuresToInsert[] = $data;
             }
         }
 
         // 4. Process Generic/Multi-Module Features
         foreach ($genericFeatures as $title => $flags) {
+            $enabledFlags = array_filter($flags, fn (string $flag) => $this->isFlagEnabled($flag));
+
+            if ($enabledFlags === []) {
+                continue;
+            }
+
             $data = $this->getBaseFeatureData($title);
-            
-            // Set all specified flags to true
-            foreach ($flags as $flag) {
+
+            // Set only the enabled-module flags to true
+            foreach ($enabledFlags as $flag) {
                 $data[$flag] = true;
             }
-            
+
             $featuresToInsert[] = $data;
         }
 
-        DB::table('features')->insert($featuresToInsert);
+        if ($featuresToInsert !== []) {
+            DB::table('features')->insert($featuresToInsert);
+        }
 
         $finalCount = DB::table('features')->count();
         $recordsCreated = $finalCount - $initialCount;
 
         $this->command->info("   > **$recordsCreated** new features created.");
         $this->command->line('✅ Features Seeding finished.');
+    }
+
+    /**
+     * Whether the module a given `is_*` flag belongs to is enabled.
+     */
+    private function isFlagEnabled(string $flag): bool
+    {
+        $moduleKey = self::MODULE_KEYS[$flag] ?? null;
+
+        return $moduleKey === null || $this->isModuleEnabled($moduleKey);
     }
 
     /**

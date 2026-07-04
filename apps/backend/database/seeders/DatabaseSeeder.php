@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\ChecksEnabledModules;
 use Database\Seeders\Payment\PaymentGatewaysSeeder;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /**
@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Schema;
  */
 class DatabaseSeeder extends Seeder
 {
+    use ChecksEnabledModules;
+
     /**
      * Seed the application's database.
      *
@@ -168,26 +170,22 @@ class DatabaseSeeder extends Seeder
             PendingPartnerApplicationSeeder::class,
         ]);
         
+        // Re-enable foreign key constraints
+        Schema::enableForeignKeyConstraints();
+
+        // MediaFullSeeder / PageContentMediaSeeder disable conversions for seeding speed,
+        // so backfill the missing webp thumbnails now that all media rows exist.
+        $this->command->newLine();
+        $this->command->info('🖼️  Regenerating media conversions (webp thumbnails)...');
+        config(['app.skip_media_conversions' => false]);
+        \Illuminate\Support\Facades\Artisan::call('media-library:regenerate', [
+            '--only-missing' => true,
+            '--force' => true,
+        ]);
+
         // Final Footer
         $this->command->newLine();
         $this->command->info('🎉 **MASTER SEEDING COMPLETE!** Setup finished.');
         $this->command->newLine();
-
-        // Re-enable foreign key constraints
-        Schema::enableForeignKeyConstraints();
-    }
-
-    /**
-     * Check if a specific module is enabled in the settings table.
-     *
-     * @param string $module
-     * @return bool
-     */
-    private function isModuleEnabled(string $module): bool
-    {
-        return DB::table('settings')
-            ->where('key', 'is_section.' . $module)
-            ->where('value', '1')
-            ->exists();
     }
 }

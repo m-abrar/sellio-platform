@@ -133,6 +133,7 @@ class Auto extends Model implements HasMedia
             ->width(800)
             ->height(600)
             ->sharpen(10)
+            ->format('webp')
             ->nonQueued();
     }
 

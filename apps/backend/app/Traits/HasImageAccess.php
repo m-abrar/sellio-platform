@@ -29,7 +29,10 @@ trait HasImageAccess
 
         if (defined('static::GALLERY_MEDIA')) {
             $this->addMediaCollection(static::GALLERY_MEDIA)
-                 ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+                 ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
+                 ->registerMediaConversions(function () {
+                     $this->registerCommonMediaConversions();
+                 });
         }
     }
 

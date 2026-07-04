@@ -4,6 +4,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\ChecksEnabledModules;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -16,6 +17,8 @@ use Illuminate\Support\Str;
  */
 class AmenitySeeder extends Seeder
 {
+    use ChecksEnabledModules;
+
     /**
      * Run the database seeds.
      *
@@ -26,6 +29,12 @@ class AmenitySeeder extends Seeder
      */
     public function run(): void
     {
+        // Amenities only ever attach to Property (amenity_property pivot) —
+        // skip entirely when the properties module isn't enabled.
+        if (! $this->isModuleEnabled('properties')) {
+            return;
+        }
+
         // Array of amenities with corresponding Font Awesome 5 Free icons
         $baseAmenities = [
             [

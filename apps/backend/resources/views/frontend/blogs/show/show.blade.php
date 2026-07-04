@@ -3,7 +3,7 @@
 {{-- Use blog data for title and category name --}}
 @section('title', $blog->title . ' - ' . ($blog->category->title ?? __('Blog')))
 @section('og_type', 'article')
-@section('og_image', $blog->getFirstMediaUrl('featured_image') ?: asset('images/placeholder.jpg'))
+@section('og_image', $blog->getFirstMediaUrl('featured_image', 'card') ?: asset('images/placeholder.jpg'))
 @section('og_description', Str::limit(strip_tags($blog->meta_description ?: $blog->content), 160))
 @section('body_class', 'has-body-glow bg-light frontend-page--detail')
 
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="main-article-image overflow-hidden" style="max-height: 500px;">
-                    <img src="{{ $blog->getFirstMediaUrl('featured_image') }}"
+                    <img src="{{ $blog->getFirstMediaUrl('featured_image', 'detail') }}"
                          id="mainImage"
                          alt="{{ $blog->title }}"
                          class="w-100 h-100 object-fit-cover transition-all">
@@ -40,7 +40,7 @@
 
                     <div class="d-flex align-items-center flex-wrap gap-3 text-muted small">
                         <div class="d-flex align-items-center">
-                            <img src="{{ $blog->user->getFirstMediaUrl('avatar') ?: asset('images/default-avatar.png') }}"
+                            <img src="{{ $blog->user->getFirstMediaUrl('avatar', 'avatar') ?: asset('images/default-avatar.png') }}"
                                  class="rounded-circle me-2" width="30" height="30" alt="{{ $blog->user->name }}">
                             <span>{{ __('By') }} <strong>{{ $blog->user->name }}</strong></span>
                         </div>
@@ -78,7 +78,7 @@
         <div class="card detail-sidebar-card p-4 mb-4">
             <h4 class="fw-800 mb-3">{{ __('About the Author') }}</h4>
             <div class="text-center mb-3 border-bottom pb-3" style="border-color:rgba(15,23,42,.07)!important">
-                <img src="{{ $blog->user->getFirstMediaUrl('avatar') ?: asset('images/default-avatar.png') }}"
+                <img src="{{ $blog->user->getFirstMediaUrl('avatar', 'avatar') ?: asset('images/default-avatar.png') }}"
                      class="host-profile-avatar rounded-circle mb-2 shadow-sm"
                      width="80" height="80" alt="{{ $blog->user->name }}">
                 <h5 class="mb-0 fw-semibold text-dark">{{ $blog->user->name }}</h5>

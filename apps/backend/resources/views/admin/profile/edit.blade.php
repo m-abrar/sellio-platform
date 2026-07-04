@@ -20,7 +20,7 @@
                 <div class="avatar-wrapper mr-4 position-relative group cursor-pointer">
                     <div class="avatar-glow position-absolute"></div>
                     <div class="position-relative overflow-hidden rounded-circle shadow-premium border-4-fff icon-box-100 z-1">
-                        <img src="{{ $user->getFirstMediaUrl(\App\Models\User::PRIMARY_MEDIA) ?: asset('images/fallbacks/avatar.jpg') }}" 
+                        <img src="{{ $user->getFirstMediaUrl(\App\Models\User::PRIMARY_MEDIA, 'avatar') ?: asset('images/fallbacks/avatar.jpg') }}"
                              alt="Avatar" 
                              class="w-100 h-100 transition-all duration-300 group-hover:scale-110 object-fit-cover">
                         <div class="avatar-overlay position-absolute d-flex align-items-center justify-content-center transition-all duration-300 opacity-0 group-hover:opacity-100">

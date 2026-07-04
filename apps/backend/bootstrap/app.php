@@ -13,6 +13,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schedule;
 use Illuminate\Validation\ValidationException;
@@ -116,6 +117,16 @@ return Application::configure(basePath: dirname(__DIR__))
                     'message' => $e->getMessage(),
                     'errors' => $e->errors(),
                 ], 422);
+            }
+        });
+
+        // 419 — CSRF token mismatch/expiry (e.g. session expired in a background AJAX tab)
+        $exceptions->render(function (TokenMismatchException $e, Request $request) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('Your session has expired. Please refresh the page and try again.'),
+                ], 419);
             }
         });
 
