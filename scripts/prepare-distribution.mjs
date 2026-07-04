@@ -826,9 +826,9 @@ php artisan queue:work
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@example.com | admin123 |
-| Partner | partner@example.com | partner123 |
-| Buyer | buyer@example.com | buyer123 |
+| Admin | admin@sellio.buzz | admin123 |
+| Partner | partner@sellio.buzz | partner123 |
+| Buyer | buyer@sellio.buzz | buyer123 |
 
 Change these before production.
 

@@ -69,11 +69,11 @@ These accounts are created by `DatabaseSeeder` for **local development and demos
 
 | Role | Email | Password | Login URL |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@example.com` | `admin123` | `/admin` |
-| **Partner** | `partner@example.com` | `partner123` | `/dashboard/partner` |
-| **Buyer** | `buyer@example.com` | `buyer123` | `/dashboard/user` |
+| **Admin** | `admin@sellio.buzz` | `admin123` | `/admin` |
+| **Partner** | `partner@sellio.buzz` | `partner123` | `/dashboard/partner` |
+| **Buyer** | `buyer@sellio.buzz` | `buyer123` | `/dashboard/user` |
 
-Additional seeded users use `user1@example.com` … `user20@example.com` with password `password`.
+Additional seeded users use `user1@sellio.buzz` … `user20@sellio.buzz` with password `password`.
 
 **Web installer:** If you used `/install/`, the **admin** account is the one you created on the final step (it may replace user ID 1). Partner and buyer demo accounts above still exist if you ran the demo seeding step.
 

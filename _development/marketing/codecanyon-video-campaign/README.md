@@ -50,12 +50,12 @@ Do not claim a feature merely because it appears in marketing copy. Every record
 
 | Surface | URL |
 | --- | --- |
-| Marketing page | `https://sellio.vebdez.com` |
-| Laravel storefront | `https://demo.sellio.vebdez.com` |
-| Laravel admin | `https://demo.sellio.vebdez.com/admin` |
-| Seller portal | `https://seller-panel.sellio.vebdez.com` |
-| Buyer portal | `https://buyer-panel.sellio.vebdez.com` |
-| Next.js storefront | `https://frontend.sellio.vebdez.com` |
-| Documentation | `https://sellio.vebdez.com/documentation` |
+| Marketing page | `https://sellio.buzz` |
+| Laravel storefront | `https://demo.sellio.buzz` |
+| Laravel admin | `https://demo.sellio.buzz/admin` |
+| Seller portal | `https://seller-panel.sellio.buzz` |
+| Buyer portal | `https://buyer-panel.sellio.buzz` |
+| Next.js storefront | `https://frontend.sellio.buzz` |
+| Documentation | `https://sellio.buzz/documentation` |
 
 Treat these as production targets, not proof that deployment is currently healthy. Complete the pre-recording checks before capture.

@@ -34,7 +34,7 @@ use App\Models\Message;
 /**
  * Class BuyerActivitySeeder
  *
- * Populates all dashboard modules specifically for the buyer account (buyer@example.com).
+ * Populates all dashboard modules specifically for the buyer account (buyer@sellio.buzz).
  * This ensures that when logging into the buyer panel, there is realistic, detailed demo data
  * in every single tab instead of "no records found" screens.
  */
@@ -49,14 +49,14 @@ class BuyerActivitySeeder extends Seeder
     {
         config(['activitylog.enabled' => false]);
 
-        $this->command->info('👤✨ Starting **Buyer Activity Seeder** for buyer@example.com...');
+        $this->command->info('👤✨ Starting **Buyer Activity Seeder** for buyer@sellio.buzz...');
 
         // 1. Fetch Eleanor Vance (Buyer) & Julian Sterling (Partner)
-        $buyer = User::where('email', 'buyer@example.com')->first();
-        $partner = User::where('email', 'partner@example.com')->first();
+        $buyer = User::where('email', 'buyer@sellio.buzz')->first();
+        $partner = User::where('email', 'partner@sellio.buzz')->first();
 
         if (!$buyer) {
-            $this->command->error('❌ Buyer user buyer@example.com not found. Ensure UserSeeder has run first.');
+            $this->command->error('❌ Buyer user buyer@sellio.buzz not found. Ensure UserSeeder has run first.');
             return;
         }
 

@@ -107,7 +107,7 @@ function installer_asset_or_cdn(string $publicPath, string $cdnUrl): string
  */
 function installer_doc_url(): string
 {
-    return 'https://sellio.vebdez.com/documentation';
+    return 'https://sellio.buzz/documentation';
 }
 
 /**
@@ -220,6 +220,109 @@ function get_php_binary(): string {
     
     // Default to the primary if everything fails (the step will catch the execution error)
     return $primary; 
+}
+
+/**
+ * Whether public/storage already resolves to a real target (link or directory).
+ * is_link() alone would also be true for a dangling/broken symlink, so this also
+ * confirms the target is actually reachable via file_exists().
+ */
+function installer_storage_link_ready(string $link): bool
+{
+    if (is_dir($link) && !is_link($link)) {
+        return true;
+    }
+
+    return is_link($link) && file_exists($link);
+}
+
+/**
+ * Recursively copy a directory tree. Last-resort fallback for hosts that block
+ * both `artisan storage:link` and PHP's symlink().
+ */
+function installer_copy_directory(string $source, string $destination): bool
+{
+    if (!is_dir($source)) {
+        return false;
+    }
+
+    if (!is_dir($destination) && !@mkdir($destination, 0775, true)) {
+        return false;
+    }
+
+    $items = @scandir($source);
+    if ($items === false) {
+        return false;
+    }
+
+    foreach ($items as $item) {
+        if ($item === '.' || $item === '..') {
+            continue;
+        }
+
+        $from = $source . DIRECTORY_SEPARATOR . $item;
+        $to = $destination . DIRECTORY_SEPARATOR . $item;
+
+        if (is_dir($from)) {
+            if (!installer_copy_directory($from, $to)) {
+                return false;
+            }
+        } elseif (!@copy($from, $to)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Ensure public/storage resolves to storage/app/public so seeded branding
+ * (site_logo/favicon) and future uploads are reachable, without requiring the
+ * buyer to have shell/SSH access to run `php artisan storage:link` themselves.
+ *
+ * Tries, in order: artisan (matches other install steps) -> native PHP
+ * symlink() (works even if exec/passthru are disabled) -> a plain directory
+ * copy (last resort on hosts that block symlinks entirely; uploads made after
+ * this point won't sync automatically, but shipped branding assets show up).
+ */
+function installer_ensure_storage_link(): array
+{
+    global $basePath;
+
+    $link = $basePath . '/public/storage';
+    $target = $basePath . '/storage/app/public';
+
+    if (installer_storage_link_ready($link)) {
+        return ['ok' => true, 'method' => 'existing'];
+    }
+
+    if (function_exists('exec')) {
+        $phpBinary = get_php_binary();
+        $cwd = getcwd();
+        chdir($basePath);
+        $output = [];
+        $status = 1;
+        @exec("{$phpBinary} artisan storage:link --force 2>&1", $output, $status);
+        chdir($cwd);
+
+        if ($status === 0 && installer_storage_link_ready($link)) {
+            return ['ok' => true, 'method' => 'artisan'];
+        }
+    }
+
+    if (is_link($link)) {
+        @unlink($link);
+    }
+
+    if (function_exists('symlink') && @symlink($target, $link)) {
+        return ['ok' => true, 'method' => 'symlink'];
+    }
+
+    if (installer_copy_directory($target, $link)) {
+        return ['ok' => true, 'method' => 'copy'];
+    }
+
+    return ['ok' => false, 'method' => null];
 }
 
 /**

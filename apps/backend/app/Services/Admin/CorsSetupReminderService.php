@@ -13,7 +13,7 @@ class CorsSetupReminderService
         'your-domain.com',
         'yourdomain.com',
         'marketplace.yourdomain.com',
-        'demo.sellio.vebdez.com',
+        'demo.sellio.buzz',
         'example.com',
         'changeme',
         'replace-me',

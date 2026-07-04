@@ -101,7 +101,7 @@ Maestro flows live under `.maestro/` and cover login, discovery/favorites,
 messaging, and checkout handoff. With a development build installed:
 
 ```powershell
-$env:BUYER_EMAIL="buyer@example.com"
+$env:BUYER_EMAIL="buyer@sellio.buzz"
 $env:BUYER_PASSWORD="your-password"
 maestro test .maestro
 ```

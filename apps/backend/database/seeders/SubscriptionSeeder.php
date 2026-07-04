@@ -41,9 +41,9 @@ class SubscriptionSeeder extends Seeder
         }
 
         $stableDemoEmails = [
-            'admin@example.com',
-            'partner@example.com',
-            'buyer@example.com',
+            'admin@sellio.buzz',
+            'partner@sellio.buzz',
+            'buyer@sellio.buzz',
         ];
         
         // Performance: Use chunkById to prevent memory exhaustion when seeding large user bases
@@ -147,7 +147,7 @@ class SubscriptionSeeder extends Seeder
 
     private function seedDemoPartnerSubscription($plans): void
     {
-        $partner = User::where('email', 'partner@example.com')->first();
+        $partner = User::where('email', 'partner@sellio.buzz')->first();
 
         if (!$partner) {
             $this->command?->warn('Demo partner user not found. Skipping deterministic partner subscription.');

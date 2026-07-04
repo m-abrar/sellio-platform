@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test';
 
-const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@example.com';
+const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@sellio.buzz';
 const adminPassword = process.env.ADMIN_PASSWORD ?? 'admin123';
 
 export async function loginAsAdmin(page: Page): Promise<void> {

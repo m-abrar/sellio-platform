@@ -50,7 +50,7 @@ class AdminTestSeeder extends Seeder
         $this->enableAllModules();
 
         $admin = User::updateOrCreate(
-            ['email' => 'admin@example.com'],
+            ['email' => 'admin@sellio.buzz'],
             [
                 'name' => 'Admin User',
                 'username' => 'admin_user',

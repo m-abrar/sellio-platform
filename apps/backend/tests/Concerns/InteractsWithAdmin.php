@@ -17,7 +17,7 @@ trait InteractsWithAdmin
     {
         $this->seed(AdminTestSeeder::class);
 
-        $this->admin = User::where('email', 'admin@example.com')->firstOrFail();
+        $this->admin = User::where('email', 'admin@sellio.buzz')->firstOrFail();
     }
 
     protected function actingAsSuperAdmin(): static

@@ -86,7 +86,7 @@
       "file": "explore-card-live-demo.png",
       "type": "linked-card",
       "title": "Live Demo",
-      "href": "https://demo.sellio.vebdez.com",
+      "href": "https://demo.sellio.buzz",
       "width": 177,
       "height": 200
     },
@@ -94,7 +94,7 @@
       "file": "explore-card-documentation.png",
       "type": "linked-card",
       "title": "Documentation",
-      "href": "https://sellio.vebdez.com/documentation",
+      "href": "https://sellio.buzz/documentation",
       "width": 177,
       "height": 200
     },
@@ -134,7 +134,7 @@
       "file": "access-card-admin-dashboard.png",
       "type": "linked-card",
       "title": "Admin Dashboard",
-      "href": "https://demo.sellio.vebdez.com/admin",
+      "href": "https://demo.sellio.buzz/admin",
       "width": 177,
       "height": 288
     },
@@ -142,7 +142,7 @@
       "file": "access-card-seller-dashboard.png",
       "type": "linked-card",
       "title": "Seller Dashboard",
-      "href": "https://seller-panel.sellio.vebdez.com",
+      "href": "https://seller-panel.sellio.buzz",
       "width": 177,
       "height": 288
     },
@@ -150,7 +150,7 @@
       "file": "access-card-buyer-dashboard.png",
       "type": "linked-card",
       "title": "Buyer Dashboard",
-      "href": "https://buyer-panel.sellio.vebdez.com",
+      "href": "https://buyer-panel.sellio.buzz",
       "width": 177,
       "height": 288
     },
@@ -166,7 +166,7 @@
       "file": "platforms-card-laravel-platform.png",
       "type": "linked-card",
       "title": "Laravel Platform",
-      "href": "https://demo.sellio.vebdez.com/admin",
+      "href": "https://demo.sellio.buzz/admin",
       "width": 177,
       "height": 231
     },
@@ -174,7 +174,7 @@
       "file": "platforms-card-next-js-storefront.png",
       "type": "linked-card",
       "title": "Next.js Storefront",
-      "href": "https://frontend.sellio.vebdez.com",
+      "href": "https://frontend.sellio.buzz",
       "width": 177,
       "height": 231
     },

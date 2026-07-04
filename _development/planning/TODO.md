@@ -756,6 +756,17 @@ in the readme file, you have included a cover from thirdparty website, why?
 
 =================
 
+- [ ] Install wizard seeding step (`/install/?step=seeding`): demo-seed log output includes lines like "🖼️ Regenerating media conversions (webp thumbnails)..." — review this step for correctness/UX.
+- [ ] Install wizard seeding step (`/install/?step=seeding`): the terminal-style window titled `database_seeding.log` has a CSS contrast issue — text loses readability against the background. Fix in `apps/backend/public/install/steps/seeding.php` / `apps/backend/public/install/style.css` (`.terminal-window`/`.terminal-body`/`.terminal-title`).
 
-u684474179_demo
-LME;?h4n>
+
+
+------------------
+
+the install wizard has it's own logo, why do you lose it in the distribution version? can you maintain?
+
+-----------------
+
+need to replace this 3rd party image link
+in the readme
+![Sellio Banner](https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200)

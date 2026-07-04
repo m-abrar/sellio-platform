@@ -39,7 +39,7 @@ Use the live demos to explore the public storefronts and the dedicated admin, se
 
 `CodeCanyon item: [FINAL_ITEM_URL]`
 
-`Documentation: https://sellio.vebdez.com/documentation`
+`Documentation: https://sellio.buzz/documentation`
 
 ## Thumbnail Copy Options
 

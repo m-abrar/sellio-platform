@@ -17,13 +17,13 @@ class WalletSeeder extends Seeder
         // 1. Find or Create the designated Test Partner User
         /** @var User $partner */
         $partner = User::query()
-            ->where('email', 'partner@example.com')
+            ->where('email', 'partner@sellio.buzz')
             ->first();
 
         if (!$partner) {
             $partner = User::create([
                 'name' => 'Julian Sterling',
-                'email' => 'partner@example.com',
+                'email' => 'partner@sellio.buzz',
                 'password' => bcrypt('password'),
                 'status' => 'active',
                 'admin_note' => 'System generated demo partner account.',

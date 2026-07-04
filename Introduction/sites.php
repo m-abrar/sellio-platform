@@ -5,21 +5,21 @@
  * Update this file when demo subdomains change.
  */
 return [
-    'marketing' => 'https://sellio.vebdez.com',
-    'documentation' => 'https://sellio.vebdez.com/documentation',
+    'marketing' => 'https://sellio.buzz',
+    'documentation' => 'https://sellio.buzz/documentation',
     'demo' => [
-        'storefront' => 'https://demo.sellio.vebdez.com',
-        'admin' => 'https://demo.sellio.vebdez.com/admin',
-        'login' => 'https://demo.sellio.vebdez.com/login',
-        'install' => 'https://demo.sellio.vebdez.com/install',
-        'seller' => 'https://seller-panel.sellio.vebdez.com',
-        'buyer' => 'https://buyer-panel.sellio.vebdez.com',
-        'nextjs' => 'https://frontend.sellio.vebdez.com',
+        'storefront' => 'https://demo.sellio.buzz',
+        'admin' => 'https://demo.sellio.buzz/admin',
+        'login' => 'https://demo.sellio.buzz/login',
+        'install' => 'https://demo.sellio.buzz/install',
+        'seller' => 'https://seller-panel.sellio.buzz',
+        'buyer' => 'https://buyer-panel.sellio.buzz',
+        'nextjs' => 'https://frontend.sellio.buzz',
     ],
     'demo_accounts' => [
         [
             'role' => 'Admin',
-            'email' => 'admin@example.com',
+            'email' => 'admin@sellio.buzz',
             'password' => 'admin123',
             'url_key' => 'admin',
             'icon' => 'fa-shield-halved',
@@ -27,7 +27,7 @@ return [
         ],
         [
             'role' => 'Seller',
-            'email' => 'partner@example.com',
+            'email' => 'partner@sellio.buzz',
             'password' => 'partner123',
             'url_key' => 'seller',
             'icon' => 'fa-store',
@@ -35,7 +35,7 @@ return [
         ],
         [
             'role' => 'Buyer',
-            'email' => 'buyer@example.com',
+            'email' => 'buyer@sellio.buzz',
             'password' => 'buyer123',
             'url_key' => 'buyer',
             'icon' => 'fa-shopping-bag',

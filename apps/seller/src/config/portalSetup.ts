@@ -25,7 +25,7 @@ const PLACEHOLDER_MARKERS = [
 ];
 
 const BUNDLED_DEMO_API_HOSTS = [
-  'demo.sellio.vebdez.com',
+  'demo.sellio.buzz',
 ];
 
 function normalizeUrl(url: string): string {
@@ -52,7 +52,7 @@ function isLocalHost(hostname: string): boolean {
 }
 
 function isVendorDemoPanelHost(hostname: string): boolean {
-  return hostname === 'sellio.vebdez.com' || hostname.endsWith('.sellio.vebdez.com');
+  return hostname === 'sellio.buzz' || hostname.endsWith('.sellio.buzz');
 }
 
 function isBundledDemoApiHost(hostname: string): boolean {
