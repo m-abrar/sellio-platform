@@ -256,3 +256,74 @@ function initPersonaNexus() {
     startRotation();
 }
 
+// 7. SCREENSHOT LIGHTBOX (screenshots.php)
+function initScreenshotLightbox() {
+    const cards = document.querySelectorAll('.screenshot-card');
+    const modalEl = document.getElementById('screenshotLightbox');
+    if (!cards.length || !modalEl || !window.bootstrap) return;
+
+    const items = Array.from(cards).map(card => ({
+        img: card.getAttribute('data-img'),
+        title: card.getAttribute('data-title'),
+        desc: card.getAttribute('data-desc'),
+    }));
+
+    const modal = new bootstrap.Modal(modalEl);
+    const imgEl = modalEl.querySelector('.lightbox-img');
+    const titleEl = modalEl.querySelector('.lightbox-title');
+    const descEl = modalEl.querySelector('.lightbox-desc');
+    let currentIndex = 0;
+
+    function show(index) {
+        currentIndex = (index + items.length) % items.length;
+        const item = items[currentIndex];
+        imgEl.src = item.img;
+        imgEl.alt = item.title;
+        titleEl.textContent = item.title;
+        descEl.textContent = item.desc;
+    }
+
+    cards.forEach((card, index) => {
+        card.addEventListener('click', () => {
+            show(index);
+            modal.show();
+        });
+    });
+
+    modalEl.querySelector('.lightbox-prev')?.addEventListener('click', () => show(currentIndex - 1));
+    modalEl.querySelector('.lightbox-next')?.addEventListener('click', () => show(currentIndex + 1));
+
+    modalEl.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') show(currentIndex - 1);
+        if (e.key === 'ArrowRight') show(currentIndex + 1);
+    });
+}
+
+// 8. VIDEO LIGHTBOX (videos.php)
+function initVideoLightbox() {
+    const cards = document.querySelectorAll('.video-card:not(.coming-soon)');
+    const modalEl = document.getElementById('videoLightbox');
+    if (!cards.length || !modalEl || !window.bootstrap) return;
+
+    const modal = new bootstrap.Modal(modalEl);
+    const frame = modalEl.querySelector('iframe');
+
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            const youtubeId = card.getAttribute('data-youtube-id');
+            if (!youtubeId) return;
+            frame.src = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0`;
+            modal.show();
+        });
+    });
+
+    modalEl.addEventListener('hidden.bs.modal', () => {
+        frame.src = '';
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initScreenshotLightbox();
+    initVideoLightbox();
+});
+

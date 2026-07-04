@@ -1,6 +1,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sellio – Elite Marketplace & Directory Solution</title>
+<title><?= htmlspecialchars($pageTitle ?? 'Sellio – Elite Marketplace & Directory Solution') ?></title>
 
 <link href="assets/vendor/fontsource/bundle.css" rel="stylesheet">
 <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">

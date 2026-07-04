@@ -5,16 +5,16 @@
 
 :root {
     --primary: #4a2c85;
-    --primary-hover: #3b236a;
+    --primary-hover: #382166;
     --primary-soft: rgba(74, 44, 133, 0.12);
     --primary-glow: rgba(74, 44, 133, 0.35);
     --secondary-color: #0f172a;
-    --accent-color: #f46136;
+    --accent-color: #f87828;
     --background-dark: #413247;
-    --secondary: #8b3cc4;
+    --secondary: #3848c8;
     --bg-main: #ffffff;
-    --bg-sidebar: #f8fafc;
-    --bg-subtle: #f1f5f9;
+    --bg-sidebar: #f7f5fa;
+    --bg-subtle: #f5f2f8;
     --text-main: #0f172a;
     --text-muted: #64748b;
     --border: #e2e8f0;
@@ -22,7 +22,7 @@
     --code-text: #f8fafc;
     --accent-success: #10b981;
     --accent-warning: #f59e0b;
-    --accent-info: #3b82f6;
+    --accent-info: #3848c8;
     --accent-danger: #ef4444;
     --radius-card: 20px;
     --radius-control: 12px;
@@ -188,24 +188,26 @@ body {
     width: 48px;
     height: 48px;
     margin-bottom: 0.85rem;
-    border-radius: 14px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .logo-text {
     font-size: 1.35rem;
     font-weight: 800;
-    color: var(--secondary-color);
+    color: var(--primary);
     letter-spacing: -0.04em;
 }
 
 .logo-sub {
+    display: inline-block;
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--text-muted);
-    margin-top: 0.15rem;
+    color: var(--secondary);
+    margin-top: 0.25rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 2px solid var(--accent-color);
 }
 
 .sidebar nav {
@@ -306,7 +308,7 @@ body {
 .reading-progress-bar {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--primary-hover), var(--primary));
+    background: linear-gradient(90deg, #f8b848 0%, var(--accent-color) 55%, #d95c18 100%);
     transition: width 0.1s linear;
 }
 
@@ -335,8 +337,8 @@ body {
 }
 
 .version-badge {
-    background: rgba(139, 60, 196, 0.12);
-    color: var(--accent-color);
+    background: rgba(248, 120, 40, 0.12);
+    color: #b94e0d;
     padding: 0.3rem 0.85rem;
     border-radius: 999px;
     font-size: 0.72rem;
@@ -345,7 +347,7 @@ body {
     text-transform: uppercase;
     margin-bottom: 1rem;
     display: inline-block;
-    border: 1px solid rgba(74, 44, 133, 0.2);
+    border: 1px solid rgba(248, 120, 40, 0.28);
 }
 
 h1 {
@@ -354,7 +356,7 @@ h1 {
     letter-spacing: -0.03em;
     line-height: 1.1;
     margin-bottom: 1rem;
-    color: var(--secondary);
+    color: var(--primary);
 }
 
 h2 {
@@ -364,21 +366,21 @@ h2 {
     margin: 3.5rem 0 1.25rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--border);
-    color: var(--secondary);
+    color: var(--primary);
 }
 
 h3 {
     font-size: 1.15rem;
     font-weight: 700;
     margin: 1.75rem 0 0.85rem;
-    color: var(--secondary);
+    color: var(--primary);
 }
 
 h4 {
     font-size: 1rem;
     font-weight: 700;
     margin: 0 0 0.5rem;
-    color: var(--secondary);
+    color: var(--primary);
 }
 
 p {
@@ -659,7 +661,7 @@ pre code {
 }
 
 .badge-info-light {
-    background: rgba(59, 130, 246, 0.12);
+    background: rgba(56, 72, 200, 0.12);
     color: var(--accent-info);
 }
 
