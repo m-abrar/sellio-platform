@@ -820,9 +820,9 @@ php artisan queue:work
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@sellio-platform.test | admin123 |
-| Partner | partner@sellio-platform.test | partner123 |
-| Buyer | buyer@sellio-platform.test | buyer123 |
+| Admin | admin@example.com | admin123 |
+| Partner | partner@example.com | partner123 |
+| Buyer | buyer@example.com | buyer123 |
 
 Change these before production.
 

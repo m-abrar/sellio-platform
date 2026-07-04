@@ -108,7 +108,7 @@ on the property detail page, there is a rating section on the last, it shows two
 
 ----------------
 
-- [x] when seeding fresh database, does our seller/partner subscibe to a plan? (Yes: `partner@sellio-platform.test` is now assigned an active `Enterprise Plan` subscription by `SubscriptionSeeder`, with regression coverage in `SeededPartnerSubscriptionTest`.)
+- [x] when seeding fresh database, does our seller/partner subscibe to a plan? (Yes: `partner@example.com` is now assigned an active `Enterprise Plan` subscription by `SubscriptionSeeder`, with regression coverage in `SeededPartnerSubscriptionTest`.)
 
 --------------------------
 
@@ -401,7 +401,7 @@ https://demo.sellio.vebdez.com/buyer
 
 - [x] Documentation — FTP upload step clarified: "Upload the **contents** of the `backend/` folder to your web root (`public_html`) — not the folder itself. Distribution packages include pre-built `vendor/`, `public/build/`, and `public/vendor/`."
 
-- [x] Documentation — "Contact support via Envato" link updated to `https://codecanyon.net/user/vebdez#contact`; replaced placeholder `mailto:support@sellio-platform.test`.
+- [x] Documentation — "Contact support via Envato" link updated to `https://codecanyon.net/user/vebdez#contact`; replaced placeholder `mailto:support@example.com`.
 
 - [x] 419 Page Expired (and similar error pages) — applied custom branded design. Created `419.blade.php`, `500.blade.php`, `503.blade.php`; refreshed `404.blade.php` and `403.blade.php` to use storefront tokens (`--color-primary`, `btn-primary-theme`). Standalone pages (500/503) follow `db-error.blade.php` pattern.
 
@@ -654,7 +654,7 @@ Also, can we make the frontend payment screenshot upload UIUX polished and premi
 
 
 
-- [x] "find if it exists in the database table? admin@sellio-platform.test, set the password to admin123." (User exists, `UserSeeder::seedCoreUser()` already seeds it with `admin123` — the live DB row was just out of sync; password reset directly and confirmed matching the seeder's intended value.)
+- [x] "find if it exists in the database table? admin@example.com, set the password to admin123." (User exists, `UserSeeder::seedCoreUser()` already seeds it with `admin123` — the live DB row was just out of sync; password reset directly and confirmed matching the seeder's intended value.)
 
 -------------------
 

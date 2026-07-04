@@ -32,7 +32,7 @@ This file tracks the status of the database seeders for the Sellio marketplace. 
 ### **4. Commerce & Finance**
 - [x] `PlanSeeder.php` **(10/10)** - Hardened with color tokens, unique slugs, and moderation metadata.
 - [x] `SubscriptionSeeder.php` **(10/10)** - Enforced status-based lifecycle (active/expired) and audit trails.
-- [x] `WalletSeeder.php` **(10/10)** - Hardened with @sellio-platform.test domains and status tracking.
+- [x] `WalletSeeder.php` **(10/10)** - Hardened with @example.com domains and status tracking.
 - [x] `PaymentSeeder.php` **(10/10)** - Synced with polymorphic hardening and admin audit notes.
 - [x] `WithdrawalSeeder.php` **(10/10)** - Reviewed; logical status flow and realistic metadata confirmed.
 - [x] `TransactionLineSeeder.php` **(10/10)** - Hardened via Factory with status and admin notes.

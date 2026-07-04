@@ -35,7 +35,7 @@ use App\Models\Withdrawal;
 /**
  * Class PartnerActivitySeeder
  *
- * Populates Julian Sterling's partner panel dashboard under partner@sellio-platform.test.
+ * Populates Julian Sterling's partner panel dashboard under partner@example.com.
  * It transfers listing ownership to Julian and simulates buyer actions (bookings, quotes,
  * inquiries, reviews, wallet earnings, withdrawals, and direct messaging).
  */
@@ -50,15 +50,15 @@ class PartnerActivitySeeder extends Seeder
     {
         config(['activitylog.enabled' => false]);
 
-        $this->command->info('👤✨ Starting **Partner Activity Seeder** for partner@sellio-platform.test...');
+        $this->command->info('👤✨ Starting **Partner Activity Seeder** for partner@example.com...');
 
         // 1. Fetch Julian Sterling (Partner) and some buyers
-        $partner = User::where('email', 'partner@sellio-platform.test')->first();
-        $buyer = User::where('email', 'buyer@sellio-platform.test')->first();
+        $partner = User::where('email', 'partner@example.com')->first();
+        $buyer = User::where('email', 'buyer@example.com')->first();
         $otherBuyers = User::where('is_partner', false)->where('id', '!=', $buyer ? $buyer->id : 0)->limit(5)->get();
 
         if (!$partner) {
-            $this->command->error('❌ Partner user partner@sellio-platform.test not found. Ensure UserSeeder has run first.');
+            $this->command->error('❌ Partner user partner@example.com not found. Ensure UserSeeder has run first.');
             return;
         }
 
@@ -539,7 +539,7 @@ class PartnerActivitySeeder extends Seeder
      * Cleans up partner demo leads on Julian's core listings without wiping the demo buyer account.
      *
      * @param int $userId Partner user id (Julian Sterling)
-     * @param int|null $preserveBuyerId Demo buyer user id to keep untouched (buyer@sellio-platform.test)
+     * @param int|null $preserveBuyerId Demo buyer user id to keep untouched (buyer@example.com)
      * @return void
      */
     private function cleanupOldRecords(int $userId, ?int $preserveBuyerId = null): void

@@ -22,7 +22,7 @@ class SeededPartnerSubscriptionTest extends TestCase
             SubscriptionSeeder::class,
         ]);
 
-        $partner = User::where('email', 'partner@sellio-platform.test')->first();
+        $partner = User::where('email', 'partner@example.com')->first();
 
         $this->assertNotNull($partner);
 

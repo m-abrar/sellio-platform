@@ -115,7 +115,7 @@ function installer_doc_url(): string
  */
 function installer_support_url(): string
 {
-    return 'mailto:support@sellio-platform.test';
+    return 'mailto:support@example.com';
 }
 
 /**

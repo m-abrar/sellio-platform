@@ -115,7 +115,7 @@ cd apps/backend && php artisan test tests/Feature/Admin/
 
 - **Trait:** `tests/Concerns/InteractsWithAdmin.php` — `RefreshDatabase`, admin login helper, `AdminTestSeeder`
 - **Seeder:** `database/seeders/AdminTestSeeder.php` — deterministic admin user, sample records per module
-- **Admin credentials (tests):** `admin@sellio-platform.test` / `admin123`
+- **Admin credentials (tests):** `admin@example.com` / `admin123`
 - **Partner credentials (browser):** `partner@test.test` / `password`
 
 ---

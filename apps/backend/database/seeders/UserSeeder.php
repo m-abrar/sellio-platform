@@ -72,7 +72,7 @@ class UserSeeder extends Seeder
         // --- Seeding Logic Start ---
         $this->command->line('Creating core test users (Admin, Partner, Buyer)...');
 
-        $admin = $this->seedCoreUser('admin@sellio-platform.test', 'admin123', [
+        $admin = $this->seedCoreUser('admin@example.com', 'admin123', [
             'name' => 'Alexander Thorne',
             'email_verified_at' => now(),
             'phone' => '+1 (555) 012-3456',
@@ -88,9 +88,9 @@ class UserSeeder extends Seeder
             'years_of_experience' => 15,
         ]);
         $users[] = $admin;
-        $this->command->info('  - Core admin ready: admin@sellio-platform.test (admin123)');
+        $this->command->info('  - Core admin ready: admin@example.com (admin123)');
 
-        $partner = $this->seedCoreUser('partner@sellio-platform.test', 'partner123', [
+        $partner = $this->seedCoreUser('partner@example.com', 'partner123', [
             'name' => 'Julian Sterling',
             'email_verified_at' => now(),
             'phone' => '+1 (555) 987-6543',
@@ -107,9 +107,9 @@ class UserSeeder extends Seeder
             'years_of_experience' => 22,
         ]);
         $users[] = $partner;
-        $this->command->info('  - Core partner ready: partner@sellio-platform.test (partner123)');
+        $this->command->info('  - Core partner ready: partner@example.com (partner123)');
 
-        $buyer = $this->seedCoreUser('buyer@sellio-platform.test', 'buyer123', [
+        $buyer = $this->seedCoreUser('buyer@example.com', 'buyer123', [
             'name' => 'Eleanor Vance',
             'email_verified_at' => now(),
             'phone' => '+1 (555) 444-5555',
@@ -127,7 +127,7 @@ class UserSeeder extends Seeder
             'years_of_experience' => 8,
         ]);
         $users[] = $buyer;
-        $this->command->info('  - Core buyer ready: buyer@sellio-platform.test (buyer123)');
+        $this->command->info('  - Core buyer ready: buyer@example.com (buyer123)');
         $this->command->newLine();
 
         // 4. Create 20 Regular Users with randomized attributes
@@ -144,7 +144,7 @@ class UserSeeder extends Seeder
             $batchUsers[] = [
                 'uuid' => Str::uuid(),
                 'name' => $userName,
-                'email' => 'user' . $index . '@sellio-platform.test',
+                'email' => 'user' . $index . '@example.com',
                 'email_verified_at' => now(),
                 'password' => $hashedPassword,
                 'phone' => $faker->phoneNumber,

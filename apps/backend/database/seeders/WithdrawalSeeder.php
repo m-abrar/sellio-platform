@@ -41,7 +41,7 @@ class WithdrawalSeeder extends Seeder
             $this->command->info('💸 Starting Withdrawal Seeder...');
             // Delete all withdrawals except for the demo partner to preserve their high-fidelity transactions
             Withdrawal::whereHas('user', function($q) {
-                $q->where('email', '!=', 'partner@sellio-platform.test');
+                $q->where('email', '!=', 'partner@example.com');
             })->delete();
             $this->command->line('  🗑️ Cleared existing non-demo withdrawal records.');
         }
@@ -57,7 +57,7 @@ class WithdrawalSeeder extends Seeder
         // --- 1. Fetch Users with a positive balance using chunkById for performance ---
         User::whereHas('wallet', function($query) use ($minBalanceToWithdraw) {
             $query->where('balance', '>', $minBalanceToWithdraw);
-        })->where('email', '!=', 'partner@sellio-platform.test') // Exclude the demo partner to preserve their balance and transactions
+        })->where('email', '!=', 'partner@example.com') // Exclude the demo partner to preserve their balance and transactions
         ->orderBy('id')->chunkById(25, function ($users) use (&$count, $maxNumberOfWithdrawalsToCreate, $faker, $minBalanceToWithdraw) {
             $batchWithdrawals = [];
             foreach ($users as $user) {

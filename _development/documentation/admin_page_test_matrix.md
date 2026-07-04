@@ -525,5 +525,5 @@ These routes are covered in Phase 4 CRUD tests after smoke passes.
 
 | User | Password | Role |
 |---|---|---|
-| admin@sellio-platform.test | admin123 | super-admin (via UserSeeder + RolesAndPermissionsSeeder) |
+| admin@example.com | admin123 | super-admin (via UserSeeder + RolesAndPermissionsSeeder) |
 

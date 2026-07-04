@@ -43,8 +43,8 @@ include __DIR__ . '/../layout/header.php';
             Your administrator login is the account you just created. These additional demo users may also exist:
         </p>
         <ul class="small text-muted mb-0 ps-3">
-            <li><strong>Partner:</strong> <code>partner@sellio-platform.test</code> / <code>partner123</code></li>
-            <li><strong>Buyer:</strong> <code>buyer@sellio-platform.test</code> / <code>buyer123</code></li>
+            <li><strong>Partner:</strong> <code>partner@example.com</code> / <code>partner123</code></li>
+            <li><strong>Buyer:</strong> <code>buyer@example.com</code> / <code>buyer123</code></li>
         </ul>
         <p class="text-muted smallest mt-3 mb-0">Change or remove demo passwords before production. See <code>README.md</code> for the full credentials table.</p>
     </div>

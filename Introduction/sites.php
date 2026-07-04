@@ -19,7 +19,7 @@ return [
     'demo_accounts' => [
         [
             'role' => 'Admin',
-            'email' => 'admin@sellio-platform.test',
+            'email' => 'admin@example.com',
             'password' => 'admin123',
             'url_key' => 'admin',
             'icon' => 'fa-shield-halved',
@@ -27,7 +27,7 @@ return [
         ],
         [
             'role' => 'Seller',
-            'email' => 'partner@sellio-platform.test',
+            'email' => 'partner@example.com',
             'password' => 'partner123',
             'url_key' => 'seller',
             'icon' => 'fa-store',
@@ -35,7 +35,7 @@ return [
         ],
         [
             'role' => 'Buyer',
-            'email' => 'buyer@sellio-platform.test',
+            'email' => 'buyer@example.com',
             'password' => 'buyer123',
             'url_key' => 'buyer',
             'icon' => 'fa-shopping-bag',

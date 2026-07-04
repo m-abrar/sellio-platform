@@ -21,7 +21,7 @@ class PendingPartnerApplicationSeeder extends Seeder
         $applicants = [
             [
                 'name' => 'Maya Hartwell',
-                'email' => 'partner.applicant1@sellio-platform.test',
+                'email' => 'partner.applicant1@example.com',
                 'username' => 'maya_hartwell',
                 'company' => 'Hartwell Living Group',
                 'phone' => '+1 (555) 210-4401',
@@ -30,7 +30,7 @@ class PendingPartnerApplicationSeeder extends Seeder
             ],
             [
                 'name' => 'Omar Whitestone',
-                'email' => 'partner.applicant2@sellio-platform.test',
+                'email' => 'partner.applicant2@example.com',
                 'username' => 'omar_whitestone',
                 'company' => 'Whitestone Motors',
                 'phone' => '+1 (555) 210-4402',
@@ -39,7 +39,7 @@ class PendingPartnerApplicationSeeder extends Seeder
             ],
             [
                 'name' => 'Priya Nandakumar',
-                'email' => 'partner.applicant3@sellio-platform.test',
+                'email' => 'partner.applicant3@example.com',
                 'username' => 'priya_nandakumar',
                 'company' => 'Pulse Events Collective',
                 'phone' => '+1 (555) 210-4403',

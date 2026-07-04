@@ -51,7 +51,7 @@ class SettingSeeder extends Seeder
             ['group' => 'general', 'key' => 'url_user', 'value' => env('BUYER_APP_URL') ?: ''],
 
             // --- Contact & API Keys (Group: contact / api) ---
-            ['group' => 'contact', 'key' => 'email_contact', 'value' => 'support@sellio-platform.test'],
+            ['group' => 'contact', 'key' => 'email_contact', 'value' => 'support@example.com'],
             ['group' => 'contact', 'key' => 'phone_contact', 'value' => '+1 (555) 000-0000'],
             ['group' => 'api', 'key' => 'google_map_api_key', 'value' => null],
 
