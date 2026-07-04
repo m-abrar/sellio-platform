@@ -1,0 +1,5 @@
+# Clean URLs: serve foo.php when /foo is requested, without a visible extension.
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^([^/]+)$ $1.php [L,QSA]

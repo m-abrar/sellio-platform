@@ -44,6 +44,10 @@
                         <h2 class="display-5 fw-800 text-white mb-3">Explore Sellio, <span class="text-sellio">one page at a time.</span></h2>
                         <p class="text-white-50 lead mb-4">Open the interactive product tour for a focused visual journey through marketplace discovery, selling, administration, payments, and growth.</p>
                         <a href="product-tour/" class="btn-main flipbook-invite-cta" target="_blank" rel="noopener">Explore the interactive product tour <i class="fas fa-arrow-right ms-2"></i></a>
+                        <div class="d-flex flex-wrap gap-4 mt-4">
+                            <a href="screenshots" class="text-white-50 fw-bold text-decoration-none hover-sellio"><i class="fas fa-images me-2"></i>Screenshot Gallery</a>
+                            <a href="videos" class="text-white-50 fw-bold text-decoration-none hover-sellio"><i class="fas fa-circle-play me-2"></i>Video Walkthroughs</a>
+                        </div>
                     </div>
                     <div class="col-lg-5 d-none d-md-flex justify-content-center" aria-hidden="true">
                         <div class="flipbook-preview">

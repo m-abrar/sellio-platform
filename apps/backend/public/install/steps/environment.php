@@ -218,8 +218,8 @@ if ($errorMessage) {
     </div>
 
     <div class="collapse <?= $mailExpanded ? 'show' : '' ?>" id="mailSettings">
-    <div class="form-section info-panel-success mb-4">
-        <h3 class="form-section-title text-success">
+    <div class="form-section info-panel-neutral mb-4">
+        <h3 class="form-section-title text-brand">
             <i class="fas fa-envelope me-2"></i> Mail server
         </h3>
         

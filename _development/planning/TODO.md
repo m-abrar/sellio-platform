@@ -733,3 +733,24 @@ Also, can we make the frontend payment screenshot upload UIUX polished and premi
 -----------------
 
 - [x] Introduce a page where we will have screenshots gallery. Introduce a page where we will have video gallery. (Added `introduction/screenshots.php` and `introduction/videos.php`, linked from the nav (`navbar.php`) and footer (`footer.php`), using the same shared chrome as `index.php` (`config.php`/`header.php`/`navbar.php`/`footer.php`). `header.php` now supports an optional `$pageTitle` override so each page gets its own `<title>`. Screenshots gallery reuses the existing `$demos` array from `config.php` (56 real theme screenshots already sitting in `introduction/images/`) filtered to `status === 'active'` only — 2 entries (`unifieds_interactive`, `properties_luxury`) are marked `'soon'` and point to images that don't exist yet, so they're excluded rather than showing broken thumbnails. Reuses the existing category filter bar/JS (`.filter-btn`/`.demo-item`/`initDemoFilter()` in `js/script.js`) unchanged, plus a new click-to-enlarge lightbox (`initScreenshotLightbox()`) — a Bootstrap modal with prev/next/arrow-key navigation cycling through the filtered set, since no lightbox library is bundled in `introduction/assets/vendor/`. Video gallery is honest about having no real videos yet: added a `$videos` array in `config.php` (6 planned topics — platform overview, installation, admin/seller/buyer walkthroughs, API) all marked `status => 'soon'`, rendered with the existing `.soon-badge` pattern instead of fake/broken players. The video lightbox (`initVideoLightbox()`, YouTube-nocookie iframe embed) is fully wired and will activate automatically once an entry's `status` flips to `'active'` and a `youtube_id` is filled in — no further dev work needed then. Caught and fixed one real bug during Playwright verification: the lightbox prev/next buttons were being visually covered by the screenshot image (DOM-order stacking with no explicit z-index), so clicks silently did nothing — added `z-index: 10` to `.lightbox-nav-btn`. Verified via Playwright: category filtering, lightbox open/caption/prev-next, and that "Coming Soon" video cards correctly do not open the (YouTube-only) modal.)
+
+-----------------
+
+- [x] Serve the gallery pages as clean URLs (`screenshots`/`videos` instead of `screenshots.php`/`videos.php`), and add CTAs for them on the main page. (Added `introduction/.htaccess` with a `mod_rewrite` rule that internally serves `foo.php` when `/introduction/foo` is requested and no directory/file of that exact name exists — the `.php` URL still works too, nothing broke it. Updated the nav (`navbar.php`) and footer (`footer.php`) links to the extensionless form. Verified against Apache's actual target: confirmed `apps/backend/public/.htaccess` already exists, so `mod_rewrite` is a safe assumption for this project's hosting; PHP's built-in dev server doesn't read `.htaccess` at all, so verification used a throwaway router script (not committed) replicating the same logic. Added two CTA links — "Screenshot Gallery" and "Video Walkthroughs" — directly under the existing "Explore the interactive product tour" button in `index.php`'s product-tour invite section, since that's already the page's dedicated "other ways to explore" spot. Verified via Playwright: clean URLs resolve with correct per-page titles, the old `.php` URLs and every other existing route (`/`, `/product-tour/`, static assets) still work, and clicking the new homepage CTAs lands on the clean URL.)
+
+
+
+-----------------
+
+
+scan files which do not need to be sent to distribution
+
+for example
+.editorconfig
+playwright
+
+and then update the distribution rules 
+
+
+in the readme file, you have included a cover from thirdparty website, why?
+

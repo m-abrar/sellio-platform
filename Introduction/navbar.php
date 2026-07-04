@@ -16,8 +16,8 @@
             <ul class="navbar-nav mx-auto gap-lg-2 main-nav-links">
                 <li class="nav-item"><a class="nav-link" href="#modules">Features</a></li>
                 <li class="nav-item"><a class="nav-link fw-bold" href="#demos">Demos</a></li>
-                <li class="nav-item"><a class="nav-link" href="screenshots.php">Screenshots</a></li>
-                <li class="nav-item"><a class="nav-link" href="videos.php">Videos</a></li>
+                <li class="nav-item"><a class="nav-link" href="screenshots">Screenshots</a></li>
+                <li class="nav-item"><a class="nav-link" href="videos">Videos</a></li>
                 <li class="nav-item"><a class="nav-link fw-bold" href="product-tour/" target="_blank" rel="noopener">Product Tour</a></li>
             </ul>
             <div class="header-actions ms-auto d-flex align-items-center gap-2">

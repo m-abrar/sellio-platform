@@ -12,6 +12,17 @@ $fontawesomeCss = installer_asset_or_cdn(
     'vendor/npm/fontawesome/css/all.min.css',
     'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css'
 );
+$fontsourceCss = installer_asset_or_cdn(
+    'vendor/npm/fontsource/bundle.css',
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap'
+);
+$headingFontCss = array_map(
+    static fn (int $weight): string => installer_asset_or_cdn(
+        "vendor/npm/fontsource/plus-jakarta-sans-{$weight}.css",
+        "https://cdn.jsdelivr.net/npm/@fontsource/plus-jakarta-sans@5.2.8/{$weight}.css"
+    ),
+    [600, 800]
+);
 
 $progress = installer_step_progress();
 $installerLogoUrl = installer_logo_url();
@@ -26,6 +37,10 @@ $installerLogoUrl = installer_logo_url();
 
     <link href="<?= htmlspecialchars($bootstrapCss) ?>" rel="stylesheet">
     <link href="<?= htmlspecialchars($fontawesomeCss) ?>" rel="stylesheet">
+    <link href="<?= htmlspecialchars($fontsourceCss) ?>" rel="stylesheet">
+    <?php foreach ($headingFontCss as $fontCss): ?>
+        <link href="<?= htmlspecialchars($fontCss) ?>" rel="stylesheet">
+    <?php endforeach; ?>
     <link href="<?= htmlspecialchars(installer_url('style.css')) ?>" rel="stylesheet">
 </head>
 <body>

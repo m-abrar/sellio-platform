@@ -21,8 +21,8 @@
                 <ul class="list-unstyled text-muted">
                     <li class="mb-3"><a href="#modules" class="text-muted text-decoration-none hover-sellio">Industry Modules</a></li>
                     <li class="mb-3"><a href="#demos" class="text-muted text-decoration-none hover-sellio">All Demos</a></li>
-                    <li class="mb-3"><a href="screenshots.php" class="text-muted text-decoration-none hover-sellio">Screenshots</a></li>
-                    <li class="mb-3"><a href="videos.php" class="text-muted text-decoration-none hover-sellio">Video Gallery</a></li>
+                    <li class="mb-3"><a href="screenshots" class="text-muted text-decoration-none hover-sellio">Screenshots</a></li>
+                    <li class="mb-3"><a href="videos" class="text-muted text-decoration-none hover-sellio">Video Gallery</a></li>
                     <li class="mb-3"><a href="#how-it-works" class="text-muted text-decoration-none hover-sellio">How it Works</a></li>
                     <li class="mb-3"><a href="#faq" class="text-muted text-decoration-none hover-sellio">Help Center</a></li>
                 </ul>
