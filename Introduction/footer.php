@@ -3,7 +3,10 @@
         <div class="row g-5">
             <div class="col-lg-5">
                 <a class="navbar-brand d-flex align-items-center gap-2 mb-4" href="#">
-                    <img src="images/logo.png" alt="Sellio" width="34" height="34" class="rounded-3 shadow-sm">
+                    <span class="brand-logo-wrap" aria-hidden="true">
+                        <img src="images/logo-dark.png" alt="" class="brand-logo brand-logo-dark">
+                        <img src="images/logo-light.png" alt="" class="brand-logo brand-logo-light">
+                    </span>
                     <span>SELLIO</span>
                 </a>
                 <p class="text-muted pe-lg-5">The definitive marketplace solution for elite digital entrepreneurs. Eliminate recurring SaaS fees and take absolute control of your data and revenue.</p>
@@ -18,6 +21,8 @@
                 <ul class="list-unstyled text-muted">
                     <li class="mb-3"><a href="#modules" class="text-muted text-decoration-none hover-sellio">Industry Modules</a></li>
                     <li class="mb-3"><a href="#demos" class="text-muted text-decoration-none hover-sellio">All Demos</a></li>
+                    <li class="mb-3"><a href="screenshots.php" class="text-muted text-decoration-none hover-sellio">Screenshots</a></li>
+                    <li class="mb-3"><a href="videos.php" class="text-muted text-decoration-none hover-sellio">Video Gallery</a></li>
                     <li class="mb-3"><a href="#how-it-works" class="text-muted text-decoration-none hover-sellio">How it Works</a></li>
                     <li class="mb-3"><a href="#faq" class="text-muted text-decoration-none hover-sellio">Help Center</a></li>
                 </ul>

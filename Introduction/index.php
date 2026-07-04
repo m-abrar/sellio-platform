@@ -50,7 +50,7 @@
                             <div class="flipbook-preview-sheet sheet-back"></div>
                             <div class="flipbook-preview-sheet sheet-middle"></div>
                             <div class="flipbook-preview-cover">
-                                <img src="images/logo.png" alt="">
+                                <img src="images/logo-light.png" alt="">
                                 <small>THE COMPLETE MARKETPLACE PLATFORM</small>
                                 <strong>SELLIO</strong>
                                 <span>Turn ideas into marketplaces.</span>

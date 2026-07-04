@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sellio — Marketplace Platform</title>
-    <link href="introduction/assets/vendor/fontsource/bundle.css" rel="stylesheet">
-    <link href="introduction/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="introduction/assets/vendor/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="introduction/css/style.css">
+    <link href="Introduction/assets/vendor/fontsource/bundle.css" rel="stylesheet">
+    <link href="Introduction/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="Introduction/assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="Introduction/css/style.css">
     <style>
         body.portal-page {
             padding-top: 0;
@@ -29,6 +29,35 @@
             text-transform: uppercase;
             color: #94a3b8;
             margin-bottom: 1rem;
+        }
+        .portal-brand-lockup {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.65rem;
+            margin-bottom: 1.5rem;
+        }
+        .portal-brand-logo {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+        }
+        .portal-brand-name {
+            font-size: clamp(1.75rem, 4vw, 2.4rem);
+            line-height: 1;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+        }
+        .portal-brand-label {
+            padding: 0.45rem 0.9rem;
+            border: 1px solid rgba(118, 192, 67, 0.34);
+            border-radius: 999px;
+            background: rgba(118, 192, 67, 0.12);
+            color: #3f7f1d;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
         .portal-grid {
             display: grid;
@@ -66,7 +95,7 @@
         .portal-link:hover .portal-card {
             transform: translateY(-5px);
             box-shadow: var(--shadow-executive);
-            border-color: rgba(62, 197, 204, 0.35);
+            border-color: rgba(118, 192, 67, 0.4);
         }
         .portal-card-body {
             padding: 1.5rem;
@@ -110,9 +139,10 @@
         .portal-card-top.bg-primary { background: #0d6efd; }
         .portal-card-top.bg-success { background: #198754; }
         .portal-card-top.bg-info { background: #0dcaf0; }
-        .portal-card-top.bg-warning { background: #ffc107; }
+        .portal-card-top.bg-warning { background: #e88838; }
         .portal-card-top.bg-dark { background: #0f172a; }
         .portal-card-top.bg-sellio { background: var(--primary-sellio); }
+        .portal-page .bg-sellio-solid { color: #16210f !important; }
         .portal-icon {
             width: 52px;
             height: 52px;
@@ -138,9 +168,9 @@
         .portal-icon.bg-primary-soft { background: rgba(13, 110, 253, 0.08); color: #0d6efd; }
         .portal-icon.bg-success-soft { background: rgba(25, 135, 84, 0.08); color: #198754; }
         .portal-icon.bg-info-soft { background: rgba(13, 202, 240, 0.08); color: #0dcaf0; }
-        .portal-icon.bg-warning-soft { background: rgba(255, 193, 7, 0.12); color: #b58100; }
+        .portal-icon.bg-warning-soft { background: rgba(232, 136, 56, 0.14); color: #b55518; }
         .portal-icon.bg-dark-soft { background: rgba(15, 23, 42, 0.08); color: #0f172a; }
-        .portal-icon.bg-sellio-soft { background: rgba(62, 197, 204, 0.12); color: #329ea3; }
+        .portal-icon.bg-sellio-soft { background: rgba(118, 192, 67, 0.14); color: #3f7f1d; }
         .portal-credentials {
             font-size: 0.72rem;
             background: #f8fafc;
@@ -159,8 +189,8 @@
             text-transform: uppercase;
             padding: 0.3rem 0.65rem;
             border-radius: 999px;
-            background: rgba(62, 197, 204, 0.1);
-            color: #329ea3;
+            background: rgba(118, 192, 67, 0.14);
+            color: #3f7f1d;
         }
         .portal-card-cta {
             margin-top: auto;
@@ -173,7 +203,7 @@
             color: var(--primary-sellio);
         }
         .portal-card--wide {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 55%, rgba(62, 197, 204, 0.06) 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 55%, rgba(118, 192, 67, 0.08) 100%);
         }
         .portal-btn-outline {
             display: inline-flex;
@@ -205,8 +235,8 @@
                 <circle cx="300" cy="300" r="300" fill="url(#portal-grad)"/>
                 <defs>
                     <radialGradient id="portal-grad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(300 300) rotate(90) scale(300)">
-                        <stop stop-color="#3ec5cc"/>
-                        <stop offset="1" stop-color="#3ec5cc" stop-opacity="0"/>
+                        <stop stop-color="#76c043"/>
+                        <stop offset="1" stop-color="#76c043" stop-opacity="0"/>
                     </radialGradient>
                 </defs>
             </svg>
@@ -214,11 +244,11 @@
 
         <div class="container position-relative">
             <div class="text-center mb-5">
-                <div class="d-inline-flex align-items-center gap-3 mb-4">
-                    <img src="introduction/images/logo.png" alt="Sellio" width="48" height="48" class="rounded-3 shadow-sm">
-                    <span class="display-6 fw-800 mb-0">SELLIO</span>
+                <div class="portal-brand-lockup">
+                    <img src="Introduction/images/logo-dark.png" alt="Sellio" class="portal-brand-logo">
+                    <span class="portal-brand-name">SELLIO</span>
+                    <span class="portal-brand-label">Multi-vendor marketplace suite</span>
                 </div>
-                <div class="badge bg-sellio-solid rounded-pill px-3 py-2 mb-3">MULTI-VENDOR MARKETPLACE SUITE</div>
                 <h1 class="display-4 fw-800 mb-3">Choose where to <span class="text-sellio">proceed</span></h1>
                 <p class="lead text-muted mx-auto mb-0" style="max-width: 640px;">
                     Welcome to Sellio. Select an option below to explore the introduction, read the documentation, or open a live demo portal.
@@ -228,7 +258,7 @@
             <p class="portal-section-label">Get Started</p>
             <div class="portal-grid mb-4 mb-md-5">
                 <div class="portal-item-intro">
-                    <a href="introduction/" class="portal-link">
+                    <a href="Introduction/" class="portal-link">
                         <article class="portal-card portal-card--featured shadow-premium-sm">
                             <div class="portal-card-top bg-sellio"></div>
                             <div class="portal-card-body">
@@ -255,7 +285,7 @@
                 </div>
 
                 <div class="portal-item-docs">
-                    <a href="Documentation/" class="portal-link">
+                    <a href="documentation/" class="portal-link">
                         <article class="portal-card shadow-premium-sm">
                             <div class="portal-card-top bg-dark"></div>
                             <div class="portal-card-body">
@@ -367,7 +397,7 @@
             <p class="portal-section-label">Storefront Themes</p>
             <div class="portal-grid">
                 <div class="portal-item-frontend">
-                    <a href="introduction/#demos" class="portal-link">
+                    <a href="Introduction/#demos" class="portal-link">
                         <article class="portal-card portal-card--wide shadow-premium-sm">
                             <div class="portal-card-top bg-warning"></div>
                             <div class="portal-card-body">
@@ -394,7 +424,7 @@
 
             <div class="text-center mt-5 pt-3">
                 <p class="text-muted small mb-2">
-                    Frontend theme previews live on the <a href="introduction/#demos" class="fw-bold text-decoration-none">Introduction page</a>.
+                    Frontend theme previews live on the <a href="Introduction/#demos" class="fw-bold text-decoration-none">Introduction page</a>.
                 </p>
                 <p class="text-muted smallest mb-0">
                     Laravel backend: <code>apps/backend</code> &middot; Seller app: <code>apps/seller</code> &middot; Buyer app: <code>apps/buyer</code>
@@ -409,7 +439,7 @@
         </div>
     </footer>
 
-    <script src="introduction/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="Introduction/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

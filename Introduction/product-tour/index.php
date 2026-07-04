@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="fb-topbar">
-    <div class="fb-brand"><img src="../images/logo.png" alt="Sellio"><span>Sellio Product Tour</span></div>
+    <div class="fb-brand"><img src="../images/logo-light.png" alt="Sellio"><span>Sellio Product Tour</span></div>
     <a class="fb-close" href="../index.php">&larr; Back to overview</a>
 </div>
 
@@ -25,7 +25,7 @@
         <article class="fb-page">
             <div class="fb-face pg-cover">
                 <div class="pg-eyebrow">Production Ready &middot; v2.4.0</div>
-                <img src="../images/logo.png" alt="Sellio">
+                <img src="../images/logo-light.png" alt="Sellio">
                 <div class="pg-cover-name">SELLIO</div>
                 <h1>The Complete <span class="text-sellio">Multi-Purpose Marketplace</span> Platform</h1>
                 <div class="pg-cover-quote">Every great marketplace starts with a single idea&hellip;</div>

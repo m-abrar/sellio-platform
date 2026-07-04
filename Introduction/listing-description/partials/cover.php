@@ -1,6 +1,6 @@
   <header class="cover">
     <div class="wrap">
-      <div class="navline"><div class="brand"><img src="../images/logo.png" alt="Sellio">SELLIO</div><span class="version">VERSION <?= htmlspecialchars($publicContent['product']['version']) ?></span></div>
+      <div class="navline"><div class="brand"><img src="../images/logo-light.png" alt="Sellio">SELLIO</div><span class="version">VERSION <?= htmlspecialchars($publicContent['product']['version']) ?></span></div>
       <div class="hero-grid">
         <div class="hero-copy"><div class="eyebrow">Everything You Need. All in One Powerful Core.</div><h1>Build Any Experience.<br><span>Endless Possibilities.</span></h1><p class="lead">Sell products, book properties, publish jobs, manage services, run events, list vehicles, or operate classifieds&mdash;with connected admin, seller, buyer, storefront, API, and mobile experiences.</p><div class="cover-actions"><a class="button" href="<?= htmlspecialchars($publicContent['urls']['storefront']) ?>" target="_blank" rel="noopener">Explore Live Demo &rarr;</a></div><div class="stackline"><?php foreach (array_slice($publicContent['stack'], 0, 6) as $technology): ?><span><?= htmlspecialchars($technology['name'] . ' ' . $technology['version']) ?></span><?php endforeach; ?></div></div>
       </div>
