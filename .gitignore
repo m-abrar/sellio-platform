@@ -41,3 +41,6 @@ apps/backend/screenshot_phase*.cjs
 # Automated distribution output (scripts/prepare-distribution.mjs)
 /distribution/
 /distribution.zip
+
+# Local installation walkthrough video
+/Introduction/Sellio Installation.mp4

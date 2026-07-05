@@ -20,7 +20,7 @@ use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Middleware\RoleMiddleware;
 
 
-return Application::configure(basePath: dirname(__DIR__))
+$app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: [
             __DIR__ . '/../routes/auth.php',
@@ -152,3 +152,16 @@ return Application::configure(basePath: dirname(__DIR__))
         Schedule::command('app:check-renewals')->dailyAt('08:00');
         Schedule::command('app:check-expired-subscriptions')->dailyAt('08:15');
     })->create();
+
+// Prefer the shared-hosting document root when present, otherwise use
+// Laravel's conventional public directory.
+foreach (['public_html', 'public'] as $publicDirectory) {
+    $publicPath = $app->basePath($publicDirectory);
+
+    if (is_dir($publicPath)) {
+        $app->usePublicPath($publicPath);
+        break;
+    }
+}
+
+return $app;
