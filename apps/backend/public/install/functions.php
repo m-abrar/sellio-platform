@@ -123,25 +123,31 @@ function installer_support_url(): string
  */
 function installer_logo_url(): ?string
 {
-    global $basePath;
-
     $publicCandidates = [
         'install/assets/logo.webp',
         'install/assets/logo.png',
+        'assets/logo.webp',
+        'assets/logo.png',
         'images/logo.png',
         'images/app-logo.webp',
         'images/app-logo.png',
     ];
 
+    // The installer lives directly inside the web root, whether the host calls
+    // that directory `public` (Laravel default) or `public_html` (shared hosts).
+    $publicRoot = dirname(__DIR__);
+
     foreach ($publicCandidates as $publicPath) {
-        $full = $basePath . '/public/' . str_replace('/', DIRECTORY_SEPARATOR, $publicPath);
+        $full = $publicRoot . DIRECTORY_SEPARATOR
+            . str_replace('/', DIRECTORY_SEPARATOR, $publicPath);
 
         if (is_file($full)) {
             return installer_asset($publicPath);
         }
     }
 
-    $linkedLogo = $basePath . '/public/storage/settings/logo.png';
+    $linkedLogo = $publicRoot . DIRECTORY_SEPARATOR
+        . str_replace('/', DIRECTORY_SEPARATOR, 'storage/settings/logo.png');
 
     if (is_file($linkedLogo)) {
         return installer_asset('storage/settings/logo.png');
