@@ -770,3 +770,32 @@ the install wizard has it's own logo, why do you lose it in the distribution ver
 need to replace this 3rd party image link
 in the readme
 ![Sellio Banner](https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200)
+
+
+----------------------
+
+on the live server, i can't run laravel
+
+[2026-07-04 19:57:59] production.ERROR: Vite manifest not found at: /home/u684474179/domains/demo.sellio.buzz/public/build/manifest.json (View: /home/u684474179/domains/demo.sellio.buzz/resources/views/frontend/_layouts/_app.blade.php) (View: /home/u684474179/domains/demo.sellio.buzz/resources/views/frontend/_layouts/_app.blade.php) {"exception":"[object] (Illuminate\\View\\ViewException(code: 0): Vite manifest not found at: /home/u684474179/domains/demo.sellio.buzz/public/build/manifest.json (View: /home/u684474179/domains/demo.sellio.buzz/resources/views/frontend/_layouts/_app.blade.php) (View: /home/u684474179/domains/demo.sellio.buzz/resources/views/frontend/_layouts/_app.blade.php) at /home/u684474179/domains/demo.sellio.buzz/vendor/laravel/framework/src/Illuminate/Foundation/Vite.php:946)
+[stacktrace]
+
+---------------------------------
+
+
+
+https://demo.sellio.buzz/admin/system/maintenance
+
+When we click the storage link button:
+
+MISSION INTERRUPTED
+SYSTEM ACTION FAILED: UNABLE TO CREATE STORAGE LINK (SYMLINK() AND EXEC() ARE UNAVAILABLE). CREATE IT MANUALLY: /HOME/U684474179/DOMAINS/DEMO.SELLIO.BUZZ/PUBLIC/STORAGE -> /HOME/U684474179/DOMAINS/DEMO.SELLIO.BUZZ/STORAGE/APP/PUBLIC
+
+----------------------
+
+While installing the app through wizard, we see warning for missing file, even it does exist.
+
+
+D:\Sellio\distribution\apps\backend\public\build\manifest.json
+
+----------------------------
+

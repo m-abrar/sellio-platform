@@ -173,15 +173,13 @@ class DatabaseSeeder extends Seeder
         // Re-enable foreign key constraints
         Schema::enableForeignKeyConstraints();
 
-        // MediaFullSeeder / PageContentMediaSeeder disable conversions for seeding speed,
-        // so backfill the missing webp thumbnails now that all media rows exist.
+        // MediaFullSeeder / PageContentMediaSeeder intentionally leave conversions
+        // disabled. Regenerating every image variant here makes web-based installs
+        // look frozen and commonly exceeds shared-hosting request limits. Models
+        // safely fall back to their original media until an administrator runs the
+        // queued regeneration action from System Maintenance after installation.
         $this->command->newLine();
-        $this->command->info('🖼️  Regenerating media conversions (webp thumbnails)...');
-        config(['app.skip_media_conversions' => false]);
-        \Illuminate\Support\Facades\Artisan::call('media-library:regenerate', [
-            '--only-missing' => true,
-            '--force' => true,
-        ]);
+        $this->command->info('🖼️  Media conversions deferred. Originals will be used until regeneration runs from System Maintenance.');
 
         // Final Footer
         $this->command->newLine();

@@ -980,6 +980,7 @@ async function main() {
   await writeDistributionConfigJs();
 
   await writeDeployGuide();
+  await writeManifest();
 
   if (makeZip) {
     console.log('\n==> Creating ZIP archive...');

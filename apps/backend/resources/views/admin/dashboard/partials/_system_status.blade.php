@@ -58,7 +58,13 @@
                                 <span class="text-muted smallest font-weight-bold letter-spacing-1">{{ $metrics['system_health']['server_ip'] }}</span>
                             </div>
                             <div class="col-6 col-md border-left border-light-soft">
-                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Queue Worker') }}</span>
+                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">
+                                    {{ __('Queue Worker') }}
+                                    <a href="#queue-worker-help" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="queue-worker-help" class="text-primary ml-1" title="{{ __('How to activate the queue worker') }}">
+                                        <i class="far fa-question-circle" aria-hidden="true"></i>
+                                        <span class="sr-only">{{ __('Show queue worker setup help') }}</span>
+                                    </a>
+                                </span>
                                 @if($queueHealth['worker_up'])
                                     <div class="d-flex align-items-center justify-content-center justify-content-md-start">
                                         <div class="bg-success rounded-circle mr-2 pulse-glow-dot"></div>
@@ -78,6 +84,29 @@
                                         {{ $queueHealth['stale_jobs'] }} {{ __('pending') }}
                                     </span>
                                 @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapse mt-4" id="queue-worker-help">
+                    <div class="alert alert-info border-0 rounded-lg mb-0 px-4 py-3 text-left">
+                        <div class="d-flex align-items-start">
+                            <i class="fas fa-lightbulb text-info mr-3 mt-1" aria-hidden="true"></i>
+                            <div class="small">
+                                <strong class="d-block text-dark mb-2">{{ __('How to activate the queue worker') }}</strong>
+                                <p class="mb-2 text-muted">
+                                    {{ __('Set QUEUE_CONNECTION=database in .env, then clear cached configuration with:') }}
+                                    <code class="d-block mt-1">php artisan config:clear</code>
+                                </p>
+                                <p class="mb-2 text-muted">
+                                    {{ __('VPS or dedicated server (keep this running with Supervisor or another process manager):') }}
+                                    <code class="d-block mt-1">php artisan queue:work --sleep=3 --tries=3 --timeout=600</code>
+                                </p>
+                                <p class="mb-0 text-muted">
+                                    {{ __('Shared hosting: create a cron job that runs every minute:') }}
+                                    <code class="d-block mt-1">cd {{ base_path() }} &amp;&amp; php artisan queue:work --stop-when-empty --tries=3 --timeout=600</code>
+                                </p>
                             </div>
                         </div>
                     </div>
