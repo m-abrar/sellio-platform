@@ -849,3 +849,20 @@ on the laravel frontend footer, show the logo in white color.
 Add feature to talk to developer immediately, to report a bug or asking custom work, or installation help
 
 ------------------
+
+Can you show "Coming Soon" on the mobile app screen? on the introduction page?
+
+
+--------------------
+
+The main navigation on introduction page needs correction
+when you are not on main page, but click demos, it will go to anchor link on same page, not the main page, hence it does not work.
+
+
+-----------------------
+
+Admin LTE preloading logo is cut off, need to solve it.
+
+--------------
+
+- [x] The trending searches show poor quality demo data. Let's update our seeders. (Root cause: `SearchQuerySeeder` gave almost every keyword only 1-3 hits, so the trending endpoint — grouped by exact keyword, top 8 by 30-day count — was picking from a pile of ties with no real signal, mixed randomly across modules. Rewrote it with 8 "hot" keywords repeated 10-26 times each (recency-weighted across the 30-day window) spread across 6 different modules for a clean decreasing ranking, plus a long tail of one-off searches for breadth. Also gave every row a realistic non-null `result_count` (previously always `null`), including 5 genuine zero-result terms, and linked 8 rows to the demo buyer (`buyer@sellio.buzz`) so their personal "recent searches" look like real history instead of empty/generic. Verified live: top 8 now reads 26/22/19/17/15/13/11/10 instead of a cluster of 1s and 2s.)

@@ -6,18 +6,18 @@ Use this checklist for the CodeCanyon item gallery, product tour, documentation,
 
 > **Capture prerequisite:** Run the final migrated and fully seeded MySQL demo database. Confirm the storefront APIs return HTTP 200 with populated records and that no `OFFLINE BACKUP MODE`, loading state, broken media, or debug output is visible before checking an item off.
 
-- [ ] **Unified marketplace homepage** — Capture `unifieds_marketplace` with the hero, vertical categories, featured listings, and marketplace navigation visible.
-- [ ] **Ecommerce storefront** — Show a polished product grid, category navigation, filters, and realistic seeded products.
+- [x] **Unified marketplace homepage** — Captured as `_development/screenshots/codecanyon/01-unified-marketplace.png`.
+- [x] **Ecommerce storefront** — Captured as `_development/screenshots/codecanyon/03-ecommerce-storefront.png`.
 - [ ] **Product details** — Include the image gallery, price, product information, seller details, and primary purchase action.
 - [ ] **Checkout** — Show the cart summary, customer/address fields, totals, and available payment methods without exposing real credentials.
-- [ ] **Property marketplace** — Capture `properties_modern` or `properties_map` with realistic listings, filters, and map or discovery content.
-- [ ] **Admin dashboard** — Show platform statistics, charts, recent activity, and the main administration navigation.
-- [ ] **Admin listing management** — Include the listing table, search, filters, statuses, bulk actions, and row actions.
-- [ ] **Admin create/edit listing** — Show a complete listing form with category fields, pricing, location, and media uploader.
-- [ ] **Seller dashboard** — Capture revenue, orders or enquiries, listing performance, and recent activity.
-- [ ] **Seller listing management** — Show the seller-facing listing table and its create, edit, status, and action controls.
-- [ ] **Buyer dashboard** — Include purchases or bookings, enquiries, favourites, messages, and account navigation.
-- [ ] **Web installer** — Capture a polished requirements, database configuration, or installation-complete step.
+- [x] **Property marketplace** — Captured as `_development/screenshots/codecanyon/10-property-marketplace.png`.
+- [x] **Admin dashboard** — Captured as `_development/screenshots/codecanyon/02-admin-dashboard.png`.
+- [x] **Admin listing management** — Captured as `_development/screenshots/codecanyon/07-admin-listing-management.png`.
+- [x] **Admin create/edit listing** — Captured as `_development/screenshots/codecanyon/08-admin-listing-editor.png`.
+- [x] **Seller dashboard** — Captured as `_development/screenshots/codecanyon/05-seller-dashboard.png`.
+- [x] **Seller listing management** — Captured as `_development/screenshots/codecanyon/06-seller-listing-management.png`.
+- [x] **Buyer dashboard** — Captured as `_development/screenshots/codecanyon/11-buyer-dashboard.png`.
+- [x] **Web installer** — Captured as `_development/screenshots/codecanyon/12-web-installer.png`.
 
 ## Recommended Supplementary Screenshots
 

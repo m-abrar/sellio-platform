@@ -15,11 +15,10 @@ class SearchQuerySeeder extends Seeder
 
         $entries = [
             // properties
-            ['module' => 'properties', 'keyword' => '3-bedroom house with pool',    'filters' => ['property_type' => 'sale',   'bedrooms' => 3, 'max_price' => 500000], 'days' => 0,  'hour' => 9],
+            ['module' => 'properties', 'keyword' => '3-bedroom house for rent',    'filters' => ['property_type' => 'sale',   'bedrooms' => 3, 'max_price' => 500000], 'days' => 0,  'hour' => 9],
             ['module' => 'properties', 'keyword' => 'studio apartment downtown',     'filters' => ['property_type' => 'rental', 'max_price' => 1200],                    'days' => 1,  'hour' => 11],
             ['module' => 'properties', 'keyword' => '2-bed condo near university',  'filters' => ['bedrooms' => 2],                                                      'days' => 2,  'hour' => 14],
             ['module' => 'properties', 'keyword' => 'villa with garden for sale',   'filters' => ['property_type' => 'sale'],                                            'days' => 3,  'hour' => 16],
-            ['module' => 'properties', 'keyword' => '3-bedroom house with pool',    'filters' => ['property_type' => 'sale',   'bedrooms' => 3, 'max_price' => 500000], 'days' => 5,  'hour' => 10],
             ['module' => 'properties', 'keyword' => 'beachfront property',          'filters' => ['property_type' => 'sale'],                                            'days' => 7,  'hour' => 8],
             ['module' => 'properties', 'keyword' => 'studio apartment downtown',    'filters' => ['property_type' => 'rental', 'max_price' => 1200],                    'days' => 8,  'hour' => 13],
             ['module' => 'properties', 'keyword' => 'pet-friendly rental',          'filters' => ['property_type' => 'rental'],                                          'days' => 10, 'hour' => 15],
@@ -33,8 +32,7 @@ class SearchQuerySeeder extends Seeder
             ['module' => 'autos', 'keyword' => 'pickup truck manual',  'filters' => ['transmission' => 'Manual'],                          'days' => 9,  'hour' => 14],
 
             // jobs
-            ['module' => 'jobs', 'keyword' => 'remote marketing manager',   'filters' => ['workplace_type' => 'remote'],              'days' => 0,  'hour' => 8],
-            ['module' => 'jobs', 'keyword' => 'junior developer',           'filters' => ['workplace_type' => 'hybrid'],              'days' => 0,  'hour' => 14],
+            ['module' => 'jobs', 'keyword' => 'remote react developer',   'filters' => ['workplace_type' => 'remote'],              'days' => 0,  'hour' => 8],
             ['module' => 'jobs', 'keyword' => 'remote marketing manager',   'filters' => ['workplace_type' => 'remote'],              'days' => 2,  'hour' => 9],
             ['module' => 'jobs', 'keyword' => 'graphic designer part-time', 'filters' => [],                                          'days' => 3,  'hour' => 10],
             ['module' => 'jobs', 'keyword' => 'junior developer',           'filters' => ['workplace_type' => 'hybrid'],              'days' => 5,  'hour' => 16],
@@ -42,21 +40,18 @@ class SearchQuerySeeder extends Seeder
             ['module' => 'jobs', 'keyword' => 'remote marketing manager',   'filters' => ['workplace_type' => 'remote'],              'days' => 12, 'hour' => 13],
 
             // events
-            ['module' => 'events', 'keyword' => 'cooking class beginner',  'filters' => [],                                           'days' => 0,  'hour' => 11],
+            ['module' => 'events', 'keyword' => 'yoga workshop',           'filters' => [],                                           'days' => 6,  'hour' => 7],
             ['module' => 'events', 'keyword' => 'jazz concert weekend',    'filters' => [],                                           'days' => 1,  'hour' => 19],
             ['module' => 'events', 'keyword' => 'tech startup networking', 'filters' => [],                                           'days' => 4,  'hour' => 10],
-            ['module' => 'events', 'keyword' => 'yoga workshop',           'filters' => [],                                           'days' => 6,  'hour' => 7],
             ['module' => 'events', 'keyword' => 'cooking class beginner',  'filters' => [],                                           'days' => 8,  'hour' => 12],
-            ['module' => 'events', 'keyword' => 'photography masterclass', 'filters' => [],                                           'days' => 11, 'hour' => 15],
 
             // services
-            ['module' => 'services', 'keyword' => 'plumber urgent',          'filters' => ['max_price' => 300],  'days' => 0,  'hour' => 13],
             ['module' => 'services', 'keyword' => 'house cleaning weekly',   'filters' => [],                    'days' => 1,  'hour' => 10],
+            ['module' => 'services', 'keyword' => 'AC repair',               'filters' => [],                    'days' => 9,  'hour' => 11],
+            ['module' => 'services', 'keyword' => 'plumber urgent',          'filters' => ['max_price' => 300],  'days' => 0,  'hour' => 13],
             ['module' => 'services', 'keyword' => 'electrician same day',    'filters' => [],                    'days' => 2,  'hour' => 8],
-            ['module' => 'services', 'keyword' => 'plumber urgent',          'filters' => ['max_price' => 300],  'days' => 3,  'hour' => 14],
             ['module' => 'services', 'keyword' => 'logo design freelancer',  'filters' => ['max_price' => 500],  'days' => 5,  'hour' => 16],
             ['module' => 'services', 'keyword' => 'house cleaning weekly',   'filters' => [],                    'days' => 7,  'hour' => 9],
-            ['module' => 'services', 'keyword' => 'AC repair',               'filters' => [],                    'days' => 9,  'hour' => 11],
 
             // classifieds
             ['module' => 'classifieds', 'keyword' => 'iPhone 14 Pro',       'filters' => ['max_price' => 800],  'days' => 0,  'hour' => 12],
