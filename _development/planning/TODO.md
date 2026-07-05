@@ -774,21 +774,13 @@ in the readme
 
 ----------------------
 
-on the live server, i can't run laravel
-
-[2026-07-04 19:57:59] production.ERROR: Vite manifest not found at: /home/u684474179/domains/demo.sellio.buzz/public/build/manifest.json (View: /home/u684474179/domains/demo.sellio.buzz/resources/views/frontend/_layouts/_app.blade.php) (View: /home/u684474179/domains/demo.sellio.buzz/resources/views/frontend/_layouts/_app.blade.php) {"exception":"[object] (Illuminate\\View\\ViewException(code: 0): Vite manifest not found at: /home/u684474179/domains/demo.sellio.buzz/public/build/manifest.json (View: /home/u684474179/domains/demo.sellio.buzz/resources/views/frontend/_layouts/_app.blade.php) (View: /home/u684474179/domains/demo.sellio.buzz/resources/views/frontend/_layouts/_app.blade.php) at /home/u684474179/domains/demo.sellio.buzz/vendor/laravel/framework/src/Illuminate/Foundation/Vite.php:946)
-[stacktrace]
+on laravel frontend, i subscribed for newsletter
+but it showed me 500 error
 
 ---------------------------------
 
+Figure out and report to me, where should i configure the pusher key? env or admin settings?
 
-
-https://demo.sellio.buzz/admin/system/maintenance
-
-When we click the storage link button:
-
-MISSION INTERRUPTED
-SYSTEM ACTION FAILED: UNABLE TO CREATE STORAGE LINK (SYMLINK() AND EXEC() ARE UNAVAILABLE). CREATE IT MANUALLY: /HOME/U684474179/DOMAINS/DEMO.SELLIO.BUZZ/PUBLIC/STORAGE -> /HOME/U684474179/DOMAINS/DEMO.SELLIO.BUZZ/STORAGE/APP/PUBLIC
 
 ----------------------
 
@@ -798,4 +790,62 @@ While installing the app through wizard, we see warning for missing file, even i
 D:\Sellio\distribution\apps\backend\public\build\manifest.json
 
 ----------------------------
+On the distribution, did we remove gemini and other valuable keys?
 
+-----------------------------
+
+get licence should be for now redirected to 
+https://codecanyon.net/user/noblesoft
+and mark as pending, unless we get real URL from codecanyon after approval.
+
+-----------------------
+
+
+https://sellio.buzz/
+
+
+Failed to load resource: the server responded with a status of 404 ()
+unifieds_interactive.webp:1  Failed to load resource: the server responded with a status of 404 ()
+properties_luxury.webp:1  Failed to load resource: the server responded with a status of 404 ()
+inter-500.css:1  Failed to load resource: the server responded with a status of 404 ()
+outfit-400.css:1  Failed to load resource: the server responded with a status of 404 ()
+outfit-800.css:1  Failed to load resource: the server responded with a status of 404 ()
+inter-300.css:1  Failed to load resource: the server responded with a status of 404 ()
+inter-400.css:1  Failed to load resource: the server responded with a status of 404 ()
+inter-600.css:1  Failed to load resource: the server responded with a status of 404 ()
+inter-700.css:1  Failed to load resource: the server responded with a status of 404 ()
+inter-800.css:1  Failed to load resource: the server responded with a status of 404 ()
+outfit-500.css:1  Failed to load resource: the server responded with a status of 404 ()
+outfit-600.css:1  Failed to load resource: the server responded with a status of 404 ()
+outfit-700.css:1  Failed to load resource: the server responded with a status of 404 ()
+inter-300.css:1  Failed to load resource: the server responded with a status of 404 ()
+inter-700.css:1  Failed to load resource: the server responded with a status of 404 ()
+inter-800.css:1  Failed to load resource: the server responded with a status of 404 ()
+inter-600.css:1  Failed to load resource: the server responded with a status of 404 ()
+inter-500.css:1  Failed to load resource: the server responded with a status of 404 ()
+inter-400.css:1  Failed to load resource: the server responded with a status of 404 ()
+outfit-700.css:1  Failed to load resource: the server responded with a status of 404 ()
+outfit-600.css:1  Failed to load resource: the server responded with a status of 404 ()
+outfit-500.css:1  Failed to load resource: the server responded with a status of 404 ()
+outfit-400.css:1  Failed to load resource: the server responded with a status of 404 ()
+outfit-800.css:1  Failed to load resource: the server responded with a status of 404 ()
+
+-------------------
+
+on the laravel frontend footer, show the logo in white color.
+
+-----------------
+
+- [x] admin-bar: can we show or hide it from backend? (Added `show_admin_bar` toggle in Admin → Settings → System → Access & Editing, default on. Gates the admin-bar CSS, the `#admin-bar` include, and the `has-admin-bar` body class in `_app.blade.php`.)
+
+- [x] on the introduction page, the favicon is missing. (Root cause: `Introduction/header.php`, `listing-description/index.php`, and `product-tour/index.php` had no `<link rel="icon">` at all. Added, using the existing `images/logo.png` — same file the Documentation site already uses as its favicon.)
+
+- [ ] the admin-bar push the main page content too much. (Found and fixed one real bug: `initAdminBarOffset()` in `resources/js/app.js` measured the bar's real height and wrote it to `<html>`, but `body.has-admin-bar { --admin-bar-offset: var(--admin-bar-height) }` in `admin-bar.css` re-declares the same custom property directly on `<body>`, which always wins over the inherited value — so the real measured height was silently discarded and the push was always the hardcoded 32px, never the bar's actual rendered height. Fixed by writing the measured value onto `document.body` directly instead of `document.documentElement`, so it now overrides the CSS fallback as an inline style. Could not visually confirm the fix resolves "too much" specifically — no local dev server/DB available in this session to render the page. Please re-check on your end; if still off, a screenshot of the actual gap would help pin down whether it's this offset or a different double-counted margin/padding.)
+
+- [x] Introduction exit-intent popup polished + real photo added. (Found the left panel referenced a `.bg-sellio-gradient` class that was never defined anywhere in the CSS — so it had no background at all, likely making the white heading text hard to read. Defined the gradient properly, replaced the 🛠️ emoji with a Pixabay illustration (`images/popup/support-agent.jpg` — free for commercial use, no attribution required) shown in a white rounded photo frame with a soft glow accent. Replaced the abrupt `display:none` toggle with a proper fade + scale-in/out transition, added Escape-key-to-close and click-outside-to-close.)
+
+-----------------
+
+Add feature to talk to developer immediately, to report a bug or asking custom work, or installation help
+
+------------------

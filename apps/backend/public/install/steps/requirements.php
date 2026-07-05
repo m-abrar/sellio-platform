@@ -5,8 +5,6 @@
 // =================================================================================
 global $basePath;
 
-$viteManifest = $basePath . '/public/build/manifest.json';
-
 $requirements = [
     'PHP >= 8.2' => version_compare(PHP_VERSION, '8.2.0', '>='),
     'BCMath Extension' => extension_loaded('bcmath'),
@@ -29,7 +27,7 @@ $requirements = [
 ];
 
 $recommendations = [
-    'Frontend assets (public/build/manifest.json)' => file_exists($viteManifest),
+    'Frontend assets (public_html/build or public/build)' => installer_vite_manifest_path() !== null,
 ];
 
 $passedCount = count(array_filter($requirements));

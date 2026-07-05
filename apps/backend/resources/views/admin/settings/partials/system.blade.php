@@ -139,7 +139,7 @@
                     </select>
                 </div>
 
-                <div class="bg-light p-3 rounded-xl border">
+                <div class="bg-light p-3 rounded-xl border mb-3">
                     <div class="custom-control custom-switch">
                         <input type="hidden" name="frontend_edit" value="0">
                         <input type="checkbox" name="frontend_edit" class="custom-control-input" id="frontendEdit"
@@ -149,6 +149,20 @@
                         </label>
                         <p class="text-muted small mb-0 mt-1">
                             {{ __('Allows super-admins to modify page content directly from the public storefront while logged in.') }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-light p-3 rounded-xl border">
+                    <div class="custom-control custom-switch">
+                        <input type="hidden" name="show_admin_bar" value="0">
+                        <input type="checkbox" name="show_admin_bar" class="custom-control-input" id="showAdminBar"
+                            value="1" {{ (old('show_admin_bar', $settings['show_admin_bar'] ?? '1') == '1') ? 'checked' : '' }}>
+                        <label class="custom-control-label font-weight-bold text-dark" for="showAdminBar">
+                            {{ __('Show Admin Quick Bar on Storefront') }}
+                        </label>
+                        <p class="text-muted small mb-0 mt-1">
+                            {{ __('Displays the floating admin toolbar (dashboard, quick add, content shortcuts) at the top of public pages for logged-in admins.') }}
                         </p>
                     </div>
                 </div>

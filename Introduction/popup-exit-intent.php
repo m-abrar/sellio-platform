@@ -1,10 +1,14 @@
-<div id="exitIntentPopup" class="exit-popup-overlay">
-    <div class="exit-popup-content shadow-lg animate__animated">
+<div id="exitIntentPopup" class="exit-popup-overlay" onclick="if(event.target === this) closeExitPopup()">
+    <div class="exit-popup-content shadow-lg">
         <button class="close-exit" onclick="closeExitPopup()" aria-label="Close">&times;</button>
         <div class="row g-0">
-            <div class="col-md-5 d-none d-md-block bg-sellio-gradient p-5 text-white text-center d-flex flex-column justify-content-center">
-                <div class="fs-1 mb-3">🛠️</div>
-                <h3 class="fw-bold mb-2">Need a hand?</h3>
+            <div class="col-md-5 d-none d-md-flex bg-sellio-gradient p-4 text-white text-center flex-column align-items-center justify-content-center exit-popup-visual">
+                <div class="exit-popup-visual-glow"></div>
+                <div class="exit-popup-photo-frame">
+                    <!-- Photo: Pixabay, free for commercial use, no attribution required -->
+                    <img src="images/popup/support-agent.jpg" alt="Friendly Sellio support agent ready to help" loading="lazy" width="220" height="220">
+                </div>
+                <h3 class="fw-bold mb-2 mt-4">Need a hand?</h3>
                 <p class="small opacity-75 mb-0">Setup guidance is included with every purchase.</p>
             </div>
             <div class="col-md-7 p-5">

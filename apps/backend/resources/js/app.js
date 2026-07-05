@@ -109,13 +109,19 @@ const AppJS = {
     initAdminBarOffset() {
         const adminBar = document.getElementById('admin-bar');
         if (!adminBar) {
-            document.documentElement.style.removeProperty('--admin-bar-offset');
+            document.body.style.removeProperty('--admin-bar-offset');
             return;
         }
 
+        // Set the custom property directly on <body> (not <html>) — the
+        // body.has-admin-bar CSS rule declares this same property on body
+        // itself, so an inherited value from <html> would be shadowed by
+        // it. An inline style on body always wins over that stylesheet
+        // rule, letting the real measured height take effect instead of
+        // the fixed --admin-bar-height fallback.
         const applyOffset = () => {
             const height = adminBar.offsetHeight;
-            document.documentElement.style.setProperty('--admin-bar-offset', `${height}px`);
+            document.body.style.setProperty('--admin-bar-offset', `${height}px`);
             document.body.classList.add('has-admin-bar');
         };
 

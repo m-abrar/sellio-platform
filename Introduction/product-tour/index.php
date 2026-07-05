@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Take an interactive product tour of Sellio, the self-hosted multi-purpose marketplace platform for products, properties, services, jobs, events and more.">
 <title>Sellio Interactive Product Tour | Multi-Purpose Marketplace Platform</title>
+<link rel="icon" type="image/png" href="../images/logo.png">
 <link href="../assets/vendor/fontsource/bundle.css" rel="stylesheet">
 <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">

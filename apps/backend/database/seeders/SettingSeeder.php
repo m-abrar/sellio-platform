@@ -68,6 +68,7 @@ class SettingSeeder extends Seeder
             // --- System / Access (Group: system) ---
             ['group' => 'system', 'key' => 'built_in_website_status', 'value' => 'active'],
             ['group' => 'system', 'key' => 'frontend_edit',           'value' => '1'],
+            ['group' => 'system', 'key' => 'show_admin_bar',          'value' => '1'],
 
             // --- Content, Layout & SEO Defaults (Group: content / seo / commerce) ---
             ['group' => 'content', 'key' => 'site_search_results', 'value' => '1'],

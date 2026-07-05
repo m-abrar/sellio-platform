@@ -146,10 +146,12 @@ let popupShown = false;
 document.addEventListener("mouseleave", function(e) {
     if (e.clientY < 0 && !popupShown) {
         const popup = document.getElementById('exitIntentPopup');
-        const content = popup.querySelector('.exit-popup-content');
-        if (popup && content) {
+        if (popup) {
             popup.style.display = 'flex';
-            content.classList.add('animate__zoomIn');
+            // Force a reflow so the opacity/transform transition actually
+            // runs instead of jumping straight to the visible state.
+            void popup.offsetHeight;
+            popup.classList.add('is-visible');
             popupShown = true;
             localStorage.setItem('exitPopupShown', 'true');
         }
@@ -158,8 +160,15 @@ document.addEventListener("mouseleave", function(e) {
 
 function closeExitPopup() {
     const popup = document.getElementById('exitIntentPopup');
-    if (popup) popup.style.display = 'none';
+    if (!popup) return;
+
+    popup.classList.remove('is-visible');
+    window.setTimeout(() => { popup.style.display = 'none'; }, 300);
 }
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeExitPopup();
+});
 
 if (localStorage.getItem('exitPopupShown')) {
     popupShown = true;

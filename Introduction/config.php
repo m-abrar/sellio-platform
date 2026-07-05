@@ -182,7 +182,7 @@ $total_demos = count($demos);
 // 4. Video Gallery — set 'status' to 'active' and fill 'youtube_id' once a video is recorded/uploaded.
 $videos = [
     ['title' => 'Platform Overview', 'desc' => 'A full tour of Sellio — every vertical, every dashboard, in one walkthrough.', 'thumb' => 'images/unifieds_mega.webp', 'youtube_id' => '', 'status' => 'soon'],
-    ['title' => 'Installation Walkthrough', 'desc' => 'Follow the guided web installer from server requirements to your first admin login.', 'thumb' => 'images/properties_default.webp', 'youtube_id' => '', 'status' => 'soon'],
+    ['title' => 'Installation Walkthrough', 'desc' => 'Follow the guided web installer from server requirements to your first admin login.', 'thumb' => 'https://i.ytimg.com/vi/gGVNYIv1hIM/hqdefault.jpg', 'youtube_id' => 'gGVNYIv1hIM', 'status' => 'active'],
     ['title' => 'Admin Dashboard Tour', 'desc' => 'Manage users, commissions, moderation, and platform-wide settings from one control center.', 'thumb' => 'images/events_corporate.webp', 'youtube_id' => '', 'status' => 'soon'],
     ['title' => 'Multi-Vendor Selling', 'desc' => 'How a seller lists inventory, manages orders, and gets paid out automatically.', 'thumb' => 'images/autos_luxury.webp', 'youtube_id' => '', 'status' => 'soon'],
     ['title' => 'Buyer Shopping Experience', 'desc' => 'Search, checkout, and order tracking from the customer-facing storefront.', 'thumb' => 'images/classifieds_premium.webp', 'youtube_id' => '', 'status' => 'soon'],

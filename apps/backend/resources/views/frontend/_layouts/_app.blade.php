@@ -53,7 +53,10 @@
     
     @auth
         @can('manage-pages')
-            @vite(['resources/css/admin-bar.css', 'resources/css/editable-ui.css'])
+            @if(setting('show_admin_bar', true))
+                @vite(['resources/css/admin-bar.css'])
+            @endif
+            @vite(['resources/css/editable-ui.css'])
         @endcan
     @endauth
 
@@ -66,7 +69,7 @@
 
 <body @class(array_merge(
     explode(' ', 'no-js antialiased frontend-site ' . trim($__env->yieldContent('body_class') ?: 'has-body-glow bg-light')),
-    auth()->check() && auth()->user()->can('manage-pages') ? ['has-admin-bar'] : []
+    auth()->check() && auth()->user()->can('manage-pages') && setting('show_admin_bar', true) ? ['has-admin-bar'] : []
 ))>
 
     @if(filled($_gtmId))
@@ -77,7 +80,9 @@
 
     @auth
         @can('manage-pages')
-            @include('admin._partials._adminbar')
+            @if(setting('show_admin_bar', true))
+                @include('admin._partials._adminbar')
+            @endif
         @endcan
     @endauth
 

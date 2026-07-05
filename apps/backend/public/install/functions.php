@@ -157,6 +157,28 @@ function installer_logo_url(): ?string
 }
 
 /**
+ * Find the compiled Vite manifest across conventional and shared-host roots.
+ */
+function installer_vite_manifest_path(): ?string
+{
+    global $basePath;
+
+    $candidates = [
+        dirname(__DIR__) . '/build/manifest.json',
+        $basePath . '/public_html/build/manifest.json',
+        $basePath . '/public/build/manifest.json',
+    ];
+
+    foreach (array_unique($candidates) as $candidate) {
+        if (is_file($candidate)) {
+            return $candidate;
+        }
+    }
+
+    return null;
+}
+
+/**
  * Web path to a file inside public/install/.
  */
 function installer_url(string $path = ''): string
@@ -482,7 +504,7 @@ function installer_requirement_hint(string $label): ?string
         'passthru() Function' => 'Remove passthru from disable_functions — the installer streams Composer and Artisan output through it.',
         'Writable storage/' => 'chmod 775 storage/ (or 755) and ensure the web-server user owns or can write to it.',
         'Writable bootstrap/cache/' => 'chmod 775 bootstrap/cache/ so Laravel can compile config and routes.',
-        'Frontend assets (public/build/manifest.json)' => 'Use the Sellio distribution ZIP (includes public/build/), or run npm run build in the backend before installing. Login still works without it via a CSS fallback, but the admin UI needs built assets.',
+        'Frontend assets (public_html/build or public/build)' => 'Upload the distribution build/ folder into your active web root (public_html/ on shared hosting or public/ elsewhere), or run npm run build before installing. Login still works without it via a CSS fallback, but the admin UI needs built assets.',
     ];
 
     if (isset($hints[$label])) {

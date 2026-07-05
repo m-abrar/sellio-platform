@@ -43,6 +43,7 @@ class SettingService
                 'cors_allowed_origins'    => 'nullable|string|max:4000',
                 'built_in_website_status' => 'nullable|string|in:active,redirect',
                 'frontend_edit'           => 'nullable|boolean',
+                'show_admin_bar'          => 'nullable|boolean',
             ],
             'modules' => [
                 'is_section' => 'nullable|array',
@@ -125,7 +126,7 @@ class SettingService
     {
         DB::transaction(function () use ($request, $section, $rules) {
             $validKeys = array_keys($rules);
-            $booleanKeys = ['frontend_edit', 'hide_site_name'];
+            $booleanKeys = ['frontend_edit', 'hide_site_name', 'show_admin_bar'];
             $fileKeys = ['site_logo', 'site_favicon'];
             $arrayKeys = ['is_section'];
             $jsonLineKeys = ['smart_search_examples', 'smart_search_thinking_messages'];
